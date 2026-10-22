@@ -1,34 +1,14 @@
-# Fiat proof settlement policy
+# Fiat evidence and settlement policy
 
-- **Specification ID:** G30
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.2_zktls_fiat_verification
-- **Module:** module_1.2.4_evidence_policy
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 4
+**Status:** Expanded design specification; independent security review and implementation pending. **Priority:** advanced feature unless MVP evidence policy. **Normative:** MUST is a release gate; SHOULD needs an approved deviation.
 
-## Scope
+## Purpose, scope and trust model
+Evidence states are UNVERIFIED, ORIGIN_AUTHENTICATED, STATUS_ATTESTED, CONTRADICTED and EXPIRED; none equals irrevocable settlement. In MVP only the crypto seller signs release after independently verifying fiat receipt. UI MUST distinguish pending, posted and potentially reversible payments; explain chargebacks and seller withholding risk before fiat is sent. Encrypt evidence end to end, minimize bank identifiers, define selective disclosure, consent, retention and deletion limits. Dispute/arbitration is a separately versioned opt-in protocol.
 
-Define whether a verified bank claim is advisory or settlement-authorizing. Separate authenticated receipt content from payment finality.
+## Interfaces and implementation requirements
+Define versioned input/output types, canonical serialization, required/optional fields, explicit validation and typed errors. Authenticate trust roots and user consent at boundaries. Use pinned audited dependencies and recorded test vectors; prohibit silent fallback to weaker proof, cipher, transport or verifier. Document privacy metadata exposed to chain, relay, issuer and browser. Reject unsupported versions, oversized inputs, expired assertions and mismatched trade/chain context. State machine MUST have terminal failure and cancellation paths and user-safe recovery. Avoid putting credentials, identity secrets or evidence plaintext in URLs, logs or public chain events.
 
-## Required behavior
+## Security tests and acceptance
+Tests: forged screenshot, genuine-but-reversed transfer, wrong beneficiary, partial payment, delayed transfer, duplicated reference, payment after escrow expiry, proof with valid origin but false status interpretation and compromised notary. Block auto-release pending legal and independent security review.
 
-1. Default to advisory proofs; autonomous release needs an audited rail-specific contract/policy version accepted before funding.
-2. Specify provider identity, statement digest, currency, recipient, amount, freshness, replay identifier, and reversal assumptions.
-3. Reject unsupported banks, ambiguous status, and policy mismatch without falling back to automatic release.
-
-## Dependencies
-
-- [G29: Proof job resource budget](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.3_proof_jobs/spec-proof-job-resource-budget.md)
-- [G17: Manual settlement risk policy](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.1_multichain_escrow/module_1.1.3_basic_settlement/spec-manual-settlement-risk-policy.md)
-
-## Acceptance evidence
-
-- A valid proof of pending/reversible payment cannot satisfy an irreversible-settlement policy.
-- Provider outage leaves basic manual trades functional.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Add unit tests, negative/fuzz tests for parsers and cryptographic inputs, integration fixtures, browser recovery and replay tests. Verify independent implementation against published vectors before any live-fund deployment. Record known limitations, dependency lock, verifier key hashes and reviewer sign-off. References: [Semaphore](https://github.com/semaphore-protocol/semaphore), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/), and the repository threat model. Exact algorithms and key management choices remain gated architectural decisions.
