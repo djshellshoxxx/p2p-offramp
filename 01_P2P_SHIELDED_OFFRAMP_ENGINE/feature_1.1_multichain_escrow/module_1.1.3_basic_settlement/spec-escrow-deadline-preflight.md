@@ -1,34 +1,12 @@
 # Escrow deadline preflight
 
-- **Specification ID:** G18
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.1_multichain_escrow
-- **Module:** module_1.1.3_basic_settlement
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 2
+**Status:** Expanded engineering/security specification — review and implementation pending. **Scope:** feature_1.1_multichain_escrow / module_1.1.3_basic_settlement. **Normative:** MUST is a release blocker; SHOULD requires a documented waiver.
 
-## Scope
+## Required behavior and boundaries
+Before wallet confirmation fetch chain time and latest finalized block, estimate confirmation delay and fees, and reject trade if remaining expiry window is below configurable minimum. Display UTC expiry and local time, warn that mempool inclusion is not guaranteed. Re-check nonce, chain, contract code hash, token allowance, recipient, balance and trade state immediately before signing; do not silently extend signed deadlines. On pending transaction show cancel/replacement guidance without implying cancellation is guaranteed. Test clock skew, stale RPC, congestion, gas spikes, wallet prompt delays, background tab, expiry at boundary and reorg.
 
-Define whether sufficient time remains to start or continue manual settlement. Prevent client clocks from acting as settlement authority.
+## Interface, errors and operational recovery
+Define a versioned TypeScript or contract interface appropriate to this module, explicit typed validation errors, user-safe retry semantics, no secret-bearing logs, and a cancellation/recovery procedure. Validate all inputs at trust boundaries, distinguish external assertions from cryptographically verified facts, and bind signatures/proofs to trade, chain, protocol version and expiration wherever applicable. Incompatible versions fail closed; do not silently downgrade security or privacy. Add deterministic fixtures and a reference implementation only after the interface is reviewed.
 
-## Required behavior
-
-1. Derive authoritative deadline status from chain state/time under chain-specific rules; local countdown is informational.
-2. Configure a reviewed minimum remaining-time buffer covering confirmation and signing delays; stop new payment instructions when buffer is exhausted.
-3. After expiry or ambiguous chain status, show reconciliation/refund guidance rather than an instruction to pay.
-
-## Dependencies
-
-- [G11: Chain network registry](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.6_wallet_connectivity/module_1.6.2_rpc_registry/spec-chain-network-registry.md)
-- [G17: Manual settlement risk policy](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.1_multichain_escrow/module_1.1.3_basic_settlement/spec-manual-settlement-risk-policy.md)
-
-## Acceptance evidence
-
-- Clock skew and RPC lag cannot mark an expired trade payable.
-- Release/refund races resolve to exactly one chain terminal outcome.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+## Delivery acceptance and audit evidence
+Require unit and negative tests for each rejection condition above, integration tests with mocked malicious peers/providers, at least one device/browser interoperability test when relevant, fuzz/property tests for parsers or financial invariants, and documented residual risks. Retain dependency lock, test vectors, compiler version, static-analysis report, peer review and release provenance. No production/mainnet approval without independent security assessment. Reference [project roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), and [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Exact protocol versions and deployment parameters remain open decisions; resolve and pin before implementation.
