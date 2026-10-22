@@ -1,0 +1,47 @@
+name: Payments Ledger CI
+on:
+  push:
+    branches: [main, "feat/**"]
+    paths: ["payments/**", ".github/workflows/payments-ledger.yml"]
+  pull_request:
+    paths: ["payments/**", ".github/workflows/payments-ledger.yml"]
+permissions:
+  contents: read
+jobs:
+  ledger:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ledger_test
+          POSTGRES_PASSWORD: ledger_test
+          POSTGRES_DB: ledger_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ledger_test -d ledger_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: payments
+    env:
+      TEST_DATABASE_URL: postgresql://ledger_test:ledger_test@localhost:5432/ledger_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Apply schema
+        run: |
+          psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f db/001_ledger.sql
+          psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f db/002_reconciliation.sql
+          psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f db/003_hold_guards.sql
+      - name: Run integration tests
+        run: npm run test:integration
