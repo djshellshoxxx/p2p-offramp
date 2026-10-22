@@ -1,12 +1,22 @@
-# Open-Source Component Reuse Matrix
-Status: architecture specification; candidate dependencies are **not security-approved**. Date: 2026-10-21. Scope: static, client-controlled noncustodial P2P off-ramp, chain escrow, encrypted messaging and optional fiat-proof adapters. This document is a procurement and design baseline, not an assertion that the packages have been integrated.
+# Open-source component reuse and adoption contract
 
-## Principles, boundaries and data flow
+## 1. Metadata
+
+- **Specification ID:** REUSE01
+- **Version:** 1.0
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Owner:** p2p-offramp maintainers
+- **Delivery phase:** 0
+- **Normative precedence:** G01–G15 and the development roadmap govern core v1; candidate research profiles do not override them.
+
+## 2. Objective and system boundaries
+
 The browser loads an immutable, hash-verified static application. A dedicated cryptographic worker handles ephemeral application secrets; an external wallet signs high-value chain operations. Transactions are verified against locally encoded chain ID, escrow addresses/code hashes, token allowlists and ABI. Client-selected RPC endpoints are untrusted. Encrypted P2P envelopes traverse replaceable Nostr/Waku transports; relay metadata is not confidential. Optional proof systems expose only minimum necessary public statements. No operator backend possesses trading keys or escrow funds. Browser-delivered code and a compromised device remain critical trust assumptions.
 
 Trust boundaries: static asset delivery -> application; application -> wallet provider; application -> worker/WASM; application -> IndexedDB; application -> untrusted RPC; application -> public messaging relays; application -> payment-proof attestor; chain contracts -> tokens/oracles. Avoid calling transport providers or attestors "serverless": those are third-party infrastructure.
 
-## Repository and tooling table
+## 3. Candidate component architecture
+
 License is the typical upstream repository license *as a selection hint only*; verify LICENSE at the exact chosen commit and transitive dependencies before adoption. "Review" means no current license claim or no approved implementation.
 
 | Domain | Recommended library/repository | License candidate | Purpose / specific component reused | Source URL | Decision |
@@ -40,19 +50,23 @@ License is the typical upstream repository license *as a selection hint only*; v
 | Supply chain | Sigstore cosign | Apache-2.0 (verify) | Sign and verify build artifact attestations | https://github.com/sigstore/cosign | CI |
 | Payment gateway research | Payment-Gateway-coinpayments | Review | Historical gateway patterns and anti-patterns, **not** a trusted payment adapter | https://github.com/blockchainhelp-eu/Payment-Gateway-coinpayments | Reference only |
 
-## Integration contracts
-1. **crypto-adapter** exposes `generateEphemeralKey(): Uint8Array`, `deriveSharedSecret(peerPublicKey)`, `signTypedData(domain, types, message)` only from a dedicated worker; high-value signatures request external wallet confirmation. Generate randomness using OS-backed `crypto.getRandomValues` with error-as-fatal semantics. secp256k1 secret scalars satisfy `1 <= d < n`; public points are validated as on-curve, non-infinity and correctly encoded. Use protocol-specific KDF domain separation.
+## 4. Integration algorithms and adapter boundaries
+
+1. **crypto-adapter** holds ephemeral secrets in purpose-scoped worker/operation handles. It exposes protocol-specific public results, never a generic raw-key getter to UI. Use `crypto.getRandomValues` and selected reviewed protocol libraries; random-source failure is fatal. G01/G02 govern messaging and vault keys; wallet spending seeds never enter app JS.
 2. **wallet-adapter** applies EIP-1193 request semantics, EIP-712 domain separation with `chainId`, `verifyingContract`, version, action-specific nonce and deadline. Re-read wallet chain/account immediately before submission. Provider is not a data-integrity oracle.
 3. **escrow-adapter** pins ABI, chain ID, deployment address and runtime bytecode/code hash per release manifest. Read via at least two independently operated RPCs for important finalized states and compare block hash/state; unresolved disagreement stops release, not majority-vote blind signing.
 4. **message-adapter** implements `encodeEncryptedEnvelope -> pad -> transport.send` and reverse receive path; authentication, replay window, expiration and envelope version are independent of Nostr/Waku. Do not send keys, fiat credentials, raw bank information, or plaintext proofs to relays.
 5. **proof-adapter** implements `verifyProof(proof, expectedPolicy, freshness, audience, tradeId)`. Bind statement to trade ID, amount, currency, payee commitment, proof expiry, issuer/attestor key and verifier version. An attestation about a webpage is **not** intrinsically irreversible bank settlement.
-6. **storage-adapter** stores only authenticated encrypted records with explicit schema version, per-record random IV, KDF metadata, ciphertext and trade-scoped associated data. Never cache private keys unencrypted; default to memory-only for escrow signing.
+6. **storage-adapter** uses G02 exact bounded snapshot encryption and authenticated metadata, G03 fresh-key recovery and G09 migrations. No per-record alternate format or mnemonic/spending-seed import is authorized in core.
 7. **routing-adapter** checks whether a privacy transport is actually active. A normal browser fetch cannot be labeled "Tor" simply because a JS package exists. Failure should be clearly surfaced, with a no-network or explicitly consented fallback.
 
 ### Crypto constructions and formulas
 AES-256-GCM encryption: `(C,T) = AEAD_Encrypt(K, IV, P, AAD)`, with independent unpredictable 96-bit nonce per encryption under a key. HKDF: `PRK=HMAC_SHA256(salt,IKM)`; `K=HKDF_Expand(PRK,"p2p-offramp/v1/" || purpose || context,32)`. Argon2id: `K=Argon2id(password, randomPersistentSalt, m,t,p,32)`, parameters calibrated on supported low-end devices and re-evaluated periodically. **A salt cannot be ephemeral if the encrypted vault needs later recovery**; store the salt alongside ciphertext. For transient-only records, use a random session key and erase it on session teardown.
 
-## Dependency selection, licenses, reproducible builds
+Candidate rows are options to evaluate, not simultaneously enabled dependencies. Argon2id, BIP39/BIP32 and generic HTML sanitization do not override the core G02 profile, no-wallet-seed policy or G04 text-only rendering. Choosing an SDK requires a G06 inventory entry with exact version/integrity, source, license and executed independent vectors. Runtime/build tools remain separate.
+
+## 5. Adoption interfaces and failure behavior
+
 - Create `security/dependencies.json` with package name, exact version, upstream repo/commit/tag, SPDX assertion, transitive license assessment, approved use, cryptographic review, last audit, bundle location and maintainer. Empty cells block merge.
 - Lock npm packages with committed lockfile; run `npm ci --ignore-scripts` where compatible, and explicitly allow only required audited build scripts. Pin GitHub Actions to full commit SHAs and audit CI permissions.
 - CI produces SBOM (CycloneDX/SPDX), runs OSV scans and license checks, compares checksums to approved artifact digests and verifies signatures/attestations where published. Pin release bundles by SHA-256 in a signed manifest; sign build artifacts and retain reproducibility evidence.
@@ -61,7 +75,14 @@ AES-256-GCM encryption: `(C,T) = AEAD_Encrypt(K, IV, P, AAD)`, with independent 
 - CI gate: two review approvals for cryptographic dependency changes, independent license confirmation, cold-install deterministic bundle, CSP/SRI checks, chain-fork regression tests, browser compatibility tests and threat-model revision. Do not mark "audited" because upstream claims an audit.
 - Compatibility gate: GPL/AGPL dependencies used at runtime may impose redistribution/source obligations inconsistent with intended distribution. Require legal review before vendoring or bundling.
 
-## Execution plan and acceptance tests
+Adoption records use the G06 CryptoDependency schema for cryptographic code and a corresponding public dependency inventory for other packages. An unreviewed candidate returns UNSUPPORTED_PROVIDER at runtime; selection cannot make a feature release-enabled without evidence. Build tools execute without production keys and are not included in browser bundles. No version/license claim in this table substitutes for examining the exact selected source.
+
+## 6. Supply-chain threat assessment
+
+Typosquatting, registry/source takeover, transitive dependency changes, postinstall execution, license incompatibility and malicious updates can compromise delivered code. Minimize dependencies, prohibit hidden provider network clients outside G05, freeze lockfiles, review diffs and verify artifacts under G15. A hash proves selected bytes, not safety. Two providers using the same operator/infrastructure are not independent consensus. The component table contains research candidates, some with unknown maintenance or license status; unresolved candidates stay disabled rather than receiving invented approvals.
+
+## 7. Verification and source intake
+
 P0: record exact current dependency versions and licenses; choose viem versus ethers and Noble versus WebCrypto as appropriate; forbid duplicate signers. P1: build interfaces + test vectors. P2: integrate wallet and escrow adapter against testnet fork. P3: encrypted messaging under malicious relay test. P4: opt-in zkTLS benchmark on constrained devices. P5: supply-chain reproducibility gate. All test vectors are deterministic except randomly generated keys and IVs; fuzz public-point parsing, signatures, relay envelopes and malicious JSON.
 
 **Acceptance:** no production secret exported to the UI/relay; unknown chains/contracts rejected; mismatched RPC finality stops operations; fresh vault salts retained for decryptable records; lockfile/pins verifiable; licensing decisions recorded; browser Tor guarantee never implied.
@@ -69,7 +90,8 @@ P0: record exact current dependency versions and licenses; choose viem versus et
 ### Reference catalog
 [Noble suite](https://paulmillr.com/noble/), [EIP-5564](https://eips.ethereum.org/EIPS/eip-5564), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP SCVS](https://scs.owasp.org/SCVS/), [MDN WebCrypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), [OWASP dependency security](https://owasp.org/www-project-dependency-check/).
 
-## NCSC CPA build assurance and Packet Storm research intake (2026-10-21 addendum)
+### Additional build assurance intake
+
 NCSC [CPA Build Standard v1.4](https://www.ncsc.gov.uk/files/CPA-Build_Standard_1-4.pdf) separates *building the right security features* from *building the product correctly*. This project adopts the latter as an evidence-driven build process, **not** a claim of CPA certification. Maintain requirements-to-tests traceability, versioned threat assumptions, reviewable architecture, code-review records, compiler/dependency inventory, release provenance, secure defect handling and reproducible build evidence. For every library, record owner, pinned commit, license, vulnerability exposure, maintenance state, security-review status, transitive dependencies, trust boundary, fallback and removal plan.
 
 [NCSC Secure communications principles](https://www.ncsc.gov.uk/sites/default/files/pdfs/publication/secure-communication-principles.pdf) provide seven vendor-neutral acceptance dimensions: authenticated encryption in transit, node/key protection, access control, secure audit, secure administration, metadata minimization and supply-chain resilience. Implement them as a seven-column scorecard for Nostr/Waku/XMTP/TLS attestors, distinguishing relay operators from cryptographic endpoints. Audit logs must not contain decrypted trades, account credentials or correlation identifiers unless essential.

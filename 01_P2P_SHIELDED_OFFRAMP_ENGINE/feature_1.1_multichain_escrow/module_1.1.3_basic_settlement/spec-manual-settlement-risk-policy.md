@@ -1,40 +1,54 @@
 # Manual settlement risk policy
 
-- **Specification ID:** G17
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.1_multichain_escrow
-- **Module:** module_1.1.3_basic_settlement
+## 1. Metadata
+
+- **Specification:** G17
+- **Version:** 1.0
 - **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
+- **Status:** Expanded design baseline — implementation and independent review pending
 - **Delivery phase:** 2
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Scope
+## 2. Objective and boundaries
 
-Define the Phase 2 settlement model without fiat proofs or a jury. State precisely which party authorizes release and who receives timeout refunds.
+Make the basic escrow’s unilateral seller release and buyer exposure an explicit acceptance condition.
 
-## Required behavior
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
 
-1. Seller deposits crypto; the funded escrow binds seller and buyer; only seller authorizes release to buyer before the on-chain deadline.
-2. At or after the deadline, refund goes only to the seller; release and refund have disjoint guards and terminal status is set before transfer effects.
-3. Cash receipt is manually confirmed by the seller; the buyer can lose fiat if the seller withholds release and later refunds, so no trustless cash-settlement or payment-protection claim is allowed.
+## 3. Architecture and data contracts
 
-## Dependencies
+```typescript
+interface ManualRiskConsent {version:1; termsHash:string;
+ role:"seller"|"buyer"; disclosureVersion:"manual-v1";
+ acceptedAtLocalMs:number; // encrypted local consent, not bank evidence
+ sellerWithholdingAcknowledged:boolean; railReversibilityAcknowledged:boolean;
+ deadlineRiskAcknowledged:boolean; }
+```
 
-- [G16: Signed trade terms](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md)
-- [G12: Transaction lifecycle journal](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.7_transaction_recovery/module_1.7.1_transaction_journal/spec-transaction-lifecycle-journal.md)
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
 
-## Acceptance evidence
+## 4. Algorithms and invariants
 
-- Boundary-time, double-call, reentrancy, wrong-party, and double-spend tests pass.
-- UI shows finality and settlement risk before fiat payment; buyer payment claims never become cryptographic proof.
+Show before both parties accept terms: seller funds crypto, buyer sends fiat outside escrow, seller alone may release before expiry, anyone may refund crypto only to seller at expiry. Buyer may lose fiat if seller withholds; no app operator can compel release/refund fiat. Seller must independently check correct fiat amount/beneficiary/status and may face reversal even after apparent receipt. Require explicit role-specific consent bound to termsHash; stale disclosure/terms invalidates consent. Never precheck acceptance. Receipts/screenshots/chat/proofs cannot enable an automatic release command.
 
-## Detailed specification completion gate
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
 
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+## 5. Interfaces, errors and recovery
 
-## MVP manual fiat settlement policy
-The crypto seller funds escrow; the buyer transfers fiat using independently agreed instructions; only seller can release after verifying receipt before expiry. This is a cooperative exchange, **not trustless fiat settlement**. Bank screenshots, payment messages and zkTLS attestations are evidence only; none proves irrevocable settlement or prevents chargebacks. The buyer can lose fiat if seller refuses to release; the seller can face reversal after releasing crypto. The UI MUST display these asymmetric risks before any fiat payment, distinguish pending/cleared/reversible payment, show exact deadline and avoid misleading guarantees.
+Declining consent leaves draft unaccepted and no wallet prompt. After fiat sent, offer encrypted communication/evidence export and direct chain observation, without implying guaranteed remedy or basic escrow dispute authority. Missing consent blocks guidance/signing but not watch-only recovery of existing funds.
 
-## Engineering acceptance
-Terms require explicit acknowledgment, supported payment rail, fee/FX display, expiry, buyer/seller roles and evidence-handling consent. Evidence encrypted before transport; minimize bank identifiers; allow selective disclosure. Do not store credentials or expose payment metadata in relay event tags. Provide cancel/refund/dispute guidance and no auto-release based solely on a screenshot. Negative tests: forged receipt, altered amount, wrong beneficiary, replayed payment proof, delayed bank transfer, partial payment, chargeback, seller withholding, expiring escrow and network outage. Jurisdiction/payment-service classification and legal review are blockers to real-money launch.
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Pressure, false proof badges and countdowns can induce unsafe payment. Use plain persistent risk text and accessible acknowledgement. Consent records do not establish legal enforceability, informed human understanding or that fiat occurred.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Fresh client cannot accept without acknowledgements; role switch/terms edit resets consent; screenshot/valid proof never enables buyer release; expiry shows seller refund destination; decline invokes no wallet; keyboard/screen-reader flow. Human review checks text against actual authority.
+
+Sources: [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Before enablement, supply exact deployment/provider configuration, cross-module compatibility fixtures and independent review evidence for the stated invariants. No production readiness follows from document structure or status.

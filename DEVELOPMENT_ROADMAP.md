@@ -5,6 +5,10 @@
 **Owner:** Project maintainers; security reviewer signs security gates  
 **Baseline reviewed:** dcc732d83accd44518257a2d7d5c90346bdc4f21
 
+## Current specification pass
+
+See [development status](docs/DEVELOPMENT_STATUS.md) and the [full readiness inventory](docs/SPEC_READINESS.md). All 171 technical documents now have expanded seven-section design baselines; the catalog and supplemental plan are tracked separately. Actual implementations, pinned profiles/deployments and independent review remain pending. The inventory checker is not semantic approval. This roadmap remains the authoritative milestone order when supplemental plans use different phase labels.
+
 ## Delivery contract
 
 The repository currently contains specifications, not an implemented application. Every milestone below is planned until its evidence is recorded. This roadmap adds missing integration requirements; it does not certify the existing placeholders as implementation-ready.

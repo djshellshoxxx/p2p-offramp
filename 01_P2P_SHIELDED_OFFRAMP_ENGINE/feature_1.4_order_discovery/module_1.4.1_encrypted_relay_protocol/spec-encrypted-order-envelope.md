@@ -1,14 +1,54 @@
 # Encrypted order envelope
 
-**Status:** Engineering/security design baseline, not implemented or independently audited. **Priority:** MVP or prerequisite. **Normative:** MUST is required; SHOULD deviations need review.
+## 1. Metadata
 
-## Scope and implementation contract
-Define canonical versioned envelope with trade ID, sender ephemeral key, ciphertext, authenticated metadata, expiry, replay nonce and relay policy. NIP-44 encryption must be used with pinned implementation; no public decryption keys. Encrypt sensitive terms, bind AAD to protocol, version, trade ID and recipient. Never put payment details or private location in public relay tags. Reject oversized/decompression-bomb ciphertext, invalid signatures, stale offers and nonce reuse.
+- **Specification:** spec-encrypted-order-envelope
+- **Version:** 1.0
+- **Owner:** p2p-offramp maintainers
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Delivery phase:** 2
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Interface and error semantics
-Define explicit versioned types and canonical serialization for every boundary, validation of all external inputs, typed errors (INVALID_INPUT, EXPIRED, UNAUTHORIZED, REPLAY, WRONG_CHAIN, UNAVAILABLE, INTEGRITY_FAILURE), retry/cancel/reconcile operations and no secret-bearing diagnostics. Public chain, external RPC, wallets and peer relays are independently untrusted; distinguish observed data from cryptographically verified facts. Require fail-closed handling of unsupported versions and security downgrades. Preserve keyboard/screen-reader access and translated error/help text.
+## 2. Objective and boundaries
 
-## Threat model and tests
-Cross-relay replay, ciphertext tampering, recipient confusion, forged sender, clock skew, message truncation, plaintext leakage and metadata correlation.
+Separate public minimal advertisements from confidential peer terms using standard Nostr message layers.
 
-Acceptance: unit and negative tests for all failure classes; fuzz parsers or financial invariants; test restart/reorg/timeout where relevant; browser mobile compatibility; signed deployment manifest; documented residual privacy risks; dependency version/license lock; independent security review before real funds. References: [NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Resolve any design choices and measurable thresholds in a recorded ADR before coding.
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
+
+## 3. Architecture and data contracts
+
+```typescript
+interface PrivateOrderPayloadV1 {v:1;kind:"terms"|"acceptance"|"cancel";
+ orderId:string;revision:number;termsHash:string;sender:string;recipient:string;
+ nonce:string;expiresAtSeconds:string;body:SignedTermsOrControl;}
+// plaintext <=16 KiB; revision safe integer >=1; nonce 32 random bytes;
+// recipient/sender canonical Nostr public keys, separate from wallet accounts.
+```
+
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
+
+## 4. Algorithms and invariants
+
+Serialize validated payload as UTF-8 JSON with exact keys, then use pinned NIP-44 v2 encryption inside NIP-17/NIP-59 flow. NIP-44 does not expose arbitrary AAD: bind trade/order/recipient/context inside authenticated encrypted plaintext and verify after decrypt, rather than invent an AAD parameter. Verify outer gift-wrap and inner seal/rumor relationships according to NIPs; validate sender wallet acceptance separately through G16. Public advertisement carries no decryption key. Reencrypting must create correct fresh upstream nonces/wraps; no custom cipher or NIP-04 fallback.
+
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
+
+## 5. Interfaces, errors and recovery
+
+Unsupported NIP version or invalid ciphertext/signature fails closed. Dedup by native event ID plus authenticated order/revision/control nonce; bounds checked before decrypt. Expired plaintext is ignored for negotiation but may be retained encrypted as user evidence.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Outer recipient/routing/timing and advertisement metadata remain visible. Relay deletion is not confidentiality. Nostr sender identity alone does not authenticate a wallet seller; private plaintext and local histories require G02 protection.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Wrong recipient/context/order/revision; ciphertext tamper; reused nonce; copied wrap; fake seal sender; 16 KiB+1; invalid UTF-8; invalid JSON keys; public decryption key leak and NIP-04 downgrade. Run official NIP-44 vectors for exact library.
+
+Sources: [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md), [NIP-40](https://github.com/nostr-protocol/nips/blob/master/40.md), [NIP-17](https://github.com/nostr-protocol/nips/blob/master/17.md), [NIP-44 version 2](https://github.com/nostr-protocol/nips/blob/master/44.md), [NIP-59](https://github.com/nostr-protocol/nips/blob/master/59.md). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Before enablement, supply exact deployment/provider configuration, cross-module compatibility fixtures and independent review evidence for the stated invariants. No production readiness follows from document structure or status.

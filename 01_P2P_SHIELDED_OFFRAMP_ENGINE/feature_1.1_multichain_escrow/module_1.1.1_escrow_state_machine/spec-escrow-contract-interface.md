@@ -1,20 +1,57 @@
 # Escrow contract interface — implementation and security specification
 
-**Status:** Design complete for implementation planning; not implemented, audited or approved for real funds. **Priority:** P0. **Scope:** basic EVM escrow, no fiat oracle or arbitrator. Solana must have a separate equivalent state-machine adapter and audit.
+## 1. Metadata
 
-## Trust and transaction model
-The crypto seller deposits a specified asset; buyer pays fiat outside the protocol; seller alone confirms fiat receipt and releases the asset before expiry; after expiry the seller can reclaim it. This does **not** protect the buyer against seller refusal after fiat payment. No third party or oracle can claim bank settlement finality. UI MUST disclose this asymmetry before the buyer sends fiat. Any later dispute module is opt-in with separate escrow version and cannot gain authority over existing deposits.
+- **Specification:** spec-escrow-contract-interface
+- **Version:** 1.0
+- **Owner:** p2p-offramp maintainers
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Delivery phase:** 2
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Typed interface and invariants
-Use Solidity 0.8.x, pinned compiler and OpenZeppelin SafeERC20, ReentrancyGuard, custom errors. Immutable deployment registry records chainId, implementation bytecode hash, version, supported tokens. Each trade stores id bytes32, seller, buyer, token, exact deposited amount, fundedAt, expiry, termsHash, state. Hash id using domain separation over chainId, contract address, version, seller nonce and signed terms; nonce never reused. Valid states: UNINITIALIZED -> FUNDED -> RELEASED or REFUNDED. Both terminal states are permanent. A token transfer that reverts MUST revert the entire transition. Reentrancy and callbacks cannot trigger double release. Asset conservation: total token outflow for a trade <= verified deposited amount. Only bound seller can release before expiry; only seller can refund after expiry; choose strict comparison `block.timestamp >= expiry` for refund and `block.timestamp < expiry` for release. At boundary, refund wins; disclose deadline and transaction confirmation uncertainty.
+## 2. Objective and boundaries
 
-Suggested ABI: `fund(TradeTerms terms, bytes sellerSignature, bytes buyerSignature)`, `release(bytes32 tradeId)`, `refund(bytes32 tradeId)`, `getTrade(bytes32)`; events `Funded(id,seller,buyer,token,amount,expiry,termsHash)`, `Released(id)`, `Refunded(id)`. Signature policy: if buyer authorization is unnecessary for funding, omit buyer signature rather than introducing a spoofable field; record buyer acceptance separately before fiat. Use EIP-712 domain name/version/chainId/verifyingContract, nonce and deadline. Support EIP-1271 contract signatures where required. Reject zero address, invalid token, zero amount, expired terms, unsupported token behavior, duplicate ID, wrong chain, stale nonce, signature malleability and unbounded expiries. Amount is measured using pre/post balance deltas; either reject fee-on-transfer/rebasing tokens or explicitly define net-amount accounting and adversarial tests. Default MVP rejects them. Never assume `transferFrom` returns a bool; use SafeERC20.
+Specify immutable basic custody: seller deposits, seller alone releases to buyer before deadline, and anyone may execute a refund to the seller at/after deadline. There is no buyer payment claim, juror, oracle or admin exit.
 
-## Error and recovery contract
-Typed errors: InvalidState, Unauthorized, InvalidTerms, Expired, NotExpired, UnsupportedAsset, IncorrectDeposit, DuplicateTrade, InvalidSignature, UnsafeToken, Reentrancy. Reverted funding creates no trade. UI must reconcile on-chain receipt and logs after network failures; never infer success from wallet callback alone. Chain reorgs revert provisional UI state. Release/refund are idempotent from UI perspective but on-chain repeat attempts revert InvalidState; client interprets terminal state as already complete. No privileged emergency drain, proxy upgrade or arbitrary destination override.
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
 
-## Security verification and negative tests
-Foundry tests: valid lifecycle; boundary timestamp; seller/buyer swap; wrong signature/domain/chain; replay across contract/chain; allowance race; ERC-777-style callback; malicious token returns false/no data; fee-on-transfer; rebasing; pause/reorg; gas grief; double claim; unauthorized settlement; zero address; fee rounding; block timestamp tolerance; forced ETH; contract-wallet signatures. Fuzz asset conservation and terminal state, test no double spend under arbitrary call sequences. Run Slither and independent audit before real funds. Cross-reference [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), [OpenZeppelin SafeERC20](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), and repo attack matrix.
+## 3. Architecture and data contracts
 
-## Open blockers
-Specify legal/payment-rail exposure and explicit buyer risk acceptance; choose allowed chains/tokens, exact expiry bounds, fee policy and whether both counterparties sign trade terms. Freeze ABI only after adversarial review and compatibility with state-transition, timeout, wallet and manual-settlement specs. No code deployment authorized by this document.
+```typescript
+struct Trade { bytes32 termsHash; address seller; address buyer;
+ address token; uint256 amount; uint64 expiry; State state; }
+// State: UNINITIALIZED, FUNDED, RELEASED, REFUNDED
+fund(TradeTerms publicTerms, bytes sellerAcceptance, bytes buyerAcceptance) payable
+release(bytes32 tradeId)
+refund(bytes32 tradeId)
+getTrade(bytes32 tradeId) view returns (Trade)
+// Native asset uses G16 assetKind=0 and zero address sentinel; never address guessing.
+```
+
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
+
+## 4. Algorithms and invariants
+
+Funding validates both G16 public-term acceptances (private agreement is only a salted digest), caller seller, registry-bound immutable deployment, nonzero distinct participants, amount >0, unused seller nonce and funding time strictly before acceptBeforeSeconds; require expiry duration 1800..604800 seconds. Use checked arithmetic, pinned Solidity 0.8 compiler, reviewed SafeERC20 and reentrancy guard. Native msg.value equals principal; ERC-20 msg.value is zero and received delta equals principal. Store terms/nonce and transfer atomically: any failure reverts all effects. Release requires FUNDED, caller seller and block.timestamp < expiry; refund requires FUNDED and block.timestamp >= expiry and pays only stored seller regardless of caller. Set terminal state before external payout under guard; revert restores FUNDED if payout fails. Zero protocol fee in basic v1: principal out equals funded principal exactly. No proxy upgrade, sweep, destination override or privileged drain.
+
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
+
+## 5. Interfaces, errors and recovery
+
+Contract errors: InvalidState, Unauthorized, InvalidTerms, Expired, NotExpired, UnsupportedAsset, IncorrectDeposit, DuplicateTrade, InvalidSignature, UnsafeToken. Repeated settlement reverts InvalidState; UI rereads terminal state. Failed recipient transfer leaves recoverable funded principal but cannot redirect to a caller-selected address. G12 reconciles ambiguous broadcasts.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Seller can withhold after fiat arrives; explicit G17 acknowledgement is required. A malicious token or callback cannot access another trade or settle twice. Forced native donations create surplus without ownership rights. Contract signatures use EIP-1271; invalid/malleable/domain-replayed signatures fail. Solana uses a distinct program contract in its adapter spec, not Solidity signatures.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Foundry/property tests: random sequences conserve principal and permit at most one terminal transfer; deadline -1/exact/+1; unauthorized buyer/caller; EIP-1271 revocation; duplicate seller nonce across orders; chain/deployment replay; false/no-return/reentrant/fee/rebase tokens; receiver revert; forced ETH; maximum uint overflow. Slither and independent review are evidence gates, not completed claims.
+
+Sources: [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [SafeERC20](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Freeze ABI, compiler/library lock and deployed runtime identity after review; no live deployment approved.

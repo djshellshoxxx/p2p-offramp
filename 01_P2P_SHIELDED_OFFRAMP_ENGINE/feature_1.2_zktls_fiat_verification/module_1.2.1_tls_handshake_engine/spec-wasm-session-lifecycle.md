@@ -1,12 +1,54 @@
 # WASM proof session lifecycle
 
-**Status:** Expanded engineering/security specification — review and implementation pending. **Scope:** feature_1.2_zktls_fiat_verification / module_1.2.1_tls_handshake_engine. **Normative:** MUST is a release blocker; SHOULD requires a documented waiver.
+## 1. Metadata
 
-## Required behavior and boundaries
-State machine IDLE -> CONSENTED -> INITIALIZING -> ATTESTING -> PROVING -> VERIFYING -> COMPLETE, with CANCELLED/FAILED terminal states. Bound memory, CPU, network and duration; abort controller must stop network requests and worker, release references and clear sensitive buffers best effort. Never persist plaintext credentials, TLS session keys or transcripts. Enforce single active proof per trade and replay-resistant challenge nonce. UI must explain progress and failure recovery. Test interrupted background session, duplicate workers, out-of-memory, stale proof, permission revoke and device low-memory.
+- **Specification:** spec-wasm-session-lifecycle
+- **Version:** 1.0
+- **Owner:** p2p-offramp maintainers
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Delivery phase:** 4 (optional evidence)
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Interface, errors and operational recovery
-Define a versioned TypeScript or contract interface appropriate to this module, explicit typed validation errors, user-safe retry semantics, no secret-bearing logs, and a cancellation/recovery procedure. Validate all inputs at trust boundaries, distinguish external assertions from cryptographically verified facts, and bind signatures/proofs to trade, chain, protocol version and expiration wherever applicable. Incompatible versions fail closed; do not silently downgrade security or privacy. Add deterministic fixtures and a reference implementation only after the interface is reviewed.
+## 2. Objective and boundaries
 
-## Delivery acceptance and audit evidence
-Require unit and negative tests for each rejection condition above, integration tests with mocked malicious peers/providers, at least one device/browser interoperability test when relevant, fuzz/property tests for parsers or financial invariants, and documented residual risks. Retain dependency lock, test vectors, compiler version, static-analysis report, peer review and release provenance. No production/mainnet approval without independent security assessment. Reference [project roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), and [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Exact protocol versions and deployment parameters remain open decisions; resolve and pin before implementation.
+Give each proof attempt a single consented lifecycle with deterministic cancellation and no secret resume queue.
+
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
+
+## 3. Architecture and data contracts
+
+```typescript
+type ProofPhase="idle"|"consented"|"initializing"|"attesting"|
+ "proving"|"verifying"|"complete"|"cancelled"|"failed";
+interface ProofSession {v:1;jobId:string;termsHash:string;generation:number;
+ phase:ProofPhase;policyHash:string;challenge:string;startedMonotonicMs:number;}
+// Challenge >=128 random bits; one active session per trade and one per tab.
+```
+
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
+
+## 4. Algorithms and invariants
+
+Transition in listed order; failure/cancellation from every nonterminal phase is terminal. Complete requires local verification under same profile, disclosure policy and immutable trade binding. Each retry creates a new job/challenge/consent; old output cannot attach to new attempt. Lock, account/terms/source-policy change, tab navigation or permission revocation cancels worker/network. Browser suspension does not reset budget; on resume cancel if elapsed unknown or over policy. Do not persist credentials, TLS keys, transcripts or a plaintext job queue.
+
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
+
+## 5. Interfaces, errors and recovery
+
+Failed sessions retain only encrypted minimal phase/error/timestamp metadata on explicit retention choice. Reload starts idle, never auto-authenticates bank or resumes a network action. G12 unresolved transactions survive independently and cannot be cancelled by this proof lifecycle.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Old consent can disclose new data after source/page changes; bind exact parser/policy hash and preview. Timing and notary interaction remain linkable. Cancellation cannot retract bytes already transmitted.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Every legal edge and illegal skip; complete before verification; two tab sessions; permission revoke during attestation; worker crash; browser suspend/reload; wrong challenge output; changed terms; cancellation race. Assert no plaintext queue or hidden restart.
+
+Sources: [TLS 1.3 RFC 8446](https://www.rfc-editor.org/rfc/rfc8446), [TLSNotary source](https://github.com/tlsnotary/tlsn). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Before enablement, supply exact deployment/provider configuration, cross-module compatibility fixtures and independent review evidence for the stated invariants. No production readiness follows from document structure or status.

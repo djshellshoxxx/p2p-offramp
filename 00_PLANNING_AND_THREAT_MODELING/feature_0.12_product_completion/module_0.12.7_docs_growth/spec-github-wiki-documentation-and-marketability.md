@@ -1,9 +1,37 @@
-# GitHub wiki, user education, adoption and GhostPay design parity
-## Wiki structure
-Create GitHub wiki Home, Quick Start, How Escrow Works, Wallets and Chains, QR Import/Export, Android Guide, iPhone/iPad/Safari Guide, Supported Browsers, Privacy and Metadata Limits, Fees and Refunds, Disputes, Evidence, Security Model, Threat Model, Recovery and Backups, Troubleshooting, Accessibility, Translation Guide, Glossary, FAQ, Scam Recognition, Release Verification, Developer Setup, Codespaces, Architecture, Smart Contracts, Transport, Cryptography, Test Matrix, Security Audit, Contributing, ADRs, Incident Response and Responsible Disclosure. Store source Markdown in repo under docs/wiki-source; sync to actual GitHub wiki only when wiki is enabled and an authorized publication workflow exists. Add documentation CI: internal link checking, missing locale keys, version cross-references and code sample validation. Docs should describe implemented behavior, distinguish proposals and never claim an audit not performed.
+# Versioned documentation, education and claims
 
-## Visual parity with GhostPay
-Source review: [GhostPay README](https://github.com/djshellshoxxx/GhostPay/blob/main/README.md), [master blueprint](https://github.com/djshellshoxxx/GhostPay/blob/main/docs/MASTER_BLUEPRINT.md), [post-launch roadmap](https://github.com/djshellshoxxx/GhostPay/blob/main/docs/POST_LAUNCH_FEATURES_SECURITY_ROADMAP.md). These documents establish a privacy-first static client, explicit network/privacy caveats, stealth invoice concepts, gas buffer, wallet safety and audit gates; they **do not establish a concrete production CSS theme**. Before pixel-matching, obtain actual GhostPay UI assets/styles or screenshots. Build shared design tokens for typography, colors, spacing, cards, alerts, privacy badges, transaction progress and responsive navigation; reuse only after confirming provenance and licenses. Do not copy contracts or security claims as proof of compatibility.
+## 1. Metadata and status
 
-## Adoption features
-First-run interactive demo with fake funds; 3-step guided trade wizard; accessible inline explanations; local-only favorites/templates; printable/shareable QR; easy multilingual invite; opt-in referral attribution with no counterpart or transaction tracking; privacy preset; simple fee calculator; wallet compatibility checker; transparent public roadmap; self-hostable static package; copyable verification steps; optional offline export. No dark patterns, referral-based fee obfuscation, unsolicited sharing or claims of guaranteed anonymity. Marketing claims must map to verified security/privacy properties and jurisdiction review.
+Owner: p2p-offramp maintainers; security reviewer approves security gates.
+
+Version: 1.0 design baseline, 2026-10-22.
+
+Delivery: M1 / M2C.
+
+Status: substantive design baseline; implementation, interoperability evidence and independent review pending. This document does not certify a deployed or audited product. DEVELOPMENT_ROADMAP.md controls milestone order.
+
+## 2. Objective and scope
+
+Provide versioned user/developer documentation whose claims match verified behavior. Adoption features cannot obscure seller-withholding risk, fees, origin trust, privacy limits or recovery requirements. No claim of GhostPay visual/security parity follows merely from copying ideas.
+
+## 3. Architecture and data contracts
+
+DocsManifest: `{releaseId,sourceCommit,locale,topic,sourcePath,implementedCapabilities,reviewers,lastVerifiedRelease,linkReportDigest}`. Source Markdown lives under docs/wiki-source; actual wiki synchronization requires an enabled destination and authorized publication workflow. Topics cover quick start, escrow authority, wallets/chains, backup/recovery, QR/mobile, privacy/metadata, fees/refunds, evidence/disputes, accessibility/localization, scams, release verification, developer setup, architecture/contracts, testing, audit scope and incident response. Each topic labels implemented, testnet-only, proposed or unsupported behavior.
+
+## 4. Algorithms and lifecycle
+
+Derive behavior examples from exact release capability/deployment registries and reviewed acceptance evidence. A ClaimsRegister stores `{claimId,text,scope,evidenceDigest,limitations,reviewer,approvedRelease}`; no claim “anonymous”, “trustless fiat”, “audited” or “guaranteed recovery” may publish without a precise justified scope, and basic manual escrow cannot support those absolute claims. Explain seller release before expiry and refund to seller at/after expiry before onboarding payment. Cite specific audit report/artifact scope if one exists. GhostPay references are inspiration only; actual visual assets/styles/screenshots need provenance/license review before reuse or parity assertions. Fee calculators use canonical minor/base units and clearly identify network versus protocol fees.
+
+## 5. Interfaces and integration
+
+Docs CI checks local links, source/example consistency, locale key parity, release references and code examples against the intended artifact; semantic review remains human. Demo onboarding uses fake funds and visible test mode. Favorites/templates remain local encrypted where private. Referrals may share generic app links without trade/counterparty identifiers and have no hidden fees/tracking; any future analytics requires separately specified consent/data lifecycle. Documentation exports include offline recovery checklist and public deployment fingerprints, not sample real secrets.
+
+## 6. Errors, abuse and residual threats
+
+DOCS_STALE, CLAIM_UNSUPPORTED, EXAMPLE_INVALID and LICENSE_UNKNOWN block affected publication. Wiki content can drift after sync; signed releases bind source docs hashes and identify external mutable wiki as guidance. Link checking cannot certify remote content or legal applicability. Stale screenshots, misleading privacy badges, dark patterns and seed-requesting support instructions are explicit threats.
+
+## 7. Verification and primary references
+
+Reviewer follows quick-start and independent recovery from a clean device using test funds; another reviewer checks all safety/fee/privacy statements against evidence. Test offline docs, keyboard/screen-reader navigation, locale fallback and no analytics requests. Release check ensures unsupported optional modules are labeled and no proposed feature appears as implemented. Publication and real-funds claims remain pending appropriate gates.
+
+Primary references (exact implementation revisions must be pinned in the evidence record): [GitHub wiki documentation](https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis); [WCAG 2.2](https://www.w3.org/TR/WCAG22/); [SPDX license identifiers](https://spdx.org/licenses/).

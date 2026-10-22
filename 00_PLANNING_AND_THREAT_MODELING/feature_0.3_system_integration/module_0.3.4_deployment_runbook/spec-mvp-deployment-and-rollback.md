@@ -1,34 +1,37 @@
-# MVP deployment and rollback
+# G25 deployment, rollback and independent recovery
 
-- **Specification ID:** G25
-- **Section:** 00_PLANNING_AND_THREAT_MODELING
-- **Feature:** feature_0.3_system_integration
-- **Module:** module_0.3.4_deployment_runbook
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 2
+## 1. Metadata and status
 
-## Scope
+Owner: p2p-offramp maintainers; security reviewer approves security gates.
 
-Define reproducible deployment of contracts, static frontend, and endpoint configuration. Provide rollback and independent fund-recovery procedures.
+Version: 1.0 design baseline, 2026-10-22.
 
-## Required behavior
+Delivery: M2C.
 
-1. Deploy and verify EVM contract and Solana program identities independently; record immutable versus upgradeable authority explicitly and reject hidden administrative release powers.
-2. Publish network/asset allowlists, static CID, RPC/relay endpoints, dependency versions, and recovery instructions in a signed release bundle.
-3. Rollback means restoring a compatible client and disabling new trades where appropriate; it cannot reverse finalized settlements or erase deployed contracts.
+Status: substantive design baseline; implementation, interoperability evidence and independent review pending. This document does not certify a deployed or audited product. DEVELOPMENT_ROADMAP.md controls milestone order.
 
-## Dependencies
+## 2. Objective and scope
 
-- [G15: IPFS origin and update policy](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.3_release_distribution/spec-ipfs-origin-and-update-policy.md)
-- [G24: MVP end-to-end test matrix](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md)
+Deploy a specific reviewed static release and separately verified EVM/Solana escrows; support frontend rollback without pretending immutable funded terms or public artifacts can be rolled back. Testnet deployment precedes independent real-funds release review.
 
-## Acceptance evidence
+## 3. Architecture and data contracts
 
-- A clean machine deploys a test environment from the release runbook.
-- Recovery release/refund works without the primary frontend and with an unavailable relay.
+DeploymentRecord contains `{releaseManifestDigest,chainId,genesisIdentity,contractOrProgramId,codeDigest,initializationTx,authorityModel,assetAllowlistDigest,rpcPolicyDigest,explorerTemplate,reviewEvidenceDigest}`. Inspect actual chain state for immutable EVM deployment and Solana program authority; no hidden administrative release or late-installed juror. Keep contract/program deployment records separate from frontend release sequence. Recovery package contains ABI/IDL, addresses/code hashes, exact release/refund parameters, chain-time instructions and receipt/journal formats; no wallet private keys.
 
-## Detailed specification completion gate
+## 4. Algorithms and lifecycle
 
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Before publication: verify reproducible source/artifact evidence, deploy to selected test network, confirm chain/genesis identity, inspect code and initialization, exercise full release/refund then fund-loss/crash recovery. Promote signed frontend only after G24/G15 gates. On incident, stop promoting unsafe builds and publish a new higher-sequence advisory/recovery release; never overwrite old immutable artifacts. Rollback means a newly signed higher-sequence frontend built from a previously reviewed source, with compatible storage reader and current deployment registry. Storage downgrade is forbidden; incompatible clients offer read-only export. Existing escrow addresses and deadlines stay unchanged. New funding can be disabled in UI advisories but maintainers cannot pause immutable on-chain settlement.
+
+## 5. Interfaces and integration
+
+Runbook actions require operator, UTC timestamp, exact input digests, expected result, independent witness and actual chain evidence. `recoverTrade(receipt)` verifies network/code, reads authoritative escrow, shows bound seller/buyer/asset/deadline, and constructs release or refund through an external wallet. A seller can release only before expiry; anyone can trigger post-expiry refund only to seller. A receipt is a discovery aid, not custody authority. Offer independent CLI/explorer/manual instructions with verified ABI/IDL and privacy disclosure.
+
+## 6. Errors, abuse and residual threats
+
+WRONG_NETWORK, CODE_MISMATCH, SCHEMA_TOO_NEW, RPC_UNAVAILABLE and STATE_UNCERTAIN stop transaction construction until resolved. An unknown broadcast must be reconciled through the journal/chain before retry. Frontend rollback cannot reverse transactions, recover fiat, remove old CIDs or guarantee an untrusted origin serves an honest recovery page. Recovery instructions must remain usable without proof/map/arbitration packages.
+
+## 7. Verification and primary references
+
+Rehearse gateway outage, bad frontend promotion, schema-forward-only state, lost origin, unavailable primary RPC and wallet account change. Execute recovery from downloaded independent bundle on both chain families using test funds. Record measured recovery steps/time, finalized transactions and independent observer results. Release remains blocked until independent security review and all chain-specific gates pass.
+
+Primary references (exact implementation revisions must be pinned in the evidence record): [Vite deployment](https://vite.dev/guide/static-deploy); [Solana program deployment](https://solana.com/docs/programs/deploying); [Ethereum JSON-RPC](https://ethereum.org/en/developers/apis/json-rpc/).

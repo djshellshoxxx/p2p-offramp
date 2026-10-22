@@ -1,12 +1,59 @@
 # zkTLS provider boundary
 
-**Status:** Expanded engineering/security specification — review and implementation pending. **Scope:** feature_1.2_zktls_fiat_verification / module_1.2.1_tls_handshake_engine. **Normative:** MUST is a release blocker; SHOULD requires a documented waiver.
+## 1. Metadata
 
-## Required behavior and boundaries
-Define provider-neutral attest(request, disclosurePolicy), verify(proof, expectedOrigin, expectedTrade, expectedAmount, expectedRecipient, freshness), cancel and capability methods. A proof is evidence of a precisely scoped statement, never automatic fiat finality. Version statement schema, notary trust roots, proof-system verification key, challenge nonce and chain/trade binding. Deny unknown providers and unreviewed browser extensions. No raw bank credentials in proof output. Test substitution across trade, origin, amount, recipient, nonce and provider version, plus malformed proofs, expired evidence and offline verifier.
+- **Specification:** spec-zktls-provider-interface
+- **Version:** 1.0
+- **Owner:** p2p-offramp maintainers
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Delivery phase:** 4 (optional evidence)
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Interface, errors and operational recovery
-Define a versioned TypeScript or contract interface appropriate to this module, explicit typed validation errors, user-safe retry semantics, no secret-bearing logs, and a cancellation/recovery procedure. Validate all inputs at trust boundaries, distinguish external assertions from cryptographically verified facts, and bind signatures/proofs to trade, chain, protocol version and expiration wherever applicable. Incompatible versions fail closed; do not silently downgrade security or privacy. Add deterministic fixtures and a reference implementation only after the interface is reviewed.
+## 2. Objective and boundaries
 
-## Delivery acceptance and audit evidence
-Require unit and negative tests for each rejection condition above, integration tests with mocked malicious peers/providers, at least one device/browser interoperability test when relevant, fuzz/property tests for parsers or financial invariants, and documented residual risks. Retain dependency lock, test vectors, compiler version, static-analysis report, peer review and release provenance. No production/mainnet approval without independent security assessment. Reference [project roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), and [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Exact protocol versions and deployment parameters remain open decisions; resolve and pin before implementation.
+Expose bounded provider capabilities and exact-statement verification; unknown or unevaluated providers are unsupported.
+
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
+
+## 3. Architecture and data contracts
+
+```typescript
+interface FiatProofRequest {v:1;binding:TradeBinding;termsHash:string;
+ sourcePolicyId:string;statementVersion:1;challenge:string;disclosureHash:string;}
+interface FiatProof {v:1;profileId:string;verificationKeyHash:string;
+ statement:ReceiptStatementV1;proofBytes:Uint8Array;}
+interface FiatProofProvider {
+ capabilities():Readonly<{profileId:string;enabled:boolean;maxProofBytes:number}>;
+ attest(r:FiatProofRequest,signal:AbortSignal):Promise<CoreResult<FiatProof>>;
+ verify(p:FiatProof,expected:FiatProofRequest,signal:AbortSignal):Promise<CoreResult<VerifiedReceipt>>;
+ cancel(jobId:string):void;
+}
+```
+
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
+
+## 4. Algorithms and invariants
+
+Select exact allowlisted profile and check negotiated capability before input collection. Bound proof to 2 MiB and witness to 1 MiB. Verify key/profile, canonical public inputs, authenticated source, challenge, terms, time and recipient/amount predicates independently of provider success boolean. Return VerifiedReceipt with verified predicates and unverified assumptions explicitly enumerated; no boolean paid/final. Verification must be local or an explicitly negotiated trust model, never a bare remote JSON true.
+
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
+
+## 5. Interfaces, errors and recovery
+
+Unsupported browser/provider/key/version fails closed. Read/prover network cancellation never cancels existing escrow. Error normalization excludes raw bank response. A different provider requires fresh consent and job, not a silent fallback.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Provider may lie about supported TLS coverage, proof privacy or field extraction. Proof system validity requires exact circuit/parser semantics and pinned artifacts; origin proofs do not imply settlement authority.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Wrong provider/key/origin/trade/amount/beneficiary/challenge; oversized malformed proof; proof that passes crypto but mismatches expected fields; offline verification; disabled capability; profile substitution and cancellation.
+
+Sources: [TLS 1.3 RFC 8446](https://www.rfc-editor.org/rfc/rfc8446), [TLSNotary source](https://github.com/tlsnotary/tlsn). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Provider registry starts empty. Enablement requires upstream profile/version/digests, publicly checkable vectors plus independently generated fixtures, notary governance and scoped independent security review.
