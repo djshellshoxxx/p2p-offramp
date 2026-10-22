@@ -69,3 +69,9 @@ interoperability checked when the corresponding spec is completed for implementa
 This file must be updated as work advances, including actual check results, unresolved design
 questions and module evidence. Never mark the repository complete while the specification audit,
 implementation inventory, browser matrix or release gates remain incomplete.
+
+## Implementation evidence
+
+- Task 1 parser/encoding boundary: 21 Node tests pass, including independent base64 encodings, exact profile/length checks, authenticated-format parsing boundaries, canonical snapshot bytes, Unicode, aggregate-size rejection and hostile reflection. Strict TypeScript 7.0.2 passes.
+- These tests do not implement or verify encryption, IndexedDB, browser sessions, wallet signing or live trading.
+- Compiler is a pinned development-only dependency; core schema code has no runtime package dependencies. Node v24.19.0 is the local test runtime.
