@@ -1,34 +1,14 @@
-# Chain network registry
+# Chain and RPC registry
 
-- **Specification ID:** G11
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.6_wallet_connectivity
-- **Module:** module_1.6.2_rpc_registry
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 1
+**Status:** Engineering/security design baseline, not implemented or independently audited. **Priority:** MVP or prerequisite. **Normative:** MUST is required; SHOULD deviations need review.
 
-## Scope
+## Scope and implementation contract
+Signed immutable release manifest binds chain ID, genesis hash, RPC options, escrow address, runtime code hash, token allowlist and finality policy. RPC is untrusted: verify chain ID, contract bytecode and independent provider quorum for high-risk decisions where feasible. User-selectable RPC with privacy disclosure; fail closed on disagreement. Never auto-switch to tracking endpoint.
 
-Define signed release configuration for supported networks, assets, and contracts. Prevent malicious configuration from redirecting transactions.
+## Interface and error semantics
+Define explicit versioned types and canonical serialization for every boundary, validation of all external inputs, typed errors (INVALID_INPUT, EXPIRED, UNAUTHORIZED, REPLAY, WRONG_CHAIN, UNAVAILABLE, INTEGRITY_FAILURE), retry/cancel/reconcile operations and no secret-bearing diagnostics. Public chain, external RPC, wallets and peer relays are independently untrusted; distinguish observed data from cryptographically verified facts. Require fail-closed handling of unsupported versions and security downgrades. Preserve keyboard/screen-reader access and translated error/help text.
 
-## Required behavior
+## Threat model and tests
+Malicious RPC, eclipse, chain fork, reorg, stale blocks, DNS hijack, code hash mismatch and finality spoofing.
 
-1. Bind each network to chain identity, RPC policy, contract address/program ID, code identity, supported assets, decimals, and finality settings.
-2. Validate configuration at build time and runtime; fail closed on a wrong-chain RPC or mismatched deployed code.
-3. Support user-selected RPCs only under explicit policy with chain verification; never treat provider responses as unconditional truth.
-
-## Dependencies
-
-- [G05: Transport policy enforcement](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.1_network_privacy/module_5.1.2_transport_policy/spec-transport-policy-enforcement.md)
-- [G10: Wallet provider interface](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.6_wallet_connectivity/module_1.6.1_provider_boundary/spec-wallet-provider-interface.md)
-
-## Acceptance evidence
-
-- Reject wrong chain, altered program ID, and forged decimals.
-- A fresh client can identify all dependencies from the release manifest.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Acceptance: unit and negative tests for all failure classes; fuzz parsers or financial invariants; test restart/reorg/timeout where relevant; browser mobile compatibility; signed deployment manifest; documented residual privacy risks; dependency version/license lock; independent security review before real funds. References: [NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Resolve any design choices and measurable thresholds in a recorded ADR before coding.
