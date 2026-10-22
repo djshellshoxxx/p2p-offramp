@@ -1,0 +1,18 @@
+{
+  "name": "p2p-offramp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.mjs",
+    "test:specs": "python -m unittest discover -s scripts/tests -v",
+    "check:specs": "python scripts/spec_audit.py --check",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
