@@ -1,0 +1,24 @@
+# Role classification matrix
+
+- **Repository:** djshellshoxxx/p2p-offramp
+- **Section:** 00_PLANNING_AND_THREAT_MODELING
+- **Feature:** feature_0.7_compliance_assessment
+- **Module:** module_0.7.1_jurisdiction_matrix
+- **Status:** Placeholder — awaiting Iteration 3
+- **Specification:** spec-role-classification-matrix.md
+
+## Scope
+
+Define separate assessments for publishers, operators, liquidity providers, arbiters, and couriers. Specify custody, control, compensation, and operational facts needed for jurisdiction-specific review.
+
+## Iteration 3 Completion Checklist
+
+- Define boundaries, dependencies, and explicit non-goals.
+- Specify normative requirements using MUST, SHOULD, and MAY.
+- Define applicable schemas, interfaces, errors, and versioning.
+- Describe state transitions, invariants, and failure recovery.
+- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
+- Separate verified cryptographic facts from external assertions.
+- Cite authoritative sources and pin evaluated protocol versions.
+- Define acceptance criteria, negative tests, and interoperability tests.
+- Record unresolved decisions, feasibility limits, and deployment blockers.

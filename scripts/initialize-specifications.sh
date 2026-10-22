@@ -262,3 +262,4 @@ EOF
 )"
 write_new "$MASTER" "$body"
 printf 'Scaffold ready: %s\nCreated: %d; preserved: %d\nMaster index: %s\n' "$ROOT" "$created" "$preserved" "$MASTER"
+
