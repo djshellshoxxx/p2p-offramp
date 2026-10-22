@@ -46,14 +46,29 @@ export async function releaseHold(pool: Pool, input: {
   if (!uuid.test(input.actorId) || !uuid.test(input.holdId))
     throw new LedgerError("INVALID_INPUT","invalid identifiers");
   return withSerializable(pool,async client=>{
-    const row=await client.query<{state:string;owner_id:string|null}>(
-      "SELECT h.state,a.owner_id FROM ledger_holds h JOIN ledger_accounts a ON a.id=h.account_id WHERE h.id=$1 FOR UPDATE OF h,a",
-      [input.holdId]
+    // Acquire account lock before hold lock, consistent with reserve/capture.
+    const initial=await client.query<{account_id:string}>(
+      "SELECT account_id FROM ledger_holds WHERE id=$1",[input.holdId]
     );
-    if (row.rows[0]?.owner_id!==input.actorId) throw new LedgerError("UNAUTHORIZED","hold not owned");
+    if (!initial.rows.length) throw new LedgerError("NOT_FOUND","hold unavailable");
+    const account=await client.query<{owner_id:string|null}>(
+      "SELECT owner_id FROM ledger_accounts WHERE id=$1 FOR UPDATE",[initial.rows[0].account_id]
+    );
+    if (account.rows[0]?.owner_id!==input.actorId)
+      throw new LedgerError("UNAUTHORIZED","hold not owned");
+    const row=await client.query<{state:string;account_id:string}>(
+      "SELECT state,account_id FROM ledger_holds WHERE id=$1 FOR UPDATE",[input.holdId]
+    );
+    if (!row.rows.length || row.rows[0].account_id!==initial.rows[0].account_id)
+      throw new LedgerError("INVALID_STATE","hold changed");
     if (row.rows[0].state==="RELEASED") return "RELEASED";
-    if (row.rows[0].state!=="ACTIVE") throw new LedgerError("INVALID_STATE","hold already captured");
+    if (row.rows[0].state!=="ACTIVE")
+      throw new LedgerError("INVALID_STATE","hold already captured");
     await client.query("UPDATE ledger_holds SET state='RELEASED',updated_at=now() WHERE id=$1",[input.holdId]);
+    await client.query(
+      "INSERT INTO ledger_outbox(operation_id,topic,payload) VALUES($1,'hold.released',$2::jsonb)",
+      [input.holdId,JSON.stringify({holdId:input.holdId})]
+    );
     return "RELEASED";
   });
 }
