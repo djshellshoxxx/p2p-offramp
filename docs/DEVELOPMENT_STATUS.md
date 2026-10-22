@@ -72,6 +72,8 @@ implementation inventory, browser matrix or release gates remain incomplete.
 
 ## Implementation evidence
 
-- Task 1 parser/encoding boundary: 21 Node tests pass, including independent base64 encodings, exact profile/length checks, authenticated-format parsing boundaries, canonical snapshot bytes, Unicode, aggregate-size rejection and hostile reflection. Strict TypeScript 7.0.2 passes.
-- These tests do not implement or verify encryption, IndexedDB, browser sessions, wallet signing or live trading.
+- Task 1 parser/encoding boundary: 22 Node tests pass, including independent base64 encodings, exact profile/length checks, authenticated-format parsing boundaries, canonical snapshot bytes, Unicode, aggregate-size rejection and hostile reflection. Strict TypeScript 7.0.2 passes.
+- Task 2 native Web Crypto helper: 15 additional Node tests pass, matching a Python-produced G02 envelope byte-for-byte and covering wrong-password/tamper/inner-format failures, secret-copy cleanup, disposal races and the 4096 attempted-encryption cap. Independent Python fixture verification passes. These helpers do not implement IndexedDB, browser sessions, wallet signing or live trading.
 - Compiler is a pinned development-only dependency; core schema code has no runtime package dependencies. Node v24.19.0 is the local test runtime.
+
+Current combined evidence: 37 JavaScript tests, 11 specification-tool tests, strict TypeScript checking, Python fixture verification and the full structural catalog check pass locally. Browser/device support and production review remain pending. GitHub publication uses the connected repository API because this checkout has no shell push credentials.

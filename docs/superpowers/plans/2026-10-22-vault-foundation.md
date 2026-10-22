@@ -41,27 +41,27 @@ Interfaces:
 - `encodeSnapshot(snapshot: PrivateSnapshotV1): Uint8Array` emits G02 deterministic JSON and zero padding.
 - `decodeSnapshot(bytes: Uint8Array): PrivateSnapshotV1` validates length prefix, padding, fatal UTF-8 and private schema.
 
-- [ ] Write failing tests for canonical empty/nonempty base64, invalid characters/padding/trailing bits, exact byte limits and pre-decode rejection.
-- [ ] Write failing envelope fixtures for unknown/nested fields, wrong versions/KDF/cipher/counts, ID/nonce/tag/ciphertext/revision limits and defensive copying.
-- [ ] Write failing snapshot fixtures for kinds, record count, duplicates, payload/schema limits and lexical ordering.
-- [ ] Write deterministic encoding tests for 4096-byte boundaries, bad prefix/zero padding/UTF-8, max snapshot bound, no caller mutation and inner metadata preservation.
-- [ ] Implement bounded validators and serialization using standard browser APIs only.
-- [ ] Run all tests and strict typecheck; record real results and commit this independent slice.
+- [x] Write failing tests for canonical empty/nonempty base64, invalid characters/padding/trailing bits, exact byte limits and pre-decode rejection.
+- [x] Write failing envelope fixtures for unknown/nested fields, wrong versions/KDF/cipher/counts, ID/nonce/tag/ciphertext/revision limits and defensive copying.
+- [x] Write failing snapshot fixtures for kinds, record count, duplicates, payload/schema limits and lexical ordering.
+- [x] Write deterministic encoding tests for 4096-byte boundaries, bad prefix/zero padding/UTF-8, max snapshot bound, no caller mutation and inner metadata preservation.
+- [x] Implement bounded validators and serialization using standard browser APIs only.
+- [x] Run all tests and strict typecheck; record real results and commit this independent slice.
 
 ## Task 2: G02 primitive envelope creation and authentication
 
 Files: `packages/storage/src/vault-crypto.ts`, `packages/storage/test/vault-crypto.test.mjs`; reviewed independent fixture bytes in `packages/storage/test/fixtures`.
 
 Interfaces:
-- `createEnvelope(snapshot, passphrase, cryptoProvider): Promise<{envelope: VaultEnvelopeV1; material: UnlockedMaterial}>` validates before KDF, generates fresh DEK/salt/nonces, and binds exact G02 AAD. UnlockedMaterial is storage-internal authenticated snapshot plus nonextractable AES key handle and unchanged wrapped-key metadata, never exported by VaultService.
-- `openEnvelope(envelope, passphrase, cryptoProvider): Promise<UnlockedMaterial>` bounds-checks first, authenticates key and snapshot, checks duplicated metadata, and emits one authentication failure shape for all private failures. `encryptRevision(material, nextSnapshot)` retains the original key and wrapped-key metadata while generating a fresh snapshot nonce; it validates revision progression and write budget.
+- `createEnvelope(snapshot, passphrase, cryptoProvider): Promise<{envelope: VaultEnvelopeV1; material: UnlockedMaterial}>` validates before KDF, generates fresh DEK/salt/nonces, and binds exact G02 AAD. UnlockedMaterial is an opaque storage-internal WeakMap handle to a nonextractable AES key and unchanged wrapped-key metadata; the authenticated plaintext snapshot is returned separately to storage, never a raw key or passphrase.
+- `openEnvelope(envelope, passphrase, cryptoProvider): Promise<{snapshot: PrivateSnapshotV1; material: UnlockedMaterial}>` bounds-checks first, authenticates key and snapshot, checks duplicated metadata, and emits one authentication failure shape for all private failures. `encryptRevision(material, nextSnapshot, expectedRevision)` retains the original key and wrapped-key metadata while generating a fresh snapshot nonce; it validates revision progression and write budget.
 - Public service session/generation handling is added in Task 3, not bypassed by exposing raw keys to UI.
 
-- [ ] Add failing independently generated PBKDF2/AES-GCM vectors, exact AAD tamper cases and wrong-passphrase tests.
-- [ ] Test that invalid public bounds/KDF profile call zero KDF operations, and random-source failures are fatal.
-- [ ] Implement native Web Crypto operations without a custom primitive library; zero owned byte buffers best effort.
-- [ ] Verify independent fixture interoperability, negative cases and strict types; do not claim browser/session security from primitive tests.
-- [ ] Record dependency/runtime evidence and commit.
+- [x] Add failing independently generated PBKDF2/AES-GCM vectors, exact AAD tamper cases and wrong-passphrase tests.
+- [x] Test that invalid public bounds/KDF profile call zero KDF operations, and random-source failures are fatal.
+- [x] Implement native Web Crypto operations without a custom primitive library; zero owned byte buffers best effort.
+- [x] Verify independent fixture interoperability, negative cases and strict types; do not claim browser/session security from primitive tests.
+- [x] Record dependency/runtime evidence and commit.
 
 ## Task 3: IndexedDB sessions and atomic updates
 

@@ -8,7 +8,7 @@
 
 ## Scope
 
-Define the navigation catalog for all planned specification placeholders. Identify completion requirements and distinguish planned capabilities from implemented or validated behavior.
+Define the navigation catalog for all planned and expanded specifications. Identify completion requirements and distinguish planned capabilities from implemented or validated behavior.
 
 ## Structure
 

@@ -227,3 +227,16 @@ test('typed-array offset views decode the exact slice and valid surrogate pairs 
   assert.deepEqual(decode(backing.subarray(5, 5 + encoded.length)), snapshot());
   assert.deepEqual(phrase('a'.repeat(12)+'😀'), new TextEncoder().encode('a'.repeat(12)+'😀'));
 });
+test('exact maximum snapshot serializes and decodes within the eight MiB envelope', () => {
+  const encode = fn('encodeSnapshot'), decode = fn('decodeSnapshot'), input = snapshot();
+  const full = b64(new Uint8Array(262144));
+  input.records = Array.from({ length: 24 }, (_, n) => ({ ...record(n.toString(16).padStart(32, '0')), payload: n < 23 ? full : '' }));
+  const last = input.records.at(-1);
+  let remaining = 8388604 - JSON.stringify(input).length;
+  if (remaining % 4 === 1) { last.schemaVersion = 10; remaining--; }
+  last.payload = 'A'.repeat(remaining);
+  assert.equal(JSON.stringify(input).length, 8388604);
+  const encoded = encode(input);
+  assert.equal(encoded.length, 8388608);
+  assert.deepEqual(decode(encoded), input);
+});

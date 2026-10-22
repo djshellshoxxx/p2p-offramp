@@ -13,8 +13,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s scripts/tests -v
-      - name: Validate local links and catalog coverage
-        run: python scripts/spec_audit.py --check-links
+      - name: Validate expanded structure, local links and catalog coverage
+        run: python scripts/spec_audit.py --check
       - name: Verify committed inventory is current
         run: |
           python scripts/spec_audit.py --markdown docs/SPEC_READINESS.md
