@@ -1,35 +1,14 @@
 # Relay failover and abuse limits
 
-- **Specification ID:** G21
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.4_order_discovery
-- **Module:** module_1.4.3_relay_resilience
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 2
+**Status:** Engineering/security design baseline, not implemented or independently audited. **Priority:** MVP or prerequisite. **Normative:** MUST is required; SHOULD deviations need review.
 
-## Scope
+## Scope and implementation contract
+Use bounded relay pool with health score, exponential backoff, per-relay quotas, message size cap and duplicate suppression. User may configure relays; do not silently change privacy mode or leak messages to public fallback. Client-only text CAPTCHA is friction, not anti-Sybil security. Proof-of-work or stake-based spam controls require explicit cost and accessibility review. Provide offline queued drafts, not guaranteed delivery.
 
-Define relay selection, reconnect behavior, and bounded resource use. Keep malicious relay input from exhausting the client or changing trade authority.
+## Interface and error semantics
+Define explicit versioned types and canonical serialization for every boundary, validation of all external inputs, typed errors (INVALID_INPUT, EXPIRED, UNAUTHORIZED, REPLAY, WRONG_CHAIN, UNAVAILABLE, INTEGRITY_FAILURE), retry/cancel/reconcile operations and no secret-bearing diagnostics. Public chain, external RPC, wallets and peer relays are independently untrusted; distinguish observed data from cryptographically verified facts. Require fail-closed handling of unsupported versions and security downgrades. Preserve keyboard/screen-reader access and translated error/help text.
 
-## Required behavior
+## Threat model and tests
+Malicious relay flooding, eclipse attack, replay storm, disk exhaustion, timeout and downgrade of private transport.
 
-1. Enforce event size, signature-validation cost, subscription, queue, and per-peer message limits before expensive work.
-2. Use configurable relay sets with bounded reconnects and event deduplication; keep private routing policy during failover.
-3. Treat relay acknowledgments as publication evidence only; never infer trade settlement or globally complete liquidity from them.
-
-## Dependencies
-
-- [G13: Typed errors and retries](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md)
-- [G19: Orderbook visibility and expiry](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.4_order_discovery/module_1.4.2_discovery_policy/spec-orderbook-visibility-and-expiry.md)
-- [G20: NIP-17 trade chat](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_encrypted_messaging/module_5.3.2_private_chat/spec-nip17-trade-chat.md)
-
-## Acceptance evidence
-
-- A malicious relay replaying oversized events cannot exhaust memory beyond configured bounds.
-- Loss of one relay permits recovery through another without duplicate fills.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Acceptance: unit and negative tests for all failure classes; fuzz parsers or financial invariants; test restart/reorg/timeout where relevant; browser mobile compatibility; signed deployment manifest; documented residual privacy risks; dependency version/license lock; independent security review before real funds. References: [NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Resolve any design choices and measurable thresholds in a recorded ADR before coding.
