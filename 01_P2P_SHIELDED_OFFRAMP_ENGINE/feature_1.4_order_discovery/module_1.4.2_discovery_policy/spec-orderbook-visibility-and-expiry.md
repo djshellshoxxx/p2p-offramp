@@ -1,34 +1,14 @@
 # Orderbook visibility and expiry
 
-- **Specification ID:** G19
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.4_order_discovery
-- **Module:** module_1.4.2_discovery_policy
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 2
+**Status:** Engineering/security design baseline, not implemented or independently audited. **Priority:** MVP or prerequisite. **Normative:** MUST is required; SHOULD deviations need review.
 
-## Scope
+## Scope and implementation contract
+Support public minimal-metadata offer, invite-only encrypted offer and local draft. Public listing may disclose token, amount range, timing and network metadata; UI must explain exposure. Expiry is signed and checked locally and on-chain before funding; relay deletion is best effort only. Never auto-fund from stale offer. Add sorting/filtering entirely client-side where feasible; avoid tracking search terms.
 
-Define the distinction between discoverable order advertisements and encrypted trade details. Specify application expiry without promising relay deletion.
+## Interface and error semantics
+Define explicit versioned types and canonical serialization for every boundary, validation of all external inputs, typed errors (INVALID_INPUT, EXPIRED, UNAUTHORIZED, REPLAY, WRONG_CHAIN, UNAVAILABLE, INTEGRITY_FAILURE), retry/cancel/reconcile operations and no secret-bearing diagnostics. Public chain, external RPC, wallets and peer relays are independently untrusted; distinguish observed data from cryptographically verified facts. Require fail-closed handling of unsupported versions and security downgrades. Preserve keyboard/screen-reader access and translated error/help text.
 
-## Required behavior
+## Threat model and tests
+Stale offers, metadata triangulation, fake liquidity, Sybil spam, malicious filtering, expiry races and invite leaks.
 
-1. Public discovery exposes only opted-in coarse market fields and a contact key; private invite-only orders encrypt details to known recipients.
-2. Document that universally discoverable offers cannot also hide all terms from every potential counterparty; do not use a publicly shared key as a confidentiality claim.
-3. Use signed expiry/revision/cancellation and revalidate before funding; choose and register application event kinds after compatibility review rather than calling all order events ephemeral.
-
-## Dependencies
-
-- [G16: Signed trade terms](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md)
-- [G05: Transport policy enforcement](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.1_network_privacy/module_5.1.2_transport_policy/spec-transport-policy-enforcement.md)
-
-## Acceptance evidence
-
-- Expired or canceled offers cannot initiate a trade even when a relay replays them.
-- Offline/late subscribers see no false guarantee of delivery or deletion.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Acceptance: unit and negative tests for all failure classes; fuzz parsers or financial invariants; test restart/reorg/timeout where relevant; browser mobile compatibility; signed deployment manifest; documented residual privacy risks; dependency version/license lock; independent security review before real funds. References: [NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Resolve any design choices and measurable thresholds in a recorded ADR before coding.
