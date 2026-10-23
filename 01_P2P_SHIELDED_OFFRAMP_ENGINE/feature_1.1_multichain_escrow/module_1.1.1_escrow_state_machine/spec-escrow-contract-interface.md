@@ -1,24 +1,20 @@
-# Escrow contract interface
+# Escrow contract interface — implementation and security specification
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.1_multichain_escrow
-- **Module:** module_1.1.1_escrow_state_machine
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-escrow-contract-interface.md
+**Status:** Design complete for implementation planning; not implemented, audited or approved for real funds. **Priority:** P0. **Scope:** basic EVM escrow, no fiat oracle or arbitrator. Solana must have a separate equivalent state-machine adapter and audit.
 
-## Scope
+## Trust and transaction model
+The crypto seller deposits a specified asset; buyer pays fiat outside the protocol; seller alone confirms fiat receipt and releases the asset before expiry; after expiry the seller can reclaim it. This does **not** protect the buyer against seller refusal after fiat payment. No third party or oracle can claim bank settlement finality. UI MUST disclose this asymmetry before the buyer sends fiat. Any later dispute module is opt-in with separate escrow version and cannot gain authority over existing deposits.
 
-Define escrow identifiers, entry points, and typed errors. Specify authorization and idempotency for externally callable operations.
+## Typed interface and invariants
+Use Solidity 0.8.x, pinned compiler and OpenZeppelin SafeERC20, ReentrancyGuard, custom errors. Immutable deployment registry records chainId, implementation bytecode hash, version, supported tokens. Each trade stores id bytes32, seller, buyer, token, exact deposited amount, fundedAt, expiry, termsHash, state. Hash id using domain separation over chainId, contract address, version, seller nonce and signed terms; nonce never reused. Valid states: UNINITIALIZED -> FUNDED -> RELEASED or REFUNDED. Both terminal states are permanent. A token transfer that reverts MUST revert the entire transition. Reentrancy and callbacks cannot trigger double release. Asset conservation: total token outflow for a trade <= verified deposited amount. Only bound seller can release before expiry; only seller can refund after expiry; choose strict comparison `block.timestamp >= expiry` for refund and `block.timestamp < expiry` for release. At boundary, refund wins; disclose deadline and transaction confirmation uncertainty.
 
-## Iteration 3 Completion Checklist
+Suggested ABI: `fund(TradeTerms terms, bytes sellerSignature, bytes buyerSignature)`, `release(bytes32 tradeId)`, `refund(bytes32 tradeId)`, `getTrade(bytes32)`; events `Funded(id,seller,buyer,token,amount,expiry,termsHash)`, `Released(id)`, `Refunded(id)`. Signature policy: if buyer authorization is unnecessary for funding, omit buyer signature rather than introducing a spoofable field; record buyer acceptance separately before fiat. Use EIP-712 domain name/version/chainId/verifyingContract, nonce and deadline. Support EIP-1271 contract signatures where required. Reject zero address, invalid token, zero amount, expired terms, unsupported token behavior, duplicate ID, wrong chain, stale nonce, signature malleability and unbounded expiries. Amount is measured using pre/post balance deltas; either reject fee-on-transfer/rebasing tokens or explicitly define net-amount accounting and adversarial tests. Default MVP rejects them. Never assume `transferFrom` returns a bool; use SafeERC20.
 
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+## Error and recovery contract
+Typed errors: InvalidState, Unauthorized, InvalidTerms, Expired, NotExpired, UnsupportedAsset, IncorrectDeposit, DuplicateTrade, InvalidSignature, UnsafeToken, Reentrancy. Reverted funding creates no trade. UI must reconcile on-chain receipt and logs after network failures; never infer success from wallet callback alone. Chain reorgs revert provisional UI state. Release/refund are idempotent from UI perspective but on-chain repeat attempts revert InvalidState; client interprets terminal state as already complete. No privileged emergency drain, proxy upgrade or arbitrary destination override.
+
+## Security verification and negative tests
+Foundry tests: valid lifecycle; boundary timestamp; seller/buyer swap; wrong signature/domain/chain; replay across contract/chain; allowance race; ERC-777-style callback; malicious token returns false/no data; fee-on-transfer; rebasing; pause/reorg; gas grief; double claim; unauthorized settlement; zero address; fee rounding; block timestamp tolerance; forced ETH; contract-wallet signatures. Fuzz asset conservation and terminal state, test no double spend under arbitrary call sequences. Run Slither and independent audit before real funds. Cross-reference [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1271](https://eips.ethereum.org/EIPS/eip-1271), [OpenZeppelin SafeERC20](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/utils/SafeERC20.sol), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), and repo attack matrix.
+
+## Open blockers
+Specify legal/payment-rail exposure and explicit buyer risk acceptance; choose allowed chains/tokens, exact expiry bounds, fee policy and whether both counterparties sign trade terms. Freeze ABI only after adversarial review and compatibility with state-transition, timeout, wallet and manual-settlement specs. No code deployment authorized by this document.

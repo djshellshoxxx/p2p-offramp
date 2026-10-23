@@ -1,35 +1,14 @@
-# Proof job resource budget
+# Proof job resource and cancellation budget
 
-- **Specification ID:** G29
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.2_zktls_fiat_verification
-- **Module:** module_1.2.3_proof_jobs
-- **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 4
+**Status:** Expanded design specification; independent security review and implementation pending. **Priority:** advanced feature unless MVP evidence policy. **Normative:** MUST is a release gate; SHOULD needs an approved deviation.
 
-## Scope
+## Purpose, scope and trust model
+Proof generation runs in an isolated worker with hard configurable limits on memory, CPU, wall-clock time, payload length, concurrency and temporary storage. Benchmark limits separately on low-memory Android, iOS Safari and desktop; do not hardcode unmeasured device promises. One proof job per trade; explicit user consent and cancel; clean worker state on abort as best effort. Keep sensitive witness and bank session material out of logs and persisted job queues.
 
-Define cancellation, worker isolation, and resource budgets for browser proof generation. Prevent proof work from blocking custody or recovery controls.
+## Interfaces and implementation requirements
+Define versioned input/output types, canonical serialization, required/optional fields, explicit validation and typed errors. Authenticate trust roots and user consent at boundaries. Use pinned audited dependencies and recorded test vectors; prohibit silent fallback to weaker proof, cipher, transport or verifier. Document privacy metadata exposed to chain, relay, issuer and browser. Reject unsupported versions, oversized inputs, expired assertions and mismatched trade/chain context. State machine MUST have terminal failure and cancellation paths and user-safe recovery. Avoid putting credentials, identity secrets or evidence plaintext in URLs, logs or public chain events.
 
-## Required behavior
+## Security tests and acceptance
+Tests: oversized witness, concurrent start, tab suspension, browser eviction, worker crash, low storage, cancellation mid-proving, repeated retry, memory pressure and device overheating. Provide progress and safe retry without silently resubmitting transactions.
 
-1. Enforce memory/time/concurrency budgets measured on supported devices and terminate cancelled workers.
-2. Never expose credentials, transcript secrets, or witness data in logs or shared event buses.
-3. A failed proof leaves escrow unchanged and follows pre-agreed manual or expiry rules.
-
-## Dependencies
-
-- [G04: Client content security policy](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.12_browser_security/module_5.12.1_content_boundary/spec-client-content-security-policy.md)
-- [G13: Typed errors and retries](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md)
-- [G14: Optional module interface](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.6_extension_contract/spec-optional-module-interface.md)
-
-## Acceptance evidence
-
-- Oversized input, cancellation, and worker crash do not freeze release/refund UI.
-- Secrets do not survive in persisted job metadata.
-
-## Detailed specification completion gate
-
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+Add unit tests, negative/fuzz tests for parsers and cryptographic inputs, integration fixtures, browser recovery and replay tests. Verify independent implementation against published vectors before any live-fund deployment. Record known limitations, dependency lock, verifier key hashes and reviewer sign-off. References: [Semaphore](https://github.com/semaphore-protocol/semaphore), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/), and the repository threat model. Exact algorithms and key management choices remain gated architectural decisions.

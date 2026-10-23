@@ -32,3 +32,9 @@ Define the Phase 2 settlement model without fiat proofs or a jury. State precise
 ## Detailed specification completion gate
 
 Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+
+## MVP manual fiat settlement policy
+The crypto seller funds escrow; the buyer transfers fiat using independently agreed instructions; only seller can release after verifying receipt before expiry. This is a cooperative exchange, **not trustless fiat settlement**. Bank screenshots, payment messages and zkTLS attestations are evidence only; none proves irrevocable settlement or prevents chargebacks. The buyer can lose fiat if seller refuses to release; the seller can face reversal after releasing crypto. The UI MUST display these asymmetric risks before any fiat payment, distinguish pending/cleared/reversible payment, show exact deadline and avoid misleading guarantees.
+
+## Engineering acceptance
+Terms require explicit acknowledgment, supported payment rail, fee/FX display, expiry, buyer/seller roles and evidence-handling consent. Evidence encrypted before transport; minimize bank identifiers; allow selective disclosure. Do not store credentials or expose payment metadata in relay event tags. Provide cancel/refund/dispute guidance and no auto-release based solely on a screenshot. Negative tests: forged receipt, altered amount, wrong beneficiary, replayed payment proof, delayed bank transfer, partial payment, chargeback, seller withholding, expiring escrow and network outage. Jurisdiction/payment-service classification and legal review are blockers to real-money launch.

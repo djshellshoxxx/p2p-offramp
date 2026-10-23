@@ -1,24 +1,14 @@
-# Payment proof replay prevention
+# Payment-proof replay prevention
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.2_zktls_fiat_verification
-- **Module:** module_1.2.2_bank_receipt_verifier
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-payment-proof-replay-prevention.md
+**Status:** Expanded design specification; independent security review and implementation pending. **Priority:** advanced feature unless MVP evidence policy. **Normative:** MUST is a release gate; SHOULD needs an approved deviation.
 
-## Scope
+## Purpose, scope and trust model
+A proof MUST bind a random challenge (>=128 bits), protocol version, chain ID, escrow contract, trade ID, currency, amount in minor units, beneficiary commitment, payment reference and proof verifier version. A consumed proof/nullifier is stored in authoritative verifier state; browser localStorage alone cannot prevent replay. Define domain-separated nullifier derivation, expiry, finality/reorg rollback and cross-chain rejection. A bank receipt can be authentic and still reversible.
 
-Define payment identifiers and trade-bound replay protection. Specify duplicate rejection without publishing raw account or transaction identifiers.
+## Interfaces and implementation requirements
+Define versioned input/output types, canonical serialization, required/optional fields, explicit validation and typed errors. Authenticate trust roots and user consent at boundaries. Use pinned audited dependencies and recorded test vectors; prohibit silent fallback to weaker proof, cipher, transport or verifier. Document privacy metadata exposed to chain, relay, issuer and browser. Reject unsupported versions, oversized inputs, expired assertions and mismatched trade/chain context. State machine MUST have terminal failure and cancellation paths and user-safe recovery. Avoid putting credentials, identity secrets or evidence plaintext in URLs, logs or public chain events.
 
-## Iteration 3 Completion Checklist
+## Security tests and acceptance
+Tests: same proof twice, two trades, two chains, alternate relays, old verifier key, colliding references, modified recipient, late proof, chain reorg, concurrent submit. Never release escrow automatically from a proof in MVP.
 
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+Add unit tests, negative/fuzz tests for parsers and cryptographic inputs, integration fixtures, browser recovery and replay tests. Verify independent implementation against published vectors before any live-fund deployment. Record known limitations, dependency lock, verifier key hashes and reviewer sign-off. References: [Semaphore](https://github.com/semaphore-protocol/semaphore), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/), and the repository threat model. Exact algorithms and key management choices remain gated architectural decisions.

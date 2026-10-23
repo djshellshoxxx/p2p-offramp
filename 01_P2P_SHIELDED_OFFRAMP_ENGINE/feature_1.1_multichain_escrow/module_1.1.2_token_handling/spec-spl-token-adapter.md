@@ -1,24 +1,12 @@
-# Spl token adapter
+# Solana SPL escrow adapter
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.1_multichain_escrow
-- **Module:** module_1.1.2_token_handling
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-spl-token-adapter.md
+**Status:** Expanded engineering/security specification — review and implementation pending. **Scope:** feature_1.1_multichain_escrow / module_1.1.2_token_handling. **Normative:** MUST is a release blocker; SHOULD requires a documented waiver.
 
-## Scope
+## Required behavior and boundaries
+Treat Solana as a separate program and state machine, not an EVM ABI translation. Pin Solana runtime and SPL Token/Token-2022 versions, choose explicitly supported token program IDs and reject transfer hooks, confidential transfers, transfer fees and freeze authority risks until individually modeled. PDA seeds MUST bind trade ID, version and program ID; escrow token account owner MUST be program-controlled. Verify mint, decimals, signer, associated token account, rent, expiry via Clock sysvar, account ownership and instruction ordering. Model transaction atomicity, blockhash expiry and commitment/finality independently from EVM. Tests: forged account substitution, PDA collisions, malicious mint, withheld authority, reentrancy-equivalent CPI, duplicate settle, token extension bypass and insufficient rent.
 
-Define mint, token-account, program-owner, and authority validation. Specify token-extension support and account lifecycle requirements.
+## Interface, errors and operational recovery
+Define a versioned TypeScript or contract interface appropriate to this module, explicit typed validation errors, user-safe retry semantics, no secret-bearing logs, and a cancellation/recovery procedure. Validate all inputs at trust boundaries, distinguish external assertions from cryptographically verified facts, and bind signatures/proofs to trade, chain, protocol version and expiration wherever applicable. Incompatible versions fail closed; do not silently downgrade security or privacy. Add deterministic fixtures and a reference implementation only after the interface is reviewed.
 
-## Iteration 3 Completion Checklist
-
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+## Delivery acceptance and audit evidence
+Require unit and negative tests for each rejection condition above, integration tests with mocked malicious peers/providers, at least one device/browser interoperability test when relevant, fuzz/property tests for parsers or financial invariants, and documented residual risks. Retain dependency lock, test vectors, compiler version, static-analysis report, peer review and release provenance. No production/mainnet approval without independent security assessment. Reference [project roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), and [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Exact protocol versions and deployment parameters remain open decisions; resolve and pin before implementation.

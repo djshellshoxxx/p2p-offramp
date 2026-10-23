@@ -1,24 +1,14 @@
-# Quote reservation interface
+# Liquidity quote reservation
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.5_liquidity_provision
-- **Module:** module_1.5.1_market_maker_vaults
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-quote-reservation-interface.md
+**Status:** Engineering/security design baseline, not implemented or independently audited. **Priority:** post-MVP. **Normative:** MUST is required; SHOULD deviations need review.
 
-## Scope
+## Scope and implementation contract
+Quote binds maker, taker, asset, exact amount, fee, expiry, nonce, chain and signed terms. Reservation state AVAILABLE -> RESERVED -> CONSUMED/EXPIRED; locked liquidity cannot be double allocated. All quotes require freshness and user confirmation; cancellation may race chain finality. Avoid off-chain quote being treated as funded guarantee.
 
-Define signed quotes, expiry, inventory reservation, and limits. Specify stale-price defenses and prevention of simultaneous liquidity overcommitment.
+## Interface and error semantics
+Define explicit versioned types and canonical serialization for every boundary, validation of all external inputs, typed errors (INVALID_INPUT, EXPIRED, UNAUTHORIZED, REPLAY, WRONG_CHAIN, UNAVAILABLE, INTEGRITY_FAILURE), retry/cancel/reconcile operations and no secret-bearing diagnostics. Public chain, external RPC, wallets and peer relays are independently untrusted; distinguish observed data from cryptographically verified facts. Require fail-closed handling of unsupported versions and security downgrades. Preserve keyboard/screen-reader access and translated error/help text.
 
-## Iteration 3 Completion Checklist
+## Threat model and tests
+Double reservation, replayed quote, front-running, stale fee, partial fill, forged maker, clock skew and insufficient vault funds.
 
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+Acceptance: unit and negative tests for all failure classes; fuzz parsers or financial invariants; test restart/reorg/timeout where relevant; browser mobile compatibility; signed deployment manifest; documented residual privacy risks; dependency version/license lock; independent security review before real funds. References: [NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Resolve any design choices and measurable thresholds in a recorded ADR before coding.

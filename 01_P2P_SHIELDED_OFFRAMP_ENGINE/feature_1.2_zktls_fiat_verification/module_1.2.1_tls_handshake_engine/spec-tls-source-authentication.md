@@ -1,24 +1,12 @@
-# Tls source authentication
+# TLS source authentication
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.2_zktls_fiat_verification
-- **Module:** module_1.2.1_tls_handshake_engine
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-tls-source-authentication.md
+**Status:** Expanded engineering/security specification — review and implementation pending. **Scope:** feature_1.2_zktls_fiat_verification / module_1.2.1_tls_handshake_engine. **Normative:** MUST is a release blocker; SHOULD requires a documented waiver.
 
-## Scope
+## Required behavior and boundaries
+Verify the authenticated server identity and TLS transcript binding for any attested bank session; the proof MUST identify which origin, session, response fields and time interval were attested. Do not equate a valid TLS session with truthful bank data, ownership of beneficiary account, irreversibility or absence of chargeback. Define certificate-chain, hostname, freshness, notary key pinning, key rotation and transcript canonicalization policy. Never export bank login secrets to notaries, relays or debug logs. Negative tests: spoofed origin, expired/revoked cert where revocation checks are available, redirect, forged transcript, replay, partial content, dynamic HTML mismatch and notary compromise.
 
-Define source identity and session provenance for payment evidence. Specify freshness checks and rejection of unsupported endpoints or TLS configurations.
+## Interface, errors and operational recovery
+Define a versioned TypeScript or contract interface appropriate to this module, explicit typed validation errors, user-safe retry semantics, no secret-bearing logs, and a cancellation/recovery procedure. Validate all inputs at trust boundaries, distinguish external assertions from cryptographically verified facts, and bind signatures/proofs to trade, chain, protocol version and expiration wherever applicable. Incompatible versions fail closed; do not silently downgrade security or privacy. Add deterministic fixtures and a reference implementation only after the interface is reviewed.
 
-## Iteration 3 Completion Checklist
-
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+## Delivery acceptance and audit evidence
+Require unit and negative tests for each rejection condition above, integration tests with mocked malicious peers/providers, at least one device/browser interoperability test when relevant, fuzz/property tests for parsers or financial invariants, and documented residual risks. Retain dependency lock, test vectors, compiler version, static-analysis report, peer review and release provenance. No production/mainnet approval without independent security assessment. Reference [project roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [Solidity security](https://docs.soliditylang.org/en/latest/security-considerations.html), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), and [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/). Exact protocol versions and deployment parameters remain open decisions; resolve and pin before implementation.

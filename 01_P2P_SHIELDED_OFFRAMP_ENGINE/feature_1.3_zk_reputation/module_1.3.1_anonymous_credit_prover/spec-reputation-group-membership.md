@@ -1,24 +1,14 @@
-# Reputation group membership
+# Anonymous reputation group membership
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.3_zk_reputation
-- **Module:** module_1.3.1_anonymous_credit_prover
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-reputation-group-membership.md
+**Status:** Expanded design specification; independent security review and implementation pending. **Priority:** advanced feature unless MVP evidence policy. **Normative:** MUST is a release gate; SHOULD needs an approved deviation.
 
-## Scope
+## Purpose, scope and trust model
+Define explicit issuer governance, membership Merkle root version, identity commitment, membership witness and nullifier scope. Proof reveals only eligibility predicate and protocol/domain, never raw identity or all past trade IDs. Membership does not establish human uniqueness or absence of collusion. Publish revocation and root freshness policy; old roots expire. Separate reputation from escrow authorization.
 
-Define membership eligibility, group updates, and anonymous proof verification. Specify issuer trust and maintenance checks for Semaphore or Sismo-style integrations.
+## Interfaces and implementation requirements
+Define versioned input/output types, canonical serialization, required/optional fields, explicit validation and typed errors. Authenticate trust roots and user consent at boundaries. Use pinned audited dependencies and recorded test vectors; prohibit silent fallback to weaker proof, cipher, transport or verifier. Document privacy metadata exposed to chain, relay, issuer and browser. Reject unsupported versions, oversized inputs, expired assertions and mismatched trade/chain context. State machine MUST have terminal failure and cancellation paths and user-safe recovery. Avoid putting credentials, identity secrets or evidence plaintext in URLs, logs or public chain events.
 
-## Iteration 3 Completion Checklist
+## Security tests and acceptance
+Tests: forged membership, stale root, copied witness, Sybil enrollment, revoked user, cross-application nullifier, issuer collusion, proof replay and malformed public inputs.
 
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+Add unit tests, negative/fuzz tests for parsers and cryptographic inputs, integration fixtures, browser recovery and replay tests. Verify independent implementation against published vectors before any live-fund deployment. Record known limitations, dependency lock, verifier key hashes and reviewer sign-off. References: [Semaphore](https://github.com/semaphore-protocol/semaphore), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/), and the repository threat model. Exact algorithms and key management choices remain gated architectural decisions.

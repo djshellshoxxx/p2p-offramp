@@ -1,24 +1,14 @@
-# Reputation score statement
+# Private reputation score proof
 
-- **Repository:** djshellshoxxx/p2p-offramp
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.3_zk_reputation
-- **Module:** module_1.3.1_anonymous_credit_prover
-- **Status:** Placeholder — awaiting Iteration 3
-- **Specification:** spec-reputation-score-statement.md
+**Status:** Expanded design specification; independent security review and implementation pending. **Priority:** advanced feature unless MVP evidence policy. **Normative:** MUST is a release gate; SHOULD needs an approved deviation.
 
-## Scope
+## Purpose, scope and trust model
+Specify statement score >= threshold with range proof and signed credential freshness; reveal threshold class, epoch, issuer and nullifier only. Never accept client-calculated score without verifiable issuer commitment. Prevent score inflation, double counting, self-trades and collusive farming using separately reviewed policy; privacy cannot prevent all Sybil attacks. No irreversible financial decision solely from reputation.
 
-Define threshold claims derived from authenticated trade outcomes. Specify score provenance and limits of group membership alone.
+## Interfaces and implementation requirements
+Define versioned input/output types, canonical serialization, required/optional fields, explicit validation and typed errors. Authenticate trust roots and user consent at boundaries. Use pinned audited dependencies and recorded test vectors; prohibit silent fallback to weaker proof, cipher, transport or verifier. Document privacy metadata exposed to chain, relay, issuer and browser. Reject unsupported versions, oversized inputs, expired assertions and mismatched trade/chain context. State machine MUST have terminal failure and cancellation paths and user-safe recovery. Avoid putting credentials, identity secrets or evidence plaintext in URLs, logs or public chain events.
 
-## Iteration 3 Completion Checklist
+## Security tests and acceptance
+Tests: negative/overflow score, stale credential, threshold bypass, forged issuer, double spend of rating, cross-trade linkability and proof mismatch.
 
-- Define boundaries, dependencies, and explicit non-goals.
-- Specify normative requirements using MUST, SHOULD, and MAY.
-- Define applicable schemas, interfaces, errors, and versioning.
-- Describe state transitions, invariants, and failure recovery.
-- Assess adversaries, trust assumptions, privacy leakage, and mitigations.
-- Separate verified cryptographic facts from external assertions.
-- Cite authoritative sources and pin evaluated protocol versions.
-- Define acceptance criteria, negative tests, and interoperability tests.
-- Record unresolved decisions, feasibility limits, and deployment blockers.
+Add unit tests, negative/fuzz tests for parsers and cryptographic inputs, integration fixtures, browser recovery and replay tests. Verify independent implementation against published vectors before any live-fund deployment. Record known limitations, dependency lock, verifier key hashes and reviewer sign-off. References: [Semaphore](https://github.com/semaphore-protocol/semaphore), [EIP-712](https://eips.ethereum.org/EIPS/eip-712), [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/), and the repository threat model. Exact algorithms and key management choices remain gated architectural decisions.
