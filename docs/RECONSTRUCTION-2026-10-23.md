@@ -98,3 +98,19 @@ full CTX02 dispatch, durable G12 pending intents, native EVM/Solana adapters, ne
 frontend/runtime integration and manifest/release trust remain unimplemented. The Solana fixture checks only
 structural binding/decimal heights. `RELEASE_ENABLED = 0`; economic preparation always returns false.
 No signing/submission interface or enabled production adapter is present.
+
+## Verified G02 persistence tranche
+
+Final frozen source: integrator `npm test` passed 98/98 Node tests, with zero failed/cancelled/skipped;
+strict typecheck passed. Real Chromium rerun passed encrypted persistence, same-revision two-tab conflict,
+exact ciphertext CAS, stale-session transaction abort, lock/reopen, versionchange session revocation,
+unsupported-future-version preservation and terminal disposal, with zero external egress.
+The Python/spec checks and independent crypto fixture remain passing from the preceding frozen pass;
+these tools did not change. No browser/device/UI or professional-audit acceptance is inferred.
+
+Review fixed rejected-open caching (explicit retry after remediation now works), terminal owned-connection
+close (shared injected stores remain caller-owned unless ownership is transferred), and synchronous quota/
+storage errors wrongly labeled cancellation. Nine injected-IDB tests exercise these faults. Twenty-one service
+tests cover bounded mutations, exact envelope preconditions, cancellation/lock at crypto/storage boundaries,
+defensive copies, quota cache preservation and commit-winning outcomes. No automatic write retry or plaintext
+fallback exists. All prior reviewed source is locally committed; G03/G09 and application integration stay open.
