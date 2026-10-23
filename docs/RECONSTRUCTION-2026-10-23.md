@@ -77,3 +77,24 @@ promoted to chain truth; old generation/out-of-order reconciliation; retries aft
 Four existing implementation workers plus one integrator total. Two finish their current GhostPay writes/tests
 before transitioning here; two remain on GhostPay. No extra cloud environment or duplicate worker team created.
 The parent continuation timer targets this same task and will cover both repositories.
+
+## Verified domain tranche and first combined check
+
+On frozen G02/G08/G13 working source, integrator `npm test` passed 89 Node tests with zero failed,
+cancelled or skipped; strict typecheck, 11 Python spec-tool tests, the 173-document audit and real
+Chromium storage checks also passed. Subsequent adapter review found retry/disposal/error-mapping bugs;
+those fixes require another complete check before the storage tranche is promoted.
+
+The domain/schema tranche itself passed 31 focused tests, including 10,000 deterministic malformed inputs,
+latest-issued/generation/context authority, exact 30-second display freshness, source/fiat separation,
+reorg conflict latching and bounded read retry. Cross-review reproduced a pending-controller collision across
+generations; controller identity now retains a hard four-outstanding-reader bound even if adapters ignore abort.
+Old completion cannot delete the newer job's cancellation handle. Fixed errors discard foreign messages/stacks;
+read retries retain the documented three-attempt, 10-second attempt and 35-second operation ceilings.
+Unsettled noncancellable reads do not overlap a retry.
+
+This is a partial G08/G13 foundation, not completion of their product gates. Relay/journal payload schemas,
+full CTX02 dispatch, durable G12 pending intents, native EVM/Solana adapters, network/registry validation,
+frontend/runtime integration and manifest/release trust remain unimplemented. The Solana fixture checks only
+structural binding/decimal heights. `RELEASE_ENABLED = 0`; economic preparation always returns false.
+No signing/submission interface or enabled production adapter is present.
