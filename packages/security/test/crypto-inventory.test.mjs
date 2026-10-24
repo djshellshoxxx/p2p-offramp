@@ -97,3 +97,16 @@ test('npm pins reject leading-zero numeric prerelease identifiers while acceptin
  for(const version of ['1.0.0-01','1.0.0-alpha.00']){const f=fixture();f.inventory[0].version=version;f.lock.packages[''].dependencies['@test/curve']=version;f.lock.packages['node_modules/@test/curve'].version=version;assert.ok(codes(await run(f)).includes('UNPINNED_VERSION'));}
  const f=fixture(),version='1.0.0-alpha-beta.0+build.01';f.inventory[0].version=version;f.lock.packages[''].dependencies['@test/curve']=version;f.lock.packages['node_modules/@test/curve'].version=version;assert.deepEqual(codes(await run(f)),['MISSING_REVIEW']);
 });
+test('duplicate inventory IDs always block the metadata gate despite a candidate capability claim',async()=>{
+ const f=fixture('release-enabled');f.inventory[0].review={status:'accepted',reviewer:'Named Reviewer',evidencePath:'reviews/curve.md'};
+ f.inventory.push({...clone(f.inventory[0]),capability:'unused-candidate'});
+ const report=await run(f);assert.equal(report.releaseEligible,false);assert.ok(report.findings.some(entry=>entry.code==='UNSUPPORTED_RUNTIME'&&entry.disposition==='blocking'));
+ const reversed=fixture('release-enabled');reversed.inventory[0].review={status:'accepted',reviewer:'Named Reviewer',evidencePath:'reviews/curve.md'};
+ reversed.inventory.unshift({...clone(reversed.inventory[0]),capability:'unused-candidate',runtime:'unknown-runtime'});
+ assert.equal((await run(reversed)).releaseEligible,false);
+});
+test('unused entries still validate the closed runtime enum without inheriting approval',async()=>{
+ const f=fixture('release-enabled');f.inventory[0].review={status:'accepted',reviewer:'Named Reviewer',evidencePath:'reviews/curve.md'};
+ f.inventory.push({...clone(f.inventory[0]),id:'unused',capability:'unused-candidate',runtime:'unknown-runtime'});
+ const report=await run(f);assert.ok(report.findings.some(entry=>entry.code==='UNSUPPORTED_RUNTIME'&&entry.disposition==='candidate'));
+});

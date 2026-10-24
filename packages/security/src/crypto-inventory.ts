@@ -120,13 +120,20 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
       }
       return 'candidate';
     };
-    const dependencies = new Map<string, Dependency>();
+    const dependencies = new Map<string, Dependency>(); const seenInventoryIds = new Set<string>();
     for (const [index, entry] of list(inventory, INVENTORY_LIMITS.dependencies).entries()) {
       const at = `inventory/${index}`;
+      // Reserve claimed IDs before validating the rest of an entry: an invalid
+      // candidate placed first cannot hide a duplicate release entry either.
+      const claimedId = typeof entry === 'object' && entry !== null && !Array.isArray(entry) ? (entry as Data).id : undefined;
+      if (typeof claimedId === 'string') {
+        if (seenInventoryIds.has(claimedId)) { finding('UNSUPPORTED_RUNTIME', at); continue; }
+        seenInventoryIds.add(claimedId);
+      }
       try {
         const raw = object(entry, ['id', 'capability', 'primitive', 'sourceUrl', 'version', 'integrity', 'license', 'runtime', 'review', 'vectors'], ['id', 'capability', 'primitive', 'sourceUrl', 'runtime']);
         for (const [field, code] of [['version', 'UNPINNED_VERSION'], ['integrity', 'INTEGRITY_MISMATCH'], ['license', 'MISSING_LICENSE'], ['review', 'MISSING_REVIEW'], ['vectors', 'MISSING_VECTOR']] as const) if (!Object.hasOwn(raw, field)) return reject(code);
-        const name = id(raw.id); if (dependencies.has(name)) return reject();
+        const name = id(raw.id);
         text(raw.primitive); url(raw.sourceUrl);
         const review = object(raw.review, ['status', 'reviewer', 'evidencePath']);
         if (!['pending', 'accepted', 'rejected'].includes(text(review.status))) return reject('MISSING_REVIEW');
@@ -136,6 +143,7 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
         const vectors = list(raw.vectors, 16).map(vector => object(vector, ['path', 'sha256', 'provenanceUrl']));
         for (const vector of vectors) { path(vector.path); url(vector.provenanceUrl); if (typeof vector.sha256 !== 'string' || !/^[0-9a-f]{64}$/.test(vector.sha256)) return reject('FIXTURE_HASH_MISMATCH'); }
         const version = text(raw.version, 128), integrity = text(raw.integrity, 256), license = text(raw.license, 256, true), runtime = text(raw.runtime);
+        if (!['npm', 'browser-built-in', 'vendored'].includes(runtime)) return reject('UNSUPPORTED_RUNTIME');
         if (!license.trim()) return reject('MISSING_LICENSE');
         if (runtime === 'npm' && !exactVersion(version)) return reject('UNPINNED_VERSION');
         if (runtime === 'npm' && !sri(integrity)) return reject('INTEGRITY_MISMATCH');
