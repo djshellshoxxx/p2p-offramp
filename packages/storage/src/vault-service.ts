@@ -100,6 +100,8 @@ export class EncryptedVaultService implements VaultService {
   #pending = new Set<AbortController>();
   #idleTimer: ReturnType<typeof setTimeout> | undefined;
   #lifecycle: boolean;
+  #lifecycleWindow: EventTarget | undefined;
+  #lifecycleDocument: EventTarget | undefined;
   #unsubscribe: () => void;
   readonly #store: VaultStore;
   readonly #ownsStore: boolean;
@@ -107,12 +109,17 @@ export class EncryptedVaultService implements VaultService {
   constructor(store: VaultStore | undefined = undefined,
     provider: CryptoProvider = globalThis.crypto, options: VaultServiceOptions = {}) {
     this.#store = store ?? new IndexedDbVaultStore(); this.#ownsStore = store === undefined || options.ownsStore === true; this.#provider = provider;
-    this.#lifecycle = options.lifecycle !== false && typeof document !== 'undefined' && typeof window !== 'undefined';
+    // Structural hosts keep this storage module usable under both DOM and dedicated-Worker libs.
+    // Worker callers disable document lifecycle and own revocation through their message boundary.
+    const host = globalThis as unknown as { window?: EventTarget; document?: EventTarget };
+    this.#lifecycle = options.lifecycle !== false && host.document !== undefined && host.window !== undefined;
+    this.#lifecycleWindow = this.#lifecycle ? host.window : undefined;
+    this.#lifecycleDocument = this.#lifecycle ? host.document : undefined;
     this.#unsubscribe = this.#store.subscribeInvalidation(() => { this.lockAll(); });
     if (this.#lifecycle) {
-      window.addEventListener('pagehide', this.#pagehide);
-      document.addEventListener('keydown', this.#activity, { capture: true });
-      document.addEventListener('pointerdown', this.#activity, { capture: true });
+      this.#lifecycleWindow!.addEventListener('pagehide', this.#pagehide);
+      this.#lifecycleDocument!.addEventListener('keydown', this.#activity, { capture: true });
+      this.#lifecycleDocument!.addEventListener('pointerdown', this.#activity, { capture: true });
     }
   }
   #pagehide = (): void => { this.lockAll(); };
@@ -134,9 +141,9 @@ export class EncryptedVaultService implements VaultService {
     this.lockAll(); this.#unsubscribe();
     if (this.#ownsStore) this.#store.close?.();
     if (this.#lifecycle) {
-      window.removeEventListener('pagehide', this.#pagehide);
-      document.removeEventListener('keydown', this.#activity, { capture: true });
-      document.removeEventListener('pointerdown', this.#activity, { capture: true });
+      this.#lifecycleWindow!.removeEventListener('pagehide', this.#pagehide);
+      this.#lifecycleDocument!.removeEventListener('keydown', this.#activity, { capture: true });
+      this.#lifecycleDocument!.removeEventListener('pointerdown', this.#activity, { capture: true });
     }
   }
   #ensureLive(): void { if (this.#disposed) throw new Failure('LOCKED'); }
