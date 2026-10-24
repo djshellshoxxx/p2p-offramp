@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { resolveChromiumPath } from './lib/chromium-path.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = await mkdtemp(resolve(tmpdir(), 'p2p-vault-browser-'));
@@ -39,7 +40,7 @@ try {
   const recoveryAddress = recoveryServer.address();
   assert.ok(recoveryAddress && typeof recoveryAddress === 'object');
   const recoveryOrigin = `http://127.0.0.1:${recoveryAddress.port}`;
-  browser = await chromium.launch({ executablePath: process.env.P2P_CHROMIUM ?? '/usr/bin/chromium', args: ['--no-sandbox'] });
+  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const unexpected = [];
   const pages = await Promise.all([context.newPage(), context.newPage()]);

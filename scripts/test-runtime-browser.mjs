@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { resolveChromiumPath } from './lib/chromium-path.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = await mkdtemp(resolve(tmpdir(), 'p2p-runtime-browser-'));
@@ -42,7 +43,7 @@ try {
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const address = server.address(); assert.ok(address && typeof address === 'object');
   const origin = `http://127.0.0.1:${address.port}`;
-  browser = await chromium.launch({ executablePath: process.env.P2P_CHROMIUM ?? '/usr/bin/chromium', args: ['--no-sandbox'] });
+  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const unexpected = [];
   let preservedProfile;
