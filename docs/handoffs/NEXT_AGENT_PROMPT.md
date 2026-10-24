@@ -1,5 +1,16 @@
 # Next agent prompt (paste as-is)
 
+## Scope override — 2026-10-24 UTC
+
+The owner-approved [lean scope](LEAN_RELEASE_SCOPE.md) and [restart instructions](RESTART.md) supersede the historical baseline and priority list below. Read them first. Preserve [SESSION_STATUS](SESSION_STATUS.md) as historical test/provenance evidence, not a current rerun.
+
+Next after GhostPay: verify PR #5's continuation branch and preserve the PR #4/#5 stack; establish G09/G03 recovery acceptance, then G11/G15 trust, G16 terms and one two-party local/test EVM trade. A profile-only shell is not an off-ramp. Keep cap 16 and trading/network disabled.
+
+Detailed reproductions require the owner-supplied private review packet via supported access; no automatic Library access is assumed. This documentation grants no runtime, merge, release, deployment or production-funds authority. Keep all existing acceptance/security gates and preserve deferred work.
+
+## Historical prompt — retained, subordinate to the override
+
+
 You are the integration owner for `djshellshoxxx/p2p-offramp`. A sibling session owns `djshellshoxxx/GhostPay`; do not touch it.
 
 Start by reading `docs/handoffs/SESSION_STATUS.md`, `docs/HANDOFF-2026-10-24-CLIENT-SHELL.md`, `docs/WORK-PLAN-2026-10-24.md` and `docs/adr/ADR-CLIENT-SIDE-2026-10-24.md`.
