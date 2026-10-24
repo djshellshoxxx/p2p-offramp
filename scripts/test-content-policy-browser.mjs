@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { buildOfflineContentPolicy } from '../packages/security/src/content-policy.ts';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -180,7 +181,7 @@ try {
   });
   await listen(protectedServer); protectedOrigin = originOf(protectedServer);
 
-  browser = await chromium.launch({ executablePath: process.env.P2P_CHROMIUM ?? '/usr/bin/chromium', args: ['--no-sandbox'] });
+  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
   const context = await browser.newContext({ serviceWorkers: 'block' });
   await context.route('**/*', route => {
     const url = new URL(route.request().url());
