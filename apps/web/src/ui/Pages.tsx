@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AppServices } from '../app-services.ts';
-import { ExportForm, UnlockForm } from './VaultForms.tsx';
+import { CreateForm, ExportForm, RestoreForm, UnlockForm } from './VaultForms.tsx';
 import { messages as m } from './messages.ts';
 import type { Route } from './routes.ts';
 
@@ -10,22 +10,28 @@ export const pageTitle: Readonly<Record<Route['page'], string>> = {
 };
 
 export function Home({ services, unlocked }: { readonly services: AppServices | null; readonly unlocked: boolean }) {
-  const [showUnlock, setShowUnlock] = useState(false);
+  const [open, setOpen] = useState<'none' | 'unlock' | 'create'>('none');
+  const [createdId, setCreatedId] = useState('');
   const unlockButton = useRef<HTMLButtonElement>(null);
-  const previouslyOpen = useRef(false);
+  const createButton = useRef<HTMLButtonElement>(null);
+  const previous = useRef<'none' | 'unlock' | 'create'>('none');
   useEffect(() => {
-    if (previouslyOpen.current && !showUnlock) unlockButton.current?.focus();
-    previouslyOpen.current = showUnlock;
-  }, [showUnlock]);
+    if (previous.current !== 'none' && open === 'none') (previous.current === 'create' ? createButton : unlockButton).current?.focus();
+    previous.current = open;
+  }, [open]);
   return <>
     <p className="lead">{m.homeIntro}</p>
     <section className="panel" aria-labelledby="available-title">
       <p className="eyebrow">{m.localOnly}</p>
       <h2 id="available-title">{m.readyTitle}</h2>
       <p>{services ? m.readyText : m.unavailable}</p>
-      {unlocked ? <p role="status">{m.unlockedHelp}</p> : services ? showUnlock
-        ? <UnlockForm services={services} onCancel={() => setShowUnlock(false)} />
-        : <button ref={unlockButton} className="primary" type="button" onClick={() => setShowUnlock(true)}>{m.unlock}</button>
+      {unlocked ? <>{createdId ? <p className="notice" role="status">{m.created(createdId)}</p> : null}<p role="status">{m.unlockedHelp}</p></> :
+        services ? open === 'unlock' ? <UnlockForm services={services} onCancel={() => setOpen('none')} />
+          : open === 'create' ? <CreateForm services={services} onDone={id => { setCreatedId(id ?? ''); setOpen('none'); }} />
+          : <div className="actions">
+            <button ref={unlockButton} className="primary" type="button" onClick={() => setOpen('unlock')}>{m.unlock}</button>
+            <button ref={createButton} type="button" onClick={() => { setCreatedId(''); setOpen('create'); }}>{m.create}</button>
+          </div>
         : null}
     </section>
     <section className="plain-section" aria-labelledby="disabled-title">
@@ -44,7 +50,10 @@ export function Recovery({ services }: { readonly services: AppServices | null }
       <div className="warning"><strong>{m.unchecked}</strong><p>{m.uncheckedHelp}</p></div>
       {services ? <ExportForm services={services} /> : <p>{m.unavailable}</p>}
     </section>
-    <section className="plain-section" aria-labelledby="restore-title"><h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p></section>
+    <section className="panel" aria-labelledby="restore-title">
+      <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
+      {services ? <RestoreForm services={services} /> : <p>{m.unavailable}</p>}
+    </section>
   </>;
 }
 
