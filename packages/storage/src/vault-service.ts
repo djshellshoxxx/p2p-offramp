@@ -116,11 +116,17 @@ export class EncryptedVaultService implements VaultService {
     }
   }
   #pagehide = (): void => { this.lockAll(); };
-  #activity = (event: Event): void => { if (event.isTrusted) this.#resetIdle(); };
-  #resetIdle(): void {
+  #activity = (event: Event): void => { if (event.isTrusted) this.#resetIdle(true); };
+  #resetIdle(trustedActivity = false): void {
     if (!this.#lifecycle) return;
-    if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
-    this.#idleTimer = this.#sessions.size ? setTimeout(() => { this.lockAll(); }, 5 * 60_000) : undefined;
+    // Opening or revoking another session cannot extend existing unlocked authority.
+    if (trustedActivity || this.#sessions.size === 0) {
+      if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
+      this.#idleTimer = undefined;
+    }
+    if (this.#sessions.size > 0 && this.#idleTimer === undefined) {
+      this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
+    }
   }
   dispose(): void {
     if (this.#disposed) return;

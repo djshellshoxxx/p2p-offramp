@@ -242,3 +242,41 @@ test('G02 disposal invalidates queued unlock jobs and cannot revive their sessio
   error(await first, 'LOCKED'); error(await second, 'LOCKED');
   error(await vault.create(pass), 'LOCKED'); assert.equal(store.writes, 1);
 });
+
+test('G02 lifecycle: lock of another session cannot refresh the existing idle deadline', async t => {
+  const previousWindow = globalThis.window, previousDocument = globalThis.document;
+  globalThis.window = new EventTarget(); globalThis.document = new EventTarget();
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const store = new Store(); const vault = new api.EncryptedVaultService(store, webcrypto);
+  try {
+    const first = value(await vault.create(pass)); const second = value(await vault.create(pass));
+    t.mock.timers.tick(299999);
+    vault.lock(first.sessionId);
+    globalThis.document.dispatchEvent(new Event('pointerdown'));
+    value(await vault.list(second.sessionId));
+    t.mock.timers.tick(1); error(await vault.list(second.sessionId), 'LOCKED');
+  } finally {
+    vault.dispose(); t.mock.timers.reset();
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+    if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
+  }
+});
+
+test('G02 lifecycle: unlock of another session cannot refresh the existing idle deadline', async t => {
+  const previousWindow = globalThis.window, previousDocument = globalThis.document;
+  globalThis.window = new EventTarget(); globalThis.document = new EventTarget();
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const store = new Store(); const vault = new api.EncryptedVaultService(store, webcrypto);
+  try {
+    const first = value(await vault.create(pass)); const second = value(await vault.create(pass));
+    t.mock.timers.tick(299999);
+    value(await vault.unlock(first.profileId, pass));
+    globalThis.document.dispatchEvent(new Event('pointerdown'));
+    value(await vault.list(second.sessionId));
+    t.mock.timers.tick(1); error(await vault.list(second.sessionId), 'LOCKED');
+  } finally {
+    vault.dispose(); t.mock.timers.reset();
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+    if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
+  }
+});
