@@ -14,6 +14,7 @@ Do NOT redo:
 - Profile inventory.
 - Worker/runtime `create`/`restore`/`listProfiles`.
 - Create/restore/inventory UI.
+- The G09 in-place migration core (`migration-service.ts`).
 All of these are implemented and tested on PR #5. The old `fc146bb` capacity fix is unavailable; do not try to recover it.
 
 Do NOT:
@@ -31,7 +32,7 @@ npm run build && npm run test:browser && npm run test:web:browser && npm run che
 
 Then:
 1. Check CI on PRs #4 and #5. Fix any red, and get them reviewed and merged on the exact head.
-2. Continue in this order: G09 migration registry → G11 signed registry + G15 manifest → H1 signed trade terms → H2 EVM escrow (local anvil) / H4 adapters → M5/H5 transport.
+2. Continue in this order: G09 resealer remainder → G11 signed registry + G15 manifest → H1 signed trade terms → H2 EVM escrow (local anvil) / H4 adapters → M5/H5 transport.
 3. Update `docs/handoffs/SESSION_STATUS.md` at each milestone. Record exact commands and results. Keep historical results separate from results you rerun.
 
 Active workers: none for p2p-offramp at handoff.

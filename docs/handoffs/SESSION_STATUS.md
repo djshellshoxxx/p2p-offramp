@@ -36,6 +36,13 @@ Account usage indicator: not observable from this environment. Work proceeded in
    - Create form with confirmation and no-reset consent; it is disabled at the bound.
    - Inventory choices in the unlock and export forms.
    - Restore form: size checked before reading, untrusted-content consent, fresh-key result stays locked, secrets cleared.
+6. G09 in-place migration core (`packages/storage/src/migration-service.ts`):
+   - `MigrationRegistry` validates registry shape: adjacent steps only, no duplicates, a schema for every version, so it is acyclic by construction. Max 64 steps per record.
+   - `RecordMigrationService.plan/apply` builds the whole candidate from one consistent snapshot. Any failure discards it.
+   - Apply recomputes the plan and rejects a supplied plan that differs (CONFLICT). It commits once with G02 CAS and verifies by readback.
+   - Future-version records or missing paths return UNSUPPORTED_VERSION with no write.
+   - More than 256 changes returns LIMIT_EXCEEDED.
+   - **Gaps:** the G03 `InternalMigrationResealer` new-profile path is not implemented. `sourceKeyId` is omitted from the plan because the session does not expose it. The registry is empty in production, since every consumer schema is still v1. There is no UI.
 5. Bug found and fixed: CreateForm unmount cleanup suppressed reporting the new profile ID. It reproduced in the emitted-app Chromium test.
 
 ## Changed files (vs 8a88d11)
@@ -71,7 +78,7 @@ Remote CI for PR #5 was queued at the time of writing. Check `pull_request_read 
 ## Remaining work (dependency order)
 
 1. Get PR #4 then PR #5 reviewed and green on the exact head, then merge. Do not force-push.
-2. G09 vault schema migration registry (upgrade, rejected downgrade, interrupted resume).
+2. G09 remainder: G03 resealer staged new-profile migration for >256 changes or fresh-key needs, and interrupted-resume tests. The in-place core is done.
 3. G11 signed network/asset/deployment registry + G15 artifact manifest/digest verification.
 4. H1 canonical signed trade terms. Then H2 EVM escrow (Foundry, local anvil only) and H4 signing/reconciliation adapters. Then M5/H5 transport/discovery.
 5. Trade journey UI (M7) after those gates. Then Solana parity (H3). Keep `ReleaseEnabled=0` throughout.
