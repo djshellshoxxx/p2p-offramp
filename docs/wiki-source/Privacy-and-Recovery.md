@@ -1,0 +1,2 @@
+# Privacy, encryption and recovery
+Planned encrypted local vault and optional encrypted backups protect selected content from casual local disclosure but not compromised browsers, malicious extensions, payment processors or network metadata observers. Blockchains expose transaction facts. Browser storage can be evicted, and deletion cannot guarantee physical erasure. Backups should be encrypted before export, use a strong user-held passphrase and be tested for recovery without a server. Do not promise unlinkability, anonymity or final settlement without evidence.

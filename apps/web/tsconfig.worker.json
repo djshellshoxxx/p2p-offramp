@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "lib": ["ES2023", "WebWorker"] },
+  "include": ["src/workers/vault.worker.ts"]
+}

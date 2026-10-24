@@ -1,0 +1,33 @@
+{
+  "name": "p2p-offramp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
+    "test:specs": "python -m unittest discover -s scripts/tests -v",
+    "check:specs": "python scripts/spec_audit.py --check",
+    "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
+    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs",
+    "build": "npm run typecheck && node apps/web/scripts/build.mjs",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs",
+    "check:boundaries": "node scripts/check-import-boundaries.mjs",
+    "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs scripts/tests/import-boundaries.test.mjs"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "playwright-core": "1.64.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.5"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

@@ -5,9 +5,15 @@
 **Owner:** Project maintainers; security reviewer signs security gates  
 **Baseline reviewed:** dcc732d83accd44518257a2d7d5c90346bdc4f21
 
+## Current specification pass
+
+See [development status](docs/DEVELOPMENT_STATUS.md) and the [full readiness inventory](docs/SPEC_READINESS.md). All 171 technical documents now have expanded seven-section design baselines; the catalog and supplemental plan are tracked separately. Actual implementations, pinned profiles/deployments and independent review remain pending. The inventory checker is not semantic approval. This roadmap remains the authoritative milestone order when supplemental plans use different phase labels.
+
 ## Delivery contract
 
-The repository currently contains specifications, not an implemented application. Every milestone below is planned until its evidence is recorded. This roadmap adds missing integration requirements; it does not certify the existing placeholders as implementation-ready.
+**Normative user requirement (2026-10-24):** the app MUST remain client-side. App logic and user-controlled keys/private local data run in the browser; core MUST NOT require an app-owned server, centralized user-account database or server-held user secrets. Static hosting/build tools are distinct from runtime services. External blockchains, user-chosen RPC endpoints and peer/relay infrastructure remain dependencies of online trading, not a claim of infrastructure-free operation. See `docs/adr/ADR-CLIENT-SIDE-2026-10-24.md`. Any conflicting future requirement must be reconciled with the user before implementation.
+
+The repository now contains expanded design specifications and an initial tested schema/crypto foundation, not a completed application. Every milestone below is planned until its evidence is recorded. This roadmap adds missing integration requirements; it does not certify the existing placeholders as implementation-ready.
 
 Build security foundations first, then a static application with a complete basic trading loop. Phase 2 is a release boundary: a user can discover an offer, agree terms, fund escrow, communicate privately, coordinate a manual payment, and receive a release or timeout refund without any Phase 3–6 package or service. It needs functioning wallets, RPC endpoints, Nostr relays, and a blockchain; standalone does not mean offline or free of external infrastructure.
 
@@ -223,11 +229,11 @@ The base scaffold also includes market-maker vaults, Waku, XMTP, shielded pools,
 
 Each implementation-targeted specification contains: (1) title and metadata, (2) objective, (3) architecture/data flow with a scoped Mermaid diagram and concrete contracts, (4) exact applicable algorithms or primitives, (5) complete interfaces, (6) specific attacks and mitigations, and (7) unit/edge/fuzz/interoperability verification requirements. Use explicit applicability statements for components with no ZK circuit or smart contract; never invent cryptographic constraints to fill a heading.
 
-The encrypted IndexedDB specification G02 is expanded to that format in this change. The other new files are clearly labeled requirements outlines, and existing baseline files remain placeholders until separately expanded. None is represented as reviewed production implementation.
+The catalog now contains 171 technical specifications expanded to that format, plus the navigation catalog and supplemental planning document. The structural expansion check passes; actual provider/dependency/deployment pins, executable module evidence and independent reviews remain separate implementation/enablement gates. None is represented as reviewed production implementation.
 
 ## Missing specification files index
 
-The following files were absent from the reviewed baseline and have now been created. IDs are stable cross-references; phase is the earliest required delivery gate. Each file includes scope, requirements, dependencies, and acceptance evidence, while G02 includes the full detailed contract.
+The following files were absent from the reviewed baseline and have now been created. IDs are stable cross-references; phase is the earliest required delivery gate. Each file now includes an expanded design contract; G02 fixes the core storage format. The index records originally missing files and does not imply that implementations or acceptance evidence already exist.
 
 | ID | Phase | Specification path | Brief outline |
 |---|---|---|---|

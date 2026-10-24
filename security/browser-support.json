@@ -1,0 +1,24 @@
+{
+  "profile": "WebCrypto-G02-v1",
+  "observed": [
+    {
+      "engine": "Chromium",
+      "version": "154.0.8037.57",
+      "platform": "Linux x86_64",
+      "qualification": "local automation only",
+      "checks": [
+        "AES-GCM authenticated encrypted IDB persistence",
+        "PBKDF2 exact G02 profile unlock",
+        "same-origin and fresh-origin fresh-key recovery",
+        "CAS/session revocation/versionchange/disposal"
+      ]
+    }
+  ],
+  "unassessed": [
+    "Firefox",
+    "WebKit",
+    "mobile browsers",
+    "physical devices",
+    "browser/OS side channels"
+  ]
+}
