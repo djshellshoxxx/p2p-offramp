@@ -16,5 +16,8 @@
   "devDependencies": {
     "playwright-core": "1.64.1",
     "typescript": "7.0.2"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0"
   }
 }
