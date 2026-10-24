@@ -21,11 +21,11 @@ function simplePort(){const port=new Port();port.handler=command=>{const {config
 async function start(port,options={}){assert.equal(typeof api.AppRuntime?.start,'function','missing AppRuntime');return api.AppRuntime.start(config,{...options,createWorker:()=>port,lifecycle:false});}
 async function setup(options={}){
  const rows=new Map(),listeners=new Set();let writes=0;
- const store={get:async id=>clone(rows.get(id)),add:async(e,o)=>{o?.assertCurrent?.();rows.set(e.profileId,clone(e));writes++;},compareAndSwap:async()=>{throw Error('runtime cannot write');},subscribeInvalidation:l=>{listeners.add(l);return()=>listeners.delete(l);}};
+ const store={listProfileIds:async()=>Object.freeze({profileIds:Object.freeze([...rows.keys()]),truncated:false}),get:async id=>clone(rows.get(id)),add:async(e,o)=>{o?.assertCurrent?.();rows.set(e.profileId,clone(e));writes++;},compareAndSwap:async()=>{throw Error('runtime cannot write');},subscribeInvalidation:l=>{listeners.add(l);return()=>listeners.delete(l);}};
  const creator=new EncryptedVaultService(store,crypto,{lifecycle:false});const session=val(await creator.create(pass));creator.dispose();
  const vault=new EncryptedVaultService(store,crypto,{lifecycle:false}),backup=new EncryptedBackupService(store),port=new Port();
  const endpoint=createVaultWorkerEndpoint(message=>port.reply(message),{...options,createServices:()=>({vault,backup})});port.handler=command=>{void endpoint.dispatch(command);};port.cleanup=()=>endpoint.dispose();
- const runtime=val(await start(port,options));return{runtime,port,session,writes:()=>writes,vault};
+ const runtime=val(await start(port,options));return{runtime,port,session,writes:()=>writes,vault,rows};
 }
 test('runtime validates config before Worker construction and refuses unsupported secure context',async()=>{
  assert.equal(typeof api.AppRuntime?.start,'function','missing AppRuntime');let calls=0;
@@ -34,7 +34,7 @@ test('runtime validates config before Worker construction and refuses unsupporte
 });
 test('runtime boots locked and returns only purpose-bound opaque handles and labelled encrypted export',async()=>{
  const s=await setup();assert.deepEqual(s.runtime.current,{state:'locked',handle:null});
- for(const forbidden of ['create','restore','read','list','commit','sign','fetch','activity'])assert.equal(forbidden in s.runtime,false);
+ for(const forbidden of ['read','list','commit','sign','fetch','activity','records','passphrase'])assert.equal(forbidden in s.runtime,false);
  const handle=val(await s.runtime.unlock(s.session.profileId,pass));assert.equal(handle.purpose,'vault');assert.equal(s.runtime.isCurrent(handle),true);assert.equal(s.runtime.isCurrent({...handle}),false);assert.equal('sessionId'in handle,false);
  assert.equal(val(await s.runtime.status()).handle,handle);assert.equal(s.runtime.isCurrent(handle),true);
  const exported=val(await s.runtime.exportEncrypted(s.session.profileId));assert.equal(exported.authentication,'not-checked');assert.ok(exported.bytes instanceof Uint8Array);assert.equal(s.writes(),1);assert.doesNotMatch(JSON.stringify(s.port.received),/passphrase|secretKey|sessionId|private-records/);
@@ -97,4 +97,30 @@ test('Node document lifecycle: synthetic events and polling never extend idle, w
    globalThis.window.dispatchEvent(new Event('pagehide'));assert.equal(runtime.isCurrent(handle),false);await flush();assert.equal(runtime.current.state,'locked');
   }finally{await runtime.dispose();}
  }finally{await s?.runtime.dispose();if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
+});
+
+test('runtime create opens a fresh profile, inventory lists opaque IDs, and restore yields a separate locked profile',async()=>{
+ const s=await setup();
+ assert.deepEqual([...val(await s.runtime.listProfiles()).profileIds],[s.session.profileId]);
+ const handle=val(await s.runtime.create('fresh runtime page passphrase'));assert.equal(s.runtime.isCurrent(handle),true);assert.notEqual(handle.profileId,s.session.profileId);
+ const listed=val(await s.runtime.listProfiles());assert.deepEqual([...listed.profileIds].sort(),[s.session.profileId,handle.profileId].sort());assert.equal(listed.truncated,false);
+ const exported=val(await s.runtime.exportEncrypted(s.session.profileId));
+ const receipt=val(await s.runtime.restore(exported.bytes,pass,'restored runtime page passphrase'));
+ assert.equal(receipt.records,0);assert.equal(s.rows.has(receipt.newProfileId),true);assert.notEqual(receipt.newProfileId,s.session.profileId);
+ assert.equal(s.runtime.isCurrent(handle),true,'restore does not replace or unlock the current session');
+ err(await s.runtime.restore(exported.bytes,'wrong runtime page passphrase','restored runtime page passphrase'),'AUTHENTICATION_FAILED');
+ const tampered=new Uint8Array(exported.bytes);tampered[tampered.length-3]^=1;
+ const bad=await s.runtime.restore(tampered,pass,'restored runtime page passphrase');assert.equal(bad.ok,false);assert.match(bad.error.code,/^(INVALID_INPUT|UNSUPPORTED_VERSION)$/);
+ err(await s.runtime.restore(new Uint8Array(0),pass,'short'),'INVALID_INPUT');err(await s.runtime.create('short'),'INVALID_INPUT');
+ assert.equal(s.rows.size,3,'failed restores and invalid creates leave no rows');
+ assert.doesNotMatch(JSON.stringify(s.port.received),/passphrase|secretKey|sessionId|private-records/);
+ await s.runtime.dispose();
+});
+test('runtime create failure leaves the runtime locked and rejects a create reply bound to another operation',async()=>{
+ const port=simplePort();let mode='limit';port.handler=command=>{const {config:ignored,passphrase:hidden,...base}=command;
+  if(command.operation==='create'&&mode==='limit'){port.reply({...base,kind:'response',result:{ok:false,error:{code:'LIMIT_EXCEEDED',messageKey:'runtime.error.limit_exceeded'}}});return;}
+  if(command.operation==='create'){port.reply(response(base,{state:'locked',handle:null}));return;}
+  port.reply(response(base));};
+ const runtime=val(await start(port));err(await runtime.create('fresh runtime page passphrase'),'LIMIT_EXCEEDED');assert.equal(runtime.current.state,'locked');
+ mode='locked';err(await runtime.create('fresh runtime page passphrase'),'PROTOCOL_ERROR');assert.equal(port.terminated,1);
 });

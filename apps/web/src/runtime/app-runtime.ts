@@ -2,8 +2,8 @@
 import {
   MAX_RUNTIME_SEQUENCE, RUNTIME_DISPOSE_TIMEOUT_MS, RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
   parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
-  type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeMessage,
-  type RuntimeOperation, type RuntimeResult, type RuntimeStatus,
+  type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
+  type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
 } from '../../../../packages/schemas/index.ts';
 
 export type RuntimeWorkerPort = Pick<Worker, 'postMessage' | 'addEventListener' | 'removeEventListener' | 'terminate'>;
@@ -14,7 +14,7 @@ export interface AppRuntimeOptions {
 }
 interface Pending {
   readonly command: RuntimeCommand;
-  readonly resolve: (result: RuntimeResult<RuntimeStatus | RuntimeExport>) => void;
+  readonly resolve: (result: RuntimeResult<RuntimeValue>) => void;
   readonly timer: ReturnType<typeof setTimeout>;
   readonly removeAbort: () => void;
 }
@@ -112,7 +112,7 @@ export class AppRuntime {
     } catch { this.#close('UNSUPPORTED_ENVIRONMENT'); }
   };
   #error = (): void => { this.#close('STORAGE_UNAVAILABLE'); };
-  #settle(id: number, result: RuntimeResult<RuntimeStatus | RuntimeExport>): void {
+  #settle(id: number, result: RuntimeResult<RuntimeValue>): void {
     const pending = this.#pending.get(id); if (!pending) return;
     this.#pending.delete(id); clearTimeout(pending.timer); pending.removeAbort(); pending.resolve(result);
   }
@@ -133,17 +133,18 @@ export class AppRuntime {
   }
   #acceptStatus(message: Extract<RuntimeMessage, { kind: 'response' }>, value: RuntimeStatus, pending: Pending): boolean {
     const operation = pending.command.operation;
+    const opening = operation === 'unlock' || operation === 'create';
     if (value.state === 'unlocked') {
       if (operation === 'init' || operation === 'lock' || operation === 'dispose' ||
           (pending.command.operation === 'unlock' && value.handle.profileId !== pending.command.profileId)) return false;
-      if (operation !== 'unlock' && (this.#current.state !== 'unlocked' || !sameHandle(this.#current.handle, value.handle))) return false;
+      if (!opening && (this.#current.state !== 'unlocked' || !sameHandle(this.#current.handle, value.handle))) return false;
       const handle = this.#current.state === 'unlocked' && sameHandle(this.#current.handle, value.handle) ? this.#current.handle : value.handle;
       const changed = this.#current.state !== 'unlocked' || this.#current.handle !== handle;
       this.#current = Object.freeze({ state: 'unlocked', handle });
       if (changed) this.#notify();
-      if (operation === 'unlock') this.#arm();
+      if (opening) this.#arm();
     } else {
-      if (operation === 'unlock') return false;
+      if (opening) return false;
       this.#resetStatus();
     }
     return message.generation === this.#generation;
@@ -160,18 +161,18 @@ export class AppRuntime {
     if (!pending) { if (message.requestId > this.#sequence) this.#close('PROTOCOL_ERROR'); return; }
     if (pending.command.operation !== message.operation || pending.command.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
-    if (message.result.ok && message.operation !== 'exportEncrypted') {
+    if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
-      if (!message.result.ok && pending.command.operation === 'unlock') this.#resetStatus();
+      if (!message.result.ok && (pending.command.operation === 'unlock' || pending.command.operation === 'create')) this.#resetStatus();
       if (message.result.ok && message.operation === 'exportEncrypted') {
         if (pending.command.operation !== 'exportEncrypted' || parseBackupBytes(message.result.value.bytes).envelope.profileId !== pending.command.profileId) { this.#close('PROTOCOL_ERROR'); return; }
       }
       this.#settle(message.requestId, message.result);
     }
   };
-  #request(operation: RuntimeOperation, fields: Record<string, unknown> = {}, signal?: AbortSignal, internal = false): Promise<RuntimeResult<RuntimeStatus | RuntimeExport>> {
+  #request(operation: RuntimeOperation, fields: Record<string, unknown> = {}, signal?: AbortSignal, internal = false): Promise<RuntimeResult<RuntimeValue>> {
     this.#checkIdle();
     if (this.#closed || (this.#disposing && operation !== 'dispose')) return Promise.resolve(runtimeFailure('LOCKED'));
     if (signal?.aborted) return Promise.resolve(runtimeFailure('CANCELLED'));
@@ -181,7 +182,7 @@ export class AppRuntime {
     try { command = parseRuntimeCommand({ version: 1, requestId: this.#sequence + 1, generation: this.#generation, operation, ...fields }); }
     catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
     this.#sequence++;
-    if (operation === 'unlock') this.#resetStatus();
+    if (operation === 'unlock' || operation === 'create') this.#resetStatus();
     return new Promise(resolve => {
       const abort = (): void => { if (!this.#closed && !this.#disposing && this.#invalidate('CANCELLED')) void this.#request('lock', {}, undefined, true); };
       const timer = setTimeout(() => this.#close('TIMEOUT'), operation === 'dispose' ? RUNTIME_DISPOSE_TIMEOUT_MS : RUNTIME_REQUEST_TIMEOUT_MS);
@@ -201,6 +202,31 @@ export class AppRuntime {
     if (this.#closed || this.#disposing || this.#generation !== generation) return runtimeFailure('LOCKED');
     if (!('state' in result.value) || result.value.state !== 'unlocked') return runtimeFailure('PROTOCOL_ERROR');
     return this.isCurrent(result.value.handle) ? Object.freeze({ ok: true, value: result.value.handle }) : runtimeFailure('LOCKED');
+  }
+  /** Creates a fresh encrypted profile and opens it; the passphrase never leaves the Worker request. */
+  async create(passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeHandle>> {
+    const generation = this.#generation;
+    const result = await this.#request('create', { passphrase }, signal);
+    if (!result.ok) return result;
+    this.#checkIdle();
+    if (this.#closed || this.#disposing || this.#generation !== generation) return runtimeFailure('LOCKED');
+    if (!('state' in result.value) || result.value.state !== 'unlocked') return runtimeFailure('PROTOCOL_ERROR');
+    return this.isCurrent(result.value.handle) ? Object.freeze({ ok: true, value: result.value.handle }) : runtimeFailure('LOCKED');
+  }
+  async listProfiles(signal?: AbortSignal): Promise<RuntimeResult<RuntimeInventory>> {
+    const generation = this.#generation;
+    const result = await this.#request('listProfiles', {}, signal);
+    this.#checkIdle();
+    if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation)) return runtimeFailure('LOCKED');
+    return !result.ok ? result : 'profileIds' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
+  }
+  /** Restores into a fresh-key locked profile. Bytes are copied by the strict command parser before posting. */
+  async restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeRestore>> {
+    const generation = this.#generation;
+    const result = await this.#request('restore', { bytes, sourcePassphrase, destinationPassphrase }, signal);
+    this.#checkIdle();
+    if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation)) return runtimeFailure('LOCKED');
+    return !result.ok ? result : 'newProfileId' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   async status(): Promise<RuntimeResult<RuntimeStatus>> {
     const generation = this.#generation;

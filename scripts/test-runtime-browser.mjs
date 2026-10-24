@@ -80,26 +80,42 @@ try {
       const handle = opened.value, exact = runtime.isCurrent(handle), cloned = runtime.isCurrent({ ...handle });
       const exported = await runtime.exportEncrypted(created.value.profileId);
       if (!exported.ok) throw new Error(exported.error.code);
+      const restored = await runtime.restore(exported.value.bytes, 'runtime browser fixture passphrase', 'runtime browser restore passphrase');
+      if (!restored.ok) throw new Error(restored.error.code);
+      const stillCurrent = runtime.isCurrent(handle);
       const lock = runtime.lock(), revokedSynchronously = !runtime.isCurrent(handle); await lock;
+      const fresh = await runtime.create('runtime browser create passphrase');
+      if (!fresh.ok) throw new Error(fresh.error.code);
+      const freshCurrent = runtime.isCurrent(fresh.value);
+      const listed = await runtime.listProfiles();
+      if (!listed.ok) throw new Error(listed.error.code);
+      await runtime.lock();
       const pending = runtime.unlock(created.value.profileId, 'runtime browser fixture passphrase');
       const closing = runtime.dispose(); const late = await pending; await closing;
       const afterDispose = await runtime.status(); window.Worker = NativeWorker;
       const reader = new EncryptedVaultService(undefined, crypto, { lifecycle: false });
       const preserved = await reader.unlock(created.value.profileId, 'runtime browser fixture passphrase');
       const records = preserved.ok ? await reader.list(preserved.value.sessionId) : preserved;
+      const copy = await reader.unlock(restored.value.newProfileId, 'runtime browser restore passphrase');
+      const copyRecords = copy.ok ? await reader.list(copy.value.sessionId) : copy;
       reader.dispose();
       return { observations, initiallyLocked, exact, cloned, revokedSynchronously,
         exported: { size: exported.value.bytes.byteLength, authentication: exported.value.authentication },
         lateCode: late.ok ? 'unexpected-success' : late.error.code,
         disposedCode: afterDispose.ok ? 'unexpected-success' : afterDispose.error.code,
         recordsPreserved: records.ok && JSON.stringify(records.value) === JSON.stringify([record]),
+        restoredCopy: copyRecords.ok && JSON.stringify(copyRecords.value) === JSON.stringify([record]) && restored.value.records === 1 &&
+          restored.value.newProfileId !== created.value.profileId,
+        stillCurrent, freshCurrent, freshDistinct: fresh.value.profileId !== created.value.profileId,
+        listed: [created.value.profileId, restored.value.newProfileId, fresh.value.profileId].every(id => listed.value.profileIds.includes(id)),
         profileId: created.value.profileId, localStorageEntries: localStorage.length, caches: await caches.keys(), href: location.href };
     }, base);
     assert.equal(result.initiallyLocked, true); assert.equal(result.exact, true); assert.equal(result.cloned, false);
     assert.equal(result.revokedSynchronously, true); assert.equal(result.disposedCode, 'LOCKED');
     assert.ok(['LOCKED', 'CANCELLED'].includes(result.lateCode));
     assert.equal(result.exported.authentication, 'not-checked'); assert.ok(result.exported.size > 0);
-    assert.equal(result.recordsPreserved, true); assert.equal(result.observations.workers.length, 1);
+    assert.equal(result.recordsPreserved, true); assert.equal(result.restoredCopy, true);
+    assert.equal(result.stillCurrent, true); assert.equal(result.freshCurrent, true); assert.equal(result.freshDistinct, true); assert.equal(result.listed, true); assert.equal(result.observations.workers.length, 1);
     assert.equal(result.observations.workers[0].type, 'module');
     assert.equal(new URL(result.observations.workers[0].url).origin, origin);
     assert.equal(result.observations.secretReply, false); assert.equal(result.localStorageEntries, 0);
@@ -130,7 +146,7 @@ try {
     assert.equal(result.sourcePreserved, true); await page.close();
   }
   assert.deepEqual(unexpected, []); await context.close();
-  console.log('PASS: Chromium same-origin module Worker at root/nested/IPFS-style paths, locked boot, native encrypted unlock/export, exact opaque handles, synchronous revocation, pending-unlock disposal, missing chunk/modeled denied-IDB recovery, preserved source, no private replies/localStorage/cache/URL or external egress. Native fixture only; React/Vite/device acceptance remains open.');
+  console.log('PASS: Chromium same-origin module Worker at root/nested/IPFS-style paths, locked boot, native encrypted unlock/export/create/restore/inventory, exact opaque handles, synchronous revocation, pending-unlock disposal, missing chunk/modeled denied-IDB recovery, preserved source, no private replies/localStorage/cache/URL or external egress. Native fixture only; React/Vite/device acceptance remains open.');
 } finally {
   await browser?.close(); if (server) await new Promise(done => server.close(done));
   await rm(output, { recursive: true, force: true });

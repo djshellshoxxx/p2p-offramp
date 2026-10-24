@@ -19,6 +19,7 @@ test('runtime command union exposes only bounded known-profile readonly operatio
  assert.deepEqual(parse(command('unlock',{profileId:'a'.repeat(32),passphrase:'local runtime passphrase'})),command('unlock',{profileId:'a'.repeat(32),passphrase:'local runtime passphrase'}));
  assert.deepEqual(parse(command('exportEncrypted',{profileId:'a'.repeat(32)})),command('exportEncrypted',{profileId:'a'.repeat(32)}));
  for(const operation of ['create','restore','read','list','commit','sign','fetch'])invalid(()=>parse(command(operation)));
+ assert.deepEqual(parse(command('listProfiles')),command('listProfiles'));invalid(()=>parse(command('listProfiles',{profileId:'a'.repeat(32)})));
  for(const changed of [{requestId:0},{requestId:Infinity},{generation:-1},{generation:Number.MAX_SAFE_INTEGER+1},{version:2},{sessionId:'SECRET'}])invalid(()=>parse({...command('status'),...changed}));
  for(const passphrase of ['short','x'.repeat(1025),'\ud800'+'x'.repeat(12)])invalid(()=>parse(command('unlock',{profileId:'a'.repeat(32),passphrase})));
  invalid(()=>parse(command('unlock',{profileId:'A'.repeat(32),passphrase:'local runtime passphrase'})));
@@ -51,4 +52,35 @@ test('runtime encrypted export is bounded G03 ciphertext with an explicit unauth
  invalid(()=>parse({...reply,result:{ok:true,value:{bytes,authentication:'authenticated'}}}));
  invalid(()=>parse({...reply,result:{ok:true,value:{bytes:new Uint8Array(12*1024*1024+1),authentication:'not-checked'}}}),'LIMIT_EXCEEDED');
  invalid(()=>parse({...reply,result:{ok:true,value:{bytes:new TextEncoder().encode('{"secretKey":"SECRET"}'),authentication:'not-checked'}}}));
+});
+
+test('runtime create/restore commands require valid passphrases and bounded genuine byte copies',async()=>{
+ const parse=fn('parseRuntimeCommand');const p='local runtime passphrase';
+ assert.deepEqual(parse(command('create',{passphrase:p})),command('create',{passphrase:p}));
+ for(const passphrase of ['short','x'.repeat(1025),'\ud800'+'x'.repeat(12),12])invalid(()=>parse(command('create',{passphrase})));
+ invalid(()=>parse(command('create',{passphrase:p,profileId:'a'.repeat(32)})));
+ const bytes=new Uint8Array([1,2,3]);const parsed=parse(command('restore',{bytes,sourcePassphrase:p,destinationPassphrase:p}));
+ assert.deepEqual([...parsed.bytes],[1,2,3]);assert.notEqual(parsed.bytes,bytes);
+ for(const changed of [{bytes:[1,2,3]},{bytes:new Uint16Array(2)},{bytes:'AAAA'},{sourcePassphrase:'short'},{destinationPassphrase:'\ud800'+'x'.repeat(12)}])
+  invalid(()=>parse(command('restore',{bytes,sourcePassphrase:p,destinationPassphrase:p,...changed})));
+ const {MAX_BACKUP_BYTES}=await import('../src/backup.ts');
+ invalid(()=>parse(command('restore',{bytes:new Uint8Array(MAX_BACKUP_BYTES+1),sourcePassphrase:p,destinationPassphrase:p})),'LIMIT_EXCEEDED');
+ class Lying extends Uint8Array{get length(){return 0;}get byteLength(){return 0;}}
+ assert.equal(parse(command('restore',{bytes:new Lying(4),sourcePassphrase:p,destinationPassphrase:p})).bytes.length,4);
+});
+test('runtime inventory and restore replies are strict, bounded and contain only opaque public fields',()=>{
+ const parse=fn('parseRuntimeMessage');const id=n=>n.toString(16).padStart(32,'0');
+ const list=value=>({...command('listProfiles'),kind:'response',result:{ok:true,value}});
+ const good=list({profileIds:[id(1),id(2)],truncated:false});assert.deepEqual(parse(good),good);
+ assert.deepEqual(parse(list({profileIds:Array.from({length:16},(_,n)=>id(n)),truncated:true})).result.value.truncated,true);
+ const sparse=[id(1)];sparse.length=2;
+ for(const value of [{profileIds:Array.from({length:17},(_,n)=>id(n)),truncated:true},{profileIds:[id(1),id(1)],truncated:false},{profileIds:['SECRET'],truncated:false},
+  {profileIds:[id(1)],truncated:0},{profileIds:[id(1)],truncated:false,envelope:'SECRET'},{profileIds:sparse,truncated:false},{profileIds:Object.assign([id(1)],{x:1}),truncated:false},
+  {state:'locked',handle:null}])invalid(()=>parse(list(value)));
+ const restore=value=>({...command('restore'),kind:'response',result:{ok:true,value}});
+ const ok=restore({newProfileId:id(5),records:3});assert.deepEqual(parse(ok),ok);
+ for(const value of [{newProfileId:id(5),records:-1},{newProfileId:id(5),records:10001},{newProfileId:id(5),records:1.5},{newProfileId:'SECRET',records:0},
+  {newProfileId:id(5),records:0,sourceProfileId:id(6)},{newProfileId:id(5),records:0,newKeyId:id(7)}])invalid(()=>parse(restore(value)));
+ const create={...command('create'),kind:'response',result:{ok:true,value:{state:'unlocked',handle:{id:'A'.repeat(43),generation:0,purpose:'vault',profileId:id(9)}}}};
+ assert.deepEqual(parse(create),create);
 });
