@@ -1,7 +1,9 @@
 # Noncustodial reconstruction plan and evidence
 
 This checkout is local reconstruction in the existing shared GhostPay environment. No missing historical
-checkpoint or historical test result has been restored or reused as current evidence. No publication is authorized.
+checkpoint or historical test result has been restored or reused as current evidence. Source-checkpoint authorization is recorded below.
+
+**Publication update — 2026-10-24 01:13 UTC:** the user explicitly authorized regular GitHub source checkpoints for both projects. Non-default work branches may receive secret-checked source at coherent milestones; no force-push, branch overwrite, main merge, PR mutation, release/deployment or new credentials/security-setting changes. Earlier no-publication statements record the prior authorization state. Preserve unfinished work and report its test status honestly.
 
 ## Verified remote intake
 
@@ -47,25 +49,25 @@ normalization never resubmits economic actions. ReleaseEnabled remains 0 and wal
 
 Global constraints: same active environment; two implementation workers per repo plus one shared integrator.
 No real funds, live submission, production actions, external target scans, credentials, paid infrastructure,
-pushes, PR mutations, release publication or deployment. Preserve existing work and OSS notices.
+unapproved publication, PR mutations, release publication or deployment. Regular secret-checked work-branch source checkpoints are now authorized. Preserve existing work and OSS notices.
 
 Review focus: stale async unlock/commit after lock; same-revision ciphertext replacement; untrusted source
 promoted to chain truth; old generation/out-of-order reconciliation; retries after possible economic submission.
 
 1. [x] Verify access, live refs/PRs and ancestry; select PR2 instead of defaulting to main; run fresh baseline checks.
-2. [ ] Storage worker (after safe GhostPay checkpoint): read full G02/G03/G09 contracts; implement
+2. [x] Storage worker (after safe GhostPay checkpoint): read full G02/G03/G09 contracts; implement
    `packages/storage/src/vault-service.ts` and `idb-vault-store.ts`, plus focused Node and real-browser tests.
    Consume existing `createEnvelope`, `openEnvelope`, `encryptRevision`, `disposeMaterial` and validators.
    Provide G02 create/unlock/read/list/commit/lock/lockAll/exportEncrypted; exact ciphertext precondition
    plus revision inside one readwrite transaction; cancellation/generation guards; fixed errors and copies.
    Do not add identity/UI/recovery bypasses or writable reuse of imported keys. Add G03 fresh-key recovery only
    after the storage slice passes and its exact specification is reconciled.
-3. [ ] Domain worker (after safe GhostPay checkpoint): read full G08/system-context/observation-envelope/G13
+3. [x] Domain worker (after safe GhostPay checkpoint): read full G08/system-context/observation-envelope/G13
    contracts; implement `packages/domain/src/authority.ts`, `errors.ts`, `read-retry.ts` and disjoint schema
    files if needed, plus Node regressions. Enforce source authority, generation/latest-sequence and reorg
    blocking. Retry only idempotent reads under exact documented attempt/time/jitter budgets; all economic
    calls remain disabled. Do not implement network/registry/deployment trust by assertion.
-4. [ ] Shared integrator inspects diffs and targeted red/green evidence; commits each verified tranche locally.
+4. [x] Shared integrator inspects diffs and targeted red/green evidence; commits each verified tranche locally.
    Freeze each repo before broad tests. Run Node/Python/typecheck/spec checks and actual browser storage tests;
    inspect errors without reducing thresholds or skipping failures. Record gates G07/G10/G11/G12/G15 still open.
 5. [ ] Continue feasible next slices only after their dependencies are verified. Store exact branch/HEAD,
@@ -146,3 +148,11 @@ closed. Every real chain/wallet/transport/release capability stays gated.
 
 Next disjoint intake is G05 broker and G12 journal, using existing storage/authority foundations.
 No durable-write Worker bridge will be improvised without discoverable commit-outcome semantics.
+
+## Latest local dependency checkpoint — 2026-10-24
+
+Source `51904e216268fabc92b022dd43dbb7d20f74ea08` includes the verified partial G05 broker and G12 encrypted reservation/unknown-marker coordinator. Fresh frozen combined evidence: 240 Node tests, strict package/DOM/Worker types, native two-tab journal races and the Worker/storage/recovery browser fixtures all pass. The original scored/audited source remains 1908249; these later modules do not retroactively raise that assessment. See handoff for exact limits and red-to-green hostile-exception fixes.
+
+Ordered next work: (1) finish/freeze/review G04 offline content/header/meta fixtures and G10 discovery-only lifecycle; (2) finish G07 React/Vite shell and G04 build enforcement with G11 registry/G15 release-trust prerequisites; (3) implement G09 migrations and trusted G12 reconciliation before any durable write/sign/send app bridge; (4) only then progress native wallet/chain/relay/terms/escrow vertical slices with local fake-funds tests. ReleaseEnabled stays zero until the defined predecessor and acceptance gates pass. These are canonical dependencies, not speculative scope.
+
+Private audit source upload succeeded; the separate audit has not run because supported Library materialization failed before intake (this environment additionally observed proxy CONNECT 403). Preserve libfile_687537bb835c8191be23deb73305addd and its exact SHA256; no reupload/alternate transport without a verified supported fix. Complete-history bundles remain local only.

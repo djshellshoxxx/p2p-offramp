@@ -4,8 +4,19 @@ export type { CoreError, CoreErrorCode, CoreResult, RecoveryAction } from '../..
 const ACTIONS: Readonly<Record<CoreErrorCode, RecoveryAction>> = Object.freeze({
   INVALID_INPUT: 'edit-input', UNSUPPORTED_VERSION: 'export', UNSUPPORTED_PROVIDER: 'change-provider', WRONG_CHAIN: 'reconnect', UNAUTHORIZED: 'reconnect', USER_REJECTED: 'none', LOCKED: 'unlock', CONFLICT: 'reload', UNAVAILABLE: 'change-provider', TIMEOUT: 'change-provider', CANCELLED: 'none', LIMIT_EXCEEDED: 'none', INTEGRITY_FAILURE: 'change-provider', BROADCAST_UNKNOWN: 'reconcile', EXPIRED: 'edit-input',
 });
+let diagnosticSequence = 0n;
+/** Diagnostic correlation only: never a key, nonce, capability, intent or authorization identifier. */
 export function createOperationId(): string {
-  return Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
+  const bytes = new Uint8Array(16);
+  try {
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+  } catch {
+    // Error formatting must remain available when the cryptographic environment is unavailable.
+    // Security-sensitive IDs keep their independent CSPRNG calls and fail closed at their boundary.
+    diagnosticSequence = (diagnosticSequence + 1n) & ((1n << 64n) - 1n);
+    return `0000000000000000${diagnosticSequence.toString(16).padStart(16, '0')}`;
+  } finally { bytes.fill(0); }
 }
 export interface ErrorContext { readonly operationId: string; readonly readOnly: boolean; }
 export function createCoreError(code: CoreErrorCode, context: ErrorContext): CoreError {

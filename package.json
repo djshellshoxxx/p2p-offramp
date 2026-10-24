@@ -11,7 +11,7 @@
     "test:specs": "python -m unittest discover -s scripts/tests -v",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit",
-    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs"
+    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs"
   },
   "devDependencies": {
     "playwright-core": "1.64.1",

@@ -38,3 +38,20 @@ test('invalid correlation identifiers are replaced with fresh bounded random ide
   const b=make('INVALID_INPUT',{operationId:'SECRET',readOnly:true});
   assert.match(a.correlationId,/^[a-f0-9]{32}$/); assert.notEqual(a.correlationId,b.correlationId); assert.doesNotMatch(JSON.stringify(a),/SECRET/);
 });
+test('unavailable or hostile RNG cannot escape through diagnostic correlation formatting', () => {
+  const original = crypto.getRandomValues;
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  try {
+    for (const reason of [new Error('SECRET diagnostic RNG failure'), revoked.proxy]) {
+      crypto.getRandomValues = () => { throw reason; };
+      const first = api.createOperationId();
+      const second = api.createCoreError('UNAVAILABLE', { operationId: 'invalid', readOnly: false });
+      assert.match(first, /^[0-9a-f]{32}$/);
+      assert.match(second.correlationId, /^[0-9a-f]{32}$/);
+      assert.notEqual(first, second.correlationId);
+      assert.equal(second.code, 'UNAVAILABLE');
+      assert.equal(second.retryable, false);
+      assert.doesNotMatch(JSON.stringify(second), /SECRET|RNG failure/);
+    }
+  } finally { crypto.getRandomValues = original; }
+});
