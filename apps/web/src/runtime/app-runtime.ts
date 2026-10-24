@@ -36,6 +36,8 @@ export class AppRuntime {
   #deadline: number | undefined;
   #lastTime = -Infinity;
   #timer: ReturnType<typeof setTimeout> | undefined;
+  readonly #observers = new Set<() => void>();
+  #notificationQueued = false;
   private constructor(worker: RuntimeWorkerPort, options: AppRuntimeOptions) {
     this.#worker = worker; this.#options = options;
     const lifecycle = options.lifecycle !== false && typeof document !== 'undefined' && typeof window !== 'undefined';
@@ -67,8 +69,27 @@ export class AppRuntime {
     this.#lastTime = now; return now;
   }
   #resetStatus(): void {
+    const changed = this.#current.state !== 'locked';
     this.#current = locked(); this.#deadline = undefined;
     if (this.#timer !== undefined) clearTimeout(this.#timer); this.#timer = undefined;
+    if (changed) this.#notify();
+  }
+  #notify(): void {
+    if (this.#notificationQueued) return;
+    this.#notificationQueued = true;
+    // Do not let an observer reenter the middle of a generation invalidation or message validation.
+    queueMicrotask(() => {
+      this.#notificationQueued = false;
+      for (const observer of [...this.#observers]) {
+        if (!this.#observers.has(observer)) continue;
+        try { observer(); } catch { /* One UI observer cannot prevent revocation. */ }
+      }
+    });
+  }
+  subscribe(observer: () => void): () => void {
+    if (typeof observer !== 'function') return () => undefined;
+    this.#observers.add(observer);
+    return () => { this.#observers.delete(observer); };
   }
   #arm(): void {
     this.#deadline = this.#time() + RUNTIME_IDLE_TIMEOUT_MS;
@@ -117,7 +138,9 @@ export class AppRuntime {
           (pending.command.operation === 'unlock' && value.handle.profileId !== pending.command.profileId)) return false;
       if (operation !== 'unlock' && (this.#current.state !== 'unlocked' || !sameHandle(this.#current.handle, value.handle))) return false;
       const handle = this.#current.state === 'unlocked' && sameHandle(this.#current.handle, value.handle) ? this.#current.handle : value.handle;
+      const changed = this.#current.state !== 'unlocked' || this.#current.handle !== handle;
       this.#current = Object.freeze({ state: 'unlocked', handle });
+      if (changed) this.#notify();
       if (operation === 'unlock') this.#arm();
     } else {
       if (operation === 'unlock') return false;

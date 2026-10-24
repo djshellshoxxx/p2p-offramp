@@ -4,7 +4,7 @@ import {
   parsePrivateSnapshot, parseVaultEnvelope, ValidationError,
   MAX_REVISION, MAX_ENCRYPTIONS_PER_HANDLE,
   type PrivateSnapshotV1, type VaultEnvelopeV1,
-} from '../../schemas/src/vault.ts';
+} from '../../schemas/index.ts';
 
 export interface UnlockedMaterial { readonly profileId: string; readonly keyId: string; }
 export type CryptoProvider = Pick<Crypto, 'subtle' | 'getRandomValues'>;

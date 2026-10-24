@@ -1,5 +1,7 @@
 # P2P Off-ramp
 
+Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
+
 A noncustodial peer-to-peer off-ramp under active development. The intended core is a static
 React/TypeScript/Vite client using external wallets, immutable versioned escrow, relay discovery,
 encrypted messaging and encrypted local recovery. Basic manual fiat settlement requires seller
@@ -11,13 +13,11 @@ The catalog contains 173 documents: 171 expanded technical design baselines, a n
 and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence
 are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
 
-Implemented foundation work includes strict G02 schema/canonical encoding and native Web Crypto
-helpers with Python-produced interoperability fixtures. The application UI, IndexedDB service,
-wallet/trading loop and production release are not complete. No real-funds readiness is claimed.
+Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore UI, signed registry/release trust, wallet signing/submission, native escrow/relay integration and the trading loop remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
 
 ## Local checks
 
-Requires Node 24+ and Python 3.12+ for the spec tool; the schema/crypto tests have no runtime npm dependencies.
+Requires Node 24+ and Python 3.12+ for the spec tool. Dependencies are pinned in package-lock.json; emitted runtime assets retain third-party MIT attribution. Chromium is required for local browser checks, not as an app-owned server.
 
 ```sh
 npm ci --ignore-scripts
@@ -25,6 +25,11 @@ npm run typecheck
 npm test
 npm run test:specs
 npm run check:specs
+npm run check:boundaries
+npm run test:build-policy
+npm run build
+npm run test:browser
+npm run test:web:browser
 ```
 
 Optional independent fixture verification requires Python `cryptography`:

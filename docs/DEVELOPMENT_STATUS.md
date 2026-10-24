@@ -1,6 +1,6 @@
 # Development status and continuation contract
 
-Updated: 2026-10-22. The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete.
+Updated: 2026-10-24. The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete. The latest reproducible implementation evidence and replacement-agent instructions are in `HANDOFF-2026-10-24-CLIENT-SHELL.md`.
 
 ## Authoritative scope and branches
 
@@ -76,4 +76,6 @@ implementation inventory, browser matrix or release gates remain incomplete.
 - Task 2 native Web Crypto helper: 15 additional Node tests pass, matching a Python-produced G02 envelope byte-for-byte and covering wrong-password/tamper/inner-format failures, secret-copy cleanup, disposal races and the 4096 attempted-encryption cap. Independent Python fixture verification passes. These helpers do not implement IndexedDB, browser sessions, wallet signing or live trading.
 - Compiler is a pinned development-only dependency; core schema code has no runtime package dependencies. Node v24.19.0 is the local test runtime.
 
-Current combined evidence: 37 JavaScript tests, 11 specification-tool tests, strict TypeScript checking, Python fixture verification and the full structural catalog check pass locally. Browser/device support and production review remain pending. GitHub publication uses the connected repository API because this checkout has no shell push credentials.
+The 37-test figure above describes the initial parser/crypto tranche only. The 2026-10-24 client-shell milestone has 273 passing Node tests, 11 specification-tool tests, strict TypeScript checks, 173 structurally checked specifications, three native-browser fixtures, emitted-static-app browser checks, and five artifact/import-policy tests. These are local Chromium/fixture results, not deployed-host, device or independent-audit acceptance. Existing authorized Git credentials now support source work-branch checkpoints; no deployment or signing is authorized.
+
+The current static React/Vite shell unlocks an existing known profile, reports locked/unlocked state, locks, and explicitly exports unchecked encrypted backup bytes. It does not create/restore profiles, discover offers, trade, sign or send. `ReleaseEnabled=0` and an empty network allowlist remain enforced. Client-side application logic, user-controlled keys and local private data are a normative requirement; see `adr/ADR-CLIENT-SIDE-2026-10-24.md`. The incompatible custodial branch remains excluded. The next ordered work is to reconcile the remaining M0/M1 contracts, implement bounded create/restore UI through the existing Worker boundary, then qualify registry/manifest/transport before any trading authority is enabled.

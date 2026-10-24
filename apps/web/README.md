@@ -1,6 +1,6 @@
-# Offline runtime foundation — partial G07/MEM01
+# Offline client-side shell and runtime — partial G07/MEM01
 
-This tranche is a TypeScript runtime boundary, without a React interface or Vite build. `AppRuntime.start` validates the exact public configuration `{version:1,ReleaseEnabled:0,connectOrigins:[]}` before creating one same-origin dedicated module Worker. Startup remains locked. There is no network, wallet, signing, create, restore, private-record read/list or mutation command.
+The app now has a static React/TypeScript/Vite shell plus a native Worker runtime boundary. It remains an offline development build, not a complete trading application. `AppRuntime.start` validates the exact public configuration `{version:1,ReleaseEnabled:0,connectOrigins:[]}` before creating one same-origin dedicated module Worker. Startup remains locked. There is no network, wallet, signing, create, restore, private-record read/list or mutation command.
 
 An explicit command can unlock a known existing G02 profile using its passphrase. The Worker retains the authenticated vault session; the document receives a purpose-bound opaque handle and public profile ID. `isCurrent(handle)` checks the exact live document handle. Status polling does not refresh idle time. Encrypted G03 export is available while locked and is always labelled `authentication: 'not-checked'`; an unlocked session does not authenticate the exact row exported by that separate read.
 
@@ -18,4 +18,4 @@ node --test packages/schemas/test/runtime.test.mjs apps/web/test/*.test.mjs
 ./node_modules/.bin/tsc -p apps/web/tsconfig.worker.json --noEmit
 ```
 
-Node event/lifetime tests use controlled EventTargets, clocks and trusted-event fixtures; they are not browser/device acceptance. The integrator owns actual Chromium Worker/IndexedDB/CSP checks. G07 remains partial: React/Vite/version review, route/UI composition, import-boundary enforcement for the entire repository, G04 deployed header/meta profiles, accessibility, mobile/multi-browser behavior, signed-release trust, wallet/transport adapters, private view models and independent review remain open. `ReleaseEnabled` remains zero.
+Node event/lifetime tests use controlled EventTargets, clocks and trusted-event fixtures; they are not browser/device acceptance. The integrator owns actual Chromium Worker/IndexedDB/CSP checks. G07 remains partial: framework/version review, full application composition, deployed header/meta profiles, complete accessibility/mobile/multi-browser acceptance, signed-release trust, wallet/transport adapters, private view models and independent review remain open. Hash routes, package-boundary enforcement and local header/meta build/browser fixtures are now implemented; local fixtures are not deployed-host acceptance. `ReleaseEnabled` remains zero.

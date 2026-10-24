@@ -1,6 +1,6 @@
 /** Local G01 key generation only. G06 review remains test-enabled; no generic signer/network API. */
 import { schnorr, secp256k1 } from '@noble/curves/secp256k1.js';
-import { IDENTITY_PROVIDER_ID, IdentityError } from '../../schemas/src/identity.ts';
+import { IDENTITY_PROVIDER_ID, IdentityError } from '../../schemas/index.ts';
 export interface MessagingIdentityProvider {
   readonly id: typeof IDENTITY_PROVIDER_ID;
   generate(): Promise<{ readonly secretKey: Uint8Array; readonly publicKey: string }>;

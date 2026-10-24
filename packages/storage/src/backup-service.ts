@@ -1,7 +1,7 @@
 /** G03 fresh-key recovery. No wallet material, transform hook, writable imported session, or authority promotion. */
-import { canonicalEnvelopeBytes, encodeBackup, parseBackupBytes, type RestoreReceipt } from '../../schemas/src/backup.ts';
-import { encodePassphrase, parsePrivateSnapshot, parseVaultEnvelope, ValidationError, type PrivateSnapshotV1 } from '../../schemas/src/vault.ts';
-import type { VaultErrorCode } from '../../schemas/src/vault-service.ts';
+import { canonicalEnvelopeBytes, encodeBackup, parseBackupBytes, type RestoreReceipt } from '../../schemas/index.ts';
+import { encodePassphrase, parsePrivateSnapshot, parseVaultEnvelope, ValidationError, type PrivateSnapshotV1 } from '../../schemas/index.ts';
+import type { VaultErrorCode } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, disposeMaterial, VaultCryptoError, type CryptoProvider } from './vault-crypto.ts';
 import { IndexedDbVaultStore, VaultStorageError, type VaultStore } from './idb-vault-store.ts';
 

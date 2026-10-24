@@ -1,8 +1,8 @@
 import {
   decodeBase64url, encodeBase64url, encodePassphrase, MAX_REVISION, parsePrivateSnapshot, parseVaultEnvelope,
   ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
-} from '../../schemas/src/vault.ts';
-import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/src/vault-service.ts';
+} from '../../schemas/index.ts';
+import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, encryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
 import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';

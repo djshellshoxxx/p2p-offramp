@@ -1,5 +1,5 @@
-import { parseVaultEnvelope, ValidationError, type VaultEnvelopeV1 } from '../../schemas/src/vault.ts';
-import type { VaultErrorCode } from '../../schemas/src/vault-service.ts';
+import { parseVaultEnvelope, ValidationError, type VaultEnvelopeV1 } from '../../schemas/index.ts';
+import type { VaultErrorCode } from '../../schemas/index.ts';
 
 export class VaultStorageError extends Error {
   readonly code: VaultErrorCode;

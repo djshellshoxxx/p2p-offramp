@@ -1,10 +1,10 @@
 /** Partial G12 worker-private persistence coordinator, with no wallet/send/clear/reconciliation API.
  * A successful marker records conservative recovery metadata; it is not spending authority.
  */
-import { CoreSchemaError, parseTradeBinding, sameBinding, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/src/core.ts';
-import { decodeIntentPayload, encodeIntentPayload, intentData, IntentSchemaError, parseIntent, parseIntentAccount, parseIntentId, type IntentV1 } from '../../schemas/src/intent.ts';
-import { MAX_RECORDS, MAX_REVISION, MAX_SNAPSHOT_JSON_BYTES } from '../../schemas/src/vault.ts';
-import type { Result, VaultService, VaultSession, VaultSessionAuthority, VaultSessionLease } from '../../schemas/src/vault-service.ts';
+import { CoreSchemaError, parseTradeBinding, sameBinding, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
+import { decodeIntentPayload, encodeIntentPayload, intentData, IntentSchemaError, parseIntent, parseIntentAccount, parseIntentId, type IntentV1 } from '../../schemas/index.ts';
+import { MAX_RECORDS, MAX_REVISION, MAX_SNAPSHOT_JSON_BYTES } from '../../schemas/index.ts';
+import type { Result, VaultService, VaultSession, VaultSessionAuthority, VaultSessionLease } from '../../schemas/index.ts';
 import { createCoreError, createOperationId, normalizeError } from './errors.ts';
 
 export type JournalVaultPort = Pick<VaultService, 'read' | 'list' | 'commit'> & VaultSessionAuthority;

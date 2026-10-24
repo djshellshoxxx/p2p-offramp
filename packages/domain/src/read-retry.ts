@@ -1,5 +1,5 @@
 /** G13: this wrapper is exclusively for policy-authorized idempotent reads, never wallet/economic calls. */
-import type { CoreResult } from '../../schemas/src/core.ts';
+import type { CoreResult } from '../../schemas/index.ts';
 import { createCoreError, normalizeError } from './errors.ts';
 
 export const READ_MAX_ATTEMPTS = 3;

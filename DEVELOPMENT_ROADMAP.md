@@ -11,6 +11,8 @@ See [development status](docs/DEVELOPMENT_STATUS.md) and the [full readiness inv
 
 ## Delivery contract
 
+**Normative user requirement (2026-10-24):** the app MUST remain client-side. App logic and user-controlled keys/private local data run in the browser; core MUST NOT require an app-owned server, centralized user-account database or server-held user secrets. Static hosting/build tools are distinct from runtime services. External blockchains, user-chosen RPC endpoints and peer/relay infrastructure remain dependencies of online trading, not a claim of infrastructure-free operation. See `docs/adr/ADR-CLIENT-SIDE-2026-10-24.md`. Any conflicting future requirement must be reconciled with the user before implementation.
+
 The repository now contains expanded design specifications and an initial tested schema/crypto foundation, not a completed application. Every milestone below is planned until its evidence is recorded. This roadmap adds missing integration requirements; it does not certify the existing placeholders as implementation-ready.
 
 Build security foundations first, then a static application with a complete basic trading loop. Phase 2 is a release boundary: a user can discover an offer, agree terms, fund escrow, communicate privately, coordinate a manual payment, and receive a release or timeout refund without any Phase 3–6 package or service. It needs functioning wallets, RPC endpoints, Nostr relays, and a blockchain; standalone does not mean offline or free of external infrastructure.

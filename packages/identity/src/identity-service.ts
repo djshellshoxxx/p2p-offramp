@@ -1,7 +1,7 @@
 /** G01 local messaging identity lifecycle. This service exposes no signing, decryption or spending interface. */
-import { decodeBase64url, encodeBase64url, type PrivateRecordV1 } from '../../schemas/src/vault.ts';
-import type { VaultService, VaultSession, VaultSessionAuthority, VaultSessionLease, Result } from '../../schemas/src/vault-service.ts';
-import { decodeIdentityPayload, encodeIdentityPayload, identityPublicKey, identityRecordId, IDENTITY_PROVIDER_ID, IdentityError, parseIdentityHandle, type CreatedIdentity, type IdentityErrorCode, type IdentityHandle, type IdentityReference, type IdentityResult, type PrivateIdentityRecordV1 } from '../../schemas/src/identity.ts';
+import { decodeBase64url, encodeBase64url, type PrivateRecordV1 } from '../../schemas/index.ts';
+import type { VaultService, VaultSession, VaultSessionAuthority, VaultSessionLease, Result } from '../../schemas/index.ts';
+import { decodeIdentityPayload, encodeIdentityPayload, identityPublicKey, identityRecordId, IDENTITY_PROVIDER_ID, IdentityError, parseIdentityHandle, type CreatedIdentity, type IdentityErrorCode, type IdentityHandle, type IdentityReference, type IdentityResult, type PrivateIdentityRecordV1 } from '../../schemas/index.ts';
 import type { MessagingIdentityProvider } from './noble-provider.ts';
 
 type IdentityVault = VaultService & VaultSessionAuthority;

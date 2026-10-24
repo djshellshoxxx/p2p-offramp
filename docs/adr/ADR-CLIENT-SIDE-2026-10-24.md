@@ -1,0 +1,13 @@
+# Client-side noncustodial application boundary
+
+Status: normative user requirement, recorded 2026-10-24.
+
+The application MUST remain a static client-side application. User-controlled keys and private local data belong in browser memory/encrypted local storage or an explicitly selected external wallet. Core MUST NOT depend on an app-owned server, a centralized user-account database, server-held user secrets, or an operator with custody/release authority. The incompatible custodial-ledger branch remains separate.
+
+Current implementation: React/TypeScript/Vite emits static assets and a same-origin native module Worker. The Worker owns the encrypted IndexedDB vault. Startup is locked, `ReleaseEnabled` is zero and `connectOrigins` is empty. The UI can unlock an existing known profile, lock/status-check and explicitly download unchecked encrypted backup bytes. Create/restore/trading/signing are not silently enabled. Node/Vite and loopback HTTP fixtures are development/build/test tools, not required application servers. There is no service worker or private server API.
+
+Online trading, once implemented, still needs external blockchains/smart contracts, external wallets, user-chosen RPC endpoints and peer/relay infrastructure. Public order discovery exposes agreed public metadata; encrypted peer messages necessarily leave the device for their recipient/relay. Smart-contract escrow is chain-held state bound to immutable participant terms, not an app-owned account ledger. The manual fiat flow cannot prove receipt or eliminate seller withholding. Client-side does not mean offline trading, infrastructure-free operation, anonymous RPC routing or trustworthy delivered JavaScript.
+
+Optional user-selected services must declare the data they receive and cannot silently become mandatory core dependencies. Future relay, transport, escrow, settlement, proof and physical-coordination modules must preserve this boundary. A genuinely incompatible requirement must be flagged and reconciled with the user first; it must not be resolved by introducing a custodial backend or inventing a guarantee.
+
+Evidence/checks: package import-boundary checks and actual document/Worker bundle graphs reject server/advanced-module dependencies in core; generated offline CSP denies connections; emitted-browser fixtures check zero automatic wallet prompts and unexpected egress, local vault behavior, cancellation and secret-free URLs/storage. These bounded checks do not constitute independent security review, a deployed-host assessment, browser/device certification or completion of the trading product.

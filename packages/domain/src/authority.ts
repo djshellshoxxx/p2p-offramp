@@ -1,5 +1,5 @@
 /** G08 source separation. Only a configured native-verifying reader may supply chain observations. */
-import { CoreSchemaError, parseChainObservation, parseObservationEnvelope, parseTradeBinding, sameBinding, type ChainObservation, type CoreResult, type TradeBinding, type TradeView } from '../../schemas/src/core.ts';
+import { CoreSchemaError, parseChainObservation, parseObservationEnvelope, parseTradeBinding, sameBinding, type ChainObservation, type CoreResult, type TradeBinding, type TradeView } from '../../schemas/index.ts';
 import { createCoreError, createOperationId, normalizeError } from './errors.ts';
 
 export const RELEASE_ENABLED = 0;

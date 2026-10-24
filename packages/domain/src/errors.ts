@@ -1,6 +1,6 @@
 /** G13 fixed public errors. Raw exception messages, stacks, URLs and causes are never copied. */
-import type { CoreError, CoreErrorCode, RecoveryAction } from '../../schemas/src/core.ts';
-export type { CoreError, CoreErrorCode, CoreResult, RecoveryAction } from '../../schemas/src/core.ts';
+import type { CoreError, CoreErrorCode, RecoveryAction } from '../../schemas/index.ts';
+export type { CoreError, CoreErrorCode, CoreResult, RecoveryAction } from '../../schemas/index.ts';
 const ACTIONS: Readonly<Record<CoreErrorCode, RecoveryAction>> = Object.freeze({
   INVALID_INPUT: 'edit-input', UNSUPPORTED_VERSION: 'export', UNSUPPORTED_PROVIDER: 'change-provider', WRONG_CHAIN: 'reconnect', UNAUTHORIZED: 'reconnect', USER_REJECTED: 'none', LOCKED: 'unlock', CONFLICT: 'reload', UNAVAILABLE: 'change-provider', TIMEOUT: 'change-provider', CANCELLED: 'none', LIMIT_EXCEEDED: 'none', INTEGRITY_FAILURE: 'change-provider', BROADCAST_UNKNOWN: 'reconcile', EXPIRED: 'edit-input',
 });
