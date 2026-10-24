@@ -23,6 +23,10 @@ class Store {
     if (this.failure) throw new api.VaultStorageError(this.failure);
     this.rows.set(next.profileId, clone(next)); this.writes++; this.afterCommit?.();
   }
+  async listProfileIds() {
+    if (this.listFailure) throw new api.VaultStorageError(this.listFailure);
+    return Object.freeze({ profileIds: Object.freeze([...this.rows.keys()]), truncated: false });
+  }
   subscribeInvalidation(listener) { this.listeners.add(listener); return () => this.listeners.delete(listener); }
 }
 function service(store = new Store(), provider = webcrypto) {
@@ -279,4 +283,20 @@ test('G02 lifecycle: unlock of another session cannot refresh the existing idle 
     if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
     if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
   }
+});
+
+test('G02 profile inventory lists opaque created IDs, honors cancellation and maps storage failures', async () => {
+  const { store, vault } = service();
+  assert.deepEqual(value(await vault.listProfiles()).profileIds, []);
+  const a = value(await vault.create(pass)), b = value(await vault.create(pass));
+  assert.deepEqual([...value(await vault.listProfiles()).profileIds].sort(), [a.profileId, b.profileId].sort());
+  const controller = new AbortController(); controller.abort();
+  error(await vault.listProfiles(controller.signal), 'CANCELLED');
+  store.listFailure = 'STORAGE_UNAVAILABLE'; assert.equal(error(await vault.listProfiles(), 'STORAGE_UNAVAILABLE').retryable, true);
+  store.listFailure = undefined; vault.dispose(); error(await vault.listProfiles(), 'LOCKED');
+});
+test('G02 create surfaces the store profile bound as a fixed non-retryable limit without registering a session', async () => {
+  const { store, vault } = service(); store.failure = 'LIMIT_EXCEEDED';
+  const failure = error(await vault.create(pass), 'LIMIT_EXCEEDED');
+  assert.equal(failure.retryable, false); assert.equal(store.rows.size, 0);
 });

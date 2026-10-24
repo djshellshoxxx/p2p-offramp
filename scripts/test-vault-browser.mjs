@@ -241,7 +241,71 @@ try {
   assert.deepEqual(future, { revoked: 'LOCKED', futureVersion: 'UNSUPPORTED_VERSION', version: 2, disposed: 'LOCKED' });
   assert.deepEqual(unexpected, []);
   await context.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, no external egress.');
+  // Profile bound on fresh storage: two documents race creates and restore at the boundary.
+  const capacityContext = await browser.newContext({ serviceWorkers: 'block' });
+  const capacityPages = await Promise.all([capacityContext.newPage(), capacityContext.newPage()]);
+  for (const page of capacityPages) {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+      const { MAX_VAULT_PROFILES } = await import('/schemas/src/vault.js');
+      window.capStore = new IndexedDbVaultStore();
+      window.capVault = new EncryptedVaultService(window.capStore, crypto, { lifecycle: false });
+      window.capBackup = new EncryptedBackupService(window.capStore);
+      window.capMax = MAX_VAULT_PROFILES;
+    });
+  }
+  const capacity = await capacityPages[0].evaluate(async () => {
+    const first = await window.capVault.create('capacity fixture passphrase');
+    if (!first.ok) throw new Error('capacity seed failed');
+    const exported = await window.capBackup.exportWithStatus(first.value.profileId);
+    for (let n = 1; n < window.capMax - 2; n++) {
+      const created = await window.capVault.create('capacity fixture passphrase');
+      if (!created.ok) throw new Error('capacity fill failed');
+    }
+    window.capFirst = first.value; window.capExport = exported.bytes;
+    return { max: window.capMax, seeded: (await window.capVault.listProfiles()).value.profileIds.length, profileId: first.value.profileId };
+  });
+  assert.equal(capacity.seeded, capacity.max - 2);
+  // Two slots remain; four concurrent creates from two tabs plus one restore race for them.
+  const raced = await Promise.all([
+    ...capacityPages.flatMap(page => [0, 1].map(() => page.evaluate(() => window.capVault.create('capacity fixture passphrase')))),
+    capacityPages[1].evaluate(async (bytes) => {
+      try { const receipt = await window.capBackup.restore(new Uint8Array(bytes), 'capacity fixture passphrase', 'capacity restore passphrase');
+        return { ok: true, value: receipt }; } catch (error) { return { ok: false, error: { code: error.code } }; }
+    }, [...await capacityPages[0].evaluate(() => [...window.capExport])]),
+  ]);
+  assert.equal(raced.filter(result => result.ok).length, 2, 'exactly the remaining slots are filled under concurrency');
+  assert.deepEqual(raced.filter(result => !result.ok).map(result => result.error.code), ['LIMIT_EXCEEDED', 'LIMIT_EXCEEDED', 'LIMIT_EXCEEDED']);
+  const atCapacity = await capacityPages[1].evaluate(async ({ profileId }) => {
+    const inventory = await window.capVault.listProfiles();
+    const opened = await window.capVault.unlock(profileId, 'capacity fixture passphrase');
+    const committed = await window.capVault.commit(opened.value.sessionId, 0, [
+      { op: 'put', record: { id: 'c'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'Y2FwYWNpdHk' } }]);
+    const extra = await window.capVault.create('capacity fixture passphrase');
+    let restored = '';
+    try { await window.capBackup.restore(new Uint8Array(0), 'x'.repeat(12), 'y'.repeat(12)); } catch (error) { restored = error.code; }
+    const after = await window.capVault.listProfiles();
+    return { count: inventory.value.profileIds.length, truncated: inventory.value.truncated, unique: new Set(inventory.value.profileIds).size,
+      committed: committed.ok && committed.value, extra: extra.error?.code, restored, after: after.value.profileIds.length };
+  }, { profileId: capacity.profileId });
+  assert.deepEqual(atCapacity, { count: capacity.max, truncated: false, unique: capacity.max, committed: 1, extra: 'LIMIT_EXCEEDED', restored: 'INVALID_INPUT', after: capacity.max });
+  const restoreAtCapacity = await capacityPages[0].evaluate(async () => {
+    try { await window.capBackup.restore(window.capExport, 'capacity fixture passphrase', 'capacity restore passphrase'); return 'restored'; }
+    catch (error) { return error.code; }
+  });
+  assert.equal(restoreAtCapacity, 'LIMIT_EXCEEDED', 'restore at the bound fails without a partial row');
+  assert.equal(await capacityPages[0].evaluate(async () => (await window.capVault.listProfiles()).value.profileIds.length), capacity.max);
+  for (const page of capacityPages) await page.evaluate(() => { window.capBackup.dispose(); window.capVault.dispose(); window.capStore.close(); });
+  assert.deepEqual(unexpected, []);
+  await capacityContext.close();
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));

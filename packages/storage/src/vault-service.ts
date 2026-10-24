@@ -5,9 +5,9 @@ import {
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, encryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
-import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
+import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type ProfileInventory, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
 export { VaultStorageError } from './idb-vault-store.ts';
-export type { VaultStore } from './idb-vault-store.ts';
+export type { ProfileInventory, VaultStore } from './idb-vault-store.ts';
 
 class Failure extends Error {
   readonly code: VaultErrorCode;
@@ -208,6 +208,15 @@ export class EncryptedVaultService implements VaultService {
           const session = this.#register(snapshot, sealed.envelope, material, token); material = undefined; return session;
         } finally { if (material) disposeMaterial(material); }
       });
+    });
+  }
+  /** Public row keys only; no envelope is read, so this reveals nothing beyond G02's observable profile count. */
+  listProfiles(signal?: AbortSignal): Promise<Result<ProfileInventory>> {
+    return this.#result(async () => {
+      if (signal?.aborted) throw new Failure('CANCELLED');
+      const inventory = await this.#store.listProfileIds();
+      if (signal?.aborted) throw new Failure('CANCELLED');
+      return inventory;
     });
   }
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>> {

@@ -15,16 +15,24 @@ function factory() {
   const requests = [];
   return { requests, open() { const request = {}; requests.push(request); return request; } };
 }
-function database({ syncError, existing = envelope } = {}) {
-  let closes = 0;
-  const db = { get closes() { return closes; }, close() { closes++; }, transaction(_name, mode) {
+function database({ syncError, existing = envelope, rows = 0, keys = [] } = {}) {
+  let closes = 0; const added = [];
+  const db = { added, get closes() { return closes; }, close() { closes++; }, transaction(_name, mode) {
     let aborted = false;
     const tx = { error: null, abort() { if (aborted) throw new DOMException('done', 'InvalidStateError'); aborted = true; queueMicrotask(() => tx.onabort?.()); }, objectStore() {
       return { keyPath: 'profileId', get() {
         const request = { result: copy(existing) };
         queueMicrotask(() => { if (!aborted) { request.onsuccess?.(); queueMicrotask(() => { if (!aborted) tx.oncomplete?.(); }); } });
         return request;
-      }, add() { if (syncError) throw syncError; const request = {}; queueMicrotask(() => { if (!aborted) { request.onsuccess?.(); tx.oncomplete?.(); } }); return request; },
+      }, count() {
+        const request = { result: rows };
+        queueMicrotask(() => { if (!aborted) request.onsuccess?.(); });
+        return request;
+      }, getAllKeys(_query, limit) {
+        const request = { result: keys.slice(0, limit) };
+        queueMicrotask(() => { if (!aborted) { request.onsuccess?.(); queueMicrotask(() => { if (!aborted) tx.oncomplete?.(); }); } });
+        return request;
+      }, add(value) { if (syncError) throw syncError; added.push(value); const request = {}; queueMicrotask(() => { if (!aborted) { request.onsuccess?.(); tx.oncomplete?.(); } }); return request; },
       put() { if (syncError) throw syncError; const request = {}; queueMicrotask(() => { if (!aborted) { request.onsuccess?.(); tx.oncomplete?.(); } }); return request; } };
     } };
     return tx;
@@ -114,4 +122,42 @@ test('IDB stale guards and abort signals return fixed cancellation before openin
   await failed(store.add(envelope, { signal: cancelled.signal }), 'CANCELLED');
   await failed(store.add(envelope, { assertCurrent() { throw new Error('SECRET stale scope'); } }), 'CANCELLED');
   assert.equal(fake.requests.length, 0);
+});
+
+test('IDB add counts rows in the same transaction and refuses at the profile bound without writing', async () => {
+  const { MAX_VAULT_PROFILES } = await import('../../schemas/index.ts');
+  for (const [rows, code] of [[MAX_VAULT_PROFILES - 1, undefined], [MAX_VAULT_PROFILES, 'LIMIT_EXCEEDED'], [MAX_VAULT_PROFILES + 3, 'LIMIT_EXCEEDED']]) {
+    const fake = factory(); const store = new IndexedDbVaultStore(fake);
+    const pending = store.add(envelope); await flush();
+    const db = database({ rows }); fake.requests[0].result = db; fake.requests[0].onsuccess();
+    if (code) { await failed(pending, code); assert.equal(db.added.length, 0); }
+    else { await pending; assert.equal(db.added.length, 1); }
+  }
+});
+test('IDB compareAndSwap at the profile bound still updates existing rows', async () => {
+  const { MAX_VAULT_PROFILES } = await import('../../schemas/index.ts');
+  const fake = factory(); const store = new IndexedDbVaultStore(fake);
+  const pending = store.compareAndSwap(envelope, { ...copy(envelope), revision: envelope.revision + 1 }); await flush();
+  fake.requests[0].result = database({ rows: MAX_VAULT_PROFILES }); fake.requests[0].onsuccess();
+  await pending;
+});
+test('IDB inventory lists bounded opaque keys, flags truncation and fails closed on foreign keys', async () => {
+  const { MAX_VAULT_PROFILES } = await import('../../schemas/index.ts');
+  const ids = Array.from({ length: MAX_VAULT_PROFILES + 2 }, (_, n) => n.toString(16).padStart(32, '0'));
+  for (const [keys, expected] of [[[], { profileIds: [], truncated: false }], [ids.slice(0, 3), { profileIds: ids.slice(0, 3), truncated: false }],
+    [ids.slice(0, MAX_VAULT_PROFILES), { profileIds: ids.slice(0, MAX_VAULT_PROFILES), truncated: false }],
+    [ids, { profileIds: ids.slice(0, MAX_VAULT_PROFILES), truncated: true }]]) {
+    const fake = factory(); const store = new IndexedDbVaultStore(fake);
+    const pending = store.listProfileIds(); await flush();
+    fake.requests[0].result = database({ keys }); fake.requests[0].onsuccess();
+    const inventory = await pending;
+    assert.deepEqual({ profileIds: [...inventory.profileIds], truncated: inventory.truncated }, expected);
+    assert.ok(Object.isFrozen(inventory) && Object.isFrozen(inventory.profileIds));
+  }
+  for (const keys of [['SECRET'], [1], ['A'.repeat(32)], [['nested']]]) {
+    const fake = factory(); const store = new IndexedDbVaultStore(fake);
+    const pending = store.listProfileIds(); await flush();
+    fake.requests[0].result = database({ keys }); fake.requests[0].onsuccess();
+    await failed(pending, 'STORAGE_UNAVAILABLE');
+  }
 });
