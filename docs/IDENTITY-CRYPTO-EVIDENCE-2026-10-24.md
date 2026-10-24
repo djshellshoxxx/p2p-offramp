@@ -26,8 +26,10 @@ JSON rejection, unsupported default provider and idle/pagehide behavior. Peer re
 verified the retirement-versus-late-unlock fix. Restored old-profile identities remain historical and fail
 selection until an explicit consumer migration exists.
 
-G06 inventory is a partial public metadata artifact: every review is pending. The full deterministic
-verifyCryptoInventory gate, source/maintenance/side-channel review, two-clean-build comparison and broader
-browser matrix remain unimplemented/unassessed. No accepted review or production badge is claimed.
+G06 inventory is a partial public metadata artifact: every review is pending. A partial deterministic verifyCryptoInventory metadata gate is now implemented and tested; vendored
+manifest support, source/maintenance/side-channel review, two-clean-build comparison and the broader
+browser matrix remain unimplemented/unassessed. The retained BIP340 vector attribution and standard
+BSD-2-Clause conditions are in packages/identity/test/fixtures/BIP340-LICENSE-NOTICE.md, checked against
+the pinned BIP340 metadata and SPDX reference on 2026-10-24. No accepted review or production badge is claimed.
 The existing independent Python cryptography fixture was freshly verified on 2026-10-24. Production npm
 audit reports zero advisories at this run, which is neither a complete security audit nor future assurance.
