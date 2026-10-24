@@ -129,3 +129,20 @@ checksum, disposes temporary source/destination key material, authenticates the 
 one atomic add, and reports committed outcomes honestly after cancellation. Ciphertext export is labeled
 not-checked; checksum is not authenticity/freshness. Restored identity/trade records retain historical
 bindings and cannot be silently promoted to active/current authority. G09 transforms remain unimplemented.
+
+## Verified partial G06/G07 runtime tranche — 2026-10-24
+
+Frozen combined source passed 190/190 Node tests, all strict package/DOM/Worker configurations,
+11 Python tests, 173-document audit and independent Python fixture. Native Chromium storage/recovery
+and dedicated module Worker fixtures passed with zero external egress. The latter tests root/nested/
+IPFS-style native assets, locked boot, encrypted-only export, exact handles, revoke/dispose, missing
+chunk and modeled denied-IDB failures preserving storage. It is not a React/Vite/mobile acceptance claim.
+
+Root review and peer reproductions fixed same-generation obsolete unlock/status publication and
+wrong-profile encrypted export. G06 duplicate IDs now globally block even when the duplicate claims
+a disabled capability or appears first as malformed input. Current inventory remains four pending
+reviews and releaseEligible false. No source/maintenance audit is automated; vendored manifests fail
+closed. Every real chain/wallet/transport/release capability stays gated.
+
+Next disjoint intake is G05 broker and G12 journal, using existing storage/authority foundations.
+No durable-write Worker bridge will be improvised without discoverable commit-outcome semantics.
