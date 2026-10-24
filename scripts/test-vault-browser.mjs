@@ -12,24 +12,32 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const output = await mkdtemp(resolve(tmpdir(), 'p2p-vault-browser-'));
 let browser;
 let server;
+let recoveryServer;
 try {
   execFileSync(resolve(root, 'node_modules/.bin/tsc'), [
     '--ignoreConfig', '--target', 'ES2023', '--module', 'ESNext', '--moduleResolution', 'Bundler',
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
+    'packages/storage/src/backup-service.ts',
   ], { cwd: root, stdio: 'inherit' });
-  server = createServer((request, response) => {
+  const handler = (request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
     response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; connect-src 'none'");
     if (pathname === '/') { response.setHeader('Content-Type', 'text/html'); response.end('<!doctype html><title>Local vault test</title>'); return; }
     const target = resolve(output, `.${pathname}`);
     if (!target.startsWith(`${output}${sep}`) || !target.endsWith('.js')) { response.writeHead(404); response.end(); return; }
     void readFile(target).then((contents) => { response.setHeader('Content-Type', 'text/javascript'); response.end(contents); }, () => { response.writeHead(404); response.end(); });
-  });
+  };
+  server = createServer(handler);
   await new Promise((resolveListen, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolveListen); });
   const address = server.address();
   assert.ok(address && typeof address === 'object');
   const origin = `http://127.0.0.1:${address.port}`;
+  recoveryServer = createServer(handler);
+  await new Promise((resolveListen, reject) => { recoveryServer.once('error', reject); recoveryServer.listen(0, '127.0.0.1', resolveListen); });
+  const recoveryAddress = recoveryServer.address();
+  assert.ok(recoveryAddress && typeof recoveryAddress === 'object');
+  const recoveryOrigin = `http://127.0.0.1:${recoveryAddress.port}`;
   browser = await chromium.launch({ executablePath: process.env.P2P_CHROMIUM ?? '/usr/bin/chromium', args: ['--no-sandbox'] });
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const unexpected = [];
@@ -84,6 +92,59 @@ try {
   assert.equal(reopened.restored.ok, true);
   assert.equal(reopened.records.ok, true);
   assert.equal(reopened.records.value.length, 1);
+  // Same-origin recovery retains the healthy original and authenticates a separately keyed profile.
+  const exported = await pages[0].evaluate(async ({ profileId, token }) => {
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    window.testBackup = new EncryptedBackupService(window.testStore);
+    const source = await window.testStore.get(profileId);
+    const records = await window.testService.list(token);
+    const exported = await window.testBackup.exportWithStatus(profileId);
+    const receipt = await window.testBackup.restore(exported.bytes, 'local browser fixture passphrase', 'fresh recovery browser passphrase');
+    const restored = await window.testService.unlock(receipt.newProfileId, 'fresh recovery browser passphrase');
+    if (!restored.ok) throw new Error('restored profile did not authenticate');
+    const restoredRecords = await window.testService.list(restored.value.sessionId);
+    const destination = await window.testStore.get(receipt.newProfileId);
+    const sourceAfter = await window.testStore.get(profileId);
+    return { bytes: Array.from(exported.bytes), authentication: exported.authentication, source, sourceAfter,
+      receipt, destination, records, restoredRecords };
+  }, { profileId: session.profileId, token: reopened.restored.value.sessionId });
+  assert.equal(exported.authentication, 'not-checked');
+  assert.deepEqual(exported.sourceAfter, exported.source, 'recovery never replaces the healthy source');
+  assert.deepEqual(exported.restoredRecords, exported.records, 'record IDs/kinds/payload bytes remain historical and unchanged');
+  assert.equal(exported.receipt.revision, 0);
+  assert.equal(exported.destination.revision, 0);
+  for (const field of ['profileId', 'keyId']) assert.notEqual(exported.destination[field], exported.source[field]);
+  for (const field of ['salt', 'nonce', 'ciphertext']) {
+    if (Object.hasOwn(exported.source.wrappedKey, field)) assert.notEqual(exported.destination.wrappedKey[field], exported.source.wrappedKey[field]);
+  }
+  assert.notEqual(exported.destination.snapshot.nonce, exported.source.snapshot.nonce);
+  assert.notEqual(exported.destination.snapshot.ciphertext, exported.source.snapshot.ciphertext);
+  // A second loopback origin starts without the source IndexedDB, then restores using only portable bytes.
+  const fresh = await context.newPage();
+  await fresh.route('**/*', route => {
+    if (new URL(route.request().url()).origin === recoveryOrigin) return route.continue();
+    unexpected.push(route.request().url()); return route.abort();
+  });
+  await fresh.goto(recoveryOrigin);
+  const portable = await fresh.evaluate(async ({ bytes, sourceId }) => {
+    const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    const store = new IndexedDbVaultStore(); const vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
+    const backup = new EncryptedBackupService(store);
+    const missingBefore = await store.get(sourceId) === undefined;
+    const receipt = await backup.restore(new Uint8Array(bytes), 'local browser fixture passphrase', 'portable recovery browser passphrase');
+    const opened = await vault.unlock(receipt.newProfileId, 'portable recovery browser passphrase');
+    const records = opened.ok ? await vault.list(opened.value.sessionId) : opened;
+    const sourceStillAbsent = await store.get(sourceId) === undefined;
+    backup.dispose(); vault.dispose(); store.close();
+    return { missingBefore, sourceStillAbsent, receipt, records };
+  }, { bytes: exported.bytes, sourceId: session.profileId });
+  assert.equal(portable.missingBefore, true); assert.equal(portable.sourceStillAbsent, true);
+  assert.equal(portable.receipt.sourceProfileId, session.profileId);
+  assert.notEqual(portable.receipt.newProfileId, exported.receipt.newProfileId);
+  assert.deepEqual(portable.records, exported.records);
+  await fresh.close();
   await pages[1].evaluate(() => new Promise((resolveUpgrade, reject) => {
     const request = indexedDB.open('p2p-offramp-vault', 2);
     request.onblocked = () => reject(new Error('existing adapters did not close on versionchange'));
@@ -95,6 +156,7 @@ try {
     let futureVersion = '';
     try { await window.testStore.get(profileId); } catch (error) { futureVersion = error.code; }
     const databases = await indexedDB.databases();
+    window.testBackup.dispose();
     window.testService.dispose();
     window.testStore.close();
     const disposed = await window.testService.unlock(profileId, 'local browser fixture passphrase');
@@ -103,9 +165,10 @@ try {
   assert.deepEqual(future, { revoked: 'LOCKED', futureVersion: 'UNSUPPORTED_VERSION', version: 2, disposed: 'LOCKED' });
   assert.deepEqual(unexpected, []);
   await context.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, versionchange/disposal, no external egress.');
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, versionchange/disposal, no external egress.');
 } finally {
   await browser?.close();
+  if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));
   if (server) await new Promise((resolveClose) => server.close(resolveClose));
   await rm(output, { recursive: true, force: true });
 }

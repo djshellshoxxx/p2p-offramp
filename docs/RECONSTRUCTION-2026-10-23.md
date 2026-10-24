@@ -114,3 +114,18 @@ storage errors wrongly labeled cancellation. Nine injected-IDB tests exercise th
 tests cover bounded mutations, exact envelope preconditions, cancellation/lock at crypto/storage boundaries,
 defensive copies, quota cache preservation and commit-winning outcomes. No automatic write retry or plaintext
 fallback exists. All prior reviewed source is locally committed; G03/G09 and application integration stay open.
+
+## Verified G03 backup tranche — 2026-10-24
+
+Integrator focused schema/service rerun: 20/20 passed, zero failed/skipped/cancelled. Actual Chromium
+passed same-origin restore retaining the original ciphertext plus a second, fresh-origin restore using
+only portable backup bytes. Both authenticate under the destination passphrase, reset outer revision to
+zero, preserve record IDs/kinds/payload bytes, and use new profile/key identifiers, wrapping salt/nonces/
+ciphertext and snapshot nonce/ciphertext. Browser traffic was loopback only, with zero external egress.
+An initial harness assertion used the wrong envelope field name; corrected to wrappedKey/nonce and rerun.
+
+G03 strictly parses the 12 MiB bounded backup before KDF work, checks a canonical SHA-256 corruption
+checksum, disposes temporary source/destination key material, authenticates the final destination before
+one atomic add, and reports committed outcomes honestly after cancellation. Ciphertext export is labeled
+not-checked; checksum is not authenticity/freshness. Restored identity/trade records retain historical
+bindings and cannot be silently promoted to active/current authority. G09 transforms remain unimplemented.
