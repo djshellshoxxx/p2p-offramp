@@ -33,6 +33,36 @@ const value = result => { assert.equal(result.ok, true, JSON.stringify(result));
 const error = (result, code) => { assert.equal(result.ok, false); assert.equal(result.error.code, code); assert.equal(typeof result.error.message, 'string'); return result.error; };
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
 
+test('G02 session leases bind the exact live profile and expose fresh defensive revision metadata', async () => {
+  const { vault } = service(); const session = value(await vault.create(pass));
+  const lease = value(vault.captureSession(session, () => {}));
+  assert.deepEqual(lease.current(), session);
+  error(vault.captureSession({ ...session, profileId: id(99) }, () => {}), 'LOCKED');
+  error(vault.captureSession({ ...session, extra: true }, () => {}), 'INVALID_INPUT');
+  error(vault.captureSession(session, null), 'INVALID_INPUT');
+  assert.equal(value(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }])), 1);
+  assert.equal(lease.current().revision, 1);
+  assert.equal(Object.isFrozen(lease.current()), true);
+  lease.dispose(); assert.equal(lease.current(), null);
+});
+test('G02 lock revokes leases synchronously and a same-profile unlock cannot revive them', async () => {
+  const { vault } = service(); const session = value(await vault.create(pass)); let revoked = 0;
+  const lease = value(vault.captureSession(session, () => { revoked++; }));
+  vault.lock(session.sessionId);
+  assert.equal(revoked, 1); assert.equal(lease.current(), null);
+  value(await vault.unlock(session.profileId, pass));
+  assert.equal(lease.current(), null); vault.lockAll(); assert.equal(revoked, 1);
+});
+test('G02 lease disposal and throwing observers cannot retain keys or prevent other revocations', async () => {
+  const { vault } = service(); const session = value(await vault.create(pass)); let revoked = 0;
+  const disposed = value(vault.captureSession(session, () => { throw new Error('disposed listener called'); })); disposed.dispose();
+  value(vault.captureSession(session, () => { throw new Error('foreign listener diagnostics'); }));
+  const live = value(vault.captureSession(session, () => { revoked++; }));
+  assert.doesNotThrow(() => vault.dispose());
+  assert.equal(revoked, 1); assert.equal(live.current(), null);
+  error(await vault.list(session.sessionId), 'LOCKED');
+});
+
 test('G02 creates only ciphertext, commits all kinds, returns defensive copies and unlocks after lock', async () => {
   const { store, vault } = service();
   const session = value(await vault.create(pass));

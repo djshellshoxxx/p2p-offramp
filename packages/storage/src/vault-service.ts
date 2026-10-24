@@ -2,7 +2,7 @@ import {
   decodeBase64url, encodeBase64url, encodePassphrase, MAX_REVISION, parsePrivateSnapshot, parseVaultEnvelope,
   ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
 } from '../../schemas/src/vault.ts';
-import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession } from '../../schemas/src/vault-service.ts';
+import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/src/vault-service.ts';
 import { createEnvelope, openEnvelope, encryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
 import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
@@ -83,6 +83,7 @@ interface SessionState {
   token: string; generation: number; revoked: boolean; material: UnlockedMaterial;
   snapshot: PrivateSnapshotV1 | undefined; envelope: VaultEnvelopeV1 | undefined;
   tail: Promise<void>; operations: Set<AbortController>;
+  revocations: Set<() => void>;
 }
 export interface VaultServiceOptions {
   lifecycle?: boolean;
@@ -163,7 +164,7 @@ export class EncryptedVaultService implements VaultService {
   }
   #register(snapshot: PrivateSnapshotV1, envelope: VaultEnvelopeV1, material: UnlockedMaterial, token: string): VaultSession {
     this.#sessions.set(token, { token, generation: 0, revoked: false, material, snapshot, envelope,
-      tail: Promise.resolve(), operations: new Set() });
+      tail: Promise.resolve(), operations: new Set(), revocations: new Set() });
     this.#resetIdle();
     return { sessionId: token, profileId: snapshot.profileId, revision: snapshot.revision };
   }
@@ -227,6 +228,32 @@ export class EncryptedVaultService implements VaultService {
       return { ok: true, value: state.snapshot!.records.filter(record => filter === undefined || record.kind === filter).map(record => ({ ...record })) };
     } catch (error) { return failed(error); }
   }
+  /** Binds a dependent service to one live vault session, including synchronous lock notification. */
+  captureSession(input: VaultSession, onRevoked: () => void): Result<VaultSessionLease> {
+    try {
+      this.#ensureLive();
+      const session = fields(input, ['sessionId', 'profileId', 'revision']);
+      if (typeof onRevoked !== 'function' || !Number.isSafeInteger(session.revision) ||
+          (session.revision as number) < 0 || (session.revision as number) > MAX_REVISION) throw new ValidationError();
+      const state = this.#session(requireToken(session.sessionId));
+      if (requireId(session.profileId) !== state.snapshot!.profileId || (session.revision as number) > state.snapshot!.revision) throw new Failure('LOCKED');
+      const generation = state.generation;
+      let active = true;
+      const revoke = (): void => {
+        if (!active) return;
+        active = false; state.revocations.delete(revoke); onRevoked();
+      };
+      state.revocations.add(revoke);
+      return { ok: true, value: Object.freeze({
+        current: (): Readonly<VaultSession> | null => {
+          if (!active || this.#disposed || state.revoked || state.generation !== generation ||
+              this.#sessions.get(state.token) !== state || state.snapshot === undefined) return null;
+          return Object.freeze({ sessionId: state.token, profileId: state.snapshot.profileId, revision: state.snapshot.revision });
+        },
+        dispose: (): void => { active = false; state.revocations.delete(revoke); },
+      }) };
+    } catch (error) { return failed(error); }
+  }
   commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
@@ -268,6 +295,10 @@ export class EncryptedVaultService implements VaultService {
     state.revoked = true; state.generation++; this.#sessions.delete(sessionId);
     for (const operation of state.operations) operation.abort();
     disposeMaterial(state.material); state.snapshot = undefined; state.envelope = undefined; this.#resetIdle();
+    for (const revoke of [...state.revocations]) {
+      try { revoke(); } catch { /* A dependent observer cannot prevent storage revocation. */ }
+    }
+    state.revocations.clear();
   }
   lockAll(): void {
     this.#epoch++;
