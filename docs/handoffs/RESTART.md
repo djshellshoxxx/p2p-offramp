@@ -11,7 +11,7 @@
 
 ## First milestone and dependencies
 
-Establish G09 durable-result/no-op-preflight acceptance, then source-bound G03 recovery/resealer reconciliation and typed quota behavior. Reproduce assigned cases on the exact source before the smallest authorized fix. The recent identity review did not establish a new key-isolation defect; optional exception-normalization robustness must not displace the core milestone.
+Establish G09 durable-result/no-op-preflight acceptance, then source-bound G03 recovery/resealer reconciliation and typed quota behavior. Reproduce assigned cases on the exact source before the smallest authorized fix.
 
 Preserve cap 16, exact persisted-envelope comparison, fresh-key recovery with the source retained, interrupted-resume and cross-tab cases. Never use source deletion/overwrite or a capacity increase as a shortcut.
 
