@@ -1,35 +1,54 @@
 # Relay failover and abuse limits
 
-- **Specification ID:** G21
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.4_order_discovery
-- **Module:** module_1.4.3_relay_resilience
+## 1. Metadata
+
+- **Specification:** G21
+- **Version:** 1.0
 - **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
+- **Status:** Expanded design baseline — implementation and independent review pending
 - **Delivery phase:** 2
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Scope
+## 2. Objective and boundaries
 
-Define relay selection, reconnect behavior, and bounded resource use. Keep malicious relay input from exhausting the client or changing trade authority.
+Bound subscription, memory and retry cost while preserving selected transport/privacy policy.
 
-## Required behavior
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
 
-1. Enforce event size, signature-validation cost, subscription, queue, and per-peer message limits before expensive work.
-2. Use configurable relay sets with bounded reconnects and event deduplication; keep private routing policy during failover.
-3. Treat relay acknowledgments as publication evidence only; never infer trade settlement or globally complete liquidity from them.
+## 3. Architecture and data contracts
 
-## Dependencies
+```typescript
+interface RelayBudgetV1 {maxRelays:4;maxSubscriptionsPerRelay:4;
+ maxEventBytes:65536;maxTags:64;maxTagItems:8;maxTagItemBytes:256;
+ maxEventsPerMinutePerRelay:120;maxRetainedOrders:1000;
+ maxOutboundQueuedEvents:32;maxDedupIds:4096;}
+// No persisted plaintext outbound queue. Order parsers impose smaller content caps.
+```
 
-- [G13: Typed errors and retries](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md)
-- [G19: Orderbook visibility and expiry](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.4_order_discovery/module_1.4.2_discovery_policy/spec-orderbook-visibility-and-expiry.md)
-- [G20: NIP-17 trade chat](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_encrypted_messaging/module_5.3.2_private_chat/spec-nip17-trade-chat.md)
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
 
-## Acceptance evidence
+## 4. Algorithms and invariants
 
-- A malicious relay replaying oversized events cannot exhaust memory beyond configured bounds.
-- Loss of one relay permits recovery through another without duplicate fills.
+Validate frame byte cap before JSON parse and tags before signature work. Token bucket admits 120 events/minute/relay with burst 20; drop excess, and disconnect relay after three consecutive 10-second overload windows. Bound subscription requested limit <=100 and history window <=24 h; max four connections, no discovered arbitrary fallback. Read reconnect retries follow G13 budget; background reconnect occurs only while user-selected subscription active, backoff 1/2/4/8/16/30 s with full jitter and at most six attempts then explicit Retry. Reset backoff only after 60 seconds stable. Queue at most 32 encrypted signed events in memory with original expiry; no automatic republish of economic intent.
 
-## Detailed specification completion gate
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
 
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+## 5. Interfaces, errors and recovery
+
+Relay exhaustion marks partial/offline discovery and keeps draft/export/chain recovery available. Failover selects only already approved endpoints under same G05 route; unknown private routing blocks. Closing or locking cancels subscriptions and drops in-memory queue.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Eclipse attacks, Sybil spam and relay collusion remain. Quotas limit local damage, not global Sybil resistance. Never fetch provider-supplied URLs/icons from events.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Flood valid/invalid signatures, oversized frame/tags, 1001 orders eviction, 4097 dedup IDs, hanging socket, reconnect exhaustion, lock during backoff, queue full, route failure and two relays duplicate. Measure bounded memory and verify no direct fallback.
+
+Sources: [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md), [NIP-40](https://github.com/nostr-protocol/nips/blob/master/40.md), [NIP-17](https://github.com/nostr-protocol/nips/blob/master/17.md), [NIP-44 version 2](https://github.com/nostr-protocol/nips/blob/master/44.md), [NIP-59](https://github.com/nostr-protocol/nips/blob/master/59.md). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Before enablement, supply exact deployment/provider configuration, cross-module compatibility fixtures and independent review evidence for the stated invariants. No production readiness follows from document structure or status.

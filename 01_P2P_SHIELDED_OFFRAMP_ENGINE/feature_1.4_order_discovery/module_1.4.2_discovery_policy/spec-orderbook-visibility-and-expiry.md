@@ -1,34 +1,55 @@
 # Orderbook visibility and expiry
 
-- **Specification ID:** G19
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.4_order_discovery
-- **Module:** module_1.4.2_discovery_policy
+## 1. Metadata
+
+- **Specification:** G19
+- **Version:** 1.0
 - **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
+- **Status:** Expanded design baseline — implementation and independent review pending
 - **Delivery phase:** 2
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Scope
+## 2. Objective and boundaries
 
-Define the distinction between discoverable order advertisements and encrypted trade details. Specify application expiry without promising relay deletion.
+Give public, invite-only and draft modes explicit disclosure and freshness rules.
 
-## Required behavior
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
 
-1. Public discovery exposes only opted-in coarse market fields and a contact key; private invite-only orders encrypt details to known recipients.
-2. Document that universally discoverable offers cannot also hide all terms from every potential counterparty; do not use a publicly shared key as a confidentiality claim.
-3. Use signed expiry/revision/cancellation and revalidate before funding; choose and register application event kinds after compatibility review rather than calling all order events ephemeral.
+## 3. Architecture and data contracts
 
-## Dependencies
+```typescript
+type Visibility="local-draft"|"public-minimal"|"invite-only";
+interface PublicAdV1 {app:"p2p-offramp";v:1;orderId:string;revision:number;
+ networkId:string;assetId:string;amount:string;currency:string;
+ railClass:string;maker:string;expiresAtSeconds:string;termsDigest:string;}
+// Maximum ad lifetime 3600 s; max ad content 8 KiB; single exact fill only.
+// Public ad is not final SignedTradeTerms and cannot authorize funding.
+```
 
-- [G16: Signed trade terms](../../../01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md)
-- [G05: Transport policy enforcement](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.1_network_privacy/module_5.1.2_transport_policy/spec-transport-policy-enforcement.md)
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
 
-## Acceptance evidence
+## 4. Algorithms and invariants
 
-- Expired or canceled offers cannot initiate a trade even when a relay replays them.
-- Offline/late subscribers see no false guarantee of delivery or deletion.
+Creation chooses visibility before publishing; show exact public fields, including amount/timing/network/maker key. Local drafts produce zero relay requests. Invite-only sends authenticated encrypted terms to selected peer keys with no public decryption key or public ad. Public ad signed expiry and revision are checked on receipt and before negotiation; now estimates use trusted configured time observations and unknown freshness blocks acceptance. Funding revalidates on-chain deadline and original G16 terms. Send NIP-40 expiration and best-effort NIP-09 deletion request on cancellation, but do not promise removal from observers/backups.
 
-## Detailed specification completion gate
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
 
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+## 5. Interfaces, errors and recovery
+
+Expired ads disappear from actionable list but remain available encrypted as evidence if retained by user. Stale/missing revision requires maker reconfirmation; it cannot trigger funding. Sorting uses base-unit integer/rational values, deterministic tie by event ID, no floating price authority.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+Search/relay subscriptions can disclose market interest. Signed ad authenticates author only, not solvency/reputation/identity. Invite recipients can redistribute plaintext.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+Public fields preview matches exact serialized event; draft zero network; invite leaked to wrong recipient fails; 3600/+1 lifetime; signed already expired offer; local clock skew; expired offline restore; deletion refusal and fake liquidity. Assert no public bank/reference/location fields.
+
+Sources: [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md), [NIP-40](https://github.com/nostr-protocol/nips/blob/master/40.md), [NIP-17](https://github.com/nostr-protocol/nips/blob/master/17.md), [NIP-44 version 2](https://github.com/nostr-protocol/nips/blob/master/44.md), [NIP-59](https://github.com/nostr-protocol/nips/blob/master/59.md). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Before enablement, supply exact deployment/provider configuration, cross-module compatibility fixtures and independent review evidence for the stated invariants. No production readiness follows from document structure or status.

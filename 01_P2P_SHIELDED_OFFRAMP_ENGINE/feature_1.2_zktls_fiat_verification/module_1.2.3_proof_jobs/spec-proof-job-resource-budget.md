@@ -1,35 +1,53 @@
-# Proof job resource budget
+# Proof job resource and cancellation budget
 
-- **Specification ID:** G29
-- **Section:** 01_P2P_SHIELDED_OFFRAMP_ENGINE
-- **Feature:** feature_1.2_zktls_fiat_verification
-- **Module:** module_1.2.3_proof_jobs
+## 1. Metadata
+
+- **Specification:** G29
+- **Version:** 1.0
 - **Owner:** p2p-offramp maintainers
-- **Version:** 0.1
-- **Status:** Scoped requirements outline; detailed Iteration 3 expansion required before implementation
-- **Delivery phase:** 4
+- **Status:** Expanded design baseline — implementation and independent review pending
+- **Delivery phase:** 4 (optional evidence)
+- **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
-## Scope
+## 2. Objective and boundaries
 
-Define cancellation, worker isolation, and resource budgets for browser proof generation. Prevent proof work from blocking custody or recovery controls.
+Bound browser work so optional proof generation cannot disable custody recovery.
 
-## Required behavior
+This contract uses CTX01 `TradeBinding`, CTX02 observations, G08 authority, G10 wallet sessions, G11 approved registry and G12 transaction intents. `CoreResult`/error codes follow G13. Native transactions/signatures retain their chain formats; local or relay observations never establish custody or fiat receipt.
 
-1. Enforce memory/time/concurrency budgets measured on supported devices and terminate cancelled workers.
-2. Never expose credentials, transcript secrets, or witness data in logs or shared event buses.
-3. A failed proof leaves escrow unchanged and follows pre-agreed manual or expiry rules.
+## 3. Architecture and data contracts
 
-## Dependencies
+```typescript
+interface ProofBudgetV1 {maxWitnessBytes:1048576;maxProofBytes:2097152;
+ maxWorkerLinearMemoryBytes:268435456;wallTimeMs:120000;
+ maxActiveJobsPerTab:1;maxQueuedJobs:0;maxNetworkBytes:8388608;}
+// Progress watchdog: no heartbeat for 15 s => terminate; no auto retry.
+```
 
-- [G04: Client content security policy](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.12_browser_security/module_5.12.1_content_boundary/spec-client-content-security-policy.md)
-- [G13: Typed errors and retries](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md)
-- [G14: Optional module interface](../../../00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.6_extension_contract/spec-optional-module-interface.md)
+Types containing native ABI/IDL declarations describe that chain interface, not a shared executable TypeScript module. Public strings/keys must use the selected chain/protocol canonical encoding; unknown fields and incompatible versions fail closed.
 
-## Acceptance evidence
+## 4. Algorithms and invariants
 
-- Oversized input, cancellation, and worker crash do not freeze release/refund UI.
-- Secrets do not survive in persisted job metadata.
+Validate input caps before worker creation. Enforce WASM linear memory maximum at build/runtime, parent monotonic 120-second wall deadline, cumulative 8 MiB network bytes and result cap. JS heap, CPU and device heat cannot be strictly bounded by a browser; unsupported profiles fail closed rather than claim exact enforcement. UI event loop is separate; cancellation aborts owned network and terminates worker. Reject second job with LIMIT_EXCEEDED; never queue bank sessions. Hidden tab suspension consumes wall budget; unknown elapsed implies cancellation on resume.
 
-## Detailed specification completion gate
+All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
 
-Before implementation, expand this outline using the seven-section Iteration 3 format in [the development roadmap](../../../DEVELOPMENT_ROADMAP.md#iteration-3-document-standard). Include concrete data contracts, bounded algorithms, interfaces, security mitigations, and executable acceptance cases. This outline is not a claim of completed implementation or security review.
+## 5. Interfaces, errors and recovery
+
+Budget exit is failed/CANCELLED with no automatic retry. User may start a fresh job after cleanup and new challenge/consent. Low-memory browsers get unsupported guidance; basic release/refund and G12 reconciliation remain available without importing proof runtime.
+
+Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
+
+## 6. Security and privacy assessment
+
+CPU exhaustion, unbounded decompression, provider streams and worker allocation before validation can exhaust device. Profile testing records measured mobile peak memory and worst-case wall time; resource constants are limits, not evidence of feasibility.
+
+No basic escrow proof, chat assertion, reputation result or later-installed extension can authorize buyer release or change seller refund rights. Separate opt-in custody versions require explicit new terms and independent review. Verified cryptographic statements remain limited to their authenticated inputs and do not establish fiat irreversibility or physical human identity.
+
+## 7. Verification, references and evidence gates
+
+1 MiB/2 MiB/8 MiB boundaries; WASM memory.grow failure; worker ignores cancel; missing heartbeat; suspend/resume; repeated start; malformed compressed payload; low-memory device. Assert worker termination and no proof import/network in core-only build.
+
+Sources: [TLS 1.3 RFC 8446](https://www.rfc-editor.org/rfc/rfc8446), [TLSNotary source](https://github.com/tlsnotary/tlsn). Protocol identifiers above identify the design profile; mutable documentation URLs do not pin implementation. G06 must record evaluated upstream source commit, dependency/toolchain lock, artifact/key hashes, official vectors where available and independently generated integration fixtures. Record actual test commands/results, browser/chain matrix and reviewer disposition; this specification reports none as already passing.
+
+Browser/device feasibility and accurate network byte accounting must be measured before enabling a profile; no claimed CPU hard cap.

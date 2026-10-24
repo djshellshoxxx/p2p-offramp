@@ -4,11 +4,11 @@
 - **Section:** 00_PLANNING_AND_THREAT_MODELING
 - **Feature:** feature_0.4_architecture_planning
 - **Module:** module_0.4.2_specification_catalog
-- **Status:** Iteration 2 scaffold; technical specifications await Iteration 3
+- **Status:** Navigation catalog; individual readiness tracked separately
 
 ## Scope
 
-Define the navigation catalog for all planned specification placeholders. Identify completion requirements and distinguish planned capabilities from implemented or validated behavior.
+Define the navigation catalog for all planned and expanded specifications. Identify completion requirements and distinguish planned capabilities from implemented or validated behavior.
 
 ## Structure
 
@@ -217,3 +217,20 @@ The [development roadmap](../../../DEVELOPMENT_ROADMAP.md) defines phases 0–6,
 - [G32: Physical handoff failure policy — Phase 5](../../../03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.7_coordination_recovery/module_3.7.1_custody_timeouts/spec-physical-handoff-failure-policy.md)
 - [G33: Arbitration version binding — Phase 6](../../../04_WEB3_DISPUTE_ARBITERS/feature_4.7_protocol_integration/module_4.7.1_arbitration_opt_in/spec-arbitration-version-binding.md)
 - [G34: Arbitration outage and finality — Phase 6](../../../04_WEB3_DISPUTE_ARBITERS/feature_4.7_protocol_integration/module_4.7.2_arbitration_liveness/spec-arbitration-outage-and-finality.md)
+
+## Additional security and product planning specifications
+
+- [P2P Off-ramp complete product plan](../../feature_0.12_product_completion/module_0.12.1_master_plan/spec-completion-roadmap-and-dependencies.md)
+- [Responsive mobile, iOS/Android and browser compatibility](../../feature_0.12_product_completion/module_0.12.2_cross_device/spec-responsive-mobile-wallet-and-browser-compatibility.md)
+- [Internationalization, natural-language guidance and comprehensive help](../../feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md)
+- [QR-first secure information interchange](../../feature_0.12_product_completion/module_0.12.4_qr_interchange/spec-qr-everywhere-secure-sharing-and-import-export.md)
+- [Optional encryption, client-only anti-abuse and no-script feasibility](../../feature_0.12_product_completion/module_0.12.5_privacy_security/spec-optional-encryption-abuse-controls-and-scriptless-mode.md)
+- [GitHub Codespaces integration, testing and delayed GitHub Pages deployment](../../feature_0.12_product_completion/module_0.12.6_codespaces/spec-codespaces-test-lab-and-github-pages-release.md)
+- [GitHub wiki, user education, adoption and GhostPay design parity](../../feature_0.12_product_completion/module_0.12.7_docs_growth/spec-github-wiki-documentation-and-marketability.md)
+- [Blockchain Escrow and Payment Processor Attack Matrix](../../feature_0.1_threat_modeling/spec-blockchain-and-payment-processor-attack-matrix.md)
+- [Open-Source Component Reuse Matrix](../../feature_0.3_reusable_code/spec-open-source-component-matrix.md)
+- [Rainbow-Series-Inspired Client Memory & Data Remanence Controls](../../../05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_client_security/spec-rainbow-book-data-remanence-and-memory-sanitization.md)
+
+## Current readiness
+
+See [the generated readiness inventory](../../../docs/SPEC_READINESS.md) and [development status](../../../docs/DEVELOPMENT_STATUS.md). Catalog inclusion does not establish specification completion, implementation, or security approval.
