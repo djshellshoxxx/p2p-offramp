@@ -19,6 +19,7 @@ try {
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
     'packages/storage/src/backup-service.ts',
+    'packages/domain/src/intent-journal.ts',
   ], { cwd: root, stdio: 'inherit' });
   const handler = (request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
@@ -145,6 +146,80 @@ try {
   assert.notEqual(portable.receipt.newProfileId, exported.receipt.newProfileId);
   assert.deepEqual(portable.records, exported.records);
   await fresh.close();
+  // G12 uses actual encrypted IDB transactions in two independent documents.
+  // The local validator checks fixture encoding only: it supplies no chain/wallet authority.
+  const journalFixture = await pages[0].evaluate(async () => {
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    window.journalVault = new EncryptedVaultService(window.testStore, crypto, { lifecycle: false });
+    const created = await window.journalVault.create('local journal browser passphrase');
+    if (!created.ok) throw new Error('journal profile creation failed');
+    window.journalSession = created.value;
+    return { profileId: created.value.profileId,
+      binding: { chain: 'evm', networkId: 'evm:1', deploymentId: 'fixture-escrow', tradeId: 'fixture-trade' },
+      account: '0x' + '12'.repeat(20) };
+  });
+  for (let index = 0; index < pages.length; index++) {
+    await pages[index].evaluate(async ({ fixture, index }) => {
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { createIntentJournal } = await import('/domain/src/intent-journal.js');
+      const { encodeBase64url } = await import('/schemas/src/vault.js');
+      if (index !== 0) {
+        window.journalVault = new EncryptedVaultService(window.testStore, crypto, { lifecycle: false });
+        const opened = await window.journalVault.unlock(fixture.profileId, 'local journal browser passphrase');
+        if (!opened.ok) throw new Error('second journal session failed');
+        window.journalSession = opened.value;
+      }
+      window.journalIntent = { version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(index + 1)),
+        binding: fixture.binding, account: fixture.account, action: 'fund', state: 'prepared', walletGeneration: 0,
+        expectedEscrowState: 'absent', preparedRequest: '{"fixture":"not-a-real-transaction"}',
+        submission: { chain: 'evm', hash: null, nonce: null }, replacementOf: null, createdAt: 0, updatedAt: 0 };
+      window.journal = createIntentJournal({ vault: window.journalVault, session: window.journalSession,
+        validateCanonical: () => ({ ok: true, value: undefined }) });
+    }, { fixture: journalFixture, index });
+  }
+  const reserved = await Promise.all(pages.map(page => page.evaluate(() => window.journal.reserve(window.journalIntent, 0))));
+  assert.equal(reserved.filter(result => result.ok).length, 1, 'two tabs reserve only one logical attempt');
+  assert.equal(reserved.find(result => !result.ok)?.error.code, 'CONFLICT');
+  const winner = reserved.findIndex(result => result.ok);
+  const reservedRow = await pages[0].evaluate(id => window.testStore.get(id), journalFixture.profileId);
+  assert.equal(reservedRow.revision, 1);
+  assert.doesNotMatch(JSON.stringify(reservedRow), /fixture-trade|not-a-real-transaction|preparedRequest|journal/);
+  const prepared = await pages[winner].evaluate(() => window.journalIntent);
+  // Reopen both tabs at the same durable revision, then race the non-idempotent marker.
+  for (const page of pages) {
+    await page.evaluate(async ({ fixture, prepared }) => {
+      const { createIntentJournal } = await import('/domain/src/intent-journal.js');
+      window.journal.dispose(); window.journalVault.lockAll();
+      const opened = await window.journalVault.unlock(fixture.profileId, 'local journal browser passphrase');
+      if (!opened.ok) throw new Error('journal reopen failed');
+      window.journal = createIntentJournal({ vault: window.journalVault, session: opened.value,
+        validateCanonical: () => ({ ok: true, value: undefined }) });
+      window.journalIntent = prepared;
+    }, { fixture: journalFixture, prepared });
+  }
+  const marked = await Promise.all(pages.map(page => page.evaluate(() => window.journal.markSending(window.journalIntent.intentId))));
+  assert.equal(marked.filter(result => result.ok).length, 1, 'only one document obtains a completed marker');
+  assert.equal(marked.find(result => !result.ok)?.error.code, 'CONFLICT');
+  const markerRow = await pages[0].evaluate(id => window.testStore.get(id), journalFixture.profileId);
+  assert.equal(markerRow.revision, 2, 'exactly one encrypted marker was committed');
+  const durable = await pages[0].evaluate(async ({ fixture, prepared }) => {
+    const { createIntentJournal } = await import('/domain/src/intent-journal.js');
+    window.journal.dispose(); window.journalVault.lockAll();
+    const opened = await window.journalVault.unlock(fixture.profileId, 'local journal browser passphrase');
+    if (!opened.ok) throw new Error('journal recovery failed');
+    window.journal = createIntentJournal({ vault: window.journalVault, session: opened.value,
+      validateCanonical: () => ({ ok: true, value: undefined }), now: () => Number.MAX_SAFE_INTEGER - 1 });
+    const unresolved = await window.journal.unresolved(fixture.binding, fixture.account);
+    const repeated = await window.journal.markSending(prepared.intentId);
+    const duplicate = await window.journal.reserve({ ...prepared, action: 'approve', state: 'prepared' }, 2);
+    return { unresolved, repeated, duplicate };
+  }, { fixture: journalFixture, prepared });
+  assert.equal(durable.unresolved.ok, true);
+  assert.equal(durable.unresolved.value.length, 1);
+  assert.equal(durable.unresolved.value[0].state, 'broadcast-unknown');
+  assert.equal(durable.repeated.error.code, 'CONFLICT');
+  assert.equal(durable.duplicate.error.code, 'CONFLICT', 'age/action changes cannot clear unknown outcomes');
+  for (const page of pages) await page.evaluate(() => { window.journal.dispose(); window.journalVault.dispose(); });
   await pages[1].evaluate(() => new Promise((resolveUpgrade, reject) => {
     const request = indexedDB.open('p2p-offramp-vault', 2);
     request.onblocked = () => reject(new Error('existing adapters did not close on versionchange'));
@@ -165,7 +240,7 @@ try {
   assert.deepEqual(future, { revoked: 'LOCKED', futureVersion: 'UNSUPPORTED_VERSION', version: 2, disposed: 'LOCKED' });
   assert.deepEqual(unexpected, []);
   await context.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, versionchange/disposal, no external egress.');
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));
