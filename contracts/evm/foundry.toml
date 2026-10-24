@@ -1,0 +1,35 @@
+# Foundry project for the basic-v1 EVM escrow. Test networks only; no deployment is approved.
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+cache_path = "cache"
+libs = ["lib"]
+# Exact compiler pin. When binaries.soliditylang.org is unreachable, place the static binary from
+# github.com/ethereum/solidity/releases at ~/.svm/0.8.30/solc-0.8.30 or set FOUNDRY_SOLC=/path/to/solc.
+solc_version = "0.8.30"
+auto_detect_solc = false
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+remappings = [
+  "forge-std/=lib/forge-std/src/",
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+]
+
+[fuzz]
+runs = 1024
+
+[invariant]
+runs = 128
+depth = 64
+fail_on_revert = false
+
+[profile.ci.fuzz]
+runs = 4096
+
+[profile.ci.invariant]
+runs = 256
+depth = 100
