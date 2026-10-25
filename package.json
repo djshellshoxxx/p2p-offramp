@@ -11,7 +11,7 @@
     "test:specs": "python -m unittest discover -s scripts/tests -v",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
-    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs",
+    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "test:web:browser": "node scripts/test-web-build-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",

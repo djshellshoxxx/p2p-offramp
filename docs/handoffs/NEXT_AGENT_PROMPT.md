@@ -13,11 +13,11 @@ Done on PR #5 — do not redo:
 - saturated-origin recovery evidence;
 - G03 R1 uncertain-restore reconciliation;
 - typed quota through to the UI;
-- persisted G09 readback.
+- persisted G09 readback;
+- reseal SIGKILL evidence.
 
-Next:
-1. Reseal under a process kill.
-2. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
+Next (reseal SIGKILL evidence is done):
+1. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
 
 G11/G15 waits on the owner's trust-root decision. The v29 packet archive is private and not in the repo; ask the owner for it.
 
