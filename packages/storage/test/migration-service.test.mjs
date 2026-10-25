@@ -154,3 +154,21 @@ test('G09 stale empty plan: a persisted advance by another writer conflicts with
   assert.deepEqual(value(await service.apply(session, value(await service.plan(session)))), { profileId: session.profileId, revision: 1, verified: true });
   assert.equal(store.writes, writes);
 });
+test('G09 verified means authenticated persisted readback, not the session cache', async () => {
+  const { store, vault, session } = await seeded([trade(1), trade(2, 3, 'b|v2|v3'), { id: id(9), kind: 'journal', schemaVersion: 1, payload: b64('journal') }]);
+  const service = new RecordMigrationService(vault, registry()); const plan = value(await service.plan(session));
+  const original = clone(store.rows.get(session.profileId));
+  const realCas = store.compareAndSwap.bind(store);
+  // The commit succeeds, then the persisted row diverges (another writer/rollback) while the cache looks migrated.
+  store.compareAndSwap = async (...args) => { await realCas(...args); store.rows.set(session.profileId, clone(original)); };
+  const diverged = value(await service.apply(session, plan));
+  assert.deepEqual(diverged, { profileId: session.profileId, revision: 2, verified: false });
+  // Positive: a normal migration is verified from the decrypted persisted row; fresh unlock confirms bytes.
+  const fresh = await seeded([trade(1), trade(2, 3, 'b|v2|v3'), { id: id(9), kind: 'journal', schemaVersion: 1, payload: b64('journal') }]);
+  const freshService = new RecordMigrationService(fresh.vault, registry());
+  assert.deepEqual(value(await freshService.apply(fresh.session, value(await freshService.plan(fresh.session)))), { profileId: fresh.session.profileId, revision: 2, verified: true });
+  const reader = new EncryptedVaultService(fresh.store, webcrypto, { lifecycle: false });
+  const reopened = value(await reader.unlock(fresh.session.profileId, pass));
+  assert.deepEqual(value(await reader.list(reopened.sessionId)).map(r => [r.id, r.schemaVersion, text(r.payload)]),
+    [[id(1), 3, 'private-1|v2|v3'], [id(2), 3, 'b|v2|v3'], [id(9), 1, 'journal']]);
+});

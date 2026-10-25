@@ -11,12 +11,13 @@ Done on PR #5 — do not redo:
 - typed quota (Worker);
 - G03 resealer, with two-tab and page-close evidence;
 - saturated-origin recovery evidence;
-- G03 R1 uncertain-restore reconciliation.
+- G03 R1 uncertain-restore reconciliation;
+- typed quota through to the UI;
+- persisted G09 readback.
 
 Next:
-1. Fresh-unlock persisted migration readback.
-2. Reseal under a process kill.
-3. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
+1. Reseal under a process kill.
+2. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
 
 G11/G15 waits on the owner's trust-root decision. The v29 packet archive is private and not in the repo; ask the owner for it.
 

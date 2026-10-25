@@ -300,3 +300,13 @@ test('G02 create surfaces the store profile bound as a fixed non-retryable limit
   const failure = error(await vault.create(pass), 'LIMIT_EXCEEDED');
   assert.equal(failure.retryable, false); assert.equal(store.rows.size, 0);
 });
+test('G02 persisted readback decrypts the stored row with the live key and refuses tampered/stale rows (exact-envelope check) and locked sessions', async () => {
+  const { store, vault } = service(); const session = value(await vault.create(pass));
+  const rev = value(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }]));
+  assert.deepEqual(value(await vault.readPersisted(session.sessionId)), [record(1)]);
+  const good = clone(store.rows.get(session.profileId));
+  const tampered = clone(good); tampered.snapshot.ciphertext = `${tampered.snapshot.ciphertext[0] === 'A' ? 'B' : 'A'}${tampered.snapshot.ciphertext.slice(1)}`;
+  store.rows.set(session.profileId, tampered); error(await vault.readPersisted(session.sessionId), 'CONFLICT');
+  store.rows.set(session.profileId, good); assert.equal(value(await vault.readPersisted(session.sessionId)).length, 1);
+  assert.equal(rev, 1); vault.lock(session.sessionId); error(await vault.readPersisted(session.sessionId), 'LOCKED');
+});

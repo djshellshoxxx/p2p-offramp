@@ -3,7 +3,7 @@ import {
   ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
 } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
-import { createEnvelope, openEnvelope, encryptRevision, disposeMaterial, VaultCryptoError,
+import { createEnvelope, openEnvelope, encryptRevision, decryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
 import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type ProfileInventory, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
 export { VaultStorageError } from './idb-vault-store.ts';
@@ -316,6 +316,24 @@ export class EncryptedVaultService implements VaultService {
           !(error instanceof Failure || error instanceof VaultStorageError || error instanceof VaultCryptoError || error instanceof ValidationError)) this.lock(sessionId);
         throw error;
       } finally { release(); state.operations.delete(control.controller); control.remove(); }
+    });
+  }
+  /**
+   * Storage-internal authenticated readback: decrypts the persisted row (not the session cache) with the
+   * live key. The row must still be exactly this session's envelope; otherwise CONFLICT. Read-only.
+   */
+  readPersisted(sessionId: string, signal?: AbortSignal): Promise<Result<PrivateRecordV1[]>> {
+    return this.#result(async () => {
+      const state = this.#session(sessionId), generation = state.generation;
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      try {
+        await previous; this.#guard(state, generation, signal);
+        const expected = state.envelope!;
+        const latest = await this.#store.get(expected.profileId); this.#guard(state, generation, signal);
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) throw new Failure('CONFLICT');
+        const snapshot = await decryptRevision(state.material, latest); this.#guard(state, generation, signal);
+        return snapshot.records.map(record => ({ ...record }));
+      } finally { release(); }
     });
   }
   /**

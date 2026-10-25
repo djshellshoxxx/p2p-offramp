@@ -96,8 +96,8 @@ export class MigrationRegistry {
   }
 }
 
-type MigrationVault = Pick<VaultService, 'list' | 'commit'> & VaultSessionAuthority & Pick<EncryptedVaultService, 'assertFresh'>;
-interface Candidate { readonly plan: MigrationPlan; readonly mutations: readonly Mutation[]; }
+type MigrationVault = Pick<VaultService, 'list' | 'commit'> & VaultSessionAuthority & Pick<EncryptedVaultService, 'assertFresh' | 'readPersisted'>;
+interface Candidate { readonly plan: MigrationPlan; readonly mutations: readonly Mutation[]; readonly recordCount: number; }
 
 export class RecordMigrationService {
   readonly #vault: MigrationVault;
@@ -123,7 +123,7 @@ export class RecordMigrationService {
         mutations.push({ op: 'put', record: this.#registry.migrate(record) });
         changes.push(Object.freeze({ recordId: record.id, fromVersion: record.schemaVersion, toVersion: target }));
       }
-      return { plan: Object.freeze({ sourceProfileId: before.profileId, sourceRevision: before.revision, changes: Object.freeze(changes) }), mutations };
+      return { plan: Object.freeze({ sourceProfileId: before.profileId, sourceRevision: before.revision, changes: Object.freeze(changes) }), mutations, recordCount: listed.value.length };
     } finally { lease.value.dispose(); }
   }
   async plan(session: VaultSession): Promise<Result<MigrationPlan>> {
@@ -150,8 +150,17 @@ export class RecordMigrationService {
       if (!committed.ok) throw new MigrationError(committed.error.code);
       // From here the new revision is durable: a later lock, cancel or readback failure must never be
       // reported as a failed migration. Readback only qualifies the result.
+      // verified = authenticated decrypt of the persisted row (G09 §4: count + readback), never the cache.
       let verified = false;
-      try { verified = (await this.#candidate({ ...session, revision: committed.value })).plan.changes.length === 0; } catch { /* durable, unverified */ }
+      try {
+        const persisted = await this.#vault.readPersisted(session.sessionId);
+        if (persisted.ok) {
+          const expected = new Map(candidate.mutations.map(m => m.op === 'put' ? [m.record.id, m.record] : [m.id, undefined]));
+          verified = persisted.value.length === candidate.recordCount &&
+            persisted.value.every(record => this.#registry.target(record) === record.schemaVersion &&
+              (!expected.has(record.id) || JSON.stringify(expected.get(record.id)) === JSON.stringify(record)));
+        }
+      } catch { /* durable, unverified */ }
       return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: committed.value, verified } };
     } catch (error) { return failed(error); }
   }

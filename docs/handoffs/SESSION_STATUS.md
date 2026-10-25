@@ -129,7 +129,7 @@ The archive's P2P packets reviewed PR #5 up to `809b669`. Mapping to the current
 
 | Packet finding | State now | Evidence |
 |---|---|---|
-| G09 P1 durable outcome | Resolved in `809b669` (packet agrees). Fresh persisted-decrypt readback evidence is still open: `verified` reflects the session cache. | `migration-service.test.mjs` durable-lock test |
+| G09 P1 durable outcome | Resolved in `809b669` (packet agrees). **Readback now persisted:** after commit, `verified` requires an authenticated decrypt of the stored row with the live key (`readPersisted`/`decryptRevision`, no key derivation, exact-envelope check), the expected record count, every record at its target version, and migrated payloads byte-equal to what was written. RED first: a row that diverged after commit was wrongly reported `verified:true` from the cache. A fresh-unlock byte check passes. | `migration-service.test.mjs` durable-lock test |
 | **G09 P2 stale empty plan** | **Fixed in this commit.** RED reproduced first in unit and real two-tab Chromium tests. The fix adds a read-only `EncryptedVaultService.assertFresh` (exact-envelope compare, serialized with commits, no write or encryption; locks the stale session like commit). A fresh no-op still makes zero writes and no commit call. | Unit test: added record, future-schema record, and same-revision envelope substitution all return CONFLICT with no write; fresh no-op control passes. Browser: two-tab stale no-op returns CONFLICT; a fresh replan sees the other tab's work. |
 | G03 R2 quota | Resolved. The quota code now survives Worker → strict reply parser → AppRuntime → facade for both restore and create, and maps to the fixed quota message rather than STORAGE_UNAVAILABLE. The UI treats it as a definite refusal, not uncertain. **A real-browser quota failure could not be reproduced**: Chromium 153's DevTools `Storage.overrideQuotaForOrigin` (even `quotaSize: 1`) did not block IndexedDB writes from the Worker, and the restore succeeded. That attempt was removed rather than kept as a false proof. | `worker-endpoint.test.mjs`, `app-runtime.test.mjs` quota test |
 | G03 R1 uncertain restore → reconcile before retry | **Fixed.** After Cancel, or after CANCELLED/TIMEOUT/STORAGE_UNAVAILABLE/LOCKED/PROTOCOL_ERROR, Restore stays disabled behind a 'may have completed' alert. **Check local profiles** runs a fresh inventory and lists all profiles without attributing any of them to the job; only then is retry enabled. Definite refusals still allow retry. RED reproduced in the emitted-app Chromium test first. | `test-web-build-browser.mjs` R1 block |
@@ -158,7 +158,7 @@ Next, in order:
 - **v29 archive:** private, in the session scratchpad only, never committed. The next agent needs the owner to supply it again.
 - **Remaining, in order:**
   1. (done, at unit/strict-parser level) Quota through to the UI. A real-browser quota failure is still unproven.
-  2. Fresh-unlock persisted readback for G09 migration (`verified` currently reflects the cache).
+  2. (done) Persisted readback for G09 migration.
   3. Reseal under a process kill (only page close is tested).
   4. G11/G15, **blocked on the owner's trust-root decision**. Do not invent signers, credentials or trust policy.
   5. G16 → wallet/escrow/offer/trade UI → two-party local EVM proof.
