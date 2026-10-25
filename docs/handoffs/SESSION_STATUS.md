@@ -250,3 +250,22 @@ Next, in order:
 - **Inventory:** the capability is renamed `trade-terms-evm-test-only` and now has two entries, `noble-hashes-2.4.0-keccak` and the new `noble-curves-2.4.0-secp256k1-recover`. Both reviews are pending; the repository inventory test expects 6× MISSING_REVIEW.
 - **Not done:** EIP-1271 contract-wallet acceptance (needs a chain call), wallet signing UX (G10), and the escrow contract.
 - `npm test` 321/321; all gates pass; nothing is in the app bundle.
+
+### G10 EVM wallet adapter: connect + G16 typed-terms signing (test-only, not wired to UI)
+
+- `packages/wallet/src/evm-adapter.ts` `EvmWalletAdapter` over EIP-1193. It is not exported or bundled, and nothing calls it from the app, so there are still no startup prompts.
+- **Connect (explicit only):**
+  - the network must be an EVM entry in the loaded G11 registry, and `eth_chainId` must equal its chain ID;
+  - the account is canonical lowercase;
+  - `accountsChanged`/`chainChanged`/`disconnect` bump the generation and invalidate the session;
+  - reconnecting never stacks duplicate provider listeners (regression test fails without the fix).
+- **`signTerms(session, domain, terms, role)`:**
+  - preflight checks the exact current session, the registry deployment (with `verifyingContract` equal to its address), the registered asset supported by that deployment, and that the session account is the stored role account;
+  - account and chain are re-queried, then **one** `eth_signTypedData_v4` call is made, never `personal_sign`/`eth_sign`; 4200 → UNSUPPORTED_PROVIDER with no fallback, 4001 → USER_REJECTED;
+  - the result must be 65 bytes and is **verified offline** against the session account (INTEGRITY_FAILURE otherwise);
+  - late results after cancel or a generation change are discarded.
+- **Deviation:** EVM `signTerms` takes structured G16 terms instead of `encodedTerms` bytes (EIP-712 wallets need typed data).
+- **Tests:** a fake EIP-1193 wallet re-derives the digest from the typed-data JSON it is shown, so a JSON/digest mismatch would fail verification. Deterministic test-only keys.
+- **Not done:** `submit` (needs G12 plus an approved escrow deployment), EIP-1271 contract wallets, EIP-6963 → adapter wiring, UI, and Solana Wallet Standard.
+- **H2 EVM escrow contract: blocked.** Downloading and running the Foundry toolchain was denied by this session's permission policy ("Code from External"). No workaround was attempted. It needs owner permission, or Foundry/solc preinstalled in the environment.
+- `npm test` 326/326; all gates pass; nothing is in the app bundle.
