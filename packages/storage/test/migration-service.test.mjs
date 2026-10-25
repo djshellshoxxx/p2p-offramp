@@ -129,3 +129,28 @@ test('G09 no-op preflight writes nothing, needs no commit and still honors cance
   const controller = new AbortController(); controller.abort(); code(await service.apply(session, plan, controller.signal), 'CANCELLED');
   vault.lock(session.sessionId); code(await service.apply(session, plan), 'LOCKED'); assert.equal(store.writes, before);
 });
+test('G09 stale empty plan: a persisted advance by another writer conflicts without writing or losing that work', async () => {
+  for (const advance of ['added-record', 'future-record', 'same-revision-substitution']) {
+    const { store, vault, session } = await seeded([trade(1, 3, 'a|v2|v3')]);
+    const service = new RecordMigrationService(vault, registry());
+    const plan = value(await service.plan(session)); assert.deepEqual(plan.changes, []); assert.equal(plan.sourceRevision, 1);
+    const other = new EncryptedVaultService(store, webcrypto, { lifecycle: false }); const tab = value(await other.unlock(session.profileId, pass));
+    if (advance === 'same-revision-substitution') {
+      const row = clone(store.rows.get(session.profileId));
+      row.snapshot.nonce = `${row.snapshot.nonce[0] === 'A' ? 'B' : 'A'}${row.snapshot.nonce.slice(1)}`; store.rows.set(session.profileId, row);
+    } else {
+      const record = advance === 'added-record' ? { id: id(7), kind: 'preference', schemaVersion: 1, payload: b64('second writer') } : trade(8, 9, 'future');
+      value(await other.commit(tab.sessionId, 1, [{ op: 'put', record }]));
+    }
+    const persisted = JSON.stringify(store.rows.get(session.profileId)); const writes = store.writes;
+    vault.commit = async () => { throw Error('stale no-op must not commit'); };
+    code(await service.apply(session, plan), 'CONFLICT');
+    assert.equal(store.writes, writes, `${advance}: no write`); assert.equal(JSON.stringify(store.rows.get(session.profileId)), persisted, `${advance}: other writer's state kept`);
+  }
+  // Control: a fresh unchanged no-op still succeeds with zero writes and no commit call.
+  const { store, vault, session } = await seeded([trade(1, 3, 'a|v2|v3')]);
+  const service = new RecordMigrationService(vault, registry()); const writes = store.writes;
+  vault.commit = async () => { throw Error('fresh no-op must not commit'); };
+  assert.deepEqual(value(await service.apply(session, value(await service.plan(session)))), { profileId: session.profileId, revision: 1, verified: true });
+  assert.equal(store.writes, writes);
+});

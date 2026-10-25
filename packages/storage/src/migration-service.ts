@@ -96,7 +96,7 @@ export class MigrationRegistry {
   }
 }
 
-type MigrationVault = Pick<VaultService, 'list' | 'commit'> & VaultSessionAuthority;
+type MigrationVault = Pick<VaultService, 'list' | 'commit'> & VaultSessionAuthority & Pick<EncryptedVaultService, 'assertFresh'>;
 interface Candidate { readonly plan: MigrationPlan; readonly mutations: readonly Mutation[]; }
 
 export class RecordMigrationService {
@@ -138,7 +138,14 @@ export class RecordMigrationService {
         throw new MigrationError('CONFLICT');
       }
       if (signal?.aborted) throw new MigrationError('CANCELLED');
-      if (candidate.mutations.length === 0) return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: candidate.plan.sourceRevision, verified: true } };
+      if (candidate.mutations.length === 0) {
+        // The cached snapshot alone is not a synchronization point (G02 §7): another tab may have advanced
+        // persisted storage. Check freshness read-only; an empty migration never writes or bumps revision.
+        const fresh = await this.#vault.assertFresh(session.sessionId, signal);
+        if (!fresh.ok) throw new MigrationError(fresh.error.code);
+        if (fresh.value !== candidate.plan.sourceRevision) throw new MigrationError('CONFLICT');
+        return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: candidate.plan.sourceRevision, verified: true } };
+      }
       const committed = await this.#vault.commit(session.sessionId, candidate.plan.sourceRevision, candidate.mutations, signal);
       if (!committed.ok) throw new MigrationError(committed.error.code);
       // From here the new revision is durable: a later lock, cancel or readback failure must never be

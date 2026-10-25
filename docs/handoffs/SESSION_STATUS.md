@@ -121,3 +121,27 @@ Lean scope (`LEAN_RELEASE_SCOPE.md`, `RESTART.md`) now governs priority. The own
   - The source row stayed byte-identical and unlockable every time.
   - Any destination row was a complete, authenticated, migrated profile. No partial rows were found.
   - Recovery after interruption means re-running the reseal. A copy that already completed is kept, never auto-deleted (G03). This is a page close; an OS or browser process kill was not tested.
+
+## v29 review-queue reconciliation (2026-10-25)
+
+The owner supplied the v29 packet archive. It is held privately in the session scratchpad, and nothing from it is committed.
+The archive's P2P packets reviewed PR #5 up to `809b669`. Mapping to the current branch:
+
+| Packet finding | State now | Evidence |
+|---|---|---|
+| G09 P1 durable outcome | Resolved in `809b669` (packet agrees). Fresh persisted-decrypt readback evidence is still open: `verified` reflects the session cache. | `migration-service.test.mjs` durable-lock test |
+| **G09 P2 stale empty plan** | **Fixed in this commit.** RED reproduced first in unit and real two-tab Chromium tests. The fix adds a read-only `EncryptedVaultService.assertFresh` (exact-envelope compare, serialized with commits, no write or encryption; locks the stale session like commit). A fresh no-op still makes zero writes and no commit call. | Unit test: added record, future-schema record, and same-revision envelope substitution all return CONFLICT with no write; fresh no-op control passes. Browser: two-tab stale no-op returns CONFLICT; a fresh replan sees the other tab's work. |
+| G03 R2 quota | Resolved at the Worker in `809b669`. A runtime→facade→emitted-UI quota test is still missing. | `worker-endpoint.test.mjs` |
+| G03 R1 uncertain restore → reconcile before retry | **Open.** RestoreForm still re-enables retry on Cancel with no inventory reconciliation. | none yet |
+| G03 source-bound resealer / resume | Covered by `1fe9efe` + `dea276f`. Page-close interruption outcomes are timing-dependent, but the invariants hold: source identical, no partial copy. A process kill was not tested. | `reseal.test.mjs`, browser reseal blocks |
+| Saturated-origin export → fresh-origin fresh-key locked restore, source retained | **Open as composed evidence.** Pieces exist separately: export, fresh-origin restore, restore refused at the bound. | none composed |
+
+16-profile cap: this is the engineering default, not a blocker. G11/G15 trust root: an unresolved owner decision; no signer, credentials or trust policy has been chosen.
+
+Reruns at this commit: `npm test` 302/302, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser`, `check:specs` and `test:specs` all exit 0.
+
+Next, in order:
+1. Saturated-origin export → fresh-origin restore (Chromium).
+2. G03 R1 restore reconciliation after an uncertain outcome (RED first).
+3. Quota through to the emitted UI.
+4. Fresh-unlock persisted readback for migration.

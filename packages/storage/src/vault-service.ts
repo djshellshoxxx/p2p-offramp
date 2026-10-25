@@ -319,6 +319,23 @@ export class EncryptedVaultService implements VaultService {
     });
   }
   /**
+   * Read-only G02 synchronization point: confirms the persisted row is still exactly this session's
+   * envelope. Never writes or encrypts. A stale session is locked, as commit would, and reports CONFLICT.
+   */
+  assertFresh(sessionId: string, signal?: AbortSignal): Promise<Result<number>> {
+    return this.#result(async () => {
+      const state = this.#session(sessionId), generation = state.generation;
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      try {
+        await previous; this.#guard(state, generation, signal);
+        const expected = state.envelope!;
+        const latest = await this.#store.get(expected.profileId); this.#guard(state, generation, signal);
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        return expected.revision;
+      } finally { release(); }
+    });
+  }
+  /**
    * Storage-internal G03/G09 reseal: copies the live session's authenticated snapshot through a bundled
    * transform into a new fresh-key profile. Not part of the public VaultService or Worker protocol.
    * The source row is rechecked inside the destination add transaction, so a concurrent commit aborts

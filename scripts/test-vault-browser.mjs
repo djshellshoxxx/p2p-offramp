@@ -317,7 +317,7 @@ try {
     await page.evaluate(async () => {
       const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
       const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
-      const { MigrationRegistry, InternalMigrationResealer } = await import('/storage/src/migration-service.js');
+      const { MigrationRegistry, InternalMigrationResealer, RecordMigrationService } = await import('/storage/src/migration-service.js');
       const kinds = ['identity', 'preference', 'trade', 'chat', 'journal'];
       const schemas = [...kinds.filter(k => k !== 'trade').map(kind => ({ kind, version: 1, validate: () => true })),
         { kind: 'trade', version: 1, validate: () => true }, { kind: 'trade', version: 2, validate: p => new TextDecoder().decode(p).endsWith('|v2') }];
@@ -326,6 +326,7 @@ try {
       window.rsStore = new IndexedDbVaultStore();
       window.rsVault = new EncryptedVaultService(window.rsStore, crypto, { lifecycle: false });
       window.rsResealer = new InternalMigrationResealer(window.rsVault, new Map([['trade-v2', registry]]));
+      window.rsMigrations = new RecordMigrationService(window.rsVault, registry);
     });
   }
   const resealSeed = await resealPages[0].evaluate(async () => {
@@ -357,6 +358,29 @@ try {
     return (await window.rsVault.list(opened.value.sessionId)).value.map(r => [r.id[0], r.kind, r.schemaVersion, atob(r.payload.replace(/-/g, '+').replace(/_/g, '/'))]);
   }, resealed.result.value.newProfileId);
   assert.deepEqual(copy, [['1', 'trade', 2, 'trade|v2'], ['2', 'preference', 1, 'pref']], 'copy includes tab B work and migrated payload');
+  // G09 stale empty plan across real documents: tab A holds a no-op plan, tab B commits, A must conflict.
+  const staleNoop = await resealPages[0].evaluate(async () => {
+    const created = await window.rsVault.create('noop fixture passphrase');
+    const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '3'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'eA' } }]);
+    window.noopSession = { ...created.value, revision: revision.value };
+    window.noopPlan = (await window.rsMigrations.plan(window.noopSession)).value;
+    return { profileId: created.value.profileId, changes: window.noopPlan.changes.length };
+  });
+  assert.equal(staleNoop.changes, 0);
+  await resealPages[1].evaluate(async ({ profileId }) => {
+    const opened = await window.rsVault.unlock(profileId, 'noop fixture passphrase');
+    const done = await window.rsVault.commit(opened.value.sessionId, opened.value.revision, [{ op: 'put', record: { id: '4'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'eQ' } }]);
+    if (!done.ok) throw new Error('tab B noop-race commit failed');
+  }, staleNoop);
+  const staleResult = await resealPages[0].evaluate(async ({ profileId }) => {
+    const before = JSON.stringify(await window.rsStore.get(profileId));
+    const result = await window.rsMigrations.apply(window.noopSession, window.noopPlan);
+    const after = JSON.stringify(await window.rsStore.get(profileId));
+    const reopened = await window.rsVault.unlock(profileId, 'noop fixture passphrase');
+    const replanned = await window.rsMigrations.plan(reopened.value);
+    return { code: result.ok ? 'unexpected-success' : result.error.code, unchanged: before === after, replannedChanges: replanned.value.changes.length };
+  }, staleNoop);
+  assert.deepEqual(staleResult, { code: 'CONFLICT', unchanged: true, replannedChanges: 1 }, 'stale no-op conflicts; fresh replan sees tab B work');
   for (const page of resealPages) await page.evaluate(() => { window.rsVault.dispose(); window.rsStore.close(); });
   // Interrupted reseal: close the document mid-job at several points; a fresh document must find the source
   // intact and every other row a complete authenticated profile (never a partial or source-overwriting row).
@@ -415,7 +439,7 @@ try {
   console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
   assert.deepEqual(unexpected, []);
   await resealContext.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, no external egress.');
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, two-tab G09 stale empty-plan conflict without write, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));
