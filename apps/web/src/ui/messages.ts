@@ -64,6 +64,7 @@ export const messages = {
     LOCKED: 'The local session is locked. Unlock the existing profile again if needed.',
     CONFLICT: 'Local data changed. Keep the original data and check its status before trying again.',
     LIMIT_EXCEEDED: 'A local safety limit was reached. Keep the original data and use recovery guidance.',
+    QUOTA_EXCEEDED: 'Browser storage for this origin is full. Nothing was saved. Free space or export a backup, then try again; existing profiles are kept.',
     STORAGE_UNAVAILABLE: 'Local storage is unavailable. Check browser storage permissions and keep your original data.',
     CANCELLED: 'The local operation was cancelled. No success is confirmed.',
     BUSY: 'Another local operation is running. Wait for it to finish before trying again.',

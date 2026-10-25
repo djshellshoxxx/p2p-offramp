@@ -55,12 +55,12 @@ test('G09 plans and applies contiguous steps in one CAS commit, preserving IDs, 
   assert.deepEqual(plan, { sourceProfileId: session.profileId, sourceRevision: 1, changes: [
     { recordId: id(1), fromVersion: 1, toVersion: 3 }, { recordId: id(2), fromVersion: 2, toVersion: 3 }] });
   const writes = store.writes; const applied = value(await service.apply(session, plan));
-  assert.deepEqual(applied, { profileId: session.profileId, revision: 2 }); assert.equal(store.writes, writes + 1);
+  assert.deepEqual(applied, { profileId: session.profileId, revision: 2, verified: true }); assert.equal(store.writes, writes + 1);
   const records = value(await vault.list(session.sessionId));
   assert.deepEqual(records.map(r => [r.id, r.kind, r.schemaVersion, text(r.payload)]), [
     [id(1), 'trade', 3, 'private-1|v2|v3'], [id(2), 'trade', 3, 'x|v2|v3'], [id(3), 'trade', 3, 'y|v2|v3'], [id(9), 'journal', 1, 'journal-intent']]);
   const again = value(await service.plan({ ...session, revision: 2 })); assert.deepEqual(again.changes, [], 'already-upgraded vault is idempotent');
-  assert.deepEqual(value(await service.apply({ ...session, revision: 2 }, again)), { profileId: session.profileId, revision: 2 }); assert.equal(store.writes, writes + 1);
+  assert.deepEqual(value(await service.apply({ ...session, revision: 2 }, again)), { profileId: session.profileId, revision: 2, verified: true }); assert.equal(store.writes, writes + 1);
 });
 test('G09 refuses future records, missing paths and any failing record without a partial write', async () => {
   for (const [records, migrations, expected] of [
@@ -109,4 +109,23 @@ test('G09 bounds in-place changes at 256 and honors cancellation and lock', asyn
   code(await service.apply(exact.session, value(await service.plan(exact.session)), controller.signal), 'CANCELLED');
   assert.equal(value(await service.apply(exact.session, value(await service.plan(exact.session)))).revision, 2);
   exact.vault.lock(exact.session.sessionId); code(await service.plan(exact.session), 'LOCKED');
+});
+test('G09 a committed migration reports its durable revision even if readback fails afterwards', async () => {
+  const { store, vault, session } = await seeded([trade(1)]);
+  const service = new RecordMigrationService(vault, registry()); const plan = value(await service.plan(session));
+  const realCommit = vault.commit.bind(vault);
+  // Lock races in right after the durable commit completes, before readback.
+  vault.commit = async (...args) => { const result = await realCommit(...args); vault.lock(session.sessionId); return result; };
+  const applied = value(await service.apply(session, plan));
+  assert.deepEqual(applied, { profileId: session.profileId, revision: 2, verified: false });
+  assert.equal(JSON.parse(JSON.stringify(store.rows.get(session.profileId))).revision, 2);
+});
+test('G09 no-op preflight writes nothing, needs no commit and still honors cancellation and lock', async () => {
+  const { store, vault, session } = await seeded([trade(1, 3, 'a|v2|v3')]);
+  const service = new RecordMigrationService(vault, registry()); const before = store.writes;
+  vault.commit = async () => { throw Error('no-op must not commit'); };
+  const plan = value(await service.plan(session)); assert.deepEqual(plan.changes, []);
+  assert.deepEqual(value(await service.apply(session, plan)), { profileId: session.profileId, revision: 1, verified: true });
+  const controller = new AbortController(); controller.abort(); code(await service.apply(session, plan, controller.signal), 'CANCELLED');
+  vault.lock(session.sessionId); code(await service.apply(session, plan), 'LOCKED'); assert.equal(store.writes, before);
 });

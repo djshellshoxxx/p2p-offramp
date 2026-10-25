@@ -25,7 +25,7 @@ function errorCode(input: unknown): RuntimeErrorCode {
     const value = input.code;
     if (value === 'CHECKSUM_MISMATCH') return 'INVALID_INPUT';
     if (value === 'INVALID_INPUT' || value === 'UNSUPPORTED_ENVIRONMENT' || value === 'UNSUPPORTED_VERSION' || value === 'NOT_FOUND' ||
-        value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'CANCELLED' || value === 'BUSY') return value;
+        value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' || value === 'BUSY') return value;
   }
   return 'STORAGE_UNAVAILABLE';
 }
@@ -33,7 +33,7 @@ function vaultValue<T>(result: Result<T>): T {
   if (result.ok) return result.value;
   const value = result.error.code;
   throw new RuntimeBoundaryError(value === 'UNSUPPORTED_ENVIRONMENT' || value === 'UNSUPPORTED_VERSION' || value === 'INVALID_INPUT' ||
-    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'CANCELLED' ? value : 'STORAGE_UNAVAILABLE');
+    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' ? value : 'STORAGE_UNAVAILABLE');
 }
 
 class VaultWorkerEndpoint {

@@ -102,3 +102,13 @@ test('Worker maps the profile bound to a fixed limit and keeps one job at a time
  const pending=e.send('listProfiles');await e.send('create',{passphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'BUSY');gate.resolve();await pending;
  assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
 });
+test('Worker reports storage quota as a typed QUOTA_EXCEEDED for create and restore, never a generic outage',async()=>{
+ const {BackupError}=await import('../../../packages/storage/index.ts');
+ const e=endpoint({createServices:()=>({vault:{create:async()=>({ok:false,error:{code:'QUOTA_EXCEEDED',retryable:true,message:'SECRET'}}),listProfiles:async()=>({ok:false,error:{code:'QUOTA_EXCEEDED',retryable:true,message:'SECRET'}}),
+  captureSession:()=>{throw Error('unused');},unlock:async()=>{throw Error('unused');},lock:()=>{},lockAll:()=>{},dispose:()=>{}},
+  backup:{exportWithStatus:async()=>{throw Error('unused');},restore:async()=>{throw new BackupError('QUOTA_EXCEEDED');},dispose:()=>{}}})});
+ await e.send('init',{config});await e.send('create',{passphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
+ assert.equal(e.messages.at(-1).result.error.messageKey,'runtime.error.quota_exceeded');
+ await e.send('restore',{bytes:new Uint8Array([1]),sourcePassphrase:pass,destinationPassphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
+ assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
+});

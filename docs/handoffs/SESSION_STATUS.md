@@ -82,3 +82,12 @@ Remote CI for PR #5 was queued at the time of writing. Check `pull_request_read 
 3. G11 signed network/asset/deployment registry + G15 artifact manifest/digest verification.
 4. H1 canonical signed trade terms. Then H2 EVM escrow (Foundry, local anvil only) and H4 signing/reconciliation adapters. Then M5/H5 transport/discovery.
 5. Trade journey UI (M7) after those gates. Then Solana parity (H3). Keep `ReleaseEnabled=0` throughout.
+
+## Continuation 2026-10-25 UTC (same session, after owner PR #6 lean-scope docs at `a35577c`)
+
+Lean scope (`LEAN_RELEASE_SCOPE.md`, `RESTART.md`) now governs priority. The owner's documents were left unchanged. The private review packet has not been received, so no packet case was reproduced.
+- **G09 durable result.** Before this fix, `apply` reported an error when a lock, cancel or readback failure happened after a committed CAS, which hid a durable migration. It now returns `{profileId, revision, verified}`; `verified: false` means committed but unconfirmed. RED test reproduced the bug first.
+- **G09 no-op preflight.** Verified no write, no commit call, and cancel/lock still refused (`migration-service.test.mjs`).
+- **Typed quota.** `QUOTA_EXCEEDED` is now a runtime error code. The Worker previously collapsed it into `STORAGE_UNAVAILABLE` for create, restore and inventory. The UI now shows a quota-specific message. RED test reproduced first.
+- Reruns at this commit: `npm test` 295/295, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser` and `check:specs` all exit 0.
+- Still open in lean order: source-bound G03 resealer (new-profile migration with source retained, interrupted resume, cross-tab), then G11/G15 → G16 → wallet/escrow/offer/trade UI → two-party local EVM proof.

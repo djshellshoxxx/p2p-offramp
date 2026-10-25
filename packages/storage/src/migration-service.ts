@@ -22,6 +22,8 @@ export interface MigrationPlan {
   readonly sourceRevision: number;
   readonly changes: readonly MigrationChange[];
 }
+/** `verified: false` means the revision committed but readback could not confirm it; unlock and replan. */
+export interface MigrationResult { readonly profileId: string; readonly revision: number; readonly verified: boolean; }
 export class MigrationError extends Error {
   readonly code: VaultErrorCode;
   constructor(code: VaultErrorCode) { super('Record migration failed.'); this.name = 'MigrationError'; this.code = code; }
@@ -127,20 +129,22 @@ export class RecordMigrationService {
     try { return { ok: true, value: (await this.#candidate(session)).plan }; } catch (error) { return failed(error); }
   }
   /** Recomputes the plan instead of trusting the supplied one; G02 CAS rejects concurrent writers. */
-  async apply(session: VaultSession, plan: MigrationPlan, signal?: AbortSignal): Promise<Result<{ profileId: string; revision: number }>> {
+  async apply(session: VaultSession, plan: MigrationPlan, signal?: AbortSignal): Promise<Result<MigrationResult>> {
     try {
       if (signal?.aborted) throw new MigrationError('CANCELLED');
       const candidate = await this.#candidate(session);
       if (JSON.stringify(candidate.plan) !== JSON.stringify({ sourceProfileId: plan?.sourceProfileId, sourceRevision: plan?.sourceRevision, changes: plan?.changes })) {
         throw new MigrationError('CONFLICT');
       }
-      if (candidate.mutations.length === 0) return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: candidate.plan.sourceRevision } };
+      if (signal?.aborted) throw new MigrationError('CANCELLED');
+      if (candidate.mutations.length === 0) return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: candidate.plan.sourceRevision, verified: true } };
       const committed = await this.#vault.commit(session.sessionId, candidate.plan.sourceRevision, candidate.mutations, signal);
       if (!committed.ok) throw new MigrationError(committed.error.code);
-      // Authenticated readback of the committed session cache: nothing left to migrate.
-      const verified = await this.#candidate({ ...session, revision: committed.value });
-      if (verified.plan.changes.length !== 0) throw new MigrationError('STORAGE_UNAVAILABLE');
-      return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: committed.value } };
+      // From here the new revision is durable: a later lock, cancel or readback failure must never be
+      // reported as a failed migration. Readback only qualifies the result.
+      let verified = false;
+      try { verified = (await this.#candidate({ ...session, revision: committed.value })).plan.changes.length === 0; } catch { /* durable, unverified */ }
+      return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: committed.value, verified } };
     } catch (error) { return failed(error); }
   }
 }
