@@ -1,5 +1,26 @@
 # Next agent prompt (paste as-is)
 
+## Current pointer (2026-10-25 ~11:30 UTC) — read first
+
+P2P owner session 01BAvLvx. Branch `claude/adoring-wozniak-850ue6` (PR #5). Read `SESSION_STATUS.md`: the "v29 review-queue reconciliation" table and the "Handoff checkpoint" section.
+
+Done on PR #5 — do not redo:
+- cap 16 and inventory;
+- create/restore/inventory UI;
+- G09 core, durable result and stale empty-plan freshness;
+- typed quota (Worker);
+- G03 resealer, with two-tab and page-close evidence;
+- saturated-origin recovery evidence;
+- G03 R1 uncertain-restore reconciliation.
+
+Next:
+1. Quota through to the emitted UI.
+2. Fresh-unlock persisted migration readback.
+3. Reseal under a process kill.
+
+G11/G15 waits on the owner's trust-root decision. The v29 packet archive is private and not in the repo; ask the owner for it.
+
+
 ## Scope override — 2026-10-24 UTC
 
 The owner-approved [lean scope](LEAN_RELEASE_SCOPE.md) and [restart instructions](RESTART.md) supersede the historical baseline and priority list below. Read them first. Preserve [SESSION_STATUS](SESSION_STATUS.md) as historical test/provenance evidence, not a current rerun.

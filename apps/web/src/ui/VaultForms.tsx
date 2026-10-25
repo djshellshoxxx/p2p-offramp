@@ -220,11 +220,32 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
   </form>;
 }
 
+/** Outcomes after which the destination add may already have committed (G03: reconcile before retry). */
+const UNCERTAIN_RESTORE = new Set(['CANCELLED', 'TIMEOUT', 'STORAGE_UNAVAILABLE', 'LOCKED', 'PROTOCOL_ERROR']);
+
 export function RestoreForm({ services }: { readonly services: AppServices }) {
   const form = useRef<HTMLFormElement>(null);
   const request = useRef<AbortController | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
+  const [uncertain, setUncertain] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [reconciled, setReconciled] = useState<readonly string[] | null>(null);
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+
+  /** Fresh inventory only; never attributes a listed profile to the uncertain job. */
+  async function reconcile() {
+    if (checking) return;
+    setChecking(true);
+    try {
+      const result = await services.listProfiles();
+      if (!mounted.current) return;
+      if (result.ok) { setReconciled(result.value.profileIds); setUncertain(false); setNotice(null); }
+      else setNotice({ error: true, text: errorMessage(result.error.code) });
+    } catch { if (mounted.current) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') }); }
+    finally { if (mounted.current) setChecking(false); }
+  }
   useEffect(() => { const element = form.current; return () => { request.current?.abort(); element?.reset(); }; }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -241,7 +262,7 @@ export function RestoreForm({ services }: { readonly services: AppServices }) {
     if (file.size > MAX_BACKUP_BYTES) { clear(); setNotice({ error: true, text: errorMessage('LIMIT_EXCEEDED') }); return; }
     if (secret !== repeat) { clear(); setNotice({ error: true, text: m.passphraseMismatch }); return; }
     if (!consent.checked) { clear(); setNotice({ error: true, text: m.restoreConsentRequired }); return; }
-    const controller = new AbortController(); request.current = controller; setBusy(true); setNotice(null);
+    const controller = new AbortController(); request.current = controller; setBusy(true); setNotice(null); setReconciled(null);
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
       if (controller.signal.aborted) return;
@@ -249,10 +270,11 @@ export function RestoreForm({ services }: { readonly services: AppServices }) {
       clear(); bytes.fill(0);
       if (!controller.signal.aborted) {
         if (result.ok) { element.reset(); setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); }
+        else if (UNCERTAIN_RESTORE.has(result.error.code)) { setUncertain(true); setNotice(null); }
         else setNotice({ error: true, text: errorMessage(result.error.code) });
       }
     } catch {
-      if (!controller.signal.aborted) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') });
+      if (!controller.signal.aborted) setUncertain(true);
     } finally {
       clear();
       if (!controller.signal.aborted) setBusy(false);
@@ -276,10 +298,14 @@ export function RestoreForm({ services }: { readonly services: AppServices }) {
       <span>{m.restoreConsent}</span>
     </label>
     <div className="actions">
-      <button className="primary" type="submit" disabled={busy}>{m.submitRestore}</button>
-      {busy ? <button type="button" onClick={() => { request.current?.abort(); setBusy(false); setNotice({ error: true, text: errorMessage('CANCELLED') }); }}>{m.cancel}</button> : null}
+      <button className="primary" type="submit" disabled={busy || uncertain}>{m.submitRestore}</button>
+      {busy ? <button type="button" onClick={() => { request.current?.abort(); setBusy(false); setUncertain(true); setNotice(null); }}>{m.cancel}</button> : null}
     </div>
     {busy ? <p role="status">{m.restoring}</p> : null}
+    {uncertain ? <div className="notice error" role="alert"><p>{m.restoreUncertain}</p>
+      <button type="button" onClick={() => void reconcile()} disabled={checking}>{m.reconcile}</button></div> : null}
+    {reconciled ? <div role="status"><p>{m.reconciledTitle(reconciled.length)}</p>
+      <ul className="profile-list">{reconciled.map(id => <li key={id}><code>{id}</code></li>)}</ul></div> : null}
     <NoticeText notice={notice} />
   </form>;
 }

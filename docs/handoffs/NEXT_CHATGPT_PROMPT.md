@@ -1,5 +1,26 @@
 # Next agent prompt (any assistant; paste as-is)
 
+## Current pointer (2026-10-25 ~11:30 UTC) — read first
+
+P2P owner session 01BAvLvx. Branch `claude/adoring-wozniak-850ue6` (PR #5). Read `SESSION_STATUS.md`: the "v29 review-queue reconciliation" table and the "Handoff checkpoint" section.
+
+Done on PR #5 — do not redo:
+- cap 16 and inventory;
+- create/restore/inventory UI;
+- G09 core, durable result and stale empty-plan freshness;
+- typed quota (Worker);
+- G03 resealer, with two-tab and page-close evidence;
+- saturated-origin recovery evidence;
+- G03 R1 uncertain-restore reconciliation.
+
+Next:
+1. Quota through to the emitted UI.
+2. Fresh-unlock persisted migration readback.
+3. Reseal under a process kill.
+
+G11/G15 waits on the owner's trust-root decision. The v29 packet archive is private and not in the repo; ask the owner for it.
+
+
 Owner-approved priority: `LEAN_RELEASE_SCOPE.md` and `RESTART.md` in this folder. They override older priority lists.
 
 Repo `djshellshoxxx/p2p-offramp`. Sole p2p owner: session 01BAvLvx. Do not edit GhostPay or Replikrazy from here.

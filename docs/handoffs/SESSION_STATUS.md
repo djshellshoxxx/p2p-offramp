@@ -132,7 +132,7 @@ The archive's P2P packets reviewed PR #5 up to `809b669`. Mapping to the current
 | G09 P1 durable outcome | Resolved in `809b669` (packet agrees). Fresh persisted-decrypt readback evidence is still open: `verified` reflects the session cache. | `migration-service.test.mjs` durable-lock test |
 | **G09 P2 stale empty plan** | **Fixed in this commit.** RED reproduced first in unit and real two-tab Chromium tests. The fix adds a read-only `EncryptedVaultService.assertFresh` (exact-envelope compare, serialized with commits, no write or encryption; locks the stale session like commit). A fresh no-op still makes zero writes and no commit call. | Unit test: added record, future-schema record, and same-revision envelope substitution all return CONFLICT with no write; fresh no-op control passes. Browser: two-tab stale no-op returns CONFLICT; a fresh replan sees the other tab's work. |
 | G03 R2 quota | Resolved at the Worker in `809b669`. A runtime→facade→emitted-UI quota test is still missing. | `worker-endpoint.test.mjs` |
-| G03 R1 uncertain restore → reconcile before retry | **Open.** RestoreForm still re-enables retry on Cancel with no inventory reconciliation. | none yet |
+| G03 R1 uncertain restore → reconcile before retry | **Fixed.** After Cancel, or after CANCELLED/TIMEOUT/STORAGE_UNAVAILABLE/LOCKED/PROTOCOL_ERROR, Restore stays disabled behind a 'may have completed' alert. **Check local profiles** runs a fresh inventory and lists all profiles without attributing any of them to the job; only then is retry enabled. Definite refusals still allow retry. RED reproduced in the emitted-app Chromium test first. | `test-web-build-browser.mjs` R1 block |
 | G03 source-bound resealer / resume | Covered by `1fe9efe` + `dea276f`. Page-close interruption outcomes are timing-dependent, but the invariants hold: source identical, no partial copy. A process kill was not tested. | `reseal.test.mjs`, browser reseal blocks |
 | Saturated-origin export → fresh-origin fresh-key locked restore, source retained | **Covered (new evidence, no fix needed).** Starting with 16 profiles, export works; restore at a different origin with fresh storage gives revision 0, a distinct ID, the old passphrase refused, the record intact, and the restored profile locked until opened with the new passphrase. The source row is byte-identical and the full origin still holds 16. | `test-vault-browser.mjs` saturated-origin block |
 
@@ -142,6 +142,24 @@ Reruns at this commit: `npm test` 302/302, 0 skipped. `typecheck`, `check:bounda
 
 Next, in order:
 1. (done) Saturated-origin recovery.
-2. G03 R1 restore reconciliation after an uncertain outcome (RED first).
+2. (done) G03 R1 restore reconciliation.
 3. Quota through to the emitted UI.
 4. Fresh-unlock persisted readback for migration.
+
+## Handoff checkpoint (2026-10-25 ~11:30 UTC)
+
+- **Branch:** `claude/adoring-wozniak-850ue6` (draft PR #5, stacked on PR #4 `8a88d11`, then `main` `28bc32f`). Verify the head with `git ls-remote`.
+- **Commits this session after `dea276f`:**
+  - `240d04c`: G09 P2 stale empty-plan fix.
+  - `d37513c`: saturated-origin recovery evidence.
+  - The R1 reconciliation commit that follows this table.
+- **CI:** all checks were green through `d37513c` (check-suite events). Recheck on the R1 commit.
+- **Local reruns at the R1 commit:** `npm test` 302/302, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser`, `check:specs` and `test:specs` all exit 0 (Node 22; CI uses Node 24).
+- **v29 archive:** private, in the session scratchpad only, never committed. The next agent needs the owner to supply it again.
+- **Remaining, in order:**
+  1. Quota error carried through runtime → facade → emitted UI (Worker-level only today).
+  2. Fresh-unlock persisted readback for G09 migration (`verified` currently reflects the cache).
+  3. Reseal under a process kill (only page close is tested).
+  4. G11/G15, **blocked on the owner's trust-root decision**. Do not invent signers, credentials or trust policy.
+  5. G16 → wallet/escrow/offer/trade UI → two-party local EVM proof.
+- **Unchanged rules:** cap 16 is the engineering default; `ReleaseEnabled=0`, `connectOrigins: []`; no real funds; no merging of PR #4/#5 or the custodial branch; no force-push or deploy.

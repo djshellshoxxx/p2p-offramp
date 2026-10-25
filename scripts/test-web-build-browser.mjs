@@ -257,6 +257,25 @@ try {
       assert.ok(restoredId && restoredId !== fixture.envelope.profileId, 'restore yields a distinct fresh profile');
       assert.equal(await page.getByText('Vault locked', { exact: true }).count(), 1, 'restore does not unlock');
       await assertSeedPreserved(page);
+      // G03 R1: a cancelled restore may already have committed. Retry stays blocked until an explicit
+      // inventory check; the check never guesses which profile belongs to the cancelled job.
+      await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
+      await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+      await page.getByRole('alert').filter({ hasText: 'may have completed' }).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), true, 'no blind retry after an uncertain restore');
+      const check = page.getByRole('button', { name: 'Check local profiles', exact: true });
+      // The old Worker job may still be settling (BUSY); retry the explicit check, never the restore.
+      for (let attempt = 0; attempt < 20; attempt++) {
+        if (await page.getByText(/^Profiles on this origin now \(\d+\)/).count()) break;
+        if (await check.count()) await check.click();
+        await page.waitForTimeout(250);
+      }
+      await page.getByText(/^Profiles on this origin now \(\d+\)/).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), false, 'retry allowed after reconciliation');
+      assert.equal(await page.getByText(restoredId).count() > 0, true, 'reconciled list shows existing restored profile');
+      await assertSeedPreserved(page);
       // Create through the UI: mismatch refusal, then explicit consent.
       await page.getByRole('link', { name: 'Home', exact: true }).click();
       await page.getByRole('button', { name: 'Create new profile', exact: true }).click();
