@@ -16,12 +16,12 @@ Done on PR #5 — do not redo:
 - persisted G09 readback;
 - reseal SIGKILL evidence;
 - G11 registry parse/load/lookup (`validateLive` and the G15 signed manifest are still open; G15 waits on the trust root);
-- G16 SHA-256 encodings (private agreement, capabilities, Solana terms, funding window; EIP-712 still open).
+- G16 SHA-256 encodings (private agreement, capabilities, Solana terms, funding window; EIP-712 digest test-only in `packages/wallet/src/evm-terms.ts` with official vectors).
 
 Next (reseal SIGKILL evidence is done):
 1. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
 
-Progress is gated on four owner/maintainer decisions listed at the end of `SESSION_STATUS.md`: the trust root, the G15 manifest schema location, a Keccak dependency for EIP-712, and the G16 Solana token-program field. The v29 packet archive is private and not in the repo; ask the owner for it.
+Progress is gated on four owner/maintainer decisions listed at the end of `SESSION_STATUS.md`: the trust root, the G15 manifest schema location, independent review of the test-only `@noble/hashes` Keccak use, and the G16 Solana token-program field. The v29 packet archive is private and not in the repo; ask the owner for it.
 
 
 Owner-approved priority: `LEAN_RELEASE_SCOPE.md` and `RESTART.md` in this folder. They override older priority lists.

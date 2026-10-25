@@ -60,9 +60,9 @@ test('native inventory requires matching bounded browser-profile observations ra
 });
 test('current repository inventory remains test-enabled pending with exact direct and transitive pins',async()=>{
  const inventory=JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json',import.meta.url))),lock=JSON.parse(readFileSync(new URL('../../../package-lock.json',import.meta.url)));
- const enabled=[{capability:'local-encrypted-vault',state:'test-enabled',implementations:[{inventoryId:'native-pbkdf2'},{inventoryId:'native-aes-gcm'}]},{capability:'local-messaging-identity-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0',packageName:'@noble/hashes'}]}];
+ const enabled=[{capability:'local-encrypted-vault',state:'test-enabled',implementations:[{inventoryId:'native-pbkdf2'},{inventoryId:'native-aes-gcm'}]},{capability:'local-messaging-identity-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0',packageName:'@noble/hashes'}]},{capability:'trade-terms-evm-digest-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-hashes-2.4.0-keccak',packageName:'@noble/hashes'}]}];
  const paths=new Set(['security/browser-support.json',...inventory.flatMap(item=>item.vectors.map(vector=>vector.path))]),files=[...paths].map(path=>({path,bytes:new Uint8Array(readFileSync(new URL('../../../'+path,import.meta.url)))}));
- const report=await run({inventory,lock,enabled,files});assert.deepEqual(codes(report),Array(4).fill('MISSING_REVIEW'));assert.equal(report.releaseEligible,false);
+ const report=await run({inventory,lock,enabled,files});assert.deepEqual(codes(report),Array(5).fill('MISSING_REVIEW'));assert.equal(report.releaseEligible,false);
 });
 test('input objects and fixture bytes are snapshotted before asynchronous hashes',async()=>{
  const f=fixture(),pending=run(f);f.files[0].bytes.fill(0);f.inventory[0].vectors[0].sha256='f'.repeat(64);f.inventory[0].review={status:'accepted',reviewer:'Late Reviewer',evidencePath:'reviews/curve.md'};f.enabled[0].state='release-enabled';

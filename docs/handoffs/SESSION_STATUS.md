@@ -221,6 +221,21 @@ Next, in order:
 
 1. **G11/G15 trust root:** who controls the release/distribution signing key, and how the first trusted fingerprint is bootstrapped.
 2. **G15 manifest schema:** the spec references a "common content-addressed manifest" (ES256-P1363 profile, detached locator) that is not in this repository. Supply or locate it; it should not be invented.
-3. **G16 EVM digest:** EIP-712 needs Keccak-256. Approve a reviewed dependency through the crypto-inventory gate; `@noble/hashes` is already a transitive dependency of the pinned `@noble/curves`. Independent EIP-712 vectors are also needed.
+3. **G16 EVM digest: implemented as test-only** (see below). It still needs an independent dependency review of `@noble/hashes` (pending in the inventory) before any enablement.
 4. **G16 Solana:** which field supplies the "selected token-program ID". It is absent from `TradeTermsV1` and G11 `AssetV1`.
 5. After these: G10 wallet signing → H2 EVM escrow (local anvil only) → offer exchange → trade UI → two-party local EVM proof.
+
+### G16 EVM EIP-712 terms digest (test-only capability)
+
+- `packages/wallet/src/evm-terms.ts` (non-core package, not exported or bundled; the app bundle contains no Keccak):
+  - computes `TradeTerms` `hashStruct` with the exact G16 type string, v=1 and mode=0;
+  - computes the domain `P2POfframp`/`1`/chainId/verifyingContract and `termsHash` = EIP-712 digest;
+  - native assets use assetKind 0 with the zero address; ERC-20 uses 1 with a nonzero token;
+  - addresses must be lowercase canonical; uint bounds are enforced; seller and buyer must differ.
+- **Vectors:** the published Keccak-256 values (`""`, `"abc"`) plus the **official EIP-712 Ether Mail example**: type hash, struct hash, domain separator and signing hash. Pinned to ethereum/EIPs@`7372d10` `assets/eip-712/Example.js` (file sha256 `c6bdb395…`, CC0), recorded in `packages/wallet/test/fixtures/eip712-keccak-vectors.json`. These are vectors from an independent source; the TradeTerms-specific digest has none yet.
+- **Inventory:**
+  - New `security/crypto-inventory.json` entry `noble-hashes-2.4.0-keccak`, capability `trade-terms-evm-digest-test-only`, review **pending**, with a fixture-hash vector.
+  - `@noble/hashes` 2.4.0 became a direct exact-pinned dependency (same locked version and integrity; npm regenerated the lockfile). The inventory gate requires declared npm crypto to be a root dependency.
+  - The repository inventory test now enables this capability and expects 5× MISSING_REVIEW. A corrupted fixture hash fails it; checked.
+- **Not done:** signing or verifying acceptances (G10, EOA/EIP-1271), the on-chain contract, and independent TradeTerms vectors.
+- `npm test` 319/319; all gates pass; `npm audit --omit=dev` reports 0.
