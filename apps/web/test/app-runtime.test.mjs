@@ -124,3 +124,17 @@ test('runtime create failure leaves the runtime locked and rejects a create repl
  const runtime=val(await start(port));err(await runtime.create('fresh runtime page passphrase'),'LIMIT_EXCEEDED');assert.equal(runtime.current.state,'locked');
  mode='locked';err(await runtime.create('fresh runtime page passphrase'),'PROTOCOL_ERROR');assert.equal(port.terminated,1);
 });
+test('quota survives Worker → strict reply → runtime → facade-visible result and maps to the fixed UI remediation',async()=>{
+ const {startAppServices}=await import('../src/app-services.ts');const {errorMessage}=await import('../src/ui/routes.ts');const {messages}=await import('../src/ui/messages.ts');
+ const {BackupError}=await import('../../../packages/storage/index.ts');
+ const port=new Port();const endpoint=createVaultWorkerEndpoint(message=>port.reply(message),{createServices:()=>({
+  vault:{create:async()=>({ok:false,error:{code:'QUOTA_EXCEEDED',retryable:true,message:'SECRET'}}),listProfiles:async()=>({ok:true,value:{profileIds:[],truncated:false}}),
+   captureSession:()=>{throw Error('unused');},unlock:async()=>{throw Error('unused');},lock:()=>{},lockAll:()=>{},dispose:()=>{}},
+  backup:{exportWithStatus:async()=>{throw Error('unused');},restore:async()=>{throw new BackupError('QUOTA_EXCEEDED');},dispose:()=>{}}})});
+ port.handler=command=>{void endpoint.dispatch(command);};port.cleanup=()=>endpoint.dispose();
+ const services=val(await startAppServices({createWorker:()=>port,lifecycle:false}));
+ const restored=await services.restore(new Uint8Array([1,2,3]),pass,'quota restore passphrase');err(restored,'QUOTA_EXCEEDED');
+ const created=await services.create('quota create passphrase');err(created,'QUOTA_EXCEEDED');assert.deepEqual(services.current,{state:'locked'});
+ assert.equal(errorMessage(restored.error.code),messages.errors.QUOTA_EXCEEDED);assert.notEqual(errorMessage(restored.error.code),messages.errors.STORAGE_UNAVAILABLE);
+ assert.doesNotMatch(JSON.stringify(port.received),/SECRET/);val(await services.listProfiles());await services.dispose();
+});

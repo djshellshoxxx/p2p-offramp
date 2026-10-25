@@ -367,7 +367,7 @@ try {
   assert.equal(forbiddenRequests, 0); assert.deepEqual(unexpected, []);
   await context.close();
   console.log(JSON.stringify({ fixture: 'emitted-react-vite-shell-local-chromium', browser: browser.version(), reports,
-    localRebuildByteMatch: true, nativeEncryptedUnlockExport: true, uiCreateRestoreInventory: true, automaticWalletPrompts: 0, forbiddenLoopbackRequests: forbiddenRequests,
+    localRebuildByteMatch: true, nativeEncryptedUnlockExport: true, uiCreateRestoreInventory: true, uiRestoreReconciliation: true, automaticWalletPrompts: 0, forbiddenLoopbackRequests: forbiddenRequests,
     unexpectedRequests: unexpected.length, deviceAcceptance: false, deployedFramingAttestation: false, signedRelease: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); await close(server); await close(forbiddenServer); await rm(temporary, { recursive: true, force: true });
