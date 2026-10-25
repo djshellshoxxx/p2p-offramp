@@ -19,7 +19,7 @@ try {
     '--ignoreConfig', '--target', 'ES2023', '--module', 'ESNext', '--moduleResolution', 'Bundler',
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
-    'packages/storage/src/backup-service.ts',
+    'packages/storage/src/backup-service.ts', 'packages/storage/src/migration-service.ts',
     'packages/domain/src/intent-journal.ts',
   ], { cwd: root, stdio: 'inherit' });
   const handler = (request, response) => {
@@ -305,7 +305,62 @@ try {
   for (const page of capacityPages) await page.evaluate(() => { window.capBackup.dispose(); window.capVault.dispose(); window.capStore.close(); });
   assert.deepEqual(unexpected, []);
   await capacityContext.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, no external egress.');
+  // G03 reseal across two real documents: a stale source session must conflict, a fresh one copies.
+  const resealContext = await browser.newContext({ serviceWorkers: 'block' });
+  const resealPages = await Promise.all([resealContext.newPage(), resealContext.newPage()]);
+  for (const page of resealPages) {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { MigrationRegistry, InternalMigrationResealer } = await import('/storage/src/migration-service.js');
+      const kinds = ['identity', 'preference', 'trade', 'chat', 'journal'];
+      const schemas = [...kinds.filter(k => k !== 'trade').map(kind => ({ kind, version: 1, validate: () => true })),
+        { kind: 'trade', version: 1, validate: () => true }, { kind: 'trade', version: 2, validate: p => new TextDecoder().decode(p).endsWith('|v2') }];
+      const registry = new MigrationRegistry({ identity: 1, preference: 1, trade: 2, chat: 1, journal: 1 }, schemas,
+        [{ kind: 'trade', fromVersion: 1, toVersion: 2, migrate: p => new TextEncoder().encode(new TextDecoder().decode(p) + '|v2') }]);
+      window.rsStore = new IndexedDbVaultStore();
+      window.rsVault = new EncryptedVaultService(window.rsStore, crypto, { lifecycle: false });
+      window.rsResealer = new InternalMigrationResealer(window.rsVault, new Map([['trade-v2', registry]]));
+    });
+  }
+  const resealSeed = await resealPages[0].evaluate(async () => {
+    const created = await window.rsVault.create('reseal fixture passphrase');
+    const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '1'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'dHJhZGU' } }]);
+    window.rsSession = { ...created.value, revision: revision.value };
+    return { profileId: created.value.profileId, revision: revision.value, keyId: (await window.rsStore.get(created.value.profileId)).keyId };
+  });
+  // Tab B commits; tab A's cached session is now stale.
+  await resealPages[1].evaluate(async ({ profileId }) => {
+    const opened = await window.rsVault.unlock(profileId, 'reseal fixture passphrase');
+    const done = await window.rsVault.commit(opened.value.sessionId, opened.value.revision, [{ op: 'put', record: { id: '2'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'cHJlZg' } }]);
+    if (!done.ok) throw new Error('tab B commit failed');
+  }, resealSeed);
+  const stale = await resealPages[0].evaluate(seed => window.rsResealer.migrateAndReseal({ sourceSessionId: window.rsSession.sessionId,
+    expectedKeyId: seed.keyId, expectedRevision: seed.revision, migrationId: 'trade-v2' }, 'reseal destination passphrase'), resealSeed);
+  assert.equal(stale.ok, false); assert.equal(stale.error.code, 'CONFLICT', 'stale source session cannot produce a copy that omits tab B work');
+  const resealed = await resealPages[0].evaluate(async seed => {
+    const opened = await window.rsVault.unlock(seed.profileId, 'reseal fixture passphrase');
+    const sourceBefore = JSON.stringify(await window.rsStore.get(seed.profileId));
+    const result = await window.rsResealer.migrateAndReseal({ sourceSessionId: opened.value.sessionId, expectedKeyId: seed.keyId,
+      expectedRevision: opened.value.revision, migrationId: 'trade-v2' }, 'reseal destination passphrase');
+    const sourceAfter = JSON.stringify(await window.rsStore.get(seed.profileId));
+    return { result, sourceKept: sourceBefore === sourceAfter, profiles: (await window.rsVault.listProfiles()).value.profileIds.length };
+  }, resealSeed);
+  assert.equal(resealed.result.ok, true); assert.equal(resealed.sourceKept, true); assert.equal(resealed.profiles, 2);
+  const copy = await resealPages[1].evaluate(async id => {
+    const opened = await window.rsVault.unlock(id, 'reseal destination passphrase');
+    return (await window.rsVault.list(opened.value.sessionId)).value.map(r => [r.id[0], r.kind, r.schemaVersion, atob(r.payload.replace(/-/g, '+').replace(/_/g, '/'))]);
+  }, resealed.result.value.newProfileId);
+  assert.deepEqual(copy, [['1', 'trade', 2, 'trade|v2'], ['2', 'preference', 1, 'pref']], 'copy includes tab B work and migrated payload');
+  for (const page of resealPages) await page.evaluate(() => { window.rsVault.dispose(); window.rsStore.close(); });
+  assert.deepEqual(unexpected, []);
+  await resealContext.close();
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));

@@ -91,3 +91,14 @@ Lean scope (`LEAN_RELEASE_SCOPE.md`, `RESTART.md`) now governs priority. The own
 - **Typed quota.** `QUOTA_EXCEEDED` is now a runtime error code. The Worker previously collapsed it into `STORAGE_UNAVAILABLE` for create, restore and inventory. The UI now shows a quota-specific message. RED test reproduced first.
 - Reruns at this commit: `npm test` 295/295, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser` and `check:specs` all exit 0.
 - Still open in lean order: source-bound G03 resealer (new-profile migration with source retained, interrupted resume, cross-tab), then G11/G15 → G16 → wallet/escrow/offer/trade UI → two-party local EVM proof.
+- **G03 source-bound resealer** (`InternalMigrationResealer.migrateAndReseal`, storage-internal `EncryptedVaultService.resealSnapshot`, store `addWithSource`):
+  - Copies a live session's authenticated snapshot through a bundled registry (looked up by ID; imported code is never accepted) into a new profile with fresh profile ID, key ID and KDF. The new profile starts at revision 0 and is locked.
+  - The source is retained byte-identical.
+  - Record IDs and kinds are preserved. Drop, duplicate and relabel are rejected.
+  - G02 bounds are re-applied, and the destination is authenticated by round-trip before the add.
+  - The source row is rechecked inside the destination add transaction, alongside the 16-profile bound: a concurrent commit returns CONFLICT, never a copy that silently omits work.
+  - A durable add is reported even if a lock arrives afterwards.
+  - Not exposed through the Worker or backup import.
+  - Tests: `reseal.test.mjs` (5), an IDB `addWithSource` unit test, and a real Chromium two-tab test (stale source conflicts; fresh source copies, including the other tab's work).
+- **Not done:** UI or Worker exposure of migration/reseal (the production registry is empty because every schema is v1); page-crash interrupted-resume evidence for reseal; Firefox/Safari.
+- Reruns at this commit: `npm test` 301/301, 0 skipped. All of `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser`, `check:specs` and `test:specs` exit 0.

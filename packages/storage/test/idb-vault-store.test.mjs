@@ -161,3 +161,18 @@ test('IDB inventory lists bounded opaque keys, flags truncation and fails closed
     await failed(pending, 'STORAGE_UNAVAILABLE');
   }
 });
+test('IDB addWithSource rechecks the exact source row, the profile bound and never aliases the source', async () => {
+  const { MAX_VAULT_PROFILES } = await import('../../schemas/index.ts');
+  const next = { ...copy(envelope), profileId: 'b'.repeat(32), keyId: 'c'.repeat(32) };
+  for (const [existing, rows, expected] of [[envelope, 1, undefined], [{ ...copy(envelope), revision: envelope.revision + 1 }, 1, 'CONFLICT'],
+    [null, 1, 'CONFLICT'], [envelope, MAX_VAULT_PROFILES, 'LIMIT_EXCEEDED']]) {
+    const fake = factory(); const store = new IndexedDbVaultStore(fake);
+    const pending = store.addWithSource(envelope, next); await flush();
+    const db = database({ existing, rows }); fake.requests[0].result = db; fake.requests[0].onsuccess();
+    if (expected) { await failed(pending, expected); assert.equal(db.added.length, 0); }
+    else { await pending; assert.deepEqual(db.added, [next]); }
+  }
+  const store = new IndexedDbVaultStore(factory());
+  await assert.rejects(store.addWithSource(envelope, { ...copy(envelope), keyId: 'c'.repeat(32) }), error => error.code === 'INVALID_INPUT');
+  await assert.rejects(store.addWithSource(envelope, { ...copy(envelope), profileId: 'b'.repeat(32) }), error => error.code === 'INVALID_INPUT');
+});

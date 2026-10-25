@@ -1,6 +1,7 @@
 /** G09 in-place record schema migration. Pure bundled transforms only; no wallet/RPC/relay authority. */
 import { decodeBase64url, encodeBase64url, MAX_PAYLOAD_BYTES, ValidationError, type PrivateRecordV1, type RecordKind } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionAuthority } from '../../schemas/index.ts';
+import type { EncryptedVaultService, ResealReceipt } from './vault-service.ts';
 
 export const MAX_MIGRATION_STEPS = 64;
 /** G09 step 4 bound for one G02 commit. Larger plans need the G03 resealer, which does not exist yet. */
@@ -146,5 +147,31 @@ export class RecordMigrationService {
       try { verified = (await this.#candidate({ ...session, revision: committed.value })).plan.changes.length === 0; } catch { /* durable, unverified */ }
       return { ok: true, value: { profileId: candidate.plan.sourceProfileId, revision: committed.value, verified } };
     } catch (error) { return failed(error); }
+  }
+}
+
+/** G03 MigrationResealRequest. `migrationId` names a bundled registry; imported code is never accepted. */
+export interface MigrationResealRequest {
+  readonly sourceSessionId: string;
+  readonly expectedKeyId: string;
+  readonly expectedRevision: number;
+  readonly migrationId: string;
+}
+/**
+ * G03 InternalMigrationResealer: migrates every record into a new fresh-key profile and retains the
+ * source. Used when an in-place commit is too large or fresh keys are required. Storage-internal only:
+ * not reachable from backup import or the Worker protocol.
+ */
+export class InternalMigrationResealer {
+  readonly #vault: Pick<EncryptedVaultService, 'resealSnapshot'>;
+  readonly #registries: ReadonlyMap<string, MigrationRegistry>;
+  constructor(vault: Pick<EncryptedVaultService, 'resealSnapshot'>, registries: ReadonlyMap<string, MigrationRegistry>) {
+    this.#vault = vault; this.#registries = new Map(registries);
+  }
+  async migrateAndReseal(request: MigrationResealRequest, destinationPassphrase: string, signal?: AbortSignal): Promise<Result<ResealReceipt>> {
+    const registry = typeof request?.migrationId === 'string' ? this.#registries.get(request.migrationId) : undefined;
+    if (!registry) return failed(new MigrationError('UNSUPPORTED_VERSION'));
+    return this.#vault.resealSnapshot(request.sourceSessionId, request.expectedKeyId, request.expectedRevision,
+      records => records.map(record => registry.migrate(record)), destinationPassphrase, signal);
   }
 }

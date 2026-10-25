@@ -13,6 +13,8 @@ export interface VaultStore {
   listProfileIds(): Promise<ProfileInventory>;
   add(envelope: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void>;
   compareAndSwap(expected: VaultEnvelopeV1, next: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void>;
+  /** Adds a new profile only if `source` is still byte-identical, in the same transaction (G03 reseal). */
+  addWithSource(source: VaultEnvelopeV1, next: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void>;
   subscribeInvalidation(listener: () => void): () => void;
   /** Terminal connection teardown. Shared injected stores remain caller-owned. */
   close?(): void;
@@ -150,15 +152,25 @@ export class IndexedDbVaultStore implements VaultStore {
   }
   async add(input: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void> {
     const envelope = parseVaultEnvelope(input);
-    await this.write(undefined, envelope, options);
+    await this.write(undefined, envelope, options, 'add');
+  }
+  async addWithSource(input: VaultEnvelopeV1, replacement: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void> {
+    const source = parseVaultEnvelope(input), next = parseVaultEnvelope(replacement);
+    // The destination is a distinct profile; it must never replace or alias the retained source.
+    if (next.profileId === source.profileId || next.keyId === source.keyId) throw new ValidationError();
+    await this.write(source, next, options, 'add');
   }
   async compareAndSwap(input: VaultEnvelopeV1, replacement: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void> {
     const expected = parseVaultEnvelope(input), next = parseVaultEnvelope(replacement);
     if (next.profileId !== expected.profileId || next.keyId !== expected.keyId || next.revision !== expected.revision + 1 ||
       JSON.stringify(next.wrappedKey) !== JSON.stringify(expected.wrappedKey)) throw new ValidationError();
-    await this.write(expected, next, options);
+    await this.write(expected, next, options, 'put');
   }
-  private async write(expected: VaultEnvelopeV1 | undefined, next: VaultEnvelopeV1, options?: StoreWriteOptions): Promise<void> {
+  /**
+   * `expected`, when given, must be the exact current row of its profile at transaction time. Then either
+   * `put` replaces that row (CAS) or `add` inserts a new row under the profile bound.
+   */
+  private async write(expected: VaultEnvelopeV1 | undefined, next: VaultEnvelopeV1, options: StoreWriteOptions | undefined, mode: 'add' | 'put'): Promise<void> {
     current(options);
     let db: IDBDatabase;
     try { db = await this.db(); } catch (error) { if (error instanceof VaultStorageError) throw error; throw storageError(error); }
@@ -176,13 +188,14 @@ export class IndexedDbVaultStore implements VaultStore {
       const put = (): void => {
         try { current(options); } catch { abort(); return; }
         try {
-          const request = expected === undefined ? tx.objectStore('vaults').add(next) : tx.objectStore('vaults').put(next);
+          const request = mode === 'add' ? tx.objectStore('vaults').add(next) : tx.objectStore('vaults').put(next);
           request.onerror = () => { failure = storageError(request.error); };
         } catch (error) { failure = storageError(error); abort(); }
       };
-      if (expected === undefined) {
-        // Count and add share one readwrite transaction. IndexedDB serializes overlapping readwrite
-        // transactions across tabs, so concurrent creates cannot both pass the bound.
+      // Count and add share one readwrite transaction. IndexedDB serializes overlapping readwrite
+      // transactions across tabs, so concurrent creates cannot both pass the bound.
+      const countThenPut = (): void => {
+        if (mode === 'put') { put(); return; }
         let counted: IDBRequest<number>;
         try { counted = tx.objectStore('vaults').count(); }
         catch (error) { failure = storageError(error); abort(); return; }
@@ -193,9 +206,8 @@ export class IndexedDbVaultStore implements VaultStore {
           }
           put();
         };
-        if (options?.signal?.aborted) abort();
-        return;
-      }
+      };
+      if (expected === undefined) { countThenPut(); if (options?.signal?.aborted) abort(); return; }
       let request: IDBRequest;
       try { request = tx.objectStore('vaults').get(expected.profileId); }
       catch (error) { failure = storageError(error); abort(); return; }
@@ -206,7 +218,7 @@ export class IndexedDbVaultStore implements VaultStore {
           if (actual === undefined || !sameEnvelope(actual, expected)) {
             failure = new VaultStorageError('CONFLICT'); tx.abort(); return;
           }
-          put();
+          countThenPut();
         } catch { failure = new VaultStorageError('CONFLICT'); try { tx.abort(); } catch { /* terminal event decides */ } }
       };
       if (options?.signal?.aborted) abort();
