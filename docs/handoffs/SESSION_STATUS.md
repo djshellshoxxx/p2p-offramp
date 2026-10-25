@@ -102,3 +102,18 @@ Lean scope (`LEAN_RELEASE_SCOPE.md`, `RESTART.md`) now governs priority. The own
   - Tests: `reseal.test.mjs` (5), an IDB `addWithSource` unit test, and a real Chromium two-tab test (stale source conflicts; fresh source copies, including the other tab's work).
 - **Not done:** UI or Worker exposure of migration/reseal (the production registry is empty because every schema is v1); page-crash interrupted-resume evidence for reseal; Firefox/Safari.
 - Reruns at this commit: `npm test` 301/301, 0 skipped. All of `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser`, `check:specs` and `test:specs` exit 0.
+
+## Report for coordinator (2026-10-25 ~08:45 UTC)
+
+- **Branch and head:** `claude/adoring-wozniak-850ue6`. Code head `1fe9efe693f90a85614e9fab5781e717d0b7fad0`, verified with `git ls-remote` before this docs commit. Read the final SHA from `git ls-remote origin refs/heads/claude/adoring-wozniak-850ue6`.
+- **Local state:** no unpushed commits and no uncommitted files at report time.
+- **Tests at `1fe9efe`:** `npm test` 301/301, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy` (5/5), `build`, `test:browser` (incl. two-tab capacity race and two-tab G03 reseal), `test:web:browser`, `check:specs` and `test:specs` all exit 0.
+- **CI:** PR #5 at `1fe9efe` passed all 8 check runs (Vault foundation: schemas-and-crypto, browser, specs; Specification inventory: inventory; each for push and pull_request).
+  - The repo has no Nightly or scheduled workflow (`list_workflow_runs event=schedule` returns 0).
+  - `Payments Ledger CI` exists only for the excluded custodial branch.
+- **v29 prep pack and private review packet:** **not in this container** (filesystem search found nothing). No packet case has been reproduced. The G03/G09 work follows the existing spec text only, not an approved clarification.
+- **Blockers / owner decisions:**
+  - Trust root (signing keys) for G11/G15.
+  - Confirmation of the order relative to the GhostPay core milestone (`RESTART.md`).
+  - Ratification of the 16-profile cap in the G02 text.
+- **Next concrete step:** page-crash interrupted-resume Chromium evidence for reseal, then G11/G15 once a trust root is decided.
