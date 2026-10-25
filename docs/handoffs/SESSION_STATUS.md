@@ -216,3 +216,11 @@ Next, in order:
   - acceptance signatures (G10 wallet) and on-chain verification;
   - any funding.
 - `npm test` 315/315; all other gates exit 0.
+
+### Ready work exhausted at `eaba1fd`; owner/maintainer decisions now gate progress
+
+1. **G11/G15 trust root:** who controls the release/distribution signing key, and how the first trusted fingerprint is bootstrapped.
+2. **G15 manifest schema:** the spec references a "common content-addressed manifest" (ES256-P1363 profile, detached locator) that is not in this repository. Supply or locate it; it should not be invented.
+3. **G16 EVM digest:** EIP-712 needs Keccak-256. Approve a reviewed dependency through the crypto-inventory gate; `@noble/hashes` is already a transitive dependency of the pinned `@noble/curves`. Independent EIP-712 vectors are also needed.
+4. **G16 Solana:** which field supplies the "selected token-program ID". It is absent from `TradeTermsV1` and G11 `AssetV1`.
+5. After these: G10 wallet signing → H2 EVM escrow (local anvil only) → offer exchange → trade UI → two-party local EVM proof.
