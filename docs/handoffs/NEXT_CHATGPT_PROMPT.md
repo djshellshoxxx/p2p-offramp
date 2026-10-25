@@ -14,7 +14,8 @@ Done on PR #5 — do not redo:
 - G03 R1 uncertain-restore reconciliation;
 - typed quota through to the UI;
 - persisted G09 readback;
-- reseal SIGKILL evidence.
+- reseal SIGKILL evidence;
+- G11 registry parse/load/lookup (`validateLive` and the G15 signed manifest are still open; G15 waits on the trust root).
 
 Next (reseal SIGKILL evidence is done):
 1. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).

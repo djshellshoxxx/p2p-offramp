@@ -169,3 +169,30 @@ Next, in order:
 - **H1, fixed.** Opening the unlock form clears an earlier creation receipt, so profile A's receipt no longer appears next to unlocked profile B. RED reproduced by reverting only this line.
 - **H2, fixed.** After a confirmed restore or reconciliation, Recovery's export list refreshes once (one bounded refresh, no polling, no writes); the new profile appears without remounting the page. RED reproduced first.
 - Both are covered in `test-web-build-browser.mjs`. No current-profile pointer and no new authority were added.
+
+### G11 registry load/lookup (no trust-root decision needed)
+
+- `packages/schemas/src/registry.ts`: a strict, bounded `parseRegistryBytes` with G11 v1 types. It:
+  - checks UTF-8 in fatal mode (BOM rejected);
+  - parses a JSON subset that rejects duplicate keys, prototype keys and fractional or negative numbers, with depth and node caps;
+  - enforces the spec limits: 1 MiB, 32 networks, 8 endpoints, 64 assets, 16 deployments;
+  - requires unique IDs and cross-references;
+  - checks asset kind against chain family, decimals 0..38, and at most one native asset per network;
+  - rejects upgradeable EVM contracts and Solana programs with an upgrade authority;
+  - enforces finality profiles: EVM finalized tag, Solana `finalized`.
+- `packages/domain/src/registry.ts`: `RegistryService.load(bytes, expectedSha256)` hashes the exact bytes (Web Crypto) **before** parsing.
+  - A digest mismatch returns INTEGRITY_FAILURE.
+  - A different digest after a successful load returns CONFLICT; updates belong to the G15 flow.
+  - `network()` / `deployment()` return frozen entries, or null before a load.
+- **Maintainer encoding choices** (G11 leaves these open):
+  - IDs are `[A-Za-z0-9._-]`, 1..64 characters, with no `..`.
+  - EVM addresses are lowercase hex; EIP-55 mixed case is rejected rather than normalized, and the zero address is rejected.
+  - EVM chain identity is a decimal chain ID; the genesis hash is `0x`-prefixed hex.
+  - Solana keys are canonical base58 decoding to 32 bytes, and `chainIdentity` must equal `genesisHash`.
+  - Endpoint URLs must be HTTPS, with no userinfo, query or fragment; plain HTTP is allowed only for loopback in a `local` network. A key embedded in a URL path cannot be detected and remains a documented residual.
+- **Deviation:** `load` is async (Web Crypto) where G11 sketches it as synchronous.
+- **Not done:**
+  - `validateLive`: needs RPC, which stays disabled.
+  - The G15 signed manifest that supplies `expectedSha256`: **blocked on the owner's trust-root decision**. No signer, credentials or trust policy was chosen.
+  - Real registry entries: none added.
+- **Tests:** `packages/domain/test/registry.test.mjs` (5 tests, ~60 rejection cases, synthetic fixtures only). `npm test` 310/310; all other gates exit 0.
