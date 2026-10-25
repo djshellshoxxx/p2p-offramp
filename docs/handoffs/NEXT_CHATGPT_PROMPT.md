@@ -20,7 +20,7 @@ npm run build && npm run test:browser && npm run test:web:browser && npm run che
 ```
 
 Next, in order:
-1. Reseal interrupted-resume (page crash) Chromium evidence.
+1. (Reseal interruption evidence is done.) Ratify the cap and the order with the owner.
 2. G11/G15 signed registry/manifest. This needs the owner's trust-root decision.
 3. G16 signed trade terms.
 4. Wallet, escrow, offer exchange and trade UI.

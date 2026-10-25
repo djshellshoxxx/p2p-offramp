@@ -358,9 +358,64 @@ try {
   }, resealed.result.value.newProfileId);
   assert.deepEqual(copy, [['1', 'trade', 2, 'trade|v2'], ['2', 'preference', 1, 'pref']], 'copy includes tab B work and migrated payload');
   for (const page of resealPages) await page.evaluate(() => { window.rsVault.dispose(); window.rsStore.close(); });
+  // Interrupted reseal: close the document mid-job at several points; a fresh document must find the source
+  // intact and every other row a complete authenticated profile (never a partial or source-overwriting row).
+  const setupReseal = async (page) => {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { MigrationRegistry, InternalMigrationResealer } = await import('/storage/src/migration-service.js');
+      const schemas = [...['identity', 'preference', 'chat', 'journal'].map(kind => ({ kind, version: 1, validate: () => true })),
+        { kind: 'trade', version: 1, validate: () => true }, { kind: 'trade', version: 2, validate: p => new TextDecoder().decode(p).endsWith('|v2') }];
+      const registry = new MigrationRegistry({ identity: 1, preference: 1, trade: 2, chat: 1, journal: 1 }, schemas,
+        [{ kind: 'trade', fromVersion: 1, toVersion: 2, migrate: p => new TextEncoder().encode(new TextDecoder().decode(p) + '|v2') }]);
+      window.rsStore = new IndexedDbVaultStore();
+      window.rsVault = new EncryptedVaultService(window.rsStore, crypto, { lifecycle: false });
+      window.rsResealer = new InternalMigrationResealer(window.rsVault, new Map([['trade-v2', registry]]));
+    });
+  };
+  const interruptions = [];
+  for (const delay of [0, 50, 300, 900, 2500]) {
+    const crashContext = await browser.newContext({ serviceWorkers: 'block' });
+    const victim = await crashContext.newPage(); await setupReseal(victim);
+    const seed = await victim.evaluate(async () => {
+      const created = await window.rsVault.create('crash fixture passphrase');
+      const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '1'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'dHJhZGU' } }]);
+      const source = await window.rsStore.get(created.value.profileId);
+      void window.rsResealer.migrateAndReseal({ sourceSessionId: created.value.sessionId, expectedKeyId: source.keyId,
+        expectedRevision: revision.value, migrationId: 'trade-v2' }, 'crash destination passphrase');
+      return { profileId: created.value.profileId, source: JSON.stringify(source) };
+    });
+    await new Promise(resolveDelay => setTimeout(resolveDelay, delay));
+    await victim.close({ runBeforeUnload: false });
+    const observer = await crashContext.newPage(); await setupReseal(observer);
+    const after = await observer.evaluate(async seed => {
+      const ids = (await window.rsVault.listProfiles()).value.profileIds;
+      const sourceSame = JSON.stringify(await window.rsStore.get(seed.profileId)) === seed.source;
+      const others = [];
+      for (const id of ids.filter(id => id !== seed.profileId)) {
+        const opened = await window.rsVault.unlock(id, 'crash destination passphrase');
+        const records = opened.ok ? (await window.rsVault.list(opened.value.sessionId)).value : null;
+        others.push(opened.ok && records.length === 1 && records[0].schemaVersion === 2 && atob(records[0].payload) === 'trade|v2');
+      }
+      const reopened = await window.rsVault.unlock(seed.profileId, 'crash fixture passphrase');
+      return { count: ids.length, sourceSame, sourceUnlocks: reopened.ok, othersComplete: others.every(Boolean) };
+    }, seed);
+    assert.equal(after.sourceSame, true, `source retained after interruption at ${delay}ms`);
+    assert.equal(after.sourceUnlocks, true); assert.ok(after.count === 1 || after.count === 2);
+    assert.equal(after.othersComplete, true, `any destination row is complete at ${delay}ms`);
+    interruptions.push(after.count === 2 ? 'copied' : 'absent');
+    await crashContext.close();
+  }
+  console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
   assert.deepEqual(unexpected, []);
   await resealContext.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, no external egress.');
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));

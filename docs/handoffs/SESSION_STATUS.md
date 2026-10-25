@@ -116,4 +116,8 @@ Lean scope (`LEAN_RELEASE_SCOPE.md`, `RESTART.md`) now governs priority. The own
   - Trust root (signing keys) for G11/G15.
   - Confirmation of the order relative to the GhostPay core milestone (`RESTART.md`).
   - Ratification of the 16-profile cap in the G02 text.
-- **Next concrete step:** page-crash interrupted-resume Chromium evidence for reseal, then G11/G15 once a trust root is decided.
+- **Next concrete step:** G11/G15, once a trust root is decided. Reseal interruption evidence is now done; see below.
+- **Reseal interruption (Chromium, real IndexedDB):** the document was closed 0/50/300/900/2500 ms into a reseal. Outcomes were absent, absent, absent, copied, copied, identical across 3 runs.
+  - The source row stayed byte-identical and unlockable every time.
+  - Any destination row was a complete, authenticated, migrated profile. No partial rows were found.
+  - Recovery after interruption means re-running the reseal. A copy that already completed is kept, never auto-deleted (G03). This is a page close; an OS or browser process kill was not tested.
