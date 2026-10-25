@@ -196,3 +196,23 @@ Next, in order:
   - The G15 signed manifest that supplies `expectedSha256`: **blocked on the owner's trust-root decision**. No signer, credentials or trust policy was chosen.
   - Real registry entries: none added.
 - **Tests:** `packages/domain/test/registry.test.mjs` (5 tests, ~60 rejection cases, synthetic fixtures only). `npm test` 310/310; all other gates exit 0.
+
+### G16 SHA-256 encodings (independent of the trust root)
+
+- `packages/domain/src/trade-terms.ts` implements:
+  - the exact G16 salted private-agreement encoding and the `capabilitiesHash` encoding (count zero for core);
+  - the Solana raw terms message (`termsHash` = SHA-256);
+  - `checkFundingWindow`;
+  - `sha256Hex` (Web Crypto).
+- Validation:
+  - unknown fields, noncanonical or float numbers, u64/u128 overflow and lone surrogates are rejected;
+  - capability IDs must be ASCII, sorted and unique; at most 8 capabilities, instructions at most 4 KiB, agreement at most 16 KiB;
+  - the native/SPL mint and token program must match the asset kind; seller and buyer must differ.
+- **Vectors:** `scripts/vectors/g16_vectors.py` is a second implementation (Python, written from the spec text) that generates `packages/domain/test/fixtures/g16-vectors.json`. The TS test must match it byte for byte; a Python unittest keeps the fixture in sync. **Both implementations were written by this session**, so the vectors are independent in implementation but not in authorship. The spec's "independent golden fixtures" enablement gate is not met.
+- **Maintainer choices:** 32-byte IDs and hashes inside the private agreement are lowercase-hex UTF-8 strings; `fiatCurrency` is `^[A-Z]{3}$`; `policyHash` is lowercase hex.
+- **Spec gap (needs owner/maintainer clarification):** the Solana message includes a "selected token-program ID", but `TradeTermsV1` and G11 `AssetV1` have no such field. The encoder takes it as an explicit input (all zero for native).
+- **Not done:**
+  - EVM EIP-712 digest (needs a reviewed Keccak-256 dependency plus vectors);
+  - acceptance signatures (G10 wallet) and on-chain verification;
+  - any funding.
+- `npm test` 315/315; all other gates exit 0.

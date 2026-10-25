@@ -15,7 +15,8 @@ Done on PR #5 — do not redo:
 - typed quota through to the UI;
 - persisted G09 readback;
 - reseal SIGKILL evidence;
-- G11 registry parse/load/lookup (`validateLive` and the G15 signed manifest are still open; G15 waits on the trust root).
+- G11 registry parse/load/lookup (`validateLive` and the G15 signed manifest are still open; G15 waits on the trust root);
+- G16 SHA-256 encodings (private agreement, capabilities, Solana terms, funding window; EIP-712 still open).
 
 Next (reseal SIGKILL evidence is done):
 1. Real-browser quota failure, if a reliable method exists (the DevTools quota override did not work in Chromium 153).
