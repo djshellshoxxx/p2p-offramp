@@ -255,6 +255,8 @@ try {
       const restoredText = await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).innerText();
       const restoredId = /profile ([0-9a-f]{32})/.exec(restoredText)?.[1];
       assert.ok(restoredId && restoredId !== fixture.envelope.profileId, 'restore yields a distinct fresh profile');
+      // H2: the sibling export list reflects the confirmed new profile without remounting the page.
+      await page.getByRole('button', { name: `Use profile ${restoredId}`, exact: true }).waitFor({ timeout: 5000 });
       assert.equal(await page.getByText('Vault locked', { exact: true }).count(), 1, 'restore does not unlock');
       await assertSeedPreserved(page);
       // G03 R1: a cancelled restore may already have committed. Retry stays blocked until an explicit
@@ -301,6 +303,8 @@ try {
       await page.getByLabel('Passphrase', { exact: true }).fill(restorePass);
       await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
       await page.getByText('Vault unlocked', { exact: true }).waitFor();
+      // H1: unlocking a different profile must not show the earlier creation receipt next to it.
+      assert.equal(await page.getByText('was created and unlocked').count(), 0, 'no stale creation receipt beside another unlocked profile');
       assert.equal(await page.evaluate(secrets => secrets.some(secret => document.documentElement.outerHTML.includes(secret)), [restorePass, createPass, fixture.passphrase]), false);
       await assertPrivateSurfaces(page, href + '#/home');
       for (const width of [320, 768]) {

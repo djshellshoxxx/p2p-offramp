@@ -163,3 +163,9 @@ Next, in order:
   4. G11/G15, **blocked on the owner's trust-root decision**. Do not invent signers, credentials or trust policy.
   5. G16 → wallet/escrow/offer/trade UI → two-party local EVM proof.
 - **Unchanged rules:** cap 16 is the engineering default; `ReleaseEnabled=0`, `connectOrigins: []`; no real funds; no merging of PR #4/#5 or the custodial branch; no force-push or deploy.
+
+### v29 `profile-ui-lifecycle` packet (low priority, display only)
+
+- **H1, fixed.** Opening the unlock form clears an earlier creation receipt, so profile A's receipt no longer appears next to unlocked profile B. RED reproduced by reverting only this line.
+- **H2, fixed.** After a confirmed restore or reconciliation, Recovery's export list refreshes once (one bounded refresh, no polling, no writes); the new profile appears without remounting the page. RED reproduced first.
+- Both are covered in `test-web-build-browser.mjs`. No current-profile pointer and no new authority were added.

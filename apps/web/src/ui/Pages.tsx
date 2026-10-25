@@ -29,7 +29,7 @@ export function Home({ services, unlocked }: { readonly services: AppServices | 
         services ? open === 'unlock' ? <UnlockForm services={services} onCancel={() => setOpen('none')} />
           : open === 'create' ? <CreateForm services={services} onDone={id => { setCreatedId(id ?? ''); setOpen('none'); }} />
           : <div className="actions">
-            <button ref={unlockButton} className="primary" type="button" onClick={() => setOpen('unlock')}>{m.unlock}</button>
+            <button ref={unlockButton} className="primary" type="button" onClick={() => { setCreatedId(''); setOpen('unlock'); }}>{m.unlock}</button>
             <button ref={createButton} type="button" onClick={() => { setCreatedId(''); setOpen('create'); }}>{m.create}</button>
           </div>
         : null}
@@ -42,17 +42,18 @@ export function Home({ services, unlocked }: { readonly services: AppServices | 
 }
 
 export function Recovery({ services }: { readonly services: AppServices | null }) {
+  const [inventoryVersion, setInventoryVersion] = useState(0);
   return <>
     <p className="lead">{m.recoveryIntro}</p>
     <section className="plain-section" aria-labelledby="origin-title"><h2 id="origin-title">{m.originTitle}</h2><p>{m.originHelp}</p></section>
     <section className="panel" aria-labelledby="backup-title">
       <h2 id="backup-title">{m.backupTitle}</h2><p>{m.backupHelp}</p>
       <div className="warning"><strong>{m.unchecked}</strong><p>{m.uncheckedHelp}</p></div>
-      {services ? <ExportForm services={services} /> : <p>{m.unavailable}</p>}
+      {services ? <ExportForm services={services} refresh={inventoryVersion} /> : <p>{m.unavailable}</p>}
     </section>
     <section className="panel" aria-labelledby="restore-title">
       <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
-      {services ? <RestoreForm services={services} /> : <p>{m.unavailable}</p>}
+      {services ? <RestoreForm services={services} onInventoryChanged={() => setInventoryVersion(v => v + 1)} /> : <p>{m.unavailable}</p>}
     </section>
   </>;
 }

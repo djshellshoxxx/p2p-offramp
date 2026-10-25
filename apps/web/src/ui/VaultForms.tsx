@@ -9,7 +9,7 @@ function NoticeText({ notice }: { readonly notice: Notice }) {
 }
 
 /** Loads the opaque local inventory once; the text field stays the authoritative, editable input. */
-function useInventory(services: AppServices): { readonly inventory: RuntimeInventory | null; readonly failed: boolean } {
+function useInventory(services: AppServices, refresh = 0): { readonly inventory: RuntimeInventory | null; readonly failed: boolean } {
   const [state, setState] = useState<{ inventory: RuntimeInventory | null; failed: boolean }>({ inventory: null, failed: false });
   useEffect(() => {
     const controller = new AbortController();
@@ -17,7 +17,7 @@ function useInventory(services: AppServices): { readonly inventory: RuntimeInven
       if (!controller.signal.aborted) setState(result.ok ? { inventory: result.value, failed: false } : { inventory: null, failed: true });
     }, () => { if (!controller.signal.aborted) setState({ inventory: null, failed: true }); });
     return () => { controller.abort(); };
-  }, [services]);
+  }, [services, refresh]);
   return state;
 }
 
@@ -106,9 +106,10 @@ function saveCiphertext(bytes: Uint8Array) {
   } finally { setTimeout(() => URL.revokeObjectURL(url), 0); }
 }
 
-export function ExportForm({ services }: { readonly services: AppServices }) {
+export function ExportForm({ services, refresh = 0 }: { readonly services: AppServices; readonly refresh?: number }) {
   const request = useRef<AbortController | null>(null);
-  const { inventory, failed } = useInventory(services);
+  // One bounded requery per confirmed same-page mutation; no polling.
+  const { inventory, failed } = useInventory(services, refresh);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
   useEffect(() => () => { request.current?.abort(); }, []);
@@ -223,7 +224,7 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
 /** Outcomes after which the destination add may already have committed (G03: reconcile before retry). */
 const UNCERTAIN_RESTORE = new Set(['CANCELLED', 'TIMEOUT', 'STORAGE_UNAVAILABLE', 'LOCKED', 'PROTOCOL_ERROR']);
 
-export function RestoreForm({ services }: { readonly services: AppServices }) {
+export function RestoreForm({ services, onInventoryChanged }: { readonly services: AppServices; readonly onInventoryChanged?: () => void }) {
   const form = useRef<HTMLFormElement>(null);
   const request = useRef<AbortController | null>(null);
   const [busy, setBusy] = useState(false);
@@ -241,7 +242,7 @@ export function RestoreForm({ services }: { readonly services: AppServices }) {
     try {
       const result = await services.listProfiles();
       if (!mounted.current) return;
-      if (result.ok) { setReconciled(result.value.profileIds); setUncertain(false); setNotice(null); }
+      if (result.ok) { setReconciled(result.value.profileIds); setUncertain(false); setNotice(null); onInventoryChanged?.(); }
       else setNotice({ error: true, text: errorMessage(result.error.code) });
     } catch { if (mounted.current) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') }); }
     finally { if (mounted.current) setChecking(false); }
@@ -269,7 +270,7 @@ export function RestoreForm({ services }: { readonly services: AppServices }) {
       const result = await services.restore(bytes, source, secret, controller.signal);
       clear(); bytes.fill(0);
       if (!controller.signal.aborted) {
-        if (result.ok) { element.reset(); setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); }
+        if (result.ok) { element.reset(); setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); onInventoryChanged?.(); }
         else if (UNCERTAIN_RESTORE.has(result.error.code)) { setUncertain(true); setNotice(null); }
         else setNotice({ error: true, text: errorMessage(result.error.code) });
       }
