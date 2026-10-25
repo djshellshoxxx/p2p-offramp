@@ -89,8 +89,8 @@
   },
   {
     "id": "noble-hashes-2.4.0-keccak",
-    "capability": "trade-terms-evm-digest-test-only",
-    "primitive": "Keccak-256 for G16 EIP-712 trade-terms digest (digest only, no signing)",
+    "capability": "trade-terms-evm-test-only",
+    "primitive": "Keccak-256 for G16 EIP-712 trade-terms digest and EOA address derivation",
     "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
     "version": "2.4.0",
     "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
@@ -104,7 +104,29 @@
     "vectors": [
       {
         "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
-        "sha256": "a8c925794f72084898f095bbfae9e49a8898feab87ba5aec9ad5879c45e9aecf",
+        "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
+      }
+    ]
+  },
+  {
+    "id": "noble-curves-2.4.0-secp256k1-recover",
+    "capability": "trade-terms-evm-test-only",
+    "primitive": "secp256k1 ECDSA public-key recovery for offline G16 EOA acceptance checks (no signing)",
+    "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+        "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
         "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
       }
     ]

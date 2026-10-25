@@ -1,9 +1,12 @@
 /**
- * G16 EVM public-terms EIP-712 digest. TEST-ONLY capability: Keccak-256 comes from the pinned, inventoried
- * @noble/hashes 2.4.0 whose review is still pending (security/crypto-inventory.json). It lives in the non-core
+ * G16 EVM public-terms EIP-712 digest and offline EOA acceptance verification. TEST-ONLY capability:
+ * Keccak-256 and secp256k1 recovery come from the pinned, inventoried @noble/hashes and @noble/curves 2.4.0,
+ * whose reviews are still pending (security/crypto-inventory.json). Contract-wallet (EIP-1271) acceptance
+ * needs a chain call and is not handled here. It lives in the non-core
  * wallet package (core domain/schemas stay dependency-free), is not exported from any entry point, and computes a digest only: it
- * never signs, verifies signatures, contacts a wallet/RPC or enables funding.
+ * never signs, contacts a wallet/RPC or enables funding.
  */
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { keccak_256 } from '@noble/hashes/sha3.js';
 
 export const TRADE_TERMS_TYPE = 'TradeTerms(uint8 v,bytes32 orderId,uint64 revision,string networkId,string deploymentId,address seller,' +
@@ -89,4 +92,38 @@ export function tradeTermsStructHash(input: EvmTermsInput): Uint8Array {
 /** termsHash: the exact EIP-712 digest both acceptance signatures must cover. */
 export function evmTermsHash(domain: EvmDomainInput, terms: EvmTermsInput): string {
   return Array.from(eip712Digest(domainSeparator(domain), tradeTermsStructHash(terms)), byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+const N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
+/** Address of an uncompressed secp256k1 public key: last 20 bytes of keccak256(x || y). */
+function addressOf(publicKey: Uint8Array): string {
+  const uncompressed = secp256k1.Point.fromBytes(publicKey).toBytes(false);
+  return `0x${Array.from(keccak256(uncompressed.subarray(1)).subarray(12), byte => byte.toString(16).padStart(2, '0')).join('')}`;
+}
+/**
+ * Recovers the EOA that produced an Ethereum r||s||v signature over a 32-byte digest and compares it with
+ * `expected`. Strict: exactly 65 bytes, v in {27, 28}, 0 < r < n, 0 < s <= n/2 (EIP-2 low-s, so a malleated
+ * twin is refused). Malformed input throws INVALID_INPUT; a well-formed signature by another key returns false.
+ */
+export function verifyEoaSignature(digestHex: string, signature: Uint8Array, expected: string): boolean {
+  const digest = bytes32Word(digestHex); addressWord(expected);
+  if (!(signature instanceof Uint8Array) || signature.byteLength !== 65) return fail();
+  const big = (part: Uint8Array): bigint => part.reduce((value, byte) => (value << 8n) | BigInt(byte), 0n);
+  const r = big(signature.subarray(0, 32)), s = big(signature.subarray(32, 64)), v = signature[64];
+  if (r === 0n || r >= N || s === 0n || s > N / 2n || (v !== 27 && v !== 28)) return fail();
+  let recovered: string;
+  try {
+    // @noble 'recovered' layout is recovery id first, then r || s.
+    const compact = new Uint8Array(65); compact[0] = v - 27; compact.set(signature.subarray(0, 64), 1);
+    recovered = addressOf(secp256k1.recoverPublicKey(compact, digest, { prehash: false }));
+  } catch { return false; }
+  return recovered === expected;
+}
+/**
+ * G16 acceptance check: the role selects the stored seller or buyer account; the signed digest never encodes
+ * the role. Both acceptances must cover the identical termsHash.
+ */
+export function verifyEoaAcceptance(domain: EvmDomainInput, terms: EvmTermsInput, role: 'seller' | 'buyer', signature: Uint8Array): boolean {
+  if (role !== 'seller' && role !== 'buyer') return fail();
+  return verifyEoaSignature(evmTermsHash(domain, terms), signature, role === 'seller' ? terms.seller : terms.buyer);
 }

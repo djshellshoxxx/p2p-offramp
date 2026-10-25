@@ -239,3 +239,14 @@ Next, in order:
   - The repository inventory test now enables this capability and expects 5× MISSING_REVIEW. A corrupted fixture hash fails it; checked.
 - **Not done:** signing or verifying acceptances (G10, EOA/EIP-1271), the on-chain contract, and independent TradeTerms vectors.
 - `npm test` 319/319; all gates pass; `npm audit --omit=dev` reports 0.
+
+### G16 offline EOA acceptance verification (test-only)
+
+- `verifyEoaSignature` / `verifyEoaAcceptance` in `packages/wallet/src/evm-terms.ts`:
+  - recover the signer from an Ethereum r||s||v signature over `termsHash` with secp256k1, and compare it with the **stored** seller or buyer account for the role (the role is never in the digest);
+  - strict: exactly 65 bytes, v ∈ {27, 28}, r/s in range, low-s (EIP-2), so the malleated high-s twin is refused; lowercase addresses only;
+  - another key gives false; malformed input gives INVALID_INPUT.
+- **Vectors:** the official EIP-712 example signature (keccak('cow') signer `0xcd2a…d826`, v=28) recovers exactly. Acceptance tests use deterministic test-only keys and check that a seller signature is not buyer acceptance, that edited terms invalidate it, and that cross-chain replay fails.
+- **Inventory:** the capability is renamed `trade-terms-evm-test-only` and now has two entries, `noble-hashes-2.4.0-keccak` and the new `noble-curves-2.4.0-secp256k1-recover`. Both reviews are pending; the repository inventory test expects 6× MISSING_REVIEW.
+- **Not done:** EIP-1271 contract-wallet acceptance (needs a chain call), wallet signing UX (G10), and the escrow contract.
+- `npm test` 321/321; all gates pass; nothing is in the app bundle.

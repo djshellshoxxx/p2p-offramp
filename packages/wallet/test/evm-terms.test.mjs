@@ -50,3 +50,35 @@ test('G16 EVM terms reject malformed, ambiguous or out-of-range input', () => {
   for (const bad of [{ chainId: '0' }, { chainId: '0x7a69' }, { verifyingContract: `0x${'0'.repeat(40)}` }])
     assert.throws(() => evmTermsHash({ ...domain, ...bad }, terms), error => error.code === 'INVALID_INPUT');
 });
+import { secp256k1 } from '@noble/curves/secp256k1.js';
+import { verifyEoaSignature, verifyEoaAcceptance, evmTermsHash as termsHashOf } from '../src/evm-terms.ts';
+const sigBytes = (r, s, v) => Uint8Array.from([...Buffer.from(r, 'hex'), ...Buffer.from(s, 'hex'), v]);
+test('EOA recovery reproduces the official EIP-712 example signer and is strict about malleability and format', () => {
+  const { signature: sig, signingHash } = { ...vectors.etherMail };
+  const good = sigBytes(sig.r, sig.s, sig.v);
+  assert.equal(verifyEoaSignature(signingHash, good, sig.signer), true);
+  assert.equal(verifyEoaSignature(signingHash, good, `0x${'44'.repeat(20)}`), false, 'other account');
+  assert.equal(verifyEoaSignature('0'.repeat(63) + '1', good, sig.signer), false, 'other digest');
+  const n = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
+  const highS = (n - BigInt(`0x${sig.s}`)).toString(16).padStart(64, '0');
+  for (const bad of [sigBytes(sig.r, highS, 27), sigBytes(sig.r, sig.s, 29), sigBytes(sig.r, sig.s, 1), good.subarray(0, 64), sigBytes('0'.repeat(64), sig.s, 28),
+    sigBytes(sig.r, '0'.repeat(64), 28), sigBytes(n.toString(16), sig.s, 28)])
+    assert.throws(() => verifyEoaSignature(signingHash, bad, sig.signer), error => error.code === 'INVALID_INPUT');
+  assert.throws(() => verifyEoaSignature(signingHash, good, sig.signer.toUpperCase().replace('0X', '0x')), error => error.code === 'INVALID_INPUT');
+});
+test('G16 acceptance is checked against the stored role account; both parties sign the identical digest', () => {
+  // Deterministic test-only keys (like the EIP example's keccak('cow')); never credentials, never persisted.
+  const keyOf = label => keccak256(enc(`p2p-offramp-test-only-${label}`));
+  const addressOf = key => `0x${hex(keccak256(secp256k1.getPublicKey(key, false).subarray(1)).subarray(12))}`;
+  const sellerKey = keyOf('seller'), buyerKey = keyOf('buyer');
+  const local = { ...terms, seller: addressOf(sellerKey), buyer: addressOf(buyerKey) };
+  const sign = (key, digestHex) => { const raw = secp256k1.sign(Buffer.from(digestHex, 'hex'), key, { prehash: false, format: 'recovered', lowS: true });
+    return Uint8Array.from([...raw.subarray(1), raw[0] + 27]); };
+  const digest = termsHashOf(domain, local);
+  const sellerSig = sign(sellerKey, digest), buyerSig = sign(buyerKey, digest);
+  assert.equal(verifyEoaAcceptance(domain, local, 'seller', sellerSig), true); assert.equal(verifyEoaAcceptance(domain, local, 'buyer', buyerSig), true);
+  assert.equal(verifyEoaAcceptance(domain, local, 'buyer', sellerSig), false, 'seller signature is not buyer acceptance');
+  assert.equal(verifyEoaAcceptance(domain, { ...local, amountBaseUnits: '2' }, 'seller', sellerSig), false, 'edited terms need new signatures');
+  assert.equal(verifyEoaAcceptance({ ...domain, chainId: '1' }, local, 'seller', sellerSig), false, 'cross-chain replay');
+  assert.throws(() => verifyEoaAcceptance(domain, local, 'arbiter', sellerSig), error => error.code === 'INVALID_INPUT');
+});
