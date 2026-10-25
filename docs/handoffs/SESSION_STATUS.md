@@ -134,14 +134,14 @@ The archive's P2P packets reviewed PR #5 up to `809b669`. Mapping to the current
 | G03 R2 quota | Resolved at the Worker in `809b669`. A runtime→facade→emitted-UI quota test is still missing. | `worker-endpoint.test.mjs` |
 | G03 R1 uncertain restore → reconcile before retry | **Open.** RestoreForm still re-enables retry on Cancel with no inventory reconciliation. | none yet |
 | G03 source-bound resealer / resume | Covered by `1fe9efe` + `dea276f`. Page-close interruption outcomes are timing-dependent, but the invariants hold: source identical, no partial copy. A process kill was not tested. | `reseal.test.mjs`, browser reseal blocks |
-| Saturated-origin export → fresh-origin fresh-key locked restore, source retained | **Open as composed evidence.** Pieces exist separately: export, fresh-origin restore, restore refused at the bound. | none composed |
+| Saturated-origin export → fresh-origin fresh-key locked restore, source retained | **Covered (new evidence, no fix needed).** Starting with 16 profiles, export works; restore at a different origin with fresh storage gives revision 0, a distinct ID, the old passphrase refused, the record intact, and the restored profile locked until opened with the new passphrase. The source row is byte-identical and the full origin still holds 16. | `test-vault-browser.mjs` saturated-origin block |
 
 16-profile cap: this is the engineering default, not a blocker. G11/G15 trust root: an unresolved owner decision; no signer, credentials or trust policy has been chosen.
 
 Reruns at this commit: `npm test` 302/302, 0 skipped. `typecheck`, `check:boundaries`, `test:build-policy`, `build`, `test:browser`, `test:web:browser`, `check:specs` and `test:specs` all exit 0.
 
 Next, in order:
-1. Saturated-origin export → fresh-origin restore (Chromium).
+1. (done) Saturated-origin recovery.
 2. G03 R1 restore reconciliation after an uncertain outcome (RED first).
 3. Quota through to the emitted UI.
 4. Fresh-unlock persisted readback for migration.

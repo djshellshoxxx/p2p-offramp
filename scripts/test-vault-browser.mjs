@@ -301,6 +301,42 @@ try {
     catch (error) { return error.code; }
   });
   assert.equal(restoreAtCapacity, 'LIMIT_EXCEEDED', 'restore at the bound fails without a partial row');
+  // Saturated origin stays recoverable: export at the bound, restore on a fresh origin/storage as a
+  // fresh-key locked profile, and the saturated source row is retained unchanged.
+  const saturated = await capacityPages[0].evaluate(async ({ profileId }) => {
+    const exported = await window.capBackup.exportWithStatus(profileId);
+    return { bytes: [...exported.bytes], source: JSON.stringify(await window.capStore.get(profileId)),
+      count: (await window.capVault.listProfiles()).value.profileIds.length };
+  }, { profileId: capacity.profileId });
+  assert.equal(saturated.count, capacity.max);
+  const freshContext = await browser.newContext({ serviceWorkers: 'block' });
+  const freshPage = await freshContext.newPage();
+  await freshPage.route('**/*', (route) => {
+    if (new URL(route.request().url()).origin === recoveryOrigin) return route.continue();
+    unexpected.push(route.request().url()); return route.abort();
+  });
+  await freshPage.goto(recoveryOrigin);
+  const recovered = await freshPage.evaluate(async ({ bytes, sourceProfileId }) => {
+    const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false }), backup = new EncryptedBackupService(store);
+    const before = (await vault.listProfiles()).value.profileIds.length;
+    const receipt = await backup.restore(new Uint8Array(bytes), 'capacity fixture passphrase', 'fresh origin passphrase');
+    const row = await store.get(receipt.newProfileId);
+    const wrongPass = await vault.unlock(receipt.newProfileId, 'capacity fixture passphrase');
+    const opened = await vault.unlock(receipt.newProfileId, 'fresh origin passphrase');
+    const records = opened.ok ? (await vault.list(opened.value.sessionId)).value : [];
+    const out = { before, after: (await vault.listProfiles()).value.profileIds.length, revision: row.revision, distinct: receipt.newProfileId !== sourceProfileId,
+      wrongPass: wrongPass.ok ? 'unexpected' : wrongPass.error.code, records: records.map(r => r.id[0]), origin: location.origin };
+    backup.dispose(); vault.dispose(); store.close(); return out;
+  }, { bytes: saturated.bytes, sourceProfileId: capacity.profileId });
+  assert.deepEqual({ ...recovered, origin: undefined }, { before: 0, after: 1, revision: 0, distinct: true, wrongPass: 'AUTHENTICATION_FAILED', records: ['c'], origin: undefined });
+  assert.equal(recovered.origin, recoveryOrigin);
+  const sourceAfter = await capacityPages[0].evaluate(async ({ profileId }) => ({
+    source: JSON.stringify(await window.capStore.get(profileId)), count: (await window.capVault.listProfiles()).value.profileIds.length }), { profileId: capacity.profileId });
+  assert.deepEqual(sourceAfter, { source: saturated.source, count: capacity.max }, 'saturated source retained, origin unchanged');
+  await freshContext.close();
   assert.equal(await capacityPages[0].evaluate(async () => (await window.capVault.listProfiles()).value.profileIds.length), capacity.max);
   for (const page of capacityPages) await page.evaluate(() => { window.capBackup.dispose(); window.capVault.dispose(); window.capStore.close(); });
   assert.deepEqual(unexpected, []);
@@ -439,7 +475,7 @@ try {
   console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
   assert.deepEqual(unexpected, []);
   await resealContext.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, two-tab G09 stale empty-plan conflict without write, no external egress.');
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, saturated-origin export to fresh-origin fresh-key locked restore with source retained, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, two-tab G09 stale empty-plan conflict without write, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));
