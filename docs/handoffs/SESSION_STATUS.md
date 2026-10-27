@@ -269,3 +269,15 @@ Next, in order:
 - **Not done:** `submit` (needs G12 plus an approved escrow deployment), EIP-1271 contract wallets, EIP-6963 → adapter wiring, UI, and Solana Wallet Standard.
 - **H2 EVM escrow contract: blocked.** Downloading and running the Foundry toolchain was denied by this session's permission policy ("Code from External"). No workaround was attempted. It needs owner permission, or Foundry/solc preinstalled in the environment.
 - `npm test` 326/326; all gates pass; nothing is in the app bundle.
+
+## Integration lead 2026-10-27 UTC (branch `claude/p2p-offramp-integration-aan57u`, stacked on PR #5 `81c2dc8`)
+
+- Source check: the published refs contain no result-schema/parser, pre-clone, physical-drain or Worker-bridge result work. That work belongs to the existing coordinator and is unpublished here. Its files (`packages/schemas/src/runtime.ts`, `apps/web/src/runtime/**`, `apps/web/src/workers/**`, `ui/{App,Pages,routes,messages}`) were not touched.
+- Added two independent packages, each built in its own worktree and reviewed and integrated here:
+  - `apps/web/src/ui/trade/*`: pure exact formatters (base units, fiat minor units, deadlines, full unshortened addresses) and a read-only `TradeTermsReview` with a "Preview only. Trading is disabled" banner. It is **not mounted**: nothing imports it, and the build output contains no trace of it. There are no actions, wallet or network calls.
+  - `packages/domain/test/fixtures/local-evm-scenario/*` plus domain and wallet tests: a synthetic local registry (31337, loopback) with native and ERC-20 term sets, and deterministic test-only keys. These are frozen self-generated values, so this is **not** an independent golden vector and not a trust root.
+- Gates on the combined tree:
+  - `npm test` 339/339, 0 skipped.
+  - typecheck, check:boundaries, test:build-policy, build, test:browser, test:web:browser, check:specs and test:specs all exit 0.
+  - `npm audit --omit=dev` reports 0. This was Node 22.
+- Unchanged: `ReleaseEnabled=0`, `connectOrigins: []`, no funds, no deploy. The G11/G15 trust root, Foundry permission and G16 Solana token-program field still await owner decisions.
