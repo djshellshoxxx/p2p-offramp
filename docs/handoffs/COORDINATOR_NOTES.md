@@ -2,6 +2,12 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — wave 3 running
+
+- Opus worker: local branch `wave3/g12-reconcile` — `packages/domain/src/tx-lifecycle.ts` (+ maybe `packages/wallet/src/evm-submit.ts`),
+  `scripts/test-evm-reconcile-local.mjs`, G12 spec. Haiku worker: `wave3/local-withdraw` — reverting-buyer + withdraw
+  scenario in `scripts/test-evm-local-trade.mjs`. If interrupted: inspect those branches in `.claude/worktrees/`, merge if green.
+
 ## 2026-10-27 — local EVM trade proof merged
 
 - Merged `wave2/evm-local-trade` (`56ff6f5`, `55255ca`): `packages/wallet/src/evm-escrow.ts` (test-only calldata/event
