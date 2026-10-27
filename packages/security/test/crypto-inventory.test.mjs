@@ -60,9 +60,14 @@ test('native inventory requires matching bounded browser-profile observations ra
 });
 test('current repository inventory remains test-enabled pending with exact direct and transitive pins',async()=>{
  const inventory=JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json',import.meta.url))),lock=JSON.parse(readFileSync(new URL('../../../package-lock.json',import.meta.url)));
- const enabled=[{capability:'local-encrypted-vault',state:'test-enabled',implementations:[{inventoryId:'native-pbkdf2'},{inventoryId:'native-aes-gcm'}]},{capability:'local-messaging-identity-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0',packageName:'@noble/hashes'}]},{capability:'trade-terms-evm-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0-secp256k1-recover',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0-keccak',packageName:'@noble/hashes'}]}];
+ const enabled=[{capability:'local-encrypted-vault',state:'test-enabled',implementations:[{inventoryId:'native-pbkdf2'},{inventoryId:'native-aes-gcm'}]},{capability:'local-messaging-identity-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0',packageName:'@noble/hashes'}]},{capability:'trade-terms-evm-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0-secp256k1-recover',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0-keccak',packageName:'@noble/hashes'}]},{capability:'nostr-messaging-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0-nostr',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0-nostr',packageName:'@noble/hashes'}]},{capability:'nostr-chacha20-project-owned-candidate',state:'candidate',implementations:[{inventoryId:'project-chacha20-rfc8439'}]}];
  const paths=new Set(['security/browser-support.json',...inventory.flatMap(item=>item.vectors.map(vector=>vector.path))]),files=[...paths].map(path=>({path,bytes:new Uint8Array(readFileSync(new URL('../../../'+path,import.meta.url)))}));
- const report=await run({inventory,lock,enabled,files});assert.deepEqual(codes(report),Array(6).fill('MISSING_REVIEW'));assert.equal(report.releaseEligible,false);
+ const report=await run({inventory,lock,enabled,files});
+ // 8 test-enabled pending reviews; the project-owned ChaCha20 (G20) stays a candidate: no review and no vendored-runtime approval path.
+ assert.deepEqual(report.findings.filter(f=>f.disposition!=='candidate').map(f=>`${f.code}:${f.disposition}`),Array(8).fill('MISSING_REVIEW:pending'));
+ const chacha=`inventory/${inventory.findIndex(item=>item.id==='project-chacha20-rfc8439')}`;
+ assert.deepEqual(report.findings.filter(f=>f.disposition==='candidate').map(f=>`${f.code}:${f.path}`),[`MISSING_REVIEW:${chacha}`,`UNSUPPORTED_RUNTIME:${chacha}`]);
+ assert.equal(report.releaseEligible,false);
 });
 test('input objects and fixture bytes are snapshotted before asynchronous hashes',async()=>{
  const f=fixture(),pending=run(f);f.files[0].bytes.fill(0);f.inventory[0].vectors[0].sha256='f'.repeat(64);f.inventory[0].review={status:'accepted',reviewer:'Late Reviewer',evidencePath:'reviews/curve.md'};f.enabled[0].state='release-enabled';

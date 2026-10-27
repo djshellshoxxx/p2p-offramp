@@ -171,6 +171,17 @@ test('key and input validation: wrong lengths, lone surrogates, x >= p and non-l
   assert.throws(() => nip44.decrypt('Ag'.padEnd(132, 'A'), new Uint8Array(31)), code('INVALID_INPUT'));
 });
 
+test('crypto inventory pins the project-owned ChaCha20 source and the NIP-44 fixture hash (review pending)', () => {
+  const inventory = JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json', import.meta.url), 'utf8'));
+  const entry = id => inventory.find(item => item.id === id);
+  const chacha = entry('project-chacha20-rfc8439');
+  assert.equal(chacha.integrity, `sha256:${sha(readFileSync(new URL('../src/chacha20.ts', import.meta.url)))}`, 'chacha20.ts changed: update the inventory pin and re-request review');
+  for (const id of ['project-chacha20-rfc8439', 'noble-curves-2.4.0-nostr', 'noble-hashes-2.4.0-nostr']) {
+    assert.equal(entry(id).review.status, 'pending');
+    assert.ok(entry(id).vectors.some(vector => vector.path === 'packages/nostr-crypto/test/fixtures/nip44.vectors.json' && vector.sha256 === sha(fixture)));
+  }
+});
+
 test('MAC comparison is a full-length constant-time loop', () => {
   const a = new Uint8Array(32), b = new Uint8Array(32);
   assert.equal(equalBytes(a, b), true); b[31] = 1; assert.equal(equalBytes(a, b), false); b[31] = 0; b[0] = 0x80; assert.equal(equalBytes(a, b), false);
