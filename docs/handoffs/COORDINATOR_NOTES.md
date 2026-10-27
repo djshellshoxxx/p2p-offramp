@@ -2,6 +2,12 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — relay pool merged
+
+- Merged `wave4/g19-g21-relay` (`b13e772`,`c5c4fe0`,`4f6135c`): `packages/relay`, ads = kind 30078 d=`p2p-offramp:v1:<orderId>`.
+  npm test 443/443. Crypto is an injected interface (test double) — swap to nostr-crypto when that worker merges.
+  Gaps: broker doesn't expose endpoint URL; strict mode needs a verified-private evidence issuer.
+
 ## 2026-10-27 — wave 4 running (Nostr)
 
 - Opus: `wave4/g20-nostr-crypto` → new `packages/nostr-crypto` (NIP-01/44 v2 w/ official vectors/59/17, no NIP-04).
