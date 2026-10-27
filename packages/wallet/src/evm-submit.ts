@@ -62,7 +62,10 @@ export function createEip1193ChainReader(options: Eip1193ChainReaderOptions) {
   const escrowStateAt = async (binding: TradeBinding, blockTag: string): Promise<EscrowState> => {
     if (binding.chain !== 'evm') throw new ReaderFailure('INVALID_INPUT');
     const getTrade = buildGetTrade(escrow, binding.tradeId);
-    return decodeTrade(data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, blockTag]))).state;
+    const returned = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, blockTag]));
+    // Before the deployment block the escrow has no code, so no trade can exist there; any other empty return is corrupt.
+    if (returned === '0x') return data(await call('eth_getCode', [escrow, blockTag])) === '0x' ? 'absent' : corrupt();
+    return decodeTrade(returned).state;
   };
   return Object.freeze({
     chainId: (signal: AbortSignal) => read(signal, async () => quantity(await call('eth_chainId', []))),

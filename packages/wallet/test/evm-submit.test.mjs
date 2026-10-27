@@ -57,6 +57,9 @@ test('hostile or failing provider output becomes fixed typed errors with no copi
     const result = await run(createEip1193ChainReader({ request: provider(override).request, escrow: ESCROW }));
     assert.equal(result.ok, false); assert.equal(result.error.code, code); assert.doesNotMatch(JSON.stringify(result), /SECRET|https/);
   }
+  const predeploy = provider({ eth_call: '0x', eth_getCode: '0x' });
+  assert.equal((await createEip1193ChainReader({ request: predeploy.request, escrow: ESCROW }).escrowState(binding, '1', signal)).value, 'absent', 'no code yet: no trade');
+  assert.equal((await createEip1193ChainReader({ request: provider({ eth_call: '0x', eth_getCode: '0x60' }).request, escrow: ESCROW }).escrowState(binding, '1', signal)).error.code, 'INTEGRITY_FAILURE');
   const aborted = new AbortController(); aborted.abort();
   assert.equal((await createEip1193ChainReader({ request: provider().request, escrow: ESCROW }).chainId(aborted.signal)).error.code, 'CANCELLED');
 });
