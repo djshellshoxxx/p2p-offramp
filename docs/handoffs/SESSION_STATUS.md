@@ -323,6 +323,58 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 - `RESTART.md` and `LEAN_RELEASE_SCOPE.md` are owner documents and still describe the old stack; they were left unchanged. Start new work from `main`.
 - Follow-up branch `claude/post-merge-followups`: Home links to the terms review; demo journey asserts no horizontal overflow at 320/768/1440 px on the review screen.
 
+## Recovery consolidation 2026-10-27 UTC (branch `claude/recovery-consolidation`, draft PR #11)
+
+**Ownership at start.**
+- Remote `main` `c8547859f603f04d3df92e68925b99162594c39d` (stack through PR #9 merged).
+- Open PR #10 `claude/sweet-noether-arf6ne` @ `e652f6de` belongs to another active session. It owns contracts/evm, the reconciliation and tx-lifecycle work, relay and nostr-crypto. None of its files were edited here.
+- This session remains the integrator for this branch only. There was no dirty state in `/workspace/integ` or `/workspace/p2p-offramp`.
+
+**Input.**
+- File: `/mnt/session/uploads/P2P-compact-source-checkpoint-20261027.zip`, SHA-256 `93ddfc6451534276e4360782f4f376c472d27c2f901d67271518f6eb8028c6d1`.
+- Inspection: 3 entries, with no path traversal and no links. It was extracted to `/tmp/recovery-staging`, not into the worktree.
+- The inner tarball's SHA-256 `06384c8a…f996` matches the manifest. It holds 1283 files (no symlinks, hard links or special files), and each file's SHA-256 matches.
+- The tree hash computed by `git write-tree` equals the declared `0770e2988519414ebe5b7563e6e44382c049faa9`.
+- No Git history was supplied, so this is a **snapshot**. The declared source `6e5c42f` and the docs head `e91985b` are absent from every published ref. The Library v25 archive is referenced but not embedded, so its bytes are missing.
+
+**Base.**
+- The fork point is `81c2dc8` (PR #5 head). Evidence: 290/316 files are identical to that commit, with 0 deletions, and the snapshot's own status names it.
+- All imports are three-way against that base. So PR #7–#9 content (trade review, demo build, boundary fix) is kept from `main` and nothing was imported twice.
+
+**Classification of the 26 modified files and 967 new files.**
+
+| Class | Files | Disposition |
+|---|---|---|
+| Genuinely missing, snapshot-only change | 20 modified files plus 45 new source/test/script files | Imported byte-identical |
+| Changed on both sides | `apps/web/scripts/build.mjs`, `apps/web/src/ui/App.tsx`, `packages/schemas/src/registry.ts` (conflicts); `apps/web/src/ui/Pages.tsx`, `apps/web/src/ui/messages.ts`, `scripts/test-web-build-browser.mjs` (clean) | Three-way merged; both sides' intent kept |
+| Docs: handoffs, reviews, evidence (920 files) | `docs/**` | Imported verbatim; labelled author-reported for that lineage's SHAs |
+| `SESSION_STATUS.md` | both sides appended | Main's text kept, then the snapshot's sections under the heading below |
+| `RESTART.md` | changed only in the snapshot | Snapshot version taken |
+| Already present, superseded or obsolete | none found | — |
+| Rejected | none | No snapshot change conflicted with an accepted decision |
+
+**Areas the user asked about.**
+- **Vault, recovery and Worker.** The snapshot does **not** change `packages/storage/**`, `worker-endpoint.ts` or `vault.worker.ts`. Its recovery change is a restore → select profile → unlock UI handoff, plus a stricter check of the Worker reply type (`schemas/runtime.ts`, `app-runtime.ts`) and minimal pending-request metadata (`pending-metadata.ts`).
+- **Journal.** The snapshot adds `trade-composition.ts`, diagnostic composition over the existing `IntentJournal`. It does not modify `intent-journal.ts`, which PR #10 changes. A local trial merge with PR #10 passes those tests.
+- **Physical-drain overlap.** In the private lineage, the two host files (`packages/wallet/test/lib/evm-agreement-host.ts` and its test) passed from broker reservation back to that lineage's integrator after the physical-drain milestone (`16c224c`). The older incomplete HOST07 run is not credited. The snapshot (`6e5c42f`) is later than both, so it holds the only surviving version. On GitHub, no other branch or PR touches these paths. They were imported verbatim, with no edits by this session. The physical-drain browser suite passes.
+
+**PR #10 interaction (not modified).**
+- A trial merge of `e652f6de` into `634e761` conflicts only in `packages/security/test/crypto-inventory.test.mjs`. The verified resolution uses the snapshot's review-evidence assertions plus PR #10's Nostr and ChaCha20 entries in `enabled`:
+  - with the review file: findings are `6× MISSING_REVIEW:pending`, then `MISSING_REVIEW:candidate`, then `UNSUPPORTED_RUNTIME:candidate`;
+  - without the review file: 9 MISSING_REVIEW;
+  - `releaseEligible` is false in both cases.
+- The resolved file's SHA-256 is `f1d2475f…09d81bc`. With that resolution, typecheck passes, `npm test` is 718 pass / 0 fail / 1 skipped (Foundry not installed), and the boundary check passes.
+- Whichever PR merges second applies it. **Owner note:** the snapshot records the G16 test providers' review as `accepted` (scoped, fresh-context reviewer, `docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md`). That is the private lineage's own decision, kept as is. It does not make anything release-eligible, and it is not independent security acceptance.
+
+**Tests actually run on `634e761`** (Node 22.22, Chromium 141, real `npm ci` in `/workspace/consol`):
+- `npm test` 626/626, 0 skipped.
+- Exit 0: typecheck, check:boundaries (61 files), test:build-policy (17), test:fuzz (26), build, build:demo, test:browser, test:web:browser, the 4 private browser suites, check:specs, test:specs.
+- Offline helper checks also pass: the OpenSSL vector check (4 signatures, `cryptography` 50.0.2), the npm signature check and the upstream correspondence check.
+- Not run: `check-crypto-cache.py`, which needs an npm cache directory argument.
+- Hosted CI on PR #11 is pending at the time of writing.
+
+**Next bounded task.** Get CI green on the PR #11 head. Have an independent reviewer accept it. Coordinate merge order with the PR #10 owner using the resolution above. Owner gates are unchanged: trust root, deployment, escrow/refund policy acceptance, and release.
+
 ## Recovered private-lineage status (verbatim, imported 2026-10-27)
 
 Source: owner-supplied snapshot `P2P-compact-source-checkpoint-20261027.zip` (sha256 `93ddfc64…c6d1`), tree `0770e2988519414ebe5b7563e6e44382c049faa9` (verified), declared source `6e5c42f601105c9c23d2e0a412338cf1849ca7fc`. No Git history was supplied; that lineage forked from `81c2dc8` (PR #5 head). The text below is that lineage's own status, kept verbatim. Its test counts are author-reported for its own source SHAs, not results reproduced here; see the consolidation section for what was rerun. Library IDs refer to private artifacts not available in this repository.
