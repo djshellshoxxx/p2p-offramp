@@ -2,6 +2,14 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — nostr-crypto merged (cipher swap pending owner)
+
+- Merged `wave4/g20-nostr-crypto` @ db210b7 with VENDORED ChaCha20 (pending review in crypto inventory; release gated).
+  npm test 474/474. Swap to `@noble/ciphers@2.4.0` was blocked by the permission system (npm install of a new dep) —
+  waiting on owner approval. Once approved: install exact, delete vendored cipher + its inventory entry, keep RFC 8439/
+  OpenSSL/NIP-44 vectors against the library.
+- Next: wire packages/relay crypto interface to packages/nostr-crypto; encrypted G16 terms exchange over NIP-17.
+
 ## 2026-10-27 — nostr-crypto under revision
 
 - `wave4/g20-nostr-crypto` done (e135e7a..db210b7, 104+24 official NIP-44 vectors) but used hand-rolled ChaCha20.
