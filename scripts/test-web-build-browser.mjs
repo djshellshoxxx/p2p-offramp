@@ -172,9 +172,16 @@ try {
       await page.setViewportSize({ width, height: 900 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No horizontal clipping at ${width}px`);
     }
-    for (const [route, heading] of [['offers', 'Offers'], ['trade/' + 'a'.repeat(32), 'Trade unavailable'], ['recovery', 'Recovery'], ['settings', 'Settings'], ['unknown', 'Page unavailable']]) {
+    for (const [route, heading] of [['offers', 'Offers'], ['trade/' + 'a'.repeat(32), 'Trade review'], ['recovery', 'Recovery'], ['settings', 'Settings'], ['unknown', 'Page unavailable']]) {
       await page.goto(href + '#/' + route); await page.reload(); await page.getByRole('heading', { level: 1, name: heading, exact: true }).waitFor();
     }
+    // Default build: no approved registry, so terms review is unavailable and no synthetic demo is reachable.
+    await page.goto(href + '#/offers');
+    await page.getByText(/^No approved network registry is loaded in this build/).waitFor();
+    assert.equal(await page.locator('#terms-file').count(), 0);
+    assert.equal(await page.getByText(/SYNTHETIC/).count(), 0);
+    await page.goto(href + '#/trade/' + 'a'.repeat(32));
+    await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
     const hostile = '<img src=x onerror="window.hostileRan=true"><svg onload="window.hostileRan=true">';
     await page.goto(href + '#/' + encodeURIComponent(hostile));
     await page.getByRole('heading', { name: 'Page unavailable', exact: true }).waitFor();
