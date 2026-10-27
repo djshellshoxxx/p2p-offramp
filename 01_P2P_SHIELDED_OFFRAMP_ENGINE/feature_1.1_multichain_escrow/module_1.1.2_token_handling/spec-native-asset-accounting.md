@@ -28,13 +28,13 @@ Types containing native ABI/IDL declarations describe that chain interface, not 
 
 ## 4. Algorithms and invariants
 
-EVM fund requires msg.value == principal; release/refund use guarded checked-effects transfer of exactly principal and revert on failure. No payable fallback creates a trade. Forced ETH does not create liabilities or withdrawable shares. Solana program-owned trade PDA tracks principal independently of rent-exempt reserve; System Program transfer funding validates seller signer, PDA seeds, program ownership and exact lamport delta. Settlement leaves required rent while trade state must persist to prevent replay; account closure is unsupported in v1. Sum outstanding principal cannot exceed available native balance minus reserved rent. No arbitrary surplus sweep in basic v1.
+EVM fund requires msg.value == principal; release/refund use guarded checked-effects transfer of exactly principal; on EVM a failed push credits the bound recipient's pending withdrawal (see [escrow contract interface](../module_1.1.1_escrow_state_machine/spec-escrow-contract-interface.md) §4), never another address. No payable fallback creates a trade. Forced ETH does not create liabilities or withdrawable shares. Solana program-owned trade PDA tracks principal independently of rent-exempt reserve; System Program transfer funding validates seller signer, PDA seeds, program ownership and exact lamport delta. Settlement leaves required rent while trade state must persist to prevent replay; account closure is unsupported in v1. Sum outstanding principal cannot exceed available native balance minus reserved rent. No arbitrary surplus sweep in basic v1.
 
 All externally supplied records require exact schema/version validation and byte/count caps before cryptographic work. Decimal money is never a JavaScript float; strings are parsed to bounded integers and overflow is rejected. G13 read retries are bounded; economic commands have zero automatic resubmission.
 
 ## 5. Interfaces, errors and recovery
 
-Failed native transfer leaves funded state. Low fee balance is distinct from insufficient principal. Incorrect delta or undercollateralized observation blocks funding and returns INTEGRITY_FAILURE. Reconcile rather than infer payout from wallet balance.
+A failed EVM native push leaves the trade terminal with principal credited to the bound recipient for `withdraw`; it never redirects funds. Low fee balance is distinct from insufficient principal. Incorrect delta or undercollateralized observation blocks funding and returns INTEGRITY_FAILURE. Reconcile rather than infer payout from wallet balance.
 
 Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
 
