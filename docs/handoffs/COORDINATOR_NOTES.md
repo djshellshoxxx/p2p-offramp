@@ -2,6 +2,15 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — EVM escrow merged into integration branch
+
+- `claude/sweet-noether-arf6ne` = origin/main `c854785` + escrow merge `237305f`. Draft PR opened to main.
+- `contracts/evm/BasicEscrow.sol`: no admin; tradeId computed on-chain = `evmTermsHash` (packages/wallet/src/evm-terms.ts);
+  failed push payout credits recipient + `withdraw`. forge 82/82 (61 unit, 6 fixture vs local-evm-scenario, 10 fuzz, 5 invariant).
+- Gates on merged tree: npm test 381/381, typecheck, check:specs, check:boundaries, test:browser, build all exit 0.
+- Open: on-chain acceptance-signature check (EOA/EIP-1271) not done; no audit. Next candidates: escrow client calldata
+  builder + G12 submit/reconcile (check other session's SESSION_STATUS first), anvil two-party local trade proof.
+
 ## 2026-10-27 ~22:10 UTC — resume after 3-day gap
 
 - PR #3 (wave-1 CI + runbooks) merged. `main` now = `6d76590` (PR #4 shell + PR #5 profiles/G03/G09/G11/G16/test-only G10).
