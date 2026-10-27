@@ -10,19 +10,25 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 /** Strings that only the synthetic demo module contains (registry release ID and pinned registry digest). */
 export const SYNTHETIC_MARKERS = Object.freeze(['test-local-only', '14e7ecfb5aff74253affe0d2e8560728763f01db405bcc7efdca964ef103ca6a']);
 export async function scanBuild(directory, { syntheticDemo = false } = {}) {
-  const files = {};
+  const files = Object.create(null), identities = Object.create(null);
   async function walk(path) {
     for (const item of await readdir(path, { withFileTypes: true })) {
       const target = resolve(path, item.name), stat = await lstat(target);
       if (stat.isSymbolicLink()) throw new Error('ARTIFACT_SYMLINK');
       if (stat.isDirectory()) await walk(target);
-      else if (stat.isFile()) files[safeArtifactPath(relative(directory, target).replaceAll('\\', '/'))] = await readFile(target, 'utf8');
+      else if (stat.isFile()) {
+        const path = safeArtifactPath(relative(directory, target).replaceAll('\\', '/'));
+        const bytes = await readFile(target);
+        // Identity binds the file on disk, independently of its text-policy decoding.
+        identities[path] = { path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+        files[path] = bytes.toString('utf8');
+      }
       else throw new Error('ARTIFACT_TYPE');
     }
   }
   await walk(directory);
-  const inspection = inspectArtifactFiles(files);
-  const assets = Object.keys(files).sort().map(path => ({ path, bytes: Buffer.byteLength(files[path]), sha256: createHash('sha256').update(files[path]).digest('hex') }));
+  const assets = Object.keys(files).sort().map(path => identities[path]);
+  const inspection = { ...inspectArtifactFiles(files), bytes: assets.reduce((total, asset) => total + asset.bytes, 0) };
   if (!assets.some(item => /^assets\/vault\.worker-[A-Za-z0-9_-]+\.js$/.test(item.path))) throw new Error('NATIVE_WORKER_ASSET_MISSING');
   const licenses = JSON.parse(files['third-party-licenses.json'] ?? 'null');
   if (!Array.isArray(licenses) || ['react', 'react-dom', 'scheduler'].some(name => !licenses.some(item => item.name === name && item.identifier === 'MIT' && typeof item.text === 'string' && item.text.includes('Permission is hereby granted')))) throw new Error('LICENSE_ATTRIBUTION_MISSING');

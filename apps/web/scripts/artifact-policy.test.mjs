@@ -1,6 +1,75 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { createHash } from 'node:crypto';
+import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
+import { scanBuild } from './build.mjs';
+
+async function syntheticBuild(t, payload, payloadPath = 'assets/payload.bin') {
+  const directory = await mkdtemp(join(tmpdir(), 'p2p-artifact-bytes-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(join(directory, 'assets'));
+  const files = {
+    'index.html': '<!doctype html><script type="module" src="./assets/main.js"></script>',
+    'assets/main.js': 'export const fixture = true;\n',
+    'assets/vault.worker-fixture.js': 'export {};\n',
+    'core-graph-document.json': '[]\n',
+    'core-graph-worker.json': '[]\n',
+    // Synthetic scanner prerequisites only; these are not distributed license notices.
+    'third-party-licenses.json': JSON.stringify(['react', 'react-dom', 'scheduler'].map(name => ({ name, identifier: 'MIT', text: 'Permission is hereby granted (synthetic test fixture)' }))),
+    [payloadPath]: payload,
+  };
+  for (const [path, bytes] of Object.entries(files)) await writeFile(join(directory, path), bytes);
+  return { directory, files };
+}
+
+for (const [name, payload] of [
+  ['binary', Buffer.from([0xff, 0x80, 0x00, 0x41])],
+  ['malformed UTF-8', Buffer.from([0xf0, 0x28, 0x8c, 0xbc, 0xc3])],
+  ['ordinary multibyte UTF-8', Buffer.from('Hello, café 日本語 🌍\n', 'utf8')],
+]) test(`build inventory binds exact raw bytes for ${name}`, async t => {
+  const { directory, files } = await syntheticBuild(t, payload);
+  const evidence = await scanBuild(directory);
+  assert.deepEqual(evidence.assets, Object.keys(files).sort().map(path => ({
+    path,
+    bytes: Buffer.byteLength(files[path]),
+    sha256: createHash('sha256').update(files[path]).digest('hex'),
+  })));
+  assert.equal(evidence.inspection.bytes, Object.values(files).reduce((total, bytes) => total + Buffer.byteLength(bytes), 0));
+  assert.equal(evidence.ReleaseEnabled, 0);
+  assert.equal(evidence.signedRelease, false);
+});
+
+test('raw-byte inventory preserves private-key refusal in a binary asset', async t => {
+  const { directory } = await syntheticBuild(t, Buffer.concat([Buffer.from([0xff]), Buffer.from('-----BEGIN PRIVATE KEY-----')]));
+  await assert.rejects(scanBuild(directory), /ARTIFACT_POLICY: assets\/payload\.bin/);
+});
+
+test('build inventory includes prototype-looking root filenames', async t => {
+  for (const path of ['__proto__', 'constructor', 'toString']) await t.test(path, async t => {
+    const payload = Buffer.from(`Owned synthetic artifact: ${path}\n`);
+    const { directory, files } = await syntheticBuild(t, payload, path);
+    const evidence = await scanBuild(directory);
+    assert.deepEqual(evidence.assets.find(asset => asset.path === path), {
+      path, bytes: payload.length, sha256: createHash('sha256').update(payload).digest('hex'),
+    });
+    assert.equal(evidence.inspection.files, Object.keys(files).length);
+    assert.equal(evidence.inspection.bytes, Object.values(files).reduce((total, bytes) => total + Buffer.byteLength(bytes), 0));
+  });
+});
+
+test('prototype-looking root filename cannot hide a private-key marker', async t => {
+  const { directory } = await syntheticBuild(t, '-----BEGIN PRIVATE KEY----- (synthetic refusal fixture)', '__proto__');
+  await assert.rejects(scanBuild(directory), /ARTIFACT_POLICY: __proto__/);
+});
+
+test('prototype-looking root filename participates in case-collision refusal', async t => {
+  const { directory } = await syntheticBuild(t, 'first owned fixture', '__proto__');
+  await writeFile(join(directory, '__PROTO__'), 'second owned fixture');
+  await assert.rejects(scanBuild(directory), /ARTIFACT_POLICY: paths/);
+});
 
 test('application token policy denies HTML execution while allowing text and React events', () => {
   assert.doesNotThrow(() => inspectApplicationSource('view.tsx', 'const C = () => <button onClick={() => command()}>{text}</button>; node.textContent = text;'));
