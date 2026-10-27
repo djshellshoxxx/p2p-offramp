@@ -13,7 +13,7 @@ The catalog contains 173 documents: 171 expanded technical design baselines, a n
 and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence
 are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
 
-Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore UI, signed registry/release trust, wallet signing/submission, native escrow/relay integration and the trading loop remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
+Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Signed registry/release trust, wallet signing/submission, native escrow/relay integration and the trading loop remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
 
 ## Local checks
 
@@ -28,6 +28,7 @@ npm run check:specs
 npm run check:boundaries
 npm run test:build-policy
 npm run build
+npm run build:demo   # synthetic test-only demo artifact; never deploy
 npm run test:browser
 npm run test:web:browser
 ```
@@ -38,5 +39,5 @@ Optional independent fixture verification requires Python `cryptography`:
 python packages/storage/test/fixtures/verify_vault_fixture.py
 ```
 
-Start with [development status](docs/DEVELOPMENT_STATUS.md), [roadmap](DEVELOPMENT_ROADMAP.md),
+See the [developer and operator guide](docs/OPERATOR.md) for build modes and the terms file format. Start with [development status](docs/DEVELOPMENT_STATUS.md), [roadmap](DEVELOPMENT_ROADMAP.md),
 [spec readiness inventory](docs/SPEC_READINESS.md) and [vault implementation plan](docs/superpowers/plans/2026-10-22-vault-foundation.md).

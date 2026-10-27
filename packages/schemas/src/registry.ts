@@ -212,14 +212,23 @@ function network(input: unknown): NetworkV1 {
     assets: Object.freeze(assets), deployments: Object.freeze(deployments), environment });
 }
 
-/** Strict UTF-8 → bounded JSON → frozen RegistryV1. Callers MUST have matched the bytes to a trusted digest first. */
-export function parseRegistryBytes(bytes: Uint8Array): RegistryV1 {
+/**
+ * Strict UTF-8 (fatal, BOM rejected) → the same bounded JSON subset used for the registry: duplicate and prototype keys,
+ * floats, negatives and unsafe integers reject; depth <= 6, <= 32 keys per object, <= 256 items per array.
+ * Structure is unchecked: callers validate exact keys and types afterwards.
+ */
+export function parseStrictJsonBytes(bytes: Uint8Array, maxBytes: number): unknown {
   if (!(bytes instanceof Uint8Array)) return fail();
-  if (bytes.byteLength > MAX_REGISTRY_BYTES) return fail('LIMIT_EXCEEDED');
+  if (bytes.byteLength > maxBytes) return fail('LIMIT_EXCEEDED');
   let text: string;
   try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); } catch { return fail(); }
   if (text.charCodeAt(0) === 0xfeff) return fail();
-  const raw = new RegistryJsonParser(text).parse();
+  return new RegistryJsonParser(text).parse();
+}
+
+/** Strict UTF-8 → bounded JSON → frozen RegistryV1. Callers MUST have matched the bytes to a trusted digest first. */
+export function parseRegistryBytes(bytes: Uint8Array): RegistryV1 {
+  const raw = parseStrictJsonBytes(bytes, MAX_REGISTRY_BYTES);
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return fail();
   if ((raw as Record<string, unknown>).version !== 1) return fail('UNSUPPORTED_VERSION');
   const top = exact(raw, ['version', 'releaseId', 'networks']);

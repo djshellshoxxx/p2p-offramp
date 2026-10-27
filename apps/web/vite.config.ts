@@ -6,10 +6,13 @@ import { staticBuildPlugin } from './scripts/static-build-plugin.mjs';
 const root = fileURLToPath(new URL('./', import.meta.url));
 const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
 export default defineConfig(({ mode }) => {
-  if (!['production', 'meta', 'header', 'development'].includes(mode)) throw new Error('UNSUPPORTED_BUILD_PROFILE');
+  if (!['production', 'meta', 'header', 'development', 'demo'].includes(mode)) throw new Error('UNSUPPORTED_BUILD_PROFILE');
   const delivery = mode === 'header' ? 'header' : 'meta';
   return {
     root, base: './', envPrefix: [], publicDir: false,
+    // Only the explicit `demo` mode includes the synthetic local registry and samples. It changes no runtime
+    // permission: ReleaseEnabled stays 0 and connectOrigins stays empty in every mode.
+    define: { __P2P_SYNTHETIC_DEMO__: JSON.stringify(mode === 'demo') },
     plugins: [react(), staticBuildPlugin(repositoryRoot, delivery)],
     build: { outDir: 'dist', emptyOutDir: true, sourcemap: false, assetsInlineLimit: 0, modulePreload: false,
       target: 'es2023', reportCompressedSize: false, license: { fileName: 'third-party-licenses.json' } },

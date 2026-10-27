@@ -3,15 +3,23 @@ import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
 import { errorMessage, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
+import type { TradeReviewController } from '../trade/review-controller.ts';
+import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
 const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
 
-export interface AppProps { readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined; }
+export interface AppProps {
+  readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined;
+  /** Local terms review session; null when unavailable. Independent of the vault runtime. */
+  readonly trade?: TradeReviewController | null;
+}
 
-export function App({ services, starting = false, startupError }: AppProps) {
+export function App({ services, starting = false, startupError, trade = null }: AppProps) {
+  const tradeSnapshot = useTradeReview(trade);
+  const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
@@ -58,7 +66,8 @@ export function App({ services, starting = false, startupError }: AppProps) {
     </aside>
     <div className="workspace">
       <header className="status-bar">
-        <div><strong>{m.fundsDisabled}</strong><span>{m.networkDisabled}</span><span>{online ? m.online : m.offline}</span></div>
+        <div><strong>{m.fundsDisabled}</strong><span>{m.networkDisabled}</span><span>{online ? m.online : m.offline}</span>
+          {syntheticDemo ? <strong className="demo-badge">{m.syntheticDemo}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
           {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={!!pending}>{m.lock}</button> : null}
@@ -71,7 +80,9 @@ export function App({ services, starting = false, startupError }: AppProps) {
         {pending ? <p role="status">{pending}</p> : null}
         {notice ? <p className="notice error" role="alert">{notice}</p> : null}
         {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} /> :
-          route.page === 'recovery' ? <Recovery services={services} /> : route.page === 'settings' ? <Settings /> : <UnavailablePage page={route.page} />}
+          route.page === 'recovery' ? <Recovery services={services} /> : route.page === 'settings' ? <Settings /> :
+          route.page === 'offers' ? <OffersPage trade={trade} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} /> :
+          <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>
     </div>

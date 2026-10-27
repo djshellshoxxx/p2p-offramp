@@ -269,3 +269,56 @@ Next, in order:
 - **Not done:** `submit` (needs G12 plus an approved escrow deployment), EIP-1271 contract wallets, EIP-6963 → adapter wiring, UI, and Solana Wallet Standard.
 - **H2 EVM escrow contract: blocked.** Downloading and running the Foundry toolchain was denied by this session's permission policy ("Code from External"). No workaround was attempted. It needs owner permission, or Foundry/solc preinstalled in the environment.
 - `npm test` 326/326; all gates pass; nothing is in the app bundle.
+
+## Integration lead 2026-10-27 UTC (branch `claude/p2p-offramp-integration-aan57u`, stacked on PR #5 `81c2dc8`)
+
+- Source check: the published refs contain no result-schema/parser, pre-clone, physical-drain or Worker-bridge result work. That work belongs to the existing coordinator and is unpublished here. Its files (`packages/schemas/src/runtime.ts`, `apps/web/src/runtime/**`, `apps/web/src/workers/**`, `ui/{App,Pages,routes,messages}`) were not touched.
+- Added two independent packages, each built in its own worktree and reviewed and integrated here:
+  - `apps/web/src/ui/trade/*`: pure exact formatters (base units, fiat minor units, deadlines, full unshortened addresses) and a read-only `TradeTermsReview` with a "Preview only. Trading is disabled" banner. It is **not mounted**: nothing imports it, and the build output contains no trace of it. There are no actions, wallet or network calls.
+  - `packages/domain/test/fixtures/local-evm-scenario/*` plus domain and wallet tests: a synthetic local registry (31337, loopback) with native and ERC-20 term sets, and deterministic test-only keys. These are frozen self-generated values, so this is **not** an independent golden vector and not a trust root.
+- Gates on the combined tree:
+  - `npm test` 339/339, 0 skipped.
+  - typecheck, check:boundaries, test:build-policy, build, test:browser, test:web:browser, check:specs and test:specs all exit 0.
+  - `npm audit --omit=dev` reports 0. This was Node 22.
+- Unchanged: `ReleaseEnabled=0`, `connectOrigins: []`, no funds, no deploy. The G11/G15 trust root, Foundry permission and G16 Solana token-program field still await owner decisions.
+
+## Trade-terms review slice 2026-10-27 UTC (branch `claude/trade-review-integration`, draft PR #8, stacked on PR #7 `48074e7`)
+
+Baseline verified: PR #7 head was still `48074e7` (base `81c2dc8`); all gates passed there (`npm test` 339/339). No result-schema/parser, Worker-bridge, lifecycle or physical-drain work exists in published refs, so `packages/schemas/src/runtime.ts`, `apps/web/src/runtime/**`, `apps/web/src/workers/**` and `app-services.ts` were **not touched**. `App.tsx`, `routes`-adjacent `messages.ts` and `main.tsx` received small additive edits only (new `trade` prop, two route branches, demo badge).
+
+### Requirement map (lean EVM scope)
+
+| Area | State | Evidence |
+|---|---|---|
+| Profiles create/unlock/lock/inventory, export, fresh-key restore, G03/G09 | Working and verified (Chromium only) | earlier sections; `test:browser`, `test:web:browser` |
+| G11 registry parse/load | Implemented, verified with synthetic data; **no approved registry** (trust root pending) | `registry.test.mjs`, `local-evm-scenario.test.mjs` |
+| G16 encodings + local terms review (`reviewTermsBytes`) | Working and verified offline against a loaded registry | `terms-review.test.mjs` (13 tests, hostile inputs, precedence, window boundaries) |
+| Offers → terms review → `#/trade/<id>` review screen | Working in the `demo` build; honest "unavailable" in the default build | `test-trade-review-browser.mjs`, `test-web-build-browser.mjs` |
+| Review persistence in the vault | Absent: needs Worker record commands (overlaps unpublished runtime work) | — |
+| EIP-712 digest / acceptance in app | Partial: test-only in `packages/wallet`, not bundled (Keccak review pending) | `evm-terms.test.mjs` |
+| Wallet connect/sign UI, escrow contract, relays/offer exchange, funding, two-party EVM proof | Blocked (owner decisions: trust root, Foundry permission; `connectOrigins: []`) | — |
+
+### What changed
+- Domain `packages/domain/src/terms-review.ts` (frozen contract, worker-implemented, integrator-reviewed): strict bounded JSON, canonical public terms, `encodePrivateAgreement`/`encodeCapabilities` + recomputed SHA-256, registry network/deployment/asset binding, G16 funding-window feasibility. `parseStrictJsonBytes` exported from schemas (registry parser unchanged in behaviour).
+- App: `apps/web/src/trade/review-controller.ts` (generation-guarded imports, cancel, stale discard, bounded 8-entry memory session, random route IDs), `ui/trade/TradePages.tsx`, rewritten `TradeTermsReview.tsx` (exact uint256, full addresses, deadlines with 15 s display refresh, screened instructions and capability versions, risk + blockers, no actions), `display-text.ts` (adapted from GhostPay, see `docs/REUSE.md`).
+- Build: `npm run build:demo` (`__P2P_SYNTHETIC_DEMO__`); `scanBuild` fails the default build on synthetic markers or `apps/web/src/demo/` modules in the core graph, and fails the demo build without them.
+- Fixes, each RED first: uint256 amounts showed "Not displayable"; boundary checker ignored dynamic imports; removing a review left a status link to it; capability version text could bidi-reverse the unsupported warning.
+- Tests: `.tsx` render tests via `scripts/test-support/register-tsx.mjs` (vite `transformWithOxc`), controller tests, demo-data equality tests, negative `scanBuild` tests, emitted-demo Chromium journey.
+
+### Evidence at `effc15e` (Node 22.22, Chromium 141 at /opt/pw-browsers)
+`npm test` 381/381, 0 skipped. `typecheck`, `check:boundaries` (53 files, graph 31 modules), `test:build-policy` 7/7, `build`, `build:demo`, `test:browser`, `test:web:browser` (shell + synthetic trade journey: 0 wallet prompts, 0 network calls), `check:specs`, `test:specs` all exit 0; `npm audit --omit=dev` 0. Mutation checks: the scanBuild negative test and the browser removal assertion each fail against a deliberately broken implementation. CI on PR #8 was still queued when this was written.
+
+### Review
+Independent reviewer agent (separate context, read-only) found no blockers; three should-fixes (capability version bidi, contract doc order, stale job after remove) and nits were all addressed in `a8438d0..effc15e`. Not done from that list: CR/TAB in instructions still hide the whole text (fails closed by design). Self-review of the worker's domain code is not independent; the reviewer covered it.
+
+### Restart
+1. Recheck PR #8 CI and the stack (#4 → #5 → #7 → #8); merge bottom-up only after owner review. Do not force-push.
+2. When the owner publishes or reconciles the runtime/Worker work: add encrypted vault records for reviewed terms (persistence + recovery).
+3. Owner decisions still gate the trade loop: G11/G15 trust root, Foundry/solc permission for the escrow, Keccak/secp256k1 dependency review, G16 Solana token-program field.
+
+## Stack merged to main 2026-10-27 UTC (owner approval in session)
+
+- Merged bottom-up with merge commits (no squash/rebase, no force-push), each with `expectedHeadSha`: PR #4 `8a88d11` → `d96dcbb`, PR #5 `81c2dc8` → `6d76590`, PR #7 `48074e7` → `55a9ea4`, PR #8 `1450c53` → `48513fb`. PRs #1–#3 are ancestors and closed with them. The custodial branch `feat/custodial-ledger-foundation` was not merged.
+- Before merging #8, a local test merge of `origin/main` into the PR head produced tree `2d8714da…`, identical to the tested PR #8 tree, so CI (all 8 check runs green on `1450c53`) and local evidence apply to `48513fb` exactly.
+- `RESTART.md` and `LEAN_RELEASE_SCOPE.md` are owner documents and still describe the old stack; they were left unchanged. Start new work from `main`.
+- Follow-up branch `claude/post-merge-followups`: Home links to the terms review; demo journey asserts no horizontal overflow at 320/768/1440 px on the review screen.

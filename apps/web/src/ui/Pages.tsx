@@ -36,7 +36,8 @@ export function Home({ services, unlocked }: { readonly services: AppServices | 
     </section>
     <section className="plain-section" aria-labelledby="disabled-title">
       <h2 id="disabled-title">{m.disabledTitle}</h2><p>{m.disabledText}</p>
-      <a href="#/recovery">{m.openRecovery}<span aria-hidden="true"> →</span></a>
+      <div className="actions"><a href="#/offers">{m.openOffers}<span aria-hidden="true"> →</span></a>
+        <a href="#/recovery">{m.openRecovery}<span aria-hidden="true"> →</span></a></div>
     </section>
   </>;
 }
