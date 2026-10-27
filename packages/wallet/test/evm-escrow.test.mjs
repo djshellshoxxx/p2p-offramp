@@ -8,8 +8,8 @@ import { evmTermsHash } from '../src/evm-terms.ts';
 import * as escrowApi from '../src/evm-escrow.ts';
 import {
   EvmEscrowError, EVENT_SIGNATURES, ERROR_SIGNATURES, FUNCTION_SIGNATURES, approveAmountFor, buildChainObservation, buildErc20Approve, buildFundNative,
-  buildFundToken, buildGetTrade, buildRefund, buildRelease, buildTradeIdOf, buildWithdraw, decodeEscrowLog, decodeEscrowRevert, decodeTrade,
-  selectorOf, stateFromLogs, topicOf, tradeMatchesTerms,
+  buildFundToken, buildGetTrade, buildPendingWithdrawals, buildRefund, buildRelease, buildSetAccept, buildTradeIdOf, buildWithdraw, decodeEscrowLog,
+  decodeEscrowRevert, decodeTrade, selectorOf, stateFromLogs, topicOf, tradeMatchesTerms,
 } from '../src/evm-escrow.ts';
 import { parseChainObservation } from '../../schemas/index.ts';
 
@@ -225,4 +225,32 @@ test('a substituted buyer changes the tradeId, so a release for the original id 
   assert.notEqual(swappedId, tradeIdNative);
   assert.equal(buildFundNative(domain, swapped).tradeId, swappedId);
   assert.notEqual(buildRelease(ESCROW, swappedId).data, buildRelease(ESCROW, tradeIdNative).data);
+});
+
+test('credit view and receiver toggle calldata: known selectors, strict arguments, cast cross-check', () => {
+  const RECEIVER = `0x${'5a'.repeat(20)}`;
+  const pending = buildPendingWithdrawals(ESCROW, RECEIVER, ZERO);
+  assert.equal(pending.to, ESCROW);
+  assert.equal(pending.value, '0');
+  assert.equal(pending.data, `0x${selectorOf('pendingWithdrawals(address,address)')}${addr(RECEIVER).slice(2)}${'0'.repeat(64)}`);
+  assert.equal(buildPendingWithdrawals(ESCROW, RECEIVER, erc20.asset).data.endsWith(addr(erc20.asset).slice(2)), true, 'token credit keyed by asset');
+  throwsCode(() => buildPendingWithdrawals('0x1234', RECEIVER, ZERO));
+  throwsCode(() => buildPendingWithdrawals(ESCROW, 'nope', ZERO));
+  throwsCode(() => buildPendingWithdrawals(ESCROW, RECEIVER, 'native'));
+
+  const toggle = buildSetAccept(RECEIVER, true);
+  assert.equal(toggle.to, RECEIVER);
+  assert.equal(toggle.value, '0');
+  assert.equal(toggle.data, `0x${selectorOf('setAccept(bool)')}${word(1)}`);
+  assert.equal(buildSetAccept(RECEIVER, false).data, `0x${selectorOf('setAccept(bool)')}${word(0)}`);
+  throwsCode(() => buildSetAccept('0x1234', true));
+  throwsCode(() => buildSetAccept(RECEIVER, 'true'));
+  throwsCode(() => buildSetAccept(RECEIVER, 1));
+
+  if (castPath !== undefined) {
+    const cast = (...args) => execFileSync(castPath, ['calldata', ...args], { encoding: 'utf8' }).trim();
+    assert.equal(pending.data, cast('pendingWithdrawals(address,address)', RECEIVER, ZERO));
+    assert.equal(toggle.data, cast('setAccept(bool)', 'true'));
+    assert.equal(buildSetAccept(RECEIVER, false).data, cast('setAccept(bool)', 'false'));
+  }
 });

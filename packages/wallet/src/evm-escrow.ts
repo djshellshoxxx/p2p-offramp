@@ -45,8 +45,10 @@ const TUPLE = '(bytes32,uint64,string,string,address,address,uint8,address,uint2
 export const FUNCTION_SIGNATURES = Object.freeze({
   fundNative: `fundNative(${TUPLE})`, fundToken: `fundToken(${TUPLE})`, release: 'release(bytes32)', refund: 'refund(bytes32)',
   withdraw: 'withdraw(address,address)', tradeIdOf: `tradeIdOf(${TUPLE})`, getTrade: 'getTrade(bytes32)',
-  approve: 'approve(address,uint256)', balanceOf: 'balanceOf(address)',
+  approve: 'approve(address,uint256)', balanceOf: 'balanceOf(address)', pendingWithdrawals: 'pendingWithdrawals(address,address)',
 } as const);
+/** Test-only mock receiver (contracts/evm/test/mocks/Mocks.sol `RevertingReceiver`); not part of BasicEscrow's ABI. */
+export const RECEIVER_FUNCTION_SIGNATURES = Object.freeze({ setAccept: 'setAccept(bool)' } as const);
 export const EVENT_SIGNATURES = Object.freeze({
   Funded: 'Funded(bytes32,address,address,address,uint256,uint64)', Released: 'Released(bytes32,address,address,uint256)',
   Refunded: 'Refunded(bytes32,address,address,address,uint256)', PayoutDeferred: 'PayoutDeferred(bytes32,address,address,uint256)',
@@ -141,6 +143,17 @@ export function buildErc20Approve(token: string, spender: string, amountBaseUnit
   address(token); address(spender);
   if (typeof amountBaseUnits !== 'string' || !/^(0|[1-9][0-9]{0,77})$/.test(amountBaseUnits)) bad();
   return Object.freeze({ to: token, data: `0x${selectorOf(FUNCTION_SIGNATURES.approve)}${hexOf(concat([address(spender), uintWord(decimal(amountBaseUnits, U256), U256)]))}`, value: '0' });
+}
+/** `pendingWithdrawals(recipient, token)` view call: the principal credited after a failed push. `token` is zero for native. */
+export function buildPendingWithdrawals(escrow: string, recipient: string, token: string): EscrowCall {
+  address(escrow);
+  return Object.freeze({ to: escrow, data: `0x${selectorOf(FUNCTION_SIGNATURES.pendingWithdrawals)}${hexOf(concat([address(recipient), address(token, true)]))}`, value: '0' });
+}
+/** Test-only: flips the mock receiver's `accept` flag, which gates its native `receive`. Not an escrow call. */
+export function buildSetAccept(receiver: string, accept: boolean): EscrowCall {
+  address(receiver);
+  if (typeof accept !== 'boolean') bad();
+  return Object.freeze({ to: receiver, data: `0x${selectorOf(RECEIVER_FUNCTION_SIGNATURES.setAccept)}${hexOf(uintWord(accept ? 1n : 0n, U8))}`, value: '0' });
 }
 /** ERC-20 `balanceOf(account)` view call. */
 export function buildErc20BalanceOf(token: string, account: string): EscrowCall {

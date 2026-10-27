@@ -17,8 +17,8 @@ import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { createTradeAuthority } from '../packages/domain/src/authority.ts';
 import { evmTermsHash, keccak256, verifyEoaAcceptance } from '../packages/wallet/src/evm-terms.ts';
 import {
-  approveAmountFor, buildChainObservation, buildErc20Approve, buildErc20BalanceOf, buildFundNative, buildFundToken, buildGetTrade, buildRefund,
-  buildRelease, buildTradeIdOf, decodeEscrowLog, decodeEscrowRevert, decodeTrade, tradeMatchesTerms,
+  approveAmountFor, buildChainObservation, buildErc20Approve, buildErc20BalanceOf, buildFundNative, buildFundToken, buildGetTrade, buildPendingWithdrawals,
+  buildRefund, buildRelease, buildSetAccept, buildTradeIdOf, buildWithdraw, decodeEscrowLog, decodeEscrowRevert, decodeTrade, tradeMatchesTerms,
 } from '../packages/wallet/src/evm-escrow.ts';
 
 const run = promisify(execFile);
@@ -277,6 +277,56 @@ async function main() {
     assert.equal((await revertOf(A.buyer, buildRelease(escrow, tradeId))).name, 'Unauthorized', 'buyer cannot release');
     assert.equal((await revertOf(A.third, buildRelease(escrow, tradeId))).name, 'Unauthorized', 'third party cannot release');
     pass('negative: buyer and third party cannot release');
+  }
+
+  // ---- 6. reverting buyer: the buyer is a contract whose receive() rejects native payments ----
+  {
+    // A contract cannot produce an EOA acceptance signature, so the buyer is the mock's address and the buyer's
+    // "signature" is a dev-key stand-in. verifyEoaAcceptance rejects it (the signer is not the contract), and
+    // BasicEscrow never checks acceptance signatures at all: fund/release/withdraw take no signature. The proof
+    // below is about payout only.
+    const receiver = await deploy('test/mocks/Mocks.sol:RevertingReceiver');
+    const amount = WEI / 4n;
+    const terms = clean(await makeTerms(domain, 'native', ZERO, amount, receiver)), tradeId = evmTermsHash(domain, terms);
+    assert.equal(verifyEoaAcceptance(domain, terms, 'seller', sign(KEYS.seller, tradeId)), true, 'seller acceptance verifies');
+    assert.equal(verifyEoaAcceptance(domain, terms, 'buyer', sign(KEYS.buyer, tradeId)), false, 'a dev EOA signature does not verify for a contract buyer');
+    assert.equal((await rpc('eth_call', [{ to: escrow, data: buildTradeIdOf(domain, terms).data }, 'latest'])).slice(2), tradeId, 'on-chain tradeId matches terms');
+    const authority = authorityFor(escrow, binding(tradeId));
+    await send(A.seller, buildFundNative(domain, terms));
+    assert.equal(tradeMatchesTerms(await trade(escrow, tradeId), terms), true);
+    await observe(authority, binding(tradeId), 'funded');
+
+    const credit = async (account, token) => big(await rpc('eth_call', [{ to: escrow, data: buildPendingWithdrawals(escrow, account, token).data }, 'latest']));
+    // Section 5 leaves a funded trade behind, so the escrow holds other principal: assert deltas from the funded balance.
+    const receiverBefore = await balance(receiver), escrowBefore = await balance(escrow);
+    await send(A.seller, buildRelease(escrow, tradeId));
+    // The push to the reverting receiver fails inside settlement; the trade still settles and the principal is credited.
+    assert.equal((await trade(escrow, tradeId)).state, 'released', 'release settles the trade despite the reverting buyer');
+    assert.deepEqual(await logsOf(escrow, tradeId), ['Funded', 'Released', 'PayoutDeferred'], 'the failed push is recorded');
+    assert.equal(await credit(receiver, ZERO), amount, 'escrow credited the buyer');
+    assert.equal(await balance(receiver), receiverBefore, 'buyer balance unchanged by settlement');
+    assert.equal(await balance(escrow), escrowBefore, 'principal stays in escrow as credit');
+    await observe(authority, binding(tradeId), 'released');
+
+    const rejected = await revertOf(A.third, buildWithdraw(escrow, receiver, ZERO));
+    assert.equal(rejected.name, 'WithdrawalFailed', 'withdraw reverts while the receiver still rejects');
+    assert.equal(await credit(receiver, ZERO), amount, 'credit intact after the failed withdraw');
+    assert.equal(await balance(escrow), escrowBefore);
+    assert.equal(await balance(receiver), receiverBefore);
+
+    // The mock's accept flag can be toggled, so the same third-party withdraw now pays out.
+    await send(A.seller, buildSetAccept(receiver, true));
+    const thirdBefore = await balance(A.third);
+    const paid = await send(A.third, buildWithdraw(escrow, receiver, ZERO));
+    assert.equal(await balance(receiver), receiverBefore + amount, 'buyer paid the credited principal');
+    assert.equal(await balance(escrow), escrowBefore - amount, 'escrow paid exactly the credit');
+    assert.equal(await credit(receiver, ZERO), 0n, 'credit cleared');
+    assert.equal(await balance(A.third), thirdBefore - paid.fee, 'third party pays only gas');
+    const withdrawn = (await rpc('eth_getLogs', [{ address: escrow, fromBlock: '0x0', toBlock: 'latest' }]))
+      .map(entry => decodeEscrowLog(escrow, entry)).filter(event => event.kind === 'Withdrawn');
+    assert.deepEqual(withdrawn.map(({ recipient, caller, token, amount: paidAmount }) => [recipient, caller, token, paidAmount]), [[receiver, A.third, ZERO, String(amount)]]);
+    assert.equal((await revertOf(A.third, buildWithdraw(escrow, receiver, ZERO))).name, 'NothingToWithdraw', 'a second withdraw finds no credit');
+    pass('reverting buyer: release settles and credits the buyer; third-party withdraw reverts while rejecting, then pays after the receiver accepts');
   }
   console.log(`\n${results.length} local trade checks passed`);
 }
