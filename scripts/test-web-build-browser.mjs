@@ -229,7 +229,7 @@ try {
       await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
       await page.getByRole('alert').filter({ hasText: 'Read and accept the unchecked export notice' }).waitFor();
       assert.equal(downloadCount, 0);
-      await page.getByRole('checkbox').check();
+      await page.getByLabel(/encrypted export is unchecked/).check();
       const downloadReady = page.waitForEvent('download');
       await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
       const download = await downloadReady;
@@ -238,6 +238,82 @@ try {
       assert.ok(bytes.byteLength > 0); assert.equal(bytes.includes(Buffer.from(fixture.passphrase)), false);
       await page.getByText('Authentication not checked', { exact: true }).waitFor();
       await assertSeedPreserved(page); await assertPrivateSurfaces(page, href + '#/recovery');
+      // Fresh-key restore of the downloaded file through the real UI and Worker.
+      const restorePass = 'restored ui fixture passphrase', createPass = 'created ui fixture passphrase';
+      await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
+      const fillRestore = async () => {
+        await page.getByLabel('Backup passphrase', { exact: true }).fill(fixture.passphrase);
+        await page.getByLabel('New passphrase', { exact: true }).fill(restorePass);
+        await page.getByLabel('Confirm new passphrase', { exact: true }).fill(restorePass);
+      };
+      await fillRestore();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      await page.getByRole('alert').filter({ hasText: 'Read and accept the restore notice' }).waitFor();
+      assert.equal(await page.getByLabel('Backup passphrase', { exact: true }).inputValue(), '', 'restore secrets clear on refusal');
+      await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      const restoredText = await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).innerText();
+      const restoredId = /profile ([0-9a-f]{32})/.exec(restoredText)?.[1];
+      assert.ok(restoredId && restoredId !== fixture.envelope.profileId, 'restore yields a distinct fresh profile');
+      // H2: the sibling export list reflects the confirmed new profile without remounting the page.
+      await page.getByRole('button', { name: `Use profile ${restoredId}`, exact: true }).waitFor({ timeout: 5000 });
+      assert.equal(await page.getByText('Vault locked', { exact: true }).count(), 1, 'restore does not unlock');
+      await assertSeedPreserved(page);
+      // G03 R1: a cancelled restore may already have committed. Retry stays blocked until an explicit
+      // inventory check; the check never guesses which profile belongs to the cancelled job.
+      await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
+      await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+      await page.getByRole('alert').filter({ hasText: 'may have completed' }).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), true, 'no blind retry after an uncertain restore');
+      const check = page.getByRole('button', { name: 'Check local profiles', exact: true });
+      // The old Worker job may still be settling (BUSY); retry the explicit check, never the restore.
+      for (let attempt = 0; attempt < 20; attempt++) {
+        if (await page.getByText(/^Profiles on this origin now \(\d+\)/).count()) break;
+        if (await check.count()) await check.click();
+        await page.waitForTimeout(250);
+      }
+      await page.getByText(/^Profiles on this origin now \(\d+\)/).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), false, 'retry allowed after reconciliation');
+      assert.equal(await page.getByText(restoredId).count() > 0, true, 'reconciled list shows existing restored profile');
+      await assertSeedPreserved(page);
+      // Create through the UI: mismatch refusal, then explicit consent.
+      await page.getByRole('link', { name: 'Home', exact: true }).click();
+      await page.getByRole('button', { name: 'Create new profile', exact: true }).click();
+      await page.getByLabel('New passphrase', { exact: true }).fill(createPass);
+      await page.getByLabel('Confirm new passphrase', { exact: true }).fill(createPass + ' typo');
+      await page.getByLabel(/no passphrase reset/).check();
+      await page.getByRole('button', { name: 'Create encrypted profile', exact: true }).click();
+      await page.getByRole('alert').filter({ hasText: 'do not match' }).waitFor();
+      assert.equal(await page.getByLabel('New passphrase', { exact: true }).inputValue(), '');
+      await page.getByLabel('New passphrase', { exact: true }).fill(createPass);
+      await page.getByLabel('Confirm new passphrase', { exact: true }).fill(createPass);
+      await page.getByRole('button', { name: 'Create encrypted profile', exact: true }).click();
+      await page.getByText('Vault unlocked', { exact: true }).waitFor();
+      const createdId = /Profile ([0-9a-f]{32}) was created/.exec(await page.getByRole('status').filter({ hasText: 'was created and unlocked' }).innerText())?.[1];
+      assert.ok(createdId && ![restoredId, fixture.envelope.profileId].includes(createdId));
+      await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      // Inventory lists all three opaque IDs; choosing one fills the editable field.
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+      await page.getByText('Profiles on this origin (3 of 16)', { exact: true }).waitFor();
+      await page.getByRole('button', { name: `Use profile ${restoredId}`, exact: true }).click();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), restoredId);
+      await page.getByLabel('Passphrase', { exact: true }).fill(restorePass);
+      await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+      await page.getByText('Vault unlocked', { exact: true }).waitFor();
+      // H1: unlocking a different profile must not show the earlier creation receipt next to it.
+      assert.equal(await page.getByText('was created and unlocked').count(), 0, 'no stale creation receipt beside another unlocked profile');
+      assert.equal(await page.evaluate(secrets => secrets.some(secret => document.documentElement.outerHTML.includes(secret)), [restorePass, createPass, fixture.passphrase]), false);
+      await assertPrivateSurfaces(page, href + '#/home');
+      for (const width of [320, 768]) {
+        await page.setViewportSize({ width, height: 900 });
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No horizontal clipping at ${width}px with inventory`);
+      }
+      await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.goto(href + '#/recovery');
       // Browser offline does not promise a fresh page load; an already loaded shell retains guidance.
       await context.setOffline(true);
       await page.getByRole('link', { name: 'Settings', exact: true }).click();
@@ -295,7 +371,7 @@ try {
   assert.equal(forbiddenRequests, 0); assert.deepEqual(unexpected, []);
   await context.close();
   console.log(JSON.stringify({ fixture: 'emitted-react-vite-shell-local-chromium', browser: browser.version(), reports,
-    localRebuildByteMatch: true, nativeEncryptedUnlockExport: true, automaticWalletPrompts: 0, forbiddenLoopbackRequests: forbiddenRequests,
+    localRebuildByteMatch: true, nativeEncryptedUnlockExport: true, uiCreateRestoreInventory: true, uiRestoreReconciliation: true, automaticWalletPrompts: 0, forbiddenLoopbackRequests: forbiddenRequests,
     unexpectedRequests: unexpected.length, deviceAcceptance: false, deployedFramingAttestation: false, signedRelease: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); await close(server); await close(forbiddenServer); await rm(temporary, { recursive: true, force: true });

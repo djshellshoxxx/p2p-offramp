@@ -121,6 +121,28 @@ export async function openEnvelope(input: unknown, passphrase: string,
     throw new VaultCryptoError(unsupported(error) ? 'UNSUPPORTED_ENVIRONMENT' : 'AUTHENTICATION_FAILED');
   } finally { password.fill(0); rawKey?.fill(0); plain?.fill(0); secrets.forEach(copy => copy.fill(0)); }
 }
+/**
+ * Authenticated decrypt of a persisted envelope with an already unlocked session key (no KDF). The envelope
+ * must belong to this exact profile/key; AAD binds profile, key and revision. Used for readback only.
+ */
+export async function decryptRevision(handle: UnlockedMaterial, input: unknown): Promise<PrivateSnapshotV1> {
+  const state = materials.get(handle);
+  if (!state) throw new VaultCryptoError('LOCKED');
+  const envelope = parseVaultEnvelope(input);
+  if (envelope.profileId !== handle.profileId || envelope.keyId !== handle.keyId ||
+      JSON.stringify(envelope.wrappedKey) !== JSON.stringify(state.envelope.wrappedKey)) throw new VaultCryptoError('AUTHENTICATION_FAILED');
+  let plain: Uint8Array | undefined;
+  try {
+    plain = new Uint8Array(await state.provider.subtle.decrypt({ name: 'AES-GCM',
+      iv: owned(decodeBase64url(envelope.snapshot.nonce, 12, 12)), additionalData: snapshotAAD(envelope), tagLength: 128 },
+      state.key, owned(decodeBase64url(envelope.snapshot.ciphertext, 4112, 8_388_624))));
+    const snapshot = decodeSnapshot(plain);
+    if (snapshot.profileId !== envelope.profileId || snapshot.keyId !== envelope.keyId || snapshot.revision !== envelope.revision) throw new Error();
+    return snapshot;
+  } catch (error) {
+    throw new VaultCryptoError(unsupported(error) ? 'UNSUPPORTED_ENVIRONMENT' : 'AUTHENTICATION_FAILED');
+  } finally { plain?.fill(0); }
+}
 /** G02 session/store owns durable expectedRevision CAS; encryption does not publish a commit. */
 export async function encryptRevision(handle: UnlockedMaterial, input: PrivateSnapshotV1,
   expectedRevision: number): Promise<VaultEnvelopeV1> {

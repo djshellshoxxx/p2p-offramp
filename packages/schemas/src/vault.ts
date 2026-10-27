@@ -6,6 +6,8 @@ export const MAX_SNAPSHOT_BYTES = 8_388_608;
 export const MAX_SNAPSHOT_JSON_BYTES = MAX_SNAPSHOT_BYTES - 4;
 export const SNAPSHOT_BLOCK_BYTES = 4096;
 export const MAX_ENCRYPTIONS_PER_HANDLE = 4096;
+/** Local per-origin profile bound. Keeps inventory/startup work bounded; counted inside the add transaction. */
+export const MAX_VAULT_PROFILES = 16;
 
 export type RecordKind = 'identity' | 'preference' | 'trade' | 'chat' | 'journal';
 export interface WrappedKeyV1 {

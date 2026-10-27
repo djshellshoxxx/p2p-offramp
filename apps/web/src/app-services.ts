@@ -1,20 +1,26 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
-import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport } from '../../../packages/schemas/index.ts';
+import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
 export interface PublicStatus { readonly state: 'locked' | 'unlocked'; }
+/** The new opaque profile ID is public metadata the user needs to unlock later; nothing private is returned. */
+export interface CreatedProfile { readonly state: 'unlocked'; readonly profileId: string; }
 export interface AppServices {
   readonly current: PublicStatus;
   getSnapshot(): PublicStatus;
   subscribe(listener: () => void): () => void;
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<AppResult<PublicStatus>>;
+  create(passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>>;
+  listProfiles(signal?: AbortSignal): Promise<AppResult<RuntimeInventory>>;
+  restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<AppResult<RuntimeRestore>>;
   status(): Promise<AppResult<PublicStatus>>;
   lock(): Promise<AppResult<PublicStatus>>;
   exportEncrypted(profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>>;
   dispose(): Promise<void>;
 }
-export type { RuntimeErrorCode };
+export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore };
+export { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES } from '../../../packages/schemas/index.ts';
 const LOCKED: PublicStatus = Object.freeze({ state: 'locked' });
 const UNLOCKED: PublicStatus = Object.freeze({ state: 'unlocked' });
 
@@ -35,6 +41,18 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     get current() { return snapshot(); }, getSnapshot: snapshot,
     subscribe: (listener: () => void) => runtime.subscribe(listener),
     unlock: (profileId: string, passphrase: string, signal?: AbortSignal) => stateCommand(() => runtime.unlock(profileId, passphrase, signal)),
+    create: async (passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>> => {
+      try {
+        const result = await runtime.create(passphrase, signal);
+        return result.ok ? Object.freeze({ ok: true, value: Object.freeze({ state: 'unlocked' as const, profileId: result.value.profileId }) }) : result;
+      } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    listProfiles: async (signal?: AbortSignal): Promise<AppResult<RuntimeInventory>> => {
+      try { return await runtime.listProfiles(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    restore: async (bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<AppResult<RuntimeRestore>> => {
+      try { return await runtime.restore(bytes, sourcePassphrase, destinationPassphrase, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
     status: () => stateCommand(() => runtime.status()), lock: () => stateCommand(() => runtime.lock()),
     exportEncrypted: async (profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>> => {
       try { return await runtime.exportEncrypted(profileId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }

@@ -19,7 +19,7 @@ try {
     '--ignoreConfig', '--target', 'ES2023', '--module', 'ESNext', '--moduleResolution', 'Bundler',
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
-    'packages/storage/src/backup-service.ts',
+    'packages/storage/src/backup-service.ts', 'packages/storage/src/migration-service.ts',
     'packages/domain/src/intent-journal.ts',
   ], { cwd: root, stdio: 'inherit' });
   const handler = (request, response) => {
@@ -241,7 +241,241 @@ try {
   assert.deepEqual(future, { revoked: 'LOCKED', futureVersion: 'UNSUPPORTED_VERSION', version: 2, disposed: 'LOCKED' });
   assert.deepEqual(unexpected, []);
   await context.close();
-  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, no external egress.');
+  // Profile bound on fresh storage: two documents race creates and restore at the boundary.
+  const capacityContext = await browser.newContext({ serviceWorkers: 'block' });
+  const capacityPages = await Promise.all([capacityContext.newPage(), capacityContext.newPage()]);
+  for (const page of capacityPages) {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+      const { MAX_VAULT_PROFILES } = await import('/schemas/src/vault.js');
+      window.capStore = new IndexedDbVaultStore();
+      window.capVault = new EncryptedVaultService(window.capStore, crypto, { lifecycle: false });
+      window.capBackup = new EncryptedBackupService(window.capStore);
+      window.capMax = MAX_VAULT_PROFILES;
+    });
+  }
+  const capacity = await capacityPages[0].evaluate(async () => {
+    const first = await window.capVault.create('capacity fixture passphrase');
+    if (!first.ok) throw new Error('capacity seed failed');
+    const exported = await window.capBackup.exportWithStatus(first.value.profileId);
+    for (let n = 1; n < window.capMax - 2; n++) {
+      const created = await window.capVault.create('capacity fixture passphrase');
+      if (!created.ok) throw new Error('capacity fill failed');
+    }
+    window.capFirst = first.value; window.capExport = exported.bytes;
+    return { max: window.capMax, seeded: (await window.capVault.listProfiles()).value.profileIds.length, profileId: first.value.profileId };
+  });
+  assert.equal(capacity.seeded, capacity.max - 2);
+  // Two slots remain; four concurrent creates from two tabs plus one restore race for them.
+  const raced = await Promise.all([
+    ...capacityPages.flatMap(page => [0, 1].map(() => page.evaluate(() => window.capVault.create('capacity fixture passphrase')))),
+    capacityPages[1].evaluate(async (bytes) => {
+      try { const receipt = await window.capBackup.restore(new Uint8Array(bytes), 'capacity fixture passphrase', 'capacity restore passphrase');
+        return { ok: true, value: receipt }; } catch (error) { return { ok: false, error: { code: error.code } }; }
+    }, [...await capacityPages[0].evaluate(() => [...window.capExport])]),
+  ]);
+  assert.equal(raced.filter(result => result.ok).length, 2, 'exactly the remaining slots are filled under concurrency');
+  assert.deepEqual(raced.filter(result => !result.ok).map(result => result.error.code), ['LIMIT_EXCEEDED', 'LIMIT_EXCEEDED', 'LIMIT_EXCEEDED']);
+  const atCapacity = await capacityPages[1].evaluate(async ({ profileId }) => {
+    const inventory = await window.capVault.listProfiles();
+    const opened = await window.capVault.unlock(profileId, 'capacity fixture passphrase');
+    const committed = await window.capVault.commit(opened.value.sessionId, 0, [
+      { op: 'put', record: { id: 'c'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'Y2FwYWNpdHk' } }]);
+    const extra = await window.capVault.create('capacity fixture passphrase');
+    let restored = '';
+    try { await window.capBackup.restore(new Uint8Array(0), 'x'.repeat(12), 'y'.repeat(12)); } catch (error) { restored = error.code; }
+    const after = await window.capVault.listProfiles();
+    return { count: inventory.value.profileIds.length, truncated: inventory.value.truncated, unique: new Set(inventory.value.profileIds).size,
+      committed: committed.ok && committed.value, extra: extra.error?.code, restored, after: after.value.profileIds.length };
+  }, { profileId: capacity.profileId });
+  assert.deepEqual(atCapacity, { count: capacity.max, truncated: false, unique: capacity.max, committed: 1, extra: 'LIMIT_EXCEEDED', restored: 'INVALID_INPUT', after: capacity.max });
+  const restoreAtCapacity = await capacityPages[0].evaluate(async () => {
+    try { await window.capBackup.restore(window.capExport, 'capacity fixture passphrase', 'capacity restore passphrase'); return 'restored'; }
+    catch (error) { return error.code; }
+  });
+  assert.equal(restoreAtCapacity, 'LIMIT_EXCEEDED', 'restore at the bound fails without a partial row');
+  // Saturated origin stays recoverable: export at the bound, restore on a fresh origin/storage as a
+  // fresh-key locked profile, and the saturated source row is retained unchanged.
+  const saturated = await capacityPages[0].evaluate(async ({ profileId }) => {
+    const exported = await window.capBackup.exportWithStatus(profileId);
+    return { bytes: [...exported.bytes], source: JSON.stringify(await window.capStore.get(profileId)),
+      count: (await window.capVault.listProfiles()).value.profileIds.length };
+  }, { profileId: capacity.profileId });
+  assert.equal(saturated.count, capacity.max);
+  const freshContext = await browser.newContext({ serviceWorkers: 'block' });
+  const freshPage = await freshContext.newPage();
+  await freshPage.route('**/*', (route) => {
+    if (new URL(route.request().url()).origin === recoveryOrigin) return route.continue();
+    unexpected.push(route.request().url()); return route.abort();
+  });
+  await freshPage.goto(recoveryOrigin);
+  const recovered = await freshPage.evaluate(async ({ bytes, sourceProfileId }) => {
+    const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+    const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+    const { EncryptedBackupService } = await import('/storage/src/backup-service.js');
+    const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false }), backup = new EncryptedBackupService(store);
+    const before = (await vault.listProfiles()).value.profileIds.length;
+    const receipt = await backup.restore(new Uint8Array(bytes), 'capacity fixture passphrase', 'fresh origin passphrase');
+    const row = await store.get(receipt.newProfileId);
+    const wrongPass = await vault.unlock(receipt.newProfileId, 'capacity fixture passphrase');
+    const opened = await vault.unlock(receipt.newProfileId, 'fresh origin passphrase');
+    const records = opened.ok ? (await vault.list(opened.value.sessionId)).value : [];
+    const out = { before, after: (await vault.listProfiles()).value.profileIds.length, revision: row.revision, distinct: receipt.newProfileId !== sourceProfileId,
+      wrongPass: wrongPass.ok ? 'unexpected' : wrongPass.error.code, records: records.map(r => r.id[0]), origin: location.origin };
+    backup.dispose(); vault.dispose(); store.close(); return out;
+  }, { bytes: saturated.bytes, sourceProfileId: capacity.profileId });
+  assert.deepEqual({ ...recovered, origin: undefined }, { before: 0, after: 1, revision: 0, distinct: true, wrongPass: 'AUTHENTICATION_FAILED', records: ['c'], origin: undefined });
+  assert.equal(recovered.origin, recoveryOrigin);
+  const sourceAfter = await capacityPages[0].evaluate(async ({ profileId }) => ({
+    source: JSON.stringify(await window.capStore.get(profileId)), count: (await window.capVault.listProfiles()).value.profileIds.length }), { profileId: capacity.profileId });
+  assert.deepEqual(sourceAfter, { source: saturated.source, count: capacity.max }, 'saturated source retained, origin unchanged');
+  await freshContext.close();
+  assert.equal(await capacityPages[0].evaluate(async () => (await window.capVault.listProfiles()).value.profileIds.length), capacity.max);
+  for (const page of capacityPages) await page.evaluate(() => { window.capBackup.dispose(); window.capVault.dispose(); window.capStore.close(); });
+  assert.deepEqual(unexpected, []);
+  await capacityContext.close();
+  // G03 reseal across two real documents: a stale source session must conflict, a fresh one copies.
+  const resealContext = await browser.newContext({ serviceWorkers: 'block' });
+  const resealPages = await Promise.all([resealContext.newPage(), resealContext.newPage()]);
+  for (const page of resealPages) {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { MigrationRegistry, InternalMigrationResealer, RecordMigrationService } = await import('/storage/src/migration-service.js');
+      const kinds = ['identity', 'preference', 'trade', 'chat', 'journal'];
+      const schemas = [...kinds.filter(k => k !== 'trade').map(kind => ({ kind, version: 1, validate: () => true })),
+        { kind: 'trade', version: 1, validate: () => true }, { kind: 'trade', version: 2, validate: p => new TextDecoder().decode(p).endsWith('|v2') }];
+      const registry = new MigrationRegistry({ identity: 1, preference: 1, trade: 2, chat: 1, journal: 1 }, schemas,
+        [{ kind: 'trade', fromVersion: 1, toVersion: 2, migrate: p => new TextEncoder().encode(new TextDecoder().decode(p) + '|v2') }]);
+      window.rsStore = new IndexedDbVaultStore();
+      window.rsVault = new EncryptedVaultService(window.rsStore, crypto, { lifecycle: false });
+      window.rsResealer = new InternalMigrationResealer(window.rsVault, new Map([['trade-v2', registry]]));
+      window.rsMigrations = new RecordMigrationService(window.rsVault, registry);
+    });
+  }
+  const resealSeed = await resealPages[0].evaluate(async () => {
+    const created = await window.rsVault.create('reseal fixture passphrase');
+    const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '1'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'dHJhZGU' } }]);
+    window.rsSession = { ...created.value, revision: revision.value };
+    return { profileId: created.value.profileId, revision: revision.value, keyId: (await window.rsStore.get(created.value.profileId)).keyId };
+  });
+  // Tab B commits; tab A's cached session is now stale.
+  await resealPages[1].evaluate(async ({ profileId }) => {
+    const opened = await window.rsVault.unlock(profileId, 'reseal fixture passphrase');
+    const done = await window.rsVault.commit(opened.value.sessionId, opened.value.revision, [{ op: 'put', record: { id: '2'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'cHJlZg' } }]);
+    if (!done.ok) throw new Error('tab B commit failed');
+  }, resealSeed);
+  const stale = await resealPages[0].evaluate(seed => window.rsResealer.migrateAndReseal({ sourceSessionId: window.rsSession.sessionId,
+    expectedKeyId: seed.keyId, expectedRevision: seed.revision, migrationId: 'trade-v2' }, 'reseal destination passphrase'), resealSeed);
+  assert.equal(stale.ok, false); assert.equal(stale.error.code, 'CONFLICT', 'stale source session cannot produce a copy that omits tab B work');
+  const resealed = await resealPages[0].evaluate(async seed => {
+    const opened = await window.rsVault.unlock(seed.profileId, 'reseal fixture passphrase');
+    const sourceBefore = JSON.stringify(await window.rsStore.get(seed.profileId));
+    const result = await window.rsResealer.migrateAndReseal({ sourceSessionId: opened.value.sessionId, expectedKeyId: seed.keyId,
+      expectedRevision: opened.value.revision, migrationId: 'trade-v2' }, 'reseal destination passphrase');
+    const sourceAfter = JSON.stringify(await window.rsStore.get(seed.profileId));
+    return { result, sourceKept: sourceBefore === sourceAfter, profiles: (await window.rsVault.listProfiles()).value.profileIds.length };
+  }, resealSeed);
+  assert.equal(resealed.result.ok, true); assert.equal(resealed.sourceKept, true); assert.equal(resealed.profiles, 2);
+  const copy = await resealPages[1].evaluate(async id => {
+    const opened = await window.rsVault.unlock(id, 'reseal destination passphrase');
+    return (await window.rsVault.list(opened.value.sessionId)).value.map(r => [r.id[0], r.kind, r.schemaVersion, atob(r.payload.replace(/-/g, '+').replace(/_/g, '/'))]);
+  }, resealed.result.value.newProfileId);
+  assert.deepEqual(copy, [['1', 'trade', 2, 'trade|v2'], ['2', 'preference', 1, 'pref']], 'copy includes tab B work and migrated payload');
+  // G09 stale empty plan across real documents: tab A holds a no-op plan, tab B commits, A must conflict.
+  const staleNoop = await resealPages[0].evaluate(async () => {
+    const created = await window.rsVault.create('noop fixture passphrase');
+    const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '3'.repeat(32), kind: 'preference', schemaVersion: 1, payload: 'eA' } }]);
+    window.noopSession = { ...created.value, revision: revision.value };
+    window.noopPlan = (await window.rsMigrations.plan(window.noopSession)).value;
+    return { profileId: created.value.profileId, changes: window.noopPlan.changes.length };
+  });
+  assert.equal(staleNoop.changes, 0);
+  await resealPages[1].evaluate(async ({ profileId }) => {
+    const opened = await window.rsVault.unlock(profileId, 'noop fixture passphrase');
+    const done = await window.rsVault.commit(opened.value.sessionId, opened.value.revision, [{ op: 'put', record: { id: '4'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'eQ' } }]);
+    if (!done.ok) throw new Error('tab B noop-race commit failed');
+  }, staleNoop);
+  const staleResult = await resealPages[0].evaluate(async ({ profileId }) => {
+    const before = JSON.stringify(await window.rsStore.get(profileId));
+    const result = await window.rsMigrations.apply(window.noopSession, window.noopPlan);
+    const after = JSON.stringify(await window.rsStore.get(profileId));
+    const reopened = await window.rsVault.unlock(profileId, 'noop fixture passphrase');
+    const replanned = await window.rsMigrations.plan(reopened.value);
+    return { code: result.ok ? 'unexpected-success' : result.error.code, unchanged: before === after, replannedChanges: replanned.value.changes.length };
+  }, staleNoop);
+  assert.deepEqual(staleResult, { code: 'CONFLICT', unchanged: true, replannedChanges: 1 }, 'stale no-op conflicts; fresh replan sees tab B work');
+  for (const page of resealPages) await page.evaluate(() => { window.rsVault.dispose(); window.rsStore.close(); });
+  // Interrupted reseal: close the document mid-job at several points; a fresh document must find the source
+  // intact and every other row a complete authenticated profile (never a partial or source-overwriting row).
+  const setupReseal = async (page) => {
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+    await page.evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { MigrationRegistry, InternalMigrationResealer } = await import('/storage/src/migration-service.js');
+      const schemas = [...['identity', 'preference', 'chat', 'journal'].map(kind => ({ kind, version: 1, validate: () => true })),
+        { kind: 'trade', version: 1, validate: () => true }, { kind: 'trade', version: 2, validate: p => new TextDecoder().decode(p).endsWith('|v2') }];
+      const registry = new MigrationRegistry({ identity: 1, preference: 1, trade: 2, chat: 1, journal: 1 }, schemas,
+        [{ kind: 'trade', fromVersion: 1, toVersion: 2, migrate: p => new TextEncoder().encode(new TextDecoder().decode(p) + '|v2') }]);
+      window.rsStore = new IndexedDbVaultStore();
+      window.rsVault = new EncryptedVaultService(window.rsStore, crypto, { lifecycle: false });
+      window.rsResealer = new InternalMigrationResealer(window.rsVault, new Map([['trade-v2', registry]]));
+    });
+  };
+  const interruptions = [];
+  for (const delay of [0, 50, 300, 900, 2500]) {
+    const crashContext = await browser.newContext({ serviceWorkers: 'block' });
+    const victim = await crashContext.newPage(); await setupReseal(victim);
+    const seed = await victim.evaluate(async () => {
+      const created = await window.rsVault.create('crash fixture passphrase');
+      const revision = await window.rsVault.commit(created.value.sessionId, 0, [{ op: 'put', record: { id: '1'.repeat(32), kind: 'trade', schemaVersion: 1, payload: 'dHJhZGU' } }]);
+      const source = await window.rsStore.get(created.value.profileId);
+      void window.rsResealer.migrateAndReseal({ sourceSessionId: created.value.sessionId, expectedKeyId: source.keyId,
+        expectedRevision: revision.value, migrationId: 'trade-v2' }, 'crash destination passphrase');
+      return { profileId: created.value.profileId, source: JSON.stringify(source) };
+    });
+    await new Promise(resolveDelay => setTimeout(resolveDelay, delay));
+    await victim.close({ runBeforeUnload: false });
+    const observer = await crashContext.newPage(); await setupReseal(observer);
+    const after = await observer.evaluate(async seed => {
+      const ids = (await window.rsVault.listProfiles()).value.profileIds;
+      const sourceSame = JSON.stringify(await window.rsStore.get(seed.profileId)) === seed.source;
+      const others = [];
+      for (const id of ids.filter(id => id !== seed.profileId)) {
+        const opened = await window.rsVault.unlock(id, 'crash destination passphrase');
+        const records = opened.ok ? (await window.rsVault.list(opened.value.sessionId)).value : null;
+        others.push(opened.ok && records.length === 1 && records[0].schemaVersion === 2 && atob(records[0].payload) === 'trade|v2');
+      }
+      const reopened = await window.rsVault.unlock(seed.profileId, 'crash fixture passphrase');
+      return { count: ids.length, sourceSame, sourceUnlocks: reopened.ok, othersComplete: others.every(Boolean) };
+    }, seed);
+    assert.equal(after.sourceSame, true, `source retained after interruption at ${delay}ms`);
+    assert.equal(after.sourceUnlocks, true); assert.ok(after.count === 1 || after.count === 2);
+    assert.equal(after.othersComplete, true, `any destination row is complete at ${delay}ms`);
+    interruptions.push(after.count === 2 ? 'copied' : 'absent');
+    await crashContext.close();
+  }
+  console.log(`reseal interruption outcomes by delay: ${interruptions.join(',')}`);
+  assert.deepEqual(unexpected, []);
+  await resealContext.close();
+  console.log('PASS: Chromium encrypted IndexedDB persistence, two-tab conflict, exact-ciphertext CAS, stale-session abort, lock/reopen, same/fresh-origin fresh-key backup restore, two-tab G12 reservation/marker CAS and unknown-outcome restart protection, versionchange/disposal, two-tab create/restore race at the profile bound with inventory and at-capacity update, saturated-origin export to fresh-origin fresh-key locked restore with source retained, two-tab G03 reseal stale-source conflict and source-retaining fresh-key copy, document-close interruption at five points leaving source intact and no partial copy, two-tab G09 stale empty-plan conflict without write, no external egress.');
 } finally {
   await browser?.close();
   if (recoveryServer) await new Promise((resolveClose) => recoveryServer.close(resolveClose));

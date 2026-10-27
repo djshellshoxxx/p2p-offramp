@@ -80,3 +80,10 @@ footer { max-width: 64rem; margin: 0 auto; padding: 1rem max(1rem, env(safe-area
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
 @media (forced-colors: active) { button, .panel, .warning, .notice, nav a[aria-current="page"] { border: 1px solid CanvasText; } }
+.profile-choices { border: 1px solid var(--line); border-radius: 4px; padding: 0.5rem 0.75rem; margin: 0 0 1rem; min-width: 0; }
+.profile-choices legend { font-size: 0.875rem; padding: 0 0.25rem; }
+.profile-choices ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.profile-choices button { width: 100%; text-align: left; overflow-wrap: anywhere; }
+.profile-choices code { font-size: 0.8rem; }
+input[type="file"] { max-width: 100%; }
+.profile-list { list-style: none; margin: 0.5rem 0 0; padding: 0; overflow-wrap: anywhere; font-size: 0.8rem; }

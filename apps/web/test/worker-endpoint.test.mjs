@@ -9,6 +9,7 @@ const pass='local runtime fixture passphrase';const clone=v=>structuredClone(v);
 class Store{
  rows=new Map();listeners=new Set();writes=0;
  async get(id){return clone(this.rows.get(id));}
+ async listProfileIds(){return Object.freeze({profileIds:Object.freeze([...this.rows.keys()]),truncated:false});}
  async add(row,options){options?.assertCurrent?.();this.rows.set(row.profileId,clone(row));this.writes++;}
  async compareAndSwap(){throw Error('runtime must not write');}
  subscribeInvalidation(listener){this.listeners.add(listener);return()=>this.listeners.delete(listener);}
@@ -69,4 +70,45 @@ test('Worker clock failure revokes keys and closes instead of keeping an unreada
  let broken=false;const s=await setup({now:()=>{if(broken)throw Error('SECRET clock');return 100;}});
  try{await s.send('unlock',{profileId:s.session.profileId,passphrase:pass});broken=true;await s.send('status');assert.equal(s.messages.at(-1).kind,'closed');assert.equal(s.messages.at(-1).code,'UNSUPPORTED_ENVIRONMENT');}
  finally{s.service.dispose();}
+});
+
+test('Worker create opens only a fresh profile, inventory lists opaque IDs and restore stays locked with a public receipt',async()=>{
+ const s=await setup();await s.send('listProfiles');assert.deepEqual(s.messages.at(-1).result.value,{profileIds:[s.session.profileId],truncated:false});
+ await s.send('create',{passphrase:'fresh worker passphrase'});const created=s.messages.at(-1).result.value;
+ assert.equal(created.state,'unlocked');assert.notEqual(created.handle.profileId,s.session.profileId);assert.equal(s.store.rows.has(created.handle.profileId),true);
+ await s.send('exportEncrypted',{profileId:s.session.profileId});const bytes=s.messages.at(-1).result.value.bytes;
+ await s.send('restore',{bytes,sourcePassphrase:pass,destinationPassphrase:'restored worker passphrase'});const receipt=s.messages.at(-1).result.value;
+ assert.deepEqual(Object.keys(receipt).sort(),['newProfileId','records']);assert.equal(s.store.rows.has(receipt.newProfileId),true);
+ await s.send('status');assert.deepEqual(s.messages.at(-1).result.value,created,'restore leaves the current selection untouched');
+ const tampered=new Uint8Array(bytes);const text=new TextDecoder().decode(tampered);const at=text.indexOf('"checksum":"')+12;tampered[at]=tampered[at]===65?66:65;
+ await s.send('restore',{bytes:tampered,sourcePassphrase:pass,destinationPassphrase:'restored worker passphrase'});assert.equal(s.messages.at(-1).result.error.code,'INVALID_INPUT');
+ await s.send('restore',{bytes,sourcePassphrase:'wrong worker passphrase',destinationPassphrase:'restored worker passphrase'});assert.equal(s.messages.at(-1).result.error.code,'AUTHENTICATION_FAILED');
+ assert.equal(s.store.rows.size,3);assert.doesNotMatch(JSON.stringify(s.messages.filter(m=>m.operation!=='exportEncrypted')),/passphrase|secretKey|sessionId|private-records|wrappedKey/);s.service.dispose();
+});
+test('Worker lock during create suppresses the stale session while the committed encrypted profile remains listable',async()=>{
+ const gate=deferred(),entered=deferred();let captured=0;const session={sessionId:'A'.repeat(43),profileId:'c'.repeat(32),revision:0};const rows=[];
+ const e=endpoint({createServices:()=>({vault:{create:async()=>{entered.resolve();await gate.promise;rows.push(session.profileId);return{ok:true,value:session};},
+  listProfiles:async()=>({ok:true,value:{profileIds:[...rows],truncated:false}}),captureSession:()=>{captured++;throw Error('stale create must not attach');},
+  unlock:async()=>{throw Error('unused');},lock:()=>{},lockAll:()=>{},dispose:()=>{}},backup:{exportWithStatus:async()=>{throw Error('unused');},restore:async()=>{throw Error('unused');},dispose:()=>{}}})});
+ await e.send('init',{config});const pending=e.send('create',{passphrase:pass});await entered.promise;await e.send('lock',{},1);
+ gate.resolve();await pending;assert.equal(captured,0);assert.equal(e.messages.filter(m=>m.operation==='create'&&m.result?.ok).length,0);
+ await e.send('listProfiles',{},1);assert.deepEqual(e.messages.at(-1).result.value.profileIds,[session.profileId]);e.service.dispose();
+});
+test('Worker maps the profile bound to a fixed limit and keeps one job at a time',async()=>{
+ const gate=deferred();const e=endpoint({createServices:()=>({vault:{create:async()=>({ok:false,error:{code:'LIMIT_EXCEEDED',retryable:false,message:'SECRET'}}),
+  listProfiles:async()=>{await gate.promise;return{ok:true,value:{profileIds:[],truncated:false}};},captureSession:()=>{throw Error('unused');},unlock:async()=>{throw Error('unused');},lock:()=>{},lockAll:()=>{},dispose:()=>{}},
+  backup:{exportWithStatus:async()=>{throw Error('unused');},restore:async()=>{throw Error('unused');},dispose:()=>{}}})});
+ await e.send('init',{config});await e.send('create',{passphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'LIMIT_EXCEEDED');
+ const pending=e.send('listProfiles');await e.send('create',{passphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'BUSY');gate.resolve();await pending;
+ assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
+});
+test('Worker reports storage quota as a typed QUOTA_EXCEEDED for create and restore, never a generic outage',async()=>{
+ const {BackupError}=await import('../../../packages/storage/index.ts');
+ const e=endpoint({createServices:()=>({vault:{create:async()=>({ok:false,error:{code:'QUOTA_EXCEEDED',retryable:true,message:'SECRET'}}),listProfiles:async()=>({ok:false,error:{code:'QUOTA_EXCEEDED',retryable:true,message:'SECRET'}}),
+  captureSession:()=>{throw Error('unused');},unlock:async()=>{throw Error('unused');},lock:()=>{},lockAll:()=>{},dispose:()=>{}},
+  backup:{exportWithStatus:async()=>{throw Error('unused');},restore:async()=>{throw new BackupError('QUOTA_EXCEEDED');},dispose:()=>{}}})});
+ await e.send('init',{config});await e.send('create',{passphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
+ assert.equal(e.messages.at(-1).result.error.messageKey,'runtime.error.quota_exceeded');
+ await e.send('restore',{bytes:new Uint8Array([1]),sourcePassphrase:pass,destinationPassphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
+ assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
 });

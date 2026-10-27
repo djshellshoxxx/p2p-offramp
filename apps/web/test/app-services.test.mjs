@@ -30,7 +30,7 @@ test('facade startup is locked, has stable state-only snapshots and rejects inse
   Object.defineProperty(globalThis, 'isSecureContext', { configurable: true, value: true });
   const port = new Port(), services = await begin(port);
   assert.deepEqual(services.getSnapshot(), { state: 'locked' }); assert.equal(services.current, services.getSnapshot());
-  for (const forbidden of ['handle', 'provider', 'records', 'create', 'restore', 'sign', 'submit', 'read', 'fetch']) assert.equal(forbidden in services, false);
+  for (const forbidden of ['handle', 'provider', 'records', 'sign', 'submit', 'read', 'fetch', 'commit', 'passphrase']) assert.equal(forbidden in services, false);
   await services.dispose(); assert.equal(port.terminated, 1);
 });
 test('observers receive unlock and synchronous lock revocation without exposing private runtime handles', async () => {
@@ -65,4 +65,21 @@ test('disposal invalidates pending unlock and ignores its late response without 
   const opened = await pending; assert.equal(opened.ok, false); assert.equal(opened.error.code, 'LOCKED');
   port.reply(port.held.base, port.held.value); await disposing; await flush();
   assert.deepEqual(services.current, { state: 'locked' }); assert.doesNotMatch(JSON.stringify(services.current), /passphrase|profileId|handle|sessionId/);
+});
+test('facade create returns only state plus the new opaque profile ID; inventory and restore pass strict public values', async () => {
+  const port = new Port(), services = await begin(port);
+  port.postMessage = command => {
+    const { config, passphrase, bytes, sourcePassphrase, destinationPassphrase, ...base } = command;
+    const values = {
+      create: { state: 'unlocked', handle: { id: 'B'.repeat(42) + 'A', generation: command.generation, profileId: 'c'.repeat(32), purpose: 'vault' } },
+      listProfiles: { profileIds: ['c'.repeat(32)], truncated: false }, restore: { newProfileId: 'd'.repeat(32), records: 2 },
+    };
+    queueMicrotask(() => port.reply(base, values[command.operation] ?? { state: 'locked', handle: null }));
+  };
+  const created = value(await services.create('local facade fixture passphrase'));
+  assert.deepEqual(created, { state: 'unlocked', profileId: 'c'.repeat(32) }); assert.deepEqual(services.current, { state: 'unlocked' });
+  assert.deepEqual(value(await services.listProfiles()), { profileIds: ['c'.repeat(32)], truncated: false });
+  assert.deepEqual(value(await services.restore(new Uint8Array([1]), 'local facade fixture passphrase', 'local facade other passphrase')), { newProfileId: 'd'.repeat(32), records: 2 });
+  assert.doesNotMatch(JSON.stringify([created, services.current]), /passphrase|handle|sessionId|BBBB/);
+  await services.dispose();
 });

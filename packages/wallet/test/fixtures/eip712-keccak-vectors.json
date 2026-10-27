@@ -1,0 +1,31 @@
+{
+ "provenance": {
+  "eip712Example": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js",
+  "eip712ExampleSha256": "c6bdb395cdfd0cf8408328156960203d5b984f2fe0087ca74c74c99e266c0e3b",
+  "license": "CC0-1.0 (EIP text and assets)",
+  "keccak": "Keccak-256 (original Keccak padding, not FIPS 202 SHA3-256) published empty-string and 'abc' digests"
+ },
+ "keccak256": [
+  {
+   "utf8": "",
+   "digest": "c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+  },
+  {
+   "utf8": "abc",
+   "digest": "4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45"
+  }
+ ],
+ "etherMail": {
+  "mailTypeHash": "a0cedeb2dc280ba39b857546d74f5549c3a1d7bdc2dd96bf881f76108e23dac2",
+  "mailStructHash": "c52c0ee5d84264471806290a3f2c4cecfc5490626bf912d01f240d7a274b371e",
+  "domainSeparator": "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f",
+  "signingHash": "be609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2",
+  "signature": {
+   "note": "ecsign(signingHash, keccak256('cow')) from the same Example.js",
+   "signer": "0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826",
+   "v": 28,
+   "r": "4355c47d63924e8a72e509b65029052eb6c299d53a04e167c5775fd466751c9d",
+   "s": "07299936d304c153f6443dfa05f40ff007d72911b6f72307f996231605b91562"
+  }
+ }
+}

@@ -3,11 +3,11 @@ import {
   ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
 } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
-import { createEnvelope, openEnvelope, encryptRevision, disposeMaterial, VaultCryptoError,
+import { createEnvelope, openEnvelope, encryptRevision, decryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
-import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
+import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type ProfileInventory, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
 export { VaultStorageError } from './idb-vault-store.ts';
-export type { VaultStore } from './idb-vault-store.ts';
+export type { ProfileInventory, VaultStore } from './idb-vault-store.ts';
 
 class Failure extends Error {
   readonly code: VaultErrorCode;
@@ -85,6 +85,12 @@ interface SessionState {
   tail: Promise<void>; operations: Set<AbortController>;
   revocations: Set<() => void>;
 }
+/** Public metadata of a resealed copy. The source profile is retained and stays as it was. */
+export interface ResealReceipt {
+  readonly sourceProfileId: string; readonly newProfileId: string; readonly newKeyId: string; readonly revision: 0; readonly records: number;
+}
+/** Pure record transform; IDs and kinds must be preserved. Throws to abort the whole reseal. */
+export type ResealTransform = (records: readonly PrivateRecordV1[]) => readonly PrivateRecordV1[];
 export interface VaultServiceOptions {
   lifecycle?: boolean;
   /** Injected stores are shared by default; true explicitly transfers connection ownership. */
@@ -210,6 +216,15 @@ export class EncryptedVaultService implements VaultService {
       });
     });
   }
+  /** Public row keys only; no envelope is read, so this reveals nothing beyond G02's observable profile count. */
+  listProfiles(signal?: AbortSignal): Promise<Result<ProfileInventory>> {
+    return this.#result(async () => {
+      if (signal?.aborted) throw new Failure('CANCELLED');
+      const inventory = await this.#store.listProfileIds();
+      if (signal?.aborted) throw new Failure('CANCELLED');
+      return inventory;
+    });
+  }
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>> {
     return this.#result(async () => {
       requireId(profileId); const password = encodePassphrase(passphrase); password.fill(0);
@@ -301,6 +316,99 @@ export class EncryptedVaultService implements VaultService {
           !(error instanceof Failure || error instanceof VaultStorageError || error instanceof VaultCryptoError || error instanceof ValidationError)) this.lock(sessionId);
         throw error;
       } finally { release(); state.operations.delete(control.controller); control.remove(); }
+    });
+  }
+  /**
+   * Storage-internal authenticated readback: decrypts the persisted row (not the session cache) with the
+   * live key. The row must still be exactly this session's envelope; otherwise CONFLICT. Read-only.
+   */
+  readPersisted(sessionId: string, signal?: AbortSignal): Promise<Result<PrivateRecordV1[]>> {
+    return this.#result(async () => {
+      const state = this.#session(sessionId), generation = state.generation;
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      try {
+        await previous; this.#guard(state, generation, signal);
+        const expected = state.envelope!;
+        const latest = await this.#store.get(expected.profileId); this.#guard(state, generation, signal);
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) throw new Failure('CONFLICT');
+        const snapshot = await decryptRevision(state.material, latest); this.#guard(state, generation, signal);
+        return snapshot.records.map(record => ({ ...record }));
+      } finally { release(); }
+    });
+  }
+  /**
+   * Read-only G02 synchronization point: confirms the persisted row is still exactly this session's
+   * envelope. Never writes or encrypts. A stale session is locked, as commit would, and reports CONFLICT.
+   */
+  assertFresh(sessionId: string, signal?: AbortSignal): Promise<Result<number>> {
+    return this.#result(async () => {
+      const state = this.#session(sessionId), generation = state.generation;
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      try {
+        await previous; this.#guard(state, generation, signal);
+        const expected = state.envelope!;
+        const latest = await this.#store.get(expected.profileId); this.#guard(state, generation, signal);
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        return expected.revision;
+      } finally { release(); }
+    });
+  }
+  /**
+   * Storage-internal G03/G09 reseal: copies the live session's authenticated snapshot through a bundled
+   * transform into a new fresh-key profile. Not part of the public VaultService or Worker protocol.
+   * The source row is rechecked inside the destination add transaction, so a concurrent commit aborts
+   * the copy instead of letting it silently omit work.
+   */
+  resealSnapshot(sessionId: string, expectedKeyId: string, expectedRevision: number, transform: ResealTransform,
+    destinationPassphrase: string, signal?: AbortSignal): Promise<Result<ResealReceipt>> {
+    return this.#result(async () => {
+      const state = this.#session(sessionId), generation = state.generation;
+      requireId(expectedKeyId);
+      if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION || typeof transform !== 'function') throw new ValidationError();
+      const password = encodePassphrase(destinationPassphrase); password.fill(0);
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      const control = this.#control(signal); state.operations.add(control.controller);
+      const guard = (): void => { this.#guard(state, generation, control.controller.signal); };
+      let candidate: PrivateSnapshotV1 | undefined;
+      try {
+        await previous; guard();
+        const snapshot = state.snapshot!, source = state.envelope!;
+        if (source.keyId !== expectedKeyId || snapshot.revision !== expectedRevision) throw new Failure('CONFLICT');
+        const latest = await this.#store.get(snapshot.profileId); guard();
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), source)) throw new Failure('CONFLICT');
+        let output: readonly PrivateRecordV1[];
+        try { output = transform(snapshot.records.map(record => ({ ...record }))); }
+        catch (error) {
+          // Only fixed schema outcomes cross this boundary; transform-supplied messages never do.
+          const code: unknown = (error as { code?: unknown } | null)?.code;
+          throw new Failure(code === 'UNSUPPORTED_VERSION' || code === 'LIMIT_EXCEEDED' ? code : 'INVALID_INPUT');
+        }
+        if (!Array.isArray(output) || output.length !== snapshot.records.length) throw new ValidationError();
+        const before = new Map(snapshot.records.map(record => [record.id, record.kind]));
+        for (const record of output) if (before.get(record?.id) !== record?.kind) throw new ValidationError();
+        const profileId = this.#randomId(), keyId = this.#randomId();
+        if (profileId === snapshot.profileId || keyId === source.keyId) throw new Failure('ALREADY_EXISTS');
+        // parsePrivateSnapshot re-applies every G02 record, payload and aggregate bound and rejects duplicates.
+        candidate = parsePrivateSnapshot({ format: snapshot.format, version: snapshot.version, profileId, keyId, revision: 0,
+          records: [...output].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0) });
+        const sealed = await createEnvelope(candidate, destinationPassphrase, this.#provider);
+        try {
+          guard();
+          const verified = await openEnvelope(sealed.envelope, destinationPassphrase, this.#provider);
+          try { guard(); if (JSON.stringify(verified.snapshot) !== JSON.stringify(candidate)) throw new Failure('AUTHENTICATION_FAILED'); }
+          finally { disposeMaterial(verified.material); }
+        } finally { disposeMaterial(sealed.material); }
+        guard();
+        const receipt: ResealReceipt = Object.freeze({ sourceProfileId: snapshot.profileId, newProfileId: profileId, newKeyId: keyId,
+          revision: 0, records: candidate.records.length });
+        candidate = undefined;
+        await this.#store.addWithSource(source, sealed.envelope, { signal: control.controller.signal, assertCurrent: guard });
+        // A completed add is durable even if the source session is locked or cancelled afterwards.
+        return receipt;
+      } catch (error) {
+        if (error instanceof VaultStorageError && error.code === 'CANCELLED') { guard(); throw new Failure('CANCELLED'); }
+        throw error;
+      } finally { candidate = undefined; release(); state.operations.delete(control.controller); control.remove(); }
     });
   }
   lock(sessionId: string): void {

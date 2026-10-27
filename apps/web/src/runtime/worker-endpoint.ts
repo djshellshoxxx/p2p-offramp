@@ -8,8 +8,8 @@ import {
 } from '../../../../packages/schemas/index.ts';
 
 export interface WorkerPrivateServices {
-  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'lock' | 'lockAll' | 'captureSession' | 'dispose'>;
-  readonly backup: Pick<EncryptedBackupService, 'exportWithStatus' | 'dispose'>;
+  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'create' | 'listProfiles' | 'lock' | 'lockAll' | 'captureSession' | 'dispose'>;
+  readonly backup: Pick<EncryptedBackupService, 'exportWithStatus' | 'restore' | 'dispose'>;
 }
 export interface WorkerEndpointOptions {
   readonly createServices?: () => WorkerPrivateServices;
@@ -23,8 +23,9 @@ function errorCode(input: unknown): RuntimeErrorCode {
   if (input instanceof RuntimeBoundaryError) return input.code;
   if (input instanceof BackupError) {
     const value = input.code;
+    if (value === 'CHECKSUM_MISMATCH') return 'INVALID_INPUT';
     if (value === 'INVALID_INPUT' || value === 'UNSUPPORTED_ENVIRONMENT' || value === 'UNSUPPORTED_VERSION' || value === 'NOT_FOUND' ||
-        value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'CANCELLED' || value === 'BUSY') return value;
+        value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' || value === 'BUSY') return value;
   }
   return 'STORAGE_UNAVAILABLE';
 }
@@ -32,7 +33,7 @@ function vaultValue<T>(result: Result<T>): T {
   if (result.ok) return result.value;
   const value = result.error.code;
   throw new RuntimeBoundaryError(value === 'UNSUPPORTED_ENVIRONMENT' || value === 'UNSUPPORTED_VERSION' || value === 'INVALID_INPUT' ||
-    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'CANCELLED' ? value : 'STORAGE_UNAVAILABLE');
+    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' ? value : 'STORAGE_UNAVAILABLE');
 }
 
 class VaultWorkerEndpoint {
@@ -124,13 +125,16 @@ class VaultWorkerEndpoint {
         this.#reply(command, { ok: true, value }); return;
       }
       if (this.#active) { this.#reply(command, runtimeFailure('BUSY')); return; }
-      if (command.operation === 'unlock') this.#clear();
+      if (command.operation === 'unlock' || command.operation === 'create') this.#clear();
       const job: ActiveJob = { generation: this.#generation, controller: new AbortController() }; this.#active = job;
       const started = this.#time();
       const timer = setTimeout(() => { job.controller.abort(); this.#services?.vault.lockAll(); }, RUNTIME_REQUEST_TIMEOUT_MS);
       try {
-        if (command.operation === 'unlock') {
-          const opened = await this.#services.vault.unlock(command.profileId, command.passphrase, job.controller.signal);
+        if (command.operation === 'unlock' || command.operation === 'create') {
+          const opened = command.operation === 'unlock'
+            ? await this.#services.vault.unlock(command.profileId, command.passphrase, job.controller.signal)
+            // A create that commits after cancellation stays encrypted and locked; inventory reveals it later.
+            : await this.#services.vault.create(command.passphrase, job.controller.signal);
           if (opened.ok && (this.#closed || job.generation !== this.#generation || job.controller.signal.aborted)) this.#services?.vault.lock(opened.value.sessionId);
           this.#guard(job);
           const session = vaultValue(opened);
@@ -150,6 +154,14 @@ class VaultWorkerEndpoint {
           } catch (error) { lease?.dispose(); this.#services.vault.lock(session.sessionId); throw error; }
           if (this.#time() - started >= RUNTIME_REQUEST_TIMEOUT_MS) { this.#clear(); throw new RuntimeBoundaryError('TIMEOUT'); }
           this.#guard(job); this.#reply(command, { ok: true, value: this.#status() });
+        } else if (command.operation === 'listProfiles') {
+          const value = vaultValue(await this.#services.vault.listProfiles(job.controller.signal)); this.#guard(job);
+          this.#reply(command, { ok: true, value: Object.freeze({ profileIds: Object.freeze([...value.profileIds]), truncated: value.truncated }) });
+        } else if (command.operation === 'restore') {
+          const receipt = await this.#services.backup.restore(command.bytes, command.sourcePassphrase, command.destinationPassphrase, job.controller.signal);
+          // A committed restore is durable even if this job is now stale; only the reply is suppressed.
+          this.#guard(job);
+          this.#reply(command, { ok: true, value: Object.freeze({ newProfileId: receipt.newProfileId, records: receipt.records }) });
         } else if (command.operation === 'exportEncrypted') {
           const value = await this.#services.backup.exportWithStatus(command.profileId, job.controller.signal); this.#guard(job);
           if (this.#time() - started >= RUNTIME_REQUEST_TIMEOUT_MS) throw new RuntimeBoundaryError('TIMEOUT');

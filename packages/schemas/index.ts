@@ -12,3 +12,4 @@ export * from './src/vault-service.ts';
 export * from './src/backup.ts';
 export * from './src/identity.ts';
 export * from './src/intent.ts';
+export * from './src/registry.ts';
