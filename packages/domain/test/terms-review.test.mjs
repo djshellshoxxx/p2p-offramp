@@ -401,3 +401,17 @@ test('terms review: hostile inputs never throw and each field is read once', asy
   assert.equal(result.value.amountBaseUnits, '5'); assert.equal(amountReads, 1);
   for (const key of [...Object.keys(doc.terms), 'format', 'terms', 'privateAgreement']) assert.equal(reads.get(key), 1, key);
 });
+
+test('terms review: agreement-level codes follow the documented step order (after INVALID_TERMS, encoder field order)', async () => {
+  const patchAgreement = (doc, patch) => { Object.assign(doc.privateAgreement, patch); return doc; };
+  const bigInstructions = 'x'.repeat(4097);
+  // Step 4 (public terms) beats every agreement-level code, including size and version.
+  assert.equal(await code(patchAgreement(withTerms('native', { revision: '01' }), { paymentInstructions: bigInstructions })), 'INVALID_TERMS');
+  assert.equal(await code(patchAgreement(withTerms('native', { revision: '01' }), { v: 2 })), 'INVALID_TERMS');
+  // Inside step 5 the encoder order applies: key set before v, currency before size.
+  const extraKey = documentFor('native'); extraKey.privateAgreement.v = 2; extraKey.privateAgreement.extra = 1;
+  assert.equal(await code(extraKey), 'INVALID_AGREEMENT');
+  assert.equal(await code(patchAgreement(documentFor('native'), { v: 2 })), 'UNSUPPORTED_FORMAT');
+  assert.equal(await code(patchAgreement(documentFor('native'), { paymentInstructions: bigInstructions, fiatCurrency: 'usd' })), 'INVALID_AGREEMENT');
+  assert.equal(await code(patchAgreement(documentFor('native'), { paymentInstructions: bigInstructions })), 'TOO_LARGE');
+});

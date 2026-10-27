@@ -31,18 +31,22 @@ export interface TermsReviewDocumentV1 {
 }
 
 /**
- * Fixed rejection codes, in check order. The first failing check wins so results are deterministic.
- * - TOO_LARGE: byte length > MAX_TERMS_REVIEW_BYTES, or a G16 size limit (instructions/agreement/capabilities count).
- * - MALFORMED: not strict UTF-8/bounded JSON, or the container is not exactly {format, terms, privateAgreement}.
- * - UNSUPPORTED_FORMAT: `format` is a string other than TERMS_REVIEW_FORMAT, or agreement v != 1.
- * - INVALID_TERMS: public terms fail exact-key/canonical-encoding checks (see implementation notes).
- * - INVALID_AGREEMENT: private agreement fails encodePrivateAgreement validation.
- * - AGREEMENT_MISMATCH: agreement orderId/revision differ from the public terms.
- * - AGREEMENT_HASH_MISMATCH / CAPABILITIES_HASH_MISMATCH: recomputed SHA-256 differs from the public field.
- * - UNKNOWN_NETWORK, NOT_EVM_NETWORK, UNKNOWN_DEPLOYMENT: registry lookup failures.
- * - UNSUPPORTED_ASSET: no registry asset of that kind/address on the network, or the deployment does not list it.
- * - UNFUNDABLE_WINDOW: no chain time t < acceptBefore satisfies 1800 <= escrowExpiry - t <= 604800 (G16).
- * - UNAVAILABLE: the SHA-256 provider failed.
+ * Fixed rejection codes. The first failing step wins, so results are deterministic. Steps, in order:
+ * 1. TOO_LARGE: byte length > MAX_TERMS_REVIEW_BYTES (bytes form only, before decoding).
+ * 2. MALFORMED: not strict UTF-8/bounded JSON, the container is not exactly {format, terms, privateAgreement}, or
+ *    `format` is not a string.
+ * 3. UNSUPPORTED_FORMAT: `format` is a string other than TERMS_REVIEW_FORMAT.
+ * 4. INVALID_TERMS: public terms fail exact-key/canonical-encoding checks.
+ * 5. Private agreement, classified by encodePrivateAgreement/encodeCapabilities in their own field order
+ *    (key set, then `v`, currency, orderId, fiatScale, then fields in encoding order): agreement v != 1 gives
+ *    UNSUPPORTED_FORMAT, a G16 size limit (instructions, agreement, capabilities count) gives TOO_LARGE, any other
+ *    failure gives INVALID_AGREEMENT. So an unknown agreement key wins over `v`, and a bad currency wins over size.
+ * 6. AGREEMENT_MISMATCH: agreement orderId/revision differ from the public terms.
+ * 7. AGREEMENT_HASH_MISMATCH, then CAPABILITIES_HASH_MISMATCH: recomputed SHA-256 differs from the public field
+ *    (UNAVAILABLE if the SHA-256 provider fails; it is consulted only from this step on).
+ * 8. UNKNOWN_NETWORK, NOT_EVM_NETWORK, UNKNOWN_DEPLOYMENT: registry lookup failures.
+ * 9. UNSUPPORTED_ASSET: no registry asset of that kind/address on the network, or the deployment does not list it.
+ * 10. UNFUNDABLE_WINDOW: no chain time t < acceptBefore satisfies 1800 <= escrowExpiry - t <= 604800 (G16).
  */
 export type TermsReviewRejection =
   | 'TOO_LARGE' | 'MALFORMED' | 'UNSUPPORTED_FORMAT' | 'INVALID_TERMS' | 'INVALID_AGREEMENT' | 'AGREEMENT_MISMATCH'
