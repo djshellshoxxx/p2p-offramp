@@ -13,10 +13,18 @@ const registrySource: RegistrySource = __P2P_SYNTHETIC_DEMO__
   ? async () => (await import('./demo/synthetic-local.ts')).syntheticDemoSource()
   : noApprovedRegistry;
 
+/**
+ * One controller for the page lifetime. It is not disposed in an effect cleanup (that would break under StrictMode's
+ * double effects); it holds no external resources, and pagehide discards any in-flight local check.
+ */
 function useTradeReviewController(): TradeReviewController {
   const [trade] = useState(() => createTradeReviewController({ source: registrySource }));
-  useEffect(() => { void trade.loadRegistry(); }, [trade]);
-  useEffect(() => () => trade.dispose(), [trade]);
+  useEffect(() => {
+    void trade.loadRegistry();
+    const pagehide = (event: PageTransitionEvent) => { if (!event.persisted) trade.dispose(); };
+    window.addEventListener('pagehide', pagehide);
+    return () => window.removeEventListener('pagehide', pagehide);
+  }, [trade]);
   return trade;
 }
 

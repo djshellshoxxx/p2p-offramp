@@ -90,8 +90,21 @@ export function OffersPage({ trade }: { readonly trade: TradeReviewController | 
   </>;
 }
 
+/** Re-reads the device clock every 15 s so deadlines and the expired blocker update while the page is open. Display only. */
+function useDeviceSeconds(trade: TradeReviewController | null): string {
+  const [now, setNow] = useState(() => trade?.nowSeconds() ?? '0');
+  useEffect(() => {
+    if (!trade) return;
+    setNow(trade.nowSeconds());
+    const timer = setInterval(() => setNow(trade.nowSeconds()), 15_000);
+    return () => clearInterval(timer);
+  }, [trade]);
+  return now;
+}
+
 export function TradePage({ trade, localId }: { readonly trade: TradeReviewController | null; readonly localId: string }) {
   const snapshot = useTradeReview(trade);
+  const now = useDeviceSeconds(trade);
   const stored = snapshot.reviews.find(item => item.localId === localId) ?? null;
   if (!trade || !stored) return <section className="empty-state" aria-labelledby="trade-missing-title">
     <h2 id="trade-missing-title">{p.tradeMissingTitle}</h2><p>{p.tradeMissing}</p>
@@ -99,7 +112,7 @@ export function TradePage({ trade, localId }: { readonly trade: TradeReviewContr
   </section>;
   return <>
     {snapshot.registry.kind === 'ready' && snapshot.registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}
-    <TradeTermsReview review={stored.review} nowSeconds={trade.nowSeconds()} source={stored.source} />
+    <TradeTermsReview review={stored.review} nowSeconds={now} source={stored.source} />
     <div className="actions">
       <a href="#/offers">{p.backToOffers}</a>
       <button type="button" onClick={() => { trade.remove(localId); window.location.hash = '#/offers'; }}>{p.remove}</button>

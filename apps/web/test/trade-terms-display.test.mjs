@@ -1,31 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { formatBaseUnits, formatFiatMinor, describeDeadline, fullAddress } from '../src/ui/trade/trade-terms-display.ts';
+import { formatFiatMinor, formatUnits, describeDeadline, fullAddress } from '../src/ui/trade/trade-terms-display.ts';
 
 const U128 = ((1n << 128n) - 1n).toString();
 const val = r => { assert.equal(r.ok, true, JSON.stringify(r)); return r.value; };
 
-test('base units: zero, trimming, exactness', () => {
-  assert.equal(val(formatBaseUnits('0', 18, 'ETH')), '0 ETH');
-  assert.equal(val(formatBaseUnits('1', 18, 'ETH')), '0.000000000000000001 ETH');
-  assert.equal(val(formatBaseUnits('1500000000000000000', 18, 'ETH')), '1.5 ETH');
-  assert.equal(val(formatBaseUnits('2000000', 6, 'USDC')), '2 USDC');
-  assert.equal(val(formatBaseUnits('123', 0, 'X')), '123 X');
-});
-test('base units: max u128 at decimals 0, 18 and 38 is exact', () => {
-  assert.equal(val(formatBaseUnits(U128, 0, 'T')), `${U128} T`);
-  assert.equal(val(formatBaseUnits(U128, 18, 'T')), '340282366920938463463.374607431768211455 T');
-  assert.equal(val(formatBaseUnits(U128, 38, 'T')), '3.40282366920938463463374607431768211455 T');
-  assert.equal(val(formatBaseUnits('1', 38, 'T')), `0.${'0'.repeat(37)}1 T`);
-  assert.equal(val(formatBaseUnits('9'.repeat(40), 38, 'T')), `99.${'9'.repeat(38)} T`);
-});
-test('base units: bad input rejected', () => {
-  for (const bad of ['', '01', '-1', '+1', '1.5', '1e3', ' 1', '1 ', '0x10', '１', '9'.repeat(41), 5, null, undefined])
-    assert.deepEqual(formatBaseUnits(bad, 18, 'ETH'), { ok: false, code: 'INVALID_AMOUNT' }, String(bad));
+test('formatUnits: zero, trimming and u128 at decimals 0, 18 and 38', () => {
+  assert.equal(val(formatUnits('0', 18)), '0');
+  assert.equal(val(formatUnits('1500000000000000000', 18)), '1.5');
+  assert.equal(val(formatUnits('123', 0)), '123');
+  assert.equal(val(formatUnits(U128, 18)), '340282366920938463463.374607431768211455');
+  assert.equal(val(formatUnits(U128, 38)), '3.40282366920938463463374607431768211455');
+  assert.equal(val(formatUnits('1', 38)), `0.${'0'.repeat(37)}1`);
   for (const d of [-1, 39, 1.5, NaN, Infinity, '18', undefined])
-    assert.deepEqual(formatBaseUnits('1', d, 'ETH'), { ok: false, code: 'INVALID_DECIMALS' }, String(d));
-  for (const s of ['', 'E TH', '<b>', 'A'.repeat(13), 1])
-    assert.deepEqual(formatBaseUnits('1', 18, s), { ok: false, code: 'INVALID_SYMBOL' });
+    assert.deepEqual(formatUnits('1', d), { ok: false, code: 'INVALID_DECIMALS' }, String(d));
 });
 test('fiat minor units', () => {
   assert.equal(val(formatFiatMinor('12345', 2, 'USD')), '123.45 USD');
@@ -67,4 +55,15 @@ test('address is never truncated or altered', () => {
   assert.ok(!r.grouped.includes('…') && !r.grouped.includes('...'));
   for (const bad of ['', '0x', '0x123', a + '0', a.slice(2), '0xZZcdEf0123456789aBcDeF0123456789AbCdEf01', ' ' + a, 5])
     assert.equal(fullAddress(bad).code, 'INVALID_ADDRESS');
+});
+test('formatUnits: exact uint256 range without a unit label', () => {
+  const max = ((1n << 256n) - 1n).toString();
+  assert.equal(val(formatUnits(max, 0)), max);
+  assert.equal(val(formatUnits(max, 18)), '115792089237316195423570985008687907853269984665640564039457.584007913129639935');
+  assert.equal(val(formatUnits('25000000', 6)), '25');
+  assert.equal(val(formatUnits('1', 18)), '0.000000000000000001');
+  assert.equal(val(formatUnits('0', 6)), '0');
+  for (const bad of [(1n << 256n).toString(), '9'.repeat(79), '01', '-1', '1.0', '1e3', ' 1', 7, null])
+    assert.deepEqual(formatUnits(bad, 18), { ok: false, code: 'INVALID_AMOUNT' }, String(bad));
+  assert.deepEqual(formatUnits('1', 39), { ok: false, code: 'INVALID_DECIMALS' });
 });

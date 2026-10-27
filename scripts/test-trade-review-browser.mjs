@@ -39,10 +39,13 @@ function instrument() {
   window.fetch = (...args) => { observed.networkCalls++; return originalFetch(...args); };
   // Test hook: hold SHA-256 calls while __holdDigest is set, so cancel/stale handling can be observed.
   const digest = crypto.subtle.digest.bind(crypto.subtle);
-  window.__releaseDigest = [];
+  window.__releaseDigest = []; window.__digestsStarted = 0; window.__digestsDone = 0;
   crypto.subtle.digest = async (...args) => {
-    if (window.__holdDigest) await new Promise(release => window.__releaseDigest.push(release));
-    return digest(...args);
+    window.__digestsStarted++;
+    try {
+      if (window.__holdDigest) await new Promise(release => window.__releaseDigest.push(release));
+      return await digest(...args);
+    } finally { window.__digestsDone++; }
   };
 }
 
@@ -77,6 +80,12 @@ try {
   await page.clock.setFixedTime(FIXED_NOW);
   const main = page.locator('main');
   const mainText = () => main.innerText();
+  /** Exact <dd> text for a review <dt> label, so a wrong-decimals value cannot pass as a substring. */
+  const field = label => page.evaluate(wanted => {
+    const term = [...document.querySelectorAll('dl.terms dt')].find(node => node.textContent === wanted);
+    return term?.nextElementSibling?.innerText ?? null;
+  }, label);
+  const amountLine = async () => (await field('Crypto amount'))?.split('\n')[0];
   const sessionItems = async () => {
     await page.getByRole('heading', { level: 2, name: 'Reviewed in this session', exact: true }).waitFor();
     return page.locator('.session-list li').count();
@@ -104,6 +113,9 @@ try {
     assert.ok(text.includes(expected), `fresh review shows ${JSON.stringify(expected)}`);
   }
   assert.ok(!text.includes('The acceptance deadline has passed'));
+  assert.equal(await amountLine(), '0.25 native');
+  assert.equal(await field('Fiat amount'), '123.45 EUR');
+  assert.equal(await field('Crypto seller (funds escrow, confirms fiat receipt)'), `${SELLER}\nGrouped for reading: 0x ${SELLER.slice(2).match(/.{4}/g).join(' ')}`);
   assert.equal(await main.getByRole('button', { name: /accept|sign|fund/i }).count(), 0, 'no accept/sign/fund controls');
 
   // 3. Reload: memory-only session is honest about losing the review; nothing is replayed from the link.
@@ -124,6 +136,8 @@ try {
     assert.ok(text.includes(expected), `file review shows ${JSON.stringify(expected)}`);
   }
   assert.ok(!text.includes('SYNTHETIC test-only sample'));
+  assert.equal(await amountLine(), '1 native');
+  assert.equal(await field('Fiat amount'), '50.00 USD');
   assert.notEqual(page.url(), freshUrl);
 
   // 5. ERC-20 frozen scenario through a file.
@@ -135,6 +149,8 @@ try {
   for (const expected of ['25 test-usd', '25000000 base units at 6 decimals', '25.00 USD', 'ERC-20 token', scenario.sets.erc20.terms.asset]) {
     assert.ok(text.includes(expected), `erc20 review shows ${JSON.stringify(expected)}`);
   }
+  assert.equal(await amountLine(), '25 test-usd');
+  assert.equal(await field('Fiat amount'), '25.00 USD');
 
   // 6. Rejections: each stays on Offers with a fixed message and stores nothing.
   await page.goto(origin + '/#/offers');
@@ -177,7 +193,10 @@ try {
   await page.getByRole('button', { name: 'Cancel check', exact: true }).click();
   await page.getByText('Check cancelled. Nothing was stored.', { exact: true }).waitFor();
   await page.evaluate(() => { window.__holdDigest = false; for (const release of window.__releaseDigest.splice(0)) release(); });
-  await page.waitForTimeout(200);
+  // Wait until every digest of the cancelled check (including any it starts after release) has settled, then one task more.
+  await page.waitForFunction(() => window.__digestsDone === window.__digestsStarted && window.__releaseDigest.length === 0);
+  await page.evaluate(() => new Promise(done => setTimeout(done, 0)));
+  await page.waitForFunction(() => window.__digestsDone === window.__digestsStarted);
   assert.match(page.url(), /#\/offers$/);
   assert.equal(await sessionItems(), before);
   assert.match(await mainText(), /Check cancelled\. Nothing was stored\./);
@@ -193,6 +212,16 @@ try {
   await page.getByRole('link', { name: 'Offers', exact: true }).click();
   await page.getByRole('heading', { level: 2, name: 'Reviewed in this session', exact: true }).waitFor();
   assert.equal(await sessionItems(), before - 1, 'in-memory session survives in-app navigation');
+
+  // 10. Import → review → remove: the Offers status must not keep linking to the removed review.
+  const count = await sessionItems();
+  await page.getByRole('button', { name: 'Core native sample (deadlines from now)', exact: true }).click();
+  await page.waitForURL(/#\/trade\//);
+  await page.getByRole('heading', { level: 1, name: 'Trade review', exact: true }).waitFor();
+  await main.locator('.actions').getByRole('button', { name: 'Remove from session', exact: true }).click();
+  await page.waitForURL(/#\/offers$/);
+  assert.equal(await sessionItems(), count);
+  assert.equal(await page.getByRole('link', { name: 'Open review', exact: true }).count(), 0, 'no status link to a removed review');
 
   const observed = await page.evaluate(() => ({ ...window.__observed, local: localStorage.length, session: sessionStorage.length }));
   assert.deepEqual(observed, { prompts: 0, networkCalls: 0, local: 0, session: 0 });
