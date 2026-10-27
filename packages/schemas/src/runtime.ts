@@ -176,11 +176,12 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
   const base = { ...header(raw), kind: 'response' as const, operation: operation(raw.operation) };
   const ok = own(raw.result, 'ok');
   if (ok === false) {
-    const result = exact(raw.result, ['ok', 'error']); const error = exact(result.error, ['code', 'messageKey']);
+    const result = exact(raw.result, ['ok', 'error']); if (result.ok !== false) return fail();
+    const error = exact(result.error, ['code', 'messageKey']);
     const value = code(error.code); if (error.messageKey !== `runtime.error.${value.toLowerCase()}`) return fail();
     return Object.freeze({ ...base, result: runtimeFailure(value) });
   }
-  const result = exact(raw.result, ['ok', 'value']); if (ok !== true) return fail();
+  const result = exact(raw.result, ['ok', 'value']); if (ok !== true || result.ok !== true) return fail();
   if (base.operation === 'exportEncrypted') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: encryptedExport(result.value) }) });
   if (base.operation === 'listProfiles') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: inventory(result.value) }) });
   if (base.operation === 'restore') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: restored(result.value) }) });
