@@ -19,7 +19,7 @@ export const KIND_PRIVATE_DIRECT_MESSAGE = 14;
 export const MAX_CHAT_CONTENT_BYTES = 24_576;
 /**
  * Rumor JSON cap. The seal's NIP-44 payload must fit inside the wrap's NIP-44 plaintext (<= 65535 bytes); a 40960-byte
- * rumor pads to 40962, encodes to 54700 base64 characters, and the seal JSON stays below 55200 bytes.
+ * rumor pads to 40962, encodes to 54704 base64 characters, and the seal JSON stays below 55200 bytes.
  */
 export const MAX_RUMOR_JSON_BYTES = 40_960;
 export const DEFAULT_MAX_SEEN_MESSAGES = 4096;
