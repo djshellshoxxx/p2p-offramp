@@ -137,8 +137,8 @@ contract RevertingReceiver {
         accept = value;
     }
 
-    function fundNative(BasicEscrow escrow, bytes32 tradeId, address buyer, uint64 deadline) external payable {
-        escrow.fundNative{value: msg.value}(tradeId, buyer, deadline);
+    function fundNative(BasicEscrow escrow, BasicEscrow.TradeTerms calldata terms) external payable returns (bytes32) {
+        return escrow.fundNative{value: msg.value}(terms);
     }
 
     receive() external payable {
@@ -159,8 +159,7 @@ contract ReentrancyAttacker is ITransferHook {
         None,
         Release,
         Refund,
-        Withdraw,
-        FundNative
+        Withdraw
     }
 
     BasicEscrow public immutable escrow;
@@ -184,13 +183,13 @@ contract ReentrancyAttacker is ITransferHook {
         withdrawToken = withdrawToken_;
     }
 
-    function fundNative(bytes32 tradeId, address buyer, uint64 deadline) external payable {
-        escrow.fundNative{value: msg.value}(tradeId, buyer, deadline);
+    function fundNative(BasicEscrow.TradeTerms calldata terms) external payable returns (bytes32) {
+        return escrow.fundNative{value: msg.value}(terms);
     }
 
-    function fundToken(bytes32 tradeId, address buyer, address token, uint256 amount, uint64 deadline) external {
-        CallbackToken(token).approve(address(escrow), amount);
-        escrow.fundToken(tradeId, buyer, token, amount, deadline);
+    function fundToken(BasicEscrow.TradeTerms calldata terms) external returns (bytes32) {
+        CallbackToken(terms.asset).approve(address(escrow), terms.amountBaseUnits);
+        return escrow.fundToken(terms);
     }
 
     function release(bytes32 tradeId) external {
@@ -214,12 +213,8 @@ contract ReentrancyAttacker is ITransferHook {
             (ok, err) = address(escrow).call(abi.encodeCall(BasicEscrow.release, (target)));
         } else if (mode == Mode.Refund) {
             (ok, err) = address(escrow).call(abi.encodeCall(BasicEscrow.refund, (target)));
-        } else if (mode == Mode.Withdraw) {
-            (ok, err) = address(escrow).call(abi.encodeCall(BasicEscrow.withdraw, (address(this), withdrawToken)));
         } else {
-            (ok, err) = address(escrow).call{value: 0}(
-                abi.encodeCall(BasicEscrow.fundNative, (target, address(0xBEEF), uint64(block.timestamp + 3600)))
-            );
+            (ok, err) = address(escrow).call(abi.encodeCall(BasicEscrow.withdraw, (address(this), withdrawToken)));
         }
         reentrySucceeded = ok;
         lastError = err;

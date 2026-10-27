@@ -6,9 +6,12 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title BasicEscrow — immutable seller-release / timeout-refund custody (basic v1)
-/// @notice Holds one seller deposit per opaque `tradeId`. Before the deadline only the bound seller can
-///         release to the bound buyer. At or after the deadline anyone can execute a refund that pays only
-///         the bound seller. Released and refunded are terminal; a trade id can never be funded twice.
+/// @notice Holds one seller deposit per G16 trade. The trade id is computed on-chain as the G16 EVM
+///         `termsHash` (EIP-712 digest of `TradeTerms` under this deployment's domain), so a funded escrow
+///         is provably the exact terms both parties accepted off-chain. Before the deadline only the bound
+///         seller can release to the bound buyer. At or after the deadline anyone can execute a refund that
+///         pays only the bound seller. Released and refunded are terminal; a trade id and a seller nonce can
+///         never be funded twice.
 /// @dev Roadmap decision 2: there is no owner, admin, operator, juror, oracle, pause, proxy, upgrade,
 ///      sweep or destination override. Every privileged-looking input (allowlist, gas constants) is fixed
 ///      at deployment. The contract has no `receive`/`fallback`; ETH can only enter through `fundNative`
@@ -43,6 +46,40 @@ contract BasicEscrow is ReentrancyGuard {
         uint256 amount;
     }
 
+    /// @notice G16 public terms (basic manual v1). Field order and types mirror
+    ///         `packages/wallet/src/evm-terms.ts` TRADE_TERMS_TYPE; the constant fields `v = 1` and
+    ///         `mode = 0` are not passed and are hashed as constants.
+    /// @dev `escrowExpirySeconds` becomes the escrow deadline. `assetKind` 0 = native (asset must be zero),
+    ///      1 = ERC-20 (asset is the token).
+    struct TradeTerms {
+        bytes32 orderId;
+        uint64 revision;
+        string networkId;
+        string deploymentId;
+        address seller;
+        address buyer;
+        uint8 assetKind;
+        address asset;
+        uint256 amountBaseUnits;
+        bytes32 privateAgreementHash;
+        bytes32 capabilitiesHash;
+        bytes32 sellerNonce;
+        uint64 acceptBeforeSeconds;
+        uint64 escrowExpirySeconds;
+    }
+
+    /// @notice EIP-712 type string, identical to the G16 TypeScript encoder.
+    bytes32 public constant TRADE_TERMS_TYPEHASH = keccak256(
+        "TradeTerms(uint8 v,bytes32 orderId,uint64 revision,string networkId,string deploymentId,address seller,"
+        "address buyer,uint8 assetKind,address asset,uint256 amountBaseUnits,bytes32 privateAgreementHash,bytes32 capabilitiesHash,"
+        "bytes32 sellerNonce,uint64 acceptBeforeSeconds,uint64 escrowExpirySeconds,uint8 mode)"
+    );
+
+    bytes32 private constant DOMAIN_TYPEHASH =
+        keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
+    bytes32 private constant NAME_HASH = keccak256("P2POfframp");
+    bytes32 private constant VERSION_HASH = keccak256("1");
+
     /// @notice Version label clients bind into terms and deployment registries.
     string public constant VERSION = "p2p-offramp.basic-escrow.evm.v1";
 
@@ -67,6 +104,9 @@ contract BasicEscrow is ReentrancyGuard {
 
     /// @notice Principal owed to an account whose push payout failed, per asset (`address(0)` = native).
     mapping(address account => mapping(address asset => uint256)) public pendingWithdrawals;
+
+    /// @notice Whether a seller nonce has funded a trade (G16: nonces are single-use per seller).
+    mapping(address seller => mapping(bytes32 nonce => bool)) public sellerNonceUsed;
 
     mapping(address token => bool) private _allowed;
     address[] private _allowlist;
@@ -93,8 +133,12 @@ contract BasicEscrow is ReentrancyGuard {
     /// @notice A deferred credit was paid to its recipient.
     event Withdrawn(address indexed recipient, address indexed caller, address token, uint256 amount);
 
-    /// @notice `tradeId` was zero.
-    error ZeroTradeId();
+    /// @notice Terms are malformed for this function (asset kind/asset mismatch, zero revision).
+    error InvalidTerms();
+    /// @notice The seller nonce was already used by a funded trade.
+    error SellerNonceUsed(address seller, bytes32 nonce);
+    /// @notice Funding attempted at or after `acceptBeforeSeconds`.
+    error AcceptanceExpired(uint64 acceptBeforeSeconds);
     /// @notice `tradeId` was already used; ids are single-use forever.
     error TradeIdUsed(bytes32 tradeId);
     /// @notice Buyer was zero, the seller, or this contract.
@@ -143,23 +187,26 @@ contract BasicEscrow is ReentrancyGuard {
         }
     }
 
-    /// @notice Seller deposits `msg.value` of the native asset for `buyer`.
-    /// @param tradeId Opaque nonzero id derived off-chain from signed terms; single use.
-    /// @param buyer Recipient of a release. Immutable once funded.
-    /// @param deadline Unix seconds; release requires `block.timestamp < deadline`, refund `>=`.
-    function fundNative(bytes32 tradeId, address buyer, uint64 deadline) external payable nonReentrant {
-        _bind(tradeId, buyer, address(0), msg.value, deadline);
-        emit Funded(tradeId, msg.sender, buyer, address(0), msg.value, deadline);
+    /// @notice Seller (`terms.seller == msg.sender`) deposits native principal for native-asset terms.
+    /// @dev `msg.value` must equal `terms.amountBaseUnits`. The deadline is `terms.escrowExpirySeconds`.
+    /// @return tradeId The G16 termsHash of `terms` under this deployment's EIP-712 domain.
+    function fundNative(TradeTerms calldata terms) external payable nonReentrant returns (bytes32 tradeId) {
+        if (terms.assetKind != 0 || terms.asset != address(0)) revert InvalidTerms();
+        uint256 amount = terms.amountBaseUnits;
+        if (msg.value != amount) revert IncorrectDeposit(amount, msg.value);
+        tradeId = _bind(terms);
+        emit Funded(tradeId, msg.sender, terms.buyer, address(0), amount, terms.escrowExpirySeconds);
     }
 
-    /// @notice Seller deposits exactly `amount` of allowlisted `token` for `buyer`.
-    /// @dev Requires prior ERC-20 approval. Reverts unless the escrow's balance rises by exactly `amount`.
-    function fundToken(bytes32 tradeId, address buyer, address token, uint256 amount, uint64 deadline)
-        external
-        nonReentrant
-    {
+    /// @notice Seller deposits exactly `terms.amountBaseUnits` of the allowlisted ERC-20 `terms.asset`.
+    /// @dev Requires prior ERC-20 approval. Reverts unless the escrow's balance rises by exactly the principal.
+    /// @return tradeId The G16 termsHash of `terms` under this deployment's EIP-712 domain.
+    function fundToken(TradeTerms calldata terms) external nonReentrant returns (bytes32 tradeId) {
+        address token = terms.asset;
+        if (terms.assetKind != 1) revert InvalidTerms();
         if (token == address(0) || !_allowed[token]) revert UnsupportedAsset(token);
-        _bind(tradeId, buyer, token, amount, deadline);
+        uint256 amount = terms.amountBaseUnits;
+        tradeId = _bind(terms);
 
         IERC20 asset = IERC20(token);
         uint256 balanceBefore = asset.balanceOf(address(this));
@@ -168,7 +215,7 @@ contract BasicEscrow is ReentrancyGuard {
         uint256 received = balanceAfter > balanceBefore ? balanceAfter - balanceBefore : 0;
         if (received != amount) revert IncorrectDeposit(amount, received);
 
-        emit Funded(tradeId, msg.sender, buyer, token, amount, deadline);
+        emit Funded(tradeId, msg.sender, terms.buyer, token, amount, terms.escrowExpirySeconds);
     }
 
     /// @notice Seller releases principal to the bound buyer. Only strictly before the deadline.
@@ -214,6 +261,17 @@ contract BasicEscrow is ReentrancyGuard {
         }
     }
 
+    /// @notice G16 EVM termsHash of `terms` for this deployment: keccak256(0x1901 || domainSeparator ||
+    ///         hashStruct(TradeTerms)). Equals `evmTermsHash` in packages/wallet/src/evm-terms.ts.
+    function tradeIdOf(TradeTerms calldata terms) public view returns (bytes32) {
+        return keccak256(abi.encodePacked(hex"1901", domainSeparator(), _structHash(terms)));
+    }
+
+    /// @notice EIP-712 domain separator: name "P2POfframp", version "1", this chain, this contract.
+    function domainSeparator() public view returns (bytes32) {
+        return keccak256(abi.encode(DOMAIN_TYPEHASH, NAME_HASH, VERSION_HASH, block.chainid, address(this)));
+    }
+
     /// @notice Returns the bound terms and state of `tradeId` (all zero for an unused id).
     function getTrade(bytes32 tradeId) external view returns (Escrow memory) {
         return _escrows[tradeId];
@@ -230,23 +288,57 @@ contract BasicEscrow is ReentrancyGuard {
         return _allowlist;
     }
 
-    /// @dev Shared funding checks and effects. Caller supplies the asset-specific deposit.
-    function _bind(bytes32 tradeId, address buyer, address token, uint256 amount, uint64 deadline) private {
-        if (tradeId == bytes32(0)) revert ZeroTradeId();
-        Escrow storage escrow = _escrows[tradeId];
-        if (escrow.state != State.None) revert TradeIdUsed(tradeId);
+    /// @dev Shared funding checks and effects. The caller performs the asset-specific deposit afterwards.
+    function _bind(TradeTerms calldata terms) private returns (bytes32 tradeId) {
+        if (terms.seller != msg.sender) revert Unauthorized(msg.sender);
+        address buyer = terms.buyer;
         if (buyer == address(0) || buyer == msg.sender || buyer == address(this)) revert InvalidBuyer(buyer);
-        if (amount == 0) revert ZeroAmount();
+        if (terms.revision == 0) revert InvalidTerms();
+        if (terms.amountBaseUnits == 0) revert ZeroAmount();
+        if (block.timestamp >= terms.acceptBeforeSeconds) revert AcceptanceExpired(terms.acceptBeforeSeconds);
+        uint64 deadline = terms.escrowExpirySeconds;
         uint256 earliest = block.timestamp + MIN_DURATION;
         uint256 latest = block.timestamp + MAX_DURATION;
         if (deadline < earliest || deadline > latest) revert DeadlineOutOfRange(deadline, earliest, latest);
 
+        tradeId = tradeIdOf(terms);
+        Escrow storage escrow = _escrows[tradeId];
+        if (escrow.state != State.None) revert TradeIdUsed(tradeId);
+        if (sellerNonceUsed[msg.sender][terms.sellerNonce]) revert SellerNonceUsed(msg.sender, terms.sellerNonce);
+
+        sellerNonceUsed[msg.sender][terms.sellerNonce] = true;
         escrow.seller = msg.sender;
         escrow.deadline = deadline;
         escrow.state = State.Funded;
         escrow.buyer = buyer;
-        escrow.token = token;
-        escrow.amount = amount;
+        escrow.token = terms.asset;
+        escrow.amount = terms.amountBaseUnits;
+    }
+
+    /// @dev hashStruct(TradeTerms) with v = 1 and mode = 0, split in two words-blocks to bound stack use.
+    function _structHash(TradeTerms calldata terms) private pure returns (bytes32) {
+        bytes memory head = abi.encode(
+            TRADE_TERMS_TYPEHASH,
+            uint8(1),
+            terms.orderId,
+            terms.revision,
+            keccak256(bytes(terms.networkId)),
+            keccak256(bytes(terms.deploymentId)),
+            terms.seller,
+            terms.buyer
+        );
+        bytes memory tail = abi.encode(
+            terms.assetKind,
+            terms.asset,
+            terms.amountBaseUnits,
+            terms.privateAgreementHash,
+            terms.capabilitiesHash,
+            terms.sellerNonce,
+            terms.acceptBeforeSeconds,
+            terms.escrowExpirySeconds,
+            uint8(0)
+        );
+        return keccak256(bytes.concat(head, tail));
     }
 
     /// @dev Push `amount` of `token` to `recipient`; on failure credit it for `withdraw`. State is
