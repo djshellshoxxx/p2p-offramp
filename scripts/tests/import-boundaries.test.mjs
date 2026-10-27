@@ -96,3 +96,26 @@ test('G07 reports missing application graph entry instead of claiming it was che
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test('G07 follows literal dynamic imports into the entry graph and still rejects non-literal ones', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-dynamic-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({
+      compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true },
+      include: ['packages/*/src/**/*', 'apps/web/src/**/*'],
+    }));
+    await put(root, 'packages/proofs/index.ts', 'export const proof = true;\n');
+    await put(root, 'apps/web/src/lazy.ts', "export const lazy = () => import('../../../packages/proofs/index.ts');\n");
+    await put(root, 'apps/web/src/demo.ts', 'export const demo = 1;\n');
+    await put(root, 'apps/web/src/main.ts', "export const load = () => import('./demo.ts'); export const other = () => import('./lazy.ts');\n");
+    await put(root, 'apps/web/src/computed.ts', 'export const load = (name: string) => import(name);\n');
+    const result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proofs/index.ts'),
+      'a forbidden module reached only through literal dynamic imports is reported');
+    assert.equal(result.findings.some(finding => finding.code === 'NON_LITERAL_IMPORT' && finding.file.endsWith('/apps/web/src/main.ts')), false,
+      'literal dynamic imports are resolvable, not NON_LITERAL');
+    assert.ok(result.findings.some(finding => finding.code === 'NON_LITERAL_IMPORT' && finding.file.endsWith('/apps/web/src/computed.ts')));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

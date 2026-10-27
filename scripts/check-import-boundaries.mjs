@@ -82,8 +82,9 @@ function moduleSpecifiers(sourceFile) {
   function walk(node) {
     if (isImportDeclaration(node) || isExportDeclaration(node)) {
       if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) imports.push({ node: node.moduleSpecifier, value: node.moduleSpecifier.text });
-    } else if (isImportExpression(node)) {
-      const argument = node.argument;
+    } else if (isCallExpression(node) && isImportExpression(node.expression)) {
+      // TypeScript 7 represents `import(x)` as a call whose callee is the `import` keyword.
+      const argument = node.arguments[0];
       if (argument && isStringLiteral(argument)) imports.push({ node: argument, value: argument.text });
       else imports.push({ node, value: undefined });
     } else if (isImportTypeNode(node)) {
