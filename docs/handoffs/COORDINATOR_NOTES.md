@@ -2,6 +2,12 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — wave 2 started
+
+- Draft PR #10 (escrow) open + subscribed. Worker (Sonnet) running on local branch `wave2/evm-local-trade`:
+  `packages/wallet/src/evm-escrow.ts` calldata/event decoder + `scripts/test-evm-local-trade.mjs` anvil two-party trade.
+  If interrupted: check that branch's commits in its worktree, resume or re-spawn with the same prompt.
+
 ## 2026-10-27 — EVM escrow merged into integration branch
 
 - `claude/sweet-noether-arf6ne` = origin/main `c854785` + escrow merge `237305f`. Draft PR opened to main.
