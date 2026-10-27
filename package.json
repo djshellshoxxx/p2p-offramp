@@ -7,15 +7,16 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
+    "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
     "test:specs": "python -m unittest discover -s scripts/tests -v",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
     "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
-    "test:web:browser": "node scripts/test-web-build-browser.mjs",
+    "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
-    "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs scripts/tests/import-boundaries.test.mjs"
+    "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs scripts/tests/import-boundaries.test.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",

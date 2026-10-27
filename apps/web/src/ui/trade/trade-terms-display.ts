@@ -1,24 +1,20 @@
-import type { PrivateAgreementV1 } from '../../../../../packages/domain/index.ts';
-import type { AssetV1 } from '../../../../../packages/schemas/index.ts';
-
 /**
  * Pure, deterministic display formatters for an already-validated trade-terms view. No DOM, globals, locale or
  * network. Formatting is not validation of a trade: nothing here accepts, signs or funds anything.
  */
-export type DisplayErrorCode = 'INVALID_AMOUNT' | 'INVALID_DECIMALS' | 'INVALID_SYMBOL' | 'INVALID_CURRENCY' | 'INVALID_TIME' | 'INVALID_ADDRESS';
+export type DisplayErrorCode = 'INVALID_AMOUNT' | 'INVALID_DECIMALS' | 'INVALID_CURRENCY' | 'INVALID_TIME' | 'INVALID_ADDRESS';
 export type DisplayResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly code: DisplayErrorCode };
 const ok = <T,>(value: T): DisplayResult<T> => ({ ok: true, value });
 const bad = (code: DisplayErrorCode): DisplayResult<never> => ({ ok: false, code });
 
 /** Same canonical rule as packages/domain/src/trade-terms.ts `unsigned`. */
 const CANONICAL_UNSIGNED = /^(0|[1-9][0-9]{0,39})$/;
+/** EVM amounts are uint256 (G16), which needs up to 78 decimal digits. */
+const CANONICAL_UNSIGNED_WIDE = /^(0|[1-9][0-9]{0,77})$/;
+const U256_MAX = (1n << 256n) - 1n;
 export const MAX_DISPLAY_DECIMALS = 38;
 /** Fiat scale is bounded to 0..6 by the G16 private agreement encoding. */
 export const MAX_FIAT_SCALE = 6;
-/** Asset decimals as carried by the frozen registry type. */
-export type AssetDecimals = AssetV1['decimals'];
-/** Fiat fields as carried by the frozen private agreement type. */
-export type FiatView = Pick<PrivateAgreementV1, 'fiatCurrency' | 'fiatMinorUnits' | 'fiatScale'>;
 
 function decimalString(units: string, decimals: number): string {
   const digits = BigInt(units).toString().padStart(decimals + 1, '0');
@@ -29,12 +25,11 @@ function decimalString(units: string, decimals: number): string {
 }
 const isScale = (value: unknown, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= max;
 
-/** Exact bigint decimal rendering of base units: no float, no rounding, trailing fractional zeros trimmed. */
-export function formatBaseUnits(amountBaseUnits: string, decimals: number, symbol: string): DisplayResult<string> {
-  if (typeof amountBaseUnits !== 'string' || !CANONICAL_UNSIGNED.test(amountBaseUnits)) return bad('INVALID_AMOUNT');
+/** Exact bigint decimal rendering of base units with no unit label: no float, no rounding, trailing fractional zeros trimmed. */
+export function formatUnits(amountBaseUnits: string, decimals: number): DisplayResult<string> {
+  if (typeof amountBaseUnits !== 'string' || !CANONICAL_UNSIGNED_WIDE.test(amountBaseUnits) || BigInt(amountBaseUnits) > U256_MAX) return bad('INVALID_AMOUNT');
   if (!isScale(decimals, MAX_DISPLAY_DECIMALS)) return bad('INVALID_DECIMALS');
-  if (typeof symbol !== 'string' || !/^[A-Za-z0-9]{1,12}$/.test(symbol)) return bad('INVALID_SYMBOL');
-  return ok(`${decimalString(amountBaseUnits, decimals)} ${symbol}`);
+  return ok(decimalString(amountBaseUnits, decimals));
 }
 
 /** Fiat minor units at a fixed scale, rendered with the three-letter currency code (never a symbol or locale). */
