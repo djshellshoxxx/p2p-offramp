@@ -7,5 +7,6 @@ export { createSeal, createGiftWrap, unwrapGiftWrap, KIND_GIFT_WRAP, KIND_SEAL }
 export type { Unwrapped } from './src/nip59.ts';
 export { createTradeChat, tradeConversationId, KIND_PRIVATE_DIRECT_MESSAGE, MAX_RUMOR_JSON_BYTES } from './src/nip17.ts';
 export type { TradeChat, TradeChatMessage } from './src/nip17.ts';
+export { parseEventJson } from './src/event.ts';
 export { NostrCryptoError } from './src/bytes.ts';
 export type { NostrCryptoErrorCode } from './src/bytes.ts';
