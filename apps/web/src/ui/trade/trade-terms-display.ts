@@ -12,6 +12,8 @@ const bad = (code: DisplayErrorCode): DisplayResult<never> => ({ ok: false, code
 
 /** Same canonical rule as packages/domain/src/trade-terms.ts `unsigned`. */
 const CANONICAL_UNSIGNED = /^(0|[1-9][0-9]{0,39})$/;
+/** EVM amounts are uint256 (G16), which needs up to 78 decimal digits. */
+const CANONICAL_UNSIGNED_WIDE = /^(0|[1-9][0-9]{0,77})$/;
 export const MAX_DISPLAY_DECIMALS = 38;
 /** Fiat scale is bounded to 0..6 by the G16 private agreement encoding. */
 export const MAX_FIAT_SCALE = 6;
@@ -29,6 +31,12 @@ function decimalString(units: string, decimals: number): string {
 }
 const isScale = (value: unknown, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= max;
 
+/** Exact bigint decimal rendering of base units with no unit label: no float, no rounding, trailing fractional zeros trimmed. */
+export function formatUnits(amountBaseUnits: string, decimals: number): DisplayResult<string> {
+  if (typeof amountBaseUnits !== 'string' || !CANONICAL_UNSIGNED_WIDE.test(amountBaseUnits)) return bad('INVALID_AMOUNT');
+  if (!isScale(decimals, MAX_DISPLAY_DECIMALS)) return bad('INVALID_DECIMALS');
+  return ok(decimalString(amountBaseUnits, decimals));
+}
 /** Exact bigint decimal rendering of base units: no float, no rounding, trailing fractional zeros trimmed. */
 export function formatBaseUnits(amountBaseUnits: string, decimals: number, symbol: string): DisplayResult<string> {
   if (typeof amountBaseUnits !== 'string' || !CANONICAL_UNSIGNED.test(amountBaseUnits)) return bad('INVALID_AMOUNT');
