@@ -85,14 +85,27 @@ export function createUnsignedEvent(pubkey: string, input: EventTemplate, limits
   return Object.freeze({ id: computeEventId(pubkey, event), pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
 }
 
-/** Strict parse of an untrusted signed event: exact keys, bounds, id recomputation, then BIP340 verification. */
-export async function verifyEvent(input: unknown, provider: NostrMessagingProvider, limits: EventLimits = DEFAULT_EVENT_LIMITS): Promise<NostrEvent> {
+/** Shape, bounds and id recomputation of an untrusted signed event; the signature is NOT checked here. */
+function checkedEvent(input: unknown, limits: EventLimits): NostrEvent {
   const raw = record(input, ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig']);
   if (!isLowerHex(raw.id, 32) || !isLowerHex(raw.pubkey, 32) || !isLowerHex(raw.sig, 64)) return fail();
   const event = template(raw, limits);
   if (computeEventId(raw.pubkey, event) !== raw.id) return fail('INTEGRITY_FAILURE');
-  if (!(await provider.verifySchnorr(hexToBytes(raw.sig, 64), hexToBytes(raw.id, 32), hexToBytes(raw.pubkey, 32)))) return fail('INTEGRITY_FAILURE');
   return Object.freeze({ id: raw.id, pubkey: raw.pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content, sig: raw.sig });
+}
+/** Strict parse of an untrusted signed event: exact keys, bounds, id recomputation, then BIP340 verification. */
+export async function verifyEvent(input: unknown, provider: NostrMessagingProvider, limits: EventLimits = DEFAULT_EVENT_LIMITS): Promise<NostrEvent> {
+  const event = checkedEvent(input, limits);
+  if (!(await provider.verifySchnorr(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)))) return fail('INTEGRITY_FAILURE');
+  return event;
+}
+/** Synchronous variant for callers that cannot await (the relay pool). Needs a provider that offers `verifySchnorrSync`. */
+export function verifyEventSync(input: unknown, provider: Pick<NostrMessagingProvider, 'verifySchnorrSync'>, limits: EventLimits = DEFAULT_EVENT_LIMITS): NostrEvent {
+  const verify = provider.verifySchnorrSync;
+  if (typeof verify !== 'function') return fail('UNSUPPORTED_PROVIDER');
+  const event = checkedEvent(input, limits);
+  if (!verify(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32))) return fail('INTEGRITY_FAILURE');
+  return event;
 }
 /** Strict parse of an untrusted rumor: exact keys (a `sig` key is rejected), bounds and id recomputation. */
 export function parseUnsignedEvent(input: unknown, limits: EventLimits = DEFAULT_EVENT_LIMITS): UnsignedEvent {

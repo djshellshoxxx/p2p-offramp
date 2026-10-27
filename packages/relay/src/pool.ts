@@ -15,6 +15,7 @@ import type { RouteError } from '../../transport/index.ts';
 import { encodeClose, encodeEvent, encodeReq, matchesFilters, parseEvent, parseRelayFrame, FRAME_LIMITS, isHex64, withinBytes } from './nip01.ts';
 import type { EventCrypto, NostrEvent, RelayFilter } from './nip01.ts';
 
+const GIFT_WRAP_KIND = 1059;
 export type RelayBroker = Pick<SessionTransportPolicy, 'authorize' | 'capture'>;
 /** The subset of WebSocket this pool uses. The default connector is the platform WebSocket. */
 export interface RelaySocketLike {
@@ -37,6 +38,8 @@ export interface PublishResult { readonly eventId: string; readonly relayId: str
 
 export const POOL_LIMITS = Object.freeze({
   maxCandidates: 16, maxRelays: 4, maxSubscriptionsPerRelay: 4, maxFiltersPerSubscription: 2, maxFilterLimit: 100, maxHistorySeconds: 86_400,
+  /** NIP-59 randomizes wrap timestamps up to 2 days into the past (+ skew), so wrap-only filters may reach back 3 days. */
+  maxGiftWrapHistorySeconds: 259_200,
   eventsPerMinute: 120, burst: 20, overloadWindowMs: 10_000, overloadWindowsToDisconnect: 3, maxEventsPerSubscription: 1000,
   maxDedupIds: 4096, maxPublishInFlight: 32, banPenalty: 10, maxReconnects: 6,
 });
@@ -279,13 +282,13 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       if (!Array.isArray(f.kinds) || f.kinds.length < 1 || f.kinds.length > 8 || !f.kinds.every((k: number) => Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
       if (!Number.isSafeInteger(f.limit) || f.limit < 1 || f.limit > POOL_LIMITS.maxFilterLimit) return null;
       if (!Number.isSafeInteger(f.since) || f.since < 0) return null;
-      if (wall !== null && f.since < wall - POOL_LIMITS.maxHistorySeconds) return null;
+      if (wall !== null && f.since < wall - (f.kinds.every((k: number) => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
       const copy: Record<string, unknown> = { kinds: [...f.kinds], since: f.since, limit: f.limit };
-      for (const name of ['authors', '#d', '#t', '#k', '#a'] as const) {
+      for (const name of ['authors', '#d', '#t', '#k', '#a', '#p'] as const) {
         const list = f[name];
         if (list === undefined) continue;
         if (!Array.isArray(list) || list.length < 1 || list.length > FRAME_LIMITS.maxFilterValues) return null;
-        if (!list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && (name !== 'authors' || isHex64(v)))) return null;
+        if (!list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
         copy[name] = [...list];
       }
       out.push(Object.freeze(copy) as unknown as RelayFilter);

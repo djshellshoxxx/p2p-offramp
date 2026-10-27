@@ -17,7 +17,7 @@ export interface EventCrypto {
 }
 export interface RelayFilter {
   readonly kinds: readonly number[]; readonly since: number; readonly limit: number;
-  readonly authors?: readonly string[]; readonly '#d'?: readonly string[]; readonly '#t'?: readonly string[]; readonly '#k'?: readonly string[]; readonly '#a'?: readonly string[];
+  readonly authors?: readonly string[]; readonly '#d'?: readonly string[]; readonly '#t'?: readonly string[]; readonly '#k'?: readonly string[]; readonly '#a'?: readonly string[]; readonly '#p'?: readonly string[];
 }
 export const FRAME_LIMITS = Object.freeze({
   maxFrameBytes: 65_536, maxEventBytes: 65_536, maxTags: 64, maxTagItems: 8, maxTagItemBytes: 256,
@@ -103,7 +103,7 @@ export function matchesFilters(event: NostrEvent, filters: readonly RelayFilter[
   return filters.some(filter => {
     if (!filter.kinds.includes(event.kind) || event.created_at < filter.since) return false;
     if (filter.authors !== undefined && !filter.authors.includes(event.pubkey)) return false;
-    for (const name of ['d', 't', 'k', 'a'] as const) {
+    for (const name of ['d', 't', 'k', 'a', 'p'] as const) {
       const wanted = filter[`#${name}`];
       if (wanted !== undefined && !event.tags.some(tag => tag[0] === name && tag[1] !== undefined && wanted.includes(tag[1]))) return false;
     }
