@@ -1,0 +1,45 @@
+{
+  "scope": "Cached public registry metadata only; signatures/attestations NOT verified; ownership not authenticated",
+  "trustedRegistryKeysCached": false,
+  "attestationBodiesCached": false,
+  "providers": [
+    {
+      "package": "@noble/curves",
+      "version": "2.4.0",
+      "gitHead": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+      "repository": {
+        "url": "git+https://github.com/paulmillr/noble-curves.git",
+        "type": "git"
+      },
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/@noble/curves/-/curves-2.4.0.tgz",
+      "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+      "registrySignatureKeyIds": [
+        "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      ],
+      "attestationAdvertised": true,
+      "metadataBodySha256": "ec6ad756dd127db5e4a536fb520adfb63c38ea8691e4ef70b96aa0b186f0caeb",
+      "metadataCacheContentHashVerified": true,
+      "matchesLockAndInventoryMetadata": true
+    },
+    {
+      "package": "@noble/hashes",
+      "version": "2.4.0",
+      "gitHead": "663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+      "repository": {
+        "url": "git+https://github.com/paulmillr/noble-hashes.git",
+        "type": "git"
+      },
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/@noble/hashes/-/hashes-2.4.0.tgz",
+      "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+      "registrySignatureKeyIds": [
+        "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      ],
+      "attestationAdvertised": true,
+      "metadataBodySha256": "80a34d4407a22809125662479867956b95dd5efae9dd353603327e7ae02e6928",
+      "metadataCacheContentHashVerified": true,
+      "matchesLockAndInventoryMetadata": true
+    }
+  ]
+}

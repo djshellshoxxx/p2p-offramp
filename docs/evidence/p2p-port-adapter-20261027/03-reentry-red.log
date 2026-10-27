@@ -1,0 +1,39 @@
+✔ MessageChannel coherent signed fixture produces the real public verifier reply (60.296093ms)
+✔ MessageChannel invalidate suppresses A at SHA1; BUSY persists until physical release (22.803266ms)
+✔ MessageChannel invalidate suppresses A at SHA2; BUSY persists until physical release (15.993926ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA resolve (9.172035ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA reject (8.988283ms)
+✔ direct seam: duplicate and replayed IDs across check/control frames close once with INVALID_INPUT (9.101571ms)
+✔ direct seam: future generation on either check or control fails closed before hashing (3.972703ms)
+✔ direct seam: malformed frames and opaque hostile traps are swallowed into one code-only close (1.317274ms)
+✔ direct throwing-send seam: invalidate ack failure terminally cleans up without recursive send or guaranteed ack (8.250118ms)
+✖ reentrant send during dispose acknowledgment cannot process another control or change close reason (1.424774ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 309.983738
+
+✖ failing tests:
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:269:1
+✖ reentrant send during dispose acknowledgment cannot process another control or change close reason (1.424774ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'LIMIT_EXCEEDED'
+  - 'DISPOSED'
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:278:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'LIMIT_EXCEEDED',
+    expected: 'DISPOSED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

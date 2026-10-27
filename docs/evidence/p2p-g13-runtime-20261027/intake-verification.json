@@ -1,0 +1,429 @@
+{
+  "assignment": "P2P-G13-READ-RUNTIME-04",
+  "base_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+  "base_tree": "939ddea89e4f9cdde5908847c1e19c0d0d75d9c6",
+  "packet": {
+    "project": "p2p",
+    "assignment": "P2P-G13-READ-RUNTIME-04",
+    "packet_path": "/workspace/ghostpay-intake/P2P-G13-read-runtime-Sonnet-packet-4e3f3cc-20261027.md",
+    "packet_bytes": 35438,
+    "packet_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+    "library_file_id": "libfile_a4a3e968cb288191ac6464ae0b8e6f9f",
+    "version": 0,
+    "base_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+    "base_tree": "939ddea89e4f9cdde5908847c1e19c0d0d75d9c6",
+    "files": [
+      {
+        "path": "packages/domain/src/read-retry.ts",
+        "role": "reserved output",
+        "wholeFile": true,
+        "fileSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+        "fileBytes": 6536,
+        "startLine": 1,
+        "endLine": 114,
+        "includedSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+        "includedBytes": 6536
+      },
+      {
+        "path": "packages/domain/test/read-retry.test.mjs",
+        "role": "reserved output",
+        "wholeFile": true,
+        "fileSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+        "fileBytes": 7508,
+        "startLine": 1,
+        "endLine": 72,
+        "includedSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+        "includedBytes": 7508
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "role": "read-only review/context",
+        "wholeFile": true,
+        "fileSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "fileBytes": 3150,
+        "startLine": 1,
+        "endLine": 39,
+        "includedSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "includedBytes": 3150
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "role": "read-only review/context",
+        "wholeFile": false,
+        "fileSha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "fileBytes": 7446,
+        "startLine": 24,
+        "endLine": 41,
+        "includedSha256": "f09ad1505cd2714b0a9d3f8b7877730064ec058eb9312d1f8d2cbe81f5a90d58",
+        "includedBytes": 1632
+      },
+      {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md",
+        "role": "read-only review/context",
+        "wholeFile": true,
+        "fileSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+        "fileBytes": 5421,
+        "startLine": 1,
+        "endLine": 62,
+        "includedSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+        "includedBytes": 5421
+      },
+      {
+        "path": "tsconfig.json",
+        "role": "read-only review/context",
+        "wholeFile": true,
+        "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+        "fileBytes": 389,
+        "startLine": 1,
+        "endLine": 16,
+        "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+        "includedBytes": 389
+      }
+    ],
+    "verified_source_blocks": 6
+  },
+  "output_manifest": [
+    {
+      "path": "packages/domain/test/read-retry.test.mjs",
+      "base_sha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+      "base_bytes": 7508,
+      "proposed_sha256": "aad6e76847d16b74b33c7c3dbaf0e0601fcdd05ccccca1f0917203af992afad7",
+      "proposed_bytes": 15896,
+      "patch_path": "P2P-G13-RUNTIME04-tests.patch",
+      "patch_sha256": "cd5e1e079a73b476a783671da52a356b4a833d1f153340d9fbfd85154b77321c",
+      "patch_bytes": 8896,
+      "status": "UNEXECUTED; inert text reconstruction only"
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "base_sha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+      "base_bytes": 6536,
+      "proposed_sha256": "167e9a1fa602b50e5d36671b3553f0a388cac9479804e72f2998aa127d43e99e",
+      "proposed_bytes": 7475,
+      "patch_path": "P2P-G13-RUNTIME04-implementation.patch",
+      "patch_sha256": "1ce2cc27b2d3ee889e7fcde8cb10ace4abc65e36b27c8b21cabef63e88e04d6c",
+      "patch_bytes": 3044,
+      "status": "UNEXECUTED; inert text reconstruction only"
+    }
+  ],
+  "request_records": [
+    {
+      "tag": "p2p-g13-read-runtime-038",
+      "project": "p2p",
+      "assignment": "P2P-G13-READ-RUNTIME-04",
+      "input_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T01:26:11.314622+00:00",
+      "requested_speed": "standard",
+      "source_format": "plain_text_blocks",
+      "thinking_type": "between_tools",
+      "effort": "medium",
+      "source_hashes": [
+        {
+          "path": "P2P-G13-read-runtime-Sonnet-packet-4e3f3cc-20261027.md",
+          "full_file_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+          "transmitted_content_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+          "library_file_id": "libfile_a4a3e968cb288191ac6464ae0b8e6f9f",
+          "version": 0
+        }
+      ],
+      "payload_bytes": 37522,
+      "max_output_tokens": 14000,
+      "worst_case_reserved_usd": "2.14",
+      "state": "completed",
+      "packet_provenance": {
+        "project": "p2p",
+        "assignment": "P2P-G13-READ-RUNTIME-04",
+        "packet_bytes": 35438,
+        "packet_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+        "library_file_id": "libfile_a4a3e968cb288191ac6464ae0b8e6f9f",
+        "version": 0,
+        "base_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+        "base_tree": "939ddea89e4f9cdde5908847c1e19c0d0d75d9c6",
+        "files": [
+          {
+            "path": "packages/domain/src/read-retry.ts",
+            "role": "reserved output",
+            "wholeFile": true,
+            "fileSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+            "fileBytes": 6536,
+            "startLine": 1,
+            "endLine": 114,
+            "includedSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+            "includedBytes": 6536
+          },
+          {
+            "path": "packages/domain/test/read-retry.test.mjs",
+            "role": "reserved output",
+            "wholeFile": true,
+            "fileSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+            "fileBytes": 7508,
+            "startLine": 1,
+            "endLine": 72,
+            "includedSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+            "includedBytes": 7508
+          },
+          {
+            "path": "packages/domain/src/errors.ts",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+            "fileBytes": 3150,
+            "startLine": 1,
+            "endLine": 39,
+            "includedSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+            "includedBytes": 3150
+          },
+          {
+            "path": "packages/schemas/src/core.ts",
+            "role": "read-only review/context",
+            "wholeFile": false,
+            "fileSha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+            "fileBytes": 7446,
+            "startLine": 24,
+            "endLine": 41,
+            "includedSha256": "f09ad1505cd2714b0a9d3f8b7877730064ec058eb9312d1f8d2cbe81f5a90d58",
+            "includedBytes": 1632
+          },
+          {
+            "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+            "fileBytes": 5421,
+            "startLine": 1,
+            "endLine": 62,
+            "includedSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+            "includedBytes": 5421
+          },
+          {
+            "path": "tsconfig.json",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+            "fileBytes": 389,
+            "startLine": 1,
+            "endLine": 16,
+            "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+            "includedBytes": 389
+          }
+        ],
+        "verified_source_blocks": 6
+      },
+      "http_status": 200,
+      "request_id": "req_011CgRsV9dSqZyRbhHLpQ36p",
+      "rate_limit_headers_sanitized": {
+        "anthropic-ratelimit-input-tokens-limit": "500000",
+        "anthropic-ratelimit-input-tokens-remaining": "492000",
+        "anthropic-ratelimit-input-tokens-reset": "2026-10-27T01:26:13Z",
+        "anthropic-ratelimit-output-tokens-limit": "80000",
+        "anthropic-ratelimit-output-tokens-remaining": "78000",
+        "anthropic-ratelimit-output-tokens-reset": "2026-10-27T01:26:32Z",
+        "anthropic-ratelimit-requests-limit": "1000",
+        "anthropic-ratelimit-requests-remaining": "999",
+        "anthropic-ratelimit-requests-reset": "2026-10-27T01:26:11Z",
+        "anthropic-ratelimit-tokens-limit": "580000",
+        "anthropic-ratelimit-tokens-remaining": "570000",
+        "anthropic-ratelimit-tokens-reset": "2026-10-27T01:26:13Z"
+      },
+      "usage": {
+        "input_tokens": 15536,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 3331,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "returned_model": "claude-sonnet-5-5",
+      "estimated_cost_usd": "0.064382",
+      "response_path": "/workspace/ghostpay-intake/p2p-g13-read-runtime-038-response.txt",
+      "completed_at_utc": "2026-10-27T01:26:31.840113+00:00",
+      "elapsed_seconds": 20.496
+    },
+    {
+      "tag": "p2p-g13-read-runtime-correction-040",
+      "project": "p2p",
+      "assignment": "P2P-G13-READ-RUNTIME-04 required cancellation correction",
+      "input_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T01:27:21.158307+00:00",
+      "requested_speed": "standard",
+      "source_format": "plain_text_blocks",
+      "thinking_type": "between_tools",
+      "effort": "medium",
+      "source_hashes": [
+        {
+          "path": "P2P-G13-read-runtime-Sonnet-packet-4e3f3cc-20261027.md",
+          "full_file_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+          "transmitted_content_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+          "library_file_id": "libfile_a4a3e968cb288191ac6464ae0b8e6f9f",
+          "version": 0
+        }
+      ],
+      "payload_bytes": 46172,
+      "max_output_tokens": 10000,
+      "worst_case_reserved_usd": "2.1",
+      "state": "completed",
+      "packet_provenance": {
+        "project": "p2p",
+        "assignment": "P2P-G13-READ-RUNTIME-04",
+        "packet_bytes": 35438,
+        "packet_sha256": "030f1bf7a27e0dd8bd5f026d7be15950d7ae4dfb704a3700c360c6bee17a4c40",
+        "library_file_id": "libfile_a4a3e968cb288191ac6464ae0b8e6f9f",
+        "version": 0,
+        "base_commit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+        "base_tree": "939ddea89e4f9cdde5908847c1e19c0d0d75d9c6",
+        "files": [
+          {
+            "path": "packages/domain/src/read-retry.ts",
+            "role": "reserved output",
+            "wholeFile": true,
+            "fileSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+            "fileBytes": 6536,
+            "startLine": 1,
+            "endLine": 114,
+            "includedSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+            "includedBytes": 6536
+          },
+          {
+            "path": "packages/domain/test/read-retry.test.mjs",
+            "role": "reserved output",
+            "wholeFile": true,
+            "fileSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+            "fileBytes": 7508,
+            "startLine": 1,
+            "endLine": 72,
+            "includedSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+            "includedBytes": 7508
+          },
+          {
+            "path": "packages/domain/src/errors.ts",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+            "fileBytes": 3150,
+            "startLine": 1,
+            "endLine": 39,
+            "includedSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+            "includedBytes": 3150
+          },
+          {
+            "path": "packages/schemas/src/core.ts",
+            "role": "read-only review/context",
+            "wholeFile": false,
+            "fileSha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+            "fileBytes": 7446,
+            "startLine": 24,
+            "endLine": 41,
+            "includedSha256": "f09ad1505cd2714b0a9d3f8b7877730064ec058eb9312d1f8d2cbe81f5a90d58",
+            "includedBytes": 1632
+          },
+          {
+            "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.5_failure_contract/spec-typed-errors-and-retries.md",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+            "fileBytes": 5421,
+            "startLine": 1,
+            "endLine": 62,
+            "includedSha256": "446025bb614a5feee14555d96ed41ea9ac54d4c1537f043c4397e10f8146af02",
+            "includedBytes": 5421
+          },
+          {
+            "path": "tsconfig.json",
+            "role": "read-only review/context",
+            "wholeFile": true,
+            "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+            "fileBytes": 389,
+            "startLine": 1,
+            "endLine": 16,
+            "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+            "includedBytes": 389
+          }
+        ],
+        "verified_source_blocks": 6
+      },
+      "context_artifacts": [
+        {
+          "path": "p2p-g13-read-runtime-038-response.txt",
+          "sha256": "a7a7a71d0db8dcf4ac63b58485fc026cb6eab606c46b7b6d0965e48cc0c5ad4a",
+          "disposition": "UNEXECUTED incomplete proposal; cancellation invariant explicitly unimplemented"
+        }
+      ],
+      "http_status": 200,
+      "request_id": "req_011CgRsaHwtsbJ2dh2Vshc6w",
+      "rate_limit_headers_sanitized": {
+        "anthropic-ratelimit-input-tokens-limit": "500000",
+        "anthropic-ratelimit-input-tokens-remaining": "490000",
+        "anthropic-ratelimit-input-tokens-reset": "2026-10-27T01:27:24Z",
+        "anthropic-ratelimit-output-tokens-limit": "80000",
+        "anthropic-ratelimit-output-tokens-remaining": "79000",
+        "anthropic-ratelimit-output-tokens-reset": "2026-10-27T01:28:03Z",
+        "anthropic-ratelimit-requests-limit": "1000",
+        "anthropic-ratelimit-requests-remaining": "999",
+        "anthropic-ratelimit-requests-reset": "2026-10-27T01:27:21Z",
+        "anthropic-ratelimit-tokens-limit": "580000",
+        "anthropic-ratelimit-tokens-remaining": "569000",
+        "anthropic-ratelimit-tokens-reset": "2026-10-27T01:27:24Z"
+      },
+      "usage": {
+        "input_tokens": 19067,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 6834,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "returned_model": "claude-sonnet-5-5",
+      "estimated_cost_usd": "0.106474",
+      "response_path": "/workspace/ghostpay-intake/p2p-g13-read-runtime-correction-040-response.txt",
+      "completed_at_utc": "2026-10-27T01:28:02.053620+00:00",
+      "elapsed_seconds": 40.868
+    }
+  ],
+  "status": "UNEXECUTED proposal; sole P2P integrator must demonstrate RED/GREEN",
+  "proposalLibrary": "libfile_b169ba0dc3e881919377975d71cceec2",
+  "proposalVersion": 1,
+  "proposalSha256": "8791883b5e8b14b9bcf35ba5622f3307f119085c2b3039b4b057f1feca374319",
+  "preImplementationHead": "d433390e104a64bfb67cd1100bb70c3400999403",
+  "freshNarrowOwnerApproval": "Sentinel_e7f7083469e88191857928cfc673f491",
+  "priorDenialsPreserved": "Parent reports2prior implementation/test denials from prep-timer restriction; this is one continuation with new explicit owner confirmation; no alternate executor or route.",
+  "patchNormalization": {
+    "originalPath": "P2P-G13-RUNTIME04-tests.patch",
+    "originalSha256": "cd5e1e079a73b476a783671da52a356b4a833d1f153340d9fbfd85154b77321c",
+    "initialGitApplyCheckExit": 128,
+    "initialGitApplyCheckError": "error: corrupt patch at line112",
+    "sourceChangedByFailedCheck": false,
+    "testExecutedByFailedIntake": false,
+    "followOnRunnerError": "runner was not yet created, so no test command ran",
+    "normalizedPath": "P2P-G13-RUNTIME04-tests-terminal-lf.patch",
+    "normalization": "append one terminal LF only; no hunk/body or test oracle changes",
+    "normalizedSha256": "3aae090a9eabcef2a5a6a998ade4402f48645709fdcb35817bf05b13ce1044fd",
+    "terminalLfOnlyProducedBytes": 15897,
+    "terminalLfOnlyProducedSha256": "b7edd135c964c645b41a7831e76115b2f94717721073b37415a88832592bbf6c",
+    "terminalLfOnlyTargetCheck": "failed: proposed target intentionally has no terminal LF",
+    "finalNormalization": "add patch line terminator plus explicit no-newline-at-end-of-file marker; exact intended test bytes, no oracle changes",
+    "testTargetHashVerified": true,
+    "testsExecutedBeforeCorrection": false,
+    "finalPatch": "P2P-G13-RUNTIME04-tests-valid-eof.patch",
+    "finalPatchSha256": "ac2a956eebe11488b5cbf60cb61e4ca62bf3fc28268aba16a4b542f298c986a8"
+  }
+}

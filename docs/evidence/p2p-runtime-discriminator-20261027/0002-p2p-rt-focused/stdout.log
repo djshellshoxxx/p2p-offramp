@@ -1,0 +1,43 @@
+✔ runtime validates config before Worker construction and refuses unsupported secure context (1.84705ms)
+✔ runtime boots locked and returns only purpose-bound opaque handles and labelled encrypted export (243.268894ms)
+✔ runtime abort synchronously invalidates pending output and ignores a late old-generation unlock (2.04986ms)
+✔ runtime rechecks authority after reply settlement before an async public method publishes its result (208.037084ms)
+✔ a replacement unlock before async publication invalidates prior unlock and status even within one generation (592.383487ms)
+✔ runtime independently binds encrypted backup profile to the export request (100.304218ms)
+✔ runtime rejects wrong-profile or malformed Worker output without publishing a handle or raw diagnostics (0.609284ms)
+✔ runtime prevalidates passphrase and cancellation before sending secret input; concurrent requests are bounded (1004.09636ms)
+✔ runtime request timeout terminally closes owned Worker and ignores output after disposal (1.585883ms)
+✔ Node document lifecycle: synthetic events and polling never extend idle, while trusted handler and pagehide revoke correctly (422.096033ms)
+✔ runtime create opens a fresh profile, inventory lists opaque IDs, and restore yields a separate locked profile (605.228557ms)
+✔ runtime create failure leaves the runtime locked and rejects a create reply bound to another operation (0.81558ms)
+✔ quota survives Worker → strict reply → runtime → facade-visible result and maps to the fixed UI remediation (4.885146ms)
+✔ Worker validates strict offline init before constructing private services and closes invalid protocol without echo (2.733854ms)
+✔ default Worker startup refuses missing secure IndexedDB/WebCrypto capability without plaintext fallback (0.398481ms)
+✔ Worker starts locked, unlocks only known encrypted profile, and exposes opaque status plus labelled ciphertext (227.32209ms)
+✔ Worker lock suppresses late uncancellable unlock and bounds replacement jobs until old crypto settles (0.841568ms)
+✔ Worker native errors and wrong passphrase use fixed diagnostics; no unsupported command reaches storage (208.768518ms)
+✔ Worker replay, future generation and invalid init never revive or expose a session (316.544784ms)
+✔ Worker authenticated vault revocation emits only a fixed lock event and disposal is terminal/idempotent (203.095256ms)
+✔ Worker owns monotonic idle deadline even when main timer stalls; late queued activity cannot revive expiry (192.615326ms)
+✔ Worker polling does not extend idle deadline and backward/unknown elapsed time fails closed (383.506717ms)
+✔ Worker clock failure revokes keys and closes instead of keeping an unreadable expiry deadline (182.233345ms)
+✔ Worker create opens only a fresh profile, inventory lists opaque IDs and restore stays locked with a public receipt (589.966722ms)
+✔ Worker lock during create suppresses the stale session while the committed encrypted profile remains listable (0.77527ms)
+✔ Worker maps the profile bound to a fixed limit and keeps one job at a time (0.434935ms)
+✔ Worker reports storage quota as a typed QUOTA_EXCEEDED for create and restore, never a generic outage (0.578147ms)
+✔ runtime config is a strict nonsecret offline allowlist with release permanently disabled (2.660836ms)
+✔ runtime command union exposes only bounded known-profile readonly operations and control commands (2.958037ms)
+✔ runtime messages reject hostile reflection without invoking getters or echoing supplied diagnostics (0.381095ms)
+✔ runtime replies validate opaque purpose handles and fixed errors without exposing vault-session or record fields (1.316032ms)
+✔ runtime encrypted export is bounded G03 ciphertext with an explicit unauthenticated label (17.866427ms)
+✔ runtime create/restore commands require valid passphrases and bounded genuine byte copies (1.329852ms)
+✔ runtime inventory and restore replies are strict, bounded and contain only opaque public fields (1.216144ms)
+✔ runtime response rejects a changing result discriminator in both branches (0.296961ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3329.734281

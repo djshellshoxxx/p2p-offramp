@@ -1,0 +1,34 @@
+{
+  "operation": "replace_library_file",
+  "status": "succeeded",
+  "path": "/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_id": "file_00000000684c81f9a576779590c3dc8d",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "current_version_number": 15,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "15"
+    }
+  ],
+  "directory_id": "libdir_30280fe7938081918252daf66e50daba",
+  "mime_type": "application/zip",
+  "library_artifact_type": "report",
+  "file_size_bytes": 1594875,
+  "external_connectors_accessed": false,
+  "localPath": "/workspace/checkpoints/2026-10-27-p2p-fuzz08-intake/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "sha256": "b44266d867eeb4a8fe7e51d06bfb3c0fdb885ecc69f7ff82c6c88095f1e98717",
+  "producerConfirmed": true,
+  "allReturnedXattrsVerified": true,
+  "binaryConsumerRetrievalVerified": false,
+  "wholeRepositoryRestoreVerified": false,
+  "twoNewFilePatchForwardReverseVerified": true,
+  "allPriorVersion14BytesPreserved": true,
+  "testedSource": "465ea63d5391bfd924f12bf8aa5d22119d1e6ede",
+  "archiveDocumentationHead": "d92f0792f38aa1a55f85301a0003425f643d64b9",
+  "integratorPaidCalls": 0,
+  "sourcePublishedToGitHub": false,
+  "HOST07PathsChanged": false
+}

@@ -1,0 +1,223 @@
+{
+  "assignment": "P2P-G16-PRIVATE-PROTOCOL-06",
+  "status": "UNEXECUTED inert proposal; no P2P code applied, imported, compiled, tested or browser-run by broker",
+  "input_packet": {
+    "project": "p2p",
+    "assignment": "P2P-G16-PRIVATE-PROTOCOL-06",
+    "packet_path": "/workspace/ghostpay-intake/P2P-G16-PRIVATE-PROTOCOL-06-packet.md",
+    "packet_bytes": 85217,
+    "packet_sha256": "f45eddaf2f2650a51212f5aba0dae5dd9f12e044abcd460604cf50b052018bd3",
+    "library_file_id": "libfile_a575afd14b888191aa86389b05d9bec2",
+    "version": 0,
+    "base_commit": "a74ff8ba5a29d958e026f6727e1ec999d22dfa5c",
+    "base_tree": "e92e4c0804347e4a86e59e1cf860769249fdd1a9",
+    "allowed_paths": [
+      {
+        "path": "packages/schemas/src/evm-agreement-protocol.ts",
+        "baseState": "absent",
+        "baseSha256": null,
+        "baseBytes": null
+      },
+      {
+        "path": "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "baseState": "absent",
+        "baseSha256": null,
+        "baseBytes": null
+      },
+      {
+        "path": "scripts/fixtures/g16-browser.mjs",
+        "baseState": "existing",
+        "baseSha256": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "baseBytes": 17877
+      }
+    ],
+    "source_blocks": [
+      {
+        "path": "packages/schemas/src/evm-agreement-input.ts",
+        "role": "read-only complete integrated body parser and structural types; reuse, do not reimplement/edit",
+        "wholeFile": true,
+        "fileSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "fileBytes": 13966,
+        "startLine": 1,
+        "endLine": 232,
+        "includedSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "includedBytes": 13966
+      },
+      {
+        "path": "scripts/fixtures/g16-browser.mjs",
+        "role": "only existing proposed output; complete current private document/Worker fixture, retain182assertions/11groups",
+        "wholeFile": true,
+        "fileSha256": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "fileBytes": 17877,
+        "startLine": 1,
+        "endLine": 234,
+        "includedSha256": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "includedBytes": 17877
+      },
+      {
+        "path": "packages/wallet/src/evm-agreement.ts",
+        "role": "read-only complete existing verifier and public outcome; reuse, no crypto/provider changes",
+        "wholeFile": true,
+        "fileSha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "fileBytes": 6796,
+        "startLine": 1,
+        "endLine": 90,
+        "includedSha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "includedBytes": 6796
+      },
+      {
+        "path": "scripts/test-g16-browser.mjs",
+        "role": "read-only complete isolated Chromium driver/corpus/graph assertions; no edits",
+        "wholeFile": true,
+        "fileSha256": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "fileBytes": 9202,
+        "startLine": 1,
+        "endLine": 117,
+        "includedSha256": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "includedBytes": 9202
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "role": "read-only complete CoreErrorCode/result/error contracts; no new error semantics",
+        "wholeFile": false,
+        "fileSha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "fileBytes": 7446,
+        "startLine": 24,
+        "endLine": 40,
+        "includedSha256": "9644495698492bf71ea25a94b3fc922c489f1c6a50c17923550cd486f46169e1",
+        "includedBytes": 1630
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "role": "read-only existing sequence/resource/BUSY/error constants; legacy runtime remains unchanged",
+        "wholeFile": false,
+        "fileSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "fileBytes": 13904,
+        "startLine": 1,
+        "endLine": 20,
+        "includedSha256": "8eeeb80fde2c73ed45fdfd7b5eb9dadcd7a64bd0caee368eea6d996b38bdc7de",
+        "includedBytes": 1772
+      },
+      {
+        "path": "apps/web/src/runtime/pending-metadata.ts",
+        "role": "read-only complete integrated PENDING05 interface; no new G16 values may be cast into RuntimeCommand",
+        "wholeFile": true,
+        "fileSha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "fileBytes": 1355,
+        "startLine": 1,
+        "endLine": 19,
+        "includedSha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "includedBytes": 1355
+      },
+      {
+        "path": "packages/schemas/test/evm-agreement-input.test.mjs",
+        "role": "read-only complete native structural fixture factory/bad helper; exact noncrypto input shape for focused tests",
+        "wholeFile": false,
+        "fileSha256": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "fileBytes": 19056,
+        "startLine": 1,
+        "endLine": 38,
+        "includedSha256": "ca128299331ae81938104e5222b5058461625cc58024b85f34662e99237831f9",
+        "includedBytes": 2454
+      },
+      {
+        "path": "docs/reviews/G16_BROWSER_DISPOSITION_2026-10-27.md",
+        "role": "read-only conditional requirements; old preallocation gap wording superseded by current integrated code",
+        "wholeFile": false,
+        "fileSha256": "a8f026acf030f41190710ccb2b7f241a552c88049bbdaf09fb041537a501c47c",
+        "fileBytes": 9447,
+        "startLine": 16,
+        "endLine": 28,
+        "includedSha256": "02d83f60255b2e9fedf213cab1190c57b4e10db069200a6527fe6df35ebed825",
+        "includedBytes": 2773
+      },
+      {
+        "path": "package.json",
+        "role": "read-only existing commands/pins; no dependency/tool changes",
+        "wholeFile": true,
+        "fileSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+        "fileBytes": 1395,
+        "startLine": 1,
+        "endLine": 34,
+        "includedSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+        "includedBytes": 1395
+      },
+      {
+        "path": "tsconfig.json",
+        "role": "read-only strict core compilation contract",
+        "wholeFile": true,
+        "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+        "fileBytes": 389,
+        "startLine": 1,
+        "endLine": 16,
+        "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+        "includedBytes": 389
+      }
+    ],
+    "all11sourceblockhashesverified": true
+  },
+  "request": {
+    "tag": "p2p-private-protocol-050",
+    "model": "claude-sonnet-5-5",
+    "timestamp_utc": "2026-10-27T03:04:35.250501+00:00",
+    "completed_at_utc": "2026-10-27T03:05:47.071350+00:00",
+    "request_id": "req_011CgRzzMSjLYAmBwN6GtS2h",
+    "http_status": 200,
+    "usage": {
+      "input_tokens": 37945,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 13286,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "stop_reason": "end_turn",
+    "elapsed_seconds": 71.788,
+    "estimated_cost_usd": "0.20875",
+    "worst_case_reserved_usd": "2.2"
+  },
+  "files": [
+    {
+      "path": "packages/schemas/test/evm-agreement-protocol.test.mjs",
+      "base_bytes": null,
+      "base_sha256": null,
+      "target_bytes": 13294,
+      "target_lines": 178,
+      "target_sha256": "0b80569625c8f4149856d6ade7233f22a56b174ce6b3b3ac8ab4bce7372005d8",
+      "base_state": "absent"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-protocol.ts",
+      "base_bytes": null,
+      "base_sha256": null,
+      "target_bytes": 6378,
+      "target_lines": 108,
+      "target_sha256": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+      "base_state": "absent"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "base_bytes": 17877,
+      "base_sha256": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+      "target_bytes": 22979,
+      "target_lines": 290,
+      "target_sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+      "base_state": "existing"
+    }
+  ],
+  "broker_adjustments": [
+    "Recomputed hunk counts and locations from exact unique old context and new-file added lines; source/test/fixture code bytes otherwise unchanged from model proposal."
+  ],
+  "remaining": [
+    "Sole P2P integrator must reproduce true tests-first RED, implementation GREEN, private fixture graph and full retained acceptance checks.",
+    "Strictly structural data envelope does not authorize host job, current request/generation, trust, money or application inclusion."
+  ]
+}

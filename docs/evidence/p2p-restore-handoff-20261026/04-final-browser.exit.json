@@ -1,0 +1,22 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:web:browser"
+  ],
+  "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+  "startedAtUtc": "2026-10-26T22:58:33.747007+00:00",
+  "sourceFiles": {
+    "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+    "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+    "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+    "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+    "scripts/test-web-build-browser.mjs": "fc41fc6ee0b943c9d029c508856165f5916ca3b9adcbf98519ef3863d19a0f5d"
+  },
+  "processLocalEnvironment": {
+    "P2P_CHROMIUM": "/usr/bin/chromium"
+  },
+  "finishedAtUtc": "2026-10-26T22:58:41.874701+00:00",
+  "exitCode": 1,
+  "sourceFilesUnchangedDuringRun": true
+}

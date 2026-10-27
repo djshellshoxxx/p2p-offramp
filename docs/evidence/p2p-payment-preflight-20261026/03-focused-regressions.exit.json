@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/payment-preflight.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T21:41:45.966852+00:00",
+  "finishedAtUtc": "2026-10-26T21:41:46.160242+00:00",
+  "exitCode": 0,
+  "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+  "sourceFiles": {
+    "packages/domain/src/payment-preflight.ts": "df436ed1893a67ea1abbff20ba004ceeef3ea19dcd9b2281d19c2dc2a7520d1b",
+    "packages/domain/test/payment-preflight.test.mjs": "42194b0c310a636d5a21ba0b0704ffedfdad519089ac4f0bf778a325a4770239"
+  }
+}

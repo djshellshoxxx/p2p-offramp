@@ -1,0 +1,14 @@
+{
+  "libraryFileId": "libfile_7984b84c92d08191867cf3ecae18f129",
+  "version": 0,
+  "nativeBytes": 21705,
+  "nativeDocumentSha256": "2ba9c64a4a26a1514b45b42e0a254fa07399eb3462d2c896f7b40870aeff67d6",
+  "markedUneditedBodyBytes": 17173,
+  "markedUneditedBodySha256": "c8d4ebdb8e0b316daa8e31ad7fbf63c5395f1611cbb06e3695ae068122067f4f",
+  "completeNativeTextVerified": true,
+  "note": "Outer broker framing and raw Fable body are different byte objects. No terminal LF was added, removed or guessed. Exact embedded raw hash matches parent.",
+  "runtimeChangesApplied": false,
+  "reviewSource": "ff2d7622d8032be87a6074c1299a09050b0a2d9d",
+  "nextReadyEngineering": "Private host physical state/terminal drain observation, before control schema/adapter; do not infer physical quiescence from logical closed or retry failed sends.",
+  "classification": "static AI review/proposed unexecuted contract, no audit/provider/trading approval"
+}

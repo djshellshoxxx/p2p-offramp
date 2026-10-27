@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-10-27T04:58:20.321135+00:00",
+  "sessionId": 5792,
+  "toolCommandTerminalExit": 130,
+  "state": "interrupted,incomplete test run; no final test result/driverexit record",
+  "commandStopConfirmed": true,
+  "descendantCleanupVerified": false,
+  "explicitOriginalFailuresPreserved": true,
+  "rawFinalLogSha256": "e2ae0dd1aedd1f16c1c0bf39799d58cee8b22c5d5471d8fc63e36011c292ec49",
+  "rawFinalLogBytes": 3359,
+  "note": "Latest write_stdin returned terminalexit130. This supersedes earlier pendingstop observation; not a passed/completed test or changed gate."
+}

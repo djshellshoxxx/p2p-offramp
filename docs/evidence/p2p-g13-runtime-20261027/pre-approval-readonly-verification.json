@@ -1,0 +1,76 @@
+{
+  "kind": "read-only G13 proposal inspection; implementation remains stopped",
+  "observedHead": "d433390e104a64bfb67cd1100bb70c3400999403",
+  "observedTree": "3c135bb71d2b8832bcb24187c762f9cbe8704e6a",
+  "worktreeClean": true,
+  "proposalLibrary": "libfile_b169ba0dc3e881919377975d71cceec2",
+  "version": 1,
+  "bytes": 33503,
+  "sha256": "8791883b5e8b14b9bcf35ba5622f3307f119085c2b3039b4b057f1feca374319",
+  "nativeCompleteBytesVerified": true,
+  "baseCommit": "4e3f3ccde34ada7908026a66c6647c689c130574",
+  "twoCurrentReservedFilesMatchBase": true,
+  "exactHunkOldTextAndPatchHashesVerified": true,
+  "patches": [
+    {
+      "path": "packages/domain/test/read-retry.test.mjs",
+      "baseSha256": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+      "patchSha256": "cd5e1e079a73b476a783671da52a356b4a833d1f153340d9fbfd85154b77321c",
+      "claimedProposedSha256": "aad6e76847d16b74b33c7c3dbaf0e0601fcdd05ccccca1f0917203af992afad7",
+      "proposedTargetHashIndependentlyVerified": false,
+      "hunks": [
+        {
+          "originalStart": 70,
+          "originalCount": 3,
+          "newCount": 109,
+          "exactOldHunkMatches": true
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "baseSha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+      "patchSha256": "1ce2cc27b2d3ee889e7fcde8cb10ace4abc65e36b27c8b21cabef63e88e04d6c",
+      "claimedProposedSha256": "167e9a1fa602b50e5d36671b3553f0a388cac9479804e72f2998aa127d43e99e",
+      "proposedTargetHashIndependentlyVerified": false,
+      "hunks": [
+        {
+          "originalStart": 32,
+          "originalCount": 15,
+          "newCount": 23,
+          "exactOldHunkMatches": true
+        },
+        {
+          "originalStart": 95,
+          "originalCount": 17,
+          "newCount": 23,
+          "exactOldHunkMatches": true
+        }
+      ]
+    }
+  ],
+  "applied": false,
+  "codeImported": false,
+  "testsOrBuildsRun": false,
+  "staticFindings": [
+    "040 adds post-callback ownership checks for start/remaining/random; cancellation wins if callback invalidates ownership. No execution proof.",
+    "Later non-finite clock samples change from TIMEOUT to UNAVAILABLE; proposed as clock-fault handling, needs explicit compatibility attention during any subsequently authorized intake.",
+    "Initial thrown/non-finite clock and random failures resolve fixed typed UNAVAILABLE when ownership remains current, without raw foreign content or fallback RNG.",
+    "Attempts/timeouts/budgets/jitter and unsettled-operation refusal logic unchanged by proposed hunks. Original tests retained as exact prefix by appended-only test hunk.",
+    "Unguarded scheduler/disposer failures remain in existing code and are outside proposal; static concern, not reproduced."
+  ],
+  "blockedAction": {
+    "target": [
+      "packages/domain/src/read-retry.ts",
+      "packages/domain/test/read-retry.test.mjs",
+      "focused and affected aggregate test/build execution"
+    ],
+    "status": "denied twice according to parent; stopped, no retry/delegation to implement",
+    "reasonAvailable": "Parent reports approval review denial and pending narrow owner confirmation; full rejection text was not provided to this continuation."
+  },
+  "idbReview": {
+    "status": "broker timeout301s; no report or usage supplied",
+    "reviewCompleted": false,
+    "repeatRequested": false
+  }
+}

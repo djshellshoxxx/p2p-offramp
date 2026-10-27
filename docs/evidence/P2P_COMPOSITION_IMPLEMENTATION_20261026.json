@@ -1,0 +1,473 @@
+{
+  "status": "first private diagnostic join implemented; no app wiring or trading acceptance",
+  "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+  "sourceFiles": [
+    {
+      "path": "packages/domain/src/trade-composition.ts",
+      "sha256": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+      "bytes": 3873,
+      "lines": 62
+    },
+    {
+      "path": "packages/domain/test/trade-composition.test.mjs",
+      "sha256": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40",
+      "bytes": 11322,
+      "lines": 167
+    }
+  ],
+  "testRecords": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T20:56:50.206382+00:00",
+      "finishedAtUtc": "2026-10-26T20:56:50.552028+00:00",
+      "exitCode": 1,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "phase": "RED, test added, implementation absent",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/01-red-composition.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T20:57:31.371220+00:00",
+      "finishedAtUtc": "2026-10-26T20:57:31.682414+00:00",
+      "exitCode": 0,
+      "phase": "initial GREEN; implementation and test uncommitted",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/02-green-initial.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T20:58:55.639169+00:00",
+      "finishedAtUtc": "2026-10-26T20:58:56.409412+00:00",
+      "exitCode": 1,
+      "phase": "focused cross-module/lifecycle regressions; source uncommitted",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/03-focused-lifecycle.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs",
+        "packages/domain/test/authority.test.mjs",
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/domain/test/trade-terms.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T20:59:19.827036+00:00",
+      "finishedAtUtc": "2026-10-26T20:59:23.469309+00:00",
+      "exitCode": 0,
+      "phase": "corrected fixture eventId encoding; no production/schema relaxation",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/04-focused-and-existing.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:00:07.468615+00:00",
+      "finishedAtUtc": "2026-10-26T21:00:22.173928+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "e5d3a79f4f0f55a87d861d85c6c50c0b265d0e9001f03908187fe9dc76832d29",
+        "packages/domain/test/trade-composition.test.mjs": "ef662b523de94eae5b3669a9f63ca4b80aed392524aa976b2dc21da47d165f0c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/05-unit.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:00:22.174486+00:00",
+      "finishedAtUtc": "2026-10-26T21:00:22.689123+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "e5d3a79f4f0f55a87d861d85c6c50c0b265d0e9001f03908187fe9dc76832d29",
+        "packages/domain/test/trade-composition.test.mjs": "ef662b523de94eae5b3669a9f63ca4b80aed392524aa976b2dc21da47d165f0c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/06-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:00:22.689575+00:00",
+      "finishedAtUtc": "2026-10-26T21:00:23.207723+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "e5d3a79f4f0f55a87d861d85c6c50c0b265d0e9001f03908187fe9dc76832d29",
+        "packages/domain/test/trade-composition.test.mjs": "ef662b523de94eae5b3669a9f63ca4b80aed392524aa976b2dc21da47d165f0c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/07-build-policy.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:00:23.208970+00:00",
+      "finishedAtUtc": "2026-10-26T21:00:25.453420+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "e5d3a79f4f0f55a87d861d85c6c50c0b265d0e9001f03908187fe9dc76832d29",
+        "packages/domain/test/trade-composition.test.mjs": "ef662b523de94eae5b3669a9f63ca4b80aed392524aa976b2dc21da47d165f0c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/08-build-and-types.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T21:03:49.546901+00:00",
+      "finishedAtUtc": "2026-10-26T21:03:50.727109+00:00",
+      "exitCode": 1,
+      "phase": "RED found during source review: cancellation can arrive during predecessor abort before listener attachment",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/09-red-abort-link.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T21:04:24.110710+00:00",
+      "finishedAtUtc": "2026-10-26T21:04:25.385675+00:00",
+      "exitCode": 1,
+      "phase": "RED external abort and synchronous reentrant read ownership before ordering fix",
+      "exitRecord": "docs/evidence/p2p-composition-20261026/10-red-reentrant-ownership.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs",
+        "packages/domain/test/authority.test.mjs",
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/domain/test/trade-terms.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T21:04:48.809233+00:00",
+      "finishedAtUtc": "2026-10-26T21:04:53.573031+00:00",
+      "exitCode": 0,
+      "phase": "GREEN ordering fix; new helper/tests source frozen",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/11-green-ownership-focused.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:37.833655+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:52.843883+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/12-unit-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:52.844678+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:53.354965+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/13-boundaries-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:53.355342+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:53.945332+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/14-build-policy-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:53.951384+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:56.147465+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/15-build-and-types-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:56.147908+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:56.535624+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/16-python-spec-tests.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "startedAtUtc": "2026-10-26T21:05:56.536104+00:00",
+      "finishedAtUtc": "2026-10-26T21:05:56.870886+00:00",
+      "exitCode": 0,
+      "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-20261026/17-spec-readiness.exit.json"
+    }
+  ],
+  "actualCounts": {
+    "initialRed": {
+      "pass": 0,
+      "fail": 1
+    },
+    "initialGreen": {
+      "pass": 1,
+      "fail": 0
+    },
+    "lifecycleFixtureFailure": {
+      "pass": 5,
+      "fail": 1,
+      "cause": "test eventId not 32-byte base64url; fixture corrected, no parser relaxation"
+    },
+    "buildPolicy": {
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "focusedRelatedInitial": {
+      "pass": 55,
+      "fail": 0,
+      "skip": 0
+    },
+    "unitAggregateInitial": {
+      "pass": 347,
+      "fail": 0,
+      "skip": 0
+    },
+    "sourceReviewAbortRed": {
+      "pass": 6,
+      "fail": 1
+    },
+    "sourceReviewOwnershipRed": {
+      "pass": 6,
+      "fail": 2
+    },
+    "focusedRelatedFinal": {
+      "pass": 57,
+      "fail": 0,
+      "skip": 0
+    },
+    "unitAggregateFinal": {
+      "pass": 349,
+      "fail": 0,
+      "skip": 0
+    },
+    "python": {
+      "pass": 12,
+      "fail": 0
+    },
+    "specReadiness": {
+      "specs": 173,
+      "brokenLinks": 0,
+      "designReviewPending": 171
+    }
+  },
+  "artifactGraphs": [
+    {
+      "path": "apps/web/dist/core-graph-document.json",
+      "sha256": "50e9ae15406b0827a1b7b097e2f76ae41ab7ec98fbc1d157243bd8cd2815e786"
+    },
+    {
+      "path": "apps/web/dist/core-graph-worker.json",
+      "sha256": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5"
+    },
+    {
+      "path": "apps/web/dist/content-policy.json",
+      "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+    }
+  ],
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "appWired": false,
+  "newDependencies": false,
+  "workersUsed": 0,
+  "ghostPayTouched": false,
+  "remainingPacketFamilies": "C05/C06/C07/C08 deeper recovery/reorg/funding-window/native terms integration remain separately unexecuted for this helper; related existing unit tests do not close composition acceptance",
+  "browserAcceptance": "Not rerun for this private helper: no UI/runtime/facade change; final emitted app graphs exclude it. Installed Chromium available for later affected browser acceptance; no qualification inferred.",
+  "review": "coordinator source/diff review, not independent security audit",
+  "sourceReviewFix": "Reproduced missed external abort and reentrant latest-owner bugs in the newly staged helper; register/recheck signal and install active owner before aborting predecessor; both regressions pass after minimal ordering fix.",
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-composition-20261026/01-red-composition.log.gz",
+      "sha256": "ff997f95450d89bddc2994b176c8c97a6c8f3fb8c0cf1de5aa43ef5ca183a0aa",
+      "uncompressedSha256": "b504f5e56aa6a8e5bfe54f54ca5c40541473e9c70b20b8a5a236959545f8563c",
+      "uncompressedBytes": 1163
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/02-green-initial.log.gz",
+      "sha256": "68b9a5b68a92a4ba1d447dcacb32030c2a2c28db178320648720c4028ee36aec",
+      "uncompressedSha256": "fca9326a643654fe75d7b0ca885c8b15f0c0afe0a996acdb8f46bb0afca566b6",
+      "uncompressedBytes": 244
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/03-focused-lifecycle.log.gz",
+      "sha256": "ee260cfde5fe22a2b646624493c161813ec6bacaf59233876974faa4fcb90551",
+      "uncompressedSha256": "3d22eaf70d67847aebea9547cb6f910a087b1151905fb4434a637f513a43fade",
+      "uncompressedBytes": 1570
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/04-focused-and-existing.log.gz",
+      "sha256": "4cfdb7a30cf09f9678ae235d0fecfaf90710f7ba4c14e9e40bc2f112c139ac3c",
+      "uncompressedSha256": "4c5046a0a323c912b529faff46f4901bb23aae322485f681be99febd6efbc884",
+      "uncompressedBytes": 5973
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/05-unit.log.gz",
+      "sha256": "9bc7584b2e13604a393c50a62bb53f0c672ef137ad86a781b273897aaf70e2c7",
+      "uncompressedSha256": "33b8f14642abf6ea7575e3f7f0a3803c1b69e36db2eba9e8eaf2360343e87a3b",
+      "uncompressedBytes": 37084
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/06-boundaries.log.gz",
+      "sha256": "d01a69abf3d6239e8254adb8cffc5795deb1e4a9bc26b2a6d952068c4ac5381b",
+      "uncompressedSha256": "436235af7947a200851fc146b11f651629966d4d654c5981683841802f4a8d41",
+      "uncompressedBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/07-build-policy.log.gz",
+      "sha256": "d9973af9b8b67634b2a88d1c2f657042b36cacd676c2b2d9a51955f90d019aa9",
+      "uncompressedSha256": "f38ef7078a3a32dee01bdd4440aab25cc4f88aa1a51d75c817189c343036de2b",
+      "uncompressedBytes": 984
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/08-build-and-types.log.gz",
+      "sha256": "2a67fb7290d3d7911acb93aa5448520d7bca7027f1881a020129bf2b37e1ee78",
+      "uncompressedSha256": "06bef58a2dba1e8f2187a3dfad7a2ea1c1d5d5b382f99a145674035f8067af83",
+      "uncompressedBytes": 1510
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/09-red-abort-link.log.gz",
+      "sha256": "41c8b515933200b1362362f3039b948b0a4bb626d0494b8f72e2fa77ede6bc4c",
+      "uncompressedSha256": "7e3ece931d9f25a6c73eb363517fbc247a5e612c5a76eff0186b5a16e3a293d6",
+      "uncompressedBytes": 1992
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/10-red-reentrant-ownership.log.gz",
+      "sha256": "81e8947960da5f319ce4c56ef75318d6f560d7d265e0cd80e7dbb3a91129f9ad",
+      "uncompressedSha256": "c54d446e8722556ce2e14c159cd1e8b0c5163567f744658fe6d271e004473902",
+      "uncompressedBytes": 3171
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/11-green-ownership-focused.log.gz",
+      "sha256": "bae1c6d38a30986542be3b6dd326384b4c0103000fc2d488e44f85e63cc1b8d6",
+      "uncompressedSha256": "46f6c539a4f635004c2413662ee4061c8c7013ddea1cdf6388d0ce8dec27e9f8",
+      "uncompressedBytes": 6215
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/12-unit-final.log.gz",
+      "sha256": "f1fc6131033f7d647e962b4f13504594fc0874798a106da77a0ea11f50e0fac6",
+      "uncompressedSha256": "8c151710526fd65331b689ef996620087f4cb96713b07924b467b2ae1af7ba3d",
+      "uncompressedBytes": 37349
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/13-boundaries-final.log.gz",
+      "sha256": "d01a69abf3d6239e8254adb8cffc5795deb1e4a9bc26b2a6d952068c4ac5381b",
+      "uncompressedSha256": "436235af7947a200851fc146b11f651629966d4d654c5981683841802f4a8d41",
+      "uncompressedBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/14-build-policy-final.log.gz",
+      "sha256": "462d29e1b016cfd43d89a8f94436a346ece99e777accb3d39625a93027cf32aa",
+      "uncompressedSha256": "9938155cdc48729729aa8ed9f57481f3307438d1f58162f0f70a1d38e19c48b4",
+      "uncompressedBytes": 983
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/15-build-and-types-final.log.gz",
+      "sha256": "848541c468c84d490038a695ae696a09de015693a18ff026d1bdef8a88704806",
+      "uncompressedSha256": "094a0717f9a1afe1450ad086f510a669530d70fea22fe3a7bbacdec3ee705c79",
+      "uncompressedBytes": 1510
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/16-python-spec-tests.log.gz",
+      "sha256": "5b1ea904c593dbbf1e4070074467f2060c857eafcfaf85ff67f1be8886deedd6",
+      "uncompressedSha256": "2a3a1259394d6808eca243e98670462e716a3554be3621640d99893b4506aec1",
+      "uncompressedBytes": 1745
+    },
+    {
+      "path": "docs/evidence/p2p-composition-20261026/17-spec-readiness.log.gz",
+      "sha256": "74983fa9d3ec24e9adebad42076b4e9d334c9c10f5d50f21de305f875d2a1d5d",
+      "uncompressedSha256": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+      "uncompressedBytes": 199
+    }
+  ],
+  "sourceImplementationCommit": "fa4e1f4ddd1fef95befb7ab7b6bb72b3ad22ba6a",
+  "evidenceStorage": "Raw logs committed before resolving diff whitespace errors; losslessly compressed in follow-up. SHA-256 of compressed and exact uncompressed bytes recorded; original local raw logs preserved. Source/tests unchanged; application checks not rerun merely for evidence format."
+}

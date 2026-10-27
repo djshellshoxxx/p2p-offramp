@@ -1,0 +1,400 @@
+{
+  "scope": "private/test-only public-data G16 browser document and dedicated module Worker parity; no app inclusion/provider approval",
+  "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "sourceFiles": {
+    "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+    "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+    "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+    "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+    "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+    "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+    "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+    "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+    "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+    "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/domain/test/trade-terms.test.mjs"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:11:50.306587+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "44252d45fb4879de09d218dcd735b7419ef05cb6a9bbd886fc22691506292769",
+        "scripts/fixtures/g16-browser.mjs": "fb1d143e744b07be9a6760f52f569b26205b9008e9bd1ec2bacabc7276676db8",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:11:50.850511+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/01-focused-parity.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/01-focused-parity.log.gz",
+      "logRawBytes": 3087,
+      "logRawSha256": "39f771d374d96ca9f43c125a61b6d896f7e721b0d26f866548ea5e1688a794b1",
+      "logGzipSha256": "aca36228e4b8c73f77e344ca98b98f52c86fcc509c6f9aff7be6558248621585"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:11:50.296783+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "44252d45fb4879de09d218dcd735b7419ef05cb6a9bbd886fc22691506292769",
+        "scripts/fixtures/g16-browser.mjs": "fb1d143e744b07be9a6760f52f569b26205b9008e9bd1ec2bacabc7276676db8",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:11:51.503773+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/02-browser-qualification.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/02-browser-qualification.log.gz",
+      "logRawBytes": 477,
+      "logRawSha256": "bf33eff6a0dd7f274302e27d7119b3a36ef29f4b4d42cf8b86de0f42b0a51688",
+      "logGzipSha256": "2bf1ec335d323b7a0f6c0879689696ddbf6e0e503fdd9fa798306529e1233a76"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:12:56.595908+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:12:57.948958+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/03-browser-qualification.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/03-browser-qualification.log.gz",
+      "logRawBytes": 3196,
+      "logRawSha256": "6aeb8ab9e7f13339a974f19766d56dbb89e744feda4265cf7cf8343a3c05cb0c",
+      "logGzipSha256": "248b34567bb2833c11fcdc00b8d5c99f441d29f511794f8500280a3f23303b54"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:13:48.608658+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:14:05.249604+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/04-unit.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/04-unit.log.gz",
+      "logRawBytes": 40765,
+      "logRawSha256": "e33d1d513f256d39ab50f2d75f9eb5aa9e24c652e5bd952736bb425ad66f5039",
+      "logGzipSha256": "47edc4b72e6a622997067e558bfaf1318e4c992a48da0b52b7e9b153712c7482"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:13:48.602567+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:13:52.530926+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/05-build-types.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/05-build-types.log.gz",
+      "logRawBytes": 1510,
+      "logRawSha256": "2a85798b28c94618e7c7788fff9cd834a6e98c0f0273fcde79037a7d57821d6c",
+      "logGzipSha256": "21ad6b4c33318533c7b4a7e0273ee3d0ffd654ed8d694ee0bb60a01a45b96aac"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:13:48.622396+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:13:49.753680+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/06-boundaries.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/06-boundaries.log.gz",
+      "logRawBytes": 448,
+      "logRawSha256": "86d0244ce8422f965c4e947e8bcd62fad9359ea3d88a41abe3e15e3b168c9b23",
+      "logGzipSha256": "120fc19a010ca2cb5e8db73cc3cbd17edb3985149673837f1a2992ba8f3d2d2e"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+      "startedAtUtc": "2026-10-26T23:13:48.633761+00:00",
+      "sourceFiles": {
+        "scripts/test-g16-browser.mjs": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "scripts/fixtures/g16-browser.mjs": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+        "packages/wallet/test/lib/g16-bundle-fixture.mjs": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+        "packages/wallet/test/evm-agreement.test.mjs": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:13:50.060263+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-browser-20261026/07-build-policy.exit.json",
+      "log": "docs/evidence/p2p-g16-browser-20261026/07-build-policy.log.gz",
+      "logRawBytes": 985,
+      "logRawSha256": "d88a11cbdc1859004920dc80b434ddddd8ca6897ee764c90c6f3df4dec4ca2c7",
+      "logGzipSha256": "9a628b98154da7ab429ffa58ee867bbeb52f851418e9cf45e952144963d729f6"
+    }
+  ],
+  "browserReport": {
+    "fixture": "private-g16-public-data-chromium",
+    "browser": "154.0.8037.57",
+    "node": "24.19.0",
+    "providerVersions": {
+      "@noble/hashes": "2.4.0",
+      "@noble/curves": "2.4.0"
+    },
+    "providerManifestHashes": {
+      "@noble/hashes": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf",
+      "@noble/curves": "63d976a6ee72f2dcdc81e6c8bf907edff54eb20e8423218578fbfaf29cff96e6"
+    },
+    "fixtureHashes": {
+      "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+      "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+    },
+    "document": {
+      "assertions": 153,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "document",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "worker": {
+      "assertions": 153,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "dedicated-module-worker",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "browserArtifactSha256": "ce68af1e45f629cc0d4778bdcaba0aa35092e57048c26ec51eacb56522b48797",
+    "fixtureModuleCount": 24,
+    "allowedFixturePaths": [
+      "/",
+      "/qualification.js",
+      "/worker.js"
+    ],
+    "unexpectedRequests": 0,
+    "consoleMessages": 0,
+    "pageErrors": 0,
+    "privateSurfaces": {
+      "local": 0,
+      "session": 0,
+      "databases": 0,
+      "cacheEntries": 0,
+      "serviceWorkers": 0
+    },
+    "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+    "appInclusion": false,
+    "providerApproval": false,
+    "auditAcceptance": false,
+    "deviceAcceptance": false,
+    "releaseEnabled": 0,
+    "economicPreparationAllowed": false
+  },
+  "sharedNodeFixturePreparation": "exact existing function-body extraction verified after export/import-path normalization; deterministic public synthetic signing recipe only in Node, never in browser qualification graph",
+  "runtimeAppDependencyAndPolicyFilesUnchanged": true,
+  "independentGoldenFilesByteIdentical": true,
+  "freshFocusedTests": {
+    "pass": 28,
+    "fail": 0,
+    "skip": 0
+  },
+  "freshAggregateTests": {
+    "pass": 379,
+    "fail": 0,
+    "skip": 0
+  },
+  "freshBuildPolicyTests": {
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "strictTypesBuildBoundaries": "all exit0;46production sources/18core; no diagnostic in this boundary run",
+  "graphHashes": {
+    "core-graph-document.json": "51465478212d250eb7aa4d599c3e77f33350a49db2521405050953c7347028e5",
+    "core-graph-worker.json": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5"
+  },
+  "qualificationInAppGraphs": false,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "failureDisposition": "first browser run failed because the fixture treated official Ether Mail signature object as one hex string; corrected existing r/s/v assembly in test entry only; no runtime defect reproduced and no production RED/GREEN fix claimed",
+  "independentEvidence": "2published Keccak KATs, official EIP712 Mail digest/recovery,6retained js-sha3/elliptic G16 expected digests and4EOA signatures; byte hashes unchanged",
+  "sameProviderEvidence": "3Node-prepared Noble-family synthetic complete bundles (native, nonempty capability, ERC20); parity and integration, not independent provider qualification",
+  "privateEncodingEvidence": "2retained Python-implementation encodings/SHA256 expectations; independently implemented, same-session authorship, not independent audit",
+  "privacy": "only synthetic corpus passed to fixture realms; no private contents/signatures emitted; zero console/page errors and private storage surfaces; observed owned SHA input buffers clear on abort and terminal paths and private bytes clear before later capability hash",
+  "residualLimits": [
+    "Linux headless Chromium154.0.8037.57 document and module Worker only",
+    "no Firefox/WebKit/mobile/physical-device or extension/wallet compatibility",
+    "observed owned byte-array clearing does not prove native crypto temporary/signature-copy/heap/string erasure",
+    "no timing/side-channel/randomness/exhaustive primitive audit",
+    "new same-provider complete bundles are not independent full-protocol fixtures",
+    "no EIP1271, registry/deployment, chain time/finality, nonce, fiat-payment or funding authorization",
+    "named browser-scope engineering review/app-boundary inclusion remain separate; inventory states unchanged"
+  ],
+  "notRerun": [
+    "emitted-app UI browser suite",
+    "separate vault/runtime/content/reseal browser suite",
+    "Python/spec suite"
+  ],
+  "workerOwnership": "coordinator only; no workers started",
+  "ghostPayChanged": false,
+  "externalPublicationOrCi": false,
+  "next": "bounded reviewer disposition of this exact public-data browser evidence, then separately authorized Worker/UI design/inclusion using existing contracts; no automatic capability promotion",
+  "diagnosticRandomness": "Existing createOperationId uses browser getRandomValues for diagnostic IDs; no secret-key generation or RNG qualification claimed"
+}

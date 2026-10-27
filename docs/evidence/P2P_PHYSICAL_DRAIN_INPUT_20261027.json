@@ -1,0 +1,28 @@
+{
+  "path": "/workspace/checkpoints/2026-10-27-p2p-g15/P2P-G16-physical-drain-prerequisite-input.md",
+  "bytes": 46565,
+  "sha256": "5b22a0a5fafea3b5f426a67c39890091fa176b7bea99f6e9ff3090c44f66a405",
+  "state": "ready only, not assigned/implemented",
+  "allowedFiles": {
+    "packages/wallet/test/lib/evm-agreement-host.ts": {
+      "bytes": 12993,
+      "sha256": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f"
+    },
+    "packages/wallet/test/evm-agreement-host.test.mjs": {
+      "bytes": 25652,
+      "sha256": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200"
+    }
+  },
+  "baseSource": "9ea7b6cd030e7315e96ba76883c305a9c94ee539",
+  "docsHead": "5aa9ebfc0dc495334c4d863a290c62c71e717851",
+  "libraryFileId": "libfile_5b55209cac4081919f21c645a07dc3f4",
+  "version": 0,
+  "fileId": "file_0000000049c481f99ce2953318468845",
+  "producerSucceeded": true,
+  "xattrsVerified": true,
+  "completeNativeReadbackVerified": true,
+  "completeSourceBlocksReconstructedAndHashVerified": true,
+  "runtimeChangesApplied": false,
+  "testCommandsProposedNotExecuted": true,
+  "paidRequestStarted": false
+}

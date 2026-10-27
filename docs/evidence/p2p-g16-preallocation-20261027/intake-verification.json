@@ -1,0 +1,57 @@
+{
+  "proposalLibrary": "libfile_79762651b9248191825f75d46520a9b0",
+  "proposalVersion": 0,
+  "proposalSha256": "53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46",
+  "nativeByteReadVerified": true,
+  "packetBase": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+  "preImplementationHead": "68354100e95f839966bef91aac2d22b026be8b07",
+  "patches": [
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "base_sha256": "8b748874fb626e680ffd2957a6ccb0f7564754a6307bfee2e98db97b74ed6c4c",
+      "proposed_sha256": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+      "patch_sha256": "c7ab56f2551773c150f7450cfc226d8fb837b2b54d0b2d236668398a356c5af0",
+      "patch": "P2P-G16-tests-017.patch",
+      "checkExit": 0,
+      "numstat": "76\t0\tpackages/domain/test/trade-terms.test.mjs"
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "base_sha256": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+      "proposed_sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+      "patch_sha256": "e5e4b5c22bff980e5058cd1ae6dc1f1c232ae77f669123f5449e308891fabf0c",
+      "patch": "P2P-G16-implementation-017.patch",
+      "checkExit": 0,
+      "numstat": "4\t1\tpackages/domain/src/trade-terms.ts"
+    }
+  ],
+  "scope": "two reserved paths only; no code changes applied yet",
+  "brokerAccountingReported": {
+    "tag": "p2p-g16-prealloc-017",
+    "model": "claude-sonnet-5-5",
+    "timestamp_utc": "2026-10-26T23:49:04.191396+00:00",
+    "completed_at_utc": "2026-10-26T23:49:23.833540+00:00",
+    "request_id": "req_011CgRk5c4hn9ntunsGVB6dD",
+    "usage": {
+      "input_tokens": 15378,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 3467,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "stop_reason": "end_turn",
+    "estimated_cost_usd": "0.065426",
+    "worst_case_reserved_usd": "2.09",
+    "state": "completed"
+  },
+  "integratorPaidCalls": 0
+}

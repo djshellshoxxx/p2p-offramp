@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "4e786571c38be3643f09c8e44a474027725c3952",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "msg",
+          "suites": [
+            {
+              "id": "worker",
+              "argv": [
+                "node",
+                "scripts/test-g16-physical-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "13deterministic trusted-fixture schedules; real MessagePort/dedicatedWorker/nativeSHA",
+                "deadline": "unchanged30second host timer via monotonic testseam, not30sec wall-clock test",
+                "scope": "qualification only; no futurecontrolschema/app inclusion"
+              }
+            }
+          ]
+        }
+      ],
+      "expected_tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8"
+    }
+  ],
+  "profiles": {
+    "quick": {
+      "seed": 1592598566,
+      "cases": 256
+    },
+    "standard": {
+      "seed": 1592598566,
+      "cases": 1024
+    },
+    "deep": {
+      "seed": 1592598566,
+      "cases": 4096
+    }
+  }
+}

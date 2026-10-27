@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "run_id": "04a39687cb9b49d1b5328e575b14749d",
+  "manifest_path": "/workspace/checkpoints/2026-10-27-p2p-physical-browser/short-browser-acceptance.json",
+  "manifest_sha256": "b3b913e2af3cc60ab219938df248af1a021936eb789b1b1e4088a1741ea63a79",
+  "profile": "standard",
+  "profile_budget": {
+    "seed": 1592598566,
+    "cases": 1024
+  },
+  "jobs_limit": 1,
+  "started_utc": "2026-10-27T07:24:20.543691+00:00",
+  "finished_utc": "2026-10-27T07:24:24.530369+00:00",
+  "cancelled": false,
+  "source_baselines": {
+    "p2p": {
+      "type": "git",
+      "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+      "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "tool_versions": {
+    "p2p": {
+      "node": {
+        "version": "v24.19.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      },
+      "npm": {
+        "version": "11.9.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "p2p/msg/worker",
+      "project": "p2p",
+      "module": "msg",
+      "suite": "worker",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:21.505246+00:00",
+      "duration_seconds": 2.314,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pm27/jobs/0001-p2p-msg-worker",
+      "stdout": "/tmp/p2pm27/jobs/0001-p2p-msg-worker/stdout.log",
+      "stderr": "/tmp/p2pm27/jobs/0001-p2p-msg-worker/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53326,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "13deterministic trusted-fixture schedules; real MessagePort/dedicatedWorker/nativeSHA",
+        "deadline": "unchanged30second host timer via monotonic testseam, not30sec wall-clock test",
+        "scope": "qualification only; no futurecontrolschema/app inclusion"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    }
+  ],
+  "counts": {
+    "pass": 1,
+    "fail": 0,
+    "timeout": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "missing_prerequisite": 0,
+    "source_changed": 0,
+    "unexecuted": 0
+  },
+  "exit_code": 0,
+  "environment_policy": {
+    "inherit_names": [
+      "PATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "SYSTEMROOT"
+    ],
+    "secrets": "all other parent variables excluded by construction; no values dumped"
+  },
+  "source_final": {
+    "p2p": {
+      "type": "git",
+      "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+      "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "source_drift_projects": []
+}

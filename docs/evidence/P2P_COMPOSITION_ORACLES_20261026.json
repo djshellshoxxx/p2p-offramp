@@ -1,0 +1,198 @@
+{
+  "kind": "PROPOSED composition oracle data; NOT an executable test or accepted authority",
+  "sourceHead": "bbba912ba7bd0563fba635f915b4ae71a831c919",
+  "executionStatus": "UNEXECUTED",
+  "origin": {
+    "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+    "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+    "vectorId": "native",
+    "digestCopiedNotRecomputed": true
+  },
+  "termsVector": {
+    "id": "native",
+    "domain": {
+      "chainId": "31337",
+      "verifyingContract": "0x2222222222222222222222222222222222222222"
+    },
+    "terms": {
+      "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": "1",
+      "networkId": "local-evm",
+      "deploymentId": "escrow-v1",
+      "seller": "0x3333333333333333333333333333333333333333",
+      "buyer": "0x4444444444444444444444444444444444444444",
+      "assetKind": "native",
+      "asset": "0x0000000000000000000000000000000000000000",
+      "amountBaseUnits": "1000000000000000000",
+      "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "acceptBeforeSeconds": "1700000000",
+      "escrowExpirySeconds": "1700086400"
+    },
+    "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+    "domainSeparator": "e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c",
+    "structHash": "bd9b44102854b69aac4318ab45a13636dba00a7e4a30431269613e1564b35a53",
+    "termsHash": "3b2b7929f40cd038620592aed507acd064ec8938ca6587924e805fc68b6c25e1"
+  },
+  "association": {
+    "binding": {
+      "chain": "evm",
+      "networkId": "local-evm",
+      "deploymentId": "escrow-v1",
+      "tradeId": "fixture-trade-01"
+    },
+    "termsVectorId": "native",
+    "account": "0x3333333333333333333333333333333333333333",
+    "status": "synthetic explicit fixture association only; production tradeId/terms/call-data binding is not implemented or inferred"
+  },
+  "authoritySeed": {
+    "generation": 0,
+    "walletGeneration": 0,
+    "initialChainHealth": "loading",
+    "initialChain": null
+  },
+  "validatedReaderResultFixtureOnly": {
+    "binding": {
+      "chain": "evm",
+      "networkId": "local-evm",
+      "deploymentId": "escrow-v1",
+      "tradeId": "fixture-trade-01"
+    },
+    "generation": 0,
+    "requestSequence": 1,
+    "anchor": {
+      "height": "100",
+      "hash": "0x3434343434343434343434343434343434343434343434343434343434343434"
+    },
+    "state": "absent",
+    "finality": "finalized",
+    "observedAt": 1000
+  },
+  "journalSeedFixtureOnly": {
+    "version": 1,
+    "intentId": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+    "binding": {
+      "chain": "evm",
+      "networkId": "local-evm",
+      "deploymentId": "escrow-v1",
+      "tradeId": "fixture-trade-01"
+    },
+    "account": "0x3333333333333333333333333333333333333333",
+    "action": "fund",
+    "state": "prepared",
+    "walletGeneration": 0,
+    "expectedEscrowState": "absent",
+    "preparedRequest": "{\"fixtureOnly\":true,\"termsVectorId\":\"native\"}",
+    "submission": {
+      "chain": "evm",
+      "hash": null,
+      "nonce": null
+    },
+    "replacementOf": null,
+    "createdAt": 1000,
+    "updatedAt": 1000
+  },
+  "journalSeedNotes": [
+    "Use existing EncryptedVaultService and test Store; no plaintext persistence writer.",
+    "Fixture validator proves only this test encoding. It must never be enabled as a native chain/ABI verifier.",
+    "reserve returns random 16-byte hex storage record ID; markSending accepts this fixture intentId, not the storage ID.",
+    "Fixture seeding may reserve/mark explicitly. The proposed read composition never calls either."
+  ],
+  "clocks": {
+    "displayNowMs": 1000,
+    "fixtureChainTimeSeconds": "1699999999",
+    "chainTimeProvenance": "separate synthetic chain-fixture input only, unavailable from ChainObservation",
+    "acceptBeforeSeconds": "1700000000",
+    "escrowExpirySeconds": "1700086400"
+  },
+  "diagnosticsProjection": {
+    "allowed": "existing authority view, opaque intent IDs, fixed diagnostic status/error codes only",
+    "excluded": [
+      "storage record IDs",
+      "preparedRequest",
+      "private agreement",
+      "payment instructions",
+      "acceptance signatures",
+      "provider exception text"
+    ],
+    "economicPreparationAllowed": false,
+    "ReleaseEnabled": 0
+  },
+  "oracleFamilies": [
+    {
+      "id": "C01",
+      "case": "Coherent offline join",
+      "before": "No composed snapshot implementation exists; G08 pendingIntentIds stays empty in isolation. No failed test has been executed.",
+      "schedule": "Seed prepared intent with actual journal reserve; read composition while authority loading; refresh via fixture reader and read again.",
+      "assert": "Correct intentId remains visible under loading/fresh; chain truth comes only from G08; economic permission false."
+    },
+    {
+      "id": "C02",
+      "case": "Exact binding/account/ID association",
+      "schedule": "Vary each binding field and EVM account; keep recordId distinct from intentId; include same account different action.",
+      "assert": "No cross-trade/account leakage; EVM case cannot bypass reservation; only intentId projected; no invented tradeId=orderId=termsHash rule."
+    },
+    {
+      "id": "C03",
+      "case": "Held journal completion after invalidation",
+      "schedule": "Hold unresolved storage read, invalidate wallet/generation or lock/dispose journal, then release read; hold old chain read while latest B resolves.",
+      "assert": "Old completion cannot publish as current or replace latest G08 view; fixed failure/unavailable, no economic effects."
+    },
+    {
+      "id": "C04",
+      "case": "Concurrent/revision-sensitive reads",
+      "schedule": "Hold A unresolved; issue B; or change vault revision from independent journal before final synchronize.",
+      "assert": "Respect single active journal CONFLICT and exact revision guard; no retry loop, unbounded queue, or fake atomic global snapshot."
+    },
+    {
+      "id": "C05",
+      "case": "Restart/uncertain marker/serialized terminal labels",
+      "schedule": "Use existing journal fixtures for durable reserve/marker then lock/cancel; reopen to read; test all serialized states including terminal.",
+      "assert": "Committed reservation discoverable; marker uncertainty honest; all persisted matches remain unresolved until trusted resolution exists; no clock clearing."
+    },
+    {
+      "id": "C06",
+      "case": "Chain terminal/reorg versus journal reservation",
+      "schedule": "Read funded then contradictory anchor/state, then consistent reconciliation; separately observe released/refunded with unresolved intent.",
+      "assert": "Reuse G08 reorg latch; chain observation does not auto-clear journal, prove fiat, or authorize a resend."
+    },
+    {
+      "id": "C07",
+      "case": "Funding-window/display-clock separation",
+      "schedule": "No chain time; exact accept boundary; +/-1 to 1800 and 604800; display age29999/30000; negative clock; funded after acceptance expiry.",
+      "assert": "Missing chain time is unknown; actual window uses seconds and strict acceptance; display fresh is not spend authority; funded recovery not invalidated by advertisement expiry."
+    },
+    {
+      "id": "C08",
+      "case": "Terms snapshots/strict data/diagnostic scope",
+      "schedule": "Mutate caller terms across held await; mismatch network/deployment/role/revision/domain; unknown field/accessor; use existing test-only digest vectors.",
+      "assert": "No borrowed mutable terms approval, no raw accessor execution, no live verification or EIP1271 support fabricated; missing native join remains unknown."
+    },
+    {
+      "id": "C09",
+      "case": "Malformed/locked/unavailable journal",
+      "schedule": "Unknown/future unrelated record, duplicate intent IDs, revoked session, quota/conflict/unavailable results.",
+      "assert": "Fixed sanitized error; never empty-unresolved success or wallet retry permission from failed read."
+    },
+    {
+      "id": "C10",
+      "case": "Effects/privacy/import boundaries",
+      "schedule": "Spy journal reserve/markSending and wallet/network interfaces; instrument existing empty-change synchronize commits separately.",
+      "assert": "No new or mutated intent, send/sign/clear/network call, app export, private record/terms leakage or new provider dependency; preserve required commit([]) preflights."
+    }
+  ],
+  "plannedNotExecutedCommands": [
+    "node --test packages/domain/test/trade-composition.test.mjs",
+    "node --test packages/domain/test/authority.test.mjs packages/domain/test/intent-journal.test.mjs packages/domain/test/trade-terms.test.mjs packages/wallet/test/evm-terms.test.mjs",
+    "npm test",
+    "npm run typecheck",
+    "npm run check:boundaries",
+    "npm run test:build-policy",
+    "npm run build",
+    "npm run check:specs",
+    "npm run test:specs",
+    "npm run test:browser",
+    "npm run test:web:browser"
+  ]
+}

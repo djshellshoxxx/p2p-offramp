@@ -1,0 +1,5 @@
+
+> p2p-offramp@0.1.0 check:boundaries
+> node scripts/check-import-boundaries.mjs
+
+PASS: 51 production source files; core entry graph visited 19 module(s). Static boundary checks do not prove runtime isolation or complete the bundler graph.

@@ -1,0 +1,355 @@
+{
+  "slice": "P2P-G15-OFFLINE-MANIFEST-MECHANICS",
+  "state": "locally implemented and verified limited offline profile; not complete G15",
+  "baseSha": "1ea616f53f7baf5019f0e0b5c6851afe1dbf3233",
+  "sourceSha": "9ea7b6cd030e7315e96ba76883c305a9c94ee539",
+  "sourceTree": "6da4429968f81d1447a2803c7f25a93d4e9f223d",
+  "recordedAtUtc": "2026-10-27T06:09:30.597004+00:00",
+  "sourcePaths": {
+    "packages/security/src/release-manifest.ts": "9c7345144d47ff4c75b884a339b2eb301ceb0c00ace9d7c8280e956891fb8e20",
+    "packages/security/test/fixtures/rfc6979-p256-public.json": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+    "packages/security/test/lib/release-fixture.mjs": "b51b300a221c620ba4118a200247b29c4b8db4ac8588b21eab765605c387155b",
+    "packages/security/test/release-manifest.test.mjs": "fb37e2d2ff3070e09c72b5ead9afba130638bab4e6afcf0fb2daa4ffc3353bbb",
+    "scripts/fixtures/release-browser.mjs": "c23dfe9031639d88a69661b1652423cb60d7d9f978e86ec41736c611bf5a4ef0",
+    "scripts/test-release-browser.mjs": "459b73897b8a3e6996787c080c675d3e04733ca9e6f1563509bf2a90a54be215",
+    "security/crypto-inventory.json": "88f85ea2e904c952564f5959c28433d93ae3dfc524d2f83170293596438037ce",
+    "security/release-browser-support.json": "0dcda8e2144e3dfad7c1393f4eaa10fddd676526ea542361044e4b38c0fd3bef"
+  },
+  "changes": [
+    "Canonical UTF8 exact-byte/shape/duplicate/noncanonical rejection under fixed G15 profile",
+    "Explicit caller-supplied public JWK fingerprint trust; ES256-P1363 domain/range/signature verification",
+    "Complete logical asset path set/byte length/raw hash match, prior raw/prototype fixes preserved",
+    "Expiry/current callback/native cancellation across every crypto await; immutable pre-await snapshots",
+    "Monotonic sequence input; equal sequence requires same retained digest, no storage write",
+    "G06 new purpose pending; release-enabled declaration still blocks; no app facade or emitted graph inclusion"
+  ],
+  "actualFailuresRetained": [
+    {
+      "log": "01-missing-verifier-red.log",
+      "kind": "tests-first absent module, no behavioral cases executed",
+      "exit": 1
+    },
+    {
+      "log": "02-verifier-focused.log",
+      "kind": "initial implementation used Node-unsupported TS parameter property",
+      "exit": 1
+    },
+    {
+      "log": "04-typecheck.log",
+      "kind": "ES2024 string API not in unchanged ES2023 target; replaced with explicit surrogate check",
+      "exit": 1
+    },
+    {
+      "log": "05-last-callback-red.log",
+      "kind": "one real new-code cancellation regression: last isCurrent callback abort allowed success; fixed second native signal check",
+      "exit": 1
+    }
+  ],
+  "focused": {
+    "g15": 38,
+    "g15PlusExistingInventory": 59,
+    "allPassed": true,
+    "skipped": 0
+  },
+  "aggregate": {
+    "nodePassed": 492,
+    "nodeSkipped": 0,
+    "policyPassed": 15,
+    "pythonPassed": 12,
+    "specDocuments": 173,
+    "specBrokenLinks": 0
+  },
+  "runner": {
+    "manifest": "p2p-g15-20261027/acceptance.json",
+    "report": "p2p-g15-20261027/runner-report.json",
+    "startedAtUtc": "2026-10-27T06:02:05.534210+00:00",
+    "finishedAtUtc": "2026-10-27T06:03:27.169994+00:00",
+    "exit": 0,
+    "counts": {
+      "pass": 10,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "sourceDrift": [],
+    "jobs": [
+      {
+        "suite": "focused",
+        "argv": [
+          "node",
+          "--test",
+          "packages/security/test/release-manifest.test.mjs",
+          "packages/security/test/crypto-inventory.test.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.777,
+        "cleanup": {
+          "process_group": 35090,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "aggregate",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 15.4,
+        "cleanup": {
+          "process_group": 35131,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.213,
+        "cleanup": {
+          "process_group": 35534,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.518,
+        "cleanup": {
+          "process_group": 35662,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "browser",
+        "argv": [
+          "npm",
+          "run",
+          "test:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 37.495,
+        "cleanup": {
+          "process_group": 35708,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "web",
+        "argv": [
+          "npm",
+          "run",
+          "test:web:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 18.759,
+        "cleanup": {
+          "process_group": 38096,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.341,
+        "cleanup": {
+          "process_group": 38551,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specaudit",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.287,
+        "cleanup": {
+          "process_group": 38580,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "policy",
+        "argv": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.578,
+        "cleanup": {
+          "process_group": 38606,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "g15browser",
+        "argv": [
+          "node",
+          "scripts/test-release-browser.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 1.283,
+        "cleanup": {
+          "process_group": 38688,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      }
+    ]
+  },
+  "browser": {
+    "engine": "Chromium",
+    "version": "154.0.8037.57",
+    "documentAssertions": 36,
+    "dedicatedWorkerAssertions": 36,
+    "publicRfcPrimitiveKat": true,
+    "completeEnvelopeProviderIndependent": false,
+    "unexpectedRequests": 0,
+    "persistentDataSurfaces": 0,
+    "actualAppGraphsExcludeVerifier": true,
+    "newScriptsQualifiedOnlyOutsideApp": true
+  },
+  "review": {
+    "kind": "fresh-context read-only AI engineering, not security audit",
+    "path": "docs/reviews/G15_ENGINEERING_REVIEW_2026-10-27.md",
+    "implementationSha256": "9c7345144d47ff4c75b884a339b2eb301ceb0c00ace9d7c8280e956891fb8e20",
+    "concreteDefectsFound": 0,
+    "coverageNoteAddressed": true
+  },
+  "inputBounds": {
+    "manifestBytes": 1048576,
+    "assets": 10000,
+    "bundleBytes": 268435456,
+    "trustedPublicKeys": 32,
+    "pathChars": 240,
+    "channelChars": 64,
+    "releaseIdUtf16Units": 128,
+    "canonicalDepth": 8,
+    "canonicalNodes": 70000,
+    "maxManifestLifetimeSeconds": 2592000,
+    "acceptedBytes": "exact non-shared Uint8Array; callers convert Node Buffer explicitly",
+    "counts": "10000 entries accepted;10001 rejected independently of1MiB cap; full256MiB supported-size stress not executed"
+  },
+  "unexecutedAndUnimplemented": [
+    "nonempty deployment wire schema reconciliation with G11 (ordinary engineering, not financial-policy approval)",
+    "signed ReleaseLocator/CID/rotation/bootstrap and persistent channel-scoped rollback state",
+    "archive extraction/symlink authenticity beyond caller-supplied logical assets",
+    "independent complete-envelope signer/provider review",
+    "Firefox/WebKit/mobile/device qualification",
+    "installer/update UI/package facade/app integration",
+    "production signer/trust/deployment/release/trading gates"
+  ],
+  "cryptoPurposeReview": "pending, no approval inherited",
+  "sourcePublicationOrPolicyChange": false,
+  "privateTransport09": {
+    "libraryFileId": "libfile_7984b84c92d08191867cf3ecae18f129",
+    "version": 0,
+    "nativeBytes": 21705,
+    "nativeDocumentSha256": "2ba9c64a4a26a1514b45b42e0a254fa07399eb3462d2c896f7b40870aeff67d6",
+    "markedUneditedBodyBytes": 17173,
+    "markedUneditedBodySha256": "c8d4ebdb8e0b316daa8e31ad7fbf63c5395f1611cbb06e3695ae068122067f4f",
+    "completeNativeTextVerified": true,
+    "note": "Outer broker framing and raw Fable body are different byte objects. No terminal LF was added, removed or guessed. Exact embedded raw hash matches parent.",
+    "runtimeChangesApplied": false,
+    "reviewSource": "ff2d7622d8032be87a6074c1299a09050b0a2d9d",
+    "nextReadyEngineering": "Private host physical state/terminal drain observation, before control schema/adapter; do not infer physical quiescence from logical closed or retry failed sends.",
+    "classification": "static AI review/proposed unexecuted contract, no audit/provider/trading approval"
+  },
+  "files": {
+    "docs/evidence/p2p-g15-20261027/0001-p2p-g15-focused/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0001-p2p-g15-focused/stdout.log": "0fd36d677e748d2b9447232e2f4a39eb22d2f5c8b554eb2a7874f775b7bfd6ae",
+    "docs/evidence/p2p-g15-20261027/0002-p2p-g15-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0002-p2p-g15-aggregate/stdout.log": "a92744782d32de778ad419246a88a991351a7a49cc19ff2e4cd558c15b9f36b5",
+    "docs/evidence/p2p-g15-20261027/0003-p2p-g15-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0003-p2p-g15-build/stdout.log": "4c6d79cdccefa8025577fc7dcd8221222d6dc36fc1958734b7d8ada6cee96670",
+    "docs/evidence/p2p-g15-20261027/0004-p2p-g15-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0004-p2p-g15-boundaries/stdout.log": "d101d6cb7acdc2f57e60ccdbff4ad4f8f1ed5e9dd474b03cdcb45e7ac7201a09",
+    "docs/evidence/p2p-g15-20261027/0005-p2p-g15-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0005-p2p-g15-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-g15-20261027/0006-p2p-g15-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0006-p2p-g15-web/stdout.log": "292c7226d0395c015dc75948981e3a781b3d7c510bbc0b330599741ca4092790",
+    "docs/evidence/p2p-g15-20261027/0007-p2p-g15-specs/stderr.log": "66f1291dbab186ef13cad7845c3fee849c73e6da51a5d0b727f5234f1d6f461f",
+    "docs/evidence/p2p-g15-20261027/0007-p2p-g15-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-g15-20261027/0008-p2p-g15-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0008-p2p-g15-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-g15-20261027/0009-p2p-g15-policy/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0009-p2p-g15-policy/stdout.log": "919171a496faad89714888cc0aea131e0426ca1868406da206b458f74ea96761",
+    "docs/evidence/p2p-g15-20261027/0010-p2p-g15-g15browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-20261027/0010-p2p-g15-g15browser/stdout.log": "1373bfa9c882de828be1d3efd9e30a4a2fd4d902bbd83f9b644886e643fe957d",
+    "docs/evidence/p2p-g15-20261027/01-missing-verifier-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-20261027/01-missing-verifier-red.log": "aec8a3edcbbbf5f79f5d5c4c2dde3d644ae716bfed2d36b48d5f38b63b258dd9",
+    "docs/evidence/p2p-g15-20261027/02-verifier-focused.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-20261027/02-verifier-focused.log": "795407db48ee778fa43f5509620aa2a44023cdd54c83b93b900689c84b31dff1",
+    "docs/evidence/p2p-g15-20261027/03-verifier-focused.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/03-verifier-focused.log": "eb521bd40e7bebd2f9bab8baf196df90fcf2a084120740ad57f16a809ead9e14",
+    "docs/evidence/p2p-g15-20261027/04-typecheck.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-20261027/04-typecheck.log": "21deaeb7199daedb490818dabbd18017ff32119fb4c8bbf9b00b9bcce1ec3904",
+    "docs/evidence/p2p-g15-20261027/05-last-callback-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-20261027/05-last-callback-red.log": "9f5c6eadadfc0e54642d5bbd148f5c40354671fe196d9fffb3a5397f1f8a6f27",
+    "docs/evidence/p2p-g15-20261027/06-focused-green.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/06-focused-green.log": "9792d5e4c1fab541b365e963c024249ac747125324dd83646c5b45e3bda8ff41",
+    "docs/evidence/p2p-g15-20261027/07-typecheck-green.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/07-typecheck-green.log": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+    "docs/evidence/p2p-g15-20261027/08-browser.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/08-browser.log": "1373bfa9c882de828be1d3efd9e30a4a2fd4d902bbd83f9b644886e643fe957d",
+    "docs/evidence/p2p-g15-20261027/09-focused-all-stages.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/09-focused-all-stages.log": "4147187ea8e4c33bb42667cf073299acfad30d5b9fb8db16060bde47a50b626c",
+    "docs/evidence/p2p-g15-20261027/10-focused-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/10-focused-final.log": "8a7c0f3f9f8cf7aa90099091e28b7e1696dfffbc4e3ba75d2e69f745efd12e8c",
+    "docs/evidence/p2p-g15-20261027/11-focused-inventory.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-20261027/11-focused-inventory.log": "d2c99fd5cbb1784214b232d835b27d3af780917b81078ecc059a2496e14a4f69",
+    "docs/evidence/p2p-g15-20261027/acceptance.json": "de59143a74c44f3e8a34520b8808378da8dbeea318bc3e6b4b9a98f7e333097b",
+    "docs/evidence/p2p-g15-20261027/runner-report.json": "6e676087f43d7a96bf7f1976386279d1c3fcccb39722eff5b047172552fb92f9"
+  }
+}

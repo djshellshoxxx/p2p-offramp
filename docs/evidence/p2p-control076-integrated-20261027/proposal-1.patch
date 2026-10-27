@@ -1,0 +1,213 @@
+diff --git a/packages/schemas/test/evm-agreement-control.test.mjs b/packages/schemas/test/evm-agreement-control.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/packages/schemas/test/evm-agreement-control.test.mjs
+@@ -0,0 +1,208 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++
++const TARGET = new URL('../src/evm-agreement-control.ts', import.meta.url);
++let mod = null;
++try {
++  mod = await import(TARGET.href);
++} catch (error) {
++  const exactMissing = error && error.code === 'ERR_MODULE_NOT_FOUND' &&
++    typeof error.message === 'string' && error.message.includes(TARGET.pathname);
++  if (!exactMissing) throw error;
++}
++const missing = () => assert.fail('evm-agreement-control.ts is absent (expected RED)');
++const P = {
++  request: (v) => (mod ? mod.parseEvmAgreementControlRequest(v) : missing()),
++  ack: (v) => (mod ? mod.parseEvmAgreementControlAck(v) : missing()),
++  closed: (v) => (mod ? mod.parseEvmAgreementHostClosed(v) : missing()),
++};
++const MAX = Number.MAX_SAFE_INTEGER - 1;
++const SENTINEL = 'PRIVATE_SENTINEL_9f3a';
++const OPS = ['invalidateEvmAgreement', 'disposeEvmAgreementHost'];
++const REASONS = ['TIMEOUT', 'LIMIT_EXCEEDED', 'INVALID_INPUT', 'DISPOSED'];
++const req = (o = {}) => ({ version: 1, requestId: 1, generation: 0, operation: OPS[0], kind: 'control', ...o });
++const ackOk = (o = {}) => ({ version: 1, requestId: 1, generation: 0, operation: OPS[0], kind: 'ack', result: { ok: true, value: { held: true } }, ...o });
++const ackBad = (code = 'CONFLICT') => ackOk({ result: { ok: false, error: { code } } });
++const closed = (o = {}) => ({ version: 1, generation: 0, kind: 'closed', reason: 'TIMEOUT', ...o });
++
++function rejects(parse, input) {
++  let thrown;
++  try { parse(input); } catch (e) { thrown = e; }
++  assert.ok(thrown, 'expected throw');
++  assert.equal(thrown.name, 'CoreSchemaError');
++  assert.equal(thrown.code, 'INVALID_INPUT');
++  assert.equal(thrown.message, 'Invalid core data.');
++  return thrown;
++}
++function deepFrozen(v) {
++  if (typeof v !== 'object' || v === null) return true;
++  return Object.isFrozen(v) && Object.values(v).every(deepFrozen);
++}
++const trap = () => { throw Object.assign(new Error(SENTINEL), { code: 'INVALID_INPUT' }); };
++
++test('valid request frames, both operations, bounds and null prototype', () => {
++  for (const operation of OPS) {
++    const out = P.request(req({ operation }));
++    assert.deepEqual(out, req({ operation }));
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.request(req({ requestId: MAX, generation: MAX })).requestId, MAX);
++  const nul = Object.assign(Object.create(null), req());
++  assert.deepEqual(P.request(nul), req());
++  assert.deepEqual(Object.keys(P.request(req())), ['version', 'requestId', 'generation', 'operation', 'kind']);
++});
++
++test('valid ack frames cover held values, both failure codes, both ops', () => {
++  for (const operation of OPS) for (const held of [true, false]) {
++    const input = ackOk({ operation, result: { ok: true, value: { held } } });
++    const out = P.ack(input);
++    assert.deepEqual(out, input);
++    assert.ok(deepFrozen(out));
++    assert.notEqual(out.result, input.result);
++    assert.notEqual(out.result.value, input.result.value);
++  }
++  for (const code of ['CONFLICT', 'INVALID_INPUT']) {
++    const out = P.ack(ackBad(code));
++    assert.deepEqual(out.result, { ok: false, error: { code } });
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.ack(ackOk({ requestId: MAX, generation: MAX })).generation, MAX);
++});
++
++test('valid closed frames cover all four reasons and bounds', () => {
++  for (const reason of REASONS) {
++    const out = P.closed(closed({ reason }));
++    assert.deepEqual(out, closed({ reason }));
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.closed(closed({ generation: MAX })).generation, MAX);
++});
++
++test('caller mutation has no effect and repeated parses are identical', () => {
++  const input = ackOk();
++  const a = P.ack(input);
++  input.result.value.held = false;
++  input.requestId = 7;
++  assert.equal(a.result.value.held, true);
++  assert.equal(a.requestId, 1);
++  const fresh = ackOk();
++  assert.deepEqual(P.ack(fresh), P.ack(fresh));
++  assert.deepEqual(fresh, ackOk());
++  assert.deepEqual(P.request(req()), P.request(req()));
++});
++
++function shapeCases(name, parse, make, nested) {
++  test(`${name}: outer structural rejections`, () => {
++    for (const bad of [null, undefined, 1, 'x', true, [], [make()], () => 0]) rejects(parse, bad);
++    const missingKey = make(); delete missingKey.version; rejects(parse, missingKey);
++    rejects(parse, { ...make(), extra: 1 });
++    rejects(parse, { ...make(), [SENTINEL]: { deep: { deeper: 1 } } });
++    const sym = make(); sym[Symbol('x')] = 1; rejects(parse, sym);
++    const hidden = make();
++    Object.defineProperty(hidden, 'version', { value: 1, enumerable: false });
++    rejects(parse, hidden);
++    let called = 0;
++    const acc = make();
++    Object.defineProperty(acc, 'version', { get() { called++; return 1; }, enumerable: true });
++    rejects(parse, acc);
++    assert.equal(called, 0);
++    class K { constructor() { Object.assign(this, make()); } }
++    rejects(parse, new K());
++    rejects(parse, Object.assign(Object.create({ inherited: 1 }), make()));
++  });
++  test(`${name}: meta traps yield fresh fixed errors`, () => {
++    for (const handler of [{ ownKeys: trap }, { getPrototypeOf: trap }, { getOwnPropertyDescriptor: trap }]) {
++      const e = rejects(parse, new Proxy(make(), handler));
++      assert.ok(!JSON.stringify(e.message).includes(SENTINEL));
++    }
++    const forged = new Proxy(make(), { ownKeys() { throw new (class extends Error { get code() { throw new Error('read'); } })(); } });
++    rejects(parse, forged);
++    rejects(parse, new Proxy([], {}));
++  });
++  test(`${name}: giant extra graph is not traversed`, () => {
++    let touched = 0;
++    const giant = new Proxy({}, { get() { touched++; return 1; }, ownKeys() { touched++; return []; } });
++    rejects(parse, { ...make(), extra: giant });
++    assert.equal(touched, 0);
++    rejects(parse, { ...make(), extra: 'x'.repeat(1_000_000) });
++  });
++  if (nested) nested();
++}
++
++shapeCases('request', P.request, req, () => {
++  test('request: discriminator and counter rejections', () => {
++    for (const v of [2, 0, '1', 1n, null]) rejects(P.request, req({ version: v }));
++    for (const o of ['checkEvmAgreement', '', 'invalid', null, 1]) rejects(P.request, req({ operation: o }));
++    for (const k of ['ack', 'closed', 'response', null]) rejects(P.request, req({ kind: k }));
++    for (const v of [0, -1, MAX + 1, NaN, Infinity, -Infinity, 1.5, 1n, '1', {}, [], null, undefined, true]) rejects(P.request, req({ requestId: v }));
++    for (const v of [-1, MAX + 1, NaN, Infinity, 0.5, 1n, '0', {}, [], null, undefined, false]) rejects(P.request, req({ generation: v }));
++    assert.equal(P.request(req({ requestId: 1, generation: 0 })).generation, 0);
++  });
++  test('request: authority/private extras rejected and sentinel excluded', () => {
++    for (const k of ['signature', 'privateAgreement', 'terms', 'payment', 'status', 'key', 'url', 'input']) rejects(P.request, { ...req(), [k]: SENTINEL });
++    assert.ok(!JSON.stringify(P.request(req())).includes(SENTINEL));
++  });
++});
++
++shapeCases('ack', P.ack, ackOk, () => {
++  test('ack: discriminators, counters, result shapes', () => {
++    for (const o of ['checkEvmAgreement', null, 1]) rejects(P.ack, ackOk({ operation: o }));
++    for (const k of ['control', 'closed', null]) rejects(P.ack, ackOk({ kind: k }));
++    for (const v of [0, -1, MAX + 1, NaN, Infinity, 1.5, 1n, '1', {}, null]) rejects(P.ack, ackOk({ requestId: v }));
++    for (const v of [-1, MAX + 1, NaN, 0.5, 1n, '0', {}, null]) rejects(P.ack, ackOk({ generation: v }));
++    for (const r of [null, 1, 'x', [], undefined, {}, { ok: 1 }, { ok: 'true' }, { ok: true }, { ok: false }]) rejects(P.ack, ackOk({ result: r }));
++    rejects(P.ack, ackOk({ result: { ok: true, value: { held: true }, error: { code: 'CONFLICT' } } }));
++    rejects(P.ack, ackOk({ result: { ok: false, error: { code: 'CONFLICT' }, value: { held: true } } }));
++    rejects(P.ack, ackOk({ result: { ok: true, error: { code: 'CONFLICT' } } }));
++    rejects(P.ack, ackOk({ result: { ok: false, value: { held: true } } }));
++    for (const v of [null, undefined, 1, [], 'x', {}, { held: 1 }, { held: 'true' }, { held: null }, { held: undefined }, { held: true, extra: 1 }]) rejects(P.ack, ackOk({ result: { ok: true, value: v } }));
++    for (const e of [null, undefined, [], 'x', {}, { code: 'TIMEOUT' }, { code: 'BUSY' }, { code: '' }, { code: 1 }, { code: 'CONFLICT', message: SENTINEL }]) rejects(P.ack, ackOk({ result: { ok: false, error: e } }));
++  });
++  test('ack: nested exact-shape hardening', () => {
++    const nestedBases = [
++      () => ackOk().result,
++      () => ackOk().result.value,
++      () => ackBad().result.error,
++    ];
++    const wrap = [
++      (n) => ackOk({ result: n }),
++      (n) => ackOk({ result: { ok: true, value: n } }),
++      (n) => ackOk({ result: { ok: false, error: n } }),
++    ];
++    nestedBases.forEach((mk, i) => {
++      const sym = mk(); sym[Symbol('s')] = 1; rejects(P.ack, wrap[i](sym));
++      const hidden = mk(); const k = Object.keys(hidden)[0];
++      Object.defineProperty(hidden, k, { value: hidden[k], enumerable: false }); rejects(P.ack, wrap[i](hidden));
++      let called = 0;
++      const acc = mk(); const key = Object.keys(acc)[0];
++      Object.defineProperty(acc, key, { get() { called++; return acc[key]; }, enumerable: true });
++      rejects(P.ack, wrap[i](acc)); assert.equal(called, 0);
++      rejects(P.ack, wrap[i](Object.assign(Object.create({ p: 1 }), mk())));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { ownKeys: trap })));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { getOwnPropertyDescriptor: trap })));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { getPrototypeOf: trap })));
++      rejects(P.ack, wrap[i]({ ...mk(), extra: 'x'.repeat(100000) }));
++    });
++    const nul = ackOk({ result: Object.assign(Object.create(null), { ok: true, value: Object.assign(Object.create(null), { held: false }) }) });
++    assert.deepEqual(P.ack(nul).result, { ok: true, value: { held: false } });
++  });
++  test('ack: sentinel excluded from output and errors', () => {
++    assert.ok(!JSON.stringify(P.ack(ackOk())).includes(SENTINEL));
++    const e = rejects(P.ack, ackOk({ result: { ok: false, error: { code: SENTINEL } } }));
++    assert.ok(!e.message.includes(SENTINEL));
++  });
++});
++
++shapeCases('closed', P.closed, closed, () => {
++  test('closed: discriminators and counters', () => {
++    for (const r of ['DRAINED', 'CONFLICT', 'timeout', '', null, 1, undefined]) rejects(P.closed, closed({ reason: r }));
++    for (const k of ['ack', 'control', null]) rejects(P.closed, closed({ kind: k }));
++    for (const v of [2, 0, '1', null]) rejects(P.closed, closed({ version: v }));
++    for (const v of [-1, MAX + 1, NaN, Infinity, 0.5, 1n, '0', {}, null, undefined]) rejects(P.closed, closed({ generation: v }));
++    for (const k of ['requestId', 'operation', 'result', 'drained', 'signature']) rejects(P.closed, { ...closed(), [k]: 1 });
++  });
++});
++
++test('Reflect trap on transparent proxy without traps is not asserted rejected', () => {
++  assert.deepEqual(P.request(new Proxy(req(), {})), req());
++});

@@ -1,0 +1,877 @@
+{
+  "schema_version": 1,
+  "run_id": "f925517442e8419fad8a85267480b794",
+  "manifest_path": "/workspace/checkpoints/2026-10-27-p2p-physical-browser/acceptance.json",
+  "manifest_sha256": "3f7b7d15af2c614fb283ca729c0b90f6a5bb528f56d283f683e6de6ad344cc09",
+  "profile": "standard",
+  "profile_budget": {
+    "seed": 1592598566,
+    "cases": 1024
+  },
+  "jobs_limit": 1,
+  "started_utc": "2026-10-27T07:23:03.593299+00:00",
+  "finished_utc": "2026-10-27T07:24:36.560715+00:00",
+  "cancelled": false,
+  "source_baselines": {
+    "p2p": {
+      "type": "git",
+      "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+      "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "tool_versions": {
+    "p2p": {
+      "node": {
+        "version": "v24.19.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      },
+      "npm": {
+        "version": "11.9.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "p2p/physical-browser/messagequalification",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "messagequalification",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "fail",
+      "reason": "exit code 1",
+      "argv": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 1,
+      "started_utc": "2026-10-27T07:23:04.282783+00:00",
+      "duration_seconds": 0.742,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pmsg27/jobs/0001-p2p-physical-browser-messagequalification",
+      "stdout": "/tmp/p2pmsg27/jobs/0001-p2p-physical-browser-messagequalification/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0001-p2p-physical-browser-messagequalification/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 49902,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "13deterministic trusted-fixture schedules; real MessagePort/dedicatedWorker/nativeSHA",
+        "deadline": "unchanged30second host timer via monotonic testseam, not30sec wall-clock test",
+        "scope": "qualification only; no futurecontrolschema/app inclusion"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/focused",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "focused",
+      "categories": [
+        "unit",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:23:05.530206+00:00",
+      "duration_seconds": 0.943,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pmsg27/jobs/0002-p2p-physical-browser-focused",
+      "stdout": "/tmp/p2pmsg27/jobs/0002-p2p-physical-browser-focused/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0002-p2p-physical-browser-focused/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 49977,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "fixed qualified-host/protocol/verifier/parser regressions; not fuzzing",
+        "scope": "no app/trading/provider approval"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/aggregate",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "aggregate",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "test"
+      ],
+      "argv_template": [
+        "npm",
+        "test"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:23:06.968028+00:00",
+      "duration_seconds": 16.115,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pmsg27/jobs/0003-p2p-physical-browser-aggregate",
+      "stdout": "/tmp/p2pmsg27/jobs/0003-p2p-physical-browser-aggregate/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0003-p2p-physical-browser-aggregate/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 50036,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/build",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "build",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:23:23.557968+00:00",
+      "duration_seconds": 2.264,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pmsg27/jobs/0004-p2p-physical-browser-build",
+      "stdout": "/tmp/p2pmsg27/jobs/0004-p2p-physical-browser-build/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0004-p2p-physical-browser-build/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 50456,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/boundaries",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "boundaries",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:23:26.288226+00:00",
+      "duration_seconds": 0.459,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pmsg27/jobs/0005-p2p-physical-browser-boundaries",
+      "stdout": "/tmp/p2pmsg27/jobs/0005-p2p-physical-browser-boundaries/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0005-p2p-physical-browser-boundaries/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 50588,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/browser",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "browser",
+      "categories": [
+        "browser"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:23:27.216425+00:00",
+      "duration_seconds": 40.035,
+      "timeout_seconds": 240,
+      "job_dir": "/tmp/p2pmsg27/jobs/0006-p2p-physical-browser-browser",
+      "stdout": "/tmp/p2pmsg27/jobs/0006-p2p-physical-browser-browser/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0006-p2p-physical-browser-browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 50638,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/web",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "web",
+      "categories": [
+        "browser"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:07.877803+00:00",
+      "duration_seconds": 20.837,
+      "timeout_seconds": 240,
+      "job_dir": "/tmp/p2pmsg27/jobs/0007-p2p-physical-browser-web",
+      "stdout": "/tmp/p2pmsg27/jobs/0007-p2p-physical-browser-web/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0007-p2p-physical-browser-web/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53038,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/specs",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "specs",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:29.233655+00:00",
+      "duration_seconds": 0.319,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pmsg27/jobs/0008-p2p-physical-browser-specs",
+      "stdout": "/tmp/p2pmsg27/jobs/0008-p2p-physical-browser-specs/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0008-p2p-physical-browser-specs/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53706,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/specaudit",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "specaudit",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:30.071080+00:00",
+      "duration_seconds": 0.266,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pmsg27/jobs/0009-p2p-physical-browser-specaudit",
+      "stdout": "/tmp/p2pmsg27/jobs/0009-p2p-physical-browser-specaudit/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0009-p2p-physical-browser-specaudit/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53739,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/policy",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "policy",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:30.871404+00:00",
+      "duration_seconds": 0.498,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pmsg27/jobs/0010-p2p-physical-browser-policy",
+      "stdout": "/tmp/p2pmsg27/jobs/0010-p2p-physical-browser-policy/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0010-p2p-physical-browser-policy/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53769,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/g15browser",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "g15browser",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-release-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-release-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:31.920395+00:00",
+      "duration_seconds": 1.162,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pmsg27/jobs/0011-p2p-physical-browser-g15browser",
+      "stdout": "/tmp/p2pmsg27/jobs/0011-p2p-physical-browser-g15browser/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0011-p2p-physical-browser-g15browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 53854,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "owned loopback fixed public-data document/Worker fixtures",
+        "scope": "no app/provider/trading/release approval"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/g16browser",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "g16browser",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:33.668126+00:00",
+      "duration_seconds": 1.427,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pmsg27/jobs/0012-p2p-physical-browser-g16browser",
+      "stdout": "/tmp/p2pmsg27/jobs/0012-p2p-physical-browser-g16browser/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0012-p2p-physical-browser-g16browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 54015,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "scope": "unchanged public-data document/Worker fixture; not new physical-API message qualification"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-browser/helpertypes",
+      "project": "p2p",
+      "module": "physical-browser",
+      "suite": "helpertypes",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+        "--noEmit"
+      ],
+      "argv_template": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+        "--noEmit"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:24:35.626575+00:00",
+      "duration_seconds": 0.404,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pmsg27/jobs/0013-p2p-physical-browser-helpertypes",
+      "stdout": "/tmp/p2pmsg27/jobs/0013-p2p-physical-browser-helpertypes/stdout.log",
+      "stderr": "/tmp/p2pmsg27/jobs/0013-p2p-physical-browser-helpertypes/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+        "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 54182,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {},
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    }
+  ],
+  "counts": {
+    "pass": 12,
+    "fail": 1,
+    "timeout": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "missing_prerequisite": 0,
+    "source_changed": 0,
+    "unexecuted": 0
+  },
+  "exit_code": 1,
+  "environment_policy": {
+    "inherit_names": [
+      "PATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "SYSTEMROOT"
+    ],
+    "secrets": "all other parent variables excluded by construction; no values dumped"
+  },
+  "source_final": {
+    "p2p": {
+      "type": "git",
+      "sha": "4e786571c38be3643f09c8e44a474027725c3952",
+      "tree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "6518edfdc048a6584bd5078b0b47cc6df0a967744661d335198ac7110086e971",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "source_drift_projects": []
+}

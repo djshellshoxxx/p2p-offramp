@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "run_id": "6f5127700ed0412195a7059bdcc01708",
+  "manifest_path": "/workspace/checkpoints/2026-10-27-p2p-adapter-browser/acceptance.json",
+  "manifest_sha256": "1cecb28bbed3645b06256326a23b87d195901d57aed781563b711c774dd6bdaf",
+  "profile": "standard",
+  "profile_budget": {
+    "seed": 1592598566,
+    "cases": 150
+  },
+  "jobs_limit": 1,
+  "started_utc": "2026-10-27T08:11:15.409349+00:00",
+  "finished_utc": "2026-10-27T08:11:48.842366+00:00",
+  "cancelled": false,
+  "source_baselines": {
+    "p2p": {
+      "type": "git",
+      "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+      "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "tool_versions": {
+    "p2p": {
+      "node": {
+        "version": "v24.19.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      },
+      "npm": {
+        "version": "11.9.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "p2p/ab/browser",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "browser",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-g16-adapter-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-adapter-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:16.456469+00:00",
+      "duration_seconds": 1.696,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pab25/jobs/0001-p2p-ab-browser",
+      "stdout": "/tmp/p2pab25/jobs/0001-p2p-ab-browser/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0001-p2p-ab-browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 68745,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "scope": "actual private adapter in real Worker, synthetic messageerror; no app/provider/trading qualification"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/focused",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "focused",
+      "categories": [
+        "unit",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/schemas/test/evm-agreement-control.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/schemas/test/evm-agreement-control.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:19.042876+00:00",
+      "duration_seconds": 1.08,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pab25/jobs/0002-p2p-ab-focused",
+      "stdout": "/tmp/p2pab25/jobs/0002-p2p-ab-focused/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0002-p2p-ab-focused/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 68922,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "G11 intrinsic viewbounds/getter/proxy/offset/snapshot and existing G15 regressions",
+        "scope": "no trust/deployment/provider selection"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/aggregate",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "aggregate",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "test"
+      ],
+      "argv_template": [
+        "npm",
+        "test"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:20.973222+00:00",
+      "duration_seconds": 17.967,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pab25/jobs/0003-p2p-ab-aggregate",
+      "stdout": "/tmp/p2pab25/jobs/0003-p2p-ab-aggregate/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0003-p2p-ab-aggregate/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 68981,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/build",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "build",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:39.779126+00:00",
+      "duration_seconds": 2.308,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pab25/jobs/0004-p2p-ab-build",
+      "stdout": "/tmp/p2pab25/jobs/0004-p2p-ab-build/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0004-p2p-ab-build/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 69424,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/boundaries",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "boundaries",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:42.838215+00:00",
+      "duration_seconds": 0.47,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pab25/jobs/0005-p2p-ab-boundaries",
+      "stdout": "/tmp/p2pab25/jobs/0005-p2p-ab-boundaries/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0005-p2p-ab-boundaries/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 69557,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/policy",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "policy",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:44.047735+00:00",
+      "duration_seconds": 0.531,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pab25/jobs/0006-p2p-ab-policy",
+      "stdout": "/tmp/p2pab25/jobs/0006-p2p-ab-policy/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0006-p2p-ab-policy/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 69607,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/workerphysical",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "workerphysical",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-physical-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:45.365121+00:00",
+      "duration_seconds": 1.614,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pab25/jobs/0007-p2p-ab-workerphysical",
+      "stdout": "/tmp/p2pab25/jobs/0007-p2p-ab-workerphysical/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0007-p2p-ab-workerphysical/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 69693,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "same13trusted fixture schedules, not production wire parser"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/ab/helpertypes",
+      "project": "p2p",
+      "module": "ab",
+      "suite": "helpertypes",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-port-adapter/tsconfig.json",
+        "--noEmit"
+      ],
+      "argv_template": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-port-adapter/tsconfig.json",
+        "--noEmit"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T08:11:47.695233+00:00",
+      "duration_seconds": 0.414,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pab25/jobs/0008-p2p-ab-helpertypes",
+      "stdout": "/tmp/p2pab25/jobs/0008-p2p-ab-helpertypes/stdout.log",
+      "stderr": "/tmp/p2pab25/jobs/0008-p2p-ab-helpertypes/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+        "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 69868,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {},
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    }
+  ],
+  "counts": {
+    "pass": 8,
+    "fail": 0,
+    "timeout": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "missing_prerequisite": 0,
+    "source_changed": 0,
+    "unexecuted": 0
+  },
+  "exit_code": 0,
+  "environment_policy": {
+    "inherit_names": [
+      "PATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "SYSTEMROOT"
+    ],
+    "secrets": "all other parent variables excluded by construction; no values dumped"
+  },
+  "source_final": {
+    "p2p": {
+      "type": "git",
+      "sha": "b91c4596054520de32b2bd39adc3052ad4d18b7f",
+      "tree": "f068f43deef238c38c31273d672415f4eb03b329",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "f9eca1c93e07598bd6c69f46ebbdb372a989b18710628bacb18ef2812eadb03e",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "source_drift_projects": []
+}

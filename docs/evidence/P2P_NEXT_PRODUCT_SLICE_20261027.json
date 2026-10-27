@@ -1,0 +1,32 @@
+{
+  "slice": "P2P-G15-ASSET-BYTE-INTEGRITY-10",
+  "state": "readyforCodex,existingdefectreproduced;notimplemented",
+  "baseSha": "d759d0c53f7c274569cf410e17730521fadb6d37",
+  "baseTree": "8e1306323277adbb7e0bf702cd45d53795eff00c",
+  "ownedNextPaths": {
+    "apps/web/scripts/build.mjs": "6e1d8185b24927c5961395081f82eebb83b3ce5b1e5336a588e20380668d7422",
+    "apps/web/scripts/artifact-policy.test.mjs": "f4bf6e7bcb17f33759172bd5387c0bf427452038d47331e4857dcd15b87094e7"
+  },
+  "existingDefectReproduction": {
+    "kind": "confirmed-existing-build-inventory-defect",
+    "baseline": "d759d0c53f7c274569cf410e17730521fadb6d37",
+    "fixture": "owned synthetic local7filebundle; no realkeys/dependencies/artifact distributed",
+    "path": "assets/opaque.bin",
+    "rawBytes": 4,
+    "reportedBytes": 8,
+    "actualSha256": "83361ca0651f3a6009c3d0ca1a9bc7c6a89f444de1d8c776d19b2839ac546b09",
+    "reportedSha256": "b4668f548a3df2f3eb38b36d4764c527e362d5953b3ecdc1eeeab39d44fbad24",
+    "sourceEdited": false,
+    "appEnabled": false,
+    "scopeChanged": false
+  },
+  "rawReproductionLogSha256": "c34dbf95a8be0b10674c0e0edf912112e69b5f98fd1ae4488318d8d3cac8de46",
+  "nextMinimalChange": "Retain raw bytes for assetsha256/byte lengths before textpolicyinspection; account actual rawbundlebytes. No signature/trust/manifestprofile change.",
+  "scopeAuthority": "existingG15exactassetidentityrequirement;noscopeamendment",
+  "testsFirstSuiteWritten": false,
+  "implementationChanged": false,
+  "brokerscope": "PRIVATE-TRANSPORT-CONTRACT09 assignedparentbroker read-only; no duplication",
+  "policyDeferrals": "recommendationsonly;nocanonicalscopechanged",
+  "workspaceReadyCommandSucceeded": true,
+  "newWorkersOrPaidCalls": 0
+}

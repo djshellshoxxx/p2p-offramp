@@ -1,0 +1,22 @@
+{
+  "path": "/workspace/checkpoints/2026-10-27-p2p-asset11/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 3494511,
+  "sha256": "79b19c885a47e90619981120957e50d169953c4ad1c85786cb1ac716443747f3",
+  "sourceSha": "78418e89b4844e420409e23c520c6d4d5ceeecd2",
+  "documentationHead": "32d5661676a5577c77c2e9eec20d6ca54ea15f6b",
+  "sourceArchiveSha256": "8099bffd003e96393dc82e875223b31193ef5cdc36af89e7d0e6258cb4c44f00",
+  "patchSha256": "cb5de236115fa2096da62e3144300311c4b7009483c47b104361a2998d137aae",
+  "trackedFiles": 850,
+  "fullTrackedSourceRestoreVerified": true,
+  "completeGitHistoryRestoreVerified": false,
+  "expectedCurrentVersion": 16,
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "libraryVersion": 17,
+  "fileId": "file_00000000a54c81f98eb2ec9123ae1c0d",
+  "libraryProducerSucceeded": true,
+  "xattrsVerified": true,
+  "binaryConsumerRetrievalVerified": false,
+  "archiveDocumentationHead": "32d5661676a5577c77c2e9eec20d6ca54ea15f6b",
+  "notGitHistoryRestoration": true,
+  "note": "The following receipt/documentation commit is outside its own archive; source snapshot and all executed tests are pinned separately."
+}

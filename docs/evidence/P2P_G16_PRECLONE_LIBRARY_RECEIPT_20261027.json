@@ -1,0 +1,26 @@
+{
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_id": "file_00000000f3c0820ca133e9fb5eba1105",
+  "version": 11,
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 815562,
+  "sha256": "ce9654d6b28b8464c18e919004efa3b85b1d563dc8d3aa857e09669f241d531f",
+  "sourceAndTestsCheckpoint": "a3392050ce41c167bf99a01d149dbcfd5d03cd17",
+  "sourceTree": "f191160f654e336af4216aca353cd349280402ca",
+  "sourceBase": "4e3f3ccde34ada7908026a66c6647c689c130574",
+  "sameIdentityGuard": {
+    "expectedPriorVersion": 10,
+    "confirmedNewVersion": 11
+  },
+  "priorVersion10BytesIntact": true,
+  "threeCodeFileForwardAndReverseRoundTripVerified": true,
+  "localBytesAndAllXattrsVerified": true,
+  "producerStatus": "succeeded",
+  "consumerRetrievalVerified": false,
+  "wholeRepositoryRestore": false,
+  "publishedToGitHub": false,
+  "appInclusion": false,
+  "providerApproval": false,
+  "releaseEnabled": 0,
+  "next": "intake independent G13 proposal and IDB review when returned; typed Worker command/lifetime prerequisites remain before separately reconciled app inclusion"
+}

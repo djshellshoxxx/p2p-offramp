@@ -1,0 +1,23 @@
+{
+  "kind": "documentation-only private checkpoint receipt",
+  "checkpoint": "ba070cfbf1d62a677da48b41b2e7027e63eec4d0",
+  "tree": "1fefa28c4f31cc37a27ce055540cd46e7fd1b6e8",
+  "sourceAndClaudePacketBase": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_id": "file_000000009bd881f7b72a70c985b6757d",
+  "version": 9,
+  "bytes": 556168,
+  "sha256": "86389d0aec78ecf73722eb8d33ede8a874e7ccaa25d525957d5e2087f218d829",
+  "localPath": "/workspace/checkpoints/2026-10-27-p2p-g16-doc-reconciliation/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "allPriorVersion8BytesPreserved": true,
+  "priorVersion8Sha256": "44b883a8b8095f79bc34eeb07cb59fa5d39530e2c643ac75ac62fedb5e5d988f",
+  "docsPatchRoundTrip": true,
+  "consumerRetrievalVerified": false,
+  "wholeRepositoryRestore": false,
+  "reservedSourceAndTestsChanged": false,
+  "newTestsOrBuilds": false,
+  "appInclusionOrProviderPolicyChange": false,
+  "newPaidCalls": 0,
+  "canonicalQueueChanged": false,
+  "proposalIntake": "after this clean documentation milestone; unexecuted/unvalidated response libfile_79762651b9248191825f75d46520a9b0/v0/SHA53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46"
+}

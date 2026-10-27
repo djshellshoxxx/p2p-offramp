@@ -1,0 +1,10 @@
+# Cross-project attribution follow-up
+
+Source at intake `fc969a774750b8752ad126e9aa5f5059313545b9`. Poseidon Solidity and circomlib are **not P2P dependencies**; these newly verified facts apply to GhostPay's retained optional pool components and do not add them to P2P.
+
+- GhostPay's three Poseidon Solidity0.0.5 files match immutable source `8205c97ec4a35a9adb854b70b2c9ba92668d1304`, canonical `chancinald/poseidon-solidity` (renamed from vimwitch; same repository ID601003661), author Chance Hudson. Full standalone upstream copyright/license text remains absent from that tree/README/vendored source; no fabricated MIT notice was added.
+- Exact installed/cache-verified circomlib2.0.5 matches source `cff5ab6288b55ef23602221694a6a38a0239dcc0` for104 circuits/package metadata. Metadata says GPL-3.0 and50 files explicitly carry GPLv3-or-later notices. The earlier unversioned LGPL claim is not evidence for those2.0.5 bytes. This factual scope correction does not settle distribution compatibility or change project licenses.
+- Existing raw GhostPay commit history and original pool/registry-import documents were inspected without fetch or shallow-metadata edits; original circuit/ScopeLift/data/port intake pins remain unknown. No missing local checkpoint was recovered.
+- The optional Poseidon `/tags` collection read was rejected by the GitHub URL allowlist (400), then stopped without retries or alternative tag-list routes. Independent ordinary repository/branch/source reads provided the matching commit. No denied compiler/Foundry/Library route was touched.
+
+P2P's previously retained Noble/React/EIP/BIP notices and runtime/provider/release state remain unchanged. Detailed source/cache/history evidence is in GhostPay's `docs/evidence/ATTRIBUTION_POSEIDON_CIRCOMLIB_20261026.json` and `ATTRIBUTION_LOCAL_HISTORY_20261026.json`; the guarded private reuse artifact includes it. No runtime/dependency/schema/source-header/fixture changes, tests/builds/CI, source publication or executable downloads occurred.

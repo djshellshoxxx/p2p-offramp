@@ -1,0 +1,40 @@
+✔ MessageChannel coherent signed fixture produces the real public verifier reply (73.220995ms)
+✔ MessageChannel invalidate suppresses A at SHA1; BUSY persists until physical release (23.935183ms)
+✔ MessageChannel invalidate suppresses A at SHA2; BUSY persists until physical release (17.193302ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA resolve (15.280507ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA reject (14.424547ms)
+✔ direct seam: duplicate and replayed IDs across check/control frames close once with INVALID_INPUT (29.00207ms)
+✔ direct seam: future generation on either check or control fails closed before hashing (5.063277ms)
+✔ direct seam: malformed frames and opaque hostile traps are swallowed into one code-only close (1.621985ms)
+✔ direct throwing-send seam: invalidate ack failure terminally cleans up without recursive send or guaranteed ack (10.174066ms)
+✔ reentrant send during dispose acknowledgment cannot process another control or change close reason (0.543787ms)
+✖ reentrant send during timeout reply cannot process a control or change close reason (12.294189ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 396.936805
+
+✖ failing tests:
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:282:1
+✖ reentrant send during timeout reply cannot process a control or change close reason (12.294189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'LIMIT_EXCEEDED'
+  - 'TIMEOUT'
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:293:64)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'LIMIT_EXCEEDED',
+    expected: 'TIMEOUT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
