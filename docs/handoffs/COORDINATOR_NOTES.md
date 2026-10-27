@@ -2,6 +2,14 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — G12 reconcile merged
+
+- Merged `wave3/g12-reconcile` (`704504e`, `472ebd9`, `e9ace34`): `packages/domain/src/tx-lifecycle.ts`, `packages/wallet/src/evm-submit.ts`,
+  opt-in lifecycle mode in intent-journal (default unchanged). `npm run test:evm:reconcile` 5/5 (SIGKILL→confirmed, replaced,
+  dropped+successor) added to CI. npm test 410/410.
+- Remaining code work (not owner-gated): app wiring of escrow/G12 (owned by other session's UI area — coordinate),
+  two-tab races in lifecycle mode, Solana parity (later-preserved), Nostr offer exchange G19/G21 + NIP-17 chat G20.
+
 ## 2026-10-27 — withdraw scenario merged
 
 - Merged `wave3/local-withdraw` (`071d600`, `2258fad`): local proof 8/8 incl. reverting buyer → deferred credit → withdraw.

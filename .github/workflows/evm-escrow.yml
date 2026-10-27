@@ -41,3 +41,4 @@ jobs:
           version: v1.5.1
       - run: npm ci --ignore-scripts
       - run: npm run test:evm:local
+      - run: npm run test:evm:reconcile
