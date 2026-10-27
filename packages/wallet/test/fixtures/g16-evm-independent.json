@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "provenance": {
+    "kind": "offline independent integration oracle; not provider approval",
+    "sourcePackageLockSha256": "aaf45e869465bf2867ca7b767e6f51f1f7444443ff6f8936dec3909ad2442ecc",
+    "providers": [
+      {
+        "name": "js-sha3",
+        "version": "0.8.0",
+        "license": "MIT",
+        "sourceFile": "src/sha3.js",
+        "sourceSha256": "13590a201b2199f00b74ee711edc1bdf744705dca12f43cc6ef64c32b5767fa9",
+        "lockedIntegrity": "sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q=="
+      },
+      {
+        "name": "elliptic",
+        "version": "6.6.1",
+        "license": "MIT",
+        "sourceFile": "lib/elliptic/ec/index.js",
+        "sourceSha256": "668741c0c921bf5174439104e8fd20636578373cbbd28736ccbcd8e59a5aeafc",
+        "lockedIntegrity": "sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g=="
+      }
+    ]
+  },
+  "vectors": [
+    {
+      "id": "native",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x2222222222222222222222222222222222222222"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-v1",
+        "seller": "0x3333333333333333333333333333333333333333",
+        "buyer": "0x4444444444444444444444444444444444444444",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c",
+      "structHash": "bd9b44102854b69aac4318ab45a13636dba00a7e4a30431269613e1564b35a53",
+      "termsHash": "3b2b7929f40cd038620592aed507acd064ec8938ca6587924e805fc68b6c25e1"
+    },
+    {
+      "id": "erc20",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x2222222222222222222222222222222222222222"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-v1",
+        "seller": "0x3333333333333333333333333333333333333333",
+        "buyer": "0x4444444444444444444444444444444444444444",
+        "assetKind": "erc20",
+        "asset": "0x1111111111111111111111111111111111111111",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c",
+      "structHash": "c4fcde4193b9aca7483e22ad8242cd2613bacf8b6386616e121a319ff1405dbc",
+      "termsHash": "d03d063dbb6b596c783313c9bea9aec4c80f405931439bf882a76e4b07b75328"
+    },
+    {
+      "id": "maximum-width",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x2222222222222222222222222222222222222222"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "18446744073709551615",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-v1",
+        "seller": "0x3333333333333333333333333333333333333333",
+        "buyer": "0x4444444444444444444444444444444444444444",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "18446744073709551615",
+        "escrowExpirySeconds": "18446744073709551615"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c",
+      "structHash": "8dcb339770b18b8226b04760fb095d76c9be69dbae2de5c7a69323ff3c2d5c8e",
+      "termsHash": "cc18cec86c835f64c02d481d931161dff9d8e08d871dfd3ce67d2cc7a3ad67d7"
+    },
+    {
+      "id": "maximum-chain-and-text",
+      "domain": {
+        "chainId": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+        "verifyingContract": "0x2222222222222222222222222222222222222222"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "1",
+        "networkId": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "deploymentId": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "seller": "0x3333333333333333333333333333333333333333",
+        "buyer": "0x4444444444444444444444444444444444444444",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "02d0f6a41ae68bb10863f41e261a2cafb949646c7dce80956b847731ee7e3a0c",
+      "structHash": "a7b16311604c577e0d0da8258f3e7058aeb722d605c4b4e307fdbee6937d380a",
+      "termsHash": "e6044deedca7dfbc8d7bbb287e60243b77b6944191121c082619b21c59323d15"
+    },
+    {
+      "id": "signed-native",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x2222222222222222222222222222222222222222"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-v1",
+        "seller": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+        "buyer": "0x2b5ad5c4795c026514f8317c7a215e218dccd6cf",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c",
+      "structHash": "27f54afc9ff437f132b8356e702d94f89b83d0a1b11dd9625d192e83640614c8",
+      "termsHash": "4044a55ecfdd61d49280e98007b2e5846e7b232196b6bc8f85972ecb29962c3b",
+      "acceptances": [
+        {
+          "role": "seller",
+          "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+          "publicKey": "0479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8",
+          "signature": "a45280146815aff6f1f9f273563e9a0aee1c3ec07a66a6582ef534b4fa1f25e355a12781d13f51da8fda5668f00ffa9a1770e4ad25e9aab618328555b2c58fb91b"
+        },
+        {
+          "role": "buyer",
+          "account": "0x2b5ad5c4795c026514f8317c7a215e218dccd6cf",
+          "publicKey": "04c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee51ae168fea63dc339a3c58419466ceaeef7f632653266d0e1236431a950cfe52a",
+          "signature": "dea96c3ffd1db4f54075beed14b5c8192339d4f82e92506afcfd20ab1444360d078abb79783257f94d63efcc0375aac223df2bd608bbf37661e97b0f10c9a48c1b"
+        }
+      ]
+    },
+    {
+      "id": "signed-erc20-other-domain",
+      "domain": {
+        "chainId": "1",
+        "verifyingContract": "0x5555555555555555555555555555555555555555"
+      },
+      "terms": {
+        "orderId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-v1",
+        "seller": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+        "buyer": "0x2b5ad5c4795c026514f8317c7a215e218dccd6cf",
+        "assetKind": "erc20",
+        "asset": "0x1111111111111111111111111111111111111111",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "capabilitiesHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sellerNonce": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "typeHash": "5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437",
+      "domainSeparator": "3a0716582a579242e543ea3e8eac6e156e48abbf77d35481e7ac559a324960ab",
+      "structHash": "e0d0e5ff6a0178e349f9b94bb79bb555a6f0eb222517fbe4e443ad3d295fd07e",
+      "termsHash": "51f9bbc2ee3dbc5386985fae3ae29e2ae3a155f756126f85046c477900678c2d",
+      "acceptances": [
+        {
+          "role": "seller",
+          "account": "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+          "publicKey": "0479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8",
+          "signature": "8f662b6094267ef416a7db7f9602038ccb9088a1a4a451f779fd58ea16c70ae75998c81ef7f436dd6a16eb30a354f0b1fe37c242793b9c5652dd029b3d175c591b"
+        },
+        {
+          "role": "buyer",
+          "account": "0x2b5ad5c4795c026514f8317c7a215e218dccd6cf",
+          "publicKey": "04c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee51ae168fea63dc339a3c58419466ceaeef7f632653266d0e1236431a950cfe52a",
+          "signature": "c617f7393237117a21dad67ee916eff3f1862235d35afd733a94fb2787bf6b4d1395f468cd9bab369a9ab9c9983971e0eeaf21c71281ae3949f24818273ecc201b"
+        }
+      ]
+    }
+  ]
+}

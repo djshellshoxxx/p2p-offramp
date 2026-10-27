@@ -21,6 +21,47 @@ export class TermsError extends Error {
 }
 const fail = (code?: TermsError['code']): never => { throw new TermsError(code); };
 
+/** Snapshot an exact JSON-shaped record using data descriptors only; untrusted accessors are never invoked. */
+function exactDataObject(input: unknown, fields: readonly string[]): Readonly<Record<string, unknown>> {
+  try {
+    if (typeof input !== 'object' || input === null || Array.isArray(input)) return fail();
+    const prototype = Object.getPrototypeOf(input);
+    if (prototype !== Object.prototype && prototype !== null) return fail();
+    const ownKeys = Reflect.ownKeys(input);
+    if (ownKeys.length !== fields.length || ownKeys.some(key => typeof key !== 'string' || !fields.includes(key))) return fail();
+    const copy = Object.create(null) as Record<string, unknown>;
+    for (const field of fields) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, field);
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return fail();
+      Object.defineProperty(copy, field, { value: descriptor.value, enumerable: true });
+    }
+    return Object.freeze(copy);
+  } catch { return fail(); }
+}
+
+/** Copy dense arrays with no custom properties or accessor elements. */
+function exactDataArray(input: unknown, maximum: number): readonly unknown[] {
+  const tooLarge = Symbol('too-large');
+  try {
+    if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return fail();
+    const lengthDescriptor = Object.getOwnPropertyDescriptor(input, 'length');
+    if (!lengthDescriptor || !('value' in lengthDescriptor) || typeof lengthDescriptor.value !== 'number' ||
+        !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0) return fail();
+    if (lengthDescriptor.value > maximum) throw tooLarge;
+    const length = lengthDescriptor.value;
+    const ownKeys = Reflect.ownKeys(input);
+    if (ownKeys.length !== length + 1 || ownKeys.some(key => key !== 'length' &&
+        (typeof key !== 'string' || !/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= length))) return fail();
+    const copy: unknown[] = [];
+    for (let index = 0; index < length; index++) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return fail();
+      copy.push(descriptor.value);
+    }
+    return Object.freeze(copy);
+  } catch (error) { return error === tooLarge ? fail('LIMIT_EXCEEDED') : fail(); }
+}
+
 export interface CapabilityV1 { readonly id: string; readonly version: string; readonly policyHash: string; }
 export interface PrivateAgreementV1 {
   readonly v: 1; readonly orderId: string; readonly revision: string; readonly fiatCurrency: string;
@@ -48,7 +89,10 @@ function unsigned(input: unknown, max: bigint, minimum = 0n): bigint {
 const utf8 = new TextEncoder();
 /** Exact UTF-8 of an already-valid JS string; lone surrogates are rejected rather than replaced. */
 function text(input: unknown, minimum: number, maximum: number, ascii = false): Uint8Array {
-  if (typeof input !== 'string' || /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(input)) return fail();
+  if (typeof input !== 'string') return fail();
+  // UTF-8 needs at least one byte per UTF-16 code unit, so a longer string can never fit: refuse before regex/encode allocation.
+  if (input.length > maximum) return fail('LIMIT_EXCEEDED');
+  if (/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(input)) return fail();
   if (ascii && !/^[\x21-\x7e]*$/.test(input)) return fail();
   const bytes = utf8.encode(input);
   if (bytes.byteLength < minimum) return fail();
@@ -71,13 +115,11 @@ function prefix(label: string): Uint8Array { return concat([utf8.encode(label), 
 
 /** count u8 + entries (id, version as length-prefixed UTF-8; policyHash as length-prefixed UTF-8 hex). Sorted unique IDs. */
 function capabilityBytes(input: unknown): Uint8Array[] {
-  if (!Array.isArray(input)) return fail();
-  if (input.length > 8) return fail('LIMIT_EXCEEDED');
-  const parts: Uint8Array[] = [new Uint8Array([input.length])];
+  const entries = exactDataArray(input, 8);
+  const parts: Uint8Array[] = [new Uint8Array([entries.length])];
   let previous: string | undefined;
-  for (const raw of input as unknown[]) {
-    if (typeof raw !== 'object' || raw === null || Object.keys(raw).sort().join() !== 'id,policyHash,version') return fail();
-    const capability = raw as CapabilityV1;
+  for (const raw of entries) {
+    const capability = exactDataObject(raw, ['id', 'policyHash', 'version']) as unknown as CapabilityV1;
     const id = text(capability.id, 1, 64, true);
     // Sorted by exact byte order of the ASCII ID; equal IDs are duplicates.
     if (previous !== undefined && !(previous < capability.id)) return fail();
@@ -90,21 +132,21 @@ function capabilityBytes(input: unknown): Uint8Array[] {
 
 /** Exact G16 salted private-agreement bytes. Unknown fields, bad UTF-8 and noncanonical integers fail closed. */
 export function encodePrivateAgreement(input: PrivateAgreementV1): Uint8Array<ArrayBuffer> {
-  if (typeof input !== 'object' || input === null || Object.keys(input).sort().join() !==
-    'agreementSalt,capabilities,fiatCurrency,fiatMinorUnits,fiatScale,orderId,paymentInstructions,revision,v') return fail();
-  if (input.v !== 1) return fail('UNSUPPORTED_VERSION');
-  if (typeof input.fiatCurrency !== 'string' || !/^[A-Z]{3}$/.test(input.fiatCurrency)) return fail();
-  hex32(input.orderId);
-  if (typeof input.fiatScale !== 'number' || !Number.isInteger(input.fiatScale) || input.fiatScale < 0 || input.fiatScale > 6) return fail();
+  const agreement = exactDataObject(input, ['agreementSalt', 'capabilities', 'fiatCurrency', 'fiatMinorUnits', 'fiatScale', 'orderId',
+    'paymentInstructions', 'revision', 'v']) as unknown as PrivateAgreementV1;
+  if (agreement.v !== 1) return fail('UNSUPPORTED_VERSION');
+  if (typeof agreement.fiatCurrency !== 'string' || !/^[A-Z]{3}$/.test(agreement.fiatCurrency)) return fail();
+  hex32(agreement.orderId);
+  if (typeof agreement.fiatScale !== 'number' || !Number.isInteger(agreement.fiatScale) || agreement.fiatScale < 0 || agreement.fiatScale > 6) return fail();
   const bytes = concat([prefix(PRIVATE_PREFIX), new Uint8Array([1]),
-    ...lengthPrefixed(text(input.orderId, 64, 64, true)),
-    beFixed(unsigned(input.revision, U64, 1n), 8),
-    ...lengthPrefixed(text(input.fiatCurrency, 3, 3, true)),
-    beFixed(unsigned(input.fiatMinorUnits, U128, 1n), 16),
-    new Uint8Array([input.fiatScale]),
-    ...lengthPrefixed(text(input.paymentInstructions, 0, MAX_INSTRUCTIONS_BYTES)),
-    ...capabilityBytes(input.capabilities),
-    hex32(input.agreementSalt)]);
+    ...lengthPrefixed(text(agreement.orderId, 64, 64, true)),
+    beFixed(unsigned(agreement.revision, U64, 1n), 8),
+    ...lengthPrefixed(text(agreement.fiatCurrency, 3, 3, true)),
+    beFixed(unsigned(agreement.fiatMinorUnits, U128, 1n), 16),
+    new Uint8Array([agreement.fiatScale]),
+    ...lengthPrefixed(text(agreement.paymentInstructions, 0, MAX_INSTRUCTIONS_BYTES)),
+    ...capabilityBytes(agreement.capabilities),
+    hex32(agreement.agreementSalt)]);
   if (bytes.byteLength > MAX_PRIVATE_AGREEMENT_BYTES) return fail('LIMIT_EXCEEDED');
   return bytes;
 }
@@ -124,21 +166,21 @@ function solanaKey(input: unknown): Uint8Array {
 
 /** G16 Solana raw canonical terms message (signed directly by both Ed25519 keys; termsHash = SHA-256 of it). */
 export function encodeSolanaTerms(input: SolanaTermsInput): Uint8Array<ArrayBuffer> {
-  if (typeof input !== 'object' || input === null || Object.keys(input).sort().join() !== 'acceptBeforeSeconds,amountBaseUnits,assetKind,buyer,capabilitiesHash,' +
-    'escrowExpirySeconds,genesisHash,mint,orderId,privateAgreementHash,programId,revision,seller,sellerNonce,tokenProgram') return fail();
-  const seller = solanaKey(input.seller), buyer = solanaKey(input.buyer);
-  if (input.seller === input.buyer) return fail();
+  const terms = exactDataObject(input, ['acceptBeforeSeconds', 'amountBaseUnits', 'assetKind', 'buyer', 'capabilitiesHash', 'escrowExpirySeconds',
+    'genesisHash', 'mint', 'orderId', 'privateAgreementHash', 'programId', 'revision', 'seller', 'sellerNonce', 'tokenProgram']) as unknown as SolanaTermsInput;
+  const seller = solanaKey(terms.seller), buyer = solanaKey(terms.buyer);
+  if (terms.seller === terms.buyer) return fail();
   let mint: Uint8Array, tokenProgram: Uint8Array, kind: number;
-  if (input.assetKind === 'native') {
-    if (input.mint !== null || input.tokenProgram !== null) return fail();
+  if (terms.assetKind === 'native') {
+    if (terms.mint !== null || terms.tokenProgram !== null) return fail();
     mint = new Uint8Array(32); tokenProgram = new Uint8Array(32); kind = 0;
-  } else if (input.assetKind === 'spl') {
-    mint = solanaKey(input.mint); tokenProgram = solanaKey(input.tokenProgram); kind = 2;
+  } else if (terms.assetKind === 'spl') {
+    mint = solanaKey(terms.mint); tokenProgram = solanaKey(terms.tokenProgram); kind = 2;
   } else return fail();
-  const accept = unsigned(input.acceptBeforeSeconds, U64), expiry = unsigned(input.escrowExpirySeconds, U64);
-  return concat([prefix(SOLANA_PREFIX), solanaKey(input.genesisHash), solanaKey(input.programId), hex32(input.orderId), seller, buyer,
-    mint, tokenProgram, hex32(input.privateAgreementHash), hex32(input.capabilitiesHash), hex32(input.sellerNonce),
-    new Uint8Array([1]), leU64(unsigned(input.revision, U64, 1n)), new Uint8Array([kind]), leU64(unsigned(input.amountBaseUnits, U64, 1n)),
+  const accept = unsigned(terms.acceptBeforeSeconds, U64), expiry = unsigned(terms.escrowExpirySeconds, U64);
+  return concat([prefix(SOLANA_PREFIX), solanaKey(terms.genesisHash), solanaKey(terms.programId), hex32(terms.orderId), seller, buyer,
+    mint, tokenProgram, hex32(terms.privateAgreementHash), hex32(terms.capabilitiesHash), hex32(terms.sellerNonce),
+    new Uint8Array([1]), leU64(unsigned(terms.revision, U64, 1n)), new Uint8Array([kind]), leU64(unsigned(terms.amountBaseUnits, U64, 1n)),
     leU64(accept), leU64(expiry), new Uint8Array([0])]);
 }
 
