@@ -2,6 +2,11 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — withdraw scenario merged
+
+- Merged `wave3/local-withdraw` (`071d600`, `2258fad`): local proof 8/8 incl. reverting buyer → deferred credit → withdraw.
+  npm test 394/394. G12 reconcile worker (`wave3/g12-reconcile`) still running.
+
 ## 2026-10-27 — wave 3 running
 
 - Opus worker: local branch `wave3/g12-reconcile` — `packages/domain/src/tx-lifecycle.ts` (+ maybe `packages/wallet/src/evm-submit.ts`),
