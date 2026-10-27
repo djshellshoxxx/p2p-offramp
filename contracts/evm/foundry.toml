@@ -18,6 +18,11 @@ remappings = [
   "forge-std/=lib/forge-std/src/",
   "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
 ]
+# Read-only access to the shared G16 scenario fixture used by test/TermsVector.t.sol.
+fs_permissions = [
+  { access = "read", path = "../../packages/domain/test/fixtures/local-evm-scenario" },
+  { access = "read", path = "./out" },
+]
 
 [fuzz]
 runs = 1024
