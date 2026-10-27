@@ -1,0 +1,102 @@
+{
+  "_notice": "SYNTHETIC, TEST-ONLY. Not a production registry, no trust root, not an independent golden vector (same authorship as the code under test). Never deploy or fund. Keys below are deterministic test-only values, never real.",
+  "registrySha256": "14e7ecfb5aff74253affe0d2e8560728763f01db405bcc7efdca964ef103ca6a",
+  "domain": {
+    "chainId": "31337",
+    "verifyingContract": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+  },
+  "testOnlyKeys": {
+    "derivation": "keccak256(utf8(\"p2p-offramp-test-only-local-scenario-<role>\"))",
+    "seller": {
+      "privateKeyHex": "d99b5d827b63f7af2dc3a36d483ef8d37306e3bf213896085b21af458d2c70aa",
+      "address": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e"
+    },
+    "buyer": {
+      "privateKeyHex": "49aeaac75f088473e0595bc2a6f6e7e4c8053a4b022ea6abc5eb87c42cad4a1b",
+      "address": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5"
+    }
+  },
+  "fundingWindow": {
+    "okChainTimeSeconds": "1699990000",
+    "expiredChainTimeSeconds": "1700000000",
+    "tooEarlyChainTimeSeconds": "1699400000"
+  },
+  "sets": {
+    "native": {
+      "privateAgreementInput": {
+        "v": 1,
+        "orderId": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "revision": "1",
+        "fiatCurrency": "USD",
+        "fiatMinorUnits": "5000",
+        "fiatScale": 2,
+        "paymentInstructions": "SYNTHETIC test payment note A",
+        "capabilities": [
+          {
+            "id": "local-test-cap",
+            "version": "1",
+            "policyHash": "9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c"
+          }
+        ],
+        "agreementSalt": "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a"
+      },
+      "privateAgreementSha256": "972459f32afc027880b2e4910469dbce213ed14e19e7273412fb8bed0fa83605",
+      "capabilitiesSha256": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+      "terms": {
+        "orderId": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-local-v1",
+        "seller": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "buyer": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "972459f32afc027880b2e4910469dbce213ed14e19e7273412fb8bed0fa83605",
+        "capabilitiesHash": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+        "sellerNonce": "3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "expectedEvmTermsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a"
+    },
+    "erc20": {
+      "privateAgreementInput": {
+        "v": 1,
+        "orderId": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "revision": "1",
+        "fiatCurrency": "USD",
+        "fiatMinorUnits": "2500",
+        "fiatScale": 2,
+        "paymentInstructions": "SYNTHETIC test payment note B",
+        "capabilities": [
+          {
+            "id": "local-test-cap",
+            "version": "1",
+            "policyHash": "9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c9c"
+          }
+        ],
+        "agreementSalt": "2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b"
+      },
+      "privateAgreementSha256": "346b2013fd019f7d9b9e2f789e458940e5c990d9fc540c7d871a6023acc9fbab",
+      "capabilitiesSha256": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+      "terms": {
+        "orderId": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-local-v1",
+        "seller": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "buyer": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "assetKind": "erc20",
+        "asset": "0x7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a",
+        "amountBaseUnits": "25000000",
+        "privateAgreementHash": "346b2013fd019f7d9b9e2f789e458940e5c990d9fc540c7d871a6023acc9fbab",
+        "capabilitiesHash": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+        "sellerNonce": "4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "expectedEvmTermsHash": "9f5c68d4d66adafb7a96e298f82b880d4fa9bf6cb197ceea9c4bfb2a18c32524"
+    }
+  }
+}
