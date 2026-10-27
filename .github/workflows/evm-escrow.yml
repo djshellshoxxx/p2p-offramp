@@ -26,3 +26,18 @@ jobs:
         run: |
           bash script/export-abi.sh
           git diff --exit-code -- abi/BasicEscrow.json
+  local-trade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.5.1
+      - run: npm ci --ignore-scripts
+      - run: npm run test:evm:local

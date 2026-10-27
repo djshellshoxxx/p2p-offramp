@@ -2,6 +2,14 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — local EVM trade proof merged
+
+- Merged `wave2/evm-local-trade` (`56ff6f5`, `55255ca`): `packages/wallet/src/evm-escrow.ts` (test-only calldata/event
+  decoder) + `npm run test:evm:local` (anvil two-party trade: native + ERC-20 fund/release, deadline refund, negatives).
+  CI job `local-trade` added. npm test 393/393, forge 82/82, local trade 7/7.
+- Still open (code): on-chain acceptance-signature check, failed-payout/withdraw path in local proof, G12 submit/reconcile,
+  wallet-signed (non-dev-account) sending. Owner-gated (skip): trust root, Keccak dep review, deployment.
+
 ## 2026-10-27 — wave 2 started
 
 - Draft PR #10 (escrow) open + subscribed. Worker (Sonnet) running on local branch `wave2/evm-local-trade`:

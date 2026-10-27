@@ -8,6 +8,7 @@
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +22,9 @@ import {
 } from '../packages/wallet/src/evm-escrow.ts';
 
 const run = promisify(execFile);
-const FOUNDRY = `${homedir()}/.foundry/bin`;
+// Prefer a local Foundry install; CI puts Foundry on PATH instead (foundry-toolchain).
+const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
+const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}` };
 // Anvil's documented deterministic development accounts (public, worthless): 0 seller, 1 buyer, 2 third party, 3 impostor buyer.
@@ -145,7 +148,7 @@ const pass = name => { results.push(name); console.log(`ok - ${name}`); };
 async function main() {
   const port = await freePort();
   rpcUrl = `http://127.0.0.1:${port}`;
-  anvil = spawn(`${FOUNDRY}/anvil`, ['--host', '127.0.0.1', '--port', String(port), '--silent', '--chain-id', '31337'], { env: ENV, stdio: ['ignore', 'ignore', 'inherit'] });
+  anvil = spawn(ANVIL, ['--host', '127.0.0.1', '--port', String(port), '--silent', '--chain-id', '31337'], { env: ENV, stdio: ['ignore', 'ignore', 'inherit'] });
   anvil.once('error', error => { throw error; });
   for (let attempt = 0; ; attempt++) {
     try { await rpc('eth_chainId'); break; } catch (error) { if (attempt > 100) throw error; await new Promise(resolve => setTimeout(resolve, 100)); }
