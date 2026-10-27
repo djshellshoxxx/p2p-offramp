@@ -1,0 +1,296 @@
+{
+  "recorded_utc": "2026-10-24T15:13:02.490228+00:00",
+  "source_commit": "52fd1149a1463f747f7c21f7693f8951e577d961",
+  "source_tree": "f5a809b47e4a9dca37c0db9acb53f1b5d0df13ed",
+  "baseline": "3df560fcc2cae2f6031ec258b53ce37ad03c6510",
+  "node": "24.19.0",
+  "npm": "11.9.0",
+  "chromium": "154.0.8037.57",
+  "evidence": [
+    {
+      "command": "npm test",
+      "result": "273 passed, zero skipped/failed",
+      "local_log": "/workspace/p2p-pr3-ui-final2-tests.log",
+      "sha256": "01f77b7b3b04054917712ee7653a3642e673a7aba088b8e179d4a4ebcf1fd741",
+      "log_modified_utc": "2026-10-24T14:57:25.780894+00:00"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "exit 0; domain/runtime/worker/UI strict checks",
+      "local_log": "/workspace/p2p-pr3-ui-final2-types.log",
+      "sha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+      "log_modified_utc": "2026-10-24T14:57:28.572974+00:00"
+    },
+    {
+      "command": "npm run check:boundaries",
+      "result": "exit 0; 37 production files and 17-entry core graph modules",
+      "local_log": "/workspace/p2p-pr3-ui-final2-boundaries.log",
+      "sha256": "9e8edae1b0774d9dfccb09742414a7dc6c6f6725e4a8e24cc8a4278be8d15493",
+      "log_modified_utc": "2026-10-24T14:57:29.424999+00:00"
+    },
+    {
+      "command": "P2P_CHROMIUM=/usr/bin/chromium npm run test:browser",
+      "result": "exit 0; three real native Chromium fixtures",
+      "local_log": "/workspace/p2p-pr3-ui-final2-native-browser.log",
+      "sha256": "0a06a0f08f3ec283fd2168c35269114c6f8dd1e71bbec3d776cd7853b3ab4ea1",
+      "log_modified_utc": "2026-10-24T14:57:40.925400+00:00"
+    },
+    {
+      "command": "P2P_CHROMIUM=/usr/bin/chromium npm run test:web:browser",
+      "result": "exit 0; emitted app six delivery/base profiles, four widths, native Worker unlock/export, cancellation, missing assets, CSP and local repeat-build bytes",
+      "local_log": "/workspace/p2p-pr3-ui-final2-web-browser.log",
+      "sha256": "9b5ecd85441ac1c8fc31be8e577ea0d067e7f50d7090cc1bd397fdf49eb7d719",
+      "log_modified_utc": "2026-10-24T14:57:31.673085+00:00"
+    },
+    {
+      "command": "npm run test:build-policy",
+      "result": "5 passed",
+      "local_log": "/workspace/p2p-pr3-policies-final.log",
+      "sha256": "29a5d8e94fb639592f1fb1402ba3badec04f450238089e28c12bae218ca93c59",
+      "log_modified_utc": "2026-10-24T15:06:49.016821+00:00"
+    },
+    {
+      "command": "npm run build",
+      "result": "exit 0; 9 emitted files, 311257 bytes; no signed release",
+      "local_log": "/workspace/p2p-pr3-build-final.log",
+      "sha256": "bdced7f052a1bd87b2f0441ff692193778363c0a2c4a4616e67430d4b390a10a",
+      "log_modified_utc": "2026-10-24T14:52:55.581205+00:00"
+    },
+    {
+      "command": "npm run check:specs",
+      "result": "173 documents structurally checked, zero broken links or omissions",
+      "local_log": "/workspace/p2p-pr3-ui-final-python.log",
+      "sha256": "9d99514a9322620061ff6ae6a0b69fe938e85792ac71b03f99d4d0629ab65b4a",
+      "log_modified_utc": "2026-10-24T14:43:58.729989+00:00"
+    },
+    {
+      "command": "npm audit --omit=dev",
+      "result": "zero production dependency advisories reported; not a supply-chain audit",
+      "local_log": "/workspace/p2p-pr3-ui-final-audit.log",
+      "sha256": "050fc23110251493ae4c9626fe52492f2de2cf96cc9aa7f3a2c728cb02ae4886",
+      "log_modified_utc": "2026-10-24T14:43:57.141944+00:00"
+    }
+  ],
+  "source_review": {
+    "review": "staged tracked source; high-signal credential and forbidden-path scan; synthetic test fixtures are not user credentials",
+    "findings": [],
+    "files": [
+      {
+        "path": ".github/workflows/specifications.yml",
+        "sha256": "d2991f96a394f4d2365344827dbb853ee0101e503d1badd824d5dab85d2ab1d0",
+        "bytes": 800
+      },
+      {
+        "path": ".github/workflows/vault-foundation.yml",
+        "sha256": "68ca76a7703578442ce5483d0fa9743539845127cd2fdc8a2694ad71edcda6f6",
+        "bytes": 1835
+      },
+      {
+        "path": "DEVELOPMENT_ROADMAP.md",
+        "sha256": "569c3b3d12bbe6bf3eba601630c9364a348a8fa501a7aa59a24cb951e393538b",
+        "bytes": 39080
+      },
+      {
+        "path": "README.md",
+        "sha256": "3bad96206b2bbc1c69ec803ba4bc06f32f4734b7d6e4964e8bfa4e102252a4f2",
+        "bytes": 2499
+      },
+      {
+        "path": "apps/web/README.md",
+        "sha256": "33450dc77cc317324251fe9ebfd1d6a0c2dfcfad75edeaf31a1e858ceec18fef",
+        "bytes": 3714
+      },
+      {
+        "path": "apps/web/index.html",
+        "sha256": "62ab141a502f9d7d2b7b66259ccfd0ce629aa7efcaba51d3379d4521b53e19cb",
+        "bytes": 858
+      },
+      {
+        "path": "apps/web/scripts/artifact-policy.mjs",
+        "sha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7",
+        "bytes": 5063
+      },
+      {
+        "path": "apps/web/scripts/artifact-policy.test.mjs",
+        "sha256": "f4bf6e7bcb17f33759172bd5387c0bf427452038d47331e4857dcd15b87094e7",
+        "bytes": 2859
+      },
+      {
+        "path": "apps/web/scripts/build.mjs",
+        "sha256": "6e1d8185b24927c5961395081f82eebb83b3ce5b1e5336a588e20380668d7422",
+        "bytes": 2835
+      },
+      {
+        "path": "apps/web/scripts/static-build-plugin.mjs",
+        "sha256": "4c7795102e2ca99d933f3d9dfe7dd6270c228e084dae46129c20e486afa4734e",
+        "bytes": 4223
+      },
+      {
+        "path": "apps/web/src/app-services.ts",
+        "sha256": "55982205be388264f4ab77686e96d0eaffe7a037eab57436c18c08a3028c30a6",
+        "bytes": 2772
+      },
+      {
+        "path": "apps/web/src/main.tsx",
+        "sha256": "2ea2c63829342f5171172f0243a796c79591046eb1c9f549a67a862ba83e4c3e",
+        "bytes": 1489
+      },
+      {
+        "path": "apps/web/src/runtime/app-runtime.ts",
+        "sha256": "ae32e827e2208b73fcaa550e5a547c9b3e0344f4b0d343871c336528cd614f43",
+        "bytes": 14705
+      },
+      {
+        "path": "apps/web/src/ui/App.tsx",
+        "sha256": "03f64164c21bd0184605155a4b4a63426d6c8651be952261939c15d39ea3e4cf",
+        "bytes": 4842
+      },
+      {
+        "path": "apps/web/src/ui/Pages.tsx",
+        "sha256": "540c9c992ca36d992accbc396daa540898de71554a92f180fc3103dd05baf6ca",
+        "bytes": 3701
+      },
+      {
+        "path": "apps/web/src/ui/VaultForms.tsx",
+        "sha256": "ed79b753439b6005674ddc9a58a092dc06b6af91d2dc78aa04af9218f1e25b9a",
+        "bytes": 6451
+      },
+      {
+        "path": "apps/web/src/ui/app.css",
+        "sha256": "dd572bfbee1ca50362d0ca4b61851cd006936bbdae391715d78fdfabd41d04ff",
+        "bytes": 6178
+      },
+      {
+        "path": "apps/web/src/ui/messages.ts",
+        "sha256": "fab4d5c1dbf30238379f17549d984d5e83cd00fe8e887669fb049d869cfc68c5",
+        "bytes": 7343
+      },
+      {
+        "path": "apps/web/src/ui/routes.ts",
+        "sha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1",
+        "bytes": 1007
+      },
+      {
+        "path": "apps/web/src/ui/styles.d.ts",
+        "sha256": "28e0b0de8c50a7e1daa4f6dca791beb9dcf4084e164c9468694f579406a63d73",
+        "bytes": 103
+      },
+      {
+        "path": "apps/web/test/app-services.test.mjs",
+        "sha256": "dec168ee0796107f82d97bd54cbb74cbb26ad2e5ada1b6edbab11c1b6e9af93f",
+        "bytes": 5324
+      },
+      {
+        "path": "apps/web/test/ui-routes.test.mjs",
+        "sha256": "f5afb20ada367a9524692d65231e6379974b6df0968d321bab127e205066ba21",
+        "bytes": 1823
+      },
+      {
+        "path": "apps/web/tsconfig.ui.json",
+        "sha256": "1273a2a458915e78ad17b7abdff4ac00f9e90449e59c43a27d5309a52ed539b8",
+        "bytes": 239
+      },
+      {
+        "path": "apps/web/vite.config.ts",
+        "sha256": "3c9b14be8284ebb8c03ae30d4a19dac093f8c4d0f5c1838844f7b9847e70389a",
+        "bytes": 1072
+      },
+      {
+        "path": "docs/DEVELOPMENT_STATUS.md",
+        "sha256": "d63f93c76aacc5a17da4db4e6c6b303b0d38d72fb1c8d766b24b2bab98f3084a",
+        "bytes": 7108
+      },
+      {
+        "path": "docs/adr/ADR-CLIENT-SIDE-2026-10-24.md",
+        "sha256": "819caf736e9b7466d2c64ed1673b22a043e36058d2ff175cf3433cffca692885",
+        "bytes": 2605
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "86e3253869782e8ef111d1f7943b004de8f9a4caa4bebc6b36a92cbecba36bcc",
+        "bytes": 41976
+      },
+      {
+        "path": "package.json",
+        "sha256": "0f663c5c3d84ecccf3ba7a9fef82f5bd2fa6ed9ea1ea409719254badf27c4fb5",
+        "bytes": 1319
+      },
+      {
+        "path": "packages/domain/src/authority.ts",
+        "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "bytes": 11377
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "bytes": 3150
+      },
+      {
+        "path": "packages/domain/src/intent-journal.ts",
+        "sha256": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "bytes": 14476
+      },
+      {
+        "path": "packages/domain/src/read-retry.ts",
+        "sha256": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+        "bytes": 6536
+      },
+      {
+        "path": "packages/identity/src/identity-service.ts",
+        "sha256": "bc966dd03942887e70f95f003925abb1a5399a5015e56f73bfd872d475217949",
+        "bytes": 14053
+      },
+      {
+        "path": "packages/identity/src/noble-provider.ts",
+        "sha256": "13141582aed59021cf103a42548e37bdced3d10dff4b3d39819ff7f8616cbbaa",
+        "bytes": 1246
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "943a3ee7818bd6179aa605a4f9ee90ea8c298e84fd13947c4a29e6c09b65df0f",
+        "bytes": 673
+      },
+      {
+        "path": "packages/storage/src/backup-service.ts",
+        "sha256": "774a6493550d3d4e5821bbe6c9609e55bcbfb5ba0e329f5b7771e9acb5a858ee",
+        "bytes": 9154
+      },
+      {
+        "path": "packages/storage/src/idb-vault-store.ts",
+        "sha256": "c000f564c876e39676ecac71ec192a28c4e5063eca092fc67aaab28a3e394286",
+        "bytes": 9698
+      },
+      {
+        "path": "packages/storage/src/vault-crypto.ts",
+        "sha256": "604a23ee1dd75442e1ee1fb4a9d05fb5e5950628ed332d3faf90e14956febe91",
+        "bytes": 9295
+      },
+      {
+        "path": "packages/storage/src/vault-service.ts",
+        "sha256": "6014887ed7d2b188516daca84b4827cf7d048da845e4919dc22b881a8bd3d854",
+        "bytes": 20343
+      },
+      {
+        "path": "scripts/check-import-boundaries.mjs",
+        "sha256": "d8bbb73cb4c3675cd5ef0ab8990f23ca5d2712f94ae167b8fa54b21d010eba46",
+        "bytes": 14913
+      },
+      {
+        "path": "scripts/test-web-build-browser.mjs",
+        "sha256": "580524d038c65eeb322abb5474fe5717101d0c61d92b37c2acb49fb8d445ff98",
+        "bytes": 23085
+      },
+      {
+        "path": "scripts/tests/import-boundaries.test.mjs",
+        "sha256": "f291db90bf8fe15090f8c23b3105ff3b1663dab06ace9deba0d512c41f961f2f",
+        "bytes": 6153
+      }
+    ],
+    "reviewed_fixture": {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "reason": "literal BEGIN marker only in negative artifact-policy test; no key body or END marker"
+    }
+  },
+  "release_enabled": 0,
+  "independent_audit_run": false
+}

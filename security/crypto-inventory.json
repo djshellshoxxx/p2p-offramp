@@ -1,0 +1,90 @@
+[
+  {
+    "id": "native-pbkdf2",
+    "capability": "local-encrypted-vault",
+    "primitive": "PBKDF2-HMAC-SHA256",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G02-v1",
+    "integrity": "browser-profile:security/browser-support.json",
+    "license": "Browser built-in; browser distribution license applies",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/storage/test/fixtures/vault-python-v1.json",
+        "sha256": "c12a25f1fddb68e9b1e976c167d38df4b050dec1d20df2da66fe367466b7f740",
+        "provenanceUrl": "https://github.com/djshellshoxxx/p2p-offramp/blob/6b6004bdf35b7aea14530f965756ca6d54336682/packages/storage/test/fixtures/verify_vault_fixture.py"
+      }
+    ]
+  },
+  {
+    "id": "native-aes-gcm",
+    "capability": "local-encrypted-vault",
+    "primitive": "AES-256-GCM",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G02-v1",
+    "integrity": "browser-profile:security/browser-support.json",
+    "license": "Browser built-in; browser distribution license applies",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/storage/test/fixtures/vault-python-v1.json",
+        "sha256": "c12a25f1fddb68e9b1e976c167d38df4b050dec1d20df2da66fe367466b7f740",
+        "provenanceUrl": "https://github.com/djshellshoxxx/p2p-offramp/blob/6b6004bdf35b7aea14530f965756ca6d54336682/packages/storage/test/fixtures/verify_vault_fixture.py"
+      }
+    ]
+  },
+  {
+    "id": "noble-curves-2.4.0",
+    "capability": "local-messaging-identity-test-only",
+    "primitive": "secp256k1 x-only public key derivation",
+    "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  },
+  {
+    "id": "noble-hashes-2.4.0",
+    "capability": "local-messaging-identity-test-only",
+    "primitive": "SHA-256 dependency of local secp256k1 provider",
+    "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  }
+]

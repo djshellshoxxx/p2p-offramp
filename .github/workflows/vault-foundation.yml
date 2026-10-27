@@ -1,0 +1,50 @@
+name: Vault foundation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  schemas-and-crypto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run check:boundaries
+      - run: npm run test:build-policy
+      - run: npm run build
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Install Chromium
+        id: chrome
+        uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3, official annotated tag dereferenced
+        with:
+          chrome-version: stable
+      - run: npm run test:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:web:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+  specs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5, official ref checked 2026-10-24
+        with:
+          python-version: '3.12'
+      - run: npm run test:specs
+      - run: npm run check:specs
