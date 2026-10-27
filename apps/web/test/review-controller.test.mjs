@@ -147,3 +147,36 @@ test('dispose discards in-flight work and stops notifications', async () => {
   assert.equal(notified, before);
   assert.deepEqual(await trade.importFile(file('{}')), { kind: 'stale' });
 });
+
+test('removing the review the last job accepted resets the job, so no link points at a missing review', async () => {
+  const trade = createTradeReviewController({ source: ready, randomBytes, review: async () => accepted('gone') });
+  await trade.loadRegistry();
+  const outcome = await trade.importFile(file('{}'));
+  trade.remove(outcome.localId);
+  assert.deepEqual(trade.getSnapshot().job, { kind: 'idle' });
+  const kept = await trade.importFile(file('{}'));
+  trade.remove('not-this-one');
+  assert.equal(trade.getSnapshot().job.localId, kept.localId, 'removing a different ID leaves the job alone');
+});
+
+test('cancel during reading, and a file import superseding a sample, both discard the older work', async () => {
+  const reading = deferred();
+  const trade = createTradeReviewController({ source: ready, randomBytes, review: async (_registry, bytes) => accepted(new TextDecoder().decode(bytes)) });
+  await trade.loadRegistry();
+  const pending = trade.importFile({ size: 2, arrayBuffer: () => reading.promise });
+  assert.deepEqual(trade.getSnapshot().job, { kind: 'busy', step: 'reading' });
+  trade.cancel();
+  reading.resolve(new TextEncoder().encode('late').buffer);
+  assert.deepEqual(await pending, { kind: 'stale' });
+  assert.equal(trade.getSnapshot().job.kind, 'cancelled');
+  const slowSample = createTradeReviewController({ source: async () => ({ kind: 'ready', label: 'synthetic-demo', registry,
+    samples: [{ id: 's1', label: 'Slow', load: () => reading2.promise }] }), randomBytes, review: async (_registry, bytes) => accepted(new TextDecoder().decode(bytes)) });
+  const reading2 = deferred();
+  await slowSample.loadRegistry();
+  const sample = slowSample.importSample('s1');
+  const fileImport = await slowSample.importFile(file('file'));
+  reading2.resolve(new TextEncoder().encode('sample'));
+  assert.deepEqual(await sample, { kind: 'stale' });
+  assert.deepEqual(slowSample.getSnapshot().reviews.map(item => item.review.orderId), ['file']);
+  assert.equal(slowSample.getSnapshot().job.localId, fileImport.localId);
+});

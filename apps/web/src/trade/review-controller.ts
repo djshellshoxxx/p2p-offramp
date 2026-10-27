@@ -157,7 +157,10 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     },
     remove(localId: string) {
       const reviews = snapshot.reviews.filter(item => item.localId !== localId);
-      if (reviews.length !== snapshot.reviews.length) publish({ reviews: Object.freeze(reviews) });
+      if (reviews.length === snapshot.reviews.length) return;
+      // A finished job that points at the removed review would otherwise link to a missing page.
+      const job = snapshot.job.kind === 'accepted' && snapshot.job.localId === localId ? Object.freeze({ kind: 'idle' } as const) : snapshot.job;
+      publish({ reviews: Object.freeze(reviews), job });
     },
     find: (localId: string) => snapshot.reviews.find(item => item.localId === localId) ?? null,
     nowSeconds: () => now().toString(),
