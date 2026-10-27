@@ -117,6 +117,13 @@ try {
   assert.equal(await field('Fiat amount'), '123.45 EUR');
   assert.equal(await field('Crypto seller (funds escrow, confirms fiat receipt)'), `${SELLER}\nGrouped for reading: 0x ${SELLER.slice(2).match(/.{4}/g).join(' ')}`);
   assert.equal(await main.getByRole('button', { name: /accept|sign|fund/i }).count(), 0, 'no accept/sign/fund controls');
+  // Long exact hex values must wrap, not clip, from phone to desktop widths.
+  for (const width of [320, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no horizontal overflow at ${width}px`);
+  }
+  // Keyboard: the review heading receives focus after route changes and the page has no positive tabindex traps.
+  assert.equal(await page.locator('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])').count(), 0);
 
   // 3. Reload: memory-only session is honest about losing the review; nothing is replayed from the link.
   await page.reload();

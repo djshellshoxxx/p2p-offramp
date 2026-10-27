@@ -315,3 +315,10 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 1. Recheck PR #8 CI and the stack (#4 → #5 → #7 → #8); merge bottom-up only after owner review. Do not force-push.
 2. When the owner publishes or reconciles the runtime/Worker work: add encrypted vault records for reviewed terms (persistence + recovery).
 3. Owner decisions still gate the trade loop: G11/G15 trust root, Foundry/solc permission for the escrow, Keccak/secp256k1 dependency review, G16 Solana token-program field.
+
+## Stack merged to main 2026-10-27 UTC (owner approval in session)
+
+- Merged bottom-up with merge commits (no squash/rebase, no force-push), each with `expectedHeadSha`: PR #4 `8a88d11` → `d96dcbb`, PR #5 `81c2dc8` → `6d76590`, PR #7 `48074e7` → `55a9ea4`, PR #8 `1450c53` → `48513fb`. PRs #1–#3 are ancestors and closed with them. The custodial branch `feat/custodial-ledger-foundation` was not merged.
+- Before merging #8, a local test merge of `origin/main` into the PR head produced tree `2d8714da…`, identical to the tested PR #8 tree, so CI (all 8 check runs green on `1450c53`) and local evidence apply to `48513fb` exactly.
+- `RESTART.md` and `LEAN_RELEASE_SCOPE.md` are owner documents and still describe the old stack; they were left unchanged. Start new work from `main`.
+- Follow-up branch `claude/post-merge-followups`: Home links to the terms review; demo journey asserts no horizontal overflow at 320/768/1440 px on the review screen.
