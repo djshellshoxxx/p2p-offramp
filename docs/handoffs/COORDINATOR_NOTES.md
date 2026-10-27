@@ -2,6 +2,11 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — nostr-crypto under revision
+
+- `wave4/g20-nostr-crypto` done (e135e7a..db210b7, 104+24 official NIP-44 vectors) but used hand-rolled ChaCha20.
+  Worker resumed to swap to audited `@noble/ciphers@2.4.0`. Merge only after that commit lands and gates pass.
+
 ## 2026-10-27 — relay pool merged
 
 - Merged `wave4/g19-g21-relay` (`b13e772`,`c5c4fe0`,`4f6135c`): `packages/relay`, ads = kind 30078 d=`p2p-offramp:v1:<orderId>`.
