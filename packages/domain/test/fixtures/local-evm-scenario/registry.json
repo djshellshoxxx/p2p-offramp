@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "releaseId": "test-local-only",
+  "networks": [
+    {
+      "id": "local-evm",
+      "chain": "evm",
+      "chainIdentity": "31337",
+      "genesisHash": "0x3131313131313131313131313131313131313131313131313131313131313131",
+      "endpoints": [
+        {
+          "id": "local-node",
+          "url": "http://127.0.0.1:8545/"
+        }
+      ],
+      "finality": {
+        "kind": "evm-finalized-tag"
+      },
+      "assets": [
+        {
+          "id": "native",
+          "kind": "native",
+          "address": null,
+          "decimals": 18,
+          "transferPolicy": "exact-transfer"
+        },
+        {
+          "id": "test-usd",
+          "kind": "erc20",
+          "address": "0x7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a",
+          "decimals": 6,
+          "transferPolicy": "exact-transfer"
+        }
+      ],
+      "deployments": [
+        {
+          "id": "escrow-local-v1",
+          "address": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+          "protocolVersion": 1,
+          "artifactSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "runtime": {
+            "kind": "evm-code",
+            "keccak256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "upgradeable": false
+          },
+          "supportedAssetIds": [
+            "native",
+            "test-usd"
+          ]
+        }
+      ],
+      "environment": "local"
+    }
+  ]
+}
