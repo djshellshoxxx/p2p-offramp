@@ -32,15 +32,23 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
       try { return !options.signal.aborted && (options.isCurrent === undefined || options.isCurrent() === true); } catch { return false; }
     };
     if (!current()) return error('CANCELLED');
-    const started = time.now();
+    // Distinguish a thrown clock callback from an existing non-finite sample; discard foreign exception content.
+    let clockFault = false;
+    const sampleNow = (): number => { try { return time.now(); } catch { clockFault = true; return Number.NaN; } };
+    const sampleRandom = (): number => { try { return time.random(); } catch { return Number.NaN; } };
+    const started = sampleNow();
+    if (!current()) return error('CANCELLED');
     if (!Number.isFinite(started) || started < 0) return error('UNAVAILABLE');
     let elapsed = 0;
+    /** Returns -1 when ownership ended during the callback, otherwise the remaining budget (0 when exhausted or faulted). */
     const remaining = (): number => {
-      const now = time.now();
+      const now = sampleNow();
+      if (!current()) return -1;
       if (!Number.isFinite(now)) return 0;
       elapsed = Math.max(elapsed, now - started);
       return Math.max(0, READ_OPERATION_BUDGET_MS - elapsed);
     };
+    const exhausted = (): CoreResult<never> => error(clockFault ? 'UNAVAILABLE' : 'TIMEOUT');
     const attempt = (budget: number): Promise<{ readonly result: CoreResult<T>; readonly operationSettled: boolean }> =>
       new Promise(resolve => {
         const controller = new AbortController();
@@ -95,17 +103,23 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
     for (let index = 0; index < READ_MAX_ATTEMPTS; index++) {
       if (!current()) return error('CANCELLED');
       const budget = remaining();
-      if (budget <= 0) return error('TIMEOUT');
+      if (budget < 0) return error('CANCELLED');
+      if (budget === 0) return exhausted();
       const { result, operationSettled } = await attempt(budget);
       last = result;
       if (!current()) return error('CANCELLED');
-      if (remaining() <= 0) return error('TIMEOUT');
+      const left = remaining();
+      if (left < 0) return error('CANCELLED');
+      if (left === 0) return exhausted();
       if (result.ok || !result.error.retryable || !operationSettled || index === READ_MAX_ATTEMPTS - 1) return result;
-      const sample = time.random();
+      const sample = sampleRandom();
+      if (!current()) return error('CANCELLED');
       if (!Number.isFinite(sample) || sample < 0 || sample >= 1) return error('UNAVAILABLE');
       const ceiling = index === 0 ? 500 : 1000;
       const delay = Math.floor(sample * (ceiling + 1));
-      if (delay >= remaining()) return error('TIMEOUT');
+      const room = remaining();
+      if (room < 0) return error('CANCELLED');
+      if (delay >= room) return clockFault ? error('UNAVAILABLE') : error('TIMEOUT');
       if (!await backoff(delay)) return error('CANCELLED');
     }
     return last;
