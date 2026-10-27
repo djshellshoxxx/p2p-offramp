@@ -27,7 +27,9 @@ export async function scanBuild(directory, { syntheticDemo = false } = {}) {
   const licenses = JSON.parse(files['third-party-licenses.json'] ?? 'null');
   if (!Array.isArray(licenses) || ['react', 'react-dom', 'scheduler'].some(name => !licenses.some(item => item.name === name && item.identifier === 'MIT' && typeof item.text === 'string' && item.text.includes('Permission is hereby granted')))) throw new Error('LICENSE_ATTRIBUTION_MISSING');
   for (const graph of ['core-graph-document.json', 'core-graph-worker.json']) if (!files[graph]) throw new Error('CORE_GRAPH_MISSING');
-  const containsSynthetic = Object.values(files).some(text => SYNTHETIC_MARKERS.some(marker => text.includes(marker)));
+  const demoModules = ['core-graph-document.json', 'core-graph-worker.json']
+    .some(graph => JSON.parse(files[graph]).modules?.some(module => typeof module.path === 'string' && module.path.startsWith('apps/web/src/demo/')));
+  const containsSynthetic = demoModules || Object.values(files).some(text => SYNTHETIC_MARKERS.some(marker => text.includes(marker)));
   if (containsSynthetic !== syntheticDemo) throw new Error(syntheticDemo ? 'SYNTHETIC_DEMO_DATA_MISSING' : 'SYNTHETIC_DATA_IN_DEFAULT_BUILD');
   return { version: 1, ReleaseEnabled: 0, syntheticDemo, signedRelease: false, releaseAcceptance: false, framingAttestation: false, inspection, assets };
 }
