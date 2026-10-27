@@ -2,6 +2,12 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-27 — wave 4 running (Nostr)
+
+- Opus: `wave4/g20-nostr-crypto` → new `packages/nostr-crypto` (NIP-01/44 v2 w/ official vectors/59/17, no NIP-04).
+- Sonnet: `wave4/g19-g21-relay` → new `packages/relay` (pool via G05 broker, G19 adverts, fake-relay tests; crypto injected).
+- After both merge: integrate relay with nostr-crypto (replace test double), then encrypted terms exchange.
+
 ## 2026-10-27 — G12 reconcile merged
 
 - Merged `wave3/g12-reconcile` (`704504e`, `472ebd9`, `e9ace34`): `packages/domain/src/tx-lifecycle.ts`, `packages/wallet/src/evm-submit.ts`,
