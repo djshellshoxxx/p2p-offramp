@@ -55,7 +55,7 @@ test('strict parse rejects every malformed or hostile event shape', async () => 
     [e => { e.created_at = '1700000000'; }, 'INVALID_INPUT'], [e => { e.kind = 65536; }, 'INVALID_INPUT'], [e => { e.kind = 4; }, 'UNSUPPORTED_VERSION'],
     [e => { e.tags = [[]]; }, 'INVALID_INPUT'], [e => { e.tags = [['p', 1]]; }, 'INVALID_INPUT'], [e => { e.tags = 'p'; }, 'INVALID_INPUT'],
     [e => { e.tags = Array.from({ length: 65 }, () => ['t', 'x']); }, 'LIMIT_EXCEEDED'], [e => { e.tags = [Array(9).fill('x')]; }, 'LIMIT_EXCEEDED'],
-    [e => { e.tags = [['t', 'x'.repeat(1025)]]; }, 'INVALID_INPUT'], [e => { e.content = 'x'.repeat(131073); }, 'INVALID_INPUT'],
+    [e => { e.tags = [['t', 'x'.repeat(1025)]]; }, 'LIMIT_EXCEEDED'], [e => { e.content = 'x'.repeat(131073); }, 'LIMIT_EXCEEDED'],
     [e => { e.content = 'é'.repeat(70000); }, 'LIMIT_EXCEEDED'], [e => { e.content = 'a\u0000b'; }, 'INVALID_INPUT'], [e => { e.content = 'a\u001bb'; }, 'INVALID_INPUT'],
     [e => { e.content = '\uDC00'; }, 'INVALID_INPUT'], [e => { e.content = 'changed'; }, 'INTEGRITY_FAILURE'], [e => { e.sig = '0'.repeat(128); }, 'INTEGRITY_FAILURE'],
     [e => { e.tags = [['t', 'x', 'y']]; e.tags[0].length = 2; e.tags[0][5] = 'z'; }, 'LIMIT_EXCEEDED'],

@@ -24,8 +24,9 @@ export const DEFAULT_EVENT_LIMITS: EventLimits = Object.freeze({ maxContentBytes
 
 const FORBIDDEN_CHARACTERS = /[\u0000-\u0007\u000b\u000e-\u001f]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
 function safeString(input: unknown, maxBytes: number): string {
-  if (typeof input !== 'string' || input.length > maxBytes || FORBIDDEN_CHARACTERS.test(input)) return fail();
-  if (utf8Encode(input).byteLength > maxBytes) return fail('LIMIT_EXCEEDED');
+  if (typeof input !== 'string') return fail();
+  if (input.length > maxBytes || utf8Encode(input).byteLength > maxBytes) return fail('LIMIT_EXCEEDED');
+  if (FORBIDDEN_CHARACTERS.test(input)) return fail();
   return input;
 }
 function integer(input: unknown, max: number): number { if (typeof input !== 'number' || !Number.isSafeInteger(input) || input < 0 || input > max) return fail(); return input; }
