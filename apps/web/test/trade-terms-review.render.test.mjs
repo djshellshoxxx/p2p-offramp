@@ -37,13 +37,17 @@ test('disabled-trading banner, read-only intro and manual settlement risk always
 });
 
 test('exact amounts: native 18 decimals, ERC-20 6 decimals, uint256 maximum, fiat minor units', () => {
-  const native = text(render({ review: review() }));
-  assert.ok(native.includes('1 native'));
+  const nativeHtml = render({ review: review() });
+  assert.ok(nativeHtml.includes('<strong>1 native</strong>'));
+  assert.ok(nativeHtml.includes('<dd>50.00 USD</dd>'));
+  const native = text(nativeHtml);
   assert.ok(native.includes('1000000000000000000 base units at 18 decimals'));
   assert.ok(native.includes('50.00 USD'));
-  const erc20 = text(render({ review: review({ asset: { id: 'test-usd', kind: 'erc20', address: TOKEN, decimals: 6 }, amountBaseUnits: '25000000',
-    agreement: { ...review().agreement, fiatMinorUnits: '2500' } }) }));
-  assert.ok(erc20.includes('25 test-usd'));
+  const erc20Html = render({ review: review({ asset: { id: 'test-usd', kind: 'erc20', address: TOKEN, decimals: 6 }, amountBaseUnits: '25000000',
+    agreement: { ...review().agreement, fiatMinorUnits: '2500' } }) });
+  assert.ok(erc20Html.includes('<strong>25 test-usd</strong>'));
+  assert.ok(erc20Html.includes('<dd>25.00 USD</dd>'));
+  const erc20 = text(erc20Html);
   assert.ok(erc20.includes('25000000 base units at 6 decimals'));
   assert.ok(erc20.includes('25.00 USD'));
   assert.ok(erc20.includes(TOKEN), 'token contract shown in full');
@@ -107,9 +111,10 @@ test('payment instructions: exact text, multi-line, hostile controls hidden, mix
 
 test('capabilities: core trade shows none; listed capabilities are flagged unsupported and blocked', () => {
   assert.ok(text(render({ review: review() })).includes(t.capabilitiesNone));
-  const caps = text(render({ review: review({ agreement: { ...review().agreement, capabilities: [{ id: 'local-test-cap', version: '1', policyHash: '9c'.repeat(32) }] },
-    unsupportedCapabilities: ['local-test-cap'] }) }));
-  assert.ok(caps.includes('local-test-cap v1'));
+  const capsHtml = render({ review: review({ agreement: { ...review().agreement, capabilities: [{ id: 'local-test-cap', version: '1', policyHash: '9c'.repeat(32) }] },
+    unsupportedCapabilities: ['local-test-cap'] }) });
+  assert.ok(capsHtml.includes('<code>local-test-cap</code> v<bdi>1</bdi>'));
+  const caps = text(capsHtml);
   assert.ok(caps.includes(t.capabilityUnsupported));
   assert.ok(caps.includes(t.blockedCapabilities));
 });
@@ -120,4 +125,17 @@ test('source labelling: synthetic samples are visibly marked; files are not call
   const file = text(render({ review: review(), source: 'file' }));
   assert.ok(file.includes(t.sourceFile));
   assert.ok(!file.includes('SYNTHETIC test-only sample'));
+});
+
+test('capability versions are screened and isolated: a direction override cannot reverse or spoof the warning', () => {
+  const spoof = review({ agreement: { ...review().agreement, capabilities: [{ id: 'local-test-cap', version: '1 (supported)\u202E', policyHash: '9c'.repeat(32) }] },
+    unsupportedCapabilities: ['local-test-cap'] });
+  const html = render({ review: spoof });
+  assert.ok(!html.includes('\u202E'), 'the override character never reaches the DOM');
+  assert.ok(!html.includes('1 (supported)'));
+  assert.ok(text(html).includes(t.versionHidden));
+  assert.ok(text(html).includes(t.capabilityUnsupported));
+  const plain = render({ review: review({ agreement: { ...review().agreement, capabilities: [{ id: 'local-test-cap', version: '2.1', policyHash: '9c'.repeat(32) }] },
+    unsupportedCapabilities: ['local-test-cap'] }) });
+  assert.ok(plain.includes('<bdi>2.1</bdi>'), 'plain versions render exactly, isolated from surrounding text');
 });

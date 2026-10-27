@@ -42,6 +42,12 @@ function Instructions({ text }: { readonly text: string }) {
     <pre className="instructions">{checked.text}</pre></>;
 }
 
+/** G16 allows any UTF-8 version text; screen it like instructions and isolate it so it cannot reorder nearby warnings. */
+function CapabilityVersion({ version }: { readonly version: string }) {
+  const checked = checkDisplayText(version);
+  return checked.ok && !checked.text.includes('\n') ? <>v<bdi>{checked.text}</bdi></> : <span className="notice error">{t.versionHidden}</span>;
+}
+
 /** True when the device clock is at or past the acceptance deadline (display only, never chain authority). */
 export function acceptanceExpired(review: ReviewedEvmTerms, nowSeconds: string): boolean {
   const deadline = describeDeadline(review.acceptBeforeSeconds, nowSeconds);
@@ -68,7 +74,7 @@ export function TradeTermsReview({ review, nowSeconds, source }: TradeTermsRevie
       <dt>{t.escrowExpiry}</dt><dd><Deadline target={review.escrowExpirySeconds} now={nowSeconds} /></dd>
       <dt>{t.instructions}</dt><dd><Instructions text={agreement.paymentInstructions} /></dd>
       <dt>{t.capabilities}</dt><dd>{agreement.capabilities.length === 0 ? t.capabilitiesNone : <ul>
-        {agreement.capabilities.map(capability => <li key={capability.id}><code>{capability.id}</code> v{capability.version}
+        {agreement.capabilities.map(capability => <li key={capability.id}><code>{capability.id}</code> <CapabilityVersion version={capability.version} />
           {review.unsupportedCapabilities.includes(capability.id) ? <> <span className="notice error">{t.capabilityUnsupported}</span></> : null}</li>)}
       </ul>}</dd>
       <dt>{t.network}</dt><dd>{review.network.id}</dd>

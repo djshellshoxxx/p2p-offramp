@@ -15,6 +15,7 @@ export const tradeMessages = {
   instructionsHidden: 'Hidden: the text contains characters that can disguise its meaning. Ask the counterparty for plain text.',
   mixedScript: 'Warning: some words mix Latin with Cyrillic or Greek letters, which can imitate other words.',
   capabilities: 'Optional capabilities', capabilitiesNone: 'None (core manual trade).',
+  versionHidden: 'version hidden: it contains characters that can disguise text',
   capabilityUnsupported: 'Not supported by this build. Terms that require it cannot be used here.',
   acceptBefore: 'Accept before', escrowExpiry: 'Escrow expiry', unixSeconds: 'Unix seconds',
   clockNote: 'Remaining time uses this device’s clock for display only. Chain time decides funding, release and refund.',
