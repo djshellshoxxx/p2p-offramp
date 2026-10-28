@@ -42,3 +42,4 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run test:evm:local
       - run: npm run test:evm:reconcile
+      - run: npm run test:sepolia:kit

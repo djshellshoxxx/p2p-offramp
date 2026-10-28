@@ -10,6 +10,15 @@ Delivery: M2C.
 
 Status: operator runbook design baseline; implementation, interoperability evidence and independent review pending. This document does not certify a deployed or audited product. No testnet deployment, mainnet deployment, signed release or recovery rehearsal recorded in this repository has been performed by this document. DEVELOPMENT_ROADMAP.md controls milestone order.
 
+**Sepolia kit (2026-10-28).** The owner selected Ethereum Sepolia as the first test network.
+- The kit is described in [docs/deployments/sepolia/README.md](../../../docs/deployments/sepolia/README.md):
+  - a guarded Forge deploy of the native-only EVM escrow;
+  - a DeploymentRecord built only from chain state;
+  - a G11 registry draft;
+  - an owner-signed G15 release with a testnet-only P-256 key.
+- It is proven against a local anvil that uses Sepolia's chain id (`npm run test:sepolia:kit`).
+- No Sepolia deployment is recorded here until the operator runs it.
+
 ## 2. Objective and scope
 
 Deploy one reviewed static release and separately verified EVM and Solana escrows to a selected test network; support frontend rollback without pretending immutable funded terms or public artifacts can be rolled back; and give an operator a procedure to recover funds directly from chain state when the frontend, origin or gateway is unavailable.
