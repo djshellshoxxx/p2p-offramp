@@ -2,6 +2,22 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-28 — Sepolia kit ready, deployment blocked on environment (session sweet-shannon)
+
+- The owner chose Sepolia, with the deploy run from the session using a testnet-only key secret, and an owner-held P-256 testnet trust root.
+- The kit is at `78a0bad` (`docs/deployments/sepolia/README.md`). `npm run test:sepolia:kit` passes 6/6 against anvil with chain id 11155111.
+- The pinned Foundry v1.5.1 now runs locally:
+  - forge 82/82;
+  - test:evm:local 8/8;
+  - test:evm:reconcile 5/5;
+  - the `cast calldata` check is no longer skipped.
+- Blocked on the owner:
+  - add the `SEPOLIA_DEPLOYER_PRIVATE_KEY` and `SEPOLIA_RPC_URL` secrets;
+  - allow the RPC host;
+  - start a new session;
+  - run `owner-release.mjs keygen` and hand over the public key.
+- Next after deploy: owner signs `--sequence 1`, then `npm run sepolia:verify`, then the two-party Sepolia trade (this needs a buyer key).
+
 ## 2026-10-28 — integration branch (session sweet-shannon)
 
 - `claude/sweet-shannon-grykla` (draft PR #12) = main + #11 (`6f05ecb`) + #10 (`9701f52`); crypto-inventory test conflict resolved
