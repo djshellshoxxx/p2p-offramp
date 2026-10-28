@@ -229,27 +229,40 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       try { listed = await store.listTermsReviews(); } catch { listed = { ok: false, error: { code: 'PROTOCOL_ERROR', messageKey: 'runtime.error.protocol_error' } }; }
       if (mine !== savedGeneration || disposed) return;
       if (!listed.ok) { publish({ saved: Object.freeze({ kind: 'failed', action: 'load', code: listed.error.code }) }); return; }
-      let reviews = [...snapshot.reviews];
-      const unreviewable: UnreviewableSaved[] = [];
+      // Re-review first; merge afterwards into the snapshot as it is then, so imports or removals made while the
+      // checks were running are kept, not overwritten by a copy taken before the awaits.
+      const checked: { readonly recordId: string; readonly source: ReviewSource; readonly bytes: Uint8Array; readonly result: TermsReviewResult }[] = [];
       for (const item of listed.value.items) {
         let result: TermsReviewResult;
         try { result = await review(lookup, item.bytes); } catch { result = { ok: false, code: 'UNAVAILABLE' }; }
         if (mine !== savedGeneration || disposed) return;
-        if (!result.ok) {
-          // A review already shown for this record (checked earlier in this session) stays; it is not listed twice.
-          if (!reviews.some(entry => entry.savedId === item.recordId)) unreviewable.push(Object.freeze({ recordId: item.recordId, code: result.code }));
+        checked.push({ recordId: item.recordId, source: item.source, bytes: item.bytes, result });
+      }
+      let reviews = [...snapshot.reviews];
+      const unreviewable: UnreviewableSaved[] = [];
+      for (const item of checked) {
+        if (!item.result.ok) {
+          // Saved bytes that fail today's review are never shown from the profile. A review imported in this session
+          // stays (it is the user's own session check), but it no longer counts as saved and is not listed twice.
+          reviews = reviews.filter(entry => !(entry.loaded && entry.savedId === item.recordId))
+            .map(entry => entry.savedId === item.recordId ? Object.freeze({ ...entry, savedId: null }) : entry);
+          unreviewable.push(Object.freeze({ recordId: item.recordId, code: item.result.code }));
           continue;
         }
-        const accepted = result.value;
+        const accepted = item.result.value;
         const index = reviews.findIndex(entry => entry.savedId === item.recordId || (entry.savedId === null && entry.source === item.source && sameReview(entry.review, accepted)));
-        if (index >= 0) reviews[index] = Object.freeze({ ...reviews[index]!, savedId: item.recordId });
+        // The fresh result replaces any earlier one, so the display always reflects today's registry and checks.
+        if (index >= 0) reviews[index] = Object.freeze({ ...reviews[index]!, review: accepted, savedId: item.recordId });
         else reviews.push(Object.freeze({ localId: localIdFrom(random(16)), review: accepted, source: item.source, bytes: item.bytes.slice(), savedId: item.recordId, loaded: true }));
       }
       // Reviews that claim a record the profile no longer holds are not saved any more.
       const present = new Set(listed.value.items.map(item => item.recordId));
       reviews = reviews.filter(entry => !(entry.loaded && entry.savedId !== null && !present.has(entry.savedId)))
         .map(entry => entry.savedId !== null && !present.has(entry.savedId) ? Object.freeze({ ...entry, savedId: null }) : entry);
-      publish({ reviews: bounded(reviews), unreviewable: Object.freeze(unreviewable), saved: Object.freeze({ kind: 'done', action: 'load', skipped: listed.value.skipped }) });
+      const kept = bounded(reviews);
+      const currentJob = snapshot.job;
+      const job = currentJob.kind === 'accepted' && !kept.some(entry => entry.localId === currentJob.localId) ? Object.freeze({ kind: 'idle' } as const) : currentJob;
+      publish({ reviews: kept, job, unreviewable: Object.freeze(unreviewable), saved: Object.freeze({ kind: 'done', action: 'load', skipped: listed.value.skipped }) });
     },
     async deleteSaved(recordId: string, store: SavedReviewStore) {
       if (disposed || snapshot.saved.kind === 'busy') return;

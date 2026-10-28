@@ -143,6 +143,49 @@ test('saved reviews are exempt from session eviction; unsaved ones keep the newe
   assert.equal(reviews.filter(item => item.savedId === null).length, MAX_SESSION_REVIEWS);
 });
 
+test('imports and removals made while a load is re-reviewing are kept, not overwritten (review finding 2)', async () => {
+  const store = memoryStore(); let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  let calls = 0;
+  const slowReview = async (registryArg, bytes) => { if (dec(bytes) === 'ok:saved' && calls++ === 0) await gate; return review(registryArg, bytes); };
+  const trade = createTradeReviewController({ source, review: slowReview, randomBytes }); await trade.loadRegistry();
+  const doomed = await trade.importFile(file('ok:doomed'));
+  await store.saveTermsReview('file', enc('ok:saved'));
+  const loading = trade.loadSaved(store);
+  await new Promise(resolve => setImmediate(resolve));
+  const during = await trade.importFile(file('ok:during'));
+  trade.remove(doomed.localId);
+  release(); await loading;
+  const orders = trade.getSnapshot().reviews.map(item => item.review.orderId).sort();
+  assert.deepEqual(orders, ['during', 'saved']);
+  assert.deepEqual(trade.getSnapshot().job, { kind: 'accepted', localId: during.localId });
+});
+
+test('a load replaces an earlier review with today\'s result, and saved bytes that now fail are never shown (review finding 3)', async () => {
+  const store = memoryStore(); let mode = 'first';
+  const changing = async (registryArg, bytes) => dec(bytes) === 'ok:drift'
+    ? (mode === 'first' ? { ok: true, value: Object.freeze({ orderId: 'drift', revision: '1' }) } : mode === 'second' ? { ok: true, value: Object.freeze({ orderId: 'drift', revision: '2' }) } : { ok: false, code: 'UNKNOWN_DEPLOYMENT' })
+    : review(registryArg, bytes);
+  const trade = createTradeReviewController({ source, review: changing, randomBytes }); await trade.loadRegistry();
+  const { value: { recordId } } = await store.saveTermsReview('file', enc('ok:drift'));
+  await trade.loadSaved(store);
+  const first = trade.getSnapshot().reviews[0];
+  assert.equal(first.review.revision, '1'); assert.equal(first.loaded, true);
+  mode = 'second'; await trade.loadSaved(store);
+  assert.equal(trade.getSnapshot().reviews.length, 1);
+  assert.equal(trade.getSnapshot().reviews[0].localId, first.localId); assert.equal(trade.getSnapshot().reviews[0].review.revision, '2');
+  mode = 'fail'; await trade.loadSaved(store);
+  assert.equal(trade.getSnapshot().reviews.length, 0, 'a loaded review that now fails is removed from display');
+  assert.deepEqual(trade.getSnapshot().unreviewable, [{ recordId, code: 'UNKNOWN_DEPLOYMENT' }]);
+  // A session-imported copy of the same bytes stays as the user's own check, unmarked, and the record is listed once.
+  mode = 'first';
+  const own = await trade.importFile(file('ok:drift'));
+  await trade.saveToProfile(own.localId, store);
+  mode = 'fail'; await trade.loadSaved(store);
+  assert.equal(trade.find(own.localId).savedId, null);
+  assert.deepEqual(trade.getSnapshot().unreviewable, [{ recordId, code: 'UNKNOWN_DEPLOYMENT' }]);
+});
+
 // AppRuntime: replies for saved-review commands must belong to the profile that is still open.
 let oldSecure;
 beforeEach(() => { oldSecure = Object.getOwnPropertyDescriptor(globalThis, 'isSecureContext'); Object.defineProperty(globalThis, 'isSecureContext', { configurable: true, value: true }); });
@@ -223,6 +266,35 @@ test('a click\'s own pending activity ping does not make its command BUSY; a sec
     const busy = await runtime.deleteTermsReview('b'.repeat(32));
     assert.equal(busy.ok, false); assert.equal(busy.error.code, 'BUSY', 'still one public command at a time');
     void listing;
+  } finally {
+    await runtime?.dispose();
+    if (oldWindow === undefined) delete globalThis.window; else globalThis.window = oldWindow;
+    if (oldDocument === undefined) delete globalThis.document; else globalThis.document = oldDocument;
+  }
+});
+
+test('unlock or create while an activity ping is pending is BUSY, never a protocol close (review finding 1)', async () => {
+  const oldWindow = globalThis.window, oldDocument = globalThis.document;
+  globalThis.window = new EventTarget(); globalThis.document = new EventTarget();
+  let runtime, port;
+  try {
+    port = new Port(); const held = [];
+    port.handler = command => {
+      if (command.operation === 'activity') { held.push(command); return; }
+      port.reply(response(command, command.operation === 'unlock' ? { state: 'unlocked', handle: handle(command.generation) } : { state: 'locked', handle: null }));
+    };
+    runtime = (await AppRuntime.start({ version: 1, ReleaseEnabled: 0, connectOrigins: [] }, { createWorker: () => port })).value;
+    assert.equal((await runtime.unlock(PROFILE, 'local runtime fixture passphrase')).ok, true);
+    const key = new Event('keydown'); Object.defineProperty(key, 'isTrusted', { value: true });
+    globalThis.document.dispatchEvent(key);
+    for (const open of [() => runtime.unlock(PROFILE, 'local runtime fixture passphrase'), () => runtime.create('fresh runtime fixture passphrase')]) {
+      const result = await open();
+      assert.equal(result.ok, false); assert.equal(result.error.code, 'BUSY');
+    }
+    // The held activity reply (old handle) arrives: still unlocked, runtime still open.
+    const [ping] = held; port.reply(response(ping, { state: 'unlocked', handle: handle(ping.generation) }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(port.terminated, 0); assert.equal(runtime.current.state, 'unlocked');
   } finally {
     await runtime?.dispose();
     if (oldWindow === undefined) delete globalThis.window; else globalThis.window = oldWindow;

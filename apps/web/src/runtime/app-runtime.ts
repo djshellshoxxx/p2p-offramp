@@ -186,7 +186,10 @@ export class AppRuntime {
     if (signal?.aborted) return Promise.resolve(runtimeFailure('CANCELLED'));
     // One public command at a time. A pending trusted-activity ping (sent on the same click's pointerdown) does not make
     // the runtime busy for that click's own command; the Worker answers activity without taking its job slot.
-    const publicPending = [...this.#pending.values()].some(value => value.metadata.operation !== 'activity');
+    // unlock/create reset the published status first, so they still wait for every pending request: a late activity
+    // reply naming the previous handle would otherwise be rejected as a protocol error and close the runtime.
+    const opening = operation === 'unlock' || operation === 'create';
+    const publicPending = [...this.#pending.values()].some(value => opening || value.metadata.operation !== 'activity');
     if ((!internal && publicPending) || (internal && this.#pending.size >= 2)) return Promise.resolve(runtimeFailure('BUSY'));
     if (this.#sequence >= MAX_RUNTIME_SEQUENCE) { this.#close('LIMIT_EXCEEDED'); return Promise.resolve(runtimeFailure('LIMIT_EXCEEDED')); }
     let command: RuntimeCommand;
