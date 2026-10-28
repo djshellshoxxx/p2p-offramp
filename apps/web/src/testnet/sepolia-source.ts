@@ -3,12 +3,15 @@
  * P-256 key as the registry trust root. Only the `testnet` build imports this module (dynamic import behind the
  * compile-time `__P2P_TESTNET__` flag). The build embeds the trusted public key, the registry and its signed G15
  * manifest after verifying them; this module verifies them again with the device clock, so an expired or altered
- * bundle yields `failed` instead of serving deployments. Lookups stay bound to the verified manifest and answer only
- * for `testnet` networks. Nothing here connects, signs or funds; ReleaseEnabled stays 0.
+ * bundle yields `failed` instead of serving deployments. The signed registry must name exactly one network, Sepolia by
+ * chain id and genesis (sepolia-network.ts); anything else fails closed. Lookups stay bound to the verified manifest.
+ * Nothing here connects, signs or funds; ReleaseEnabled stays 0.
  */
 import { createReleaseRegistry, verifyRelease } from '../../../../packages/security/index.ts';
+import { parseRegistryBytes } from '../../../../packages/schemas/index.ts';
 import type { RegistryLookup } from '../../../../packages/domain/index.ts';
 import type { RegistrySource } from '../trade/review-controller.ts';
+import { isSepolia, isSepoliaOnly } from './sepolia-network.ts';
 
 export const TESTNET_TRUST_FORMAT = 'p2p-offramp/testnet-trust/v1';
 export const TESTNET_CHANNEL = 'sepolia-testnet';
@@ -44,10 +47,11 @@ export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number
       if (!verified.ok || verified.value.keyId !== raw.keyId) return { kind: 'failed' };
       const bound = await createReleaseRegistry(verified.value, TESTNET_REGISTRY_PATH, registryBytes);
       if (!bound.ok) return { kind: 'failed' };
+      // The bytes matched the verified manifest above; any network other than Sepolia refuses the whole bundle.
+      if (!isSepoliaOnly(parseRegistryBytes(registryBytes))) return { kind: 'failed' };
       const guarded = bound.value;
-      // Testnet build: a non-testnet network in the signed registry is never served.
       const registry: RegistryLookup = Object.freeze({
-        network: (id: string) => { const network = guarded.network(id); return network && network.environment === 'testnet' ? network : null; },
+        network: (id: string) => { const network = guarded.network(id); return isSepolia(network) ? network : null; },
         deployment: (networkId: string, deploymentId: string) => registry.network(networkId) ? guarded.deployment(networkId, deploymentId) : null,
       });
       return { kind: 'ready', label: 'sepolia-testnet', registry, samples: [],

@@ -60,3 +60,31 @@ test('build-time loader fails closed on missing files, a tampered registry and a
   await rm(registryPath);
   await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_MISSING/);
 });
+
+const MAINNET = { id: 'ethereum', chain: 'evm', chainIdentity: '1', genesisHash: '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3',
+  endpoints: [{ id: 'mainnet-public', url: 'https://ethereum-rpc.publicnode.com/' }], finality: { kind: 'evm-finalized-tag' },
+  assets: [{ id: 'native', kind: 'native', address: null, decimals: 18, transferPolicy: 'exact-transfer' }],
+  deployments: [{ id: 'escrow-sepolia-v1', address: FIXTURE_ESCROW, protocolVersion: 1, artifactSha256: 'd'.repeat(64),
+    runtime: { kind: 'evm-code', keccak256: 'e'.repeat(64), upgradeable: false }, supportedAssetIds: ['native'] }] };
+/** The bundle exactly as the build would embed it, assembled from the files without the build's own checks. */
+async function rawBundle(root) {
+  const read = path => readFile(resolve(root, path));
+  const trusted = JSON.parse(await read(TESTNET_TRUST_FILES.key));
+  return { format: TESTNET_TRUST_FORMAT, keyId: trusted.keyId, publicKey: trusted.publicKey, registry: (await read(TESTNET_TRUST_FILES.registry)).toString('base64url'),
+    manifest: (await read(TESTNET_TRUST_FILES.manifest)).toString('base64url'), envelope: JSON.parse(await read(TESTNET_TRUST_FILES.envelope)) };
+}
+test('a signed registry that is not exactly Sepolia (chain id and genesis) is refused at build time and at runtime', async t => {
+  const sepolia = fixtureRegistry().networks[0];
+  const cases = {
+    'mainnet labelled testnet': [sepolia, { ...MAINNET, environment: 'testnet' }],
+    'mainnet labelled mainnet': [sepolia, { ...MAINNET, environment: 'mainnet' }],
+    'sepolia id with a foreign genesis': [{ ...sepolia, genesisHash: `0x${'12'.repeat(32)}` }],
+    'sepolia id with another chain id': [{ ...sepolia, chainIdentity: '17000' }],
+    'Sepolia under another network id': [{ ...sepolia, id: 'sepolia-alt' }],
+  };
+  for (const [name, networks] of Object.entries(cases)) {
+    const { root } = await trustRoot(t, { registry: { ...fixtureRegistry(), networks } });
+    await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_INVALID: NETWORK/, name);
+    assert.deepEqual(await sepoliaRegistrySource(await rawBundle(root))(), { kind: 'failed' }, name);
+  }
+});

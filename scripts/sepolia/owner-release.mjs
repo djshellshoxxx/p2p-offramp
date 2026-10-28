@@ -7,8 +7,11 @@
  *                                      (mode 0600, refuses to overwrite) and prints ONLY the public JWK + keyId, which
  *                                      is what you hand over (commit it as security/testnet-trust/sepolia-release-key.pub.json).
  *   sign --key <private.jwk> --sequence <n> [--days 30]
- *                                      Sign a manifest over registry/testnet/sepolia.registry.json. Writes
- *                                      registry/testnet/sepolia.release.json and sepolia.release.sig.json.
+ *                                      Sign a manifest over registry/testnet/sepolia.registry.json (1-30 days, the
+ *                                      verifier's maximum). Refuses any registry that is not exactly Sepolia (chain id
+ *                                      and genesis). Writes registry/testnet/sepolia.release.json and
+ *                                      sepolia.release.sig.json and prints the networks, endpoints and deployments
+ *                                      that were signed: check them before committing.
  *
  * Format (identical to the G15 verifier, packages/security/src/release-manifest.ts): canonical JSON manifest, ES256
  * with IEEE-P1363 signature over "p2p-offramp/release/v1\n" + manifest bytes, keyId = sha256(canonical {crv,kty,x,y}).
@@ -21,9 +24,13 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { parseRegistryBytes } from '../../packages/schemas/index.ts';
+import { isSepoliaOnly } from '../../apps/web/src/testnet/sepolia-network.ts';
 
 export const CHANNEL = 'sepolia-testnet';
 export const REGISTRY_ASSET = 'registry/testnet/sepolia.registry.json';
+/** packages/security/src/release-manifest.ts refuses a manifest valid for longer than 30 days. */
+export const MAX_RELEASE_DAYS = 30;
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 export const canonical = value => value === null || typeof value !== 'object' ? JSON.stringify(value)
@@ -38,14 +45,10 @@ export function keygen() {
   return { privateJwk: privateKey.export({ format: 'jwk' }), publicKey: pub, keyId: keyIdOf(pub) };
 }
 
-/** Builds and signs the manifest. `root` is the repository checkout whose registry asset is signed. */
-export async function signRelease({ privateJwk, sequence, days = 30, now = Math.floor(Date.now() / 1000), root = ROOT, sourceCommit }) {
-  if (!Number.isSafeInteger(sequence) || sequence < 1) throw new Error('SEQUENCE_INVALID');
-  if (!Number.isSafeInteger(days) || days < 1 || days > 90) throw new Error('DAYS_INVALID');
-  const registry = await readFile(resolve(root, REGISTRY_ASSET));
+/** The G15 manifest over `registry` (bytes of the registry asset). No checks: signRelease is the owner-facing entry. */
+export async function buildManifest({ registry, sequence, days, now, root, sourceCommit }) {
   const registryId = JSON.parse(new TextDecoder().decode(registry)).releaseId;
-  const pub = publicJwk(privateJwk);
-  const manifest = {
+  return {
     format: 'p2p-offramp-release', version: 1, channel: CHANNEL, sequence, releaseId: registryId,
     sourceCommit: sourceCommit ?? execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     // Digest definitions: recipe = foundry.toml (pinned compiler/EVM settings); lockfile = package-lock.json;
@@ -56,11 +59,35 @@ export async function signRelease({ privateJwk, sequence, days = 30, now = Math.
     createdAt: now, expiresAt: now + days * 86_400, minStorageSchema: 1, maxStorageSchema: 1,
     assets: [{ path: REGISTRY_ASSET, bytes: registry.length, sha256: sha(registry) }], deployments: [], predecessorDigest: null,
   };
+}
+
+/** Canonical manifest bytes and their ES256 envelope. */
+export function signManifest(privateJwk, manifest) {
+  const pub = publicJwk(privateJwk);
   const bytes = new TextEncoder().encode(canonical(manifest));
   const key = createPrivateKey({ key: privateJwk, format: 'jwk' });
   const envelope = { v: 1, keyId: keyIdOf(pub), alg: 'ES256-P1363', manifestSha256: sha(bytes),
     signature: sign('sha256', Buffer.concat([Buffer.from('p2p-offramp/release/v1\n'), Buffer.from(bytes)]), { key, dsaEncoding: 'ieee-p1363' }).toString('base64url') };
   return { manifestBytes: bytes, envelope };
+}
+
+/**
+ * Builds and signs the manifest over the registry asset of `root` (the repository checkout). The registry must be
+ * exactly Sepolia; `expectGenesis` exists only for local proofs on a node started with Sepolia's chain id.
+ * Returns the signed bytes plus a summary of what was signed, for the owner to check.
+ */
+export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAYS, now = Math.floor(Date.now() / 1000), root = ROOT, sourceCommit, expectGenesis }) {
+  if (!Number.isSafeInteger(sequence) || sequence < 1) throw new Error('SEQUENCE_INVALID');
+  if (!Number.isSafeInteger(days) || days < 1 || days > MAX_RELEASE_DAYS) throw new Error('DAYS_INVALID');
+  const registry = await readFile(resolve(root, REGISTRY_ASSET));
+  let parsed;
+  try { parsed = parseRegistryBytes(new Uint8Array(registry)); } catch { throw new Error('REGISTRY_INVALID'); }
+  if (!isSepoliaOnly(parsed, expectGenesis)) throw new Error('REGISTRY_NOT_SEPOLIA');
+  const signed = signManifest(privateJwk, await buildManifest({ registry, sequence, days, now, root, sourceCommit }));
+  const summary = { releaseId: parsed.releaseId, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
+    genesisHash: network.genesisHash, environment: network.environment, endpoints: network.endpoints.map(endpoint => endpoint.url),
+    deployments: network.deployments.map(deployment => ({ id: deployment.id, address: deployment.address, runtimeKeccak: deployment.runtime.keccak256 ?? null })) })) };
+  return { ...signed, summary };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -77,6 +104,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const signed = await signRelease({ privateJwk: JSON.parse(await readFile(values.key, 'utf8')), sequence: Number(values.sequence), days: Number(values.days ?? 30) });
     await writeFile(resolve(ROOT, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
     await writeFile(resolve(ROOT, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope, null, 2) + '\n');
-    console.log(JSON.stringify({ ok: true, manifestSha256: signed.envelope.manifestSha256, keyId: signed.envelope.keyId }));
+    console.log(JSON.stringify({ ok: true, manifestSha256: signed.envelope.manifestSha256, keyId: signed.envelope.keyId, signed: signed.summary }, null, 2));
   } else { console.error('usage: owner-release.mjs keygen --out <dir> | sign --key <private.jwk> --sequence <n> [--days 30]'); process.exitCode = 2; }
 }

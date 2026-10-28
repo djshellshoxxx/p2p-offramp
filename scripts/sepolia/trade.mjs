@@ -8,6 +8,9 @@
  * domain trade authority. Replay (same trade id, reused seller nonce), amount and expiry controls are exercised with
  * eth_call so they cost nothing. The run is RESUMABLE: terms and signatures are written to the state file before any
  * transaction, and each run reconciles from chain state first (a crash after broadcast is recovered from the logs).
+ * The state file is an editable document: on resume every negotiated trade is re-checked (parties, deployment, amount,
+ * the app terms review, termsHash and both acceptance signatures) before any transaction is built from it, and the
+ * amount comes from this invocation (--amount-wei, default 1e14 wei), never from the file.
  * The refund trade cannot settle before MIN_DURATION (30 min) after funding: rerun later, or pass --wait.
  *
  * Keys: SEPOLIA_SELLER_PRIVATE_KEY (or SEPOLIA_DEPLOYER_PRIVATE_KEY) sends every transaction through Forge;
@@ -51,10 +54,10 @@ function signDigest(key, digestHex) {
   return Uint8Array.from([...raw.subarray(1), raw[0] + 27]);
 }
 
-async function loadTrust({ root, requireSignedRegistry, nowSeconds }) {
+async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis }) {
   const registryBytes = new Uint8Array(await readFile(resolve(root, REGISTRY_ASSET)));
   let signed;
-  try { signed = await loadVerifiedRegistry({ root, ...(nowSeconds ? { nowSeconds } : {}) }); }
+  try { signed = await loadVerifiedRegistry({ root, expectGenesis, ...(nowSeconds ? { nowSeconds } : {}) }); }
   catch (error) { signed = { ok: false, error: { code: error?.code === 'ENOENT' ? 'RELEASE_MISSING' : 'RELEASE_UNREADABLE' } }; }
   if (signed.ok) return { lookup: signed.value.registry, trust: { verified: true, keyId: signed.value.keyId, sequence: signed.value.sequence, manifestSha256: signed.value.manifestSha256 } };
   if (requireSignedRegistry) fail(`REGISTRY_NOT_VERIFIED_${signed.error.code}`);
@@ -84,7 +87,7 @@ export async function runTrades({
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
   if (identity.genesisHash !== expectGenesis) fail('WRONG_GENESIS');
 
-  const { lookup, trust } = await loadTrust({ root, requireSignedRegistry, nowSeconds });
+  const { lookup, trust } = await loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis });
   const network = lookup.network(NETWORK_ID), deployment = lookup.deployment(NETWORK_ID, DEPLOYMENT_ID);
   if (!network || !deployment || network.chainIdentity !== SEPOLIA.chainId.toString() || network.genesisHash !== identity.genesisHash) fail('REGISTRY_NETWORK_MISMATCH');
   if (!deployment.supportedAssetIds.includes('native')) fail('REGISTRY_ASSET_UNSUPPORTED');
@@ -100,11 +103,27 @@ export async function runTrades({
   if (seller === buyer) fail('BUYER_EQUALS_SELLER');
   const domain = { chainId: SEPOLIA.chainId.toString(), verifyingContract: escrow };
 
+  /** A stored trade must be exactly what both keys accepted for this deployment and amount. */
+  async function checkStoredTrade(trade) {
+    const { terms, privateAgreement, acceptance } = trade ?? {};
+    if (!terms || !privateAgreement || !acceptance || terms.seller !== seller || terms.buyer !== buyer || terms.networkId !== NETWORK_ID ||
+        terms.deploymentId !== DEPLOYMENT_ID || terms.assetKind !== 'native' || terms.asset !== ZERO || terms.amountBaseUnits !== amountWei.toString()) fail('STATE_MISMATCH');
+    const reviewed = await reviewTermsBytes(lookup, new TextEncoder().encode(JSON.stringify({ format: TERMS_REVIEW_FORMAT, terms, privateAgreement })));
+    let accepted = false;
+    try {
+      accepted = reviewed.ok && evmTermsHash(domain, terms) === trade.tradeId &&
+        verifyEoaAcceptance(domain, terms, 'seller', hexToBytes(acceptance.seller)) && verifyEoaAcceptance(domain, terms, 'buyer', hexToBytes(acceptance.buyer));
+    } catch { accepted = false; }
+    if (!accepted) fail('STATE_MISMATCH');
+  }
+
   let state;
   try { state = JSON.parse(await readFile(path, 'utf8')); }
   catch (error) { if (error?.code !== 'ENOENT') throw error; state = null; }
   if (state) {
-    if (state.escrow !== escrow || state.seller !== seller || state.buyer !== buyer || state.genesisHash !== identity.genesisHash) fail('STATE_MISMATCH');
+    if (state.escrow !== escrow || state.seller !== seller || state.buyer !== buyer || state.genesisHash !== identity.genesisHash ||
+        state.amountWei !== amountWei.toString() || !Array.isArray(state.trades)) fail('STATE_MISMATCH');
+    for (const trade of state.trades) if (trade?.status !== 'planned') await checkStoredTrade(trade);
   } else {
     state = { format: 'p2p-offramp/sepolia-trade-run/v1', run, network: NETWORK_ID, chainId: domain.chainId, genesisHash: identity.genesisHash, escrow,
       runtimeKeccak: deployment.runtime.keccak256, deploymentRecord: `docs/deployments/sepolia/BasicEscrow-${escrow}.json`, registryTrust: trust, seller, buyer,

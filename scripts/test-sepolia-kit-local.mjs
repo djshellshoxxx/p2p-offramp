@@ -8,12 +8,13 @@
  *   npm run test:sepolia:kit   (needs Foundry: FOUNDRY_BIN, ~/.foundry/bin or PATH)
  */
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { homedir, tmpdir } from 'node:os';
 import { resolve } from 'node:path';
+import { promisify } from 'node:util';
 import { deploy } from './sepolia/deploy.mjs';
 import { recordDeployment } from './sepolia/record-deployment.mjs';
 import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
@@ -26,6 +27,11 @@ const PATH = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}:${process.env.PATH ?? 
 const DEV_KEY = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 const UNFUNDED_KEY = '0x' + '11'.repeat(32);
 const PUBLIC_ENDPOINT = 'https://ethereum-sepolia-rpc.publicnode.com/';
+// An operator session holds real Sepolia settings; none of them may reach this loopback-only proof.
+process.env.SEPOLIA_SELLER_PRIVATE_KEY = '0x' + '22'.repeat(32);
+process.env.SEPOLIA_CROSSCHECK_RPC_URL = 'http://127.0.0.1:9/';
+const KEYED_RPC = 'https://eth-sepolia.g.alchemy.com/v2/AbCdEf0123456789xyzKEY';
+const runNode = promisify(execFile);
 const passed = [];
 const pass = name => { passed.push(name); console.log(`ok - ${name}`); };
 const code = expected => error => { assert.equal(error?.code, expected, String(error)); return true; };
@@ -42,7 +48,8 @@ async function startAnvil(chainId) {
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-kit-'));
 const anvils = [];
 try {
-  const env = (url, key = DEV_KEY) => ({ ...process.env, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: key });
+  const inherited = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('SEPOLIA_')));
+  const env = (url, key = DEV_KEY) => ({ ...inherited, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: key });
   const out = { outDir: resolve(temporary, 'records'), registryPath: resolve(temporary, 'root', REGISTRY_ASSET) };
 
   // Refusals happen before any transaction: wrong chain id, unknown genesis, unfunded key.
@@ -55,11 +62,21 @@ try {
   assert.notEqual(genesisHash, SEPOLIA.genesisHash, 'a local node never passes as real Sepolia by default');
   await assert.rejects(deploy({ env: env(node.url, UNFUNDED_KEY), publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out }), code('DEPLOYER_UNFUNDED'));
   await assert.rejects(deploy({ env: { ...env(node.url), SEPOLIA_DEPLOYER_PRIVATE_KEY: '' }, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out }), code('DEPLOYER_KEY_MISSING'));
+  // A keyed provider URL never becomes the registry's public endpoint (it would be signed and shipped in the bundle).
+  await assert.rejects(deploy({ env: { ...env(node.url), SEPOLIA_CROSSCHECK_RPC_URL: KEYED_RPC }, publicEndpoint: KEYED_RPC, expectGenesis: genesisHash, ...out }), code('PUBLIC_ENDPOINT_IS_PRIVATE_RPC'));
+  await assert.rejects(deploy({ env: { ...env(node.url), SEPOLIA_CROSSCHECK_RPC_URL: KEYED_RPC }, publicEndpoint: 'https://proxy.example/AbCdEf0123456789xyzKEY/', expectGenesis: genesisHash, ...out }), code('PUBLIC_ENDPOINT_IS_PRIVATE_RPC'));
+  // The genesis override is programmatic (tests) only: the CLIs refuse it before contacting the node.
+  for (const [script, args] of [['scripts/sepolia/deploy.mjs', ['--public-endpoint', PUBLIC_ENDPOINT, '--expect-genesis', genesisHash]],
+    ['scripts/sepolia/record-deployment.mjs', ['--tx', '0x' + '00'.repeat(32), '--public-endpoint', PUBLIC_ENDPOINT, '--expect-genesis', genesisHash, '--out-dir', resolve(temporary, 'cli'), '--registry', resolve(temporary, 'cli/r.json')]]]) {
+    await assert.rejects(runNode(process.execPath, ['--import', resolve(ROOT, 'scripts/test-support/register-tsx.mjs'), resolve(ROOT, script), ...args],
+      { cwd: ROOT, env: env(node.url) }), error => /expect-genesis/.test(String(error?.stderr)), script);
+  }
   assert.equal(await node.rpc('eth_blockNumber'), '0x0', 'refusals sent nothing');
-  pass('refuses wrong chain id, non-Sepolia genesis, unfunded or missing key before sending anything');
+  pass('refuses wrong chain id, non-Sepolia genesis, unfunded or missing key, a keyed public endpoint and a CLI genesis override before sending anything');
 
   // Guarded deploy → on-chain record → G11 registry accepted by the app parser.
-  const deployed = await deploy({ env: env(node.url), publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out });
+  // The key is given without 0x (the form wallets export); Forge needs the prefix, so the kit normalizes it.
+  const deployed = await deploy({ env: env(node.url, DEV_KEY.slice(2)), publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out });
   const record = deployed.record;
   assert.equal(record.chainId, '11155111'); assert.equal(record.genesisIdentity, genesisHash);
   assert.equal(record.authorityModel, 'immutable'); assert.deepEqual(record.assetAllowlist, []);
@@ -83,26 +100,38 @@ try {
   await mkdir(resolve(root, TRUSTED_KEY_PATH, '..'), { recursive: true });
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: owner.publicKey }));
   const now = 1_900_000_000;
-  const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now, root, sourceCommit: 'a'.repeat(40) });
+  // The owner tool signs only a Sepolia-only registry (this local node's genesis stands in for Sepolia's here) for at most 30 days.
+  await assert.rejects(signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now, root, sourceCommit: 'a'.repeat(40) }), /REGISTRY_NOT_SEPOLIA/);
+  await assert.rejects(signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 31, now, root, sourceCommit: 'a'.repeat(40), expectGenesis: genesisHash }), /DAYS_INVALID/);
+  const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now, root, sourceCommit: 'a'.repeat(40), expectGenesis: genesisHash });
+  assert.deepEqual(signed.summary.networks.map(network => [network.id, network.chainIdentity, network.genesisHash, network.environment, network.endpoints, network.deployments.map(item => item.address)]),
+    [['sepolia', '11155111', genesisHash, 'testnet', [PUBLIC_ENDPOINT], [record.contractAddress]]], 'the owner sees exactly what is signed');
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope));
-  const verified = await verifySepoliaRelease({ root, nowSeconds: () => now + 60 });
+  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60 })).error.code, 'NETWORK_NOT_SEPOLIA', 'real-Sepolia identity by default');
+  const verified = await verifySepoliaRelease({ root, nowSeconds: () => now + 60, expectGenesis: genesisHash });
   assert.equal(verified.ok, true, JSON.stringify(verified));
   assert.equal(verified.value.escrow, record.contractAddress); assert.equal(verified.value.runtimeKeccak, record.codeDigest.runtime);
   assert.equal(verified.value.releaseEnabled, false);
   pass('owner-signed release verifies with the trusted testnet key and binds the registry deployment');
 
   // Refusals: expired manifest, untrusted key, tampered registry.
-  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 31 * 86_400 })).error.code, 'MANIFEST_EXPIRED');
+  const check = nowSeconds => verifySepoliaRelease({ root, nowSeconds, expectGenesis: genesisHash });
+  assert.equal((await check(() => now + 31 * 86_400)).error.code, 'MANIFEST_EXPIRED');
   const stranger = keygen();
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: stranger.keyId, publicKey: stranger.publicKey }));
-  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60 })).ok, false, 'a manifest signed by another key is refused');
+  assert.equal((await check(() => now + 60)).ok, false, 'a manifest signed by another key is refused');
+  // The pinned keyId is enforced as the build enforces it: neither half of the trusted-key file can be swapped alone.
+  await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: 'f'.repeat(64), publicKey: owner.publicKey }));
+  assert.equal((await check(() => now + 60)).error.code, 'KEY_UNTRUSTED');
+  await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: stranger.publicKey }));
+  assert.equal((await check(() => now + 60)).ok, false);
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: owner.publicKey }));
   const registryFile = resolve(root, REGISTRY_ASSET);
   const original = await readFile(registryFile, 'utf8');
   await writeFile(registryFile, original.replace(record.contractAddress, '0x' + 'de'.repeat(20)));
-  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60 })).error.code, 'ASSET_MISMATCH');
-  pass('refuses an expired manifest, an untrusted key and a tampered registry');
+  assert.equal((await check(() => now + 60)).error.code, 'ASSET_MISMATCH');
+  pass('refuses an expired manifest, an untrusted or mismatched key and a tampered registry');
 
   // The broadcast cache Forge writes must not hold the key either (it is git-ignored, but check anyway).
   const broadcastDir = resolve(ROOT, 'contracts/evm/broadcast/DeployBasicEscrow.s.sol/11155111');

@@ -6,15 +6,16 @@
  *
  * Usage (RPC URL from the environment, never argv):
  *   SEPOLIA_RPC_URL=... node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/record-deployment.mjs \
- *     --tx 0x<deploy tx hash> --public-endpoint https://<public rpc>/ [--expect-genesis 0x..] [--out-dir dir]
- * Optional SEPOLIA_CROSSCHECK_RPC_URL repeats the identity and code checks against an independent endpoint.
+ *     --tx 0x<deploy tx hash> --public-endpoint https://<public rpc>/ [--out-dir dir]
+ * Optional SEPOLIA_CROSSCHECK_RPC_URL repeats the identity and code checks against an independent endpoint. The public
+ * endpoint may not carry any credential of either RPC URL. `expectGenesis` is programmatic, for the local proofs only.
  */
 import { mkdir, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
-import { chainIdentity, escrowArtifact, hexToBytes, keccakHex, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, escrowArtifact, hexToBytes, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
 
 const ALLOWLIST_SELECTOR = '0x' + keccakHex(new TextEncoder().encode('allowlistedTokens()')).slice(0, 8);
 
@@ -37,6 +38,7 @@ async function inspect(rpc, txHash, expectedGenesis) {
 }
 
 export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEndpoint, expectGenesis = SEPOLIA.genesisHash, outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath = resolve(ROOT, 'registry/testnet/sepolia.registry.json') }) {
+  if (leaksPrivateRpc(publicEndpoint, [rpcUrl, crosscheckUrl])) fail('PUBLIC_ENDPOINT_IS_PRIVATE_RPC');
   if (!/^0x[0-9a-f]{64}$/.test(txHash ?? '')) fail('TX_HASH_INVALID');
   const artifact = await escrowArtifact();
   const primary = await inspect(rpcClient(rpcUrl), txHash, expectGenesis);
@@ -82,10 +84,10 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { values } = parseArgs({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, 'expect-genesis': { type: 'string' }, 'out-dir': { type: 'string' }, registry: { type: 'string' } } });
+  const { values } = parseArgs({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, 'out-dir': { type: 'string' }, registry: { type: 'string' } } });
   try {
     const result = await recordDeployment({ rpcUrl: process.env.SEPOLIA_RPC_URL, crosscheckUrl: process.env.SEPOLIA_CROSSCHECK_RPC_URL, txHash: values.tx,
-      publicEndpoint: values['public-endpoint'], ...(values['expect-genesis'] ? { expectGenesis: values['expect-genesis'] } : {}),
+      publicEndpoint: values['public-endpoint'],
       ...(values['out-dir'] ? { outDir: resolve(values['out-dir']) } : {}), ...(values.registry ? { registryPath: resolve(values.registry) } : {}) });
     console.log(JSON.stringify({ ok: true, address: result.record.contractAddress, codeDigest: result.record.codeDigest.runtime, finalized: result.record.finalizedAtRecording, record: result.recordPath, registry: result.registryPath }));
   } catch (error) { console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED' })); process.exitCode = 1; }

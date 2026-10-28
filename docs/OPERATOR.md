@@ -48,7 +48,7 @@ a signed manifest.
   - `registry/testnet/sepolia.registry.json`;
   - `registry/testnet/sepolia.release.json`;
   - `registry/testnet/sepolia.release.sig.json`.
-- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest, the wrong key ID, or a non-testnet network stops it with `TESTNET_TRUST_INVALID`.
+- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest or the wrong key ID stops it with `TESTNET_TRUST_INVALID`. So does any registry that is not exactly Sepolia (`TESTNET_TRUST_INVALID: NETWORK`): it must name one network, chain id 11155111 with Sepolia's genesis hash, whatever its `environment` labels say. The app repeats every check at runtime and fails closed.
 - **Testnet build: in the app.**
   - The verified bundle is embedded through `__P2P_TESTNET_TRUST__`. The app cannot fetch anything, because CSP sets `connect-src 'none'`.
   - The app verifies the bundle again with the device clock, so after the manifest expires the registry fails closed.

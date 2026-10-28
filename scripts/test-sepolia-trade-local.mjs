@@ -21,6 +21,7 @@ import { TRUSTED_KEY_PATH } from './sepolia/verify-release.mjs';
 import { runTrades } from './sepolia/trade.mjs';
 import { chainIdentity, ROOT, rpcClient, SEPOLIA } from './sepolia/lib.mjs';
 import { reviewTermsBytes, RegistryService } from '../packages/domain/index.ts';
+import { evmTermsHash } from '../packages/wallet/src/evm-terms.ts';
 
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
 const PATH = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}:${process.env.PATH ?? ''}` : process.env.PATH ?? '';
@@ -29,6 +30,10 @@ const SELLER_KEY = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4
 const BUYER_KEY = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d';
 const SELLER = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 const PUBLIC_ENDPOINT = 'https://ethereum-sepolia-rpc.publicnode.com/';
+// An operator session holds real Sepolia settings; none of them may reach this loopback-only proof.
+process.env.SEPOLIA_SELLER_PRIVATE_KEY = '0x' + '22'.repeat(32);
+process.env.SEPOLIA_CROSSCHECK_RPC_URL = 'http://127.0.0.1:9/';
+const inherited = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('SEPOLIA_')));
 const passed = [];
 const pass = name => { passed.push(name); console.log(`ok - ${name}`); };
 const code = expected => error => { assert.equal(error?.code, expected, String(error?.stack ?? error)); return true; };
@@ -47,7 +52,8 @@ try {
   // Kit: deploy, record and owner-sign the registry inside a temporary repository root.
   const root = resolve(temporary, 'root');
   for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
-  const env = { ...process.env, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: SELLER_KEY, SEPOLIA_BUYER_PRIVATE_KEY: BUYER_KEY };
+  // The seller key is given without 0x (the form wallets export); the kit normalizes it for Forge.
+  const env = { ...inherited, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: SELLER_KEY.slice(2), SEPOLIA_BUYER_PRIVATE_KEY: BUYER_KEY };
   const deployed = await deploy({ env, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash,
     outDir: resolve(root, 'docs/deployments/sepolia'), registryPath: resolve(root, REGISTRY_ASSET) });
   const escrow = deployed.record.contractAddress;
@@ -57,7 +63,7 @@ try {
   const owner = keygen();
   await mkdir(resolve(root, TRUSTED_KEY_PATH, '..'), { recursive: true });
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: owner.publicKey }));
-  const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now: Math.floor(Date.now() / 1000) - 60, root, sourceCommit: 'b'.repeat(40) });
+  const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now: Math.floor(Date.now() / 1000) - 60, root, sourceCommit: 'b'.repeat(40), expectGenesis: genesisHash });
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope));
   await assert.rejects(runTrades({ env, root, run: 'wrong-genesis' }), code('WRONG_GENESIS'));
@@ -110,6 +116,33 @@ try {
   assert.equal(expired.state.trades[1].status, 'awaiting-deadline', 'the other trade still runs');
   assert.equal(BigInt(await rpc('eth_getTransactionCount', [SELLER, 'latest'])), BigInt(nonceBefore) + 1n, 'only the refund trade was funded');
   pass('an acceptance window that lapses before funding ends as expired-unfunded without any transaction');
+
+  // A negotiated trade is re-validated from the state file before any transaction: edited terms are refused.
+  const crash = new Error('crash after negotiation, before funding');
+  await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash, beforeFund: async () => { throw crash; } }), error => error === crash);
+  const tamperPath = resolve(root, 'docs/deployments/sepolia/trades/tamper.json');
+  const negotiated = JSON.parse(await readFile(tamperPath, 'utf8'));
+  assert.equal(negotiated.trades[0].status, 'negotiated');
+  const nonceAtTamper = await rpc('eth_getTransactionCount', [SELLER, 'latest']);
+  const domain = { chainId: SEPOLIA.chainId.toString(), verifyingContract: escrow };
+  for (const change of [trade => { trade.terms.buyer = `0x${'77'.repeat(20)}`; }, trade => { trade.terms.amountBaseUnits = '5000000000000000000'; },
+    trade => { trade.terms.escrowExpirySeconds = String(Number(trade.terms.escrowExpirySeconds) + 86_400); },
+    trade => { trade.acceptance.buyer = trade.acceptance.seller; }, trade => { trade.privateAgreement.fiatMinorUnits = '999'; }]) {
+    const edited = structuredClone(negotiated); change(edited.trades[0]); edited.trades[0].tradeId = evmTermsHash(domain, edited.trades[0].terms);
+    await writeFile(tamperPath, JSON.stringify(edited));
+    await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
+  }
+  // The invocation, not the file, sets the amount: a consistently edited file amount is refused as well.
+  const larger = structuredClone(negotiated); larger.amountWei = '5000000000000000000';
+  await writeFile(tamperPath, JSON.stringify(larger));
+  await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
+  assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), nonceAtTamper, 'nothing was sent for an edited state file');
+  pass('a resumed run re-validates every negotiated trade (parties, amount, terms review, termsHash, both signatures) before any transaction');
+
+  // A Forge failure that is not a simulated revert is reported, never swallowed as "not funded".
+  await assert.rejects(runTrades({ env: { ...env, PATH: '/usr/bin:/bin' }, root, run: 'no-forge', expectGenesis: genesisHash }), code('FORGE_FAILED'));
+  assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), nonceAtTamper);
+  pass('a Forge failure other than a revert stops the run as FORGE_FAILED');
 
   // A state file that names another deployment or party is refused.
   const tampered = JSON.parse(await readFile(statePath, 'utf8')); tampered.escrow = `0x${'ab'.repeat(20)}`;

@@ -7,18 +7,33 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
+import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
 
-/**
- * Sepolia identity, from go-ethereum `params/chainspecs/sepolia.json` (chainId) and `params/config.go`
- * (`SepoliaGenesisHash`), read 2026-10-28. Checked against the connected node before any transaction is sent.
- */
-export const SEPOLIA = Object.freeze({ chainId: 11155111n, genesisHash: '0x25a5cc106eea7138acab33231d7160d69cb777ee0c2c553fcddf5138993e6dd9' });
+/** Sepolia identity (provenance in apps/web/src/testnet/sepolia-network.ts). Checked against the node before any send. */
+export const SEPOLIA = Object.freeze({ chainId: BigInt(SEPOLIA_NETWORK.chainIdentity), genesisHash: SEPOLIA_NETWORK.genesisHash });
 export const EVM_DIR = fileURLToPath(new URL('../../contracts/evm/', import.meta.url));
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 export const sha256Hex = bytes => createHash('sha256').update(bytes).digest('hex');
 export const keccakHex = bytes => Buffer.from(keccak256(bytes)).toString('hex');
 export const hexToBytes = hex => { const clean = hex.startsWith('0x') ? hex.slice(2) : hex; if (!/^(?:[0-9a-f]{2})*$/i.test(clean)) throw new Error('INVALID_HEX'); return Uint8Array.from(Buffer.from(clean, 'hex')); };
+
+/** A secp256k1 key as Forge's vm.envUint reads it (0x-prefixed lowercase hex), or undefined when malformed. */
+export const forgeKey = value => /^(0x)?[0-9a-f]{64}$/i.test(value ?? '') ? `0x${value.replace(/^0x/i, '').toLowerCase()}` : undefined;
+
+/**
+ * The registry's public endpoint is signed and shipped in the testnet bundle, so it must carry no credential of the
+ * private RPC URLs: their userinfo, query, or any long (key-like) host label or path segment. Keyless URLs may repeat.
+ */
+export function leaksPrivateRpc(publicEndpoint, privateUrls) {
+  const endpoint = String(publicEndpoint ?? '');
+  return privateUrls.some(value => {
+    let secret; try { secret = new URL(value); } catch { return false; }
+    const credentials = [secret.username, secret.password, secret.search.slice(1)].filter(part => part.length >= 6);
+    const keyLike = [...secret.hostname.split('.'), ...secret.pathname.split('/')].filter(part => part.length >= 16);
+    return [...credentials, ...keyLike].some(part => endpoint.includes(part));
+  });
+}
 
 export class RpcError extends Error { constructor(code) { super(`RPC ${code}`); this.name = 'RpcError'; this.code = code; } }
 

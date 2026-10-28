@@ -6,14 +6,16 @@
  * Neither appears in a process argument list or in this script's output.
  *
  *   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs --public-endpoint https://<public rpc>/
- * Test-only: `--expect-genesis` lets the local kit test aim at an anvil started with chain id 11155111.
+ * The public endpoint is signed into the registry and shipped in the testnet bundle: it may not carry any credential of
+ * SEPOLIA_RPC_URL or SEPOLIA_CROSSCHECK_RPC_URL. The genesis override (`expectGenesis`) is a programmatic parameter for
+ * the local proofs only; the CLI has no such option.
  */
 import { execFile } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { chainIdentity, EVM_DIR, hexToBytes, keccakHex, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, EVM_DIR, forgeKey, hexToBytes, keccakHex, leaksPrivateRpc, rpcClient, SEPOLIA } from './lib.mjs';
 import { recordDeployment } from './record-deployment.mjs';
 import { clearForgeCache } from './send.mjs';
 
@@ -29,6 +31,7 @@ function deployerAddress(keyHex) {
 }
 
 export async function deploy({ env = process.env, publicEndpoint, expectGenesis = SEPOLIA.genesisHash, minBalanceWei = 10n ** 15n, outDir, registryPath }) {
+  if (leaksPrivateRpc(publicEndpoint, [env.SEPOLIA_RPC_URL, env.SEPOLIA_CROSSCHECK_RPC_URL])) fail('PUBLIC_ENDPOINT_IS_PRIVATE_RPC');
   const rpc = rpcClient(env.SEPOLIA_RPC_URL);
   const identity = await chainIdentity(rpc);
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
@@ -39,7 +42,8 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
   try { await run('forge', ['build'], { cwd: EVM_DIR, env }); } catch { fail('BUILD_FAILED'); }
   try {
     await run('forge', ['script', 'script/DeployBasicEscrow.s.sol:DeployBasicEscrow', '--rpc-url', 'sepolia', '--broadcast', '--slow'],
-      { cwd: EVM_DIR, env: { ...env, DEPLOY_EXPECTED_CHAIN_ID: SEPOLIA.chainId.toString() }, maxBuffer: 16 * 1024 * 1024 });
+      { cwd: EVM_DIR, env: { ...env, SEPOLIA_DEPLOYER_PRIVATE_KEY: forgeKey(env.SEPOLIA_DEPLOYER_PRIVATE_KEY), DEPLOY_EXPECTED_CHAIN_ID: SEPOLIA.chainId.toString(), FOUNDRY_OFFLINE: 'true' },
+        maxBuffer: 16 * 1024 * 1024 });
   } catch { fail('BROADCAST_FAILED'); } // forge output can echo RPC details; it is not relayed
   finally { await clearForgeCache('DeployBasicEscrow.s.sol'); } // Forge caches the RPC URL (maybe with an API key) here
   const broadcast = JSON.parse(await readFile(resolve(EVM_DIR, 'broadcast/DeployBasicEscrow.s.sol', SEPOLIA.chainId.toString(), 'run-latest.json'), 'utf8'));
@@ -57,9 +61,9 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { values } = parseArgs({ options: { 'public-endpoint': { type: 'string' }, 'expect-genesis': { type: 'string' } } });
+  const { values } = parseArgs({ options: { 'public-endpoint': { type: 'string' } } });
   try {
-    const result = await deploy({ publicEndpoint: values['public-endpoint'], ...(values['expect-genesis'] ? { expectGenesis: values['expect-genesis'] } : {}) });
+    const result = await deploy({ publicEndpoint: values['public-endpoint'] });
     console.log(JSON.stringify({ ok: true, address: result.record.contractAddress, tx: result.record.initializationTx, record: result.recordPath, registry: result.registryPath }));
   } catch (error) { console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED' })); process.exitCode = 1; }
 }

@@ -3,10 +3,10 @@
  * G11 registry with a fixture deployment, signed G15 manifest and envelope), plus a builder for G16 terms-review
  * documents that match it. The private key never leaves this process. Never used by any build or release.
  */
-import { copyFile, mkdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { keygen, REGISTRY_ASSET, signRelease } from '../sepolia/owner-release.mjs';
+import { buildManifest, keygen, REGISTRY_ASSET, signManifest } from '../sepolia/owner-release.mjs';
 import { TRUSTED_KEY_PATH } from '../sepolia/verify-release.mjs';
 import { encodeCapabilities, encodePrivateAgreement, sha256Hex, TERMS_REVIEW_FORMAT } from '../../packages/domain/index.ts';
 
@@ -25,7 +25,10 @@ export function fixtureRegistry({ environment = 'testnet' } = {}) {
       environment }] };
 }
 
-/** Writes the trust root under `root`; `now` (unix seconds) anchors the manifest window [now - 60, now + days]. */
+/**
+ * Writes the trust root under `root`; `now` (unix seconds) anchors the manifest window [now - 60, now + days]. Signs
+ * whatever `registry` is given (no owner-tool checks), so tests can model a key that signed a wrong registry.
+ */
 export async function writeTestnetTrust(root, { now = Math.floor(Date.now() / 1000), days = 30, registry = fixtureRegistry() } = {}) {
   for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
   await mkdir(resolve(root, REGISTRY_ASSET, '..'), { recursive: true });
@@ -33,7 +36,7 @@ export async function writeTestnetTrust(root, { now = Math.floor(Date.now() / 10
   const owner = keygen();
   await mkdir(resolve(root, TRUSTED_KEY_PATH, '..'), { recursive: true });
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: owner.publicKey }));
-  const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days, now: now - 60, root, sourceCommit: 'c'.repeat(40) });
+  const signed = signManifest(owner.privateJwk, await buildManifest({ registry: await readFile(resolve(root, REGISTRY_ASSET)), sequence: 1, days, now: now - 60, root, sourceCommit: 'c'.repeat(40) }));
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope));
   return { keyId: owner.keyId, expiresAt: now - 60 + days * 86_400 };

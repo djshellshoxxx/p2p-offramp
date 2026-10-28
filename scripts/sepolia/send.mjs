@@ -10,22 +10,23 @@
  * and passed to the script, which forwards it as the call's gas.
  *
  * Forge stores the RPC URL (possibly with a provider API key) under contracts/evm/cache/<script>/<chain>; that
- * directory is deleted after every run.
+ * directory is deleted after every run. Forge runs offline (FOUNDRY_OFFLINE) so trace decoding never sends call data
+ * to third-party signature services. A revert in Forge's simulation is SIMULATION_REVERTED (the caller re-observes);
+ * any other Forge failure (bad key format, missing binary, compile error) is FORGE_FAILED and is never swallowed.
  */
 import { execFile } from 'node:child_process';
 import { readFile, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { promisify } from 'node:util';
-import { EVM_DIR, SEPOLIA } from './lib.mjs';
+import { EVM_DIR, forgeKey, SEPOLIA } from './lib.mjs';
 
 const run = promisify(execFile);
 export class SendError extends Error { constructor(code) { super(code); this.name = 'SendError'; this.code = code; } }
 const fail = code => { throw new SendError(code); };
 
+/** The seller key in the form Forge reads (0x-prefixed); wallets often export it without the prefix. */
 export function sellerKeyEnv(env) {
-  const key = env.SEPOLIA_SELLER_PRIVATE_KEY || env.SEPOLIA_DEPLOYER_PRIVATE_KEY;
-  if (!/^(0x)?[0-9a-f]{64}$/i.test(key ?? '')) fail('SELLER_KEY_MISSING');
-  return key;
+  return forgeKey(env.SEPOLIA_SELLER_PRIVATE_KEY || env.SEPOLIA_DEPLOYER_PRIVATE_KEY) ?? fail('SELLER_KEY_MISSING');
 }
 
 /**
@@ -43,12 +44,14 @@ export async function sendAsSeller({ env, rpc, call, seller, pollMs = 3000, maxP
   catch { fail('SIMULATION_REVERTED'); } // the node refuses to estimate a call that reverts: nothing is broadcast
   const gas = estimate + estimate / 5n + 10_000n;
   if (gas > 2_000_000n) fail('GAS_LIMIT_UNREASONABLE');
-  const childEnv = { ...env, SEPOLIA_SELLER_PRIVATE_KEY: sellerKeyEnv(env), DEPLOY_EXPECTED_CHAIN_ID: SEPOLIA.chainId.toString(),
+  const childEnv = { ...env, SEPOLIA_SELLER_PRIVATE_KEY: sellerKeyEnv(env), DEPLOY_EXPECTED_CHAIN_ID: SEPOLIA.chainId.toString(), FOUNDRY_OFFLINE: 'true',
     CALL_TO: call.to, CALL_DATA: call.data, CALL_VALUE: BigInt(call.value).toString(), CALL_GAS: gas.toString() };
   try {
     await run('forge', ['script', 'script/SendCall.s.sol:SendCall', '--rpc-url', 'sepolia', '--broadcast'], { cwd: EVM_DIR, env: childEnv, maxBuffer: 16 * 1024 * 1024 });
-  } catch { fail('SIMULATION_REVERTED'); } // Forge output may echo RPC details; it is never relayed
-  finally { await clearForgeCache('SendCall.s.sol'); }
+  } catch (error) {
+    // Forge output may echo RPC details: it is only matched against the script's own revert marker, never relayed.
+    fail(/script failed: CallReverted\(/.test(`${error?.stdout ?? ''}\n${error?.stderr ?? ''}`) ? 'SIMULATION_REVERTED' : 'FORGE_FAILED');
+  } finally { await clearForgeCache('SendCall.s.sol'); }
   const broadcast = JSON.parse(await readFile(resolve(EVM_DIR, 'broadcast/SendCall.s.sol', SEPOLIA.chainId.toString(), 'run-latest.json'), 'utf8'));
   const sent = broadcast.transactions ?? [];
   if (sent.length !== 1) fail('BROADCAST_UNREADABLE');
