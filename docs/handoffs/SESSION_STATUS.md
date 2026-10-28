@@ -363,10 +363,11 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 - The suite needed no product-code change.
 
 **Gates that remain, none approved here.**
-- The `@noble/ciphers@2.4.0` swap is still unapproved. The dependency is not installed, the project-owned ChaCha20 stays a `candidate`, and no other cipher was vendored.
+- ChaCha20 for NIP-44 now comes from `@noble/ciphers@2.4.0` (commit `e7f3485`). It is an exact pin with no transitive dependencies, its licence is retained, and its inventory review is pending. The project-owned cipher and its `candidate` entry were removed. The RFC 8439, OpenSSL and NIP-44 vectors still run.
 - #10's escrow semantics have not been accepted. They are: seller-only release before the deadline, refund to the seller after it, deferred payout credits, and acceptance signatures kept off-chain. The contract is unaudited.
 - Trust root, deployment and release are not decided.
-- The GitHub token pasted in an earlier chat still needs revocation. This session did not use it or touch it.
+- The GitHub token pasted in an earlier chat was never used or touched by this session.
+- The owner answered the open decisions (escrow policy, release, token) in chat on 2026-10-28. Any in-repo record of those decisions is for the owner to write. This file does not grant them. The release answer named no trust root, network or deployment target, so `ReleaseEnabled=0` and `connectOrigins: []` stay unchanged.
 
 **Review status.**
 - A fresh-context AI reviewer (a Sonnet subagent with read-only access) reviewed #11's six three-way-merged files. For each file it diffed 81c2dc8→main and main→7586b5f.
@@ -380,9 +381,23 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 - This is AI-assisted review inside the integrator session. It is not an independent professional or human review.
 - Import fidelity against snapshot `0770e298` is **not verified** here, because the zip and staging bytes are absent from this container.
 
-**Deferred: reviewed-terms vault persistence.**
-- No spec defines the payload of a `trade` record (kind, fields, retention or redaction).
-- That design needs to be accepted before Worker record commands are added. It is not invented here.
+**Slice: saved terms reviews, commit `fc3b25e`.** The owner asked for this on 2026-10-28.
+- The design is specified in the G07 section "Saved terms reviews".
+- The Worker has three purpose-bound commands. The document still has no generic record access.
+- The stored payload is the raw terms bytes plus their source.
+- Every load runs the review again against the current registry.
+- The commands are bound to the profile. Saving is idempotent, and a profile holds at most 8 saved reviews with no eviction.
+- Lock, profile switch and stale results are handled by `selectionScope()` and `forgetSaved()`.
+- One fix rides along: a click's own `activity` ping no longer makes that click's command `BUSY`.
+- Tests:
+  - schema;
+  - Worker against a real encrypted vault;
+  - controller and runtime;
+  - a Chromium journey on the emitted demo build: save, reload, unlock, load, lock hides it, delete, and encrypted at rest.
+- Mutants fail as expected:
+  - with the Worker's profile check removed;
+  - with the controller's stale guard removed;
+  - with the old BUSY rule restored.
 
 ## Recovery consolidation 2026-10-27 UTC (branch `claude/recovery-consolidation`, draft PR #11)
 
