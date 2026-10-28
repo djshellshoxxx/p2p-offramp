@@ -9,6 +9,7 @@ import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
+const noScope = () => 0;
 const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
 
 export interface AppProps {
@@ -27,6 +28,10 @@ export function App({ services, starting = false, startupError, trade = null }: 
   // A confirmed restore may offer an explicit handoff; never persist selection or put it in a route.
   const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
+  const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
+  // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
+  useEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const initialRoute = useRef(true);
@@ -90,7 +95,7 @@ export function App({ services, starting = false, startupError, trade = null }: 
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
           }} /> : route.page === 'settings' ? <Settings /> :
-          route.page === 'offers' ? <OffersPage trade={trade} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} /> :
+          route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>

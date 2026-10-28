@@ -18,7 +18,7 @@
     "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs && node scripts/test-lifecycle-tabs-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
-    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
     "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs scripts/tests/import-boundaries.test.mjs",
     "test:fuzz": "node --test scripts/tests/evm-agreement-fuzz.test.mjs",

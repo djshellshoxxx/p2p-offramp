@@ -67,5 +67,10 @@ examples are the synthetic sets in `packages/domain/test/fixtures/local-evm-scen
 ## What review does not do
 
 Review never accepts, signs, computes the EIP-712 digest, connects a wallet, reads chain state or funds anything.
-Remaining time uses the device clock for display only. Reviews are kept in memory (at most 8) and are cleared on
-reload; vault persistence needs new Worker record commands, which are not implemented.
+Remaining time uses the device clock for display only.
+
+Reviews are kept in memory and cleared on reload. At most 8 unsaved reviews are kept.
+
+While a profile is unlocked, **Save to profile** stores the original terms file, encrypted, in that profile. A profile holds at most 8 saved reviews, and a ninth save is refused rather than evicting one.
+
+**Load saved reviews** checks every saved file again against the registry in the running build. Saved files that no longer pass are listed so they can be deleted. Locking the vault, or switching profile, removes loaded reviews from the page. Saved reviews are included in encrypted backups of the profile.
