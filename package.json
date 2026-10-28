@@ -15,7 +15,7 @@
     "abi:evm": "bash contracts/evm/script/export-abi.sh",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
-    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs",
+    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs && node scripts/test-lifecycle-tabs-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
     "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs",
