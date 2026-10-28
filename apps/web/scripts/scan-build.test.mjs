@@ -32,3 +32,18 @@ test('scanBuild: the default artifact refuses synthetic markers or demo modules;
   await assert.rejects(scanBuild(clean, { syntheticDemo: true }), /SYNTHETIC_DEMO_DATA_MISSING/);
   assert.equal((await scanBuild(marked, { syntheticDemo: true })).syntheticDemo, true);
 });
+
+test('scanBuild: only the testnet artifact may carry the testnet trust bundle or testnet modules, and it must', async t => {
+  const { TESTNET_TRUST_FORMAT } = await import('./testnet-trust.mjs');
+  const clean = await fixture();
+  const bundled = await fixture({ js: `export const trust = ${JSON.stringify({ format: TESTNET_TRUST_FORMAT })};\n` });
+  const graphOnly = await fixture({ graphModules: [{ path: 'apps/web/src/testnet/sepolia-source.ts', sha256: '0'.repeat(64) }] });
+  t.after(() => Promise.all([clean, bundled, graphOnly].map(dir => rm(dir, { recursive: true, force: true }))));
+  assert.equal((await scanBuild(clean)).testnet, false);
+  for (const dir of [bundled, graphOnly]) {
+    await assert.rejects(scanBuild(dir), /TESTNET_DATA_IN_NON_TESTNET_BUILD/);
+    await assert.rejects(scanBuild(dir, { syntheticDemo: false }), /TESTNET_DATA_IN_NON_TESTNET_BUILD/);
+  }
+  await assert.rejects(scanBuild(clean, { testnet: true }), /TESTNET_TRUST_DATA_MISSING/);
+  assert.equal((await scanBuild(bundled, { testnet: true })).testnet, true);
+});

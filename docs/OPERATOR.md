@@ -20,6 +20,7 @@ npm run check:boundaries     # core packages: no browser globals/npm imports; ap
 npm run test:build-policy
 npm run build                # default artifact -> apps/web/dist
 npm run build:demo           # synthetic demo artifact -> apps/web/dist-demo
+npm run build:testnet        # Sepolia testnet artifact (owner-signed registry) -> apps/web/dist-testnet
 npm run test:browser         # vault, runtime, content policy, reseal crash (Chromium)
 npm run test:web:browser     # emitted shell journeys + synthetic trade-review journey (Chromium)
 npm run test:specs && npm run check:specs
@@ -34,6 +35,7 @@ a signed manifest.
 |---|---|---|---|
 | default | `npm run build` | none (G11/G15 trust root pending) | Shown as unavailable |
 | demo | `npm run build:demo` | synthetic `test-local-only` registry, chain 31337, digest-pinned | Works on files and built-in samples |
+| testnet | `npm run build:testnet` | owner-signed Sepolia registry (G15 manifest, owner's testnet-only P-256 key), chain 11155111 | Works on files; no samples |
 
 - The demo flag is the compile-time constant `__P2P_SYNTHETIC_DEMO__` (`apps/web/vite.config.ts`). The synthetic
   module is reachable only through a dynamic import behind it.
@@ -41,6 +43,20 @@ a signed manifest.
   digest) appears in any emitted file, and fails the demo build if the markers are missing.
 - The demo build shows a "SYNTHETIC DEMO" badge on every page. Its samples still pass through the same validator
   as user files. Never deploy the demo build as a product, and never use its addresses, keys or amounts on a real network.
+- **Testnet build: what it needs.** Before building, `apps/web/scripts/testnet-trust.mjs` reads four files and verifies them with the app's own G15 verifier:
+  - `security/testnet-trust/sepolia-release-key.pub.json`;
+  - `registry/testnet/sepolia.registry.json`;
+  - `registry/testnet/sepolia.release.json`;
+  - `registry/testnet/sepolia.release.sig.json`.
+- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest, the wrong key ID, or a non-testnet network stops it with `TESTNET_TRUST_INVALID`.
+- **Testnet build: in the app.**
+  - The verified bundle is embedded through `__P2P_TESTNET_TRUST__`. The app cannot fetch anything, because CSP sets `connect-src 'none'`.
+  - The app verifies the bundle again with the device clock, so after the manifest expires the registry fails closed.
+  - Lookups answer only for `testnet` networks.
+  - Pages show a "SEPOLIA TESTNET" badge and a banner naming the key ID and the manifest expiry.
+- **Testnet build: what it does not do.** It changes no permission: `ReleaseEnabled` stays 0 and `connectOrigins` stays empty. It does not accept, sign or fund anything.
+- `scanBuild` fails every non-testnet build that contains the testnet bundle or the testnet modules, and fails the testnet build if they are missing.
+- The terms files written by `npm run sepolia:trade` (`docs/deployments/sepolia/trades/*.terms-review.json`) can be reviewed in this build.
 
 To view a build locally, serve the output folder over loopback HTTP, for example
 `npx vite preview --config apps/web/vite.config.ts --mode demo --outDir dist-demo` (use `--outDir dist` without `--mode demo` for the default build; `outDir` is relative to `apps/web`), then open

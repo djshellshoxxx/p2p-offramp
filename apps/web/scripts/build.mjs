@@ -5,11 +5,12 @@ import { resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
+import { loadTestnetTrust, TESTNET_TRUST_FORMAT } from './testnet-trust.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 /** Strings that only the synthetic demo module contains (registry release ID and pinned registry digest). */
 export const SYNTHETIC_MARKERS = Object.freeze(['test-local-only', '14e7ecfb5aff74253affe0d2e8560728763f01db405bcc7efdca964ef103ca6a']);
-export async function scanBuild(directory, { syntheticDemo = false } = {}) {
+export async function scanBuild(directory, { syntheticDemo = false, testnet = false } = {}) {
   const files = Object.create(null), identities = Object.create(null);
   async function walk(path) {
     for (const item of await readdir(path, { withFileTypes: true })) {
@@ -37,15 +38,26 @@ export async function scanBuild(directory, { syntheticDemo = false } = {}) {
     .some(graph => JSON.parse(files[graph]).modules?.some(module => typeof module.path === 'string' && module.path.startsWith('apps/web/src/demo/')));
   const containsSynthetic = demoModules || Object.values(files).some(text => SYNTHETIC_MARKERS.some(marker => text.includes(marker)));
   if (containsSynthetic !== syntheticDemo) throw new Error(syntheticDemo ? 'SYNTHETIC_DEMO_DATA_MISSING' : 'SYNTHETIC_DATA_IN_DEFAULT_BUILD');
-  return { version: 1, ReleaseEnabled: 0, syntheticDemo, signedRelease: false, releaseAcceptance: false, framingAttestation: false, inspection, assets };
+  // The testnet registry source and its embedded trust bundle belong to the testnet build only, and must be there.
+  const testnetModules = ['core-graph-document.json', 'core-graph-worker.json']
+    .some(graph => JSON.parse(files[graph]).modules?.some(module => typeof module.path === 'string' && module.path.startsWith('apps/web/src/testnet/')));
+  const containsTestnet = testnetModules || Object.values(files).some(text => text.includes(TESTNET_TRUST_FORMAT));
+  if (containsTestnet !== testnet) throw new Error(testnet ? 'TESTNET_TRUST_DATA_MISSING' : 'TESTNET_DATA_IN_NON_TESTNET_BUILD');
+  return { version: 1, ReleaseEnabled: 0, syntheticDemo, testnet, signedRelease: false, releaseAcceptance: false, framingAttestation: false, inspection, assets };
 }
-/** `demo` is a meta-delivery build that additionally includes the synthetic local registry and samples. */
-export async function buildWeb({ delivery = 'meta', outDir } = {}) {
-  if (!['meta', 'header', 'demo'].includes(delivery)) throw new Error('UNSUPPORTED_BUILD_PROFILE');
-  const syntheticDemo = delivery === 'demo';
-  outDir ??= resolve(root, syntheticDemo ? 'dist-demo' : 'dist');
-  await build({ configFile: resolve(root, 'vite.config.ts'), mode: delivery, build: { outDir } });
-  const evidence = await scanBuild(outDir, { syntheticDemo });
+/**
+ * `demo` is a meta-delivery build that additionally includes the synthetic local registry and samples. `testnet` is a
+ * meta-delivery build that embeds the owner-signed Sepolia registry, verified here first (fail closed) and again at
+ * runtime. `trustRoot` (testnet only) is the directory holding the trust files; it defaults to the repository root.
+ */
+export async function buildWeb({ delivery = 'meta', outDir, trustRoot, nowSeconds } = {}) {
+  if (!['meta', 'header', 'demo', 'testnet'].includes(delivery)) throw new Error('UNSUPPORTED_BUILD_PROFILE');
+  const syntheticDemo = delivery === 'demo', testnet = delivery === 'testnet';
+  const trust = testnet ? await loadTestnetTrust(trustRoot ?? resolve(root, '../..'), nowSeconds ? { nowSeconds } : {}) : null;
+  outDir ??= resolve(root, syntheticDemo ? 'dist-demo' : testnet ? 'dist-testnet' : 'dist');
+  await build({ configFile: resolve(root, 'vite.config.ts'), mode: delivery, build: { outDir },
+    ...(trust ? { define: { __P2P_TESTNET_TRUST__: JSON.stringify(trust.bundle) } } : {}) });
+  const evidence = { ...await scanBuild(outDir, { syntheticDemo, testnet }), ...(trust ? { testnetTrust: trust.summary } : {}) };
   await writeFile(resolve(outDir, 'local-build-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
   return evidence;
 }

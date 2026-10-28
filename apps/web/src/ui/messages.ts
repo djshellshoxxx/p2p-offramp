@@ -16,7 +16,7 @@ export const messages = {
   submitUnlock: 'Unlock local vault', cancel: 'Cancel', unlocking: 'Unlocking local vault…',
   unlockedHelp: 'The local vault session is open. This shell does not display private records or enable trading. Lock it when you finish.',
   offersTitle: 'Offers', offersIntro: 'Offer discovery is unavailable.', offersHelp: 'No relay is connected and no live offers have been loaded. This page does not show example prices or counterparties.',
-  tradeTitle: 'Trade review', syntheticDemo: 'SYNTHETIC DEMO · test-only data', tradeIntro: 'This local trade cannot be resolved in this build.', tradeHelp: 'A route is not proof of a trade, payment, approved contract, or chain state. No transaction will be replayed from this link.',
+  tradeTitle: 'Trade review', syntheticDemo: 'SYNTHETIC DEMO · test-only data', testnet: 'SEPOLIA TESTNET · owner-signed registry', tradeIntro: 'This local trade cannot be resolved in this build.', tradeHelp: 'A route is not proof of a trade, payment, approved contract, or chain state. No transaction will be replayed from this link.',
   recoveryTitle: 'Recovery', recoveryIntro: 'Keep an encrypted copy before changing browser, device, or origin.',
   originTitle: 'Local storage belongs to this origin', originHelp: 'A new domain, gateway, or CID origin can have a different IndexedDB vault. An empty browser does not establish that your keys or funds are gone. A changed path on the same origin does not isolate storage.',
   backupTitle: 'Export an encrypted file', backupHelp: 'Export reads committed ciphertext for a known local profile. It does not include external-wallet spending keys. Keep the file private and retain its passphrase separately.',

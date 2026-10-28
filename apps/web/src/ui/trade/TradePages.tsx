@@ -21,6 +21,12 @@ function JobStatus({ snapshot }: { readonly snapshot: TradeReviewSnapshot }) {
   return null;
 }
 
+/** Names the trusted source of the loaded registry: synthetic demo data, or the owner-signed Sepolia testnet registry. */
+function RegistryBanner({ registry }: { readonly registry: Extract<TradeReviewSnapshot['registry'], { kind: 'ready' }> }) {
+  if (registry.label === 'synthetic-demo') return <p className="warning" role="note">{p.demoBanner}</p>;
+  return registry.trust ? <p className="warning" role="note">{p.testnetBanner(registry.trust.keyId, registry.trust.sequence, registry.trust.expiresAt)}</p> : null;
+}
+
 /** The open profile's saved-review commands, or null while no profile is unlocked. */
 export type SavedStoreProp = { readonly store: SavedReviewStore | null };
 
@@ -123,7 +129,7 @@ export function OffersPage({ trade, store = null }: { readonly trade: TradeRevie
       {registry.kind === 'loading' ? <p className="notice" role="status">{p.registryLoading}</p>
         : registry.kind === 'unavailable' || !trade ? <p className="notice" role="status">{p.registryUnavailable}</p>
         : registry.kind === 'failed' ? <p className="notice error" role="alert">{p.registryFailed}</p>
-        : <>{registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}<ReviewForm trade={trade} snapshot={snapshot} /></>}
+        : <><RegistryBanner registry={registry} /><ReviewForm trade={trade} snapshot={snapshot} /></>}
     </section>
     {trade && registry.kind === 'ready' ? <SavedPanel trade={trade} snapshot={snapshot} store={store} /> : null}
     {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} store={store} /> : null}
@@ -151,7 +157,7 @@ export function TradePage({ trade, localId, store = null }: { readonly trade: Tr
     <div className="actions"><a href="#/offers">{p.backToOffers}</a></div>
   </section>;
   return <>
-    {snapshot.registry.kind === 'ready' && snapshot.registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}
+    {snapshot.registry.kind === 'ready' ? <RegistryBanner registry={snapshot.registry} /> : null}
     <TradeTermsReview review={stored.review} nowSeconds={now} source={stored.source} />
     <div className="actions">
       <a href="#/offers">{p.backToOffers}</a>

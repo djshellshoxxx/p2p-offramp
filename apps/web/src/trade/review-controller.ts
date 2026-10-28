@@ -20,17 +20,21 @@ export interface TermsSample {
   /** Produces document bytes; receives the device clock in unix seconds so samples can be relative to now. */
   load(nowSeconds: bigint): Promise<Uint8Array>;
 }
+/** Which trusted composition supplied the registry: synthetic local demo data, or the owner-signed Sepolia registry. */
+export type RegistryLabel = 'synthetic-demo' | 'sepolia-testnet';
+/** Public facts about a verified testnet registry, for display (manifest sequence, expiry in unix seconds). */
+export interface RegistryTrustSummary { readonly keyId: string; readonly sequence: number; readonly expiresAt: number; }
 export type RegistrySourceResult =
   | { readonly kind: 'unavailable' }
   | { readonly kind: 'failed' }
-  | { readonly kind: 'ready'; readonly label: 'synthetic-demo'; readonly registry: RegistryLookup; readonly samples: readonly TermsSample[] };
-/** Trusted composition input. Only the demo build supplies a ready source; the default build has no approved registry. */
+  | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly registry: RegistryLookup; readonly samples: readonly TermsSample[]; readonly trust?: RegistryTrustSummary };
+/** Trusted composition input. Only the demo and testnet builds supply a ready source; the default build has no approved registry. */
 export type RegistrySource = () => Promise<RegistrySourceResult>;
 export const noApprovedRegistry: RegistrySource = async () => ({ kind: 'unavailable' });
 
 export type RegistryState =
   | { readonly kind: 'loading' } | { readonly kind: 'unavailable' } | { readonly kind: 'failed' }
-  | { readonly kind: 'ready'; readonly label: 'synthetic-demo'; readonly samples: readonly Pick<TermsSample, 'id' | 'label'>[] };
+  | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly samples: readonly Pick<TermsSample, 'id' | 'label'>[]; readonly trust: RegistryTrustSummary | null };
 export type ImportRejection = TermsReviewRejection | 'FILE_UNREADABLE' | 'REGISTRY_NOT_READY';
 export type ImportState =
   | { readonly kind: 'idle' }
@@ -177,7 +181,8 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
         if (disposed) return;
         if (result.kind === 'ready') {
           registry = result.registry; samples = result.samples;
-          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(({ id, label }) => Object.freeze({ id, label }))) }) });
+          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(({ id, label }) => Object.freeze({ id, label }))),
+            trust: result.trust ? Object.freeze({ keyId: result.trust.keyId, sequence: result.trust.sequence, expiresAt: result.trust.expiresAt }) : null }) });
         } else publish({ registry: Object.freeze({ kind: result.kind }) });
       })();
       return loading;

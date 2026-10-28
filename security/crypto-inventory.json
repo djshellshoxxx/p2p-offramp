@@ -164,6 +164,28 @@
     ]
   },
   {
+    "id": "native-webcrypto-g15-verification-testnet-build",
+    "capability": "release-manifest-verification-testnet-build",
+    "primitive": "native WebCrypto ECDSA P-256/SHA-256 verification and SHA-256 digests of the owner-signed Sepolia registry in the testnet web build only (apps/web/src/testnet; owner-held testnet trust root, 2026-10-28)",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G15-v1",
+    "integrity": "browser-profile:security/release-browser-support.json",
+    "license": "Browser implementation dependent; Web Crypto API specification, no third-party implementation copied",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+        "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+        "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
+      }
+    ]
+  },
+  {
     "id": "noble-curves-2.4.0-nostr",
     "capability": "nostr-messaging-test-only",
     "primitive": "secp256k1 BIP340 Schnorr sign/verify for NIP-01 events and unhashed x-only ECDH for the NIP-44 v2 conversation key",

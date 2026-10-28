@@ -43,6 +43,7 @@ export const tradePageMessages = {
   registryUnavailable: 'No approved network registry is loaded in this build, so trade terms cannot be checked. Registry and release trust (G11/G15) await an owner decision.',
   registryFailed: 'The network registry failed its integrity check and was not used. Terms cannot be checked.',
   demoBanner: 'SYNTHETIC LOCAL DEMO: test-only registry for local chain 31337. Not a trust root; never use these values with real funds.',
+  testnetBanner: (keyId: string, sequence: number, expiresAt: number) => `SEPOLIA TESTNET: the network registry is signed by the owner's testnet-only key ${keyId.slice(0, 16)}… (manifest ${sequence}, valid until ${new Date(expiresAt * 1000).toISOString()}). Test network only: never use real funds. Trading stays disabled in this build.`,
   fileLabel: 'Trade-terms file (JSON, at most 64 KiB)',
   fileHelp: 'The file is read locally. Larger files are refused before reading.',
   fileRequired: 'Choose a trade-terms file first.',

@@ -117,7 +117,7 @@ CI runs both in `evm-escrow.yml`.
 
 These are the next slices:
 - **Running the two-party Sepolia trade.** The tool is ready and proven locally. Running it needs the deployment, the signed registry and `SEPOLIA_BUYER_PRIVATE_KEY`.
-- **App testnet build.** It needs a trusted-key build profile, and wallet signing behind the G05 broker. Today `connectOrigins: []` stays empty in every build.
+- **App testnet build.** The build exists: `npm run build:testnet` reviews Sepolia terms against the signed registry (`docs/OPERATOR.md`). Accepting, signing and funding from inside the app (wallet connection) are not built yet, and `connectOrigins: []` stays empty in every build.
 - **ERC-20 assets.** The deployment is native-only.
 
 Before any real-funds release, these are still required: independent audit, G06 crypto reviews and production trust-root decisions.
