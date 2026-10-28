@@ -373,6 +373,17 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 - Not run: `check-crypto-cache.py`, which needs an npm cache directory argument.
 - Hosted CI on PR #11 is pending at the time of writing.
 
+**Review status.**
+- An independent merge-resolution reviewer agent was started. It failed before doing any work because the account's API credit balance ran out, so **no independent review exists**.
+- Integrator self-check (not independent):
+  - `package-lock.json` is untouched.
+  - `app-services.ts` is unchanged (`ReleaseEnabled: 0`, `connectOrigins: []`).
+  - Both sides' markers are present in the three conflicted files.
+  - A Proxy passed to `reviewTermsBytes` still fails closed with `MALFORMED`.
+  - Every snapshot file other than the 17 three-way-merged or wiring files is byte-identical to the manifest.
+  - No file from `main` is missing.
+- Hosted CI on PR #11 is 11/11 green, including CodeQL.
+
 **Next bounded task.** Get CI green on the PR #11 head. Have an independent reviewer accept it. Coordinate merge order with the PR #10 owner using the resolution above. Owner gates are unchanged: trust root, deployment, escrow/refund policy acceptance, and release.
 
 ## Recovered private-lineage status (verbatim, imported 2026-10-27)
