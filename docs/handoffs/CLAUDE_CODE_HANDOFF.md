@@ -2,6 +2,12 @@
 
 Written 2026-10-28 UTC by the session that merged PRs #4–#9 and opened draft PR #11. Read this first, then `docs/handoffs/SESSION_STATUS.md`. Neither document authorizes merging, release, deployment or trading.
 
+> **Update 2026-10-28 (session sweet-shannon).**
+> - Draft PR #12 (`claude/sweet-shannon-grykla`) integrates #11 and then #10 on `main`, with the crypto-inventory conflict resolved and every local gate passing.
+> - It adds the relay ↔ nostr-crypto wiring.
+> - Start from that branch. The record, test results and open gates are in the SESSION_STATUS section "Integration branch 2026-10-28".
+> - The table below is the state on 2026-10-28 before that work.
+
 ## State of the repository
 
 | Ref | SHA | Status |

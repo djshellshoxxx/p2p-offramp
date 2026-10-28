@@ -323,6 +323,67 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 - `RESTART.md` and `LEAN_RELEASE_SCOPE.md` are owner documents and still describe the old stack; they were left unchanged. Start new work from `main`.
 - Follow-up branch `claude/post-merge-followups`: Home links to the terms review; demo journey asserts no horizontal overflow at 320/768/1440 px on the review screen.
 
+## Integration branch 2026-10-28 UTC (session sweet-shannon, branch `claude/sweet-shannon-grykla`, draft PR #12)
+
+**Ownership.**
+- No other p2p-offramp cloud session was running at the start. The PR #10 and PR #11 authors were idle, and their branches were left untouched.
+- This session integrates both drafts on its own branch, so the owner can review one tested head.
+- PR #10 and PR #11 stay open as the provenance record.
+
+**Refs.**
+- `main` is `c8547859f603f04d3df92e68925b99162594c39d`. It is also the merge base of #10 (`e652f6de0e010f95f57926b2844f5fe9ade0c0ab`) and #11 (`7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25`).
+- Integration merges: `6f05ecb` brings in #11 with no conflicts; `9701f52` brings in #10.
+
+**Overlap between #10 and #11.**
+- `package.json` and `security/crypto-inventory.json` auto-merged.
+- `packages/security/test/crypto-inventory.test.mjs` conflicted. The resolution keeps #11's G16 review-evidence and tamper assertions and adds #10's Nostr test-enabled entries and its ChaCha20 candidate. The counts come from the merged inventory:
+  - 6× `MISSING_REVIEW:pending`, plus `MISSING_REVIEW` and `UNSUPPORTED_RUNTIME` on the ChaCha20 candidate;
+  - 9× `MISSING_REVIEW` when the evidence file is withheld;
+  - `releaseEligible` is false in every case.
+- The resolved file's sha256 is `23fe0abb…`. It was re-derived because the out-of-repo patch (`f1d2475f…`) was not available.
+
+**Tests on `9701f52`.** Run locally with Node 22.22 and Chromium 153 (`/opt/pw-browsers/chromium-1243`).
+- `npm test`: 718 pass, 0 fail, 1 skipped. The skipped test is the `cast calldata` check, which needs Foundry.
+- Every other gate exits 0: typecheck, check:boundaries, test:build-policy, test:fuzz, build, build:demo, test:browser, test:web:browser, test:private:browser, test:specs and check:specs (173 docs).
+- `forge test`, `test:evm:local` and `test:evm:reconcile` were **not run locally**. This session's permission policy denied installing the pinned Foundry v1.5.1 and solc 0.8.30. Hosted `evm-escrow.yml` is the evidence for those.
+
+**Slice: relay to nostr-crypto wiring, commit `03c02f3`.** This was the "Next" item in #10's notes, and no one owned it.
+- `packages/nostr-crypto/src/relay-event-crypto.ts` implements the relay `EventCrypto` interface.
+- `verifyEventSync` exists because the pool never yields between dedupe, filter, verify and deliver.
+- The adapter copies the signing key. `dispose()` wipes it, and it also refuses an in-flight signature.
+- A composition test runs the relay pool and order book with real signatures.
+- `npm test` gives 729 pass, 0 fail, 1 skipped. Typecheck, boundaries (77 files), build-policy and specs pass.
+- The app is not wired to the relay: `connectOrigins: []` and `ReleaseEnabled=0` are unchanged.
+
+**Slice: G12 lifecycle-mode two-tab races.** This was open acceptance in the G12 spec, and no one owned it.
+- New suite `scripts/test-lifecycle-tabs-browser.mjs`, wired into `test:browser`. It runs in two real Chromium documents on one encrypted IndexedDB profile.
+- Each of these commits exactly once: reservation, `markSending`, conflicting `pending` hashes, confirmed vs replaced, the write from a stale document, and the successor race.
+- A second profile forces the other outcome, so both follow-up branches always run.
+- Failing-before evidence: a temporary mutant that compares the stored envelope with itself (CAS disabled) fails with "exactly one tab reserves the binding". The source was then restored.
+- The suite needed no product-code change.
+
+**Gates that remain, none approved here.**
+- The `@noble/ciphers@2.4.0` swap is still unapproved. The dependency is not installed, the project-owned ChaCha20 stays a `candidate`, and no other cipher was vendored.
+- #10's escrow semantics have not been accepted. They are: seller-only release before the deadline, refund to the seller after it, deferred payout credits, and acceptance signatures kept off-chain. The contract is unaudited.
+- Trust root, deployment and release are not decided.
+- The GitHub token pasted in an earlier chat still needs revocation. This session did not use it or touch it.
+
+**Review status.**
+- A fresh-context AI reviewer (a Sonnet subagent with read-only access) reviewed #11's six three-way-merged files. For each file it diffed 81c2dc8→main and main→7586b5f.
+  - Result: no issues. Every change main made since 81c2dc8 is still present.
+  - In `build.mjs`, raw-byte identity is used and the scanner and policy are unweakened.
+  - In `registry.ts`, the intrinsic `byteLength` check is stricter than before.
+  - The App/Pages restore handoff is wired once, and the messages keys are new.
+  - One low-severity note: `App.tsx` passes a fresh `onSelectionConsumed` callback each render, so the effect re-runs every time. It is gated by `opened`, so it is a no-op.
+  - The reviewer reran `scan-build`, `artifact-policy` and `registry` tests: 24/24 pass.
+  - The reviewer could not verify fidelity to the snapshot's own versions.
+- This is AI-assisted review inside the integrator session. It is not an independent professional or human review.
+- Import fidelity against snapshot `0770e298` is **not verified** here, because the zip and staging bytes are absent from this container.
+
+**Deferred: reviewed-terms vault persistence.**
+- No spec defines the payload of a `trade` record (kind, fields, retention or redaction).
+- That design needs to be accepted before Worker record commands are added. It is not invented here.
+
 ## Recovery consolidation 2026-10-27 UTC (branch `claude/recovery-consolidation`, draft PR #11)
 
 **Ownership at start.**

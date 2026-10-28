@@ -2,6 +2,13 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-28 — integration branch (session sweet-shannon)
+
+- `claude/sweet-shannon-grykla` (draft PR #12) = main + #11 (`6f05ecb`) + #10 (`9701f52`); crypto-inventory test conflict resolved
+  (see SESSION_STATUS "Integration branch"). Relay ↔ nostr-crypto wiring done (`03c02f3`): `createRelayEventCrypto`.
+- G12 lifecycle two-tab IndexedDB races covered (`scripts/test-lifecycle-tabs-browser.mjs`, in `test:browser`).
+- Cipher swap still pending owner approval of `@noble/ciphers@2.4.0`; Foundry install denied in this session (hosted CI covers forge/anvil).
+
 ## 2026-10-27 — nostr-crypto merged (cipher swap pending owner)
 
 - Merged `wave4/g20-nostr-crypto` @ db210b7 with VENDORED ChaCha20 (pending review in crypto inventory; release gated).
