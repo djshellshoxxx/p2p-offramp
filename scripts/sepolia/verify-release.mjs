@@ -13,7 +13,8 @@ import { ROOT } from './lib.mjs';
 
 export const TRUSTED_KEY_PATH = 'security/testnet-trust/sepolia-release-key.pub.json';
 
-export async function verifySepoliaRelease({ root = ROOT, nowSeconds, highestSequence = 0 } = {}) {
+/** Verifies the signed release and returns the guarded registry (a RegistryLookup bound to the verified manifest). */
+export async function loadVerifiedRegistry({ root = ROOT, nowSeconds, highestSequence = 0 } = {}) {
   const read = path => readFile(resolve(root, path));
   const trusted = JSON.parse(new TextDecoder().decode(await read(TRUSTED_KEY_PATH)));
   const manifest = new Uint8Array(await read('registry/testnet/sepolia.release.json'));
@@ -24,10 +25,17 @@ export async function verifySepoliaRelease({ root = ROOT, nowSeconds, highestSeq
   if (!verified.ok) return verified;
   const bound = await createReleaseRegistry(verified.value, REGISTRY_ASSET, registry);
   if (!bound.ok) return bound;
-  const deployment = bound.value.deployment('sepolia', 'escrow-sepolia-v1');
+  return { ok: true, value: { registry: bound.value, keyId: verified.value.keyId, sequence: verified.value.manifest.sequence,
+    manifestSha256: verified.value.manifestSha256, releaseEnabled: verified.value.releaseEnabled } };
+}
+
+export async function verifySepoliaRelease(options = {}) {
+  const loaded = await loadVerifiedRegistry(options);
+  if (!loaded.ok) return loaded;
+  const deployment = loaded.value.registry.deployment('sepolia', 'escrow-sepolia-v1');
   if (!deployment) return { ok: false, error: { code: 'ASSET_MISMATCH' } };
-  return { ok: true, value: { keyId: verified.value.keyId, sequence: verified.value.manifest.sequence, manifestSha256: verified.value.manifestSha256,
-    escrow: deployment.address, runtimeKeccak: deployment.runtime.keccak256, releaseEnabled: verified.value.releaseEnabled } };
+  return { ok: true, value: { keyId: loaded.value.keyId, sequence: loaded.value.sequence, manifestSha256: loaded.value.manifestSha256,
+    escrow: deployment.address, runtimeKeccak: deployment.runtime.keccak256, releaseEnabled: loaded.value.releaseEnabled } };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

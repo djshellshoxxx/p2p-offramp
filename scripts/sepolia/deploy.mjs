@@ -15,6 +15,7 @@ import { parseArgs, promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { chainIdentity, EVM_DIR, hexToBytes, keccakHex, rpcClient, SEPOLIA } from './lib.mjs';
 import { recordDeployment } from './record-deployment.mjs';
+import { clearForgeCache } from './send.mjs';
 
 const run = promisify(execFile);
 export class DeployError extends Error { constructor(code) { super(code); this.name = 'DeployError'; this.code = code; } }
@@ -40,6 +41,7 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
     await run('forge', ['script', 'script/DeployBasicEscrow.s.sol:DeployBasicEscrow', '--rpc-url', 'sepolia', '--broadcast', '--slow'],
       { cwd: EVM_DIR, env: { ...env, DEPLOY_EXPECTED_CHAIN_ID: SEPOLIA.chainId.toString() }, maxBuffer: 16 * 1024 * 1024 });
   } catch { fail('BROADCAST_FAILED'); } // forge output can echo RPC details; it is not relayed
+  finally { await clearForgeCache('DeployBasicEscrow.s.sol'); } // Forge caches the RPC URL (maybe with an API key) here
   const broadcast = JSON.parse(await readFile(resolve(EVM_DIR, 'broadcast/DeployBasicEscrow.s.sol', SEPOLIA.chainId.toString(), 'run-latest.json'), 'utf8'));
   const created = broadcast.transactions?.filter(tx => tx.transactionType === 'CREATE' && tx.contractName === 'BasicEscrow') ?? [];
   if (created.length !== 1 || !/^0x[0-9a-f]{64}$/.test(created[0].hash)) fail('BROADCAST_UNREADABLE');

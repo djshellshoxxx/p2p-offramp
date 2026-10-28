@@ -107,7 +107,8 @@ try {
   // The broadcast cache Forge writes must not hold the key either (it is git-ignored, but check anyway).
   const broadcastDir = resolve(ROOT, 'contracts/evm/broadcast/DeployBasicEscrow.s.sol/11155111');
   for (const name of await readdir(broadcastDir)) assert.ok(!(await readFile(resolve(broadcastDir, name), 'utf8')).includes(DEV_KEY.slice(2)), name);
-  pass('Forge broadcast logs contain no private key');
+  assert.equal(existsSync(resolve(ROOT, 'contracts/evm/cache/DeployBasicEscrow.s.sol/11155111')), false, 'Forge RPC-URL cache removed after deploy');
+  pass('Forge broadcast logs contain no private key and its RPC-URL cache is removed');
   console.log(`\n${passed.length} sepolia kit checks passed`);
 } finally {
   for (const anvil of anvils) anvil.stop();
