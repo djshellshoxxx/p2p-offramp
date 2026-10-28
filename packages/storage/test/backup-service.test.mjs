@@ -172,3 +172,13 @@ test('G03 abort during native final verification suppresses persistence and even
   await failure(pending, 'CANCELLED'); assert.equal(store.writes, 0);
   assert.equal((await vault.restore(backup(), fixture.passphrase, destinationPass)).revision, 0);
 });
+test('G03 rejects a signal that is not an AbortSignal before claiming the recovery slot', async () => {
+  const { service: vault, store } = service();
+  for (const signal of [new AbortController(), {}, { aborted: false, addEventListener() { throw new Error('SECRET'); } }]) {
+    await failure(vault.exportWithStatus(fixture.envelope.profileId, signal), 'INVALID_INPUT');
+    await failure(vault.restore(backup(), fixture.passphrase, destinationPass, signal), 'INVALID_INPUT');
+  }
+  assert.equal(store.writes, 0);
+  // The slot was never claimed, so a well-formed job in any instance still runs.
+  assert.equal((await service().service.exportWithStatus(fixture.envelope.profileId)).authentication, 'not-checked');
+});
