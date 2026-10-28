@@ -382,7 +382,8 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
   - A Proxy passed to `reviewTermsBytes` still fails closed with `MALFORMED`.
   - Every snapshot file other than the 17 three-way-merged or wiring files is byte-identical to the manifest.
   - No file from `main` is missing.
-- Hosted CI on PR #11 is 11/11 green, including CodeQL.
+- Hosted CI on PR #11 is 11/11 green, including CodeQL, on `b5799c9` and on `dea8e9e`.
+- Restart document for the next agent: [CLAUDE_CODE_HANDOFF.md](CLAUDE_CODE_HANDOFF.md).
 
 **Next bounded task.** Get CI green on the PR #11 head. Have an independent reviewer accept it. Coordinate merge order with the PR #10 owner using the resolution above. Owner gates are unchanged: trust root, deployment, escrow/refund policy acceptance, and release.
 
