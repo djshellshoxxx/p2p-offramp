@@ -24,6 +24,7 @@ Quick restart notes. Updated at every milestone. Newest entry first. Read this, 
   (see SESSION_STATUS "Integration branch"). Relay ↔ nostr-crypto wiring done (`03c02f3`): `createRelayEventCrypto`.
 - G12 lifecycle two-tab IndexedDB races covered (`scripts/test-lifecycle-tabs-browser.mjs`, in `test:browser`).
 - Cipher swap still pending owner approval of `@noble/ciphers@2.4.0`; Foundry install denied in this session (hosted CI covers forge/anvil).
+  - Superseded the same day: the owner approved the dependency and the swap landed in `e7f3485`; Foundry v1.5.1 was installed after the owner's Sepolia decision.
 
 ## 2026-10-27 — nostr-crypto merged (cipher swap pending owner)
 

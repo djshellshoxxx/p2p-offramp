@@ -4,7 +4,8 @@ Written 2026-10-28 UTC by the session that merged PRs #4–#9 and opened draft P
 
 > **Update 2026-10-28 (session sweet-shannon).**
 > - Draft PR #12 (`claude/sweet-shannon-grykla`) integrates #11 and then #10 on `main`, with the crypto-inventory conflict resolved and every local gate passing.
-> - It adds the relay ↔ nostr-crypto wiring.
+> - It adds the relay ↔ nostr-crypto wiring, saved terms reviews, ChaCha20 from `@noble/ciphers@2.4.0`, and the Sepolia testnet kit: deploy/record/sign/verify, the two-party trade tool and the testnet web build.
+> - The owner chose Ethereum Sepolia as the test network and an owner-held testnet-only P-256 key as the registry trust root (2026-10-28). Nothing is deployed yet; the deploy waits for the owner's environment secrets.
 > - Start from that branch. The record, test results and open gates are in the SESSION_STATUS section "Integration branch 2026-10-28".
 > - The table below is the state on 2026-10-28 before that work.
 
@@ -22,11 +23,11 @@ Other `claude/*`, `work/*` and `docs/*` branches are historical and already cont
 ## Fixed rules
 
 - Client-side, noncustodial, single-EVM lean scope (`docs/handoffs/LEAN_RELEASE_SCOPE.md`, `docs/adr/ADR-CLIENT-SIDE-2026-10-24.md`).
-- `ReleaseEnabled=0` and `connectOrigins: []` stay in every build. There is no real wallet signing, no funds, no deployment and no credentials.
+- `ReleaseEnabled=0` and `connectOrigins: []` stay in every build. The app has no wallet signing and moves no funds. The Sepolia kit signs testnet transactions from the session only with an owner-provided testnet key held as an environment secret, never in the repository, chat, argv or logs; nothing is deployed yet.
 - Do not choose trust-root, escrow, refund, fee or release policy. Those are owner decisions.
 - Release and real-funds claims need tests on the exact head plus independent security acceptance. Neither exists yet.
 - Never force-push or skip hooks/signing. Push only to `claude/*` branches. Merge to `main` only with explicit owner approval.
-- A GitHub token was pasted in chat on 2026-10-27. It was never used or stored, and it should be revoked. Do not use it.
+- A GitHub token was pasted in chat on 2026-10-27. It was never used or stored. The owner reported it revoked on 2026-10-28. Never use it.
 
 ## Commands (discovered from `package.json` and CI)
 

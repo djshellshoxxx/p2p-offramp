@@ -365,8 +365,8 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
 **Gates that remain, none approved here.**
 - ChaCha20 for NIP-44 now comes from `@noble/ciphers@2.4.0` (commit `e7f3485`). It is an exact pin with no transitive dependencies, its licence is retained, and its inventory review is pending. The project-owned cipher and its `candidate` entry were removed. The RFC 8439, OpenSSL and NIP-44 vectors still run.
 - #10's escrow semantics have not been accepted. They are: seller-only release before the deadline, refund to the seller after it, deferred payout credits, and acceptance signatures kept off-chain. The contract is unaudited.
-- Trust root, deployment and release are not decided.
-- The GitHub token pasted in an earlier chat was never used or touched by this session.
+- Test network and trust root (later on 2026-10-28): the owner chose Ethereum Sepolia, a deployment sent from the session with a testnet-only key held as an environment secret, and an owner-held testnet-only P-256 key as the registry trust root (see "Slice: Sepolia testnet kit" below). Nothing is deployed yet. Mainnet, real-funds release and the production trust root are not decided.
+- The GitHub token pasted in an earlier chat was never used or touched by this session. The owner reported it revoked on 2026-10-28.
 - The owner answered the open decisions (escrow policy, release, token) in chat on 2026-10-28. Any in-repo record of those decisions is for the owner to write. This file does not grant them. The release answer named no trust root, network or deployment target, so `ReleaseEnabled=0` and `connectOrigins: []` stay unchanged.
 
 **Review status.**
@@ -398,6 +398,15 @@ Independent reviewer agent (separate context, read-only) found no blockers; thre
   - with the Worker's profile check removed;
   - with the controller's stale guard removed;
   - with the old BUSY rule restored.
+
+**Slice: Sepolia testnet kit, commits `78a0bad`, `f4ab076`, `0345737`, `e010cbf`, `c06e47a`.** The owner chose the network and trust root on 2026-10-28 (above). Operator steps: `docs/deployments/sepolia/README.md`.
+- Deploy and record: guarded Forge deploy of the native-only BasicEscrow, DeploymentRecord built from chain state and a fresh build of the committed sources by the pinned toolchain (forge 1.5.1 `b0a9dd9c`, solc 0.8.30 by sha256), G11 registry draft. A post-broadcast failure leaves a pending marker that blocks a second deployment. Re-recording after finality is required before signing.
+- Trust: owner signing (`owner-release.mjs`, own machine) accepts only a Sepolia-only registry (chain id and genesis) whose deployments match finalized, clean-source records, for at most 30 days. `sepolia:verify`, the trade tool and the testnet build share one verifier (`verifyTestnetTrust`): signature, pinned keyId, registry asset, Sepolia-only rule and rollback against the accepted release (`--accept`).
+- Two-party trade tool (`npm run sepolia:trade`): G16 terms through the app's own review, both acceptances, fund, release, refund after the deadline, replay/amount/expiry controls by `eth_call`, and recovery that is crash-safe and resumable (state file re-validated, replay controls at the funding block, late release refunded, failed broadcasts recorded, paged logs, terminal and finality re-checks).
+- Testnet web build (`npm run build:testnet`): verifies the owner-signed registry at build time and again at runtime; no wallet connection, no signing, no funding.
+- Local proofs on anvil with Sepolia's chain id: `test:sepolia:kit` 9/9, `test:sepolia:trade` 13/13 (mutation-checked). Foundry v1.5.1 was installed in this session after the owner's testnet decision: `forge test` 82/82, `test:evm:local` 8/8, `test:evm:reconcile` 5/5.
+- Blocked on the owner: the `SEPOLIA_DEPLOYER_PRIVATE_KEY` and `SEPOLIA_RPC_URL` secrets with the RPC host allowed and a new session; the `keygen` public key; `SEPOLIA_BUYER_PRIVATE_KEY` for the two-party trade.
+- Recorded G25 deviations for this testnet registry: `reviewEvidence` is null, and the trade tool reconciles from its own state and chain state rather than through the G12 journal.
 
 ## Recovery consolidation 2026-10-27 UTC (branch `claude/recovery-consolidation`, draft PR #11)
 
