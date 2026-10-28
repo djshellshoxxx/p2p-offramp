@@ -18,6 +18,8 @@ Status: operator runbook design baseline; implementation, interoperability evide
   - an owner-signed G15 release with a testnet-only P-256 key.
 - It is proven against a local anvil that uses Sepolia's chain id (`npm run test:sepolia:kit`).
 - No Sepolia deployment is recorded here until the operator runs it.
+- Order used for the testnet registry: deploy, re-record after finality (§4.2), exercise release and refund with the unsigned registry draft, owner signing (which requires the finalized, clean-source record), verify and accept (§4.3 rollback refusal against the accepted sequence).
+- Recorded deviations: `reviewEvidence` stays null (no independent review of the deployed code), and the trade tool reconciles from its own state file and chain state rather than through the G12 journal, so the crash-and-reconcile exercise through G12 is not performed.
 
 ## 2. Objective and scope
 

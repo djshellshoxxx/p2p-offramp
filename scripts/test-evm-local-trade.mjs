@@ -203,7 +203,14 @@ async function main() {
     const amount = 2_500_000n, terms = clean(await makeTerms(domain, 'erc20', token, amount)), tradeId = negotiate(domain, terms);
     assert.equal(approveAmountFor(terms), String(amount));
     const fund = buildFundToken(domain, terms);
-    await assert.rejects(rpc('eth_call', [{ from: A.seller, to: fund.to, data: fund.data }, 'latest']), 'funding without allowance reverts (token error, not an escrow error)');
+    // Funding without allowance reverts with the token's own error, bubbled through SafeERC20, not with an escrow error.
+    await assert.rejects(rpc('eth_call', [{ from: A.seller, to: fund.to, data: fund.data }, 'latest']), error => {
+      const data = error.rpc?.data;
+      assert.equal(typeof data, 'string', `expected revert data, got ${error.message}`);
+      assert.equal(data.slice(0, 10), '0xfb8f41b2', 'ERC20InsufficientAllowance(address,uint256,uint256)');
+      assert.throws(() => decodeEscrowRevert(data), 'not an escrow custom error');
+      return true;
+    });
     await send(A.seller, buildErc20Approve(token, escrow, approveAmountFor(terms)));
     const sellerBefore = await tokenBalance(token, A.seller), buyerBefore = await tokenBalance(token, A.buyer);
     const authority = authorityFor(escrow, binding(tradeId));

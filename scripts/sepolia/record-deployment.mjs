@@ -2,25 +2,45 @@
 /**
  * Verify a BasicEscrow deployment from chain state and write its G25 DeploymentRecord plus the G11 testnet registry
  * draft. Everything recorded is read from the node (chain id, genesis, receipt, runtime code, allowlist), never taken
- * from configuration alone, and is compared with the pinned-toolchain artifact.
+ * from configuration alone, and is compared with a fresh build of the committed sources by the pinned toolchain: the
+ * contract sources must be clean (DIRTY_SOURCE otherwise) and forge/solc must be the pinned ones (TOOLCHAIN_MISMATCH),
+ * so the recorded sourceCommit is exactly what was compared.
  *
  * Usage (RPC URL from the environment, never argv):
  *   SEPOLIA_RPC_URL=... node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/record-deployment.mjs \
- *     --tx 0x<deploy tx hash> --public-endpoint https://<public rpc>/ [--out-dir dir]
+ *     --tx 0x<deploy tx hash> --public-endpoint https://<public rpc>/ [--deployer 0x<address>] [--out-dir dir]
  * Optional SEPOLIA_CROSSCHECK_RPC_URL repeats the identity and code checks against an independent endpoint. The public
- * endpoint may not carry any credential of either RPC URL. `expectGenesis` is programmatic, for the local proofs only.
+ * endpoint must be a keyless https URL carrying no credential of either RPC URL. Run it again once the deployment block
+ * is finalized: the refreshed record says finalizedAtRecording: true, which owner signing requires (G25 §4.2).
+ * `expectGenesis` is programmatic, for the local proofs only.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { parseArgs } from 'node:util';
+import { parseArgs, promisify } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
-import { chainIdentity, escrowArtifact, hexToBytes, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, escrowArtifact, EVM_DIR, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
 
+const run = promisify(execFile);
 const ALLOWLIST_SELECTOR = '0x' + keccakHex(new TextEncoder().encode('allowlistedTokens()')).slice(0, 8);
+/** Written by deploy once a CREATE was broadcast and removed once it is recorded; deploy refuses to run while it exists. */
+export const PENDING_FILE = 'pending-deploy.json';
 
-export class RecordError extends Error { constructor(code) { super(code); this.name = 'RecordError'; this.code = code; } }
-const fail = code => { throw new RecordError(code); };
+export class RecordError extends Error {
+  constructor(code, details = {}) { super(code); this.name = 'RecordError'; this.code = code; Object.assign(this, details); }
+}
+const fail = (code, details) => { throw new RecordError(code, details); };
+
+/** The G11 registry's endpoint rules (https, no userinfo, query or fragment), applied before anything is sent. */
+export function checkPublicEndpoint(publicEndpoint) {
+  if (typeof publicEndpoint !== 'string') fail('PUBLIC_ENDPOINT_INVALID');
+  const probe = { version: 1, releaseId: 'endpoint-check', networks: [{ id: 'sepolia', chain: 'evm', chainIdentity: SEPOLIA.chainId.toString(), genesisHash: SEPOLIA.genesisHash,
+    endpoints: [{ id: 'sepolia-public', url: publicEndpoint }], finality: { kind: 'evm-finalized-tag' },
+    assets: [{ id: 'native', kind: 'native', address: null, decimals: 18, transferPolicy: 'exact-transfer' }],
+    deployments: [{ id: 'escrow-sepolia-v1', address: `0x${'11'.repeat(20)}`, protocolVersion: 1, artifactSha256: '0'.repeat(64),
+      runtime: { kind: 'evm-code', keccak256: '0'.repeat(64), upgradeable: false }, supportedAssetIds: ['native'] }], environment: 'testnet' }] };
+  try { parseRegistryBytes(new TextEncoder().encode(JSON.stringify(probe))); } catch { fail('PUBLIC_ENDPOINT_INVALID'); }
+}
 
 async function inspect(rpc, txHash, expectedGenesis) {
   const identity = await chainIdentity(rpc);
@@ -37,12 +57,20 @@ async function inspect(rpc, txHash, expectedGenesis) {
   return { identity, receipt, address, runtimeKeccak: keccakHex(code), allowlist, finalizedBlock: finalized?.number ? BigInt(finalized.number) : null };
 }
 
-export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEndpoint, expectGenesis = SEPOLIA.genesisHash, outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath = resolve(ROOT, 'registry/testnet/sepolia.registry.json') }) {
+export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEndpoint, expectedDeployer, expectGenesis = SEPOLIA.genesisHash,
+  outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath = resolve(ROOT, 'registry/testnet/sepolia.registry.json'), root = ROOT, env = process.env }) {
+  checkPublicEndpoint(publicEndpoint);
   if (leaksPrivateRpc(publicEndpoint, [rpcUrl, crosscheckUrl])) fail('PUBLIC_ENDPOINT_IS_PRIVATE_RPC');
   if (!/^0x[0-9a-f]{64}$/.test(txHash ?? '')) fail('TX_HASH_INVALID');
+  if (expectedDeployer !== undefined && !/^0x[0-9a-f]{40}$/.test(expectedDeployer)) fail('DEPLOYER_INVALID');
+  // Provenance: the chain is compared with the committed sources built by the pinned toolchain, nothing else.
+  const sourceCommit = await checkCleanSource(root);
+  const toolchain = await checkToolchain(env);
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env }); } catch { fail('BUILD_FAILED'); }
   const artifact = await escrowArtifact();
   const primary = await inspect(rpcClient(rpcUrl), txHash, expectGenesis);
   if (primary.runtimeKeccak !== artifact.runtimeKeccak) fail('RUNTIME_CODE_MISMATCH');
+  if (expectedDeployer !== undefined && primary.receipt.from?.toLowerCase() !== expectedDeployer) fail('UNEXPECTED_DEPLOYER');
   // An ABI-encoded empty address[]: offset 0x20, length 0. Native-only deployments must have no ERC-20 allowlist.
   if (primary.allowlist !== '0x' + '20'.padStart(64, '0') + '0'.repeat(64)) fail('ALLOWLIST_NOT_EMPTY');
   if (crosscheckUrl) {
@@ -55,12 +83,12 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
     chainId: primary.identity.chainId.toString(), genesisIdentity: primary.identity.genesisHash,
     contract: 'BasicEscrow', contractAddress: primary.address, authorityModel: 'immutable',
     codeDigest: { algorithm: 'keccak256', runtime: primary.runtimeKeccak },
-    artifactSha256: artifact.creationSha256, artifactDefinition: 'sha256 of the creation bytecode from forge v1.5.1 (b0a9dd9c), solc 0.8.30, contracts/evm/foundry.toml',
-    assetAllowlist: [], supportedAssetIds: ['native'],
-    initializationTx: txHash, deployBlock: deployBlock.toString(), deployBlockHash: primary.receipt.blockHash, deployer: primary.receipt.from.toLowerCase(),
+    artifactSha256: artifact.creationSha256, artifactDefinition: 'sha256 of the creation bytecode built from sourceCommit with contracts/evm/foundry.toml by the toolchain below',
+    toolchain, assetAllowlist: [], supportedAssetIds: ['native'],
+    initializationTx: txHash, deployBlock: deployBlock.toString(), deployBlockHash: primary.receipt.blockHash,
+    deployer: primary.receipt.from.toLowerCase(), deployerVerified: expectedDeployer !== undefined,
     finalizedAtRecording: primary.finalizedBlock !== null && primary.finalizedBlock >= deployBlock,
-    crosschecked: Boolean(crosscheckUrl),
-    sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),
+    crosschecked: Boolean(crosscheckUrl), sourceCommit, sourceTreeClean: true,
     releaseEnabled: 0, reviewEvidence: null,
   };
   const registry = {
@@ -80,14 +108,17 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   const recordPath = resolve(outDir, `BasicEscrow-${record.contractAddress}.json`);
   await writeFile(recordPath, JSON.stringify(record, null, 2) + '\n');
   await writeFile(registryPath, registryBytes);
+  // The broadcast this record covers is no longer pending.
+  const pending = await readFile(resolve(outDir, PENDING_FILE), 'utf8').then(JSON.parse, () => null);
+  if (pending?.tx === txHash) await rm(resolve(outDir, PENDING_FILE), { force: true });
   return { record, recordPath, registryPath };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const { values } = parseArgs({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, 'out-dir': { type: 'string' }, registry: { type: 'string' } } });
+if (isMain(import.meta.url)) {
+  const { values } = parseArgs({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, deployer: { type: 'string' }, 'out-dir': { type: 'string' }, registry: { type: 'string' } } });
   try {
     const result = await recordDeployment({ rpcUrl: process.env.SEPOLIA_RPC_URL, crosscheckUrl: process.env.SEPOLIA_CROSSCHECK_RPC_URL, txHash: values.tx,
-      publicEndpoint: values['public-endpoint'],
+      publicEndpoint: values['public-endpoint'], ...(values.deployer ? { expectedDeployer: values.deployer.toLowerCase() } : {}),
       ...(values['out-dir'] ? { outDir: resolve(values['out-dir']) } : {}), ...(values.registry ? { registryPath: resolve(values.registry) } : {}) });
     console.log(JSON.stringify({ ok: true, address: result.record.contractAddress, codeDigest: result.record.codeDigest.runtime, finalized: result.record.finalizedAtRecording, record: result.recordPath, registry: result.registryPath }));
   } catch (error) { console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED' })); process.exitCode = 1; }

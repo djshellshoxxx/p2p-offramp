@@ -3,9 +3,14 @@
  * primary-source provenance, and artifact digests. Nothing here holds, prints or transmits a private key, and RPC
  * URLs (which may embed a provider API key) are never logged.
  */
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { realpathSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { homedir } from 'node:os';
+import { resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { promisify } from 'node:util';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
 import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
 
@@ -15,6 +20,50 @@ export const EVM_DIR = fileURLToPath(new URL('../../contracts/evm/', import.meta
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 export const sha256Hex = bytes => createHash('sha256').update(bytes).digest('hex');
+const run = promisify(execFile);
+
+/**
+ * True when the module at `moduleUrl` is the script node was started with. Compares real paths as file URLs, so a
+ * checkout path with spaces, non-ASCII characters or a symlink still runs the CLI (a raw `file://${argv[1]}` string
+ * comparison silently skips it and exits 0).
+ */
+export function isMain(moduleUrl) {
+  try { return process.argv[1] !== undefined && moduleUrl === pathToFileURL(realpathSync(process.argv[1])).href; } catch { return false; }
+}
+
+/** Toolchain pins, as recorded in contracts/evm/README.md (the kit test checks the README agrees). */
+export const TOOLCHAIN = Object.freeze({
+  forgeVersion: '1.5.1-v1.5.1', forgeCommit: 'b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2',
+  solcVersion: '0.8.30', solcSha256: 'f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7',
+});
+export class KitError extends Error { constructor(code) { super(code); this.name = 'KitError'; this.code = code; } }
+
+/** The forge on PATH and the solc Foundry will use must be the pinned ones; returns what was checked, for the record. */
+export async function checkToolchain(env = process.env) {
+  let version;
+  try { version = (await run('forge', ['--version'], { env })).stdout; } catch { throw new KitError('TOOLCHAIN_MISSING'); }
+  const forgeVersion = /forge Version: (\S+)/.exec(version)?.[1], forgeCommit = /Commit SHA: ([0-9a-f]{40})/.exec(version)?.[1];
+  if (forgeVersion !== TOOLCHAIN.forgeVersion || forgeCommit !== TOOLCHAIN.forgeCommit) throw new KitError('TOOLCHAIN_MISMATCH');
+  const solcPath = env.FOUNDRY_SOLC || resolve(env.HOME || homedir(), '.svm', TOOLCHAIN.solcVersion, `solc-${TOOLCHAIN.solcVersion}`);
+  let solc;
+  try { solc = await readFile(solcPath); } catch { throw new KitError('TOOLCHAIN_MISSING'); }
+  if (sha256Hex(solc) !== TOOLCHAIN.solcSha256) throw new KitError('TOOLCHAIN_MISMATCH');
+  return { forgeVersion, forgeCommit, solcVersion: TOOLCHAIN.solcVersion, solcSha256: TOOLCHAIN.solcSha256 };
+}
+
+/**
+ * The contract sources must be exactly the committed ones, so the recorded sourceCommit is what was built: no modified,
+ * staged or untracked file under contracts/evm (build outputs are git-ignored) and no submodule off its pinned commit.
+ */
+export async function checkCleanSource(root = ROOT) {
+  let status, submodules;
+  try {
+    status = (await run('git', ['status', '--porcelain', '--untracked-files=all', '--', 'contracts/evm'], { cwd: root })).stdout;
+    submodules = (await run('git', ['submodule', 'status'], { cwd: root })).stdout.split('\n').filter(line => line.includes(' contracts/evm/lib/'));
+  } catch { throw new KitError('SOURCE_STATUS_UNAVAILABLE'); }
+  if (status.trim() !== '' || submodules.some(line => /^[-+U]/.test(line))) throw new KitError('DIRTY_SOURCE');
+  return (await run('git', ['rev-parse', 'HEAD'], { cwd: root })).stdout.trim();
+}
 export const keccakHex = bytes => Buffer.from(keccak256(bytes)).toString('hex');
 export const hexToBytes = hex => { const clean = hex.startsWith('0x') ? hex.slice(2) : hex; if (!/^(?:[0-9a-f]{2})*$/i.test(clean)) throw new Error('INVALID_HEX'); return Uint8Array.from(Buffer.from(clean, 'hex')); };
 

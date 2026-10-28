@@ -19,11 +19,25 @@ export const TESTNET_TRUST_FILES = Object.freeze({
   manifest: 'registry/testnet/sepolia.release.json',
   envelope: 'registry/testnet/sepolia.release.sig.json',
 });
+/** Optional record of the last accepted release ({sequence, manifestSha256}); written by `sepolia:verify -- --accept`. */
+export const TESTNET_ACCEPTED_FILE = 'registry/testnet/sepolia.accepted.json';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+
+/** The recorded accepted release, null when none was recorded yet; throws on a malformed record. */
+async function acceptedRelease(root) {
+  let text;
+  try { text = await readFile(resolve(root, TESTNET_ACCEPTED_FILE), 'utf8'); } catch (error) { if (error?.code === 'ENOENT') return null; throw error; }
+  const value = JSON.parse(text);
+  if (typeof value !== 'object' || value === null || Object.keys(value).sort().join() !== 'manifestSha256,sequence' ||
+      !Number.isSafeInteger(value.sequence) || value.sequence < 1 || !/^[0-9a-f]{64}$/.test(value.manifestSha256)) throw new Error('ACCEPTED_INVALID');
+  return value;
+}
 
 /**
  * Verifies the trust files under `root`: G15 signature by the trusted key, the pinned keyId, the registry asset, then
- * the Sepolia-only rule. Never throws for bad input; failure codes are MISSING, JSON, KEY_ID, NETWORK or a G15 code.
+ * the Sepolia-only rule. When a release was accepted before (TESTNET_ACCEPTED_FILE), a lower sequence, or another
+ * manifest at the accepted sequence, is RELEASE_ROLLBACK (G25 §4.3). Never throws for bad input; failure codes are
+ * MISSING, JSON, ACCEPTED_INVALID, KEY_ID, NETWORK or a G15 code.
  * `genesisHash` is overridable only by local proofs on a node started with Sepolia's chain id.
  */
 export async function verifyTestnetTrust(root, { nowSeconds = () => Math.floor(Date.now() / 1000), highestSequence = 0, genesisHash } = {}) {
@@ -32,10 +46,13 @@ export async function verifyTestnetTrust(root, { nowSeconds = () => Math.floor(D
   try {
     [key, registry, manifest, envelope] = await Promise.all(Object.values(TESTNET_TRUST_FILES).map(path => readFile(resolve(root, path))));
   } catch { return failed('MISSING'); }
-  let trusted, signature;
+  let trusted, signature, accepted;
   try { trusted = JSON.parse(key.toString('utf8')); signature = JSON.parse(envelope.toString('utf8')); } catch { return failed('JSON'); }
-  const verified = await verifyRelease(new Uint8Array(manifest), signature, [trusted?.publicKey], highestSequence,
-    { channel: 'sepolia-testnet', assets: [{ path: TESTNET_TRUST_FILES.registry, bytes: new Uint8Array(registry) }], nowSeconds });
+  try { accepted = await acceptedRelease(root); } catch { return failed('ACCEPTED_INVALID'); }
+  const highest = Math.max(highestSequence, accepted?.sequence ?? 0);
+  const verified = await verifyRelease(new Uint8Array(manifest), signature, [trusted?.publicKey], highest,
+    { channel: 'sepolia-testnet', assets: [{ path: TESTNET_TRUST_FILES.registry, bytes: new Uint8Array(registry) }], nowSeconds,
+      ...(accepted && accepted.sequence === highest ? { installedManifestSha256: accepted.manifestSha256 } : {}) });
   if (!verified.ok) return failed(verified.error.code);
   // The announced keyId and the public key must name the same key: neither half of the file can be swapped alone.
   if (typeof trusted.keyId !== 'string' || !/^[0-9a-f]{64}$/.test(trusted.keyId) || verified.value.keyId !== trusted.keyId) return failed('KEY_ID');

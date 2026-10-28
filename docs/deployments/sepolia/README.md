@@ -38,24 +38,43 @@ The testnet trust root covers **Sepolia only**. Signing, `sepolia:verify`, the t
    npm run sepolia:deploy -- --public-endpoint https://<public sepolia rpc>/
    ```
 
-   It does the following:
-   - checks the chain id and genesis;
-   - checks that the deployer has at least 0.001 ETH;
-   - broadcasts `contracts/evm/script/DeployBasicEscrow.s.sol` (native-only, empty ERC-20 allowlist);
-   - waits for the receipt;
-   - writes `docs/deployments/sepolia/BasicEscrow-<address>.json` and `registry/testnet/sepolia.registry.json`.
+   Before anything is sent it checks:
+   - the public endpoint (a keyless `https` URL, see below);
+   - that no earlier broadcast is still unrecorded (`UNRECORDED_DEPLOYMENT_PENDING`, with that deployment's transaction and address);
+   - the chain id and genesis;
+   - that the deployer has at least 0.001 ETH;
+   - that nothing under `contracts/evm` differs from the commit, untracked files and submodules included (`DIRTY_SOURCE`);
+   - that `forge` and `solc` are the pinned toolchain (`TOOLCHAIN_MISMATCH`; pins in `contracts/evm/README.md`).
 
-   It also verifies these values from chain state: runtime code keccak equal to the pinned artifact, empty allowlist, receipt status, deployer. `finalizedAtRecording` records whether the block was already finalized when recorded.
+   It then broadcasts `contracts/evm/script/DeployBasicEscrow.s.sol` (native-only, empty ERC-20 allowlist; the script itself refuses any chain id other than Sepolia's), waits for the receipt and writes `docs/deployments/sepolia/BasicEscrow-<address>.json` and `registry/testnet/sepolia.registry.json`.
+
+   Everything recorded is read from chain state and compared with a fresh build of the committed sources by the pinned toolchain: runtime code keccak, empty allowlist, receipt status, and the deployer (`deployerVerified`). The record states the `sourceCommit`, `sourceTreeClean` and the `toolchain` that were checked. `finalizedAtRecording` says whether the block was finalized when recorded.
+
+   If anything fails after the broadcast, the output names the transaction and contract address, and `docs/deployments/sepolia/pending-deploy.json` blocks another deployment. Complete the recording with `record-deployment.mjs --tx <hash> --public-endpoint <url> --deployer <address>` (step 4) instead of deploying again.
 
    The `--public-endpoint` URL is written into the registry, signed and shipped inside the testnet build, so it must be a public, keyless endpoint. If it contains any credential of `SEPOLIA_RPC_URL` or `SEPOLIA_CROSSCHECK_RPC_URL` (user info, query, or a long key-like host label or path segment), the run stops with `PUBLIC_ENDPOINT_IS_PRIVATE_RPC` before anything is sent. Forge runs offline (`FOUNDRY_OFFLINE`), so trace decoding sends nothing to third-party signature services.
-4. **Sign (owner, own machine, after pulling the registry).** Run:
+4. **Re-record after finality (session).** Sepolia finalizes a block about 13 to 15 minutes after inclusion. Then run:
+
+   ```bash
+   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/record-deployment.mjs --tx <deploy tx hash> --public-endpoint https://<public sepolia rpc>/ --deployer <deployer address>
+   ```
+
+   This reads the code again after finality (G25 §4.2) and writes `finalizedAtRecording: true`. Owner signing refuses a deployment without that. Commit the record and the registry.
+5. **Exercise before acceptance (session, recommended).** G25 asks for a full release and a full refund before a deployment is accepted. Run the two-party trade (below) against the recorded, not yet signed registry:
+
+   ```bash
+   npm run sepolia:trade -- --run exercise-1 --unsigned-registry --wait
+   ```
+
+   The state file records `registryTrust.verified: false`. Every on-chain identity check (chain, genesis, runtime code, deployment record) still applies.
+6. **Sign (owner, own machine, after pulling the registry).** Run:
 
    ```bash
    node scripts/sepolia/owner-release.mjs sign --key ~/p2p-sepolia-release-key/sepolia-release-key.private.jwk --sequence 1
    ```
 
-   It refuses a registry that is not exactly Sepolia (`REGISTRY_NOT_SEPOLIA`). `--days` is 1 to 30 (default 30), the verifier's maximum. The output lists the networks, endpoints and deployments that were signed: check them before you commit `registry/testnet/sepolia.release.json` and `sepolia.release.sig.json`. Raise `--sequence` for every later registry.
-5. **Verify (anyone).** Run `npm run sepolia:verify`. It uses the same verifier as the testnet build: G15 signature, the pinned `keyId` in the trusted-key file (the key and its announced id must match), the G11 registry asset, and the Sepolia-only rule.
+   It refuses a registry that is not exactly Sepolia (`REGISTRY_NOT_SEPOLIA`), and any deployment whose committed record is missing, does not match the registry entry or was not made from clean sources (`DEPLOYMENT_RECORD_MISSING`, `DEPLOYMENT_RECORD_MISMATCH`) or not after finality (`DEPLOYMENT_NOT_FINALIZED`). `--days` is 1 to 30 (default 30), the verifier's maximum. The output lists the networks, endpoints and deployments that were signed: check them before you commit `registry/testnet/sepolia.release.json` and `sepolia.release.sig.json`. Raise `--sequence` for every later registry.
+7. **Verify and accept (anyone).** Run `npm run sepolia:verify -- --accept`. It uses the same verifier as the testnet build: G15 signature, the pinned `keyId` in the trusted-key file (the key and its announced id must match), the G11 registry asset, and the Sepolia-only rule. `--accept` records the verified release in `registry/testnet/sepolia.accepted.json`; commit it. From then on `sepolia:verify`, the trade tool and the testnet build refuse an older signed release, or a different manifest at the accepted sequence, as `RELEASE_ROLLBACK` (G25 §4.3).
 
 ## Two-party test trade
 
@@ -93,6 +112,12 @@ It runs two native trades against the deployment named in the signed registry:
 
 **Resuming.**
 - The state file is `docs/deployments/sepolia/trades/<id>.json`. The terms and signatures are written to it before any transaction.
+- Each trade is processed on its own: a failure in one (recorded as its `lastError`) never stops the other, and the run then reports the first failure.
+- A release trade that can no longer be released safely (less than 120 s before its deadline, or after it) is settled by refund after the deadline and ends as `refunded-after-release-deadline`.
+- A transaction that was broadcast but failed (for example a release mined after the deadline) is recorded in `failedSends` with its hash and outcome (`TX_REVERTED`, `RECEIPT_TIMEOUT`). Only a revert in simulation, when nothing was sent, is treated as "nothing happened"; a nonce change without a readable Forge record is `BROADCAST_UNCERTAIN`.
+- Replay controls run at the funding block, so they also work when a run resumes after the acceptance window.
+- Logs are read from each trade's own first block in pages of 2,000 blocks, within hosted providers' `eth_getLogs` caps.
+- Terminal outcomes are re-checked against the chain on every run. Finality is checked against each recorded block hash, and a re-included transaction is marked `reincluded`.
 - The state file is editable, so a resumed run trusts nothing in it. Before any transaction it re-checks each negotiated trade: the parties derived from the keys, network and deployment, the amount from this invocation (`--amount-wei`, default 1e14 wei; pass the same value when resuming), the app's terms review, the termsHash, and both acceptance signatures. Any difference stops the run with `STATE_MISMATCH`.
 - A Forge failure that is not a simulated revert (for example a missing binary) stops the run as `FORGE_FAILED`. It is not treated as "not funded".
 - Each run reconciles from chain state first. A transaction whose hash was lost in a crash is recovered from the escrow logs and never re-funded.
@@ -110,6 +135,10 @@ It runs two native trades against the deployment named in the signed registry:
 - recovery of a lost transaction hash;
 - an acceptance window that lapses before funding;
 - refusals;
+- a crash between the fund broadcast and its save, resumed after the acceptance window;
+- a release trade resumed after its deadline, and a release mined after its deadline (recorded as `TX_REVERTED`, then refunded);
+- terminal statuses that the chain contradicts, and a re-included transaction;
+- paged log queries through a proxy that caps `eth_getLogs` at 3 blocks;
 - edited state files (parties, amount, deadline, swapped signature, agreement) refused before any transaction;
 - a Forge failure reported as `FORGE_FAILED`;
 - a check that the evidence holds no key or RPC URL.
@@ -117,9 +146,14 @@ It runs two native trades against the deployment named in the signed registry:
 Both local proofs drop every inherited `SEPOLIA_*` variable, so a session that holds the real Sepolia secrets never signs or queries with them.
 
 For the kit itself, `npm run test:sepolia:kit` covers:
-- the refusals: wrong chain, non-Sepolia genesis, unfunded key, missing key, a keyed or private public endpoint, a command-line genesis override, foreign runtime code, non-https endpoint, a non-Sepolia registry or more than 30 days at signing, expired manifest, untrusted key, a key id that does not match the key, tampered registry;
-- the record, the registry and a verified release;
-- a check that no key appears in any written file or in the Forge broadcast log.
+- the toolchain pins (and that this README states them), a different `forge` or `solc`, dirty or untracked contract sources;
+- the refusals before sending: an invalid, keyed or private public endpoint, wrong chain, non-Sepolia genesis, unfunded or missing key, a command-line genesis override;
+- a failure after the broadcast: the pending marker, a refused second deployment, and completion with `record-deployment`;
+- every recorder refusal from real chain state: foreign runtime code, wrong genesis, non-https endpoint, unexpected deployer, a non-deployment, a reverted deployment, a non-empty allowlist, a disagreeing cross-check;
+- re-recording after finality, and owner signing (non-Sepolia registry, unfinalized or mismatched record, more than 30 days);
+- verification (expired manifest, untrusted key, a key id that does not match the key, tampered registry) and acceptance with rollback refusal;
+- the CLIs running from a checkout path with spaces reached through a symlink;
+- a check that no key or RPC URL is in any Forge cache or broadcast file, and that the checkout's broadcast records are untouched (Forge writes them to a per-run directory).
 
 CI runs both in `evm-escrow.yml`.
 
@@ -129,5 +163,7 @@ These are the next slices:
 - **Running the two-party Sepolia trade.** The tool is ready and proven locally. Running it needs the deployment, the signed registry and `SEPOLIA_BUYER_PRIVATE_KEY`.
 - **App testnet build.** The build exists: `npm run build:testnet` reviews Sepolia terms against the signed registry (`docs/OPERATOR.md`). Accepting, signing and funding from inside the app (wallet connection) are not built yet, and `connectOrigins: []` stays empty in every build.
 - **ERC-20 assets.** The deployment is native-only.
+
+Recorded deviations from G25 for this testnet registry: the deployment record carries `reviewEvidence: null` (no independent review of the deployed code), and the trade tool reconciles from its own state file and chain state, not through the G12 transaction journal, so G25's crash-and-reconcile exercise through G12 is not performed.
 
 Before any real-funds release, these are still required: independent audit, G06 crypto reviews and production trust-root decisions.

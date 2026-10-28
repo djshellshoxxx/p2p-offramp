@@ -9,9 +9,11 @@
  *   sign --key <private.jwk> --sequence <n> [--days 30]
  *                                      Sign a manifest over registry/testnet/sepolia.registry.json (1-30 days, the
  *                                      verifier's maximum). Refuses any registry that is not exactly Sepolia (chain id
- *                                      and genesis). Writes registry/testnet/sepolia.release.json and
- *                                      sepolia.release.sig.json and prints the networks, endpoints and deployments
- *                                      that were signed: check them before committing.
+ *                                      and genesis), and any deployment without a committed DeploymentRecord that
+ *                                      matches it, was recorded from clean sources and after finality (G25 §4.2: run
+ *                                      record-deployment again once the block is finalized). Writes
+ *                                      registry/testnet/sepolia.release.json and sepolia.release.sig.json and prints
+ *                                      the networks, endpoints and deployments that were signed: check them first.
  *
  * Format (identical to the G15 verifier, packages/security/src/release-manifest.ts): canonical JSON manifest, ES256
  * with IEEE-P1363 signature over "p2p-offramp/release/v1\n" + manifest bytes, keyId = sha256(canonical {crv,kty,x,y}).
@@ -26,6 +28,7 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
 import { isSepoliaOnly } from '../../apps/web/src/testnet/sepolia-network.ts';
+import { isMain } from './lib.mjs';
 
 export const CHANNEL = 'sepolia-testnet';
 export const REGISTRY_ASSET = 'registry/testnet/sepolia.registry.json';
@@ -83,6 +86,15 @@ export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAY
   let parsed;
   try { parsed = parseRegistryBytes(new Uint8Array(registry)); } catch { throw new Error('REGISTRY_INVALID'); }
   if (!isSepoliaOnly(parsed, expectGenesis)) throw new Error('REGISTRY_NOT_SEPOLIA');
+  // Every deployment must match its committed record, made from clean sources after the deployment block was finalized.
+  for (const network of parsed.networks) for (const deployment of network.deployments) {
+    let record;
+    try { record = JSON.parse(await readFile(resolve(root, 'docs/deployments/sepolia', `BasicEscrow-${deployment.address}.json`), 'utf8')); }
+    catch { throw new Error('DEPLOYMENT_RECORD_MISSING'); }
+    if (record.contractAddress !== deployment.address || record.codeDigest?.runtime !== deployment.runtime.keccak256 || record.artifactSha256 !== deployment.artifactSha256 ||
+        record.chainId !== network.chainIdentity || record.genesisIdentity !== network.genesisHash || record.sourceTreeClean !== true) throw new Error('DEPLOYMENT_RECORD_MISMATCH');
+    if (record.finalizedAtRecording !== true) throw new Error('DEPLOYMENT_NOT_FINALIZED');
+  }
   const signed = signManifest(privateJwk, await buildManifest({ registry, sequence, days, now, root, sourceCommit }));
   const summary = { releaseId: parsed.releaseId, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
     genesisHash: network.genesisHash, environment: network.environment, endpoints: network.endpoints.map(endpoint => endpoint.url),
@@ -90,7 +102,7 @@ export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAY
   return { ...signed, summary };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (isMain(import.meta.url)) {
   const [command] = process.argv.slice(2);
   const { values } = parseArgs({ args: process.argv.slice(3), options: { out: { type: 'string' }, key: { type: 'string' }, sequence: { type: 'string' }, days: { type: 'string' } } });
   if (command === 'keygen') {
