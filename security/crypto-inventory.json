@@ -213,14 +213,14 @@
     ]
   },
   {
-    "id": "project-chacha20-rfc8439",
-    "capability": "nostr-chacha20-project-owned-candidate",
-    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2; project-owned source packages/nostr-crypto/src/chacha20.ts",
-    "sourceUrl": "https://www.rfc-editor.org/rfc/rfc8439",
-    "version": "g20-v1",
-    "integrity": "sha256:95ebc9784627f3453a033da871611060fffbdb3fe423c7473f332eff7c3324d6",
-    "license": "Project source; no external code copied",
-    "runtime": "vendored",
+    "id": "noble-ciphers-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2, via packages/nostr-crypto/src/chacha20.ts (input checks only)",
+    "sourceUrl": "https://github.com/paulmillr/noble-ciphers/tree/d9e8a6a599e7ed729d9be03854c46a3c73bd9a79",
+    "version": "2.4.0",
+    "integrity": "sha512-AnjFn0Jv92laAkvMrghlFZq4qQCIN/4DxFV/eooqtC2YTjB7kBeLMS2T9KJX4Dn+ZVXLOwK0lSgqDtx9gvxtiw==",
+    "license": "MIT",
+    "runtime": "npm",
     "review": {
       "status": "pending",
       "reviewer": "",

@@ -171,12 +171,19 @@ test('key and input validation: wrong lengths, lone surrogates, x >= p and non-l
   assert.throws(() => nip44.decrypt('Ag'.padEnd(132, 'A'), new Uint8Array(31)), code('INVALID_INPUT'));
 });
 
-test('crypto inventory pins the project-owned ChaCha20 source and the NIP-44 fixture hash (review pending)', () => {
+test('crypto inventory pins @noble/ciphers 2.4.0 for ChaCha20 and the NIP-44 fixture hash (review pending)', () => {
   const inventory = JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json', import.meta.url), 'utf8'));
+  const lock = JSON.parse(readFileSync(new URL('../../../package-lock.json', import.meta.url), 'utf8'));
+  const pkg = JSON.parse(readFileSync(new URL('../../../package.json', import.meta.url), 'utf8'));
   const entry = id => inventory.find(item => item.id === id);
-  const chacha = entry('project-chacha20-rfc8439');
-  assert.equal(chacha.integrity, `sha256:${sha(readFileSync(new URL('../src/chacha20.ts', import.meta.url)))}`, 'chacha20.ts changed: update the inventory pin and re-request review');
-  for (const id of ['project-chacha20-rfc8439', 'noble-curves-2.4.0-nostr', 'noble-hashes-2.4.0-nostr']) {
+  assert.equal(entry('project-chacha20-rfc8439'), undefined, 'the project-owned ChaCha20 was replaced; no candidate entry remains');
+  const ciphers = entry('noble-ciphers-2.4.0-nostr'), locked = lock.packages['node_modules/@noble/ciphers'];
+  assert.equal(pkg.dependencies['@noble/ciphers'], '2.4.0', 'exact pin');
+  assert.equal(locked.version, ciphers.version); assert.equal(locked.integrity, ciphers.integrity); assert.equal(ciphers.license, locked.license);
+  assert.equal(locked.dependencies, undefined, 'no transitive dependencies');
+  // The adapter keeps only input checks; no keystream implementation may come back into the project.
+  assert.doesNotMatch(readFileSync(new URL('../src/chacha20.ts', import.meta.url), 'utf8'), /0x61707865|quarter|Uint32Array/);
+  for (const id of ['noble-ciphers-2.4.0-nostr', 'noble-curves-2.4.0-nostr', 'noble-hashes-2.4.0-nostr']) {
     assert.equal(entry(id).review.status, 'pending');
     assert.ok(entry(id).vectors.some(vector => vector.path === 'packages/nostr-crypto/test/fixtures/nip44.vectors.json' && vector.sha256 === sha(fixture)));
   }

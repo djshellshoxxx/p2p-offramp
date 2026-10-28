@@ -53,15 +53,15 @@ type NostrCryptoErrorCode = "INVALID_INPUT" | "UNSUPPORTED_VERSION" | "UNSUPPORT
 
 Keys: the secret key is the G01 messaging identity (or a one-time gift-wrap key). It is never the G02 DEK or an external spending key. Public keys are BIP340 x-only, 64 lowercase hex. A key is accepted only if `x < p` and `x` lifts to a curve point (even y). Secret keys must be scalars in `[1, n−1]`.
 
-The pinned dependencies are `@noble/curves` 2.4.0 (BIP340, ECDH) and `@noble/hashes` 2.4.0 (SHA-256, HKDF, HMAC). WebCrypto provides `getRandomValues` only. Neither dependency provides ChaCha20, and WebCrypto has none, so ChaCha20 is a project-owned implementation of RFC 8439 (`project-chacha20-rfc8439`). The G06 inventory ([security/crypto-inventory.json](../../../security/crypto-inventory.json)) records this:
+The pinned dependencies are `@noble/curves` 2.4.0 (BIP340, ECDH), `@noble/hashes` 2.4.0 (SHA-256, HKDF, HMAC) and `@noble/ciphers` 2.4.0 (ChaCha20). The ChaCha20 dependency was approved by the owner on 2026-10-28. It replaced the earlier project-owned RFC 8439 implementation. [chacha20.ts](../../../packages/nostr-crypto/src/chacha20.ts) now only checks inputs and maps errors before calling the library. RFC 8439 §2.4.2, OpenSSL and every official NIP-44 v2 vector still run against the library. WebCrypto provides `getRandomValues` only. The G06 inventory ([security/crypto-inventory.json](../../../security/crypto-inventory.json)) records this:
 
 | Inventory id | Capability | State | Review |
 |---|---|---|---|
 | noble-curves-2.4.0-nostr | nostr-messaging-test-only | test-enabled | pending |
 | noble-hashes-2.4.0-nostr | nostr-messaging-test-only | test-enabled | pending |
-| project-chacha20-rfc8439 (vendored, `sha256:` source pin) | nostr-chacha20-project-owned-candidate | candidate | pending; the vendored runtime has no approval path |
+| noble-ciphers-2.4.0-nostr (npm, lockfile SHA-512 pin, no transitive dependencies) | nostr-messaging-test-only | test-enabled | pending |
 
-Because NIP-44 depends on the candidate cipher, the adapter as a whole is unevaluated, whatever the state of the noble entries.
+The adapter is test-enabled only. Every entry still needs a named G06 review before any release eligibility.
 
 Runtime validation MUST reject unknown versions/properties, unsafe integers, duplicate identities and oversized inputs before expensive work. Network, deployment, trade and account generation are explicit bindings where economic state is involved. Immutable results and defensive copies prevent consumers mutating validated state. Protocol-specific limits override broader application limits.
 

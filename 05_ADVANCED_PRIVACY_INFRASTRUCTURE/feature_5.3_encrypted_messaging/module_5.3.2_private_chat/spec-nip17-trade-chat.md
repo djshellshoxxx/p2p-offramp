@@ -186,7 +186,7 @@ Still required and **not** claimed:
 - durable deduplication and encrypted history in G02;
 - application envelope validation;
 - browser and device matrix;
-- named G06 review (the project-owned ChaCha20 is a candidate);
+- named G06 review of the pinned noble dependencies, including `@noble/ciphers` 2.4.0 for ChaCha20;
 - app/Worker wiring and UI.
 
 Core release/refund does not depend on chat availability. For each supported profile record source/dependency commit, integrity digest, protocol revision, deployment/network IDs, fixture provenance, browser/provider matrix and named review. Where no concrete profile is approved the implementation MUST return unsupported, not emulate success. Unit fixtures alone do not establish browser routing, wallet support or custody safety. Acceptance requires positive interoperability and negative boundary cases, cancellation/reload fault injection, redacted logging checks, and a core-only build with advanced packages absent completing basic trading recovery. Independent review and applicable roadmap milestone gates remain pending.
