@@ -11,7 +11,7 @@
  */
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
-import { chmod, copyFile, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, mkdir, mkdtemp, readFile, readdir, rm, stat, symlink, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { createServer as createHttpServer } from 'node:http';
@@ -63,7 +63,16 @@ async function disagreeingProxy(target) {
   return { url: `http://127.0.0.1:${server.address().port}/`, close: () => new Promise(done => { server.closeAllConnections(); server.close(done); }) };
 }
 
+/** Paths and mtimes of the checkout's Forge broadcast records: a local proof must leave real deployment records untouched. */
+async function broadcastSnapshot() {
+  const dir = resolve(EVM_DIR, 'broadcast');
+  if (!existsSync(dir)) return '[]';
+  const names = (await readdir(dir, { recursive: true })).sort();
+  return JSON.stringify(await Promise.all(names.map(async name => [name, (await stat(resolve(dir, name))).mtimeMs])));
+}
+
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-kit-'));
+const recordsBefore = await broadcastSnapshot();
 const anvils = [];
 let proxy;
 try {
@@ -253,7 +262,7 @@ try {
     }
   }
   assert.equal(existsSync(resolve(EVM_DIR, 'cache/DeployBasicEscrow.s.sol/11155111')), false, 'Forge RPC-URL cache removed after deploy');
-  assert.equal(existsSync(resolve(EVM_DIR, 'broadcast/DeployBasicEscrow.s.sol/11155111')), false, 'the checkout broadcast record is never touched');
+  assert.equal(await broadcastSnapshot(), recordsBefore, 'the checkout broadcast records are never touched');
   pass('no key or RPC URL in any Forge cache or broadcast file; the checkout broadcast records are untouched');
   console.log(`\n${passed.length} sepolia kit checks passed`);
 } finally {

@@ -12,7 +12,7 @@
  */
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { createServer as createHttpServer } from 'node:http';
@@ -23,7 +23,7 @@ import { recordDeployment } from './sepolia/record-deployment.mjs';
 import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
 import { TRUSTED_KEY_PATH } from './sepolia/verify-release.mjs';
 import { runTrades } from './sepolia/trade.mjs';
-import { chainIdentity, ROOT, rpcClient, SEPOLIA } from './sepolia/lib.mjs';
+import { chainIdentity, EVM_DIR, ROOT, rpcClient, SEPOLIA } from './sepolia/lib.mjs';
 import { reviewTermsBytes, RegistryService } from '../packages/domain/index.ts';
 import { evmTermsHash } from '../packages/wallet/src/evm-terms.ts';
 
@@ -62,7 +62,16 @@ async function cappedLogsProxy(target, maxSpan) {
   return { url: `http://127.0.0.1:${server.address().port}/`, close: () => new Promise(done => { server.closeAllConnections(); server.close(done); }) };
 }
 
+/** Paths and mtimes of the checkout's Forge broadcast records: a local proof must leave real deployment records untouched. */
+async function broadcastSnapshot() {
+  const dir = resolve(EVM_DIR, 'broadcast');
+  if (!existsSync(dir)) return '[]';
+  const names = (await readdir(dir, { recursive: true })).sort();
+  return JSON.stringify(await Promise.all(names.map(async name => [name, (await stat(resolve(dir, name))).mtimeMs])));
+}
+
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-trade-'));
+const recordsBefore = await broadcastSnapshot();
 let anvil, capped;
 try {
   const port = await freePort();
@@ -262,9 +271,10 @@ try {
   const reviewed = await reviewTermsBytes(service, new Uint8Array(await readFile(resolve(root, 'docs/deployments/sepolia/trades/local-proof.release.terms-review.json'))));
   assert.equal(reviewed.ok, true); assert.equal(reviewed.value.deployment.address, escrow);
   pass('evidence contains no key or RPC URL; the written terms-review file passes the app review and names the deployed escrow');
+  // Forge wrote every broadcast record to per-run directories: the checkout's records (real deployments) are untouched.
+  assert.equal(await broadcastSnapshot(), recordsBefore, 'the checkout broadcast records are untouched');
   console.log(`\n${passed.length} sepolia trade checks passed`);
 } finally {
   await capped?.close(); anvil?.kill('SIGTERM');
   await rm(temporary, { recursive: true, force: true });
-  for (const dir of ['broadcast/DeployBasicEscrow.s.sol/11155111']) await rm(resolve(ROOT, 'contracts/evm', dir), { recursive: true, force: true });
 }
