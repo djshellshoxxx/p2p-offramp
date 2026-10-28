@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
-import { errorMessage, parseRoute } from './routes.ts';
+import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
@@ -24,6 +24,8 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
   const [pending, setPending] = useState('');
+  // A confirmed restore may offer an explicit handoff; never persist selection or put it in a route.
+  const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -31,7 +33,11 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
-    const navigate = () => { setRoute(parseRoute(window.location.hash)); setNotice(''); };
+    const navigate = () => {
+      const next = parseRoute(window.location.hash);
+      setRoute(next); setNotice('');
+      if (next.page !== 'home') setRestoredProfileId('');
+    };
     const connectivity = () => setOnline(navigator.onLine);
     window.addEventListener('hashchange', navigate);
     window.addEventListener('online', connectivity); window.addEventListener('offline', connectivity);
@@ -79,8 +85,11 @@ export function App({ services, starting = false, startupError, trade = null }: 
         {starting ? <p className="notice" role="status">{m.starting}</p> : !services ? <p className="notice error" role="alert">{startupError ? errorMessage(startupError) : m.unavailable}</p> : null}
         {pending ? <p role="status">{pending}</p> : null}
         {notice ? <p className="notice error" role="alert">{notice}</p> : null}
-        {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} /> :
-          route.page === 'recovery' ? <Recovery services={services} /> : route.page === 'settings' ? <Settings /> :
+        {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
+          route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
+            if (!isProfileId(id)) return;
+            setRestoredProfileId(id); window.location.hash = '#/home';
+          }} /> : route.page === 'settings' ? <Settings /> :
           route.page === 'offers' ? <OffersPage trade={trade} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} /> :
           <UnavailablePage page={route.page} />}
       </main>

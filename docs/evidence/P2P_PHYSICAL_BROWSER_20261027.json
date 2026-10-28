@@ -1,0 +1,268 @@
+{
+  "slice": "actual message-driven qualification of existing G16 physical APIs",
+  "sourceSha": "4e786571c38be3643f09c8e44a474027725c3952",
+  "sourceTree": "4dd6d23f80e3fc282585bb401ec52f16f65523c8",
+  "recordedAtUtc": "2026-10-27T07:26:09.512115+00:00",
+  "sourceFiles": {
+    "scripts/test-g16-physical-browser.mjs": "da70d260aa57f7b7491e4a1d2df04e54c6cd1ebda2433f74b9306d9ed5d3b133",
+    "scripts/fixtures/g16-physical-worker.mjs": "1ee2f5eeac637a43d62dec19513ddf01c6f5a7c6c0c8a91ae948bf48d4aac303"
+  },
+  "unchangedHostSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+  "brokerReservation": {
+    "assignment": "P2P-G16-CONTROL-SCHEMA-NEXT",
+    "state": "assigned by parent; no request execution evidence here",
+    "libraryFileId": "libfile_a0a59b3c56648191891511b047aa71d2",
+    "version": 0,
+    "pathsAbsentUnchanged": [
+      "packages/schemas/src/evm-agreement-control.ts",
+      "packages/schemas/test/evm-agreement-control.test.mjs"
+    ]
+  },
+  "actualBrowserResult": {
+    "fixture": "G16-physical-message-qualification",
+    "browser": "154.0.8037.57",
+    "assertions": 168,
+    "schedules": [
+      {
+        "schedule": "normal",
+        "verdict": "OK"
+      },
+      {
+        "holdAt": 1,
+        "action": "invalidate",
+        "backend": "resolve",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 1,
+        "action": "invalidate",
+        "backend": "reject",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 1,
+        "action": "dispose",
+        "backend": "resolve",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 1,
+        "action": "dispose",
+        "backend": "reject",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 1,
+        "action": "timeout",
+        "backend": "resolve",
+        "logical": "TIMEOUT",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 1,
+        "action": "timeout",
+        "backend": "reject",
+        "logical": "TIMEOUT",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "invalidate",
+        "backend": "resolve",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "invalidate",
+        "backend": "reject",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "dispose",
+        "backend": "resolve",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "dispose",
+        "backend": "reject",
+        "logical": "SUPPRESSED",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "timeout",
+        "backend": "resolve",
+        "logical": "TIMEOUT",
+        "physicalDrained": true
+      },
+      {
+        "holdAt": 2,
+        "action": "timeout",
+        "backend": "reject",
+        "logical": "TIMEOUT",
+        "physicalDrained": true
+      }
+    ],
+    "surfaces": {
+      "local": 0,
+      "session": 0,
+      "databases": 0,
+      "caches": 0,
+      "serviceWorkers": 0
+    },
+    "sourceHostSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+    "actualMessagePortAndDedicatedWorker": true,
+    "timeoutMode": "trusted monotonic/timer fixture at29999/30000; not native30second wall-clock acceptance",
+    "unhandledObservation": "event reporting through post-drain task checkpoint; not indefinite absence proof",
+    "heldSchedulesUseNonemptyCapabilities": true,
+    "fixtureControlsOnly": true,
+    "productionControlProtocolImplemented": false,
+    "appIncluded": false,
+    "spendingEnabled": false,
+    "browserArtifactSha256": "f5bb80215c7ba1e27b8b1b09fc7804ac7408b664603de6908331f6df4588f77b",
+    "unexpectedRequests": 0,
+    "consoleMessages": 0,
+    "pageErrors": 0,
+    "providerApproval": false,
+    "auditAcceptance": false
+  },
+  "testMethod": "native MessagePort transferred to dedicated Chromium Worker; trusted fixture controls invoke existing host; not production wire parser/adapter/app API",
+  "actualFailures": [
+    {
+      "record": "01-missing-fixture-red",
+      "kind": "new harness missing entry, no product correctness failure or cases executed"
+    },
+    {
+      "record": "02-browser-first-run",
+      "kind": "incorrect positive-wipe oracle for empty SHA2 capabilities; fixture error, no host bug"
+    },
+    {
+      "record": "aggregate/0001-p2p-physical-browser-messagequalification/stderr.log",
+      "kind": "ChromiumUnixsocket path too long, launchSIGABRT before tests; corrected only external runner job identifiers/outputpath"
+    }
+  ],
+  "review": {
+    "reviewer": "/root/physical_drain_review",
+    "readOnly": true,
+    "noExecutionOrIndependentAudit": true,
+    "finding": "no host/drain message-flow defect; qualification limits in empty SHA2 and unhandled event sampling",
+    "adaptations": [
+      "retain nonzeroAtCapture booleans only; use existing nonempty-capability fixture for all held schedules",
+      "emit fixed fixtureUnhandled notification; bounded post-drain task observation and later terminal response recheck; never use event-loop turns as drain proof"
+    ],
+    "finalMustFixFindings": 0
+  },
+  "freshChecks": {
+    "node": 522,
+    "focused": 73,
+    "policy": 15,
+    "python": 12,
+    "specDocuments": 173,
+    "newBrowserAssertions": 168,
+    "newMessageSchedules": 13,
+    "existingG16AssertionsEach": 238,
+    "existingG15AssertionsEach": 66,
+    "buildFourStrictTypes": true,
+    "explicitHelperStrictTypes": true,
+    "boundaryProductionFiles": 50,
+    "nativeAndEmittedBrowser": true,
+    "requiredSuites": 13,
+    "initialRun": {
+      "pass": 12,
+      "fail": 1,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "onlyFailedSuiteRerun": {
+      "pass": 1,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "noSourceDrift": true,
+    "noRemainingRunnerProcessGroups": true
+  },
+  "limits": [
+    "timer29999/30000 is trusted fixture, not native30second wall-clock acceptance",
+    "rejection event absence observed through bounded fixture window only",
+    "new fixtures public synthetic same-provider bundle preparation, no independent crypto qualification",
+    "no browser control-schema/productionportadapter/app inclusion",
+    "no sender-supplied state establishes physical settlement; actual hostdrain awaited",
+    "no physical native cancellation/rollback or memory-GC erasure guarantee",
+    "new source did not rerun parserfuzz; previous4096cases remain pinned16c"
+  ],
+  "nextActuallyReproduced": {
+    "source": "4e786571c38be3643f09c8e44a474027725c3952",
+    "directParser": {
+      "accepted": true
+    },
+    "load": {
+      "returnedTypedResult": false,
+      "foreignExceptionEscaped": true
+    },
+    "getterInvocations": 1,
+    "actualOversizedViewBytes": 1048577,
+    "scope": "synthetic local direct boundary; guarded G15 snapshot path not demonstrated affected"
+  },
+  "noGhostPaySourcePushCiPaidCallsDependenciesSecurityOrSpendingChanges": true,
+  "files": {
+    "docs/evidence/p2p-physical-browser-20261027/01-missing-fixture-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-physical-browser-20261027/01-missing-fixture-red.log": "ab5dd1d4b01a17e25c588b215dbe21805741c7e01fe9ae87dc7e2fab9280820d",
+    "docs/evidence/p2p-physical-browser-20261027/02-browser-first-run.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-physical-browser-20261027/02-browser-first-run.log": "920fdff3f5fc1abd43768d27448ba071fb0e55c156eecaaf06006d677ab4b059",
+    "docs/evidence/p2p-physical-browser-20261027/03-browser-corrected-oracle.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-browser-20261027/03-browser-corrected-oracle.log": "f2ac6bb24714d949fef1bfcc86eac1242e32eeb312442df75fd19f8f36ae344b",
+    "docs/evidence/p2p-physical-browser-20261027/04-browser-review-oracles.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-browser-20261027/04-browser-review-oracles.log": "868490e7cdab2575a069972f7d26718f8cfed47083f90d56c4f7ed13662ec8b1",
+    "docs/evidence/p2p-physical-browser-20261027/05-registry-next-reproduction.log": "6c89d9791da3e942d629d3969dad822bc28a7c8e14a189127f0b2e30f9775a1d",
+    "docs/evidence/p2p-physical-browser-20261027/acceptance.json": "3f7b7d15af2c614fb283ca729c0b90f6a5bb528f56d283f683e6de6ad344cc09",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0001-p2p-physical-browser-messagequalification/stderr.log": "612055373e86e5d17460f41507f2700bcd0b7c4a5309d1d9cdf843fcc049103f",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0001-p2p-physical-browser-messagequalification/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0002-p2p-physical-browser-focused/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0002-p2p-physical-browser-focused/stdout.log": "6bde203d1d5fe112644597ea1224430990bfc9e51fb6bbd5247c9cbd130bcf13",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0003-p2p-physical-browser-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0003-p2p-physical-browser-aggregate/stdout.log": "becf96ece365d08d1fb1bffb42eaf7b75c2f39012edf71b8cd237bc87d7fac1d",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0004-p2p-physical-browser-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0004-p2p-physical-browser-build/stdout.log": "095d16cef8558cff49711f84700779dfeb79a8ff6932b5b2ac92a7f3187e21ce",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0005-p2p-physical-browser-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0005-p2p-physical-browser-boundaries/stdout.log": "d101d6cb7acdc2f57e60ccdbff4ad4f8f1ed5e9dd474b03cdcb45e7ac7201a09",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0006-p2p-physical-browser-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0006-p2p-physical-browser-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0007-p2p-physical-browser-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0007-p2p-physical-browser-web/stdout.log": "49fccee6401dd4b453eb26ede736cb34818f447377b8cee3a70d4ac38914bb9f",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0008-p2p-physical-browser-specs/stderr.log": "55f853efe7580e382468afd9643d5b7816793b6f0e01f5c0a9f71601d99e3252",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0008-p2p-physical-browser-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0009-p2p-physical-browser-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0009-p2p-physical-browser-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0010-p2p-physical-browser-policy/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0010-p2p-physical-browser-policy/stdout.log": "5be51640499206b4fedb416ae2bbf7de810ada0c6d5a8950667c28bb6c9b1403",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0011-p2p-physical-browser-g15browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0011-p2p-physical-browser-g15browser/stdout.log": "ae1d15ffc654e7e74bef3c1a137b248aeb835857b07eacb6e41cc7d31418a233",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0012-p2p-physical-browser-g16browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0012-p2p-physical-browser-g16browser/stdout.log": "07a20c02ca7bc1553de7632e80026df4b58b932caf85409e68bdaccbf7be0a4b",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0013-p2p-physical-browser-helpertypes/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/0013-p2p-physical-browser-helpertypes/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/aggregate/report.json": "fa3000aa64fd0a5c9c6b8dedb1a003dff8d790b7a1001164654a44bd9041ba72",
+    "docs/evidence/p2p-physical-browser-20261027/short-browser-acceptance.json": "b3b913e2af3cc60ab219938df248af1a021936eb789b1b1e4088a1741ea63a79",
+    "docs/evidence/p2p-physical-browser-20261027/short-path/0001-p2p-msg-worker/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-browser-20261027/short-path/0001-p2p-msg-worker/stdout.log": "868490e7cdab2575a069972f7d26718f8cfed47083f90d56c4f7ed13662ec8b1",
+    "docs/evidence/p2p-physical-browser-20261027/short-path/report.json": "2e1aeaca79ba84adc114aa0131f389e6b11376dce0947384e678df31f1e5ba9d"
+  }
+}

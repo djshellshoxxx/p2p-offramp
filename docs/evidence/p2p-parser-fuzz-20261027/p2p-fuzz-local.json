@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "quick": {
+      "seed": 1592598566,
+      "cases": 256
+    },
+    "standard": {
+      "seed": 1592598566,
+      "cases": 1024
+    },
+    "deep": {
+      "seed": 1592598566,
+      "cases": 4096
+    }
+  },
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "465ea63d5391bfd924f12bf8aa5d22119d1e6ede",
+      "expected_tree": "08e4618aab48aa78a14bc26714b5b696c85a9f7e",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "evm-agreement-parser",
+          "suites": [
+            {
+              "id": "seeded-generation-mutation",
+              "categories": [
+                "property",
+                "fuzz"
+              ],
+              "argv": [
+                "node",
+                "{project_root}/scripts/fuzz-evm-agreement-input.mjs",
+                "--seed",
+                "{seed}",
+                "--cases",
+                "{cases}",
+                "--output",
+                "{job_dir}/metrics.json"
+              ],
+              "required_files": [
+                "scripts/fuzz-evm-agreement-input.mjs",
+                "packages/schemas/src/evm-agreement-input.ts",
+                "packages/schemas/src/core.ts",
+                "package-lock.json"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "metrics_file": "{job_dir}/metrics.json",
+              "budget": {
+                "method": "actual seeded structural generation/mutation,not coverage-guided",
+                "seed": "applied in argv",
+                "cases": "applied total cases in argv; quick256 standard1024 deep4096",
+                "inputConstructionMaxUtf16Units": 4097,
+                "decimalCharactersMax": 5000,
+                "capabilitiesMax": 9,
+                "signatureViewBytesMax": 66,
+                "backingBufferBytesMax": 1024,
+                "memoryHardLimit": false,
+                "productionAssertionsAndKdfUnchanged": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

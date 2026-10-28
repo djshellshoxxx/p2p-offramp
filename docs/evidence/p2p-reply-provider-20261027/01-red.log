@@ -1,0 +1,108 @@
+✔ request: valid minimal snapshot is fresh, frozen and owned (3.577972ms)
+✔ request: native assetKind also structurally valid (0.375687ms)
+✔ request: header counter bounds (1.698747ms)
+✔ request: outer exact fields, symbols, accessors, non-plain (0.60724ms)
+✔ request: bad header fails before the body is touched (0.232936ms)
+✔ request: body errors are the original native typed errors (0.94435ms)
+✔ request: meta-trap throws become fresh fixed INVALID_INPUT (0.760166ms)
+✔ reply: valid success and every known failure code (0.868767ms)
+✔ reply: header bounds and exact discriminators (0.679858ms)
+✔ reply: rich errors, unknown codes and authority fields reject (0.759266ms)
+✔ reply: value flags, hashes and accounts (0.704634ms)
+✔ reply: data-only; invented values and mismatched ids parse structurally (0.191004ms)
+✔ reply: symbols, non-enumerable, accessors and custom prototypes (0.498669ms)
+✔ reply: errors contain no private sentinel and are fixed (0.247006ms)
+✖ reply: changing result discriminator between probe and snapshot is rejected in both branches (1.179398ms)
+✔ G15 public-data purpose stays pending and cannot inherit another capability provider acceptance (35.773686ms)
+✔ G15 native P-256 verification matches published RFC6979 public primitive vector (2.44247ms)
+✔ G15 binds canonical manifest, explicit public trust and complete raw asset set without enabling a release (4.634569ms)
+✔ G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain (5.091886ms)
+✔ G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures (2.88097ms)
+✔ G15 rejects malformed or private JWKs without invoking accessors (0.997989ms)
+✔ G15 rejects an off-curve trusted JWK even when its fingerprint matches the envelope label (1.259607ms)
+✔ G15 release identity is the manifest digest, independent of valid ECDSA s representation (2.438945ms)
+✔ G15 canonical wire rejects duplicate/escaped keys, whitespace, reordering, numeric aliases, BOM and malformed UTF-8 (2.939766ms)
+✔ G15 rejects incomplete/unsupported metadata and unresolved deployment schemas (6.807168ms)
+✔ G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence (9.1161ms)
+✔ G15 compares complete asset paths, lengths and raw hashes, including non-text files (4.740145ms)
+✔ G15 signed path inventory rejects traversal, query, case collision, unsorted paths and aggregate overflow (5.071987ms)
+✔ G15 bounds manifest/key/asset counts before allocation or accessor execution (1.431672ms)
+✔ G15 accepts the bounded 10000-entry inventory and refuses the next entry within the manifest byte cap (558.75515ms)
+✔ G15 snapshots caller bytes/metadata/assets before a held asynchronous digest (7.768143ms)
+▶ G15 cancellation/current-generation and late expiry win over a held crypto result
+  ✔ abort (2.360579ms)
+  ✔ generation (4.667988ms)
+  ✔ expiry (2.181803ms)
+  ✔ backward (1.020973ms)
+✔ G15 cancellation/current-generation and late expiry win over a held crypto result (11.05919ms)
+✔ G15 returns fixed errors for thrown callbacks/native failures and cancelled input (0.922377ms)
+✔ G15 cancellation from the last current callback cannot escape as a verified result (1.847138ms)
+▶ G15 fences held importKey results and failures
+  ✔ abort (1.636515ms)
+  ✔ generation (1.296862ms)
+  ✔ expiry (1.223473ms)
+  ✔ native-failure (1.06599ms)
+✔ G15 fences held importKey results and failures (5.830672ms)
+▶ G15 fences held verify results and failures
+  ✔ abort (1.571479ms)
+  ✔ generation (1.407657ms)
+  ✔ expiry (1.645048ms)
+  ✔ native-failure (1.144366ms)
+✔ G15 fences held verify results and failures (6.170856ms)
+▶ G15 fences held asset-digest results and failures
+  ✔ abort (1.927807ms)
+  ✔ generation (1.695963ms)
+  ✔ expiry (1.273838ms)
+  ✔ native-failure (1.051919ms)
+✔ G15 fences held asset-digest results and failures (6.563336ms)
+✔ G15 foreign exceptions from metadata traps are never inspected and stay typed; cancellation wins (0.780227ms)
+✔ G15 revoked and primitive thrown metadata values remain fixed typed refusals (0.383709ms)
+✖ G15 importKey foreign rejection is opaque and typed; genuine DataError classification stays intact (2.122145ms)
+ℹ tests 56
+ℹ suites 0
+ℹ pass 54
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 854.365272
+
+✖ failing tests:
+
+test at packages/schemas/test/evm-agreement-protocol.test.mjs:180:1
+✖ reply: changing result discriminator between probe and snapshot is rejected in both branches (1.179398ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at badRep (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-protocol.test.mjs:29:28)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-protocol.test.mjs:188:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-manifest.test.mjs:242:1
+✖ G15 importKey foreign rejection is opaque and typed; genuine DataError classification stays intact (2.122145ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'MANIFEST_UNSUPPORTED'
+  - 'UNAVAILABLE'
+  
+      at rejected (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-manifest.test.mjs:8:81)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-manifest.test.mjs:251:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'MANIFEST_UNSUPPORTED',
+    expected: 'UNAVAILABLE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

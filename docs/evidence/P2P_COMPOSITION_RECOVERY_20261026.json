@@ -1,0 +1,154 @@
+{
+  "kind": "bounded C05/C06 composition verification; test-only changes",
+  "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+  "runtimeImplementationCommit": "fa4e1f4ddd1fef95befb7ab7b6bb72b3ad22ba6a",
+  "recordedAtUtc": "2026-10-26T21:18:22.771273+00:00",
+  "environmentRecovery": {
+    "previousFailure": "No usable execution environment is available. Wait for an environment to become available before using this tool.",
+    "afterUpdatedContext": "ordinary same-selected-executor pwd/git read succeeded; baseline clean; no matching running test process; prior terminal exits retained",
+    "replacementOrDeniedRouteRetry": false
+  },
+  "sourceFiles": {
+    "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+    "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+  },
+  "runtimeChanged": false,
+  "redDisposition": "No new RED: five new invariant cases all passed existing runtime on first execution; no defect fabricated or runtime fix applied. Prior RED/bugfix evidence retained separately.",
+  "counts": {
+    "newTests": 5,
+    "focusedComposition": 13,
+    "unitAggregate": 354,
+    "buildPolicy": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+      "startedAtUtc": "2026-10-26T21:14:59.457575+00:00",
+      "finishedAtUtc": "2026-10-26T21:15:01.712662+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-recovery-20261026/01-recovery-oracles-first-run.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+      "startedAtUtc": "2026-10-26T21:15:50.886726+00:00",
+      "finishedAtUtc": "2026-10-26T21:16:05.673804+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-recovery-20261026/02-unit-aggregate.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+      "startedAtUtc": "2026-10-26T21:16:05.674350+00:00",
+      "finishedAtUtc": "2026-10-26T21:16:06.166887+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-recovery-20261026/03-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+      "startedAtUtc": "2026-10-26T21:16:06.167273+00:00",
+      "finishedAtUtc": "2026-10-26T21:16:06.671077+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-recovery-20261026/04-build-policy.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+      "startedAtUtc": "2026-10-26T21:16:06.671486+00:00",
+      "finishedAtUtc": "2026-10-26T21:16:08.879760+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-recovery-20261026/05-build-and-types.exit.json"
+    }
+  ],
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-composition-recovery-20261026/01-recovery-oracles-first-run.log.gz",
+      "sha256": "8c02d815c549212dc89f3c3cba8f46a771d10cfbc2fdbd23ca6dc4bdf07c11e3",
+      "rawSha256": "fba2d66d4082806e68cd233736efee6f24ca39838936a5a4ca159c262306b682",
+      "rawBytes": 1670
+    },
+    {
+      "path": "docs/evidence/p2p-composition-recovery-20261026/02-unit-aggregate.log.gz",
+      "sha256": "d9213dfd0b3508930843cd6e07efa5dd5dfde2ff3322be53e67f92e957ac6a55",
+      "rawSha256": "5bb3044534295bdb7f99f135519320b40590dcc374076932743ab01367cff07d",
+      "rawBytes": 37950
+    },
+    {
+      "path": "docs/evidence/p2p-composition-recovery-20261026/03-boundaries.log.gz",
+      "sha256": "d01a69abf3d6239e8254adb8cffc5795deb1e4a9bc26b2a6d952068c4ac5381b",
+      "rawSha256": "436235af7947a200851fc146b11f651629966d4d654c5981683841802f4a8d41",
+      "rawBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-composition-recovery-20261026/04-build-policy.log.gz",
+      "sha256": "376f3b1809e521380651b8dd037dfabd8b828f7bc33634c0b0d9acaa48473a35",
+      "rawSha256": "f8aef4beb3a6f425d8951de9075d4693c45d38510b3bd48725683c093714915e",
+      "rawBytes": 981
+    },
+    {
+      "path": "docs/evidence/p2p-composition-recovery-20261026/05-build-and-types.log.gz",
+      "sha256": "0b8e44a4feb7340f54ecd18e966318b8269a45ca49411190c9937a0f142f9b6d",
+      "rawSha256": "aa1e12d45996874711afbb46a559a98f83b461022637882cfad0bc52791e3f47",
+      "rawBytes": 1510
+    }
+  ],
+  "limitations": [
+    "in-memory retained encrypted Store with actual EncryptedVaultService, not native browser/IndexedDB crash recovery",
+    "native-reader fixture only, no live chain/provider/deployment assurance",
+    "no trusted journal hash/observe/reconcile/clear lifecycle implemented",
+    "no app wiring, wallet invocation, spend authority or native terms/time binding added",
+    "browser/Python/spec suites not rerun for this test-only slice; earlier exact-source results remain historical"
+  ],
+  "nextReadyBoundedSlice": "C04 held diagnostic read while another unlocked vault/session changes revision; ensure late/error completion cannot yield empty-unresolved success or retry authority; existing policies only",
+  "workersStarted": 0,
+  "ghostPayTouched": false,
+  "canonicalQueueReadOrWritten": false
+}

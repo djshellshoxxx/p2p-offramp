@@ -1,0 +1,31 @@
+{
+  "atUtc": "2026-10-26T20:52:25+00:00",
+  "sourceHead": "bbba912ba7bd0563fba635f915b4ae71a831c919",
+  "sourceTree": "e0d223783f0c128b2fda025ffe964c3967c62794",
+  "sourceIdentitiesUnchanged": 28,
+  "applicationTestsRun": false,
+  "buildsRun": false,
+  "oracleFamiliesProposed": 10,
+  "mechanicalChecks": [
+    "JSON parsing",
+    "manifest SHA-256 source correspondence",
+    "documentation credential-pattern check"
+  ],
+  "files": [
+    {
+      "path": "docs/handoffs/P2P_COMPOSITION_PACKET_2026-10-26.md",
+      "bytes": 20357,
+      "sha256": "1b6e03b4c87dce12fb857cfae626152c868ef8b98c6cb8fb8fee37acb15ce14a"
+    },
+    {
+      "path": "docs/evidence/P2P_COMPOSITION_SOURCE_20261026.json",
+      "bytes": 14594,
+      "sha256": "2b41da0f487b852c98a6502bc380fd7ac9a70f9429097fd497115109b6a94a9b"
+    },
+    {
+      "path": "docs/evidence/P2P_COMPOSITION_ORACLES_20261026.json",
+      "bytes": 9184,
+      "sha256": "e1592428a8839d70434e834bf442bd6130d96ba3877725cc60823704d0d28a35"
+    }
+  ]
+}

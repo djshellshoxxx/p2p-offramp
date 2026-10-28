@@ -1,0 +1,252 @@
+▶ G15→G11 nested revocation dominates a callback that restores its state before an outer projection
+  ✖ current/network (12.997236ms)
+  ✖ current/deployment (5.008497ms)
+  ✖ current/post-load (3.521743ms)
+  ✖ clock/network (4.476749ms)
+  ✖ clock/deployment (4.502558ms)
+  ✖ clock/post-load (2.646525ms)
+✖ G15→G11 nested revocation dominates a callback that restores its state before an outer projection (35.044814ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.262996
+
+✖ failing tests:
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ current/network (12.997236ms)
+  AssertionError [ERR_ASSERTION]: outer projection must respect nested terminal revocation
+  + actual - expected
+  
+  + {
+  +   assets: [
+  +     {
+  +       address: null,
+  +       decimals: 18,
+  +       id: 'native',
+  +       kind: 'native',
+  +       transferPolicy: 'exact-transfer'
+  +     }
+  +   ],
+  +   chain: 'evm',
+  +   chainIdentity: '31337',
+  +   deployments: [
+  +     {
+  +       address: '0x2222222222222222222222222222222222222222',
+  +       artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  +       id: 'escrow-fixture',
+  +       protocolVersion: 1,
+  +       runtime: {
+  +         keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +         kind: 'evm-code',
+  +         upgradeable: false
+  +       },
+  +       supportedAssetIds: [
+  +         'native'
+  +       ]
+  +     }
+  +   ],
+  +   endpoints: [
+  +     {
+  +       id: 'loopback-fixture',
+  +       url: 'http://127.0.0.1:8545/'
+  +     }
+  +   ],
+  +   environment: 'local',
+  +   finality: {
+  +     kind: 'evm-finalized-tag'
+  +   },
+  +   genesisHash: '0xabababababababababababababababababababababababababababababababab',
+  +   id: 'local-evm'
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:101:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'local-evm', chain: 'evm', chainIdentity: '31337', genesisHash: '0xabababababababababababababababababababababababababababababababab', endpoints: [ [Object] ], finality: { kind: 'evm-finalized-tag' }, assets: [ [Object] ], deployments: [ [Object] ], environment: 'local' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ current/deployment (5.008497ms)
+  AssertionError [ERR_ASSERTION]: outer projection must respect nested terminal revocation
+  + actual - expected
+  
+  + {
+  +   address: '0x2222222222222222222222222222222222222222',
+  +   artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  +   id: 'escrow-fixture',
+  +   protocolVersion: 1,
+  +   runtime: {
+  +     keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +     kind: 'evm-code',
+  +     upgradeable: false
+  +   },
+  +   supportedAssetIds: [
+  +     'native'
+  +   ]
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:101:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'escrow-fixture', address: '0x2222222222222222222222222222222222222222', protocolVersion: 1, artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', runtime: { kind: 'evm-code', keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', upgradeable: false }, supportedAssetIds: [ 'native' ] },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ current/post-load (3.521743ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at refused (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:9:44)
+      at file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:95:7
+      at async heldRegistryHash (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:62:9)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:93:37)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ clock/network (4.476749ms)
+  AssertionError [ERR_ASSERTION]: outer projection must respect nested terminal revocation
+  + actual - expected
+  
+  + {
+  +   assets: [
+  +     {
+  +       address: null,
+  +       decimals: 18,
+  +       id: 'native',
+  +       kind: 'native',
+  +       transferPolicy: 'exact-transfer'
+  +     }
+  +   ],
+  +   chain: 'evm',
+  +   chainIdentity: '31337',
+  +   deployments: [
+  +     {
+  +       address: '0x2222222222222222222222222222222222222222',
+  +       artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  +       id: 'escrow-fixture',
+  +       protocolVersion: 1,
+  +       runtime: {
+  +         keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +         kind: 'evm-code',
+  +         upgradeable: false
+  +       },
+  +       supportedAssetIds: [
+  +         'native'
+  +       ]
+  +     }
+  +   ],
+  +   endpoints: [
+  +     {
+  +       id: 'loopback-fixture',
+  +       url: 'http://127.0.0.1:8545/'
+  +     }
+  +   ],
+  +   environment: 'local',
+  +   finality: {
+  +     kind: 'evm-finalized-tag'
+  +   },
+  +   genesisHash: '0xabababababababababababababababababababababababababababababababab',
+  +   id: 'local-evm'
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:101:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'local-evm', chain: 'evm', chainIdentity: '31337', genesisHash: '0xabababababababababababababababababababababababababababababababab', endpoints: [ [Object] ], finality: { kind: 'evm-finalized-tag' }, assets: [ [Object] ], deployments: [ [Object] ], environment: 'local' },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ clock/deployment (4.502558ms)
+  AssertionError [ERR_ASSERTION]: outer projection must respect nested terminal revocation
+  + actual - expected
+  
+  + {
+  +   address: '0x2222222222222222222222222222222222222222',
+  +   artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  +   id: 'escrow-fixture',
+  +   protocolVersion: 1,
+  +   runtime: {
+  +     keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +     kind: 'evm-code',
+  +     upgradeable: false
+  +   },
+  +   supportedAssetIds: [
+  +     'native'
+  +   ]
+  + }
+  - null
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:101:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { id: 'escrow-fixture', address: '0x2222222222222222222222222222222222222222', protocolVersion: 1, artifactSha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', runtime: { kind: 'evm-code', keccak256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', upgradeable: false }, supportedAssetIds: [ 'native' ] },
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/release-registry.test.mjs:79:117
+✖ clock/post-load (2.646525ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at refused (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:9:44)
+      at file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:95:7
+      at async heldRegistryHash (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:62:9)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:93:37)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:79:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

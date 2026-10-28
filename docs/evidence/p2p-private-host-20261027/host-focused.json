@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "require_clean": false,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "private-host",
+          "suites": [
+            {
+              "id": "focused",
+              "categories": [
+                "unit",
+                "integration"
+              ],
+              "argv": [
+                "node",
+                "--test",
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/wallet/test/evm-agreement.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_files": [
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/wallet/test/evm-agreement.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "existing fixed regression cases; no seed/fuzz claim",
+                "productionDeadlineMs": 30000,
+                "sourceInitiallyDirty": "authorized3file integration frozen by content fingerprint;clean source commit follows accepted checks"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

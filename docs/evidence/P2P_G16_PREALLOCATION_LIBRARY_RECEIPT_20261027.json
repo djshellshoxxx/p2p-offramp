@@ -1,0 +1,74 @@
+{
+  "kind": "tested two-file Claude proposal integration private checkpoint receipt",
+  "sourceAndTestsCheckpoint": "d00f1463688570332b19c8851c49364e807acf98",
+  "tree": "c861b49a4f1d471cdbd2be2824b4420f11254bc9",
+  "originalPacketBase": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+  "preImplementationHead": "68354100e95f839966bef91aac2d22b026be8b07",
+  "documentationCheckpoint": "ba070cfbf1d62a677da48b41b2e7027e63eec4d0",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_id": "file_00000000373c81f589cc39cf9e2993c8",
+  "version": 10,
+  "bytes": 650726,
+  "sha256": "a992a6a3a99f695a79b680415c3a3af30f7d5514389828e317bb9d2cc2e9b936",
+  "localPath": "/workspace/checkpoints/2026-10-27-p2p-preallocation-intake/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "allPriorVersion9BytesPreserved": true,
+  "priorVersion9Sha256": "86389d0aec78ecf73722eb8d33ede8a874e7ccaa25d525957d5e2087f218d829",
+  "twoFileForwardReverseRoundTrip": true,
+  "consumerRetrievalVerified": false,
+  "wholeRepositoryRestore": false,
+  "proposalLibrary": "libfile_79762651b9248191825f75d46520a9b0",
+  "proposalVersion": 0,
+  "proposalSha256": "53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46",
+  "brokerRequest": "req_011CgRk5c4hn9ntunsGVB6dD",
+  "proposedByModel": "claude-sonnet-5-5",
+  "integrator": "Codex sole P2P integration owner",
+  "integratorNewPaidApiCalls": 0,
+  "red": {
+    "tests": 10,
+    "pass": 8,
+    "fail": 2,
+    "skip": 0
+  },
+  "greenFocused": {
+    "tests": 32,
+    "pass": 32,
+    "fail": 0,
+    "skip": 0
+  },
+  "greenAggregate": {
+    "tests": 383,
+    "pass": 383,
+    "fail": 0,
+    "skip": 0
+  },
+  "buildPolicy": {
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "browser": "Chromium154.0.8037.57 document+module Worker153assertions each; no unexpected requests",
+  "strictTypesBuildBoundaries": "exit0;46production/18core",
+  "actualCodePaths": [
+    "packages/domain/src/trade-terms.ts",
+    "packages/domain/test/trade-terms.test.mjs"
+  ],
+  "appliedFilesMatchExactBrokerProposedHashes": true,
+  "independentGoldenFilesUnchanged": true,
+  "policyDependenciesChanged": false,
+  "appInclusion": false,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "economicPreparationAllowed": false,
+  "notRerun": [
+    "emitted-app UI browser suite",
+    "separate vault/runtime/content/reseal browser suite",
+    "Python/specs",
+    "other browsers/devices"
+  ],
+  "scopeLimit": "existing encoder temporary allocation only; document-to-Worker structured-clone intake and preview UI/lifecycle remain separate",
+  "ghostPayAccess": false,
+  "canonicalQueueChanged": false,
+  "sourcePublicationOrCi": false,
+  "receiptCommitScope": "documentation-only descendant after uploaded source/test checkpoint"
+}

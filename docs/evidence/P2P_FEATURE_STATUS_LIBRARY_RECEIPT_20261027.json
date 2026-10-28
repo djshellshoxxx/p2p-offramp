@@ -1,0 +1,26 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/P2P-current-feature-completion-20261027.md",
+  "file_id": "file_00000000221881f9ada6de885c382e06",
+  "library_file_id": "libfile_c5fc139e90248191b96bf27de217d2f9",
+  "file_name": "P2P-current-feature-completion-20261027.md",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "libdir_30280fe7938081918252daf66e50daba",
+  "mime_type": "text/markdown",
+  "library_artifact_type": "report",
+  "file_size_bytes": 35789,
+  "external_connectors_accessed": false,
+  "sha256": "3b906475aecede6e1944cac716c89d536565b84c507367bba33dc53bf66010d1",
+  "completeNativeReadbackVerified": true,
+  "assessedCommit": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+  "laterHostWorkExcludedFromPercentages": true,
+  "immutablePointInTimeReport": true
+}

@@ -1,0 +1,108 @@
+--- a/harnesses/invoice-encoding-fuzz.mjs
++++ b/harnesses/invoice-encoding-fuzz.mjs
+@@ -1,11 +1,13 @@
+ #!/usr/bin/env node
+ // Seeded property/mutation encoding fuzz harness for invoice-schema.
+ // NOT coverage-guided. No network, installs, or source writes.
+-// Exit codes: 0 all pass, 1 property failure, 2 prerequisite/argument/setup failure.
++// Exit codes: 0 all requested cases pass, 1 failed/interrupted/incomplete run,
++// 2 prerequisite/argument/setup failure.
+ 
+ import fs from 'node:fs';
+ import path from 'node:path';
+-import { pathToFileURL } from 'node:url';
++import { createHash } from 'node:crypto';
++import { pathToFileURL, fileURLToPath } from 'node:url';
+ 
+ const MAX_BYTES = 2048;
+ const MAX_UNITS = 300;
+@@ -317,7 +319,8 @@
+   // ---- run ----
+   const results = [];
+   let anyFail = false;
+-  const totals = { properties: 0, numRuns: 0, numSkips: 0, numShrinks: 0 };
++  const totals = { properties: 0, numRuns: 0, numSkips: 0, numShrinks: 0,
++    interrupted_properties: 0, incomplete_properties: 0 };
+   for (const p of properties) {
+     let rec;
+     try {
+@@ -327,22 +330,38 @@
+         }),
+         { seed: args.seed, numRuns: args.cases, verbose: 0 }
+       );
++      const interrupted = res.interrupted === true;
++      const countIsValid = v => Number.isSafeInteger(v) && v >= 0;
++      const countsValid = [res.numRuns, res.numSkips, res.numShrinks].every(countIsValid);
++      const incomplete = !countsValid || res.failed !== false || res.interrupted !== false
++        || res.numRuns !== args.cases || res.numSkips !== 0;
++      const status = res.failed === true ? 'fail' : interrupted ? 'interrupted' : incomplete ? 'incomplete' : 'pass';
++      const diagnostic = status === 'interrupted'
++        ? `fast-check interrupted; returned numRuns=${res.numRuns}, requested=${args.cases}, skips=${res.numSkips}; no complete-run acceptance`
++        : `fast-check incomplete measurement; returned numRuns=${res.numRuns}, requested=${args.cases}, skips=${res.numSkips}; no complete-run acceptance`;
+       rec = {
+         id: p.id,
+         encoding: p.encoding,
+         invariant: p.invariant,
+-        status: res.failed ? 'fail' : 'pass',
+-        numRuns: res.numRuns,
+-        numSkips: res.numSkips,
+-        numShrinks: res.numShrinks,
+-        counterexamplePath: res.failed ? res.counterexamplePath ?? null : null,
+-        counterexample: res.failed ? sanitize(res.counterexample && res.counterexample.length === 1 ? res.counterexample[0] : res.counterexample) : null,
+-        failure_message: res.failed ? bounded(res.errorInstance && res.errorInstance.message ? res.errorInstance.message : String(res.error || 'property failed'), 300) : null,
++        status,
++        interrupted,
++        requested_numRuns: args.cases,
++        seed: Number.isSafeInteger(res.seed) ? res.seed : args.seed,
++        numRuns: countIsValid(res.numRuns) ? res.numRuns : 0,
++        numSkips: countIsValid(res.numSkips) ? res.numSkips : 0,
++        numShrinks: countIsValid(res.numShrinks) ? res.numShrinks : 0,
++        counterexamplePath: res.counterexamplePath ?? null,
++        counterexample: res.counterexample == null ? null : sanitize(res.counterexample.length === 1 ? res.counterexample[0] : res.counterexample),
++        failure_message: status === 'fail'
++          ? bounded(res.errorInstance && res.errorInstance.message ? res.errorInstance.message : String(res.error || 'property failed'), 300)
++          : status === 'pass' ? null : bounded(diagnostic, 300),
+       };
+     } catch (e) {
+-      rec = { id: p.id, encoding: p.encoding, invariant: p.invariant, status: 'fail', numRuns: 0, numSkips: 0, numShrinks: 0, counterexamplePath: null, counterexample: null, failure_message: bounded('harness error: ' + (e && e.message), 300) };
++      rec = { id: p.id, encoding: p.encoding, invariant: p.invariant, status: 'fail', interrupted: false, requested_numRuns: args.cases, seed: args.seed, numRuns: 0, numSkips: 0, numShrinks: 0, counterexamplePath: null, counterexample: null, failure_message: bounded('harness error: ' + (e && e.message), 300) };
+     }
+-    if (rec.status === 'fail') anyFail = true;
++    if (rec.status !== 'pass') anyFail = true;
++    if (rec.status === 'interrupted') totals.interrupted_properties += 1;
++    if (rec.status === 'incomplete') totals.incomplete_properties += 1;
+     totals.properties += 1;
+     totals.numRuns += rec.numRuns;
+     totals.numSkips += rec.numSkips;
+@@ -376,6 +395,14 @@
+     seed: args.seed,
+     requested_cases_per_property: args.cases,
+     method: METHOD,
++    provenance: {
++      harness: artifactIdentity(fileURLToPath(import.meta.url)),
++      fast_check_entry: artifactIdentity(fcPath),
++      target_entry: artifactIdentity(schemaPath),
++      argv: [process.execPath, ...process.argv.slice(1)],
++      metrics_file: args.output,
++      log_capture: 'stdout/stderr paths and full project source identity are retained by the calling runner when used; unavailable to this standalone helper',
++    },
+     controls: [{ id: 'memo-envelope-positive', status: memoControl.ok && memoControl.value?.memo === 'ok memo' ? 'pass' : 'fail', invariant: 'validatePrivatePart accepts lineItems:[] and exact synthetic ok memo before rejection oracles' }],
+     properties: results,
+     totals,
+@@ -383,8 +410,15 @@
+   };
+   fs.mkdirSync(path.dirname(args.output), { recursive: true });
+   fs.writeFileSync(args.output, JSON.stringify(metrics, null, 2) + '\n', 'utf8');
+-  process.stdout.write('properties=' + totals.properties + ' numRuns=' + totals.numRuns + ' failed=' + results.filter((r) => r.status === 'fail').length + '\n');
++  process.stdout.write('properties=' + totals.properties + ' numRuns=' + totals.numRuns
++    + ' failed=' + results.filter((r) => r.status === 'fail').length
++    + ' interrupted=' + totals.interrupted_properties + ' incomplete=' + totals.incomplete_properties + '\n');
+   process.exitCode = anyFail ? 1 : 0;
++}
++
++function artifactIdentity(file) {
++  return { path: file, resolved_path: fs.realpathSync(file),
++    sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') };
+ }
+ 
+ main().catch((e) => {

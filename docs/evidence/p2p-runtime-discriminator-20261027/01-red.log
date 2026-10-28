@@ -1,0 +1,36 @@
+✔ runtime config is a strict nonsecret offline allowlist with release permanently disabled (1.933247ms)
+✔ runtime command union exposes only bounded known-profile readonly operations and control commands (2.157389ms)
+✔ runtime messages reject hostile reflection without invoking getters or echoing supplied diagnostics (0.286946ms)
+✔ runtime replies validate opaque purpose handles and fixed errors without exposing vault-session or record fields (0.963108ms)
+✔ runtime encrypted export is bounded G03 ciphertext with an explicit unauthenticated label (12.36728ms)
+✔ runtime create/restore commands require valid passphrases and bounded genuine byte copies (1.028885ms)
+✔ runtime inventory and restore replies are strict, bounded and contain only opaque public fields (0.99782ms)
+✖ runtime response rejects a changing result discriminator in both branches (0.868228ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 134.25248
+
+✖ failing tests:
+
+test at packages/schemas/test/runtime.test.mjs:88:1
+✖ runtime response rejects a changing result discriminator in both branches (0.868228ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at invalid (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/runtime.test.mjs:8:51)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/runtime.test.mjs:94:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

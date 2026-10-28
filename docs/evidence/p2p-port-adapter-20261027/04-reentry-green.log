@@ -1,0 +1,18 @@
+✔ MessageChannel coherent signed fixture produces the real public verifier reply (65.088552ms)
+✔ MessageChannel invalidate suppresses A at SHA1; BUSY persists until physical release (18.625052ms)
+✔ MessageChannel invalidate suppresses A at SHA2; BUSY persists until physical release (15.240464ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA resolve (9.661107ms)
+✔ MessageChannel dispose ack retains held=true; drain awaits real SHA reject (8.483113ms)
+✔ direct seam: duplicate and replayed IDs across check/control frames close once with INVALID_INPUT (10.054019ms)
+✔ direct seam: future generation on either check or control fails closed before hashing (19.337853ms)
+✔ direct seam: malformed frames and opaque hostile traps are swallowed into one code-only close (1.296869ms)
+✔ direct throwing-send seam: invalidate ack failure terminally cleans up without recursive send or guaranteed ack (11.021865ms)
+✔ reentrant send during dispose acknowledgment cannot process another control or change close reason (0.631474ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 334.003232

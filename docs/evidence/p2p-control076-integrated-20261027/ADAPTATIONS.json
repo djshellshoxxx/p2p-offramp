@@ -1,0 +1,13 @@
+{
+  "originalTestCodeSha256": "bd87056db25d4abac3a0ff66a2f9e489e3e18a20cbdab0b339c2c73a689aab99",
+  "adaptedTestSha256": "ba0c98a47a4d6cdc8ec71959c5f4b129bcb8b276204cfbc788e73d86cf212a55",
+  "adaptations": [
+    "exact ERR_MODULE_NOT_FOUND plus error.url===TARGET.href guard; transitive failures rethrow",
+    "complete exact-shape families for success/failure result/value/error",
+    "genuine and proxy-forged CoreSchemaError freshness/no-inspection at all7record nodes \u00d73meta traps \u00d72error forms",
+    "missing ack discriminators/counter invalid values",
+    "recursive getter fixture replaced with fixed throw; zero getter calls still required"
+  ],
+  "applicationHeldForProducerOuterChecksumAndVersion": true,
+  "noRuntimeOrReservedFileEdits": true
+}

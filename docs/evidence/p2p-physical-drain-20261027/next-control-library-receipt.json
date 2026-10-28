@@ -1,0 +1,13 @@
+{
+  "libraryFileId": "libfile_a0a59b3c56648191891511b047aa71d2",
+  "fileId": "file_00000000b48081f9a0aff3bd5ae3fe55",
+  "version": 0,
+  "bytes": 25106,
+  "sha256": "c11500f064b947670ab6381dfc4100a5e9e4ebe81b8e0e0e1d62c0f3468a8a43",
+  "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+  "state": "ready not assigned",
+  "localXattrs": {
+    "user.library-file-version": "0",
+    "user.library-file-id": "libfile_a0a59b3c56648191891511b047aa71d2"
+  }
+}

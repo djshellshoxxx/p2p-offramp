@@ -1,0 +1,335 @@
+{
+  "slice": "G15-to-G11-guarded-registry-composition",
+  "state": "integrated/tested offline only, no live grant",
+  "baseSha": "01bcb301a4d7ffd0e2ee39a6c8108ca284b44425",
+  "sourceSha": "463c9d998ae8b25b7f4c18c36b083a97a07e1c3c",
+  "sourceTree": "53af62680ca4fed2bb2fd644cabe68c4ecfdf342",
+  "recordedAtUtc": "2026-10-27T06:43:41.761931+00:00",
+  "sourceFiles": {
+    "docs/evidence/P2P_READY_HOST_FUZZ_20261027.json": "07ba224a74df230839c760572d95d1c044fa963bc1a39b41de7d328876b6d544",
+    "packages/security/src/release-manifest.ts": "87e1d43d763f55d6855c8dcd54f7ba3a045c095fdf771887afef02e9c91e0833",
+    "packages/security/test/lib/release-registry-fixture.mjs": "97ccdc676d9d93131a0c1ef25596b28954b8d0decc6fa8b2fb3e272ddfda8dbc",
+    "packages/security/test/release-registry.test.mjs": "9ae1b18de1e318184ccdc6d165f8bde34d9ecf768f49620323ffc09cee681fe0",
+    "scripts/fixtures/release-browser.mjs": "7a4f4af8c9b76be3d744ff0774e17f147ed52bed9dbb694731dba92f6f36574d",
+    "scripts/test-release-browser.mjs": "d5f3159ce9887ee410e065285bac730810f250a31deb4516eda4dd01c3ba2fb1",
+    "security/release-browser-support.json": "36cc2905ad9ce3b43fc2418203a8b25527a8f0ed1477893bb72f0136d85e9849"
+  },
+  "changes": [
+    "Only exact in-memory successful G15 verifier values have WeakMap authority; copied/scanned/proxy metadata refused without property reads",
+    "Reuse unchanged G11 RegistryService with exact signed asset digest and matching releaseId; never expose underlying service or reload mutation API",
+    "Small lease retains public manifest/digest and clock/lifetime callbacks, no raw asset/key/signature cache",
+    "Snapshots before hash, post-await activation guard and before/after immutable read lookup guards",
+    "Latched revocation cannot revive; nested callback/clock revocation dominates outer projection; first terminal code preserved",
+    "No public facade/app inclusion/live deployment validation or release/trading enablement"
+  ],
+  "actualFailures": [
+    {
+      "file": "01-missing-bridge-red.log",
+      "exit": 1,
+      "kind": "tests-first missing export; no cases executed"
+    },
+    {
+      "file": "05-reentrant-revocation-red.log",
+      "exit": 1,
+      "casesFailed": 6,
+      "nodeFailuresIncludingParent": 7,
+      "kind": "reviewed new-code stale acceptance reproduced"
+    },
+    {
+      "file": "08-terminal-callback-red.log",
+      "exit": 1,
+      "casesFailed": 1,
+      "kind": "one extra observer invocation after nested terminal revocation"
+    }
+  ],
+  "freshChecks": {
+    "g15Original": 38,
+    "newBridge": 17,
+    "existingG11Registry": 5,
+    "focusedTotal": 60,
+    "nodeAggregate": 509,
+    "policy": 15,
+    "python": 12,
+    "specDocuments": 173,
+    "specBrokenLinks": 0,
+    "nodeSkipped": 0
+  },
+  "runner": {
+    "manifest": "p2p-g15-registry-20261027/acceptance.json",
+    "report": "p2p-g15-registry-20261027/runner-report.json",
+    "startedAtUtc": "2026-10-27T06:36:21.290401+00:00",
+    "finishedAtUtc": "2026-10-27T06:37:43.400082+00:00",
+    "exit": 0,
+    "counts": {
+      "pass": 10,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "sourceDrift": [],
+    "jobs": [
+      {
+        "suite": "focused",
+        "argv": [
+          "node",
+          "--test",
+          "packages/security/test/release-manifest.test.mjs",
+          "packages/security/test/release-registry.test.mjs",
+          "packages/domain/test/registry.test.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 1.096,
+        "cleanup": {
+          "process_group": 39919,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "aggregate",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 16.858,
+        "cleanup": {
+          "process_group": 39971,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.088,
+        "cleanup": {
+          "process_group": 40377,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.429,
+        "cleanup": {
+          "process_group": 40506,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "browser",
+        "argv": [
+          "npm",
+          "run",
+          "test:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 37.569,
+        "cleanup": {
+          "process_group": 40552,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "web",
+        "argv": [
+          "npm",
+          "run",
+          "test:web:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 17.574,
+        "cleanup": {
+          "process_group": 42906,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.321,
+        "cleanup": {
+          "process_group": 43378,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specaudit",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.24,
+        "cleanup": {
+          "process_group": 43407,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "policy",
+        "argv": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.447,
+        "cleanup": {
+          "process_group": 43433,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "g15browser",
+        "argv": [
+          "node",
+          "scripts/test-release-browser.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 1.061,
+        "cleanup": {
+          "process_group": 43514,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      }
+    ]
+  },
+  "browser": {
+    "Chromium": "154.0.8037.57",
+    "documentAssertions": 66,
+    "dedicatedWorkerAssertions": 66,
+    "unexpectedRequests": 0,
+    "persistentDataSurfaces": 0,
+    "publicRfcPrimitiveFixtureUnchanged": true,
+    "completeEnvelopeProviderIndependent": false,
+    "actualAppGraphsExcludeG15": true
+  },
+  "review": {
+    "kind": "scoped AI engineering, no execution/audit/approval",
+    "path": "docs/reviews/G15_REGISTRY_ENGINEERING_REVIEW_2026-10-27.md",
+    "oneFindingReproducedFixed": true,
+    "minorCleanupFindingReproducedFixed": true
+  },
+  "brokerOwnership": {
+    "physicalDrainState": "assigned by parent, no request execution evidence in executor yet",
+    "pathsUnchanged": {
+      "packages/wallet/test/lib/evm-agreement-host.ts": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f",
+      "packages/wallet/test/evm-agreement-host.test.mjs": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200"
+    },
+    "localHostOrTestEditsStarted": false,
+    "readOnlyIntakeBeforeReservation": true,
+    "noDuplicateImplementation": true
+  },
+  "providerDisposition": {
+    "nativeG15Purpose": "pending, release-enabled declaration blocked",
+    "metadataOnlyCheck": {
+      "ecdsaInstalled": false,
+      "pycryptodomeInstalled": false,
+      "cryptographyDistributionVersion": "50.0.0",
+      "cryptographyImportedOrExecutedForThisCheck": false,
+      "extraSignerBackendOrProvenanceReviewed": false
+    },
+    "noIndependentProviderClaim": true
+  },
+  "remaining": [
+    "nonempty G15 deployment item schema reconciliation; not an owner-only financial choice",
+    "locator/bootstrap/rotation/archive extraction/persistent rollback/installer and app integration",
+    "full independent protocol/provider and device qualification",
+    "G11 validateLive/code/deployment proof and trust-root choices",
+    "wallet/escrow/offer/trade product implementation/acceptance",
+    "broker host physical-state/drain proposal remains separately assigned"
+  ],
+  "noSourcePublicationPaidCallsNewDependenciesOrFinancialPolicy": true,
+  "files": {
+    "docs/evidence/p2p-g15-registry-20261027/0001-p2p-g15registry-focused/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0001-p2p-g15registry-focused/stdout.log": "924ceb28f132c7357afb08f5b5d8befe6fb1d62ea2239f09b0077834ec644331",
+    "docs/evidence/p2p-g15-registry-20261027/0002-p2p-g15registry-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0002-p2p-g15registry-aggregate/stdout.log": "f1da3bfa1ecc767c99baea7873b07a6f48f966df213387f88aa07be09aef5eb0",
+    "docs/evidence/p2p-g15-registry-20261027/0003-p2p-g15registry-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0003-p2p-g15registry-build/stdout.log": "5605fc96ae4551afde608ed114a69e932749816f79685e5acadface868b47d6c",
+    "docs/evidence/p2p-g15-registry-20261027/0004-p2p-g15registry-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0004-p2p-g15registry-boundaries/stdout.log": "d101d6cb7acdc2f57e60ccdbff4ad4f8f1ed5e9dd474b03cdcb45e7ac7201a09",
+    "docs/evidence/p2p-g15-registry-20261027/0005-p2p-g15registry-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0005-p2p-g15registry-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-g15-registry-20261027/0006-p2p-g15registry-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0006-p2p-g15registry-web/stdout.log": "0dbf5f66c003d40240b2f4e0ffb9965b643d5e8d963302cfebb96402493d390a",
+    "docs/evidence/p2p-g15-registry-20261027/0007-p2p-g15registry-specs/stderr.log": "5a7bcf58240e6fd6d677a8c5594dbf7603cbfc583f10e80af4ffff18cbecc308",
+    "docs/evidence/p2p-g15-registry-20261027/0007-p2p-g15registry-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-g15-registry-20261027/0008-p2p-g15registry-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0008-p2p-g15registry-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-g15-registry-20261027/0009-p2p-g15registry-policy/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0009-p2p-g15registry-policy/stdout.log": "58291776813d6e0df7bb698700a8e44a6033b5c6ef65a494e43492cdb659570b",
+    "docs/evidence/p2p-g15-registry-20261027/0010-p2p-g15registry-g15browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-g15-registry-20261027/0010-p2p-g15registry-g15browser/stdout.log": "ae1d15ffc654e7e74bef3c1a137b248aeb835857b07eacb6e41cc7d31418a233",
+    "docs/evidence/p2p-g15-registry-20261027/01-missing-bridge-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-registry-20261027/01-missing-bridge-red.log": "0c8bc694a8addba70a53301e9a757492b336326b430c3f0781241c63e3c88d26",
+    "docs/evidence/p2p-g15-registry-20261027/02-focused-green.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/02-focused-green.log": "d9c87f18210b1f46120bb6735a697688c2f0c3d1681a773debdeaa7cd0373c53",
+    "docs/evidence/p2p-g15-registry-20261027/03-types.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/03-types.log": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+    "docs/evidence/p2p-g15-registry-20261027/04-browser.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/04-browser.log": "8c1a94b87654bb5edfb4c08eee43233c60350d620a955f1881bab9bd04fed269",
+    "docs/evidence/p2p-g15-registry-20261027/05-reentrant-revocation-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-registry-20261027/05-reentrant-revocation-red.log": "a27bfb546fd4c666fa4871793337f3dafbf5cddcc6007be7eecf1d4de33fe316",
+    "docs/evidence/p2p-g15-registry-20261027/06-focused-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/06-focused-final.log": "933a491b0cdba1b0bf56baecf650d46873bd0a883f31530c896edf0a3889d7ed",
+    "docs/evidence/p2p-g15-registry-20261027/07-browser-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/07-browser-final.log": "ae1d15ffc654e7e74bef3c1a137b248aeb835857b07eacb6e41cc7d31418a233",
+    "docs/evidence/p2p-g15-registry-20261027/08-terminal-callback-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-g15-registry-20261027/08-terminal-callback-red.log": "a99f10d6fddf6227e5e8978c8ee71331bda6b0b0ea9a12c9ed9781ea4ca953fe",
+    "docs/evidence/p2p-g15-registry-20261027/09-focused-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-g15-registry-20261027/09-focused-final.log": "f6ccc56b1f48f5470acca034e4fa615e5a6bf68fb90d6d2ad1d56bfc66267978",
+    "docs/evidence/p2p-g15-registry-20261027/acceptance.json": "0943ad985278b403abea463f8ea9e3d05c2452321cf65794fee5f37e9b94a991",
+    "docs/evidence/p2p-g15-registry-20261027/runner-report.json": "0ab0551c98ec37ad699112a8278f8ab6b7897cf5987b34f8e7016b595d648456"
+  }
+}

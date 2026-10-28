@@ -1,0 +1,34 @@
+✔ missing helper reports the exact missing target export (RED guard) (1.078539ms)
+✔ generateCase is deterministic for same seed/index and descriptors are bounded safe data (29.524299ms)
+✔ generateCase family assignment is periodic with period 8 for every seed (9.541717ms)
+✔ different seeds actually vary generated descriptors/corpus, not only metadata (68.520872ms)
+✔ runCampaign executes 256 actual cases (not 4096), 32 per family, with exact accounting (83.232057ms)
+✔ single-index replay executes exactly one case matching the generated descriptor/outcome (1.338164ms)
+✔ strict parameter validation rejects bad seed/cases/index before generation (0.293064ms)
+✔ real parser: accepted cases pass (frozen independent snapshots) and refused cases carry genuine codes (37.72377ms)
+✔ real parser: accepted snapshot oracle retains exact values and compact owned signatures; wiping is harmless (7.099376ms)
+✔ deliberately permissive fake parser is rejected by invalid-case oracle (10.227483ms)
+✔ broken snapshot oracle: fake that mutates, aliases, or drops fields fails accepted cases (25.143239ms)
+✔ wrong-code and throwing-nonparser fakes fail oracle; instrumentation faults are not expected refusals (3.024674ms)
+✔ resource-family instrumentation restores TextEncoder/BigInt/Uint8Array.set and never leaks into later state (8.258294ms)
+✔ resource oracle catches a parser that encodes oversized text or feeds overlength decimals to BigInt (2.011061ms)
+✔ metrics are bounded and private: no instruction text, signature bytes, or private fixture strings (44.536201ms)
+✔ global state restored after generation and campaign (5.732819ms)
+✔ generation does not depend on Math.random or time (deterministic under patched globals) (0.196771ms)
+✔ CLI: valid run writes bounded metrics outside source; overwrite refused; replay writes single case (303.970502ms)
+✔ CLI: invalid arguments fail nonzero and write no output (1578.751656ms)
+✔ CLI: output inside source and symlinked parent resolving inside source are refused with no output (248.546234ms)
+✔ main(argv) returns nonzero for invalid arguments without running a campaign; importing runs nothing (4.794528ms)
+✔ source fixtures are unchanged by selftests: no stray files created in repository scripts/test dirs (0.254998ms)
+✔ different seeds vary actual accepted instruction fields (13.430042ms)
+✔ an incomplete accepted snapshot is a parser counterexample, not an evaluator exception (0.214688ms)
+✔ generated text respects the declared 4097 UTF16-unit construction cap (0.481915ms)
+✔ CLI refuses a dot-dot-prefixed basename within an isolated source fixture (82.219779ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2689.778423

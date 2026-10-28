@@ -1,0 +1,215 @@
+✖ MessageChannel coherent signed fixture produces the real public verifier reply (42.819534ms)
+✖ MessageChannel invalidate suppresses A at SHA1; BUSY persists until physical release (8.468618ms)
+✖ MessageChannel invalidate suppresses A at SHA2; BUSY persists until physical release (5.07718ms)
+✖ MessageChannel dispose ack retains held=true; drain awaits real SHA resolve (5.807618ms)
+✖ MessageChannel dispose ack retains held=true; drain awaits real SHA reject (7.793978ms)
+✖ direct seam: duplicate and replayed IDs across check/control frames close once with INVALID_INPUT (4.305622ms)
+✖ direct seam: future generation on either check or control fails closed before hashing (3.812293ms)
+✖ direct seam: malformed frames and opaque hostile traps are swallowed into one code-only close (0.728609ms)
+✖ direct throwing-send seam: invalidate ack failure terminally cleans up without recursive send or guaranteed ack (0.48764ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 0
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.453226
+
+✖ failing tests:
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:139:1
+✖ MessageChannel coherent signed fixture produces the real public verifier reply (42.819534ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at messageSession (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:103:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:140:73)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:152:30
+✖ MessageChannel invalidate suppresses A at SHA1; BUSY persists until physical release (8.468618ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at messageSession (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:103:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:154:40)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:152:30
+✖ MessageChannel invalidate suppresses A at SHA2; BUSY persists until physical release (5.07718ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at messageSession (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:103:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:154:40)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:176:43
+✖ MessageChannel dispose ack retains held=true; drain awaits real SHA resolve (5.807618ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at messageSession (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:103:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:177:61)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:176:43
+✖ MessageChannel dispose ack retains held=true; drain awaits real SHA reject (7.793978ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at messageSession (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:103:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:177:61)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:194:1
+✖ direct seam: duplicate and replayed IDs across check/control frames close once with INVALID_INPUT (4.305622ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at direct (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:83:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:197:39)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:216:1
+✖ direct seam: future generation on either check or control fails closed before hashing (3.812293ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:222:34)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:231:1
+✖ direct seam: malformed frames and opaque hostile traps are swallowed into one code-only close (0.728609ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at direct (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:83:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:241:39)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-port-adapter.test.mjs:251:1
+✖ direct throwing-send seam: invalidate ack failure terminally cleans up without recursive send or guaranteed ack (0.48764ms)
+  AssertionError [ERR_ASSERTION]: missing createEvmAgreementPortAdapter
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at make (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:33:10)
+      at direct (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:83:13)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-port-adapter.test.mjs:254:29)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

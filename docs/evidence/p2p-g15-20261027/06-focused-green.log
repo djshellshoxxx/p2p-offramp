@@ -1,0 +1,27 @@
+✔ G15 binds canonical manifest, explicit public trust and complete raw asset set without enabling a release (16.458812ms)
+✔ G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain (7.893271ms)
+✔ G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures (3.080216ms)
+✔ G15 rejects malformed or private JWKs without invoking accessors (1.130646ms)
+✔ G15 canonical wire rejects duplicate/escaped keys, whitespace, reordering, numeric aliases, BOM and malformed UTF-8 (4.392211ms)
+✔ G15 rejects incomplete/unsupported metadata and unresolved deployment schemas (9.307797ms)
+✔ G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence (5.68711ms)
+✔ G15 compares complete asset paths, lengths and raw hashes, including non-text files (17.0946ms)
+✔ G15 signed path inventory rejects traversal, query, case collision, unsorted paths and aggregate overflow (6.050679ms)
+✔ G15 bounds manifest/key/asset counts before allocation or accessor execution (1.86839ms)
+✔ G15 snapshots caller bytes/metadata/assets before a held asynchronous digest (10.560815ms)
+▶ G15 cancellation/current-generation and late expiry win over a held crypto result
+  ✔ abort (1.715003ms)
+  ✔ generation (1.128653ms)
+  ✔ expiry (1.281349ms)
+  ✔ backward (1.302471ms)
+✔ G15 cancellation/current-generation and late expiry win over a held crypto result (6.171138ms)
+✔ G15 returns fixed errors for thrown callbacks/native failures and cancelled input (1.331874ms)
+✔ G15 cancellation from the last current callback cannot escape as a verified result (2.687944ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 236.714637

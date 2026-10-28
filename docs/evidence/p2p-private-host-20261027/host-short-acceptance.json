@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "require_clean": false,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "h",
+          "suites": [
+            {
+              "id": "f",
+              "categories": [
+                "unit",
+                "integration"
+              ],
+              "argv": [
+                "node",
+                "--test",
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/wallet/test/evm-agreement.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_files": [
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/wallet/test/evm-agreement.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "existing fixed regression cases; no seed/fuzz claim",
+                "productionDeadlineMs": 30000,
+                "sourceInitiallyDirty": "authorized3file integration frozen by content fingerprint;clean source commit follows accepted checks"
+              }
+            },
+            {
+              "id": "a",
+              "categories": [
+                "integration"
+              ],
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "caseThresholdsUnchanged": true,
+                "hostDeadlineMs": 30000,
+                "sourceFreeze": "authorized3file dirty integration pinned by before-after content fingerprint; no edits until terminal"
+              }
+            },
+            {
+              "id": "t",
+              "categories": [
+                "integration"
+              ],
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "caseThresholdsUnchanged": true,
+                "hostDeadlineMs": 30000,
+                "sourceFreeze": "authorized3file dirty integration pinned by before-after content fingerprint; no edits until terminal"
+              }
+            },
+            {
+              "id": "i",
+              "categories": [
+                "integration"
+              ],
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "caseThresholdsUnchanged": true,
+                "hostDeadlineMs": 30000,
+                "sourceFreeze": "authorized3file dirty integration pinned by before-after content fingerprint; no edits until terminal"
+              }
+            },
+            {
+              "id": "p",
+              "categories": [
+                "integration"
+              ],
+              "argv": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "caseThresholdsUnchanged": true,
+                "hostDeadlineMs": 30000,
+                "sourceFreeze": "authorized3file dirty integration pinned by before-after content fingerprint; no edits until terminal"
+              }
+            },
+            {
+              "id": "b",
+              "categories": [
+                "browser"
+              ],
+              "argv": [
+                "node",
+                "scripts/test-g16-browser.mjs"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "caseThresholdsUnchanged": true,
+                "hostDeadlineMs": 30000,
+                "sourceFreeze": "authorized3file dirty integration pinned by before-after content fingerprint; no edits until terminal"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/schemas/test/evm-agreement-input.test.mjs",
+    "packages/domain/test/trade-terms.test.mjs",
+    "packages/wallet/test/evm-terms.test.mjs",
+    "packages/wallet/test/evm-agreement.test.mjs"
+  ],
+  "base": "4e3f3ccde34ada7908026a66c6647c689c130574",
+  "startedAtUtc": "2026-10-27T01:25:20.291447+00:00",
+  "sourceFiles": {
+    "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+    "packages/schemas/test/evm-agreement-input.test.mjs": "f89371ddaf4f9a0beeca8b0acee3a32edd634aef0e7c2288ebcf69aa74f36af2",
+    "scripts/fixtures/g16-browser.mjs": "1fb7b6f8d138fc88117c0fedb92126fcf7b644e9341c90b459461f2d494a5601",
+    "packages/domain/src/read-retry.ts": "b19c0acb856e990d5fd48a9022aac458bde3427e108528ed532558156bd8babf",
+    "packages/domain/test/read-retry.test.mjs": "ffd25ccdbbfe95dacd247fd6177cf890b006f7b9c86839495e8aa874f62003c4",
+    "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+    "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+    "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+    "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+    "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+    "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+    "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+  },
+  "processLocalEnvironment": {
+    "P2P_CHROMIUM": "/usr/bin/chromium"
+  },
+  "finishedAtUtc": "2026-10-27T01:25:20.760494+00:00",
+  "exitCode": 0,
+  "sourceFilesUnchangedDuringRun": true
+}

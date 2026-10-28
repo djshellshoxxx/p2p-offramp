@@ -1,0 +1,30 @@
+{
+  "localPath": "/workspace/checkpoints/2026-10-26-attribution-followup/delivery/GhostPay-P2P-reuse-inventories-20261026.zip",
+  "sha256": "612e625aeed42e8ad6ed8fd69e97e088faf6c138fc987155120720bdcb916872",
+  "bytes": 143837,
+  "files": 37,
+  "sources": {
+    "GhostPay": {
+      "head": "5a525990cd25246addce1a6700089aee9f80a177",
+      "tree": "1bb0dc5e4ae149586bd421a8669dbf17d5af699c",
+      "branch": "work/ghostpay-payment-sweep-guards-2026-10-26",
+      "sourceNotPushed": true
+    },
+    "P2P": {
+      "head": "2caf80b80b09b744fb4d5d45b0cca4bd1612b43e",
+      "tree": "54faa5ec761ff47c5af852c540f93c6e9d71ad72",
+      "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+      "sourceNotPushed": true
+    }
+  },
+  "verifiedZipAndPayloads": true,
+  "libraryFileId": "libfile_724075754830819189367812705445ee",
+  "expectedCurrentVersion": 1,
+  "uploadStatus": "succeeded",
+  "version": 2,
+  "fileId": "file_0000000030c481f78d15be08007435ca",
+  "localHashVerifiedAfterUpload": true,
+  "localIdentityAndVersionPersisted": true,
+  "consumerRetrievalTested": false,
+  "recordedUTC": "2026-10-26T20:17:39.602097+00:00"
+}

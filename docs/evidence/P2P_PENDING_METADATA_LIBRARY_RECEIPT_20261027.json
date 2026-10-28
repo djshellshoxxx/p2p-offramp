@@ -1,0 +1,29 @@
+{
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_id": "file_000000000a9c81f999a774b29d116ab4",
+  "version": 13,
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 1062256,
+  "sha256": "984164edbd527a9d94dc4e5bdb00b87331b3a37f371e6f3612cd9dee64c8a63a",
+  "sourceAndTestsCheckpoint": "265851ff963d326cb36ee26d8297aaa932b4caf5",
+  "sourceTree": "c579816c4fd30e38ec5418f780cd1a7c1b3aded2",
+  "preImplementationBase": "e43f371e2779640c9fd1751f15112b894a550ede",
+  "packetBase": "6519f05f71e31579d1c5caad206089d85c2824f8",
+  "proposalLibrary": "libfile_c61db81d507c8191b841b67fe527d242",
+  "proposalVersion": 0,
+  "proposalSha256": "ff8a6f3834fe135288e9fcf45fd52cb2daca06f4539ac9b58468a2f9e7c3c94c",
+  "sameIdentityGuard": {
+    "expectedPriorVersion": 12,
+    "confirmedNewVersion": 13
+  },
+  "allPriorVersion12BytesIntact": true,
+  "threeCodeFileForwardAndReverseRoundTripVerified": true,
+  "localBytesAndAllXattrsVerified": true,
+  "producerStatus": "succeeded",
+  "consumerRetrievalVerified": false,
+  "wholeRepositoryRestore": false,
+  "publishedToGitHub": false,
+  "g16AppInclusion": false,
+  "releaseEnabled": 0,
+  "next": "source-pinned bounded G16 typed request/result and Worker lifetime preparation; sole external runner artifact awaited; no duplicate implementation/review"
+}

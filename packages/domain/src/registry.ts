@@ -4,8 +4,11 @@
  * trusts the registry bytes on their own. Live RPC/deployment validation (validateLive) is not implemented:
  * network access stays disabled (connectOrigins: []).
  */
-import { parseRegistryBytes, ValidationError, type CoreResult, type DeploymentV1, type NetworkV1, type RegistryV1 } from '../../schemas/index.ts';
+import { parseRegistryBytes, ValidationError, MAX_REGISTRY_BYTES, type CoreResult, type DeploymentV1, type NetworkV1, type RegistryV1 } from '../../schemas/index.ts';
 import { createCoreError, createOperationId } from './errors.ts';
+
+const viewByteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype), 'byteLength')!.get!;
+const copyBytes = Uint8Array.prototype.set;
 
 type Digest = (bytes: Uint8Array<ArrayBuffer>) => Promise<ArrayBuffer>;
 const failure = (code: Parameters<typeof createCoreError>[0]): CoreResult<never> =>
@@ -23,9 +26,16 @@ export class RegistryService {
    * Deviation: G11 sketches a synchronous load; native Web Crypto SHA-256 is asynchronous.
    */
   async load(bytes: Uint8Array, expectedSha256: string): Promise<CoreResult<RegistryV1>> {
-    if (typeof expectedSha256 !== 'string' || !/^[0-9a-f]{64}$/.test(expectedSha256) || !(bytes instanceof Uint8Array)) return failure('INVALID_INPUT');
-    if (bytes.byteLength > 1024 * 1024) return failure('LIMIT_EXCEEDED');
-    const copy = new Uint8Array(bytes.byteLength); copy.set(bytes);
+    if (typeof expectedSha256 !== 'string' || !/^[0-9a-f]{64}$/.test(expectedSha256)) return failure('INVALID_INPUT');
+    let length: number;
+    try {
+      if (!(bytes instanceof Uint8Array)) return failure('INVALID_INPUT');
+      length = viewByteLength.call(bytes) as number;
+    } catch { return failure('INVALID_INPUT'); }
+    if (length > MAX_REGISTRY_BYTES) return failure('LIMIT_EXCEEDED');
+    let copy: Uint8Array<ArrayBuffer>;
+    try { copy = new Uint8Array(length); copyBytes.call(copy, bytes); }
+    catch { return failure('INVALID_INPUT'); }
     let actual: string;
     try { actual = Array.from(new Uint8Array(await this.#sha256(copy)), byte => byte.toString(16).padStart(2, '0')).join(''); }
     catch { return failure('UNAVAILABLE'); }

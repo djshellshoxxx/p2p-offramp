@@ -1,0 +1,16 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "build"
+  ],
+  "sourceBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+  "startedAtUtc": "2026-10-26T21:16:06.671486+00:00",
+  "finishedAtUtc": "2026-10-26T21:16:08.879760+00:00",
+  "exitCode": 0,
+  "runtimeChanged": false,
+  "sourceFiles": {
+    "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+    "packages/domain/test/trade-composition.test.mjs": "93336a62213bf6d0b71ee2c25a0ab7a1899c66d14ec47ec39fbd94ce01daff05"
+  }
+}

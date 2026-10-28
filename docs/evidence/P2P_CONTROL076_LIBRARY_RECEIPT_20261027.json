@@ -1,0 +1,40 @@
+{
+  "operation": "replace_library_file",
+  "status": "succeeded",
+  "path": "/workspace/checkpoints/2026-10-27-p2p-control076-intake/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_id": "file_000000003a0481f9ba2daa0f6572bf53",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "current_version_number": 23,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "23"
+    }
+  ],
+  "directory_id": "libdir_30280fe7938081918252daf66e50daba",
+  "mime_type": "application/zip",
+  "library_artifact_type": "report",
+  "file_size_bytes": 22209236,
+  "external_connectors_accessed": false,
+  "verifiedSha256": "a1e05923988bab4bac9e28ff8afed1100f4b8d7a68868015af78f03f2d1d2395",
+  "localXattrs": {
+    "user.library-file-version": "23",
+    "user.library-file-id": "libfile_b5734354657c81919d25ed4930348dc9"
+  },
+  "bytes": 22209236,
+  "sha256": "a1e05923988bab4bac9e28ff8afed1100f4b8d7a68868015af78f03f2d1d2395",
+  "sourceSha": "f94cda226c5338ad82e9318b9a2ad05203195fa0",
+  "documentationHead": "23bf2d10bee2700c8354d1ff55eb7491a6378f4b",
+  "sourceArchiveSha256": "7df1aed09c8510dcdf88153bd018c053e3ea4ab356acb253a53356000e3f5d18",
+  "patchSha256": "8e97463b96c2dff5a076c19aaa862769934bc00f54311c6c7431d3e029805ce4",
+  "trackedFiles": 1177,
+  "fullTrackedSourceRestoreVerified": true,
+  "completeGitHistoryRestoreVerified": false,
+  "expectedCurrentVersion": 22,
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "guardedPreviousVersion": 22,
+  "wholePreviousVersionRetained": true,
+  "consumerBinaryRetrievalVerified": false
+}

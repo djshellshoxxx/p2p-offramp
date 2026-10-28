@@ -58,11 +58,18 @@ test('native inventory requires matching bounded browser-profile observations ra
  f.files.push({path:'security/browser-support.json',bytes:bytes(JSON.stringify(profile))});assert.deepEqual(codes(await run(f)),['MISSING_REVIEW']);
  profile.observed=[];f.files.at(-1).bytes=bytes(JSON.stringify(profile));assert.ok(codes(await run(f)).includes('UNSUPPORTED_RUNTIME'));
 });
-test('current repository inventory remains test-enabled pending with exact direct and transitive pins',async()=>{
+test('current inventory has scoped G16 review evidence while other test-only providers remain pending',async()=>{
  const inventory=JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json',import.meta.url))),lock=JSON.parse(readFileSync(new URL('../../../package-lock.json',import.meta.url)));
+ const independentPath='packages/wallet/test/fixtures/g16-evm-independent.json';
+ const termsEntries=inventory.filter(item=>item.capability==='trade-terms-evm-test-only');assert.equal(termsEntries.length,2);
+ for(const item of termsEntries){assert.ok(item.vectors.some(vector=>vector.path===independentPath),'independent G16 fixture must enter both provider hash gates');assert.equal(item.review.status,'accepted');assert.match(item.review.reviewer,/fresh-context/);assert.equal(item.review.evidencePath,'docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md');}
  const enabled=[{capability:'local-encrypted-vault',state:'test-enabled',implementations:[{inventoryId:'native-pbkdf2'},{inventoryId:'native-aes-gcm'}]},{capability:'local-messaging-identity-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0',packageName:'@noble/hashes'}]},{capability:'trade-terms-evm-test-only',state:'test-enabled',implementations:[{inventoryId:'noble-curves-2.4.0-secp256k1-recover',packageName:'@noble/curves'},{inventoryId:'noble-hashes-2.4.0-keccak',packageName:'@noble/hashes'}]}];
- const paths=new Set(['security/browser-support.json',...inventory.flatMap(item=>item.vectors.map(vector=>vector.path))]),files=[...paths].map(path=>({path,bytes:new Uint8Array(readFileSync(new URL('../../../'+path,import.meta.url)))}));
- const report=await run({inventory,lock,enabled,files});assert.deepEqual(codes(report),Array(6).fill('MISSING_REVIEW'));assert.equal(report.releaseEligible,false);
+ const paths=new Set(['security/browser-support.json',...inventory.flatMap(item=>item.vectors.map(vector=>vector.path)),...inventory.map(item=>item.review.evidencePath).filter(Boolean)]),files=[...paths].map(path=>({path,bytes:new Uint8Array(readFileSync(new URL('../../../'+path,import.meta.url)))}));
+ const report=await run({inventory,lock,enabled,files});assert.deepEqual(codes(report),Array(4).fill('MISSING_REVIEW'));assert.equal(report.releaseEligible,false);
+ const withoutReview=files.filter(file=>!termsEntries.some(item=>item.review.evidencePath===file.path));
+ assert.equal(codes(await run({inventory,lock,enabled,files:withoutReview})).filter(code=>code==='MISSING_REVIEW').length,6,'review acceptance requires its actual retained evidence file');
+ const independent=files.find(file=>file.path===independentPath);independent.bytes[0]^=1;
+ const tampered=await run({inventory,lock,enabled,files});assert.equal(codes(tampered).filter(code=>code==='FIXTURE_HASH_MISMATCH').length,2,'actual fixture tamper fails both provider gates');assert.equal(tampered.releaseEligible,false);
 });
 test('input objects and fixture bytes are snapshotted before asynchronous hashes',async()=>{
  const f=fixture(),pending=run(f);f.files[0].bytes.fill(0);f.inventory[0].vectors[0].sha256='f'.repeat(64);f.inventory[0].review={status:'accepted',reviewer:'Late Reviewer',evidencePath:'reviews/curve.md'};f.enabled[0].state='release-enabled';

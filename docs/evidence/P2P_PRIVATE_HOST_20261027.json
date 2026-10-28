@@ -1,0 +1,1862 @@
+{
+  "assignment": "P2P-G16-PRIVATE-HOST-07",
+  "packetBase": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+  "preImplementationHead": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+  "proposalLibrary": "libfile_f05a746c8ec48191be3fbd741d4b60c3",
+  "proposalVersion": 0,
+  "proposalBytes": 61922,
+  "proposalSha256": "a57d38cb08753c3473ed113a34932d7fcf7d215d2e4f98fd91e1b81f15141f04",
+  "completeNativeBytesVerified": true,
+  "brokerMetadata": {
+    "assignment": "P2P-G16-PRIVATE-HOST-07",
+    "release_stage": "Complete source/tests/browserfixture proposal, UNEXECUTED",
+    "base_sha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+    "base_tree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+    "input_library": "libfile_7bce3324aea48191a60e89287fd4b2ecv0",
+    "input_bytes": 44452,
+    "input_sha256": "e9784f4a79bdb561cb5db1e5383f825ef03f83b5f772e4af18da5ecba63c56eb",
+    "files": [
+      {
+        "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+        "baseState": "absent",
+        "target_bytes": 22923,
+        "target_lines": 327,
+        "target_sha256": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded"
+      },
+      {
+        "path": "packages/wallet/src/evm-agreement-host.ts",
+        "baseState": "absent",
+        "target_bytes": 13211,
+        "target_lines": 261,
+        "target_sha256": "06d9f7b803cd9ede59e3d386cde01a08ccdf6080fb90f5b1ae8b7527872215f3"
+      },
+      {
+        "path": "scripts/fixtures/g16-browser.mjs",
+        "baseState": "existing",
+        "base_bytes": 22979,
+        "base_sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+        "target_bytes": 28333,
+        "target_lines": 378,
+        "target_sha256": "4cbbb6283bf7c238b9e6133564f84a24813e808927efb5f4033d40b123270426"
+      }
+    ],
+    "review": "Fable066returned end_turn/staticPASS exact064host after061blockingfindings; noNode/browserexecutionclaim",
+    "review_sha256": "c804feae532e266c15618eef2f7c6b22260dcd579b8e87d9796b520facc490a2",
+    "requests": [
+      {
+        "tag": "p2p-private-host-053",
+        "model": "claude-fable-5-1",
+        "state": "completed",
+        "request_id": "req_011CgS4KgGCSE2Jquprwsnxn",
+        "usage": {
+          "input_tokens": 53409,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 48000,
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard",
+          "output_tokens_details": {
+            "thinking_tokens": 48000
+          }
+        },
+        "stop_reason": "max_tokens",
+        "estimated_cost_usd": "2.93409",
+        "worst_case_reserved_usd": "5.00116"
+      },
+      {
+        "tag": "p2p-host-invariant-review-059",
+        "model": "claude-fable-5-1",
+        "state": "completed",
+        "request_id": "req_011CgS5VzxUzeHVvEqJwdJ1D",
+        "usage": {
+          "input_tokens": 11354,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 6100,
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard",
+          "output_tokens_details": {
+            "thinking_tokens": 2909
+          }
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.41854",
+        "worst_case_reserved_usd": "1.47208"
+      },
+      {
+        "tag": "p2p-host-implementation-060",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS5hJhtFBN3EZCr6QdRe",
+        "usage": {
+          "input_tokens": 53453,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 5640,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.163306",
+        "worst_case_reserved_usd": "2.16"
+      },
+      {
+        "tag": "p2p-host-concrete-review-061",
+        "model": "claude-fable-5-1",
+        "state": "completed",
+        "request_id": "req_011CgS639urMVCxxFgdw4b1P",
+        "usage": {
+          "input_tokens": 19269,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 7368,
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard",
+          "output_tokens_details": {
+            "thinking_tokens": 4508
+          }
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.56109",
+        "worst_case_reserved_usd": "1.66872"
+      },
+      {
+        "tag": "p2p-host-selftests-062",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS639w6RmLXbjxUut4Y4",
+        "usage": {
+          "input_tokens": 58292,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 7930,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.195884",
+        "worst_case_reserved_usd": "2.18"
+      },
+      {
+        "tag": "p2p-host-browser-fixture-063",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS67qD7Ji1tJTqwzpBq9",
+        "usage": {
+          "input_tokens": 58360,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 2025,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.13697",
+        "worst_case_reserved_usd": "2.1"
+      },
+      {
+        "tag": "p2p-host-corrected-source-064",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS6T2LcVSHDK89QwQDac",
+        "usage": {
+          "input_tokens": 19466,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 5763,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.096562",
+        "worst_case_reserved_usd": "2.16"
+      },
+      {
+        "tag": "p2p-host-tests-correction-065",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS6T2KNGnCc751GbqEpE",
+        "usage": {
+          "input_tokens": 67280,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 10344,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.238",
+        "worst_case_reserved_usd": "2.18"
+      },
+      {
+        "tag": "p2p-host-final-review-066",
+        "model": "claude-fable-5-1",
+        "state": "completed",
+        "request_id": "req_011CgS6n4Xr5dB7TzFiAqewr",
+        "usage": {
+          "input_tokens": 19567,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4629,
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard",
+          "output_tokens_details": {
+            "thinking_tokens": 2763
+          }
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.42712",
+        "worst_case_reserved_usd": "1.59446"
+      },
+      {
+        "tag": "p2p-host-browser-focused-067",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS6n4WrTAr4P9fAuqTtG",
+        "usage": {
+          "input_tokens": 16939,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 2601,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.059888",
+        "worst_case_reserved_usd": "2.1"
+      },
+      {
+        "tag": "p2p-host-browser-oracle-correction-068",
+        "model": "claude-sonnet-5-5",
+        "state": "completed",
+        "request_id": "req_011CgS71XxyXQsFiDTrJMtZB",
+        "usage": {
+          "input_tokens": 19483,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 3262,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "stop_reason": "end_turn",
+        "estimated_cost_usd": "0.071586",
+        "worst_case_reserved_usd": "2.1"
+      }
+    ],
+    "host_assignment_completed_estimated_usd": "5.303036",
+    "whole_implementation053": "Knowncompletedmax_tokens48000allthinking/no visiblecode,2.93409USD; no accessdenial/transportuncertainty",
+    "no_P2P_code_applied_imported_or_tested_by_broker": true,
+    "source_corrections": "Sonnet064source and065testreplacement supersede060/062; no brokeralgorithm adaptations",
+    "open_oracle_limits": [
+      "Bodyparserpreimportcopyspy is conditional: emptycapture doesnotprovehostcopyzeroization; integratormustqualifypositiveobservationorretainexplicitgap",
+      "Trustedclockfault/nonterminal behavior andpromptlogicalcancel engineeringdispositions documented, notnewfinancialauthority",
+      "Isolatedbrowserfixture proposal nowcomplete, but notexecuted. Actualmessage/DOM/Worker/appbridge andallfinancial/trust/inclusiongates remainclosed."
+    ],
+    "broker_adjustments": [
+      "Onlynormalizedbrowser068hunklocations/countsagainstuniqueexactbasecontext;source064andtests065codebytesunchanged",
+      "Rejected063nopatch and067manualcleanup-before-assert/racyphysicalslot assumptions;068hasprecleanupassertions andexplicitnativebackendcompletion+oneeventloopdrain, no polling/retries"
+    ]
+  },
+  "brokerReportedEstimatedTotalUsd": "5.303036",
+  "integratorPaidCalls": 0,
+  "staticReviewLimit": "Fable066PASS applies exact proposal064 host06d9f7... only; not runtime proof or independent review of integrator3clock fixes/staging move",
+  "returnedProposalTargets": [
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "baseState": "absent",
+      "target_bytes": 22923,
+      "target_lines": 327,
+      "target_sha256": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded"
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement-host.ts",
+      "baseState": "absent",
+      "target_bytes": 13211,
+      "target_lines": 261,
+      "target_sha256": "06d9f7b803cd9ede59e3d386cde01a08ccdf6080fb90f5b1ae8b7527872215f3"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "baseState": "existing",
+      "base_bytes": 22979,
+      "base_sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+      "target_bytes": 28333,
+      "target_lines": 378,
+      "target_sha256": "4cbbb6283bf7c238b9e6133564f84a24813e808927efb5f4033d40b123270426"
+    }
+  ],
+  "integratedPaths": [
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "bytes": 12993,
+      "sha256": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "bytes": 25652,
+      "sha256": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "bytes": 28338,
+      "sha256": "eba44bad3cbfab549db4ad6f4a218fb619b15bf13c1b27a1f88ddf668e7af937"
+    }
+  ],
+  "originalProductionHostPathAbsent": "packages/wallet/src/evm-agreement-host.ts",
+  "placementDecision": "Qualification-only host belongs in wallet/test/lib. Reversible relocation of new unexported module with test/browser import changes, no expanded facades or weakened source checker; separate strict tsc project extends unchanged repo config. Actual production integration remains unimplemented/gated.",
+  "historicalTerminalRecords": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs"
+      ],
+      "base": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "startedAtUtc": "2026-10-27T04:30:46.295260+00:00",
+      "sourceFiles": {
+        "scripts/fuzz-evm-agreement-input.mjs": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930",
+        "scripts/tests/evm-agreement-fuzz.test.mjs": "b4d6ab5d13a488d3782984122b7bd89af5e7c66d35f7b36e6418849338933311",
+        "packages/wallet/src/evm-agreement-host.ts": null,
+        "packages/wallet/test/evm-agreement-host.test.mjs": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded",
+        "packages/schemas/src/evm-agreement-protocol.ts": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs": "0b80569625c8f4149856d6ade7233f22a56b174ce6b3b3ac8ab4bce7372005d8",
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium",
+        "npm_config_offline": "true",
+        "npm_config_update_notifier": "false"
+      },
+      "finishedAtUtc": "2026-10-27T04:30:46.581294+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "log": "docs/evidence/p2p-private-host-20261027/01-missing-host-red.log.gz",
+      "logRawBytes": 18634,
+      "logRawSha256": "8a5f4c91df45e5eb15db359dbd4d113a7f2a66a40930f2f13f9ad620d3cc328c"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs"
+      ],
+      "base": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "startedAtUtc": "2026-10-27T04:31:01.610145+00:00",
+      "sourceFiles": {
+        "scripts/fuzz-evm-agreement-input.mjs": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930",
+        "scripts/tests/evm-agreement-fuzz.test.mjs": "b4d6ab5d13a488d3782984122b7bd89af5e7c66d35f7b36e6418849338933311",
+        "packages/wallet/src/evm-agreement-host.ts": "06d9f7b803cd9ede59e3d386cde01a08ccdf6080fb90f5b1ae8b7527872215f3",
+        "packages/wallet/test/evm-agreement-host.test.mjs": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded",
+        "packages/schemas/src/evm-agreement-protocol.ts": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs": "0b80569625c8f4149856d6ade7233f22a56b174ce6b3b3ac8ab4bce7372005d8",
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium",
+        "npm_config_offline": "true",
+        "npm_config_update_notifier": "false"
+      },
+      "finishedAtUtc": "2026-10-27T04:31:32.062733+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "log": "docs/evidence/p2p-private-host-20261027/02-proposal-host-tests.log.gz",
+      "logRawBytes": 3823,
+      "logRawSha256": "1915db9d4995c6d4f51ee74527977aa8f2392d46b03952621095d731630c96ec"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs"
+      ],
+      "base": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "startedAtUtc": "2026-10-27T04:33:21.331023+00:00",
+      "sourceFiles": {
+        "scripts/fuzz-evm-agreement-input.mjs": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930",
+        "scripts/tests/evm-agreement-fuzz.test.mjs": "b4d6ab5d13a488d3782984122b7bd89af5e7c66d35f7b36e6418849338933311",
+        "packages/wallet/src/evm-agreement-host.ts": "06d9f7b803cd9ede59e3d386cde01a08ccdf6080fb90f5b1ae8b7527872215f3",
+        "packages/wallet/test/evm-agreement-host.test.mjs": "6ec2ed2a853b60f0695bba01e5dad9d3241419cee894ae20d33017a1d244659b",
+        "packages/schemas/src/evm-agreement-protocol.ts": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs": "0b80569625c8f4149856d6ade7233f22a56b174ce6b3b3ac8ab4bce7372005d8",
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium",
+        "npm_config_offline": "true",
+        "npm_config_update_notifier": "false"
+      },
+      "finishedAtUtc": "2026-10-27T04:33:21.954344+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "log": "docs/evidence/p2p-private-host-20261027/03-clock-reentry-regressions-red.log.gz",
+      "logRawBytes": 5458,
+      "logRawSha256": "dcf6e0d84567578eccf9e4d2491ef2f3fcfac800faa244c86aa3b3bc1b2154c5"
+    }
+  ],
+  "incompleteRun": {
+    "recordedAtUtc": "2026-10-27T04:39:53.363140+00:00",
+    "sessionId": 5792,
+    "state": "incomplete;no terminal exit captured",
+    "explicitObservedFailures": [
+      "BUSY/A-next schedule",
+      "invalidate/BUSY/C schedule"
+    ],
+    "lastProgress": "clock-fault fake-timer case did not complete; fixed-tick pump lacks a real backend-completion barrier",
+    "sourceHashesBeforeHarnessFix": {
+      "packages/wallet/src/evm-agreement-host.ts": "519cf4cc763506fbae32d121da99244e9e45f82d16b6c5a190df6e80bcdb9d85",
+      "packages/wallet/test/evm-agreement-host.test.mjs": "be5ca5454fc472b458e7f18f64ddd6a3feb5e25851b7ae5efd003b6e841d8cbb",
+      "scripts/fixtures/g16-browser.mjs": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8"
+    },
+    "partialLogSha256": "e2ae0dd1aedd1f16c1c0bf39799d58cee8b22c5d5471d8fc63e36011c292ec49",
+    "stopAttempts": [
+      {
+        "operation": "SIGTERM exact owned child via proc",
+        "result": "not executed; no matching Node process visible in subsequent command session"
+      },
+      {
+        "operation": "write_stdin Ctrl-C session5792",
+        "result": "session still reported running; stop unverified"
+      }
+    ],
+    "noDenialOrPermissionsChange": true,
+    "next": "retain incomplete run without success claim; correct test-only barriers and use existing bounded shared runner for new source"
+  },
+  "incompleteRunStatus": "Command session5792 terminated with toolExit130; originaltestinterrupted/incomplete,no finaltestsummary/driverexit captured; originaldescendantcleanupunverified. No completed or passing test claim. Later bounded corrected runs have verified cleanup.",
+  "boundedRuns": [
+    {
+      "label": "05focused",
+      "exit": 0,
+      "counts": {
+        "pass": 1,
+        "fail": 0,
+        "timeout": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "missing_prerequisite": 0,
+        "source_changed": 0,
+        "unexecuted": 0
+      },
+      "jobs": [
+        {
+          "id": "p2p/private-host/focused",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "--test",
+            "packages/wallet/test/evm-agreement-host.test.mjs",
+            "packages/wallet/test/evm-agreement.test.mjs",
+            "packages/schemas/test/evm-agreement-protocol.test.mjs",
+            "packages/schemas/test/evm-agreement-input.test.mjs"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.82,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23060,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/05focused-focused-stdout.log.gz",
+            "rawSha256": "74a6a9bf9138f85de2f406449e2fd508c8fdc49394cef47aa9eb66d6e9ba6379",
+            "rawBytes": 6117
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/05focused-focused-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        }
+      ]
+    },
+    {
+      "label": "06initial",
+      "exit": 1,
+      "counts": {
+        "pass": 3,
+        "fail": 2,
+        "timeout": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "missing_prerequisite": 0,
+        "source_changed": 0,
+        "unexecuted": 0
+      },
+      "jobs": [
+        {
+          "id": "p2p/host-acceptance/aggregate",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "test"
+          ],
+          "returncode": 0,
+          "duration_seconds": 15.271,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23159,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-aggregate-stdout.log.gz",
+            "rawSha256": "5932573bc94cc5cdc0b2f9c487c8696971c44a4695c61132abd4c7af71135654",
+            "rawBytes": 48071
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-aggregate-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/host-acceptance/build",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "build"
+          ],
+          "returncode": 0,
+          "duration_seconds": 2.084,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23543,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-build-stdout.log.gz",
+            "rawSha256": "daeade6c95cbc6d56b0e6823b6324899c12798177f18c8caa16d3a1d7c2f5524",
+            "rawBytes": 1094
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-build-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/host-acceptance/boundaries",
+          "status": "fail",
+          "reason": "exit code 1",
+          "argv": [
+            "npm",
+            "run",
+            "check:boundaries"
+          ],
+          "returncode": 1,
+          "duration_seconds": 0.41,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23674,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-boundaries-stdout.log.gz",
+            "rawSha256": "358f566f37c1777030ca5c976fda2595e944c182e31936b9900d537830a938e2",
+            "rawBytes": 401
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-boundaries-stderr.log.gz",
+            "rawSha256": "20e7951a23ab385bc3ec80920d351d48125bb83d0acfba6faf5bc3a1f122bc5d",
+            "rawBytes": 115
+          }
+        },
+        {
+          "id": "p2p/host-acceptance/policy",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "test:build-policy"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.441,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23720,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-policy-stdout.log.gz",
+            "rawSha256": "283428dd3fd61ba34569d591957ce16892078374540a246bb12b62c61a24f35d",
+            "rawBytes": 777
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-policy-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/host-acceptance/private-browser",
+          "status": "fail",
+          "reason": "exit code 1",
+          "argv": [
+            "node",
+            "scripts/test-g16-browser.mjs"
+          ],
+          "returncode": 1,
+          "duration_seconds": 0.745,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "4a74a8c465f89766a214b18181a23c057785aadec6b9aadd5ad3cafedc408ec3",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23789,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-private-browser-stdout.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/06initial-private-browser-stderr.log.gz",
+            "rawSha256": "476c1e1ff9112c14be583624362ce384a9e27a6d4d61a369301211b89e6c8896",
+            "rawBytes": 8800
+          }
+        }
+      ]
+    },
+    {
+      "label": "07short",
+      "exit": 1,
+      "counts": {
+        "pass": 5,
+        "fail": 1,
+        "timeout": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "missing_prerequisite": 0,
+        "source_changed": 0,
+        "unexecuted": 0
+      },
+      "jobs": [
+        {
+          "id": "p2p/h/f",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "--test",
+            "packages/wallet/test/evm-agreement-host.test.mjs",
+            "packages/wallet/test/evm-agreement.test.mjs",
+            "packages/schemas/test/evm-agreement-protocol.test.mjs",
+            "packages/schemas/test/evm-agreement-input.test.mjs"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.762,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 23965,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-f-stdout.log.gz",
+            "rawSha256": "d2f5754d42e8a663336991bad1a47be8883b82d6456f5b42a74761df54b5a3a0",
+            "rawBytes": 6114
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-f-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/a",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "test"
+          ],
+          "returncode": 0,
+          "duration_seconds": 15.315,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 24020,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-a-stdout.log.gz",
+            "rawSha256": "67a12b0b3fdf5c14531eb72e57509fa6b0a4ff2c92628ed3465f38addc387269",
+            "rawBytes": 48049
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-a-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/t",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "build"
+          ],
+          "returncode": 0,
+          "duration_seconds": 2.385,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 24405,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-t-stdout.log.gz",
+            "rawSha256": "c60b727fb25f4838c48fd6bdf5fb5d04170f67e63b30ee91109d0f14aec9415f",
+            "rawBytes": 1094
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-t-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/i",
+          "status": "fail",
+          "reason": "exit code 1",
+          "argv": [
+            "npm",
+            "run",
+            "check:boundaries"
+          ],
+          "returncode": 1,
+          "duration_seconds": 0.428,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 24539,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-i-stdout.log.gz",
+            "rawSha256": "b62f17c048badcfd59c330485144fe65ce6ad4364742e69989a5713559d5c3ee",
+            "rawBytes": 200
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-i-stderr.log.gz",
+            "rawSha256": "780dc46f0e29f5231ada75210ebebe7f777e793bf5aaf280996f622c001c4159",
+            "rawBytes": 115
+          }
+        },
+        {
+          "id": "p2p/h/p",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "test:build-policy"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.439,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 24585,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-p-stdout.log.gz",
+            "rawSha256": "9a241396c1663286c4884e4b052046262851926f0905cb7dd84cbd88fd078099",
+            "rawBytes": 777
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-p-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/b",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "scripts/test-g16-browser.mjs"
+          ],
+          "returncode": 0,
+          "duration_seconds": 1.514,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/src/evm-agreement-host.ts",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs"
+            ],
+            "fingerprint": "6a195de4d871c6b5db852cb87bee79b95a689cc3ba1b1edfe8c5afdf01b96727",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 24655,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-b-stdout.log.gz",
+            "rawSha256": "bc26d26940ebfff9bfc72f2b6ac929d746a97296010e0857fee2f76de16c17da",
+            "rawBytes": 3968
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/07short-b-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        }
+      ]
+    },
+    {
+      "label": "08qualification",
+      "exit": 0,
+      "counts": {
+        "pass": 7,
+        "fail": 0,
+        "timeout": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "missing_prerequisite": 0,
+        "source_changed": 0,
+        "unexecuted": 0
+      },
+      "jobs": [
+        {
+          "id": "p2p/h/f",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "--test",
+            "packages/wallet/test/evm-agreement-host.test.mjs",
+            "packages/wallet/test/evm-agreement.test.mjs",
+            "packages/schemas/test/evm-agreement-protocol.test.mjs",
+            "packages/schemas/test/evm-agreement-input.test.mjs"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.711,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25007,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-f-stdout.log.gz",
+            "rawSha256": "eafff554ea071e34fc10d435733480100f0c3bbe12212cda2495864fdfb78ef0",
+            "rawBytes": 6121
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-f-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/a",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "test"
+          ],
+          "returncode": 0,
+          "duration_seconds": 15.121,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25062,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-a-stdout.log.gz",
+            "rawSha256": "d2bbf08f48432bf7417fa66f4ed465ebb0fdeecaf18d312aeed914ad507ab3bd",
+            "rawBytes": 48050
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-a-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/t",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "build"
+          ],
+          "returncode": 0,
+          "duration_seconds": 2.041,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25446,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-t-stdout.log.gz",
+            "rawSha256": "0a6d02721ae1f8cc116aa349e746230960ae418c908966dad1840c8bed60acbe",
+            "rawBytes": 1094
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-t-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/qt",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "node_modules/typescript/bin/tsc",
+            "--project",
+            "/workspace/checkpoints/2026-10-27-p2p-host07-intake/qualification-tsconfig.json",
+            "--noEmit"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.358,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25574,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-qt-stdout.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-qt-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/i",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "check:boundaries"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.389,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25603,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-i-stdout.log.gz",
+            "rawSha256": "f24a7ecf35fb3df0015722143b8fd9f692156a81c03ca3c6a5e2ef2581688db9",
+            "rawBytes": 240
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-i-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/p",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "npm",
+            "run",
+            "test:build-policy"
+          ],
+          "returncode": 0,
+          "duration_seconds": 0.425,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25649,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-p-stdout.log.gz",
+            "rawSha256": "012152c85450851e6f93de894bdd2fcfb70ec0194ed3f89a31b8d38854691052",
+            "rawBytes": 775
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-p-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        },
+        {
+          "id": "p2p/h/b",
+          "status": "pass",
+          "reason": "",
+          "argv": [
+            "node",
+            "scripts/test-g16-browser.mjs"
+          ],
+          "returncode": 0,
+          "duration_seconds": 1.412,
+          "source_before": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "source_after": {
+            "type": "git",
+            "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+            "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+            "dirty": true,
+            "dirty_status": [
+              " M scripts/fixtures/g16-browser.mjs",
+              "?? packages/wallet/test/evm-agreement-host.test.mjs",
+              "?? packages/wallet/test/lib/evm-agreement-host.ts"
+            ],
+            "fingerprint": "c07ae112e374e20b6ed67d83b5cf208bd6ba0efa9ef5511b28601f7a798923ef",
+            "excluded_sensitive_paths_count": 0
+          },
+          "cleanup": {
+            "process_group": 25719,
+            "term_sent": false,
+            "kill_sent": false,
+            "remaining_active_pids": []
+          },
+          "stdout": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-b-stdout.log.gz",
+            "rawSha256": "3e47f17f76f5ce6d80bf8a3a14c0279f59e6f40bdaec6b46ed420628ec3ba73d",
+            "rawBytes": 3968
+          },
+          "stderr": {
+            "path": "docs/evidence/p2p-private-host-20261027/08qualification-b-stderr.log.gz",
+            "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "rawBytes": 0
+          }
+        }
+      ]
+    }
+  ],
+  "finalFocused": {
+    "tests": 60,
+    "pass": 60,
+    "fail": 0,
+    "skip": 0
+  },
+  "finalAggregate": {
+    "tests": 454,
+    "pass": 454,
+    "fail": 0,
+    "skip": 0
+  },
+  "policy": {
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "types": "all4existing strict app/core configs plus explicit strict qualification-host project; no lower options",
+  "boundaries": "49production/19core modules; checker unchanged; helper not production source",
+  "browser": {
+    "fixture": "private-g16-public-data-chromium",
+    "browser": "154.0.8037.57",
+    "node": "24.19.0",
+    "providerVersions": {
+      "@noble/hashes": "2.4.0",
+      "@noble/curves": "2.4.0"
+    },
+    "providerManifestHashes": {
+      "@noble/hashes": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf",
+      "@noble/curves": "63d976a6ee72f2dcdc81e6c8bf907edff54eb20e8423218578fbfaf29cff96e6"
+    },
+    "fixtureHashes": {
+      "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+      "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+    },
+    "document": {
+      "assertions": 238,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "bounded structural pre-clone input snapshot (parser only, not Worker lifecycle)",
+        "parser snapshot feeds real verifier with same-provider complete-bundle parity",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing",
+        "private request-reply schema around the real verifier (structural, header IDs are data only)",
+        "actual host lifecycle around real verifier (direct call; invalidate, BUSY while held, backend-completion drain, quiet dispose)"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "document",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "worker": {
+      "assertions": 238,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "bounded structural pre-clone input snapshot (parser only, not Worker lifecycle)",
+        "parser snapshot feeds real verifier with same-provider complete-bundle parity",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing",
+        "private request-reply schema around the real verifier (structural, header IDs are data only)",
+        "actual host lifecycle around real verifier (direct call; invalidate, BUSY while held, backend-completion drain, quiet dispose)"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "dedicated-module-worker",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "browserArtifactSha256": "967c4437e4ac7c0f817e5957432b1fe607f188dea27cb29206fa34c0120c4241",
+    "fixtureModuleCount": 27,
+    "allowedFixturePaths": [
+      "/",
+      "/qualification.js",
+      "/worker.js"
+    ],
+    "unexpectedRequests": 0,
+    "consoleMessages": 0,
+    "pageErrors": 0,
+    "privateSurfaces": {
+      "local": 0,
+      "session": 0,
+      "databases": 0,
+      "cacheEntries": 0,
+      "serviceWorkers": 0
+    },
+    "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+    "appInclusion": false,
+    "providerApproval": false,
+    "auditAcceptance": false,
+    "deviceAcceptance": false,
+    "releaseEnabled": 0,
+    "economicPreparationAllowed": false
+  },
+  "appGraphsUnchanged": {
+    "core-graph-worker.json": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5",
+    "core-graph-document.json": "fa26589803e3e66ca14bd4790e05ceee1339e68730da7d27db550a21d41c7c42"
+  },
+  "sourceDataIndependence": {
+    "hostOwnedSignatureCopySamplesRefusals": 4,
+    "hostOwnedSignatureCopySamplesCompletion": 2,
+    "assertedClearedBeforeTestCleanup": true,
+    "callerBytesIntact": true,
+    "browserHostSignatureCopySpy": false,
+    "physicalMemoryErasure": false
+  },
+  "reproducedHostDefects": [
+    {
+      "case": "trusted clock callback reenters dispatch before registration",
+      "before": "2actualverifierjobs",
+      "after": "recheck active after clock, outerBUSY;oneactualjob"
+    },
+    {
+      "case": "clock invalidates then returnsNaN before registration",
+      "before": "staleUNAVAILABLEreply",
+      "after": "lifetime recheck beforeclockfault reply;undefined"
+    },
+    {
+      "case": "finalclock invalidates and reachesdeadline simultaneously",
+      "before": "staleTIMEOUTandclosedfuturegeneration",
+      "after": "lifetime check precedesdeadline classification;newgeneration remainsusable"
+    }
+  ],
+  "harnessCorrections": [
+    "sampleCstart index beforedispatch, not after synchronous SHA prefix",
+    "observeactualhigherclock reading beforecallingit backwards",
+    "replacefixedticks/missingbackendbarriers with real nativecompletion+eventloopdrain; preserve30sdeadline",
+    "shortexternalrunnerTMP path resolves recordedChromiumUnixsocketlengthfailure; no browser/security flag change"
+  ],
+  "failedGatesPreserved": [
+    "originalboundary3privateimports",
+    "afterexistingpublicimports1privateprotocolimport",
+    "initialChromiumFATALSocketpath tool failure"
+  ],
+  "unchanged": [
+    "schemas/publicfacades",
+    "fuzz08helper/selftests",
+    "runnercore",
+    "verifier/bodyparser/protocol/goldens",
+    "appbuildgraphs",
+    "securitysettings/origins/locks/providers"
+  ],
+  "appInclusion": false,
+  "productionHostIntegrated": false,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "remaining": [
+    "actualprivateWorkercontrol/message lifecycle and document/route/pagehide/lock tests",
+    "approvednarrowproductionpackage/facade composition",
+    "nativeprimitive/publicdataprovider inclusion disposition",
+    "emittedappUIgraph qualification and financial/trust/deployment gates"
+  ],
+  "next": "bounded independent review of exact integration delta and minimal privateWorker control/ack contract before transport code; no new masterplan or financial choices",
+  "incompleteRunTerminalUpdate": {
+    "observedAtUtc": "2026-10-27T04:58:20.321135+00:00",
+    "sessionId": 5792,
+    "toolCommandTerminalExit": 130,
+    "state": "interrupted,incomplete test run; no final test result/driverexit record",
+    "commandStopConfirmed": true,
+    "descendantCleanupVerified": false,
+    "explicitOriginalFailuresPreserved": true,
+    "rawFinalLogSha256": "e2ae0dd1aedd1f16c1c0bf39799d58cee8b22c5d5471d8fc63e36011c292ec49",
+    "rawFinalLogBytes": 3359,
+    "note": "Latest write_stdin returned terminalexit130. This supersedes earlier pendingstop observation; not a passed/completed test or changed gate."
+  }
+}

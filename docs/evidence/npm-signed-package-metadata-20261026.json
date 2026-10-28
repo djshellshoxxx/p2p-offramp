@@ -1,0 +1,36 @@
+[
+  {
+    "name": "@noble/curves",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQC2ZQZDA+Hj07qenHW3BdNvK7cBxuaxH+S5RuMLQa+zNQIhAOfm9vDtM9ZeSzYqx1TUl6tnuO7qd6B3ANkCseO+Rt0M"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@noble%2fcurves@2.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  },
+  {
+    "name": "@noble/hashes",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+    "signatures": [
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQD5/zhgZaTaRKNdw4p94/s5ICjMK4pjrZszeQnHqmhjYAIgFlSsdpDfVMaUE+3CApwSyRdp4t4goJqUge1/zYwWo+g="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@noble%2fhashes@2.4.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    }
+  }
+]

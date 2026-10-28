@@ -1,0 +1,457 @@
+{
+  "scope": "G03 confirmed restore to explicit profile selection and normal unlock; offline UI only",
+  "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "sourceFiles": {
+    "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+    "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+    "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+    "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+    "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+  },
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T22:54:54.369274+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "03f64164c21bd0184605155a4b4a63426d6c8651be952261939c15d39ea3e4cf",
+        "apps/web/src/ui/Pages.tsx": "4ca4039a94c1adad471433aae3e2009d4b78870e7b4a60564794e654a81068f8",
+        "apps/web/src/ui/VaultForms.tsx": "8213f5d4131efdaa07d4ca32190dd68de34fee4db56543137e1dbc62b7423278",
+        "apps/web/src/ui/messages.ts": "ba351f1b563bca1e8d9f238a2f04b01efdd56d24d9f73957f090b4d919caf6c3",
+        "scripts/test-web-build-browser.mjs": "9868c8c6bd71e7722a7c9c86634587e58070c1213c8c8f7cd5be3920b912a91a"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T22:55:00.644258+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/01-red-missing-restore-handoff.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/01-red-missing-restore-handoff.log.gz",
+      "logRawBytes": 3381,
+      "logRawSha256": "12c74611406599cda26b5b096615a4e68c958001e5448dbfec2f51e294f0cfd2",
+      "logGzipSha256": "22216bc06bbacc8753d23c6e76cf03877a3391102662e8f48e358a6751a379f9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T22:55:58.173272+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "4e255cff124b8ee6e751daaef356f985649712428881fefd5484764cf357e359",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "9868c8c6bd71e7722a7c9c86634587e58070c1213c8c8f7cd5be3920b912a91a"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T22:56:15.151363+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/02-green-restore-handoff.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/02-green-restore-handoff.log.gz",
+      "logRawBytes": 4745,
+      "logRawSha256": "413d9d7f52487f9efabcfe81d056e7f3748b431ced18e3ae75495017ec07b2e3",
+      "logGzipSha256": "ac696671f86c49c04131afea86fee80c8f8ff76fae5e4324df46e6931926abb0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T22:57:16.096836+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "4e255cff124b8ee6e751daaef356f985649712428881fefd5484764cf357e359",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "caf603a320403c5ba194b6c1e27421ab3671495bc06288e39b5828366171965d"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T22:57:23.088871+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/03-expanded-browser.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/03-expanded-browser.log.gz",
+      "logRawBytes": 3360,
+      "logRawSha256": "033797433fd922f0bc27c51e544e269f74d52685f6ded3a3fd5d97ab251abb0b",
+      "logGzipSha256": "34a46bd8c4e234d6624483528d1e2fcc0434532aff929ad7a31befaaa93b1c2a"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T22:58:33.747007+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "fc41fc6ee0b943c9d029c508856165f5916ca3b9adcbf98519ef3863d19a0f5d"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T22:58:41.874701+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/04-final-browser.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/04-final-browser.log.gz",
+      "logRawBytes": 3245,
+      "logRawSha256": "bf71c7caf160423fe6e32de5cab34140097cd1a06b589aec704ab302798d7869",
+      "logGzipSha256": "10272c43493c5ad73e3df7326713dabe47eb830d91226f06e38ab849a7cf6aa1"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T22:59:15.157625+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T22:59:33.525265+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/05-final-browser.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/05-final-browser.log.gz",
+      "logRawBytes": 4745,
+      "logRawSha256": "4cd74ca10f818ab959d8328c6c41ee63a3093bd49c0d952c5695bdd633424098",
+      "logGzipSha256": "b25f65241f5f2bac4d360ab5147ed6682878fee12d1a7df6c2468e79c854471c"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T23:00:10.281349+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:00:27.308424+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/06-unit.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/06-unit.log.gz",
+      "logRawBytes": 40757,
+      "logRawSha256": "c1132b3ddd653fdb06bc217343f0bc0b77d9f9e89e7c06f4f7781484c96e385b",
+      "logGzipSha256": "5e1a8e081a33060976bec4ee152e05b42f8bf1edaa7d3b7d9d154189bbca5baf"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T23:00:10.266209+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:00:13.946439+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/07-build-types.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/07-build-types.log.gz",
+      "logRawBytes": 1510,
+      "logRawSha256": "ad03be83cfc0c810d8184861fea74d36545bcf9d2912d05e7336f04664289e20",
+      "logGzipSha256": "397acdb392029709921c7335b399f4fd90f66ed86062416c560b2e2a62dd1625"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T23:00:10.282590+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:00:11.443981+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/08-boundaries.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/08-boundaries.log.gz",
+      "logRawBytes": 465,
+      "logRawSha256": "cab309b9f171426bdde1764e7770df8938619c92f67ad82595ca9ea856a9bb8b",
+      "logGzipSha256": "0291f1dbce6af01683e18c4b5020412cf9cffdcb40d79ef9274ba767af5562e9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T23:00:10.289100+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:00:11.633117+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/09-build-policy.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/09-build-policy.log.gz",
+      "logRawBytes": 985,
+      "logRawSha256": "4b8e59f1aa85c90d90d4cc61fbacff63dc5df58b6919e86e28f53e3d99513b8d",
+      "logGzipSha256": "8a3613f9ee8950e4d516db8b206beb658084bc45e7d03b753017d188f5e25860"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+      "startedAtUtc": "2026-10-26T23:01:02.633309+00:00",
+      "sourceFiles": {
+        "apps/web/src/ui/App.tsx": "16c0994f1fa803871e599632d6ba7c2cccc34be01b09f6491d55da59c43175f5",
+        "apps/web/src/ui/Pages.tsx": "d31639158b7e6c645dfce6cd894591df6901bbae1f84de6fdc42422da7becd02",
+        "apps/web/src/ui/VaultForms.tsx": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+        "apps/web/src/ui/messages.ts": "e4d520f8b63411ea3914b00a9cfc41084b02489138b8829b7cc059fe78a787a5",
+        "scripts/test-web-build-browser.mjs": "4f9fc8888668d3ab6ab68ff494df934724ddd420a5ddcf7eca08e3a7e80617df"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-26T23:01:03.187336+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-restore-handoff-20261026/10-boundaries-isolated.exit.json",
+      "log": "docs/evidence/p2p-restore-handoff-20261026/10-boundaries-isolated.log.gz",
+      "logRawBytes": 448,
+      "logRawSha256": "86d0244ce8422f965c4e947e8bcd62fad9359ea3d88a41abe3e15e3b168c9b23",
+      "logGzipSha256": "120fc19a010ca2cb5e8db73cc3cbd17edb3985149673837f1a2992ba8f3d2d2e"
+    }
+  ],
+  "browserReport": {
+    "fixture": "emitted-react-vite-shell-local-chromium",
+    "browser": "154.0.8037.57",
+    "reports": [
+      {
+        "delivery": "meta",
+        "base": "/ipfs/bafy-local-fixture/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "base": "/nested/project/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "base": "/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/ipfs/bafy-local-fixture/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/nested/project/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "actualArtifactPolicyDenials": true
+      },
+      {
+        "delivery": "header",
+        "actualArtifactPolicyDenials": true
+      },
+      {
+        "delivery": "header",
+        "localFraming": "blocked",
+        "deployedAttestation": false
+      },
+      {
+        "delivery": "meta",
+        "localFraming": "permitted-as-disclosed",
+        "deployedAttestation": false
+      },
+      {
+        "mode": "missing-entry",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "missing-worker",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "unsupported-document-crypto",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "unsupported-worker-storage",
+        "encryptedSourcePreserved": true
+      }
+    ],
+    "localRebuildByteMatch": true,
+    "nativeEncryptedUnlockExport": true,
+    "uiCreateRestoreInventory": true,
+    "uiRestoreReconciliation": true,
+    "automaticWalletPrompts": 0,
+    "forbiddenLoopbackRequests": 0,
+    "unexpectedRequests": 0,
+    "deviceAcceptance": false,
+    "deployedFramingAttestation": false,
+    "signedRelease": false,
+    "releaseAcceptance": false
+  },
+  "sourceHashFrozenForFinalCommands": true,
+  "freshAggregateTests": {
+    "pass": 379,
+    "fail": 0,
+    "skip": 0
+  },
+  "freshBuildPolicyTests": {
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "strictTypesBuild": "exit0; all four existing strict configurations and Vite build",
+  "boundaryDiagnostic": "08 emitted context canceled then PASS/exit0; 10 isolated rerun PASS/exit0 without diagnostic; api.close() occurs in existing checker finally; precise internal diagnostic origin not established, original log retained",
+  "originalFailures": {
+    "01": "missing explicit open-profile action; expected RED",
+    "03": "first implementation did not consume handoff when unlock notification unmounted form before reply; fixed in Home transition",
+    "04": "test author referenced undefined submitRestore helper; fixture corrected to existing fillRestore plus explicit file/consent/submit, no app change"
+  },
+  "privacy": "only confirmed opaque destination ID crosses UI components in document memory; no passphrase propagation, persistent active-profile pointer or ID in URL; no private agreement data involved",
+  "graphHashes": {
+    "core-graph-document.json": "51465478212d250eb7aa4d599c3e77f33350a49db2521405050953c7347028e5",
+    "core-graph-worker.json": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5"
+  },
+  "noWalletOrG16InAppGraphs": true,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "unchangedGoldenHashes": {
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+  },
+  "environment": {
+    "node": "24.19.0",
+    "npm": "11.9.0",
+    "chromium": "154.0.8037.57",
+    "platform": "Linux x86_64; local automation only"
+  },
+  "notRerun": [
+    "separate test:browser vault/runtime/content/reseal suite",
+    "Python/spec checks",
+    "Firefox/WebKit/mobile/physical device qualification"
+  ],
+  "independentAuditOrProviderApproval": false,
+  "workerOwnership": "coordinator only; no workers started; GhostPay reserved and untouched",
+  "externalSourcePublication": false,
+  "next": "native-vault/browser qualification or separately reviewed offline G16 browser/Worker inclusion; live trading still requires native contract/ABI/reader, registry/trust and journal integration"
+}

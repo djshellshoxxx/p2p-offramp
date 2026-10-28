@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/trade-composition.test.mjs",
+    "packages/domain/test/authority.test.mjs",
+    "packages/domain/test/intent-journal.test.mjs",
+    "packages/domain/test/trade-terms.test.mjs",
+    "packages/wallet/test/evm-terms.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T20:59:19.827036+00:00",
+  "finishedAtUtc": "2026-10-26T20:59:23.469309+00:00",
+  "exitCode": 0,
+  "phase": "corrected fixture eventId encoding; no production/schema relaxation"
+}

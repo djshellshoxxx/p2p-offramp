@@ -1,0 +1,16 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:specs"
+  ],
+  "cwd": "/workspace/p2p-offramp-pr5-validation",
+  "startedAtUtc": "2026-10-26T21:05:56.147908+00:00",
+  "finishedAtUtc": "2026-10-26T21:05:56.535624+00:00",
+  "exitCode": 0,
+  "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+  "sourceFiles": {
+    "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+    "packages/domain/test/trade-composition.test.mjs": "69daf62a3b25c07dcd04628c30b23ac854f688ad7351c6e112fce0189d41cf40"
+  }
+}

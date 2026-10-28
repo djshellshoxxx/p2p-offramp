@@ -1,0 +1,57 @@
+{
+  "kind": "private Library producer receipt; not consumer retrieval or production acceptance",
+  "sourceAndTestsCheckpoint": "73066c773faab455ee3e418980e46bc1bc862a83",
+  "sourceTree": "4590eca9771f6ab7668b9ccdf98bdb601c0f3d1c",
+  "cleanBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "current_version_number": 6,
+  "file_id": "file_000000000d0081f7a6148672b88ce77e",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_size_bytes": 340920,
+  "sha256": "54fbf8972ab36f4b4b86e7f1d23db9dec88a33a5bc74b0c1a9dd49efbe752355",
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-g16-bundle/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "producerStatus": "succeeded",
+  "xattrsApplied": true,
+  "payloadEntries": 142,
+  "sevenFileSourcePatchRoundTripVerified": true,
+  "wholeRepositoryGitRestoreVerified": false,
+  "consumerRetrievalVerified": false,
+  "priorVersionsPreserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "freshTests": {
+    "newBundleTests": 12,
+    "focusedTests": 28,
+    "aggregateUnitTests": 379,
+    "buildPolicyTests": 5,
+    "fail": 0,
+    "skip": 0,
+    "strictTypesBuildBoundaries": "passed"
+  },
+  "notRerun": [
+    "browser acceptance",
+    "Python checks",
+    "spec checks"
+  ],
+  "independentGoldenVectors": "unchanged; new coherent signature fixtures are same-provider integration evidence only",
+  "testOnly": true,
+  "economicPreparationAllowed": false,
+  "releaseEnabled": 0,
+  "appWorkerExportAdded": false,
+  "credentialsAndPrivateUserData": "not included; deterministic synthetic public test fixtures only",
+  "canonicalQueueReadOrWritten": false,
+  "ghostPayFilesChanged": false,
+  "externalSourcePublication": false,
+  "remainingGates": [
+    "native authoritative contract/ABI/reader and trusted journal reconciliation",
+    "app/wallet/escrow/two-party wiring",
+    "provider/trust/deployment, independent review, device and live-funds gates"
+  ],
+  "receiptCommitScope": "documentation only after packaged source checkpoint; no transfer of new runtime test claims"
+}

@@ -1,0 +1,26 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/P2P-control076-integrator-intake-prepared-tests-20261027.md",
+  "file_id": "file_0000000026ec81f9a1cf6c5738e6f88e",
+  "library_file_id": "libfile_48c4612947b4819191bb878827903c75",
+  "file_name": "P2P-control076-integrator-intake-prepared-tests-20261027.md",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "libdir_30280fe7938081918252daf66e50daba",
+  "mime_type": "text/markdown",
+  "library_artifact_type": "report",
+  "file_size_bytes": 21332,
+  "external_connectors_accessed": false,
+  "verifiedSha256": "757d703bb75f01fbb3f6d8bcbe482dba547d831bdff1664261d65976598b95de",
+  "localXattrs": {
+    "user.library-file-version": "0",
+    "user.library-file-id": "libfile_48c4612947b4819191bb878827903c75"
+  }
+}
