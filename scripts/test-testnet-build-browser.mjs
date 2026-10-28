@@ -71,7 +71,8 @@ try {
     await page.getByText('SEPOLIA TESTNET · owner-signed registry', { exact: true }).waitFor();
     const banner = page.getByRole('note').filter({ hasText: 'SEPOLIA TESTNET: the network registry is signed' });
     await banner.waitFor();
-    assert.match(await banner.innerText(), new RegExp(`key ${keyId.slice(0, 16)}… \\(manifest 1, valid until ${new Date(expiresAt * 1000).toISOString().replace(/[.]/g, '\\.')}\\)`));
+    const bannerText = await banner.innerText();
+    assert.ok(bannerText.includes(`key ${keyId.slice(0, 16)}… (manifest 1, valid until ${new Date(expiresAt * 1000).toISOString()})`), bannerText);
     assert.equal(await page.getByText('SYNTHETIC', { exact: false }).count(), 0, 'no synthetic data or samples in the testnet build');
     assert.equal(await page.getByRole('heading', { name: 'Synthetic samples' }).count(), 0);
     // 2. A Sepolia terms file for the signed deployment is reviewed with exact values.
