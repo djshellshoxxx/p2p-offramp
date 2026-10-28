@@ -9,6 +9,10 @@
   "scripts": {
     "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
     "test:specs": "python -m unittest discover -s scripts/tests -v",
+    "test:evm": "cd contracts/evm && forge test",
+    "test:evm:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
+    "test:evm:reconcile": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
+    "abi:evm": "bash contracts/evm/script/export-abi.sh",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
     "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs",

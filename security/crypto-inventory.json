@@ -162,5 +162,76 @@
         "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
       }
     ]
+  },
+  {
+    "id": "noble-curves-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "secp256k1 BIP340 Schnorr sign/verify for NIP-01 events and unhashed x-only ECDH for the NIP-44 v2 conversation key",
+    "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      },
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  },
+  {
+    "id": "noble-hashes-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "SHA-256 (NIP-01 event id), HKDF-SHA256 extract/expand and HMAC-SHA256 (NIP-44 v2 keys and MAC)",
+    "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      }
+    ]
+  },
+  {
+    "id": "project-chacha20-rfc8439",
+    "capability": "nostr-chacha20-project-owned-candidate",
+    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2; project-owned source packages/nostr-crypto/src/chacha20.ts",
+    "sourceUrl": "https://www.rfc-editor.org/rfc/rfc8439",
+    "version": "g20-v1",
+    "integrity": "sha256:95ebc9784627f3453a033da871611060fffbdb3fe423c7473f332eff7c3324d6",
+    "license": "Project source; no external code copied",
+    "runtime": "vendored",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      }
+    ]
   }
 ]
