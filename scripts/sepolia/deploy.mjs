@@ -19,7 +19,7 @@ import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, forgeKey, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, forgeEnv, forgeKey, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
 import { checkPublicEndpoint, PENDING_FILE, recordDeployment } from './record-deployment.mjs';
 import { clearForgeCache, recordedTransactions } from './send.mjs';
 
@@ -52,15 +52,15 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
   if (balance < minBalanceWei) fail('DEPLOYER_UNFUNDED');
   await checkCleanSource(root);
   await checkToolchain(env);
-  try { await run('forge', ['build'], { cwd: EVM_DIR, env }); } catch { fail('BUILD_FAILED'); }
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
   const dir = broadcastDir ?? await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-deploy-'));
   let created;
   try {
     let forgeFailed = false;
     try {
       await run('forge', ['script', 'script/DeployBasicEscrow.s.sol:DeployBasicEscrow', '--rpc-url', 'sepolia', '--broadcast', '--slow'],
-        { cwd: EVM_DIR, env: { ...env, SEPOLIA_DEPLOYER_PRIVATE_KEY: forgeKey(env.SEPOLIA_DEPLOYER_PRIVATE_KEY),
-          FOUNDRY_OFFLINE: 'true', FOUNDRY_BROADCAST: dir }, maxBuffer: 16 * 1024 * 1024 });
+        { cwd: EVM_DIR, env: forgeEnv(env, { SEPOLIA_DEPLOYER_PRIVATE_KEY: forgeKey(env.SEPOLIA_DEPLOYER_PRIVATE_KEY),
+          FOUNDRY_OFFLINE: 'true', FOUNDRY_BROADCAST: dir }), maxBuffer: 16 * 1024 * 1024 });
     } catch { forgeFailed = true; } // Forge output can echo RPC details; it is not relayed. A CREATE may still have gone out.
     finally { await clearForgeCache('DeployBasicEscrow.s.sol'); } // Forge caches the RPC URL (maybe with an API key) here
     const sent = (await recordedTransactions(dir, 'DeployBasicEscrow.s.sol')).filter(tx => tx.transactionType === 'CREATE' && tx.contractName === 'BasicEscrow');

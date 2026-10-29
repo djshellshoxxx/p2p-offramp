@@ -112,6 +112,10 @@ try {
   // Run 1: release trade settles; refund trade is funded and waits for its deadline.
   const first = await runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash });
   const statePath = first.path;
+  assert.equal((await stat(statePath)).mode & 0o777, 0o600, 'trade state (payment instructions, signatures) is owner-only');
+  for (const name of (await readdir(resolve(statePath, '..'))).filter(entry => entry.endsWith('.terms-review.json'))) {
+    assert.equal((await stat(resolve(statePath, '..', name))).mode & 0o777, 0o600, name);
+  }
   const [release, refund] = first.state.trades;
   assert.equal(first.state.registryTrust.verified, true); assert.equal(first.state.registryTrust.keyId, owner.keyId);
   assert.equal(release.status, 'released'); assert.equal(refund.status, 'awaiting-deadline');

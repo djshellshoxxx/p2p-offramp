@@ -22,7 +22,7 @@
  *                             registryTrust.verified: false). Every on-chain identity check still applies.
  */
 import { randomBytes } from 'node:crypto';
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
@@ -76,7 +76,8 @@ async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesi
 async function saveState(path, state) {
   await mkdir(resolve(path, '..'), { recursive: true });
   const temporary = `${path}.tmp`;
-  await writeFile(temporary, JSON.stringify(state, null, 2) + '\n');
+  await rm(temporary, { force: true }); // a stale temp file would keep its old mode
+  await writeFile(temporary, JSON.stringify(state, null, 2) + '\n', { mode: 0o600 }); // holds payment instructions and signatures
   await rename(temporary, path);
 }
 
@@ -237,7 +238,7 @@ export async function runTrades({
     Object.assign(trade, { status: 'negotiated', terms, privateAgreement: agreement, tradeId, fromBlock: head.number.toString(), acceptance: { seller: hex(sellerSig), buyer: hex(buyerSig) } });
     trade.checks.push('terms pass the app terms review against the registry', 'seller and buyer acceptances verify; not across roles, chains or deployments', 'on-chain tradeIdOf equals the off-chain termsHash');
     await mkdir(resolve(path, '..'), { recursive: true });
-    await writeFile(resolve(path, '..', `${run}.${trade.label}.terms-review.json`), JSON.stringify(document, null, 2) + '\n');
+    await writeFile(resolve(path, '..', `${run}.${trade.label}.terms-review.json`), JSON.stringify(document, null, 2) + '\n', { mode: 0o600 });
   }
 
   async function fund(trade) {

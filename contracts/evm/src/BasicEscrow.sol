@@ -36,7 +36,7 @@ contract BasicEscrow is ReentrancyGuard {
     }
 
     /// @notice Immutable terms bound at funding plus the current lifecycle state.
-    /// @dev `token == address(0)` denotes the chain's native asset. Packed into three storage slots.
+    /// @dev `token == address(0)` denotes the chain's native asset. Occupies four storage slots.
     struct Escrow {
         address seller;
         uint64 deadline;

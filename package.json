@@ -12,7 +12,7 @@
     "test:evm": "cd contracts/evm && forge test",
     "test:evm:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
     "test:evm:reconcile": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
-    "test:sepolia:kit": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs",
+    "test:sepolia:kit": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs",
     "test:sepolia:trade": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-trade-local.mjs",
     "sepolia:deploy": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs",
     "sepolia:verify": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/verify-release.mjs",

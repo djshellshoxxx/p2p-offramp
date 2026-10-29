@@ -24,7 +24,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { promisify } from 'node:util';
-import { EVM_DIR, forgeKey, SEPOLIA } from './lib.mjs';
+import { EVM_DIR, forgeEnv, forgeKey, SEPOLIA } from './lib.mjs';
 
 const run = promisify(execFile);
 export class SendError extends Error {
@@ -69,8 +69,8 @@ export async function sendAsSeller({ env, rpc, call, seller, pollMs = 3000, maxP
   const gas = estimate + estimate / 5n + 10_000n;
   if (gas > 2_000_000n) fail('GAS_LIMIT_UNREASONABLE');
   const dir = broadcastDir ?? await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-send-'));
-  const childEnv = { ...env, SEPOLIA_SELLER_PRIVATE_KEY: sellerKeyEnv(env),
-    FOUNDRY_OFFLINE: 'true', FOUNDRY_BROADCAST: dir, CALL_TO: call.to, CALL_DATA: call.data, CALL_VALUE: BigInt(call.value).toString(), CALL_GAS: gas.toString() };
+  const childEnv = forgeEnv(env, { SEPOLIA_SELLER_PRIVATE_KEY: sellerKeyEnv(env),
+    FOUNDRY_OFFLINE: 'true', FOUNDRY_BROADCAST: dir, CALL_TO: call.to, CALL_DATA: call.data, CALL_VALUE: BigInt(call.value).toString(), CALL_GAS: gas.toString() });
   try {
     const nonceBefore = BigInt(await rpc('eth_getTransactionCount', [seller, 'pending']));
     let forgeFailure;

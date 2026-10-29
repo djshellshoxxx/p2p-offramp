@@ -22,6 +22,19 @@ export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 export const sha256Hex = bytes => createHash('sha256').update(bytes).digest('hex');
 const run = promisify(execFile);
 
+const FORGE_BASE_ENV = new Set(['PATH', 'HOME', 'TMPDIR', 'TMP', 'TEMP', 'LANG', 'LC_ALL', 'SystemRoot', 'USERPROFILE']);
+/**
+ * Environment for a Forge child: OS basics, FOUNDRY_* settings and SEPOLIA_RPC_URL (read by foundry.toml), plus `extra`,
+ * which carries the one key that script reads. Every other variable, including the other parties' private keys, is dropped.
+ */
+export function forgeEnv(env, extra = {}) {
+  const out = {};
+  for (const [name, value] of Object.entries(env)) {
+    if (typeof value === 'string' && (FORGE_BASE_ENV.has(name) || name.startsWith('FOUNDRY_') || name === 'SEPOLIA_RPC_URL')) out[name] = value;
+  }
+  return { ...out, ...extra };
+}
+
 /**
  * True when the module at `moduleUrl` is the script node was started with. Compares real paths as file URLs, so a
  * checkout path with spaces, non-ASCII characters or a symlink still runs the CLI (a raw `file://${argv[1]}` string
@@ -41,7 +54,7 @@ export class KitError extends Error { constructor(code) { super(code); this.name
 /** The forge on PATH and the solc Foundry will use must be the pinned ones; returns what was checked, for the record. */
 export async function checkToolchain(env = process.env) {
   let version;
-  try { version = (await run('forge', ['--version'], { env })).stdout; } catch { throw new KitError('TOOLCHAIN_MISSING'); }
+  try { version = (await run('forge', ['--version'], { env: forgeEnv(env) })).stdout; } catch { throw new KitError('TOOLCHAIN_MISSING'); }
   const forgeVersion = /forge Version: (\S+)/.exec(version)?.[1], forgeCommit = /Commit SHA: ([0-9a-f]{40})/.exec(version)?.[1];
   if (forgeVersion !== TOOLCHAIN.forgeVersion || forgeCommit !== TOOLCHAIN.forgeCommit) throw new KitError('TOOLCHAIN_MISMATCH');
   const solcPath = env.FOUNDRY_SOLC || resolve(env.HOME || homedir(), '.svm', TOOLCHAIN.solcVersion, `solc-${TOOLCHAIN.solcVersion}`);
@@ -84,11 +97,18 @@ export function leaksPrivateRpc(publicEndpoint, privateUrls) {
   });
 }
 
+/** True for a plain-HTTP URL whose host is loopback (local anvil); anything else must use HTTPS. */
+export function isLoopbackUrl(url) {
+  let host; try { host = new URL(url).hostname; } catch { return false; }
+  return host === 'localhost' || host === '[::1]' || /^127(?:\.\d{1,3}){3}$/.test(host);
+}
+
 export class RpcError extends Error { constructor(code) { super(`RPC ${code}`); this.name = 'RpcError'; this.code = code; } }
 
 /** Minimal JSON-RPC client. Errors carry fixed codes only, never the URL or response body. */
 export function rpcClient(url, { timeoutMs = 20_000 } = {}) {
   if (typeof url !== 'string' || !/^https?:\/\//.test(url)) throw new RpcError('RPC_URL_MISSING');
+  if (url.startsWith('http://') && !isLoopbackUrl(url)) throw new RpcError('RPC_URL_INSECURE'); // a provider API key would travel in clear
   let id = 0;
   return async function rpc(method, params = []) {
     let response;

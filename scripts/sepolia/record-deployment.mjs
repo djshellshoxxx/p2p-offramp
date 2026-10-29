@@ -19,7 +19,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
-import { chainIdentity, checkCleanSource, checkToolchain, escrowArtifact, EVM_DIR, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, escrowArtifact, EVM_DIR, forgeEnv, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
 
 const run = promisify(execFile);
 const ALLOWLIST_SELECTOR = '0x' + keccakHex(new TextEncoder().encode('allowlistedTokens()')).slice(0, 8);
@@ -66,7 +66,7 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   // Provenance: the chain is compared with the committed sources built by the pinned toolchain, nothing else.
   const sourceCommit = await checkCleanSource(root);
   const toolchain = await checkToolchain(env);
-  try { await run('forge', ['build'], { cwd: EVM_DIR, env }); } catch { fail('BUILD_FAILED'); }
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
   const artifact = await escrowArtifact();
   const primary = await inspect(rpcClient(rpcUrl), txHash, expectGenesis);
   if (primary.runtimeKeccak !== artifact.runtimeKeccak) fail('RUNTIME_CODE_MISMATCH');
