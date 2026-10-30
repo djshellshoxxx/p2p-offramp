@@ -14,8 +14,15 @@ export interface NostrMessagingProvider extends MessagingIdentityProvider {
   signSchnorr(message: Uint8Array, secretKey: Uint8Array): Promise<Uint8Array>;
   /** BIP340 verification. Returns false, never throws, for any malformed input. */
   verifySchnorr(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): Promise<boolean>;
+  /** Synchronous BIP340 verification of public data (needed by the relay pool's synchronous verifier). Optional. */
+  verifySchnorrSync?(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): boolean;
   /** NIP-44 v2 conversation key between this secret and an x-only peer key. The caller wipes the result. */
   conversationKey(secretKey: Uint8Array, peerPublicKey: string): Promise<Uint8Array>;
+}
+
+function verifySync(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): boolean {
+  if (!isBytes(signature, 64) || !isBytes(message, 32) || !isBytes(publicKey, 32)) return false;
+  try { return schnorr.verify(signature, message, publicKey); } catch { return false; }
 }
 
 /** Local test provider over pinned @noble/curves 2.4.0 (G06 review pending). Not a release-enabled signer. */
@@ -30,10 +37,8 @@ export function createLocalNobleNostrProvider(): NostrMessagingProvider {
       const aux = randomBytes(32);
       try { return schnorr.sign(message, secretKey, aux); } catch { return fail(); } finally { wipe(aux); }
     },
-    async verifySchnorr(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): Promise<boolean> {
-      if (!isBytes(signature, 64) || !isBytes(message, 32) || !isBytes(publicKey, 32)) return false;
-      try { return schnorr.verify(signature, message, publicKey); } catch { return false; }
-    },
+    async verifySchnorr(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): Promise<boolean> { return verifySync(signature, message, publicKey); },
+    verifySchnorrSync(signature: Uint8Array, message: Uint8Array, publicKey: Uint8Array): boolean { return verifySync(signature, message, publicKey); },
     async conversationKey(secretKey: Uint8Array, peerPublicKey: string): Promise<Uint8Array> { return getConversationKey(secretKey, peerPublicKey); },
   });
 }
