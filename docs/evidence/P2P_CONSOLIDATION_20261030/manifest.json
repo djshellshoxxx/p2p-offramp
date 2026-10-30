@@ -1,0 +1,722 @@
+{
+  "base": "47f9bbee455e7affbc39539489227228eb346a0f",
+  "candidateStatus": "unmerged integration candidate; not main/release acceptance",
+  "parents": [
+    "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+    "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+    "9f80c9b27b943b30409710dea76a53d97a761832",
+    "cc9a0a4baa2ad11b9efe4ada639a809542a7c5c9",
+    "e762e649600493221e3bd10f0c3525858722bc94",
+    "c1e31918ed5e4e370e7217a6a654ea360c71f4b4"
+  ],
+  "deltas": {
+    "relay": [
+      {
+        "path": "packages/relay/src/pool.ts",
+        "old": "a7b36acee6b0e71209646313c6659a333d7e5907",
+        "incoming": "c1d64827ad6eacec1bea98ea5146fb8a5ff69e4e"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/first-fix-source.txt",
+        "old": null,
+        "incoming": "f95f3fc89559af54f0b53ffd6024d20e1638ade3"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-baseline-exact.log",
+        "old": null,
+        "incoming": "96beca56232f5b51a82efde452d3ad0c70537ca4"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-final-green.tap",
+        "old": null,
+        "incoming": "4096d21cf330530bb210b95be0a5e622718df043"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-lifetime-boundary-red.tap",
+        "old": null,
+        "incoming": "b43878e3c10d4d26a0e5cdf6224c79e0ca64ab2f"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-lifetime-final-green.tap",
+        "old": null,
+        "incoming": "a808d3fe54abc4b0cf89965254fcc43cb67356ec"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-lifetime-red.tap",
+        "old": null,
+        "incoming": "b5c3c36c753e6e0860c76ada15852cb8a06b7d86"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-observer-red.tap",
+        "old": null,
+        "incoming": "b7a5e64914668d6194b4a815947f72d4bfe55632"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-reviewed-green.tap",
+        "old": null,
+        "incoming": "30aa288ed12b6211603ba97bda49d8ca8fc18a76"
+      },
+      {
+        "path": "docs/evidence/P2P_RELAY_LIFETIME_20261030/relay-typecheck-red.log",
+        "old": null,
+        "incoming": "c975c3aba49377e0609ef3d8d92c5838407bc48d"
+      },
+      {
+        "path": "docs/handoffs/P2P_RELAY_LIFETIME_20261030.md",
+        "old": null,
+        "incoming": "1ba2e964a0215a747cfc09b36e48f0f1f0fddea9"
+      },
+      {
+        "path": "packages/relay/test/pool-lifetime.test.mjs",
+        "old": null,
+        "incoming": "8619dae80f1b4d388304e4abf2a481ee1b1cb7de"
+      }
+    ],
+    "exchange": [
+      {
+        "path": "packages/exchange/src/exchange.ts",
+        "old": "1d6fbfab40d503350dcb711a214b9e20d7b70040",
+        "incoming": "2f936ca502357460aa48841e406739dabdf052bf"
+      },
+      {
+        "path": "packages/exchange/test/exchange.test.mjs",
+        "old": "efcd8457800d8ccc74fb091eeb1f00ca7b3029b8",
+        "incoming": "043d2fb455198a31b61517df3e57220edec3ae3f"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/exact-green.tap",
+        "old": null,
+        "incoming": "427aad40153257ca65dd9a91b818971d9aff5d79"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/hosted-source-checks.json",
+        "old": null,
+        "incoming": "e1b8987a3945e2b2694c4cd01c0398dde5b5ccb6"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/intermediate-missing-inventory.tap",
+        "old": null,
+        "incoming": "1052d2aa1ac167bbb900e6c74a2de5b676aabdac"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/intermediate-missing-lock.tap",
+        "old": null,
+        "incoming": "584744b92b42b2ffe79494cf9dd195867474d343"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/manifest.json",
+        "old": null,
+        "incoming": "dd294a2ef2848f84c991eae9a9bc1c1f3b111721"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings-invalid-reason.tap",
+        "old": null,
+        "incoming": "39eec0226db0a700ea544705bfffb8524c9b7e77"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings-red.tap",
+        "old": null,
+        "incoming": "0b7b662ab63fbd1b23d74d58f4964c8022ca3d48"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings-setup-failure.tap",
+        "old": null,
+        "incoming": "fac0e4110231fd2b4dc09cc3e329b2aa4be2a183"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs",
+        "old": null,
+        "incoming": "904d650aa345fb372dc40d6cc2860469ce2b3bbd"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/provider-red.tap",
+        "old": null,
+        "incoming": "0d0808f180e98f9db42229f4a6419a7d9ac59355"
+      },
+      {
+        "path": "docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/runtime-negative.tap",
+        "old": null,
+        "incoming": "8bb4f532b51efebd927518852d7bd40fc4c1c98d"
+      },
+      {
+        "path": "docs/evidence/p2p-exchange-close-20261030/green.log",
+        "old": null,
+        "incoming": "6dcdcb112d2e83227034ddd7851aa33564d68e00"
+      },
+      {
+        "path": "docs/evidence/p2p-exchange-close-20261030/red.log",
+        "old": null,
+        "incoming": "4732f18ed0d33f805dd1a4a923e83e50797bd0b4"
+      },
+      {
+        "path": "docs/evidence/p2p-exchange-close-20261030/repro.mjs",
+        "old": null,
+        "incoming": "6282aaaf45385f655f929544d8b378bfe1460477"
+      },
+      {
+        "path": "docs/handoffs/P2P_EXCHANGE_CLOSE_20261030.md",
+        "old": null,
+        "incoming": "07c9a55fc35c0c47b0b477e850a0806a45218d64"
+      },
+      {
+        "path": "docs/handoffs/P2P_EXCHANGE_TEST_REPAIR_20261030.md",
+        "old": null,
+        "incoming": "922a8961ef568b3490d0077f2cbcdf76755f5eb5"
+      }
+    ],
+    "review": [
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/async-repro.mjs",
+        "old": null,
+        "incoming": "c65d264f6347d6fa90cffa226e4d6880957e108d"
+      },
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/exchange-async-red.log",
+        "old": null,
+        "incoming": "7267dc4031d97ebcefa31c5cbce961727c1181e4"
+      },
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/exchange-ci-failure-excerpt.log",
+        "old": null,
+        "incoming": "cd4cd5d890c27a127544bd04744a266c87831886"
+      },
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/relay-review-green.tap",
+        "old": null,
+        "incoming": "a0df94269c56cc260657a79abc771d3554af90f1"
+      },
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/relay-review.test.mjs",
+        "old": null,
+        "incoming": "76bbf53c3abaea52642e2d72c01483f6bc5ff010"
+      },
+      {
+        "path": "docs/evidence/P2P_BRANCH_REVIEW_20261030/source-manifest.json",
+        "old": null,
+        "incoming": "f2aac1d73ed3c554956f0c375f605c6ae7b19ff0"
+      },
+      {
+        "path": "docs/handoffs/P2P_BRANCH_REVIEW_20261030.md",
+        "old": null,
+        "incoming": "237048cd89724aaaa2fd2e0d8bd18d494383fb43"
+      }
+    ],
+    "validation": [
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/browser.log.gz",
+        "old": null,
+        "incoming": "cfdc5f44555afd8e2d6b68880d52983731328565"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/build.log.gz",
+        "old": null,
+        "incoming": "76820171c838bae87eabe2b57742d74870065b0c"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/fuzz-seed-2718281828.json",
+        "old": null,
+        "incoming": "f84b553c4b003784f8e5cce38f876a8f9d5860e5"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/fuzz-selftests.log.gz",
+        "old": null,
+        "incoming": "a22e607df212e424a3421e9c22f47653f903779e"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/npm-test.log.gz",
+        "old": null,
+        "incoming": "e8b44930545c81808ed9c8d434c3cc5a798dea5b"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/private-browser.log.gz",
+        "old": null,
+        "incoming": "f3c5e7cc4660ac3d53e346047ad5aee42b96295e"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/relay-e096-typecheck.log.gz",
+        "old": null,
+        "incoming": "5bf6caccef795c7c937cd03cb8646bc4939254c7"
+      },
+      {
+        "path": "docs/evidence/p2p-validation-47f9-20261030/web-browser.log.gz",
+        "old": null,
+        "incoming": "1b9c6867d461802730d3d5e546bacfdf91289682"
+      },
+      {
+        "path": "docs/handoffs/P2P_REMOTE_BRANCH_INTAKE_20261030.md",
+        "old": null,
+        "incoming": "5efe106894c15958e86dff5b05ecea6c3abc2dab"
+      },
+      {
+        "path": "docs/handoffs/P2P_VALIDATION_47F9_2026-10-30.md",
+        "old": null,
+        "incoming": "8cb850fa3808a84f601889ee38f552d7db16ec47"
+      }
+    ],
+    "gate": [
+      {
+        "path": "docs/handoffs/P2P_GATE_RECONCILIATION_20261030.md",
+        "old": null,
+        "incoming": "7bf6fe21ce907324594076edaee3f56f64806055"
+      }
+    ],
+    "screenshots": [
+      {
+        "path": "README.md",
+        "old": "38a3a5a44b4cfcac72f3588b686546c5286a8a38",
+        "incoming": "fdb61619781907f6ba6dac0a078b114c75b901ca"
+      },
+      {
+        "path": "docs/screenshots/offers-demo.png",
+        "old": null,
+        "incoming": "e2bc561c13645523b164498fed5e74cb6a4efef1"
+      },
+      {
+        "path": "docs/screenshots/startup.png",
+        "old": null,
+        "incoming": "cf31550b213fbb14705cbe7c8f19b50d0faa282d"
+      },
+      {
+        "path": "docs/screenshots/trade-terms-review-demo.png",
+        "old": null,
+        "incoming": "2f1020e997096d52e6fa1a75749c855b5468a42f"
+      }
+    ]
+  },
+  "conflicts": [],
+  "verifiedMaterializedPackageFiles": [
+    {
+      "path": "packages/exchange/index.ts",
+      "sha": "59db5e57392a446dfe3189882ec723fd509eac13"
+    },
+    {
+      "path": "packages/nostr-crypto/index.ts",
+      "sha": "7a9957dcfde58b4df7987975f46960f03d875d34"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha": "567147ebfa91f32f04b87f2192de7349671abe00"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha": "ddd40bc997865d91b357611eb4503bc0857dafa3"
+    },
+    {
+      "path": "packages/identity/index.ts",
+      "sha": "6279058df65c82db754ba4a90911b725232ea2cf"
+    },
+    {
+      "path": "packages/transport/index.ts",
+      "sha": "67e490f5f8bf7937c04e46a6ba3838ca21b07459"
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "sha": "392c8accca1a6b887d4942b8338f5bc9c19bde73"
+    },
+    {
+      "path": "packages/exchange/test/exchange.test.mjs",
+      "sha": "043d2fb455198a31b61517df3e57220edec3ae3f"
+    },
+    {
+      "path": "packages/exchange/src/machine.ts",
+      "sha": "e38ff198bb49baf7d10c01f8daadcf3fbdea3a37"
+    },
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "sha": "2f936ca502357460aa48841e406739dabdf052bf"
+    },
+    {
+      "path": "packages/exchange/src/messages.ts",
+      "sha": "08aa561cabaf3b0705bb3eca56243aeee2dff6c5"
+    },
+    {
+      "path": "packages/nostr-crypto/test/event.test.mjs",
+      "sha": "77f76729b82201078451a395f92f5ac898d0c128"
+    },
+    {
+      "path": "packages/nostr-crypto/test/relay-event-crypto.test.mjs",
+      "sha": "9a41efe41a5f9268a0df8f1287325026d01539c4"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip17.test.mjs",
+      "sha": "90e527e4707e96975a8962c060e393f0cb660334"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip44.test.mjs",
+      "sha": "7538ed0577006b14117a9f6b2f43fc7646918e13"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip59.test.mjs",
+      "sha": "5c826dd9e25c8a6b90aa78424e42fb189513297e"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "sha": "de401b32886833436ffa3e3ac5fbe159b8d9d2ad"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip17.ts",
+      "sha": "70ad7f769ef8133f77c9e1b08dc109aa1105bcd2"
+    },
+    {
+      "path": "packages/nostr-crypto/src/relay-event-crypto.ts",
+      "sha": "3f7c7732bfeb0a7e7dedd92eeb02201a3cc02be5"
+    },
+    {
+      "path": "packages/nostr-crypto/src/provider.ts",
+      "sha": "3da386223a78346d0d8886e46361ccba91783235"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "sha": "7aaf4cab7aa69ad7b121014fa510a60054cd9c68"
+    },
+    {
+      "path": "packages/nostr-crypto/src/event.ts",
+      "sha": "89b52b915f26fd07cff61315ea48d1117f939e73"
+    },
+    {
+      "path": "packages/nostr-crypto/src/bytes.ts",
+      "sha": "0a2ecbb3042c0f55f22acf0039b100e2fa4bf496"
+    },
+    {
+      "path": "packages/nostr-crypto/src/chacha20.ts",
+      "sha": "7d3785a6b2130befb378a1095b76375b85884db4"
+    },
+    {
+      "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+      "sha": "8be2b7b5508144a0c507f7584972a887ad5cb171"
+    },
+    {
+      "path": "packages/nostr-crypto/test/fixtures/NIP44-VECTORS-PROVENANCE.md",
+      "sha": "32844b7ead23992825416aa5ae870c54c4e6e595"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement.test.mjs",
+      "sha": "7bdbff79f59d389d7f6996aec1f54b35fc322908"
+    },
+    {
+      "path": "packages/wallet/test/discovery.test.mjs",
+      "sha": "feccbc9a0c1c9ab37752dbce923f0352cffa0876"
+    },
+    {
+      "path": "packages/wallet/test/local-evm-scenario.test.mjs",
+      "sha": "f6b2b839856f568bd2e4677b973e246cd813ec62"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "sha": "c4b9166a632e89bd3913555f22de6d2cf2cc5cdb"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "sha": "f2d898f9693b3271a0a19c5c0a055a9bec7c11c8"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "sha": "3615a1e46d7fe3bfc87fdf4e4ff414716db80f23"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+      "sha": "1c197286e5f3e46fc538244f1e5af48fcf966c0f"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "sha": "9c48346b82fee1a7161dfb0eca73c0dbd8f2f3b6"
+    },
+    {
+      "path": "packages/wallet/test/evm-escrow.test.mjs",
+      "sha": "3730699ca311099ff87cfcff52714534d27900b4"
+    },
+    {
+      "path": "packages/wallet/src/evm-submit.ts",
+      "sha": "8c223e25e51f1dd930aaa4aa23c57e294a90892c"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha": "7288a66ae4c5ea72c87209f665147878be1c4040"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha": "3b6a3e7884ea55ca731a74578edd4f5e0b92815a"
+    },
+    {
+      "path": "packages/wallet/src/discovery.ts",
+      "sha": "00bd8300efbbb821cb888973d6062f0aeab39dcb"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha": "b9af813c4f3d20900fd28ce5309f71304005bdd7"
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement.ts",
+      "sha": "10848dcf2d5c9cb58c57216a497cfdbfc5f46664"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-port-adapter.ts",
+      "sha": "1ee6f49f64d698e405a0336d3868d419b7fdc0a8"
+    },
+    {
+      "path": "packages/wallet/test/lib/g16-bundle-fixture.mjs",
+      "sha": "065e988b8e6c67d79b2911aec746b27fce590a86"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "sha": "6b4bc8aa1261ccddfed237dc924725fcc3555141"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "sha": "5e974de18adb0919c03eec66421dd1e18f17f802"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+      "sha": "571f5759fd92361402eee55a969eeedb9bdb5d30"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/EIP712-LICENSE-NOTICE.md",
+      "sha": "252fb7104c3ca431df37a634057070d10d289a44"
+    },
+    {
+      "path": "packages/domain/test/tx-lifecycle.test.mjs",
+      "sha": "0bd1959c90141f802bffa289068e19402e5976cd"
+    },
+    {
+      "path": "packages/domain/test/read-retry.test.mjs",
+      "sha": "1cc37b860cda2ca80b20a35643d152b5fbe3ad08"
+    },
+    {
+      "path": "packages/domain/test/authority.test.mjs",
+      "sha": "70e5fe58265783dbc9ac6669c8899f34f2226299"
+    },
+    {
+      "path": "packages/domain/test/local-evm-scenario.test.mjs",
+      "sha": "2fa157a264319333890a63eeb005075ddfd4ba80"
+    },
+    {
+      "path": "packages/domain/test/terms-review.test.mjs",
+      "sha": "6f2f85de19956c698f4d50db24b3a042899c9f3c"
+    },
+    {
+      "path": "packages/domain/test/intent-journal.test.mjs",
+      "sha": "1dabb5f70c97123de3a6b6030d467cdaec5e0afa"
+    },
+    {
+      "path": "packages/domain/test/trade-composition.test.mjs",
+      "sha": "d493c2034f3363d7b4ce7c04404c91aa914691f9"
+    },
+    {
+      "path": "packages/domain/test/payment-preflight.test.mjs",
+      "sha": "3f6fcabc1e5b2f53210cd69650eef63be49cad74"
+    },
+    {
+      "path": "packages/domain/test/errors.test.mjs",
+      "sha": "e8da3d0aff4ad879ce79eb3bbafabe2816eb3dd5"
+    },
+    {
+      "path": "packages/domain/test/registry.test.mjs",
+      "sha": "2ab7d7d34d816777b3aaffe763ae35904b95f05c"
+    },
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "sha": "459039de265bb9ca98bdc43b84f16c20e2567d2a"
+    },
+    {
+      "path": "packages/domain/src/payment-preflight.ts",
+      "sha": "81ab25e9c08c28f879f043158d49498db7398d35"
+    },
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "sha": "a7a4aea84186e3cd7c05b7b275cace24e50261f3"
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha": "7e157f40bf2fe0625fd2d42b7397667664afdf5f"
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "sha": "bab80670f91e7173a656d7f6e88dba0c46d5773f"
+    },
+    {
+      "path": "packages/domain/src/authority.ts",
+      "sha": "83c4341610b3e1fb46b60ca631035cdf51291b22"
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha": "39c38db45686516db53e459d17fdf2286761e81f"
+    },
+    {
+      "path": "packages/domain/src/trade-composition.ts",
+      "sha": "25b8c0081df05b6abf1ca594ed709f11790d5d9f"
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "sha": "1e8a714bf9afe8fd9a701328e6272f127f091c18"
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha": "b3257781cee02ba2b23854e3f62f1e34db746f7d"
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "sha": "dd6c9994c18fb4e903a447492878452e4e16d15e"
+    },
+    {
+      "path": "packages/domain/test/fixtures/g16-vectors.json",
+      "sha": "664eb80f5f8ac5072b8ac2aec8fa33675c8a9bf7"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/registry.json",
+      "sha": "7a550f8d0710b6d6d6f1df319b163b1a53ade64d"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/README.md",
+      "sha": "fef93e7698dcac671026f0a799efaeb8ffa6d731"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/scenario.json",
+      "sha": "8a85bdf453fffad2bc45126e7b6d215160c3fd44"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha": "2c97c7b14f773ca0cfd172f858097a8cdda479aa"
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha": "dd389faf82ebb8a9942d689ffc9b352423126b9e"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-control.ts",
+      "sha": "762a1af97f5095884050bec07b3168968a891e34"
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha": "303aa45ef9498613d5ca0d8768219a501d122568"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-input.ts",
+      "sha": "c6d07309b225ca68dc5060485481aae878f4de09"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha": "c6774ec9d519e8ddfab385dd975d3bf9d0eeb5ed"
+    },
+    {
+      "path": "packages/schemas/src/identity.ts",
+      "sha": "664d921865882ae0463be0e499e89234142d2fa4"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha": "5e77c2baa678cd31e3bb1cd0d558cc1fde4979ef"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-protocol.ts",
+      "sha": "85836b0aec7f4898e3d7590fdfb88be2892e3258"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha": "3d2308b4261a854a146906ca7fde43790bceab97"
+    },
+    {
+      "path": "packages/schemas/src/transport.ts",
+      "sha": "3bbd8d0ece621e1d3c5838d41e45db6cb055d33f"
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha": "c9165f64f8566c5b7a8f112366ddbe672c41dbfa"
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "sha": "c902a67990a937171673bc7e2228755360e8df60"
+    },
+    {
+      "path": "packages/identity/test/identity.test.mjs",
+      "sha": "0b75cc49708f3472eabfb8548b23fb135bd090e8"
+    },
+    {
+      "path": "packages/identity/test/provider.test.mjs",
+      "sha": "c84ffc6c1e75735dbf7289c478a09a917550c7e0"
+    },
+    {
+      "path": "packages/identity/test/schema.test.mjs",
+      "sha": "a3322586ef0b0e22ce813ef21478b50c9cf54d3f"
+    },
+    {
+      "path": "packages/identity/src/noble-provider.ts",
+      "sha": "14e231236c012153ec759502dce7a1526763d7df"
+    },
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "sha": "d80c111765f7199859df8d1257378ca2b82cad27"
+    },
+    {
+      "path": "packages/identity/test/fixtures/noble-MIT-LICENSE.txt",
+      "sha": "9297a046d01cf521f93679535be51a8e5b736c0d"
+    },
+    {
+      "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+      "sha": "672339129a844a060591bb22f444158ff45438ed"
+    },
+    {
+      "path": "packages/identity/test/fixtures/BIP340-LICENSE-NOTICE.md",
+      "sha": "581eb8b10db25bb3bf84e4ba7d0ae4ae58726f53"
+    },
+    {
+      "path": "packages/transport/test/policy.test.mjs",
+      "sha": "1710e3fd935f1c6674ee17cf2ed1fa3a4340872d"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha": "e2cd9fdcdae6f2a1e90161caefe2c85f63179c6c"
+    },
+    {
+      "path": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "sha": "958a01ca2bffc5237cbc72097a9c7fc7888caa4e"
+    },
+    {
+      "path": "packages/relay/test/pool-lifetime.test.mjs",
+      "sha": "8619dae80f1b4d388304e4abf2a481ee1b1cb7de"
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha": "4e01a5b9100151fb157c61bbdf01b1a1357cb915"
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "sha": "895d19735d7c49ad8bccf5133ec1eef67f74aaf3"
+    },
+    {
+      "path": "packages/relay/src/ad.ts",
+      "sha": "6ee5a62e0bca278f6b06caa1ebc40569acecc1a1"
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha": "1e9257bc042f92ac5766e52528377ed158662b2f"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha": "c1d64827ad6eacec1bea98ea5146fb8a5ff69e4e"
+    },
+    {
+      "path": "packages/relay/test/support/harness.mjs",
+      "sha": "6f57115fad1e5a396afef3806d5f31436e8c514f"
+    },
+    {
+      "path": "packages/relay/test/support/crypto-double.mjs",
+      "sha": "4e65c3bf10f04b494ec6fa7ca05eb7b9871b7ee4"
+    },
+    {
+      "path": "packages/relay/test/support/fake-relay.mjs",
+      "sha": "e0d4fba58d8089d571506e6b2e00abb6a78e1a8c"
+    }
+  ],
+  "validation": {
+    "command": "node --test --test-reporter=tap packages/exchange/test/exchange.test.mjs packages/relay/test/*.test.mjs packages/nostr-crypto/test/*.test.mjs packages/transport/test/*.test.mjs",
+    "node": "24.22.1",
+    "tests": 117,
+    "pass": 117,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "scope": "105 verified package files, partial snapshot; not full application/build/CI qualification",
+    "knownOpenDefects": 3,
+    "knownFailingRealProviderCases": 5
+  },
+  "userScope": "Consolidate compatible preserved work into a new candidate; ignore Sonar details, not required-check enforcement; no original refs/main changed."
+}

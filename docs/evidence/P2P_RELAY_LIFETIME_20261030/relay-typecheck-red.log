@@ -1,0 +1,4 @@
+packages/relay/src/pool.ts(232,50): error TS2379: Argument of type '{ signal: AbortSignal | undefined; }' is not assignable to parameter of type 'CaptureOptions' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'signal' are incompatible.
+    Type 'AbortSignal | undefined' is not assignable to type 'AbortSignal'.
+      Type 'undefined' is not assignable to type 'AbortSignal'.

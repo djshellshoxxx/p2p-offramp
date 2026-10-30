@@ -1,0 +1,370 @@
+TAP version 13
+# Subtest: ad event carries only public metadata with fixed tags and the chosen kind
+ok 1 - ad event carries only public metadata with fixed tags and the chosen kind
+  ---
+  duration_ms: 10.355738
+  type: 'test'
+  ...
+# Subtest: strict content parser rejects unknown keys, floats, bad ranges and oversized content
+ok 2 - strict content parser rejects unknown keys, floats, bad ranges and oversized content
+  ---
+  duration_ms: 0.513721
+  type: 'test'
+  ...
+# Subtest: lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+ok 3 - lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+  ---
+  duration_ms: 54.347526
+  type: 'test'
+  ...
+# Subtest: book accepts, dedupes, orders by revision, and is not decided by created_at
+ok 4 - book accepts, dedupes, orders by revision, and is not decided by created_at
+  ---
+  duration_ms: 25.585245
+  type: 'test'
+  ...
+# Subtest: same revision with a different event id is a conflict that blocks use until a higher revision
+ok 5 - same revision with a different event id is a conflict that blocks use until a higher revision
+  ---
+  duration_ms: 16.074148
+  type: 'test'
+  ...
+# Subtest: expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+ok 6 - expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+  ---
+  duration_ms: 10.239336
+  type: 'test'
+  ...
+# Subtest: clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+ok 7 - clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+  ---
+  duration_ms: 3.95601
+  type: 'test'
+  ...
+# Subtest: forged or unverifiable events are rejected by the book when a verifier is supplied
+ok 8 - forged or unverifiable events are rejected by the book when a verifier is supplied
+  ---
+  duration_ms: 3.220049
+  type: 'test'
+  ...
+# Subtest: NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+ok 9 - NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+  ---
+  duration_ms: 17.50682
+  type: 'test'
+  ...
+# Subtest: capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+ok 10 - capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+  ---
+  duration_ms: 22.619203
+  type: 'test'
+  ...
+# Subtest: list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+ok 11 - list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+  ---
+  duration_ms: 8.151363
+  type: 'test'
+  ...
+# Subtest: publish: caller abort during connect closes the socket and never sends a late EVENT
+ok 12 - publish: caller abort during connect closes the socket and never sends a late EVENT
+  ---
+  duration_ms: 29.741391
+  type: 'test'
+  ...
+# Subtest: publish: pool close during connect closes the socket and never sends a late EVENT
+ok 13 - publish: pool close during connect closes the socket and never sends a late EVENT
+  ---
+  duration_ms: 14.809575
+  type: 'test'
+  ...
+# Subtest: publish: caller abort after send closes the socket and settles unknown before timeout
+ok 14 - publish: caller abort after send closes the socket and settles unknown before timeout
+  ---
+  duration_ms: 10.562675
+  type: 'test'
+  ...
+# Subtest: publish: pool close after send closes the socket and settles unknown before timeout
+ok 15 - publish: pool close after send closes the socket and settles unknown before timeout
+  ---
+  duration_ms: 6.071843
+  type: 'test'
+  ...
+# Subtest: publish: broker revoke after send closes the socket and settles unknown before timeout
+ok 16 - publish: broker revoke after send closes the socket and settles unknown before timeout
+  ---
+  duration_ms: 6.585114
+  type: 'test'
+  ...
+# Subtest: unsolicited CLOSED cannot poison a future subscription id
+ok 17 - unsolicited CLOSED cannot poison a future subscription id
+  ---
+  duration_ms: 24.645594
+  type: 'test'
+  ...
+# Subtest: EOSE after CLOSED does not call the ended subscription handler
+ok 18 - EOSE after CLOSED does not call the ended subscription handler
+  ---
+  duration_ms: 0.997127
+  type: 'test'
+  ...
+# Subtest: publish: abort between socket open and the async continuation releases the socket
+ok 19 - publish: abort between socket open and the async continuation releases the socket
+  ---
+  duration_ms: 4.995039
+  type: 'test'
+  ...
+# Subtest: read: pool close releases a pending connection without waiting for its timeout
+ok 20 - read: pool close releases a pending connection without waiting for its timeout
+  ---
+  duration_ms: 0.791342
+  type: 'test'
+  ...
+# Subtest: read: last subscription close releases a pending connection without waiting for its timeout
+ok 21 - read: last subscription close releases a pending connection without waiting for its timeout
+  ---
+  duration_ms: 0.64158
+  type: 'test'
+  ...
+# Subtest: connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays
+ok 22 - connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays
+  ---
+  duration_ms: 59.762477
+  type: 'test'
+  ...
+# Subtest: strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct
+ok 23 - strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct
+  ---
+  duration_ms: 145.412351
+  type: 'test'
+  ...
+# Subtest: ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked
+ok 24 - ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked
+  ---
+  duration_ms: 11.346766
+  type: 'test'
+  ...
+# Subtest: switching to strict mid-session revokes sockets and the pool does not reconnect
+ok 25 - switching to strict mid-session revokes sockets and the pool does not reconnect
+  ---
+  duration_ms: 11.777614
+  type: 'test'
+  ...
+# Subtest: bounds: relay candidates, active connections, subscriptions and filter shape
+ok 26 - bounds: relay candidates, active connections, subscriptions and filter shape
+  ---
+  duration_ms: 28.764619
+  type: 'test'
+  ...
+# Subtest: failover: a relay that never connects exhausts six reconnects, then the next approved relay is used
+ok 27 - failover: a relay that never connects exhausts six reconnects, then the next approved relay is used
+  ---
+  duration_ms: 92.053684
+  type: 'test'
+  ...
+# Subtest: reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery
+ok 28 - reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery
+  ---
+  duration_ms: 23.545053
+  type: 'test'
+  ...
+# Subtest: backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime
+ok 29 - backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime
+  ---
+  duration_ms: 32.588303
+  type: 'test'
+  ...
+# Subtest: malicious relay: flood is rate limited, valid events pass, memory use stays bounded
+ok 30 - malicious relay: flood is rate limited, valid events pass, memory use stays bounded
+  ---
+  duration_ms: 766.810174
+  type: 'test'
+  ...
+# Subtest: malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock)
+ok 31 - malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock)
+  ---
+  duration_ms: 1098.319809
+  type: 'test'
+  ...
+# Subtest: malicious relay: an oversized frame bans the relay immediately and it is never reconnected
+ok 32 - malicious relay: an oversized frame bans the relay immediately and it is never reconnected
+  ---
+  duration_ms: 51.86504
+  type: 'test'
+  ...
+# Subtest: malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay
+ok 33 - malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay
+  ---
+  duration_ms: 19.323217
+  type: 'test'
+  ...
+# Subtest: malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized
+ok 34 - malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized
+  ---
+  duration_ms: 10.366292
+  type: 'test'
+  ...
+# Subtest: malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered
+ok 35 - malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered
+  ---
+  duration_ms: 8.259071
+  type: 'test'
+  ...
+# Subtest: per-subscription event cap closes the subscription on that relay and dedupe memory is bounded
+ok 36 - per-subscription event cap closes the subscription on that relay and dedupe memory is bounded
+  ---
+  duration_ms: 16.604921
+  type: 'test'
+  ...
+# Subtest: dedupe memory evicts the oldest ids beyond 4096
+ok 37 - dedupe memory evicts the oldest ids beyond 4096
+  ---
+  duration_ms: 44.111578
+  type: 'test'
+  ...
+# Subtest: hanging socket: connect timeout fails the attempt without blocking other relays
+ok 38 - hanging socket: connect timeout fails the attempt without blocking other relays
+  ---
+  duration_ms: 48.214373
+  type: 'test'
+  ...
+# Subtest: closing the last subscription closes sockets and stops reconnecting
+ok 39 - closing the last subscription closes sockets and stops reconnecting
+  ---
+  duration_ms: 53.469522
+  type: 'test'
+  ...
+# Subtest: end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion
+ok 40 - end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion
+  ---
+  duration_ms: 28.811458
+  type: 'test'
+  ...
+# Subtest: publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported
+ok 41 - publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported
+  ---
+  duration_ms: 11.370329
+  type: 'test'
+  ...
+# Subtest: relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled
+ok 42 - relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled
+  ---
+  duration_ms: 1.310861
+  type: 'test'
+  ...
+# Subtest: crypto stays injected: the default verifier is required and signing is never done in the pool
+ok 43 - crypto stays injected: the default verifier is required and signing is never done in the pool
+  ---
+  duration_ms: 1.14829
+  type: 'test'
+  ...
+# Subtest: production default has empty authority and all channels unknown; wallet never becomes an app request
+ok 44 - production default has empty authority and all channels unknown; wallet never becomes an app request
+  ---
+  duration_ms: 1.951571
+  type: 'test'
+  ...
+# Subtest: fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback
+ok 45 - fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback
+  ---
+  duration_ms: 17.121509
+  type: 'test'
+  ...
+# Subtest: ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet
+ok 46 - ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet
+  ---
+  duration_ms: 0.291341
+  type: 'test'
+  ...
+# Subtest: permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize
+ok 47 - permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize
+  ---
+  duration_ms: 0.326844
+  type: 'test'
+  ...
+# Subtest: trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics
+ok 48 - trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics
+  ---
+  duration_ms: 0.272173
+  type: 'test'
+  ...
+# Subtest: hostile thrown capability values cannot escape fixed refusal handling
+ok 49 - hostile thrown capability values cannot escape fixed refusal handling
+  ---
+  duration_ms: 0.339784
+  type: 'test'
+  ...
+# Subtest: inspection cannot relabel a stale registry callback result under a newer generation
+ok 50 - inspection cannot relabel a stale registry callback result under a newer generation
+  ---
+  duration_ms: 0.279004
+  type: 'test'
+  ...
+# Subtest: projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes
+ok 51 - projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes
+  ---
+  duration_ms: 0.460012
+  type: 'test'
+  ...
+# Subtest: expiry revokes before invocation and after awaits; queued late callbacks cannot publish
+ok 52 - expiry revokes before invocation and after awaits; queued late callbacks cannot publish
+  ---
+  duration_ms: 9.413132
+  type: 'test'
+  ...
+# Subtest: mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization
+ok 53 - mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization
+  ---
+  duration_ms: 1.238775
+  type: 'test'
+  ...
+# Subtest: already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity
+ok 54 - already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity
+  ---
+  duration_ms: 4.527035
+  type: 'test'
+  ...
+# Subtest: outstanding permit count is bounded and scoped use is single-shot
+ok 55 - outstanding permit count is bounded and scoped use is single-shot
+  ---
+  duration_ms: 3.654253
+  type: 'test'
+  ...
+# Subtest: native callback failure is sanitized, revokes private evidence and never falls back to direct
+ok 56 - native callback failure is sanitized, revokes private evidence and never falls back to direct
+  ---
+  duration_ms: 0.403017
+  type: 'test'
+  ...
+# Subtest: a policy change after native settlement but before scope continuation suppresses success
+ok 57 - a policy change after native settlement but before scope continuation suppresses success
+  ---
+  duration_ms: 0.226385
+  type: 'test'
+  ...
+# Subtest: owned expiry timer closes resources without polling; a failed monotonic clock fails closed
+ok 58 - owned expiry timer closes resources without polling; a failed monotonic clock fails closed
+  ---
+  duration_ms: 1.51253
+  type: 'test'
+  ...
+# Subtest: operation timeout aborts owned scope without retry or accepting a late callback
+ok 59 - operation timeout aborts owned scope without retry or accepting a late callback
+  ---
+  duration_ms: 0.706006
+  type: 'test'
+  ...
+# Subtest: external abort during a scoped operation closes its resource immediately and discards late output
+ok 60 - external abort during a scoped operation closes its resource immediately and discards late output
+  ---
+  duration_ms: 0.402737
+  type: 'test'
+  ...
+1..60
+# tests 60
+# suites 0
+# pass 60
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2909.916044

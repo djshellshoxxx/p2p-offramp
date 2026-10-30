@@ -132,6 +132,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   async function build(s: Session, type: MessageType, body: Record<string, unknown>, termsHash: string | null, secret: Uint8Array, now: number): Promise<ExchangeResult<{ envelope: ExchangeEnvelopeV1; rumorId: string; recipientWrap: NostrEvent; selfWrap: NostrEvent }>> {
     try {
       if (await provider.publicKey(secret) !== self) return bad('WRONG_SIGNER');
+      if (closed) return bad('CLOSED');
       const recipient = s.role === 'seller' ? s.buyer : s.seller;
       const expires = Math.min(now + ttl, s.adExpires);
       if (expires <= now) return bad('AD_EXPIRED');
@@ -143,6 +144,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (new TextEncoder().encode(JSON.stringify(rumor)).byteLength > MAX_RUMOR_JSON_BYTES) return bad('LIMIT_EXCEEDED');
       const recipientWrap = await createGiftWrap(await createSeal(rumor, secret, recipient, provider, now), recipient, provider, now);
       const selfWrap = await createGiftWrap(await createSeal(rumor, secret, self, provider, now), self, provider, now);
+      if (closed) return bad('CLOSED');
       return { ok: true, value: { envelope, rumorId: rumor.id, recipientWrap, selfWrap } };
     } catch { return bad('INVALID_INPUT'); }
   }
@@ -182,6 +184,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (sessions.has(s.id) && !isTerminal(sessions.get(s.id)!.state) && now < sessions.get(s.id)!.adExpires) return bad('OUT_OF_ORDER');
       sessions.delete(s.id);
       const built = await build(s, 'take-request', { buyerAddress, buyerMessagingKey: self }, null, secret, now);
+      if (closed) return bad('CLOSED');
       if (!built.ok) return built;
       if (!admit(s, now)) return bad('LIMIT_EXCEEDED');
       return { ok: true, value: sent(s, 'take-request', built.value, built.value.envelope.expiresAtSeconds) };
@@ -193,10 +196,12 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (!(termsBytes instanceof Uint8Array)) return bad('INVALID_INPUT');
       if (transition(s.state, 'terms-offer', 'seller') === null) return bad('OUT_OF_ORDER');
       const copy = new Uint8Array(termsBytes);
-      const checked = await reviewForSession(s, copy, now!); if (!checked.ok) return checked;
+      const checked = await reviewForSession(s, copy, now!); if (closed) return bad('CLOSED');
+      if (!checked.ok) return checked;
       let text: string;
       try { text = new TextDecoder('utf-8', { fatal: true }).decode(copy); } catch { return bad('INVALID_INPUT'); }
       const built = await build(s, 'terms-offer', { terms: text }, checked.value.hash, secret, now!);
+      if (closed) return bad('CLOSED');
       if (!built.ok) return built;
       if (s.state !== 'taken') return bad('OUT_OF_ORDER'); // re-check after awaits
       s.state = 'offered'; s.terms = { hash: checked.value.hash, bytes: copy, reviewed: checked.value.reviewed };
@@ -213,6 +218,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (BigInt(s.terms.reviewed.acceptBeforeSeconds) <= BigInt(now!)) return bad('EXPIRED');
       const { hash, reviewed } = s.terms;
       const built = await build(s, 'terms-accept', { revision: reviewed.revision }, hash, secret, now!);
+      if (closed) return bad('CLOSED');
       if (!built.ok) return built;
       if (s.state !== 'offered') return bad('OUT_OF_ORDER');
       s.state = 'accepted';
@@ -224,6 +230,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       const s = live.value;
       if (transition(s.state, 'terms-reject', 'buyer') === null || s.terms === null) return bad('OUT_OF_ORDER');
       const built = await build(s, 'terms-reject', { reason }, s.terms.hash, secret, now!);
+      if (closed) return bad('CLOSED');
       if (!built.ok) return built;
       if (s.state !== 'offered') return bad('OUT_OF_ORDER');
       s.state = 'rejected';
@@ -238,6 +245,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (now >= s.adExpires) return bad('AD_EXPIRED');
       if (transition(s.state, 'cancel', s.role) === null) return bad('OUT_OF_ORDER');
       const built = await build(s, 'cancel', { reason }, s.terms?.hash ?? null, secret, now);
+      if (closed) return bad('CLOSED');
       if (!built.ok) return built;
       if (isTerminal(s.state)) return bad('OUT_OF_ORDER');
       s.state = 'cancelled';
@@ -252,6 +260,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
         if (await provider.publicKey(secret) !== self) return bad('WRONG_SIGNER');
         rumor = (await unwrapGiftWrap(wrap, secret, provider, { now, rumorLimits: RUMOR_LIMITS })).rumor;
       } catch { return bad('WRAP_INVALID'); }
+      if (closed) return bad('CLOSED');
       if (rumor.kind !== KIND_PRIVATE_DIRECT_MESSAGE) return bad('MALFORMED');
       // The seal's author is authenticated (rumor.pubkey == seal.pubkey); envelope fields must agree with it.
       if (rumor.pubkey === self) return { ok: true, value: Object.freeze({ own: true as const, rumorId: rumor.id }) };
@@ -309,6 +318,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
         let bytes: Uint8Array;
         try { bytes = new TextEncoder().encode(text); } catch { return bad('MALFORMED'); }
         const checked = await reviewForSession(session, bytes, now);
+        if (closed) return bad('CLOSED');
         if (!checked.ok) return checked;
         if (checked.value.hash !== env.termsHash) return bad('HASH_MISMATCH');
         session = sessions.get(id);

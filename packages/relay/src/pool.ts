@@ -83,7 +83,7 @@ interface RelayRec {
   readonly cfg: RelayConfig; state: RelayState; reason: string | null; failures: number; penalty: number;
   socket: RelaySocketLike | null; scope: TransportScope | null; timer: ReturnType<typeof setTimeout> | undefined; openedAt: number;
   tokens: number; refilledAt: number; windowIndex: number; windowDropped: number; overloadedWindows: number;
-  counts: Map<string, number>; closedSubs: Set<string>; generation: number;
+  counts: Map<string, number>; closedSubs: Set<string>; generation: number; connecting: AbortController | null;
 }
 const refuse = (error: PoolError): PoolResult<never> => Object.freeze({ ok: false, error });
 
@@ -96,13 +96,14 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const maxActive = Math.max(1, Math.min(options.maxRelays ?? POOL_LIMITS.maxRelays, POOL_LIMITS.maxRelays));
   const seenIds = new Map<string, true>();
   const subs = new Map<string, Sub>();
+  const publications = new Set<AbortController>();
   const seenEndpoints = new Set<string>();
   const recs: RelayRec[] = [];
   for (const cfg of options.relays) {
     if (seenEndpoints.has(cfg.endpointId)) throw new RangeError('duplicate relay');
     seenEndpoints.add(cfg.endpointId);
     recs.push({ cfg: Object.freeze({ ...cfg }), state: 'idle', reason: null, failures: 0, penalty: 0, socket: null, scope: null, timer: undefined, openedAt: 0,
-      tokens: POOL_LIMITS.burst, refilledAt: clock(), windowIndex: 0, windowDropped: 0, overloadedWindows: 0, counts: new Map(), closedSubs: new Set(), generation: 0 });
+      tokens: POOL_LIMITS.burst, refilledAt: clock(), windowIndex: 0, windowDropped: 0, overloadedWindows: 0, counts: new Map(), closedSubs: new Set(), generation: 0, connecting: null });
   }
   let closed = false, subCounter = 0, inFlight = 0;
 
@@ -113,6 +114,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
 
   function teardown(r: RelayRec): void {
     r.generation++;
+    r.connecting?.abort(); r.connecting = null;
     if (r.timer !== undefined) clearTimeout(r.timer);
     r.timer = undefined;
     const socket = r.socket, scope = r.scope; r.socket = null; r.scope = null;
@@ -209,28 +211,42 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       case 'EOSE': {
         const sub = subs.get(frame.subId);
         if (!sub || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
+        if (r.closedSubs.has(frame.subId)) return;
         try { sub.handlers.onEose?.(r.cfg.endpointId); } catch { /* ignore */ }
         return;
       }
-      case 'CLOSED': r.closedSubs.add(frame.subId); return; // relay refused or ended it; never auto-resubscribed
+      case 'CLOSED':
+        // Only a currently requested subscription can end. Unsolicited ids must not consume
+        // memory or pre-empt a future subscription whose id happens to match.
+        if (!subs.has(frame.subId) || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
+        r.closedSubs.add(frame.subId); return; // relay refused or ended it; never auto-resubscribed
       case 'NOTICE': return; // text is never interpreted or surfaced
       case 'OK': penalize(r, PENALTY.unexpected, 'unexpected-ok');
     }
   }
   /** Authorize through G05, capture, and open one socket inside the single-shot scope.run. */
-  async function open(r: RelayRec, method: 'read' | 'publish'): Promise<{ socket: RelaySocketLike; scope: TransportScope } | RouteError> {
+  async function open(r: RelayRec, method: 'read' | 'publish', signal?: AbortSignal): Promise<{ socket: RelaySocketLike; scope: TransportScope } | RouteError> {
     const permit: Permit | RouteError = options.broker.authorize({ channel: 'relay', endpointId: r.cfg.endpointId, method });
     if (typeof permit === 'string') return permit;
     let scope: TransportScope | RouteError;
-    try { scope = options.broker.capture(permit); } catch { return 'ROUTE_UNAVAILABLE'; }
+    try { scope = options.broker.capture(permit, signal === undefined ? {} : { signal }); } catch { return 'ROUTE_UNAVAILABLE'; }
     if (typeof scope === 'string') return scope;
     const leased = scope;
+    // Keep ownership across scope.run's async boundary, including an open socket whose
+    // successful result is discarded by a concurrent broker/caller cancellation.
+    let socket: RelaySocketLike | null = null;
+    const discard = (): void => {
+      if (socket === null) return;
+      socket.onopen = socket.onclose = socket.onerror = socket.onmessage = null;
+      try { socket.close(); } catch { /* ignore */ }
+      socket = null;
+    };
     // The operation never rejects: a rejected operation would make the broker block the whole adapter.
     const result = await leased.run(signal => new Promise<RelaySocketLike | null>(resolve => {
-      let socket: RelaySocketLike | null = null, done = false;
+      let done = false;
       const finish = (value: RelaySocketLike | null): void => {
         if (done) return; done = true; clearTimeout(timer); signal.removeEventListener('abort', onAbort);
-        if (value === null && socket) { socket.onopen = socket.onclose = socket.onerror = socket.onmessage = null; try { socket.close(); } catch { /* ignore */ } }
+        if (value === null) discard();
         resolve(value);
       };
       const onAbort = (): void => finish(null);
@@ -238,21 +254,25 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       signal.addEventListener('abort', onAbort, { once: true });
       try {
         socket = connect(r.cfg.url, signal);
+        if (done) { discard(); return; }
         socket.onopen = () => finish(socket);
         socket.onclose = () => finish(null);
         socket.onerror = () => finish(null);
       } catch { finish(null); }
     }));
-    if (!result.ok) { leased.dispose(); return result.error; }
-    if (result.value === null) { leased.dispose(); return 'ROUTE_UNAVAILABLE'; }
-    if (!leased.current()) { try { result.value.close(); } catch { /* ignore */ } leased.dispose(); return 'CANCELLED'; }
+    if (!result.ok) { discard(); leased.dispose(); return result.error; }
+    if (result.value === null) { discard(); leased.dispose(); return 'ROUTE_UNAVAILABLE'; }
+    if (!leased.current()) { discard(); leased.dispose(); return 'CANCELLED'; }
     return { socket: result.value, scope: leased };
   }
   async function start(r: RelayRec): Promise<void> {
     if (closed) return;
-    setState(r, 'connecting'); emitStatus();
     const generation = ++r.generation;
-    const opened = await open(r, 'read');
+    const connecting = new AbortController(); r.connecting = connecting;
+    setState(r, 'connecting'); emitStatus();
+    if (closed || r.generation !== generation) return;
+    const opened = await open(r, 'read', connecting.signal);
+    if (r.connecting === connecting) r.connecting = null;
     if (closed || r.generation !== generation) {
       if (typeof opened !== 'string') { try { opened.socket.close(); } catch { /* ignore */ } opened.scope.dispose(); }
       return;
@@ -266,6 +286,9 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     r.socket = opened.socket; r.scope = opened.scope; r.openedAt = clock();
     r.tokens = POOL_LIMITS.burst; r.refilledAt = r.openedAt; r.windowIndex = Math.floor(r.openedAt / POOL_LIMITS.overloadWindowMs); r.windowDropped = 0; r.overloadedWindows = 0;
     setState(r, 'open'); emitStatus();
+    // An observer may close the pool/subscription or revoke the broker synchronously.
+    if (closed || r.generation !== generation) return;
+    if (!opened.scope.current()) { fail(r, null, 'revoked'); return; }
     const socket = opened.socket;
     socket.onmessage = event => onFrame(r, generation, event.data);
     socket.onclose = () => { if (r.generation === generation && !closed) fail(r, null, 'closed'); };
@@ -304,32 +327,42 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     if (subs.size === 0) for (const r of recs) if (active(r)) { teardown(r); setState(r, 'idle'); r.failures = 0; }
     emitStatus();
   }
-  function publishOne(r: RelayRec, event: NostrEvent, signal: AbortSignal | undefined): Promise<PublishResult> {
+  async function publishOne(r: RelayRec, event: NostrEvent, signal: AbortSignal | undefined): Promise<PublishResult> {
     const unknown = (): PublishResult => ({ eventId: event.id, relayId: r.cfg.endpointId, status: 'unknown' });
-    return (async () => {
-      if (r.state === 'banned') return unknown();
-      const opened = await open(r, 'publish');
+    if (closed || signal?.aborted || r.state === 'banned') return unknown();
+    const controller = new AbortController();
+    const cancel = (): void => controller.abort();
+    publications.add(controller);
+    signal?.addEventListener('abort', cancel, { once: true });
+    try {
+      const opened = await open(r, 'publish', controller.signal);
       if (typeof opened === 'string') return unknown();
       const { socket, scope } = opened;
-      return new Promise<PublishResult>(resolve => {
+      // Await keeps this publication owned until ACK, refusal, cancellation or timeout.
+      return await new Promise<PublishResult>(resolve => {
         let done = false;
         const finish = (status: PublishResult['status']): void => {
-          if (done) return; done = true; clearTimeout(timer); signal?.removeEventListener('abort', abort);
-          socket.onmessage = socket.onclose = socket.onerror = null; try { socket.close(); } catch { /* ignore */ }
+          if (done) return; done = true; clearTimeout(timer); scope.signal.removeEventListener('abort', abort);
+          socket.onopen = socket.onmessage = socket.onclose = socket.onerror = null; try { socket.close(); } catch { /* ignore */ }
           scope.dispose(); resolve({ eventId: event.id, relayId: r.cfg.endpointId, status });
         };
         const abort = (): void => finish('unknown');
         const timer = setTimeout(() => finish('unknown'), timing.publishTimeoutMs);
-        signal?.addEventListener('abort', abort, { once: true });
+        scope.signal.addEventListener('abort', abort, { once: true });
         socket.onclose = socket.onerror = () => finish('unknown');
         socket.onmessage = message => {
           if (!scope.current()) { finish('unknown'); return; }
           const parsed = typeof message.data === 'string' ? parseRelayFrame(message.data) : null;
           if (parsed?.ok && parsed.frame.type === 'OK' && parsed.frame.eventId === event.id) finish(parsed.frame.accepted ? 'accepted' : 'rejected');
         };
+        // Cancellation can occur after the connect promise resolves but before this continuation.
+        if (closed || controller.signal.aborted || !scope.current()) { finish('unknown'); return; }
         try { socket.send(encodeEvent(event)); } catch { finish('unknown'); }
       });
-    })();
+    } finally {
+      signal?.removeEventListener('abort', cancel);
+      publications.delete(controller);
+    }
   }
   function status_(): readonly RelayStatus[] { return status(); }
   const pool: RelayPool = {
@@ -365,6 +398,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     status: status_,
     close() {
       if (closed) return; closed = true;
+      for (const controller of publications) controller.abort();
       for (const r of recs) { teardown(r); setState(r, 'idle'); }
       subs.clear(); seenIds.clear();
     },
