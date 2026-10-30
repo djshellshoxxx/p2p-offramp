@@ -229,7 +229,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     const permit: Permit | RouteError = options.broker.authorize({ channel: 'relay', endpointId: r.cfg.endpointId, method });
     if (typeof permit === 'string') return permit;
     let scope: TransportScope | RouteError;
-    try { scope = options.broker.capture(permit, { signal }); } catch { return 'ROUTE_UNAVAILABLE'; }
+    try { scope = options.broker.capture(permit, signal === undefined ? {} : { signal }); } catch { return 'ROUTE_UNAVAILABLE'; }
     if (typeof scope === 'string') return scope;
     const leased = scope;
     // Keep ownership across scope.run's async boundary, including an open socket whose
