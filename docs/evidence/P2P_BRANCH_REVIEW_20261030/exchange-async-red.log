@@ -1,0 +1,56 @@
+{
+  "source": "/workspace/p2p-offramp-review-20261030/packages/exchange/src/exchange.ts",
+  "qualification": "isolated lifecycle only; mocked crypto/review",
+  "observations": [
+    {
+      "case": "take-crosses-ad-expiry",
+      "result": "SUCCESS_AFTER_EXPIRY",
+      "sessionCount": 1
+    },
+    {
+      "case": "accept-crosses-terms-deadline",
+      "result": "ACCEPTED_AFTER_DEADLINE",
+      "state": "accepted"
+    },
+    {
+      "case": "review-crosses-session-replacement",
+      "result": "OFFER_APPLIED_TO_REPLACEMENT",
+      "buyerAddress": "0x2222222222222222222222222222222222222222",
+      "reviewedBuyer": "0x1111111111111111111111111111111111111111",
+      "state": "offered"
+    },
+    {
+      "case": "outgoing-replay-budget",
+      "configuredMaxSeenMessages": 1,
+      "successfulDistinctMessages": 20
+    }
+  ]
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: expiry, generation, and replay capacity contracts
++ actual - expected
+
+  [
++   false,
++   false,
++   false,
++   false
+-   true,
+-   true,
+-   true,
+-   true
+  ]
+
+    at file:///workspace/p2p-offramp-review-20261030/review/async-repro.mjs:105:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ false, false, false, false ],
+  expected: [ true, true, true, true ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
