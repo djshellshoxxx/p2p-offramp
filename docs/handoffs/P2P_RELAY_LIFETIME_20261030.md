@@ -1,5 +1,36 @@
 # Relay lifetime repair — 2026-10-30
 
+## Latest reviewed checkpoint (supersedes initial source/results below)
+
+- Product source: 0859ea76ab813b5a8dacea51d4c5e5ca3b59e50f; source tree 40b8c945c1071c89788070bcaf9451ce11df46de.
+- Predecessor documentation: b5c0a46d6d84dd990b513ba43da669ec4be942d0.
+- This documentation SHA is the commit containing this section; resolve work/p2p-relay-lifetime-20261030.
+- Draft PR: https://github.com/djshellshoxxx/p2p-offramp/pull/15, base claude/sweet-noether-arf6ne.
+- Source milestones: b6245e50f7bc71ef5563c6bb830f23e47877bb00 (initial lifetime fix), 32c7e50a16f4bfb45809bad47b17a6f511f56dc8 (status-observer revocation), 0859ea76ab813b5a8dacea51d4c5e5ca3b59e50f (exact-optional capture options).
+- packages/relay/src/pool.ts: Git blob c1d64827ad6eacec1bea98ea5146fb8a5ff69e4e; SHA-256 7d76f8e40945c87b16d9c40505487ebee9819f24fe2a678ae36429233b407a8b
+- packages/relay/test/pool-lifetime.test.mjs: Git blob 8619dae80f1b4d388304e4abf2a481ee1b1cb7de; SHA-256 cfd07e2864a49752a1fa8440f075d51b57733e6f2c3601c406fa6702b89e40e6
+
+### Review and additional original failures
+Two read-only AI reviewers used independent standards/specification scopes. Standards: zero hard violations and one optional cleanup-duplication suggestion; no extra refactor was made. Spec: one confirmed pre-existing residual lifetime defect: broker.dispose() from onStatus(open) left the read socket open and sent REQ. Regression on b6245e5 failed 1/1 (relay-observer-red.tap); a post-callback generation/closed/scope check fixes it. The spec reviewer then found no residual issues in this slice. This is AI review, not an independent professional audit or release acceptance.
+
+Hosted schemas-and-crypto at b5c0a46 failed TS2379 in pool.ts:232 because exactOptionalPropertyTypes forbids {signal: undefined}. Original job: https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41039014148/job/124006871812; PR merge checkout 4ea8cdae18de87c0f93336c7638dbbdf00e48dab. The same error was reproduced locally (relay-typecheck-red.log), then fixed by omitting the absent property. Compiler settings were not weakened. The earlier supplementary strict command lacked exactOptionalPropertyTypes and did not establish the repository configuration passed; retain this limitation.
+
+### Current local validation
+- Eleven deterministic lifetime/control-frame regressions.
+- Final relay/transport suite: 61 pass, 0 fail, 0 skipped, 0 cancelled; original command is the same as below. Log: relay-final-green.tap.
+- Available TypeScript 5.9.3 with the exact root tsconfig.json (including exactOptionalPropertyTypes and noUncheckedIndexedAccess) passes for the materialized source subset. This is still not full repository TypeScript 7.0.2 qualification.
+- The original red logs, first-fix source, 57/60 predecessor outcomes and CI failure remain historical evidence. No local full build/browser/Foundry acceptance has been added.
+
+### Current remote and gates
+Remote b5c0a46 and both tested product blob SHAs were verified after publishing. At that predecessor head, incremental Sonar analysis passed with 0 new issues/hotspots; forge, local-trade and inventory passed; schemas-and-crypto failed as above; browser/spec and duplicate push checks were still pending when sampled. CodeRabbit skipped the draft. These results do not transfer to the new final head; final exact-head checks must complete after this update.
+
+The separate exchange-close work is now draft PR #14 at 0054543f81f48e928a46bd58c1dab14f91d0edeb when observed. Its files remain outside this session's ownership. Parent integration/testnet Sonar E/E failures and missing detailed issue access remain unresolved. No merge into another session's integration branch was attempted; current ownership coordination and required review/check acceptance remain gates. Original local preservation branches and app/runtime/schemas reservations remain as below.
+
+Next: verify final remote ref/blob hashes and exact-head full CI; repair concrete failures only in this owned scope. Coordinate PR #14/#15 integration without overwriting other workers. Obtain the parent Sonar findings via authorized access and reconcile the original executor/local branches before claiming consolidation. Preserve ReleaseEnabled=0/connectOrigins:[] and all prior skips/limits. No paid model calls or measured cache usage.
+
+
+## Initial milestone (historical)
+
 ## Source, ownership and restart
 - Verified integration source: 47f9bbee455e7affbc39539489227228eb346a0f.
 - Source/test repair commit: b6245e50f7bc71ef5563c6bb830f23e47877bb00; tree 2947c1683082cde252fad78c152bbc64a9c8f550.
