@@ -1,0 +1,53 @@
+# Continue P2P Offramp to lean EVM acceptance
+
+Continue `djshellshoxxx/p2p-offramp` autonomously until the owner-approved lean acceptance criteria pass, coding capacity is exhausted, or a specific access/ownership/approval gate prevents further independent progress. Implement accepted, dependency-ready work; do not manufacture tasks or repeat completed checks to stay busy.
+
+## Start from the live checkpoint
+
+Read `P2P_PR14_MERGE_HANDOFF_20261030.md` first for the final PR #14 merge/check status and exact source/documentation SHAs. Recheck GitHub refs, PRs, current-head CI, recent commits, worker handoffs, applicable AGENTS.md/skills, local status/worktrees and unique unpublished commits. Do not assume any snapshot below is still current.
+
+- PR #14 exchange runtime repair: runtime commit `f379dc243cd9164da076c69702c2b5c21898f520`; evidence refactor `2d3135b646bf99f63935287a082856ea7fe6b74d`. Use the final handoff for subsequent corrections/merge status.
+- PR #10 integration `claude/sweet-noether-arf6ne` was `47f9bbee455e7affbc39539489227228eb346a0f` before PR #14. Main was `c8547859f603f04d3df92e68925b99162594c39d`.
+- PR #12 testnet `7165626c17d8afb7ad7fce461ae7df9cbfcdba07` and PR #11 recovery are already ancestors of that integration source. Do not import them twice.
+- PR #15 relay `e0961edc8cb64b466a2a3193aa37158bfc8c3487` is separately owned. Its exact-head checks/review must be confirmed before consolidation.
+- PR #17 test repair `adfbec52f964d9b07c571b8924d31fa03d54e03a` and PR #16 review `9f80c9b27b943b30409710dea76a53d97a761832` are parents of the repaired PR #14. Preserve their histories/evidence; do not recreate their changes.
+- PR #18 consolidation `31bbab0db07163c61b31dab75733e711440372b7` contains relay, original exchange close/test repair, review, validation, gate notes and synthetic screenshots. It predates the runtime repair. Coordinate with its owner and merge the repaired history into that candidate before qualifying it; never overwrite repaired exchange files with its old snapshot.
+- Validation ref `cc9a0a4baa2ad11b9efe4ada639a809542a7c5c9` preserves `9eed65dabb2437b87270dab3f676133a063b5bef`. Keep local G16 branch `work/p2p-restore-commit-reconciliation-test-2026-10-26` at `beb9866ed39452b603554d364c98fe025372da3a` wherever it exists. It remains unincorporated; compare exact current source and coordinate schemas/runtime ownership before extracting it. Retain `saved-review.ts` in the schema facade.
+
+Read current coordinator notes, `LEAN_RELEASE_SCOPE.md`, `DEVELOPMENT_ROADMAP.md`, session/restart notes, and current exchange/relay/consolidation handoffs. Old chronological entries are historical evidence, not proof that a feature remains missing. Distinguish an authenticated full checkout from a materialized partial snapshot and do not claim access to another executor's dirty work.
+
+## Authority and ownership
+
+The owner authorizes necessary changes, branch fixes, compatible consolidation and appropriate reviewed merges once required exact-head checks pass. Preserve original branches, parents, dirty/untracked work and failed evidence. No force-push, destructive reset, blind cherry-pick or uncoordinated updates to another writer's branch. Do not submit a GitHub PR approval without specific confirmation.
+
+One coordinator integrates, with one writer per module. The PR #14 finishing coordinator owns its bounded exchange repair. Relay files remain reserved to PR #15's writer. App/trade UI, `packages/domain/src/terms-review.ts`, runtime/Worker and schemas retain another session's reservation until explicitly reconciled. Consolidation owns its branch and uniquely named handoff files. Inclusion of commits does not transfer source ownership. Read-only reviewers may work in parallel when current task instructions permit them; implementation workers require disjoint owned files. If a handoff cannot be established, finish independent work and name the exact blocked paths.
+
+Use authorized access. Stop an actually denied operation and report its target/reason/outcome; do not change routes to evade it. Earlier unsupported GitHub annotation access and local npm proxy denial remain recorded. Visible CI summaries are usable. Do not repeatedly request inaccessible scanner details, speculate that a gate passed, or disable/bypass required checks. A failed or pending required gate is not merge acceptance.
+
+## Finish branch consolidation safely
+
+First verify PR #14's final state. Its repaired behavior includes post-await identity/state and deadline checks, bounded incoming/outgoing replay admission, latest-take tokens, terminal accepted-session protection until ad expiry, size checks before copying, and close guards. Accepted records count toward the existing maxSessions cap until expiry; cancelled/rejected records may be pruned/restarted. Do not treat the original three runtime defect classes as still open without testing current code.
+
+Use original real-provider RED cases in `docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs` and normal `packages/exchange/test/async-boundaries.test.mjs` as regression evidence. Historical RED logs remain immutable evidence. Local synthetic lifecycle probes only establish scheduling/state behavior; hosted real-provider tests and full exact-head CI are distinct qualifications.
+
+Reconcile PR #18 with repaired exchange and the reviewed relay head using ancestry and three-way file/mode comparison. Preserve all unique validation, evidence and screenshot work. Confirm no app/runtime/schemas/dependency drift and no custodial-ledger content. Run appropriate combined-source checks and substantive review before accepted integration/main merges. Verify remote SHAs afterward. A conflict-free tree, an ancestor's green CI or a passing subset alone is insufficient. Update/close superseded PRs only after verifying their full history/content is retained; preserve branches.
+
+## Implement the remaining product acceptance
+
+Build a concise requirement → implementation → executable evidence → remaining gap/owner table from current source and normative specs. Reuse the existing client foundation, registry/release verification, canonical G16 terms, wallet/escrow, G12 journal/reconciliation, relay and Nostr packages. Implement only demonstrated gaps, in small tested increments.
+
+After app ownership is resolved, compose reviewed exchange/relay, wallet/escrow and G12 lifecycle into the user flow. Complete two-party local/test EVM proof: offer → local review → accept → fund → settle or deadline refund, with honest unknown broadcasts, recovery/chain reconciliation, replay and amount/expiry controls. Acceptance does not prove funding. Chain observation controls funding/terminal authority; relay messages do not prove payment or fiat finality. Do not promote test-only/private providers into normal app authority merely because their unit tests pass.
+
+Assess current tests before adding missing cases: two buyers sharing a seller nonce admit at most one funded trade; new-order nonce reuse; stale cancellation after funding; same-revision equivocation; offline expiry; relay gaps; reorg recovery; duplicate/history restore; interrupted migration, quota/CAS/cross-tab recovery; exact reviewed-byte binding and unknown-outcome resumption. Preserve G03/G09 source-profile data-loss protections, profile cap 16, G11/G15 trust/rollback checks and G16 canonical independent digest vectors. Retain later-preserved Solana/privacy/courier/arbitration/advanced features without claiming them qualified for lean EVM release.
+
+When feasible product work is complete, perform a whole-codebase bug/code review followed by a deep security review. Scope the exact commit/build, cover trust boundaries, cryptography use, state/chain authority, replay/resource limits, recovery/data loss, browser/Worker/relay input and dependency/licensing risks. Preserve reproducible findings and fix them with regression evidence. Same-agent review and CI are not an independent external audit. Keep independent audit, interoperability, device/browser matrix and owner trust/release gates explicit.
+
+## Validation, checkpoints and boundaries
+
+Reproduce a defect before fixing it; distinguish harness setup errors from intended failure assertions. Preserve skips and original failures. Use pinned toolchain/dependencies and appropriate focused checks first, then the required full checks on the final combined source: typecheck, npm test, import boundaries, build policy, spec audit/tests, builds, browser/emitted-app/private browser, parser harness/fuzz, forge and local EVM trade/reconcile. Inspect script effects first. Local fixture scripts do not authorize network deployment or funds. Record exact commands, exit codes, test counts/skips, SHA and environment limitations. Do not add counts from unrelated sources or relabel synthetic fixtures as independent hardware/chain/audit evidence.
+
+Keep client-side/noncustodial architecture, `ReleaseEnabled=0`, `connectOrigins: []`, all crypto/resource/trust gates and unknown outcomes. Never merge the incompatible custodial-ledger branch. No deployment, live funds, new credentials, security-setting changes, paid infrastructure or unapproved release. Testnet preparation is not deployment authority.
+
+At each coherent milestone and before stopping, commit a restart-ready handoff with source/documentation SHAs, changed files, tests/skips/failures, ownership, remote checkpoint verification and concrete next steps. Publish useful GitHub milestones without overwriting another writer. Use configurable prompt caching only if exposed and report it only when measured. Paid Claude work must use the existing authorized shared broker and budget; create no alternative paid route.
+
+Continue independent authorized work when one area is blocked. End with concrete deliverables and any exact remaining action/target/reason, marking it denied, pending or uncertain. Project completion requires the lean scope's executable acceptance and remaining independent decisions; package tests, testnet tooling or a profile preview alone do not establish completion.
