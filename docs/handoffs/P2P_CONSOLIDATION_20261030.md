@@ -63,3 +63,6 @@ Next:
 5. At each milestone record source/documentation SHAs, files, checks/skips, open failures, ownership, remote verification and next steps.
 
 ReleaseEnabled=0, connectOrigins=[] and client-side/noncustodial architecture remain unchanged. No deployment or live funds authority.
+
+## Final concurrent documentation observation
+After the second source intake, the exchange owner advanced to 2d3135b646bf99f63935287a082856ea7fe6b74d. Comparison with f379dc2 shows six evidence/handoff-only paths: shared native lifecycle harness/fixture setup, two reproduction scripts, manifest and owner handoff. No product source changed. This late evidence revision remains preserved on its owner branch and is not included here; the continuation prompt records it for coordinated intake. The 134-test result remains tied to the included f379 product source, not to execution of those newer evidence scripts.

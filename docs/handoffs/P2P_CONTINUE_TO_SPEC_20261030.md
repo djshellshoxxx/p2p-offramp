@@ -23,12 +23,14 @@ The following is an observed checkpoint, not a claim that these refs are still c
 | `claude/sweet-noether-arf6ne` / PR #10 | `47f9bbee455e7affbc39539489227228eb346a0f` |
 | `claude/sweet-shannon-grykla` / PR #12 | `7165626c17d8afb7ad7fce461ae7df9cbfcdba07`; already an ancestor of #10 |
 | `work/p2p-relay-lifetime-20261030` / #15 | `e0961edc8cb64b466a2a3193aa37158bfc8c3487` |
-| `work/p2p-exchange-close-20261030` / #14 | `f379dc243cd9164da076c69702c2b5c21898f520`; owner-produced runtime repair, now included in candidate |
+| `work/p2p-exchange-close-20261030` / #14 | Latest observed head `2d3135b646bf99f63935287a082856ea7fe6b74d`; runtime repair `f379dc243cd9164da076c69702c2b5c21898f520` is included in candidate |
 | `work/p2p-exchange-test-repair-20261030` / #17 | `adfbec52f964d9b07c571b8924d31fa03d54e03a`; already preserved in #14 and candidate ancestry |
 | `work/p2p-independent-branch-review-20261030` / #16 | `9f80c9b27b943b30409710dea76a53d97a761832` |
 | `work/p2p-validation-20261030` | `cc9a0a4baa2ad11b9efe4ada639a809542a7c5c9`; preserves `9eed65dabb2437b87270dab3f676133a063b5bef` in ancestry |
 | `work/p2p-gate-reconciliation-20261030` | `e762e649600493221e3bd10f0c3525858722bc94` |
 | `claude/docs-screenshots` / #13 | `c1e31918ed5e4e370e7217a6a654ea360c71f4b4` |
+
+The exchange owner subsequently published evidence/harness-only commit `2d3135b646bf99f63935287a082856ea7fe6b74d`; its six changed documentation/evidence paths do not alter product source. That late evidence revision remains on its original branch and is not yet included in the candidate. Reconcile it with the owner before changing those artifacts; do not rerun or recreate the runtime repair merely because the branch head moved.
 
 The candidate combines the six preserved work branches on integration 47f9, then the exchange owner's later f379dc2 repair, with original commits as parents. It is an unmerged development candidate, not an accepted release. The five earlier exchange failure schedules pass against the updated combined source; full exact-head qualification remains pending. This session did not advance main or original worker refs. The exchange owner independently advanced #14 during consolidation, which prompted the second intake. PR #11/recovery and older compatible branches are already ancestors of 47f9; do not re-import their content. Keep original PRs/history until the coordinator verifies final integration and closes superseded work deliberately.
 
