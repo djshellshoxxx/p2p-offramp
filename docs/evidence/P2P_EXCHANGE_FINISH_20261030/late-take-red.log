@@ -1,0 +1,19 @@
+{
+  "qualification": "actual exchange source; mocked crypto/review; no funding operation",
+  "observations": [
+    {
+      "before": "cancelled",
+      "beforeBuyer": "0x2222222222222222222222222222222222222222",
+      "lateResult": "LIMIT_EXCEEDED",
+      "after": "cancelled",
+      "afterBuyer": "0x2222222222222222222222222222222222222222"
+    },
+    {
+      "before": "accepted",
+      "beforeBuyer": "0x2222222222222222222222222222222222222222",
+      "lateResult": "LIMIT_EXCEEDED",
+      "after": "accepted",
+      "afterBuyer": "0x2222222222222222222222222222222222222222"
+    }
+  ]
+}

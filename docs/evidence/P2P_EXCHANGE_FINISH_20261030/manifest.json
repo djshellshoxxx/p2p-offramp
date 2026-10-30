@@ -1,0 +1,73 @@
+{
+  "originalRuntimeCommit": "0054543f81f48e928a46bd58c1dab14f91d0edeb",
+  "testRepairParent": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+  "independentReviewParent": "9f80c9b27b943b30409710dea76a53d97a761832",
+  "qualification": "Local actual-source lifecycle checks use explicit mock crypto/review. Normal new tests require pinned real providers and remain pending hosted CI. No cryptographic, funded-value, independent audit or release qualification.",
+  "files": [
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "sha256": "263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a",
+      "gitBlobSha": "888a199d6ec7ab5843c6e57f0e371949de3f33eb"
+    },
+    {
+      "path": "packages/exchange/test/async-boundaries.test.mjs",
+      "sha256": "bed1b87970cbdd1dc5c5da2b3895c7c5c0c8d29a16b7e83cf24f0e08c0a60413",
+      "gitBlobSha": "82854e7623afd111d5c257e5ddacc51e61f60d1a"
+    },
+    {
+      "path": "packages/exchange/test/exchange.test.mjs",
+      "sha256": "546c58d8d83494cc5c483ddc017b1479447c67d4ff3fb2894d15391033ccae72",
+      "gitBlobSha": "043d2fb455198a31b61517df3e57220edec3ae3f"
+    },
+    {
+      "path": "docs/evidence/p2p-exchange-close-20261030/repro.mjs",
+      "sha256": "682328cb4f4d04b58f99be7e5bd488711293aa29c6348f20c8b6b904d37faaf7",
+      "gitBlobSha": "5ad68ab1e8330f033f0de3d6f8aee3b51127cc54"
+    },
+    {
+      "path": "docs/evidence/p2p-exchange-close-20261030/lifecycle-fixtures.mjs",
+      "sha256": "deb997c96e37741368749eb1714fb10a49fcefd42fd2ae06c4dec139f1698490",
+      "gitBlobSha": "a901ba173ec693fd86212a9853d6d19c399f030d"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/async-green.log",
+      "sha256": "f0cd49f059d97e3337171269860d1ee1efe21b4e8b2a1c0b0c4824ecdfe072a8",
+      "gitBlobSha": "15134446b8e20e0bd2d569ada5f4385403647769"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/close-native-green.log",
+      "sha256": "85e64db5089a7e3ecc7bc8a3238222030b7ca65210c87e2c9850903893ae0b30",
+      "gitBlobSha": "0617439348f3ca83eec68d08583b76980ae7a513"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-green.log",
+      "sha256": "d142dd55e77cbb0bb438680d0cf75c8d456c800cdadbb32be82bf629ba2c0ce8",
+      "gitBlobSha": "88e7f23637d081b839825db9b791a5e6f00e6920"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-red.log",
+      "sha256": "b405687e9a4eb356d203f9dab4241ac8a3590811549e19d01a76b501849b87b7",
+      "gitBlobSha": "19223968ee0140d342734632f67dfc050e04b563"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-repro.mjs",
+      "sha256": "2efb0842b36eb5857c04edee668b219a6e25064127900049e77b563788fe2ffc",
+      "gitBlobSha": "0b2809f6a667c1ae11cbb1652f8bd691c493f3b7"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-green.log",
+      "sha256": "c822714ce3f2dda3cb1e93046aa97ff7b8ddc44f68fa48879ac8fc8680299881",
+      "gitBlobSha": "5c199ba0939c4900f5a7ff0d48574f7d9ede63f2"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-red.log",
+      "sha256": "8334f0183c8fc353d496b24335a26bb53da869e9249c3755554c9dd6db69ac84",
+      "gitBlobSha": "61190759503fa8c4a8e83b6247c781f21f2d6735"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-repro.mjs",
+      "sha256": "c727ab44fb6c4d95bfe1935d9a0bc19a2e96f4258968476f72c36e07078f1686",
+      "gitBlobSha": "d98663316d649e012dd3ec736651f24da566c3db"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+2026-10-30T10:23:06.9598123Z ✖ close during take signer lookup refuses the pending result and keeps sessions empty (6.660133ms)
+2026-10-30T10:23:06.9647077Z ✖ close during offer signer lookup refuses the pending result and keeps sessions empty (5.64596ms)
+2026-10-30T10:23:06.9649359Z ✖ close during accept signer lookup refuses the pending result and keeps sessions empty (5.267229ms)
+2026-10-30T10:23:06.9686852Z ✖ close during reject signer lookup refuses the pending result and keeps sessions empty (5.350555ms)
+2026-10-30T10:23:06.9710681Z ✖ close during cancel signer lookup refuses the pending result and keeps sessions empty (5.224758ms)
+2026-10-30T10:23:06.9727477Z ✖ close during receive signer lookup refuses the pending result and keeps sessions empty (10.387491ms)
+2026-10-30T10:23:28.2805334Z ℹ tests 783
+2026-10-30T10:23:28.2806290Z ℹ pass 776
+2026-10-30T10:23:28.2806669Z ℹ fail 6
+2026-10-30T10:23:28.2807399Z ℹ skipped 1
+2026-10-30T10:23:28.2808878Z ✖ failing tests:
+2026-10-30T10:23:28.2811020Z ✖ close during take signer lookup refuses the pending result and keeps sessions empty (6.660133ms)
+2026-10-30T10:23:28.2813811Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2828589Z ✖ close during offer signer lookup refuses the pending result and keeps sessions empty (5.64596ms)
+2026-10-30T10:23:28.2830997Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2844598Z ✖ close during accept signer lookup refuses the pending result and keeps sessions empty (5.267229ms)
+2026-10-30T10:23:28.2846259Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2857284Z ✖ close during reject signer lookup refuses the pending result and keeps sessions empty (5.350555ms)
+2026-10-30T10:23:28.2858646Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2866814Z ✖ close during cancel signer lookup refuses the pending result and keeps sessions empty (5.224758ms)
+2026-10-30T10:23:28.2868159Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2876626Z ✖ close during receive signer lookup refuses the pending result and keeps sessions empty (10.387491ms)
+2026-10-30T10:23:28.2878064Z   TypeError [Error]: 'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+2026-10-30T10:23:28.2895385Z ##[error]Process completed with exit code 1.
