@@ -274,3 +274,53 @@ test('state machine table and the cancel path', async () => {
   assert.equal(ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret)).state, 'taken');
   w.buyer.ex.close(); fail(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret), 'CLOSED');
 });
+
+for (const operation of ['take', 'offer', 'accept', 'reject', 'cancel', 'receive']) {
+  test(`close during ${operation} signer lookup refuses the pending result and keeps sessions empty`, async () => {
+    let armed = false, entered, release;
+    const reached = new Promise(resolve => { entered = resolve; });
+    const gate = new Promise(resolve => { release = resolve; });
+    const delayedProvider = new Proxy(provider, {
+      get(target, key) {
+        if (key === 'publicKey') return async secret => {
+          if (armed) { entered(); await gate; }
+          return target.publicKey(secret);
+        };
+        return Reflect.get(target, key);
+      },
+    });
+    const w = await world({ provider: delayedProvider });
+    let ex = w.buyer.ex, pending, id;
+    if (operation !== 'take') {
+      const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
+      id = take.sessionId;
+      if (operation === 'receive') {
+        ex = w.seller.ex;
+        armed = true;
+        pending = ex.receive(take.recipientWrap, w.seller.secret);
+      } else {
+        ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+        if (operation === 'offer') ex = w.seller.ex;
+        else {
+          const offer = ok(await w.seller.ex.offer(id, termsBytes(), w.seller.secret));
+          ok(await w.buyer.ex.receive(offer.recipientWrap, w.buyer.secret));
+        }
+      }
+    }
+    if (operation !== 'receive') {
+      armed = true;
+      if (operation === 'take') pending = ex.take(w.key, set.terms.buyer, w.buyer.secret);
+      if (operation === 'offer') pending = ex.offer(id, termsBytes(), w.seller.secret);
+      if (operation === 'accept') pending = ex.accept(id, termsBytes(), w.buyer.secret);
+      if (operation === 'reject') pending = ex.reject(id, 'declined', w.buyer.secret);
+      if (operation === 'cancel') pending = ex.cancel(id, 'withdrawn', w.buyer.secret);
+    }
+    await reached;
+    ex.close();
+    release();
+    fail(await pending, 'CLOSED');
+    assert.equal(ex.sessionCount, 0);
+    if (id !== undefined) assert.equal(ex.session(id), null);
+    w.seller.ex.close(); w.buyer.ex.close();
+  });
+}
