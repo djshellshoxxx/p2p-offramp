@@ -280,15 +280,15 @@ for (const operation of ['take', 'offer', 'accept', 'reject', 'cancel', 'receive
     let armed = false, entered, release;
     const reached = new Promise(resolve => { entered = resolve; });
     const gate = new Promise(resolve => { release = resolve; });
-    const delayedProvider = new Proxy(provider, {
-      get(target, key) {
-        if (key === 'publicKey') return async secret => {
-          if (armed) { entered(); await gate; }
-          return target.publicKey(secret);
-        };
-        return Reflect.get(target, key);
+    // The real provider is frozen; replace the method on a new wrapper rather than
+    // violating Proxy invariants for a non-configurable, non-writable property.
+    const delayedProvider = {
+      ...provider,
+      async publicKey(secret) {
+        if (armed) { entered(); await gate; }
+        return provider.publicKey(secret);
       },
-    });
+    };
     const w = await world({ provider: delayedProvider });
     let ex = w.buyer.ex, pending, id;
     if (operation !== 'take') {

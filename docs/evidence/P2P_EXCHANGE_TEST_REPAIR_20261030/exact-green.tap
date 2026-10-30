@@ -1,0 +1,646 @@
+TAP version 13
+# Subtest: two-party exchange over the fake relay with real crypto: ad -> take -> offer -> local review -> accept; hash equals the escrow evmTermsHash
+ok 1 - two-party exchange over the fake relay with real crypto: ad -> take -> offer -> local review -> accept; hash equals the escrow evmTermsHash
+  ---
+  duration_ms: 548.152949
+  type: 'test'
+  ...
+# Subtest: negative: an impostor cannot send an offer; the seller key cannot be claimed inside an envelope
+ok 2 - negative: an impostor cannot send an offer; the seller key cannot be claimed inside an envelope
+  ---
+  duration_ms: 231.679842
+  type: 'test'
+  ...
+# Subtest: negative: replayed, duplicated and expired messages are refused; bounds are enforced without eviction of live ids
+ok 3 - negative: replayed, duplicated and expired messages are refused; bounds are enforced without eviction of live ids
+  ---
+  duration_ms: 574.311216
+  type: 'test'
+  ...
+# Subtest: negative: tampered terms bytes never reach accept
+ok 4 - negative: tampered terms bytes never reach accept
+  ---
+  duration_ms: 284.414739
+  type: 'test'
+  ...
+# Subtest: negative: acceptance of a different revision or different terms is refused by the seller
+ok 5 - negative: acceptance of a different revision or different terms is refused by the seller
+  ---
+  duration_ms: 352.415884
+  type: 'test'
+  ...
+# Subtest: negative: an expired ad cannot be taken, offered on or accepted
+ok 6 - negative: an expired ad cannot be taken, offered on or accepted
+  ---
+  duration_ms: 394.335197
+  type: 'test'
+  ...
+# Subtest: negative: a message from a third pubkey, or from the wrong side, changes nothing
+ok 7 - negative: a message from a third pubkey, or from the wrong side, changes nothing
+  ---
+  duration_ms: 529.689516
+  type: 'test'
+  ...
+# Subtest: state machine table and the cancel path
+ok 8 - state machine table and the cancel path
+  ---
+  duration_ms: 113.776209
+  type: 'test'
+  ...
+# Subtest: close during take signer lookup refuses the pending result and keeps sessions empty
+ok 9 - close during take signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 10.105535
+  type: 'test'
+  ...
+# Subtest: close during offer signer lookup refuses the pending result and keeps sessions empty
+ok 10 - close during offer signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 46.968189
+  type: 'test'
+  ...
+# Subtest: close during accept signer lookup refuses the pending result and keeps sessions empty
+ok 11 - close during accept signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 88.214116
+  type: 'test'
+  ...
+# Subtest: close during reject signer lookup refuses the pending result and keeps sessions empty
+ok 12 - close during reject signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 97.870251
+  type: 'test'
+  ...
+# Subtest: close during cancel signer lookup refuses the pending result and keeps sessions empty
+ok 13 - close during cancel signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 130.600675
+  type: 'test'
+  ...
+# Subtest: close during receive signer lookup refuses the pending result and keeps sessions empty
+ok 14 - close during receive signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 76.501696
+  type: 'test'
+  ...
+# Subtest: provider keeps the G01 identity interface and adds BIP340 and ECDH
+ok 15 - provider keeps the G01 identity interface and adds BIP340 and ECDH
+  ---
+  duration_ms: 73.620101
+  type: 'test'
+  ...
+# Subtest: official BIP340 vectors with 32-byte messages verify through the provider
+ok 16 - official BIP340 vectors with 32-byte messages verify through the provider
+  ---
+  duration_ms: 75.923857
+  type: 'test'
+  ...
+# Subtest: NIP-01 id is SHA-256 of the canonical array and the signature verifies independently
+ok 17 - NIP-01 id is SHA-256 of the canonical array and the signature verifies independently
+  ---
+  duration_ms: 29.172851
+  type: 'test'
+  ...
+# Subtest: strict parse rejects every malformed or hostile event shape
+ok 18 - strict parse rejects every malformed or hostile event shape
+  ---
+  duration_ms: 18.775856
+  type: 'test'
+  ...
+# Subtest: rumors are unsigned, id-checked and refuse a sig field
+ok 19 - rumors are unsigned, id-checked and refuse a sig field
+  ---
+  duration_ms: 1.221096
+  type: 'test'
+  ...
+# Subtest: strict JSON parser rejects duplicate keys, __proto__, depth, trailing data and oversize input
+ok 20 - strict JSON parser rejects duplicate keys, __proto__, depth, trailing data and oversize input
+  ---
+  duration_ms: 2.446738
+  type: 'test'
+  ...
+# Subtest: two counterparties exchange trade-bound messages with a self copy and deduplication
+ok 21 - two counterparties exchange trade-bound messages with a self copy and deduplication
+  ---
+  duration_ms: 576.173336
+  type: 'test'
+  ...
+# Subtest: only the two counterparties, with exact trade and conversation tags, are accepted
+ok 22 - only the two counterparties, with exact trade and conversation tags, are accepted
+  ---
+  duration_ms: 579.022744
+  type: 'test'
+  ...
+# Subtest: NIP-04 kind 4 is rejected at the outer and inner layers
+ok 23 - NIP-04 kind 4 is rejected at the outer and inner layers
+  ---
+  duration_ms: 39.233611
+  type: 'test'
+  ...
+# Subtest: content and resource limits, invalid configuration, close and cancellation
+ok 24 - content and resource limits, invalid configuration, close and cancellation
+  ---
+  duration_ms: 166.24562
+  type: 'test'
+  ...
+# Subtest: a hostile relay cannot crash receive with arbitrary input
+ok 25 - a hostile relay cannot crash receive with arbitrary input
+  ---
+  duration_ms: 11.655356
+  type: 'test'
+  ...
+# Subtest: official NIP-44 vector file is byte-identical to the checksum published in NIP-44
+ok 26 - official NIP-44 vector file is byte-identical to the checksum published in NIP-44
+  ---
+  duration_ms: 7.152738
+  type: 'test'
+  ...
+# Subtest: valid.get_conversation_key: every vector
+ok 27 - valid.get_conversation_key: every vector
+  ---
+  duration_ms: 257.657221
+  type: 'test'
+  ...
+# Subtest: valid.get_message_keys: every vector
+ok 28 - valid.get_message_keys: every vector
+  ---
+  duration_ms: 10.329986
+  type: 'test'
+  ...
+# Subtest: valid.calc_padded_len: every vector
+ok 29 - valid.calc_padded_len: every vector
+  ---
+  duration_ms: 0.484366
+  type: 'test'
+  ...
+# Subtest: valid.encrypt_decrypt: full two-party conversation for every vector
+ok 30 - valid.encrypt_decrypt: full two-party conversation for every vector
+  ---
+  duration_ms: 320.543458
+  type: 'test'
+  ...
+# Subtest: valid.encrypt_decrypt_long_msg: every vector by checksum
+ok 31 - valid.encrypt_decrypt_long_msg: every vector by checksum
+  ---
+  duration_ms: 141.575906
+  type: 'test'
+  ...
+# Subtest: invalid.encrypt_msg_lengths: every length is rejected before encryption
+ok 32 - invalid.encrypt_msg_lengths: every length is rejected before encryption
+  ---
+  duration_ms: 18.664603
+  type: 'test'
+  ...
+# Subtest: invalid.get_conversation_key: every vector is rejected
+ok 33 - invalid.get_conversation_key: every vector is rejected
+  ---
+  duration_ms: 2.627425
+  type: 'test'
+  ...
+# Subtest: invalid.decrypt: every vector is rejected with a fixed class
+ok 34 - invalid.decrypt: every vector is rejected with a fixed class
+  ---
+  duration_ms: 20.168892
+  type: 'test'
+  ...
+# Subtest: every official vector ran: 104 valid and 24 invalid
+ok 35 - every official vector ran: 104 valid and 24 invalid
+  ---
+  duration_ms: 0.422504
+  type: 'test'
+  ...
+# Subtest: NIP-44 text extended-length row for 65535 bytes (the last length this profile supports)
+ok 36 - NIP-44 text extended-length row for 65535 bytes (the last length this profile supports)
+  ---
+  duration_ms: 8.791842
+  type: 'test'
+  ...
+# Subtest: ChaCha20 matches RFC 8439 2.4.2 and the independent OpenSSL implementation
+ok 37 - ChaCha20 matches RFC 8439 2.4.2 and the independent OpenSSL implementation
+  ---
+  duration_ms: 24.544098
+  type: 'test'
+  ...
+# Subtest: random round trips agree with the independent node:crypto decryptor and use fresh nonces
+ok 38 - random round trips agree with the independent node:crypto decryptor and use fresh nonces
+  ---
+  duration_ms: 43.035083
+  type: 'test'
+  ...
+# Subtest: authenticated but malformed padding, extended prefix, invalid UTF-8 and non-canonical base64 are all rejected
+ok 39 - authenticated but malformed padding, extended prefix, invalid UTF-8 and non-canonical base64 are all rejected
+  ---
+  duration_ms: 8.094862
+  type: 'test'
+  ...
+# Subtest: key and input validation: wrong lengths, lone surrogates, x >= p and non-lowercase keys
+ok 40 - key and input validation: wrong lengths, lone surrogates, x >= p and non-lowercase keys
+  ---
+  duration_ms: 0.600548
+  type: 'test'
+  ...
+# Subtest: crypto inventory pins @noble/ciphers 2.4.0 for ChaCha20 and the NIP-44 fixture hash (review pending)
+ok 41 - crypto inventory pins @noble/ciphers 2.4.0 for ChaCha20 and the NIP-44 fixture hash (review pending)
+  ---
+  duration_ms: 1.354312
+  type: 'test'
+  ...
+# Subtest: MAC comparison is a full-length constant-time loop
+ok 42 - MAC comparison is a full-length constant-time loop
+  ---
+  duration_ms: 0.150643
+  type: 'test'
+  ...
+# Subtest: rumor -> seal -> gift wrap round trip with layer invariants
+ok 43 - rumor -> seal -> gift wrap round trip with layer invariants
+  ---
+  duration_ms: 185.679778
+  type: 'test'
+  ...
+# Subtest: each wrap uses a fresh one-time key and timestamps spread across the 2-day window
+ok 44 - each wrap uses a fresh one-time key and timestamps spread across the 2-day window
+  ---
+  duration_ms: 471.78662
+  type: 'test'
+  ...
+# Subtest: wrong recipient, forged seal author, tampering and wrong kinds are rejected
+ok 45 - wrong recipient, forged seal author, tampering and wrong kinds are rejected
+  ---
+  duration_ms: 280.098567
+  type: 'test'
+  ...
+# Subtest: signs through the provider with the G01 key; the event verifies synchronously and through the async provider path
+ok 46 - signs through the provider with the G01 key; the event verifies synchronously and through the async provider path
+  ---
+  duration_ms: 90.338207
+  type: 'test'
+  ...
+# Subtest: verifyEvent returns false, never throws, for tampered, forged, non-canonical, NIP-04 or exotic input
+ok 47 - verifyEvent returns false, never throws, for tampered, forged, non-canonical, NIP-04 or exotic input
+  ---
+  duration_ms: 52.397256
+  type: 'test'
+  ...
+# Subtest: a proxy is read once through its exact own data properties; the verified event is a fresh frozen copy
+ok 48 - a proxy is read once through its exact own data properties; the verified event is a fresh frozen copy
+  ---
+  duration_ms: 16.592307
+  type: 'test'
+  ...
+# Subtest: the adapter holds its own key copy; caller mutation after creation has no effect
+ok 49 - the adapter holds its own key copy; caller mutation after creation has no effect
+  ---
+  duration_ms: 13.822291
+  type: 'test'
+  ...
+# Subtest: creation refuses invalid keys and non-byte input without retaining anything
+ok 50 - creation refuses invalid keys and non-byte input without retaining anything
+  ---
+  duration_ms: 13.906806
+  type: 'test'
+  ...
+# Subtest: dispose wipes the key: later signing fails UNAUTHORIZED, an in-flight signature is refused, verification still works
+ok 51 - dispose wipes the key: later signing fails UNAUTHORIZED, an in-flight signature is refused, verification still works
+  ---
+  duration_ms: 29.44919
+  type: 'test'
+  ...
+# Subtest: a slow provider that completes after dispose cannot publish under the released key
+ok 52 - a slow provider that completes after dispose cannot publish under the released key
+  ---
+  duration_ms: 12.992574
+  type: 'test'
+  ...
+# Subtest: a provider that signs with a different key than it reported is refused
+ok 53 - a provider that signs with a different key than it reported is refused
+  ---
+  duration_ms: 9.172875
+  type: 'test'
+  ...
+# Subtest: ad event carries only public metadata with fixed tags and the chosen kind
+ok 54 - ad event carries only public metadata with fixed tags and the chosen kind
+  ---
+  duration_ms: 20.358116
+  type: 'test'
+  ...
+# Subtest: strict content parser rejects unknown keys, floats, bad ranges and oversized content
+ok 55 - strict content parser rejects unknown keys, floats, bad ranges and oversized content
+  ---
+  duration_ms: 0.628019
+  type: 'test'
+  ...
+# Subtest: lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+ok 56 - lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+  ---
+  duration_ms: 87.873228
+  type: 'test'
+  ...
+# Subtest: book accepts, dedupes, orders by revision, and is not decided by created_at
+ok 57 - book accepts, dedupes, orders by revision, and is not decided by created_at
+  ---
+  duration_ms: 38.964842
+  type: 'test'
+  ...
+# Subtest: same revision with a different event id is a conflict that blocks use until a higher revision
+ok 58 - same revision with a different event id is a conflict that blocks use until a higher revision
+  ---
+  duration_ms: 63.73777
+  type: 'test'
+  ...
+# Subtest: expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+ok 59 - expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+  ---
+  duration_ms: 33.842698
+  type: 'test'
+  ...
+# Subtest: clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+ok 60 - clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+  ---
+  duration_ms: 24.179488
+  type: 'test'
+  ...
+# Subtest: forged or unverifiable events are rejected by the book when a verifier is supplied
+ok 61 - forged or unverifiable events are rejected by the book when a verifier is supplied
+  ---
+  duration_ms: 6.883499
+  type: 'test'
+  ...
+# Subtest: NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+ok 62 - NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+  ---
+  duration_ms: 59.224225
+  type: 'test'
+  ...
+# Subtest: capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+ok 63 - capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+  ---
+  duration_ms: 91.730952
+  type: 'test'
+  ...
+# Subtest: list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+ok 64 - list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+  ---
+  duration_ms: 18.341885
+  type: 'test'
+  ...
+# Subtest: real nostr-crypto signs an ad that the pool publishes, a second pool discovers and the order book accepts
+ok 65 - real nostr-crypto signs an ad that the pool publishes, a second pool discovers and the order book accepts
+  ---
+  duration_ms: 215.145165
+  type: 'test'
+  ...
+# Subtest: with the real verifier a forged event is never delivered and penalizes the relay; a genuine one is delivered once
+ok 66 - with the real verifier a forged event is never delivered and penalizes the relay; a genuine one is delivered once
+  ---
+  duration_ms: 35.984407
+  type: 'test'
+  ...
+# Subtest: a disposed signer cannot produce new ads, while the pool keeps verifying with public data only
+ok 67 - a disposed signer cannot produce new ads, while the pool keeps verifying with public data only
+  ---
+  duration_ms: 16.705521
+  type: 'test'
+  ...
+# Subtest: connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays
+ok 68 - connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays
+  ---
+  duration_ms: 107.76535
+  type: 'test'
+  ...
+# Subtest: strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct
+ok 69 - strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct
+  ---
+  duration_ms: 149.736325
+  type: 'test'
+  ...
+# Subtest: ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked
+ok 70 - ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked
+  ---
+  duration_ms: 8.268498
+  type: 'test'
+  ...
+# Subtest: switching to strict mid-session revokes sockets and the pool does not reconnect
+ok 71 - switching to strict mid-session revokes sockets and the pool does not reconnect
+  ---
+  duration_ms: 19.138954
+  type: 'test'
+  ...
+# Subtest: bounds: relay candidates, active connections, subscriptions and filter shape
+ok 72 - bounds: relay candidates, active connections, subscriptions and filter shape
+  ---
+  duration_ms: 31.341139
+  type: 'test'
+  ...
+# Subtest: failover: a relay that never connects exhausts six reconnects, then the next approved relay is used
+ok 73 - failover: a relay that never connects exhausts six reconnects, then the next approved relay is used
+  ---
+  duration_ms: 120.765095
+  type: 'test'
+  ...
+# Subtest: reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery
+ok 74 - reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery
+  ---
+  duration_ms: 32.036057
+  type: 'test'
+  ...
+# Subtest: backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime
+ok 75 - backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime
+  ---
+  duration_ms: 31.914928
+  type: 'test'
+  ...
+# Subtest: malicious relay: flood is rate limited, valid events pass, memory use stays bounded
+ok 76 - malicious relay: flood is rate limited, valid events pass, memory use stays bounded
+  ---
+  duration_ms: 939.667792
+  type: 'test'
+  ...
+# Subtest: malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock)
+ok 77 - malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock)
+  ---
+  duration_ms: 1314.731243
+  type: 'test'
+  ...
+# Subtest: malicious relay: an oversized frame bans the relay immediately and it is never reconnected
+ok 78 - malicious relay: an oversized frame bans the relay immediately and it is never reconnected
+  ---
+  duration_ms: 54.387311
+  type: 'test'
+  ...
+# Subtest: malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay
+ok 79 - malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay
+  ---
+  duration_ms: 20.500733
+  type: 'test'
+  ...
+# Subtest: malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized
+ok 80 - malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized
+  ---
+  duration_ms: 12.117219
+  type: 'test'
+  ...
+# Subtest: malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered
+ok 81 - malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered
+  ---
+  duration_ms: 9.360814
+  type: 'test'
+  ...
+# Subtest: per-subscription event cap closes the subscription on that relay and dedupe memory is bounded
+ok 82 - per-subscription event cap closes the subscription on that relay and dedupe memory is bounded
+  ---
+  duration_ms: 17.165366
+  type: 'test'
+  ...
+# Subtest: dedupe memory evicts the oldest ids beyond 4096
+ok 83 - dedupe memory evicts the oldest ids beyond 4096
+  ---
+  duration_ms: 46.247414
+  type: 'test'
+  ...
+# Subtest: hanging socket: connect timeout fails the attempt without blocking other relays
+ok 84 - hanging socket: connect timeout fails the attempt without blocking other relays
+  ---
+  duration_ms: 48.152141
+  type: 'test'
+  ...
+# Subtest: closing the last subscription closes sockets and stops reconnecting
+ok 85 - closing the last subscription closes sockets and stops reconnecting
+  ---
+  duration_ms: 52.88583
+  type: 'test'
+  ...
+# Subtest: end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion
+ok 86 - end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion
+  ---
+  duration_ms: 31.633988
+  type: 'test'
+  ...
+# Subtest: publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported
+ok 87 - publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported
+  ---
+  duration_ms: 10.203239
+  type: 'test'
+  ...
+# Subtest: relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled
+ok 88 - relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled
+  ---
+  duration_ms: 1.306352
+  type: 'test'
+  ...
+# Subtest: crypto stays injected: the default verifier is required and signing is never done in the pool
+ok 89 - crypto stays injected: the default verifier is required and signing is never done in the pool
+  ---
+  duration_ms: 0.693115
+  type: 'test'
+  ...
+# Subtest: production default has empty authority and all channels unknown; wallet never becomes an app request
+ok 90 - production default has empty authority and all channels unknown; wallet never becomes an app request
+  ---
+  duration_ms: 3.876664
+  type: 'test'
+  ...
+# Subtest: fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback
+ok 91 - fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback
+  ---
+  duration_ms: 18.268791
+  type: 'test'
+  ...
+# Subtest: ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet
+ok 92 - ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet
+  ---
+  duration_ms: 0.27704
+  type: 'test'
+  ...
+# Subtest: permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize
+ok 93 - permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize
+  ---
+  duration_ms: 0.403707
+  type: 'test'
+  ...
+# Subtest: trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics
+ok 94 - trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics
+  ---
+  duration_ms: 0.23647
+  type: 'test'
+  ...
+# Subtest: hostile thrown capability values cannot escape fixed refusal handling
+ok 95 - hostile thrown capability values cannot escape fixed refusal handling
+  ---
+  duration_ms: 0.179826
+  type: 'test'
+  ...
+# Subtest: inspection cannot relabel a stale registry callback result under a newer generation
+ok 96 - inspection cannot relabel a stale registry callback result under a newer generation
+  ---
+  duration_ms: 2.628227
+  type: 'test'
+  ...
+# Subtest: projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes
+ok 97 - projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes
+  ---
+  duration_ms: 0.25709
+  type: 'test'
+  ...
+# Subtest: expiry revokes before invocation and after awaits; queued late callbacks cannot publish
+ok 98 - expiry revokes before invocation and after awaits; queued late callbacks cannot publish
+  ---
+  duration_ms: 0.756108
+  type: 'test'
+  ...
+# Subtest: mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization
+ok 99 - mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization
+  ---
+  duration_ms: 0.722138
+  type: 'test'
+  ...
+# Subtest: already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity
+ok 100 - already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity
+  ---
+  duration_ms: 20.075459
+  type: 'test'
+  ...
+# Subtest: outstanding permit count is bounded and scoped use is single-shot
+ok 101 - outstanding permit count is bounded and scoped use is single-shot
+  ---
+  duration_ms: 7.311502
+  type: 'test'
+  ...
+# Subtest: native callback failure is sanitized, revokes private evidence and never falls back to direct
+ok 102 - native callback failure is sanitized, revokes private evidence and never falls back to direct
+  ---
+  duration_ms: 0.889876
+  type: 'test'
+  ...
+# Subtest: a policy change after native settlement but before scope continuation suppresses success
+ok 103 - a policy change after native settlement but before scope continuation suppresses success
+  ---
+  duration_ms: 0.56139
+  type: 'test'
+  ...
+# Subtest: owned expiry timer closes resources without polling; a failed monotonic clock fails closed
+ok 104 - owned expiry timer closes resources without polling; a failed monotonic clock fails closed
+  ---
+  duration_ms: 1.614658
+  type: 'test'
+  ...
+# Subtest: operation timeout aborts owned scope without retry or accepting a late callback
+ok 105 - operation timeout aborts owned scope without retry or accepting a late callback
+  ---
+  duration_ms: 0.546168
+  type: 'test'
+  ...
+# Subtest: external abort during a scoped operation closes its resource immediately and discards late output
+ok 106 - external abort during a scoped operation closes its resource immediately and discards late output
+  ---
+  duration_ms: 4.385856
+  type: 'test'
+  ...
+1..106
+# tests 106
+# suites 0
+# pass 106
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4398.14948
