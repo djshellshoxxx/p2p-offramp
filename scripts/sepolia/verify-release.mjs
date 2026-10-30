@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Verify the signed Sepolia testnet release (G15) and the registry it covers (G11) against the trusted testnet public
- * key with the same verifier the testnet build uses (apps/web/scripts/testnet-trust.mjs): signature, pinned keyId,
+ * key with the same verifier the testnet build uses (apps/web/scripts/testnet-trust.mjs): signature, keyId (pinned once SEPOLIA_RELEASE_KEY_ID is set),
  * registry asset, the Sepolia-only network rule and rollback against the last accepted release. Needs no network and
  * no private key. With --accept it records the verified release as accepted (registry/testnet/sepolia.accepted.json,
  * commit it), so an older or substituted signed registry is refused from then on.

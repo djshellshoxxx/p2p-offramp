@@ -88,3 +88,14 @@ test('a signed registry that is not exactly Sepolia (chain id and genesis) is re
     assert.deepEqual(await sepoliaRegistrySource(await rawBundle(root))(), { kind: 'failed' }, name);
   }
 });
+
+test('a pinned release keyId refuses any other key at build time and at runtime; unpinned builds say so', async t => {
+  const { root, keyId } = await trustRoot(t);
+  const other = 'e'.repeat(64);
+  assert.equal((await loadTestnetTrust(root)).summary.keyPinned, false, 'SEPOLIA_RELEASE_KEY_ID is null until the owner supplies a key');
+  const { bundle, summary } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
+  assert.equal(summary.keyPinned, true);
+  assert.equal((await sepoliaRegistrySource(structuredClone(bundle), undefined, keyId)()).kind, 'ready');
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: other }), /TESTNET_TRUST_INVALID: KEY_ID/);
+  assert.deepEqual(await sepoliaRegistrySource(structuredClone(bundle), undefined, other)(), { kind: 'failed' });
+});

@@ -31,7 +31,7 @@ The testnet trust root covers **Sepolia only**. Signing, `sepolia:verify`, the t
    node scripts/sepolia/owner-release.mjs keygen --out ~/p2p-sepolia-release-key
    ```
 
-   Commit the printed `{ keyId, publicKey }` as `security/testnet-trust/sepolia-release-key.pub.json`, or paste it to the agent. It is public data.
+   Commit the printed `{ keyId, publicKey }` as `security/testnet-trust/sepolia-release-key.pub.json`, or paste it to the agent. It is public data. Also set `SEPOLIA_RELEASE_KEY_ID` in `apps/web/src/testnet/sepolia-network.ts` to that `keyId`: until then the key file is only self-consistent, not pinned, and the testnet build records `keyPinned: false`.
 3. **Deploy (session).** Run:
 
    ```bash
@@ -74,7 +74,7 @@ The testnet trust root covers **Sepolia only**. Signing, `sepolia:verify`, the t
    ```
 
    It refuses a registry that is not exactly Sepolia (`REGISTRY_NOT_SEPOLIA`), and any deployment whose committed record is missing, does not match the registry entry or was not made from clean sources (`DEPLOYMENT_RECORD_MISSING`, `DEPLOYMENT_RECORD_MISMATCH`) or not after finality (`DEPLOYMENT_NOT_FINALIZED`). `--days` is 1 to 30 (default 30), the verifier's maximum. The output lists the networks, endpoints and deployments that were signed: check them before you commit `registry/testnet/sepolia.release.json` and `sepolia.release.sig.json`. Raise `--sequence` for every later registry.
-7. **Verify and accept (anyone).** Run `npm run sepolia:verify -- --accept`. It uses the same verifier as the testnet build: G15 signature, the pinned `keyId` in the trusted-key file (the key and its announced id must match), the G11 registry asset, and the Sepolia-only rule. `--accept` records the verified release in `registry/testnet/sepolia.accepted.json`; commit it. From then on `sepolia:verify`, the trade tool and the testnet build refuse an older signed release, or a different manifest at the accepted sequence, as `RELEASE_ROLLBACK` (G25 §4.3).
+7. **Verify and accept (anyone).** Run `npm run sepolia:verify -- --accept`. It uses the same verifier as the testnet build: G15 signature, the `keyId` in the trusted-key file (the key and its announced id must match, and it must equal `SEPOLIA_RELEASE_KEY_ID` in `apps/web/src/testnet/sepolia-network.ts` once that is set), the G11 registry asset, and the Sepolia-only rule. `--accept` records the verified release in `registry/testnet/sepolia.accepted.json`; commit it. From then on `sepolia:verify`, the trade tool and the testnet build refuse an older signed release, or a different manifest at the accepted sequence, as `RELEASE_ROLLBACK` (G25 §4.3).
 
 ## Two-party test trade
 

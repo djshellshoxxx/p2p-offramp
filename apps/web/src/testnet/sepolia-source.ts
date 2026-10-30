@@ -11,7 +11,7 @@ import { createReleaseRegistry, verifyRelease } from '../../../../packages/secur
 import { parseRegistryBytes } from '../../../../packages/schemas/index.ts';
 import type { RegistryLookup } from '../../../../packages/domain/index.ts';
 import type { RegistrySource } from '../trade/review-controller.ts';
-import { isSepolia, isSepoliaOnly } from './sepolia-network.ts';
+import { isPinnedReleaseKey, isSepolia, isSepoliaOnly, SEPOLIA_RELEASE_KEY_ID } from './sepolia-network.ts';
 
 export const TESTNET_TRUST_FORMAT = 'p2p-offramp/testnet-trust/v1';
 export const TESTNET_CHANNEL = 'sepolia-testnet';
@@ -35,8 +35,11 @@ function base64url(input: unknown): Uint8Array {
   return Uint8Array.from(binary, character => character.charCodeAt(0));
 }
 
-/** Registry source for the embedded bundle; `nowSeconds` is injectable for tests and defaults to the device clock. */
-export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number): RegistrySource {
+/**
+ * Registry source for the embedded bundle; `nowSeconds` is injectable for tests and defaults to the device clock.
+ * `pinnedKeyId` defaults to SEPOLIA_RELEASE_KEY_ID; a bundle signed by any other key fails once that is set.
+ */
+export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number, pinnedKeyId: string | null = SEPOLIA_RELEASE_KEY_ID): RegistrySource {
   return async () => {
     try {
       const raw = plainObject(bundle, ['format', 'keyId', 'publicKey', 'registry', 'manifest', 'envelope']);
@@ -44,7 +47,7 @@ export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number
       const registryBytes = base64url(raw.registry), manifestBytes = base64url(raw.manifest);
       const verified = await verifyRelease(manifestBytes, raw.envelope, [raw.publicKey], 0,
         { channel: TESTNET_CHANNEL, assets: [{ path: TESTNET_REGISTRY_PATH, bytes: registryBytes }], ...(nowSeconds ? { nowSeconds } : {}) });
-      if (!verified.ok || verified.value.keyId !== raw.keyId) return { kind: 'failed' };
+      if (!verified.ok || verified.value.keyId !== raw.keyId || !isPinnedReleaseKey(verified.value.keyId, pinnedKeyId)) return { kind: 'failed' };
       const bound = await createReleaseRegistry(verified.value, TESTNET_REGISTRY_PATH, registryBytes);
       if (!bound.ok) return { kind: 'failed' };
       // The bytes matched the verified manifest above; any network other than Sepolia refuses the whole bundle.

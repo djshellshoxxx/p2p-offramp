@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
@@ -31,7 +31,8 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
   const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
   // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
-  useEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
+  useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
   const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
