@@ -2,6 +2,14 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-30 — SonarCloud gate red on PR #10
+
+- SonarCloud (new app check) failed: D Security + D Reliability on new code @ e652f6d. sonarcloud.io blocked by proxy;
+  check run has summary only. Commented on PR asking owner for issue list / network allow. Suspect: hardcoded anvil dev
+  keys in scripts/test-evm-*.mjs (fix: anvil --config-out). Do not push speculative fixes.
+- Terms-exchange worker (`wave5/terms-exchange`) hit rate limit; resumed 10-30.
+- Still pending owner: @noble/ciphers install permission.
+
 ## 2026-10-27 — nostr-crypto merged (cipher swap pending owner)
 
 - Merged `wave4/g20-nostr-crypto` @ db210b7 with VENDORED ChaCha20 (pending review in crypto inventory; release gated).
