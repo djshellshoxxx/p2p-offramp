@@ -125,3 +125,22 @@ for (const end of ['pool close', 'last subscription close']) {
     } finally { broker.dispose(); pool.close(); }
   });
 }
+
+test('read: revocation from the open-status observer closes the socket before sending REQ', async () => {
+  const { broker } = makeBroker(), net = memoryNetwork();
+  let revoked = false;
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example' }],
+    verifier: sellerCrypto, connect: net.connector, timing: FAST, nowSeconds: () => NOW,
+    onStatus(status) {
+      if (!revoked && status[0].state === 'open') { revoked = true; broker.dispose(); }
+    },
+  });
+  try {
+    pool.subscribe([filter()], { onEvent() {} });
+    await setImmediate();
+    assert.equal(revoked, true);
+    assert.equal(net.sockets[0].sent.length, 0, 'revocation precedes the first subscription request');
+    assert.equal(net.sockets[0].closed, true);
+    assert.notEqual(pool.status()[0].state, 'open');
+  } finally { pool.close(); broker.dispose(); }
+});

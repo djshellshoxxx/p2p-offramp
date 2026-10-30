@@ -286,6 +286,9 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     r.socket = opened.socket; r.scope = opened.scope; r.openedAt = clock();
     r.tokens = POOL_LIMITS.burst; r.refilledAt = r.openedAt; r.windowIndex = Math.floor(r.openedAt / POOL_LIMITS.overloadWindowMs); r.windowDropped = 0; r.overloadedWindows = 0;
     setState(r, 'open'); emitStatus();
+    // An observer may close the pool/subscription or revoke the broker synchronously.
+    if (closed || r.generation !== generation) return;
+    if (!opened.scope.current()) { fail(r, null, 'revoked'); return; }
     const socket = opened.socket;
     socket.onmessage = event => onFrame(r, generation, event.data);
     socket.onclose = () => { if (r.generation === generation && !closed) fail(r, null, 'closed'); };
