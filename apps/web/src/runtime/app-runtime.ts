@@ -4,7 +4,9 @@ import {
   parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
+  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource,
 } from '../../../../packages/schemas/index.ts';
+import { capturePendingMetadata, type PendingMetadata } from './pending-metadata.ts';
 
 export type RuntimeWorkerPort = Pick<Worker, 'postMessage' | 'addEventListener' | 'removeEventListener' | 'terminate'>;
 export interface AppRuntimeOptions {
@@ -13,7 +15,7 @@ export interface AppRuntimeOptions {
   readonly now?: () => number;
 }
 interface Pending {
-  readonly command: RuntimeCommand;
+  readonly metadata: PendingMetadata;
   readonly resolve: (result: RuntimeResult<RuntimeValue>) => void;
   readonly timer: ReturnType<typeof setTimeout>;
   readonly removeAbort: () => void;
@@ -104,7 +106,7 @@ export class AppRuntime {
   #activity = (event: Event): void => {
     this.#checkIdle();
     if (!event.isTrusted || this.#closed || this.#disposing || this.#current.state !== 'unlocked' ||
-        [...this.#pending.values()].some(value => value.command.operation === 'activity')) return;
+        [...this.#pending.values()].some(value => value.metadata.operation === 'activity')) return;
     try {
       this.#arm();
       // No public reset API exists. Only the captured document's trusted-event handler sends this control.
@@ -132,11 +134,11 @@ export class AppRuntime {
     this.#worker.terminate();
   }
   #acceptStatus(message: Extract<RuntimeMessage, { kind: 'response' }>, value: RuntimeStatus, pending: Pending): boolean {
-    const operation = pending.command.operation;
+    const operation = pending.metadata.operation;
     const opening = operation === 'unlock' || operation === 'create';
     if (value.state === 'unlocked') {
       if (operation === 'init' || operation === 'lock' || operation === 'dispose' ||
-          (pending.command.operation === 'unlock' && value.handle.profileId !== pending.command.profileId)) return false;
+          (pending.metadata.operation === 'unlock' && value.handle.profileId !== pending.metadata.profileId)) return false;
       if (!opening && (this.#current.state !== 'unlocked' || !sameHandle(this.#current.handle, value.handle))) return false;
       const handle = this.#current.state === 'unlocked' && sameHandle(this.#current.handle, value.handle) ? this.#current.handle : value.handle;
       const changed = this.#current.state !== 'unlocked' || this.#current.handle !== handle;
@@ -159,15 +161,21 @@ export class AppRuntime {
     if (message.kind === 'locked') { if (!this.#disposing) void this.lock(); return; }
     const pending = this.#pending.get(message.requestId);
     if (!pending) { if (message.requestId > this.#sequence) this.#close('PROTOCOL_ERROR'); return; }
-    if (pending.command.operation !== message.operation || pending.command.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
+    if (pending.metadata.operation !== message.operation || pending.metadata.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
-    if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore') {
+    if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
+        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
-      if (!message.result.ok && (pending.command.operation === 'unlock' || pending.command.operation === 'create')) this.#resetStatus();
+      if (!message.result.ok && (pending.metadata.operation === 'unlock' || pending.metadata.operation === 'create')) this.#resetStatus();
+      // Saved-review replies belong to the profile the command named; it must still be the open profile.
+      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview') &&
+          (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
+        this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
+      }
       if (message.result.ok && message.operation === 'exportEncrypted') {
-        if (pending.command.operation !== 'exportEncrypted' || parseBackupBytes(message.result.value.bytes).envelope.profileId !== pending.command.profileId) { this.#close('PROTOCOL_ERROR'); return; }
+        if (pending.metadata.operation !== 'exportEncrypted' || parseBackupBytes(message.result.value.bytes).envelope.profileId !== pending.metadata.profileId) { this.#close('PROTOCOL_ERROR'); return; }
       }
       this.#settle(message.requestId, message.result);
     }
@@ -176,7 +184,13 @@ export class AppRuntime {
     this.#checkIdle();
     if (this.#closed || (this.#disposing && operation !== 'dispose')) return Promise.resolve(runtimeFailure('LOCKED'));
     if (signal?.aborted) return Promise.resolve(runtimeFailure('CANCELLED'));
-    if ((!internal && this.#pending.size > 0) || (internal && this.#pending.size >= 2)) return Promise.resolve(runtimeFailure('BUSY'));
+    // One public command at a time. A pending trusted-activity ping (sent on the same click's pointerdown) does not make
+    // the runtime busy for that click's own command; the Worker answers activity without taking its job slot.
+    // unlock/create reset the published status first, so they still wait for every pending request: a late activity
+    // reply naming the previous handle would otherwise be rejected as a protocol error and close the runtime.
+    const opening = operation === 'unlock' || operation === 'create';
+    const publicPending = [...this.#pending.values()].some(value => opening || value.metadata.operation !== 'activity');
+    if ((!internal && publicPending) || (internal && this.#pending.size >= 2)) return Promise.resolve(runtimeFailure('BUSY'));
     if (this.#sequence >= MAX_RUNTIME_SEQUENCE) { this.#close('LIMIT_EXCEEDED'); return Promise.resolve(runtimeFailure('LIMIT_EXCEEDED')); }
     let command: RuntimeCommand;
     try { command = parseRuntimeCommand({ version: 1, requestId: this.#sequence + 1, generation: this.#generation, operation, ...fields }); }
@@ -186,7 +200,7 @@ export class AppRuntime {
     return new Promise(resolve => {
       const abort = (): void => { if (!this.#closed && !this.#disposing && this.#invalidate('CANCELLED')) void this.#request('lock', {}, undefined, true); };
       const timer = setTimeout(() => this.#close('TIMEOUT'), operation === 'dispose' ? RUNTIME_DISPOSE_TIMEOUT_MS : RUNTIME_REQUEST_TIMEOUT_MS);
-      const pending: Pending = { command, resolve, timer, removeAbort: () => signal?.removeEventListener('abort', abort) };
+      const pending: Pending = { metadata: capturePendingMetadata(command), resolve, timer, removeAbort: () => signal?.removeEventListener('abort', abort) };
       this.#pending.set(command.requestId, pending); signal?.addEventListener('abort', abort, { once: true });
       if (signal?.aborted) { abort(); return; }
       try { this.#worker.postMessage(command); } catch { this.#close('STORAGE_UNAVAILABLE'); }
@@ -243,6 +257,27 @@ export class AppRuntime {
     this.#checkIdle();
     if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation)) return runtimeFailure('LOCKED');
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
+  }
+  /** Saved terms reviews of the open profile. Each call names that profile; a reply after lock or a switch is refused. */
+  async #savedReviews<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview', fields: Record<string, unknown>,
+    accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
+    this.#checkIdle();
+    const current = this.#current;
+    if (this.#closed || this.#disposing || current.state !== 'unlocked') return runtimeFailure('LOCKED');
+    const generation = this.#generation;
+    const result = await this.#request(operation, { profileId: current.handle.profileId, ...fields }, signal);
+    this.#checkIdle();
+    if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation || !this.isCurrent(current.handle))) return runtimeFailure('LOCKED');
+    return !result.ok ? result : accept(result.value) ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
+  }
+  saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
+    return this.#savedReviews('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
+  }
+  listTermsReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviews>> {
+    return this.#savedReviews('listTermsReviews', {}, (value): value is RuntimeSavedReviews => 'items' in value, signal);
+  }
+  deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
+    return this.#savedReviews('deleteTermsReview', { recordId }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
   }
   lock(): Promise<RuntimeResult<RuntimeStatus>> {
     if (this.#closed || this.#disposing || !this.#invalidate('LOCKED')) return Promise.resolve(runtimeFailure('LOCKED'));

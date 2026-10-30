@@ -1,0 +1,39 @@
+{
+  "artifact": "/workspace/checkpoints/2026-10-26-feature-gaps/GhostPay-P2P-incomplete-features-20261026.md",
+  "bytes": 53076,
+  "sha256": "f14ff94dc3886e69a53d6a99249dc2141b14d5aeab8267361b8b8e947f330bba",
+  "recordedUTC": "2026-10-26T19:47:07.283574+00:00",
+  "sourceHeads": {
+    "GhostPay": "e6cfcdd38dded45d454154ee0b72c0bf43792770",
+    "P2P": "267df7da83af8d6b5b317a4245b3a8feffc96ce9"
+  },
+  "runtimeChanges": false,
+  "newTestsRun": false,
+  "reportCounts": {
+    "GhostPayGroupedFeaturesAndGates": 26,
+    "P2PGroupedFeaturesAndGates": 25
+  },
+  "quantitativeClaims": {
+    "englishCatalogKeys": 481,
+    "eachNonEnglishCatalogMatchingKeys": 54,
+    "eachNonEnglishCatalogMissingKeys": 427,
+    "pendingP2PProviderReviews": 4,
+    "acceptedScopedG16Reviews": 2,
+    "profileCap": 16
+  },
+  "limitations": [
+    "private final-plan/review inputs not materialized",
+    "remote refs not refreshed",
+    "grouped assessment, not exhaustive semantic audit",
+    "deferred P2P child specifications not all individually inspected"
+  ],
+  "library": {
+    "libraryFileId": "libfile_5d0ef5761f288191ab17d215d2b9090e",
+    "fileId": "file_00000000d0b481f78c49be417bcfae1b",
+    "version": 0,
+    "operation": "create_library_file",
+    "status": "succeeded",
+    "localHashVerifiedAfterUpload": true,
+    "consumerDownloadTested": false
+  }
+}

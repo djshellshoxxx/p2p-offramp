@@ -1,0 +1,116 @@
+{
+  "repository": "P2P",
+  "baseHead": "b2ebd641785b9ca87633865b77a492d249653cb3",
+  "recordedUTC": "2026-10-26T19:58:04.066404+00:00",
+  "scope": "Mechanical attribution only; no project relicensing, legal/security clearance or runtime/dependency changes.",
+  "restoredLicenseTexts": [
+    {
+      "repository": "paulmillr/noble-curves",
+      "commit": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+      "upstreamPath": "LICENSE",
+      "localPath": "licenses/noble-2.4.0-MIT.txt",
+      "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec",
+      "bytes": 1109,
+      "restoredExactly": true
+    },
+    {
+      "repository": "react/react",
+      "commit": null,
+      "upstreamPath": "LICENSE",
+      "localPath": "licenses/react-19.3.1-MIT.txt",
+      "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+      "bytes": 1088,
+      "restoredExactly": true
+    },
+    {
+      "repository": "ethereum/EIPs",
+      "commit": "7372d10a457b29eceb02cd052345af165de1fb60",
+      "upstreamPath": "LICENSE.md",
+      "localPath": "licenses/eip712-CC0-1.0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "restoredExactly": true
+    }
+  ],
+  "protectedRuntimeSourceAndLockDiff": [],
+  "originalHeadersAndFixturesUnchanged": true,
+  "licensesMatchExactVerifiedInputs": true,
+  "executedChecks": [
+    "immutable Git blob/source correspondence",
+    "SHA-256 of retained texts",
+    "installed MIT texts match lock-SRI-verified cached packages",
+    "runtime/source/header/fixture/lock diff is empty"
+  ],
+  "buildsTestsOrCIExecuted": false,
+  "unresolved": [
+    "original source commits for ScopeLift/circuit/data/port intakes",
+    "poseidon-solidity full upstream license/copyright evidence",
+    "circomlib GPL/LGPL discrepancy",
+    "GPL/project distribution and Zama patent/commercial compatibility",
+    "complete emitted release/dev/transitive notice audit"
+  ],
+  "cachedMITCorrespondence": [
+    {
+      "package": "@noble/curves",
+      "version": "2.4.0",
+      "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+      "license": "MIT",
+      "installedLicenseMatchesLockedArchive": true,
+      "licenseSha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec",
+      "copyrightLines": [
+        "Copyright (c) 2022 Paul Miller (https://paulmillr.com)"
+      ],
+      "cachedArchiveSha256": "55279c71b0201d6c0e58d0206d15825359e02a3932f326ba7b7909ac2d334aa9"
+    },
+    {
+      "package": "@noble/hashes",
+      "version": "2.4.0",
+      "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+      "license": "MIT",
+      "installedLicenseMatchesLockedArchive": true,
+      "licenseSha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec",
+      "copyrightLines": [
+        "Copyright (c) 2022 Paul Miller (https://paulmillr.com)"
+      ],
+      "cachedArchiveSha256": "e1946149b780017b2564fcc092cb01c04e1d7f20627d0296c17da8868f4436dc"
+    },
+    {
+      "package": "react",
+      "version": "19.3.1",
+      "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==",
+      "license": "MIT",
+      "installedLicenseMatchesLockedArchive": true,
+      "licenseSha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+      "copyrightLines": [
+        "Copyright (c) Meta Platforms, Inc. and affiliates."
+      ],
+      "cachedArchiveSha256": "56936913918dcf1f7a6fe58784e79df54b18200a88655ce809cf5e9c4ef871aa"
+    },
+    {
+      "package": "react-dom",
+      "version": "19.3.1",
+      "integrity": "sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==",
+      "license": "MIT",
+      "installedLicenseMatchesLockedArchive": true,
+      "licenseSha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+      "copyrightLines": [
+        "Copyright (c) Meta Platforms, Inc. and affiliates."
+      ],
+      "cachedArchiveSha256": "8b49975821eec6311e00d2b3f4b8337923253c876517388a33f9839c61ab262e"
+    },
+    {
+      "package": "scheduler",
+      "version": "0.28.0",
+      "integrity": "sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==",
+      "license": "MIT",
+      "installedLicenseMatchesLockedArchive": true,
+      "licenseSha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+      "copyrightLines": [
+        "Copyright (c) Meta Platforms, Inc. and affiliates."
+      ],
+      "cachedArchiveSha256": "302995d590e3c0a11eeb40d1d0f299c1df1800135d599d85cdd5faeb614f32d6"
+    }
+  ],
+  "eip712ExampleSha256": "c6bdb395cdfd0cf8408328156960203d5b984f2fe0087ca74c74c99e266c0e3b",
+  "nobleSourceLicenseEvidence": "docs/evidence/g06-package-source-correspondence-20261026.json"
+}

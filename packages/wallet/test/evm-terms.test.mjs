@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { keccak256, uintWord, addressWord, stringWord, eip712Digest, tradeTermsStructHash, evmTermsHash, TRADE_TERMS_TYPE } from '../src/evm-terms.ts';
+import { keccak256, uintWord, addressWord, stringWord, eip712Digest, domainSeparator, tradeTermsStructHash, evmTermsHash, TRADE_TERMS_TYPE } from '../src/evm-terms.ts';
 const hex = bytes => Buffer.from(bytes).toString('hex');
 const enc = text => new TextEncoder().encode(text);
 const cat = (...parts) => Buffer.concat(parts.map(part => Buffer.from(part)));
@@ -42,6 +42,19 @@ test('G16 EVM terms hash binds every field, domain chain and verifying contract'
   assert.notEqual(evmTermsHash({ ...domain, chainId: '1' }, terms), base, 'chain replay'); assert.notEqual(evmTermsHash({ ...domain, verifyingContract: `0x${'66'.repeat(20)}` }, terms), base, 'contract replay');
   assert.equal(evmTermsHash(domain, { ...terms }), base, 'deterministic');
 });
+// Differential expected values from an independent viem 2.57.7 EIP-712 encoder. Its Keccak provider was
+// @noble/hashes 1.8.0, so these cross-check encoding against the pinned 2.4.0 implementation but do not
+// constitute independent Keccak-provider approval.
+test('G16 EVM typed terms match fixed independent native, ERC-20 and maximum-width digests', () => {
+  assert.equal(hex(keccak256(enc(TRADE_TERMS_TYPE))), '5847d4d64dcfd78a4c20db05a569c4121b97a47858cca8887c0d20388af1e437');
+  assert.equal(hex(domainSeparator(domain)), 'e5224ebb13fad6126fa11545e1688fad9525d23af69113ee8fd16ed51611f03c');
+  assert.equal(evmTermsHash(domain, terms), '3b2b7929f40cd038620592aed507acd064ec8938ca6587924e805fc68b6c25e1');
+  assert.equal(evmTermsHash(domain, { ...terms, assetKind: 'erc20', asset: `0x${'11'.repeat(20)}` }),
+    'd03d063dbb6b596c783313c9bea9aec4c80f405931439bf882a76e4b07b75328');
+  const maxU64 = '18446744073709551615', maxU256 = ((1n << 256n) - 1n).toString();
+  assert.equal(evmTermsHash(domain, { ...terms, revision: maxU64, amountBaseUnits: maxU256, acceptBeforeSeconds: maxU64, escrowExpirySeconds: maxU64 }),
+    'cc18cec86c835f64c02d481d931161dff9d8e08d871dfd3ce67d2cc7a3ad67d7');
+});
 test('G16 EVM terms reject malformed, ambiguous or out-of-range input', () => {
   for (const change of [{ seller: terms.buyer }, { seller: `0x${'AB'.repeat(20)}` }, { seller: `0x${'0'.repeat(40)}` }, { asset: `0x${'11'.repeat(20)}` },
     { assetKind: 'erc20' }, { assetKind: 'spl' }, { revision: '0' }, { revision: '18446744073709551616' }, { amountBaseUnits: '0' },
@@ -49,6 +62,20 @@ test('G16 EVM terms reject malformed, ambiguous or out-of-range input', () => {
     assert.throws(() => tradeTermsStructHash({ ...terms, ...change }), error => error.code === 'INVALID_INPUT', JSON.stringify(change));
   for (const bad of [{ chainId: '0' }, { chainId: '0x7a69' }, { verifyingContract: `0x${'0'.repeat(40)}` }])
     assert.throws(() => evmTermsHash({ ...domain, ...bad }, terms), error => error.code === 'INVALID_INPUT');
+});
+test('G16 EVM domain and terms are exact data-only objects; hostile accessors fail without invocation', () => {
+  assert.throws(() => domainSeparator({ ...domain, extra: 'ignored-fields-must-not-be-signed' }), error => error.code === 'INVALID_INPUT');
+  assert.throws(() => domainSeparator(null), error => error.code === 'INVALID_INPUT');
+  assert.throws(() => evmTermsHash(domain, null), error => error.code === 'INVALID_INPUT');
+  let invocations = 0;
+  const hostileTerms = { ...terms };
+  Object.defineProperty(hostileTerms, 'amountBaseUnits', { enumerable: true, get() { invocations++; throw new Error('SECRET accessor'); } });
+  assert.throws(() => tradeTermsStructHash(hostileTerms), error => error.code === 'INVALID_INPUT');
+  assert.equal(invocations, 0);
+  const hostileDomain = { ...domain };
+  Object.defineProperty(hostileDomain, 'chainId', { enumerable: true, get() { invocations++; throw new Error('SECRET accessor'); } });
+  assert.throws(() => domainSeparator(hostileDomain), error => error.code === 'INVALID_INPUT');
+  assert.equal(invocations, 0);
 });
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { verifyEoaSignature, verifyEoaAcceptance, evmTermsHash as termsHashOf } from '../src/evm-terms.ts';
@@ -81,4 +108,38 @@ test('G16 acceptance is checked against the stored role account; both parties si
   assert.equal(verifyEoaAcceptance(domain, { ...local, amountBaseUnits: '2' }, 'seller', sellerSig), false, 'edited terms need new signatures');
   assert.equal(verifyEoaAcceptance({ ...domain, chainId: '1' }, local, 'seller', sellerSig), false, 'cross-chain replay');
   assert.throws(() => verifyEoaAcceptance(domain, local, 'arbiter', sellerSig), error => error.code === 'INVALID_INPUT');
+});
+
+test('EOA low-s validation and recovery consume the same intrinsic signature bytes', () => {
+  const { signingHash, signature: sig } = vectors.etherMail;
+  const n = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
+  const highS = (n - BigInt(`0x${sig.s}`)).toString(16).padStart(64, '0');
+  const raw = sigBytes(sig.r, highS, 27);
+  class InconsistentSignature extends Uint8Array {
+    subarray(start, end) {
+      if (start === 32 && end === 64) return Buffer.from(sig.s, 'hex');
+      return super.subarray(start, end);
+    }
+  }
+  assert.throws(() => verifyEoaSignature(signingHash, new InconsistentSignature(raw), sig.signer), error => error.code === 'INVALID_INPUT');
+  assert.throws(() => verifyEoaSignature(signingHash, new Proxy(raw, {}), sig.signer), error => error.code === 'INVALID_INPUT');
+});
+
+test('G16 matches independently encoded non-Noble digest and EOA signature fixtures', async () => {
+  const fixture = JSON.parse(await readFile(new URL('./fixtures/g16-evm-independent.json', import.meta.url), 'utf8'));
+  assert.equal(fixture.vectors.length, 6); let signatures = 0;
+  for (const vector of fixture.vectors) {
+    assert.equal(hex(keccak256(enc(TRADE_TERMS_TYPE))), vector.typeHash, vector.id);
+    assert.equal(hex(domainSeparator(vector.domain)), vector.domainSeparator, vector.id);
+    assert.equal(hex(tradeTermsStructHash(vector.terms)), vector.structHash, vector.id);
+    assert.equal(evmTermsHash(vector.domain, vector.terms), vector.termsHash, vector.id);
+    for (const acceptance of vector.acceptances ?? []) {
+      const signature = Uint8Array.from(Buffer.from(acceptance.signature, 'hex'));
+      assert.equal(verifyEoaAcceptance(vector.domain, vector.terms, acceptance.role, signature), true, vector.id);
+      assert.equal(verifyEoaAcceptance(vector.domain, vector.terms, acceptance.role === 'seller' ? 'buyer' : 'seller', signature), false);
+      assert.equal(verifyEoaAcceptance({ ...vector.domain, chainId: '2' }, vector.terms, acceptance.role, signature), false);
+      signatures++;
+    }
+  }
+  assert.equal(signatures, 4);
 });

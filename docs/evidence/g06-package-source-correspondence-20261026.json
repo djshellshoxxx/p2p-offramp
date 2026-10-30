@@ -1,0 +1,238 @@
+[
+  {
+    "package": "@noble/hashes",
+    "commit": "663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "source": "https://api.github.com/repos/paulmillr/noble-hashes/git/trees/663c2aeeffc308ac0cded59bd32f7c212adacfc2?recursive=1",
+    "allIncludedTypeScriptAndLicenseMatch": true,
+    "files": [
+      {
+        "path": "src/_blake.ts",
+        "gitBlobSha1": "6e6179b18fea50edc1f29a9be66f1a5e73f161df",
+        "sha256": "9eda40c7520d7ccaabf7accca24225ba6bac9ca7b1b7486fc960e15870af1f97"
+      },
+      {
+        "path": "src/_md.ts",
+        "gitBlobSha1": "c7522084f7a1607a294a744ebadc8018dbd5e5bd",
+        "sha256": "d469c5ca7f638b0ec14df23acd9e631f7f04592bfb8cdd7a13918f178ebeb19d"
+      },
+      {
+        "path": "src/_u64.ts",
+        "gitBlobSha1": "287056aacad3af150b7ae4c777e7f9365108003b",
+        "sha256": "3dd3e0a061dfedf2fd3a0c622e746b2927c141dcde8045e5f7cbc5df0b758a74"
+      },
+      {
+        "path": "src/argon2.ts",
+        "gitBlobSha1": "5bb638548c61afc0b5a38469ad4544d8f6c59615",
+        "sha256": "6672b2cca5a86f7b3d9c9de75d2d12bf4fea8711fa7f43dcf185d8033839795d"
+      },
+      {
+        "path": "src/blake1.ts",
+        "gitBlobSha1": "70986fbb5411fe6e4576fac867e3861e8d6a6859",
+        "sha256": "a4864dcddbfe4e03df638463339d953aca3cb0995ae0b498d1dd3ecc7d50bdb7"
+      },
+      {
+        "path": "src/blake2.ts",
+        "gitBlobSha1": "8acec68c8c81a4bd87a02b82b0deb790c048470e",
+        "sha256": "edee1cce752a6e86cea251f11282adb34b5bb8e20e023d317849bbc2920a38ad"
+      },
+      {
+        "path": "src/blake3.ts",
+        "gitBlobSha1": "b2e99e7078b3a06bbc14a3ecbc4f08a1f13838d8",
+        "sha256": "7d7f9432a069cdb05516549091344d525a2762ea698993f5e05f7180ed3aa873"
+      },
+      {
+        "path": "src/eskdf.ts",
+        "gitBlobSha1": "1b40f28e053e1520b128a924107f87af9f6aaaec",
+        "sha256": "fc953318a9f6cc95eced18543f29022a2a1da81795aa63622299180ce37de579"
+      },
+      {
+        "path": "src/hkdf.ts",
+        "gitBlobSha1": "39d38822895332c26ec764e2ab5f273f0c2d05a6",
+        "sha256": "0f145497126d9943373c6830d8c67f91f177bf9827bc18e99149909315186423"
+      },
+      {
+        "path": "src/hmac.ts",
+        "gitBlobSha1": "7b02984fe76774e0977b121fddb5382a68baad0d",
+        "sha256": "74a1ac9f74e3cb97076665c6deada914c3b8e3d645fc65e7e64b71b6d43728fe"
+      },
+      {
+        "path": "src/index.ts",
+        "gitBlobSha1": "c6a9c23a572e85fa5925a65aadadfeb635814e94",
+        "sha256": "9f2034ab7b5c452fd7b2b9df6ec7ef0266830cd11f05908e9f5e862993a19c30"
+      },
+      {
+        "path": "src/legacy.ts",
+        "gitBlobSha1": "01ada8d21bc4dd4250a0bf859cdd5c7fac13c0e1",
+        "sha256": "2bacb7fed94e9d0c33d98313bf764989d9d9c23c2fa13d8f7f5ad5a4fea4751f"
+      },
+      {
+        "path": "src/pbkdf2.ts",
+        "gitBlobSha1": "c4ceeec7b51cb616eeaae54afa3e6c3ac8ce84b3",
+        "sha256": "1a6230a1c1b18a090601667b28b32b2b7843dfb80539bd33d9be5bb3d20d23ca"
+      },
+      {
+        "path": "src/scrypt.ts",
+        "gitBlobSha1": "90542bd820f312785c29679343d93c84952466ac",
+        "sha256": "5f03c5bef264a42f413d199bbee69918f6ca8828be8f2e9f710143043b662b80"
+      },
+      {
+        "path": "src/sha2.ts",
+        "gitBlobSha1": "eed7018845974222d779088e8d717fcc0c9d33e5",
+        "sha256": "27447d36015d30a97dbe68a08978af65094208ba6f093d9197785105d95c20bc"
+      },
+      {
+        "path": "src/sha3-addons.ts",
+        "gitBlobSha1": "642d2e3254342ff35dbae940391f9c56b599dea6",
+        "sha256": "8f0ed953b9194fa0b0f6164ab02d33ee78f491fc2b264876a3e4080522bc55ce"
+      },
+      {
+        "path": "src/sha3.ts",
+        "gitBlobSha1": "3674549d96dfe23b23c4633274ba518d6c21d1ca",
+        "sha256": "a4a94b8b6755466a6972a3ab7816ec8cb2cabc013c1f4107dd09f235b4815415"
+      },
+      {
+        "path": "src/utils.ts",
+        "gitBlobSha1": "7622a0efa1e433a35ba721a9b613226cf7d87767",
+        "sha256": "df2e7c132fb6c451c792dd32dc8a7643de449bcb7782f50fd23664696fbc5962"
+      },
+      {
+        "path": "src/webcrypto.ts",
+        "gitBlobSha1": "e83c8c588e704fc8a5e8747fddc11ee5e73bf5f0",
+        "sha256": "799203593e71f7658d2a6aa7863ac082eee1b725024630e300669c7770378628"
+      },
+      {
+        "path": "LICENSE",
+        "gitBlobSha1": "9297a046d01cf521f93679535be51a8e5b736c0d",
+        "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+      }
+    ]
+  },
+  {
+    "package": "@noble/curves",
+    "commit": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "source": "https://api.github.com/repos/paulmillr/noble-curves/git/trees/656c4364dffa44c64aa0c49914b8000b278b67a9?recursive=1",
+    "allIncludedTypeScriptAndLicenseMatch": true,
+    "files": [
+      {
+        "path": "src/abstract/bls.ts",
+        "gitBlobSha1": "5e2c1402c22d7cd5d4d26f0c53c32ee39b3d5698",
+        "sha256": "b7e80754e25a574698b256524d39012c764ec2b1c544fe77cf6bf88fce05146b"
+      },
+      {
+        "path": "src/abstract/curve.ts",
+        "gitBlobSha1": "c3b1f87704104178e419b2737de3794217d51570",
+        "sha256": "1e234b2d66ad82f1b0edd551b379759d9b0d23db377ee3435cba613ddb1bda81"
+      },
+      {
+        "path": "src/abstract/der.ts",
+        "gitBlobSha1": "b1fffb432945ee2493b3a4c2aaf712a097ad0c60",
+        "sha256": "d67ad7adeb206a490613348a03fb2003ef343a897bad29f858658e1bb6149506"
+      },
+      {
+        "path": "src/abstract/edwards.ts",
+        "gitBlobSha1": "4666a31ce16c30f43178bbc0434b6491b85d0163",
+        "sha256": "1495abd992c174cfe7755228242a8e601ff58f4c41b424063c824f66fabf7c81"
+      },
+      {
+        "path": "src/abstract/fft.ts",
+        "gitBlobSha1": "417c44d7b425946bed6dedb68a2575e899060fad",
+        "sha256": "bcdf6b4e84ac24d94f32eb4b99e7404a6c5f1687835396ae7e2ad8ee2cf4b1ad"
+      },
+      {
+        "path": "src/abstract/frost.ts",
+        "gitBlobSha1": "960583681599f2d85582aec017e9ee9bcf40cc54",
+        "sha256": "3bf0a0f4d0ed6d7a41cc5ae5d76d165a7655e89de3e8f50a14cf8294f188cc56"
+      },
+      {
+        "path": "src/abstract/hash-to-curve.ts",
+        "gitBlobSha1": "9734f3cf31eb848d72de460343818bce609963a3",
+        "sha256": "6ecf9cea9fb4fdff3da5323408bc8e4ad21c84f493eb6d8541d99d5a4eee8526"
+      },
+      {
+        "path": "src/abstract/modular.ts",
+        "gitBlobSha1": "82697cd97066744cfac786e23a9cd2fcf81873e2",
+        "sha256": "a369965c957400e86775a946e873fcd13efb1c4936afcd6c40ad22289645e111"
+      },
+      {
+        "path": "src/abstract/montgomery.ts",
+        "gitBlobSha1": "840a4717c89664d1fda170d81d8d906698e7cbf6",
+        "sha256": "8327e278df009b4e09663b8a7fad443232f248ac40fc0d83b4365c483415ec29"
+      },
+      {
+        "path": "src/abstract/oprf.ts",
+        "gitBlobSha1": "2c40301f6890e458731490f016957ae32c5ece42",
+        "sha256": "1764b2f56d45b447fc2a66ecddc0b07afb62a26c1967c9e7d2dcc44a682e5e68"
+      },
+      {
+        "path": "src/abstract/poseidon.ts",
+        "gitBlobSha1": "73bb65af448a245f6d9f25462c99adcbc181903b",
+        "sha256": "2cae030d62686b13482ccea0a4cedbce6c369ca2fc6031cf2bdad9ace030c4c4"
+      },
+      {
+        "path": "src/abstract/tower.ts",
+        "gitBlobSha1": "236aaecd75fb6bc63671694763a204ed35173ee1",
+        "sha256": "aea994d732da1552a7003553ab9ace8b3f179f4f80ad72ee5a36f45fb3918124"
+      },
+      {
+        "path": "src/abstract/weierstrass.ts",
+        "gitBlobSha1": "cc06e5c87f43bf729a09d0029b7142cb40c30fe7",
+        "sha256": "ccaa0ec1e5b8682ae1984afcf2d62faeb20d61631e3d3b564224d62fb0e9504c"
+      },
+      {
+        "path": "src/bls12-381.ts",
+        "gitBlobSha1": "6608bff38e2c89d79865479b569386ba18d4bd88",
+        "sha256": "a289524874e8fddced06f88a19d83f0115251076981e55a4e496a4df15f16f95"
+      },
+      {
+        "path": "src/bn254.ts",
+        "gitBlobSha1": "326dc66866cf2516c9786e8a242dbba09c1fdfb7",
+        "sha256": "8ad90dde78c9447eb27a12dc0f89f9747099c36e50d8d306fb7a7c05712ff788"
+      },
+      {
+        "path": "src/ed25519.ts",
+        "gitBlobSha1": "560988a02ec3477f0fbf60801494a21f59278910",
+        "sha256": "16cf1b94d477b9930f9db29d89ef2a57db65a6bcfadb65c90ac8aa658f69ea82"
+      },
+      {
+        "path": "src/ed448.ts",
+        "gitBlobSha1": "1e5659f0299afeda2ff43373adaaec56b2c7cfbd",
+        "sha256": "d96c872eb65fbcca966d25f1d07b924215694f152bd2b3764bc62195bcc53490"
+      },
+      {
+        "path": "src/index.ts",
+        "gitBlobSha1": "201a00ac89a1187ed9bdf8e89d44e285af8761b3",
+        "sha256": "b32a7b257dc52b0f4974f437854c82166ab97b211b1556785bb6624184c75210"
+      },
+      {
+        "path": "src/misc.ts",
+        "gitBlobSha1": "8cc49b7883b5cd9248e39989c3b2894319d93cb0",
+        "sha256": "160f95002f5ed86feefaab4711f5c80385cdd7d0c446501143d3c23a04f28430"
+      },
+      {
+        "path": "src/nist.ts",
+        "gitBlobSha1": "38f08efa0473d96eb25e25892ef8c21e6055cf4d",
+        "sha256": "372513e7e6b79af0081cef20d25ba77942d201fb64ba4444fafeb9c84c282215"
+      },
+      {
+        "path": "src/secp256k1.ts",
+        "gitBlobSha1": "f5fb363eb5a283d7819cce69e70c6b69e87c487b",
+        "sha256": "f474017df70d47f2c1afa0798a5be4c20315506d1cc86090c8d60df94f5e70fb"
+      },
+      {
+        "path": "src/utils.ts",
+        "gitBlobSha1": "4713860579f589cb12d68ee5a932290b398023bc",
+        "sha256": "76a892c19902f11aa49a35b9d81c3ca79e961004b892928dce656a87e07f5d83"
+      },
+      {
+        "path": "src/webcrypto.ts",
+        "gitBlobSha1": "6a5a418e55969f129cb050f87d39e51a69e7e2d6",
+        "sha256": "a471437fe915d058262a05a6220a13debc2f4600be05af025744cf35822950d6"
+      },
+      {
+        "path": "LICENSE",
+        "gitBlobSha1": "9297a046d01cf521f93679535be51a8e5b736c0d",
+        "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+      }
+    ]
+  }
+]

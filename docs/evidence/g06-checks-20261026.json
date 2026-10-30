@@ -1,0 +1,54 @@
+{
+  "sourceCommit": "e35fdb08745783686fbb7733953e7bd8d758f227",
+  "sourceTree": "807aab9d6d0851f68d139938509cbf21880fd2ac",
+  "unit": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit": 0,
+    "passed": 341,
+    "skipped": 0
+  },
+  "focused": {
+    "command": [
+      "node",
+      "--test",
+      "packages/security/test/crypto-inventory.test.mjs",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "exit": 0,
+    "passed": 31
+  },
+  "red": {
+    "scope": "missing actual independent fixture hash-gate registration",
+    "exit": 1
+  },
+  "buildPolicy": {
+    "exit": 0,
+    "passed": 5
+  },
+  "boundaries": {
+    "exit": 0,
+    "productionFiles": 43,
+    "coreModules": 18
+  },
+  "logs": [
+    {
+      "path": "/workspace/p2p-g06-fixture-red.log",
+      "sha256": "bfeec490aeaaa0c8e0aaa7f40f5935be967eb1d256e2a60482f7827dad876882"
+    },
+    {
+      "path": "/workspace/p2p-g06-fixture-green.log",
+      "sha256": "3d14d7848042dae065ed3e4a4867a68291f31a33ae4798abb20469c30c5e870a"
+    },
+    {
+      "path": "/workspace/p2p-g06-unit.log",
+      "sha256": "6065e86fe7d52b0d5c46c802ad5231a71e3b3a82a4b595fa856c8415c9a40d46"
+    },
+    {
+      "path": "/workspace/p2p-g06-build-policy.log",
+      "sha256": "c0f68d3a891abccf14c7e0e4792d4f88f571790665f9c420ce0405f2e6d2e0fe"
+    }
+  ]
+}

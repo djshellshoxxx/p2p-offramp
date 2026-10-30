@@ -10,3 +10,4 @@ export type { TradeChat, TradeChatMessage } from './src/nip17.ts';
 export { parseEventJson } from './src/event.ts';
 export { NostrCryptoError } from './src/bytes.ts';
 export type { NostrCryptoErrorCode } from './src/bytes.ts';
+export { createRelayEventCrypto } from './src/relay-event-crypto.ts';

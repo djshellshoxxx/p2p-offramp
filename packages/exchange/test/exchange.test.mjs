@@ -9,7 +9,7 @@ import { createUnsignedEvent, createSeal, createGiftWrap, createLocalNobleNostrP
 import { createRelayPool, createAdEvent, createOrderBook, AD_KIND } from '../../relay/index.ts';
 import { startFakeRelay } from '../../relay/test/support/fake-relay.mjs';
 import { makeBroker, FAST, until } from '../../relay/test/support/harness.mjs';
-import { createNostrEventCrypto, createTermsExchange, adAddress, adBookKey, encodeEnvelope, envelopeTags, transition } from '../index.ts';
+import { createRelayEventCrypto, createTermsExchange, adAddress, adBookKey, encodeEnvelope, envelopeTags, transition } from '../index.ts';
 
 // SYNTHETIC local scenario (packages/domain/test/fixtures/local-evm-scenario): same-author regression fixture, not a golden vector.
 const dir = new URL('../../domain/test/fixtures/local-evm-scenario/', import.meta.url);
@@ -34,7 +34,7 @@ const hashTerms = r => evmTermsHash({ chainId: r.network.chainId, verifyingContr
   capabilitiesHash: r.capabilitiesSha256, sellerNonce: r.sellerNonce, acceptBeforeSeconds: r.acceptBeforeSeconds, escrowExpirySeconds: r.escrowExpirySeconds });
 const nodeSha256 = async bytes => { const d = createHash('sha256').update(bytes).digest(); return d.buffer.slice(d.byteOffset, d.byteOffset + 32); };
 
-async function party() { const k = await provider.generate(); return { secret: k.secretKey, pub: k.publicKey, crypto: createNostrEventCrypto({ provider, secretKey: k.secretKey }) }; }
+async function party() { const k = await provider.generate(); return { secret: k.secretKey, pub: k.publicKey, crypto: await createRelayEventCrypto(provider, k.secretKey) }; }
 const adFor = (maker, over = {}) => ({ app: 'p2p-offramp', v: 1, orderId: ORDER, revision: 1, networkId: 'eip155:31337', assetId: 'native', amountMin: '1000000000000000000',
   amountMax: '2000000000000000000', currency: 'USD', railClass: 'bank-transfer', expiresAtSeconds: String(NOW + 1800), maker, ...over });
 

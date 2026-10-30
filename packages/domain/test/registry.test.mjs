@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { RegistryService } from '../src/registry.ts';
+import { parseRegistryBytes, MAX_REGISTRY_BYTES } from '../../schemas/src/registry.ts';
 // Synthetic fixtures only: local dev chain ID, repeated-digit addresses and made-up hashes. Nothing here is a
 // real or approved network, contract, mint or endpoint.
 const SOL_A = '11111111111111111111111111111112', SOL_B = '4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM';
@@ -98,4 +99,54 @@ test('G11 rejects mutable deployments and credential-bearing or non-HTTPS endpoi
     code((await load(mutate(v => { v.networks[1].endpoints = [{ id: 'e', url }]; v.networks[1].environment = environment; }))).result, 'INVALID_INPUT');
   }
   assert.equal((await load(mutate(v => { v.networks[0].endpoints = [{ id: 'e', url: 'http://localhost:8545/' }]; }))).result.ok, true, 'loopback HTTP only for local');
+});
+
+
+test('G11 direct parser enforces actual view byte bound despite forged own byteLength', () => {
+  const bytes = new Uint8Array(MAX_REGISTRY_BYTES + 1).fill(32);
+  bytes.set(encode(registry())); Object.defineProperty(bytes, 'byteLength', { value: 0 });
+  assert.throws(() => parseRegistryBytes(bytes), error => error.name === 'ValidationError' && error.code === 'LIMIT_EXCEEDED');
+});
+
+test('G11 service rejects actual oversized view before hashing despite forged byteLength', async () => {
+  const bytes = new Uint8Array(MAX_REGISTRY_BYTES + 1).fill(32);
+  bytes.set(encode(registry())); Object.defineProperty(bytes, 'byteLength', { value: 0 });
+  let digests = 0;
+  const service = new RegistryService(async () => { digests++; throw Error('SECRET digest must not run'); });
+  code(await service.load(bytes, '0'.repeat(64)), 'LIMIT_EXCEEDED');
+  assert.equal(digests, 0); assert.equal(service.network('local-evm'), null);
+});
+
+test('G11 genuine byte views ignore byteLength and length getters without leaking foreign exceptions', async () => {
+  for (const kind of ['false-size', 'throwing-getter']) {
+    const bytes = encode(registry()), expected = sha(bytes); let reads = 0;
+    Object.defineProperty(bytes, 'byteLength', kind === 'false-size' ? { value: 0 } : {
+      get() { reads++; throw Error('SECRET synthetic foreign getter'); } });
+    Object.defineProperty(bytes, 'length', { get() { reads++; throw Error('SECRET synthetic length'); } });
+    assert.equal(parseRegistryBytes(bytes).releaseId, 'fixture-0001');
+    const result = await new RegistryService().load(bytes, expected);
+    assert.equal(result.ok, true); assert.equal(reads, 0, 'only intrinsic typed-array view facts are read');
+  }
+});
+
+test('G11 proxy and revoked views return fixed direct-parser/typed-service failures without inspecting foreign errors', async () => {
+  const revoked = Proxy.revocable(encode(registry()), {}); revoked.revoke();
+  const inputs = [new Proxy(encode(registry()), {}), revoked.proxy, new Uint16Array(3), {}, null];
+  for (const bytes of inputs) {
+    assert.throws(() => parseRegistryBytes(bytes), error => error.name === 'ValidationError' && error.code === 'INVALID_INPUT');
+    code(await new RegistryService().load(bytes, '0'.repeat(64)), 'INVALID_INPUT');
+  }
+});
+
+test('G11 offset view hashes and parses only its bounded bytes and keeps an owned snapshot across hash await', async () => {
+  const body = encode(registry()), backing = new Uint8Array(body.byteLength + 32).fill(0xff);
+  const view = new Uint8Array(backing.buffer, 16, body.byteLength); view.set(body);
+  assert.equal(parseRegistryBytes(view).releaseId, 'fixture-0001');
+  let snapshot;
+  const service = new RegistryService(async copy => {
+    snapshot = copy; assert.equal(copy.byteLength, body.byteLength); assert.notEqual(copy.buffer, backing.buffer);
+    view.fill(0); await Promise.resolve(); return crypto.subtle.digest('SHA-256', copy);
+  });
+  assert.equal((await service.load(view, sha(body))).ok, true);
+  assert.deepEqual(snapshot, body); assert.equal(backing[0], 0xff); assert.equal(backing.at(-1), 0xff);
 });

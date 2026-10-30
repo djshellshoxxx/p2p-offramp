@@ -1,0 +1,72 @@
+{
+  "identity": {
+    "path": "/workspace/checkpoints/2026-10-27-p2p-control-schema-next/P2P-private-control-schema-next-16c224c-20261027.md",
+    "bytes": 25106,
+    "sha256": "c11500f064b947670ab6381dfc4100a5e9e4ebe81b8e0e0e1d62c0f3468a8a43",
+    "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+    "allowedPaths": [
+      "packages/schemas/src/evm-agreement-control.ts",
+      "packages/schemas/test/evm-agreement-control.test.mjs"
+    ],
+    "state": "ready not assigned"
+  },
+  "manifest": {
+    "assignment": "P2P-G16-CONTROL-SCHEMA-NEXT",
+    "state": "ready, not assigned/active; proposal only",
+    "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+    "sourceTree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+    "owner": "sole P2P integrator; broker proposal only",
+    "allowedPaths": [
+      {
+        "path": "packages/schemas/src/evm-agreement-control.ts",
+        "base": "absent",
+        "sha256": null
+      },
+      {
+        "path": "packages/schemas/test/evm-agreement-control.test.mjs",
+        "base": "absent",
+        "sha256": null
+      }
+    ],
+    "readOnlyReferences": [
+      {
+        "path": "packages/schemas/src/evm-agreement-protocol.ts",
+        "bytes": 6378,
+        "sha256": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+        "scope": "complete read-only file"
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "bytes": 7446,
+        "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "scope": "complete read-only file"
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "fullSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "scope": "lines1-8 only; partial file",
+        "excerptBytes": 502,
+        "excerptSha256": "1625a2b2302017d2cecc7bb20ac8a9b3b0060680294e374e70ff803a097e2e07"
+      },
+      {
+        "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+        "fullSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+        "scope": "complete physical-state and host interfaces only; partial file",
+        "excerptBytes": 706,
+        "excerptSha256": "02a1f0ac81c028552e14a6b23fe1c766422a76acdef9ae174c6263178b81c1ef"
+      }
+    ],
+    "noOtherWrites": true,
+    "appIncluded": false,
+    "paidCallByIntegrator": false,
+    "testsRunForThisPacket": false,
+    "referenceReview": {
+      "libraryFileId": "libfile_7984b84c92d08191867cf3ecae18f129",
+      "version": 0,
+      "outerBytes": 21705,
+      "outerSha256": "2ba9c64a4a26a1514b45b42e0a254fa07399eb3462d2c896f7b40870aeff67d6",
+      "rawBodySha256": "c8d4ebdb8e0b316daa8e31ad7fbf63c5395f1611cbb06e3695ae068122067f4f",
+      "status": "static reviewed sketch, not approval or executed wire code"
+    }
+  }
+}

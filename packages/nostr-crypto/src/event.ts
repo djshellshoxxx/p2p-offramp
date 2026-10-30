@@ -6,6 +6,7 @@
  * escape differently from NIP-01 (control characters other than \b \t \n \f \r, and lone surrogates) are rejected,
  * so this serialization is exactly the NIP-01 one for every accepted event.
  */
+import { schnorr } from '@noble/curves/secp256k1.js';
 import { sha256 } from '@noble/hashes/sha2.js';
 import { bytesToHex, fail, hexToBytes, isLowerHex, utf8Encode } from './bytes.ts';
 import type { NostrMessagingProvider } from './provider.ts';
@@ -85,8 +86,8 @@ export function createUnsignedEvent(pubkey: string, input: EventTemplate, limits
   return Object.freeze({ id: computeEventId(pubkey, event), pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
 }
 
-/** Shape, bounds and id recomputation of an untrusted signed event; the signature is NOT checked here. */
-function checkedEvent(input: unknown, limits: EventLimits): NostrEvent {
+/** Exact keys, bounds and id recomputation of an untrusted signed event; the signature is not checked here. */
+function parseSignedUnverified(input: unknown, limits: EventLimits): NostrEvent {
   const raw = record(input, ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig']);
   if (!isLowerHex(raw.id, 32) || !isLowerHex(raw.pubkey, 32) || !isLowerHex(raw.sig, 64)) return fail();
   const event = template(raw, limits);
@@ -95,16 +96,20 @@ function checkedEvent(input: unknown, limits: EventLimits): NostrEvent {
 }
 /** Strict parse of an untrusted signed event: exact keys, bounds, id recomputation, then BIP340 verification. */
 export async function verifyEvent(input: unknown, provider: NostrMessagingProvider, limits: EventLimits = DEFAULT_EVENT_LIMITS): Promise<NostrEvent> {
-  const event = checkedEvent(input, limits);
+  const event = parseSignedUnverified(input, limits);
   if (!(await provider.verifySchnorr(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)))) return fail('INTEGRITY_FAILURE');
   return event;
 }
-/** Synchronous variant for callers that cannot await (the relay pool). Needs a provider that offers `verifySchnorrSync`. */
-export function verifyEventSync(input: unknown, provider: Pick<NostrMessagingProvider, 'verifySchnorrSync'>, limits: EventLimits = DEFAULT_EVENT_LIMITS): NostrEvent {
-  const verify = provider.verifySchnorrSync;
-  if (typeof verify !== 'function') return fail('UNSUPPORTED_PROVIDER');
-  const event = checkedEvent(input, limits);
-  if (!verify(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32))) return fail('INTEGRITY_FAILURE');
+/**
+ * Synchronous form of verifyEvent for callers that must not yield between checks (the relay pool dedupes, filters,
+ * verifies and delivers in one turn). Same parse; BIP340 verification uses the pinned @noble/curves 2.4.0 directly,
+ * the primitive the local provider wraps. Verification needs only public data, so no provider key is involved.
+ */
+export function verifyEventSync(input: unknown, limits: EventLimits = DEFAULT_EVENT_LIMITS): NostrEvent {
+  const event = parseSignedUnverified(input, limits);
+  let valid = false;
+  try { valid = schnorr.verify(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)) === true; } catch { valid = false; }
+  if (!valid) return fail('INTEGRITY_FAILURE');
   return event;
 }
 /** Strict parse of an untrusted rumor: exact keys (a `sig` key is rejected), bounds and id recomputation. */

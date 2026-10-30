@@ -1,0 +1,198 @@
+{
+  "repository": "p2p-offramp-pr5-validation",
+  "sourceHead": "02f75b452045afd35b71d977c347c331937568ee",
+  "sourceTree": "9806239fddacdbceef006db1a7437f16553f92ac",
+  "purpose": "Bounded reuse inventory: exact current bytes of referenced tracked-source, provenance and representative imports. Not a complete dependency or source-similarity audit.",
+  "observedDateUTC": "2026-10-26",
+  "paths": [
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/README.md",
+      "gitMode": "100644",
+      "headBlob": "98258084a1b128bc93cb354c6a67eb8b1d24fce8",
+      "sha256": "bde95324164f70e1e6462577d60ed5c795a1644a68f7d8805341239e8d352d3d",
+      "differsFromHead": false
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/src/chainManifest.ts",
+      "gitMode": "100644",
+      "headBlob": "d5d121a155c8e4d0677cc1f5a7ac5b0b7ae06a67",
+      "sha256": "dbe573dabe7fcb165bb46374044970297613152f8681b84e947b3731011ecc23",
+      "differsFromHead": false
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/src/secureEnvelope.ts",
+      "gitMode": "100644",
+      "headBlob": "46df68762f3d5a2d934d5ecdba3d4e8f334de0bd",
+      "sha256": "f3e2f3fae95adb26c577aedbe99ff6ee64625e3c5e9879f919343330dec23b07",
+      "differsFromHead": false
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/spec-open-source-component-matrix.md",
+      "gitMode": "100644",
+      "headBlob": "8c4e3d0e4d4816126d9bfe45a79492afbe9f20c5",
+      "sha256": "524b2cab4f96e8915202959d92af739cf69a00bc21fe96e3ba6a0181fdd60564",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "gitMode": "100644",
+      "headBlob": "bdaa584f4f95b420203d7ffde721b2662b34b739",
+      "sha256": "2ea2c63829342f5171172f0243a796c79591046eb1c9f549a67a862ba83e4c3e",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "gitMode": "100644",
+      "headBlob": "de6f1555d8d03faacd19044e2a07b1818bb3eadd",
+      "sha256": "03f64164c21bd0184605155a4b4a63426d6c8651be952261939c15d39ea3e4cf",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "gitMode": "100644",
+      "headBlob": "fa9dbab04d0703295fdfc4b54df0f219c3a79df4",
+      "sha256": "4ca4039a94c1adad471433aae3e2009d4b78870e7b4a60564794e654a81068f8",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/VaultForms.tsx",
+      "gitMode": "100644",
+      "headBlob": "50052e388e963d70bf25a8605866b393f85a0f8f",
+      "sha256": "8213f5d4131efdaa07d4ca32190dd68de34fee4db56543137e1dbc62b7423278",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/app.css",
+      "gitMode": "100644",
+      "headBlob": "90a0d5cd7326d427aee8d80047e9e0a1ef0dfc90",
+      "sha256": "efeffb3f115764cbfdf29ca9c516150ad088d328e2a9fe9a44ec2e3cbc0a5b76",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "gitMode": "100644",
+      "headBlob": "535f135df9c1dadff6d4844b1f66586aa4702c58",
+      "sha256": "ba351f1b563bca1e8d9f238a2f04b01efdd56d24d9f73957f090b4d919caf6c3",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/routes.ts",
+      "gitMode": "100644",
+      "headBlob": "459f6a6592a13f817265dac11a5efa4585765d33",
+      "sha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1",
+      "differsFromHead": false
+    },
+    {
+      "path": "apps/web/src/ui/styles.d.ts",
+      "gitMode": "100644",
+      "headBlob": "9478326fc8eb07ff409bd24c189c4eea179efa8e",
+      "sha256": "28e0b0de8c50a7e1daa4f6dca791beb9dcf4084e164c9468694f579406a63d73",
+      "differsFromHead": false
+    },
+    {
+      "path": "docs/RECONSTRUCTION-2026-10-23.md",
+      "gitMode": "100644",
+      "headBlob": "f3620fdae20e517d5e29f6cf13cd1d8b36ee7866",
+      "sha256": "771044f5a758d14069101cfaa4da168302bab128d7dbea9d563d2efa760a67d4",
+      "differsFromHead": false
+    },
+    {
+      "path": "docs/reviews/G16_2026-10-26.md",
+      "gitMode": "100644",
+      "headBlob": "a96007b8ac5e9348184cd3c58c6c631444abac0c",
+      "sha256": "fcd403171d65fd1fc9a30e982dc316215103d073171f85ed5ff88eeaf1f22e5f",
+      "differsFromHead": false
+    },
+    {
+      "path": "package-lock.json",
+      "gitMode": "100644",
+      "headBlob": "46a74d567108b67eb6b5539aea1ea8cbf7e9403f",
+      "sha256": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+      "differsFromHead": false
+    },
+    {
+      "path": "package.json",
+      "gitMode": "100644",
+      "headBlob": "8d32774542116f4c5dcace0ec6abc7e351e539b7",
+      "sha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/identity/src/noble-provider.ts",
+      "gitMode": "100644",
+      "headBlob": "14e231236c012153ec759502dce7a1526763d7df",
+      "sha256": "13141582aed59021cf103a42548e37bdced3d10dff4b3d39819ff7f8616cbbaa",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/identity/test/fixtures/BIP340-LICENSE-NOTICE.md",
+      "gitMode": "100644",
+      "headBlob": "581eb8b10db25bb3bf84e4ba7d0ae4ae58726f53",
+      "sha256": "05dde9f462c219afa09ca64ec231b90a75ce34e4f2113f5dad3aa26f7a60bc26",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+      "gitMode": "100644",
+      "headBlob": "672339129a844a060591bb22f444158ff45438ed",
+      "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/identity/test/fixtures/noble-MIT-LICENSE.txt",
+      "gitMode": "100644",
+      "headBlob": "9297a046d01cf521f93679535be51a8e5b736c0d",
+      "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "gitMode": "100644",
+      "headBlob": "7288a66ae4c5ea72c87209f665147878be1c4040",
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+      "gitMode": "100644",
+      "headBlob": "571f5759fd92361402eee55a969eeedb9bdb5d30",
+      "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+      "differsFromHead": false
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "gitMode": "100644",
+      "headBlob": "5e974de18adb0919c03eec66421dd1e18f17f802",
+      "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "differsFromHead": false
+    },
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "gitMode": "100644",
+      "headBlob": "3fddb77b83bd4b31d772a1b4c40ad086305dfd6b",
+      "sha256": "efd62a22e2fbd5c973fbc5248658216fcd4492106c6cfd63b3837c0acd154cb3",
+      "differsFromHead": false
+    },
+    {
+      "path": "scripts/vectors/g16_evm_independent.mjs",
+      "gitMode": "100644",
+      "headBlob": "321223061ed59dd5a2b002ae0b6d771996ae1104",
+      "sha256": "650483be964b74bb94980f88dd9044e09ed3fd72b43b2477e9bdd6dca63a117a",
+      "differsFromHead": false
+    },
+    {
+      "path": "security/browser-support.json",
+      "gitMode": "100644",
+      "headBlob": "814a748ee78dc4e7f3d95f2add1315997ed6119b",
+      "sha256": "fa17df82bba4d15bd4ef1deef389f1e43df840af8ad17a33b6ab622cb75146d0",
+      "differsFromHead": false
+    },
+    {
+      "path": "security/crypto-inventory.json",
+      "gitMode": "100644",
+      "headBlob": "ae32a2c258d8af1a4baf108c8ed6085d22cb6339",
+      "sha256": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+      "differsFromHead": true
+    }
+  ]
+}

@@ -22,6 +22,24 @@ export class EvmTermsError extends Error {
 const fail = (): never => { throw new EvmTermsError(); };
 const utf8 = new TextEncoder();
 
+/** Copy exact enumerable data fields without invoking caller accessors. EIP-712 inputs are plain JSON-shaped data. */
+function exactDataObject<T extends object>(input: unknown, fields: readonly string[]): Readonly<T> {
+  try {
+    if (typeof input !== 'object' || input === null || Array.isArray(input)) return fail();
+    const prototype = Object.getPrototypeOf(input);
+    if (prototype !== Object.prototype && prototype !== null) return fail();
+    const ownKeys = Reflect.ownKeys(input);
+    if (ownKeys.length !== fields.length || ownKeys.some(key => typeof key !== 'string' || !fields.includes(key))) return fail();
+    const copy = Object.create(null) as Record<string, unknown>;
+    for (const field of fields) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, field);
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return fail();
+      Object.defineProperty(copy, field, { value: descriptor.value, enumerable: true });
+    }
+    return Object.freeze(copy) as Readonly<T>;
+  } catch { return fail(); }
+}
+
 export function keccak256(bytes: Uint8Array): Uint8Array { return keccak_256(bytes); }
 function concat(parts: readonly Uint8Array[]): Uint8Array {
   const out = new Uint8Array(parts.reduce((sum, part) => sum + part.byteLength, 0));
@@ -60,9 +78,14 @@ export function eip712Digest(domainSeparator: Uint8Array, structHash: Uint8Array
 }
 
 export interface EvmDomainInput { readonly chainId: string; readonly verifyingContract: string; }
+const DOMAIN_FIELDS = ['chainId', 'verifyingContract'] as const;
+export function snapshotEvmDomain(input: EvmDomainInput): Readonly<EvmDomainInput> {
+  return exactDataObject<EvmDomainInput>(input, DOMAIN_FIELDS);
+}
 export function domainSeparator(input: EvmDomainInput): Uint8Array {
+  const domain = snapshotEvmDomain(input);
   return keccak256(concat([keccak256(utf8.encode(DOMAIN_TYPE)), stringWord('P2POfframp'), stringWord('1'),
-    uintWord(unsigned(input.chainId, U256, 1n), U256), addressWord(input.verifyingContract)]));
+    uintWord(unsigned(domain.chainId, U256, 1n), U256), addressWord(domain.verifyingContract)]));
 }
 export interface EvmTermsInput {
   readonly orderId: string; readonly revision: string; readonly networkId: string; readonly deploymentId: string;
@@ -73,20 +96,24 @@ export interface EvmTermsInput {
 const ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
 const KEYS = 'acceptBeforeSeconds,amountBaseUnits,asset,assetKind,buyer,capabilitiesHash,deploymentId,escrowExpirySeconds,networkId,' +
   'orderId,privateAgreementHash,revision,seller,sellerNonce';
+const TERMS_FIELDS_EXACT = KEYS.split(',');
+export function snapshotEvmTerms(input: EvmTermsInput): Readonly<EvmTermsInput> {
+  return exactDataObject<EvmTermsInput>(input, TERMS_FIELDS_EXACT);
+}
 /** hashStruct(TradeTerms) with v=1 and mode=0 (basic manual v1). Native: assetKind 0 with zero address; ERC-20: 1 with nonzero token. */
 export function tradeTermsStructHash(input: EvmTermsInput): Uint8Array {
-  if (typeof input !== 'object' || input === null || Object.keys(input).sort().join() !== KEYS) return fail();
-  for (const value of [input.networkId, input.deploymentId]) if (typeof value !== 'string' || !ID.test(value) || value.includes('..')) fail();
-  if (input.seller === input.buyer) fail();
+  const terms = snapshotEvmTerms(input);
+  for (const value of [terms.networkId, terms.deploymentId]) if (typeof value !== 'string' || !ID.test(value) || value.includes('..')) fail();
+  if (terms.seller === terms.buyer) fail();
   let kind: bigint;
-  if (input.assetKind === 'native') { if (input.asset !== `0x${'0'.repeat(40)}`) fail(); kind = 0n; }
-  else if (input.assetKind === 'erc20') { addressWord(input.asset); kind = 1n; }
+  if (terms.assetKind === 'native') { if (terms.asset !== `0x${'0'.repeat(40)}`) fail(); kind = 0n; }
+  else if (terms.assetKind === 'erc20') { addressWord(terms.asset); kind = 1n; }
   else return fail();
-  return keccak256(concat([keccak256(utf8.encode(TRADE_TERMS_TYPE)), uintWord(1n, 255n), bytes32Word(input.orderId),
-    uintWord(unsigned(input.revision, U64, 1n), U64), stringWord(input.networkId), stringWord(input.deploymentId),
-    addressWord(input.seller), addressWord(input.buyer), uintWord(kind, 255n), addressWord(input.asset, true),
-    uintWord(unsigned(input.amountBaseUnits, U256, 1n), U256), bytes32Word(input.privateAgreementHash), bytes32Word(input.capabilitiesHash),
-    bytes32Word(input.sellerNonce), uintWord(unsigned(input.acceptBeforeSeconds, U64), U64), uintWord(unsigned(input.escrowExpirySeconds, U64), U64),
+  return keccak256(concat([keccak256(utf8.encode(TRADE_TERMS_TYPE)), uintWord(1n, 255n), bytes32Word(terms.orderId),
+    uintWord(unsigned(terms.revision, U64, 1n), U64), stringWord(terms.networkId), stringWord(terms.deploymentId),
+    addressWord(terms.seller), addressWord(terms.buyer), uintWord(kind, 255n), addressWord(terms.asset, true),
+    uintWord(unsigned(terms.amountBaseUnits, U256, 1n), U256), bytes32Word(terms.privateAgreementHash), bytes32Word(terms.capabilitiesHash),
+    bytes32Word(terms.sellerNonce), uintWord(unsigned(terms.acceptBeforeSeconds, U64), U64), uintWord(unsigned(terms.escrowExpirySeconds, U64), U64),
     uintWord(0n, 255n)]));
 }
 /** termsHash: the exact EIP-712 digest both acceptance signatures must cover. */
@@ -95,6 +122,7 @@ export function evmTermsHash(domain: EvmDomainInput, terms: EvmTermsInput): stri
 }
 
 const N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
+const typedArrayByteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype), 'byteLength')!.get!;
 /** Address of an uncompressed secp256k1 public key: last 20 bytes of keccak256(x || y). */
 function addressOf(publicKey: Uint8Array): string {
   const uncompressed = secp256k1.Point.fromBytes(publicKey).toBytes(false);
@@ -107,14 +135,19 @@ function addressOf(publicKey: Uint8Array): string {
  */
 export function verifyEoaSignature(digestHex: string, signature: Uint8Array, expected: string): boolean {
   const digest = bytes32Word(digestHex); addressWord(expected);
-  if (!(signature instanceof Uint8Array) || signature.byteLength !== 65) return fail();
+  let stable: Uint8Array;
+  try {
+    if (!(signature instanceof Uint8Array) || typedArrayByteLength.call(signature) !== 65) return fail();
+    // Typed-array construction copies intrinsic bytes without caller subarray/iterator overrides.
+    stable = new Uint8Array(signature);
+  } catch { return fail(); }
   const big = (part: Uint8Array): bigint => part.reduce((value, byte) => (value << 8n) | BigInt(byte), 0n);
-  const r = big(signature.subarray(0, 32)), s = big(signature.subarray(32, 64)), v = signature[64];
+  const r = big(stable.subarray(0, 32)), s = big(stable.subarray(32, 64)), v = stable[64];
   if (r === 0n || r >= N || s === 0n || s > N / 2n || (v !== 27 && v !== 28)) return fail();
   let recovered: string;
   try {
     // @noble 'recovered' layout is recovery id first, then r || s.
-    const compact = new Uint8Array(65); compact[0] = v - 27; compact.set(signature.subarray(0, 64), 1);
+    const compact = new Uint8Array(65); compact[0] = v - 27; compact.set(stable.subarray(0, 64), 1);
     recovered = addressOf(secp256k1.recoverPublicKey(compact, digest, { prehash: false }));
   } catch { return false; }
   return recovered === expected;
@@ -125,5 +158,6 @@ export function verifyEoaSignature(digestHex: string, signature: Uint8Array, exp
  */
 export function verifyEoaAcceptance(domain: EvmDomainInput, terms: EvmTermsInput, role: 'seller' | 'buyer', signature: Uint8Array): boolean {
   if (role !== 'seller' && role !== 'buyer') return fail();
-  return verifyEoaSignature(evmTermsHash(domain, terms), signature, role === 'seller' ? terms.seller : terms.buyer);
+  const stableDomain = snapshotEvmDomain(domain), stableTerms = snapshotEvmTerms(terms);
+  return verifyEoaSignature(evmTermsHash(stableDomain, stableTerms), signature, role === 'seller' ? stableTerms.seller : stableTerms.buyer);
 }

@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "physical-drain",
+          "suites": [
+            {
+              "id": "focused",
+              "argv": [
+                "node",
+                "--test",
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/wallet/test/evm-agreement.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "categories": [
+                "unit",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "fixed qualified-host/protocol/verifier/parser regressions; not fuzzing",
+                "scope": "no app/trading/provider approval"
+              }
+            },
+            {
+              "id": "aggregate",
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "build",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "boundaries",
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "browser",
+              "argv": [
+                "npm",
+                "run",
+                "test:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "web",
+              "argv": [
+                "npm",
+                "run",
+                "test:web:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specs",
+              "argv": [
+                "npm",
+                "run",
+                "test:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specaudit",
+              "argv": [
+                "npm",
+                "run",
+                "check:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "policy",
+              "argv": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged"
+              }
+            },
+            {
+              "id": "g15browser",
+              "argv": [
+                "node",
+                "scripts/test-release-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "owned loopback fixed public-data document/Worker fixtures",
+                "scope": "no app/provider/trading/release approval"
+              }
+            },
+            {
+              "id": "g16browser",
+              "argv": [
+                "node",
+                "scripts/test-g16-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "scope": "unchanged public-data document/Worker fixture; not new physical-API message qualification"
+              }
+            },
+            {
+              "id": "helpertypes",
+              "argv": [
+                "node",
+                "node_modules/typescript/bin/tsc",
+                "--project",
+                "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+                "--noEmit"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60
+            },
+            {
+              "id": "fuzzharness",
+              "argv": [
+                "node",
+                "--test",
+                "scripts/tests/evm-agreement-fuzz.test.mjs"
+              ],
+              "categories": [
+                "unit"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60
+            },
+            {
+              "id": "seeded-parser",
+              "categories": [
+                "property",
+                "fuzz"
+              ],
+              "argv": [
+                "node",
+                "{project_root}/scripts/fuzz-evm-agreement-input.mjs",
+                "--seed",
+                "{seed}",
+                "--cases",
+                "{cases}",
+                "--output",
+                "{job_dir}/metrics.json"
+              ],
+              "required_files": [
+                "scripts/fuzz-evm-agreement-input.mjs",
+                "packages/schemas/src/evm-agreement-input.ts",
+                "packages/schemas/src/core.ts",
+                "package-lock.json"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "metrics_file": "{job_dir}/metrics.json",
+              "budget": {
+                "method": "actual seeded structural generation/mutation,not coverage-guided",
+                "seed": "applied in argv",
+                "cases": "applied total cases in argv; quick256 standard1024 deep4096",
+                "inputConstructionMaxUtf16Units": 4097,
+                "decimalCharactersMax": 5000,
+                "capabilitiesMax": 9,
+                "signatureViewBytesMax": 66,
+                "backingBufferBytesMax": 1024,
+                "memoryHardLimit": false,
+                "productionAssertionsAndKdfUnchanged": true
+              }
+            }
+          ]
+        }
+      ],
+      "expected_tree": "71c6940c43bef08be407f4b716fb6539edcd19f2"
+    }
+  ],
+  "profiles": {
+    "quick": {
+      "seed": 1592598566,
+      "cases": 256
+    },
+    "standard": {
+      "seed": 1592598566,
+      "cases": 1024
+    },
+    "deep": {
+      "seed": 1592598566,
+      "cases": 4096
+    }
+  }
+}

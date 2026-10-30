@@ -2,20 +2,39 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
-## 2026-10-30 — terms exchange merged
+## 2026-10-30 — PR #12 merged into PR #10 branch; terms exchange on top (session sweet-noether)
 
-- Merged `wave5/terms-exchange` (b2af7a5, c5d4999, e17fe4a): new `packages/exchange` (NIP-17 take/offer/accept/reject/cancel
-  state machine, real-crypto relay adapter), `packages/nostr-crypto/index.ts` facade + sync verify. npm test 485/485.
-- Lean-scope core now covered at package level: terms → encrypted exchange → escrow fund/release/refund → G12 reconcile.
-  Remaining: app wiring (other session's UI area), SonarCloud findings (blocked), @noble/ciphers swap (blocked).
+- `claude/sweet-noether-arf6ne` now = `claude/sweet-shannon-grykla` (PR #12, 7165626) + `packages/exchange` (NIP-17 take/offer/
+  accept/reject/cancel state machine over packages/relay; tests end on evmTermsHash == expectedEvmTermsHash).
+- Conflicts resolved in favour of PR #12: its `verifyEventSync`, provider and `createRelayEventCrypto` adapter are kept; the
+  duplicate exchange adapter was deleted. Kept: `packages/nostr-crypto/index.ts` facade (+ createRelayEventCrypto export),
+  relay `#p` filter and 3-day gift-wrap history window.
+- Merge order for the owner: PR #12 first, then PR #10 (which then only adds the exchange package).
+- SonarCloud gate on PR #10 (D security/reliability) still unexplained: sonarcloud.io blocked from this session.
 
-## 2026-10-30 — SonarCloud gate red on PR #10
+## 2026-10-28 — Sepolia kit ready, deployment blocked on environment (session sweet-shannon)
 
-- SonarCloud (new app check) failed: D Security + D Reliability on new code @ e652f6d. sonarcloud.io blocked by proxy;
-  check run has summary only. Commented on PR asking owner for issue list / network allow. Suspect: hardcoded anvil dev
-  keys in scripts/test-evm-*.mjs (fix: anvil --config-out). Do not push speculative fixes.
-- Terms-exchange worker (`wave5/terms-exchange`) hit rate limit; resumed 10-30.
-- Still pending owner: @noble/ciphers install permission.
+- The owner chose Sepolia, with the deploy run from the session using a testnet-only key secret, and an owner-held P-256 testnet trust root.
+- The kit is at `78a0bad` (`docs/deployments/sepolia/README.md`). `npm run test:sepolia:kit` passes 6/6 against anvil with chain id 11155111.
+- The pinned Foundry v1.5.1 now runs locally:
+  - forge 82/82;
+  - test:evm:local 8/8;
+  - test:evm:reconcile 5/5;
+  - the `cast calldata` check is no longer skipped.
+- Blocked on the owner:
+  - add the `SEPOLIA_DEPLOYER_PRIVATE_KEY` and `SEPOLIA_RPC_URL` secrets;
+  - allow the RPC host;
+  - start a new session;
+  - run `owner-release.mjs keygen` and hand over the public key.
+- Next after deploy: owner signs `--sequence 1`, then `npm run sepolia:verify`, then the two-party Sepolia trade (this needs a buyer key).
+
+## 2026-10-28 — integration branch (session sweet-shannon)
+
+- `claude/sweet-shannon-grykla` (draft PR #12) = main + #11 (`6f05ecb`) + #10 (`9701f52`); crypto-inventory test conflict resolved
+  (see SESSION_STATUS "Integration branch"). Relay ↔ nostr-crypto wiring done (`03c02f3`): `createRelayEventCrypto`.
+- G12 lifecycle two-tab IndexedDB races covered (`scripts/test-lifecycle-tabs-browser.mjs`, in `test:browser`).
+- Cipher swap still pending owner approval of `@noble/ciphers@2.4.0`; Foundry install denied in this session (hosted CI covers forge/anvil).
+  - Superseded the same day: the owner approved the dependency and the swap landed in `e7f3485`; Foundry v1.5.1 was installed after the owner's Sepolia decision.
 
 ## 2026-10-27 — nostr-crypto merged (cipher swap pending owner)
 

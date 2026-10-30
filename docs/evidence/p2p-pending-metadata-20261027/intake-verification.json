@@ -1,0 +1,554 @@
+{
+  "assignment": "P2P-G16-PENDING-PRIVACY-05",
+  "status": "UNEXECUTED inert proposal; sole P2P integrator applies/tests",
+  "input": {
+    "library_file_id": "libfile_f348b4b81c54819195701b59913b1768",
+    "version": 1,
+    "bytes": 154395,
+    "sha256": "1c3683132698785514245bb9adfb508b0f0b3293d92eca5e9edd3ef739095f08",
+    "source_blocks_verified": 15,
+    "manifest": {
+      "assignment": "P2P-G16-PENDING-PRIVACY-05",
+      "baseSha": "6519f05f71e31579d1c5caad206089d85c2824f8",
+      "baseTree": "4525cc92067f37814dbffe1dea036220614af4eb",
+      "preparationOnly": true,
+      "allowedProposalPaths": [
+        {
+          "path": "apps/web/src/runtime/app-runtime.ts",
+          "baseState": "existing",
+          "baseSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "baseBytes": 16843
+        },
+        {
+          "path": "apps/web/src/runtime/pending-metadata.ts",
+          "baseState": "absent",
+          "baseSha256": null,
+          "baseBytes": null
+        },
+        {
+          "path": "apps/web/test/pending-metadata.test.mjs",
+          "baseState": "absent",
+          "baseSha256": null,
+          "baseBytes": null
+        }
+      ],
+      "implementationApplied": false,
+      "testsBuildsRun": false,
+      "paidCalls": 0,
+      "appInclusion": false,
+      "publicFacadeChangesAllowed": false,
+      "sourceBlocks": [
+        {
+          "path": "apps/web/src/runtime/app-runtime.ts",
+          "role": "only existing proposed output; complete AppRuntime and all lifecycle/request/reply functions",
+          "wholeFile": true,
+          "fileSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "fileBytes": 16843,
+          "startLine": 1,
+          "endLine": 259,
+          "includedSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "includedBytes": 16843
+        },
+        {
+          "path": "apps/web/test/app-runtime.test.mjs",
+          "role": "read-only existing regression suite, complete; retain bytes/tests without modifications",
+          "wholeFile": true,
+          "fileSha256": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+          "fileBytes": 16422,
+          "startLine": 1,
+          "endLine": 140,
+          "includedSha256": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+          "includedBytes": 16422
+        },
+        {
+          "path": "packages/schemas/src/runtime.ts",
+          "role": "read-only exact RuntimeCommand/response/error/limits and complete parsers; no protocol change allowed",
+          "wholeFile": true,
+          "fileSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+          "fileBytes": 13904,
+          "startLine": 1,
+          "endLine": 188,
+          "includedSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+          "includedBytes": 13904
+        },
+        {
+          "path": "apps/web/src/runtime/worker-endpoint.ts",
+          "role": "read-only existing one-active-job/abort/generation ownership; no endpoint modifications allowed",
+          "wholeFile": true,
+          "fileSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+          "fileBytes": 11663,
+          "startLine": 1,
+          "endLine": 183,
+          "includedSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+          "includedBytes": 11663
+        },
+        {
+          "path": "packages/schemas/src/evm-agreement-input.ts",
+          "role": "read-only integrated private G16 input interfaces; implementation already present, not missing",
+          "wholeFile": false,
+          "fileSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+          "fileBytes": 13966,
+          "startLine": 1,
+          "endLine": 33,
+          "includedSha256": "4f37d4d7014e0dd56e2cfc3adf8e7d1b60f9802d70b58673b6384eded3889dbc",
+          "includedBytes": 2196
+        },
+        {
+          "path": "packages/schemas/src/evm-agreement-input.ts",
+          "role": "read-only complete integrated parse entry; helper bodies intentionally omitted because this assignment must not change/use the parser",
+          "wholeFile": false,
+          "fileSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+          "fileBytes": 13966,
+          "startLine": 217,
+          "endLine": 232,
+          "includedSha256": "dacf008888b2f733fed50733e5a00c167ac955bb95e4e4c97e701c3e41396a6c",
+          "includedBytes": 768
+        },
+        {
+          "path": "packages/wallet/src/evm-agreement.ts",
+          "role": "read-only existing private verifier context/public-result interfaces; no provider/signing/app inclusion",
+          "wholeFile": false,
+          "fileSha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+          "fileBytes": 6796,
+          "startLine": 1,
+          "endLine": 20,
+          "includedSha256": "d743bd513125d5cc6b5ef8a78806ad4b29494d39e9998c60d7663d39576bff42",
+          "includedBytes": 1339
+        },
+        {
+          "path": "packages/schemas/index.ts",
+          "role": "read-only current facade/import context; do not modify or add exports",
+          "wholeFile": true,
+          "fileSha256": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+          "fileBytes": 708,
+          "startLine": 1,
+          "endLine": 15,
+          "includedSha256": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+          "includedBytes": 708
+        },
+        {
+          "path": "docs/reviews/G16_BROWSER_DISPOSITION_2026-10-27.md",
+          "role": "read-only existing conditional review requirements; old intake-gap wording is superseded by integrated PREALLOC/PRECLONE",
+          "wholeFile": false,
+          "fileSha256": "a8f026acf030f41190710ccb2b7f241a552c88049bbdaf09fb041537a501c47c",
+          "fileBytes": 9447,
+          "startLine": 16,
+          "endLine": 28,
+          "includedSha256": "02d83f60255b2e9fedf213cab1190c57b4e10db069200a6527fe6df35ebed825",
+          "includedBytes": 2773
+        },
+        {
+          "path": "docs/handoffs/P2P_G16_PRECLONE_2026-10-27.md",
+          "role": "read-only next-prerequisite scope; G13 has since completed at b15179c and IDB timed out without report",
+          "wholeFile": false,
+          "fileSha256": "877154babadbbea35934537b3c0356471a0429159a5943db9d68d9facf389fe4",
+          "fileBytes": 8443,
+          "startLine": 43,
+          "endLine": 48,
+          "includedSha256": "6164dffa5cf3c42e92e5245bbb304bda9a82d59f4d2ee29449a777ff2c8fcf80",
+          "includedBytes": 1418
+        },
+        {
+          "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_client_security/spec-rainbow-book-data-remanence-and-memory-sanitization.md",
+          "role": "read-only complete normative memory-lifetime paragraph; no physical-erasure guarantee",
+          "wholeFile": false,
+          "fileSha256": "8957370a33c60f3f7154bf5e77805808776a5b43671a94f372389046010d54eb",
+          "fileBytes": 14705,
+          "startLine": 20,
+          "endLine": 20,
+          "includedSha256": "94cebb1cd1a2fdea2a2d4d44942c92234ae64104923e2194a47e957a0bb4388e",
+          "includedBytes": 483
+        },
+        {
+          "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_client_security/spec-rainbow-book-data-remanence-and-memory-sanitization.md",
+          "role": "read-only complete normative memory-lifetime paragraph; no physical-erasure guarantee",
+          "wholeFile": false,
+          "fileSha256": "8957370a33c60f3f7154bf5e77805808776a5b43671a94f372389046010d54eb",
+          "fileBytes": 14705,
+          "startLine": 71,
+          "endLine": 71,
+          "includedSha256": "5c5473c15b9aa219c2341ef4b9cefbde86ccdb96adc834853241ec7542c22ae6",
+          "includedBytes": 380
+        },
+        {
+          "path": "package.json",
+          "role": "read-only actual commands/pins; no installs or dependency edits",
+          "wholeFile": true,
+          "fileSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+          "fileBytes": 1395,
+          "startLine": 1,
+          "endLine": 34,
+          "includedSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+          "includedBytes": 1395
+        },
+        {
+          "path": "tsconfig.json",
+          "role": "read-only strict type options",
+          "wholeFile": true,
+          "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+          "fileBytes": 389,
+          "startLine": 1,
+          "endLine": 16,
+          "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+          "includedBytes": 389
+        },
+        {
+          "path": "apps/web/tsconfig.runtime.json",
+          "role": "read-only document runtime compilation root",
+          "wholeFile": true,
+          "fileSha256": "fcf9b93d83f70aabd5ab90af8bcc962aecd4822e97be117b7561c08f6c54808e",
+          "fileBytes": 135,
+          "startLine": 1,
+          "endLine": 5,
+          "includedSha256": "fcf9b93d83f70aabd5ab90af8bcc962aecd4822e97be117b7561c08f6c54808e",
+          "includedBytes": 135
+        }
+      ]
+    }
+  },
+  "output_manifest": [
+    {
+      "path": "apps/web/test/pending-metadata.test.mjs",
+      "base_state": "absent",
+      "base_bytes": null,
+      "base_sha256": null,
+      "proposed_bytes": 7069,
+      "proposed_sha256": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+      "patch_sha256": "3da76aba38882c4d695da2a9e59d1698338365c29b551fbe92d309ebbc87f98a",
+      "localPatch": "tests.patch"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "base_state": "absent",
+      "base_bytes": null,
+      "base_sha256": null,
+      "proposed_bytes": 1355,
+      "proposed_sha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+      "patch_sha256": "513805563c36a2c9f60ab79327c58e7ebe5c2f338672ae5f6f9bb480f6963ad4",
+      "localPatch": "helper.patch"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "base_state": "existing",
+      "base_bytes": 16843,
+      "base_sha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+      "proposed_bytes": 16975,
+      "proposed_sha256": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+      "patch_sha256": "5b76e39a2a1cd6c06fd5da23f41d5cd7529675bb92f7cc0cd3c3c35a8dd9e0c9",
+      "localPatch": "runtime.patch"
+    }
+  ],
+  "request": {
+    "tag": "p2p-pending-metadata-046",
+    "project": "p2p",
+    "assignment": "P2P-G16-PENDING-PRIVACY-05",
+    "input_commit": "6519f05f71e31579d1c5caad206089d85c2824f8",
+    "model": "claude-sonnet-5-5",
+    "timestamp_utc": "2026-10-27T02:18:47.143917+00:00",
+    "requested_speed": "standard",
+    "source_format": "plain_text_blocks",
+    "thinking_type": "between_tools",
+    "effort": "medium",
+    "source_hashes": [
+      {
+        "path": "P2P-G16-PENDING-PRIVACY-05-packet.md",
+        "full_file_sha256": "1c3683132698785514245bb9adfb508b0f0b3293d92eca5e9edd3ef739095f08",
+        "transmitted_content_sha256": "3cb18a7631a2b7bb10c2cf77f590339e4ca6ad6b53fbf42503449cddcf9e268a",
+        "library_file_id": "libfile_f348b4b81c54819195701b59913b1768",
+        "version": 1,
+        "original_packet_line_ranges": [
+          [
+            1,
+            1337
+          ]
+        ]
+      }
+    ],
+    "payload_bytes": 106855,
+    "max_output_tokens": 16000,
+    "worst_case_reserved_usd": "2.16",
+    "state": "completed",
+    "packet_provenance": {
+      "project": "p2p",
+      "assignment": "P2P-G16-PENDING-PRIVACY-05",
+      "packet_bytes": 154395,
+      "packet_sha256": "1c3683132698785514245bb9adfb508b0f0b3293d92eca5e9edd3ef739095f08",
+      "library_file_id": "libfile_f348b4b81c54819195701b59913b1768",
+      "version": 1,
+      "base_commit": "6519f05f71e31579d1c5caad206089d85c2824f8",
+      "base_tree": "4525cc92067f37814dbffe1dea036220614af4eb",
+      "allowed_paths": [
+        {
+          "path": "apps/web/src/runtime/app-runtime.ts",
+          "baseState": "existing",
+          "baseSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "baseBytes": 16843
+        },
+        {
+          "path": "apps/web/src/runtime/pending-metadata.ts",
+          "baseState": "absent",
+          "baseSha256": null,
+          "baseBytes": null
+        },
+        {
+          "path": "apps/web/test/pending-metadata.test.mjs",
+          "baseState": "absent",
+          "baseSha256": null,
+          "baseBytes": null
+        }
+      ],
+      "source_blocks": [
+        {
+          "path": "apps/web/src/runtime/app-runtime.ts",
+          "role": "only existing proposed output; complete AppRuntime and all lifecycle/request/reply functions",
+          "wholeFile": true,
+          "fileSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "fileBytes": 16843,
+          "startLine": 1,
+          "endLine": 259,
+          "includedSha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+          "includedBytes": 16843
+        },
+        {
+          "path": "apps/web/test/app-runtime.test.mjs",
+          "role": "read-only existing regression suite, complete; retain bytes/tests without modifications",
+          "wholeFile": true,
+          "fileSha256": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+          "fileBytes": 16422,
+          "startLine": 1,
+          "endLine": 140,
+          "includedSha256": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+          "includedBytes": 16422
+        },
+        {
+          "path": "packages/schemas/src/runtime.ts",
+          "role": "read-only exact RuntimeCommand/response/error/limits and complete parsers; no protocol change allowed",
+          "wholeFile": true,
+          "fileSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+          "fileBytes": 13904,
+          "startLine": 1,
+          "endLine": 188,
+          "includedSha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+          "includedBytes": 13904
+        },
+        {
+          "path": "apps/web/src/runtime/worker-endpoint.ts",
+          "role": "read-only existing one-active-job/abort/generation ownership; no endpoint modifications allowed",
+          "wholeFile": true,
+          "fileSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+          "fileBytes": 11663,
+          "startLine": 1,
+          "endLine": 183,
+          "includedSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+          "includedBytes": 11663
+        },
+        {
+          "path": "packages/schemas/src/evm-agreement-input.ts",
+          "role": "read-only integrated private G16 input interfaces; implementation already present, not missing",
+          "wholeFile": false,
+          "fileSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+          "fileBytes": 13966,
+          "startLine": 1,
+          "endLine": 33,
+          "includedSha256": "4f37d4d7014e0dd56e2cfc3adf8e7d1b60f9802d70b58673b6384eded3889dbc",
+          "includedBytes": 2196
+        },
+        {
+          "path": "packages/schemas/src/evm-agreement-input.ts",
+          "role": "read-only complete integrated parse entry; helper bodies intentionally omitted because this assignment must not change/use the parser",
+          "wholeFile": false,
+          "fileSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+          "fileBytes": 13966,
+          "startLine": 217,
+          "endLine": 232,
+          "includedSha256": "dacf008888b2f733fed50733e5a00c167ac955bb95e4e4c97e701c3e41396a6c",
+          "includedBytes": 768
+        },
+        {
+          "path": "packages/wallet/src/evm-agreement.ts",
+          "role": "read-only existing private verifier context/public-result interfaces; no provider/signing/app inclusion",
+          "wholeFile": false,
+          "fileSha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+          "fileBytes": 6796,
+          "startLine": 1,
+          "endLine": 20,
+          "includedSha256": "d743bd513125d5cc6b5ef8a78806ad4b29494d39e9998c60d7663d39576bff42",
+          "includedBytes": 1339
+        },
+        {
+          "path": "packages/schemas/index.ts",
+          "role": "read-only current facade/import context; do not modify or add exports",
+          "wholeFile": true,
+          "fileSha256": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+          "fileBytes": 708,
+          "startLine": 1,
+          "endLine": 15,
+          "includedSha256": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+          "includedBytes": 708
+        },
+        {
+          "path": "docs/reviews/G16_BROWSER_DISPOSITION_2026-10-27.md",
+          "role": "read-only existing conditional review requirements; old intake-gap wording is superseded by integrated PREALLOC/PRECLONE",
+          "wholeFile": false,
+          "fileSha256": "a8f026acf030f41190710ccb2b7f241a552c88049bbdaf09fb041537a501c47c",
+          "fileBytes": 9447,
+          "startLine": 16,
+          "endLine": 28,
+          "includedSha256": "02d83f60255b2e9fedf213cab1190c57b4e10db069200a6527fe6df35ebed825",
+          "includedBytes": 2773
+        },
+        {
+          "path": "docs/handoffs/P2P_G16_PRECLONE_2026-10-27.md",
+          "role": "read-only next-prerequisite scope; G13 has since completed at b15179c and IDB timed out without report",
+          "wholeFile": false,
+          "fileSha256": "877154babadbbea35934537b3c0356471a0429159a5943db9d68d9facf389fe4",
+          "fileBytes": 8443,
+          "startLine": 43,
+          "endLine": 48,
+          "includedSha256": "6164dffa5cf3c42e92e5245bbb304bda9a82d59f4d2ee29449a777ff2c8fcf80",
+          "includedBytes": 1418
+        },
+        {
+          "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_client_security/spec-rainbow-book-data-remanence-and-memory-sanitization.md",
+          "role": "read-only complete normative memory-lifetime paragraph; no physical-erasure guarantee",
+          "wholeFile": false,
+          "fileSha256": "8957370a33c60f3f7154bf5e77805808776a5b43671a94f372389046010d54eb",
+          "fileBytes": 14705,
+          "startLine": 20,
+          "endLine": 20,
+          "includedSha256": "94cebb1cd1a2fdea2a2d4d44942c92234ae64104923e2194a47e957a0bb4388e",
+          "includedBytes": 483
+        },
+        {
+          "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_client_security/spec-rainbow-book-data-remanence-and-memory-sanitization.md",
+          "role": "read-only complete normative memory-lifetime paragraph; no physical-erasure guarantee",
+          "wholeFile": false,
+          "fileSha256": "8957370a33c60f3f7154bf5e77805808776a5b43671a94f372389046010d54eb",
+          "fileBytes": 14705,
+          "startLine": 71,
+          "endLine": 71,
+          "includedSha256": "5c5473c15b9aa219c2341ef4b9cefbde86ccdb96adc834853241ec7542c22ae6",
+          "includedBytes": 380
+        },
+        {
+          "path": "package.json",
+          "role": "read-only actual commands/pins; no installs or dependency edits",
+          "wholeFile": true,
+          "fileSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+          "fileBytes": 1395,
+          "startLine": 1,
+          "endLine": 34,
+          "includedSha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+          "includedBytes": 1395
+        },
+        {
+          "path": "tsconfig.json",
+          "role": "read-only strict type options",
+          "wholeFile": true,
+          "fileSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+          "fileBytes": 389,
+          "startLine": 1,
+          "endLine": 16,
+          "includedSha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+          "includedBytes": 389
+        },
+        {
+          "path": "apps/web/tsconfig.runtime.json",
+          "role": "read-only document runtime compilation root",
+          "wholeFile": true,
+          "fileSha256": "fcf9b93d83f70aabd5ab90af8bcc962aecd4822e97be117b7561c08f6c54808e",
+          "fileBytes": 135,
+          "startLine": 1,
+          "endLine": 5,
+          "includedSha256": "fcf9b93d83f70aabd5ab90af8bcc962aecd4822e97be117b7561c08f6c54808e",
+          "includedBytes": 135
+        }
+      ],
+      "all15sourceblockhashesverified": true
+    },
+    "http_status": 200,
+    "request_id": "req_011CgRwVmoXasp44e9x9nDgT",
+    "rate_limit_headers_sanitized": {
+      "anthropic-ratelimit-input-tokens-limit": "500000",
+      "anthropic-ratelimit-input-tokens-remaining": "463000",
+      "anthropic-ratelimit-input-tokens-reset": "2026-10-27T02:18:52Z",
+      "anthropic-ratelimit-output-tokens-limit": "80000",
+      "anthropic-ratelimit-output-tokens-remaining": "78000",
+      "anthropic-ratelimit-output-tokens-reset": "2026-10-27T02:19:30Z",
+      "anthropic-ratelimit-requests-limit": "1000",
+      "anthropic-ratelimit-requests-remaining": "999",
+      "anthropic-ratelimit-requests-reset": "2026-10-27T02:18:47Z",
+      "anthropic-ratelimit-tokens-limit": "580000",
+      "anthropic-ratelimit-tokens-remaining": "541000",
+      "anthropic-ratelimit-tokens-reset": "2026-10-27T02:18:52Z"
+    },
+    "usage": {
+      "input_tokens": 43678,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 7052,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "stop_reason": "end_turn",
+    "returned_model": "claude-sonnet-5-5",
+    "estimated_cost_usd": "0.157876",
+    "response_path": "/workspace/ghostpay-intake/p2p-pending-metadata-046-response.txt",
+    "completed_at_utc": "2026-10-27T02:19:29.251010+00:00",
+    "elapsed_seconds": 42.091
+  },
+  "broker_normalization": [
+    "Removed three explicitly model-withdrawn unused/dead swallowed imports",
+    "Exact missing target error.url guard replaces error.message.includes to avoid swallowing transitive import errors",
+    "Implemented model explicit corrected final pending-construction edit, not withdrawn no-op hunk",
+    "Regenerated correct ordinary unified diff hunks from exact old source strings, preserving complete original regression files"
+  ],
+  "runtime_replacement_counts": [
+    {
+      "original_text": "} from '../../../../packages/schemas/index.ts';\n",
+      "replacements": 1
+    },
+    {
+      "original_text": "  readonly command: RuntimeCommand;",
+      "replacements": 1
+    },
+    {
+      "original_text": "value.command.operation",
+      "replacements": 1
+    },
+    {
+      "original_text": "pending.command.operation",
+      "replacements": 6
+    },
+    {
+      "original_text": "pending.command.generation",
+      "replacements": 1
+    },
+    {
+      "original_text": "pending.command.profileId",
+      "replacements": 2
+    },
+    {
+      "original_text": "const pending: Pending = { command, resolve, timer, removeAbort: () => signal?.removeEventListener('abort', abort) };",
+      "replacements": 1
+    }
+  ],
+  "no_p2p_code_execution_or_git_apply": true,
+  "runner_appendix": "17 mappings extracted separately for sole runner worker; no P2P suite execution here",
+  "preImplementationHead": "e43f371e2779640c9fd1751f15112b894a550ede",
+  "proposalLibrary": "libfile_c61db81d507c8191b841b67fe527d242",
+  "proposalVersion": 0,
+  "proposalBytes": 39765,
+  "proposalSha256": "ff8a6f3834fe135288e9fcf45fd52cb2daca06f4539ac9b58468a2f9e7c3c94c",
+  "nativeCompleteBytesVerified": true,
+  "all15SourceBlocksMatchCurrent": true,
+  "docsOnlyDescendantPreserved": true
+}

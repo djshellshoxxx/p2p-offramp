@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/trade-composition.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T20:57:31.371220+00:00",
+  "finishedAtUtc": "2026-10-26T20:57:31.682414+00:00",
+  "exitCode": 0,
+  "phase": "initial GREEN; implementation and test uncommitted"
+}

@@ -1,0 +1,192 @@
+[
+  {
+    "package": "@noble/hashes",
+    "commit": "663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "source": "https://api.github.com/repos/paulmillr/noble-hashes/git/trees/663c2aeeffc308ac0cded59bd32f7c212adacfc2?recursive=1",
+    "tree": [
+      {
+        "path": "LICENSE",
+        "gitBlobSha1": "9297a046d01cf521f93679535be51a8e5b736c0d"
+      },
+      {
+        "path": "src/_blake.ts",
+        "gitBlobSha1": "6e6179b18fea50edc1f29a9be66f1a5e73f161df"
+      },
+      {
+        "path": "src/_md.ts",
+        "gitBlobSha1": "c7522084f7a1607a294a744ebadc8018dbd5e5bd"
+      },
+      {
+        "path": "src/_u64.ts",
+        "gitBlobSha1": "287056aacad3af150b7ae4c777e7f9365108003b"
+      },
+      {
+        "path": "src/argon2.ts",
+        "gitBlobSha1": "5bb638548c61afc0b5a38469ad4544d8f6c59615"
+      },
+      {
+        "path": "src/blake1.ts",
+        "gitBlobSha1": "70986fbb5411fe6e4576fac867e3861e8d6a6859"
+      },
+      {
+        "path": "src/blake2.ts",
+        "gitBlobSha1": "8acec68c8c81a4bd87a02b82b0deb790c048470e"
+      },
+      {
+        "path": "src/blake3.ts",
+        "gitBlobSha1": "b2e99e7078b3a06bbc14a3ecbc4f08a1f13838d8"
+      },
+      {
+        "path": "src/eskdf.ts",
+        "gitBlobSha1": "1b40f28e053e1520b128a924107f87af9f6aaaec"
+      },
+      {
+        "path": "src/hkdf.ts",
+        "gitBlobSha1": "39d38822895332c26ec764e2ab5f273f0c2d05a6"
+      },
+      {
+        "path": "src/hmac.ts",
+        "gitBlobSha1": "7b02984fe76774e0977b121fddb5382a68baad0d"
+      },
+      {
+        "path": "src/index.ts",
+        "gitBlobSha1": "c6a9c23a572e85fa5925a65aadadfeb635814e94"
+      },
+      {
+        "path": "src/legacy.ts",
+        "gitBlobSha1": "01ada8d21bc4dd4250a0bf859cdd5c7fac13c0e1"
+      },
+      {
+        "path": "src/pbkdf2.ts",
+        "gitBlobSha1": "c4ceeec7b51cb616eeaae54afa3e6c3ac8ce84b3"
+      },
+      {
+        "path": "src/scrypt.ts",
+        "gitBlobSha1": "90542bd820f312785c29679343d93c84952466ac"
+      },
+      {
+        "path": "src/sha2.ts",
+        "gitBlobSha1": "eed7018845974222d779088e8d717fcc0c9d33e5"
+      },
+      {
+        "path": "src/sha3-addons.ts",
+        "gitBlobSha1": "642d2e3254342ff35dbae940391f9c56b599dea6"
+      },
+      {
+        "path": "src/sha3.ts",
+        "gitBlobSha1": "3674549d96dfe23b23c4633274ba518d6c21d1ca"
+      },
+      {
+        "path": "src/utils.ts",
+        "gitBlobSha1": "7622a0efa1e433a35ba721a9b613226cf7d87767"
+      },
+      {
+        "path": "src/webcrypto.ts",
+        "gitBlobSha1": "e83c8c588e704fc8a5e8747fddc11ee5e73bf5f0"
+      }
+    ]
+  },
+  {
+    "package": "@noble/curves",
+    "commit": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "source": "https://api.github.com/repos/paulmillr/noble-curves/git/trees/656c4364dffa44c64aa0c49914b8000b278b67a9?recursive=1",
+    "tree": [
+      {
+        "path": "LICENSE",
+        "gitBlobSha1": "9297a046d01cf521f93679535be51a8e5b736c0d"
+      },
+      {
+        "path": "src/abstract/bls.ts",
+        "gitBlobSha1": "5e2c1402c22d7cd5d4d26f0c53c32ee39b3d5698"
+      },
+      {
+        "path": "src/abstract/curve.ts",
+        "gitBlobSha1": "c3b1f87704104178e419b2737de3794217d51570"
+      },
+      {
+        "path": "src/abstract/der.ts",
+        "gitBlobSha1": "b1fffb432945ee2493b3a4c2aaf712a097ad0c60"
+      },
+      {
+        "path": "src/abstract/edwards.ts",
+        "gitBlobSha1": "4666a31ce16c30f43178bbc0434b6491b85d0163"
+      },
+      {
+        "path": "src/abstract/fft.ts",
+        "gitBlobSha1": "417c44d7b425946bed6dedb68a2575e899060fad"
+      },
+      {
+        "path": "src/abstract/frost.ts",
+        "gitBlobSha1": "960583681599f2d85582aec017e9ee9bcf40cc54"
+      },
+      {
+        "path": "src/abstract/hash-to-curve.ts",
+        "gitBlobSha1": "9734f3cf31eb848d72de460343818bce609963a3"
+      },
+      {
+        "path": "src/abstract/modular.ts",
+        "gitBlobSha1": "82697cd97066744cfac786e23a9cd2fcf81873e2"
+      },
+      {
+        "path": "src/abstract/montgomery.ts",
+        "gitBlobSha1": "840a4717c89664d1fda170d81d8d906698e7cbf6"
+      },
+      {
+        "path": "src/abstract/oprf.ts",
+        "gitBlobSha1": "2c40301f6890e458731490f016957ae32c5ece42"
+      },
+      {
+        "path": "src/abstract/poseidon.ts",
+        "gitBlobSha1": "73bb65af448a245f6d9f25462c99adcbc181903b"
+      },
+      {
+        "path": "src/abstract/tower.ts",
+        "gitBlobSha1": "236aaecd75fb6bc63671694763a204ed35173ee1"
+      },
+      {
+        "path": "src/abstract/weierstrass.ts",
+        "gitBlobSha1": "cc06e5c87f43bf729a09d0029b7142cb40c30fe7"
+      },
+      {
+        "path": "src/bls12-381.ts",
+        "gitBlobSha1": "6608bff38e2c89d79865479b569386ba18d4bd88"
+      },
+      {
+        "path": "src/bn254.ts",
+        "gitBlobSha1": "326dc66866cf2516c9786e8a242dbba09c1fdfb7"
+      },
+      {
+        "path": "src/ed25519.ts",
+        "gitBlobSha1": "560988a02ec3477f0fbf60801494a21f59278910"
+      },
+      {
+        "path": "src/ed448.ts",
+        "gitBlobSha1": "1e5659f0299afeda2ff43373adaaec56b2c7cfbd"
+      },
+      {
+        "path": "src/index.ts",
+        "gitBlobSha1": "201a00ac89a1187ed9bdf8e89d44e285af8761b3"
+      },
+      {
+        "path": "src/misc.ts",
+        "gitBlobSha1": "8cc49b7883b5cd9248e39989c3b2894319d93cb0"
+      },
+      {
+        "path": "src/nist.ts",
+        "gitBlobSha1": "38f08efa0473d96eb25e25892ef8c21e6055cf4d"
+      },
+      {
+        "path": "src/secp256k1.ts",
+        "gitBlobSha1": "f5fb363eb5a283d7819cce69e70c6b69e87c487b"
+      },
+      {
+        "path": "src/utils.ts",
+        "gitBlobSha1": "4713860579f589cb12d68ee5a932290b398023bc"
+      },
+      {
+        "path": "src/webcrypto.ts",
+        "gitBlobSha1": "6a5a418e55969f129cb050f87d39e51a69e7e2d6"
+      }
+    ]
+  }
+]

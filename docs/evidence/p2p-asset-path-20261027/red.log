@@ -1,0 +1,77 @@
+✔ build inventory binds exact raw bytes for binary (22.152782ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (6.210327ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (4.458509ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (4.797502ms)
+▶ build inventory includes prototype-looking root filenames
+  ✖ __proto__ (7.141628ms)
+  ✔ constructor (4.06797ms)
+  ✔ toString (2.703228ms)
+✖ build inventory includes prototype-looking root filenames (14.658652ms)
+✖ prototype-looking root filename cannot hide a private-key marker (3.410897ms)
+✖ prototype-looking root filename participates in case-collision refusal (4.571157ms)
+✔ application token policy denies HTML execution while allowing text and React events (2.653534ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.253696ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (0.586139ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 9
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 243.534226
+
+✖ failing tests:
+
+test at apps/web/scripts/artifact-policy.test.mjs:51:72
+✖ __proto__ (7.141628ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - {
+  -   bytes: 36,
+  -   path: '__proto__',
+  -   sha256: '8438d9c61a17ed6c51f20b384616acb0784d244ec0d04965a182f205573a1016'
+  - }
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:55:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:51:64)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: { path: '__proto__', bytes: 36, sha256: '8438d9c61a17ed6c51f20b384616acb0784d244ec0d04965a182f205573a1016' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/scripts/artifact-policy.test.mjs:63:1
+✖ prototype-looking root filename cannot hide a private-key marker (3.410897ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:65:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /ARTIFACT_POLICY: __proto__/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps/web/scripts/artifact-policy.test.mjs:68:1
+✖ prototype-looking root filename participates in case-collision refusal (4.571157ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:71:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /ARTIFACT_POLICY: paths/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

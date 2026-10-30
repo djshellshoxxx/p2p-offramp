@@ -13,3 +13,4 @@ export * from './src/backup.ts';
 export * from './src/identity.ts';
 export * from './src/intent.ts';
 export * from './src/registry.ts';
+export * from './src/saved-review.ts';

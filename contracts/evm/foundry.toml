@@ -38,3 +38,8 @@ runs = 4096
 [profile.ci.invariant]
 runs = 256
 depth = 100
+
+# Test-network endpoints resolved from the environment, so a keyed RPC URL never appears in a process argument list.
+# Used only by scripts/sepolia/deploy.mjs (`--rpc-url sepolia`).
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL}"

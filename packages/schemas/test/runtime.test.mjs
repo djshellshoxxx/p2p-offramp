@@ -84,3 +84,13 @@ test('runtime inventory and restore replies are strict, bounded and contain only
  const create={...command('create'),kind:'response',result:{ok:true,value:{state:'unlocked',handle:{id:'A'.repeat(43),generation:0,purpose:'vault',profileId:id(9)}}}};
  assert.deepEqual(parse(create),create);
 });
+
+test('runtime response rejects a changing result discriminator in both branches',()=>{
+ const parse=fn('parseRuntimeMessage');
+ for(const first of [true,false]){
+  let reads=0;
+  const original=first?{ok:true,value:{state:'locked',handle:null}}:{ok:false,error:{code:'LOCKED',messageKey:'runtime.error.locked'}};
+  const result=new Proxy(original,{getOwnPropertyDescriptor(target,key){const descriptor=Reflect.getOwnPropertyDescriptor(target,key);return key==='ok'?{...descriptor,value:++reads===1?first:!first}:descriptor;}});
+  invalid(()=>parse({...command('status'),kind:'response',result}));assert.equal(reads,2);
+ }
+});

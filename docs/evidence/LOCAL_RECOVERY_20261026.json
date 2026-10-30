@@ -1,0 +1,149 @@
+{
+  "diagnosticClone": {
+    "command": [
+      "git",
+      "clone",
+      "--bare",
+      "/workspace/checkpoints/2026-10-26-g16-review/GhostPay-all-refs.bundle",
+      "/workspace/checkpoints/2026-10-26-g16-review/GhostPay-restore.git"
+    ],
+    "sourceBundleSha256": "dac0ce78ed0f576179c2016a5af80b806e0e4b88791d015ebe0b4370ac89df92",
+    "started": "2026-10-26T19:01:36.751705+00:00",
+    "stdout": "/workspace/checkpoints/2026-10-26-clone-diagnostic/stdout.log",
+    "stderr": "/workspace/checkpoints/2026-10-26-clone-diagnostic/stderr.log",
+    "exitCode": 128,
+    "finished": "2026-10-26T19:01:36.953922+00:00",
+    "destinationExists": false,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "edecddd3aa4d4dd605ef3ce6bcde9c3118b925635b992404c1c4a51ffe84ac1f"
+  },
+  "diagnosticStderr": "Cloning into bare repository '/workspace/checkpoints/2026-10-26-g16-review/GhostPay-restore.git'...\nerror: Could not read 643d1ed98bbcaaef599c3da7f893827512d6bf39\nfatal: Failed to traverse parents of commit 7373172db4cf40ce5622e5a92a55b2b086e5e7cb\nfatal: remote did not send all necessary objects\n",
+  "sourceGhostPay": {
+    "shallow": true,
+    "boundary": [
+      "7373172db4cf40ce5622e5a92a55b2b086e5e7cb"
+    ],
+    "promisor": true,
+    "partialCloneFilter": "blob:none",
+    "ancestorCommitObjectsRead": 808,
+    "missingReachableHistoricalObjects": 1557,
+    "noFetchAttempted": true
+  },
+  "verifiedGhostPayShallowRecovery": {
+    "time": "2026-10-26T19:06:53.690501+00:00",
+    "sourceBundle": "/workspace/checkpoints/2026-10-26-root-exit-and-g06/GhostPay-all-refs.bundle",
+    "sourceBundleSha256": "ffca632c7e64da2f6477f2d402836d137de9c82b505a835d50aaf4441118c874",
+    "shallowBoundary": [
+      "7373172db4cf40ce5622e5a92a55b2b086e5e7cb"
+    ],
+    "sourceShallowMarkerChanged": false,
+    "restoredHead": "0f85ee9bd316546b3814bf327fa45ad3d76c7851",
+    "standalone": true,
+    "fullStrictFsckExit": 0,
+    "archiveRestoreStrictFsckExit": 0,
+    "archive": "/workspace/checkpoints/2026-10-26-clone-diagnostic/GhostPay-verified-shallow-git-0f85ee9.tar.gz",
+    "archiveSha256": "53907791e05bb68539fb0332d1078c3de3ced87bbeca5d69063c284526be5986",
+    "completeHistory": false,
+    "missingHistoricalObjectsOutsideBoundary": 1557,
+    "publication": "LOCAL ONLY history archive; not part of source-only private upload",
+    "steps": [
+      {
+        "step": "bundle-heads",
+        "command": [
+          "git",
+          "bundle",
+          "list-heads",
+          "/workspace/checkpoints/2026-10-26-root-exit-and-g06/GhostPay-all-refs.bundle"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "shallow-init",
+        "command": [
+          "git",
+          "init",
+          "--bare",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restore-current.git"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "shallow-unbundle",
+        "command": [
+          "git",
+          "--git-dir",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restore-current.git",
+          "bundle",
+          "unbundle",
+          "/workspace/checkpoints/2026-10-26-root-exit-and-g06/GhostPay-all-refs.bundle"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "shallow-fsck",
+        "command": [
+          "git",
+          "--git-dir",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restore-current.git",
+          "fsck",
+          "--full",
+          "--strict",
+          "--no-reflogs"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "shallow-head",
+        "command": [
+          "git",
+          "--git-dir",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restore-current.git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "archive-restored-fsck",
+        "command": [
+          "git",
+          "--git-dir",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restored-from-archive.git",
+          "fsck",
+          "--full",
+          "--strict",
+          "--no-reflogs"
+        ],
+        "exit": 0
+      },
+      {
+        "step": "archive-restored-head",
+        "command": [
+          "git",
+          "--git-dir",
+          "/workspace/checkpoints/2026-10-26-clone-diagnostic/shallow-restored-from-archive.git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exit": 0
+      }
+    ]
+  },
+  "verifiedP2PCompleteRecovery": {
+    "sourceBundle": "/workspace/checkpoints/2026-10-26-root-exit-and-g06/p2p-offramp-all-refs.bundle",
+    "sourceBundleSha256": "dad01106151efd4eb9753028e6d354ca612cc019563fbe4ecbddfc36da6cbafc",
+    "command": [
+      "git",
+      "clone",
+      "--bare",
+      "/workspace/checkpoints/2026-10-26-root-exit-and-g06/p2p-offramp-all-refs.bundle",
+      "/workspace/checkpoints/2026-10-26-clone-diagnostic/p2p-complete-restore.git"
+    ],
+    "cloneExit": 0,
+    "restoredHead": "02f75b452045afd35b71d977c347c331937568ee",
+    "strictFsckExit": 0,
+    "isShallow": "false",
+    "alternatesPresent": false
+  },
+  "limits": "GhostPay complete history is NOT available offline; standalone shallow snapshot only. Restored exact historical docs pins; later source-only archives remain separate backups."
+}

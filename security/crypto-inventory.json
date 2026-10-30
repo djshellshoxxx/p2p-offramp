@@ -97,15 +97,20 @@
     "license": "MIT",
     "runtime": "npm",
     "review": {
-      "status": "pending",
-      "reviewer": "",
-      "evidencePath": ""
+      "status": "accepted",
+      "reviewer": "Codex GPT-6 Astra fresh-context review /root/p2p_g16_fresh_review, 2026-10-26",
+      "evidencePath": "docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md"
     },
     "vectors": [
       {
         "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
         "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
         "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
+      },
+      {
+        "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+        "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "provenanceUrl": "https://registry.npmjs.org/js-sha3/-/js-sha3-0.8.0.tgz"
       }
     ]
   },
@@ -119,15 +124,64 @@
     "license": "MIT",
     "runtime": "npm",
     "review": {
-      "status": "pending",
-      "reviewer": "",
-      "evidencePath": ""
+      "status": "accepted",
+      "reviewer": "Codex GPT-6 Astra fresh-context review /root/p2p_g16_fresh_review, 2026-10-26",
+      "evidencePath": "docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md"
     },
     "vectors": [
       {
         "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
         "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
         "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
+      },
+      {
+        "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+        "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "provenanceUrl": "https://registry.npmjs.org/elliptic/-/elliptic-6.6.1.tgz"
+      }
+    ]
+  },
+  {
+    "id": "native-webcrypto-g15-verification-test-only",
+    "capability": "release-manifest-verification-test-only",
+    "primitive": "native WebCrypto ECDSA P-256/SHA-256 verification and SHA-256 release digests",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G15-v1",
+    "integrity": "browser-profile:security/release-browser-support.json",
+    "license": "Browser implementation dependent; Web Crypto API specification, no third-party implementation copied",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+        "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+        "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
+      }
+    ]
+  },
+  {
+    "id": "native-webcrypto-g15-verification-testnet-build",
+    "capability": "release-manifest-verification-testnet-build",
+    "primitive": "native WebCrypto ECDSA P-256/SHA-256 verification and SHA-256 digests of the owner-signed Sepolia registry in the testnet web build only (apps/web/src/testnet; owner-held testnet trust root, 2026-10-28)",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G15-v1",
+    "integrity": "browser-profile:security/release-browser-support.json",
+    "license": "Browser implementation dependent; Web Crypto API specification, no third-party implementation copied",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+        "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+        "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
       }
     ]
   },
@@ -181,14 +235,14 @@
     ]
   },
   {
-    "id": "project-chacha20-rfc8439",
-    "capability": "nostr-chacha20-project-owned-candidate",
-    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2; project-owned source packages/nostr-crypto/src/chacha20.ts",
-    "sourceUrl": "https://www.rfc-editor.org/rfc/rfc8439",
-    "version": "g20-v1",
-    "integrity": "sha256:95ebc9784627f3453a033da871611060fffbdb3fe423c7473f332eff7c3324d6",
-    "license": "Project source; no external code copied",
-    "runtime": "vendored",
+    "id": "noble-ciphers-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2, via packages/nostr-crypto/src/chacha20.ts (input checks only)",
+    "sourceUrl": "https://github.com/paulmillr/noble-ciphers/tree/d9e8a6a599e7ed729d9be03854c46a3c73bd9a79",
+    "version": "2.4.0",
+    "integrity": "sha512-AnjFn0Jv92laAkvMrghlFZq4qQCIN/4DxFV/eooqtC2YTjB7kBeLMS2T9KJX4Dn+ZVXLOwK0lSgqDtx9gvxtiw==",
+    "license": "MIT",
+    "runtime": "npm",
     "review": {
       "status": "pending",
       "reviewer": "",

@@ -1,0 +1,11 @@
+# P2P documentation reconciliation restart
+
+2026-10-27. Documentation-only descendant of `673006c1a9cb1e8a1e6eb1a665738b5312f3edc2`; browser source/evidence remains `626d82e084c306c29e54cc33e4f59a5cd7e3104d`. No executable test/build or runtime/provider/security-policy change.
+
+Read `../reviews/G16_BROWSER_DISPOSITION_2026-10-27.md` and `../evidence/G16_BROWSER_RECONCILIATION_20261027.json`. They record the existing fresh-context conditional browser recommendation, correct native diagnostic randomness wording, and separately attribute native SHA256. Node acceptance, recorded browser evidence, external/separately implemented public fixtures and same-provider complete bundles are distinct. No app inclusion, audit, funds or unrelated identity/vault approval. Raw prior logs/evidence remain unchanged.
+
+Claude assignment P2P-G16-PREALLOC-01 owns only `packages/domain/src/trade-terms.ts` and its test. Both hashes/base673006c and packet identity/hash are retained in reconciliation evidence. A proposal is now available as `libfile_79762651b9248191825f75d46520a9b0` version0 / SHA256 `53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46`; it is unexecuted/unvalidated. After this docs checkpoint, native-read complete bytes/hash, verify reserved file hashes, inspect scope, apply test hunks independently for real RED, then minimal source patch and focused/affected GREEN. No old test counts transfer to changed source.
+
+Private checkpoint target remains `libfile_b5734354657c81919d25ed4930348dc9`, last confirmed version8. A new guarded version must embed the entire exact498472-byte v8 ZIP (SHA256 `44b883a8b8095f79bc34eeb07cb59fa5d39530e2c643ac75ac62fedb5e5d988f`) plus docs delta; never refresh/overwrite prior member bytes. Stop on a newer-version conflict rather than remove the guard. No whole-repository restore or consumer retrieval claim. Receipt follows actual producing success.
+
+P2P coordinator remains sole integrator. No GhostPay access, separate API spend, source push/CI/deploy, new credentials/security settings, environment replacement or denied retry. Native SHA/profile attribution and typed preclone/Worker/UI engineering remain requirements, not completed implementation or an owner-only blanket gate.

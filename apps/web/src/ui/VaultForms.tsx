@@ -37,7 +37,7 @@ function ProfileChoices({ inventory, failed, target, disabled }: { readonly inve
   </fieldset>;
 }
 
-export function UnlockForm({ services, onCancel }: { readonly services: AppServices; readonly onCancel: () => void }) {
+export function UnlockForm({ services, onCancel, initialProfileId = '' }: { readonly services: AppServices; readonly onCancel: () => void; readonly initialProfileId?: string }) {
   const form = useRef<HTMLFormElement>(null);
   const { inventory, failed } = useInventory(services);
   const request = useRef<AbortController | null>(null);
@@ -45,9 +45,9 @@ export function UnlockForm({ services, onCancel }: { readonly services: AppServi
   const [notice, setNotice] = useState<Notice>(null);
   useEffect(() => {
     const element = form.current;
-    element?.querySelector<HTMLInputElement>('input')?.focus();
+    element?.querySelector<HTMLInputElement>(initialProfileId ? 'input[name="passphrase"]' : 'input')?.focus();
     return () => { request.current?.abort(); element?.reset(); };
-  }, []);
+  }, [initialProfileId]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -79,7 +79,7 @@ export function UnlockForm({ services, onCancel }: { readonly services: AppServi
   return <form ref={form} onSubmit={submit} autoComplete="off" noValidate aria-label={m.unlock} aria-busy={busy}>
     <p>{m.unlockHelp}</p>
     <label htmlFor="unlock-profile">{m.profile}</label>
-    <input id="unlock-profile" name="profile" type="text" required maxLength={32} pattern="[0-9a-f]{32}" autoCapitalize="none" spellCheck={false} aria-describedby="unlock-profile-help" readOnly={busy} />
+    <input id="unlock-profile" name="profile" type="text" defaultValue={initialProfileId} required maxLength={32} pattern="[0-9a-f]{32}" autoCapitalize="none" spellCheck={false} aria-describedby="unlock-profile-help" readOnly={busy} />
     <p id="unlock-profile-help" className="helper">{m.profileHelp}</p>
     <ProfileChoices inventory={inventory} failed={failed} target="unlock-profile" disabled={busy} />
     <label htmlFor="unlock-passphrase">{m.passphrase}</label>
@@ -224,14 +224,16 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
 /** Outcomes after which the destination add may already have committed (G03: reconcile before retry). */
 const UNCERTAIN_RESTORE = new Set(['CANCELLED', 'TIMEOUT', 'STORAGE_UNAVAILABLE', 'LOCKED', 'PROTOCOL_ERROR']);
 
-export function RestoreForm({ services, onInventoryChanged }: { readonly services: AppServices; readonly onInventoryChanged?: () => void }) {
+export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { readonly services: AppServices; readonly onInventoryChanged?: () => void;
+  readonly onOpenRestored: (profileId: string) => void }) {
   const form = useRef<HTMLFormElement>(null);
   const request = useRef<AbortController | null>(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
   const [uncertain, setUncertain] = useState(false);
   const [checking, setChecking] = useState(false);
-  const [reconciled, setReconciled] = useState<readonly string[] | null>(null);
+  const [reconciled, setReconciled] = useState<RuntimeInventory | null>(null);
+  const [confirmedProfileId, setConfirmedProfileId] = useState('');
   const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
 
@@ -242,7 +244,14 @@ export function RestoreForm({ services, onInventoryChanged }: { readonly service
     try {
       const result = await services.listProfiles();
       if (!mounted.current) return;
-      if (result.ok) { setReconciled(result.value.profileIds); setUncertain(false); setNotice(null); onInventoryChanged?.(); }
+      if (result.ok) {
+        setReconciled(result.value);
+        // A bounded but truncated list is fresh, yet cannot establish whether the interrupted
+        // destination exists among the omitted rows. Keep retry disarmed until inventory is complete.
+        setUncertain(result.value.truncated);
+        setNotice(null);
+        onInventoryChanged?.();
+      }
       else setNotice({ error: true, text: errorMessage(result.error.code) });
     } catch { if (mounted.current) setNotice({ error: true, text: errorMessage('PROTOCOL_ERROR') }); }
     finally { if (mounted.current) setChecking(false); }
@@ -252,6 +261,7 @@ export function RestoreForm({ services, onInventoryChanged }: { readonly service
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
+    setConfirmedProfileId('');
     const element = event.currentTarget;
     const fileInput = element.elements.namedItem('file') as HTMLInputElement;
     const consent = element.elements.namedItem('consent') as HTMLInputElement;
@@ -270,7 +280,10 @@ export function RestoreForm({ services, onInventoryChanged }: { readonly service
       const result = await services.restore(bytes, source, secret, controller.signal);
       clear(); bytes.fill(0);
       if (!controller.signal.aborted) {
-        if (result.ok) { element.reset(); setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); onInventoryChanged?.(); }
+        if (result.ok) {
+          element.reset(); setConfirmedProfileId(result.value.newProfileId);
+          setNotice({ error: false, text: m.restored(result.value.newProfileId, result.value.records) }); onInventoryChanged?.();
+        }
         else if (UNCERTAIN_RESTORE.has(result.error.code)) { setUncertain(true); setNotice(null); }
         else setNotice({ error: true, text: errorMessage(result.error.code) });
       }
@@ -305,8 +318,9 @@ export function RestoreForm({ services, onInventoryChanged }: { readonly service
     {busy ? <p role="status">{m.restoring}</p> : null}
     {uncertain ? <div className="notice error" role="alert"><p>{m.restoreUncertain}</p>
       <button type="button" onClick={() => void reconcile()} disabled={checking}>{m.reconcile}</button></div> : null}
-    {reconciled ? <div role="status"><p>{m.reconciledTitle(reconciled.length)}</p>
-      <ul className="profile-list">{reconciled.map(id => <li key={id}><code>{id}</code></li>)}</ul></div> : null}
+    {reconciled ? <div role="status"><p>{reconciled.truncated ? m.inventoryTruncated : m.reconciledTitle(reconciled.profileIds.length)}</p>
+      <ul className="profile-list">{reconciled.profileIds.map(id => <li key={id}><code>{id}</code></li>)}</ul></div> : null}
     <NoticeText notice={notice} />
+    {confirmedProfileId ? <button type="button" onClick={() => onOpenRestored(confirmedProfileId)}>{m.openRestored}</button> : null}
   </form>;
 }

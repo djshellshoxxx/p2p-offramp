@@ -12,15 +12,23 @@
     "test:evm": "cd contracts/evm && forge test",
     "test:evm:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
     "test:evm:reconcile": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
+    "test:sepolia:kit": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs",
+    "test:sepolia:trade": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-trade-local.mjs",
+    "sepolia:deploy": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs",
+    "sepolia:verify": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/verify-release.mjs",
+    "sepolia:trade": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/trade.mjs",
     "abi:evm": "bash contracts/evm/script/export-abi.sh",
     "check:specs": "python scripts/spec_audit.py --check",
     "typecheck": "tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit",
-    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs",
+    "test:browser": "node scripts/test-vault-browser.mjs && node scripts/test-runtime-browser.mjs && node scripts/test-content-policy-browser.mjs && node scripts/test-reseal-crash-browser.mjs && node scripts/test-lifecycle-tabs-browser.mjs",
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
-    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs",
+    "build:testnet": "npm run typecheck && node apps/web/scripts/build.mjs testnet",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
-    "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs scripts/tests/import-boundaries.test.mjs"
+    "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs scripts/tests/import-boundaries.test.mjs",
+    "test:fuzz": "node --test scripts/tests/evm-agreement-fuzz.test.mjs",
+    "test:private:browser": "node scripts/test-g16-browser.mjs && node scripts/test-g16-adapter-browser.mjs && node scripts/test-g16-physical-browser.mjs && node scripts/test-release-browser.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
@@ -31,6 +39,7 @@
     "vite": "8.3.5"
   },
   "dependencies": {
+    "@noble/ciphers": "2.4.0",
     "@noble/curves": "2.4.0",
     "@noble/hashes": "2.4.0",
     "react": "19.3.1",

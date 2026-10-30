@@ -1,0 +1,21 @@
+{
+  "path": "/workspace/checkpoints/2026-10-27-p2p-g15/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 5271245,
+  "sha256": "da59e701b860f62e54bd73db27ba0ec300f686c29cbcf7efb1d9533142c77185",
+  "sourceSha": "9ea7b6cd030e7315e96ba76883c305a9c94ee539",
+  "documentationHead": "5aa9ebfc0dc495334c4d863a290c62c71e717851",
+  "sourceArchiveSha256": "e00802ff239bbcc64e6c6725ccd3914653fbad033e18e3ee7e8b1561fb23cc88",
+  "patchSha256": "4c09a34a09533e0b5eedfbedbe7d43f49b6d42e15038da048a7efb77953996e1",
+  "trackedFiles": 908,
+  "fullTrackedSourceRestoreVerified": true,
+  "completeGitHistoryRestoreVerified": false,
+  "expectedCurrentVersion": 17,
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "libraryVersion": 18,
+  "fileId": "file_000000008a9481f9bc752de6261d9918",
+  "producerSucceeded": true,
+  "xattrsVerified": true,
+  "consumerBinaryRetrievalVerified": false,
+  "sourceSnapshotIncludesDocsThrough": "5aa9ebfc0dc495334c4d863a290c62c71e717851",
+  "followingReceiptCommitOutsideItsOwnArchive": true
+}

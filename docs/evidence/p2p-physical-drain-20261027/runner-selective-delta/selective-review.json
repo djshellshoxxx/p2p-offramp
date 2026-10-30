@@ -1,0 +1,25 @@
+{
+  "newDirectory": "/workspace/helpers/p2p-runner-consumer-delta-20261027/quarantine-runner",
+  "coreUnchanged": true,
+  "originalTreeUntouched": true,
+  "twoMemberTargetsVerified": [
+    {
+      "path": "harnesses/invoice-encoding-fuzz.mjs",
+      "baseSha256": "a541c18f027ef8d59af327d9372c451f80165eb27561ded6870d202b1b4fa686",
+      "fixedSha256": "ea230ed29fc78a29a8402b56eb0ebb539fa5b09cddd4463d6831baa7b55e5906",
+      "hunks": 5,
+      "application": "exact literal in isolated review copy only"
+    },
+    {
+      "path": "tests/test_encoding_helper.py",
+      "baseSha256": "105598940d116d53274f75a75b024469d77c0ed984f39672f07cf155c04e3ecb",
+      "fixedSha256": "a5ca5e0e94c5203dc93674c7dc38658bb123411b1f86ec896984886fb5915131",
+      "hunks": 1,
+      "application": "exact literal in isolated review copy only"
+    }
+  ],
+  "activeP2PBindingChanged": false,
+  "invoiceHelperActivated": false,
+  "producerEncodingTestsRunnable": false,
+  "reason": "No fast-check package at producer or P2P binding; actual P2P seeded parser harness does not use this adapter."
+}

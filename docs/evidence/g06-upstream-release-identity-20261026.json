@@ -1,0 +1,98 @@
+{
+  "observedDate": "2026-10-26",
+  "scope": "Authoritative read-only GitHub service metadata, not independent maintainer signing-key verification",
+  "repositories": [
+    {
+      "repository": "paulmillr/noble-hashes",
+      "id": "414330605",
+      "owner": {
+        "login": "paulmillr",
+        "id": 574696
+      },
+      "visibility": "public",
+      "archived": false,
+      "url": "https://github.com/paulmillr/noble-hashes"
+    },
+    {
+      "repository": "paulmillr/noble-curves",
+      "id": "573750299",
+      "owner": {
+        "login": "paulmillr",
+        "id": 574696
+      },
+      "visibility": "public",
+      "archived": false,
+      "url": "https://github.com/paulmillr/noble-curves"
+    }
+  ],
+  "commits": [
+    {
+      "repository": "paulmillr/noble-hashes",
+      "sha": "663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+      "message": "Release 2.4.0.",
+      "author": "paulmillr",
+      "committer": "paulmillr",
+      "created_at": "2026-08-27T12:59:21Z",
+      "url": "https://github.com/paulmillr/noble-hashes/commit/663c2aeeffc308ac0cded59bd32f7c212adacfc2"
+    },
+    {
+      "repository": "paulmillr/noble-curves",
+      "sha": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+      "message": "Release 2.4.0.",
+      "author": "paulmillr",
+      "committer": "paulmillr",
+      "created_at": "2026-08-27T14:20:08Z",
+      "url": "https://github.com/paulmillr/noble-curves/commit/656c4364dffa44c64aa0c49914b8000b278b67a9"
+    }
+  ],
+  "tagsAndReleases": [
+    {
+      "source": "https://api.github.com/repos/paulmillr/noble-hashes/git/tags/cbb9aed9154101899b3f362d87983f465f4157be",
+      "package": "@noble/hashes",
+      "tag": "2.4.0",
+      "tagObjectSha": "cbb9aed9154101899b3f362d87983f465f4157be",
+      "target": "663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+      "taggerDate": "2026-08-27T12:59:21Z",
+      "githubVerification": {
+        "verified": true,
+        "reason": "valid",
+        "verifiedAt": "2026-08-27T12:59:36Z"
+      }
+    },
+    {
+      "source": "https://api.github.com/repos/paulmillr/noble-curves/git/tags/bf43f3fc23ef644406f463f1580f8b78e13e0b6a",
+      "package": "@noble/curves",
+      "tag": "2.4.0",
+      "tagObjectSha": "bf43f3fc23ef644406f463f1580f8b78e13e0b6a",
+      "target": "656c4364dffa44c64aa0c49914b8000b278b67a9",
+      "taggerDate": "2026-08-27T14:20:08Z",
+      "githubVerification": {
+        "verified": true,
+        "reason": "valid",
+        "verifiedAt": "2026-08-27T14:20:52Z"
+      }
+    },
+    {
+      "source": "https://api.github.com/repos/paulmillr/noble-hashes/releases/tags/2.4.0",
+      "package": "@noble/hashes",
+      "tag": "2.4.0",
+      "published": "2026-08-27T12:59:28Z",
+      "created": "2026-08-27T12:59:21Z",
+      "author": "paulmillr",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/paulmillr/noble-hashes/releases/tag/2.4.0"
+    },
+    {
+      "source": "https://api.github.com/repos/paulmillr/noble-curves/releases/tags/2.4.0",
+      "package": "@noble/curves",
+      "tag": "2.4.0",
+      "published": "2026-08-27T14:20:15Z",
+      "created": "2026-08-27T14:20:08Z",
+      "author": "paulmillr",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/paulmillr/noble-curves/releases/tag/2.4.0"
+    }
+  ]
+}

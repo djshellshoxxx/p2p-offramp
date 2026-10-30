@@ -1,0 +1,233 @@
+{
+  "slice": "P2P-G15-ARTIFACT-PATH-COMPLETENESS-11",
+  "state": "integrated locally; release disabled",
+  "baseSha": "bbfe4248cacc6ce11900373c7dd7c253218c4a9e",
+  "sourceSha": "78418e89b4844e420409e23c520c6d4d5ceeecd2",
+  "sourceTree": "6383c956bf3946083c6fc7cf0f084b3be24c4445",
+  "recordedAtUtc": "2026-10-27T05:35:42.564161+00:00",
+  "ownedPaths": {
+    "apps/web/scripts/build.mjs": "8d06f62b247d385eabfef1a5686b9dd056d63f48dda93335d8b4971633d80e17",
+    "apps/web/scripts/artifact-policy.test.mjs": "dcfe1d26f0d5bee46e00dadc5d3362e95726e0e83e343a19f592e5ccd96c60d0"
+  },
+  "red": {
+    "argv": [
+      "node",
+      "--test",
+      "apps/web/scripts/artifact-policy.test.mjs"
+    ],
+    "exit": 1,
+    "nodePass": 9,
+    "nodeFail": 4,
+    "substantiveDefects": 3,
+    "note": "Node failure count includes parent test for failed __proto__ child. Three independent failures: omission, hidden synthetic key marker, missed case collision. Constructor/toString controls pass. Exact command start timestamp not separately captured."
+  },
+  "greenPolicy": {
+    "argv": [
+      "npm",
+      "run",
+      "test:build-policy"
+    ],
+    "exit": 0,
+    "passed": 15,
+    "sourceBytesMatchCommit": true
+  },
+  "runner": {
+    "report": "p2p-asset-path-20261027/runner-report.json",
+    "startedAtUtc": "2026-10-27T05:32:59.591366+00:00",
+    "finishedAtUtc": "2026-10-27T05:34:15.073647+00:00",
+    "exit": 0,
+    "counts": {
+      "pass": 7,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "sourceDrift": [],
+    "jobs": [
+      {
+        "suite": "aggregate",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 15.116,
+        "cleanup": {
+          "process_group": 30489,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.042,
+        "cleanup": {
+          "process_group": 30907,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.413,
+        "cleanup": {
+          "process_group": 31034,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "browser",
+        "argv": [
+          "npm",
+          "run",
+          "test:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 37.581,
+        "cleanup": {
+          "process_group": 31080,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "web",
+        "argv": [
+          "npm",
+          "run",
+          "test:web:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 17.646,
+        "cleanup": {
+          "process_group": 33461,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.298,
+        "cleanup": {
+          "process_group": 33893,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specaudit",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.247,
+        "cleanup": {
+          "process_group": 33922,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      }
+    ]
+  },
+  "nodeAggregate": {
+    "passed": 454,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pythonTests": 12,
+  "specAudit": {
+    "documents": 173,
+    "brokenLinks": 0
+  },
+  "change": "Use null-prototype file/identity maps. Path __proto__ is a real entry subject to inventory, secret-content and case-collision checks. No path-format restriction relaxed.",
+  "unchanged": [
+    "PRIVATE-TRANSPORT09/host/protocol/Worker/facades",
+    "production app source/keys/vault/crypto/journal/parser/fuzz08",
+    "lockfile/provider selection/thresholds/release scope",
+    "ReleaseEnabled=0/connectOrigins=[]"
+  ],
+  "next": "Await independently broker-owned transport contract09 review before that private lifecycle implementation. Separate G15 signed manifest verification/strict asset matching is ordinary remaining engineering with canonical profile, not completed by these fixes. Production trust-root/deployment and app/provider enablement still need their gates.",
+  "reuseResearchIntake": {
+    "currentPackagePins": {
+      "@noble/curves": "2.4.0",
+      "@noble/hashes": "2.4.0",
+      "react": "19.3.1",
+      "react-dom": "19.3.1"
+    },
+    "notInstalledOrVendoredInCurrentInventory": [
+      "viem",
+      "ethers",
+      "nostr-tools",
+      "@openzeppelin/contracts"
+    ],
+    "historicalViem": "Independent fixture expected values reference viem2.57.7; this is not an installed/current adapter. New2.57.12 research pin is not upgrade authority.",
+    "decision": "no adoption now; candidate observation adapter deferred to exact API/license/package-boundary/authority integration review. No ABI identity invented; timeout must not resend/clear journal.",
+    "parentReportedCautionsNotReproducedHere": [
+      "viem cached confirmations do not recheck canonical block hash",
+      "historical replacement scans may miss already mined replacements",
+      "nostr rejected-event cursor/gap behavior"
+    ],
+    "noExternalResearchOrDownloads": true
+  },
+  "files": {
+    "docs/evidence/p2p-asset-path-20261027/0001-p2p-asset11-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0001-p2p-asset11-aggregate/stdout.log": "759ec0bbfdeffab861097d382a2277b68507d1af986e91badda8a739adf41bfd",
+    "docs/evidence/p2p-asset-path-20261027/0002-p2p-asset11-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0002-p2p-asset11-build/stdout.log": "fff067f61808054a04852d964dcdb6b95b09e9e8a68a5ab8dcfe245cc7481fab",
+    "docs/evidence/p2p-asset-path-20261027/0003-p2p-asset11-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0003-p2p-asset11-boundaries/stdout.log": "f24a7ecf35fb3df0015722143b8fd9f692156a81c03ca3c6a5e2ef2581688db9",
+    "docs/evidence/p2p-asset-path-20261027/0004-p2p-asset11-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0004-p2p-asset11-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-asset-path-20261027/0005-p2p-asset11-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0005-p2p-asset11-web/stdout.log": "dd10a0748b4df585700e1169861338a2f1c3c092eef9bfdab37c546a09c84444",
+    "docs/evidence/p2p-asset-path-20261027/0006-p2p-asset11-specs/stderr.log": "76aa3de9c0d17c79a3be371e762ea563d0567fafee4ed7200b3b65fc7901cf15",
+    "docs/evidence/p2p-asset-path-20261027/0006-p2p-asset11-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-asset-path-20261027/0007-p2p-asset11-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-path-20261027/0007-p2p-asset11-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-asset-path-20261027/acceptance.json": "bb7a793ff9e21d1e818710b0824b853cd28ff00f9127cf19798676c80cf62c93",
+    "docs/evidence/p2p-asset-path-20261027/green-policy.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-asset-path-20261027/green-policy.log": "0c4c9303609dfbdcf185d86ef88c204390d695db18480106edb84aaed7552da1",
+    "docs/evidence/p2p-asset-path-20261027/red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-asset-path-20261027/red.log": "04fe48673c2ffbff51c1eff0d9a9f4e3448dcb4f49be3f273abf19e7a88c6eef",
+    "docs/evidence/p2p-asset-path-20261027/runner-report.json": "d24d0df26a27817fc362f0e269065803ce7a2ccdae6bfef36997948e828a0d7d"
+  }
+}

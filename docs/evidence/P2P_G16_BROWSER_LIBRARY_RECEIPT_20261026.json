@@ -1,0 +1,77 @@
+{
+  "kind": "private Library producer receipt; executed browser evidence, not app/provider/audit acceptance",
+  "sourceAndTestsCheckpoint": "626d82e084c306c29e54cc33e4f59a5cd7e3104d",
+  "sourceTree": "bc73d306f7d7ff014169977a7fe6aeb1fac8abb2",
+  "base": "61d95873f6ef62604a62f9963e54971e6cbfb2a1",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "current_version_number": 8,
+  "file_id": "file_0000000066fc81f7967280d5013eb6ba",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_size_bytes": 498472,
+  "sha256": "44b883a8b8095f79bc34eeb07cb59fa5d39530e2c643ac75ac62fedb5e5d988f",
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-g16-browser/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "producerStatus": "succeeded",
+  "xattrsApplied": true,
+  "payloadEntries": 198,
+  "patchRoundTrips": {
+    "incremental4files": true,
+    "additions9files": true,
+    "cumulative15files": true,
+    "wholeRepositoryRestore": false
+  },
+  "priorVersionsPreserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "consumerRetrievalVerified": false,
+  "freshVerification": {
+    "browser": "Chromium154.0.8037.57 on Linux headless; document and dedicated module Worker",
+    "assertionsPerRealm": 153,
+    "groupsPerRealm": 9,
+    "focusedNode": {
+      "pass": 28,
+      "fail": 0,
+      "skip": 0
+    },
+    "aggregateNode": {
+      "pass": 379,
+      "fail": 0,
+      "skip": 0
+    },
+    "buildPolicy": {
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "strictTypesBuildBoundaries": "exit0;46sources/18core"
+  },
+  "provenance": "unchanged independent public KAT/digest/signature fixtures;3same-provider Node-only synthetic complete bundles accurately labelled; no browser signing or identity inclusion",
+  "failureDisposition": "one new fixture shape error corrected; no production defect reproduced or runtime RED/GREEN fix claimed; original log retained",
+  "applicationRuntimeDependenciesInventoryChanged": false,
+  "appInclusion": false,
+  "providerApproval": false,
+  "independentAudit": false,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "economicPreparationAllowed": false,
+  "notices": "existing EIP712 notice/full CC0 and Noble MIT notice included unchanged",
+  "notRerun": [
+    "emitted-app UI browser suite",
+    "separate vault/runtime/content/reseal browser suite",
+    "Python/specs",
+    "other browser/device qualification"
+  ],
+  "privacy": "synthetic test corpus only; no private agreement logs; observed owned SHA buffers clear; physical/native/heap/signature-copy erasure not proven",
+  "ghostPayChanged": false,
+  "externalSourcePublication": false,
+  "canonicalQueueReadOrWritten": false,
+  "next": "attributable browser-scope engineering review of exact evidence; app Worker/UI inclusion separately reviewed and authorized; no automatic capability promotion",
+  "receiptCommitScope": "documentation only after packaged source checkpoint"
+}

@@ -1,0 +1,33 @@
+
+> p2p-offramp@0.1.0 test:build-policy
+> node --test apps/web/scripts/artifact-policy.test.mjs scripts/tests/import-boundaries.test.mjs
+
+✔ build inventory binds exact raw bytes for binary (22.579382ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (18.301759ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (5.87877ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (4.82827ms)
+▶ build inventory includes prototype-looking root filenames
+  ✔ __proto__ (7.971829ms)
+  ✔ constructor (19.284829ms)
+  ✔ toString (5.133053ms)
+✔ build inventory includes prototype-looking root filenames (33.231511ms)
+✔ prototype-looking root filename cannot hide a private-key marker (8.521985ms)
+✔ prototype-looking root filename participates in case-collision refusal (4.428907ms)
+✔ application token policy denies HTML execution while allowing text and React events (2.496737ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.207748ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (0.589906ms)
+✔ G07 import boundaries use the TypeScript AST and report fixture violations without false positives (96.398966ms)
+✔ G07 reports missing application graph entry instead of claiming it was checked (76.664089ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 278.772484
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

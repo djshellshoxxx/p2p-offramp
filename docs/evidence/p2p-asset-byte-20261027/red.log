@@ -1,0 +1,85 @@
+✖ build inventory binds exact raw bytes for binary (29.968949ms)
+✖ build inventory binds exact raw bytes for malformed UTF-8 (8.699018ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (6.249243ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (4.498135ms)
+✔ application token policy denies HTML execution while allowing text and React events (2.652366ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.324271ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (2.431999ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 5
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 262.41396
+
+✖ failing tests:
+
+test at apps/web/scripts/artifact-policy.test.mjs:32:4
+✖ build inventory binds exact raw bytes for binary (29.968949ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      {
+        bytes: 29,
+        path: 'assets/main.js',
+        sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb'
+      },
+      {
+  +     bytes: 8,
+  -     bytes: 4,
+        path: 'assets/payload.bin',
+  +     sha256: 'b4668f548a3df2f3eb38b36d4764c527e362d5953b3ecdc1eeeab39d44fbad24'
+  -     sha256: '83361ca0651f3a6009c3d0ca1a9bc7c6a89f444de1d8c776d19b2839ac546b09'
+      },
+      {
+        bytes: 11,
+        path: 'assets/vault.worker-fixture.js',
+        sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881'
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { path: 'assets/main.js', bytes: 29, sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb' }, { path: 'assets/payload.bin', bytes: 8, sha256: 'b4668f548a3df2f3eb38b36d4764c527e362d5953b3ecdc1eeeab39d44fbad24' }, { path: 'assets/vault.worker-fixture.js', bytes: 11, sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881' }, { path: 'core-graph-document.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'core-graph-worker.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'index.html', bytes: 69, sha256: '0b250ea88f8612e5f27c01ef929507b5794595a3639a4959389f6a132b544fe8' }, { path: 'third-party-licenses.json', bytes: 306, sha256: '5c3dd7bfaf10447b9ae5327de553e53c15df704719458636cdccf76702f580da' } ],
+    expected: [ { path: 'assets/main.js', bytes: 29, sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb' }, { path: 'assets/payload.bin', bytes: 4, sha256: '83361ca0651f3a6009c3d0ca1a9bc7c6a89f444de1d8c776d19b2839ac546b09' }, { path: 'assets/vault.worker-fixture.js', bytes: 11, sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881' }, { path: 'core-graph-document.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'core-graph-worker.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'index.html', bytes: 69, sha256: '0b250ea88f8612e5f27c01ef929507b5794595a3639a4959389f6a132b544fe8' }, { path: 'third-party-licenses.json', bytes: 306, sha256: '5c3dd7bfaf10447b9ae5327de553e53c15df704719458636cdccf76702f580da' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/scripts/artifact-policy.test.mjs:32:4
+✖ build inventory binds exact raw bytes for malformed UTF-8 (8.699018ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      {
+        bytes: 29,
+        path: 'assets/main.js',
+        sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb'
+      },
+      {
+  +     bytes: 13,
+  -     bytes: 5,
+        path: 'assets/payload.bin',
+  +     sha256: 'ba6138fb3dbd498c5d2cb5e2ba316e3b75a4c920421b18dbaaa5d0eef00cd151'
+  -     sha256: '315f0cf0864d2f476afca947e480fe52b94194369d0930ce646d4c3b927729be'
+      },
+      {
+        bytes: 11,
+        path: 'assets/vault.worker-fixture.js',
+        sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881'
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/apps/web/scripts/artifact-policy.test.mjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { path: 'assets/main.js', bytes: 29, sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb' }, { path: 'assets/payload.bin', bytes: 13, sha256: 'ba6138fb3dbd498c5d2cb5e2ba316e3b75a4c920421b18dbaaa5d0eef00cd151' }, { path: 'assets/vault.worker-fixture.js', bytes: 11, sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881' }, { path: 'core-graph-document.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'core-graph-worker.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'index.html', bytes: 69, sha256: '0b250ea88f8612e5f27c01ef929507b5794595a3639a4959389f6a132b544fe8' }, { path: 'third-party-licenses.json', bytes: 306, sha256: '5c3dd7bfaf10447b9ae5327de553e53c15df704719458636cdccf76702f580da' } ],
+    expected: [ { path: 'assets/main.js', bytes: 29, sha256: 'ddf066ee341c060cca67ed6faa462602690b490d98c6fecdf607c447754e14bb' }, { path: 'assets/payload.bin', bytes: 5, sha256: '315f0cf0864d2f476afca947e480fe52b94194369d0930ce646d4c3b927729be' }, { path: 'assets/vault.worker-fixture.js', bytes: 11, sha256: '8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881' }, { path: 'core-graph-document.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'core-graph-worker.json', bytes: 3, sha256: '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570' }, { path: 'index.html', bytes: 69, sha256: '0b250ea88f8612e5f27c01ef929507b5794595a3639a4959389f6a132b544fe8' }, { path: 'third-party-licenses.json', bytes: 306, sha256: '5c3dd7bfaf10447b9ae5327de553e53c15df704719458636cdccf76702f580da' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

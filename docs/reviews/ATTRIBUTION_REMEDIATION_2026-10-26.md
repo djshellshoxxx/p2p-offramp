@@ -1,0 +1,11 @@
+# Attribution remediation and release requirements
+
+Base source `b2ebd641785b9ca87633865b77a492d249653cb3`, 2026-10-26. This tranche adds source notices and matching full license texts only. No app/runtime/Worker/schema/crypto/provider/test-fixture/dependency-version or project-license changes.
+
+`THIRD_PARTY_NOTICES.md` now distinguishes actual Noble/React imports, copied/derived BIP/EIP test data, independent oracle tooling, original project adapters and research-only candidates. Copyright is retained exactly: Paul Miller2022 for Noble; Meta Platforms, Inc. and affiliates for React/DOM/scheduler. All five installed MIT files match their exact-version npm archives after SHA-512 lock-integrity verification. React's upstream source SHA remains explicitly unknown, not fabricated.
+
+Full MIT texts are retained in `licenses/noble-2.4.0-MIT.txt` and `licenses/react-19.3.1-MIT.txt`. Existing Noble/BIP340 fixture notices were not replaced. The pinned official EIP-712 metadata names Remco Bloemen, Leonid Logvinov and Jacob Evans; its Example.js bytes match the already recorded hash. Full upstream CC0 text and an adjacent fixture-attribution notice were added without changing fixture contents/inventory hashes.
+
+Evidence is `docs/evidence/ATTRIBUTION_LICENSES_20261026.json`. Existing emitted-build code already requires full React/DOM/scheduler notices in `third-party-licenses.json`; it was inspected, not rerun or modified. No new build proves that a future enabled wallet/identity distribution includes all new dependencies; recheck actual chosen artifacts at release. This bounded correction is not an exhaustive build/dev/transitive-license audit.
+
+Release readiness requires exact source/package pins, preserved copyright and modified-file notices, matching full license texts in distributed artifacts, and disposition of genuinely unresolved compatibility questions. It does not require inventing approval for uninstalled candidates. Preserve client-side architecture, test-only wallet/identity boundaries and ReleaseEnabled=0. The earlier two-entry G16 disposition remains attributable AI engineering review, not owner approval/external audit/live-trading permission. No new software installation, executable download, denied endpoint retry, remote write, CI or security-setting change occurred.

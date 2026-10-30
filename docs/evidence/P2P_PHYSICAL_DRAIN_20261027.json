@@ -1,0 +1,527 @@
+{
+  "slice": "G16 qualification physical-state/drain and isolated runner-consumer validation",
+  "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+  "sourceTree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+  "baseSha": "8487eb24468ba6c57c104e7ffc189d24c6e190b7",
+  "recordedAtUtc": "2026-10-27T07:15:48.928528+00:00",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "sourceFiles": {
+    "packages/wallet/test/lib/evm-agreement-host.ts": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+    "packages/wallet/test/evm-agreement-host.test.mjs": "2f6edd83acbf059be937c0c1b13afd0d41a0db93a68dc267b037bece0636f6b3"
+  },
+  "proposal": {
+    "libraryFileId": "libfile_4b1b65b794d48191b369f445cd6443dc",
+    "version": 1,
+    "reportedOuterBytes": 23275,
+    "nativeOuterBytes": 23274,
+    "outerExactFileSha256IndependentlyVerified": false,
+    "rawBodyBytes": 18510,
+    "rawBodySha256": "037129a1d5092af52f2e2be052ba48341f9a4956208f6adc8bc1c1d02b79de51",
+    "rawBodyTerminalLf": false,
+    "requestReportedByParent": "req_011CgSG8NMmFwTNRvpe9Jd6v",
+    "runtimePayloadStrictLiteralReconstruction": true,
+    "implementationTargetMatchesLiteralProposal": true,
+    "draftMechanicsAdapted": "See adaptations.json; exact context/hunk-count repair, exact API assertion, bounded waits and failure cleanup, honest exhaustion label, early-release and exceptional-settlement oracles; no fuzzy application"
+  },
+  "actualRed": {
+    "rawPatchCheck": {
+      "exit": 128,
+      "reason": "corrupt patch at line180; malformed draft syntax, not access denial"
+    },
+    "testsFirst": {
+      "exit": 1,
+      "tests": 30,
+      "pass": 17,
+      "fail": 13,
+      "skipped": 0,
+      "hostImplementationUnchanged": true,
+      "cleanupRedRerunMilliseconds": 780.857,
+      "initial30sTimerWaitRetained": true
+    },
+    "reviewFinding": "qualification gap only; already-waiting drain backend rejection added and passes, no demonstrated implementation defect"
+  },
+  "freshChecks": {
+    "host": 31,
+    "focused": 73,
+    "nodeAggregate": 522,
+    "policy": 15,
+    "python": 12,
+    "specDocuments": 173,
+    "brokenLinks": 0,
+    "fuzzHarness": 26,
+    "skips": 0,
+    "rootBuildAndFourStrictTsProjects": true,
+    "explicitHelperStrictTs": true,
+    "boundaries": {
+      "productionFiles": 50,
+      "coreEntryModules": 19
+    },
+    "nativeAndEmittedBrowser": true,
+    "G16DocumentAndDedicatedWorkerAssertionsEach": 238,
+    "G15DocumentAndDedicatedWorkerAssertionsEach": 66
+  },
+  "runner": {
+    "root": "/workspace/helpers/p2p-runner-consumer-delta-20261027/quarantine-runner",
+    "report": "p2p-physical-drain-20261027/runner-report.json",
+    "startedAtUtc": "2026-10-27T07:12:41.160921+00:00",
+    "finishedAtUtc": "2026-10-27T07:14:10.839122+00:00",
+    "exit": 0,
+    "counts": {
+      "pass": 14,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "sourceDrift": [],
+    "sourceBaseline": {
+      "type": "git",
+      "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+      "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+      "excluded_sensitive_paths_count": 0
+    },
+    "jobs": [
+      {
+        "suite": "focused",
+        "argv": [
+          "node",
+          "--test",
+          "packages/wallet/test/evm-agreement-host.test.mjs",
+          "packages/wallet/test/evm-agreement.test.mjs",
+          "packages/schemas/test/evm-agreement-protocol.test.mjs",
+          "packages/schemas/test/evm-agreement-input.test.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.934,
+        "cleanup": {
+          "process_group": 44724,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "aggregate",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 16.106,
+        "cleanup": {
+          "process_group": 44779,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.206,
+        "cleanup": {
+          "process_group": 45212,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.408,
+        "cleanup": {
+          "process_group": 45342,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "browser",
+        "argv": [
+          "npm",
+          "run",
+          "test:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 37.187,
+        "cleanup": {
+          "process_group": 45388,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "web",
+        "argv": [
+          "npm",
+          "run",
+          "test:web:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 17.859,
+        "cleanup": {
+          "process_group": 47844,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.33,
+        "cleanup": {
+          "process_group": 48291,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specaudit",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.267,
+        "cleanup": {
+          "process_group": 48320,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "policy",
+        "argv": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.484,
+        "cleanup": {
+          "process_group": 48346,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "g15browser",
+        "argv": [
+          "node",
+          "scripts/test-release-browser.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 1.147,
+        "cleanup": {
+          "process_group": 48437,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "g16browser",
+        "argv": [
+          "node",
+          "scripts/test-g16-browser.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 1.503,
+        "cleanup": {
+          "process_group": 48593,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "helpertypes",
+        "argv": [
+          "node",
+          "node_modules/typescript/bin/tsc",
+          "--project",
+          "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+          "--noEmit"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.395,
+        "cleanup": {
+          "process_group": 48752,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "fuzzharness",
+        "argv": [
+          "node",
+          "--test",
+          "scripts/tests/evm-agreement-fuzz.test.mjs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.769,
+        "cleanup": {
+          "process_group": 48782,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "seeded-parser",
+        "argv": [
+          "node",
+          "/workspace/p2p-offramp-pr5-validation/scripts/fuzz-evm-agreement-input.mjs",
+          "--seed",
+          "1592598566",
+          "--cases",
+          "4096",
+          "--output",
+          "/tmp/p2pdrain27/jobs/0014-p2p-physical-drain-seeded-parser/metrics.json"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.751,
+        "cleanup": {
+          "process_group": 48990,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      }
+    ]
+  },
+  "seededFuzz": {
+    "tool": "fuzz-evm-agreement-input",
+    "mappingVersion": "p2p-parser-fuzz-08/v2",
+    "domainLabel": "p2p-parser-fuzz-08/nonsecurity-test-input",
+    "seed": 1592598566,
+    "requestedCases": 4096,
+    "replayCaseIndex": null,
+    "executedCases": 4096,
+    "generatedCases": 4096,
+    "generatedValidVariations": 1352,
+    "passedCases": 4096,
+    "mutatedCases": 2744,
+    "boundaryControlCases": 264,
+    "perFamily": {
+      "instruction-text": {
+        "executed": 512,
+        "accepted": 512,
+        "refused": 0,
+        "boundaryControls": 113
+      },
+      "text-mutation": {
+        "executed": 512,
+        "accepted": 64,
+        "refused": 448,
+        "boundaryControls": 0
+      },
+      "decimal": {
+        "executed": 512,
+        "accepted": 175,
+        "refused": 337,
+        "boundaryControls": 151
+      },
+      "hex-address": {
+        "executed": 512,
+        "accepted": 161,
+        "refused": 351,
+        "boundaryControls": 0
+      },
+      "capabilities": {
+        "executed": 512,
+        "accepted": 196,
+        "refused": 316,
+        "boundaryControls": 0
+      },
+      "signature-views": {
+        "executed": 512,
+        "accepted": 244,
+        "refused": 268,
+        "boundaryControls": 0
+      },
+      "shape": {
+        "executed": 512,
+        "accepted": 0,
+        "refused": 512,
+        "boundaryControls": 0
+      },
+      "resource": {
+        "executed": 512,
+        "accepted": 0,
+        "refused": 512,
+        "boundaryControls": 0
+      }
+    },
+    "corpusDigest": "83d7ded6b26d43cac2053efca65a9bfe3a9a5577f5e0136a81869b272d267235",
+    "status": "pass",
+    "firstFailure": null,
+    "coverageGuided": false,
+    "shrinking": false,
+    "replayNote": null,
+    "elapsedMs": 627
+  },
+  "runnerSelectiveDelta": {
+    "libraryFileId": "libfile_8f4d26f52ef081918da253322549d268",
+    "reportedOuterBytes": 19750,
+    "nativeOuterBytes": 19749,
+    "outerExactChecksumIndependentlyVerified": false,
+    "bothEmbeddedDiffHashesVerified": true,
+    "reviewCopy": "/workspace/helpers/p2p-runner-consumer-delta-20261027/quarantine-runner",
+    "activeConsumerUntouched": true,
+    "coreUnchangedSha256": "2e687ec8f219c6a8fa92ad62e0cdb7afbf11b5886bfd651dc3be5997360f88e2",
+    "genericSelfTests": 30,
+    "genericFailures": 0,
+    "encodingHelperTestsExecuted": false,
+    "encodingPrerequisite": "No installed fast-check and no producer GhostPay fixture binding. Invoice helper not used by P2P; no unrelated port/install or skip-as-pass claim.",
+    "fixedHelperOnlyInQuarantine": true,
+    "actualP2PAdaptersValidated": true,
+    "P2PFuzzHarnessUnchangedSha256": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930"
+  },
+  "review": {
+    "reviewer": "/root/physical_drain_review",
+    "kind": "fresh-context AI static engineering, not independent audit/owner/provider acceptance",
+    "defectsDemonstrated": 0,
+    "coverageRecommendationAdded": true
+  },
+  "limits": {
+    "productionRequestTimeoutUnchanged": 30000,
+    "nativeCancellationOrRollbackClaimed": false,
+    "generationExhaustionExecuted": false,
+    "newPhysicalApisQualifiedInRealBrowser": false,
+    "actualControlMessageAdapterImplemented": false,
+    "browserRerun": "Existing unchanged direct-call G16 and native/emitted app regressions only; new physical APIs exercised in Node, not claimed message-driven qualification.",
+    "appInclusion": false,
+    "releaseEnabled": 0,
+    "connectOrigins": [],
+    "spendingEnabled": false,
+    "independentNewProviderQualification": false
+  },
+  "processReadDenial": {
+    "action": "read /proc/22931/cwd",
+    "reason": "PermissionError: [Errno13] Permission denied",
+    "operationStopped": true,
+    "oldUnrelatedToThisRunProcessesUntouched": true,
+    "priorPartialTestOutcomeNotConvertedToPass": true,
+    "newRunnerOwnProcessGroupsAllEmpty": true
+  },
+  "next": {
+    "libraryFileId": "libfile_a0a59b3c56648191891511b047aa71d2",
+    "fileId": "file_00000000b48081f9a0aff3bd5ae3fe55",
+    "version": 0,
+    "bytes": 25106,
+    "sha256": "c11500f064b947670ab6381dfc4100a5e9e4ebe81b8e0e0e1d62c0f3468a8a43",
+    "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+    "state": "ready not assigned",
+    "localXattrs": {
+      "user.library-file-version": "0",
+      "user.library-file-id": "libfile_a0a59b3c56648191891511b047aa71d2"
+    }
+  },
+  "noGhostPayWritesPushCiPaidCallsDependenciesCredentialsSecurityOrDeploymentChanges": true,
+  "files": {
+    "docs/evidence/p2p-physical-drain-20261027/0001-p2p-physical-drain-focused/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0001-p2p-physical-drain-focused/stdout.log": "62a28a3c148a95147e0ebac1b09d2659bc434f73e1ea910083b167b53317984e",
+    "docs/evidence/p2p-physical-drain-20261027/0002-p2p-physical-drain-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0002-p2p-physical-drain-aggregate/stdout.log": "4e9fba2fe9a86d785f05af15933a75a5ba678608496ce44652a0bae4cc25ca17",
+    "docs/evidence/p2p-physical-drain-20261027/0003-p2p-physical-drain-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0003-p2p-physical-drain-build/stdout.log": "8ba6db959630b93062f242b8c110aa4089a422f36f4e95fe30db5fb0815b6ce8",
+    "docs/evidence/p2p-physical-drain-20261027/0004-p2p-physical-drain-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0004-p2p-physical-drain-boundaries/stdout.log": "d101d6cb7acdc2f57e60ccdbff4ad4f8f1ed5e9dd474b03cdcb45e7ac7201a09",
+    "docs/evidence/p2p-physical-drain-20261027/0005-p2p-physical-drain-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0005-p2p-physical-drain-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-physical-drain-20261027/0006-p2p-physical-drain-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0006-p2p-physical-drain-web/stdout.log": "fc36b63e8e1e9011ca7cd9f3c86e384c0827fce08630b55aa146d7fbb0e228c9",
+    "docs/evidence/p2p-physical-drain-20261027/0007-p2p-physical-drain-specs/stderr.log": "9a315900d8d01e73f89f70e984d64d8a7d2c423ac3267907e6773142f8ecfbed",
+    "docs/evidence/p2p-physical-drain-20261027/0007-p2p-physical-drain-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-physical-drain-20261027/0008-p2p-physical-drain-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0008-p2p-physical-drain-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-physical-drain-20261027/0009-p2p-physical-drain-policy/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0009-p2p-physical-drain-policy/stdout.log": "e2d1d7abab5f7d5a052eef68b63179578891e5a6f0dc42bb3c1b1d30587373a3",
+    "docs/evidence/p2p-physical-drain-20261027/0010-p2p-physical-drain-g15browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0010-p2p-physical-drain-g15browser/stdout.log": "ae1d15ffc654e7e74bef3c1a137b248aeb835857b07eacb6e41cc7d31418a233",
+    "docs/evidence/p2p-physical-drain-20261027/0011-p2p-physical-drain-g16browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0011-p2p-physical-drain-g16browser/stdout.log": "07a20c02ca7bc1553de7632e80026df4b58b932caf85409e68bdaccbf7be0a4b",
+    "docs/evidence/p2p-physical-drain-20261027/0012-p2p-physical-drain-helpertypes/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0012-p2p-physical-drain-helpertypes/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0013-p2p-physical-drain-fuzzharness/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0013-p2p-physical-drain-fuzzharness/stdout.log": "8b06dc64eed0785cc79a0382c0b8d5fb8c97c6df603e33fe400ba98ffa030e74",
+    "docs/evidence/p2p-physical-drain-20261027/0014-p2p-physical-drain-seeded-parser/metrics.json": "bcc7a3978714f2491a0d698ffd4a49e77bd96139421b4eab256ffab4f4d550ea",
+    "docs/evidence/p2p-physical-drain-20261027/0014-p2p-physical-drain-seeded-parser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/0014-p2p-physical-drain-seeded-parser/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/01-tests-only-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-physical-drain-20261027/01-tests-only-red.log": "7c0c8199b7fff91298f4ccb75e1359077f64633d9867bee4556d2275a2743ae0",
+    "docs/evidence/p2p-physical-drain-20261027/02-tests-only-cleanup-red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-physical-drain-20261027/02-tests-only-cleanup-red.log": "e6bfc618c69663ad2a17a1de3aa97d54169ed7626eac2561eb3185e4c828b283",
+    "docs/evidence/p2p-physical-drain-20261027/03-focused-green.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-drain-20261027/03-focused-green.log": "53afb25987473deed8e6e7390b3a33ad18ce880ade8004be85693ff4797dbb31",
+    "docs/evidence/p2p-physical-drain-20261027/04-helper-types.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-drain-20261027/04-helper-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-physical-drain-20261027/05-review-regression-green.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-drain-20261027/05-review-regression-green.log": "4c32e19aec81ca3b5e3f8dab82c3f63d41bcbfbe3f28ec5d1310acb82b705f1b",
+    "docs/evidence/p2p-physical-drain-20261027/acceptance.json": "5194eb97d8fb0029f870a48c06193a089c9edd36926c9d5875e26f3fc9c650e3",
+    "docs/evidence/p2p-physical-drain-20261027/adaptations.json": "383191d972042141ac3c44cccd54543f3839632e7f0d5bd87e7f42702ad65ad5",
+    "docs/evidence/p2p-physical-drain-20261027/implementation-corrected.patch": "029ec3a0e1112f831bdebf4858b9c01527a2ad3ec6108af807cbd46200ceefd7",
+    "docs/evidence/p2p-physical-drain-20261027/next-control-assignment.json": "618bc8d53e82a96bcbb00b849aa8cec5a97e220f9d8087c49f30e6c817f7ba6b",
+    "docs/evidence/p2p-physical-drain-20261027/next-control-library-receipt.json": "e3ac5549d9c99720e71bd08fe93bf6191bffffb2c4cfefca0b6df9597aefcab4",
+    "docs/evidence/p2p-physical-drain-20261027/proposal-1.patch": "9481bcc3a0b15fedb1e5f18a87f0af205878633bdb2a1a1b9d2c3081f7e327d2",
+    "docs/evidence/p2p-physical-drain-20261027/proposal-2.patch": "74ff951fb8dbb8795c626fb564350dd0f3dfe3952d17d1af4ccb1fba58b6b940",
+    "docs/evidence/p2p-physical-drain-20261027/qualification-tsconfig.json": "c0e44d67b5eeb436dcc14760cdb4e995302b53551897e8d43a53d6b4457c3b28",
+    "docs/evidence/p2p-physical-drain-20261027/raw-patch-check.exit": "56292515f7d3a7110811eb8de26b3f75f82a0766aa5a1fd66ebcfcb84fe6d5ff",
+    "docs/evidence/p2p-physical-drain-20261027/raw-patch-check.log": "0e9149c438cb850f703532adf2f3e32748f0c94b7c5ae470d5cf50ac6f26c34d",
+    "docs/evidence/p2p-physical-drain-20261027/response-raw.md": "037129a1d5092af52f2e2be052ba48341f9a4956208f6adc8bc1c1d02b79de51",
+    "docs/evidence/p2p-physical-drain-20261027/runner-report.json": "cd27bb3fd31047b9fca7e215d83d12c22e76212c4ed682b4d7a479f6c1dcfe60",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/CONSUMER-DELTA.native-text.md": "fc105f4c22f1a6953441bd2280f01ccfe8e2744f14efe4a32bf2e43698b9707c",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/delta-1.patch": "fab364c108495ce66bb29b980d701588dd7184fc257ed368d8d353a47ef1be7e",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/delta-2.patch": "1e9c619dc767baac103bc8c7244b5a04071be1816b19b625b3a4c13d486d903c",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/generic-consumer-selftests.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/generic-consumer-selftests.log": "3d790a7075c434767d5ce01057a86df5f09cc837eb509c62720d7a4998395958",
+    "docs/evidence/p2p-physical-drain-20261027/runner-selective-delta/selective-review.json": "b85e8d8280a26b657e7bca202911dab5b4aaac3f6040b07cc3a579002ca7071b",
+    "docs/evidence/p2p-physical-drain-20261027/tests-corrected.patch": "3e9f5df4983612d5a69a892bba8e09b73352d197147a93dc159b7b76e42b42d0",
+    "docs/evidence/p2p-physical-drain-20261027/tests-final-corrected.patch": "dcf75606249160b86370dc933d41e45fa64585e1a60caa241010248ec73ffd1d"
+  }
+}

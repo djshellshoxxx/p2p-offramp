@@ -1,0 +1,6 @@
+{
+  "extends": "/workspace/p2p-offramp-pr5-validation/tsconfig.json",
+  "include": [
+    "/workspace/p2p-offramp-pr5-validation/packages/wallet/test/lib/evm-agreement-host.ts"
+  ]
+}
