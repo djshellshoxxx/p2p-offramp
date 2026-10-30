@@ -2,6 +2,13 @@
 
 Quick restart notes. Updated at every milestone. Newest entry first. Read this, then `git ls-remote origin`.
 
+## 2026-10-30 — terms exchange merged
+
+- Merged `wave5/terms-exchange` (b2af7a5, c5d4999, e17fe4a): new `packages/exchange` (NIP-17 take/offer/accept/reject/cancel
+  state machine, real-crypto relay adapter), `packages/nostr-crypto/index.ts` facade + sync verify. npm test 485/485.
+- Lean-scope core now covered at package level: terms → encrypted exchange → escrow fund/release/refund → G12 reconcile.
+  Remaining: app wiring (other session's UI area), SonarCloud findings (blocked), @noble/ciphers swap (blocked).
+
 ## 2026-10-30 — SonarCloud gate red on PR #10
 
 - SonarCloud (new app check) failed: D Security + D Reliability on new code @ e652f6d. sonarcloud.io blocked by proxy;
