@@ -1,0 +1,88 @@
+{
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "runtime": "f379dc243cd9164da076c69702c2b5c21898f520",
+  "merge": "391653eaba946f77057b01fd03d3c234958bcf1d",
+  "sourceAndMergeTree": "634a2ec9e910c31844f9ea7de7e5f4b1cde96ef6",
+  "priorDocumentation": "eace75c2291546bfd53bde1116833877ea51b92e",
+  "qualification": "Completed exact-source hosted job logs and checks; local synthetic review probes labelled separately. No project/release/audit acceptance. All original branches, skips and failures retained.",
+  "files": [
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/accept-delivery-boundary.json",
+      "sha256": "4476c85e7ae453724717d79fe343b20dccf1e7d3b6401633fe4cbdad4285bf55",
+      "gitBlobSha": "b27709eee5654163ed9295f80949adb875ab66df",
+      "bytes": 697
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/accept-delivery-boundary.mjs",
+      "sha256": "dc05f841522ed41aca29e1ef47ab24acf76300ad6f05c56ee208b025f7373bd9",
+      "gitBlobSha": "5500a45a78f6acdcf7576fcf95319478b1188486",
+      "bytes": 2019
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/checks.json",
+      "sha256": "6941bab47b7f7e537b593664e720ca90fcc6a40d9a55dd5c07cdc63d4a68e5a3",
+      "gitBlobSha": "669519e69941c2f84c2552b94ad243049afddb95",
+      "bytes": 7184
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024298439.json",
+      "sha256": "20b4d36bef4c81b861e2e92b441921e9c95f026f18e99ccd3ef2926a052b09e5",
+      "gitBlobSha": "3cac5edf07a9eed6dc65f118da97ce411f120112",
+      "bytes": 561
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024298694.json",
+      "sha256": "bb626dd4769e966ab426254888f1d8de18452207e70edeabf59103edb2cd6efe",
+      "gitBlobSha": "9bb4479264b1a45d8719911166ab21fb750dce8b",
+      "bytes": 698
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024298748.json",
+      "sha256": "39285811fa3555b3fd63c5cea0f945112446f735d8a0c36d3d3ebe6a84208a2f",
+      "gitBlobSha": "ad1c3a4886e0b59eab5eb8535768eb3da0500bc7",
+      "bytes": 1486
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024298934.json",
+      "sha256": "44963e3797aaa70cf3a4efcdd3577b10b93d9f10ed39093de28c07f22329fc51",
+      "gitBlobSha": "d190c32e675f4f41b2942313f7d917a19f7086cc",
+      "bytes": 1327
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024299059.json",
+      "sha256": "d4349868c7249a3a73c35ac2d1e20d75d3cf8683a392377109185e5f751e7c42",
+      "gitBlobSha": "cdb230d4b5100641315d2971e3f5a312a6111356",
+      "bytes": 685
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/job-124024299266.json",
+      "sha256": "4522644a6b1d1f4311f977ff8109b2de9d013bf6be25eed207f6053bfa568384",
+      "gitBlobSha": "dd5951b73477d4289209dddcb9a730bea1334db9",
+      "bytes": 3378
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/merge.json",
+      "sha256": "cc6b48847b521461cdbdd072d4a7cefdf0d62e89d62a05b0955306388865c3c2",
+      "gitBlobSha": "c3d4c51a117fb9859d9825ece8392ca5e668c144",
+      "bytes": 789
+    },
+    {
+      "path": "docs/evidence/P2P_PR14_MERGE_20261030/review-disposition.md",
+      "sha256": "174c0816d92f72f799eaa128dfb8889a4bd3e8ad2d1cfbef8bcce16730ddf78e",
+      "gitBlobSha": "1cb1a900579cdf6f61aa174434291c44a06bd8b4",
+      "bytes": 3433
+    },
+    {
+      "path": "docs/handoffs/P2P_PR14_MERGE_HANDOFF_20261030.md",
+      "sha256": "07c577bcd08ff6d7bce8b28f84cbad5ae4e7ef6196cf2d303b4a37c0f5b1b4f2",
+      "gitBlobSha": "e18b7a003e3e3c8d78568c80132afc7651acc468",
+      "bytes": 8938
+    },
+    {
+      "path": "docs/handoffs/P2P_FINISH_PROJECT_PROMPT_20261030.md",
+      "sha256": "294e31a22fc5cf632432eb44fab12ea85b706369b9e61770114c9676288f038b",
+      "gitBlobSha": "5d53b326c91d3b7b63c6375685177e364f360883",
+      "bytes": 11343
+    }
+  ]
+}

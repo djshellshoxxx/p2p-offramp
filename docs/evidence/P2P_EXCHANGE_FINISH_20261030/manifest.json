@@ -51,8 +51,8 @@
     },
     {
       "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-repro.mjs",
-      "sha256": "2efb0842b36eb5857c04edee668b219a6e25064127900049e77b563788fe2ffc",
-      "gitBlobSha": "0b2809f6a667c1ae11cbb1652f8bd691c493f3b7"
+      "sha256": "a7929d243c6a067920e9d2069c58a4b5d7395f1bbfedb3b16be82852e163328d",
+      "gitBlobSha": "71666bed4c5f85b6c9739165b17aaa48b4f68c62"
     },
     {
       "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-green.log",
@@ -66,8 +66,19 @@
     },
     {
       "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-repro.mjs",
-      "sha256": "c727ab44fb6c4d95bfe1935d9a0bc19a2e96f4258968476f72c36e07078f1686",
-      "gitBlobSha": "d98663316d649e012dd3ec736651f24da566c3db"
+      "sha256": "4f004aeab162ded174173c9aefefc85e3d98edd680eab31eae5626a265f8dd9e",
+      "gitBlobSha": "0cdadf118e43f9be40f9ba4449f7b6d560bcf4df"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/lifecycle-harness.mjs",
+      "sha256": "8a5a1a86669709432effcdf95fb80add7b95d75d507174df1fbc14399376e989",
+      "gitBlobSha": "f7585409aa5a54f217d850926c6e3981b35e4247"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/synthetic-fixtures.mjs",
+      "sha256": "d6be1e12443914d93f270bd21d09f536853a9119fd2add7384a07a407994a024",
+      "gitBlobSha": "f5261348ea3e6f55f8ce7a87d24a9e4f97e28e08"
     }
-  ]
+  ],
+  "harnessRevision": "Shared fixed fixtures remove duplicate setup; output equivalence against preserved red/green logs checked 4/4. Original harness version remains in f379dc243cd9164da076c69702c2b5c21898f520 history."
 }

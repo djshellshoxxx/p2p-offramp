@@ -1,0 +1,20 @@
+{
+  "id": 124024298748,
+  "run": 41044252121,
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252121/job/124024298748",
+  "fullLogSha256": "9b768ce55f015cf5f5058b4f4bf7b57379ce2ce0a8c0bc3d7b08dcd46d660290",
+  "fullLogBytes": 69403,
+  "qualification": "Fetched completed exact-source hosted job log; full log retained locally, selected excerpts retained here.",
+  "excerpts": [
+    "2026-10-30T11:19:33.7747304Z Ran 61 tests for test/BasicEscrow.t.sol:BasicEscrowTest",
+    "2026-10-30T11:19:33.9737077Z Suite result: ok. 61 passed; 0 failed; 0 skipped; finished in 13.67ms (11.85ms CPU time)",
+    "2026-10-30T11:19:33.9796933Z Ran 6 tests for test/TermsVector.t.sol:TermsVectorTest",
+    "2026-10-30T11:19:34.0007117Z Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 15.23ms (13.83ms CPU time)",
+    "2026-10-30T11:19:44.4268032Z Ran 10 tests for test/BasicEscrowFuzz.t.sol:BasicEscrowFuzzTest",
+    "2026-10-30T11:19:44.4297863Z Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 10.68s (10.67s CPU time)",
+    "2026-10-30T11:19:52.8282930Z Ran 5 tests for test/BasicEscrowInvariant.t.sol:BasicEscrowInvariantTest",
+    "2026-10-30T11:19:52.8437226Z Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 19.08s (57.26s CPU time)",
+    "2026-10-30T11:19:52.8437917Z Ran 4 test suites in 19.09s (29.79s CPU time): 82 tests passed, 0 failed, 0 skipped (82 total tests)"
+  ]
+}
