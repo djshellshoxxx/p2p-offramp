@@ -1,0 +1,25 @@
+{
+  "result": {
+    "sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+    "merged": true,
+    "message": "Pull Request successfully merged"
+  },
+  "remoteIntegration": "391653eaba946f77057b01fd03d3c234958bcf1d",
+  "main": "c8547859f603f04d3df92e68925b99162594c39d",
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "tree": "634a2ec9e910c31844f9ea7de7e5f4b1cde96ef6",
+  "parents": [
+    "47f9bbee455e7affbc39539489227228eb346a0f",
+    "2d3135b646bf99f63935287a082856ea7fe6b74d"
+  ],
+  "pr14": {
+    "state": "closed",
+    "merged": true
+  },
+  "pr16": {
+    "state": "closed",
+    "merged": true,
+    "byAncestry": true
+  },
+  "authority": "Owner explicitly requested finishing and merging PR14, then approved continuing to the next milestone. No PR approval review submitted."
+}

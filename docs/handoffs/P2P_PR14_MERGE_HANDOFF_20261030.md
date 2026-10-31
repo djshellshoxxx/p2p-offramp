@@ -1,66 +1,64 @@
-# PR #14 merge handoff — 2026-10-30 11:02 UTC
+# PR #14 merged — 2026-10-30 Pacific
 
-**Fixes published; merge pending hosted CI. No merge attempt has been made.** The owner authorized finishing PR #14, making it merge-ready and merging it, then creating this handoff and a prompt to finish the project. No further routine merge permission is needed once the existing acceptance gates pass. Do not submit a PR approval review.
+**Milestone complete: PR #14 merged into the integration branch. Main was not advanced.** The owner explicitly authorized finishing/merging PR #14 and then approved continuing to the next milestone. No GitHub PR approval review was submitted.
 
-## Exact checkpoint
+## Exact source and remote verification
 
-- PR #14: https://github.com/djshellshoxxx/p2p-offramp/pull/14 — open, no longer draft. GitHub reports mergeable=true, mergeable_state=unstable; this is not acceptance.
-- Source/head `2d3135b646bf99f63935287a082856ea7fe6b74d`; tree `634a2ec9e910c31844f9ea7de7e5f4b1cde96ef6`.
-- Runtime/test commit `f379dc243cd9164da076c69702c2b5c21898f520`; runtime blob `888a199d6ec7ab5843c6e57f0e371949de3f33eb`, SHA-256 `263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a`.
-- Target integration `claude/sweet-noether-arf6ne` remains `47f9bbee455e7affbc39539489227228eb346a0f`. Main remains `c8547859f603f04d3df92e68925b99162594c39d`. PR #14 targets integration, not main.
-- Testnet remains `7165626c17d8afb7ad7fce461ae7df9cbfcdba07`.
-- This documentation is published separately on `work/p2p-pr14-finish-handoff-20261030`, based exactly on source `2d3135b`. Its containing Git commit is the documentation SHA; the publication result and PR #14 body record that exact SHA. It does not advance PR #14's tested source or any other writer branch.
+- PR: https://github.com/djshellshoxxx/p2p-offramp/pull/14 — verified closed/merged.
+- Merge and remote integration `claude/sweet-noether-arf6ne`: **391653eaba946f77057b01fd03d3c234958bcf1d**.
+- Reviewed/tested PR head: **2d3135b646bf99f63935287a082856ea7fe6b74d**. Runtime implementation: `f379dc243cd9164da076c69702c2b5c21898f520`.
+- Merge tree: **634a2ec9e910c31844f9ea7de7e5f4b1cde96ef6**, exactly equal to the reviewed head and GitHub's tested synthetic merge tree. Merge parents: `47f9bbee455e7affbc39539489227228eb346a0f`, `2d3135b646bf99f63935287a082856ea7fe6b74d`.
+- Main remains **c8547859f603f04d3df92e68925b99162594c39d**. Testnet remains `7165626c17d8afb7ad7fce461ae7df9cbfcdba07`.
+- Runtime blob `888a199d6ec7ab5843c6e57f0e371949de3f33eb`; SHA-256 `263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a`.
+- Prior documentation SHA **eace75c2291546bfd53bde1116833877ea51b92e** is retained as the first parent of the updated documentation checkpoint. The new checkpoint also retains merge `391653e` as a parent. Resolve its exact documentation SHA from this file's containing commit on `work/p2p-pr14-finish-handoff-20261030`; it is recorded in PR #14's publication links. This branch contains documentation/evidence only beyond the merged source.
 
-Read `P2P_FINISH_PROJECT_PROMPT_20261030.md` for the complete continuation prompt. The earlier `P2P_EXCHANGE_FINISH_20261030.md` describes the source milestones; this handoff supersedes its pending-review and old-Sonar status.
+Original exchange/test-repair/review branch refs remain intact. PR #16 now reports merged by retained ancestry; no separate source import was needed. The queued-CI handoff and original red evidence remain in history.
 
-## Completed changes and preservation
+## Completed behavior
 
-`packages/exchange/src/exchange.ts` now rejects late results after close, stale/replaced sessions, expired advertisements/terms/messages, superseded takes, and replay-capacity overbooking before synchronous mutation. Accepted sessions cannot restart and consume the existing session capacity until advertisement expiry; cancelled/rejected sessions remain restartable. Offers are size-checked before allocating a defensive copy.
+The merged runtime refuses late results after close, stale/replaced sessions, expired advertisements/terms/messages, superseded takes and replay overbooking before state mutation. Offers are size-checked before copying. Accepted sessions cannot restart until advertisement expiry and count toward the bounded session capacity; cancelled/rejected sessions can restart.
 
-`packages/exchange/test/exchange.test.mjs` retains PR #17's repaired wrapper for the frozen provider, with its original assertions. `packages/exchange/test/async-boundaries.test.mjs` adds twelve real-provider schedules for expiry, same/different-address replacement generations, outgoing/incoming replay races, late takes against newer terminal sessions, and pre-copy size rejection. Each new test has a ten-second deadline.
+Product paths changed by PR #14: `packages/exchange/src/exchange.ts`, `packages/exchange/test/exchange.test.mjs` (inherited exact PR #17 wrapper repair), and `packages/exchange/test/async-boundaries.test.mjs` (twelve new real-provider regressions). Other changes preserve review/evidence/handoffs, use native source imports instead of transformed-source evaluation and share synthetic harness setup. No app/runtime/schemas/dependency/workflow/security setting changed. PR #17 and PR #16 histories are retained, not recreated.
 
-The old close evidence harness now uses native imports and fixed synthetic fixtures instead of evaluating transformed source. The two new reviewer harnesses share setup, preserving the exact RED/GREEN observations. No scanner suppression, exclusions, workflow or security-setting changes were made.
+## Exact-head hosted qualification
 
-The runtime commit retains PR #17 `adfbec52f964d9b07c571b8924d31fa03d54e03a` and PR #16 `9f80c9b27b943b30409710dea76a53d97a761832` as parents. Original branches and red evidence remain. Remote recursive-tree comparisons verified all 1,411 original PR #17 blobs retained, with only the explicit source/evidence allowlist changed; no deletion or unrelated source drift. The subsequent evidence-only tree changed six named files and left the runtime/test blobs unchanged.
+All twelve push/pull-request Actions jobs completed successfully on `2d3135b` before merge. The post-merge tree is identical; this does not claim that separately triggered post-merge jobs have completed.
 
-## Review and executed evidence
+| Check | Result and evidence |
+|---|---|
+| Node suite | Job 124024299266: 795 tests, **794 pass, 0 fail/cancelled, 1 skip**. The cast-calldata comparison is skipped because Foundry is absent in that Node job. All twelve new real-provider boundary tests pass. |
+| Typecheck/build/boundaries | Same job: pinned typecheck and app build, import boundaries pass. |
+| Build policy / fuzz harness | 18/18 and 26/26 respectively, zero skips. This is not a newly executed 4,096-case campaign. |
+| Browser | Job 124024299059: browser foundation/lifecycle, emitted web/testnet and private G16/release suites pass. Local fixtures; no deployment. |
+| Specifications | Jobs 124024298694 and 124024298439 pass; spec unit tests 12/12. |
+| Forge | Job 124024298748: 82 tests pass, zero failed/skipped, committed ABI check succeeds. This does not erase the separate Node skip. |
+| Local EVM fixtures | Job 124024298934: local trade 8/8, reconciliation 5/5, Sepolia kit 9 checks and Sepolia trade 13 checks pass. Local fixture execution, not live-network deployment. |
+| Sonar | Check 124025066415 passes, 0% new-code duplication, zero hotspots; two non-gate issues are reported. Original security/duplication failures remain historical evidence. |
+| Snyk / automated review | Snyk succeeds with no manifest change. CodeRabbit skips non-default-base auto review; it is not counted as substantive review. |
 
-Two separate read-only reviews covered specification behavior and bounded-resource/fixed-error/client authority standards. They found a late take replacing a newer accepted/cancelled session and a 1 MiB allocation before the offer cap. Both were reproduced before repair. Both focused re-reviews found no remaining source blocker.
+Workflows: vault `41044252146`, EVM `41044252121`, inventory `41044252066`. Full hosted job logs were fetched and hashed locally; selected excerpts, counts, URLs and exact checks are committed under `docs/evidence/P2P_PR14_MERGE_20261030/`. Original full local logs remain in `review/hosted-<job>.log` in the finishing snapshot. The evidence JSON states this distinction.
 
-Local executions against actual exchange/messages/machine with explicitly mocked crypto/review:
-- Two close schedules return CLOSED with sessionCount=0.
-- Four original async contracts pass: ad expiry, acceptance deadline, replacement identity, outgoing replay bound.
-- Both late-take schedules return OUT_OF_ORDER and preserve the newer terminal session/address.
-- A 1 MiB oversized offer returns LIMIT_EXCEEDED with zero copies and unchanged taken state.
-- The specification reviewer ran seven additional lifecycle assertions covering restart, failed/superseded-token cleanup, pending capacity, accepted retention/exact-expiry reclamation, and close; all passed.
-- The shared-harness refactor reproduces all four preserved red/green observation logs exactly. The new normal test file passes syntax checking.
+## Substantive review and remaining package limitations
 
-These are scheduling/state probes, not cryptographic qualification, an independent project audit, funded-value proof or release acceptance. **The twelve new real-provider tests and full pinned typecheck/build suite have not yet executed in this session's environment or hosted CI.** Prior PR #17 evidence (782 passes, one cast-calldata/Foundry skip) belongs to its old source and does not qualify this repair.
+Separate specification and standards reviewers found no remaining merge blocker after the reproduced fixes. Follow-up reviews assessed both Qodo findings and reproduced the described behavior:
 
-## Exact-head hosted status and blocker
+1. Buyer acceptance prepared before the deadline can reach the seller at/after it, producing local buyer accepted and seller offered/EXPIRED. Receipt-time refusal is retained. The exact lifecycle spec explicitly anticipates relay delay and ends accept eligibility at acceptBefore; acceptance is a local record, not delivery acknowledgment or funding. Sender timestamps are authenticated claims, not trusted time. The committed synthetic three-case probe covers receipt before/at/after the deadline.
+2. Accepted sessions hold the bounded capacity until ad expiry. The standards probe with maxSessions=1 verified outgoing/incoming refusal, blocked same-pair restart, and successful reclamation for a different live ad exactly at expiry. Ad-lifetime slot starvation is an explicit availability limit; a separate tombstone map or caller release API needs its own bounded policy.
 
-At the checkpoint source `2d3135b`:
-- SonarCloud check **124025066415 passed**, with 0% new-code duplication, zero security hotspots, and two non-gate issues reported. Earlier source `f379dc2` failed duplication 15.9% against maximum 3%; the follow-up shared evidence setup and passed. Original PR #14's security failure is no longer the current failed gate. This does not resolve PR #10/#12 parent gates.
-- CodeRabbit check **124024327323 skipped**. Do not count it as substantive review; the separate source reviews above are the review evidence.
-- Snyk previously reported success with no manifest changes; recheck current status before merge.
-- All twelve Actions jobs remain **queued**, with no logs/results: schemas-and-crypto, browser, specs, inventory, forge and local-trade, each triggered by push and pull request.
+Both findings are retained as app/API design obligations, not represented as nonexistent. See `review-disposition.md` in the new evidence directory. App composition must expose local preparation/delivery/expiry appropriately and preserve no-restart/replay constraints. This is package qualification, not an independent whole-codebase audit, interoperability proof or release acceptance.
 
-PR workflows: Vault foundation **41044252146**, EVM escrow **41044252121**, Specification inventory **41044252066**. Push counterparts: **41044244479**, **41044244485**, **41044244570**. Exact IDs/status summaries are in `docs/evidence/P2P_EXCHANGE_FINISH_20261030/hosted-checkpoint.json`. Required schemas/typecheck/build, normal Node tests, browser, build-policy/fuzz/spec and EVM qualification remain pending. No test pass is inferred from queueing, and no merge is attempted until these gates pass.
+## Current other work and next milestone
 
-Local dependency access was **denied**: `npm view @noble/curves@2.4.0 version --fetch-retries=0 --fetch-timeout=10000` failed EPERM connecting to the managed proxy at 172.31.14.13:8080. No alternate download/credential/route was used; no usable offline dependency cache exists here. The GitHub connector publishes and reads successfully. Prior unsupported annotations access was not retried. The CI queue cause is unknown; no runner, billing or security settings were changed.
+- PR #18 candidate is **68fb46920431e3311c78f931432bc4a21d066c17**, based on source merge `eeb2a81323b9093864d6ec53b113949dbb710d25`. It already contains runtime `f379dc2` and the twelve new tests, plus PR #15 relay, review, validation, screenshots and gate notes. It does not yet include evidence cleanup `2d3135b` in its own ancestry. Its owner retains the candidate branch; do not overwrite it or duplicate the runtime fixes. Reconcile the newly merged integration history with the owner and qualify the resulting merge tree/current checks.
+- PR #15 relay **e0961edc8cb64b466a2a3193aa37158bfc8c3487** remains separately owned. This milestone does not merge it or transfer ownership.
+- Validation branch now **11ce9e42bea9e5f27e303ee6db66e463d38ebdda**, preserving `cc9a0a4` and `9eed65d`. Its hosted-workflow report is consistent with this session's log-level results. Its local candidate tests were on `fa115bb`, not a new claim for every subsequent head.
+- App/trade/runtime/Worker/schemas remain reserved to their respective session. Reconcile ownership before editing. Unique local G16 **beb9866ed39452b603554d364c98fe025372da3a** remains inaccessible/unincorporated here; preserve it and retain `saved-review.ts` on any coordinated extraction.
+- Parent PR #10/#12 acceptance, candidate integration and lean EVM app acceptance remain separate. Refresh their live gates; do not transfer PR #14's passing Sonar or tests to them.
 
-## Exact next merge action
+Next milestone: coordinate candidate/relay ownership, reconcile this merge and the latest validation evidence without losing any history, then qualify that combined source. Once app ownership is clear, implement dependency-ready composition and local two-party EVM acceptance. The detailed `P2P_FINISH_PROJECT_PROMPT_20261030.md` supplies the continuation sequence, controls and eventual whole-code/deep security review.
 
-1. Refresh PR #14's current head/base, checks, statuses and reviews; inspect new worker commits before writing. Do not blindly reuse this checkpoint if either ref moved.
-2. Wait for the current-head required jobs. Fetch logs, preserve original failures/skips, fix demonstrated failures in the owned exchange scope, and rerun only appropriate affected checks. Do not weaken tests/compiler options or assume the Foundry-dependent Node skip disappeared.
-3. When exact-head CI, security gates and substantive review pass, merge PR #14 into its existing integration base with a normal merge and expected head `2d3135b646bf99f63935287a082856ea7fe6b74d` (or the freshly reviewed successor). The merge is authorized; no PR approval review is authorized. If denied, stop the action and report exact reason. Recheck uncertain outcomes before any retry.
-4. Verify PR merged status and remote integration merge SHA. Preserve branches. Record source/check/documentation SHAs, actual test counts and any skips in a follow-up checkpoint. Parent integration/main acceptance remains separate.
-5. Reconcile the repaired history with PR #18 and review PR #15 with their owners, then follow the project-completion prompt.
+## Access and boundaries
 
-## Other branches and ownership
+No merge/upload was denied in this milestone. GitHub confirmed the merge and remote ref; no uncertain write remains. Earlier local npm access failed EPERM at the managed proxy and was not retried or bypassed; current full-suite evidence is hosted and independently reported by the validation executor. This workspace remains a partial materialized snapshot, not another executor's checkout or unpublished work.
 
-PR #15 relay `e0961edc8cb64b466a2a3193aa37158bfc8c3487` remains separately owned and unmodified. App/trade/runtime/Worker/schemas ownership remains reserved; this task did not edit those files. PR #18 `31bbab0db07163c61b31dab75733e711440372b7` contains the old exchange runtime plus compatible relay/validation/screenshots; do not let consolidation overwrite this repair. Coordinate incorporation into that candidate and requalify the combined source.
-
-Validation `cc9a0a4baa2ad11b9efe4ada639a809542a7c5c9` now preserves local checkpoint `9eed65d`. The unique G16 branch at `beb9866ed39452b603554d364c98fe025372da3a` remains inaccessible/unincorporated here; preserve it and coordinate extraction with schemas/runtime owner, keeping `saved-review.ts` exported. The local workspace used here is a partial materialized snapshot, not the original full checkout or another executor's unpublished work.
-
-ReleaseEnabled=0, connectOrigins=[], client-only/noncustodial and profile/data-loss boundaries remain intact. No deployment, live funds, new credentials, security settings, custodial-ledger merge, paid infrastructure or paid Claude call occurred. No configurable/measured prompt caching was exposed.
+Keep ReleaseEnabled=0, connectOrigins=[], client-side/noncustodial, profile cap 16, trust/resource/recovery/data-loss and unknown-outcome controls. No deployment, live funds, new credentials, security settings, custodial-ledger merge, paid infrastructure, paid Claude call or measured prompt-cache claim occurred. No release authority is implied.

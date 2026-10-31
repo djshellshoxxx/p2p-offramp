@@ -1,0 +1,29 @@
+{
+  "qualification": "actual exchange source with synthetic crypto/review; local records, no delivery guarantee or custody evidence",
+  "observations": [
+    {
+      "acceptedAt": 149,
+      "acceptBefore": 150,
+      "receiptAt": 149,
+      "result": "SUCCESS",
+      "buyerState": "accepted",
+      "sellerState": "accepted"
+    },
+    {
+      "acceptedAt": 149,
+      "acceptBefore": 150,
+      "receiptAt": 150,
+      "result": "EXPIRED",
+      "buyerState": "accepted",
+      "sellerState": "offered"
+    },
+    {
+      "acceptedAt": 149,
+      "acceptBefore": 150,
+      "receiptAt": 151,
+      "result": "EXPIRED",
+      "buyerState": "accepted",
+      "sellerState": "offered"
+    }
+  ]
+}
