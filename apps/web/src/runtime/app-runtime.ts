@@ -140,11 +140,15 @@ export class AppRuntime {
       if (operation === 'init' || operation === 'lock' || operation === 'dispose' ||
           (pending.metadata.operation === 'unlock' && value.handle.profileId !== pending.metadata.profileId)) return false;
       if (!opening && (this.#current.state !== 'unlocked' || !sameHandle(this.#current.handle, value.handle))) return false;
+      // Opening must establish an enforceable idle deadline before any handle becomes observable.
+      // An unavailable or regressed clock is terminal even when the Worker reply itself is valid.
+      if (opening) {
+        try { this.#arm(); } catch { this.#close('UNSUPPORTED_ENVIRONMENT'); return false; }
+      }
       const handle = this.#current.state === 'unlocked' && sameHandle(this.#current.handle, value.handle) ? this.#current.handle : value.handle;
       const changed = this.#current.state !== 'unlocked' || this.#current.handle !== handle;
       this.#current = Object.freeze({ state: 'unlocked', handle });
       if (changed) this.#notify();
-      if (opening) this.#arm();
     } else {
       if (opening) return false;
       this.#resetStatus();

@@ -258,20 +258,27 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       if (!registry) { publish({ saved: Object.freeze({ kind: 'failed', action: 'load', code: 'REGISTRY_NOT_READY' }) }); return; }
       const lookup = registry;
       publish({ saved: Object.freeze({ kind: 'busy', action: 'load' }) });
+      const abort = new AbortController(); savedAbort = abort;
+      const owned = new Set<Uint8Array>();
+      const own = (bytes: Uint8Array): void => { owned.add(bytes); transient.add(bytes); };
+      try {
       let listed: RuntimeResult<RuntimeSavedReviews>;
-      const abort=new AbortController(); savedAbort=abort;
-      try { listed = await store.listTermsReviews(abort.signal); } catch { listed = { ok: false, error: { code: 'PROTOCOL_ERROR', messageKey: 'runtime.error.protocol_error' } }; }
-      if (mine !== savedGeneration || disposed) { if(listed.ok)for(const item of listed.value.items)item.bytes.fill(0); return; }
+      try { listed = await store.listTermsReviews(abort.signal); }
+      catch { listed = { ok: false, error: { code: 'PROTOCOL_ERROR', messageKey: 'runtime.error.protocol_error' } }; }
+      if (listed.ok) {
+        // Runtime replies transfer fresh buffers to this controller. Own them before validation or awaits so
+        // lock/dispose clears even an invalid list or an uncooperative review. A retained review is never borrowed.
+        for (const item of listed.value.items) if (item.bytes instanceof Uint8Array && !snapshot.reviews.some(entry => entry.bytes === item.bytes)) own(item.bytes);
+      }
+      if (mine !== savedGeneration || disposed) return;
       if (!listed.ok) { publish({ saved: Object.freeze({ kind: 'failed', action: 'load', code: listed.error.code }) }); return; }
       // Re-review first; merge afterwards into the snapshot as it is then, so imports or removals made while the
       // checks were running are kept, not overwritten by a copy taken before the awaits.
       const checked: { readonly recordId: string; readonly source: ReviewSource; readonly bytes: Uint8Array; readonly result: TermsReviewResult }[] = [];
-      const owned: Uint8Array[]=[];
-      try {
       if(listed.value.items.length>MAX_SESSION_REVIEWS || new Set(listed.value.items.map(item=>item.recordId)).size!==listed.value.items.length)throw Error();
       for (const item of listed.value.items) {
         if(!/^[0-9a-f]{32}$/.test(item.recordId)||!(item.bytes instanceof Uint8Array)||item.bytes.length>MAX_TERMS_REVIEW_BYTES||!['file','synthetic-sample'].includes(item.source))throw Error();
-        const original=item.bytes.slice(), copy=item.bytes.slice(); owned.push(original,copy);transient.add(original);transient.add(copy);
+        const original=item.bytes.slice(), copy=item.bytes.slice(); own(original); own(copy);
         let result: TermsReviewResult;
         try { result = await review(lookup, copy); } catch { result = { ok: false, code: 'UNAVAILABLE' }; }
         if (mine !== savedGeneration || disposed) return;
@@ -292,8 +299,8 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
         const accepted = item.result.value;
         const index = reviews.findIndex(entry => entry.savedId === item.recordId || (entry.savedId === null && entry.source === item.source && sameReview(entry.review, accepted)));
         // The fresh result replaces any earlier one, so the display always reflects today's registry and checks.
-        if (index >= 0) reviews[index] = Object.freeze({ ...reviews[index]!, review: accepted, source:item.source, bytes:item.bytes.slice(), savedId: item.recordId });
-        else reviews.push(Object.freeze({ localId: localIdFrom(random(16)), review: accepted, source: item.source, bytes: item.bytes.slice(), savedId: item.recordId, loaded: true }));
+        if (index >= 0) reviews[index] = Object.freeze({ ...reviews[index]!, review: accepted, source:item.source, bytes:item.bytes, savedId: item.recordId });
+        else reviews.push(Object.freeze({ localId: localIdFrom(random(16)), review: accepted, source: item.source, bytes: item.bytes, savedId: item.recordId, loaded: true }));
       }
       // Reviews that claim a record the profile no longer holds are not saved any more.
       const present = new Set(listed.value.items.map(item => item.recordId));
@@ -305,7 +312,13 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       wipe(snapshot.reviews.filter(item=>!kept.some(entry=>entry.bytes===item.bytes)));
       publish({ reviews: kept, job, unreviewable: Object.freeze(unreviewable), saved: unreviewable.length ? Object.freeze({kind:'failed',action:'load',code:'INVALID_SAVED_REVIEW'}) : Object.freeze({ kind: 'done', action: 'load', skipped: listed.value.skipped }) });
       } catch {if(mine===savedGeneration&&!disposed)unavailable('load','INVALID_SAVED_REVIEW');}
-      finally {for(const bytes of owned){bytes.fill(0);transient.delete(bytes);} if(savedAbort===abort)savedAbort=undefined;}
+      finally {
+        for (const bytes of owned) {
+          if (!snapshot.reviews.some(entry => entry.bytes === bytes)) bytes.fill(0);
+          transient.delete(bytes);
+        }
+        if (savedAbort === abort) savedAbort = undefined;
+      }
     },
     async deleteSaved(recordId: string, store: SavedReviewStore) {
       if (disposed || snapshot.saved.kind === 'busy') return;
@@ -320,6 +333,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       const reviews = bounded(snapshot.reviews.filter(entry => !gone.includes(entry.localId))
         .map(entry => entry.savedId === recordId ? Object.freeze({ ...entry, savedId: null }) : entry));
       const job = snapshot.job.kind === 'accepted' && gone.includes(snapshot.job.localId) ? Object.freeze({ kind: 'idle' } as const) : snapshot.job;
+      wipe(snapshot.reviews.filter(item => !reviews.some(entry => entry.bytes === item.bytes)));
       publish({ reviews, job, unreviewable: Object.freeze(snapshot.unreviewable.filter(entry => entry.recordId !== recordId)),
         saved: Object.freeze({ kind: 'done', action: 'delete', skipped: 0 }) });
     },

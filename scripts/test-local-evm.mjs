@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import { EventEmitter } from 'node:events';
 import { fixture } from '../packages/escrow-evm/test/helpers.mjs';
 import { RegistryService, reviewTermsBytes, encodePrivateAgreement } from '../packages/domain/index.ts';
 import { EvmWalletAdapter } from '../packages/wallet/src/evm-adapter.ts';
@@ -44,7 +45,7 @@ try {
   await s.finalize();
   val(await reader.validateLive('local-evm','escrow-local-v1'));
   let unknownSend=false;
-  const ports=s.secrets.slice(0,2).map(key=>({request:async({method,params=[]})=>{
+  const ports=s.secrets.slice(0,2).map(key=>{const events=new EventEmitter();return{on:events.on.bind(events),removeListener:events.removeListener.bind(events),request:async({method,params=[]})=>{
     if(method==='eth_requestAccounts'||method==='eth_accounts')return[key.address.toLowerCase()];
     if(method==='eth_signTypedData_v4'){
       const typed=JSON.parse(params[1]),types={...typed.types};delete types.EIP712Domain;
@@ -57,7 +58,7 @@ try {
       return hash;
     }
     return s.rpc.request({method,params});
-  }}));
+  }};});
   const adapters=ports.map((port,index)=>new EvmWalletAdapter(port,`local-fixture-${index}`,registry));
   const sessions=await Promise.all(adapters.map(adapter=>adapter.connect('local-evm').then(val)));
   const intents=new Map(), termSets=new Map();

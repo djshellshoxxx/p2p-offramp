@@ -294,8 +294,9 @@ class EvmLifecycle implements EvmTxLifecycle {
       if (external?.aborted) { await this.#cancelPrepared([intentId]); return stop('CANCELLED'); }
       // Durable send-started marker (prepared -> broadcast-unknown CAS). Its failure means the wallet is never called.
       unwrap(await this.#serial(() => this.#journal.markSending(intentId)));
-      // The marker is conservative: if the wallet changed meanwhile, stop here and leave reconciliation to classify it.
-      if (this.#generation !== generation || this.#disposed) return stop('BROADCAST_UNKNOWN');
+      // The marker is conservative: cancellation or a changed wallet during its durable write must
+      // stop before the send-capable call and leave reconciliation to classify the recorded marker.
+      if (external?.aborted || this.#generation !== generation || this.#disposed) return stop('BROADCAST_UNKNOWN');
       sendStarted = true;
       let result: unknown;
       try {

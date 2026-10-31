@@ -79,3 +79,12 @@ test('disposal promptly settles held validator and provider work without caller 
   assert.equal(s.events.includes('known-hash'),false);if(stage==='validator')assert.equal(s.events.includes('eth_sendTransaction'),false);
  }
 });
+test('exceptions during or after a durable marker preserve an unknown attempt without sending',async()=>{
+ for(const phase of ['marker','final-accounts','final-chain']){
+  const s=setup(),mark=s.journal.markSending,request=s.provider.request;
+  s.journal.markSending=async(...args)=>{await mark(...args);if(phase==='marker')throw Error('SECRET marker readback');return success(undefined);};
+  s.provider.request=async args=>{if(s.state()==='broadcast-unknown'&&args.method===(phase==='final-accounts'?'eth_accounts':phase==='final-chain'?'eth_chainId':'never'))throw Error('SECRET provider detail');return request(args);};
+  err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');assert.equal(s.events.includes('eth_sendTransaction'),false);assert.equal(s.state(),'broadcast-unknown');
+  err(await s.execution.submit(s.intent,0),'CONFLICT');
+ }
+});

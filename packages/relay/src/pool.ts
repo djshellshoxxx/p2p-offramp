@@ -9,6 +9,8 @@
  * Known limits (see spec G21): the broker does not hand the registered URL to the caller, so `relays[].url` comes from
  * the same trusted composition root as the registry and is not cross-checked here. The platform WebSocket assembles a
  * whole message before this code sees it, so the frame cap bounds parse/crypto cost, not transient network buffering.
+ * Read and publication sockets share maxRelays slots, including sockets closing without a close event. Publications
+ * return LIMIT_EXCEEDED before opening any socket when all targets cannot fit; they are never queued or retried.
  */
 import type { Permit, SessionTransportPolicy, TransportScope } from '../../transport/index.ts';
 import type { RouteError } from '../../transport/index.ts';
@@ -97,6 +99,8 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const seenIds = new Map<string, true>();
   const subs = new Map<string, Sub>();
   const publications = new Set<AbortController>();
+  // Read and short-lived publish sockets share one physical budget. Calling close is not proof of closure.
+  const sockets = new Set<object>();
   const seenEndpoints = new Set<string>();
   const recs: RelayRec[] = [];
   for (const cfg of options.relays) {
@@ -126,7 +130,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     if (closed || subs.size === 0) return;
     let count = recs.filter(active).length;
     for (const r of recs) {
-      if (count >= maxActive) return;
+      if (count >= maxActive || sockets.size >= maxActive) return;
       if (r.state === 'idle') { count++; void start(r); }
     }
   }
@@ -226,6 +230,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   }
   /** Authorize through G05, capture, and open one socket inside the single-shot scope.run. */
   async function open(r: RelayRec, method: 'read' | 'publish', signal?: AbortSignal): Promise<{ socket: RelaySocketLike; scope: TransportScope } | RouteError> {
+    if (sockets.size >= maxActive) return 'LIMIT_EXCEEDED';
     const permit: Permit | RouteError = options.broker.authorize({ channel: 'relay', endpointId: r.cfg.endpointId, method });
     if (typeof permit === 'string') return permit;
     let scope: TransportScope | RouteError;
@@ -235,6 +240,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     // Keep ownership across scope.run's async boundary, including an open socket whose
     // successful result is discarded by a concurrent broker/caller cancellation.
     let socket: RelaySocketLike | null = null;
+    let capacityRefused = false;
     const discard = (): void => {
       if (socket === null) return;
       socket.onopen = socket.onclose = socket.onerror = socket.onmessage = null;
@@ -253,7 +259,24 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       const timer = setTimeout(() => finish(null), timing.connectTimeoutMs);
       signal.addEventListener('abort', onAbort, { once: true });
       try {
-        socket = connect(r.cfg.url, signal);
+        if (sockets.size >= maxActive) { capacityRefused = true; finish(null); return; }
+        const token = {}; sockets.add(token);
+        let native: RelaySocketLike;
+        try { native = connect(r.cfg.url, signal); }
+        catch (error) { sockets.delete(token); throw error; }
+        const wrapped: RelaySocketLike = { onopen: null, onmessage: null, onclose: null, onerror: null,
+          send: text => native.send(text), close: () => native.close() };
+        // Internal teardown may clear public handlers; the native close handler still owns slot release.
+        native.onopen = event => { if (sockets.has(token)) wrapped.onopen?.(event); };
+        native.onmessage = event => { if (sockets.has(token)) wrapped.onmessage?.(event); };
+        native.onerror = event => { if (sockets.has(token)) wrapped.onerror?.(event); };
+        native.onclose = event => {
+          if (!sockets.delete(token)) return;
+          native.onopen = native.onmessage = native.onerror = null;
+          wrapped.onclose?.(event);
+          queueMicrotask(fill);
+        };
+        socket = wrapped;
         if (done) { discard(); return; }
         socket.onopen = () => finish(socket);
         socket.onclose = () => finish(null);
@@ -261,7 +284,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       } catch { finish(null); }
     }));
     if (!result.ok) { discard(); leased.dispose(); return result.error; }
-    if (result.value === null) { discard(); leased.dispose(); return 'ROUTE_UNAVAILABLE'; }
+    if (result.value === null) { discard(); leased.dispose(); return capacityRefused ? 'LIMIT_EXCEEDED' : 'ROUTE_UNAVAILABLE'; }
     if (!leased.current()) { discard(); leased.dispose(); return 'CANCELLED'; }
     return { socket: result.value, scope: leased };
   }
@@ -278,6 +301,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       return;
     }
     if (typeof opened === 'string') {
+      if (opened === 'LIMIT_EXCEEDED') { setState(r, 'idle', opened); emitStatus(); return; }
       // Policy refusals are final for this session until an explicit retry: no timers, no direct fallback.
       if (opened === 'POLICY_BLOCKED' || opened === 'INVALID_ENDPOINT') fail(r, 'blocked', opened);
       else fail(r, null, opened);
@@ -385,7 +409,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       try { valid = checked !== null && options.verifier.verifyEvent(checked) === true; } catch { valid = false; }
       if (checked === null || !valid || signal?.aborted) return refuse('INVALID_FILTER');
       const targets = recs.filter(r => r.state !== 'banned').slice(0, maxActive);
-      if (inFlight + targets.length > POOL_LIMITS.maxPublishInFlight) return refuse('LIMIT_EXCEEDED');
+      if (inFlight + targets.length > POOL_LIMITS.maxPublishInFlight || sockets.size + targets.length > maxActive) return refuse('LIMIT_EXCEEDED');
       inFlight += targets.length;
       try { return { ok: true as const, value: Object.freeze(await Promise.all(targets.map(r => publishOne(r, checked, signal)))) }; }
       finally { inFlight -= targets.length; }

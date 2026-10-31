@@ -57,7 +57,7 @@ function record(input: unknown, keys: readonly string[]): Record<string, unknown
 }
 function array(input: unknown, max: number): unknown[] {
   return checked(() => {
-    if (!meta(() => Array.isArray(input)) || meta(() => Object.getPrototypeOf(input)) !== Array.prototype) return fail();
+    if (typeof input !== 'object' || input === null || !meta(() => Array.isArray(input)) || meta(() => Object.getPrototypeOf(input)) !== Array.prototype) return fail();
     const length = meta(() => Object.getOwnPropertyDescriptor(input, 'length'))?.value as unknown;
     if (typeof length !== 'number' || length > max || meta(() => Reflect.ownKeys(input)).length !== length + 1) return fail('LIMIT_EXCEEDED');
     return Array.from({ length }, (_, index) => { const descriptor = meta(() => Object.getOwnPropertyDescriptor(input, String(index))); if (!descriptor || !('value' in descriptor)) return fail(); return descriptor.value; });

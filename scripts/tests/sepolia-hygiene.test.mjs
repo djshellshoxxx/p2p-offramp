@@ -1,7 +1,7 @@
 /** Secret hygiene of the Sepolia kit that needs no Foundry or chain: Forge child environments and RPC URL transport. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { forgeEnv, isLoopbackUrl, rpcClient } from '../sepolia/lib.mjs';
+import { forgeEnv, isLoopbackUrl, MAX_RPC_REVERT_BYTES, rpcClient } from '../sepolia/lib.mjs';
 
 const KEY = `0x${'11'.repeat(32)}`;
 const parent = {
@@ -56,6 +56,36 @@ test('RPC requests capture independent ids and prohibit redirects/credentials wi
   globalThis.fetch=async()=>{throw Error('SECRET rpc provider details');};
   await assert.rejects(rpc('x'),error=>error.code==='RPC_UNREACHABLE'&&!/SECRET/.test(error.message));
  }finally{globalThis.fetch=original;}
+});
+
+test('control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes', async () => {
+  const original = globalThis.fetch;
+  let data = '0xAABB';
+  try {
+    globalThis.fetch = async (_url, init) => {
+      assert.equal(init.redirect, 'error');
+      assert.equal(init.credentials, 'omit');
+      return Response.json({ jsonrpc: '2.0', id: JSON.parse(init.body).id,
+        error: { code: 3, message: 'SECRET provider detail', data, arbitrary: 'SECRET' } });
+    };
+    const rpc = rpcClient('https://rpc.example/SECRET');
+    await assert.rejects(rpc('eth_call', [], { includeRevertData: true }), error => {
+      assert.equal(error.revertData, '0xaabb');
+      assert.equal(error.code, 'RPC_ERROR_3');
+      assert.equal(Object.hasOwn(error, 'data'), false);
+      assert.equal(Object.hasOwn(error, 'arbitrary'), false);
+      assert.doesNotMatch(JSON.stringify(error), /SECRET/);
+      assert.doesNotMatch(error.message, /SECRET/);
+      return true;
+    });
+    for (const invoke of [() => rpc('eth_call'), () => rpc('eth_chainId', [], { includeRevertData: true })]) {
+      await assert.rejects(invoke(), error => !Object.hasOwn(error, 'revertData'));
+    }
+    for (const invalid of ['0x1', 'SECRET', { data: '0xaabb' }, `0x${'aa'.repeat(MAX_RPC_REVERT_BYTES + 1)}`]) {
+      data = invalid;
+      await assert.rejects(rpc('eth_call', [], { includeRevertData: true }), error => error.code === 'RPC_ERROR_3' && !Object.hasOwn(error, 'revertData'));
+    }
+  } finally { globalThis.fetch = original; }
 });
 
 test('deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send', async()=>{

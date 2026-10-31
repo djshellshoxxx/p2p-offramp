@@ -27,7 +27,7 @@ function memoryStore() {
       if (rows.size >= 8) return err('LIMIT_EXCEEDED');
       const recordId = (++next).toString(16).padStart(32, '0'); rows.set(recordId, { source: src, bytes: bytes.slice() }); return ok({ recordId });
     },
-    async listTermsReviews() { return ok({ items: [...rows].map(([recordId, row]) => ({ recordId, source: row.source, bytes: row.bytes })), skipped: 0 }); },
+    async listTermsReviews() { return ok({ items: [...rows].map(([recordId, row]) => ({ recordId, source: row.source, bytes: row.bytes.slice() })), skipped: 0 }); },
     async deleteTermsReview(recordId) { return rows.delete(recordId) ? ok({ recordId }) : err('NOT_FOUND'); },
   };
 }
@@ -304,4 +304,86 @@ test('unlock or create retires a pending activity waiter without a protocol clos
     if (oldWindow === undefined) delete globalThis.window; else globalThis.window = oldWindow;
     if (oldDocument === undefined) delete globalThis.document; else globalThis.document = oldDocument;
   }
+});
+
+
+test('deleting a loaded review wipes retained snapshot bytes before later lock or disposal', async () => {
+  const store = memoryStore(), trade = await controller();
+  await store.saveTermsReview('file', enc('ok:loaded-private'));
+  await trade.loadSaved(store);
+  const held = trade.getSnapshot().reviews[0], recordId = held.savedId;
+  assert.equal(dec(held.bytes), 'ok:loaded-private');
+  await trade.deleteSaved(recordId, store);
+  assert.equal(trade.find(held.localId), null);
+  assert.ok(held.bytes.every(byte => byte === 0), 'deletion wipes bytes before dropping the last controller reference');
+  trade.forgetSaved(); trade.dispose();
+  assert.ok(held.bytes.every(byte => byte === 0));
+});
+
+for (const mode of ['accepted', 'rejected', 'oversized', 'too-many']) {
+  test(`load wipes every transferred runtime buffer on ${mode} completion`, async () => {
+    const trade = await controller();
+    const bytes = mode === 'oversized' ? new Uint8Array(65537).fill(1) : enc(mode === 'rejected' ? 'bad:UNKNOWN_NETWORK' : 'ok:runtime-private');
+    const items = Array.from({ length: mode === 'too-many' ? 9 : 1 }, (_, index) => ({ recordId: String(index + 1).padStart(32, '0'), source: 'file', bytes: index ? enc('ok:extra') : bytes }));
+    await trade.loadSaved({ listTermsReviews: async () => ok({ items, skipped: 0 }) });
+    for (const item of items) assert.ok(item.bytes.every(byte => byte === 0), 'the transferred runtime buffer is cleared on every result path');
+    if (mode === 'accepted') {
+      assert.equal(dec(trade.getSnapshot().reviews[0].bytes), 'ok:runtime-private', 'the adopted review owns a separate retained copy');
+    } else assert.equal(trade.getSnapshot().reviews.length, 0);
+    trade.dispose();
+  });
+}
+
+test('lock wipes transferred runtime buffers while an uncooperative revalidation is still pending', async () => {
+  const gate = deferred(), bytes = enc('ok:runtime-private');
+  const trade = createTradeReviewController({ source, randomBytes, review: async (...args) => { await gate.promise; return review(...args); } });
+  await trade.loadRegistry();
+  const pending = trade.loadSaved({ listTermsReviews: async () => ok({ items: [{ recordId: 'a'.repeat(32), source: 'file', bytes }], skipped: 0 }) });
+  await new Promise(resolve => setImmediate(resolve));
+  trade.forgetSaved();
+  assert.ok(bytes.every(byte => byte === 0), 'logical lock clears the owned response even when the review does not settle');
+  gate.resolve(); await pending;
+  assert.equal(trade.getSnapshot().reviews.length, 0); trade.dispose();
+});
+
+test('quota failure wipes only the save transfer, keeping the session source until it is removed', async () => {
+  const trade = await controller(), imported = await trade.importFile(file('ok:keep-until-removed'));
+  const held = trade.find(imported.localId).bytes; let transferred;
+  await trade.saveToProfile(imported.localId, { saveTermsReview: async (_source, bytes) => { transferred = bytes; return err('QUOTA_EXCEEDED'); } });
+  assert.equal(dec(held), 'ok:keep-until-removed');
+  assert.ok(transferred.every(byte => byte === 0));
+  trade.remove(imported.localId);
+  assert.ok(held.every(byte => byte === 0)); trade.dispose();
+});
+
+
+test('load replacement wipes the earlier buffer and borrowed retained bytes survive a rejected list', async () => {
+  const trade = await controller(), store = memoryStore();
+  await store.saveTermsReview('file', enc('ok:replace'));
+  await trade.loadSaved(store);
+  const earlier = trade.getSnapshot().reviews[0].bytes;
+  await trade.loadSaved(store);
+  const current = trade.getSnapshot().reviews[0].bytes;
+  assert.notEqual(current, earlier);
+  assert.ok(earlier.every(byte => byte === 0));
+  assert.equal(dec(current), 'ok:replace');
+  await trade.loadSaved({ listTermsReviews: async () => ok({ items: [{ recordId: 'invalid-id', source: 'file', bytes: current }], skipped: 0 }) });
+  assert.equal(trade.getSnapshot().reviews[0].bytes, current);
+  assert.equal(dec(current), 'ok:replace', 'rejected input cannot erase an existing retained review it aliases');
+  trade.dispose(); assert.ok(current.every(byte => byte === 0));
+});
+
+
+test('a candidate dropped by a failed merge cannot leave an unwiped transient buffer', async () => {
+  let count = 0; const held = [];
+  const trade = createTradeReviewController({ source, review: async (_registry, bytes) => {
+    held.push(bytes); return review(_registry, bytes);
+  }, randomBytes: () => { if (++count === 2) throw new Error('local RNG unavailable'); return randomBytes(); } });
+  await trade.loadRegistry();
+  const bytes = [enc('ok:first'), enc('ok:second')];
+  await trade.loadSaved({ listTermsReviews: async () => ok({ items: bytes.map((value, index) => ({ recordId: String(index + 1).padStart(32, '0'), source: 'file', bytes: value })), skipped: 0 }) });
+  assert.equal(trade.getSnapshot().reviews.length, 0);
+  assert.equal(trade.getSnapshot().saved.code, 'INVALID_SAVED_REVIEW');
+  assert.ok([...bytes, ...held].every(value => value.every(byte => byte === 0)));
+  trade.dispose();
 });

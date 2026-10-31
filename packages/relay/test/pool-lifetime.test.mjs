@@ -144,3 +144,27 @@ test('read: revocation from the open-status observer closes the socket before se
     assert.notEqual(pool.status()[0].state, 'open');
   } finally { pool.close(); broker.dispose(); }
 });
+
+test('read and publication sockets share four physical slots, including delayed closure',async()=>{
+ const net=heldNetwork(),{pool,broker}=setup(net),event=await signedAd();
+ const jobs=[];
+ try{
+  pool.subscribe([filter()],{onEvent(){}});net.sockets[0].onopen({});await setImmediate();
+  for(let i=0;i<3;i++)jobs.push(pool.publish(event));
+  assert.equal(net.sockets.length,4,'one read plus three publication connections');
+  assert.deepEqual(await pool.publish(event),{ok:false,error:'LIMIT_EXCEEDED'});
+  const original=net.sockets[1],closed=original.onclose;
+  original.onopen({});await setImmediate();original.deliver(['OK',event.id,true,'accepted']);
+  await jobs[0];assert.equal(original.closed,true);
+  assert.deepEqual(await pool.publish(event),{ok:false,error:'LIMIT_EXCEEDED'},'close request retains native slot');
+  closed({});await setImmediate();
+  jobs.push(pool.publish(event));assert.equal(net.sockets.length,5,'a native close acknowledgement frees exactly one slot');
+ }finally{pool.close();broker.dispose();await Promise.all(jobs);}
+});
+
+test('four read connections refuse extra publication I/O',async()=>{
+ const net=memoryNetwork(),{broker}=makeBroker({endpoints:['relay-a','relay-b','relay-c','relay-d']});
+ const pool=createRelayPool({broker,relays:['a','b','c','d'].map(id=>({endpointId:`relay-${id}`,url:'wss://fixture.example'})),verifier:sellerCrypto,connect:net.connector,timing:FAST,nowSeconds:()=>NOW});
+ try{pool.subscribe([filter()],{onEvent(){}});await setImmediate();assert.equal(net.sockets.length,4);assert.deepEqual(await pool.publish(await signedAd()),{ok:false,error:'LIMIT_EXCEEDED'});assert.equal(net.sockets.length,4);}
+ finally{pool.close();broker.dispose();}
+});

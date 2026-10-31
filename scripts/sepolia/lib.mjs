@@ -107,6 +107,7 @@ export class RpcError extends Error { constructor(code) { super(`RPC ${code}`); 
 
 /** Local tool transport bound; paged logs must fit one bounded response. */
 export const MAX_RPC_RESPONSE_BYTES = 4 * 1024 * 1024;
+export const MAX_RPC_REVERT_BYTES = 65_536;
 /** Minimal bounded JSON-RPC client. Fixed errors never echo the URL or response body. */
 export function rpcClient(url, { timeoutMs = 20_000 } = {}) {
   if (typeof url !== 'string' || !/^https?:\/\//.test(url)) throw new RpcError('RPC_URL_MISSING');
@@ -115,7 +116,7 @@ export function rpcClient(url, { timeoutMs = 20_000 } = {}) {
   try { parsed = new URL(url); } catch { throw new RpcError('RPC_URL_MISSING'); }
   if (parsed.username || parsed.password) throw new RpcError('RPC_URL_INVALID');
   let sequence = 0;
-  return async function rpc(method, params = []) {
+  return async function rpc(method, params = [], { includeRevertData = false } = {}) {
     const id = ++sequence;
     let response, reader;
     try {
@@ -151,7 +152,14 @@ export function rpcClient(url, { timeoutMs = 20_000 } = {}) {
         Object.hasOwn(body, 'error') === Object.hasOwn(body, 'result')) throw new RpcError('RPC_MALFORMED');
     if (Object.hasOwn(body, 'error')) {
       if (typeof body.error !== 'object' || body.error === null || !Number.isSafeInteger(body.error.code)) throw new RpcError('RPC_MALFORMED');
-      throw new RpcError(`RPC_ERROR_${body.error.code}`);
+      const error = new RpcError(`RPC_ERROR_${body.error.code}`);
+      // Control probes need custom-error bytes, never the provider's message, nested data or arbitrary fields.
+      // This opt-in is limited to eth_call and a bounded, even-length hexadecimal value.
+      const data = body.error.data;
+      if (includeRevertData && method === 'eth_call' && typeof data === 'string' && data.length <= 2 + MAX_RPC_REVERT_BYTES * 2 && /^0x(?:[0-9a-f]{2})*$/i.test(data)) {
+        Object.defineProperty(error, 'revertData', { value: data.toLowerCase(), enumerable: true });
+      }
+      throw error;
     }
     return body.result;
   };

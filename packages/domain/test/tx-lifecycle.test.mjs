@@ -179,6 +179,28 @@ test('crash after reservation (before send-started): restart cancels the prepare
   close(env);
 });
 
+test('external cancellation after the durable send marker prevents the wallet call and preserves unknown recovery', async () => {
+  const env = await setup(), controller = new AbortController();
+  env.life.dispose();
+  const journal = Object.freeze({ ...env.journal, async markSending(...args) {
+    const result = await env.journal.markSending(...args);
+    assert.equal(result.ok, true);
+    controller.abort();
+    return result;
+  } });
+  env.life = createEvmTxLifecycle({ journal, reader: env.chain.reader(), wallet: env.wallet.request, policy, retry });
+  try {
+    await env.life.walletChanged({ account: ACCOUNT, chainId: '31337', generation: 1 });
+    const prepared = val(await env.life.prepare(fund()));
+    err(await env.life.submit(prepared, controller.signal), 'BROADCAST_UNKNOWN');
+    assert.equal(env.wallet.sends, 0);
+    const record = await stored(env, prepared.intentId);
+    assert.equal(record.state, 'broadcast-unknown'); assert.equal(record.submission.hash, null);
+    assert.equal(val(await env.life.recover())[0].intentId, prepared.intentId);
+    err(await env.life.submit(prepared), 'CONFLICT'); assert.equal(env.wallet.sends, 0);
+  } finally { close(env); }
+});
+
 test('crash after send-started, before the wallet broadcast: pending until expiry, then dropped; re-prepare needs an explicit same-nonce successor', async () => {
   const env = await setup(), prepared = val(await env.life.prepare(fund()));
   env.wallet.onSend = never; // process dies inside the wallet call; nothing reached the chain

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AD_KIND, adKey, adTags, createDeletionEvent, createOrderBook, parseAdContent, serializeAd, validateAdEvent, DELETION_KIND, MAX_AD_LIFETIME_SECONDS } from '../src/ad.ts';
+import { AD_KIND, adKey, adTags, createAdEvent, createDeletionEvent, createOrderBook, parseAdContent, serializeAd, validateAdEvent, DELETION_KIND, MAX_AD_LIFETIME_SECONDS } from '../src/ad.ts';
 import { adFor, makeKey, NOW, ORDER, seller, sellerCrypto, signedAd, signWith } from './support/harness.mjs';
 
 const book = (now = NOW, extra = {}) => { const clock = { now }; const b = createOrderBook({ nowSeconds: () => clock.now, verifier: sellerCrypto, ...extra }); return { b, clock }; };
@@ -133,4 +133,37 @@ test('list order is deterministic: amountMin as integer, ties by event id; outpu
   b.ingest(big); b.ingest(small);
   assert.deepEqual(b.list().map(x => x.ad.amountMin), ['9', '10'], 'numeric not lexicographic');
   for (const item of b.list()) { assert.equal(item.authority, 'relay-discovery-only'); assert.ok(Object.isFrozen(item)); assert.ok(Object.isFrozen(item.ad)); }
+});
+
+test('advertisement maker must be the signing author, at construction and discovery validation', async()=>{
+ const other=makeKey('different-maker');
+ await assert.rejects(signedAd({maker:other.pubkey}),/INVALID_AD/);
+ const ad=adFor({maker:other.pubkey});
+ const wrong=signWith(seller,{kind:AD_KIND,created_at:NOW,tags:adTags(ad),content:serializeAd(ad)});
+ assert.equal(sellerCrypto.verifyEvent(wrong),true,'signature itself is valid');
+ assert.deepEqual(validateAdEvent(wrong,NOW),{ok:false,reason:'INVALID'});
+ const {b}=book();assert.equal(b.ingest(wrong),'invalid');assert.equal(b.list().length,0);
+});
+
+
+test('ad builder snapshots the maker before signing and rejects hostile signer output without reading getters', async () => {
+  const ad = { ...adFor() };
+  const event = await createAdEvent({ async signEvent(unsigned) {
+    ad.maker = makeKey('late-maker').pubkey;
+    return sellerCrypto.signEvent(unsigned);
+  } }, ad, NOW);
+  assert.equal(event.pubkey, seller.pubkey);
+  assert.equal(JSON.parse(event.content).maker, seller.pubkey);
+  let reads = 0;
+  const valid = await signedAd();
+  const hostile = { ...valid };
+  Object.defineProperty(hostile, 'pubkey', { enumerable: true, get() { reads++; throw new Error('foreign detail'); } });
+  await assert.rejects(createAdEvent({ signEvent: async () => hostile }, adFor(), NOW), /^Error: INVALID_AD$/);
+  assert.equal(reads, 0);
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  await assert.rejects(createAdEvent({ signEvent: async () => ({ ...valid, tags: revoked.proxy }) }, adFor(), NOW), /^Error: INVALID_AD$/);
+  const input = { ...adFor() };
+  Object.defineProperty(input, 'maker', { enumerable: true, get() { reads++; return seller.pubkey; } });
+  await assert.rejects(createAdEvent(sellerCrypto, input, NOW), /^Error: INVALID_AD$/);
+  assert.equal(reads, 0);
 });

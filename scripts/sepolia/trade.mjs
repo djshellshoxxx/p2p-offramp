@@ -32,7 +32,7 @@ import { evmTermsHash, verifyEoaAcceptance } from '../../packages/wallet/src/evm
 import {
   buildChainObservation, buildFundNative, buildGetTrade, buildRefund, buildRelease, buildTradeIdOf, decodeEscrowLog, decodeEscrowRevert, decodeTrade, tradeMatchesTerms,
 } from '../../packages/wallet/src/evm-escrow.ts';
-import { chainIdentity, hexToBytes, isMain, keccakHex, ROOT, rpcClient, SEPOLIA, sha256Hex as sha } from './lib.mjs';
+import { chainIdentity, hexToBytes, isMain, keccakHex, ROOT, RpcError, rpcClient, SEPOLIA, sha256Hex as sha } from './lib.mjs';
 import { REGISTRY_ASSET } from './owner-release.mjs';
 import { loadVerifiedRegistry } from './verify-release.mjs';
 import { sellerKeyEnv, sendAsSeller } from './send.mjs';
@@ -152,16 +152,13 @@ export async function runTrades({
   const pushOnce = (trade, check) => { if (!trade.checks.includes(check)) trade.checks.push(check); };
   /** eth_call as the seller at `blockTag`; returns the decoded escrow error. Fails when the call does not revert. */
   async function revertOf(call, blockTag = 'latest') {
-    let body;
     try {
-      // The read-only client hides node messages, so a raw request reads the revert data.
-      const response = await fetch(env.SEPOLIA_RPC_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, signal: AbortSignal.timeout(20_000),
-        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ from: seller, to: call.to, data: call.data, value: qty(call.value) }, blockTag] }) });
-      body = await response.json();
-    } catch { fail('RPC_UNREACHABLE'); }
-    if (body?.error) {
-      if (typeof body.error.data === 'string' && /^0x[0-9a-f]*$/i.test(body.error.data)) return decodeEscrowRevert(body.error.data);
-      fail(`CALL_FAILED_${Number(body.error.code) || 'UNKNOWN'}`); // e.g. a node without state for an old block
+      await rpc('eth_call', [{ from: seller, to: call.to, data: call.data, value: qty(call.value) }, blockTag], { includeRevertData: true });
+    } catch (error) {
+      if (!(error instanceof RpcError)) fail('RPC_UNREACHABLE');
+      if (typeof error.revertData === 'string') return decodeEscrowRevert(error.revertData);
+      if (/^RPC_ERROR_-?\d+$/.test(error.code)) fail(`CALL_FAILED_${error.code.slice('RPC_ERROR_'.length)}`); // e.g. no historical state
+      throw error;
     }
     return fail('EXPECTED_REVERT');
   }

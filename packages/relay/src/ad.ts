@@ -73,13 +73,52 @@ export function serializeAd(ad: PublicAdV1): string {
 export function adTags(ad: PublicAdV1): string[][] {
   return [['d', AD_D_PREFIX + ad.orderId], ['t', AD_TOPIC], ['expiration', ad.expiresAtSeconds]];
 }
-/** Build and sign an advertisement. Rejects locally invalid ads before the signer is asked. */
+/** Snapshot injected object values without executing accessors. Foreign reflection traps are invalid input. */
+function ownData(input: unknown, keys: readonly string[]): Record<string, unknown> | null {
+  try {
+    if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
+    const proto = Object.getPrototypeOf(input);
+    if (proto !== Object.prototype && proto !== null) return null;
+    const own = Reflect.ownKeys(input);
+    if (own.length !== keys.length || own.some(key => typeof key !== 'string' || !keys.includes(key))) return null;
+    const result: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+    for (const key of keys) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, key);
+      if (!descriptor || !('value' in descriptor)) return null;
+      result[key] = descriptor.value;
+    }
+    return result;
+  } catch { return null; }
+}
+function dataArray(input: unknown, length: number): readonly unknown[] | null {
+  try {
+    if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype ||
+        Object.getOwnPropertyDescriptor(input, 'length')?.value !== length || Reflect.ownKeys(input).length !== length + 1) return null;
+    const result: unknown[] = [];
+    for (let index = 0; index < length; index++) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
+      if (!descriptor || !('value' in descriptor)) return null;
+      result.push(descriptor.value);
+    }
+    return result;
+  } catch { return null; }
+}
+/** Build and sign an advertisement. Capture public fields before awaits and bind the maker to the actual signer. */
 export async function createAdEvent(crypto: Pick<EventCrypto, 'signEvent'>, ad: PublicAdV1, createdAt: number): Promise<NostrEvent> {
-  const content = serializeAd(ad);
-  if (parseAdContent(content) === null) throw new Error('INVALID_AD');
-  const expires = Number(ad.expiresAtSeconds);
+  const fields = ownData(ad, AD_KEYS);
+  if (fields === null || Object.values(fields).some(value => typeof value !== 'string' && typeof value !== 'number')) throw new Error('INVALID_AD');
+  const content = serializeAd(fields as unknown as PublicAdV1);
+  const captured = parseAdContent(content);
+  if (captured === null) throw new Error('INVALID_AD');
+  const expires = Number(captured.expiresAtSeconds);
   if (!Number.isSafeInteger(createdAt) || expires <= createdAt || expires - createdAt > MAX_AD_LIFETIME_SECONDS) throw new Error('INVALID_AD');
-  return crypto.signEvent({ kind: AD_KIND, created_at: createdAt, tags: adTags(ad), content });
+  const signed = await crypto.signEvent({ kind: AD_KIND, created_at: createdAt, tags: adTags(captured), content });
+  const raw = ownData(signed, ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig']);
+  const tags = dataArray(raw?.tags, 3)?.map(tag => dataArray(tag, 2));
+  const parsed = raw === null || !tags || tags.some(tag => tag === null) ? null : parseEvent({ ...raw, tags });
+  if (parsed === null || parsed.pubkey !== captured.maker || parsed.content !== content || parsed.kind !== AD_KIND ||
+      parsed.created_at !== createdAt || JSON.stringify(parsed.tags) !== JSON.stringify(adTags(captured))) throw new Error('INVALID_AD');
+  return parsed;
 }
 /**
  * NIP-09 deletion request for one order. Best effort only: relays MAY ignore it, other observers may already hold or
@@ -99,7 +138,7 @@ export function validateAdEvent(event: NostrEvent, nowSeconds: number): { ok: tr
   const [d, t, x] = event.tags;
   if (d?.length !== 2 || t?.length !== 2 || x?.length !== 2 || d[0] !== 'd' || t[0] !== 't' || x[0] !== 'expiration' || t[1] !== AD_TOPIC) return bad('INVALID');
   const ad = parseAdContent(event.content);
-  if (ad === null || d[1] !== AD_D_PREFIX + ad.orderId || x[1] !== ad.expiresAtSeconds) return bad('INVALID');
+  if (ad === null || ad.maker !== event.pubkey || d[1] !== AD_D_PREFIX + ad.orderId || x[1] !== ad.expiresAtSeconds) return bad('INVALID');
   const expires = Number(ad.expiresAtSeconds);
   if (expires <= event.created_at || expires - event.created_at > MAX_AD_LIFETIME_SECONDS) return bad('LIFETIME');
   if (event.created_at > nowSeconds + MAX_FUTURE_SKEW_SECONDS) return bad('FUTURE');

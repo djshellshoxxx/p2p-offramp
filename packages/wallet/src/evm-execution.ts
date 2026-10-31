@@ -103,7 +103,7 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         if(!recorded.ok || guard())return fail('BROADCAST_UNKNOWN');
         return Object.freeze({ok:true,value:Object.freeze({hash:canonicalHash})});
       } catch(error) {
-        if(sent)return fail('BROADCAST_UNKNOWN');
+        if(sent || marking)return fail('BROADCAST_UNKNOWN');
         const stopped=guard();if(stopped)return stopped;
         return fail(errorCode(error)===4001?'USER_REJECTED':'UNAVAILABLE');
       } finally {active=false;}

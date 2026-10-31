@@ -46,7 +46,7 @@ export function memoryNetwork() {
   net.connector = () => {
     net.attempts++;
     const socket = { onopen: null, onmessage: null, onclose: null, onerror: null, sent: [], closed: false,
-      send(text) { this.sent.push(JSON.parse(text)); }, close() { this.closed = true; },
+      send(text) { this.sent.push(JSON.parse(text)); }, close() { if (this.closed) return; this.closed = true; queueMicrotask(() => this.onclose?.({})); },
       deliver(text) { this.onmessage?.({ data: text }); } };
     net.sockets.push(socket);
     queueMicrotask(() => socket.onopen?.({}));
