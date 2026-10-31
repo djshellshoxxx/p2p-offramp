@@ -93,6 +93,7 @@ export interface ResealReceipt {
 export type ResealTransform = (records: readonly PrivateRecordV1[]) => readonly PrivateRecordV1[];
 export interface VaultServiceOptions {
   lifecycle?: boolean;
+  now?: () => number;
   /** Injected stores are shared by default; true explicitly transfers connection ownership. */
   ownsStore?: boolean;
 }
@@ -104,6 +105,10 @@ export class EncryptedVaultService implements VaultService {
   #disposed = false;
   #opening: Promise<void> = Promise.resolve();
   #pending = new Set<AbortController>();
+  readonly #now: () => number;
+  #deadline: number | undefined;
+  #lastTime = -Infinity;
+  #checkingIdle = false;
   #idleTimer: ReturnType<typeof setTimeout> | undefined;
   #lifecycle: boolean;
   #lifecycleWindow: EventTarget | undefined;
@@ -114,6 +119,7 @@ export class EncryptedVaultService implements VaultService {
   readonly #provider: CryptoProvider;
   constructor(store: VaultStore | undefined = undefined,
     provider: CryptoProvider = globalThis.crypto, options: VaultServiceOptions = {}) {
+    this.#now = options.now ?? (() => performance.now());
     this.#store = store ?? new IndexedDbVaultStore(); this.#ownsStore = store === undefined || options.ownsStore === true; this.#provider = provider;
     // Structural hosts keep this storage module usable under both DOM and dedicated-Worker libs.
     // Worker callers disable document lifecycle and own revocation through their message boundary.
@@ -130,16 +136,28 @@ export class EncryptedVaultService implements VaultService {
   }
   #pagehide = (): void => { this.lockAll(); };
   #activity = (event: Event): void => { if (event.isTrusted) this.#resetIdle(true); };
+  #idleCurrent(): boolean {
+    if (!this.#lifecycle || this.#checkingIdle || this.#sessions.size === 0) return true;
+    let now: number;
+    try { now = this.#now(); } catch { now = NaN; }
+    if (!Number.isFinite(now) || now < 0 || now < this.#lastTime || this.#deadline !== undefined && now >= this.#deadline) {
+      this.#checkingIdle = true;
+      try { this.lockAll(); } finally { this.#checkingIdle = false; }
+      return false;
+    }
+    this.#lastTime = now; return true;
+  }
   #resetIdle(trustedActivity = false): void {
-    if (!this.#lifecycle) return;
-    // Opening or revoking another session cannot extend existing unlocked authority.
-    if (trustedActivity || this.#sessions.size === 0) {
+    if (!this.#lifecycle || !this.#idleCurrent()) return;
+    if (this.#sessions.size === 0) {
       if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
-      this.#idleTimer = undefined;
+      this.#idleTimer = undefined; this.#deadline = undefined; return;
     }
-    if (this.#sessions.size > 0 && this.#idleTimer === undefined) {
-      this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
-    }
+    if (this.#idleTimer !== undefined && !trustedActivity) return;
+    if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
+    // #idleCurrent checked the monotonic clock before activity can renew authority.
+    this.#deadline = this.#lastTime + 5 * 60_000;
+    this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
   }
   dispose(): void {
     if (this.#disposed) return;
@@ -166,12 +184,14 @@ export class EncryptedVaultService implements VaultService {
     } finally { bytes.fill(0); }
   }
   #session(token: string): SessionState {
+    if (!this.#idleCurrent()) throw new Failure('LOCKED');
     requireToken(token);
     const state = this.#sessions.get(token);
     if (!state || state.revoked || state.snapshot === undefined || state.envelope === undefined) throw new Failure('LOCKED');
     return state;
   }
   #guard(state: SessionState, generation: number, signal?: AbortSignal): void {
+    if (!this.#idleCurrent()) throw new Failure('LOCKED');
     if (state.revoked || state.generation !== generation || this.#sessions.get(state.token) !== state) throw new Failure('LOCKED');
     if (signal?.aborted) throw new Failure('CANCELLED');
   }
@@ -274,6 +294,7 @@ export class EncryptedVaultService implements VaultService {
       state.revocations.add(revoke);
       return { ok: true, value: Object.freeze({
         current: (): Readonly<VaultSession> | null => {
+          if (!this.#idleCurrent()) return null;
           if (!active || this.#disposed || state.revoked || state.generation !== generation ||
               this.#sessions.get(state.token) !== state || state.snapshot === undefined) return null;
           return Object.freeze({ sessionId: state.token, profileId: state.snapshot.profileId, revision: state.snapshot.revision });

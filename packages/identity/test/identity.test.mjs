@@ -122,3 +122,19 @@ test('Node lifecycle unit: revoking another profile cannot refresh idle authorit
   t.mock.timers.tick(299999);s.vault.lock(s.session.sessionId);t.mock.timers.tick(1);err(await service.publicIdentity(handle),'LOCKED');
  }finally{service?.dispose();s.vault.dispose();t.mock.timers.reset();if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });
+test('suspended lifecycle deadlines expire before access or trusted input can revive vault or identity',async()=>{
+ const oldWindow=globalThis.window,oldDocument=globalThis.document;
+ globalThis.window=new EventTarget();globalThis.document=new EventTarget();
+ try {
+  for(const reason of ['expired','backward','invalid'])for(const service of ['vault','identity']){
+   let clock=10;const store=new Store(),vault=new EncryptedVaultService(store,crypto,{lifecycle:service==='vault',now:()=>clock});
+   const session=val(await vault.create(pass)),identity=new api.MessagingIdentityService(vault,{provider:adapter.createLocalNobleIdentityProvider(),now:()=>clock});
+   try{
+    const created=val(await identity.create(session));clock=reason==='expired'?300011:reason==='backward'?9:NaN;
+    const event=new Event('keydown');Object.defineProperty(event,'isTrusted',{value:true});document.dispatchEvent(event);
+    err(await identity.publicIdentity(created.handle),'LOCKED');
+    if(service==='vault')err(await vault.list(session.sessionId),'LOCKED');
+   }finally{identity.dispose();vault.dispose();}
+  }
+ }finally{if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
+});

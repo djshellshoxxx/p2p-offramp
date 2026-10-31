@@ -7,7 +7,7 @@ import type { MessagingIdentityProvider } from './noble-provider.ts';
 type IdentityVault = VaultService & VaultSessionAuthority;
 interface Job { epoch: number; lease: VaultSessionLease; controller: AbortController; buffers: Set<Uint8Array>; kept: boolean; committed: boolean; revision?: number; reference?: IdentityReference; handle?: HandleState; }
 interface HandleState { handle: IdentityHandle; session: Readonly<VaultSession>; lease: VaultSessionLease; profileId: string; recordId: string; publicKey: string; active: boolean; }
-export interface IdentityServiceOptions { readonly provider?: MessagingIdentityProvider; readonly lifecycle?: boolean; }
+export interface IdentityServiceOptions { readonly provider?: MessagingIdentityProvider; readonly lifecycle?: boolean; readonly now?: () => number; }
 function failure(code: IdentityErrorCode): IdentityResult<never> { return { ok: false, error: Object.freeze({ code, messageKey: `identity.error.${code.toLowerCase()}` }) }; }
 function fromVault<T>(result: Result<T>): T {
   if (result.ok) return result.value;
@@ -22,23 +22,45 @@ export class MessagingIdentityService {
   #tails = new Map<string, Promise<void>>();
   #epoch = 0; #generation = 0; #disposed = false;
   #lifecycle: boolean;
+  readonly #now: () => number;
+  #deadline: number | undefined;
+  #lastTime = -Infinity;
+  #checkingIdle = false;
   #idleTimer: ReturnType<typeof setTimeout> | undefined;
   constructor(vault: IdentityVault, options: IdentityServiceOptions = {}) {
-    this.#vault = vault; this.#provider = options.provider;
+    this.#vault = vault; this.#provider = options.provider; this.#now = options.now ?? (() => performance.now());
     this.#lifecycle = options.lifecycle !== false && typeof document !== 'undefined' && typeof window !== 'undefined';
     if (this.#lifecycle) { window.addEventListener('pagehide', this.#pagehide); document.addEventListener('keydown', this.#activity, { capture: true }); document.addEventListener('pointerdown', this.#activity, { capture: true }); }
   }
   #pagehide = (): void => this.lockAll();
   #activity = (event: Event): void => { if (event.isTrusted) this.#resetIdle(true); };
+  #idleCurrent(): boolean {
+    if (!this.#lifecycle || this.#checkingIdle || this.#handles.size === 0) return true;
+    let now: number;
+    try { now = this.#now(); } catch { now = NaN; }
+    if (!Number.isFinite(now) || now < 0 || now < this.#lastTime || this.#deadline !== undefined && now >= this.#deadline) {
+      this.#checkingIdle = true;
+      try { this.lockAll(); } finally { this.#checkingIdle = false; }
+      return false;
+    }
+    this.#lastTime = now; return true;
+  }
   #resetIdle(trustedActivity = false): void {
-    if (!this.#lifecycle) return;
-    if (this.#handles.size && this.#idleTimer !== undefined && !trustedActivity) return;
+    if (!this.#lifecycle || !this.#idleCurrent()) return;
+    if (this.#handles.size === 0) {
+      if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
+      this.#idleTimer = undefined; this.#deadline = undefined; return;
+    }
+    if (this.#idleTimer !== undefined && !trustedActivity) return;
     if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
-    this.#idleTimer = this.#handles.size ? setTimeout(() => this.lockAll(), 5 * 60_000) : undefined;
+    // #idleCurrent checked the monotonic clock before activity can renew authority.
+    this.#deadline = this.#lastTime + 5 * 60_000;
+    this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
   }
   #wipe(job: Job): void { for (const bytes of job.buffers) bytes.fill(0); }
   #revoke(state: HandleState): void { if (!state.active) return; state.active = false; this.#handles.delete(state.handle); state.lease.dispose(); this.#resetIdle(); }
   #guard(job: Job): Readonly<VaultSession> {
+    if (!this.#idleCurrent()) throw new IdentityError('LOCKED');
     const session = job.lease.current();
     if (this.#disposed || job.epoch !== this.#epoch || session === null) throw new IdentityError('LOCKED');
     if (job.controller.signal.aborted) throw new IdentityError('CANCELLED');
@@ -104,6 +126,7 @@ export class MessagingIdentityService {
     this.#handles.set(handle, state); job.handle = state; job.kept = true; this.#resetIdle(); return handle;
   }
   #state(handle: IdentityHandle): HandleState {
+    if (!this.#idleCurrent()) throw new IdentityError('LOCKED');
     parseIdentityHandle(handle);
     const state = this.#handles.get(handle);
     if (this.#disposed || !state?.active || state.lease.current() === null) throw new IdentityError('LOCKED');

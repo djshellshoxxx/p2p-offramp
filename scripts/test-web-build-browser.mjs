@@ -37,6 +37,7 @@ function instrument() {
     }
     postMessage(message, transfer) {
       observed.operations.push(message.operation);
+      if (message.operation === 'status' && window.__holdStatus) { window.__statusHeld = true; return; }
       if (transfer === undefined) super.postMessage(message); else super.postMessage(message, transfer);
     }
   };
@@ -227,8 +228,15 @@ try {
       await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
       await page.getByText('Vault unlocked', { exact: true }).waitFor();
       await assertPrivateSurfaces(page, href + '#/home');
+      // A status request may hang, but explicit lock must revoke immediately and supersede its notice.
+      await page.evaluate(() => { window.__holdStatus = true; window.__statusHeld = false; });
+      await page.getByRole('button', { name: 'Refresh vault status', exact: true }).click();
+      await page.waitForFunction(() => window.__statusHeld);
+      assert.equal(await page.getByRole('button', { name: 'Lock vault', exact: true }).isEnabled(), true, 'status refresh cannot disable lock');
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.evaluate(() => { window.__holdStatus = false; });
+      assert.equal(await page.locator('main').getByRole('alert').count(), 0, 'late cancelled refresh does not override explicit lock');
       await page.goto(href + '#/recovery');
       await page.getByLabel('Profile ID', { exact: true }).fill(fixture.envelope.profileId);
       let downloadCount = 0;

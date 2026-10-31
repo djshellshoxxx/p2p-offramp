@@ -118,9 +118,10 @@ export class RecordMigrationService {
       const changes: MigrationChange[] = []; const mutations: Mutation[] = [];
       for (const record of listed.value) {
         const target = this.#registry.target(record);
+        const migrated = this.#registry.migrate(record);
         if (target === record.schemaVersion) continue;
         if (changes.length >= MAX_IN_PLACE_CHANGES) throw new MigrationError('LIMIT_EXCEEDED');
-        mutations.push({ op: 'put', record: this.#registry.migrate(record) });
+        mutations.push({ op: 'put', record: migrated });
         changes.push(Object.freeze({ recordId: record.id, fromVersion: record.schemaVersion, toVersion: target }));
       }
       return { plan: Object.freeze({ sourceProfileId: before.profileId, sourceRevision: before.revision, changes: Object.freeze(changes) }), mutations, recordCount: listed.value.length };

@@ -70,3 +70,29 @@ test('hostile result getters are rejected without invocation or automatic retry'
  const result=await retry(async()=>{calls++;return{get ok(){touched++;throw Error('SECRET');}};},{signal:new AbortController().signal,operationId:id});
  assert.equal(result.error.code,'INTEGRITY_FAILURE');assert.equal(touched,0);assert.equal(calls,1);assert.equal(time.pending,0);
 });
+test('throwing or invalid runtime hooks return fixed UNAVAILABLE without leaking diagnostics or retries',async()=>{
+ const unavailable=async(runtime,operation=async()=>({ok:true,value:1}))=>{
+  let calls=0;const result=await api.createReadRetrier(runtime)(signal=>{calls++;return operation(signal);},{signal:new AbortController().signal,operationId:id});
+  assert.equal(result.ok,false);assert.equal(result.error.code,'UNAVAILABLE');assert.doesNotMatch(JSON.stringify(result),/SECRET/);return calls;
+ };
+ const boom=()=>{throw Error('SECRET runtime hook');};
+ assert.equal(await unavailable({now:boom,random:()=>0,schedule:()=>()=>{}}),0);
+ assert.equal(await unavailable({now:()=>NaN,random:()=>0,schedule:()=>()=>{}}),0);
+ assert.equal(await unavailable({now:()=>0,random:()=>0,schedule:boom}),0);
+ assert.equal(await unavailable({now:()=>0,random:()=>0,schedule:()=>null}),0);
+ assert.equal(await unavailable({now:()=>0,random:()=>0,schedule:()=>boom}),1,'throwing canceller suppresses successful read without retry');
+ let clocks=0;assert.equal(await unavailable({now:()=>{if(++clocks===3)boom();return 0;},random:()=>0,schedule:()=>()=>{}}),1);
+ assert.equal(await unavailable({now:()=>0,random:boom,schedule:()=>()=>{}},async()=>failure('UNAVAILABLE')),1);
+ let schedules=0;assert.equal(await unavailable({now:()=>0,random:()=>0,schedule:()=>{if(++schedules===2)boom();return()=>{};}},async()=>failure('UNAVAILABLE')),1);
+});
+test('scheduler failure removes abort listeners; canceller failure cannot skip remaining cleanup',async()=>{
+ for(const phase of ['schedule','cancel']){
+  const controller=new AbortController();let added=0,removed=0;
+  const add=controller.signal.addEventListener.bind(controller.signal),remove=controller.signal.removeEventListener.bind(controller.signal);
+  controller.signal.addEventListener=(...args)=>{if(args[0]==='abort')added++;return add(...args);};
+  controller.signal.removeEventListener=(...args)=>{if(args[0]==='abort')removed++;return remove(...args);};
+  const retry=api.createReadRetrier({now:()=>0,random:()=>0,schedule:()=>{if(phase==='schedule')throw Error('SECRET');return()=>{throw Error('SECRET');};}});
+  const result=await retry(async()=>({ok:true,value:1}),{signal:controller.signal,operationId:id});
+  assert.equal(result.error.code,'UNAVAILABLE');assert.equal(added,removed);controller.abort();
+ }
+});

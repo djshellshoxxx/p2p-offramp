@@ -32,13 +32,22 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
       try { return !options.signal.aborted && (options.isCurrent === undefined || options.isCurrent() === true); } catch { return false; }
     };
     if (!current()) return error('CANCELLED');
-    const started = time.now();
-    if (!Number.isFinite(started) || started < 0) return error('UNAVAILABLE');
+    let runtimeFailed = false, previousTime = -Infinity;
+    const now = (): number => {
+      try {
+        const value = time.now();
+        if (!Number.isFinite(value) || value < 0 || value < previousTime) throw new Error();
+        previousTime = value; return value;
+      } catch { runtimeFailed = true; return NaN; }
+    };
+    const started = now();
+    if (runtimeFailed) return error('UNAVAILABLE');
+    const cancelTimer = (cancel: () => void): void => { try { cancel(); } catch { runtimeFailed = true; } };
     let elapsed = 0;
     const remaining = (): number => {
-      const now = time.now();
-      if (!Number.isFinite(now)) return 0;
-      elapsed = Math.max(elapsed, now - started);
+      const value = now();
+      if (runtimeFailed) return 0;
+      elapsed = Math.max(elapsed, value - started);
       return Math.max(0, READ_OPERATION_BUDGET_MS - elapsed);
     };
     const attempt = (budget: number): Promise<{ readonly result: CoreResult<T>; readonly operationSettled: boolean }> =>
@@ -48,17 +57,22 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
         let clearTimer: () => void = () => undefined;
         const finish = (result: CoreResult<T>): void => {
           if (finished) return;
-          finished = true; clearTimer(); options.signal.removeEventListener('abort', onAbort);
-          resolve({ result, operationSettled: settled });
+          finished = true; cancelTimer(clearTimer); options.signal.removeEventListener('abort', onAbort);
+          resolve({ result: runtimeFailed ? error('UNAVAILABLE') : result, operationSettled: settled });
         };
         const onAbort = (): void => { controller.abort(); finish(error('CANCELLED')); };
         options.signal.addEventListener('abort', onAbort, { once: true });
-        clearTimer = time.schedule(() => {
-          timedOut = true;
-          controller.abort();
-          // An abort-aware adapter's promise rejection is queued first. Retry only once its real wrapper settled.
-          queueMicrotask(() => finish(current() ? error('TIMEOUT') : error('CANCELLED')));
-        }, Math.min(READ_ATTEMPT_TIMEOUT_MS, budget));
+        try {
+          const cancel = time.schedule(() => {
+            timedOut = true;
+            controller.abort();
+            // Retry only after an abort-aware adapter's actual promise has settled.
+            queueMicrotask(() => finish(current() ? error('TIMEOUT') : error('CANCELLED')));
+          }, Math.min(READ_ATTEMPT_TIMEOUT_MS, budget));
+          if (typeof cancel !== 'function') throw new Error();
+          clearTimer = cancel;
+          if (finished) { cancelTimer(clearTimer); return; }
+        } catch { runtimeFailed = true; controller.abort(); finish(error('UNAVAILABLE')); return; }
         if (!current()) { onAbort(); return; }
         let reading: Promise<CoreResult<T>>;
         try { reading = Promise.resolve(operation(controller.signal)); }
@@ -84,29 +98,41 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
       let done = false;
       let clearTimer: () => void = () => undefined;
       const finish = (valid: boolean): void => {
-        if (done) return; done = true; clearTimer(); options.signal.removeEventListener('abort', onAbort); resolve(valid);
+        if (done) return; done = true; cancelTimer(clearTimer); options.signal.removeEventListener('abort', onAbort); resolve(valid && !runtimeFailed);
       };
       const onAbort = (): void => finish(false);
       options.signal.addEventListener('abort', onAbort, { once: true });
       if (!current()) { finish(false); return; }
-      clearTimer = time.schedule(() => finish(current()), delay);
+      try {
+        const cancel = time.schedule(() => finish(current()), delay);
+        if (typeof cancel !== 'function') throw new Error();
+        clearTimer = cancel;
+        if (done) cancelTimer(clearTimer);
+      } catch { runtimeFailed = true; finish(false); }
     });
     let last: CoreResult<T> = error('UNAVAILABLE');
     for (let index = 0; index < READ_MAX_ATTEMPTS; index++) {
       if (!current()) return error('CANCELLED');
       const budget = remaining();
+      if (runtimeFailed) return error('UNAVAILABLE');
       if (budget <= 0) return error('TIMEOUT');
       const { result, operationSettled } = await attempt(budget);
       last = result;
       if (!current()) return error('CANCELLED');
-      if (remaining() <= 0) return error('TIMEOUT');
+      const left = remaining();
+      if (runtimeFailed) return error('UNAVAILABLE');
+      if (left <= 0) return error('TIMEOUT');
       if (result.ok || !result.error.retryable || !operationSettled || index === READ_MAX_ATTEMPTS - 1) return result;
-      const sample = time.random();
+      let sample: number;
+      try { sample = time.random(); } catch { return error('UNAVAILABLE'); }
       if (!Number.isFinite(sample) || sample < 0 || sample >= 1) return error('UNAVAILABLE');
       const ceiling = index === 0 ? 500 : 1000;
       const delay = Math.floor(sample * (ceiling + 1));
-      if (delay >= remaining()) return error('TIMEOUT');
-      if (!await backoff(delay)) return error('CANCELLED');
+      const backoffBudget = remaining();
+      if (runtimeFailed) return error('UNAVAILABLE');
+      if (delay >= backoffBudget) return error('TIMEOUT');
+      if (!await backoff(delay)) return error(runtimeFailed ? 'UNAVAILABLE' : 'CANCELLED');
+      if (runtimeFailed) return error('UNAVAILABLE');
     }
     return last;
   };

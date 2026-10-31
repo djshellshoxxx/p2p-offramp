@@ -29,6 +29,8 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const title = useRef<HTMLHeadingElement>(null);
   const initialRoute = useRef(true);
   const mounted = useRef(true);
+  const commandSequence = useRef(0);
+  const locking = useRef(false);
   useEffect(() => {
     mounted.current = true;
     const navigate = () => { setRoute(parseRoute(window.location.hash)); setNotice(''); };
@@ -48,13 +50,18 @@ export function App({ services, starting = false, startupError, trade = null }: 
   }, [route]);
 
   async function command(kind: 'lock' | 'status') {
-    if (!services || pending) return;
+    if (!services || (kind === 'status' && pending) || (kind === 'lock' && locking.current)) return;
+    const sequence = ++commandSequence.current;
+    if (kind === 'lock') locking.current = true;
     setPending(kind === 'lock' ? m.locking : m.refreshing); setNotice('');
     try {
       const result = await services[kind]();
-      if (mounted.current && !result.ok) setNotice(errorMessage(result.error.code));
-    } catch { if (mounted.current) setNotice(errorMessage('PROTOCOL_ERROR')); }
-    finally { if (mounted.current) setPending(''); }
+      if (mounted.current && sequence === commandSequence.current && !result.ok) setNotice(errorMessage(result.error.code));
+    } catch { if (mounted.current && sequence === commandSequence.current) setNotice(errorMessage('PROTOCOL_ERROR')); }
+    finally {
+      if (kind === 'lock') locking.current = false;
+      if (mounted.current && sequence === commandSequence.current) setPending('');
+    }
   }
 
   return <div className="app-shell">
@@ -70,7 +77,7 @@ export function App({ services, starting = false, startupError, trade = null }: 
           {syntheticDemo ? <strong className="demo-badge">{m.syntheticDemo}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
-          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={!!pending}>{m.lock}</button> : null}
+          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === m.locking}>{m.lock}</button> : null}
         </div>
       </header>
       <main id="main-content" ref={main} tabIndex={-1}>
