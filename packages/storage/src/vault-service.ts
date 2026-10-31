@@ -220,10 +220,16 @@ export class EncryptedVaultService implements VaultService {
     catch (error) { if (error instanceof VaultStorageError && error.code === 'CANCELLED') guard(); throw error; }
     finally { release(); this.#pending.delete(control.controller); control.remove(); }
   }
-  create(passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>> {
+  create(passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<VaultSession>> {
     return this.#result(async () => {
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
       const password = encodePassphrase(passphrase); password.fill(0);
-      return this.#openJob(signal, async (guard, controller) => {
+      return this.#openJob(signal, async (sessionGuard, controller) => {
+        const guard = (): void => {
+          sessionGuard();
+          try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+          sessionGuard();
+        };
         guard();
         const snapshot: PrivateSnapshotV1 = { format: 'p2p-offramp-private-records', version: 1,
           profileId: this.#randomId(), keyId: this.#randomId(), revision: 0, records: [] };
@@ -306,15 +312,21 @@ export class EncryptedVaultService implements VaultService {
       }) };
     } catch (error) { return failed(error); }
   }
-  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal): Promise<Result<number>> {
+  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
       requireSignal(signal);
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION) throw new ValidationError();
       const captured = mutationCopies(mutations, state.snapshot!);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       const control = this.#control(signal); state.operations.add(control.controller);
-      const guard = (): void => { this.#guard(state, generation, signal); };
+      const guard = (): void => {
+        this.#guard(state, generation, signal);
+        // The callback is a local composition capability, never stored input. Do not expose its exception.
+        try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+        this.#guard(state, generation, signal);
+      };
       try {
         await previous; guard();
         const snapshot = state.snapshot!, expected = state.envelope!;

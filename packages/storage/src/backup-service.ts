@@ -106,8 +106,16 @@ export class EncryptedBackupService {
       return Object.freeze({ bytes, authentication: 'not-checked' as const });
     });
   }
-  restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<RestoreReceipt> {
-    return this.#job(signal, async (guard, controller) => {
+  /** Optional authority guard is supplied by trusted composition, never by the backup document. */
+  restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<RestoreReceipt> {
+    return this.#job(signal, async (sessionGuard, controller) => {
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new BackupError('INVALID_INPUT');
+      const guard = (): void => {
+        sessionGuard();
+        try { assertCurrent?.(); } catch { throw new BackupError('CANCELLED'); }
+        sessionGuard();
+      };
+      guard();
       const backup = parseBackupBytes(bytes);
       for (const passphrase of [sourcePassphrase, destinationPassphrase]) { const encoded = encodePassphrase(passphrase); encoded.fill(0); }
       const checksum = await this.#checksum(canonicalEnvelopeBytes(backup.envelope)); guard();

@@ -18,8 +18,9 @@ class Store {
   rows = new Map(); listeners = new Set(); writes = 0;
   async get(id) { return clone(this.rows.get(id)); }
   async listProfileIds() { return Object.freeze({ profileIds: Object.freeze([...this.rows.keys()]), truncated: false }); }
-  async add(row, options) { options?.assertCurrent?.(); this.rows.set(row.profileId, clone(row)); this.writes++; }
+  async add(row, options) { await this.beforeAdd?.(); options?.assertCurrent?.(); this.rows.set(row.profileId, clone(row)); this.writes++; this.afterAdd?.(); }
   async compareAndSwap(expected, next, options) {
+    await this.beforeWrite?.();
     options?.assertCurrent?.();
     if (JSON.stringify(this.rows.get(expected.profileId)) !== JSON.stringify(expected)) { const error = new Error('CONFLICT'); error.code = 'CONFLICT'; throw error; }
     this.rows.set(next.profileId, clone(next)); this.writes++;
@@ -27,13 +28,13 @@ class Store {
   subscribeInvalidation(listener) { this.listeners.add(listener); return () => this.listeners.delete(listener); }
 }
 
-async function setup({ wrapVault } = {}) {
+async function setup({ wrapVault, now, provider = crypto } = {}) {
   const store = new Store();
   const creator = new EncryptedVaultService(store, crypto, { lifecycle: false });
   const session = (await creator.create(pass)).value; creator.dispose();
-  const vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
+  const vault = new EncryptedVaultService(store, provider, { lifecycle: false });
   const messages = []; let sequence = 0;
-  const service = createVaultWorkerEndpoint(message => messages.push(clone(message)), { createServices: () => ({ vault: wrapVault ? wrapVault(vault) : vault, backup: new EncryptedBackupService(store) }) });
+  const service = createVaultWorkerEndpoint(message => messages.push(clone(message)), { ...(now ? { now } : {}), createServices: () => ({ vault: wrapVault ? wrapVault(vault) : vault, backup: new EncryptedBackupService(store) }) });
   const send = (operation, extra = {}, generation = 0) => service.dispatch({ version: 1, requestId: ++sequence, generation, operation, ...extra });
   const last = () => messages.at(-1);
   const value = () => { assert.equal(last().result?.ok, true, JSON.stringify(last())); return last().result.value; };
@@ -180,4 +181,118 @@ test('listing saved reviews checks persisted freshness and refuses a stale tab b
   assert.equal(s.error(),'CONFLICT');
   assert.equal(s.messages.some(message=>message.operation==='listTermsReviews'&&message.result?.ok),false);
   assert.ok(s.messages.some(message=>message.kind==='locked'),'stale vault selection revokes');
+});
+
+test('request expiry during a review read blocks the next encrypted write even when the timer has not run', async () => {
+  let clock = 0;
+  const s = await setup({ now: () => clock, wrapVault: vault => new Proxy(vault, { get(target, key) {
+    const value = Reflect.get(target, key, target);
+    if (key === 'list') return async (...args) => { const result = await value.apply(target, args); clock = 30_000; return result; };
+    return typeof value === 'function' ? value.bind(target) : value;
+  } }) });
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  const before = s.store.writes;
+  await s.send('saveTermsReview', { profileId: s.profileId, source: 'file', bytes: terms(81) });
+  assert.equal(s.error(), 'TIMEOUT');
+  assert.equal(s.store.writes, before, 'request deadline reached before commit writes nothing');
+  await s.send('status'); assert.equal(s.value().state, 'locked');
+  const reopened = (await s.vault.unlock(s.profileId, pass)).value;
+  assert.deepEqual((await s.vault.list(reopened.sessionId)).value, []);
+});
+
+test('a durable review write winning expiry stays recoverable while its reply reports an uncertain timeout', async () => {
+  let clock = 0;
+  const s = await setup({ now: () => clock });
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  const swap = s.store.compareAndSwap.bind(s.store);
+  s.store.compareAndSwap = async (...args) => { await swap(...args); clock = 30_000; };
+  const before = s.store.writes;
+  await s.send('saveTermsReview', { profileId: s.profileId, source: 'file', bytes: terms(82) });
+  assert.equal(s.error(), 'TIMEOUT');
+  assert.equal(s.store.writes, before + 1, 'durable ciphertext is preserved');
+  assert.equal(s.messages.some(message => message.operation === 'saveTermsReview' && message.result?.ok), false);
+  await s.send('status'); assert.equal(s.value().state, 'locked');
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  await s.send('listTermsReviews', { profileId: s.profileId });
+  assert.deepEqual(s.value().items.map(item => item.bytes), [terms(82)]);
+});
+
+test('expiry immediately before encrypted CAS blocks save and delete without relying on a timer callback', async () => {
+  let clock = 0;
+  const s = await setup({ now: () => clock });
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  s.store.beforeWrite = () => { clock += 30_000; };
+  const initial = s.store.writes;
+  await s.send('saveTermsReview', { profileId: s.profileId, source: 'file', bytes: terms(83) });
+  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, initial);
+  s.store.beforeWrite = undefined;
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  await s.send('saveTermsReview', { profileId: s.profileId, source: 'file', bytes: terms(83) });
+  const { recordId } = s.value(), beforeDelete = s.store.writes;
+  s.store.beforeWrite = () => { clock += 30_000; };
+  await s.send('deleteTermsReview', { profileId: s.profileId, recordId });
+  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, beforeDelete);
+  s.store.beforeWrite = undefined;
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  await s.send('listTermsReviews', { profileId: s.profileId });
+  assert.deepEqual(s.value().items.map(item => item.recordId), [recordId], 'expired deletion preserves the encrypted original');
+});
+
+test('request expiry while native review encryption finishes blocks entry to the atomic write', async () => {
+  let clock = 0, expireEncryption = false;
+  const provider = { getRandomValues: crypto.getRandomValues.bind(crypto), subtle: new Proxy(crypto.subtle, {
+    get(target, key) {
+      if (key === 'encrypt') return async (...args) => { const encrypted = await target.encrypt(...args); if (expireEncryption) clock = 30_000; return encrypted; };
+      const member = Reflect.get(target, key); return typeof member === 'function' ? member.bind(target) : member;
+    },
+  }) };
+  const s = await setup({ now: () => clock, provider });
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  const before = s.store.writes;
+  expireEncryption = true;
+  await s.send('saveTermsReview', { profileId: s.profileId, source: 'file', bytes: terms(84) });
+  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, before);
+  expireEncryption = false;
+  await s.send('unlock', { profileId: s.profileId, passphrase: pass });
+  await s.send('listTermsReviews', { profileId: s.profileId }); assert.deepEqual(s.value().items, []);
+});
+
+test('create and restore expiry immediately before encrypted add leaves no destination and preserves the source', async () => {
+  let clock = 0;
+  const s = await setup({ now: () => clock });
+  const original = clone(s.store.rows.get(s.profileId)), before = s.store.writes;
+  s.store.beforeAdd = () => { clock += 30_000; };
+  await s.send('create', { passphrase: pass });
+  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, before); assert.equal(s.store.rows.size, 1);
+  s.store.beforeAdd = undefined;
+  await s.send('exportEncrypted', { profileId: s.profileId }); const { bytes } = s.value();
+  s.store.beforeAdd = () => { clock += 30_000; };
+  await s.send('restore', { bytes, sourcePassphrase: pass, destinationPassphrase: 'restored deadline fixture passphrase' });
+  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, before); assert.equal(s.store.rows.size, 1);
+  assert.deepEqual(s.store.rows.get(s.profileId), original);
+  await s.send('status'); assert.equal(s.value().state, 'locked');
+});
+
+test('durable create and restore adds winning expiry remain encrypted, locked and discoverable after uncertain replies', async () => {
+  let clock = 0;
+  const s = await setup({ now: () => clock });
+  const original = clone(s.store.rows.get(s.profileId));
+  s.store.afterAdd = () => { clock += 30_000; };
+  await s.send('create', { passphrase: pass }); assert.equal(s.error(), 'TIMEOUT');
+  assert.equal(s.store.rows.size, 2);
+  const createdId = [...s.store.rows.keys()].find(id => id !== s.profileId);
+  s.store.afterAdd = undefined;
+  await s.send('exportEncrypted', { profileId: s.profileId }); const { bytes } = s.value();
+  s.store.afterAdd = () => { clock += 30_000; };
+  const destinationPassphrase = 'restored durable deadline passphrase';
+  await s.send('restore', { bytes, sourcePassphrase: pass, destinationPassphrase }); assert.equal(s.error(), 'TIMEOUT');
+  assert.equal(s.store.rows.size, 3);
+  const restoredId = [...s.store.rows.keys()].find(id => id !== s.profileId && id !== createdId);
+  assert.deepEqual(s.store.rows.get(s.profileId), original);
+  assert.equal(s.messages.some(message => ['create', 'restore'].includes(message.operation) && message.result?.ok), false);
+  await s.send('status'); assert.equal(s.value().state, 'locked');
+  await s.send('listProfiles'); assert.deepEqual(new Set(s.value().profileIds), new Set([s.profileId, createdId, restoredId]));
+  for (const [profileId, passphrase] of [[createdId, pass], [restoredId, destinationPassphrase]]) {
+    await s.send('unlock', { profileId, passphrase }); assert.equal(s.value().handle.profileId, profileId);
+  }
 });

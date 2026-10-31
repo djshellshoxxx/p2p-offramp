@@ -19,7 +19,7 @@ export interface WorkerEndpointOptions {
   readonly now?: () => number;
   readonly random?: (bytes: Uint8Array<ArrayBuffer>) => Uint8Array<ArrayBuffer>;
 }
-interface ActiveJob { readonly generation: number; readonly controller: AbortController; }
+interface ActiveJob { readonly requestId: number; readonly generation: number; readonly controller: AbortController; readonly deadline: number; timedOut: boolean; }
 interface Selection { readonly handle: RuntimeHandle; readonly lease: VaultSessionLease; }
 const locked = (): RuntimeStatus => Object.freeze({ state: 'locked', handle: null });
 /** Compatibility read only: the earlier local preview used this wrapper, without a source label.
@@ -110,7 +110,18 @@ class VaultWorkerEndpoint {
   #guard(job: ActiveJob): void {
     this.#checkDeadline();
     if (this.#closed || job.generation !== this.#generation) throw new RuntimeBoundaryError('LOCKED');
+    this.#checkRequestDeadline(job);
     if (job.controller.signal.aborted) throw new RuntimeBoundaryError('CANCELLED');
+  }
+  #checkRequestDeadline(job: ActiveJob): void {
+    if (job.timedOut || this.#time() >= job.deadline) {
+      this.#expire(job);
+      throw new RuntimeBoundaryError('TIMEOUT');
+    }
+  }
+  #expire(job: ActiveJob): void {
+    if (this.#closed || this.#active !== job || job.generation !== this.#generation) return;
+    job.timedOut = true; job.controller.abort(); this.#services?.vault.lockAll();
   }
   /** The vault session of the selected profile, which must be the profile the command names. */
   #selected(profileId: string): Readonly<VaultSession> {
@@ -160,15 +171,14 @@ class VaultWorkerEndpoint {
       }
       if (this.#active) { this.#reply(command, runtimeFailure('BUSY')); return; }
       if (command.operation === 'unlock' || command.operation === 'create') this.#clear();
-      const job: ActiveJob = { generation: this.#generation, controller: new AbortController() }; this.#active = job;
-      const started = this.#time();
-      const timer = setTimeout(() => { job.controller.abort(); this.#services?.vault.lockAll(); }, RUNTIME_REQUEST_TIMEOUT_MS);
+      const job: ActiveJob = { requestId: command.requestId, generation: this.#generation, controller: new AbortController(), deadline: this.#time() + RUNTIME_REQUEST_TIMEOUT_MS, timedOut: false }; this.#active = job;
+      const timer = setTimeout(() => this.#expire(job), RUNTIME_REQUEST_TIMEOUT_MS);
       try {
         if (command.operation === 'unlock' || command.operation === 'create') {
           const opened = command.operation === 'unlock'
             ? await this.#services.vault.unlock(command.profileId, command.passphrase, job.controller.signal)
             // A create that commits after cancellation stays encrypted and locked; inventory reveals it later.
-            : await this.#services.vault.create(command.passphrase, job.controller.signal);
+            : await this.#services.vault.create(command.passphrase, job.controller.signal, () => this.#guard(job));
           if (opened.ok && (this.#closed || job.generation !== this.#generation || job.controller.signal.aborted)) this.#services?.vault.lock(opened.value.sessionId);
           this.#guard(job);
           const session = vaultValue(opened);
@@ -186,19 +196,17 @@ class VaultWorkerEndpoint {
             this.#selection = { handle: Object.freeze({ id, generation: this.#generation, purpose: 'vault', profileId: session.profileId }), lease };
             lease = undefined; this.#armDeadline();
           } catch (error) { lease?.dispose(); this.#services.vault.lock(session.sessionId); throw error; }
-          if (this.#time() - started >= RUNTIME_REQUEST_TIMEOUT_MS) { this.#clear(); throw new RuntimeBoundaryError('TIMEOUT'); }
           this.#guard(job); this.#reply(command, { ok: true, value: this.#status() });
         } else if (command.operation === 'listProfiles') {
           const value = vaultValue(await this.#services.vault.listProfiles(job.controller.signal)); this.#guard(job);
           this.#reply(command, { ok: true, value: Object.freeze({ profileIds: Object.freeze([...value.profileIds]), truncated: value.truncated }) });
         } else if (command.operation === 'restore') {
-          const receipt = await this.#services.backup.restore(command.bytes, command.sourcePassphrase, command.destinationPassphrase, job.controller.signal);
+          const receipt = await this.#services.backup.restore(command.bytes, command.sourcePassphrase, command.destinationPassphrase, job.controller.signal, () => this.#guard(job));
           // A committed restore is durable even if this job is now stale; only the reply is suppressed.
           this.#guard(job);
           this.#reply(command, { ok: true, value: Object.freeze({ newProfileId: receipt.newProfileId, records: receipt.records }) });
         } else if (command.operation === 'exportEncrypted') {
           const value = await this.#services.backup.exportWithStatus(command.profileId, job.controller.signal); this.#guard(job);
-          if (this.#time() - started >= RUNTIME_REQUEST_TIMEOUT_MS) throw new RuntimeBoundaryError('TIMEOUT');
           this.#reply(command, { ok: true, value });
         } else if (command.operation === 'saveTermsReview' || command.operation === 'listTermsReviews' || command.operation === 'deleteTermsReview') {
           const vault = this.#services.vault;
@@ -233,14 +241,18 @@ class VaultWorkerEndpoint {
               if (!target) throw new RuntimeBoundaryError('NOT_FOUND');
               recordId = target.record.id; mutation = { op: 'delete', id: recordId };
             }
+            this.#guard(job);
             const current = this.#selected(command.profileId);
             if (current.sessionId !== session.sessionId || current.revision !== session.revision) throw new RuntimeBoundaryError('CONFLICT');
-            vaultValue(await vault.commit(current.sessionId, current.revision, [mutation], job.controller.signal));
+            vaultValue(await vault.commit(current.sessionId, current.revision, [mutation], job.controller.signal, () => this.#guard(job)));
             // A commit that lands after lock/timeout stays durable; only the reply is suppressed (retry is idempotent).
             this.#guard(job);
             this.#reply(command, { ok: true, value: Object.freeze({ recordId }) });
           }
         } else throw new RuntimeBoundaryError('PROTOCOL_ERROR');
+      } catch (error) {
+        if (!this.#closed && job.generation === this.#generation) this.#checkRequestDeadline(job);
+        throw error;
       } finally { clearTimeout(timer); if (this.#active === job) this.#active = undefined; }
     } catch (error) {
       if (error instanceof RuntimeBoundaryError && error.code === 'UNSUPPORTED_ENVIRONMENT') { this.#protocol(error.code); return; }
@@ -248,6 +260,7 @@ class VaultWorkerEndpoint {
     }
   }
   #reply(command: RuntimeCommand, result: unknown): void {
+    if (this.#active?.requestId === command.requestId && (result as RuntimeResult<unknown>).ok) this.#guard(this.#active);
     this.#emit({ version: 1, requestId: command.requestId, generation: command.generation, operation: command.operation, kind: 'response', result } as RuntimeMessage);
   }
 }

@@ -141,6 +141,37 @@ test('G02 cancellation before commit leaves old revision, quota preserves usable
   store.failure = 'QUOTA_EXCEEDED'; error(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }]), 'QUOTA_EXCEEDED');
   assert.deepEqual(value(await vault.list(session.sessionId)), []); assert.equal(store.rows.get(session.profileId).revision, 0);
 });
+
+test('G02 trusted commit guards run at the atomic-write boundary and foreign failures stay fixed', async () => {
+  const { vault, store } = service();
+  const session = value(await vault.create(pass));
+  let current = true, checks = 0;
+  const guard = () => { checks++; if (!current) throw new Error('SECRET caller authority detail'); };
+  store.beforeWrite = () => { current = false; };
+  const before = store.writes;
+  const failed = error(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }], undefined, guard), 'CANCELLED');
+  assert.ok(checks >= 4, 'guard covers post-await and pre-CAS checks');
+  assert.equal(store.writes, before);
+  assert.doesNotMatch(JSON.stringify(failed), /SECRET/);
+  assert.deepEqual(value(await vault.list(session.sessionId)), []);
+  store.beforeWrite = undefined;
+  error(await vault.commit(session.sessionId, 0, [], undefined, {}), 'INVALID_INPUT');
+  assert.equal(value(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }])), 1, 'invalid guard does not hold the session queue');
+  vault.dispose();
+});
+
+test('G02 trusted create guard can refuse the atomic add without exposing its exception or holding the opening queue', async () => {
+  const { vault, store } = service();
+  let current = true;
+  store.beforeWrite = () => { current = false; };
+  const stopped = error(await vault.create(pass, undefined, () => { if (!current) throw new Error('SECRET authority detail'); }), 'CANCELLED');
+  assert.equal(store.writes, 0); assert.equal(store.rows.size, 0);
+  assert.doesNotMatch(JSON.stringify(stopped), /SECRET/);
+  error(await vault.create(pass, undefined, {}), 'INVALID_INPUT');
+  store.beforeWrite = undefined;
+  assert.ok(value(await vault.create(pass)).profileId); assert.equal(store.writes, 1);
+  vault.dispose();
+});
 test('G02 lockAll during unlock discards key material and does not publish a session', async () => {
   const { store, vault } = service(); const session = value(await vault.create(pass)); vault.lockAll();
   const held = deferred(); store.beforeGet = () => held.promise;
