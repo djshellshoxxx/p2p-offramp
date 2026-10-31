@@ -7,7 +7,7 @@ import { createAdEvent, createDeletionEvent, createOrderBook, adKey } from '../s
 import { createLocalNobleNostrProvider } from '../../nostr-crypto/src/provider.ts';
 import { createRelayEventCrypto } from '../../nostr-crypto/src/relay-event-crypto.ts';
 import { startFakeRelay } from './support/fake-relay.mjs';
-import { adFor, AD_KIND, FAST, makeBroker, makeKey, memoryNetwork, NOW, ORDER, signWith, until } from './support/harness.mjs';
+import { adFor, AD_KIND, FAST, makeBroker, makeKey, memoryNetwork, NOW, ORDER, signWith, until, loopbackRelayFixture } from './support/harness.mjs';
 
 const filter = () => ({ kinds: [AD_KIND], '#t': ['p2p-offramp-ad-v1'], since: NOW - 3600, limit: 50 });
 const key = Uint8Array.from(Buffer.from('7f'.repeat(31) + '01', 'hex'));
@@ -16,9 +16,9 @@ const real = () => createRelayEventCrypto(createLocalNobleNostrProvider(), key);
 test('real nostr-crypto signs an ad that the pool publishes, a second pool discovers and the order book accepts', async () => {
   const fake = await startFakeRelay();
   const crypto = await real();
-  const relays = [{ endpointId: 'relay-a', url: fake.wsUrl }];
-  const publisher = createRelayPool({ broker: makeBroker().broker, relays, verifier: crypto, timing: FAST, nowSeconds: () => NOW });
-  const reader = createRelayPool({ broker: makeBroker().broker, relays, verifier: crypto, timing: FAST, nowSeconds: () => NOW });
+  const fixture = loopbackRelayFixture([fake]);
+  const publisher = createRelayPool({ broker: makeBroker({ endpointURLs: fixture.endpointURLs }).broker, relays: fixture.relays, connect: fixture.connect, verifier: crypto, timing: FAST, nowSeconds: () => NOW });
+  const reader = createRelayPool({ broker: makeBroker({ endpointURLs: fixture.endpointURLs }).broker, relays: fixture.relays, connect: fixture.connect, verifier: crypto, timing: FAST, nowSeconds: () => NOW });
   try {
     const ad = await createAdEvent(crypto, adFor({ maker: crypto.pubkey }), NOW);
     assert.equal(ad.pubkey, crypto.pubkey);
@@ -37,7 +37,7 @@ test('real nostr-crypto signs an ad that the pool publishes, a second pool disco
 test('with the real verifier a forged event is never delivered and penalizes the relay; a genuine one is delivered once', async () => {
   const crypto = await real();
   const net = memoryNetwork(); const { broker } = makeBroker();
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: crypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: crypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
   try {
     const got = [];
     pool.subscribe([filter()], { onEvent: e => got.push(e.id) });

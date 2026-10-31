@@ -4,12 +4,13 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { createRelayPool, POOL_LIMITS, webSocketConnector } from '../src/pool.ts';
 import { createOrderBook, adKey } from '../src/ad.ts';
 import { startFakeRelay } from './support/fake-relay.mjs';
-import { adFor, AD_KIND, FAST, makeBroker, makeCrypto, makeKey, memoryNetwork, NOW, ORDER, seller, sellerCrypto, signedAd, signWith, until, wait } from './support/harness.mjs';
+import { adFor, AD_KIND, FAST, makeBroker, makeCrypto, makeKey, memoryNetwork, NOW, ORDER, seller, sellerCrypto, signedAd, signWith, until, wait, loopbackRelayFixture } from './support/harness.mjs';
 
 const filter = (extra = {}) => ({ kinds: [AD_KIND], '#t': ['p2p-offramp-ad-v1'], since: NOW - 3600, limit: 50, ...extra });
-const relays = (...fakes) => fakes.map((f, i) => ({ endpointId: `relay-${'abc'[i]}`, url: f.wsUrl }));
+const relays = (...fakes) => loopbackRelayFixture(fakes).relays;
 const stateOf = (pool, id) => pool.status().find(s => s.endpointId === id);
-const opts = (fakes, extra = {}) => ({ broker: makeBroker().broker, relays: relays(...fakes), verifier: sellerCrypto, timing: FAST, nowSeconds: () => NOW, ...extra });
+const opts = (fakes, extra = {}) => { const fixture = loopbackRelayFixture(fakes); return { broker: makeBroker({ endpointURLs: fixture.endpointURLs }).broker,
+  relays: fixture.relays, connect: fixture.connect, verifier: sellerCrypto, timing: FAST, nowSeconds: () => NOW, ...extra }; };
 async function withRelays(count, behaviors, body) {
   const fakes = []; for (let i = 0; i < count; i++) fakes.push(await startFakeRelay(behaviors?.[i]));
   let pool;
@@ -17,7 +18,7 @@ async function withRelays(count, behaviors, body) {
 }
 const collect = () => { const got = []; return { got, handlers: { onEvent: (e, id) => got.push([e.id, id]), onEose: id => got.push(['eose', id]) } }; };
 
-test('connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays', async () => {
+test('connects through an explicit loopback WebSocket fixture with G05-bound logical URLs, receives a verified ad and dedupes', async () => {
   await withRelays(2, [], async (fakes, keep) => {
     const ad = await signedAd(); fakes.forEach(f => f.events.push(ad));
     const pool = keep(createRelayPool(opts(fakes))); const { got, handlers } = collect();
@@ -32,7 +33,7 @@ test('connects over the platform WebSocket through the G05 broker, receives a ve
 test('strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct', async () => {
   await withRelays(2, [], async (fakes, keep) => {
     for (const setup of [{ coverage: 'direct', mode: 'strict' }, { coverage: 'unknown', mode: 'ordinary' }, { empty: true, mode: 'strict' }, { empty: true, mode: 'ordinary' }]) {
-      const pool = createRelayPool(opts(fakes, { broker: makeBroker(setup).broker }));
+      const pool = createRelayPool(opts(fakes, { broker: makeBroker({ ...setup, endpointURLs: loopbackRelayFixture(fakes).endpointURLs }).broker }));
       assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
       await until(() => pool.status().every(s => s.state === 'blocked'));
       await wait(30);
@@ -44,8 +45,8 @@ test('strict mode without verified-private coverage: no relay is contacted, noth
 
 test('ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked', async () => {
   await withRelays(1, [], async (fakes, keep) => {
-    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary', endpoints: ['relay-a'] });
-    const pool = keep(createRelayPool(opts(fakes, { broker, relays: [...relays(...fakes), { endpointId: 'relay-zzz', url: fakes[0].wsUrl }] })));
+    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary', endpoints: ['relay-a'], endpointURLs: loopbackRelayFixture(fakes).endpointURLs });
+    const pool = keep(createRelayPool(opts(fakes, { broker, relays: [...relays(...fakes), { endpointId: 'relay-zzz', url: relays(...fakes)[0].url }] })));
     pool.subscribe([filter()], collect().handlers);
     await until(() => stateOf(pool, 'relay-a').state === 'open');
     assert.equal(stateOf(pool, 'relay-zzz').state, 'blocked');
@@ -54,7 +55,7 @@ test('ordinary mode with direct coverage and consent is the only direct path; un
 
 test('switching to strict mid-session revokes sockets and the pool does not reconnect', async () => {
   await withRelays(1, [], async (fakes, keep) => {
-    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary' });
+    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary', endpointURLs: loopbackRelayFixture(fakes).endpointURLs });
     const pool = keep(createRelayPool(opts(fakes, { broker })));
     pool.subscribe([filter()], collect().handlers);
     await until(() => stateOf(pool, 'relay-a').state === 'open');
@@ -67,7 +68,7 @@ test('switching to strict mid-session revokes sockets and the pool does not reco
 
 test('bounds: relay candidates, active connections, subscriptions and filter shape', async () => {
   const net = memoryNetwork();
-  const many = Array.from({ length: 6 }, (_, i) => ({ endpointId: `relay-${i}`, url: 'wss://x.example' }));
+  const many = Array.from({ length: 6 }, (_, i) => ({ endpointId: `relay-${i}`, url: 'wss://fixture.example/' }));
   assert.throws(() => createRelayPool({ broker: makeBroker().broker, relays: Array.from({ length: 17 }, (_, i) => ({ endpointId: `r${i}`, url: 'wss://x' })), verifier: sellerCrypto, connect: net.connector }), RangeError);
   const { broker } = makeBroker({ endpoints: many.map(r => r.endpointId) });
   const pool = createRelayPool({ broker, relays: many, verifier: sellerCrypto, connect: net.connector, timing: FAST, nowSeconds: () => NOW, maxRelays: 99 });
@@ -125,7 +126,7 @@ test('backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only
   const net = memoryNetwork(); const delays = []; const realSetTimeout = globalThis.setTimeout;
   let clock = 0;
   const { broker } = makeBroker();
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW,
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW,
     clock: () => clock, random: () => 0.999, timing: { stableMs: 60_000, connectTimeoutMs: 800 } });
   globalThis.setTimeout = (fn, ms, ...rest) => { if (ms >= 100 && ms < 30_000 && ms !== 800) { delays.push(ms); return realSetTimeout(fn, 1); } return realSetTimeout(fn, ms, ...rest); };
   try {
@@ -155,7 +156,7 @@ test('malicious relay: three consecutive overloaded 10 s windows disconnect the 
   const net = memoryNetwork(); let clock = 1_000_000;
   const { broker } = makeBroker(); const events = [];
   for (let i = 0; i < 400; i++) events.push(signWith(seller, { kind: AD_KIND, created_at: NOW, tags: [['t', 'p2p-offramp-ad-v1']], content: String(i) }));
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: { ...FAST, backoffCeilingsMs: [60_000] }, random: () => 0.5 });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: { ...FAST, backoffCeilingsMs: [60_000] }, random: () => 0.5 });
   try {
     pool.subscribe([filter()], collect().handlers);
     await until(() => stateOf(pool, 'relay-a').state === 'open');
@@ -199,7 +200,7 @@ test('malicious relay: invalid signatures are never delivered, never poison dedu
 
 test('malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized', async () => {
   const net = memoryNetwork(); const { broker } = makeBroker();
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
   try {
     const { got, handlers } = collect(); pool.subscribe([filter()], handlers);
     await until(() => stateOf(pool, 'relay-a').state === 'open');
@@ -219,7 +220,7 @@ test('malicious relay: wrong-subscription events, events outside the filter and 
 
 test('malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered', async () => {
   const net = memoryNetwork(); const { broker } = makeBroker();
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
   try {
     const { got, handlers } = collect(); pool.subscribe([filter()], handlers);
     await until(() => stateOf(pool, 'relay-a').state === 'open');
@@ -237,7 +238,7 @@ test('malformed and unknown frames are ignored safely; NOTICE and CLOSED never c
 
 test('per-subscription event cap closes the subscription on that relay and dedupe memory is bounded', async () => {
   const net = memoryNetwork(); const { broker } = makeBroker(); let clock = 0;
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
   try {
     let delivered = 0; pool.subscribe([filter()], { onEvent: () => { delivered++; } });
     await until(() => stateOf(pool, 'relay-a').state === 'open');
@@ -252,7 +253,7 @@ test('per-subscription event cap closes the subscription on that relay and dedup
 
 test('dedupe memory evicts the oldest ids beyond 4096', async () => {
   const net = memoryNetwork(); const { broker } = makeBroker(); let clock = 0;
-  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
   try {
     let delivered = 0;
     const subs = []; for (let i = 0; i < 4; i++) subs.push(pool.subscribe([filter()], { onEvent: () => { delivered++; } }));
@@ -272,7 +273,7 @@ test('dedupe memory evicts the oldest ids beyond 4096', async () => {
 
 test('hanging socket: connect timeout fails the attempt without blocking other relays', async () => {
   const net = { n: 0, connector() { this.n++; return { onopen: null, onmessage: null, onclose: null, onerror: null, send() {}, close() {} }; } };
-  const { broker } = makeBroker(); const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: () => net.connector(), nowSeconds: () => NOW, timing: { ...FAST, connectTimeoutMs: 20 } });
+  const { broker } = makeBroker(); const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: () => net.connector(), nowSeconds: () => NOW, timing: { ...FAST, connectTimeoutMs: 20 } });
   try {
     pool.subscribe([filter()], collect().handlers);
     await until(() => net.n >= 3);
@@ -316,7 +317,7 @@ test('end to end: sign, publish through the broker, discover, supersede with a r
 test('publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported', async () => {
   await withRelays(1, [{ onMessage(conn, m) { if (m[0] === 'EVENT') { conn.send(JSON.stringify(['OK', m[1].id, false, 'blocked: spam'])); return true; } return false; } }], async (fakes, keep) => {
     const ad = await signedAd();
-    const refused = createRelayPool(opts(fakes, { broker: makeBroker({ coverage: 'direct', mode: 'strict' }).broker }));
+    const refused = createRelayPool(opts(fakes, { broker: makeBroker({ coverage: 'direct', mode: 'strict', endpointURLs: loopbackRelayFixture(fakes).endpointURLs }).broker }));
     assert.deepEqual(await refused.publish(ad), { ok: true, value: [{ eventId: ad.id, relayId: 'relay-a', status: 'unknown' }] });
     refused.close(); assert.equal(fakes[0].connectCount, 0);
     const pool = keep(createRelayPool(opts(fakes)));

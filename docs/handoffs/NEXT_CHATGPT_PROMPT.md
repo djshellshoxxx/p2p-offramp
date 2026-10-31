@@ -1,5 +1,7 @@
 # Next agent prompt (any assistant; paste as-is)
 
+**Historical checkpoint:** use the [current continuation contract](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
+
 ## Current pointer (2026-10-25 ~11:30 UTC) — read first
 
 P2P owner session 01BAvLvx. Branch `claude/adoring-wozniak-850ue6` (PR #5). Read `SESSION_STATUS.md`: the "v29 review-queue reconciliation" table and the "Handoff checkpoint" section.

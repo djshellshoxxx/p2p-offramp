@@ -97,3 +97,31 @@ test('external abort during a scoped operation closes its resource immediately a
  try{const leased=scope(s.broker.capture(permit(s.broker.authorize(request())),{signal:controller.signal,onRevoked:()=>{closed++;}}));const pending=leased.run(()=>gate.promise);controller.abort();assert.equal(closed,1);assert.equal(leased.signal.aborted,true);assert.deepEqual(await pending,{ok:false,error:'CANCELLED'});gate.resolve('SECRET late');await Promise.resolve();leased.dispose();assert.equal(closed,1);}
  finally{s.broker.dispose();}
 });
+
+test('optional destination binding compares the detached canonical registration before granting a runnable scope',async()=>{
+ const s=setup();let issuedSnapshot,invoked=0;
+ try{
+  s.registry.mutate=data=>{issuedSnapshot=data;};
+  const p=permit(s.broker.authorize(request()));issuedSnapshot.endpoint.url='https://attacker.invalid/changed-after-authorize';
+  const leased=scope(s.broker.capture(p,{expectedURL:'HTTPS://FIXTURE.EXAMPLE:443/api'}));
+  assert.deepEqual(await leased.run(async()=>++invoked),{ok:true,value:1});leased.dispose();assert.equal(invoked,1);
+  s.registry.mutate=undefined;
+  const mismatch=permit(s.broker.authorize(request()));
+  assert.equal(s.broker.capture(mismatch,{expectedURL:'https://attacker.invalid/api'}),'INVALID_ENDPOINT');
+  assert.equal(s.broker.isCurrent(mismatch),false);assert.equal(s.broker.capture(mismatch),'CANCELLED');
+  assert.equal(s.registry.issued.size,0,'mismatch consumes and disposes the registered grant');
+ }finally{s.broker.dispose();}
+});
+test('destination credentials, fragments, controls, malformed schemes and hostile URL options fail before operation',()=>{
+ const s=setup();let getters=0;
+ try{
+  for(const expectedURL of ['','https:fixture.example/api','http://fixture.example/api','ws://fixture.example/api','https://u:p@fixture.example/api','https://@fixture.example/api',
+   'https://fixture.example/api#','https://fixture.example/api#fragment','https://fixture.example/api\n','https://fixture.example\\api','https://fixture.example/'+ 'x'.repeat(2048),{},undefined]){
+   const p=permit(s.broker.authorize(request()));assert.equal(s.broker.capture(p,{expectedURL}),'INVALID_ENDPOINT');assert.equal(s.broker.isCurrent(p),false);
+  }
+  const getter=Object.defineProperty({},'expectedURL',{get(){getters++;throw Error('SECRET');}});
+  assert.equal(s.broker.capture(permit(s.broker.authorize(request())),getter),'INVALID_ENDPOINT');assert.equal(getters,0);
+  assert.equal(s.broker.capture(permit(s.broker.authorize(request())),Object.create({expectedURL:'https://attacker.invalid/api'})),'INVALID_ENDPOINT');
+  assert.equal(s.registry.issued.size,0);
+ }finally{s.broker.dispose();}
+});

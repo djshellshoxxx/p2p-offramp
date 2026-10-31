@@ -51,6 +51,11 @@ test('metadata never holds secret values, buffers, config or full command; input
  }
  assert.equal(all.unlock.passphrase,SECRET);assert.equal(all.restore.sourcePassphrase,SOURCE);assert.equal(all.restore.destinationPassphrase,DEST);
 });
+test('recovery inspection retains only the profile correlation, not its pagination or payload',()=>{
+ const command=build('listRecoveryReferences',{profileId:PROFILE,offset:64,expectedRevision:17}),meta=capture(command);
+ assert.deepEqual(meta,{operation:'listRecoveryReferences',generation:3,profileId:PROFILE});assert.equal(Object.isFrozen(meta),true);
+ assert.equal('offset'in meta,false);assert.equal('expectedRevision'in meta,false);
+});
 // Integration with the real AppRuntime through the existing public contract only. Fixed synthetic inputs.
 let oldSecure;
 beforeEach(()=>{oldSecure=Object.getOwnPropertyDescriptor(globalThis,'isSecureContext');Object.defineProperty(globalThis,'isSecureContext',{configurable:true,value:true});});

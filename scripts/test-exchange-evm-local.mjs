@@ -27,7 +27,7 @@ import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
 import { decodeIntentPayload } from '../packages/schemas/index.ts';
 import { rpcClient, checkToolchain, forgeEnv, TOOLCHAIN } from './sepolia/lib.mjs';
 import { startFakeRelay } from '../packages/relay/test/support/fake-relay.mjs';
-import { makeBroker, FAST, until } from '../packages/relay/test/support/harness.mjs';
+import { makeBroker, FAST, until, loopbackRelayFixture } from '../packages/relay/test/support/harness.mjs';
 
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
@@ -150,12 +150,15 @@ try{
     for(const event of fixture.events)if(matchesFilters(event,message.slice(2)))conn.send(JSON.stringify(['EVENT',message[1],event]));
     conn.send(JSON.stringify(['EOSE',message[1]]));return true;
   }});const provider=createLocalNobleNostrProvider(),domain={chainId:'31337',verifyingContract:escrow};
+  // Explicit fixture connector maps independently registered logical WSS URLs to this owned loopback WS relay.
+  // It proves connector-argument authorization, not native TLS or private routing.
+  const relayFixture = loopbackRelayFixture([relay]);
   for(let i=0;i<2;i++){
     const key=await provider.generate(),eventCrypto=await createRelayEventCrypto(provider,key.secretKey);
     const book=createOrderBook({nowSeconds:()=>clock,verifier:eventCrypto});
     const exchange=createTermsExchange({provider,selfPublicKey:key.publicKey,ads:book,registry,hashTerms:reviewed=>evmTermsHash(domain,asTerms(reviewed)),now:()=>clock});
-    const broker=makeBroker({coverage:'direct',mode:'ordinary'}).broker;brokers.push(broker);
-    const pool=createRelayPool({broker,relays:[{endpointId:'relay-a',url:relay.wsUrl}],verifier:eventCrypto,timing:FAST,nowSeconds:()=>clock});pools.push(pool);
+    const broker=makeBroker({coverage:'direct',mode:'ordinary',endpointURLs:relayFixture.endpointURLs}).broker;brokers.push(broker);
+    const pool=createRelayPool({broker,relays:relayFixture.relays,connect:relayFixture.connect,verifier:eventCrypto,timing:FAST,nowSeconds:()=>clock});pools.push(pool);
     parties.push({secret:key.secretKey,pub:key.publicKey,eventCrypto,book,exchange,pool});
   }
   pass('canonical escrow and both real-crypto exchange parties use loopback-only chain/relay fixtures');

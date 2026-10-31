@@ -84,6 +84,25 @@ test('G07 import boundaries use the TypeScript AST and report fixture violations
   }
 });
 
+test('G07 permits only the explicit read-only release side entry and follows its dependencies', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-release-context-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/security/release-context.ts', "export { context } from './src/release-proof.ts';\n");
+    await put(root, 'packages/security/src/release-proof.ts', 'export const context = true;\n');
+    await put(root, 'packages/other/release-context.ts', 'export const context = true;\n');
+    await put(root, 'apps/web/src/main.ts', "import '../../../packages/security/release-context.ts'; import '../../../packages/security/src/release-proof.ts'; import '../../../packages/security/other-context.ts'; import '../../../packages/other/release-context.ts';\n");
+    let result = await inspectImportBoundaries(root);
+    const privateImports = result.findings.filter(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT');
+    assert.equal(privateImports.length, 3, 'private/similar-named entries remain rejected');
+    assert.equal(privateImports.some(finding => finding.detail === '../../../packages/security/release-context.ts'), false);
+    await put(root, 'packages/proofs/index.ts', 'export const proof = true;\n');
+    await put(root, 'packages/security/src/release-proof.ts', "export * from '../../proofs/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proofs/index.ts'), 'side-entry dependencies remain checked');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('G07 reports missing application graph entry instead of claiming it was checked', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-no-entry-'));
   try {

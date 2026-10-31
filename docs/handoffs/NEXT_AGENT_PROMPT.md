@@ -1,5 +1,11 @@
 # Next agent prompt (paste as-is)
 
+**Superseded continuation instructions:** execute the current
+[coordinated autonomous prompt](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
+and resume its [task ledger](../../tasks/todo.md). Source through `eaa1fe5` is
+merged. The unavailable Foundry/schema assumptions and unfinished defect claims
+below are historical; inspect current source and retained verification first.
+
 ## Current pointer (2026-10-25 ~11:30 UTC) — read first
 
 P2P owner session 01BAvLvx. Branch `claude/adoring-wozniak-850ue6` (PR #5). Read `SESSION_STATUS.md`: the "v29 review-queue reconciliation" table and the "Handoff checkpoint" section.

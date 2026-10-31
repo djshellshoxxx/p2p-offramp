@@ -1,6 +1,10 @@
 # P2P Off-ramp
 
-Current combined-source status and audit: [consolidation report](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
+Current source: [autonomous completion report](docs/execution/AUTONOMOUS-RESULT-2026-10-31.md),
+[remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
+[autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
+and [task ledger](tasks/todo.md). The prior [consolidation audit](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md)
+records merged compatible work; historical local-only reports below are superseded.
 
 
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
@@ -16,7 +20,7 @@ The catalog contains 173 documents: 171 expanded technical design baselines, a n
 and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence
 are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
 
-Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Signed registry/release trust, wallet signing/submission, native escrow/relay integration and the trading loop remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
+Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Offline signed registry/release verification, test-only wallet execution, both native escrow profiles and the canonical encrypted relay-to-escrow local acceptance loop are implemented. Approved live trust/bootstrap, qualified deployments and a funds-enabled app remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
 
 ## Screenshots
 

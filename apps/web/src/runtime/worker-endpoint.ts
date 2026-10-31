@@ -1,10 +1,10 @@
 /**
  * Worker-private composition root. The narrow protocol cannot read, mutate or return private records, except the
- * purpose-bound saved terms reviews (G07): `trade` records in the saved-review format, in the selected profile only.
+ * purpose-bound saved terms reviews (G07) and unverified scalar recovery references (G12), in the selected profile only.
  */
 import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
 import {
-  decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError,
+  decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeHandle, type RuntimeMessage, type RuntimeResult,
   type RuntimeStatus, type RuntimeSavedReview, type VaultSession, type VaultSessionLease, type Result, type PrivateRecordV1, type SavedReviewPayload,
@@ -207,6 +207,17 @@ class VaultWorkerEndpoint {
           this.#reply(command, { ok: true, value: Object.freeze({ newProfileId: receipt.newProfileId, records: receipt.records }) });
         } else if (command.operation === 'exportEncrypted') {
           const value = await this.#services.backup.exportWithStatus(command.profileId, job.controller.signal); this.#guard(job);
+          this.#reply(command, { ok: true, value });
+        } else if (command.operation === 'listRecoveryReferences') {
+          const vault = this.#services.vault, session = this.#selected(command.profileId);
+          vaultValue(await vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);
+          if (command.expectedRevision !== null && command.expectedRevision !== session.revision) throw new RuntimeBoundaryError('CONFLICT');
+          const records = vaultValue(await vault.list(session.sessionId, 'journal')); this.#guard(job);
+          let value;
+          try { value = projectRecoveryReferences(records, command.offset, session.revision); } catch { throw new RuntimeBoundaryError('INVALID_INPUT'); }
+          vaultValue(await vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);
+          const current = this.#selected(command.profileId);
+          if (current.sessionId !== session.sessionId || current.revision !== session.revision) throw new RuntimeBoundaryError('CONFLICT');
           this.#reply(command, { ok: true, value });
         } else if (command.operation === 'saveTermsReview' || command.operation === 'listTermsReviews' || command.operation === 'deleteTermsReview') {
           const vault = this.#services.vault;

@@ -39,7 +39,11 @@ export interface TransportScope {
   run<T>(operation: (signal: AbortSignal) => Promise<T>): Promise<TransportResult<T>>;
   dispose(): void;
 }
-export interface CaptureOptions { readonly signal?: AbortSignal; readonly onRevoked?: () => void; }
+export interface CaptureOptions {
+  readonly signal?: AbortSignal; readonly onRevoked?: () => void;
+  /** Bind a driver's destination to the detached registered endpoint. This grants no new route authority. */
+  readonly expectedURL?: string;
+}
 export interface TransportPolicyOptions { readonly trustedRegistry?: TrustedTransportRegistryCapability; readonly now?: () => number; }
 interface State {
   readonly permit: Permit; readonly projection: TransportGrantProjection; readonly grant: TrustedTransportGrant;
@@ -50,6 +54,16 @@ interface State {
 const EMPTY: TrustedTransportRegistryCapability = Object.freeze({ inspect: () => null, capture: () => null, subscribeInvalidation: () => () => undefined });
 const failure = (error: RouteError): TransportResult<never> => Object.freeze({ ok: false, error });
 const bindingMatches = (left: RequestPolicy, right: RequestPolicy): boolean => left.channel === right.channel && left.endpointId === right.endpointId && left.method === right.method;
+function canonicalExpectedURL(input: unknown): string | null {
+  if (typeof input !== 'string' || input.length > 2048 || !/^(?:https|wss):\/\//i.test(input) || /[\u0000-\u0020\u007f\\#]/.test(input)) return null;
+  try {
+    const url = new URL(input);
+    // Reject user-info syntax even when it normalizes to empty credentials.
+    const authority = input.slice(input.indexOf('://') + 3).split(/[/?]/, 1)[0];
+    if ((url.protocol !== 'https:' && url.protocol !== 'wss:') || url.username || url.password || authority?.includes('@')) return null;
+    return url.href;
+  } catch { return null; }
+}
 
 export class SessionTransportPolicy {
   readonly #registry: TrustedTransportRegistryCapability;
@@ -198,6 +212,12 @@ export class SessionTransportPolicy {
     const state = this.#states.get(permit);
     if (!state || state.captured || !this.#current(state)) return 'CANCELLED';
     try {
+      const expected = Object.getOwnPropertyDescriptor(options, 'expectedURL');
+      if (!expected && 'expectedURL' in options) { this.#drop(state, 'INVALID_ENDPOINT'); return 'INVALID_ENDPOINT'; }
+      if (expected) {
+        const destination = 'value' in expected ? canonicalExpectedURL(expected.value) : null;
+        if (destination === null || destination !== state.projection.endpoint.url) { this.#drop(state, 'INVALID_ENDPOINT'); return 'INVALID_ENDPOINT'; }
+      }
       if ((options.signal !== undefined && !(options.signal instanceof AbortSignal)) || (options.onRevoked !== undefined && typeof options.onRevoked !== 'function')) return 'POLICY_BLOCKED';
       if (options.signal?.aborted) { this.#drop(state, 'CANCELLED'); return 'CANCELLED'; }
       state.captured = true; state.onRevoked = options.onRevoked;

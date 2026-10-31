@@ -8,7 +8,7 @@ import { evmTermsHash } from '../../wallet/src/evm-terms.ts';
 import { createUnsignedEvent, createSeal, createGiftWrap, createLocalNobleNostrProvider } from '../../nostr-crypto/index.ts';
 import { createRelayPool, createAdEvent, createOrderBook, AD_KIND } from '../../relay/index.ts';
 import { startFakeRelay } from '../../relay/test/support/fake-relay.mjs';
-import { makeBroker, FAST, until } from '../../relay/test/support/harness.mjs';
+import { makeBroker, FAST, until, loopbackRelayFixture } from '../../relay/test/support/harness.mjs';
 import { createRelayEventCrypto, createTermsExchange, adAddress, adBookKey, encodeEnvelope, envelopeTags, transition } from '../index.ts';
 
 // SYNTHETIC local scenario (packages/domain/test/fixtures/local-evm-scenario): same-author regression fixture, not a golden vector.
@@ -74,7 +74,8 @@ test('two-party exchange over the fake relay with real crypto: ad -> take -> off
   const pools = [];
   try {
     const w = await world();
-    const mkPool = who => { const p = createRelayPool({ broker: makeBroker().broker, relays: [{ endpointId: 'relay-a', url: fake.wsUrl }], verifier: who.crypto, timing: FAST, nowSeconds: () => NOW }); pools.push(p); return p; };
+    const fixture = loopbackRelayFixture([fake]);
+    const mkPool = who => { const p = createRelayPool({ broker: makeBroker({ endpointURLs: fixture.endpointURLs }).broker, relays: fixture.relays, connect: fixture.connect, verifier: who.crypto, timing: FAST, nowSeconds: () => NOW }); pools.push(p); return p; };
     const sellerPool = mkPool(w.seller), buyerPool = mkPool(w.buyer);
     /** Subscribe for events addressed to `who`, return everything not yet delivered once the relay says EOSE, then close. */
     const pull = async (pool, who) => {
