@@ -1,0 +1,629 @@
+{
+  "assignment": "P2P-G16-PENDING-PRIVACY-05",
+  "packetBase": "6519f05f71e31579d1c5caad206089d85c2824f8",
+  "preImplementationHead": "e43f371e2779640c9fd1751f15112b894a550ede",
+  "docsOnlyDescendantPreserved": true,
+  "proposalLibrary": "libfile_c61db81d507c8191b841b67fe527d242",
+  "proposalVersion": 0,
+  "proposalBytes": 39765,
+  "proposalSha256": "ff8a6f3834fe135288e9fcf45fd52cb2daca06f4539ac9b58468a2f9e7c3c94c",
+  "nativeCompleteBytesVerified": true,
+  "all15SourceBlocksMatchedAtIntake": true,
+  "outputManifest": [
+    {
+      "path": "apps/web/test/pending-metadata.test.mjs",
+      "base_state": "absent",
+      "base_bytes": null,
+      "base_sha256": null,
+      "proposed_bytes": 7069,
+      "proposed_sha256": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+      "patch_sha256": "3da76aba38882c4d695da2a9e59d1698338365c29b551fbe92d309ebbc87f98a",
+      "localPatch": "tests.patch"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "base_state": "absent",
+      "base_bytes": null,
+      "base_sha256": null,
+      "proposed_bytes": 1355,
+      "proposed_sha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+      "patch_sha256": "513805563c36a2c9f60ab79327c58e7ebe5c2f338672ae5f6f9bb480f6963ad4",
+      "localPatch": "helper.patch"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "base_state": "existing",
+      "base_bytes": 16843,
+      "base_sha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+      "proposed_bytes": 16975,
+      "proposed_sha256": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+      "patch_sha256": "5b76e39a2a1cd6c06fd5da23f41d5cd7529675bb92f7cc0cd3c3c35a8dd9e0c9",
+      "localPatch": "runtime.patch"
+    }
+  ],
+  "threeTargetsMatchProposalByteForByte": true,
+  "integratorCodeOrOracleAdaptation": false,
+  "originalArtifacts": [
+    {
+      "originalName": "proposal.md",
+      "storedPath": "docs/evidence/p2p-pending-metadata-20261027/proposal.md.gz",
+      "rawBytes": 39765,
+      "rawSha256": "ff8a6f3834fe135288e9fcf45fd52cb2daca06f4539ac9b58468a2f9e7c3c94c",
+      "gzipSha256": "dd8739afcc9d4a81db0579fff0c08a316622806a676f52dd3a540bec45f9ea76"
+    },
+    {
+      "originalName": "tests.patch",
+      "storedPath": "docs/evidence/p2p-pending-metadata-20261027/tests.patch.gz",
+      "rawBytes": 7248,
+      "rawSha256": "3da76aba38882c4d695da2a9e59d1698338365c29b551fbe92d309ebbc87f98a",
+      "gzipSha256": "2e46d409a96beee7cc6dd56d93cc05dbc4e7a6307916137643398980df50e098"
+    },
+    {
+      "originalName": "helper.patch",
+      "storedPath": "docs/evidence/p2p-pending-metadata-20261027/helper.patch.gz",
+      "rawBytes": 1452,
+      "rawSha256": "513805563c36a2c9f60ab79327c58e7ebe5c2f338672ae5f6f9bb480f6963ad4",
+      "gzipSha256": "0f1a402abae579050b0c9c44cdc47fabee0a50aa1f3f240fa1c2bca81ad95247"
+    },
+    {
+      "originalName": "runtime.patch",
+      "storedPath": "docs/evidence/p2p-pending-metadata-20261027/runtime.patch.gz",
+      "rawBytes": 5318,
+      "rawSha256": "5b76e39a2a1cd6c06fd5da23f41d5cd7529675bb92f7cc0cd3c3c35a8dd9e0c9",
+      "gzipSha256": "c8701a3d6f3b79fc738eda4f6e5a01c848668320b93ecf2870de14e90e7f31ce"
+    }
+  ],
+  "brokerRequest": "req_011CgRwVmoXasp44e9x9nDgT",
+  "proposedByModel": "claude-sonnet-5-5",
+  "brokerReportedEstimatedCostUsd": "0.157876",
+  "integratorPaidCalls": 0,
+  "integrator": "Codex sole P2P integrator; no extra worker/runner/review started",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/pending-metadata.test.mjs"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:35:46.675836+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+        "apps/web/src/runtime/pending-metadata.ts": null,
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:35:46.928587+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/01-helper-missing-red.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/01-helper-missing-red.log.gz",
+      "logRawBytes": 2447,
+      "logRawSha256": "2dea501c8dc4fbefd3fd35ec740980cebbe1824d51120263810c998e73f2b759",
+      "logGzipSha256": "5cbd58cfd8730f74c994947b5a615f14089a1d9debb2a2dc4278499588089382"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "apps/web/test/pending-metadata.test.mjs",
+        "apps/web/test/app-runtime.test.mjs",
+        "apps/web/test/worker-endpoint.test.mjs",
+        "apps/web/test/app-services.test.mjs"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:35:58.782273+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:36:02.555708+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/02-focused-green.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/02-focused-green.log.gz",
+      "logRawBytes": 4588,
+      "logRawSha256": "cdbcb691c0f30c7b25567a38c73d2a586a7ed43f55fcef2eedae8b7cb4f9ce6c",
+      "logGzipSha256": "93a1a170603dce678b87cbff9576eaa7b92dbd441d4d037a645f50eb9b8627d6"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:36:51.868156+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:36:54.764405+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/03-build.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/03-build.log.gz",
+      "logRawBytes": 1510,
+      "logRawSha256": "e261b2df43d55863dc60975cb5788c75d2bfc6d575764b8f8473046edf19af6d",
+      "logGzipSha256": "72bacca488bec53eba2b80787ad72fe0070ee63f8641a9b751965c48e7c5c616"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:36:51.879819+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:36:52.759446+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/04-boundaries.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/04-boundaries.log.gz",
+      "logRawBytes": 448,
+      "logRawSha256": "c859d84fe0941983ecf59fe803e7233e5187f23588f35a562f456008dc48eddd",
+      "logGzipSha256": "31ec2aeaadefab519e5cf42a516405d3feb37317ead43e5245830f11b4e899bd"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:36:51.860228+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:36:52.754201+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/05-build-policy.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/05-build-policy.log.gz",
+      "logRawBytes": 985,
+      "logRawSha256": "72f3a4f0dd657edc8ac6d0167248a5ea85ef6411b5ad646b44242fea484924ba",
+      "logGzipSha256": "c6a2d2057008199f6000d002069c1501f6964ba11144ab777288bcaaeb2f5364"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:37:25.218823+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:37:45.000339+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/06-node-aggregate.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/06-node-aggregate.log.gz",
+      "logRawBytes": 44846,
+      "logRawSha256": "ff10dfa13104a05995eed176c632c1b7f92e21852f4f66520fa321090f2b1e5c",
+      "logGzipSha256": "698494a0c8b028360b8505c0da11a5106fa9cfff33a524707c4d865bc9cff6e6"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "base": "e43f371e2779640c9fd1751f15112b894a550ede",
+      "startedAtUtc": "2026-10-27T02:37:25.239294+00:00",
+      "sourceFiles": {
+        "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+        "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+        "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+        "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+        "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+        "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+        "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+        "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+        "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+        "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+        "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+        "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T02:37:47.994213+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-pending-metadata-20261027/07-emitted-browser.exit.json",
+      "log": "docs/evidence/p2p-pending-metadata-20261027/07-emitted-browser.log.gz",
+      "logRawBytes": 4745,
+      "logRawSha256": "3723848907775773dc91b47f41773818b9abbab44e016c9f63b830c0dd1c9015",
+      "logGzipSha256": "b4e06db7d67c4d68a77c11e2b1a097ee12bb5164bf1091cf17138a7aa2cdcff0"
+    }
+  ],
+  "finalSourceHashes": {
+    "apps/web/src/runtime/app-runtime.ts": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+    "apps/web/src/runtime/pending-metadata.ts": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+    "apps/web/test/pending-metadata.test.mjs": "94d03e919b7958d86cdb7666a5091c078b5c50d5fa534a3ab3a9de04ed5f58eb",
+    "apps/web/test/app-runtime.test.mjs": "fec258b1adbf63bc356724e9f092fdf638b63687a9aaba8773a1a13c3d6da88b",
+    "apps/web/test/worker-endpoint.test.mjs": "4925b41a24a34faa24cafca98605285049ea34d98f8233f44a1b91f48723f2f5",
+    "apps/web/test/app-services.test.mjs": "841cfb809b4dcf2bf4c65f08fd2e33fac4f2569f0b6c7426ff53d0cf74156735",
+    "apps/web/src/runtime/worker-endpoint.ts": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+    "apps/web/src/app-services.ts": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+    "packages/schemas/src/runtime.ts": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+    "packages/schemas/index.ts": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+    "packages/schemas/src/evm-agreement-input.ts": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+    "packages/schemas/test/evm-agreement-input.test.mjs": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+    "scripts/fixtures/g16-browser.mjs": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8",
+    "packages/domain/src/read-retry.ts": "e3b42d26125f6743e73d7699f185b8cb1fd96b729f7c0c8dc398b4cbe2a2d41a",
+    "packages/domain/test/read-retry.test.mjs": "78bb81cf4ebc46a9c5243ab0d1aee50e2f4d10cce8c94418086e70489e936d79",
+    "packages/domain/src/errors.ts": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+    "packages/schemas/src/core.ts": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+    "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+    "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+    "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+    "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+    "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+    "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+    "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+  },
+  "red": {
+    "tests": 5,
+    "pass": 3,
+    "fail": 2,
+    "skip": 0,
+    "cause": "new helper absent; both direct metadata oracles fail;3public integration cases already pass base"
+  },
+  "greenFocused": {
+    "tests": 38,
+    "pass": 38,
+    "fail": 0,
+    "skip": 0
+  },
+  "greenAggregate": {
+    "tests": 422,
+    "pass": 422,
+    "fail": 0,
+    "skip": 0
+  },
+  "buildPolicy": {
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "strictTypesBuild": "exit0;all4existing strict configurations and static Vite build",
+  "boundaries": "exit0;48production source/19core graph modules",
+  "emittedBrowser": {
+    "fixture": "emitted-react-vite-shell-local-chromium",
+    "browser": "154.0.8037.57",
+    "reports": [
+      {
+        "delivery": "meta",
+        "base": "/ipfs/bafy-local-fixture/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "base": "/nested/project/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "base": "/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/ipfs/bafy-local-fixture/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/nested/project/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "header",
+        "base": "/",
+        "widths": [
+          320,
+          768,
+          1024,
+          1440
+        ],
+        "hashReload": true,
+        "lockedBoot": true,
+        "hostileRouteAndTextbox": true
+      },
+      {
+        "delivery": "meta",
+        "actualArtifactPolicyDenials": true
+      },
+      {
+        "delivery": "header",
+        "actualArtifactPolicyDenials": true
+      },
+      {
+        "delivery": "header",
+        "localFraming": "blocked",
+        "deployedAttestation": false
+      },
+      {
+        "delivery": "meta",
+        "localFraming": "permitted-as-disclosed",
+        "deployedAttestation": false
+      },
+      {
+        "mode": "missing-entry",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "missing-worker",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "unsupported-document-crypto",
+        "encryptedSourcePreserved": true
+      },
+      {
+        "mode": "unsupported-worker-storage",
+        "encryptedSourcePreserved": true
+      }
+    ],
+    "localRebuildByteMatch": true,
+    "nativeEncryptedUnlockExport": true,
+    "uiCreateRestoreInventory": true,
+    "uiRestoreReconciliation": true,
+    "automaticWalletPrompts": 0,
+    "forbiddenLoopbackRequests": 0,
+    "unexpectedRequests": 0,
+    "deviceAcceptance": false,
+    "deployedFramingAttestation": false,
+    "signedRelease": false,
+    "releaseAcceptance": false
+  },
+  "appGraphs": {
+    "core-graph-document.json": "fa26589803e3e66ca14bd4790e05ceee1339e68730da7d27db550a21d41c7c42",
+    "core-graph-worker.json": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5"
+  },
+  "newProjectionInDocumentGraphOnlyAsExistingOfflineRuntimeHelper": true,
+  "g16VerifierParserWalletNobleExcludedFromAppGraph": true,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "projectionGuarantee": "fresh frozen2field metadata or3fields for unlock/exportEncrypted; no direct full-command/payload/credential reference; full validated outgoing message and controls preserved",
+  "scopeLimits": "not a new parser/authorization constructor or global string/closure/GC/transport/physical erasure claim; no G16 command/UI/provider inclusion",
+  "unchangedAuthority": "operation/generation checks, unlock/export profile binding, stale response/replacement publication, one-public/up-to2internal bound and original deadlines unchanged",
+  "originalTestsAndProtocolWorkerFacadeUnchanged": true,
+  "g13ParserIdbSourceUnchanged": true,
+  "notRerun": [
+    "private G16 qualification browser fixture",
+    "separate vault/runtime/content/reseal browser suites",
+    "Python/spec suite",
+    "other browsers/devices",
+    "independent audit",
+    "seeded/coverage-guided campaigns"
+  ],
+  "runnerOwnership": "sole external broker/helper;17adapter mappings already assigned; no duplicate implementation/execution",
+  "idbReview": "timeout301s/no report or usage supplied, no completion/retry claimed",
+  "next": "AppRuntime PENDING05 ownership can close after this source checkpoint; next bounded G16 typed command/result/Worker lifetime preparation remains subject to existing inclusion conditions and new exact source pin"
+}

@@ -97,15 +97,20 @@
     "license": "MIT",
     "runtime": "npm",
     "review": {
-      "status": "pending",
-      "reviewer": "",
-      "evidencePath": ""
+      "status": "accepted",
+      "reviewer": "Codex GPT-6 Astra fresh-context review /root/p2p_g16_fresh_review, 2026-10-26",
+      "evidencePath": "docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md"
     },
     "vectors": [
       {
         "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
         "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
         "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
+      },
+      {
+        "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+        "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "provenanceUrl": "https://registry.npmjs.org/js-sha3/-/js-sha3-0.8.0.tgz"
       }
     ]
   },
@@ -116,6 +121,192 @@
     "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
     "version": "2.4.0",
     "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "accepted",
+      "reviewer": "Codex GPT-6 Astra fresh-context review /root/p2p_g16_fresh_review, 2026-10-26",
+      "evidencePath": "docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md"
+    },
+    "vectors": [
+      {
+        "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+        "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "provenanceUrl": "https://github.com/ethereum/EIPs/blob/7372d10a457b29eceb02cd052345af165de1fb60/assets/eip-712/Example.js"
+      },
+      {
+        "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+        "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "provenanceUrl": "https://registry.npmjs.org/elliptic/-/elliptic-6.6.1.tgz"
+      }
+    ]
+  },
+  {
+    "id": "native-webcrypto-g15-verification-test-only",
+    "capability": "release-manifest-verification-test-only",
+    "primitive": "native WebCrypto ECDSA P-256/SHA-256 verification and SHA-256 release digests",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G15-v1",
+    "integrity": "browser-profile:security/release-browser-support.json",
+    "license": "Browser implementation dependent; Web Crypto API specification, no third-party implementation copied",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+        "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+        "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
+      }
+    ]
+  },
+  {
+    "id": "native-webcrypto-g15-verification-testnet-build",
+    "capability": "release-manifest-verification-testnet-build",
+    "primitive": "native WebCrypto ECDSA P-256/SHA-256 verification and SHA-256 digests of the owner-signed Sepolia registry in the testnet web build only (apps/web/src/testnet; owner-held testnet trust root, 2026-10-28)",
+    "sourceUrl": "https://www.w3.org/TR/2017/REC-WebCryptoAPI-20170126/",
+    "version": "WebCrypto-G15-v1",
+    "integrity": "browser-profile:security/release-browser-support.json",
+    "license": "Browser implementation dependent; Web Crypto API specification, no third-party implementation copied",
+    "runtime": "browser-built-in",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+        "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+        "provenanceUrl": "https://www.rfc-editor.org/rfc/rfc6979.txt"
+      }
+    ]
+  },
+  {
+    "id": "noble-curves-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "secp256k1 BIP340 Schnorr sign/verify for NIP-01 events and unhashed x-only ECDH for the NIP-44 v2 conversation key",
+    "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      },
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  },
+  {
+    "id": "noble-hashes-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "SHA-256 (NIP-01 event id), HKDF-SHA256 extract/expand and HMAC-SHA256 (NIP-44 v2 keys and MAC)",
+    "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      }
+    ]
+  },
+  {
+    "id": "noble-ciphers-2.4.0-nostr",
+    "capability": "nostr-messaging-test-only",
+    "primitive": "ChaCha20 stream cipher (RFC 8439, 32-bit block counter from 0) for NIP-44 v2, via packages/nostr-crypto/src/chacha20.ts (input checks only)",
+    "sourceUrl": "https://github.com/paulmillr/noble-ciphers/tree/d9e8a6a599e7ed729d9be03854c46a3c73bd9a79",
+    "version": "2.4.0",
+    "integrity": "sha512-AnjFn0Jv92laAkvMrghlFZq4qQCIN/4DxFV/eooqtC2YTjB7kBeLMS2T9KJX4Dn+ZVXLOwK0lSgqDtx9gvxtiw==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040",
+        "provenanceUrl": "https://github.com/paulmillr/nip44/blob/671a1f04bcfacaf125b0db68adc45bc9ce0e763b/nip44.vectors.json"
+      }
+    ]
+  },
+  {
+    "id": "noble-curves-2.4.0-schnorr-verify",
+    "capability": "public-relay-discovery-test-only",
+    "primitive": "BIP340 Schnorr signature verification of NIP-01 public discovery events",
+    "sourceUrl": "https://github.com/paulmillr/noble-curves/tree/656c4364dffa44c64aa0c49914b8000b278b67a9",
+    "version": "2.4.0",
+    "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  },
+  {
+    "id": "noble-hashes-2.4.0-relay-sha256",
+    "capability": "public-relay-discovery-test-only",
+    "primitive": "SHA-256 native NIP-01 event ID hashing",
+    "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+    "license": "MIT",
+    "runtime": "npm",
+    "review": {
+      "status": "pending",
+      "reviewer": "",
+      "evidencePath": ""
+    },
+    "vectors": [
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d",
+        "provenanceUrl": "https://github.com/bitcoin/bips/blob/93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0/bip-0340/test-vectors.csv"
+      }
+    ]
+  },
+  {
+    "id": "noble-hashes-2.4.0-runtime-keccak",
+    "capability": "evm-chain-reader-test-only",
+    "primitive": "Keccak-256 native EVM runtime code identity and escrow selector",
+    "sourceUrl": "https://github.com/paulmillr/noble-hashes/tree/663c2aeeffc308ac0cded59bd32f7c212adacfc2",
+    "version": "2.4.0",
+    "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
     "license": "MIT",
     "runtime": "npm",
     "review": {

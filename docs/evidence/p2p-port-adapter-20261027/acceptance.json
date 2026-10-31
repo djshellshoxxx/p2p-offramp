@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "2c04460b3ea7d47445d6cb210a29e59339d2ea10",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "port",
+          "suites": [
+            {
+              "id": "focused",
+              "argv": [
+                "node",
+                "--test",
+                "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+                "packages/wallet/test/evm-agreement-host.test.mjs",
+                "packages/schemas/test/evm-agreement-control.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs"
+              ],
+              "categories": [
+                "unit",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "G11 intrinsic viewbounds/getter/proxy/offset/snapshot and existing G15 regressions",
+                "scope": "no trust/deployment/provider selection"
+              }
+            },
+            {
+              "id": "aggregate",
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "build",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "boundaries",
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "policy",
+              "argv": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged"
+              }
+            },
+            {
+              "id": "workerphysical",
+              "argv": [
+                "node",
+                "scripts/test-g16-physical-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "same13trusted fixture schedules, not production wire parser"
+              }
+            },
+            {
+              "id": "helpertypes",
+              "argv": [
+                "node",
+                "node_modules/typescript/bin/tsc",
+                "--project",
+                "/workspace/checkpoints/2026-10-27-p2p-port-adapter/tsconfig.json",
+                "--noEmit"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60
+            }
+          ]
+        }
+      ],
+      "expected_tree": "42cd6c0f2a608db42c95989394172b0beb7305e4"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "check:boundaries"
+  ],
+  "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+  "startedAtUtc": "2026-10-26T22:38:31.507079+00:00",
+  "finishedAtUtc": "2026-10-26T22:38:32.100712+00:00",
+  "exitCode": 0,
+  "sourceFiles": {
+    "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+    "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+  }
+}

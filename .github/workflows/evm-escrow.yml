@@ -1,0 +1,47 @@
+name: EVM escrow
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts/evm
+    env:
+      FOUNDRY_PROFILE: ci
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: true
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf
+        with:
+          version: v1.5.1
+      - run: forge --version
+      - run: forge build --sizes
+      - run: forge test -vvv
+      - name: Verify committed ABI is current
+        run: |
+          bash script/export-abi.sh
+          git diff --exit-code -- abi/BasicEscrow.json
+  local-trade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf
+        with:
+          version: v1.5.1
+      - run: npm ci --ignore-scripts
+      - run: npm run test:evm:local
+      - run: npm run test:exchange:evm
+      - run: npm run test:evm:reconcile
+      - run: npm run test:sepolia:kit
+      - run: npm run test:sepolia:trade

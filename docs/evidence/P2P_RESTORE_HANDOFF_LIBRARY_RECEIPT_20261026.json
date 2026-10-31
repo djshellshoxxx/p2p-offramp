@@ -1,0 +1,72 @@
+{
+  "kind": "private Library producer receipt; not consumer retrieval, whole-repository Git restore or release acceptance",
+  "sourceAndTestsCheckpoint": "bd432033f101e2d19ea023da44155348a7acf15b",
+  "sourceTree": "6c43ba480f96b06afdd24ab9efd04bde31043fa2",
+  "base": "c0d2c8a18de760d1bede6da0cf94cd038ed93305",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "current_version_number": 7,
+  "file_id": "file_00000000650481f78a6a255750207ab4",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_size_bytes": 419008,
+  "sha256": "87ba97487146a0e17a7c019372ca9f9acf82d01f1529d9d3d305c53700de91e7",
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-restore-handoff/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "producerStatus": "succeeded",
+  "xattrsApplied": true,
+  "payloadEntries": 172,
+  "patchRoundTrips": {
+    "incrementalFiveFiles": true,
+    "cumulativeTwelveFiles": true,
+    "wholeRepositoryRestore": false
+  },
+  "packagerDisposition": "initial helper expected a different normal Git missing-path diagnostic; replaced stderr-text assumption with exact ls-tree membership; no source change, final two round trips passed",
+  "consumerRetrievalVerified": false,
+  "priorVersionsPreserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "freshVerification": {
+    "browser": "emitted app Chromium154.0.8037.57; full existing fixture plus confirmed restore join, explicit lock/switch, cancellation/stale/uncertain and selected reload cases",
+    "unit": {
+      "pass": 379,
+      "fail": 0,
+      "skip": 0
+    },
+    "buildPolicy": {
+      "pass": 5,
+      "fail": 0,
+      "skip": 0
+    },
+    "strictTypesBuild": "exit0",
+    "boundaries": "46sources/18core exit0; first diagnostic preserved; isolated rerun clean"
+  },
+  "originalFailuresPreserved": [
+    "missing explicit UI join RED",
+    "introduced unlock-notification cleanup defect RED",
+    "fixture helper ReferenceError"
+  ],
+  "notRerun": [
+    "separate test:browser vault/runtime/content/reseal suite",
+    "Python/spec checks",
+    "other browser/device qualification"
+  ],
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "economicPreparationAllowed": false,
+  "additionalCryptoProviderInApp": false,
+  "privacy": "opaque confirmed destination ID only in component memory; no passphrase forwarding, URL ID or persistent active-profile pointer",
+  "ghostPayFilesChanged": false,
+  "canonicalQueueReadOrWritten": false,
+  "externalSourcePublication": false,
+  "remainingGates": [
+    "native-vault/browser qualification",
+    "separately reviewed offline G16 browser/Worker inclusion",
+    "native authoritative contract/ABI/reader, trusted journal, registry/manifest/wallet/escrow/offer/trade integration and two-party acceptance"
+  ],
+  "receiptCommitScope": "documentation only after packaged source checkpoint; no new runtime test claim"
+}

@@ -1,0 +1,535 @@
+{
+  "baselineCandidate": "31bbab0db07163c61b31dab75733e711440372b7",
+  "incomingOwnerSource": "f379dc243cd9164da076c69702c2b5c21898f520",
+  "relaySource": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+  "changes": [
+    {
+      "path": "docs/evidence/p2p-exchange-close-20261030/repro.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ad68ab1e8330f033f0de3d6f8aee3b51127cc54"
+    },
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "888a199d6ec7ab5843c6e57f0e371949de3f33eb"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/async-green.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15134446b8e20e0bd2d569ada5f4385403647769"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/close-native-green.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0617439348f3ca83eec68d08583b76980ae7a513"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-green.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88e7f23637d081b839825db9b791a5e6f00e6920"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-red.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19223968ee0140d342734632f67dfc050e04b563"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/copy-cap-repro.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b2809f6a667c1ae11cbb1652f8bd691c493f3b7"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-green.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c199ba0939c4900f5a7ff0d48574f7d9ede63f2"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-red.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61190759503fa8c4a8e83b6247c781f21f2d6735"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/late-take-repro.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d98663316d649e012dd3ec736651f24da566c3db"
+    },
+    {
+      "path": "docs/evidence/P2P_EXCHANGE_FINISH_20261030/manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9189cd8a7706a54d7df76533b045ac25c9585b04"
+    },
+    {
+      "path": "docs/evidence/p2p-exchange-close-20261030/lifecycle-fixtures.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a901ba173ec693fd86212a9853d6d19c399f030d"
+    },
+    {
+      "path": "docs/handoffs/P2P_EXCHANGE_FINISH_20261030.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6617c317b8fc693d7f5d251cbb13e0bc144273d"
+    },
+    {
+      "path": "packages/exchange/test/async-boundaries.test.mjs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82854e7623afd111d5c257e5ddacc51e61f60d1a"
+    }
+  ],
+  "conflicts": [],
+  "packageFiles": [
+    {
+      "path": "packages/exchange/index.ts",
+      "sha": "59db5e57392a446dfe3189882ec723fd509eac13"
+    },
+    {
+      "path": "packages/nostr-crypto/index.ts",
+      "sha": "7a9957dcfde58b4df7987975f46960f03d875d34"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha": "567147ebfa91f32f04b87f2192de7349671abe00"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha": "ddd40bc997865d91b357611eb4503bc0857dafa3"
+    },
+    {
+      "path": "packages/identity/index.ts",
+      "sha": "6279058df65c82db754ba4a90911b725232ea2cf"
+    },
+    {
+      "path": "packages/transport/index.ts",
+      "sha": "67e490f5f8bf7937c04e46a6ba3838ca21b07459"
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "sha": "392c8accca1a6b887d4942b8338f5bc9c19bde73"
+    },
+    {
+      "path": "packages/exchange/test/exchange.test.mjs",
+      "sha": "043d2fb455198a31b61517df3e57220edec3ae3f"
+    },
+    {
+      "path": "packages/exchange/test/async-boundaries.test.mjs",
+      "sha": "82854e7623afd111d5c257e5ddacc51e61f60d1a"
+    },
+    {
+      "path": "packages/exchange/src/machine.ts",
+      "sha": "e38ff198bb49baf7d10c01f8daadcf3fbdea3a37"
+    },
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "sha": "888a199d6ec7ab5843c6e57f0e371949de3f33eb"
+    },
+    {
+      "path": "packages/exchange/src/messages.ts",
+      "sha": "08aa561cabaf3b0705bb3eca56243aeee2dff6c5"
+    },
+    {
+      "path": "packages/nostr-crypto/test/event.test.mjs",
+      "sha": "77f76729b82201078451a395f92f5ac898d0c128"
+    },
+    {
+      "path": "packages/nostr-crypto/test/relay-event-crypto.test.mjs",
+      "sha": "9a41efe41a5f9268a0df8f1287325026d01539c4"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip17.test.mjs",
+      "sha": "90e527e4707e96975a8962c060e393f0cb660334"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip44.test.mjs",
+      "sha": "7538ed0577006b14117a9f6b2f43fc7646918e13"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip59.test.mjs",
+      "sha": "5c826dd9e25c8a6b90aa78424e42fb189513297e"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "sha": "de401b32886833436ffa3e3ac5fbe159b8d9d2ad"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip17.ts",
+      "sha": "70ad7f769ef8133f77c9e1b08dc109aa1105bcd2"
+    },
+    {
+      "path": "packages/nostr-crypto/src/relay-event-crypto.ts",
+      "sha": "3f7c7732bfeb0a7e7dedd92eeb02201a3cc02be5"
+    },
+    {
+      "path": "packages/nostr-crypto/src/provider.ts",
+      "sha": "3da386223a78346d0d8886e46361ccba91783235"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "sha": "7aaf4cab7aa69ad7b121014fa510a60054cd9c68"
+    },
+    {
+      "path": "packages/nostr-crypto/src/event.ts",
+      "sha": "89b52b915f26fd07cff61315ea48d1117f939e73"
+    },
+    {
+      "path": "packages/nostr-crypto/src/bytes.ts",
+      "sha": "0a2ecbb3042c0f55f22acf0039b100e2fa4bf496"
+    },
+    {
+      "path": "packages/nostr-crypto/src/chacha20.ts",
+      "sha": "7d3785a6b2130befb378a1095b76375b85884db4"
+    },
+    {
+      "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+      "sha": "8be2b7b5508144a0c507f7584972a887ad5cb171"
+    },
+    {
+      "path": "packages/nostr-crypto/test/fixtures/NIP44-VECTORS-PROVENANCE.md",
+      "sha": "32844b7ead23992825416aa5ae870c54c4e6e595"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement.test.mjs",
+      "sha": "7bdbff79f59d389d7f6996aec1f54b35fc322908"
+    },
+    {
+      "path": "packages/wallet/test/discovery.test.mjs",
+      "sha": "feccbc9a0c1c9ab37752dbce923f0352cffa0876"
+    },
+    {
+      "path": "packages/wallet/test/local-evm-scenario.test.mjs",
+      "sha": "f6b2b839856f568bd2e4677b973e246cd813ec62"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "sha": "c4b9166a632e89bd3913555f22de6d2cf2cc5cdb"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "sha": "f2d898f9693b3271a0a19c5c0a055a9bec7c11c8"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "sha": "3615a1e46d7fe3bfc87fdf4e4ff414716db80f23"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+      "sha": "1c197286e5f3e46fc538244f1e5af48fcf966c0f"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "sha": "9c48346b82fee1a7161dfb0eca73c0dbd8f2f3b6"
+    },
+    {
+      "path": "packages/wallet/test/evm-escrow.test.mjs",
+      "sha": "3730699ca311099ff87cfcff52714534d27900b4"
+    },
+    {
+      "path": "packages/wallet/src/evm-submit.ts",
+      "sha": "8c223e25e51f1dd930aaa4aa23c57e294a90892c"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha": "7288a66ae4c5ea72c87209f665147878be1c4040"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha": "3b6a3e7884ea55ca731a74578edd4f5e0b92815a"
+    },
+    {
+      "path": "packages/wallet/src/discovery.ts",
+      "sha": "00bd8300efbbb821cb888973d6062f0aeab39dcb"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha": "b9af813c4f3d20900fd28ce5309f71304005bdd7"
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement.ts",
+      "sha": "10848dcf2d5c9cb58c57216a497cfdbfc5f46664"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-port-adapter.ts",
+      "sha": "1ee6f49f64d698e405a0336d3868d419b7fdc0a8"
+    },
+    {
+      "path": "packages/wallet/test/lib/g16-bundle-fixture.mjs",
+      "sha": "065e988b8e6c67d79b2911aec746b27fce590a86"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "sha": "6b4bc8aa1261ccddfed237dc924725fcc3555141"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "sha": "5e974de18adb0919c03eec66421dd1e18f17f802"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+      "sha": "571f5759fd92361402eee55a969eeedb9bdb5d30"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/EIP712-LICENSE-NOTICE.md",
+      "sha": "252fb7104c3ca431df37a634057070d10d289a44"
+    },
+    {
+      "path": "packages/domain/test/tx-lifecycle.test.mjs",
+      "sha": "0bd1959c90141f802bffa289068e19402e5976cd"
+    },
+    {
+      "path": "packages/domain/test/read-retry.test.mjs",
+      "sha": "1cc37b860cda2ca80b20a35643d152b5fbe3ad08"
+    },
+    {
+      "path": "packages/domain/test/authority.test.mjs",
+      "sha": "70e5fe58265783dbc9ac6669c8899f34f2226299"
+    },
+    {
+      "path": "packages/domain/test/local-evm-scenario.test.mjs",
+      "sha": "2fa157a264319333890a63eeb005075ddfd4ba80"
+    },
+    {
+      "path": "packages/domain/test/terms-review.test.mjs",
+      "sha": "6f2f85de19956c698f4d50db24b3a042899c9f3c"
+    },
+    {
+      "path": "packages/domain/test/intent-journal.test.mjs",
+      "sha": "1dabb5f70c97123de3a6b6030d467cdaec5e0afa"
+    },
+    {
+      "path": "packages/domain/test/trade-composition.test.mjs",
+      "sha": "d493c2034f3363d7b4ce7c04404c91aa914691f9"
+    },
+    {
+      "path": "packages/domain/test/payment-preflight.test.mjs",
+      "sha": "3f6fcabc1e5b2f53210cd69650eef63be49cad74"
+    },
+    {
+      "path": "packages/domain/test/errors.test.mjs",
+      "sha": "e8da3d0aff4ad879ce79eb3bbafabe2816eb3dd5"
+    },
+    {
+      "path": "packages/domain/test/registry.test.mjs",
+      "sha": "2ab7d7d34d816777b3aaffe763ae35904b95f05c"
+    },
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "sha": "459039de265bb9ca98bdc43b84f16c20e2567d2a"
+    },
+    {
+      "path": "packages/domain/src/payment-preflight.ts",
+      "sha": "81ab25e9c08c28f879f043158d49498db7398d35"
+    },
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "sha": "a7a4aea84186e3cd7c05b7b275cace24e50261f3"
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha": "7e157f40bf2fe0625fd2d42b7397667664afdf5f"
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "sha": "bab80670f91e7173a656d7f6e88dba0c46d5773f"
+    },
+    {
+      "path": "packages/domain/src/authority.ts",
+      "sha": "83c4341610b3e1fb46b60ca631035cdf51291b22"
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha": "39c38db45686516db53e459d17fdf2286761e81f"
+    },
+    {
+      "path": "packages/domain/src/trade-composition.ts",
+      "sha": "25b8c0081df05b6abf1ca594ed709f11790d5d9f"
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "sha": "1e8a714bf9afe8fd9a701328e6272f127f091c18"
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha": "b3257781cee02ba2b23854e3f62f1e34db746f7d"
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "sha": "dd6c9994c18fb4e903a447492878452e4e16d15e"
+    },
+    {
+      "path": "packages/domain/test/fixtures/g16-vectors.json",
+      "sha": "664eb80f5f8ac5072b8ac2aec8fa33675c8a9bf7"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/registry.json",
+      "sha": "7a550f8d0710b6d6d6f1df319b163b1a53ade64d"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/README.md",
+      "sha": "fef93e7698dcac671026f0a799efaeb8ffa6d731"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/scenario.json",
+      "sha": "8a85bdf453fffad2bc45126e7b6d215160c3fd44"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha": "2c97c7b14f773ca0cfd172f858097a8cdda479aa"
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha": "dd389faf82ebb8a9942d689ffc9b352423126b9e"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-control.ts",
+      "sha": "762a1af97f5095884050bec07b3168968a891e34"
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha": "303aa45ef9498613d5ca0d8768219a501d122568"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-input.ts",
+      "sha": "c6d07309b225ca68dc5060485481aae878f4de09"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha": "c6774ec9d519e8ddfab385dd975d3bf9d0eeb5ed"
+    },
+    {
+      "path": "packages/schemas/src/identity.ts",
+      "sha": "664d921865882ae0463be0e499e89234142d2fa4"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha": "5e77c2baa678cd31e3bb1cd0d558cc1fde4979ef"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-protocol.ts",
+      "sha": "85836b0aec7f4898e3d7590fdfb88be2892e3258"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha": "3d2308b4261a854a146906ca7fde43790bceab97"
+    },
+    {
+      "path": "packages/schemas/src/transport.ts",
+      "sha": "3bbd8d0ece621e1d3c5838d41e45db6cb055d33f"
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha": "c9165f64f8566c5b7a8f112366ddbe672c41dbfa"
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "sha": "c902a67990a937171673bc7e2228755360e8df60"
+    },
+    {
+      "path": "packages/identity/test/identity.test.mjs",
+      "sha": "0b75cc49708f3472eabfb8548b23fb135bd090e8"
+    },
+    {
+      "path": "packages/identity/test/provider.test.mjs",
+      "sha": "c84ffc6c1e75735dbf7289c478a09a917550c7e0"
+    },
+    {
+      "path": "packages/identity/test/schema.test.mjs",
+      "sha": "a3322586ef0b0e22ce813ef21478b50c9cf54d3f"
+    },
+    {
+      "path": "packages/identity/src/noble-provider.ts",
+      "sha": "14e231236c012153ec759502dce7a1526763d7df"
+    },
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "sha": "d80c111765f7199859df8d1257378ca2b82cad27"
+    },
+    {
+      "path": "packages/identity/test/fixtures/noble-MIT-LICENSE.txt",
+      "sha": "9297a046d01cf521f93679535be51a8e5b736c0d"
+    },
+    {
+      "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+      "sha": "672339129a844a060591bb22f444158ff45438ed"
+    },
+    {
+      "path": "packages/identity/test/fixtures/BIP340-LICENSE-NOTICE.md",
+      "sha": "581eb8b10db25bb3bf84e4ba7d0ae4ae58726f53"
+    },
+    {
+      "path": "packages/transport/test/policy.test.mjs",
+      "sha": "1710e3fd935f1c6674ee17cf2ed1fa3a4340872d"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha": "e2cd9fdcdae6f2a1e90161caefe2c85f63179c6c"
+    },
+    {
+      "path": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "sha": "958a01ca2bffc5237cbc72097a9c7fc7888caa4e"
+    },
+    {
+      "path": "packages/relay/test/pool-lifetime.test.mjs",
+      "sha": "8619dae80f1b4d388304e4abf2a481ee1b1cb7de"
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha": "4e01a5b9100151fb157c61bbdf01b1a1357cb915"
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "sha": "895d19735d7c49ad8bccf5133ec1eef67f74aaf3"
+    },
+    {
+      "path": "packages/relay/src/ad.ts",
+      "sha": "6ee5a62e0bca278f6b06caa1ebc40569acecc1a1"
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha": "1e9257bc042f92ac5766e52528377ed158662b2f"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha": "c1d64827ad6eacec1bea98ea5146fb8a5ff69e4e"
+    },
+    {
+      "path": "packages/relay/test/support/harness.mjs",
+      "sha": "6f57115fad1e5a396afef3806d5f31436e8c514f"
+    },
+    {
+      "path": "packages/relay/test/support/crypto-double.mjs",
+      "sha": "4e65c3bf10f04b494ec6fa7ca05eb7b9871b7ee4"
+    },
+    {
+      "path": "packages/relay/test/support/fake-relay.mjs",
+      "sha": "e0d4fba58d8089d571506e6b2e00abb6a78e1a8c"
+    }
+  ],
+  "node": "24.22.1",
+  "tests": {
+    "command": "node --test --test-reporter=tap packages/exchange/test/*.test.mjs packages/relay/test/*.test.mjs packages/nostr-crypto/test/*.test.mjs packages/transport/test/*.test.mjs docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs",
+    "total": 134,
+    "pass": 134,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "includes": "12 new real-provider tests and five previously RED cases"
+  },
+  "typecheck": {
+    "command": "node /workspace/scratch/ee4d6b8ddb74/GhostPay/node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
+    "version": "5.9.3",
+    "exit": 0,
+    "scope": "Materialized subset with actual root configuration; not pinned TS7 full application qualification"
+  },
+  "review": "Bounded compatibility review found no blocker; exact-head full CI and owner substantive review remain required. Exchange implementation/integration ownership retained."
+}

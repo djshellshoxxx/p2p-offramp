@@ -1,0 +1,20 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "libraryFileId": "libfile_724075754830819189367812705445ee",
+  "fileId": "file_00000000cf9881f5bdffc46af4262a56",
+  "version": 0,
+  "libraryPath": "/GhostPay-P2P-reuse-inventories-20261026.zip",
+  "sha256": "65c05286f851d58915d0a5461af9542bd037e0eb832ac0d61b6ab2335c987c4d",
+  "bytes": 53791,
+  "recordedUTC": "2026-10-26T19:32:00.109555+00:00",
+  "localPayloadHashVerifiedBeforeAndAfterUpload": true,
+  "localLibraryIdentityAndVersionPersisted": true,
+  "consumerDownloadTested": false,
+  "contentScope": "two reuse inventories; source/file identities; scoped G06 report/check evidence; next bounded task notes; no source repositories, Git history, dependencies or private review packets",
+  "packagedHeads": {
+    "GhostPay": "61cb14003f527a91970411c20262d6c7fc398d8f",
+    "P2P": "66f8b24d866056e0608cbaf300e0fc462caed091"
+  },
+  "restrictions": "No Library input retry, canonical queue overwrite, GitHub write, CI, deployment, new dependency/software, credentials or security-setting change. New standalone private Library item; no sharing operation."
+}

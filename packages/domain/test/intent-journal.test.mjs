@@ -136,3 +136,55 @@ test('hostile thrown values at capture, scan and marker boundaries remain fixed 
  const marker=journal({captureSession:s.vault.captureSession.bind(s.vault),list:s.vault.list.bind(s.vault),read:s.vault.read.bind(s.vault),commit:async(sessionId,revision,mutations,signal)=>{if(mutations.length)throw hostile();return s.vault.commit(sessionId,revision,mutations,signal);}},s.session);
  const failed=err(await marker.markSending(prepared.intentId),'BROADCAST_UNKNOWN');assert.equal(failed.error.action,'reconcile');assert.equal(failed.error.retryable,false);assert.equal(s.store.writes,2);marker.dispose();s.journal.dispose();s.vault.dispose();
 });
+
+const nativeObservation=(prepared,change={})=>({binding:prepared.binding,account:prepared.account.toLowerCase(),action:prepared.action,state:'finalized',hash:'0x'+'11'.repeat(32),nonce:'1',replacementHash:null,anchor:{height:'8',hash:'0x'+'22'.repeat(32)},canonical:true,finalized:true,...change});
+test('known broadcast hashes persist, terminal reservations require fresh trusted native proof after reopen',async()=>{
+ const prepared=intent({submission:{chain:'evm',hash:null,nonce:'1'}});let calls=0,canonical=true;
+ const readNative=async stored=>{calls++;return{ok:true,value:nativeObservation(stored,{canonical,finalized:canonical,state:canonical?'finalized':'reorged'})};};
+ const s=await setup({readNative});val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));
+ val(await s.journal.recordBroadcast(prepared.intentId,'0x'+'11'.repeat(32)));assert.equal(val(await s.journal.unresolved(binding,account))[0].state,'pending');
+ err(await s.journal.recordBroadcast(prepared.intentId,'0x'+'33'.repeat(32)),'CONFLICT');
+ assert.equal(val(await s.journal.reconcileNative(prepared.intentId)).state,'finalized');assert.equal(calls,1);
+ assert.deepEqual(val(await s.journal.unresolved(binding,account)),[]);assert.equal(calls,2);
+ s.journal.dispose();s.journal=journal(s.vault,s.session,{readNative});canonical=false;
+ err(await s.journal.reserve(intent(),4),'CONFLICT');assert.equal(calls,3,'restored terminal labels are reobserved');
+ canonical=true;val(await s.journal.reserve(intent(),4));assert.equal(calls,4);s.journal.dispose();s.vault.dispose();
+});
+test('native reconciliation refuses mismatched identity, hash, nonce, forged anchors and expired strings',async()=>{
+ for(const mutation of [{binding:{...binding,tradeId:'other'}},{account:'0x'+'34'.repeat(20)},{action:'refund'},{hash:'0x'+'33'.repeat(32)},{nonce:'2'},{anchor:{height:'01',hash:'0x'+'22'.repeat(32)}},{state:'expired'},{canonical:false,finalized:true},{state:'replaced',replacementHash:null}]){
+  const prepared=intent({submission:{chain:'evm',hash:null,nonce:'1'}}),s=await setup({readNative:async stored=>({ok:true,value:nativeObservation(stored,mutation)})});
+  val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));val(await s.journal.recordBroadcast(prepared.intentId,'0x'+'11'.repeat(32)));
+  err(await s.journal.reconcileNative(prepared.intentId),'INTEGRITY_FAILURE');assert.equal(s.store.rows.get(s.session.profileId).revision,3);s.journal.dispose();s.vault.dispose();
+ }
+});
+test('native reconciliation supports pending/confirmed/reorged/failed/replaced without automatic retries',async()=>{
+ const prepared=intent({submission:{chain:'evm',hash:null,nonce:'1'}});let evidence=nativeObservation(prepared,{state:'pending',finalized:false});
+ const s=await setup({readNative:async()=>({ok:true,value:evidence})});val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));
+ assert.equal(val(await s.journal.reconcileNative(prepared.intentId)).state,'pending');
+ for(const state of ['confirmed','reorged']){evidence={...evidence,state};assert.equal(val(await s.journal.reconcileNative(prepared.intentId)).state,state);assert.equal(val(await s.journal.unresolved(binding,account)).length,1);}
+ evidence={...evidence,state:'failed',finalized:false};val(await s.journal.reconcileNative(prepared.intentId));assert.equal(val(await s.journal.unresolved(binding,account)).length,1);
+ evidence={...evidence,state:'failed',finalized:true};val(await s.journal.reconcileNative(prepared.intentId));assert.deepEqual(val(await s.journal.unresolved(binding,account)),[]);
+ evidence={...evidence,state:'replaced',replacementHash:'0x'+'44'.repeat(32)};val(await s.journal.reconcileNative(prepared.intentId));assert.deepEqual(val(await s.journal.unresolved(binding,account)),[]);
+ s.journal.dispose();s.vault.dispose();
+});
+test('native callback cancellation, absent reader and post-commit lock never grant terminal authority',async()=>{
+ const prepared=intent({submission:{chain:'evm',hash:null,nonce:'1'}}),entered=deferred(),gate=deferred();
+ const s=await setup({readNative:async stored=>{entered.resolve();await gate.promise;return{ok:true,value:nativeObservation(stored)};}});val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));
+ const controller=new AbortController(),pending=s.journal.reconcileNative(prepared.intentId,controller.signal);await entered.promise;controller.abort();gate.resolve();err(await pending,'CANCELLED');assert.equal(s.store.rows.get(s.session.profileId).revision,2);
+ s.store.afterCommit=()=>s.vault.lockAll();err(await s.journal.reconcileNative(prepared.intentId),'BROADCAST_UNKNOWN');s.store.afterCommit=undefined;
+ const session=val(await s.vault.unlock(s.session.profileId,pass)),fresh=journal(s.vault,session);assert.equal(val(await fresh.unresolved(binding,account)).length,1);err(await fresh.reconcileNative(prepared.intentId),'UNSUPPORTED_PROVIDER');fresh.dispose();s.journal.dispose();s.vault.dispose();
+});
+test('different EVM trades cannot reserve the same account/network nonce without fresh final proof',async()=>{
+ const prepared=intent({submission:{chain:'evm',hash:null,nonce:'7'}}),s=await setup();val(await s.journal.reserve(prepared,0));
+ err(await s.journal.reserve(intent({binding:{...binding,tradeId:'other'},submission:{chain:'evm',hash:null,nonce:'7'}}),1),'CONFLICT');
+ val(await s.journal.reserve(intent({binding:{...binding,tradeId:'other'},submission:{chain:'evm',hash:null,nonce:'8'}}),1));s.journal.dispose();s.vault.dispose();
+});
+test('cross-trade nonce reuse requires fresh native finality, never a restored terminal label',async()=>{
+ for(const trusted of [false,true]){
+  const prepared=intent({state:'finalized',submission:{chain:'evm',hash:'0x'+'11'.repeat(32),nonce:'7'}});
+  const s=await setup(trusted?{readNative:async stored=>({ok:true,value:nativeObservation(stored,{nonce:'7'})})}:{});
+  val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ac'.repeat(16),kind:'journal',schemaVersion:1,payload:schema.encodeIntentPayload(prepared)}}]));
+  const result=await s.journal.reserve(intent({binding:{...binding,tradeId:'new-trade'},submission:{chain:'evm',hash:null,nonce:'7'}}),1);
+  if(trusted)val(result);else err(result,'CONFLICT');s.journal.dispose();s.vault.dispose();
+ }
+});

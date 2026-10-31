@@ -1,0 +1,272 @@
+{
+  "retrieved": "2026-10-30T11:02:00Z",
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "checks": [
+    {
+      "name": "SonarCloud Code Analysis",
+      "id": 124025066415,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "completed",
+      "conclusion": "success",
+      "details_url": "https://sonarcloud.io/dashboard?id=djshellshoxxx_p2p-offramp&pullRequest=14",
+      "output": {
+        "title": "Quality Gate passed",
+        "summary": "Issues  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed.svg '') [2 New issues](https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&pullRequest=14&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/accepted.svg '') [0 Accepted issues](https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&pullRequest=14&issueStatuses=ACCEPTED)\n\nMeasures  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed.svg '') [0 Security Hotspots](https://sonarcloud.io/project/security_hotspots?id=djshellshoxxx_p2p-offramp&pullRequest=14&issueStatuses=OPEN,CONFIRMED&sinceLeakPeriod=true)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed.svg '') [0.0% Coverage on New Code](https://sonarcloud.io/component_measures?id=djshellshoxxx_p2p-offramp&pullRequest=14&metric=new_coverage&view=list)  \n![](https://sonarsource.github.io/sonarcloud-github-static-resources/v2/common/passed.svg '') [0.0% Duplication on New Code](https://sonarcloud.io/component_measures?id=djshellshoxxx_p2p-offramp&pullRequest=14&metric=new_duplicated_lines_density&view=list)  \n  \n[See analysis details on SonarQube Cloud](https://sonarcloud.io/dashboard?id=djshellshoxxx_p2p-offramp&pullRequest=14)\n\n",
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124025066415/annotations"
+      }
+    },
+    {
+      "name": "CodeRabbit",
+      "id": 124024327323,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "completed",
+      "conclusion": "skipped",
+      "details_url": "https://coderabbit.ai?utm_source=cr_app&utm_medium=github",
+      "output": {
+        "title": "Review skipped",
+        "summary": "Result: Skipped - Review skipped\nRun ID: `09000fd0-3681-4bfd-ad32-801870796fa5`\n\n| Step | Status | Time |\n| --- | --- | --- |\n| Prepare review scope | Skipped | 4s 292ms |\n| Prepare repository workspace | Skipped | 0s |\n| Run analysis checks | Skipped | 0s |\n| Generate review feedback | Skipped | 0s |\n| Publish review results | Skipped | 0s |\n| Time taken | | 4s 293ms |",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024327323/annotations"
+      }
+    },
+    {
+      "name": "schemas-and-crypto",
+      "id": 124024299266,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252146/job/124024299266",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024299266/annotations"
+      }
+    },
+    {
+      "name": "browser",
+      "id": 124024299059,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252146/job/124024299059",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024299059/annotations"
+      }
+    },
+    {
+      "name": "local-trade",
+      "id": 124024298934,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252121/job/124024298934",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024298934/annotations"
+      }
+    },
+    {
+      "name": "forge",
+      "id": 124024298748,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252121/job/124024298748",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024298748/annotations"
+      }
+    },
+    {
+      "name": "specs",
+      "id": 124024298694,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252146/job/124024298694",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024298694/annotations"
+      }
+    },
+    {
+      "name": "inventory",
+      "id": 124024298439,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252066/job/124024298439",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024298439/annotations"
+      }
+    },
+    {
+      "name": "browser",
+      "id": 124024275453,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244479/job/124024275453",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024275453/annotations"
+      }
+    },
+    {
+      "name": "schemas-and-crypto",
+      "id": 124024275409,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244479/job/124024275409",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024275409/annotations"
+      }
+    },
+    {
+      "name": "inventory",
+      "id": 124024275352,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244570/job/124024275352",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024275352/annotations"
+      }
+    },
+    {
+      "name": "forge",
+      "id": 124024275262,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244485/job/124024275262",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024275262/annotations"
+      }
+    },
+    {
+      "name": "specs",
+      "id": 124024274906,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244479/job/124024274906",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024274906/annotations"
+      }
+    },
+    {
+      "name": "local-trade",
+      "id": 124024274898,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "status": "queued",
+      "conclusion": null,
+      "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244485/job/124024274898",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/check-runs/124024274898/annotations"
+      }
+    }
+  ],
+  "workflow_runs": [
+    {
+      "id": 41044252121,
+      "name": "EVM escrow",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "pull_request",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252121"
+    },
+    {
+      "id": 41044252066,
+      "name": "Specification inventory",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "pull_request",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252066"
+    },
+    {
+      "id": 41044252146,
+      "name": "Vault foundation",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "pull_request",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252146"
+    },
+    {
+      "id": 41044244485,
+      "name": "EVM escrow",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "push",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244485"
+    },
+    {
+      "id": 41044244479,
+      "name": "Vault foundation",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "push",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244479"
+    },
+    {
+      "id": 41044244570,
+      "name": "Specification inventory",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "event": "push",
+      "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044244570"
+    }
+  ]
+}

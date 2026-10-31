@@ -1,0 +1,91 @@
+{
+  "assignment": "P2P-SHARED-RUNNER-DEMO01",
+  "source": "a9135412158144ff2ac01461bc77654c5fab38ca",
+  "tree": "6de276d73153fb373d0f414b018baf819830e026",
+  "runnerLibrary": "libfile_10891e001ae481918162e6c01eebb8f9",
+  "runnerVersion": 0,
+  "nativeTextBytes": 185846,
+  "nativeTextSha256": "dc3bad3bd51b27533a235aa5942133d79cd3a8a417758554c1b36bde911c3be0",
+  "archiveSha256": "097ab5eaa6a5c4115cdd8556d64d485d7c15e4929d423b071a86b337706ab399",
+  "archiveMembers": 63,
+  "allMemberHashesVerified": true,
+  "isolatedHelperDirectory": "/workspace/helpers/p2p-shared-runner-20261027/module-test-runner",
+  "runnerCoreSha256": "2e687ec8f219c6a8fa92ad62e0cdb7afbf11b5886bfd651dc3be5997360f88e2",
+  "manifestSha256": "da96c12308703efa5f62cde84133fd18fcc894dce96af20f521193a31e7bd131",
+  "configurationScope": "translated2existing mappings of17; no competing runner or helper edits",
+  "runResult": {
+    "exit": 0,
+    "pass": 2,
+    "fail": 0,
+    "timeout": 0,
+    "skipped": 0,
+    "sourceDrift": false,
+    "fixedNodeRegressions": 49,
+    "parserTests": 16,
+    "readRetryAndErrorTests": 33
+  },
+  "commands": [
+    [
+      "python3",
+      "/workspace/helpers/p2p-shared-runner-20261027/module-test-runner/runner.py",
+      "--manifest",
+      "/workspace/checkpoints/2026-10-27-p2p-runner-intake/p2p-local.json",
+      "--list"
+    ],
+    [
+      "python3",
+      "/workspace/helpers/p2p-shared-runner-20261027/module-test-runner/runner.py",
+      "--manifest",
+      "/workspace/checkpoints/2026-10-27-p2p-runner-intake/p2p-local.json",
+      "--project",
+      "p2p",
+      "--profile",
+      "quick",
+      "--jobs",
+      "1",
+      "--output",
+      "/workspace/checkpoints/2026-10-27-p2p-runner-intake/p2p-demo-01"
+    ]
+  ],
+  "method": "existing deterministic fixed regressions, not seeded fuzz/generation/mutation/coverage-guided",
+  "seedApplied": false,
+  "profileCaseMetadataApplied": false,
+  "resourceLimits": {
+    "jobs": 1,
+    "perJobDeadlineSeconds": 60,
+    "iterations": 1,
+    "memoryHardLimit": false,
+    "hostileProcessOrNetworkSandbox": false
+  },
+  "logs": [
+    {
+      "path": "docs/evidence/p2p-runner-demo-20261027/p2p-parser-fixed-regressions-stdout.log.gz",
+      "rawBytes": 1295,
+      "rawSha256": "fb9475cfd8515ece8c72d0df09333e134a2f2f4aebb2dea9bb98abef78a1a952"
+    },
+    {
+      "path": "docs/evidence/p2p-runner-demo-20261027/p2p-parser-fixed-regressions-stderr.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/p2p-runner-demo-20261027/p2p-read-retry-fixed-regressions-stdout.log.gz",
+      "rawBytes": 3577,
+      "rawSha256": "1ae5aaa13b849697067b6b23e17d7a3afc03cc7f74e862a643a1294db5e3faaa"
+    },
+    {
+      "path": "docs/evidence/p2p-runner-demo-20261027/p2p-read-retry-fixed-regressions-stderr.log.gz",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceSnapshots": "clean exactSHA/tree and identical before/after/final file fingerprint",
+  "environment": "runner minimal allowlist; job-owned home/temp/cache; no credential values inherited/logged",
+  "remaining": [
+    "15other adapter mappings not demonstrated here",
+    "P2P seeded generative/mutation and coverage-guided harnesses absent",
+    "no full runner platform/audit/security qualification; producer41selftests were not rerun here",
+    "Windows/macOS/browser/device/fullsoak unqualified by this2suite run"
+  ],
+  "next": "private G16 current-generation/one-active-job host lifecycle boundary using integrated schema, outside emitted app; requires next bounded reviewed assignment before implementation"
+}

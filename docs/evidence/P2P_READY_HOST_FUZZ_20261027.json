@@ -1,0 +1,536 @@
+{
+  "kind": "P2P ready bounded broker queue and source/provenance preparation",
+  "baseSha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+  "sourceAndTestsCommit": "a9135412158144ff2ac01461bc77654c5fab38ca",
+  "runtimeChanges": false,
+  "testsBuildsExecuted": false,
+  "seededCasesExecuted": 0,
+  "paidCalls": 0,
+  "additionalWorkersStarted": 0,
+  "canonicalPreparationQueueChanged": false,
+  "privateCheckpoint14Preserved": true,
+  "items": [
+    {
+      "assignment": "P2P-G16-PRIVATE-HOST-07",
+      "state": "integrated",
+      "stateEvidence": "Qualification-only host placed in wallet/test/lib;18host/60focused/454aggregate/5policy/root+explicithelperstrict types/boundaries and238privateChromiumassertions perruntime passed. No production/appintegration. Original3seamdefects/testoraclefailures/interruptedrun retained.",
+      "baseSha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+      "baseTree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+      "libraryFileId": "libfile_7bce3324aea48191a60e89287fd4b2ec",
+      "fileId": "file_00000000b9bc81f9894394560ee10913",
+      "version": 0,
+      "bytes": 44452,
+      "lines": 556,
+      "sha256": "e9784f4a79bdb561cb5db1e5383f825ef03f83b5f772e4af18da5ecba63c56eb",
+      "completeNativeReadbackVerified": true,
+      "allLocalXattrsVerified": true,
+      "allowedPaths": [
+        {
+          "path": "packages/wallet/src/evm-agreement-host.ts",
+          "baseState": "absent",
+          "bytes": null,
+          "sha256": null
+        },
+        {
+          "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+          "baseState": "absent",
+          "bytes": null,
+          "sha256": null
+        },
+        {
+          "path": "scripts/fixtures/g16-browser.mjs",
+          "baseState": "existing",
+          "bytes": 22979,
+          "sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8"
+        }
+      ],
+      "manifest": {
+        "assignment": "P2P-G16-PRIVATE-HOST-07",
+        "status": "READY private proposal assignment; not assigned/active/executed",
+        "baseSha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+        "baseTree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+        "sourceOwner": "sole P2P Codex integrator; broker proposes; no GhostPay writes",
+        "allowedPaths": [
+          {
+            "path": "packages/wallet/src/evm-agreement-host.ts",
+            "baseState": "absent",
+            "bytes": null,
+            "sha256": null
+          },
+          {
+            "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+            "baseState": "absent",
+            "bytes": null,
+            "sha256": null
+          },
+          {
+            "path": "scripts/fixtures/g16-browser.mjs",
+            "baseState": "existing",
+            "bytes": 22979,
+            "sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8"
+          }
+        ],
+        "retainedRequiredDependencies": [
+          {
+            "path": "packages/schemas/src/evm-agreement-input.ts",
+            "bytes": 13966,
+            "sha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "scripts/fixtures/g16-browser.mjs",
+            "bytes": 22979,
+            "sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+            "retainedLocation": "PRIVATE-PROTOCOL06 proposal fixture target, reconstruct from exact base+diff",
+            "wholeFileAvailable": true,
+            "readOnly": false
+          },
+          {
+            "path": "packages/wallet/src/evm-agreement.ts",
+            "bytes": 6796,
+            "sha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "scripts/test-g16-browser.mjs",
+            "bytes": 9202,
+            "sha256": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/src/core.ts",
+            "bytes": 7446,
+            "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": false,
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/src/runtime.ts",
+            "bytes": 13904,
+            "sha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": false,
+            "readOnly": true
+          },
+          {
+            "path": "apps/web/src/runtime/pending-metadata.ts",
+            "bytes": 1355,
+            "sha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/test/evm-agreement-input.test.mjs",
+            "bytes": 19056,
+            "sha256": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": false,
+            "readOnly": true
+          },
+          {
+            "path": "docs/reviews/G16_BROWSER_DISPOSITION_2026-10-27.md",
+            "bytes": 9447,
+            "sha256": "a8f026acf030f41190710ccb2b7f241a552c88049bbdaf09fb041537a501c47c",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": false,
+            "readOnly": true
+          },
+          {
+            "path": "package.json",
+            "bytes": 1395,
+            "sha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "tsconfig.json",
+            "bytes": 389,
+            "sha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+            "retainedLocation": "PRIVATE-PROTOCOL06 original input packet source block",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/src/evm-agreement-protocol.ts",
+            "bytes": 6378,
+            "sha256": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+            "retainedLocation": "PRIVATE-PROTOCOL06 returned implementation new-file diff, complete source",
+            "wholeFileAvailable": true,
+            "readOnly": true
+          }
+        ],
+        "inlineSourceBlocks": [
+          {
+            "path": "packages/wallet/test/lib/g16-bundle-fixture.mjs",
+            "role": "complete existing synthetic Node factory; never browser/app imported",
+            "wholeFile": true,
+            "startLine": 1,
+            "endLine": 36,
+            "fileBytes": 2658,
+            "fileSha256": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+            "includedBytes": 2658,
+            "includedSha256": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1"
+          },
+          {
+            "path": "packages/wallet/test/evm-agreement.test.mjs",
+            "role": "complete existing test imports and deferred/clear/error helpers; read-only; exact-target missing-module guard must be stricter in new tests",
+            "wholeFile": false,
+            "startLine": 1,
+            "endLine": 14,
+            "fileBytes": 12698,
+            "fileSha256": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+            "includedBytes": 1179,
+            "includedSha256": "39ce7e2adee5b2c505ab906a739859ad57afa73ca3bec7a0818e8cdabdb12b8b"
+          },
+          {
+            "path": "packages/wallet/test/evm-agreement.test.mjs",
+            "role": "complete existing held-hash/snapshot/cancellation/backend test functions; read-only",
+            "wholeFile": false,
+            "startLine": 115,
+            "endLine": 172,
+            "fileBytes": 12698,
+            "fileSha256": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+            "includedBytes": 4219,
+            "includedSha256": "96f83c3ae3b63c9bef4026f2936a9a0be46cadf13ed96823ebb3e8b3f3160168"
+          },
+          {
+            "path": "apps/web/src/runtime/worker-endpoint.ts",
+            "role": "existing closed/replay/generation/control/one-active and30s request setup; read-only comparison, no vault join",
+            "wholeFile": false,
+            "startLine": 93,
+            "endLine": 132,
+            "fileBytes": 11663,
+            "fileSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+            "includedBytes": 2682,
+            "includedSha256": "952f93f174de853d8621a97e424ae98e83a04a61138d8bee90b5d731af02eaab"
+          },
+          {
+            "path": "apps/web/src/runtime/worker-endpoint.ts",
+            "role": "existing post-await/finally/active release/reply guard; read-only comparison",
+            "wholeFile": false,
+            "startLine": 159,
+            "endLine": 184,
+            "fileBytes": 11663,
+            "fileSha256": "a086298074e6131111d98a448ca315b34ff3d7807e0b271f6ecffb0852e41b27",
+            "includedBytes": 1890,
+            "includedSha256": "6c0b1942dcab24a26500decdd4ec21ef2a4ffaabf8e418b48424c25f2ad9f4ef"
+          },
+          {
+            "path": "apps/web/src/runtime/app-runtime.ts",
+            "role": "existing primitive invalidation/close and generation exhaustion; read-only comparison",
+            "wholeFile": false,
+            "startLine": 117,
+            "endLine": 133,
+            "fileBytes": 16975,
+            "fileSha256": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+            "includedBytes": 1137,
+            "includedSha256": "2813329d2b8bac4ce2bc80bb1d8d6d05df83a8b98a227e90afb94a2bf434a468"
+          },
+          {
+            "path": "apps/web/src/runtime/app-runtime.ts",
+            "role": "existing one-public/two-internal,30s/1s,metadata andabort rules; read-only comparison",
+            "wholeFile": false,
+            "startLine": 176,
+            "endLine": 196,
+            "fileBytes": 16975,
+            "fileSha256": "e3d150419605dcd29d878ace31c855d343e5304a356e53bb61ededc7b5654f19",
+            "includedBytes": 1842,
+            "includedSha256": "c67e1dc0c15d84630dcbe8d1f652da9c859d1220fba8d9b55743cc5a11d9d8a7"
+          }
+        ],
+        "retainedPacket": {
+          "library_file_id": "libfile_a575afd14b888191aa86389b05d9bec2",
+          "version": 0,
+          "bytes": 85217,
+          "sha256": "f45eddaf2f2650a51212f5aba0dae5dd9f12e044abcd460604cf50b052018bd3"
+        },
+        "retainedProposal": {
+          "library_file_id": "libfile_c3188e45c7dc8191a9a545b48f6562b5",
+          "version": 0,
+          "bytes": 39665,
+          "sha256": "60cce726b59b95225721ec04306e999cd04620c0530f011a0e8e88f4619a5d25"
+        },
+        "priorBaselineEvidence": "a9135412158144ff2ac01461bc77654c5fab38ca:42focused/436aggregate/5policy/typebuildboundary/206private Chromium assertions each; not rerun in preparation",
+        "appInclusion": false,
+        "financialPolicyChanged": false,
+        "testsBuildsRunInPreparation": false,
+        "integratorPaidCalls": 0
+      },
+      "assignedModel": "Fable",
+      "implementationOwner": "sole P2P integrator after reviewed returned proposal",
+      "requestId": null,
+      "returnedProposal": {
+        "libraryFileId": "libfile_f05a746c8ec48191be3fbd741d4b60c3",
+        "version": 0,
+        "bytes": 61922,
+        "sha256": "a57d38cb08753c3473ed113a34932d7fcf7d215d2e4f98fd91e1b81f15141f04"
+      },
+      "integratedPaths": [
+        "packages/wallet/test/lib/evm-agreement-host.ts",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "scripts/fixtures/g16-browser.mjs"
+      ],
+      "productionInclusion": false,
+      "qualificationCommit": "ff2d7622d8032be87a6074c1299a09050b0a2d9d"
+    },
+    {
+      "assignment": "P2P-PARSER-SEEDED-FUZZ-08",
+      "state": "integrated",
+      "stateEvidence": "Source465ea63; genuineRED/originalfailure/minimalharnessfixes retained;26selftests,4096actualseededcases via existingrunner,436unaffectedaggregate/5policy/typesbuildboundaries pass. No app/parser/host/core changes.",
+      "baseSha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+      "baseTree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+      "libraryFileId": "libfile_c2cf0593aa80819195ab8d021c9ffb58",
+      "fileId": "file_000000004f4081f9957655990ca7491b",
+      "version": 0,
+      "bytes": 15704,
+      "lines": 151,
+      "sha256": "1119f92c4c279bfdead04ea1514bd7b691298425d933357f48d74d2d85354e48",
+      "completeNativeReadbackVerified": true,
+      "allLocalXattrsVerified": true,
+      "allowedPaths": [
+        {
+          "path": "scripts/fuzz-evm-agreement-input.mjs",
+          "baseState": "absent",
+          "sha256": null
+        },
+        {
+          "path": "scripts/tests/evm-agreement-fuzz.test.mjs",
+          "baseState": "absent",
+          "sha256": null
+        }
+      ],
+      "manifest": {
+        "assignment": "P2P-PARSER-SEEDED-FUZZ-08",
+        "status": "READY unassigned preparation; no implementation or campaign",
+        "baseSha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+        "baseTree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+        "allowedPaths": [
+          {
+            "path": "scripts/fuzz-evm-agreement-input.mjs",
+            "baseState": "absent",
+            "sha256": null
+          },
+          {
+            "path": "scripts/tests/evm-agreement-fuzz.test.mjs",
+            "baseState": "absent",
+            "sha256": null
+          }
+        ],
+        "readOnlySources": [
+          {
+            "path": "packages/schemas/src/evm-agreement-input.ts",
+            "bytes": 13966,
+            "sha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/test/evm-agreement-input.test.mjs",
+            "bytes": 19056,
+            "sha256": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b",
+            "readOnly": true
+          },
+          {
+            "path": "packages/schemas/src/core.ts",
+            "bytes": 7446,
+            "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+            "readOnly": true
+          },
+          {
+            "path": "package.json",
+            "bytes": 1395,
+            "sha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+            "readOnly": true
+          }
+        ],
+        "independentOf": "HOST07 controller/test/private browser fixture; no shared writes",
+        "runnerOwnership": "existing shared runner, no core edits or competing runner",
+        "dependencyAvailability": {
+          "node24PriorExecuted": true,
+          "fastCheckInstalled": false,
+          "pureRandInstalled": false,
+          "newDependenciesRequired": false
+        },
+        "retainedParserPacket": {
+          "library_file_id": "libfile_a575afd14b888191aa86389b05d9bec2",
+          "version": 0,
+          "bytes": 85217,
+          "sha256": "f45eddaf2f2650a51212f5aba0dae5dd9f12e044abcd460604cf50b052018bd3",
+          "content": "full232line parser and first38lines of current parser test, plus partial core schema contract; verify exact path/hash"
+        },
+        "factoryExcerpt": {
+          "path": "packages/schemas/test/evm-agreement-input.test.mjs",
+          "startLine": 20,
+          "endLine": 33,
+          "bytes": 1156,
+          "sha256": "6017b077532bc717c902e58107ab64e69d64597ee9bf2fde9ff754bbe791eaa9"
+        },
+        "testsBuildsExecuted": false,
+        "paidCalls": 0,
+        "runtimeChanges": false,
+        "generatedCasesExecuted": 0,
+        "seededHarnessPresentBefore": false
+      },
+      "assignedModel": "Sonnet",
+      "implementationOwner": "sole P2P integrator after reviewed returned proposal",
+      "requestId": null,
+      "returnedProposal": {
+        "libraryFileId": "libfile_04cd1c8e186c8191939df62972c94c32",
+        "version": 0,
+        "sha256": "d3e8006117b31e0783ee40cd5cb3de1e46822766251c6d1624a9adca9a130dd4"
+      },
+      "integratedSource": "465ea63d5391bfd924f12bf8aa5d22119d1e6ede"
+    }
+  ],
+  "sharedRunner": "existing verified sole runner; core unchanged; previous2suite/49fixedregressions remain historical source-bound evidence, not fuzz",
+  "gates": {
+    "engineering": [
+      "private host implementation and deterministic/isolatedbrowser lifecycle evidence",
+      "actual message-driven transport cancellation and route/pagehide/lock/disposal bridge",
+      "typed narrow facade and Worker/document routing",
+      "native primitive/provider inclusion disposition and emitted graph/UI/privacy acceptance"
+    ],
+    "ownerDecisions": [
+      "approved production registry/trust root/deployment and financial/custody permissions",
+      "live spending/release/deployment enablement"
+    ],
+    "notAnOwnerGate": "preparing private app-excluded host and parser-fuzz proposals"
+  },
+  "next": "Consume returned brokercontrol proposal when delivered; next private wire adapter depends on that schema. Other G15 schema/locator mechanics remain engineering, not production trust choice.",
+  "assignmentRecordedAtUtc": "2026-10-27T03:45:05.991232+00:00",
+  "activeRequestsConfirmedInThisExecutor": 0,
+  "assignmentReportedByParent": true,
+  "latestRuntimeScope": "Two opt-in script/test paths only; actual parser/app/HOST07/runner unchanged",
+  "nextReady": {
+    "assignment": "P2P-G16-PRIVATE-TRANSPORT-CONTRACT-09",
+    "state": "returned, native wrapper/body provenance verified; unexecuted draft",
+    "libraryFileId": "libfile_e3b70f50f2bc8191947db56eba32238b",
+    "version": 0,
+    "sha256": "497160fe2d09266f4bff1453f2fe79808a6371c2f85619a125342f29e6c57288",
+    "baseSha": "ff2d7622d8032be87a6074c1299a09050b0a2d9d",
+    "scope": "read-only integration review+minimum privateWorker control/ack contract;no runtimeownership",
+    "requestExecutionEvidence": {
+      "requestId": "req_011CgSBeQ6wG4hXTf3MXEcKk",
+      "reportedBy": "parent broker",
+      "end": "end_turn",
+      "kind": "returned static review only; no runtime/tests",
+      "executorPaidCalls": 0
+    },
+    "stateEvidence": "Parent says09packetpassedtoexistingbroker; no requestexecution evidence supplied here. No duplicatereview.",
+    "returnedLibraryFileId": "libfile_7984b84c92d08191867cf3ecae18f129",
+    "nativeDocumentSha256": "2ba9c64a4a26a1514b45b42e0a254fa07399eb3462d2c896f7b40870aeff67d6",
+    "rawBodySha256": "c8d4ebdb8e0b316daa8e31ad7fbf63c5395f1611cbb06e3695ae068122067f4f",
+    "implementationApplied": false
+  },
+  "nextCodex": {
+    "state": "disjoint G11actual-byte bug fixed; brokercontrol assigned, await returned proposal without duplicate",
+    "packet": {
+      "libraryFileId": "libfile_a0a59b3c56648191891511b047aa71d2",
+      "fileId": "file_00000000b48081f9a0aff3bd5ae3fe55",
+      "version": 0,
+      "bytes": 25106,
+      "sha256": "c11500f064b947670ab6381dfc4100a5e9e4ebe81b8e0e0e1d62c0f3468a8a43",
+      "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+      "state": "assigned by parent; no request execution evidence here",
+      "localXattrs": {
+        "user.library-file-version": "0",
+        "user.library-file-id": "libfile_a0a59b3c56648191891511b047aa71d2"
+      }
+    },
+    "ordinaryEngineeringAfter": "private wire adapter/actual Worker transport then package/app boundary; G15 remaining mechanics disjoint",
+    "noAppOrPolicyEnablement": true,
+    "reservedToBroker": [
+      "packages/schemas/src/evm-agreement-control.ts",
+      "packages/schemas/test/evm-agreement-control.test.mjs"
+    ]
+  },
+  "latestBuildScope": {
+    "source": "78418e89b4844e420409e23c520c6d4d5ceeecd2",
+    "slices": [
+      "ASSET-BYTE-INTEGRITY10",
+      "ARTIFACT-PATH-COMPLETENESS11"
+    ],
+    "state": "integrated, verified local only",
+    "evidence": "P2P_ASSET_PATH_20261027.json"
+  },
+  "latestG15": {
+    "source": "9ea7b6cd030e7315e96ba76883c305a9c94ee539",
+    "state": "limited offline verification mechanics integrated/tested; no release/app/provider approval",
+    "evidence": "P2P_G15_VERIFICATION_20261027.json"
+  },
+  "currentSource": "783f9e7d781310f73a5ad034d27c0bf4df44aefe",
+  "physicalDrainReady": {
+    "libraryFileId": "libfile_5b55209cac4081919f21c645a07dc3f4",
+    "version": 0,
+    "bytes": 46565,
+    "sha256": "5b22a0a5fafea3b5f426a67c39890091fa176b7bea99f6e9ff3090c44f66a405",
+    "baseSource": "9ea7b6cd030e7315e96ba76883c305a9c94ee539",
+    "docsHead": "5aa9ebfc0dc495334c4d863a290c62c71e717851",
+    "allowedFiles": {
+      "packages/wallet/test/lib/evm-agreement-host.ts": {
+        "bytes": 12993,
+        "sha256": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f"
+      },
+      "packages/wallet/test/evm-agreement-host.test.mjs": {
+        "bytes": 25652,
+        "sha256": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200"
+      }
+    },
+    "completeNativeReadbackVerified": true,
+    "state": "integrated qualification-only at16c224c; original proposal and tests-first evidence retained",
+    "nextPrerequisite": "existing host physical-slot/terminal-drain observation before wire adapter",
+    "paidRequestStarted": false,
+    "assignmentEvidence": "Parent delegated broker reservation after local read-only intake; no local host/test edits started",
+    "localHostEdits": true,
+    "returnedProposal": {
+      "libraryFileId": "libfile_4b1b65b794d48191b369f445cd6443dc",
+      "version": 1,
+      "rawBodySha256": "037129a1d5092af52f2e2be052ba48341f9a4956208f6adc8bc1c1d02b79de51"
+    },
+    "integratedSource": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246"
+  },
+  "latestG15Registry": {
+    "source": "463c9d998ae8b25b7f4c18c36b083a97a07e1c3c",
+    "state": "offline composition integrated/tested; native purpose pending and live/release disabled",
+    "evidence": "P2P_G15_REGISTRY_20261027.json"
+  },
+  "latestPhysicalDrain": {
+    "state": "integrated/tested qualification only",
+    "source": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+    "evidence": "P2P_PHYSICAL_DRAIN_20261027.json"
+  },
+  "latestPhysicalBrowser": {
+    "source": "4e786571c38be3643f09c8e44a474027725c3952",
+    "state": "qualification integrated/tested only",
+    "assertions": 168,
+    "schedules": 13,
+    "evidence": "P2P_PHYSICAL_BROWSER_20261027.json"
+  },
+  "nextActuallyReproduced": {
+    "source": "4e786571c38be3643f09c8e44a474027725c3952",
+    "directParser": {
+      "accepted": true
+    },
+    "load": {
+      "returnedTypedResult": false,
+      "foreignExceptionEscaped": true
+    },
+    "getterInvocations": 1,
+    "actualOversizedViewBytes": 1048577,
+    "scope": "synthetic local direct boundary; guarded G15 snapshot path not demonstrated affected",
+    "state": "fixed at783f9e7; original reproduction and4RED retained"
+  },
+  "latestG11ByteBound": {
+    "source": "783f9e7d781310f73a5ad034d27c0bf4df44aefe",
+    "state": "integrated/tested",
+    "evidence": "P2P_REGISTRY_BYTE_BOUND_20261027.json"
+  }
+}

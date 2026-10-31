@@ -1,0 +1,227 @@
+{
+  "kind": "private fixture-only funded-trade payment-guidance evaluator",
+  "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+  "recordedAtUtc": "2026-10-26T21:45:54.998420+00:00",
+  "sourceFiles": {
+    "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+    "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+  },
+  "counts": {
+    "redPass": 0,
+    "redFail": 1,
+    "initialGreen": 1,
+    "focusedFinal": 11,
+    "unitAggregate": 367,
+    "buildPolicy": 5,
+    "finalFail": 0,
+    "finalSkip": 0
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/payment-preflight.test.mjs"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:38:19.913180+00:00",
+      "finishedAtUtc": "2026-10-26T21:38:20.079474+00:00",
+      "exitCode": 1,
+      "phase": "RED: evaluator absent, regression written first",
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/01-red-missing-preflight.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/payment-preflight.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T21:39:46.543993+00:00",
+      "finishedAtUtc": "2026-10-26T21:39:46.749246+00:00",
+      "exitCode": 0,
+      "phase": "initial GREEN; fixture-only private evaluator, uncommitted",
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/02-green-initial-preflight.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/payment-preflight.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T21:41:45.966852+00:00",
+      "finishedAtUtc": "2026-10-26T21:41:46.160242+00:00",
+      "exitCode": 0,
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "df436ed1893a67ea1abbff20ba004ceeef3ea19dcd9b2281d19c2dc2a7520d1b",
+        "packages/domain/test/payment-preflight.test.mjs": "42194b0c310a636d5a21ba0b0704ffedfdad519089ac4f0bf778a325a4770239"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/03-focused-regressions.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/payment-preflight.test.mjs"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:42:55.299817+00:00",
+      "finishedAtUtc": "2026-10-26T21:42:55.509159+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+        "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/04-focused-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:42:55.509724+00:00",
+      "finishedAtUtc": "2026-10-26T21:43:11.259916+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+        "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/05-unit-aggregate.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:43:11.260466+00:00",
+      "finishedAtUtc": "2026-10-26T21:43:11.758368+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+        "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/06-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:43:11.758781+00:00",
+      "finishedAtUtc": "2026-10-26T21:43:12.279723+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+        "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/07-build-policy.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+      "startedAtUtc": "2026-10-26T21:43:12.280484+00:00",
+      "finishedAtUtc": "2026-10-26T21:43:14.420224+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+        "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-payment-preflight-20261026/08-build-and-types.exit.json"
+    }
+  ],
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/01-red-missing-preflight.log.gz",
+      "sha256": "cebe2077e1ee52c112f3a62f0ce4f11f6a732092678d2dd6510b5f1f1e69c0e8",
+      "rawSha256": "87ed15ab2dc70baa075339593e0ac3f206e90c7334ed25ca3f10b48d2bc59943",
+      "rawBytes": 1240
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/02-green-initial-preflight.log.gz",
+      "sha256": "e0665c6a11d0c2f0f68594b1edff54cc8c5ba7bac3ef5cec110735950549fe63",
+      "rawSha256": "16d89cb8fd268f8f8924b73b52eef5d48ab903a337c23ebb883923d087a8a098",
+      "rawBytes": 232
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/03-focused-regressions.log.gz",
+      "sha256": "bb140ca7863fbdc2351482f298a05cb8c7d23e35ebef2b56fa17188fbb6bbaf2",
+      "rawSha256": "eed703c9d788d9aef981f7a1e749e6c3dde70bb66e7317cd8e27bcf66f181300",
+      "rawBytes": 1283
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/04-focused-final.log.gz",
+      "sha256": "4679f6e54db66677183f652c34b817c2326f21e98e9bff848d5f46c18db15725",
+      "rawSha256": "97ac7a14561e085114085ede60ff82d85297f3f6eb0792b2e365523ad8fcfd6d",
+      "rawBytes": 1284
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/05-unit-aggregate.log.gz",
+      "sha256": "fcc19da3515cc7355c92e23626409194d3692e023d336aae2b5905f6e78285f0",
+      "rawSha256": "fa895e54e4c4beca88a36051978154bdb3b8fec1e5294308029d5ebfb5ae9848",
+      "rawBytes": 39370
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/06-boundaries.log.gz",
+      "sha256": "3e8cde6a7544eed065d8f82df59ced63aa226d9c3cf6d79a953fc23518a27997",
+      "rawSha256": "9caccc7ec63e4c6344629aec551a8ffc335b4d27ca934ccb750bdc2f242c4bad",
+      "rawBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/07-build-policy.log.gz",
+      "sha256": "0133626b6cdc0212593e6c40d87431b2018b8f9c83dfd1bc969425af79624745",
+      "rawSha256": "b0b9a6d818bd9211d8f7500be9b1c6ac1958ce5acba9a97942737bb50b24eeb2",
+      "rawBytes": 985
+    },
+    {
+      "path": "docs/evidence/p2p-payment-preflight-20261026/08-build-and-types.log.gz",
+      "sha256": "be17759f45db04659d62fbaf0e1319457e570aa2d5d3ddf2f6ced4f09b55c58f",
+      "rawSha256": "3a9c335eb84704c73f948d17e82f44af90dfbd9377762b6d0431e06e94aef6ad",
+      "rawBytes": 1510
+    }
+  ],
+  "fixedExistingRules": {
+    "remainingSecondsMustExceed": "900",
+    "freshnessAgeMsMustBeLessThan": 30000,
+    "chainTimeFromFixtureMatchingHashAndHeight": true,
+    "alreadyFundedIgnoresAdvertisementAcceptanceExpiry": true
+  },
+  "outcomeScope": {
+    "evidence": "fixture-only",
+    "economicPreparationAllowed": false,
+    "appExported": false,
+    "nativeRpcAuthenticated": false,
+    "signaturesOrExpectedHashRecomputedByEvaluator": false,
+    "abiDecoded": false,
+    "registryOrDeploymentApproved": false,
+    "walletOrSubmissionEnabled": false,
+    "releaseEnabled": 0,
+    "connectOrigins": []
+  },
+  "errorSemantics": "Missing/unfinalized evidence returns G13 UNAVAILABLE; reorg/time-anchor contradictions INTEGRITY_FAILURE; no invented canonical timestamp/anchor. Semantic mismatch/stale/near-expiry/unfunded returns blocked fixture preflight.",
+  "limitations": [
+    "private decoded-fixture input, no wire/schema/ABI definition or real chain evidence authentication",
+    "expected terms hash consistency and acceptance verification remain separate native/G16 prerequisites",
+    "no trade UI/recovery routes altered; caller integration must keep recovery/export access",
+    "browser/Python/spec tests not rerun; earlier source-specific results preserved",
+    "coordinator review, not independent audit or live-wallet/provider acceptance"
+  ],
+  "remaining": "reviewed native adapter/ABI and verified chain/deployment/finality/time/terms association, trusted G12 hash/observe/reconcile, actual wallet/escrow/offer/trade UI and two-party acceptance; owner trust/deployment/live-funds gates separate",
+  "workersStarted": 0,
+  "ghostPayTouched": false,
+  "canonicalQueueReadOrWritten": false
+}

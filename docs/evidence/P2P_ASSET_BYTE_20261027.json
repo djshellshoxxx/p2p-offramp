@@ -1,0 +1,222 @@
+{
+  "slice": "P2P-G15-ASSET-BYTE-INTEGRITY-10",
+  "state": "integrated locally; release disabled",
+  "baseSha": "37174cc5773599809c9e254a32599ea837cdedac",
+  "sourceSha": "2327719605dfd8dd59b4a1d5a8e99761053509e4",
+  "sourceTree": "b4571cf779cf4ea5d85af893c758aec7eb0cf68b",
+  "recordedAtUtc": "2026-10-27T05:32:04.701327+00:00",
+  "ownedPaths": {
+    "apps/web/scripts/build.mjs": "ab1176041e2bd987b3193e07457b702e079d1ba524612c5f9208c787dd4c3779",
+    "apps/web/scripts/artifact-policy.test.mjs": "620d0ca99be8bb0dbe61dac445d25cf6fd556b097a1d1183733eb87312c2a01e"
+  },
+  "red": {
+    "command": [
+      "node",
+      "--test",
+      "apps/web/scripts/artifact-policy.test.mjs"
+    ],
+    "exit": 1,
+    "pass": 5,
+    "fail": 2,
+    "expectedFailures": [
+      "4 binary bytes reported as 8 with wrong SHA256",
+      "5 malformed UTF8 bytes reported as 13 with wrong SHA256"
+    ],
+    "exactCommandStartTimestampCaptured": false
+  },
+  "greenPolicy": {
+    "command": [
+      "npm",
+      "run",
+      "test:build-policy"
+    ],
+    "exit": 0,
+    "passed": 9,
+    "sourceBytesMatchCommittedSha": true
+  },
+  "runner": {
+    "manifest": "p2p-asset-byte-20261027/acceptance.json",
+    "report": "p2p-asset-byte-20261027/runner-report.json",
+    "startedAtUtc": "2026-10-27T05:29:19.255810+00:00",
+    "finishedAtUtc": "2026-10-27T05:30:33.718649+00:00",
+    "exit": 0,
+    "counts": {
+      "pass": 7,
+      "fail": 0,
+      "timeout": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "missing_prerequisite": 0,
+      "source_changed": 0,
+      "unexecuted": 0
+    },
+    "sourceDrift": [],
+    "jobs": [
+      {
+        "suite": "aggregate",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 16.315,
+        "cleanup": {
+          "process_group": 26804,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "build",
+        "argv": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 2.068,
+        "cleanup": {
+          "process_group": 27188,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.413,
+        "cleanup": {
+          "process_group": 27316,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "browser",
+        "argv": [
+          "npm",
+          "run",
+          "test:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 36.42,
+        "cleanup": {
+          "process_group": 27362,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "web",
+        "argv": [
+          "npm",
+          "run",
+          "test:web:browser"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 16.994,
+        "cleanup": {
+          "process_group": 29780,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.312,
+        "cleanup": {
+          "process_group": 30209,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      },
+      {
+        "suite": "specaudit",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "status": "pass",
+        "returncode": 0,
+        "duration_seconds": 0.242,
+        "cleanup": {
+          "process_group": 30238,
+          "term_sent": false,
+          "kill_sent": false,
+          "remaining_active_pids": []
+        }
+      }
+    ]
+  },
+  "aggregateNode": {
+    "passed": 454,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pythonTests": 12,
+  "specAudit": {
+    "documents": 173,
+    "brokenLinks": 0
+  },
+  "privateTransport09Untouched": true,
+  "privacyFinancialOrReleaseAuthorityExpanded": false,
+  "scopeChanged": false,
+  "newDependenciesOrPaidCalls": false,
+  "limits": "Text policy/limits unchanged. Inventory now counts/hashes raw bytes. This is local build evidence, not a signed/authenticated release, full G15 completion, security audit, device qualification or live trading acceptance. Private G16 browser HOST07 qualification not rerun by these commands.",
+  "nextConfirmedDefect": {
+    "slice": "P2P-G15-ARTIFACT-PATH-COMPLETENESS-11",
+    "source": "2327719605dfd8dd59b4a1d5a8e99761053509e4",
+    "actualFiles": 7,
+    "reportedFiles": 6,
+    "missingPath": "__proto__",
+    "status": "reproduced only; not fixed/test-first regression not yet written"
+  },
+  "files": {
+    "docs/evidence/p2p-asset-byte-20261027/0001-p2p-asset10-aggregate/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0001-p2p-asset10-aggregate/stdout.log": "ffde00094c1b65bbc4bd9d35f4a714849b01b37d949bd4d6b10b270970151292",
+    "docs/evidence/p2p-asset-byte-20261027/0002-p2p-asset10-build/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0002-p2p-asset10-build/stdout.log": "df9738e0dc0239ba9309eed64a0364b5ea2a2138a0a8c44acfd7b57bd563b772",
+    "docs/evidence/p2p-asset-byte-20261027/0003-p2p-asset10-boundaries/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0003-p2p-asset10-boundaries/stdout.log": "f24a7ecf35fb3df0015722143b8fd9f692156a81c03ca3c6a5e2ef2581688db9",
+    "docs/evidence/p2p-asset-byte-20261027/0004-p2p-asset10-browser/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0004-p2p-asset10-browser/stdout.log": "c70a1844179ea78dd327301e7c2c2236a303f900c7014276c4137e1db4c633c2",
+    "docs/evidence/p2p-asset-byte-20261027/0005-p2p-asset10-web/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0005-p2p-asset10-web/stdout.log": "4413bb5e9d1d8f5742818233da47987d3315894d04281feae5ea4b60eb838b8c",
+    "docs/evidence/p2p-asset-byte-20261027/0006-p2p-asset10-specs/stderr.log": "f4d8b5e6e85b86f86c606f7e9e59928d457d4277c7fb70479e9f4ab27b25becd",
+    "docs/evidence/p2p-asset-byte-20261027/0006-p2p-asset10-specs/stdout.log": "55ad62f35d1a4a9b8f788741d7b74e23b49109998a979cf1fcc515bf8eee0256",
+    "docs/evidence/p2p-asset-byte-20261027/0007-p2p-asset10-specaudit/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evidence/p2p-asset-byte-20261027/0007-p2p-asset10-specaudit/stdout.log": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f",
+    "docs/evidence/p2p-asset-byte-20261027/acceptance.json": "834f6aa15c50bb88e18473e549d633ff7d67c1576c936a1f6d51b6a05bf4a8f3",
+    "docs/evidence/p2p-asset-byte-20261027/green-policy.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "docs/evidence/p2p-asset-byte-20261027/green-policy.log": "cf9d211e7275dd9699423c981cc4d99e55d6adbb66101e321cde25d56ed396aa",
+    "docs/evidence/p2p-asset-byte-20261027/prototype-path-reproduction.log": "604e1d46391be39454d20d0942c70cb583d75464eb248c613c708a3244d2773b",
+    "docs/evidence/p2p-asset-byte-20261027/red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "docs/evidence/p2p-asset-byte-20261027/red.log": "32962884c0c8a7a33f3b5dff142ee848414e937601e4ab030090429e43885f80",
+    "docs/evidence/p2p-asset-byte-20261027/reproduce-prototype-path.mjs": "ff232a689815cf223a8013b682d0eca2fd5e3aa307b24b5a3c77dc24418bc280",
+    "docs/evidence/p2p-asset-byte-20261027/runner-report.json": "788661a1cd923b65e2fb3875fbc0030ccddb24a949bdf8cc027cc0b732dd099e"
+  }
+}

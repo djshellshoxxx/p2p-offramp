@@ -7,3 +7,4 @@ dist/
 !.env.example
 .superpowers/
 dist-demo/
+dist-testnet/

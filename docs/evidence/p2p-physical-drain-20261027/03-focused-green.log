@@ -1,0 +1,40 @@
+✔ coherent native, ERC20 and nonempty-capability requests run the actual verifier with strict code-only replies (83.900151ms)
+✔ B is BUSY while A actually pending (each SHA position); caller mutation cannot change A; next explicit request proceeds (42.277691ms)
+✔ replay, wrong generation and last-request bounds fail before any verifier; lower generation never revives (30.812847ms)
+✔ invalidate at either SHA await: A settles undefined promptly, slot stays BUSY until actual settle, then C proceeds (success and thrown backend) (69.831547ms)
+✔ late A finalizer after C starts cannot clear or release C; A settles only after C owns the slot (19.224393ms)
+✔ dispose is terminal and idempotent idle/held/before/after parsing; no later reply, job, or unhandled rejection (19.078607ms)
+✔ fixed 30s deadline: 29999 succeeds; 30000 with delayed timer is TIMEOUT; timer fire aborts/wipes while slot stays held (24.596451ms)
+✔ after timeout the host is terminal; late settlement cannot resurrect it, a late timer callback is a no-op, no retry (12.311214ms)
+✔ timeout boundary also applies when the final reply projection happens after the bound (no late success) (10.876783ms)
+✔ clock faults (throw, non-finite, backwards after increase) fail closed code-only; host reusable after actual settlement; invalidation dominates (48.433027ms)
+✔ invalidate dominates a queued TIMEOUT: timer fires after invalidation yields no timeout reply (7.048017ms)
+✔ malformed, accessor, revoked proxy, oversized and forged-throw inputs fail with fresh fixed errors and no getter execution (15.102334ms)
+✔ reentrant dispatch during a strict parse rejects with a fresh fixed INVALID_INPUT without touching nested input; outer proceeds (13.544709ms)
+✔ BUSY and wrong-generation refusals clear host-owned parsed signature copies (observed via pre-import intrinsic-copy spy) (15.051614ms)
+ℹ host-copy samples on refusals=4
+✔ host-owned vs verifier-owned buffers clear separately; caller-owned bytes are never erased; abort wipe precedes underlying settle (16.683574ms)
+ℹ host-copy samples on completion=2
+✔ clock reentry cannot admit two verifier jobs before the outer job is registered (14.567433ms)
+✔ clock failure during a synchronous invalidation suppresses the old request before job creation (12.914842ms)
+✔ invalidation during the final clock sample dominates a coincident deadline without closing the new generation (21.67202ms)
+✔ physical-state: idle snapshot is not held, reads are pure and stable (1.005407ms)
+✔ physical-state: logical invalidate keeps held true at both SHA gates; stale A cleanup never releases B (42.154228ms)
+✔ physical-state: dispose while held is terminal+held; disposeAndDrain stays pending until the real SHA settles (27.029315ms)
+✔ physical-state: repeated dispose/drain share completion semantics and idle drain resolves without waiting (8.163738ms)
+✔ physical-state: normal completion and native digest rejection release the slot with unchanged outcomes (15.042876ms)
+✔ physical-state: timeout closes logically while held; drain is not resolved until the native Promise settles (17.144535ms)
+✔ physical-state: idle terminal observation; generation exhaustion remains unexercised (0.463376ms)
+✔ physical-state: timer setup failure leaves no phantom held slot or waiter and starts no verifier (10.160948ms)
+✔ physical-state: timer-seam reentrant dispose/invalidate before verifier start releases without verifier or phantom waiter (10.209494ms)
+✔ physical-state: wipe oracle intact and observation exposes no private material (7.037453ms)
+✔ physical-state: drain requested inside a throwing timer setup resolves when no verifier started (2.906099ms)
+✔ physical-state: pre-registration clock disposal/drain has no phantom work or waiter (5.043641ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 765.63315

@@ -1,0 +1,1024 @@
+{
+  "schema_version": 1,
+  "run_id": "f4e2854f8ddb416e80f9a7cc420b6031",
+  "manifest_path": "/workspace/checkpoints/2026-10-27-p2p-drain-intake/acceptance.json",
+  "manifest_sha256": "5194eb97d8fb0029f870a48c06193a089c9edd36926c9d5875e26f3fc9c650e3",
+  "profile": "deep",
+  "profile_budget": {
+    "seed": 1592598566,
+    "cases": 4096
+  },
+  "jobs_limit": 1,
+  "started_utc": "2026-10-27T07:12:41.160921+00:00",
+  "finished_utc": "2026-10-27T07:14:10.839122+00:00",
+  "cancelled": false,
+  "source_baselines": {
+    "p2p": {
+      "type": "git",
+      "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+      "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "tool_versions": {
+    "p2p": {
+      "node": {
+        "version": "v24.19.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      },
+      "npm": {
+        "version": "11.9.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "p2p/physical-drain/focused",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "focused",
+      "categories": [
+        "unit",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:12:41.779272+00:00",
+      "duration_seconds": 0.934,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pdrain27/jobs/0001-p2p-physical-drain-focused",
+      "stdout": "/tmp/p2pdrain27/jobs/0001-p2p-physical-drain-focused/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0001-p2p-physical-drain-focused/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 44724,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "fixed qualified-host/protocol/verifier/parser regressions; not fuzzing",
+        "scope": "no app/trading/provider approval"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/aggregate",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "aggregate",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "test"
+      ],
+      "argv_template": [
+        "npm",
+        "test"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:12:43.205329+00:00",
+      "duration_seconds": 16.106,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pdrain27/jobs/0002-p2p-physical-drain-aggregate",
+      "stdout": "/tmp/p2pdrain27/jobs/0002-p2p-physical-drain-aggregate/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0002-p2p-physical-drain-aggregate/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 44779,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/build",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "build",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:12:59.806125+00:00",
+      "duration_seconds": 2.206,
+      "timeout_seconds": 180,
+      "job_dir": "/tmp/p2pdrain27/jobs/0003-p2p-physical-drain-build",
+      "stdout": "/tmp/p2pdrain27/jobs/0003-p2p-physical-drain-build/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0003-p2p-physical-drain-build/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 45212,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/boundaries",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "boundaries",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:13:02.574251+00:00",
+      "duration_seconds": 0.408,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0004-p2p-physical-drain-boundaries",
+      "stdout": "/tmp/p2pdrain27/jobs/0004-p2p-physical-drain-boundaries/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0004-p2p-physical-drain-boundaries/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 45342,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/browser",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "browser",
+      "categories": [
+        "browser"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:13:03.418000+00:00",
+      "duration_seconds": 37.187,
+      "timeout_seconds": 240,
+      "job_dir": "/tmp/p2pdrain27/jobs/0005-p2p-physical-drain-browser",
+      "stdout": "/tmp/p2pdrain27/jobs/0005-p2p-physical-drain-browser/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0005-p2p-physical-drain-browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 45388,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/web",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "web",
+      "categories": [
+        "browser"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:13:41.105252+00:00",
+      "duration_seconds": 17.859,
+      "timeout_seconds": 240,
+      "job_dir": "/tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web",
+      "stdout": "/tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 47844,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/specs",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "specs",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:13:59.458541+00:00",
+      "duration_seconds": 0.33,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0007-p2p-physical-drain-specs",
+      "stdout": "/tmp/p2pdrain27/jobs/0007-p2p-physical-drain-specs/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0007-p2p-physical-drain-specs/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48291,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/specaudit",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "specaudit",
+      "categories": [
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:00.238584+00:00",
+      "duration_seconds": 0.267,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0008-p2p-physical-drain-specaudit",
+      "stdout": "/tmp/p2pdrain27/jobs/0008-p2p-physical-drain-specaudit/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0008-p2p-physical-drain-specaudit/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48320,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged",
+        "testMethod": "existing fixed regressions, no fuzz claim",
+        "network": "owned loopback fixtures only"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/policy",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "policy",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "argv_template": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/npm",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:00.981954+00:00",
+      "duration_seconds": 0.484,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0009-p2p-physical-drain-policy",
+      "stdout": "/tmp/p2pdrain27/jobs/0009-p2p-physical-drain-policy/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0009-p2p-physical-drain-policy/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48346,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "thresholds": "unchanged"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/g15browser",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "g15browser",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-release-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-release-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:01.950998+00:00",
+      "duration_seconds": 1.147,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pdrain27/jobs/0010-p2p-physical-drain-g15browser",
+      "stdout": "/tmp/p2pdrain27/jobs/0010-p2p-physical-drain-g15browser/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0010-p2p-physical-drain-g15browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48437,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "owned loopback fixed public-data document/Worker fixtures",
+        "scope": "no app/provider/trading/release approval"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/g16browser",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "g16browser",
+      "categories": [
+        "browser",
+        "security"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:03.574144+00:00",
+      "duration_seconds": 1.503,
+      "timeout_seconds": 120,
+      "job_dir": "/tmp/p2pdrain27/jobs/0011-p2p-physical-drain-g16browser",
+      "stdout": "/tmp/p2pdrain27/jobs/0011-p2p-physical-drain-g16browser/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0011-p2p-physical-drain-g16browser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48593,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "scope": "unchanged public-data document/Worker fixture; not new physical-API message qualification"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/helpertypes",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "helpertypes",
+      "categories": [
+        "static"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+        "--noEmit"
+      ],
+      "argv_template": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/workspace/checkpoints/2026-10-27-p2p-drain-intake/qualification-tsconfig.json",
+        "--noEmit"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:05.545574+00:00",
+      "duration_seconds": 0.395,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0012-p2p-physical-drain-helpertypes",
+      "stdout": "/tmp/p2pdrain27/jobs/0012-p2p-physical-drain-helpertypes/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0012-p2p-physical-drain-helpertypes/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48752,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {},
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/fuzzharness",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "fuzzharness",
+      "categories": [
+        "unit"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/evm-agreement-fuzz.test.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "--test",
+        "scripts/tests/evm-agreement-fuzz.test.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:06.396505+00:00",
+      "duration_seconds": 2.769,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0013-p2p-physical-drain-fuzzharness",
+      "stdout": "/tmp/p2pdrain27/jobs/0013-p2p-physical-drain-fuzzharness/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0013-p2p-physical-drain-fuzzharness/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48782,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {},
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    },
+    {
+      "id": "p2p/physical-drain/seeded-parser",
+      "project": "p2p",
+      "module": "physical-drain",
+      "suite": "seeded-parser",
+      "categories": [
+        "property",
+        "fuzz"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "/workspace/p2p-offramp-pr5-validation/scripts/fuzz-evm-agreement-input.mjs",
+        "--seed",
+        "1592598566",
+        "--cases",
+        "4096",
+        "--output",
+        "/tmp/p2pdrain27/jobs/0014-p2p-physical-drain-seeded-parser/metrics.json"
+      ],
+      "argv_template": [
+        "node",
+        "{project_root}/scripts/fuzz-evm-agreement-input.mjs",
+        "--seed",
+        "{seed}",
+        "--cases",
+        "{cases}",
+        "--output",
+        "{job_dir}/metrics.json"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T07:14:09.627680+00:00",
+      "duration_seconds": 0.751,
+      "timeout_seconds": 60,
+      "job_dir": "/tmp/p2pdrain27/jobs/0014-p2p-physical-drain-seeded-parser",
+      "stdout": "/tmp/p2pdrain27/jobs/0014-p2p-physical-drain-seeded-parser/stdout.log",
+      "stderr": "/tmp/p2pdrain27/jobs/0014-p2p-physical-drain-seeded-parser/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+        "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+        "dirty": false,
+        "dirty_status": [],
+        "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 48990,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "actual seeded structural generation/mutation,not coverage-guided",
+        "seed": "applied in argv",
+        "cases": "applied total cases in argv; quick256 standard1024 deep4096",
+        "inputConstructionMaxUtf16Units": 4097,
+        "decimalCharactersMax": 5000,
+        "capabilitiesMax": 9,
+        "signatureViewBytesMax": 66,
+        "backingBufferBytesMax": 1024,
+        "memoryHardLimit": false,
+        "productionAssertionsAndKdfUnchanged": true
+      },
+      "prepared_files": [],
+      "harness_metrics": {
+        "tool": "fuzz-evm-agreement-input",
+        "mappingVersion": "p2p-parser-fuzz-08/v2",
+        "domainLabel": "p2p-parser-fuzz-08/nonsecurity-test-input",
+        "seed": 1592598566,
+        "requestedCases": 4096,
+        "replayCaseIndex": null,
+        "executedCases": 4096,
+        "generatedCases": 4096,
+        "generatedValidVariations": 1352,
+        "passedCases": 4096,
+        "mutatedCases": 2744,
+        "boundaryControlCases": 264,
+        "perFamily": {
+          "instruction-text": {
+            "executed": 512,
+            "accepted": 512,
+            "refused": 0,
+            "boundaryControls": 113
+          },
+          "text-mutation": {
+            "executed": 512,
+            "accepted": 64,
+            "refused": 448,
+            "boundaryControls": 0
+          },
+          "decimal": {
+            "executed": 512,
+            "accepted": 175,
+            "refused": 337,
+            "boundaryControls": 151
+          },
+          "hex-address": {
+            "executed": 512,
+            "accepted": 161,
+            "refused": 351,
+            "boundaryControls": 0
+          },
+          "capabilities": {
+            "executed": 512,
+            "accepted": 196,
+            "refused": 316,
+            "boundaryControls": 0
+          },
+          "signature-views": {
+            "executed": 512,
+            "accepted": 244,
+            "refused": 268,
+            "boundaryControls": 0
+          },
+          "shape": {
+            "executed": 512,
+            "accepted": 0,
+            "refused": 512,
+            "boundaryControls": 0
+          },
+          "resource": {
+            "executed": 512,
+            "accepted": 0,
+            "refused": 512,
+            "boundaryControls": 0
+          }
+        },
+        "corpusDigest": "83d7ded6b26d43cac2053efca65a9bfe3a9a5577f5e0136a81869b272d267235",
+        "status": "pass",
+        "firstFailure": null,
+        "coverageGuided": false,
+        "shrinking": false,
+        "replayNote": null,
+        "elapsedMs": 627
+      },
+      "harness_metrics_error": null
+    }
+  ],
+  "counts": {
+    "pass": 14,
+    "fail": 0,
+    "timeout": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "missing_prerequisite": 0,
+    "source_changed": 0,
+    "unexecuted": 0
+  },
+  "exit_code": 0,
+  "environment_policy": {
+    "inherit_names": [
+      "PATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "SYSTEMROOT"
+    ],
+    "secrets": "all other parent variables excluded by construction; no values dumped"
+  },
+  "source_final": {
+    "p2p": {
+      "type": "git",
+      "sha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+      "tree": "71c6940c43bef08be407f4b716fb6539edcd19f2",
+      "dirty": false,
+      "dirty_status": [],
+      "fingerprint": "7364504553e5938295f78247e2fdc942e58623217a775e9a0dbf71329b329772",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "source_drift_projects": []
+}

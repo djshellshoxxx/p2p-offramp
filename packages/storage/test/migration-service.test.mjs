@@ -172,3 +172,11 @@ test('G09 verified means authenticated persisted readback, not the session cache
   assert.deepEqual(value(await reader.list(reopened.sessionId)).map(r => [r.id, r.schemaVersion, text(r.payload)]),
     [[id(1), 3, 'private-1|v2|v3'], [id(2), 3, 'b|v2|v3'], [id(9), 1, 'journal']]);
 });
+test('current-version invalid records reject no-op and mixed migration candidates without writes',async()=>{
+ for(const mixed of [false,true]){
+  const s=await seeded([trade(1,mixed?2:1,'bad-current'),...(mixed?[trade(2,1,'valid')]:[])]);
+  const reg=new MigrationRegistry(current(mixed?2:1),[...all(1).filter(x=>x.kind!=='trade'),tradeSchema(1),...(mixed?[tradeSchema(2)]:[])],mixed?[step(1)]:[]);
+  const service=new RecordMigrationService(s.vault,reg),before=s.store.writes;
+  code(await service.plan(s.session),'INVALID_INPUT');assert.equal(s.store.writes,before);s.vault.dispose();
+ }
+});

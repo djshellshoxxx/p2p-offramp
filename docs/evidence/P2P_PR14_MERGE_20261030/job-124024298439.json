@@ -1,0 +1,13 @@
+{
+  "id": 124024298439,
+  "run": 41044252066,
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252066/job/124024298439",
+  "fullLogSha256": "fd143028f883eb6505134105bcf45bacf708829ef4fdfd5ad9f97ad0b1801218",
+  "fullLogBytes": 17520,
+  "qualification": "Fetched completed exact-source hosted job log; full log retained locally, selected excerpts retained here.",
+  "excerpts": [
+    "2026-10-30T11:23:06.5412193Z Ran 12 tests in 0.105s",
+    "2026-10-30T11:23:06.5413260Z OK"
+  ]
+}

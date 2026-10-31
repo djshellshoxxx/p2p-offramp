@@ -32,6 +32,8 @@ function requireId(value: unknown): string {
   return value;
 }
 function requireToken(value: unknown): string { decodeBase64url(value, 32, 32); return value as string; }
+/** Checked before a session tail is swapped: a non-signal would otherwise throw while holding it. */
+function requireSignal(signal: unknown): void { if (signal !== undefined && !(signal instanceof AbortSignal)) throw new ValidationError(); }
 function kind(value: unknown): RecordKind {
   if (value !== 'identity' && value !== 'preference' && value !== 'trade' && value !== 'chat' && value !== 'journal') throw new ValidationError();
   return value;
@@ -93,6 +95,7 @@ export interface ResealReceipt {
 export type ResealTransform = (records: readonly PrivateRecordV1[]) => readonly PrivateRecordV1[];
 export interface VaultServiceOptions {
   lifecycle?: boolean;
+  now?: () => number;
   /** Injected stores are shared by default; true explicitly transfers connection ownership. */
   ownsStore?: boolean;
 }
@@ -104,6 +107,10 @@ export class EncryptedVaultService implements VaultService {
   #disposed = false;
   #opening: Promise<void> = Promise.resolve();
   #pending = new Set<AbortController>();
+  readonly #now: () => number;
+  #deadline: number | undefined;
+  #lastTime = -Infinity;
+  #checkingIdle = false;
   #idleTimer: ReturnType<typeof setTimeout> | undefined;
   #lifecycle: boolean;
   #lifecycleWindow: EventTarget | undefined;
@@ -114,6 +121,7 @@ export class EncryptedVaultService implements VaultService {
   readonly #provider: CryptoProvider;
   constructor(store: VaultStore | undefined = undefined,
     provider: CryptoProvider = globalThis.crypto, options: VaultServiceOptions = {}) {
+    this.#now = options.now ?? (() => performance.now());
     this.#store = store ?? new IndexedDbVaultStore(); this.#ownsStore = store === undefined || options.ownsStore === true; this.#provider = provider;
     // Structural hosts keep this storage module usable under both DOM and dedicated-Worker libs.
     // Worker callers disable document lifecycle and own revocation through their message boundary.
@@ -130,16 +138,28 @@ export class EncryptedVaultService implements VaultService {
   }
   #pagehide = (): void => { this.lockAll(); };
   #activity = (event: Event): void => { if (event.isTrusted) this.#resetIdle(true); };
+  #idleCurrent(): boolean {
+    if (!this.#lifecycle || this.#checkingIdle || this.#sessions.size === 0) return true;
+    let now: number;
+    try { now = this.#now(); } catch { now = NaN; }
+    if (!Number.isFinite(now) || now < 0 || now < this.#lastTime || this.#deadline !== undefined && now >= this.#deadline) {
+      this.#checkingIdle = true;
+      try { this.lockAll(); } finally { this.#checkingIdle = false; }
+      return false;
+    }
+    this.#lastTime = now; return true;
+  }
   #resetIdle(trustedActivity = false): void {
-    if (!this.#lifecycle) return;
-    // Opening or revoking another session cannot extend existing unlocked authority.
-    if (trustedActivity || this.#sessions.size === 0) {
+    if (!this.#lifecycle || !this.#idleCurrent()) return;
+    if (this.#sessions.size === 0) {
       if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
-      this.#idleTimer = undefined;
+      this.#idleTimer = undefined; this.#deadline = undefined; return;
     }
-    if (this.#sessions.size > 0 && this.#idleTimer === undefined) {
-      this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
-    }
+    if (this.#idleTimer !== undefined && !trustedActivity) return;
+    if (this.#idleTimer !== undefined) clearTimeout(this.#idleTimer);
+    // #idleCurrent checked the monotonic clock before activity can renew authority.
+    this.#deadline = this.#lastTime + 5 * 60_000;
+    this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
   }
   dispose(): void {
     if (this.#disposed) return;
@@ -166,12 +186,14 @@ export class EncryptedVaultService implements VaultService {
     } finally { bytes.fill(0); }
   }
   #session(token: string): SessionState {
+    if (!this.#idleCurrent()) throw new Failure('LOCKED');
     requireToken(token);
     const state = this.#sessions.get(token);
     if (!state || state.revoked || state.snapshot === undefined || state.envelope === undefined) throw new Failure('LOCKED');
     return state;
   }
   #guard(state: SessionState, generation: number, signal?: AbortSignal): void {
+    if (!this.#idleCurrent()) throw new Failure('LOCKED');
     if (state.revoked || state.generation !== generation || this.#sessions.get(state.token) !== state) throw new Failure('LOCKED');
     if (signal?.aborted) throw new Failure('CANCELLED');
   }
@@ -188,7 +210,7 @@ export class EncryptedVaultService implements VaultService {
     return { sessionId: token, profileId: snapshot.profileId, revision: snapshot.revision };
   }
   async #openJob<T>(signal: AbortSignal | undefined, operation: (guard: () => void, control: AbortController) => Promise<T>): Promise<T> {
-    const epoch = this.#epoch; const control = this.#control(signal); this.#pending.add(control.controller);
+    requireSignal(signal); const epoch = this.#epoch; const control = this.#control(signal); this.#pending.add(control.controller);
     const previous = this.#opening; let release!: () => void; this.#opening = new Promise(resolve => { release = resolve; });
     const guard = (): void => {
       if (this.#disposed || this.#epoch !== epoch) throw new Failure('LOCKED');
@@ -198,10 +220,16 @@ export class EncryptedVaultService implements VaultService {
     catch (error) { if (error instanceof VaultStorageError && error.code === 'CANCELLED') guard(); throw error; }
     finally { release(); this.#pending.delete(control.controller); control.remove(); }
   }
-  create(passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>> {
+  create(passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<VaultSession>> {
     return this.#result(async () => {
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
       const password = encodePassphrase(passphrase); password.fill(0);
-      return this.#openJob(signal, async (guard, controller) => {
+      return this.#openJob(signal, async (sessionGuard, controller) => {
+        const guard = (): void => {
+          sessionGuard();
+          try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+          sessionGuard();
+        };
         guard();
         const snapshot: PrivateSnapshotV1 = { format: 'p2p-offramp-private-records', version: 1,
           profileId: this.#randomId(), keyId: this.#randomId(), revision: 0, records: [] };
@@ -219,6 +247,7 @@ export class EncryptedVaultService implements VaultService {
   /** Public row keys only; no envelope is read, so this reveals nothing beyond G02's observable profile count. */
   listProfiles(signal?: AbortSignal): Promise<Result<ProfileInventory>> {
     return this.#result(async () => {
+      requireSignal(signal);
       if (signal?.aborted) throw new Failure('CANCELLED');
       const inventory = await this.#store.listProfileIds();
       if (signal?.aborted) throw new Failure('CANCELLED');
@@ -274,6 +303,7 @@ export class EncryptedVaultService implements VaultService {
       state.revocations.add(revoke);
       return { ok: true, value: Object.freeze({
         current: (): Readonly<VaultSession> | null => {
+          if (!this.#idleCurrent()) return null;
           if (!active || this.#disposed || state.revoked || state.generation !== generation ||
               this.#sessions.get(state.token) !== state || state.snapshot === undefined) return null;
           return Object.freeze({ sessionId: state.token, profileId: state.snapshot.profileId, revision: state.snapshot.revision });
@@ -282,14 +312,21 @@ export class EncryptedVaultService implements VaultService {
       }) };
     } catch (error) { return failed(error); }
   }
-  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal): Promise<Result<number>> {
+  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION) throw new ValidationError();
       const captured = mutationCopies(mutations, state.snapshot!);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       const control = this.#control(signal); state.operations.add(control.controller);
-      const guard = (): void => { this.#guard(state, generation, signal); };
+      const guard = (): void => {
+        this.#guard(state, generation, signal);
+        // The callback is a local composition capability, never stored input. Do not expose its exception.
+        try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+        this.#guard(state, generation, signal);
+      };
       try {
         await previous; guard();
         const snapshot = state.snapshot!, expected = state.envelope!;
@@ -325,6 +362,7 @@ export class EncryptedVaultService implements VaultService {
   readPersisted(sessionId: string, signal?: AbortSignal): Promise<Result<PrivateRecordV1[]>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       try {
         await previous; this.#guard(state, generation, signal);
@@ -343,6 +381,7 @@ export class EncryptedVaultService implements VaultService {
   assertFresh(sessionId: string, signal?: AbortSignal): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       try {
         await previous; this.#guard(state, generation, signal);
@@ -363,6 +402,7 @@ export class EncryptedVaultService implements VaultService {
     destinationPassphrase: string, signal?: AbortSignal): Promise<Result<ResealReceipt>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       requireId(expectedKeyId);
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION || typeof transform !== 'function') throw new ValidationError();
       const password = encodePassphrase(destinationPassphrase); password.fill(0);

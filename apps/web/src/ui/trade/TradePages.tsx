@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
-import type { ImportOutcome, TradeReviewController, TradeReviewSnapshot } from '../../trade/review-controller.ts';
-import { tradePageMessages as p } from './trade-messages.ts';
+import type { ImportOutcome, SavedReviewStore, StoredReview, TradeReviewController, TradeReviewSnapshot } from '../../trade/review-controller.ts';
+import { tradePageMessages as p, tradeMessages } from './trade-messages.ts';
 import { TradeTermsReview } from './TradeTermsReview.tsx';
 
 const noSubscription = () => () => {};
-const missingSnapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'unavailable' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]) });
+const missingSnapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'unavailable' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]),
+  saved: Object.freeze({ kind: 'idle' }), unreviewable: Object.freeze([]), persistence:Object.freeze({unlocked:false,kind:'idle'}) });
 const missing = () => missingSnapshot;
 
 export function useTradeReview(trade: TradeReviewController | null): TradeReviewSnapshot {
@@ -20,13 +21,58 @@ function JobStatus({ snapshot }: { readonly snapshot: TradeReviewSnapshot }) {
   return null;
 }
 
-function SessionList({ trade, snapshot }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot }) {
+/** Names the trusted source of the loaded registry: synthetic demo data, or the owner-signed Sepolia testnet registry. */
+function RegistryBanner({ registry }: { readonly registry: Extract<TradeReviewSnapshot['registry'], { kind: 'ready' }> }) {
+  if (registry.label === 'synthetic-demo') return <p className="warning" role="note">{p.demoBanner}</p>;
+  if (registry.label === 'sepolia-local-proof') return registry.trust ? <p className="warning" role="note">{p.testnetLocalProofBanner(registry.trust.keyId, registry.trust.sequence, registry.trust.expiresAt)}</p> : null;
+  return registry.trust ? <p className="warning" role="note">{p.testnetBanner(registry.trust.keyId, registry.trust.sequence, registry.trust.expiresAt)}</p> : null;
+}
+
+/** The open profile's saved-review commands, or null while no profile is unlocked. */
+export type SavedStoreProp = { readonly store: SavedReviewStore | null };
+
+function SavedActions({ trade, item, store, busy }: { readonly trade: TradeReviewController; readonly item: StoredReview; readonly store: SavedReviewStore | null; readonly busy: boolean }) {
+  if (item.savedId !== null) return <>
+    <small className="helper"> ({p.savedBadge})</small>
+    {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.savedId!, store); }}>{p.deleteFromProfile}</button></> : null}
+  </>;
+  return store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.saveToProfile(item.localId, store); }}>{p.saveToProfile}</button></> : null;
+}
+
+function SavedStatus({ snapshot, trade }: { readonly snapshot: TradeReviewSnapshot; readonly trade: TradeReviewController }) {
+  const saved = snapshot.saved;
+  if (saved.kind === 'busy') return <p className="notice" role="status">{p.savedBusy[saved.action]} <button type="button" onClick={()=>trade.cancel()}>{p.cancelPersistence}</button></p>;
+  if (saved.kind === 'failed') return <p className="notice error" role="alert">{p.savedFailed[saved.code] ?? p.savedFailedOther}</p>;
+  if (saved.kind === 'done') return <p className="notice" role="status">{p.savedDone[saved.action]}{saved.skipped > 0 ? ` ${p.savedSkipped(saved.skipped)}` : ''}</p>;
+  return null;
+}
+
+function SavedPanel({ trade, snapshot, store }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot } & SavedStoreProp) {
+  const busy = snapshot.saved.kind === 'busy';
+  return <section className="plain-section" aria-labelledby="saved-title">
+    <h2 id="saved-title">{p.savedTitle}</h2><p className="helper">{p.savedHelp}</p>
+    {!store ? <p>{p.savedLocked}</p> : <div className="actions">
+      <button type="button" disabled={busy} onClick={() => { void trade.loadSaved(store); }}>{p.loadSaved}</button>
+    </div>}
+    <SavedStatus snapshot={snapshot} trade={trade} />
+    {snapshot.unreviewable.length > 0 ? <>
+      <h3>{p.unreviewableTitle}</h3>
+      <ul className="session-list">{snapshot.unreviewable.map(item => <li key={item.recordId}>
+        {p.unreviewableItem(item.recordId)}: {p.rejected[item.code]}
+        {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.recordId, store); }}>{p.deleteFromProfile}</button></> : null}
+      </li>)}</ul>
+    </> : null}
+  </section>;
+}
+
+function SessionList({ trade, snapshot, store }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot } & SavedStoreProp) {
   return <section className="plain-section" aria-labelledby="session-title">
     <h2 id="session-title">{p.sessionTitle}</h2><p className="helper">{p.sessionHelp}</p>
     {snapshot.reviews.length === 0 ? <p>{p.sessionEmpty}</p> : <ul className="session-list">
       {snapshot.reviews.map(item => <li key={item.localId}>
         <a href={`#/trade/${item.localId}`}>{p.sessionItem(item.review.orderId, item.review.revision)}</a>
         {item.source === 'synthetic-sample' ? <small className="helper"> (synthetic)</small> : null}
+        <SavedActions trade={trade} item={item} store={store} busy={snapshot.saved.kind === 'busy'} />
         {' '}<button type="button" onClick={() => trade.remove(item.localId)}>{p.remove}</button>
       </li>)}
     </ul>}
@@ -72,7 +118,7 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
   </>;
 }
 
-export function OffersPage({ trade }: { readonly trade: TradeReviewController | null }) {
+export function OffersPage({ trade, store = null }: { readonly trade: TradeReviewController | null; readonly store?: SavedReviewStore | null }) {
   const snapshot = useTradeReview(trade);
   const registry = snapshot.registry;
   return <>
@@ -84,9 +130,10 @@ export function OffersPage({ trade }: { readonly trade: TradeReviewController | 
       {registry.kind === 'loading' ? <p className="notice" role="status">{p.registryLoading}</p>
         : registry.kind === 'unavailable' || !trade ? <p className="notice" role="status">{p.registryUnavailable}</p>
         : registry.kind === 'failed' ? <p className="notice error" role="alert">{p.registryFailed}</p>
-        : <>{registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}<ReviewForm trade={trade} snapshot={snapshot} /></>}
+        : <><RegistryBanner registry={registry} /><ReviewForm trade={trade} snapshot={snapshot} /></>}
     </section>
-    {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} /> : null}
+    {trade && registry.kind === 'ready' ? <SavedPanel trade={trade} snapshot={snapshot} store={store} /> : null}
+    {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} store={store} /> : null}
   </>;
 }
 
@@ -102,7 +149,7 @@ function useDeviceSeconds(trade: TradeReviewController | null): string {
   return now;
 }
 
-export function TradePage({ trade, localId }: { readonly trade: TradeReviewController | null; readonly localId: string }) {
+export function TradePage({ trade, localId, store = null }: { readonly trade: TradeReviewController | null; readonly localId: string; readonly store?: SavedReviewStore | null }) {
   const snapshot = useTradeReview(trade);
   const now = useDeviceSeconds(trade);
   const stored = snapshot.reviews.find(item => item.localId === localId) ?? null;
@@ -111,11 +158,14 @@ export function TradePage({ trade, localId }: { readonly trade: TradeReviewContr
     <div className="actions"><a href="#/offers">{p.backToOffers}</a></div>
   </section>;
   return <>
-    {snapshot.registry.kind === 'ready' && snapshot.registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}
-    <TradeTermsReview review={stored.review} nowSeconds={now} source={stored.source} />
+    {snapshot.registry.kind === 'ready' ? <RegistryBanner registry={snapshot.registry} /> : null}
+    {stored.loaded && stored.source === 'synthetic-sample' ? <p className="warning">{tradeMessages.sourceSynthetic}</p> : null}
+    <TradeTermsReview review={stored.review} nowSeconds={now} source={stored.loaded ? 'saved-review' : stored.source} />
     <div className="actions">
       <a href="#/offers">{p.backToOffers}</a>
+      <SavedActions trade={trade} item={stored} store={store} busy={snapshot.saved.kind === 'busy'} />
       <button type="button" onClick={() => { trade.remove(localId); window.location.hash = '#/offers'; }}>{p.remove}</button>
     </div>
+    <SavedStatus snapshot={snapshot} trade={trade} />
   </>;
 }

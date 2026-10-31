@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/payment-preflight.test.mjs"
+  ],
+  "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+  "startedAtUtc": "2026-10-26T21:38:19.913180+00:00",
+  "finishedAtUtc": "2026-10-26T21:38:20.079474+00:00",
+  "exitCode": 1,
+  "phase": "RED: evaluator absent, regression written first"
+}

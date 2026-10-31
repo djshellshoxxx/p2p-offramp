@@ -74,6 +74,42 @@ test('runtime rejects wrong-profile or malformed Worker output without publishin
  const port=simplePort();const runtime=val(await start(port));port.handler=command=>{const {profileId,passphrase:ignored,...base}=command;port.reply(response(base,{state:'unlocked',handle:{id:'A'.repeat(43),generation:command.generation,purpose:'vault',profileId:'b'.repeat(32)}}));};
  err(await runtime.unlock('a'.repeat(32),pass),'PROTOCOL_ERROR');assert.equal(runtime.current.state,'locked');assert.equal(port.terminated,1);await runtime.dispose();
 });
+test('an invalid opening clock closes before publishing an unlocked handle and settles the pending request',async()=>{
+ for(const mode of ['nan','throw','backward']){
+  let clock=20;let invalid=false;
+  const listeners=new Set(),callbackErrors=[];
+  const port={terminated:0,
+   addEventListener(type,listener){if(type==='message')listeners.add(listener);},
+   removeEventListener(type,listener){if(type==='message')listeners.delete(listener);},
+   terminate(){this.terminated++;},
+   postMessage(command){const {version,requestId,generation,operation}=command;
+    const value=operation==='unlock'?{state:'unlocked',handle:{id:'A'.repeat(43),generation,purpose:'vault',profileId:command.profileId}}:{state:'locked',handle:null};
+    queueMicrotask(()=>{for(const listener of [...listeners]){try{listener({data:{version,requestId,generation,operation,kind:'response',result:{ok:true,value}}});}catch(error){callbackErrors.push(error);}}});
+   }};
+  const runtime=val(await start(port,{now:()=>{if(invalid&&mode==='throw')throw Error('SECRET clock diagnostic');return invalid&&mode==='nan'?NaN:clock;}}));
+  let pending;const published=[];
+  try{
+   if(mode==='backward'){val(await runtime.unlock('a'.repeat(32),pass));val(await runtime.lock());clock=19;}
+   runtime.subscribe(()=>published.push(runtime.current.state));invalid=true;
+   pending=runtime.unlock('a'.repeat(32),pass);await flush();
+   assert.equal(runtime.current.state,'locked',mode);assert.equal(port.terminated,1,mode);
+   assert.deepEqual(callbackErrors,[],mode);assert.equal(published.includes('unlocked'),false,mode);
+   err(await pending,'UNSUPPORTED_ENVIRONMENT');
+  }finally{await runtime.dispose();await pending;}
+ }
+});
+test('a clock failure after unlock reply settlement revokes the handle before async publication',async()=>{
+ for(const mode of ['nan','throw','backward']){
+  let clock=20;let invalid=false;
+  const port=simplePort();
+  port.handler=command=>{const {version,requestId,generation,operation}=command;port.reply({version,requestId,generation,operation,kind:'response',result:{ok:true,value:operation==='unlock'?{state:'unlocked',handle:{id:'A'.repeat(43),generation,purpose:'vault',profileId:command.profileId}}:{state:'locked',handle:null}}});};
+  const runtime=val(await start(port,{now:()=>{if(invalid&&mode==='throw')throw Error('SECRET clock diagnostic');return invalid&&mode==='nan'?NaN:clock;}}));
+  const expire=event=>{if(event.data.operation==='unlock'){invalid=true;clock=19;}};
+  port.addEventListener('message',expire);
+  try{err(await runtime.unlock('a'.repeat(32),pass),'LOCKED');assert.equal(runtime.current.state,'locked',mode);assert.equal(port.terminated,1,mode);}
+  finally{port.removeEventListener('message',expire);await runtime.dispose();}
+ }
+});
 test('runtime prevalidates passphrase and cancellation before sending secret input; concurrent requests are bounded',async()=>{
  const port=simplePort(),runtime=val(await start(port));const before=port.sent.length;err(await runtime.unlock('a'.repeat(32),'short'),'INVALID_INPUT');
  const controller=new AbortController();controller.abort();err(await runtime.unlock('a'.repeat(32),pass,controller.signal),'CANCELLED');assert.equal(port.sent.length,before);
@@ -137,4 +173,26 @@ test('quota survives Worker → strict reply → runtime → facade-visible resu
  const created=await services.create('quota create passphrase');err(created,'QUOTA_EXCEEDED');assert.deepEqual(services.current,{state:'locked'});
  assert.equal(errorMessage(restored.error.code),messages.errors.QUOTA_EXCEEDED);assert.notEqual(errorMessage(restored.error.code),messages.errors.STORAGE_UNAVAILABLE);
  assert.doesNotMatch(JSON.stringify(port.received),/SECRET/);val(await services.listProfiles());await services.dispose();
+});
+
+test('trusted activity never blocks a click save or reopening and late activity replies are ignored',async()=>{
+ const oldWindow=globalThis.window,oldDocument=globalThis.document;globalThis.window=new EventTarget();globalThis.document=new EventTarget();
+ const port=new Port();let held,state={state:'locked',handle:null};
+ port.handler=command=>{
+  const {config,passphrase,profileId,source,bytes,...base}=command;
+  if(command.operation==='activity'){held={base,state};return;}
+  if(command.operation==='unlock'||command.operation==='create')state={state:'unlocked',handle:{id:'A'.repeat(43),generation:command.generation,purpose:'vault',profileId:profileId??'b'.repeat(32)}};
+  if(command.operation==='lock'||command.operation==='dispose')state={state:'locked',handle:null};
+  port.reply(response(base,command.operation==='saveTermsReview'?{recordId:'1'.repeat(32)}:state));
+ };
+ const runtime=val(await api.AppRuntime.start(config,{createWorker:()=>port}));
+ const activity=async()=>{const event=new Event('pointerdown');Object.defineProperty(event,'isTrusted',{value:true});globalThis.document.dispatchEvent(event);await flush();assert.ok(held);};
+ try{
+  await runtime.unlock('a'.repeat(32),pass);
+  for(const operation of ['saveTermsReview','unlock','create']){
+   await activity();
+   const result=operation==='saveTermsReview'?await runtime.saveTermsReview('file',new Uint8Array([1])):operation==='unlock'?await runtime.unlock('c'.repeat(32),pass):await runtime.create(pass);
+   val(result);port.reply(response(held.base,held.state));held=undefined;await flush();assert.equal(runtime.current.state,'unlocked');
+  }
+ }finally{await runtime.dispose();if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });

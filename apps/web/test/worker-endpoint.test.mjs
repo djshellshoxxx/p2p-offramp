@@ -1,4 +1,6 @@
-import test from 'node:test';
+import test, { afterEach } from 'node:test';
+const liveEndpoints = new Set();
+afterEach(() => { for (const service of liveEndpoints) service.dispose(); liveEndpoints.clear(); });
 import assert from 'node:assert/strict';
 import { EncryptedVaultService, EncryptedBackupService } from '../../../packages/storage/index.ts';
 const api=await import('../src/runtime/worker-endpoint.ts').catch(error=>{if(error.code==='ERR_MODULE_NOT_FOUND')return{};throw error;});
@@ -14,7 +16,7 @@ class Store{
  async compareAndSwap(){throw Error('runtime must not write');}
  subscribeInvalidation(listener){this.listeners.add(listener);return()=>this.listeners.delete(listener);}
 }
-function endpoint(options={}){assert.equal(typeof api.createVaultWorkerEndpoint,'function','missing Worker endpoint');const messages=[];const service=api.createVaultWorkerEndpoint(message=>messages.push(clone(message)),options);let sequence=0;return{service,messages,send:(operation,extra={},generation=0)=>service.dispatch({version:1,requestId:++sequence,generation,operation,...extra})};}
+function endpoint(options={}){assert.equal(typeof api.createVaultWorkerEndpoint,'function','missing Worker endpoint');const messages=[];const service=api.createVaultWorkerEndpoint(message=>messages.push(clone(message)),options);liveEndpoints.add(service);let sequence=0;return{service,messages,send:(operation,extra={},generation=0)=>service.dispatch({version:1,requestId:++sequence,generation,operation,...extra})};}
 async function setup(options={}){const store=new Store(),creator=new EncryptedVaultService(store,crypto,{lifecycle:false});const session=val(await creator.create(pass));creator.dispose();const workerVault=new EncryptedVaultService(store,crypto,{lifecycle:false});const backup=new EncryptedBackupService(store);const e=endpoint({...options,createServices:()=>({vault:workerVault,backup})});await e.send('init',{config});return{...e,store,session,workerVault,backup};}
 test('Worker validates strict offline init before constructing private services and closes invalid protocol without echo',async()=>{
  let calls=0;const e=endpoint({createServices:()=>{calls++;throw Error('SECRET https://private.invalid');}});
@@ -111,4 +113,36 @@ test('Worker reports storage quota as a typed QUOTA_EXCEEDED for create and rest
  assert.equal(e.messages.at(-1).result.error.messageKey,'runtime.error.quota_exceeded');
  await e.send('restore',{bytes:new Uint8Array([1]),sourcePassphrase:pass,destinationPassphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
  assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
+});
+
+test('review storage is session-bound, bounded, idempotent and preserves foreign records', async()=>{
+ const rows = new Map(); let revision=0, code, commits=0, live=true, randomId=1;
+ const profileId='a'.repeat(32),success=value=>({ok:true,value});
+ const fake={create:async()=>success({sessionId:'session',profileId,revision}),captureSession:()=>success({current:()=>live?{sessionId:'session',profileId,revision}:null,dispose(){}}),lockAll(){live=false;},dispose(){},assertFresh:async()=>success(revision),list:async()=>success([...rows.values()]),commit:async(_session,expected,mutations)=>{if(code)return{ok:false,error:{code}};assert.equal(expected,revision);for(const m of mutations)if(m.op==='put')rows.set(m.record.id,m.record);else rows.delete(m.id);commits++;return success(++revision);}};
+ const s=endpoint({random:bytes=>bytes.fill(randomId++),createServices:()=>({vault:fake,backup:{dispose(){}}})});
+ await s.send('init',{config});
+ await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.error.code,'LOCKED');
+ fake.create=async()=>{live=true;return success({sessionId:'session',profileId,revision});};
+ await s.send('create',{passphrase:pass});
+ const bytes=new Uint8Array([1,2,3]);
+ await s.send('saveTermsReview',{profileId,source:'file',bytes});assert.equal(s.messages.at(-1).result.ok,true);
+ await s.send('saveTermsReview',{profileId,source:'file',bytes});assert.equal(commits,1);
+ rows.set('f'.repeat(32),{id:'f'.repeat(32),kind:'trade',schemaVersion:1,payload:'e30'});
+ randomId=255;await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([4])});assert.equal(s.messages.at(-1).result.error.code,'CONFLICT');randomId=3;
+ code='QUOTA_EXCEEDED';await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([5])});assert.equal(s.messages.at(-1).result.error.code,code);code='CONFLICT';await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([5])});assert.equal(s.messages.at(-1).result.error.code,code);code=undefined;
+ for(let i=2;i<=8;i++)await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([i])});
+ await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([9])});assert.equal(s.messages.at(-1).result.error.code,'LIMIT_EXCEEDED');
+ await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.value.items.length,8);assert.equal(s.messages.at(-1).result.value.skipped,1);assert.equal(rows.size,9);
+ rows.set('c'.repeat(32),{id:'c'.repeat(32),kind:'trade',schemaVersion:1,payload:Buffer.from(JSON.stringify({format:'p2p-offramp/saved-review/v1',bytes:''})).toString('base64url')});
+ await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.error.code,'INVALID_INPUT');
+ await s.send('lock',{},1);await s.send('listTermsReviews',{profileId},1);assert.equal(s.messages.at(-1).result.error.code,'LOCKED');s.service.dispose();
+});
+
+test('review list suppresses private results after lock while an uncancellable read drains',async()=>{
+ const pending=deferred();let live=true;
+ const success=value=>({ok:true,value});
+ const fake={create:async()=>{live=true;return success({sessionId:'s',profileId:'a'.repeat(32),revision:0});},captureSession:()=>success({current:()=>live?{sessionId:'s',profileId:'a'.repeat(32),revision:0}:null,dispose(){}}),lockAll(){live=false;},dispose(){},assertFresh:async()=>success(0),list:()=>pending.promise};
+ const s=endpoint({createServices:()=>({vault:fake,backup:{dispose(){}}})});await s.send('init',{config});await s.send('create',{passphrase:pass});
+ const job=s.send('listTermsReviews',{profileId:'a'.repeat(32)});await Promise.resolve();await Promise.resolve();await s.send('lock',{},1);pending.resolve(success([]));await job;
+ assert.equal(s.messages.some(m=>m.operation==='listTermsReviews'&&m.result.ok),false);s.service.dispose();
 });

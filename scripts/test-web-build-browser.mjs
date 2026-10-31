@@ -20,7 +20,7 @@ const close = async target => { if (target) { target.closeAllConnections(); awai
 const listen = target => new Promise((done, fail) => { target.once('error', fail); target.listen(0, '127.0.0.1', done); });
 const getOrigin = target => `http://127.0.0.1:${target.address().port}`;
 function instrument() {
-  const observed = { prompts: 0, networkCalls: 0, workers: [], operations: [], secretReplies: 0, violations: {} };
+  const observed = { prompts: 0, networkCalls: 0, workers: [], operations: [], secretReplies: 0, violations: {}, holdReplies: [], heldReplies: {} };
   window.__observed = observed;
   const prompt = async () => { observed.prompts++; throw new Error('FIXTURE_WALLET_DENIED'); };
   Object.defineProperty(window, 'ethereum', { value: { request: prompt, enable: prompt }, configurable: true });
@@ -31,12 +31,29 @@ function instrument() {
   window.Worker = class extends NativeWorker {
     constructor(url, options) {
       super(url, options); observed.workers.push({ url: String(url), type: options?.type });
+      // Deterministically hold a selected main-thread reply. A successful restore response is
+      // posted only after its IndexedDB add transaction completes, so this can exercise the
+      // committed-but-unacknowledged cancellation boundary without stubbing storage or the Worker.
+      this.addEventListener('message', event => {
+        const message = event.data;
+        if (message?.kind !== 'response' || !observed.holdReplies.includes(message.operation)) return;
+        event.stopImmediatePropagation();
+        const messages = observed.heldReplies[message.operation] ??= [];
+        messages.push(message);
+      }, { capture: true });
+      observed.releaseReply = operation => {
+        observed.holdReplies = observed.holdReplies.filter(value => value !== operation);
+        const messages = observed.heldReplies[operation] ?? [];
+        observed.heldReplies[operation] = [];
+        for (const message of messages) this.dispatchEvent(new MessageEvent('message', { data: message }));
+      };
       this.addEventListener('message', event => {
         if (/passphrase|sessionId|private-records|fixture only password/.test(JSON.stringify(event.data))) observed.secretReplies++;
       });
     }
     postMessage(message, transfer) {
       observed.operations.push(message.operation);
+      if (message.operation === 'status' && window.__holdStatus) { window.__statusHeld = true; return; }
       if (transfer === undefined) super.postMessage(message); else super.postMessage(message, transfer);
     }
   };
@@ -227,8 +244,15 @@ try {
       await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
       await page.getByText('Vault unlocked', { exact: true }).waitFor();
       await assertPrivateSurfaces(page, href + '#/home');
+      // A status request may hang, but explicit lock must revoke immediately and supersede its notice.
+      await page.evaluate(() => { window.__holdStatus = true; window.__statusHeld = false; });
+      await page.getByRole('button', { name: 'Refresh vault status', exact: true }).click();
+      await page.waitForFunction(() => window.__statusHeld);
+      assert.equal(await page.getByRole('button', { name: 'Lock vault', exact: true }).isEnabled(), true, 'status refresh cannot disable lock');
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.evaluate(() => { window.__holdStatus = false; });
+      assert.equal(await page.locator('main').getByRole('alert').count(), 0, 'late cancelled refresh does not override explicit lock');
       await page.goto(href + '#/recovery');
       await page.getByLabel('Profile ID', { exact: true }).fill(fixture.envelope.profileId);
       let downloadCount = 0;
@@ -266,27 +290,113 @@ try {
       await page.getByRole('button', { name: `Use profile ${restoredId}`, exact: true }).waitFor({ timeout: 5000 });
       assert.equal(await page.getByText('Vault locked', { exact: true }).count(), 1, 'restore does not unlock');
       await assertSeedPreserved(page);
-      // G03 R1: a cancelled restore may already have committed. Retry stays blocked until an explicit
-      // inventory check; the check never guesses which profile belongs to the cancelled job.
+      // G03: a confirmed destination can be selected without copying its ID or carrying a passphrase.
+      const openRestored = page.getByRole('button', { name: 'Open restored profile', exact: true });
+      assert.equal(await openRestored.count(), 1, 'confirmed restore provides an explicit open-profile handoff');
+      const unlocksBeforeOpen = await page.evaluate(() => window.__observed.operations.filter(op => op === 'unlock').length);
+      await openRestored.click();
+      await page.getByRole('heading', { level: 1, name: 'Your local workspace', exact: true }).waitFor();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), restoredId);
+      assert.equal(await page.getByLabel('Passphrase', { exact: true }).inputValue(), '', 'handoff carries no passphrase');
+      assert.equal(await page.evaluate(() => window.__observed.operations.filter(op => op === 'unlock').length), unlocksBeforeOpen, 'selection does not unlock');
+      await assertPrivateSurfaces(page, href + '#/home');
+      await page.getByLabel('Passphrase', { exact: true }).fill(fixture.passphrase);
+      await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+      await page.getByRole('alert').filter({ hasText: 'could not be authenticated' }).waitFor();
+      assert.equal(await page.getByLabel('Passphrase', { exact: true }).inputValue(), '');
+      await page.getByLabel('Passphrase', { exact: true }).fill(restorePass);
+      await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+      await page.getByText('Vault unlocked', { exact: true }).waitFor();
+      assert.equal(await page.getByRole('status').filter({ hasText: 'is selected for unlock in this page only' }).count(), 0, 'successful unlock consumes the handoff');
+      await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      // G03 R1: hold the successful Worker receipt after its IDB add transaction committed.
+      // Cancellation then revokes the response generation; retry stays blocked until fresh inventory.
+      await page.evaluate(() => { window.__observed.holdReplies = ['restore', 'lock']; });
       await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
       await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
       await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      await page.waitForFunction(() => window.__observed.heldReplies.restore?.length === 1);
+      const heldRestore = await page.evaluate(() => window.__observed.heldReplies.restore[0]);
+      assert.equal(heldRestore.result.ok, true, 'the actual Worker completed restore before its UI reply was held');
+      const interruptedId = heldRestore.result.value.newProfileId;
+      assert.ok(interruptedId && ![restoredId, fixture.envelope.profileId].includes(interruptedId));
+      const destinationCommitted = await page.evaluate(id => new Promise((done, fail) => {
+        const request = indexedDB.open('p2p-offramp-vault', 1);
+        request.onerror = () => fail(new Error('FIXTURE_IDB_OPEN'));
+        request.onsuccess = () => {
+          const db = request.result, tx = db.transaction('vaults', 'readonly'), get = tx.objectStore('vaults').get(id);
+          get.onsuccess = () => done(get.result !== undefined);
+          get.onerror = () => fail(new Error('FIXTURE_IDB_GET'));
+          tx.oncomplete = () => db.close();
+        };
+      }), interruptedId);
+      assert.equal(destinationCommitted, true, 'destination add is durable before the held reply');
       await page.getByRole('button', { name: 'Cancel', exact: true }).click();
       await page.getByRole('alert').filter({ hasText: 'may have completed' }).waitFor();
+      assert.equal(await openRestored.count(), 0, 'cancelled restore cannot select a destination');
       assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), true, 'no blind retry after an uncertain restore');
       const check = page.getByRole('button', { name: 'Check local profiles', exact: true });
-      // The old Worker job may still be settling (BUSY); retry the explicit check, never the restore.
-      for (let attempt = 0; attempt < 20; attempt++) {
-        if (await page.getByText(/^Profiles on this origin now \(\d+\)/).count()) break;
-        if (await check.count()) await check.click();
-        await page.waitForTimeout(250);
-      }
+      await page.waitForFunction(() => window.__observed.heldReplies.lock?.length === 1);
+      await check.click();
+      await page.getByText('Another local operation is running. Wait for it to finish before trying again.', { exact: true }).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), true, 'BUSY inventory does not enable retry');
+      assert.equal(await page.getByText(/^Profiles on this origin now \(\d+\)/).count(), 0, 'BUSY is not treated as a fresh inventory');
+      // Deliver the stale committed receipt after cancellation, then let the new-generation lock finish.
+      // The runtime must ignore the old response; only the subsequent local inventory may resolve uncertainty.
+      await page.evaluate(() => window.__observed.releaseReply('restore'));
+      await page.evaluate(() => window.__observed.releaseReply('lock'));
+
+      // A bounded inventory can be fresh but incomplete. It must not resolve uncertainty or enable a
+      // retry when an interrupted destination might be among the unlisted rows.
+      const overflowIds = await page.evaluate(async () => {
+        const db = await new Promise((resolve, reject) => {
+          const request = indexedDB.open('p2p-offramp-vault', 1);
+          request.onerror = () => reject(new Error('FIXTURE_IDB_OPEN'));
+          request.onsuccess = () => resolve(request.result);
+        });
+        const transaction = db.transaction('vaults', 'readwrite'), store = transaction.objectStore('vaults');
+        const keys = new Set(await new Promise((resolve, reject) => {
+          const request = store.getAllKeys(); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(new Error('FIXTURE_IDB_KEYS'));
+        }));
+        const ids = [];
+        for (let value = 0; ids.length < 14; value++) {
+          const id = value.toString(16).padStart(32, '0');
+          if (!keys.has(id)) { store.add({ profileId: id, testOnlyOverflow: true }); ids.push(id); }
+        }
+        await new Promise((resolve, reject) => { transaction.oncomplete = resolve; transaction.onerror = () => reject(new Error('FIXTURE_IDB_ADD')); });
+        db.close(); return ids;
+      });
+      await page.getByRole('button', { name: 'Check local profiles', exact: true }).click();
+      const restoreForm = page.getByRole('form', { name: 'Restore an encrypted file', exact: true });
+      await restoreForm.getByText(/More rows exist than this build lists/).waitFor({ timeout: 5000 });
+      assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), true,
+        'incomplete inventory keeps retry blocked');
+      await page.evaluate(ids => new Promise((resolve, reject) => {
+        const request = indexedDB.open('p2p-offramp-vault', 1);
+        request.onerror = () => reject(new Error('FIXTURE_IDB_OPEN'));
+        request.onsuccess = () => {
+          const db = request.result, transaction = db.transaction('vaults', 'readwrite'), store = transaction.objectStore('vaults');
+          for (const id of ids) store.delete(id);
+          transaction.oncomplete = () => { db.close(); resolve(); };
+          transaction.onerror = () => reject(new Error('FIXTURE_IDB_DELETE'));
+        };
+      }), overflowIds);
+      await page.getByRole('button', { name: 'Check local profiles', exact: true }).click();
       await page.getByText(/^Profiles on this origin now \(\d+\)/).waitFor();
       assert.equal(await page.getByRole('button', { name: 'Restore as new profile', exact: true }).isDisabled(), false, 'retry allowed after reconciliation');
-      assert.equal(await page.getByText(restoredId).count() > 0, true, 'reconciled list shows existing restored profile');
+      const inventoryStatus = page.getByRole('status').filter({ hasText: 'Profiles on this origin now' });
+      assert.equal(await inventoryStatus.getByText(interruptedId, { exact: true }).count(), 1, 'fresh inventory reveals the opaque ID without a success receipt');
+      assert.equal(await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).count(), 0, 'inventory does not attribute a profile to the interrupted restore');
+      assert.equal(await openRestored.count(), 0, 'stale success and reconciliation do not produce a confirmed-destination handoff');
+      assert.match(await inventoryStatus.innerText(), /may be from the interrupted restore; nothing was deleted/);
       await assertSeedPreserved(page);
       // Create through the UI: mismatch refusal, then explicit consent.
       await page.getByRole('link', { name: 'Home', exact: true }).click();
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), '', 'uncertain restore does not preselect any inventory row');
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
       await page.getByRole('button', { name: 'Create new profile', exact: true }).click();
       await page.getByLabel('New passphrase', { exact: true }).fill(createPass);
       await page.getByLabel('Confirm new passphrase', { exact: true }).fill(createPass + ' typo');
@@ -302,9 +412,9 @@ try {
       assert.ok(createdId && ![restoredId, fixture.envelope.profileId].includes(createdId));
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
-      // Inventory lists all three opaque IDs; choosing one fills the editable field.
+      // Inventory lists all four opaque IDs; choosing one fills the editable field.
       await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
-      await page.getByText('Profiles on this origin (3 of 16)', { exact: true }).waitFor();
+      await page.getByText('Profiles on this origin (4 of 16)', { exact: true }).waitFor();
       await page.getByRole('button', { name: `Use profile ${restoredId}`, exact: true }).click();
       assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), restoredId);
       await page.getByLabel('Passphrase', { exact: true }).fill(restorePass);
@@ -318,7 +428,50 @@ try {
         await page.setViewportSize({ width, height: 900 });
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No horizontal clipping at ${width}px with inventory`);
       }
+      // A confirmed restore while another profile is unlocked never locks or switches implicitly.
+      await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
+      await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      const switchText = await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).innerText();
+      const switchId = /profile ([0-9a-f]{32})/.exec(switchText)?.[1];
+      assert.ok(switchId && ![createdId, interruptedId, restoredId, fixture.envelope.profileId].includes(switchId));
+      const operationsBeforeSwitch = await page.evaluate(() => window.__observed.operations.filter(op => ['unlock', 'lock'].includes(op)));
+      await openRestored.click();
+      await page.getByRole('heading', { level: 1, name: 'Your local workspace', exact: true }).waitFor();
+      await page.getByText('A profile is already unlocked.', { exact: false }).waitFor();
+      assert.equal(await page.getByText('Vault unlocked', { exact: true }).count(), 1);
+      assert.equal(await page.getByLabel('Passphrase', { exact: true }).count(), 0, 'explicit lock is required before switching');
+      assert.deepEqual(await page.evaluate(() => window.__observed.operations.filter(op => ['unlock', 'lock'].includes(op))), operationsBeforeSwitch, 'handoff neither locks nor unlocks');
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+      await page.getByLabel('Passphrase', { exact: true }).waitFor();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), switchId);
+      assert.equal(await page.getByLabel('Passphrase', { exact: true }).inputValue(), '');
+      // Reload while the handoff is selected returns to manual profile selection.
+      await page.reload();
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), '', 'reload has no active-profile pointer');
+      await page.getByText('Profiles on this origin (5 of 16)', { exact: true }).waitFor();
+      await page.getByRole('button', { name: `Use profile ${switchId}`, exact: true }).click();
+      await page.getByLabel('Passphrase', { exact: true }).fill(restorePass);
+      await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+      await page.getByText('Vault unlocked', { exact: true }).waitFor();
+      await assertPrivateSurfaces(page, href + '#/home');
+      await assertSeedPreserved(page);
+      // A later confirmed handoff can also be cancelled without leaving a sticky selection.
+      await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await download.path());
+      await fillRestore(); await page.getByLabel(/file content is untrusted/).check();
+      await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+      await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).waitFor();
+      await openRestored.click();
+      await page.getByText('A profile is already unlocked.', { exact: false }).waitFor();
+      await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+      await page.getByLabel('Passphrase', { exact: true }).waitFor();
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+      assert.equal(await page.getByLabel('Profile ID', { exact: true }).inputValue(), '', 'cancel clears the confirmed destination selection');
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
       await page.goto(href + '#/recovery');
       // Browser offline does not promise a fresh page load; an already loaded shell retains guidance.

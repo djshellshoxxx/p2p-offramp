@@ -1,0 +1,29 @@
+{
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_id": "file_00000000a78c81f5b21269e87b837e1b",
+  "version": 12,
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 930721,
+  "sha256": "c03d5fcccd3434ef882d52c3a6a381553f37baaab3255d423d3f98fba520d821",
+  "sourceAndTestsCheckpoint": "b15179c0b8295183646dcb433e476b0547046baf",
+  "sourceTree": "121bad0dbe60a9c5aa1c3ae49385297e1b72be89",
+  "preImplementationBase": "d433390e104a64bfb67cd1100bb70c3400999403",
+  "proposalLibrary": "libfile_b169ba0dc3e881919377975d71cceec2",
+  "proposalVersion": 1,
+  "proposalSha256": "8791883b5e8b14b9bcf35ba5622f3307f119085c2b3039b4b057f1feca374319",
+  "sameIdentityGuard": {
+    "expectedPriorVersion": 11,
+    "confirmedNewVersion": 12
+  },
+  "priorVersion11BytesIntact": true,
+  "twoCodeFileForwardAndReverseRoundTripVerified": true,
+  "localBytesAndAllXattrsVerified": true,
+  "producerStatus": "succeeded",
+  "consumerRetrievalVerified": false,
+  "wholeRepositoryRestore": false,
+  "publishedToGitHub": false,
+  "appInclusion": false,
+  "providerApproval": false,
+  "releaseEnabled": 0,
+  "next": "Narrow G13 approval complete; scheduler/disposer concern remains static/out of scope, and G16 pending metadata/typed Worker prerequisites remain separate; IDB review produced no report and was not retried"
+}

@@ -1,0 +1,65 @@
+{
+  "provenance": "ethers 6.15.0 TypedDataEncoder and Wallet; independent implementation, same project-supplied synthetic inputs. Not independent security review, trust-root approval, contract interoperability or production readiness. Never fund these keys.",
+  "vectors": [
+    {
+      "name": "native",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+      },
+      "terms": {
+        "orderId": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-local-v1",
+        "seller": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "buyer": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "assetKind": "native",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "amountBaseUnits": "1000000000000000000",
+        "privateAgreementHash": "972459f32afc027880b2e4910469dbce213ed14e19e7273412fb8bed0fa83605",
+        "capabilitiesHash": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+        "sellerNonce": "3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "domainSeparator": "5816cd5220e8184a22e074460163eacbc38a0824f184795a269addfcde818b9f",
+      "structHash": "032568b7142f9f49a2aecee9b4206163250b8439062be4b5d9e355cdb450b00e",
+      "digest": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+      "signatures": {
+        "seller": "0x89c29b49abfbd8c4d8f36ea60838acd922a270f8e79aaf8b4419cc40afdf382a41d7f32278d3accce34b8971d6f28c6777384a939b8d935fe65901159f14d9b41c",
+        "buyer": "0xc4dabfb7225b4eea344c6353c03dee43cc323feed894e9673ae635b662c777932326d790fa31b07237713275a0bb458ccbd9ae3e25139d3a6a81f86f2a89c8781c"
+      }
+    },
+    {
+      "name": "erc20",
+      "domain": {
+        "chainId": "31337",
+        "verifyingContract": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+      },
+      "terms": {
+        "orderId": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "revision": "1",
+        "networkId": "local-evm",
+        "deploymentId": "escrow-local-v1",
+        "seller": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "buyer": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "assetKind": "erc20",
+        "asset": "0x7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a",
+        "amountBaseUnits": "25000000",
+        "privateAgreementHash": "346b2013fd019f7d9b9e2f789e458940e5c990d9fc540c7d871a6023acc9fbab",
+        "capabilitiesHash": "6a53056d4685133d77cb26b16b7c5c281581a414b586337e0314a5296280e2e4",
+        "sellerNonce": "4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d",
+        "acceptBeforeSeconds": "1700000000",
+        "escrowExpirySeconds": "1700086400"
+      },
+      "domainSeparator": "5816cd5220e8184a22e074460163eacbc38a0824f184795a269addfcde818b9f",
+      "structHash": "b4bc220388b553a6273bac0184e23d299b5f7bf2b75ab2cc085cc31c9e1d7b5d",
+      "digest": "9f5c68d4d66adafb7a96e298f82b880d4fa9bf6cb197ceea9c4bfb2a18c32524",
+      "signatures": {
+        "seller": "0x3d95c251357113b50fbf840c46aaccc8852fe7ea823f5b04d9cad3180b2692e142bd8a0859a15de7c631d94ae8bc18f7c046f8bbd74f8e376f1486e4c518d1801b",
+        "buyer": "0x41159c8debccab217d7430566f3d8f6028fd7460561df1ed04260a6e7140f43c4ba4e9b5f954b7f9144c64598fbbb05b67a0e8cf97b37124ba7133048cf91d2c1b"
+      }
+    }
+  ]
+}

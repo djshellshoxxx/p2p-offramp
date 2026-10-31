@@ -1,5 +1,8 @@
 # P2P Off-ramp
 
+Current combined-source status and audit: [consolidation report](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
+
+
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
 
 A noncustodial peer-to-peer off-ramp under active development. The intended core is a static
@@ -14,6 +17,16 @@ and supplemental plan. Provider/artifact pins, implementations and security/inte
 are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
 
 Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Signed registry/release trust, wallet signing/submission, native escrow/relay integration and the trading loop remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
+
+## Screenshots
+
+Captured from the synthetic, test-only demo build (`npm run build:demo`); trading and funds are disabled in every build.
+
+![Home: locked local workspace with funds disabled and the SYNTHETIC DEMO badge](docs/screenshots/startup.png)
+
+![Offers page with built-in synthetic samples](docs/screenshots/offers-demo.png)
+
+![Read-only trade terms review with full addresses, integrity checks and manual settlement risk](docs/screenshots/trade-terms-review-demo.png)
 
 ## Local checks
 
@@ -41,3 +54,16 @@ python packages/storage/test/fixtures/verify_vault_fixture.py
 
 See the [developer and operator guide](docs/OPERATOR.md) for build modes and the terms file format. Start with [development status](docs/DEVELOPMENT_STATUS.md), [roadmap](DEVELOPMENT_ROADMAP.md),
 [spec readiness inventory](docs/SPEC_READINESS.md) and [vault implementation plan](docs/superpowers/plans/2026-10-22-vault-foundation.md).
+
+Local continuation: the demo review UI can explicitly save up to eight original terms documents encrypted in an
+unlocked profile and revalidate them on load. Reload, cross-tab conflict, lock and fresh-key backup recovery are
+covered in emitted-app Chromium checks. Independent-library EIP-712 vectors also check native/ERC-20 terms and
+both parties' signatures outside the shipped app. See [delivery coordination](docs/handoffs/DELIVERY-2026-10-30.md).
+Trading remains disabled; these checks do not qualify a real-funds release.
+
+The [autonomous local EVM pass](docs/execution/EXECUTION-STATUS.md) adds immutable test escrow,
+read-only chain/receipt validation, explicit journaled execution, bounded signed discovery/transport,
+and a real two-party loopback-chain recovery test. Run `npm ci --ignore-scripts --prefix packages/escrow-evm`
+on Linux x64, then `npm run test:escrow` and `npm run test:local-evm`. These modules remain excluded from
+the shipped app. The [full code audit](docs/execution/CODE-AUDIT-2026-10-30.md) records nine resolved
+findings, verification and remaining human-input/later-integration gates.

@@ -1,0 +1,48 @@
+✔ valid request frames, both operations, bounds and null prototype (2.689305ms)
+✔ valid ack frames cover held values, both failure codes, both ops (0.737658ms)
+✔ valid closed frames cover all four reasons and bounds (0.343066ms)
+✔ caller mutation has no effect and repeated parses are identical (0.341093ms)
+✔ request: outer structural rejections (0.529471ms)
+✔ request: meta traps yield fresh fixed errors (0.435733ms)
+✔ request: giant extra graph is not traversed (0.193054ms)
+✔ request: discriminator and counter rejections (0.671981ms)
+✔ request: authority/private extras rejected and sentinel excluded (0.310618ms)
+✔ ack: outer structural rejections (0.459607ms)
+✔ ack: meta traps yield fresh fixed errors (0.214256ms)
+✔ ack: giant extra graph is not traversed (0.133117ms)
+✔ ack: discriminators, counters, result shapes (1.224616ms)
+✔ ack: nested exact-shape hardening (1.133ms)
+✔ ack: sentinel excluded from output and errors (0.215788ms)
+✔ closed: outer structural rejections (0.267575ms)
+✔ closed: meta traps yield fresh fixed errors (0.237891ms)
+✔ closed: giant extra graph is not traversed (0.143752ms)
+✔ closed: discriminators and counters (0.544803ms)
+✔ Reflect trap on transparent proxy without traps is not asserted rejected (0.196099ms)
+✔ complete nested exact-shape family: success-result (1.029538ms)
+✔ complete nested exact-shape family: failure-result (1.440213ms)
+✔ complete nested exact-shape family: held-value (0.593545ms)
+✔ complete nested exact-shape family: failure-error (0.44756ms)
+✔ genuine and forged CoreSchemaError trap values are discarded fresh without any error-property reads (2.313532ms)
+✔ every ack discriminator and all request/ack/closed integer counter domains are exact (1.572929ms)
+✔ request: valid minimal snapshot is fresh, frozen and owned (4.563098ms)
+✔ request: native assetKind also structurally valid (0.563071ms)
+✔ request: header counter bounds (2.164751ms)
+✔ request: outer exact fields, symbols, accessors, non-plain (0.602809ms)
+✔ request: bad header fails before the body is touched (0.306392ms)
+✔ request: body errors are the original native typed errors (0.846267ms)
+✔ request: meta-trap throws become fresh fixed INVALID_INPUT (0.792609ms)
+✔ reply: valid success and every known failure code (0.92242ms)
+✔ reply: header bounds and exact discriminators (0.878255ms)
+✔ reply: rich errors, unknown codes and authority fields reject (0.778738ms)
+✔ reply: value flags, hashes and accounts (0.7869ms)
+✔ reply: data-only; invented values and mismatched ids parse structurally (0.207547ms)
+✔ reply: symbols, non-enumerable, accessors and custom prototypes (0.608757ms)
+✔ reply: errors contain no private sentinel and are fixed (0.243388ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 182.668184

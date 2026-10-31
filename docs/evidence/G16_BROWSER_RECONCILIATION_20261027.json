@@ -1,0 +1,68 @@
+{
+  "recordedAtUtc": "2026-10-27T00:14:18.888261+00:00",
+  "kind": "documentation-only reconciliation of existing recorded evidence and conditional engineering review",
+  "reviewedHead": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+  "reviewedTree": "8bea687ecee68c8680000269cb266a98b0eb3b36",
+  "browserEvidenceSource": "626d82e084c306c29e54cc33e4f59a5cd7e3104d",
+  "browserEvidenceTree": "bc73d306f7d7ff014169977a7fe6aeb1fac8abb2",
+  "reviewer": "Codex GPT-6 Astra /root/p2p_g16_browser_boundary_review, fresh-context read-only,2026-10-26",
+  "disposition": "conditional recommendation of exact public-data scope for test-only offline consistency preview; app exclusion retained pending engineering and validation conditions",
+  "nodeAcceptance": "two existing G16 Keccak/EOA recovery entries accepted for recorded Node configuration only",
+  "browserEvidence": "recorded Chromium154.0.8037.57 Linux document/Worker153assertions each; not new execution or unconditional provider acceptance",
+  "nativeUses": [
+    {
+      "primitive": "SHA-256",
+      "provider": "browser WebCrypto subtle.digest",
+      "source": "packages/domain/src/trade-terms.ts:194",
+      "use": "private agreement and capability commitments",
+      "disposition": "actual use attributed; dedicated G16 native-SHA inventory/profile not added or accepted"
+    },
+    {
+      "primitive": "diagnostic random bytes",
+      "provider": "browser crypto.getRandomValues",
+      "source": "packages/domain/src/errors.ts:9",
+      "use": "16-byte diagnostic operation IDs, wiped; diagnostic-only fallback sequence on RNG failure",
+      "disposition": "not keys/nonces/capabilities/authorization; no entropy or secret RNG qualification"
+    }
+  ],
+  "independentPublicEvidence": "published KAT/Mail plus6separately implemented non-Noble G16 digests/4signatures with retained provenance and OpenSSL cross-checks; not absent or external audit",
+  "privateEncodingEvidence": "2Python implementation vectors with shared authorship",
+  "completeBundleEvidence": "3same-provider Node-prepared integration bundles; not independent complete-bundle qualification",
+  "correctedWording": "removed blanket no-randomness claim; diagnostic getRandomValues invocation remains separate from secret generation",
+  "historicalEvidenceUnmodified": [
+    "docs/evidence/P2P_G16_BROWSER_20261026.json",
+    "docs/evidence/p2p-g16-browser-20261026",
+    "docs/evidence/P2P_G16_BROWSER_LIBRARY_RECEIPT_20261026.json"
+  ],
+  "reservedPacket": {
+    "library_file_id": "libfile_1505c877c3708191bcacc035dabece07",
+    "version": 0,
+    "sha256": "91a298757e45bc0ff77e7c365839e426a21ccd2a8679c7cdfae1c28931d675bc",
+    "base": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+    "reservedFileSha256": {
+      "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+      "packages/domain/test/trade-terms.test.mjs": "8b748874fb626e680ffd2957a6ccb0f7564754a6307bfee2e98db97b74ed6c4c"
+    },
+    "untouched": true
+  },
+  "proposalAvailableNotValidated": {
+    "library_file_id": "libfile_79762651b9248191825f75d46520a9b0",
+    "version": 0,
+    "sha256": "53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46",
+    "request": "req_011CgRk5c4hn9ntunsGVB6dD"
+  },
+  "priorCheckpoint": {
+    "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+    "version": 8,
+    "sha256": "44b883a8b8095f79bc34eeb07cb59fa5d39530e2c643ac75ac62fedb5e5d988f",
+    "bytes": 498472,
+    "preserveOriginalArchiveBytes": true
+  },
+  "newTestsOrBuildsExecuted": false,
+  "runtimeOrSecurityPolicyChanged": false,
+  "appInclusion": false,
+  "ownerApprovalOrAuditClaim": false,
+  "newPaidApiCalls": 0,
+  "ghostPayAccess": false,
+  "externalSourcePublication": false
+}

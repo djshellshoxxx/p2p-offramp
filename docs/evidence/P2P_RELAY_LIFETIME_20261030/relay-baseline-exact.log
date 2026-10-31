@@ -1,0 +1,30 @@
+✔ connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays (51.87942ms)
+✔ strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct (143.71963ms)
+✔ ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked (7.556502ms)
+✔ switching to strict mid-session revokes sockets and the pool does not reconnect (11.908681ms)
+✔ bounds: relay candidates, active connections, subscriptions and filter shape (28.757556ms)
+✔ failover: a relay that never connects exhausts six reconnects, then the next approved relay is used (97.800987ms)
+✔ reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery (23.381664ms)
+✔ backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime (31.96597ms)
+✔ malicious relay: flood is rate limited, valid events pass, memory use stays bounded (785.432496ms)
+✔ malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock) (1021.471006ms)
+✔ malicious relay: an oversized frame bans the relay immediately and it is never reconnected (50.471081ms)
+✔ malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay (14.689979ms)
+✔ malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized (10.216163ms)
+✔ malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered (8.849138ms)
+✔ per-subscription event cap closes the subscription on that relay and dedupe memory is bounded (15.784531ms)
+✔ dedupe memory evicts the oldest ids beyond 4096 (41.996026ms)
+✔ hanging socket: connect timeout fails the attempt without blocking other relays (49.09405ms)
+✔ closing the last subscription closes sockets and stops reconnecting (52.033674ms)
+✔ end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion (28.127924ms)
+✔ publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported (12.373989ms)
+✔ relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled (1.155892ms)
+✔ crypto stays injected: the default verifier is required and signing is never done in the pool (0.819294ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2693.988282

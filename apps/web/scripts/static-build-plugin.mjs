@@ -37,6 +37,7 @@ export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = fa
         if (id.startsWith('\0') || id.startsWith('vite/') || id.startsWith('rolldown:')) continue;
         const clean = id.split('?')[0];
         const path = relative(repositoryRoot, clean).replaceAll('\\', '/');
+        if (/^packages\/wallet\/src\/evm-(?:execution|adapter|terms)\.ts$/.test(path)) throw new Error('NON_CORE_MODULE');
         if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) || /(?:^|\/)packages\/(?:extensions|chain-evm|chain-solana|relay)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path)) throw new Error('NON_CORE_MODULE');
         if (!/\.(?:[cm]?[jt]sx?|css|html)$/.test(clean)) throw new Error('UNREVIEWED_MODULE_TYPE');
         const source = await readFile(clean, 'utf8');

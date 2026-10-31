@@ -83,3 +83,25 @@ test('facade create returns only state plus the new opaque profile ID; inventory
   assert.doesNotMatch(JSON.stringify([created, services.current]), /passphrase|handle|sessionId|BBBB/);
   await services.dispose();
 });
+
+test('facade review commands bind active profile and reject stale or mismatched results',async()=>{
+ class ReviewPort extends Port {
+  pendingReview;
+  postMessage(command){
+   if(['saveTermsReview','listTermsReviews','deleteTermsReview'].includes(command.operation)){
+    const {profileId,recordId,source,bytes,...base}=command;
+    this.pendingReview={base,recordId,source,bytes};return;
+   }
+   super.postMessage(command);
+  }
+ }
+ const port=new ReviewPort(),services=await begin(port);const id='1'.repeat(32),bytes=new Uint8Array([1]);
+ assert.equal(services.profileId,null);assert.equal((await services.saveTermsReview('file',bytes)).error.code,'LOCKED');
+ await services.unlock('a'.repeat(32),'local valid passphrase');assert.equal(services.profileId,'a'.repeat(32));
+ const save=services.saveTermsReview('file',bytes);port.reply(port.pendingReview.base,{recordId:id});assert.deepEqual(value(await save),{recordId:id});
+ const list=services.listTermsReviews();port.reply(port.pendingReview.base,{items:[{recordId:id,source:'file',bytes}],skipped:0});assert.equal(value(await list).items[0].bytes[0],1);
+ const wrong=services.deleteTermsReview(id);port.reply(port.pendingReview.base,{recordId:'2'.repeat(32)});assert.equal((await wrong).error.code,'PROTOCOL_ERROR');
+ const cancelled=new AbortController();cancelled.abort();assert.equal((await services.listTermsReviews(cancelled.signal)).error.code,'CANCELLED');
+ const stale=services.listTermsReviews();port.reply(port.pendingReview.base,{items:[{recordId:id,source:'file',bytes}],skipped:0});await services.lock();assert.equal((await stale).error.code,'LOCKED');assert.equal(services.profileId,null);
+ await services.dispose();
+});

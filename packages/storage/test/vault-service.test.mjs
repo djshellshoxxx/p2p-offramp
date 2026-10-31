@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { webcrypto } from 'node:crypto';
+import { createEnvelope, encryptRevision, disposeMaterial } from '../src/vault-crypto.ts';
+import { MAX_REVISION } from '../../schemas/index.ts';
 const api = await import('../src/vault-service.ts').catch(error => { if (error.code === 'ERR_MODULE_NOT_FOUND') return {}; throw error; });
 const clone = value => structuredClone(value);
 const pass = 'portable test passphrase';
@@ -138,6 +140,37 @@ test('G02 cancellation before commit leaves old revision, quota preserves usable
   error(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }], controller.signal), 'CANCELLED');
   store.failure = 'QUOTA_EXCEEDED'; error(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }]), 'QUOTA_EXCEEDED');
   assert.deepEqual(value(await vault.list(session.sessionId)), []); assert.equal(store.rows.get(session.profileId).revision, 0);
+});
+
+test('G02 trusted commit guards run at the atomic-write boundary and foreign failures stay fixed', async () => {
+  const { vault, store } = service();
+  const session = value(await vault.create(pass));
+  let current = true, checks = 0;
+  const guard = () => { checks++; if (!current) throw new Error('SECRET caller authority detail'); };
+  store.beforeWrite = () => { current = false; };
+  const before = store.writes;
+  const failed = error(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }], undefined, guard), 'CANCELLED');
+  assert.ok(checks >= 4, 'guard covers post-await and pre-CAS checks');
+  assert.equal(store.writes, before);
+  assert.doesNotMatch(JSON.stringify(failed), /SECRET/);
+  assert.deepEqual(value(await vault.list(session.sessionId)), []);
+  store.beforeWrite = undefined;
+  error(await vault.commit(session.sessionId, 0, [], undefined, {}), 'INVALID_INPUT');
+  assert.equal(value(await vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }])), 1, 'invalid guard does not hold the session queue');
+  vault.dispose();
+});
+
+test('G02 trusted create guard can refuse the atomic add without exposing its exception or holding the opening queue', async () => {
+  const { vault, store } = service();
+  let current = true;
+  store.beforeWrite = () => { current = false; };
+  const stopped = error(await vault.create(pass, undefined, () => { if (!current) throw new Error('SECRET authority detail'); }), 'CANCELLED');
+  assert.equal(store.writes, 0); assert.equal(store.rows.size, 0);
+  assert.doesNotMatch(JSON.stringify(stopped), /SECRET/);
+  error(await vault.create(pass, undefined, {}), 'INVALID_INPUT');
+  store.beforeWrite = undefined;
+  assert.ok(value(await vault.create(pass)).profileId); assert.equal(store.writes, 1);
+  vault.dispose();
 });
 test('G02 lockAll during unlock discards key material and does not publish a session', async () => {
   const { store, vault } = service(); const session = value(await vault.create(pass)); vault.lockAll();
@@ -309,4 +342,47 @@ test('G02 persisted readback decrypts the stored row with the live key and refus
   store.rows.set(session.profileId, tampered); error(await vault.readPersisted(session.sessionId), 'CONFLICT');
   store.rows.set(session.profileId, good); assert.equal(value(await vault.readPersisted(session.sessionId)).length, 1);
   assert.equal(rev, 1); vault.lock(session.sessionId); error(await vault.readPersisted(session.sessionId), 'LOCKED');
+});
+
+function settlesWithin(promise, ms = 2000) {
+  let timer; const late = new Promise((_, fail) => { timer = setTimeout(() => fail(new Error('operation never settled')), ms); });
+  return Promise.race([promise, late]).finally(() => clearTimeout(timer));
+}
+test('G02 rejects a signal that is not an AbortSignal without wedging the session queue', async () => {
+  const { vault, store } = service(); const session = value(await vault.create(pass));
+  for (const signal of [new AbortController(), {}, { aborted: false, addEventListener() { throw new Error('SECRET'); } }]) {
+    error(await settlesWithin(vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }], signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.readPersisted(session.sessionId, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.assertFresh(session.sessionId, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.resealSnapshot(session.sessionId, id(1), 0, records => records, 'another passphrase', signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.listProfiles(signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.unlock(session.profileId, pass, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.create(pass, signal)), 'INVALID_INPUT');
+  }
+  assert.equal(store.writes, 1); assert.equal(store.rows.size, 1);
+  // The session stayed live and its serialization tail still advances.
+  assert.equal(value(await settlesWithin(vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }]))), 1);
+  assert.equal(value(await settlesWithin(vault.assertFresh(session.sessionId))), 1);
+});
+test('G02 revision cap: the last allowed commit succeeds; the next returns REKEY_REQUIRED without encrypting or writing', async () => {
+  const profileId = id(7), keyId = id(8);
+  const base = { format: 'p2p-offramp-private-records', version: 1, profileId, keyId, revision: 0, records: [] };
+  const sealed = await createEnvelope(base, pass, webcrypto);
+  const nearCap = await encryptRevision(sealed.material, { ...base, revision: MAX_REVISION - 1, records: [record(1)] }, MAX_REVISION - 2);
+  disposeMaterial(sealed.material);
+  let encryptions = 0;
+  const provider = { getRandomValues: webcrypto.getRandomValues.bind(webcrypto), subtle: new Proxy(webcrypto.subtle, { get(target, name) {
+    if (name === 'encrypt') return (...args) => { encryptions++; return target.encrypt(...args); };
+    const member = Reflect.get(target, name); return typeof member === 'function' ? member.bind(target) : member;
+  } }) };
+  const store = new Store(); store.rows.set(profileId, clone(nearCap));
+  const { vault } = service(store, provider);
+  const session = value(await vault.unlock(profileId, pass)); assert.equal(session.revision, MAX_REVISION - 1);
+  assert.equal(value(await vault.commit(session.sessionId, MAX_REVISION - 1, [{ op: 'put', record: record(2) }])), MAX_REVISION);
+  const writes = store.writes, encrypted = encryptions, row = clone(store.rows.get(profileId));
+  error(await vault.commit(session.sessionId, MAX_REVISION, [{ op: 'put', record: record(3) }]), 'REKEY_REQUIRED');
+  assert.equal(store.writes, writes); assert.equal(encryptions, encrypted); assert.deepEqual(store.rows.get(profileId), row);
+  // An empty batch at the cap writes nothing and reports the current revision; the session stays usable for reads.
+  assert.equal(value(await vault.commit(session.sessionId, MAX_REVISION, [])), MAX_REVISION);
+  assert.equal(store.writes, writes); assert.equal(value(await vault.assertFresh(session.sessionId)), MAX_REVISION);
 });

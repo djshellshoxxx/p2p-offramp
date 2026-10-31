@@ -6,12 +6,15 @@ import { createTradeReviewController, noApprovedRegistry, type RegistrySource, t
 import './ui/app.css';
 
 /**
- * Compile-time constant from vite.config.ts: true only for the `demo` build. When false the bundler removes the
- * synthetic module entirely; the build-policy test checks that no synthetic data reaches the default artifact.
+ * Compile-time constants from vite.config.ts: `__P2P_SYNTHETIC_DEMO__` is true only for the `demo` build and
+ * `__P2P_TESTNET__` only for the `testnet` build. When false the bundler removes the module entirely; the build-policy
+ * scan checks that no synthetic or testnet data reaches any other artifact.
  */
 const registrySource: RegistrySource = __P2P_SYNTHETIC_DEMO__
   ? async () => (await import('./demo/synthetic-local.ts')).syntheticDemoSource()
-  : noApprovedRegistry;
+  : __P2P_TESTNET__
+    ? async () => (await import('./testnet/sepolia-source.ts')).sepoliaRegistrySource(__P2P_TESTNET_TRUST__, undefined, __P2P_TESTNET_LOCAL_PROOF_KEY_ID__ ?? undefined, __P2P_TESTNET_LOCAL_PROOF_KEY_ID__ !== null)()
+    : noApprovedRegistry;
 
 /**
  * One controller for the page lifetime. It is not disposed in an effect cleanup (that would break under StrictMode's
@@ -33,6 +36,10 @@ function Bootstrap() {
   const [services, setServices] = useState<AppServices | null>(null);
   const [starting, setStarting] = useState(true);
   const [startupError, setStartupError] = useState<string>();
+  useEffect(() => {
+    trade.setPersistence(services);
+    return () => trade.setPersistence(null);
+  }, [trade, services]);
   useEffect(() => {
     let ended = false;
     let owned: AppServices | null = null;

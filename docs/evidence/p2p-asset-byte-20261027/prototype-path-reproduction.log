@@ -1,0 +1,9 @@
+{
+  "kind": "confirmed-existing-artifact-path-omission",
+  "source": "2327719605dfd8dd59b4a1d5a8e99761053509e4",
+  "actualFileCount": 7,
+  "reportedFileCount": 6,
+  "missingPath": "__proto__",
+  "sourceEdited": false,
+  "fixtureRemovedInFinally": true
+}

@@ -1,0 +1,71 @@
+{
+ "tool": "fuzz-evm-agreement-input",
+ "mappingVersion": "p2p-parser-fuzz-08/v2",
+ "domainLabel": "p2p-parser-fuzz-08/nonsecurity-test-input",
+ "seed": 2718281828,
+ "requestedCases": 4096,
+ "replayCaseIndex": null,
+ "executedCases": 4096,
+ "generatedCases": 4096,
+ "generatedValidVariations": 1347,
+ "passedCases": 4096,
+ "mutatedCases": 2749,
+ "boundaryControlCases": 301,
+ "perFamily": {
+  "instruction-text": {
+   "executed": 512,
+   "accepted": 512,
+   "refused": 0,
+   "boundaryControls": 134
+  },
+  "text-mutation": {
+   "executed": 512,
+   "accepted": 75,
+   "refused": 437,
+   "boundaryControls": 0
+  },
+  "decimal": {
+   "executed": 512,
+   "accepted": 177,
+   "refused": 335,
+   "boundaryControls": 167
+  },
+  "hex-address": {
+   "executed": 512,
+   "accepted": 177,
+   "refused": 335,
+   "boundaryControls": 0
+  },
+  "capabilities": {
+   "executed": 512,
+   "accepted": 158,
+   "refused": 354,
+   "boundaryControls": 0
+  },
+  "signature-views": {
+   "executed": 512,
+   "accepted": 248,
+   "refused": 264,
+   "boundaryControls": 0
+  },
+  "shape": {
+   "executed": 512,
+   "accepted": 0,
+   "refused": 512,
+   "boundaryControls": 0
+  },
+  "resource": {
+   "executed": 512,
+   "accepted": 0,
+   "refused": 512,
+   "boundaryControls": 0
+  }
+ },
+ "corpusDigest": "7b2afc84c63814bd9f16db41b338e4444550acfa7582ea80bc676397bc3bb93f",
+ "status": "pass",
+ "firstFailure": null,
+ "coverageGuided": false,
+ "shrinking": false,
+ "replayNote": null,
+ "elapsedMs": 782
+}

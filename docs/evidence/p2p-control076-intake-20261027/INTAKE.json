@@ -1,0 +1,65 @@
+{
+  "libraryFileId": "libfile_f23d3240448c81919a7eb6ef15bf0882",
+  "reportedBytes": 30070,
+  "reportedVersion": null,
+  "nativeTextBytes": 30069,
+  "nativeTextSha256": "27e9ffcaaa2013dc72e22cd9052fa3fe61ac2c633c25584f8c483269cc17f1dd",
+  "nativePlusLfBytes": 30070,
+  "nativePlusLfSha256": "15fd5e215cb7528337adbe461e1224ebd0dce8dd5baf686799b955d931ba7ed5",
+  "outerFullHashFromProducerPending": true,
+  "rawResponseBytes": 19996,
+  "rawResponseSha256": "64046ba1a6ba95721e31737d57a5fce15259dae9de383fdd347d93d632b896b4",
+  "bothCodeHashesMatch": true,
+  "readOnlyDependenciesMatchOriginalInput": true,
+  "baseAncestorAndAllowedFilesAbsent": true,
+  "patchApplied": false,
+  "provenance": {
+    "model": "claude-sonnet-5-5",
+    "request_id": "req_011CgSLas95Ap1y7QVRZkyyF",
+    "timestamp_utc": "2026-10-27T07:21:33.018932+00:00",
+    "completed_at_utc": "2026-10-27T07:22:20.656673+00:00",
+    "input_commit": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+    "usage": {
+      "input_tokens": 12003,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 9046,
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard",
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      }
+    },
+    "stop_reason": "end_turn",
+    "estimated_cost_usd": "0.114466",
+    "elapsed_seconds": 47.594,
+    "implementation_accepted": false,
+    "tests_run_by_broker": false,
+    "normalization": "hunk line-count metadata ONLY; all proposed source/test bytes unchanged",
+    "patches": [
+      {
+        "path": "packages/schemas/test/evm-agreement-control.test.mjs",
+        "old": "@@ -0,0 +1,264 @@",
+        "normalized": "@@ -0,0 +1,208 @@",
+        "code_sha256": "bd87056db25d4abac3a0ff66a2f9e489e3e18a20cbdab0b339c2c73a689aab99",
+        "code_bytes": 10967
+      },
+      {
+        "path": "packages/schemas/src/evm-agreement-control.ts",
+        "old": "@@ -0,0 +1,118 @@",
+        "normalized": "@@ -0,0 +1,108 @@",
+        "code_sha256": "55ad92a6af85eee7c25598ef83f23e2a3bc4fff0ffbcd4c265eb8b63c759c2ca",
+        "code_bytes": 5863
+      }
+    ],
+    "raw_response_sha256": "64046ba1a6ba95721e31737d57a5fce15259dae9de383fdd347d93d632b896b4",
+    "packet_id": "libfile_a0a59b3c56648191891511b047aa71d2",
+    "packet_version": 0,
+    "packet_sha256": "c11500f064b947670ab6381dfc4100a5e9e4ebe81b8e0e0e1d62c0f3468a8a43"
+  }
+}

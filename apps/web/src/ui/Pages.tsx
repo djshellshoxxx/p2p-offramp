@@ -9,12 +9,21 @@ export const pageTitle: Readonly<Record<Route['page'], string>> = {
   recovery: m.recoveryTitle, settings: m.settingsTitle, unknown: m.unknownTitle,
 };
 
-export function Home({ services, unlocked }: { readonly services: AppServices | null; readonly unlocked: boolean }) {
-  const [open, setOpen] = useState<'none' | 'unlock' | 'create'>('none');
+export function Home({ services, unlocked, restoredProfileId, onSelectionConsumed }: { readonly services: AppServices | null; readonly unlocked: boolean;
+  readonly restoredProfileId: string; readonly onSelectionConsumed: () => void }) {
+  const [open, setOpen] = useState<'none' | 'unlock' | 'create'>(restoredProfileId ? 'unlock' : 'none');
   const [createdId, setCreatedId] = useState('');
   const unlockButton = useRef<HTMLButtonElement>(null);
   const createButton = useRef<HTMLButtonElement>(null);
   const previous = useRef<'none' | 'unlock' | 'create'>('none');
+  const wasUnlocked = useRef(unlocked);
+  useEffect(() => {
+    // The unlock notification may unmount the form before its command reply. Consume the handoff
+    // on that transition; arriving here with another unlocked profile still requires explicit lock.
+    const opened = unlocked && !wasUnlocked.current;
+    wasUnlocked.current = unlocked;
+    if (opened) { setOpen('none'); onSelectionConsumed(); }
+  }, [unlocked, onSelectionConsumed]);
   useEffect(() => {
     if (previous.current !== 'none' && open === 'none') (previous.current === 'create' ? createButton : unlockButton).current?.focus();
     previous.current = open;
@@ -25,8 +34,10 @@ export function Home({ services, unlocked }: { readonly services: AppServices | 
       <p className="eyebrow">{m.localOnly}</p>
       <h2 id="available-title">{m.readyTitle}</h2>
       <p>{services ? m.readyText : m.unavailable}</p>
+      {restoredProfileId ? <p role="status">{m.restoredSelection(restoredProfileId)}</p> : null}
+      {restoredProfileId && unlocked ? <p>{m.lockToOpenRestored}</p> : null}
       {unlocked ? <>{createdId ? <p className="notice" role="status">{m.created(createdId)}</p> : null}<p role="status">{m.unlockedHelp}</p></> :
-        services ? open === 'unlock' ? <UnlockForm services={services} onCancel={() => setOpen('none')} />
+        services ? open === 'unlock' ? <UnlockForm services={services} initialProfileId={restoredProfileId} onCancel={() => { setOpen('none'); onSelectionConsumed(); }} />
           : open === 'create' ? <CreateForm services={services} onDone={id => { setCreatedId(id ?? ''); setOpen('none'); }} />
           : <div className="actions">
             <button ref={unlockButton} className="primary" type="button" onClick={() => { setCreatedId(''); setOpen('unlock'); }}>{m.unlock}</button>
@@ -42,7 +53,7 @@ export function Home({ services, unlocked }: { readonly services: AppServices | 
   </>;
 }
 
-export function Recovery({ services }: { readonly services: AppServices | null }) {
+export function Recovery({ services, onOpenRestored }: { readonly services: AppServices | null; readonly onOpenRestored: (profileId: string) => void }) {
   const [inventoryVersion, setInventoryVersion] = useState(0);
   return <>
     <p className="lead">{m.recoveryIntro}</p>
@@ -54,7 +65,7 @@ export function Recovery({ services }: { readonly services: AppServices | null }
     </section>
     <section className="panel" aria-labelledby="restore-title">
       <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
-      {services ? <RestoreForm services={services} onInventoryChanged={() => setInventoryVersion(v => v + 1)} /> : <p>{m.unavailable}</p>}
+      {services ? <RestoreForm services={services} onOpenRestored={onOpenRestored} onInventoryChanged={() => setInventoryVersion(v => v + 1)} /> : <p>{m.unavailable}</p>}
     </section>
   </>;
 }

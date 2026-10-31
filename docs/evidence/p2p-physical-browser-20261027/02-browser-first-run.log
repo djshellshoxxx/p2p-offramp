@@ -1,0 +1,13 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: Error: PHYSICAL_BROWSER_POSITIVE_CAPTURE_BEFORE_WIPE
+    at check (eval at evaluate (:370:30), <anonymous>:4:70)
+    at eval (eval at evaluate (:370:30), <anonymous>:49:9)
+    at async <anonymous>:396:30
+    at /workspace/p2p-offramp-pr5-validation/scripts/test-g16-physical-browser.mjs:57:29 {
+  log: []
+}
+
+Node.js v24.19.0

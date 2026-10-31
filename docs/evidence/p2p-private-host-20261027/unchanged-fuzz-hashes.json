@@ -1,0 +1,4 @@
+{
+  "scripts/fuzz-evm-agreement-input.mjs": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930",
+  "scripts/tests/evm-agreement-fuzz.test.mjs": "b4d6ab5d13a488d3782984122b7bd89af5e7c66d35f7b36e6418849338933311"
+}

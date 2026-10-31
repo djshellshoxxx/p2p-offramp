@@ -1,0 +1,196 @@
+TAP version 13
+# Subtest: two-party exchange over the fake relay with real crypto: ad -> take -> offer -> local review -> accept; hash equals the escrow evmTermsHash
+ok 1 - two-party exchange over the fake relay with real crypto: ad -> take -> offer -> local review -> accept; hash equals the escrow evmTermsHash
+  ---
+  duration_ms: 307.883749
+  type: 'test'
+  ...
+# Subtest: negative: an impostor cannot send an offer; the seller key cannot be claimed inside an envelope
+ok 2 - negative: an impostor cannot send an offer; the seller key cannot be claimed inside an envelope
+  ---
+  duration_ms: 143.670803
+  type: 'test'
+  ...
+# Subtest: negative: replayed, duplicated and expired messages are refused; bounds are enforced without eviction of live ids
+ok 3 - negative: replayed, duplicated and expired messages are refused; bounds are enforced without eviction of live ids
+  ---
+  duration_ms: 344.677616
+  type: 'test'
+  ...
+# Subtest: negative: tampered terms bytes never reach accept
+ok 4 - negative: tampered terms bytes never reach accept
+  ---
+  duration_ms: 196.443054
+  type: 'test'
+  ...
+# Subtest: negative: acceptance of a different revision or different terms is refused by the seller
+ok 5 - negative: acceptance of a different revision or different terms is refused by the seller
+  ---
+  duration_ms: 256.638881
+  type: 'test'
+  ...
+# Subtest: negative: an expired ad cannot be taken, offered on or accepted
+ok 6 - negative: an expired ad cannot be taken, offered on or accepted
+  ---
+  duration_ms: 293.179066
+  type: 'test'
+  ...
+# Subtest: negative: a message from a third pubkey, or from the wrong side, changes nothing
+ok 7 - negative: a message from a third pubkey, or from the wrong side, changes nothing
+  ---
+  duration_ms: 504.557005
+  type: 'test'
+  ...
+# Subtest: state machine table and the cancel path
+ok 8 - state machine table and the cancel path
+  ---
+  duration_ms: 136.11676
+  type: 'test'
+  ...
+# Subtest: close during take signer lookup refuses the pending result and keeps sessions empty
+not ok 9 - close during take signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 3.805336
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: close during offer signer lookup refuses the pending result and keeps sessions empty
+not ok 10 - close during offer signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 3.243413
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: close during accept signer lookup refuses the pending result and keeps sessions empty
+not ok 11 - close during accept signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 3.134062
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: close during reject signer lookup refuses the pending result and keeps sessions empty
+not ok 12 - close during reject signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 3.063266
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: close during cancel signer lookup refuses the pending result and keeps sessions empty
+not ok 13 - close during cancel signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 3.623467
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: close during receive signer lookup refuses the pending result and keeps sessions empty
+not ok 14 - close during receive signer lookup refuses the pending result and keeps sessions empty
+  ---
+  duration_ms: 2.982157
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:279:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    'get' on proxy: property 'publicKey' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '(secretKey            ) => identity.publicKey(secretKey)' but got 'async secret => {
+              if (armed) { entered(); await gate; }
+              return target.publicKey(secret);
+            }')
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    createTermsExchange (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/src/exchange.ts:90:40)
+    make (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:47:24)
+    world (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:49:13)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-relay/packages/exchange/test/exchange.test.mjs:292:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 8
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2505.617609

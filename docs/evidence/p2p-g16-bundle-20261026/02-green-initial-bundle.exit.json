@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/wallet/test/evm-agreement.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T22:34:52.536348+00:00",
+  "finishedAtUtc": "2026-10-26T22:34:52.769319+00:00",
+  "exitCode": 0,
+  "phase": "initial GREEN; new private/test-only verifier, uncommitted"
+}

@@ -1,0 +1,97 @@
+{
+  "recordedUTC": "2026-10-26T19:25:33.712186+00:00",
+  "baseHead": "02f75b452045afd35b71d977c347c331937568ee",
+  "scope": "No app/runtime/dependency changes. Two scoped G16 inventory review entries, evidence tools and gate regression. Other providers pending; ReleaseEnabled=0 unchanged.",
+  "testedChangedFiles": [
+    {
+      "path": "security/crypto-inventory.json",
+      "sha256": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+    },
+    {
+      "path": "packages/security/test/crypto-inventory.test.mjs",
+      "sha256": "c1f0c4e12e421058302e13c43a4e0399201690e19ab06b63bfba5ebfb068d8bd"
+    },
+    {
+      "path": "scripts/check-npm-registry-signatures.mjs",
+      "sha256": "360db30855c444bd11af952fe6eb26c890fa6c7a33610db7b531641d2057168c"
+    },
+    {
+      "path": "scripts/check-upstream-source-correspondence.py",
+      "sha256": "39fe1cbb902385c3bb55263437cadbbe04c48d850f20573ac3f784b6303e5449"
+    },
+    {
+      "path": "docs/reviews/G06_UPSTREAM_REVIEW_2026-10-26.md",
+      "sha256": "4ea395b701e2a351bb2faf8753797f836512b9bdee1b6825c5f1faf48c8827df"
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm test",
+      "exit": 0,
+      "summary": "341 passed; 0 skipped",
+      "log": "/workspace/p2p-g06-upstream-unit.log",
+      "logSha256": "7dbbd91450d123087a18607ff33ecadbc263bdb971d6fb76e6850108af1f5239",
+      "logLastModifiedUTC": "2026-10-26T19:15:38.015593+00:00"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "summary": "exit 0",
+      "log": "/workspace/p2p-g06-upstream-typecheck.log",
+      "logSha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+      "logLastModifiedUTC": "2026-10-26T19:23:21.044687+00:00"
+    },
+    {
+      "command": "npm run check:boundaries",
+      "exit": 0,
+      "summary": "43 production source files; static gate",
+      "log": "/workspace/p2p-g06-upstream-boundaries.log",
+      "logSha256": "54f7fdd485ebeaf84fcf137e297e129e7dd2a010547440b4db971a117cf61875",
+      "logLastModifiedUTC": "2026-10-26T19:24:02.428430+00:00"
+    },
+    {
+      "command": "npm run test:build-policy",
+      "exit": 0,
+      "summary": "5 passed",
+      "log": "/workspace/p2p-g06-upstream-build-policy.log",
+      "logSha256": "8415c2f303daaa570c4e6c92f0cc97617216ad336c88fe101e0a6fee5939f42c",
+      "logLastModifiedUTC": "2026-10-26T19:24:03.148426+00:00"
+    },
+    {
+      "command": "npm run build",
+      "exit": 0,
+      "summary": "static build; not release acceptance",
+      "log": "/workspace/p2p-g06-upstream-build.log",
+      "logSha256": "31eb914daabd5db2640674cb5ef5f98a9ee43811fc3646acabdbdceea89f7583",
+      "logLastModifiedUTC": "2026-10-26T19:24:12.580366+00:00"
+    },
+    {
+      "command": "node scripts/check-npm-registry-signatures.mjs",
+      "exit": 0,
+      "summary": "2 signatures; 6 negative controls",
+      "log": "/workspace/p2p-g06-upstream-signatures-recheck.json",
+      "logSha256": "859802778270df1cb06f616c7f216efcaa804ce97a345bfb25d8eb9ee10d9a95",
+      "logLastModifiedUTC": "2026-10-26T19:24:42.592188+00:00"
+    },
+    {
+      "command": "python3 scripts/check-upstream-source-correspondence.py",
+      "exit": 0,
+      "summary": "44 TS/LICENSE files",
+      "log": "/workspace/p2p-g06-upstream-source-recheck.json",
+      "logSha256": "bcb8514ca60cec15458969e3af74e7c77f1dfd8c81024fd85f9c9daccd6fb6e1",
+      "logLastModifiedUTC": "2026-10-26T19:24:42.824187+00:00"
+    }
+  ],
+  "focused": {
+    "passed": 31,
+    "redLogSha256": "71d68105e4953e18324eb3fdca1260704bfdb5eb35293b97c6bc924e98f0a293",
+    "greenLogSha256": "0cb0ebdb1e2df4947bb9834c5d699b54d8f4b2d24c14505624ff4cd6b4cacf39"
+  },
+  "notRerun": [
+    "browser checks",
+    "Python/spec aggregate",
+    "upstream source build",
+    "SLSA attestation"
+  ],
+  "historicalEvidenceNotTransferred": true
+}

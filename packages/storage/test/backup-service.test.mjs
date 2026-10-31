@@ -41,6 +41,19 @@ function providerSpy() {
 }
 const deferred = () => { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; };
 
+test('G03 trusted restore guard refuses a late atomic add without exposing caller exceptions or holding recovery capacity', async () => {
+  const { service: vault, store } = service();
+  let current = true;
+  const original = clone(store.rows.get(fixture.envelope.profileId));
+  store.beforeAdd = () => { current = false; };
+  await failure(vault.restore(backup(), fixture.passphrase, destinationPass, undefined, () => { if (!current) throw new Error('SECRET authority detail'); }), 'CANCELLED');
+  assert.equal(store.writes, 0); assert.equal(store.rows.size, 1); assert.deepEqual(store.rows.get(fixture.envelope.profileId), original);
+  await failure(vault.restore(backup(), fixture.passphrase, destinationPass, undefined, {}), 'INVALID_INPUT');
+  store.beforeAdd = undefined;
+  const restored = await vault.restore(backup(), fixture.passphrase, destinationPass); assert.ok(store.rows.has(restored.newProfileId));
+  vault.dispose();
+});
+
 test('G03 export returns the exact backup format/checksum and explicitly marks authentication not checked', async () => {
   const { service: vault } = service();
   const exported = await vault.exportWithStatus(fixture.envelope.profileId);
@@ -171,4 +184,14 @@ test('G03 abort during native final verification suppresses persistence and even
   const pending = vault.restore(backup(), fixture.passphrase, destinationPass, controller.signal); await entered.promise; controller.abort(); held.resolve();
   await failure(pending, 'CANCELLED'); assert.equal(store.writes, 0);
   assert.equal((await vault.restore(backup(), fixture.passphrase, destinationPass)).revision, 0);
+});
+test('G03 rejects a signal that is not an AbortSignal before claiming the recovery slot', async () => {
+  const { service: vault, store } = service();
+  for (const signal of [new AbortController(), {}, { aborted: false, addEventListener() { throw new Error('SECRET'); } }]) {
+    await failure(vault.exportWithStatus(fixture.envelope.profileId, signal), 'INVALID_INPUT');
+    await failure(vault.restore(backup(), fixture.passphrase, destinationPass, signal), 'INVALID_INPUT');
+  }
+  assert.equal(store.writes, 0);
+  // The slot was never claimed, so a well-formed job in any instance still runs.
+  assert.equal((await service().service.exportWithStatus(fixture.envelope.profileId)).authentication, 'not-checked');
 });

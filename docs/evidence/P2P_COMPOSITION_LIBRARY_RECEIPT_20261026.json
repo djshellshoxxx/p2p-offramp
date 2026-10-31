@@ -1,0 +1,21 @@
+{
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "fileId": "file_000000006b1c81f79435b2ff6097b31e",
+  "version": 0,
+  "libraryPath": "/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 20277,
+  "sha256": "17214fefca8dc6a2e6048a1dd2e1fcdeba46372b8bb318e4a71f4dc892b7ea08",
+  "documentationCommit": "4b6aba3236d198cc980f5251d25a211516761972",
+  "documentationTree": "2df4018b6759fe08c0ec6f4d896cd0cfa9b1d48d",
+  "inspectedSourceHead": "bbba912ba7bd0563fba635f915b4ae71a831c919",
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-composition/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "scope": "private read-only documentation/oracle report, not source repository or test evidence",
+  "consumerDownloadTested": false,
+  "canonicalQueueReadOrModified": false,
+  "localIdentityHelperExit": 0,
+  "localXattrNames": [
+    "user.library-file-version",
+    "user.library-file-id"
+  ]
+}

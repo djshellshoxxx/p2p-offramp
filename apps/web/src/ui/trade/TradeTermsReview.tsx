@@ -3,7 +3,7 @@ import { checkDisplayText } from './display-text.ts';
 import { tradeMessages as t } from './trade-messages.ts';
 import { describeDeadline, formatFiatMinor, formatUnits, fullAddress, type DisplayResult } from './trade-terms-display.ts';
 
-export type TermsSource = 'file' | 'synthetic-sample';
+export type TermsSource = 'file' | 'synthetic-sample' | 'saved-review';
 export interface TradeTermsReviewProps {
   /** Output of the domain terms review. Display only: no callbacks, wallet, network or state. */
   readonly review: ReviewedEvmTerms;
@@ -61,7 +61,7 @@ export function TradeTermsReview({ review, nowSeconds, source }: TradeTermsRevie
     <p className="warning" role="status">{t.banner}</p>
     <h2 id="trade-terms-title">{t.title}</h2>
     <p className="helper">{t.intro}</p>
-    <p className={source === 'synthetic-sample' ? 'warning' : 'helper'}>{source === 'synthetic-sample' ? t.sourceSynthetic : t.sourceFile}</p>
+    <p className={source === 'synthetic-sample' ? 'warning' : 'helper'}>{source === 'synthetic-sample' ? t.sourceSynthetic : source === 'saved-review' ? t.sourceSaved : t.sourceFile}</p>
     <p className="helper">{t.addressHelp}</p>
     <dl className="terms">
       <dt>{t.amount}</dt><dd><Amount review={review} /></dd>

@@ -1,0 +1,179 @@
+--- a/packages/wallet/test/evm-agreement-host.test.mjs
++++ b/packages/wallet/test/evm-agreement-host.test.mjs
+@@ -455,3 +455,174 @@
+   } finally { host.dispose(); }
+ });
++
++// ---- Physical settlement observation (qualification-only) ----
++const phys = host => {
++  assert.equal(typeof host.physicalState, 'function', 'missing physicalState');
++  const state = host.physicalState();
++  assert.equal(Object.isFrozen(state), true, 'physicalState snapshot is frozen');
++  assert.deepEqual(Object.keys(state).sort(), ['generation', 'held', 'terminal']);
++  return state;
++};
++const drain = host => {
++  assert.equal(typeof host.disposeAndDrain, 'function', 'missing disposeAndDrain');
++  return host.disposeAndDrain();
++};
++// Resolves 'settled' only when the promise actually settles; 'pending' after several real event-loop turns.
++const turns = async promise => Promise.race([promise.then(() => 'settled', () => 'settled'), tick(4).then(() => 'pending')]);
++
++test('physical-state: idle snapshot is not held, reads are pure and stable', async () => {
++  const time = fakeTime(), host = make({ now: time.now, timer: time.timer });
++  const readsBefore = time.state.reads, timersBefore = time.state.timers.length;
++  const first = phys(host), second = phys(host);
++  assert.deepEqual(first, { generation: 0, held: false, terminal: false });
++  assert.deepEqual(second, first);
++  assert.notEqual(first, second, 'fresh frozen snapshot per read');
++  assert.equal(host.generation, 0);
++  assert.equal(time.state.reads, readsBefore, 'observation never invokes the clock');
++  assert.equal(time.state.timers.length, timersBefore, 'observation never arms timers');
++  assert.doesNotMatch(JSON.stringify(first), PRIVATE);
++  host.dispose();
++});
++
++test('physical-state: logical invalidate keeps held true at both SHA gates; stale A cleanup never releases B', async () => {
++  for (const at of [0, 1]) {
++    const held = heldSha(), host = make({ sha256: held.sha256 }), pendingA = host.dispatch(request(await fixture(), 1));
++    for (let i = 0; i < at; i++) (await waitCall(held.calls, i)).gate.resolve();
++    await waitCall(held.calls, at);
++    assert.deepEqual(phys(host), { generation: 0, held: true, terminal: false });
++    host.invalidate();
++    assert.equal(await pendingA, undefined);
++    assert.deepEqual(phys(host), { generation: 1, held: true, terminal: false }, 'logical suppression is not physical release');
++    const before = held.calls.length;
++    assert.equal(code(await host.dispatch(request(await fixture(), 2, 1))), 'BUSY');
++    assert.equal(held.calls.length, before);
++    assert.equal(phys(host).held, true, 'B refusal does not release A');
++    for (const call of held.calls) call.gate.resolve();
++    for (const call of held.calls) await call.native.catch(() => {});
++    // Poll actual physical release without fixed tick guesses.
++    while (phys(host).held) await tick(1);
++    assert.deepEqual(phys(host), { generation: 1, held: false, terminal: false });
++    const c = host.dispatch(request(await fixture(), 3, 1));
++    await pump(held.calls);
++    assert.equal((await c).result.ok, true);
++    host.dispose();
++  }
++});
++
++test('physical-state: dispose while held is terminal+held; disposeAndDrain stays pending until the real SHA settles', async () => {
++  for (const at of [0, 1]) {
++    const held = heldSha(), host = make({ sha256: held.sha256 }), pending = host.dispatch(request(await fixture(), 1));
++    for (let i = 0; i < at; i++) (await waitCall(held.calls, i)).gate.resolve();
++    await waitCall(held.calls, at);
++    const drained = drain(host);
++    assert.ok(drained instanceof Promise, 'disposeAndDrain returns a Promise');
++    assert.deepEqual(phys(host), { generation: host.generation, held: true, terminal: true }, 'dispose is synchronous; physical work still held');
++    assert.equal(await pending, undefined, 'logical reply suppressed promptly');
++    assert.equal(await turns(drained), 'pending', 'terminal drain unresolved across real event-loop turns');
++    assert.equal(phys(host).held, true);
++    const before = held.calls.length;
++    assert.equal(await host.dispatch(request(await fixture(), 2)), undefined);
++    assert.equal(held.calls.length, before, 'no dispatch admitted after dispose');
++    for (const call of held.calls) call.gate.resolve();
++    await drained;
++    assert.equal(phys(host).held, false, 'drain resolves only after the slot was physically released');
++    assert.equal(phys(host).terminal, true);
++  }
++});
++
++test('physical-state: repeated dispose/drain share completion semantics and idle drain resolves without waiting', async () => {
++  const idle = make();
++  await drain(idle); await drain(idle);
++  assert.deepEqual(phys(idle), { generation: 0, held: false, terminal: true });
++  const held = heldSha(), host = make({ sha256: held.sha256 }), pending = host.dispatch(request(await fixture(), 1));
++  await waitCall(held.calls, 0);
++  const d1 = drain(host), d2 = drain(host); host.dispose();
++  const d3 = drain(host);
++  assert.equal(await pending, undefined);
++  assert.equal(await turns(Promise.all([d1, d2, d3])), 'pending');
++  for (const call of held.calls) call.gate.resolve();
++  await Promise.all([d1, d2, d3]);
++  assert.equal(phys(host).held, false);
++  await drain(host);
++});
++
++test('physical-state: normal completion and native digest rejection release the slot with unchanged outcomes', async () => {
++  const held = heldSha(), host = make({ sha256: held.sha256 }), pending = host.dispatch(request(await fixture(), 1));
++  await waitCall(held.calls, 0);
++  assert.equal(phys(host).held, true);
++  await pump(held.calls);
++  assert.equal((await pending).result.ok, true);
++  while (phys(host).held) await tick(1);
++  assert.deepEqual(phys(host), { generation: 0, held: false, terminal: false });
++  await drain(host);
++
++  const calls = [], host2 = make({ sha256: bytes => { const gate = deferred(); calls.push(gate); return gate.promise.then(() => { throw Error('PRIVATE-FIXTURE native https://private.invalid'); }); } });
++  const pending2 = host2.dispatch(request(await fixture(), 1));
++  while (!calls.length) await tick(1);
++  assert.equal(phys(host2).held, true);
++  calls[0].resolve();
++  assert.equal(code(await pending2), 'UNAVAILABLE');
++  while (phys(host2).held) await tick(1);
++  assert.equal(phys(host2).held, false);
++  await drain(host2);
++});
++
++test('physical-state: timeout closes logically while held; drain is not resolved until the native Promise settles', async () => {
++  const time = fakeTime(), held = heldSha(), host = make({ sha256: held.sha256, now: time.now, timer: time.timer });
++  const pending = host.dispatch(request(await fixture(), 1)); await waitCall(held.calls, 0);
++  time.advance(30000); time.fire();
++  assert.equal(code(await pending), 'TIMEOUT');
++  assert.deepEqual(phys(host), { generation: 0, held: true, terminal: true }, 'timeout closes the host but the slot is still physically held');
++  const drained = drain(host);
++  assert.equal(await turns(drained), 'pending', 'no drain success while underlying native Promise pending');
++  assert.equal(held.calls.length, 1, 'no further hashing started');
++  for (const call of held.calls) call.gate.resolve();
++  await drained;
++  assert.equal(phys(host).held, false);
++});
++
++test('physical-state: generation exhaustion closes the host terminal without false quiescence', async () => {
++  // Exhaustion needs generation >= MAX_RUNTIME_SEQUENCE; no trusted seam exists to reach it without ~2^53 invalidations.
++  // Not exercised here (see stated limitation). Verify only that an idle host reports an unchanged non-terminal state.
++  const host = make();
++  assert.equal(phys(host).terminal, false);
++  host.dispose();
++  assert.equal(phys(host).terminal, true);
++  await drain(host);
++});
++
++test('physical-state: timer setup failure leaves no phantom held slot or waiter and starts no verifier', async () => {
++  let hashes = 0;
++  const timer = { setTimeout() { throw Error('PRIVATE-FIXTURE timer'); }, clearTimeout() {} };
++  const host = make({ timer, sha256: bytes => { hashes++; return crypto.subtle.digest('SHA-256', bytes); } });
++  assert.equal(code(await host.dispatch(request(await fixture(), 1))), 'UNAVAILABLE');
++  assert.equal(hashes, 0);
++  assert.deepEqual(phys(host), { generation: 0, held: false, terminal: false });
++  await drain(host);
++  assert.equal(phys(host).terminal, true);
++});
++
++test('physical-state: timer-seam reentrant dispose/invalidate before verifier start releases without verifier or phantom waiter', async () => {
++  for (const action of ['dispose', 'invalidate']) {
++    let hashes = 0, host;
++    const timer = { setTimeout() { host[action](); return {}; }, clearTimeout() {} };
++    host = make({ timer, sha256: bytes => { hashes++; return crypto.subtle.digest('SHA-256', bytes); } });
++    assert.equal(await host.dispatch(request(await fixture(), 1)), undefined);
++    assert.equal(hashes, 0, 'no verifier started');
++    assert.equal(phys(host).held, false, 'slot released early with nothing physically running');
++    assert.equal(phys(host).terminal, action === 'dispose');
++    const settled = await turns(drain(host));
++    assert.equal(settled, 'settled', 'drain does not wait on a phantom physical job');
++  }
++});
++
++test('physical-state: wipe oracle intact and observation exposes no private material', async () => {
++  const held = heldSha(), host = make({ sha256: held.sha256 }), pending = host.dispatch(request(await fixture(), 1));
++  await waitCall(held.calls, 0);
++  const state = phys(host);
++  assert.doesNotMatch(JSON.stringify(state), PRIVATE);
++  assert.deepEqual(Object.keys(state).sort(), ['generation', 'held', 'terminal']);
++  const drained = drain(host);
++  assert.equal(zero(held.calls[0].bytes), true, 'abort wipes verifier-owned bytes before underlying settle');
++  assert.equal(await pending, undefined);
++  for (const call of held.calls) call.gate.resolve();
++  await drained;
++});

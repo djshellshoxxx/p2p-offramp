@@ -1,6 +1,15 @@
 # Development status and continuation contract
 
-Updated: 2026-10-24. The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete. The latest reproducible implementation evidence and replacement-agent instructions are in `HANDOFF-2026-10-24-CLIENT-SHELL.md`.
+Current combined-source status and audit: [consolidation report](execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
+
+
+Updated: 2026-10-30 (America/Los_Angeles). The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete. Current continuation scope and verification are tracked in [delivery coordination](handoffs/DELIVERY-2026-10-30.md); earlier implementation history remains in `handoffs/SESSION_STATUS.md` and `HANDOFF-2026-10-24-CLIENT-SHELL.md`.
+
+Latest continuation: [autonomous execution status](execution/EXECUTION-STATUS.md) and
+[full first-party code audit](execution/CODE-AUDIT-2026-10-30.md). Local escrow, native chain reads,
+journaled wallet execution and bounded offer/transport modules now have real local-EVM integration
+evidence. They are excluded from the offline app; trading and release gates remain disabled.
+Historical milestone counts below are retained as historical evidence.
 
 ## Authoritative scope and branches
 

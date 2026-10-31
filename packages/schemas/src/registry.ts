@@ -5,6 +5,9 @@
  */
 import { ValidationError } from './vault.ts';
 
+// Genuine view facts bypass caller-owned byteLength accessors; proxy receivers fail closed.
+const viewByteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype), 'byteLength')!.get!;
+
 export const MAX_REGISTRY_BYTES = 1024 * 1024;
 export const MAX_NETWORKS = 32;
 export const MAX_ENDPOINTS = 8;
@@ -215,11 +218,16 @@ function network(input: unknown): NetworkV1 {
 /**
  * Strict UTF-8 (fatal, BOM rejected) → the same bounded JSON subset used for the registry: duplicate and prototype keys,
  * floats, negatives and unsafe integers reject; depth <= 6, <= 32 keys per object, <= 256 items per array.
+ * The size bound uses the genuine view length, never a caller-owned byteLength accessor; proxies fail closed.
  * Structure is unchecked: callers validate exact keys and types afterwards.
  */
 export function parseStrictJsonBytes(bytes: Uint8Array, maxBytes: number): unknown {
-  if (!(bytes instanceof Uint8Array)) return fail();
-  if (bytes.byteLength > maxBytes) return fail('LIMIT_EXCEEDED');
+  let length: number;
+  try {
+    if (!(bytes instanceof Uint8Array)) return fail();
+    length = viewByteLength.call(bytes) as number;
+  } catch { return fail(); }
+  if (length > maxBytes) return fail('LIMIT_EXCEEDED');
   let text: string;
   try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); } catch { return fail(); }
   if (text.charCodeAt(0) === 0xfeff) return fail();

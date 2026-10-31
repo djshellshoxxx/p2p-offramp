@@ -1,0 +1,341 @@
+✖ coherent native, ERC20 and nonempty-capability requests run the actual verifier with strict code-only replies (88.646965ms)
+✔ B is BUSY while A actually pending (each SHA position); caller mutation cannot change A; next explicit request proceeds (39.177943ms)
+✔ replay, wrong generation and last-request bounds fail before any verifier; lower generation never revives (32.443649ms)
+✔ invalidate at either SHA await: A settles undefined promptly, slot stays BUSY until actual settle, then C proceeds (success and thrown backend) (72.275906ms)
+✔ late A finalizer after C starts cannot clear or release C; A settles only after C owns the slot (21.896107ms)
+✔ dispose is terminal and idempotent idle/held/before/after parsing; no later reply, job, or unhandled rejection (22.434114ms)
+✔ fixed 30s deadline: 29999 succeeds; 30000 with delayed timer is TIMEOUT; timer fire aborts/wipes while slot stays held (23.104179ms)
+✔ after timeout the host is terminal; late settlement cannot resurrect it, a late timer callback is a no-op, no retry (10.364669ms)
+✔ timeout boundary also applies when the final reply projection happens after the bound (no late success) (11.241769ms)
+✔ clock faults (throw, non-finite, backwards after increase) fail closed code-only; host reusable after actual settlement; invalidation dominates (65.587952ms)
+✔ invalidate dominates a queued TIMEOUT: timer fires after invalidation yields no timeout reply (7.569083ms)
+✔ malformed, accessor, revoked proxy, oversized and forged-throw inputs fail with fresh fixed errors and no getter execution (16.28757ms)
+✔ reentrant dispatch during a strict parse rejects with a fresh fixed INVALID_INPUT without touching nested input; outer proceeds (16.623149ms)
+✔ BUSY and wrong-generation refusals clear host-owned parsed signature copies (observed via pre-import intrinsic-copy spy) (11.700329ms)
+ℹ host-copy samples on refusals=4
+✔ host-owned vs verifier-owned buffers clear separately; caller-owned bytes are never erased; abort wipe precedes underlying settle (14.234586ms)
+ℹ host-copy samples on completion=2
+✔ clock reentry cannot admit two verifier jobs before the outer job is registered (11.105187ms)
+✔ clock failure during a synchronous invalidation suppresses the old request before job creation (10.038744ms)
+✔ invalidation during the final clock sample dominates a coincident deadline without closing the new generation (14.28343ms)
+✖ physical-state: idle snapshot is not held, reads are pure and stable (0.794037ms)
+✖ physical-state: logical invalidate keeps held true at both SHA gates; stale A cleanup never releases B (7.228007ms)
+✖ physical-state: dispose while held is terminal+held; disposeAndDrain stays pending until the real SHA settles (10.97231ms)
+✖ physical-state: repeated dispose/drain share completion semantics and idle drain resolves without waiting (0.436317ms)
+✖ physical-state: normal completion and native digest rejection release the slot with unchanged outcomes (9.404124ms)
+✖ physical-state: timeout closes logically while held; drain is not resolved until the native Promise settles (7.407483ms)
+✖ physical-state: idle terminal observation; generation exhaustion remains unexercised (0.437629ms)
+✖ physical-state: timer setup failure leaves no phantom held slot or waiter and starts no verifier (4.340546ms)
+✖ physical-state: timer-seam reentrant dispose/invalidate before verifier start releases without verifier or phantom waiter (3.803029ms)
+✖ physical-state: wipe oracle intact and observation exposes no private material (7.826064ms)
+✖ physical-state: drain requested inside a throwing timer setup resolves when no verifier started (4.470319ms)
+✖ physical-state: pre-registration clock disposal/drain has no phantom work or waiter (3.790701ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 17
+ℹ fail 13
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30688.641402
+
+✖ failing tests:
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:74:1
+✖ coherent native, ERC20 and nonempty-capability requests run the actual verifier with strict code-only replies (88.646965ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'dispatch',
+      'dispose',
+  -   'disposeAndDrain',
+      'generation',
+      'invalidate',
+  -   'physicalState'
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:91:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'dispatch', 'dispose', 'generation', 'invalidate' ],
+    expected: [ 'dispatch', 'dispose', 'disposeAndDrain', 'generation', 'invalidate', 'physicalState' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:422:1
+✖ physical-state: idle snapshot is not held, reads are pure and stable (0.794037ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:425:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:436:1
+✖ physical-state: logical invalidate keeps held true at both SHA gates; stale A cleanup never releases B (7.228007ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:441:22)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:458:1
+✖ physical-state: dispose while held is terminal+held; disposeAndDrain stays pending until the real SHA settles (10.97231ms)
+  AssertionError [ERR_ASSERTION]: missing disposeAndDrain
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at drain (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:410:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:463:21)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:479:1
+✖ physical-state: repeated dispose/drain share completion semantics and idle drain resolves without waiting (0.436317ms)
+  AssertionError [ERR_ASSERTION]: missing disposeAndDrain
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at drain (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:410:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:481:18)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:497:1
+✖ physical-state: normal completion and native digest rejection release the slot with unchanged outcomes (9.404124ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:500:16)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:518:1
+✖ physical-state: timeout closes logically while held; drain is not resolved until the native Promise settles (7.407483ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:523:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:532:1
+✖ physical-state: idle terminal observation; generation exhaustion remains unexercised (0.437629ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:536:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:542:1
+✖ physical-state: timer setup failure leaves no phantom held slot or waiter and starts no verifier (4.340546ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:548:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:553:1
+✖ physical-state: timer-seam reentrant dispose/invalidate before verifier start releases without verifier or phantom waiter (3.803029ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:560:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:568:1
+✖ physical-state: wipe oracle intact and observation exposes no private material (7.826064ms)
+  AssertionError [ERR_ASSERTION]: missing physicalState
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at phys (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:403:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:571:17)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:582:1
+✖ physical-state: drain requested inside a throwing timer setup resolves when no verifier started (4.470319ms)
+  AssertionError [ERR_ASSERTION]: disposal keeps precedence over setup failure
+  + actual - expected
+  
+  + {
+  +   generation: 0,
+  +   kind: 'response',
+  +   operation: 'checkEvmAgreement',
+  +   requestId: 1,
+  +   result: {
+  +     error: {
+  +       code: 'UNAVAILABLE'
+  +     },
+  +     ok: false
+  +   },
+  +   version: 1
+  + }
+  - undefined
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:586:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { version: 1, requestId: 1, generation: 0, operation: 'checkEvmAgreement', kind: 'response', result: { ok: false, error: [Object] } },
+    expected: undefined,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-agreement-host.test.mjs:591:1
+✖ physical-state: pre-registration clock disposal/drain has no phantom work or waiter (3.790701ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   generation: 0,
+  +   kind: 'response',
+  +   operation: 'checkEvmAgreement',
+  +   requestId: 1,
+  +   result: {
+  +     error: {
+  +       code: 'UNAVAILABLE'
+  +     },
+  +     ok: false
+  +   },
+  +   version: 1
+  + }
+  - undefined
+  
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/wallet/test/evm-agreement-host.test.mjs:595:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { version: 1, requestId: 1, generation: 0, operation: 'checkEvmAgreement', kind: 'response', result: { ok: false, error: [Object] } },
+    expected: undefined,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

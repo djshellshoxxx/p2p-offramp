@@ -1,0 +1,131 @@
+{
+  "sourceCommit": "e67a15cb62d723d168202dddcfc99216d1e03db0",
+  "sourceTree": "b81cf6c1ee501c8b0efb2d51e7ea7c5386f55828",
+  "unit": {
+    "passed": 341,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 31,
+    "skipped": 0
+  },
+  "chromium": "154.0.8037.57 Linux local fixtures",
+  "checks": [
+    {
+      "check": "unit",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "start": "2026-10-26T18:19:56.948697+00:00",
+      "end": "2026-10-26T18:20:12.909183+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/unit.log",
+      "logSha256": "36b4806fe745b564f93969de622438d05f7db2f4e0e38a9019ab645e9b7b7167"
+    },
+    {
+      "check": "types",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "start": "2026-10-26T18:20:12.909905+00:00",
+      "end": "2026-10-26T18:20:14.960416+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/types.log",
+      "logSha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04"
+    },
+    {
+      "check": "boundaries",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "start": "2026-10-26T18:20:14.960997+00:00",
+      "end": "2026-10-26T18:20:15.673511+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/boundaries.log",
+      "logSha256": "54f7fdd485ebeaf84fcf137e297e129e7dd2a010547440b4db971a117cf61875"
+    },
+    {
+      "check": "build-policy",
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "start": "2026-10-26T18:20:15.674036+00:00",
+      "end": "2026-10-26T18:20:16.404272+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/build-policy.log",
+      "logSha256": "3961697e6472731c82e87be239a791dd35e250700da8a5b0898489d96490a3f8"
+    },
+    {
+      "check": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "start": "2026-10-26T18:20:16.405582+00:00",
+      "end": "2026-10-26T18:20:20.263847+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/build.log",
+      "logSha256": "88cd6d14339d18f437e723eeaec9538bc8fd813dafb7c572b1bc7840d754dd48"
+    },
+    {
+      "check": "browser",
+      "command": [
+        "npm",
+        "run",
+        "test:browser"
+      ],
+      "start": "2026-10-26T18:20:20.264507+00:00",
+      "end": "2026-10-26T18:21:05.471934+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/browser.log",
+      "logSha256": "433d16152b9cb0f4f978bedf0192194b9c5a3898445081c2305c227e1f9b4ce7"
+    },
+    {
+      "check": "web-browser",
+      "command": [
+        "npm",
+        "run",
+        "test:web:browser"
+      ],
+      "start": "2026-10-26T18:21:05.473699+00:00",
+      "end": "2026-10-26T18:21:24.077126+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/web-browser.log",
+      "logSha256": "bf11a3bc81c5a0046d307e896de6fe50154d94990ed44cb15ba0447c87d687df"
+    },
+    {
+      "check": "specs",
+      "command": [
+        "npm",
+        "run",
+        "check:specs"
+      ],
+      "start": "2026-10-26T18:21:24.078238+00:00",
+      "end": "2026-10-26T18:21:24.477452+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/specs.log",
+      "logSha256": "b305f0a204383fe73916bbac32780e5535a13a68c69d054961c190672fed098f"
+    },
+    {
+      "check": "spec-tests",
+      "command": [
+        "npm",
+        "run",
+        "test:specs"
+      ],
+      "start": "2026-10-26T18:21:24.477853+00:00",
+      "end": "2026-10-26T18:21:24.969863+00:00",
+      "exit": 0,
+      "log": "/workspace/p2p-g16-checks-20261026/spec-tests.log",
+      "logSha256": "cdf37cae29491e544ba85372d04cc2b5c1728343af60177d1a810fe51f08158c"
+    }
+  ]
+}

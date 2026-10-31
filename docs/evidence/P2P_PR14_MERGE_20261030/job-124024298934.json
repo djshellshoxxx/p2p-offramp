@@ -1,0 +1,25 @@
+{
+  "id": 124024298934,
+  "run": 41044252121,
+  "source": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+  "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41044252121/job/124024298934",
+  "fullLogSha256": "986c1cda2245832d9262e9679f828caad4da3b2b07b4db306db7bf7bede04145",
+  "fullLogBytes": 31237,
+  "qualification": "Fetched completed exact-source hosted job log; full log retained locally, selected excerpts retained here.",
+  "excerpts": [
+    "2026-10-30T11:12:26.2953841Z ##[group]Run npm run test:evm:local",
+    "2026-10-30T11:12:28.4692806Z 8 local trade checks passed",
+    "2026-10-30T11:12:28.4992531Z ##[group]Run npm run test:evm:reconcile",
+    "2026-10-30T11:12:31.0027506Z 5 reconcile checks passed",
+    "2026-10-30T11:12:31.0352788Z ##[group]Run npm run test:sepolia:kit",
+    "2026-10-30T11:12:31.5326249Z \u2139 tests 2",
+    "2026-10-30T11:12:31.5327245Z \u2139 pass 2",
+    "2026-10-30T11:12:31.5327682Z \u2139 fail 0",
+    "2026-10-30T11:12:31.5328117Z \u2139 cancelled 0",
+    "2026-10-30T11:12:31.5328664Z \u2139 skipped 0",
+    "2026-10-30T11:12:31.5329096Z \u2139 todo 0",
+    "2026-10-30T11:12:39.0975570Z 9 sepolia kit checks passed",
+    "2026-10-30T11:12:39.1367860Z ##[group]Run npm run test:sepolia:trade",
+    "2026-10-30T11:12:43.1062193Z 13 sepolia trade checks passed"
+  ]
+}

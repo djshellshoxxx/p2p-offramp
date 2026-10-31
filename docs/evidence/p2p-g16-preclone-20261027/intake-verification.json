@@ -1,0 +1,44 @@
+{
+  "assignment": "P2P-G16-PRECLONE-02",
+  "base": "4e3f3ccde34ada7908026a66c6647c689c130574",
+  "tree": "939ddea89e4f9cdde5908847c1e19c0d0d75d9c6",
+  "proposalLibrary": "libfile_6982e70d96548191903134e7e533740b",
+  "version": 0,
+  "bytes": 48238,
+  "sha256": "f4926808d6b7234d102bc1c9386f9da0814e0520a04c26a1a9e0b53d8bfdc696",
+  "fullNativeTextVerified": true,
+  "allowedPaths": [
+    {
+      "path": "packages/schemas/test/evm-agreement-input.test.mjs",
+      "baseSha256": null,
+      "proposedSha256": "f2aa35af47dbb51f0fe1b9fc2f029af58d16cf5b576d4ee0938d206a2fe531cb",
+      "patch": "test.patch",
+      "patchSha256": "b2e87578c9abbbc173a45f9e0b8f5228751bbfdb4c9cf474c4e64ed830e75aed",
+      "finalSha256": "f418b42ac3c234fce71a4d3faf9247e7c5bccd5d05b104e49efdda81fbf1ef5b"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-input.ts",
+      "baseSha256": null,
+      "proposedSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+      "patch": "implementation.patch",
+      "patchSha256": "15a74568b2d65c0c9fc6d71283e2fc95c9d3f4efafa27cc8d32b785bd8f30699",
+      "finalSha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "baseSha256": "62c1aba5f99794e9020ced78d623f8e391647821647de8f88f169243a8378e92",
+      "proposedSha256": "1fb7b6f8d138fc88117c0fedb92126fcf7b644e9341c90b459461f2d494a5601",
+      "patch": "browser.patch",
+      "patchSha256": "f15b053427cb73441b7240e2e3c2ae9c630ec300a238ea170f5af1bae3c7dabe",
+      "finalSha256": "8d89b7fffee4b13f836783b6ed2cb138ec10283dc034d9feae6a2342ae0bdde8"
+    }
+  ],
+  "integratorChanges": [
+    "Replace impossible generic transparent-array-proxy rejection oracle with hostile ownKeys trap refusal; preserve typed-array Proxy refusal tests",
+    "Construct invalid nested capability before freezing private fixture, so test reaches parser instead of throwing on fixture mutation",
+    "Retitle detached-buffer test to describe actual refusal evidence; separate observed copy-failure test proves output clearing",
+    "Correct complete-bundle parity group to same-provider; independent vector assertions unchanged"
+  ],
+  "implementationModifiedFromProposal": false,
+  "integratorPaidCalls": 0
+}

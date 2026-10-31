@@ -4,6 +4,7 @@ import { encodePassphrase, parsePrivateSnapshot, parseVaultEnvelope, ValidationE
 import type { VaultErrorCode } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, disposeMaterial, VaultCryptoError, type CryptoProvider } from './vault-crypto.ts';
 import { IndexedDbVaultStore, VaultStorageError, type VaultStore } from './idb-vault-store.ts';
+import { claimRecoverySlot } from './recovery-slot.ts';
 
 export type BackupErrorCode = VaultErrorCode | 'CHECKSUM_MISMATCH' | 'BUSY';
 const MESSAGES: Readonly<Record<BackupErrorCode, string>> = Object.freeze({
@@ -37,10 +38,6 @@ export interface BackupServiceOptions {
   /** Injected stores are caller-owned/shared unless ownership is explicitly transferred. */
   readonly ownsStore?: boolean;
 }
-// One job per loaded document module, including across independently constructed service instances.
-// A cancelled Web Crypto job keeps this slot until its actual work settles; cancellation cannot stop the native primitive.
-let documentJob: object | undefined;
-
 export class EncryptedBackupService {
   readonly #store: VaultStore;
   readonly #provider: CryptoProvider;
@@ -61,9 +58,11 @@ export class EncryptedBackupService {
   }
   async #job<T>(signal: AbortSignal | undefined, operation: (guard: () => void, controller: AbortController) => Promise<T>): Promise<T> {
     if (this.#closed) throw new BackupError('LOCKED');
+    // Checked before the slot is claimed: a non-signal would otherwise throw while holding it.
+    if (signal !== undefined && !(signal instanceof AbortSignal)) throw new BackupError('INVALID_INPUT');
     if (signal?.aborted) throw new BackupError('CANCELLED');
-    if (documentJob !== undefined) throw new BackupError('BUSY');
-    const token = {}; documentJob = token;
+    const release = claimRecoverySlot();
+    if (release === undefined) throw new BackupError('BUSY');
     const generation = this.#generation; const controller = new AbortController(); this.#active = controller;
     const onAbort = (): void => { controller.abort(); };
     signal?.addEventListener('abort', onAbort, { once: true }); if (signal?.aborted) onAbort();
@@ -78,7 +77,7 @@ export class EncryptedBackupService {
     } finally {
       signal?.removeEventListener('abort', onAbort);
       if (this.#active === controller) this.#active = undefined;
-      if (documentJob === token) documentJob = undefined;
+      release();
     }
   }
   async #checksum(bytes: Uint8Array<ArrayBuffer>): Promise<string> {
@@ -107,8 +106,16 @@ export class EncryptedBackupService {
       return Object.freeze({ bytes, authentication: 'not-checked' as const });
     });
   }
-  restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<RestoreReceipt> {
-    return this.#job(signal, async (guard, controller) => {
+  /** Optional authority guard is supplied by trusted composition, never by the backup document. */
+  restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<RestoreReceipt> {
+    return this.#job(signal, async (sessionGuard, controller) => {
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new BackupError('INVALID_INPUT');
+      const guard = (): void => {
+        sessionGuard();
+        try { assertCurrent?.(); } catch { throw new BackupError('CANCELLED'); }
+        sessionGuard();
+      };
+      guard();
       const backup = parseBackupBytes(bytes);
       for (const passphrase of [sourcePassphrase, destinationPassphrase]) { const encoded = encodePassphrase(passphrase); encoded.fill(0); }
       const checksum = await this.#checksum(canonicalEnvelopeBytes(backup.envelope)); guard();

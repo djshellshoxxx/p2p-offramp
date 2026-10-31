@@ -1,0 +1,46 @@
+{"operation":"take","result":{"ok":true,"value":{"sessionId":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","rumorId":"rumor","type":"take-request","state":"taken","recipientWrap":{"id":"wrap"},"selfWrap":{"id":"wrap"}}},"sessionCount":1}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
++   ok: true,
++   value: {
++     recipientWrap: {
++       id: 'wrap'
++     },
++     rumorId: 'rumor',
++     selfWrap: {
++       id: 'wrap'
++     },
++     sessionId: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
++     state: 'taken',
++     type: 'take-request'
++   }
+-   code: 'CLOSED',
+-   ok: false
+  }
+
+    at file:///workspace/scratch/6e878ebbe9d3/exchange-repro/repro.mjs:24:9 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    ok: true,
+    value: {
+      sessionId: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      rumorId: 'rumor',
+      type: 'take-request',
+      state: 'taken',
+      recipientWrap: { id: 'wrap' },
+      selfWrap: { id: 'wrap' }
+    }
+  },
+  expected: { ok: false, code: 'CLOSED' },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

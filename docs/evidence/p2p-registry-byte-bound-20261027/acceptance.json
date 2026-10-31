@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "783f9e7d781310f73a5ad034d27c0bf4df44aefe",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "g11bytes",
+          "suites": [
+            {
+              "id": "focused",
+              "argv": [
+                "node",
+                "--test",
+                "packages/domain/test/registry.test.mjs",
+                "packages/security/test/release-manifest.test.mjs",
+                "packages/security/test/release-registry.test.mjs"
+              ],
+              "categories": [
+                "unit",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "G11 intrinsic viewbounds/getter/proxy/offset/snapshot and existing G15 regressions",
+                "scope": "no trust/deployment/provider selection"
+              }
+            },
+            {
+              "id": "aggregate",
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "build",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "boundaries",
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "browser",
+              "argv": [
+                "npm",
+                "run",
+                "test:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "web",
+              "argv": [
+                "npm",
+                "run",
+                "test:web:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specs",
+              "argv": [
+                "npm",
+                "run",
+                "test:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specaudit",
+              "argv": [
+                "npm",
+                "run",
+                "check:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "policy",
+              "argv": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged"
+              }
+            },
+            {
+              "id": "g15browser",
+              "argv": [
+                "node",
+                "scripts/test-release-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "owned loopback fixed public-data document/Worker fixtures",
+                "scope": "no app/provider/trading/release approval"
+              }
+            },
+            {
+              "id": "workerphysical",
+              "argv": [
+                "node",
+                "scripts/test-g16-physical-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "same13trusted fixture schedules, not production wire parser"
+              }
+            }
+          ]
+        }
+      ],
+      "expected_tree": "bf10b6fca18af6ea6f0d50b7beb14fe00c254435"
+    }
+  ]
+}

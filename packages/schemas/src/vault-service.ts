@@ -15,11 +15,13 @@ export type VaultErrorCode = 'UNSUPPORTED_ENVIRONMENT' | 'UNSUPPORTED_VERSION' |
 export interface VaultError { code: VaultErrorCode; retryable: boolean; message: string; }
 export type Result<T> = { ok: true; value: T } | { ok: false; error: VaultError };
 export interface VaultService {
-  create(passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>>;
+  /** `assertCurrent` is a trusted local authority guard, checked again immediately before the atomic add. */
+  create(passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<VaultSession>>;
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<Result<VaultSession>>;
   read(sessionId: string, id: string): Promise<Result<PrivateRecordV1 | null>>;
   list(sessionId: string, kind?: RecordKind): Promise<Result<PrivateRecordV1[]>>;
-  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal): Promise<Result<number>>;
+  /** `assertCurrent` is a trusted local authority guard, checked again immediately before the atomic write. */
+  commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<number>>;
   lock(sessionId: string): void;
   lockAll(): void;
   exportEncrypted(profileId: string): Promise<Result<VaultEnvelopeV1>>;

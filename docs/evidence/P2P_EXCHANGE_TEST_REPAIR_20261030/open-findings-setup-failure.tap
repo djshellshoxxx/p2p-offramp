@@ -1,0 +1,96 @@
+TAP version 13
+# Subtest: pending review refuses a replacement session: different address
+not ok 1 - pending review refuses a replacement session: different address
+  ---
+  duration_ms: 41.081402
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:78:3'
+  failureType: 'testCodeFailure'
+  error: 'INVALID_AD'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    createAdEvent (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/packages/relay/src/ad.ts:81:120)
+    world (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:60:20)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:80:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: pending review refuses a replacement session: same address, new generation
+not ok 2 - pending review refuses a replacement session: same address, new generation
+  ---
+  duration_ms: 3.565438
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:78:3'
+  failureType: 'testCodeFailure'
+  error: 'INVALID_AD'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    createAdEvent (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/packages/relay/src/ad.ts:81:120)
+    world (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:60:20)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:80:15)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: take refuses ad expiry reached during signer lookup
+not ok 3 - take refuses ad expiry reached during signer lookup
+  ---
+  duration_ms: 75.524503
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:100:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    {"expected":"AD_EXPIRED","result":true,"sessionCount":1}
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:107:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: accept refuses the exact terms deadline reached during signer lookup
+not ok 4 - accept refuses the exact terms deadline reached during signer lookup
+  ---
+  duration_ms: 2.332788
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:112:1'
+  failureType: 'testCodeFailure'
+  error: 'INVALID_AD'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    createAdEvent (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/packages/relay/src/ad.ts:81:120)
+    world (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:60:20)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:114:13)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: outgoing replay capacity refuses a second message without state changes
+not ok 5 - outgoing replay capacity refuses a second message without state changes
+  ---
+  duration_ms: 2.090179
+  type: 'test'
+  location: '/workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:126:1'
+  failureType: 'testCodeFailure'
+  error: 'INVALID_AD'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    createAdEvent (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/packages/relay/src/ad.ts:81:120)
+    world (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:60:20)
+    async TestContext.<anonymous> (file:///workspace/scratch/a69029df5430/p2p-exchange-test-repair/docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs:127:13)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 0
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 365.225024

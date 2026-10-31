@@ -1,0 +1,122 @@
+{
+  "record": {
+    "path": "/workspace/checkpoints/2026-10-27-p2p-transport09/P2P-private-transport-contract09-ff2d762-20261027.md",
+    "bytes": 39055,
+    "lines": 667,
+    "sha256": "497160fe2d09266f4bff1453f2fe79808a6371c2f85619a125342f29e6c57288",
+    "baseSha": "ff2d7622d8032be87a6074c1299a09050b0a2d9d",
+    "baseTree": "0949b76b911448c80e59cfc14d0e0136af9957e7",
+    "status": "ready unassigned read-onlyreview/contract",
+    "runtimeEdits": false,
+    "testsBuildsRun": false,
+    "paidCalls": 0,
+    "outputDocument": "docs/reviews/G16_PRIVATE_TRANSPORT_CONTRACT_2026-10-27.md (returned document,sole integrator applies);no runtime patch ownership",
+    "libraryFileId": "libfile_e3b70f50f2bc8191947db56eba32238b",
+    "version": 0,
+    "nativeFullReadbackVerified": true,
+    "localIdentityVerified": true,
+    "sourceQualificationCommit": "ff2d7622d8032be87a6074c1299a09050b0a2d9d"
+  },
+  "manifest": {
+    "assignment": "P2P-G16-PRIVATE-TRANSPORT-CONTRACT-09",
+    "status": "READY read-only review/contract packet;unassigned,no paidcall",
+    "baseSha": "ff2d7622d8032be87a6074c1299a09050b0a2d9d",
+    "baseTree": "0949b76b911448c80e59cfc14d0e0136af9957e7",
+    "proposedOutputOnly": "docs/reviews/G16_PRIVATE_TRANSPORT_CONTRACT_2026-10-27.md (returned document,sole integrator applies);no runtime patch ownership",
+    "allRuntimeReadOnly": true,
+    "inlineHost": {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "bytes": 12993,
+      "sha256": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f"
+    },
+    "testDelta": {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "baseBytes": 22923,
+      "baseSha256": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded",
+      "targetBytes": 25652,
+      "targetSha256": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200",
+      "deltaBytes": 10727,
+      "deltaSha256": "b226a343bef09c3e28e5d73ee5c642adae9f0c8fce25f226c03dcfed845ca154"
+    },
+    "fixtureDelta": {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "baseSha256": "4cbbb6283bf7c238b9e6133564f84a24813e808927efb5f4033d40b123270426",
+      "targetSha256": "eba44bad3cbfab549db4ad6f4a218fb619b15bf13c1b27a1f88ddf668e7af937",
+      "deltaBytes": 932,
+      "deltaSha256": "8c21ce703091cc52ee78af82e65c788a667ad32aae298f8909a24bb9cee6d0cc"
+    },
+    "unchangedReferences": [
+      {
+        "path": "packages/schemas/src/evm-agreement-protocol.ts",
+        "bytes": 6378,
+        "sha256": "0c4f12029f02957c237eb5ecf512733125e8233107964d2747c53496090e5577",
+        "readOnly": true
+      },
+      {
+        "path": "packages/schemas/src/evm-agreement-input.ts",
+        "bytes": 13966,
+        "sha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "readOnly": true
+      },
+      {
+        "path": "packages/wallet/src/evm-agreement.ts",
+        "bytes": 6796,
+        "sha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "readOnly": true
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "bytes": 13904,
+        "sha256": "dc94e4cb60f486c783d34fa4aad11b675281d806a1f6752380265f73202f3cc4",
+        "readOnly": true
+      },
+      {
+        "path": "apps/web/src/runtime/pending-metadata.ts",
+        "bytes": 1355,
+        "sha256": "c580db1dd24b50c8cf2bd8c4a02c7479d7fd9528f950bfc745245317cf3143cf",
+        "readOnly": true
+      },
+      {
+        "path": "scripts/test-g16-browser.mjs",
+        "bytes": 9202,
+        "sha256": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+        "readOnly": true
+      },
+      {
+        "path": "scripts/check-import-boundaries.mjs",
+        "bytes": 14913,
+        "sha256": "d8bbb73cb4c3675cd5ef0ab8990f23ca5d2712f94ae167b8fa54b21d010eba46",
+        "readOnly": true
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "bytes": 708,
+        "sha256": "bccd9ce750e47dd4d39e6b2fd8cd7e9c93ea69f0739b3045fe9ccbe23b26108a",
+        "readOnly": true
+      }
+    ],
+    "retainedHostProposal": {
+      "libraryId": "libfile_f05a746c8ec48191be3fbd741d4b60c3",
+      "version": 0,
+      "bytes": 61922,
+      "sha256": "a57d38cb08753c3473ed113a34932d7fcf7d215d2e4f98fd91e1b81f15141f04",
+      "content": "complete original327line hosttest and exact fixturebase+patch;reconstruct with provided deltas"
+    },
+    "retainedProtocolInput": {
+      "libraryId": "libfile_a575afd14b888191aa86389b05d9bec2",
+      "version": 0,
+      "bytes": 85217,
+      "sha256": "f45eddaf2f2650a51212f5aba0dae5dd9f12e044abcd460604cf50b052018bd3",
+      "content": "completebodyparser/verifier/driver and partialruntime/constants/PENDING/review references,not full unavailable app files"
+    },
+    "retainedProtocolProposal": {
+      "libraryId": "libfile_c3188e45c7dc8191a9a545b48f6562b5",
+      "version": 0,
+      "bytes": 39665,
+      "sha256": "60cce726b59b95225721ec04306e999cd04620c0530f011a0e8e88f4619a5d25",
+      "content": "completeprivateprotocolsource108line newfilediff"
+    },
+    "sourceTestsRunInPreparation": false,
+    "paidCalls": 0
+  }
+}

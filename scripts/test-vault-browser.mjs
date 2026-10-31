@@ -20,7 +20,7 @@ try {
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts',
     'packages/storage/src/backup-service.ts', 'packages/storage/src/migration-service.ts',
-    'packages/domain/src/intent-journal.ts',
+    'packages/domain/src/intent-journal.ts', 'packages/domain/src/authority.ts', 'packages/domain/src/trade-composition.ts',
   ], { cwd: root, stdio: 'inherit' });
   const handler = (request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
@@ -221,6 +221,158 @@ try {
   assert.equal(durable.repeated.error.code, 'CONFLICT');
   assert.equal(durable.duplicate.error.code, 'CONFLICT', 'age/action changes cannot clear unknown outcomes');
   for (const page of pages) await page.evaluate(() => { window.journal.dispose(); window.journalVault.dispose(); });
+
+  // G08/G12 diagnostic composition in real separate documents, backed by native IndexedDB.
+  const compositionContext = await browser.newContext({ serviceWorkers: 'block' });
+  const compositionPages = await Promise.all([compositionContext.newPage(), compositionContext.newPage()]);
+  const compositionErrors = [], compositionReports = [];
+  for (const page of compositionPages) {
+    page.on('pageerror', error => compositionErrors.push(error.message));
+    await page.route('**/*', route => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push(route.request().url()); return route.abort();
+    });
+    await page.goto(origin);
+  }
+  async function compositionCase(seeded) {
+    for (const page of compositionPages) await page.evaluate(() => {
+      const c = window.comp; if (!c) return;
+      c.releaseRead?.(); c.releaseChain?.(); c.heldComposition?.dispose(); c.heldJournal?.dispose();
+      c.composition.dispose(); c.journal.dispose(); c.authority.dispose(); c.vault.dispose(); c.store.close();
+    });
+    const fixture = await compositionPages[0].evaluate(async () => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
+      const created = await vault.create('local composition browser passphrase');
+      if (!created.ok) throw new Error('composition profile create failed');
+      window.comp = { store, vault, session: created.value };
+      return { profileId: created.value.profileId,
+        binding: { chain: 'evm', networkId: 'local-evm', deploymentId: 'fixture-escrow', tradeId: 'fixture-trade-01' },
+        account: '0x' + '12'.repeat(20) };
+    });
+    for (let index = 0; index < compositionPages.length; index++) await compositionPages[index].evaluate(async ({ fixture, seeded, index }) => {
+      const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
+      const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
+      const { createIntentJournal } = await import('/domain/src/intent-journal.js');
+      const { createTradeAuthority } = await import('/domain/src/authority.js');
+      const { createTradeComposition } = await import('/domain/src/trade-composition.js');
+      const { encodeBase64url } = await import('/schemas/src/vault.js');
+      if (index !== 0) {
+        const store = new IndexedDbVaultStore(), vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
+        const opened = await vault.unlock(fixture.profileId, 'local composition browser passphrase');
+        if (!opened.ok) throw new Error('composition peer unlock failed'); window.comp = { store, vault, session: opened.value };
+      }
+      const c = window.comp; c.fixture = fixture;
+      c.intent = { version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(1)), binding: fixture.binding,
+        account: fixture.account, action: 'fund', state: 'prepared', walletGeneration: 0, expectedEscrowState: 'absent',
+        preparedRequest: '{"fixture":"not-a-real-transaction"}', submission: { chain: 'evm', hash: null, nonce: null },
+        replacementOf: null, createdAt: 0, updatedAt: 0 };
+      // This validates fixture encoding only; there is no ABI/provider/deployment approval.
+      c.makeJournal = (port = c.vault) => createIntentJournal({ vault: port, session: c.session, validateCanonical: () => ({ ok: true, value: undefined }) });
+      c.journal = c.makeJournal();
+      if (index === 0 && seeded) { const result = await c.journal.reserve(c.intent, 0); if (!result.ok) throw new Error('composition seed failed'); }
+      let chainReads = 0;
+      c.authority = createTradeAuthority({ binding: fixture.binding, generation: 0, walletGeneration: 0,
+        readValidated: async (_binding, request) => {
+          const sequence = ++chainReads;
+          if (c.holdChain && sequence === 1) { c.chainHeld = true; await new Promise(resolve => { c.releaseChain = resolve; }); }
+          return { ok: true, value: { binding: fixture.binding, generation: request.generation, requestSequence: request.requestSequence,
+            anchor: { height: String(100 + sequence), hash: 'fixture-anchor-' + sequence }, state: sequence === 1 ? 'absent' : 'funded',
+            finality: 'finalized', observedAt: 1000 } };
+        } });
+      c.makeComposition = journal => createTradeComposition({ binding: fixture.binding, account: fixture.account, authority: c.authority, journal, now: () => 1000 });
+      c.composition = c.makeComposition(c.journal);
+    }, { fixture, seeded, index });
+    return fixture;
+  }
+  async function holdComposition(point) {
+    await compositionPages[0].evaluate(point => {
+      const c = window.comp; c.readHeld = false; c.abort = new AbortController(); let first = true;
+      const gate = new Promise(resolve => { c.releaseRead = resolve; });
+      const hold = async () => { if (first) { first = false; c.readHeld = true; await gate; } };
+      let reader = c.journal;
+      if (point === 'before-preflight') {
+        const get = c.store.get.bind(c.store); c.store.get = async id => { await hold(); return get(id); };
+      } else {
+        reader = c.heldJournal = c.makeJournal({ captureSession: (...args) => c.vault.captureSession(...args),
+          read: (...args) => c.vault.read(...args), commit: (...args) => c.vault.commit(...args),
+          list: async (...args) => { const result = await c.vault.list(...args); await hold(); return result; } });
+      }
+      c.heldComposition = c.makeComposition(reader); c.pendingRead = c.heldComposition.read(c.abort.signal);
+    }, point);
+    await compositionPages[0].waitForFunction(() => window.comp.readHeld);
+  }
+  async function recoverComposition() {
+    return compositionPages[0].evaluate(async () => {
+      const c = window.comp; c.heldComposition.dispose(); c.heldJournal?.dispose(); c.composition.dispose(); c.journal.dispose(); c.vault.lockAll();
+      const opened = await c.vault.unlock(c.fixture.profileId, 'local composition browser passphrase');
+      if (!opened.ok) throw new Error('composition recovery unlock failed'); c.session = opened.value; c.journal = c.makeJournal(); c.composition = c.makeComposition(c.journal);
+      const view = await c.composition.read(), unresolved = await c.journal.unresolved(c.fixture.binding, c.fixture.account);
+      const duplicate = await c.journal.reserve({ ...c.intent, intentId: 'CQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQk', action: 'approve' }, opened.value.revision);
+      return { view, count: unresolved.ok ? unresolved.value.length : -1, state: unresolved.ok ? unresolved.value[0]?.state : null,
+        idMatches: view.ok && view.value.pendingIntentIds.length === 1 && view.value.pendingIntentIds[0] === c.intent.intentId,
+        duplicate: duplicate.ok ? 'unexpected-success' : duplicate.error.code };
+    });
+  }
+  for (const schedule of ['before-preflight', 'after-snapshot', 'peer-marker']) {
+    const fixture = await compositionCase(schedule === 'peer-marker');
+    await holdComposition(schedule === 'before-preflight' ? schedule : 'after-snapshot');
+    const peer = await compositionPages[1].evaluate(async marker => {
+      const c = window.comp, result = marker ? await c.journal.markSending(c.intent.intentId) : await c.journal.reserve(c.intent, 0);
+      c.committed = JSON.stringify(await c.store.get(c.fixture.profileId)); return result;
+    }, schedule === 'peer-marker');
+    assert.equal(peer.ok, true);
+    const stale = await compositionPages[0].evaluate(() => { const c = window.comp; c.releaseRead(); return c.pendingRead; });
+    assert.equal(stale.ok, false); assert.equal(stale.error.code, 'CONFLICT');
+    const locked = await compositionPages[0].evaluate(() => window.comp.heldComposition.read());
+    assert.equal(locked.ok, false); assert.equal(locked.error.code, 'LOCKED');
+    const recovered = await recoverComposition();
+    assert.equal(recovered.view.ok, true); assert.equal(recovered.idMatches, true); assert.equal(recovered.count, 1);
+    assert.equal(recovered.view.value.economicPreparationAllowed, false); assert.equal(recovered.duplicate, 'CONFLICT');
+    assert.equal(recovered.state, schedule === 'peer-marker' ? 'broadcast-unknown' : 'prepared');
+    const same = await compositionPages[1].evaluate(async () => { const c = window.comp; return JSON.stringify(await c.store.get(c.fixture.profileId)) === c.committed; });
+    assert.equal(same, true, 'refused diagnostic and duplicate must not change the committed ciphertext');
+    compositionReports.push({ schedule, stale: stale.error.code, recoveredState: recovered.state, reserved: recovered.count, ciphertextUnchanged: same });
+  }
+  for (const cancellation of ['abort', 'dispose', 'wallet-generation']) {
+    const fixture = await compositionCase(true);
+    await compositionPages[0].evaluate(async () => { const c = window.comp; c.committed = JSON.stringify(await c.store.get(c.fixture.profileId)); });
+    if (cancellation === 'wallet-generation') {
+      await compositionPages[0].evaluate(() => { const c = window.comp; c.holdChain = true; c.pendingChain = c.authority.refresh(c.fixture.binding); });
+      await compositionPages[0].waitForFunction(() => window.comp.chainHeld);
+    }
+    await holdComposition('after-snapshot');
+    const cancelled = await compositionPages[0].evaluate(async cancellation => {
+      const c = window.comp;
+      if (cancellation === 'abort') c.abort.abort();
+      if (cancellation === 'dispose') c.heldComposition.dispose();
+      if (cancellation === 'wallet-generation') {
+        const { encodeBase64url } = await import('/schemas/src/vault.js');
+        const dispatched = c.authority.dispatchLocal({ version: 1, eventId: encodeBase64url(new Uint8Array(32).fill(9)),
+          binding: c.fixture.binding, generation: 0, sequence: 1, observedAt: 1000, source: 'wallet', kind: 'wallet-invalidated', data: { walletGeneration: 1 } });
+        if (dispatched !== 'accepted') throw new Error('wallet fixture invalidation refused');
+        const old = await c.pendingChain; if (old.ok || old.error.code !== 'CANCELLED') throw new Error('old authority read survived invalidation');
+        const newer = await c.authority.refresh(c.fixture.binding); if (!newer.ok) throw new Error('fresh authority fixture read failed'); c.releaseChain();
+      }
+      c.releaseRead(); return c.pendingRead;
+    }, cancellation);
+    assert.equal(cancelled.ok, false); assert.equal(cancelled.error.code, 'CANCELLED');
+    const recovered = await recoverComposition();
+    assert.equal(recovered.view.ok, true); assert.equal(recovered.idMatches, true); assert.equal(recovered.state, 'prepared');
+    assert.equal(recovered.view.value.economicPreparationAllowed, false); assert.equal(recovered.duplicate, 'CONFLICT');
+    if (cancellation === 'wallet-generation') {
+      assert.equal(recovered.view.value.walletGeneration, 1); assert.equal(recovered.view.value.chain.state, 'funded');
+    }
+    const same = await compositionPages[0].evaluate(async () => { const c = window.comp; return JSON.stringify(await c.store.get(c.fixture.profileId)) === c.committed; });
+    assert.equal(same, true);
+    compositionReports.push({ cancellation, stale: cancelled.error.code, reserved: recovered.count, ciphertextUnchanged: same });
+  }
+  assert.deepEqual(compositionErrors, []);
+  assert.deepEqual(unexpected, []);
+  await compositionContext.close();
+  console.log(JSON.stringify({ fixture: 'native-indexeddb-authority-composition', browser: browser.version(), reports: compositionReports,
+    syntheticChainObservationsOnly: true, economicPreparationAllowed: false, pageErrors: compositionErrors.length, externalEgress: unexpected.length }));
   await pages[1].evaluate(() => new Promise((resolveUpgrade, reject) => {
     const request = indexedDB.open('p2p-offramp-vault', 2);
     request.onblocked = () => reject(new Error('existing adapters did not close on versionchange'));

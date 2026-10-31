@@ -35,7 +35,7 @@ All externally supplied records require exact schema/version validation and byte
 
 ## 5. Interfaces, errors and recovery
 
-Expiry creates eligibility, not automatic execution. Offer a native-chain refund transaction, fee estimate and direct ABI/IDL recovery instructions. Chain outage postpones execution; lost seller spending key prevents seller release but anyone can still refund to its bound address. A refund transfer failure preserves funds and state for retry with original destination.
+Expiry creates eligibility, not automatic execution. Offer a native-chain refund transaction, fee estimate and direct ABI/IDL recovery instructions. Chain outage postpones execution; lost seller spending key prevents seller release but anyone can still refund to its bound address. A refund transfer failure on EVM marks the trade refunded and preserves principal as a pending credit for retry to the original destination (see [escrow contract interface](spec-escrow-contract-interface.md) §4).
 
 Boundary failures map to fixed G13 errors; raw provider exceptions, signed payloads, credentials and witness material MUST NOT enter diagnostics. Cancellation stops owned work and rejects late generation outputs, but cannot retract already transmitted data or transactions. Existing funded trade recovery retains its original deployment and authority.
 
