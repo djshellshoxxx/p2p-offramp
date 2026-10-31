@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { accessSync, constants } from 'node:fs';
+import { join, delimiter } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { evmTermsHash } from '../src/evm-terms.ts';
@@ -77,7 +78,9 @@ test('simple calls round-trip and reject malformed arguments', () => {
   assert.equal(buildErc20Approve(erc20.asset, ESCROW, '0').data.endsWith('0'.repeat(64)), true, 'allowance reset is allowed');
 });
 
-const castPath = [`${homedir()}/.foundry/bin/cast`].find(existsSync);
+const castName = process.platform === 'win32' ? 'cast.exe' : 'cast';
+const castPath = [...(process.env.FOUNDRY_BIN ? [join(process.env.FOUNDRY_BIN, castName)] : []), ...(process.env.PATH ?? '').split(delimiter).filter(Boolean).map(path => join(path, castName)), join(homedir(), '.foundry', 'bin', castName)]
+  .find(path => { try { accessSync(path, constants.X_OK); return true; } catch { return false; } });
 test('calldata equals `cast calldata` for the same ABI signature (skipped without foundry)', { skip: castPath === undefined }, () => {
   const cast = (...args) => execFileSync(castPath, ['calldata', ...args], { encoding: 'utf8' }).trim();
   assert.equal(buildRelease(ESCROW, tradeIdNative).data, cast('release(bytes32)', `0x${tradeIdNative}`));
@@ -253,4 +256,14 @@ test('credit view and receiver toggle calldata: known selectors, strict argument
     assert.equal(toggle.data, cast('setAccept(bool)', 'true'));
     assert.equal(buildSetAccept(RECEIVER, false).data, cast('setAccept(bool)', 'false'));
   }
+});
+
+test('fund and trade-id builders use one detached descriptor snapshot for digest, calldata, destination and value', () => {
+  let reads=0;
+  const hostileDomain=new Proxy({...domain},{get(target,key,receiver){reads++;return key==='verifyingContract'?'0x'+'99'.repeat(20):Reflect.get(target,key,receiver);}});
+  for(const [terms,builder] of [[native,buildFundNative],[erc20,buildFundToken],[native,buildTradeIdOf]]){
+    const hostileTerms=new Proxy({...terms},{get(target,key,receiver){reads++;return key==='amountBaseUnits'?'2':Reflect.get(target,key,receiver);}});
+    assert.deepEqual(builder(hostileDomain,hostileTerms),builder(domain,terms),'every output field derives from the same validated snapshot');
+  }
+  assert.equal(reads,0,'no original property getters are used after descriptor snapshot');
 });

@@ -25,7 +25,7 @@ try {
     '--ignoreConfig', '--target', 'ES2023', '--module', 'ESNext', '--moduleResolution', 'Bundler',
     '--strict', '--noUncheckedIndexedAccess', '--exactOptionalPropertyTypes', '--rewriteRelativeImportExtensions',
     '--rootDir', 'packages', '--outDir', output, 'packages/storage/src/vault-service.ts', 'packages/storage/src/idb-vault-store.ts',
-    'packages/domain/src/intent-journal.ts',
+    'packages/domain/src/intent-journal.ts', 'packages/domain/src/tx-lifecycle.ts',
   ], { cwd: root, stdio: 'inherit' });
   server = createServer((request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
@@ -53,13 +53,15 @@ try {
       const { IndexedDbVaultStore } = await import('/storage/src/idb-vault-store.js');
       const { EncryptedVaultService } = await import('/storage/src/vault-service.js');
       const { createLifecycleJournal } = await import('/domain/src/intent-journal.js');
+      const { createEvmTxLifecycle } = await import('/domain/src/tx-lifecycle.js');
       const { encodeBase64url } = await import('/schemas/src/vault.js');
       window.store = new IndexedDbVaultStore();
       window.vault = new EncryptedVaultService(window.store, crypto, { lifecycle: false });
       window.makeIntent = (fill, extra = {}) => ({ version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(fill)),
         binding: { chain: 'evm', networkId: 'evm:31337', deploymentId: 'fixture-escrow', tradeId: 'fixture-lifecycle-trade' },
         account: '0x' + '34'.repeat(20), action: 'fund', state: 'prepared', walletGeneration: 0, expectedEscrowState: 'absent',
-        preparedRequest: '{"fixture":"not-a-real-transaction"}', submission: { chain: 'evm', hash: null, nonce: '7' },
+        preparedRequest: JSON.stringify({ v: 1, chainId: '31337', from: '0x' + '34'.repeat(20), to: '0x' + '56'.repeat(20),
+          data: '0x', value: '0', nonce: '7', preparedAtBlock: '0' }), submission: { chain: 'evm', hash: null, nonce: '7' },
         replacementOf: null, createdAt: 0, updatedAt: 0, ...extra });
       // Fresh session and journal at the current durable revision (what a reloaded tab sees).
       window.reopen = async (profileId, passphrase) => {
@@ -72,6 +74,31 @@ try {
         return window.journal.currentRevision();
       };
       window.codeOf = result => result.ok ? 'ok' : result.error.code;
+      // Restore native authority through the coordinator. Serialized labels do not authorize successors.
+      // This deterministic chain fixture cannot send/sign: the wallet port always throws.
+      window.revalidate = async ({ id, hash, outcome }) => {
+        let reads = 0;
+        const ok = value => { reads++; return Promise.resolve({ ok: true, value }); };
+        const blockHash = height => '0x' + height.toString(16).padStart(64, '0');
+        const state = outcome === 'finalized' ? 'funded' : 'absent';
+        const reader = {
+          chainId: () => ok('31337'),
+          head: () => ok({ number: '20', hash: blockHash(20) }),
+          blockHashAt: height => ok(blockHash(Number(height))),
+          transactionCount: () => ok('8'),
+          transaction: () => ok(outcome === 'finalized' ? { hash, from: '0x' + '34'.repeat(20), to: '0x' + '56'.repeat(20),
+            nonce: '7', input: '0x', value: '0', blockNumber: '10' } : null),
+          receipt: () => ok(outcome === 'finalized' ? { transactionHash: hash, blockNumber: '10', blockHash: blockHash(10), status: 'success' } : null),
+          escrowState: () => ok(state),
+          escrowObservation: (binding, request) => ok({ binding, generation: request.generation, requestSequence: request.requestSequence,
+            anchor: { height: '20', hash: blockHash(20) }, state, finality: 'finalized', observedAt: 1 }),
+        };
+        const life = createEvmTxLifecycle({ journal: window.journal, reader,
+          wallet: async () => { throw new Error('This read-only fixture may not call a wallet.'); },
+          policy: { finality: { kind: 'evm-finalized-tag' }, confirmations: 2, dropAfterBlocks: 5 } });
+        try { const result = await life.reconcile(id); return { code: window.codeOf(result), outcome: result.ok ? result.value.outcome : null, reads }; }
+        finally { life.dispose(); }
+      };
     });
   }
   async function runProfile(forced) {
@@ -79,6 +106,13 @@ try {
   const reopenAll = () => Promise.all(pages.map(page => page.evaluate(({ id, pass }) => window.reopen(id, pass), { id: created, pass: PASSPHRASE })));
   const storedRevision = () => pages[0].evaluate(async id => (await window.store.get(id)).revision, created);
   const listIn = page => page.evaluate(async () => { const r = await window.journal.list(); if (!r.ok) throw new Error(r.error.code); return r.value; });
+  const revalidateAll = async outcome => {
+    const results = await Promise.all(pages.map(page => page.evaluate(args => window.revalidate(args), { id: intentId, hash: recordedHash, outcome })));
+    for (const result of results) {
+      assert.equal(result.code, 'ok'); assert.equal(result.outcome, outcome);
+      assert.ok(result.reads > 0, 'each restored tab rechecks native chain evidence');
+    }
+  };
 
   // 1. Reservation: two tabs, two different intents for the same binding/account at the same revision.
   let revisions = await reopenAll();
@@ -145,11 +179,17 @@ try {
 
     // 6. After a finalized intent, two tabs race to reserve successors for the same binding: still exactly one.
     revisions = await reopenAll();
+    const blocked = await pages[0].evaluate(revision => window.journal.reserve(window.makeIntent(30, { submission: { chain: 'evm', hash: null, nonce: '8' } }), revision).then(window.codeOf), revisions[0]);
+    assert.equal(blocked, 'CONFLICT', 'a restored finalized label alone never releases the binding');
+    await revalidateAll('finalized');
     const next = await Promise.all(pages.map((page, index) => page.evaluate(({ fill, revision }) => window.journal.reserve(window.makeIntent(fill, { submission: { chain: 'evm', hash: null, nonce: '8' } }), revision).then(window.codeOf), { fill: 10 + index, revision: revisions[index] })));
     assert.deepEqual([...next].sort(), ['CONFLICT', 'ok'], 'released binding admits exactly one new intent');
   } else {
     // replaced is terminal and admits only one explicit successor naming it; race two successors.
     revisions = await reopenAll();
+    const blocked = await pages[0].evaluate(({ revision, replaced }) => window.journal.reserve(window.makeIntent(31, { replacementOf: replaced, submission: { chain: 'evm', hash: null, nonce: '8' } }), revision).then(window.codeOf), { revision: revisions[0], replaced: intentId });
+    assert.equal(blocked, 'CONFLICT', 'a restored replaced label alone never authorizes its successor');
+    await revalidateAll('replaced');
     const successors = await Promise.all(pages.map((page, index) => page.evaluate(({ fill, revision, replaced }) => window.journal.reserve(window.makeIntent(fill, { replacementOf: replaced, submission: { chain: 'evm', hash: null, nonce: '8' } }), revision).then(window.codeOf), { fill: 20 + index, revision: revisions[index], replaced: intentId })));
     assert.deepEqual([...successors].sort(), ['CONFLICT', 'ok'], 'a replaced intent has exactly one successor');
   }

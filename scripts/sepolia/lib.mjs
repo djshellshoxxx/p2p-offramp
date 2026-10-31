@@ -105,20 +105,55 @@ export function isLoopbackUrl(url) {
 
 export class RpcError extends Error { constructor(code) { super(`RPC ${code}`); this.name = 'RpcError'; this.code = code; } }
 
-/** Minimal JSON-RPC client. Errors carry fixed codes only, never the URL or response body. */
+/** Local tool transport bound; paged logs must fit one bounded response. */
+export const MAX_RPC_RESPONSE_BYTES = 4 * 1024 * 1024;
+/** Minimal bounded JSON-RPC client. Fixed errors never echo the URL or response body. */
 export function rpcClient(url, { timeoutMs = 20_000 } = {}) {
   if (typeof url !== 'string' || !/^https?:\/\//.test(url)) throw new RpcError('RPC_URL_MISSING');
-  if (url.startsWith('http://') && !isLoopbackUrl(url)) throw new RpcError('RPC_URL_INSECURE'); // a provider API key would travel in clear
-  let id = 0;
+  if (url.startsWith('http://') && !isLoopbackUrl(url)) throw new RpcError('RPC_URL_INSECURE');
+  let parsed;
+  try { parsed = new URL(url); } catch { throw new RpcError('RPC_URL_MISSING'); }
+  if (parsed.username || parsed.password) throw new RpcError('RPC_URL_INVALID');
+  let sequence = 0;
   return async function rpc(method, params = []) {
-    let response;
+    const id = ++sequence;
+    let response, reader;
     try {
-      response = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: ++id, method, params }), signal: AbortSignal.timeout(timeoutMs) });
+      response = await fetch(url, { method: 'POST', redirect: 'error', credentials: 'omit',
+        headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id, method, params }), signal: AbortSignal.timeout(timeoutMs) });
     } catch { throw new RpcError('RPC_UNREACHABLE'); }
-    if (!response.ok) throw new RpcError(`RPC_HTTP_${response.status}`);
-    let body; try { body = await response.json(); } catch { throw new RpcError('RPC_MALFORMED'); }
-    if (body?.error) throw new RpcError(`RPC_ERROR_${Number(body.error.code) || 'UNKNOWN'}`);
-    return body?.result;
+    if (response.redirected || !response.ok) {
+      if (response.body) void response.body.cancel().catch(() => undefined);
+      throw new RpcError(response.redirected ? 'RPC_REDIRECTED' : `RPC_HTTP_${response.status}`);
+    }
+    let body;
+    try {
+      const declared = response.headers.get('content-length');
+      if (declared !== null && (!/^(0|[1-9][0-9]*)$/.test(declared) || Number(declared) > MAX_RPC_RESPONSE_BYTES)) throw new RpcError('RPC_RESPONSE_TOO_LARGE');
+      if (!response.body) throw new RpcError('RPC_MALFORMED');
+      reader = response.body.getReader();
+      const chunks = []; let size = 0, reads = 0;
+      for (;;) {
+        if (++reads > 65536) throw new RpcError('RPC_RESPONSE_TOO_LARGE');
+        const next = await reader.read();
+        if (next.done) break;
+        size += next.value.byteLength;
+        if (size > MAX_RPC_RESPONSE_BYTES) throw new RpcError('RPC_RESPONSE_TOO_LARGE');
+        chunks.push(next.value);
+      }
+      const bytes = new Uint8Array(size); let offset = 0;
+      for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+      body = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+    } catch (error) {
+      throw error instanceof RpcError ? error : new RpcError('RPC_MALFORMED');
+    } finally { if (reader) void reader.cancel().catch(() => undefined); else if (response.body) void response.body.cancel().catch(() => undefined); }
+    if (typeof body !== 'object' || body === null || Array.isArray(body) || body.jsonrpc !== '2.0' || body.id !== id ||
+        Object.hasOwn(body, 'error') === Object.hasOwn(body, 'result')) throw new RpcError('RPC_MALFORMED');
+    if (Object.hasOwn(body, 'error')) {
+      if (typeof body.error !== 'object' || body.error === null || !Number.isSafeInteger(body.error.code)) throw new RpcError('RPC_MALFORMED');
+      throw new RpcError(`RPC_ERROR_${body.error.code}`);
+    }
+    return body.result;
   };
 }
 

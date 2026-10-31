@@ -57,6 +57,26 @@ async function inspect(rpc, txHash, expectedGenesis) {
   return { identity, receipt, address, runtimeKeccak: keccakHex(code), allowlist, finalizedBlock: finalized?.number ? BigInt(finalized.number) : null };
 }
 
+/** Clear only this verified native deployment's guard. Unknown attempts need finalized account/nonce
+ * and canonical inclusion proof, not a missing file, imported terminal label or a new deployment request.
+ */
+export async function clearRecordedAttempt({ pendingPath, txHash, record, rpc }) {
+  const pending = await readFile(pendingPath, 'utf8').then(JSON.parse, () => null);
+  if (pending?.tx === txHash) { await rm(pendingPath, { force: true }); return true; }
+  if (pending?.format !== 'p2p-offramp/deployment-attempt/v1' || pending.state !== 'broadcast-unknown' ||
+      pending.tx !== null || pending.chainId !== record.chainId || pending.from !== record.deployer || !record.finalizedAtRecording) return false;
+  let transaction, canonical;
+  try {
+    transaction = await rpc('eth_getTransactionByHash', [txHash]);
+    if (!transaction || transaction.hash !== txHash || transaction.from?.toLowerCase() !== pending.from || transaction.to !== null ||
+        BigInt(transaction.nonce) !== BigInt(pending.nonce) || BigInt(transaction.blockNumber) !== BigInt(record.deployBlock) ||
+        transaction.blockHash !== record.deployBlockHash) return false;
+    canonical = await rpc('eth_getBlockByNumber', [transaction.blockNumber, false]);
+    if (!canonical || canonical.hash !== record.deployBlockHash || BigInt(canonical.number) !== BigInt(record.deployBlock)) return false;
+  } catch { return false; }
+  await rm(pendingPath, { force: true }); return true;
+}
+
 export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEndpoint, expectedDeployer, expectGenesis = SEPOLIA.genesisHash,
   outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath = resolve(ROOT, 'registry/testnet/sepolia.registry.json'), root = ROOT, env = process.env }) {
   checkPublicEndpoint(publicEndpoint);
@@ -68,7 +88,8 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   const toolchain = await checkToolchain(env);
   try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
   const artifact = await escrowArtifact();
-  const primary = await inspect(rpcClient(rpcUrl), txHash, expectGenesis);
+  const rpc = rpcClient(rpcUrl);
+  const primary = await inspect(rpc, txHash, expectGenesis);
   if (primary.runtimeKeccak !== artifact.runtimeKeccak) fail('RUNTIME_CODE_MISMATCH');
   if (expectedDeployer !== undefined && primary.receipt.from?.toLowerCase() !== expectedDeployer) fail('UNEXPECTED_DEPLOYER');
   // An ABI-encoded empty address[]: offset 0x20, length 0. Native-only deployments must have no ERC-20 allowlist.
@@ -109,8 +130,7 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   await writeFile(recordPath, JSON.stringify(record, null, 2) + '\n');
   await writeFile(registryPath, registryBytes);
   // The broadcast this record covers is no longer pending.
-  const pending = await readFile(resolve(outDir, PENDING_FILE), 'utf8').then(JSON.parse, () => null);
-  if (pending?.tx === txHash) await rm(resolve(outDir, PENDING_FILE), { force: true });
+  await clearRecordedAttempt({ pendingPath: resolve(outDir, PENDING_FILE), txHash, record, rpc });
   return { record, recordPath, registryPath };
 }
 

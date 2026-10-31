@@ -84,6 +84,15 @@ test('input objects and fixture bytes are snapshotted before asynchronous hashes
 test('bounded metadata rejects oversized files, aggregate bytes, graph and hostile prototypes',async()=>{
  for(const change of [f=>f.files[0].bytes=new Uint8Array(1024*1024+1),f=>f.files=Array.from({length:17},(_,i)=>({path:`fixtures/${i}`,bytes:new Uint8Array(1024*1024)})),f=>f.inventory=Array.from({length:65},()=>clone(f.inventory[0])),f=>Object.setPrototypeOf(f.inventory[0],{inherited:'SECRET'})]){const f=fixture();change(f);assert.ok((await run(f)).findings.length>0);}
 });
+test('foreign reflection failures always resolve to a fixed blocking input finding',async()=>{
+ const revoked=Proxy.revocable({},{});revoked.revoke();
+ for(const thrown of [Error('SECRET reflection diagnostic'),revoked.proxy])for(const trap of ['getPrototypeOf','ownKeys','getOwnPropertyDescriptor'])for(const input of ['inventory','lock','enabled','files']){
+  const f=fixture('release-enabled');f[input]=new Proxy({value:1},{[trap](){throw thrown;}});
+  const report=await run(f);
+  assert.deepEqual(report,{findings:[{code:'UNSUPPORTED_RUNTIME',path:'input',disposition:'blocking'}],releaseEligible:false});
+  assert.doesNotMatch(JSON.stringify(report),/SECRET|reflection diagnostic/);
+ }
+});
 test('declared npm implementations must connect to exact root and transitive lock edges',async()=>{
  const f=fixture();delete f.lock.packages[''].dependencies['@test/curve'];assert.ok(codes(await run(f)).includes('UNDECLARED_CRYPTO'));
 });

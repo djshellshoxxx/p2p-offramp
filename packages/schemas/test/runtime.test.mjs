@@ -105,3 +105,9 @@ test('runtime response rejects a changing result discriminator in both branches'
   invalid(()=>parse({...command('status'),kind:'response',result}));assert.equal(reads,2);
  }
 });
+test('runtime parsers reject discriminators that change during their bounded snapshot',()=>{
+ const changing=(target,key,first,second)=>{let reads=0;return new Proxy(target,{getOwnPropertyDescriptor(object,property){const descriptor=Reflect.getOwnPropertyDescriptor(object,property);return property===key?{...descriptor,value:++reads===1?first:second}:descriptor;}});};
+ invalid(()=>api.parseRuntimeCommand(changing(command('lock'),'operation','lock','deleteTermsReview')));
+ invalid(()=>api.parseRuntimeMessage(changing({version:1,kind:'locked',generation:0},'kind','locked','closed')));
+ invalid(()=>api.parseRuntimeMessage(changing({...command('status'),kind:'response',result:{ok:true,value:{state:'locked',handle:null}}},'kind','response','closed')));
+});

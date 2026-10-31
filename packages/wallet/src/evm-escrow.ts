@@ -14,7 +14,7 @@
  */
 import type { CoreErrorCode } from '../../domain/index.ts';
 import { parseChainObservation, type ChainObservation, type TradeBinding } from '../../schemas/index.ts';
-import { addressWord, bytes32Word, evmTermsHash, keccak256, tradeTermsStructHash, uintWord, type EvmDomainInput, type EvmTermsInput } from './evm-terms.ts';
+import { addressWord, bytes32Word, evmTermsHash, keccak256, snapshotEvmDomain, snapshotEvmTerms, tradeTermsStructHash, uintWord, type EvmDomainInput, type EvmTermsInput } from './evm-terms.ts';
 
 export class EvmEscrowError extends Error {
   readonly code: Extract<CoreErrorCode, 'INVALID_INPUT' | 'INTEGRITY_FAILURE'>;
@@ -88,8 +88,13 @@ function encodeTuple(terms: EvmTermsInput): Uint8Array {
 function validate(domain: EvmDomainInput, terms: EvmTermsInput): string {
   try { tradeTermsStructHash(terms); return evmTermsHash(domain, terms); } catch { return bad(); }
 }
+function validatedSnapshot(domain: EvmDomainInput, terms: EvmTermsInput) {
+  try {
+    const stableDomain = snapshotEvmDomain(domain), stableTerms = snapshotEvmTerms(terms);
+    return Object.freeze({ domain: stableDomain, terms: stableTerms, tradeId: validate(stableDomain, stableTerms) });
+  } catch { return bad(); }
+}
 function tupleCall(name: 'fundNative' | 'fundToken' | 'tradeIdOf', domain: EvmDomainInput, terms: EvmTermsInput): string {
-  validate(domain, terms);
   if (terms.buyer === domain.verifyingContract || terms.seller === domain.verifyingContract) bad();
   return `0x${selectorOf(FUNCTION_SIGNATURES[name])}${hexOf(concat([uintWord(32n, U256), encodeTuple(terms)]))}`;
 }
@@ -102,20 +107,20 @@ const address = (input: unknown, allowZero = false): Uint8Array => {
 
 /** `fundNative(terms)`: the seller sends exactly `amountBaseUnits` as value. Returns the expected tradeId. */
 export function buildFundNative(domain: EvmDomainInput, terms: EvmTermsInput): FundCall {
-  const tradeId = validate(domain, terms);
-  if (terms.assetKind !== 'native') bad();
-  return Object.freeze({ to: domain.verifyingContract, data: tupleCall('fundNative', domain, terms), value: terms.amountBaseUnits, tradeId });
+  const stable = validatedSnapshot(domain, terms);
+  if (stable.terms.assetKind !== 'native') bad();
+  return Object.freeze({ to: stable.domain.verifyingContract, data: tupleCall('fundNative', stable.domain, stable.terms), value: stable.terms.amountBaseUnits, tradeId: stable.tradeId });
 }
 /** `fundToken(terms)`: requires a prior ERC-20 allowance of `approveAmountFor(terms)` from the seller to the escrow. */
 export function buildFundToken(domain: EvmDomainInput, terms: EvmTermsInput): FundCall {
-  const tradeId = validate(domain, terms);
-  if (terms.assetKind !== 'erc20') bad();
-  return Object.freeze({ to: domain.verifyingContract, data: tupleCall('fundToken', domain, terms), value: '0', tradeId });
+  const stable = validatedSnapshot(domain, terms);
+  if (stable.terms.assetKind !== 'erc20') bad();
+  return Object.freeze({ to: stable.domain.verifyingContract, data: tupleCall('fundToken', stable.domain, stable.terms), value: '0', tradeId: stable.tradeId });
 }
 /** On-chain `tradeIdOf(terms)` view call, for cross-checking the off-chain termsHash against a live deployment. */
 export function buildTradeIdOf(domain: EvmDomainInput, terms: EvmTermsInput): EscrowCall {
-  validate(domain, terms);
-  return Object.freeze({ to: domain.verifyingContract, data: tupleCall('tradeIdOf', domain, terms), value: '0' });
+  const stable = validatedSnapshot(domain, terms);
+  return Object.freeze({ to: stable.domain.verifyingContract, data: tupleCall('tradeIdOf', stable.domain, stable.terms), value: '0' });
 }
 function tradeCall(name: 'release' | 'refund' | 'getTrade', escrow: string, tradeId: string): EscrowCall {
   address(escrow);

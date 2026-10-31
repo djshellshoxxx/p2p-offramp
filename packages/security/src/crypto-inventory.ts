@@ -9,7 +9,10 @@ export interface CryptoCapability { readonly capability: string; readonly state:
 export interface PublicEvidenceFile { readonly path: string; readonly bytes: Uint8Array; }
 export const INVENTORY_LIMITS = Object.freeze({ dependencies: 64, capabilities: 64, implementations: 256, lockPackages: 512, files: 256, fileBytes: 1024 * 1024, totalFileBytes: 16 * 1024 * 1024, profileBytes: 32768 });
 type Data = Record<string, unknown>;
-class Invalid extends Error { readonly code: CryptoFindingCode; constructor(code: CryptoFindingCode = 'UNSUPPORTED_RUNTIME') { super('Invalid cryptographic inventory metadata.'); this.code = code; } }
+const invalidCodes = new WeakMap<object, CryptoFindingCode>();
+class Invalid extends Error { constructor(code: CryptoFindingCode = 'UNSUPPORTED_RUNTIME') { super('Invalid cryptographic inventory metadata.'); invalidCodes.set(this, code); } }
+/** Foreign reflection/provider rejections may themselves be hostile objects. */
+const invalidCode = (error: unknown): CryptoFindingCode | undefined => typeof error === 'object' && error !== null ? invalidCodes.get(error) : undefined;
 const reject = (code?: CryptoFindingCode): never => { throw new Invalid(code); };
 function object(value: unknown, allowed?: readonly string[], required: readonly string[] = allowed ?? []): Data {
   if (typeof value !== 'object' || value === null || Array.isArray(value) || value instanceof Uint8Array) return reject();
@@ -149,7 +152,7 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
         if (runtime === 'npm' && !sri(integrity)) return reject('INTEGRITY_MISMATCH');
         if (runtime === 'browser-built-in') { if (!integrity.startsWith('browser-profile:')) return reject('INTEGRITY_MISMATCH'); path(integrity.slice('browser-profile:'.length)); }
         dependencies.set(name, { id: name, capability: id(raw.capability), version: text(raw.version, 128), integrity: text(raw.integrity, 256), license: text(raw.license, 256, true), runtime: text(raw.runtime), review, vectors, index });
-      } catch (error) { finding(error instanceof Invalid ? error.code : 'UNSUPPORTED_RUNTIME', at, stateFor(entry)); }
+      } catch (error) { finding(invalidCode(error) ?? 'UNSUPPORTED_RUNTIME', at, stateFor(entry)); }
     }
     const capabilities: Capability[] = []; const capabilityNames = new Set<string>(); let implementationCount = 0;
     for (const [index, entry] of list(enabledCapabilities, INVENTORY_LIMITS.capabilities).entries()) {
@@ -182,7 +185,7 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
         for (const [index, vector] of dependency.vectors.entries()) {
           const vectorAt = `${location}/vectors/${index}`;
           try { const name = path(vector.path); url(vector.provenanceUrl); if (typeof vector.sha256 !== 'string' || !/^[0-9a-f]{64}$/.test(vector.sha256)) return reject('FIXTURE_HASH_MISMATCH'); const bytes = files.get(name); if (!bytes?.length) finding('MISSING_VECTOR', vectorAt, state); else if (await sha256(bytes) !== vector.sha256) finding('FIXTURE_HASH_MISMATCH', vectorAt, state); }
-          catch (error) { finding(error instanceof Invalid ? error.code : 'FIXTURE_HASH_MISMATCH', vectorAt, state); }
+          catch (error) { finding(invalidCode(error) ?? 'FIXTURE_HASH_MISMATCH', vectorAt, state); }
         }
         if (dependency.runtime === 'npm') {
           if (!implementation.packageName) { finding('UNDECLARED_CRYPTO', location, state); continue; }
@@ -230,7 +233,7 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
       }
       for (const name of declared.keys()) if (!visitedNames.has(name)) finding('UNDECLARED_CRYPTO', `capabilities/${capability.index}/graph`, state);
     }
-  } catch (error) { finding(error instanceof Invalid ? error.code : 'UNSUPPORTED_RUNTIME', 'input'); }
+  } catch (error) { finding(invalidCode(error) ?? 'UNSUPPORTED_RUNTIME', 'input'); }
   findings.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : a.code < b.code ? -1 : a.code > b.code ? 1 : a.disposition < b.disposition ? -1 : a.disposition > b.disposition ? 1 : 0);
   return Object.freeze({ findings: Object.freeze(findings), releaseEligible: hasRelease && !findings.some(entry => entry.disposition === 'blocking') });
 }

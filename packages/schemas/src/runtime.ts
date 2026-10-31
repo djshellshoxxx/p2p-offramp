@@ -130,6 +130,7 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' ? ['profileId'] :
     op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
+  if (raw.operation !== op) return fail();
   if (op === 'init') return Object.freeze({ ...base, operation: op, config: parseRuntimeConfig(raw.config) });
   if (op === 'unlock') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), passphrase: passphrase(raw.passphrase) });
   if (op === 'create') return Object.freeze({ ...base, operation: op, passphrase: passphrase(raw.passphrase) });
@@ -212,12 +213,12 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
   const kind = own(input, 'kind');
   if (kind === 'locked' || kind === 'closed') {
     const raw = exact(input, kind === 'locked' ? ['version', 'kind', 'generation'] : ['version', 'kind', 'generation', 'code']);
-    if (raw.version !== 1) return fail();
+    if (raw.version !== 1 || raw.kind !== kind) return fail();
     const generation = sequence(raw.generation);
     return kind === 'locked' ? Object.freeze({ version: 1, kind, generation }) : Object.freeze({ version: 1, kind, generation, code: code(raw.code) });
   }
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', 'kind', 'result']);
-  if (kind !== 'response') return fail();
+  if (kind !== 'response' || raw.kind !== kind) return fail();
   const base = { ...header(raw), kind: 'response' as const, operation: operation(raw.operation) };
   const ok = own(raw.result, 'ok');
   if (ok === false) {
