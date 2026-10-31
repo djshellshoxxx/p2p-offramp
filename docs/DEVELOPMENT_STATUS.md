@@ -1,5 +1,8 @@
 # Development status and continuation contract
 
+Current combined-source status and audit: [consolidation report](execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
+
+
 Updated: 2026-10-30 (America/Los_Angeles). The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete. Current continuation scope and verification are tracked in [delivery coordination](handoffs/DELIVERY-2026-10-30.md); earlier implementation history remains in `handoffs/SESSION_STATUS.md` and `HANDOFF-2026-10-24-CLIENT-SHELL.md`.
 
 Latest continuation: [autonomous execution status](execution/EXECUTION-STATUS.md) and

@@ -1,0 +1,144 @@
+{
+  "integrationBranch": "integration/all-compatible-work",
+  "localBaseline": "8ff3d2872e36e788c5bb54430366088274a83110",
+  "heads": [
+    {
+      "ref": "origin/claude/adoring-wozniak-850ue6",
+      "sha": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/docs-screenshots",
+      "sha": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/p2p-offramp-integration-aan57u",
+      "sha": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/post-merge-followups",
+      "sha": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/recovery-consolidation",
+      "sha": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/sweet-noether-arf6ne",
+      "sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/sweet-shannon-grykla",
+      "sha": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/claude/trade-review-integration",
+      "sha": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/docs/lean-release-handoff-2026-10-24",
+      "sha": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/docs/security-spec-expansion-20261021",
+      "sha": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/docs/spec-readiness-and-foundations",
+      "sha": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/feat/custodial-ledger-foundation",
+      "sha": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "included": false,
+      "reason": "Preserved incompatible custodial implementation; normative client-only noncustodial product excludes it."
+    },
+    {
+      "ref": "origin/main",
+      "sha": "c8547859f603f04d3df92e68925b99162594c39d",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/noncustodial-reconstruction-2026-10-24",
+      "sha": "bc996aac828ce63856193c9114edfef480153325",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-client-shell-2026-10-24",
+      "sha": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-consolidated-20261030",
+      "sha": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-exchange-close-20261030",
+      "sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-exchange-test-repair-20261030",
+      "sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-gate-reconciliation-20261030",
+      "sha": "e762e649600493221e3bd10f0c3525858722bc94",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-independent-branch-review-20261030",
+      "sha": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-pr14-finish-handoff-20261030",
+      "sha": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-relay-lifetime-20261030",
+      "sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "included": true,
+      "reason": null
+    },
+    {
+      "ref": "origin/work/p2p-validation-20261030",
+      "sha": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "included": true,
+      "reason": null
+    }
+  ]
+}

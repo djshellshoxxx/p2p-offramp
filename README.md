@@ -1,5 +1,8 @@
 # P2P Off-ramp
 
+Current combined-source status and audit: [consolidation report](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
+
+
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
 
 A noncustodial peer-to-peer off-ramp under active development. The intended core is a static
