@@ -163,11 +163,15 @@ export function createDurableTradeChat(options: DurableTradeChatOptions): CoreRe
       }
       return { ...stored, messages };
     }
+    function existingMessage(messages: readonly HistoryMessage[], message: TextMessageV1): HistoryMessage | undefined {
+      const duplicate = messages.find(entry => entry.message.sender === message.sender && entry.message.messageId === message.messageId);
+      if (duplicate && JSON.stringify(duplicate.message) !== JSON.stringify(message)) return stop('CONFLICT');
+      return duplicate;
+    }
     async function persist(job: Job, key: Uint8Array, authenticated: Authenticated): Promise<HistoryReceipt> {
       const stored = await history(job, key); guard(job);
-      const duplicate = stored.messages.find(entry => entry.message.sender === authenticated.message.sender && entry.message.messageId === authenticated.message.messageId);
+      const duplicate = existingMessage(stored.messages, authenticated.message);
       if (duplicate) {
-        if (JSON.stringify(duplicate.message) !== JSON.stringify(authenticated.message)) return stop('CONFLICT');
         return Object.freeze({ recordId: duplicate.recordId, receivedSequence: duplicate.receivedSequence, duplicate: true });
       }
       if (stored.records.length >= maxMessages) return stop('LIMIT_EXCEEDED');
@@ -197,6 +201,11 @@ export function createDurableTradeChat(options: DurableTradeChatOptions): CoreRe
         return run(secret, signal, async (job, key) => {
           const encoded = messageBytes(message); job.buffers.add(encoded);
           try {
+            // Re-authenticate durable history before expensive seal/wrap generation. An explicit duplicate retry
+            // still needs both delivery wraps; only known-impossible new messages and conflicts stop here.
+            const preflight = await history(job, key); guard(job);
+            if (!existingMessage(preflight.messages, message) && (preflight.records.length >= maxMessages ||
+                preflight.records.reduce((sum, record) => sum + record.bytes, 0) >= maxBytes)) return stop('LIMIT_EXCEEDED');
             const sent = take(await native.send(new TextDecoder().decode(encoded), key, job.controller.signal)); guard(job);
             const authenticated = await authenticate(job, sent.selfWrap, key);
             const receipt = await persist(job, key, authenticated); guard(job);

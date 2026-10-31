@@ -68,9 +68,18 @@ export function createDiagnostics(options: { readonly storage: DiagnosticStorage
   const previews = new WeakMap<object, { readonly epoch: number; readonly snapshot: DiagnosticCollection; readonly indexes: readonly number[]; readonly bytes: Uint8Array }>();
   function guarded<T>(work: () => T): DiagnosticResult<T> {
     try { return success(work()); } catch (error) {
-      const code = refusal(error); if (code) return failure(code);
+      const code = refusal(error);
+      if (code === 'RELEASE_UNAVAILABLE') {
+        try { clearRing(); } catch { return failure('STORAGE_UNAVAILABLE'); }
+      }
+      if (code) return failure(code);
       return failure('REDACTION_FAILED');
     }
+  }
+  /** Invalidate all prior selections even when local removal fails; never claim that failed erase succeeded. */
+  function clearRing(): void {
+    epoch++;
+    try { storage.clear(); } catch { return stop('STORAGE_UNAVAILABLE'); }
   }
   function context() {
     const verified = revalidateRelease(release);
@@ -115,9 +124,10 @@ export function createDiagnostics(options: { readonly storage: DiagnosticStorage
     return { events, warnings: [...warnings], serialized };
   }
   function checkedSnapshot(snapshot: DiagnosticCollection): DiagnosticCollection {
+    const ctx = context();
     const saved = snapshots.get(snapshot);
     if (!saved || saved.epoch !== epoch) return stop();
-    const current = read(context()); context();
+    const current = read(ctx); context();
     if (saved.epoch !== epoch || current.serialized !== saved.serialized) return stop();
     return snapshot;
   }
@@ -128,23 +138,24 @@ export function createDiagnostics(options: { readonly storage: DiagnosticStorage
         const timeBucket = new Date(Math.floor(ctx.now / 3600) * 3600_000).toISOString();
         ring.events.push(Object.freeze({ v: 1, timeBucket, releaseId: ctx.releaseId, ...input, storageSchema: schema }));
         while (ring.events.length > DIAGNOSTIC_LIMITS.events || encode({ v: 1, events: ring.events }).length > DIAGNOSTIC_LIMITS.bytes) ring.events.shift();
-        write(ring.events); epoch++;
+        context(); write(ring.events); epoch++; context();
       });
     },
     collectDiagnostics() {
       return guarded(() => {
-        let ctx: ReturnType<typeof context>;
-        try { ctx = context(); } catch (error) {
+        try {
+          const ctx = context(), ring = read(ctx); context();
+          const snapshot: DiagnosticCollection = Object.freeze({ configured: true, events: Object.freeze(ring.events), warnings: Object.freeze(ring.warnings) });
+          snapshots.set(snapshot, { epoch, serialized: ring.serialized }); return snapshot;
+        } catch (error) {
           if (refusal(error) === 'RELEASE_UNAVAILABLE') {
             // An unauthenticated/expired context cannot retain or present earlier release metadata.
             // This ring is disposable, never a recovery/audit record; no vault data is touched.
-            epoch++; try { storage.clear(); } catch { return stop('STORAGE_UNAVAILABLE'); }
+            clearRing();
             return Object.freeze({ configured: false, events: Object.freeze([]), warnings: Object.freeze([]) });
           }
           throw error;
         }
-        const ring = read(ctx), snapshot: DiagnosticCollection = Object.freeze({ configured: true, events: Object.freeze(ring.events), warnings: Object.freeze(ring.warnings) });
-        snapshots.set(snapshot, { epoch, serialized: ring.serialized }); return snapshot;
       });
     },
     previewExport(snapshot: DiagnosticCollection, selection: readonly number[]) {
@@ -162,6 +173,7 @@ export function createDiagnostics(options: { readonly storage: DiagnosticStorage
     },
     confirmExport(preview: DiagnosticPreview) {
       return guarded(() => {
+        context();
         const saved = previews.get(preview);
         if (!saved || saved.epoch !== epoch) return stop();
         checkedSnapshot(saved.snapshot);
@@ -169,7 +181,7 @@ export function createDiagnostics(options: { readonly storage: DiagnosticStorage
         return new Uint8Array(saved.bytes);
       });
     },
-    clearDiagnostics() { return guarded(() => { epoch++; try { storage.clear(); } catch { return stop('STORAGE_UNAVAILABLE'); } }); },
+    clearDiagnostics() { return guarded(() => { clearRing(); }); },
   });
   return service;
 }

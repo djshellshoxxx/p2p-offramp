@@ -96,3 +96,46 @@ test('public enum arrays cannot be enlarged to admit private/free-text diagnosti
   }
   assert.equal(s.raw,null);
 });
+test('every operation purges an expired release ring and invalidates prior export leases',async()=>{
+  for(const operation of ['record','collect','preview','confirm']){
+    const s=await setup();s.service.record(input);const snapshot=s.service.collectDiagnostics().value,preview=s.service.previewExport(snapshot,[0]).value;
+    assert.ok(s.raw.length>0);s.setTime(2_592_000);
+    const result=operation==='record'?s.service.record(input):operation==='collect'?s.service.collectDiagnostics():operation==='preview'?s.service.previewExport(snapshot,[0]):s.service.confirmExport(preview);
+    if(operation==='collect'){assert.equal(result.ok,true);assert.equal(result.value.configured,false);assert.deepEqual(result.value.events,[]);}
+    else assert.equal(result.error.code,'RELEASE_UNAVAILABLE');
+    assert.equal(s.raw,null,`${operation} must purge the expired ring`);
+    assert.equal(s.service.confirmExport(preview).ok,false);
+  }
+});
+test('revoked context purges on record; failed purge reports storage error and consumes old export leases',async()=>{
+  let current=true,raw=null,clearFails=true,clears=0;
+  const f=fixture(),proof=await verifyRelease(f.bytes,f.envelope,[f.key],0,{...f.options,isCurrent:()=>current});assert.equal(proof.ok,true);
+  const service=api.createDiagnostics({release:proof.value,storageSchema:1,nowSeconds:()=>1500,storage:{read:()=>raw,write:value=>{raw=value;},clear:()=>{clears++;if(clearFails)throw new Error('SECRET purge failure');raw=null;}}});
+  service.record(input);const snapshot=service.collectDiagnostics().value,preview=service.previewExport(snapshot,[0]).value;
+  current=false;
+  assert.deepEqual(service.record(input),{ok:false,error:{code:'STORAGE_UNAVAILABLE'}});assert.equal(clears,1);assert.ok(raw.length>0,'failed removal never claims successful erase');
+  assert.equal(service.confirmExport(preview).ok,false);
+  clearFails=false;assert.equal(service.clearDiagnostics().ok,true);assert.equal(raw,null);
+  assert.equal(service.confirmExport(preview).ok,false);
+});
+test('release revocation during local access purges before an operation returns any usable result',async()=>{
+  for(const operation of ['record','collect','preview','confirm']){
+    let current=true,armed=false,raw=null;
+    const f=fixture(),proof=await verifyRelease(f.bytes,f.envelope,[f.key],0,{...f.options,isCurrent:()=>current});assert.equal(proof.ok,true);
+    const service=api.createDiagnostics({release:proof.value,storageSchema:1,nowSeconds:()=>1500,storage:{read:()=>{if(armed)current=false;return raw;},write:value=>{raw=value;},clear:()=>{raw=null;}}});
+    service.record(input);const snapshot=service.collectDiagnostics().value,preview=service.previewExport(snapshot,[0]).value;
+    armed=true;
+    const result=operation==='record'?service.record(input):operation==='collect'?service.collectDiagnostics():operation==='preview'?service.previewExport(snapshot,[0]):service.confirmExport(preview);
+    if(operation==='collect'){assert.equal(result.ok,true);assert.equal(result.value.configured,false);}else assert.equal(result.error.code,'RELEASE_UNAVAILABLE');
+    assert.equal(raw,null,`${operation} must not retain diagnostics after a reentrant release revocation`);
+  }
+});
+test('a failed explicit erase invalidates live preview leases without claiming stored bytes were erased',async()=>{
+  let raw=null,clearFails=true;
+  const f=fixture(),proof=await verifyRelease(f.bytes,f.envelope,[f.key],0,f.options);assert.equal(proof.ok,true);
+  const service=api.createDiagnostics({release:proof.value,storageSchema:1,nowSeconds:()=>1500,storage:{read:()=>raw,write:value=>{raw=value;},clear:()=>{if(clearFails)throw new Error('SECRET');raw=null;}}});
+  service.record(input);const snapshot=service.collectDiagnostics().value,preview=service.previewExport(snapshot,[0]).value;
+  assert.deepEqual(service.clearDiagnostics(),{ok:false,error:{code:'STORAGE_UNAVAILABLE'}});assert.ok(raw.length>0);
+  assert.equal(service.confirmExport(preview).error.code,'REDACTION_FAILED');
+  clearFails=false;assert.equal(service.clearDiagnostics().ok,true);assert.equal(raw,null);
+});

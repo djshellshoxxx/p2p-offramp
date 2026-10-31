@@ -21,6 +21,14 @@ decoding precede native message work. Markup is data, never HTML. Terms and
 receipt-status body profiles, sequence/expiry wire fields and future versions
 remain unsupported; this implementation does not invent their contracts.
 
+Generic envelope validation does not promise that every payload fits every native
+messaging profile. The NIP-17 rumor JSON has a separate 40,960-byte cap, including
+the envelope serialized again as its content. For example, 11,000 quotation marks
+fit the generic body/envelope limits but JSON escaping exceeds that rumor cap.
+`send` returns `LIMIT_EXCEEDED` before conversation-key derivation, signatures,
+ephemeral wrapping keys or history writes. No truncation or alternate encryption
+format is used; the protocol-specific limit takes precedence.
+
 `createDurableTradeChat` requires a trusted vault/session and configured native
 messaging provider, trade binding, two participants and self identity. Its API is
 `send(bytes, secret, signal?)`, `receive(wrap, secret, signal?)`, `list(secret,
@@ -58,6 +66,12 @@ order is separate from sender time. Defaults are 64 messages per conversation,
 configurable up to 256, and at most 2 MiB of matching record payloads. Capacity
 refuses growth instead of evicting replay memory. No deletion/retention policy is
 invented. Full history and duplicate reads remain available at capacity.
+Outbound sends re-authenticate history and reject a conflicting ID, a full message
+count or an exactly consumed byte budget before generating new cryptographic
+wraps. Explicit identical-message retry still returns both delivery wraps. The
+exact encrypted-proof byte limit, live session and append CAS are checked again
+after cryptography; the early check is not a write reservation or a ciphertext
+size estimate.
 
 Reads authenticate the live persisted vault revision. Appends use its exact CAS
 revision and a pre-write guard. Across tabs only a winning CAS adds a message;

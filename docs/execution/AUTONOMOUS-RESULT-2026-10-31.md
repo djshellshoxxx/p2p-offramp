@@ -11,10 +11,10 @@ verification/publication results are recorded below and in the final PR metadata
 | Task | Behavior | Focused/native evidence | Reviewer |
 | --- | --- | --- | --- |
 | T1 | Signed canonical release locator, explicit CIDv1 profile, archive-byte digest, live manifest proof | 24 locator + 59 existing G15 tests; document 25 + Worker 25; existing browser 66 + 66 | review_registry: 83/83 |
-| T2 | Exact text envelope, authenticated G02 durable chat, sender/message-ID dedup/conflict, source-preserving recovery | 14 tests; real IndexedDB two-tab/reload/fresh-key browser proof | inventory_tools: 14/14 and allocation mutant |
+| T2 | Exact text envelope, authenticated G02 durable chat, sender/message-ID dedup/conflict, source-preserving recovery | 17 tests; real IndexedDB two-tab/reload/fresh-key browser proof | inventory_tools: 16 capacity tests + 1 protocol-limit qualification; allocation/capacity probes |
 | T3 | Bundled registry, exact bounded negotiation, once-per-generation initialization and revocable contexts | 14 tests, strict types | review_registry: 14/14 |
-| T4 | Canonical native finalized payment guidance with code/genesis/terms/anchor checks and monotonic freshness | 12 tests, 6 pinned native-chain checks; 97 adapter reads and zero adapter send/sign calls | extension_lifecycle: 12/12 |
-| T5 | Allowlisted bounded local diagnostics, exact selected preview/export, locked clear | 10 model tests, native Settings/proof browser journey at 320/768/1440 | native_preflight: 10/10 plus mutation/storage/quota probes |
+| T4 | Canonical native finalized payment guidance with code/genesis/terms/anchor checks and monotonic freshness | 14 tests, 6 pinned native-chain checks; 115 adapter reads and zero adapter send/sign calls | extension_lifecycle: 14/14 |
+| T5 | Allowlisted bounded local diagnostics, exact selected preview/export, locked clear | 14 model tests, native Settings/proof browser journey at 320/768/1440 | native_preflight: 14/14 plus mutation/storage/quota/retention probes |
 | T6 | Strict local-v1 acceptance evidence/candidate evaluator and bounded report CLI | 21 tests including actual CLI | inventory_release: 21/21 |
 | T7 | Offline bounded journal-reference inspection/export | 64-record revision-pinned pages; real encrypted Worker, reload, lock/profile and exact selected export/stale-write browser proof at 320/768/1440 | inventory_core: 62/62 related backend tests; native_preflight: separate frontend/export review |
 | T8 | Current incomplete-work inventory, prompt, ownership and superseded continuation entrypoints | Source/spec comparison; full spec/link audit | root / integration review |
@@ -43,6 +43,40 @@ between preview and download. The browser proof now confirms refusal and no new
 download after a separate encrypted write. This is additional negative evidence,
 not a claim of a reproduced frontend defect.
 
+Hosted review on the initial published `9fdefd6` then reproduced two narrower
+issues. Expired release-context recording left a diagnostic ring that collection
+would discard; cleanup now applies consistently and failed erasure revokes old
+preview leases without claiming success. An independent genuine-proof probe
+observes the old 227-byte ring becoming zero. A full chat history also performed
+unnecessary signing before refusal; early authenticated capacity/conflict checks
+now avoid new signatures/keys while identical retries still return both wraps.
+Fresh post-crypto history, exact byte caps and CAS remain authoritative. Final
+independent diagnostic 14/14 and chat 16/16 checks and native browsers pass.
+
+The reusable prompt now explicitly conditions future authority on the user's
+invocation; reading a stored file alone grants none. Recommendations to release
+physical read/crypto slots on logical cancellation were not applied: nonsettling
+trusted operations must retain their bounded slots until actual drain. Recovery
+information remains separate from payment guidance availability. The hosted
+[review ledger](HOSTED-REVIEW-PR20-2026-10-31.md) records all observed reports and
+their dispositions without dismissing issues or changing scanner settings.
+
+CodeRabbit's completed review also reproduced an important clock distinction:
+finalized funded state at time 1500 with expiry 2401 appeared to leave 901 seconds
+while the available latest block time was 2400. Funding proof remains pinned to
+the finalized anchor; an independently rechecked latest header now supplies the
+deadline clock and can only tighten the budget. Height/time regression,
+same-height disagreement and either anchor changing fail closed. Owner and
+independent tests pass 14/14; the six-check actual native fixture deliberately
+lags finality by over 900 seconds and verifies latest-clock 901/900 boundaries.
+
+A valid generic text envelope can exceed NIP-17's smaller escaped-rumor profile
+limit. That was already refused safely before sealing/signing/key generation or
+storage; a targeted regression and README now state the provider-specific bound
+without changing the generic 24,576-byte wire contract. A late parser-sharing
+style refactor was deferred because no defect was reproduced and it would expand
+security-sensitive scope. Minor continuation-link/article corrections are applied.
+
 Final reassessment admitted T9 because the canonical pool explicitly documented
 that permits checked endpoint ID but not its separately supplied URL. Optional
 broker capture destination checks now consume/refuse mismatches before I/O;
@@ -69,8 +103,9 @@ Release locators verify bytes and bindings, not gateway authenticity, extraction
 or installation. Key rotation, nonempty deployment-item wire contracts and
 archive parser profiles remain undefined. Chat transport/reconnect and default
 app chat/identity authority remain gated. G14 has no invented G16 policy mapping.
-Payment guidance reduces deadline risk; finalized timestamps may lag and fiat
-is never proved. Diagnostics requires a live authenticated manifest context;
+Payment guidance keeps state evidence finalized and uses an independently
+anchored latest-block clock to tighten the budget; chain observations are not
+fiat proof or a guarantee of timely inclusion. Diagnostics requires a live authenticated manifest context;
 the default unsigned app refuses collection. Acceptance compares supplied
 evidence identities; imported names cannot authenticate review, omitted trusted
 review policy stays blocked, and every report denies promotion/runtime authority.
@@ -84,7 +119,7 @@ this pass independently reviews its new slices and integration.
 ## Combined verification and source delivery
 
 Baseline: 908 Node tests, zero failures/skips/cancellations. Final frozen-source
-suite: **1,019 pass, zero failures/skips/cancellations**, using Node 24.19.0 and
+suite: **1,028 pass, zero failures/skips/cancellations**, using Node 24.19.0 and
 the pinned Foundry tools on PATH so native calldata parity is executed.
 
 All four strict TypeScript configurations, source boundaries, build policy,

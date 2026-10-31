@@ -22,7 +22,8 @@ async function fixture(overrides = {}) {
   const terms = { ...scenario.sets.native.terms, acceptBeforeSeconds: '2000', escrowExpirySeconds: '2401' };
   const domain = { chainId: network.chainIdentity, verifyingContract: network.deployments[0].address };
   const binding = { chain: 'evm', networkId: terms.networkId, deploymentId: terms.deploymentId, tradeId: evmTermsHash(domain, terms) };
-  const state = { clock: 50, timestamp: 1500, phase: 'funded', readCount: 0, headers: 0, code: CODE, stored: { ...terms }, ...overrides };
+  const state = { clock: 50, timestamp: 1500, latestTimestamp: null, latestHeight: 17, latestHash: OTHER,
+    phase: 'funded', readCount: 0, headers: 0, code: CODE, stored: { ...terms }, ...overrides };
   const calls = [];
   const encodedTrade = () => state.phase === 'absent' ? `0x${word(0).repeat(6)}` : `0x${[
     state.stored.seller, state.stored.escrowExpirySeconds, ['absent', 'funded', 'released', 'refunded'].indexOf(state.phase),
@@ -36,6 +37,9 @@ async function fixture(overrides = {}) {
       case 'eth_getBlockByNumber': {
         const tag = args.params[0];
         if (tag === '0x0') return { number: '0x0', hash: network.genesisHash, timestamp: '0x0' };
+        if (tag === 'latest' || tag === uint(state.latestHeight) && state.latestHeight !== 16) return {
+          number: uint(state.latestHeight), hash: state.latestHash, timestamp: uint(state.latestTimestamp ?? state.timestamp),
+        };
         if (tag !== 'finalized') state.headers++;
         return { number: '0x10', hash: ANCHOR, timestamp: uint(state.timestamp) };
       }
@@ -61,6 +65,32 @@ test('canonical finalized funded state yields read-only guidance; every call is 
   assert.ok(f.calls.every(call => allowed.has(call.method)));
   assert.ok(f.calls.filter(call => ['eth_call', 'eth_getCode'].includes(call.method)).every(call => call.params[1] === '0x10'));
   assert.ok(f.calls.length <= 12); assert.deepEqual(good(f.reader.view()), value);
+});
+
+test('lagging finalized state cannot overstate the latest chain-time payment buffer', async () => {
+  const f = await fixture({ timestamp: 100, latestTimestamp: 1501 });
+  const near = good(await f.reader.read());
+  assert.equal(near.reason, 'near-expiry'); assert.equal(near.decision, 'block'); assert.equal(near.remainingSeconds, '900');
+  assert.equal(near.checkedChainTime, '1501'); assert.equal(near.finalizedAnchor, ANCHOR);
+  assert.equal(near.chainTimeAnchor, OTHER);
+  f.state.latestTimestamp = 1500;
+  const far = good(await f.reader.read()); assert.equal(far.remainingSeconds, '901'); assert.equal(far.decision, 'allow-guidance');
+});
+
+test('latest chain clock must be at or beyond finalized height/time and both anchors must remain canonical', async () => {
+  for (const patch of [{ latestHeight: 15 }, { latestTimestamp: 1499 }, { latestHeight: 16, latestHash: OTHER }]) {
+    const f = await fixture(patch); refused(await f.reader.read(), 'INTEGRITY_FAILURE'); refused(f.reader.view(), 'UNAVAILABLE');
+  }
+  const same = await fixture({ latestHeight: 16, latestHash: ANCHOR }); assert.equal(good(await same.reader.read()).decision, 'allow-guidance');
+  for (const field of ['hash', 'timestamp', 'number']) {
+    const f = await fixture({ intercept: args => args.method === 'eth_getBlockByNumber' && args.params[0] === '0x11' ?
+      { number: field === 'number' ? '0x12' : '0x11', hash: field === 'hash' ? ANCHOR : OTHER, timestamp: field === 'timestamp' ? '0x5dd' : '0x5dc' } : undefined });
+    refused(await f.reader.read(), 'INTEGRITY_FAILURE'); refused(f.reader.view(), 'UNAVAILABLE');
+  }
+  for (const [answer, code] of [[null, 'UNAVAILABLE'], [{ number: '0x11', hash: OTHER, timestamp: '0x10000000000000000' }, 'INTEGRITY_FAILURE']]) {
+    const f = await fixture({ intercept: args => args.method === 'eth_getBlockByNumber' && args.params[0] === 'latest' ? answer : undefined });
+    refused(await f.reader.read(), code); refused(f.reader.view(), 'UNAVAILABLE');
+  }
 });
 
 test('900 seconds blocks; unfinalized, absent and settled trades never allow payment guidance', async () => {

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createDurableTradeChat, HISTORY_FORMAT, MAX_HISTORY_MESSAGES } from '../index.ts';
-import { createTradeChat, createUnsignedEvent, createSeal, createGiftWrap } from '../../nostr-crypto/index.ts';
+import { createDurableTradeChat, HISTORY_FORMAT, MAX_HISTORY_MESSAGES, MAX_TEXT_BYTES, MAX_MESSAGE_BYTES } from '../index.ts';
+import { createTradeChat, createUnsignedEvent, createSeal, createGiftWrap, MAX_RUMOR_JSON_BYTES } from '../../nostr-crypto/index.ts';
 import { EncryptedVaultService, EncryptedBackupService } from '../../storage/index.ts';
 import { encodeBase64url, decodeBase64url } from '../../schemas/index.ts';
 import { setup, envelope, provider, binding, NOW, PASS, ok, bad, deferred } from './support.mjs';
@@ -199,5 +199,74 @@ test('message/byte caps refuse growth without eviction while full history and re
     assert.equal(ok(await limited.list(s.bob.secretKey)).messages.length, 0);
     bad(createDurableTradeChat({ vault: s.vault, session: s.session, provider, binding, participants: s.participants,
       selfPublicKey: s.alice.publicKey, maxMessages: MAX_HISTORY_MESSAGES + 1 }), 'INVALID_INPUT');
+  } finally { s.dispose(); }
+});
+
+test('native-authenticated full count and exact used-byte budgets refuse new wraps before signing, while explicit duplicate retry keeps both wraps', async () => {
+  const s = await setup();
+  try {
+    let signatures = 0, generations = 0;
+    const measured = { ...provider, signSchnorr(...args) { signatures++; return provider.signSchnorr(...args); },
+      generate() { generations++; return provider.generate(); } };
+    const alice = s.make(s.alice, { provider: measured, maxMessages: 1 }), data = envelope(s.alice, s.bob);
+    ok(await alice.send(data, s.alice.secretKey));
+    const sourceBefore = JSON.stringify(await s.store.get(s.session.profileId)), initialSigns = signatures, initialGenerations = generations;
+    for (const messageId of ['23'.repeat(16), '34'.repeat(16)]) bad(await alice.send(envelope(s.alice, s.bob, { messageId }), s.alice.secretKey), 'LIMIT_EXCEEDED');
+    bad(await alice.send(envelope(s.alice, s.bob, { body: 'same ID with changed text' }), s.alice.secretKey), 'CONFLICT');
+    assert.equal(signatures, initialSigns, 'known-full history never creates Schnorr signatures for a new/refused message');
+    assert.equal(generations, initialGenerations, 'known-full history never creates ephemeral wrapping keys');
+    assert.equal(JSON.stringify(await s.store.get(s.session.profileId)), sourceBefore);
+    const retry = ok(await alice.send(data, s.alice.secretKey));
+    assert.equal(retry.duplicate, true); assert.ok(retry.recipientWrap.sig); assert.ok(retry.selfWrap.sig);
+    assert.equal(signatures, initialSigns + 4, 'an explicit same-message retry still generates its two authenticated delivery wraps');
+    assert.equal(JSON.stringify(await s.store.get(s.session.profileId)), sourceBefore, 'retry preserves original native proof and encrypted bytes');
+    const ownRecord = ok(await s.vault.list(s.session.sessionId, 'chat'))[0];
+    const usedBytes = decodeBase64url(ownRecord.payload, 1, 262144).length;
+    const exactByteBudget = s.make(s.alice, { provider: measured, maxMessages: 4, maxHistoryBytes: usedBytes });
+    const beforeByteRefusal = signatures;
+    bad(await exactByteBudget.send(envelope(s.alice, s.bob, { messageId: '45'.repeat(16) }), s.alice.secretKey), 'LIMIT_EXCEEDED');
+    assert.equal(signatures, beforeByteRefusal, 'an exactly consumed known byte budget cannot hold any new record');
+    assert.equal(JSON.stringify(await s.store.get(s.session.profileId)), sourceBefore);
+    const bob = s.make(s.bob); ok(await bob.receive(retry.recipientWrap, s.bob.secretKey));
+    assert.equal(ok(await bob.receive(retry.recipientWrap, s.bob.secretKey)).duplicate, true, 'retry output remains usable by the authenticated counterparty');
+  } finally { s.dispose(); }
+});
+
+test('a preflight capacity check never replaces the post-crypto freshness and CAS check', async () => {
+  const s = await setup(); let otherVault;
+  try {
+    const entered = deferred(), gate = deferred(); let once = false;
+    const paused = { ...provider, async signSchnorr(...args) { if (!once) { once = true; entered.resolve(); await gate.promise; } return provider.signSchnorr(...args); } };
+    const first = s.make(s.alice, { provider: paused, maxMessages: 1 });
+    otherVault = new EncryptedVaultService(s.store, crypto, { lifecycle: false });
+    const session = ok(await otherVault.unlock(s.session.profileId, PASS)), other = s.make(s.alice, { vault: otherVault, session, maxMessages: 1 });
+    const pending = first.send(envelope(s.alice, s.bob), s.alice.secretKey); await entered.promise;
+    ok(await other.send(envelope(s.alice, s.bob, { messageId: '23'.repeat(16) }), s.alice.secretKey));
+    const winner = JSON.stringify(await s.store.get(s.session.profileId)); gate.resolve();
+    bad(await pending); assert.equal(JSON.stringify(await s.store.get(s.session.profileId)), winner);
+    assert.equal(s.store.writes, 1); const view = ok(await other.list(s.alice.secretKey));
+    assert.equal(view.messages.length, 1); assert.equal(view.messages[0].message.messageId, '23'.repeat(16));
+  } finally { otherVault?.dispose(); s.dispose(); }
+});
+
+test('a valid generic envelope that exceeds the escaped NIP-17 rumor profile is refused before wrapping or persistence', async () => {
+  const s = await setup();
+  try {
+    const calls = { conversationKeys: 0, signatures: 0, ephemeralKeys: 0 };
+    const measured = { ...provider,
+      conversationKey(...args) { calls.conversationKeys++; return provider.conversationKey(...args); },
+      signSchnorr(...args) { calls.signatures++; return provider.signSchnorr(...args); },
+      generate() { calls.ephemeralKeys++; return provider.generate(); } };
+    const alice = s.make(s.alice, { provider: measured }), body = '"'.repeat(11_000), data = envelope(s.alice, s.bob, { body });
+    assert.ok(new TextEncoder().encode(body).length <= MAX_TEXT_BYTES);
+    assert.ok(data.length <= MAX_MESSAGE_BYTES, 'the generic application encoding is valid');
+    const rumor = createUnsignedEvent(s.alice.publicKey, { kind: 14, created_at: NOW,
+      tags: [['p', s.bob.publicKey], ['trade', binding.tradeId], ['conversation', alice.conversationId]], content: new TextDecoder().decode(data) });
+    assert.ok(new TextEncoder().encode(JSON.stringify(rumor)).length > MAX_RUMOR_JSON_BYTES, 'protocol JSON escaping adds overhead beyond the native profile');
+    const before = JSON.stringify([...s.store.rows]);
+    bad(await alice.send(data, s.alice.secretKey), 'LIMIT_EXCEEDED');
+    assert.deepEqual(calls, { conversationKeys: 0, signatures: 0, ephemeralKeys: 0 });
+    assert.equal(s.store.writes, 0); assert.equal(JSON.stringify([...s.store.rows]), before);
+    assert.equal(ok(await alice.list(s.alice.secretKey)).messages.length, 0, 'safe refusal leaves no history entry or occupied request slot');
   } finally { s.dispose(); }
 });

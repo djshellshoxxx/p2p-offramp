@@ -1,6 +1,6 @@
 # P2P-offramp: current incomplete features and remaining work
 
-**Historical checkpoint:** use the [current continuation contract](../execution/INCOMPLETE-WORK-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
+**Historical checkpoint:** use the [current continuation contract](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
 
 Read-only assessment, 2026-10-26. Exact local source **`267df7da83af8d6b5b317a4245b3a8feffc96ce9`**, tree `8a15859de8ebca9b744a968dd9b11341eeb3509e`, branch `work/p2p-restore-commit-reconciliation-test-2026-10-26`, clean at inspection. One existing separate-context reviewer, `/root/p2p_g16_fresh_review`, inspected P2P read-only; the coordinator verified major implementation paths and integrated this report. No files were modified by the reviewer and no tests, downloads, new implementations or remote operations were run for this assessment. Remote refs were not refreshed.
 

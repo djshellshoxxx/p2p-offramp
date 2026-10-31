@@ -66,6 +66,7 @@ try {
   await page.getByRole('button', { name: 'Download the previewed diagnostics', exact: true }).click();
   await page.getByRole('alert').filter({ hasText: 'authenticated release context is unavailable or expired' }).waitFor();
   assert.equal(await page.getByLabel('Exact export text (UTF-8 JSON)', { exact: true }).count(), 0);
+  assert.equal(await page.evaluate(() => localStorage.getItem('fixture-diagnostics')), null, 'revoked release context purges the disposable ring before an explicit clear');
   await page.getByRole('button', { name: 'Clear local diagnostics', exact: true }).click();
   assert.equal(await page.evaluate(() => localStorage.getItem('fixture-diagnostics')), null);
   for (const width of [320, 768, 1440]) { await page.setViewportSize({ width, height: 900 }); assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true); }

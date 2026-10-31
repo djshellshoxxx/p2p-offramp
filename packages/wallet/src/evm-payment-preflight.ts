@@ -3,6 +3,8 @@
  * adapter authenticates neither a registry signer nor an RPC operator. It checks
  * the selected registry identity against native responses and never sends/signs.
  * A successful result reduces payment-guidance risk, not fiat or spend authority.
+ * Escrow state/code stay finalized; a separately anchored latest header only
+ * tightens the expiry clock and cannot establish funded or settled state.
  */
 import { createCoreError, createOperationId } from '../../domain/index.ts';
 import { parseTradeBinding, type CoreErrorCode, type CoreResult, type DeploymentV1, type NetworkV1, type TradeBinding } from '../../schemas/index.ts';
@@ -14,6 +16,8 @@ export const NATIVE_PAYMENT_PREFLIGHT_LIMITS = Object.freeze({ freshnessMs: 30_0
 export interface NativePaymentPreflight {
   readonly evidence: 'native-rpc'; readonly economicPreparationAllowed: false;
   readonly binding: TradeBinding; readonly termsHash: string; readonly finalizedAnchor: string;
+  /** Latest native header used only to tighten expiry timing; it grants no escrow-state authority. */
+  readonly chainTimeAnchor: string;
   readonly checkedChainTime: string; readonly expiry: string; readonly remainingSeconds: string;
   readonly decision: 'allow-guidance' | 'block';
   readonly reason: 'ok' | 'unfunded' | 'stale' | 'mismatch' | 'near-expiry';
@@ -164,16 +168,22 @@ export function createEvmPaymentPreflight(options: EvmPaymentPreflightOptions): 
             if (typeof rawTrade !== 'string' || rawTrade.length !== 386) return stop('INTEGRITY_FAILURE');
             let trade;
             try { trade = decodeTrade(rawTrade); } catch { return stop('INTEGRITY_FAILURE'); }
+            // Finalized funding remains the state proof. A lagging finalized clock
+            // must never enlarge the payment window relative to the current chain.
+            const latest = block(await call('eth_getBlockByNumber', ['latest', false]));
+            if (BigInt(latest.number) < BigInt(finalized.number) || BigInt(latest.timestamp) < BigInt(finalized.timestamp) ||
+                latest.number === finalized.number && !sameBlock(latest, finalized)) return stop('INTEGRITY_FAILURE');
             if (!sameBlock(finalized, block(await call('eth_getBlockByNumber', [tag, false])))) return stop('INTEGRITY_FAILURE');
             if (quantity(await call('eth_chainId', [])) !== chainId) return stop('WRONG_CHAIN');
             const finalGenesis = block(await call('eth_getBlockByNumber', ['0x0', false]));
             if (!sameBlock(initialGenesis, finalGenesis)) return stop('WRONG_CHAIN');
-            const remaining = BigInt(terms.escrowExpirySeconds) - BigInt(finalized.timestamp);
+            if (!sameBlock(latest, block(await call('eth_getBlockByNumber', [hex(latest.number), false])))) return stop('INTEGRITY_FAILURE');
+            const remaining = BigInt(terms.escrowExpirySeconds) - BigInt(latest.timestamp);
             const reason: NativePaymentPreflight['reason'] = trade.state !== 'funded' ? 'unfunded' : !tradeMatchesTerms(trade, terms) ? 'mismatch' :
               stale() ? 'stale' : remaining <= BigInt(NATIVE_PAYMENT_PREFLIGHT_LIMITS.paymentBufferSeconds) ? 'near-expiry' : 'ok';
             guard();
             last = Object.freeze({ evidence: 'native-rpc', economicPreparationAllowed: false, binding, termsHash,
-              finalizedAnchor: finalized.hash, checkedChainTime: finalized.timestamp, expiry: terms.escrowExpirySeconds,
+              finalizedAnchor: finalized.hash, chainTimeAnchor: latest.hash, checkedChainTime: latest.timestamp, expiry: terms.escrowExpirySeconds,
               remainingSeconds: remaining.toString(), decision: reason === 'ok' ? 'allow-guidance' : 'block', reason });
             return { ok: true, value: last };
           } catch (error) { return failed(classify(error, 'UNAVAILABLE')); }

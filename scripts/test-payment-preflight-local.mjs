@@ -63,14 +63,9 @@ function readerFor(terms, selectedRegistry = registry) {
   const reader = good(createEvmPaymentPreflight({ registry: selectedRegistry, terms, binding, request, monotonicNow: () => monotonic }));
   readers.push(reader); return { reader, tradeId: binding.tradeId };
 }
-async function finalizedTime(target) {
+async function latestTime(target) {
   await rpc('evm_setNextBlockTimestamp', [Number(target)]); await mine();
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const observed = BigInt((await block('finalized')).timestamp);
-    if (observed >= target) { assert.equal(observed, target, 'exact native finalized timestamp'); return; }
-    await mine();
-  }
-  assert.fail('finality did not reach the target within bounded mining');
+  assert.equal(BigInt((await block('latest')).timestamp), target, 'exact native latest timestamp');
 }
 
 try {
@@ -104,11 +99,14 @@ try {
   assert.equal(good(await reader.read()).decision, 'allow-guidance');
   pass('native finalized funding matches canonical terms, registry runtime, chain and genesis');
 
-  await finalizedTime(BigInt(terms.escrowExpirySeconds) - 901n);
+  await latestTime(BigInt(terms.escrowExpirySeconds) - 901n);
+  const clockHead = await block('latest'), stateHead = await block('finalized');
+  assert.ok(BigInt(clockHead.timestamp) - BigInt(stateHead.timestamp) > 900n, 'actual native finalized clock lags by over the payment buffer');
   const far = good(await reader.read()); assert.equal(far.remainingSeconds, '901'); assert.equal(far.decision, 'allow-guidance');
-  await finalizedTime(BigInt(terms.escrowExpirySeconds) - 900n);
+  assert.equal(far.finalizedAnchor, stateHead.hash); assert.equal(far.chainTimeAnchor, clockHead.hash);
+  await latestTime(BigInt(terms.escrowExpirySeconds) - 900n);
   const near = good(await reader.read()); assert.equal(near.remainingSeconds, '900'); assert.equal(near.reason, 'near-expiry');
-  pass('actual finalized native time permits 901 seconds and refuses 900 seconds');
+  pass('latest native time permits 901 seconds and refuses 900 despite a finalized clock lag over 900 seconds');
 
   monotonic += 30_000; assert.equal(good(reader.view()).reason, 'stale'); reader.invalidate(); bad(reader.view(), 'UNAVAILABLE');
   monotonic += 1; assert.equal(good(await reader.read()).decision, 'block');
@@ -129,7 +127,7 @@ try {
   const refundNow = await time(), refundTerms = makeTerms('refund', refundNow + 3600n, refundNow);
   await send(accounts[0], buildFundNative(domain, refundTerms)); await mine(5);
   const refund = readerFor(refundTerms); assert.equal(good(await refund.reader.read()).decision, 'allow-guidance');
-  await finalizedTime(BigInt(refundTerms.escrowExpirySeconds));
+  await latestTime(BigInt(refundTerms.escrowExpirySeconds));
   assert.equal(good(await refund.reader.read()).reason, 'near-expiry');
   await send(accounts[2], buildRefund(escrow, refund.tradeId)); await mine(5);
   assert.equal(good(await refund.reader.read()).reason, 'unfunded');
@@ -138,7 +136,7 @@ try {
 
   assert.ok(methods.every(method => ['eth_chainId', 'eth_getBlockByNumber', 'eth_getCode', 'eth_call'].includes(method)));
   console.log(JSON.stringify({ fixture: 'canonical-native-payment-preflight', checks: checks.length, adapterReads: methods.length,
-    adapterSendOrSignCalls: 0, finalizedPolicy: true, nativeBoundary901And900: true, externalNetwork: false, tradingEnabled: false, releaseAcceptance: false }));
+    adapterSendOrSignCalls: 0, finalizedPolicy: true, latestClockWhileFinalizedLags: true, nativeBoundary901And900: true, externalNetwork: false, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   readers.forEach(reader => reader.dispose());
   if (anvil?.pid && anvil.exitCode === null && anvil.signalCode === null) {

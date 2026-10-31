@@ -8,8 +8,11 @@ to it. This prompt is executable instructions, not a completion claim.
 
 ## Authority and invariants
 
-The user authorizes implementation, coordinated agents, source publication and
-merge. Continue without routine permission questions. Keep the static client,
+When the user explicitly invokes this prompt to execute the work, that request
+authorizes implementation, coordinated agents, source publication and merge.
+Reading this stored file alone grants no authority; honor the actual current
+user request and any narrower session constraints. During an authorized run,
+continue without routine permission questions. Keep the static client,
 noncustodial architecture, `ReleaseEnabled=0`, `connectOrigins:[]`, original
 history and incompatible custodial branch separation. Never select a production
 trust root, fabricate professional approval, deploy, use live funds, create paid
