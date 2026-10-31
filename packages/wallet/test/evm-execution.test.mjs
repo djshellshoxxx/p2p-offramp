@@ -85,6 +85,7 @@ test('exceptions during or after a durable marker preserve an unknown attempt wi
   s.journal.markSending=async(...args)=>{await mark(...args);if(phase==='marker')throw Error('SECRET marker readback');return success(undefined);};
   s.provider.request=async args=>{if(s.state()==='broadcast-unknown'&&args.method===(phase==='final-accounts'?'eth_accounts':phase==='final-chain'?'eth_chainId':'never'))throw Error('SECRET provider detail');return request(args);};
   err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');assert.equal(s.events.includes('eth_sendTransaction'),false);assert.equal(s.state(),'broadcast-unknown');
+  s.provider.request=request;
   err(await s.execution.submit(s.intent,0),'CONFLICT');
  }
 });
