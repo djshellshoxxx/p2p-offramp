@@ -41,3 +41,9 @@ python packages/storage/test/fixtures/verify_vault_fixture.py
 
 See the [developer and operator guide](docs/OPERATOR.md) for build modes and the terms file format. Start with [development status](docs/DEVELOPMENT_STATUS.md), [roadmap](DEVELOPMENT_ROADMAP.md),
 [spec readiness inventory](docs/SPEC_READINESS.md) and [vault implementation plan](docs/superpowers/plans/2026-10-22-vault-foundation.md).
+
+Local continuation: the demo review UI can explicitly save up to eight original terms documents encrypted in an
+unlocked profile and revalidate them on load. Reload, cross-tab conflict, lock and fresh-key backup recovery are
+covered in emitted-app Chromium checks. Independent-library EIP-712 vectors also check native/ERC-20 terms and
+both parties' signatures outside the shipped app. See [delivery coordination](docs/handoffs/DELIVERY-2026-10-30.md).
+Trading remains disabled; these checks do not qualify a real-funds release.

@@ -1,9 +1,9 @@
-/** Partial G07 document composition root. Public commands never expose a provider, record payload or key. */
+/** Offline document composition root exposes bounded review bytes, never generic vault access, providers or keys. */
 import {
   MAX_RUNTIME_SEQUENCE, RUNTIME_DISPOSE_TIMEOUT_MS, RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
   parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
-  type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
+  type RuntimeReviews, type RuntimeReviewSaved, type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
 } from '../../../../packages/schemas/index.ts';
 
 export type RuntimeWorkerPort = Pick<Worker, 'postMessage' | 'addEventListener' | 'removeEventListener' | 'terminate'>;
@@ -161,7 +161,7 @@ export class AppRuntime {
     if (!pending) { if (message.requestId > this.#sequence) this.#close('PROTOCOL_ERROR'); return; }
     if (pending.command.operation !== message.operation || pending.command.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
-    if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore') {
+    if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' && message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
@@ -176,7 +176,13 @@ export class AppRuntime {
     this.#checkIdle();
     if (this.#closed || (this.#disposing && operation !== 'dispose')) return Promise.resolve(runtimeFailure('LOCKED'));
     if (signal?.aborted) return Promise.resolve(runtimeFailure('CANCELLED'));
-    if ((!internal && this.#pending.size > 0) || (internal && this.#pending.size >= 2)) return Promise.resolve(runtimeFailure('BUSY'));
+    if ((!internal && [...this.#pending.values()].some(pending => pending.command.operation !== 'activity')) ||
+        (internal && this.#pending.size >= 2)) return Promise.resolve(runtimeFailure('BUSY'));
+    // A pointerdown activity notification must not occupy the following click's command slot.
+    // Retire its local waiter; the ordered Worker notification may finish, and its late reply is ignored.
+    if (!internal) for (const [id, pending] of this.#pending) {
+      if (pending.command.operation === 'activity') this.#settle(id, runtimeFailure('CANCELLED'));
+    }
     if (this.#sequence >= MAX_RUNTIME_SEQUENCE) { this.#close('LIMIT_EXCEEDED'); return Promise.resolve(runtimeFailure('LIMIT_EXCEEDED')); }
     let command: RuntimeCommand;
     try { command = parseRuntimeCommand({ version: 1, requestId: this.#sequence + 1, generation: this.#generation, operation, ...fields }); }
@@ -212,6 +218,20 @@ export class AppRuntime {
     if (this.#closed || this.#disposing || this.#generation !== generation) return runtimeFailure('LOCKED');
     if (!('state' in result.value) || result.value.state !== 'unlocked') return runtimeFailure('PROTOCOL_ERROR');
     return this.isCurrent(result.value.handle) ? Object.freeze({ ok: true, value: result.value.handle }) : runtimeFailure('LOCKED');
+  }
+  async saveTermsReview(id: string, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeReviewSaved>> {
+    if (this.current.state !== 'unlocked') return runtimeFailure('LOCKED');
+    const handle = this.current.handle;
+    const result = await this.#request('saveTermsReview', {id, bytes}, signal);
+    if (result.ok && (!handle || !this.isCurrent(handle))) return runtimeFailure('LOCKED');
+    return !result.ok ? result : 'id' in result.value && result.value.id === id ? {ok:true,value:result.value} : runtimeFailure('PROTOCOL_ERROR');
+  }
+  async listTermsReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeReviews>> {
+    if (this.current.state !== 'unlocked') return runtimeFailure('LOCKED');
+    const handle = this.current.handle;
+    const result = await this.#request('listTermsReviews', {}, signal);
+    if (result.ok && (!handle || !this.isCurrent(handle))) return runtimeFailure('LOCKED');
+    return !result.ok ? result : 'entries' in result.value ? {ok:true,value:result.value} : runtimeFailure('PROTOCOL_ERROR');
   }
   async listProfiles(signal?: AbortSignal): Promise<RuntimeResult<RuntimeInventory>> {
     const generation = this.#generation;

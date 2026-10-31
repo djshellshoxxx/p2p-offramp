@@ -1,4 +1,4 @@
-/** Partial G07/MEM01 offline Worker boundary. No network, record mutation or signer operation exists. */
+/** Offline Worker boundary with bounded local saved-review storage; no network or signer operation exists. */
 import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
 import { MAX_BACKUP_BYTES, parseBackupBytes } from './backup.ts';
 
@@ -27,23 +27,31 @@ export interface RuntimeExport { readonly bytes: Uint8Array; readonly authentica
 export interface RuntimeInventory { readonly profileIds: readonly string[]; readonly truncated: boolean; }
 /** Restore creates a fresh-key locked profile; it never unlocks or returns record content. */
 export interface RuntimeRestore { readonly newProfileId: string; readonly records: number; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore;
-export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity';
-const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity'];
+export const MAX_SAVED_REVIEWS = 8;
+export const MAX_SAVED_REVIEW_BYTES = 65536;
+export interface RuntimeReviewEntry { readonly id: string; readonly bytes: Uint8Array; }
+export interface RuntimeReviews { readonly entries: readonly RuntimeReviewEntry[]; }
+export interface RuntimeReviewSaved { readonly id: string; }
+export type RuntimeValue = RuntimeReviews | RuntimeReviewSaved | RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore;
+export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'saveTermsReview' | 'listTermsReviews' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity';
+const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'saveTermsReview', 'listTermsReviews', 'lock', 'exportEncrypted', 'dispose', 'activity'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
   { readonly operation: 'unlock'; readonly profileId: string; readonly passphrase: string } |
   { readonly operation: 'create'; readonly passphrase: string } |
   { readonly operation: 'restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string } |
+  { readonly operation: 'saveTermsReview'; readonly id: string; readonly bytes: Uint8Array } |
   { readonly operation: 'exportEncrypted'; readonly profileId: string } |
-  { readonly operation: 'status' | 'listProfiles' | 'lock' | 'dispose' | 'activity' });
+  { readonly operation: 'status' | 'listProfiles' | 'listTermsReviews' | 'lock' | 'dispose' | 'activity' });
 export type RuntimeResponse = Header & { readonly kind: 'response'; readonly operation: RuntimeOperation } & (
   { readonly result: { readonly ok: false; readonly error: RuntimeError } } |
   { readonly operation: 'exportEncrypted'; readonly result: { readonly ok: true; readonly value: RuntimeExport } } |
   { readonly operation: 'listProfiles'; readonly result: { readonly ok: true; readonly value: RuntimeInventory } } |
+  { readonly operation: 'saveTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeReviewSaved } } |
+  { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeReviews } } |
   { readonly operation: 'restore'; readonly result: { readonly ok: true; readonly value: RuntimeRestore } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'listTermsReviews'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -108,8 +116,9 @@ export function parseRuntimeConfig(input: unknown): RuntimeConfig {
 export function parseRuntimeCommand(input: unknown): RuntimeCommand {
   const op = operation(own(input, 'operation'));
   const extra = op === 'init' ? ['config'] : op === 'unlock' ? ['profileId', 'passphrase'] : op === 'create' ? ['passphrase'] :
-    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' ? ['profileId'] : [];
+    op === 'saveTermsReview' ? ['id', 'bytes'] : op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' ? ['profileId'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
+  if (op === 'saveTermsReview') return Object.freeze({ ...base, operation: op, ...reviewEntry({id: raw.id, bytes: raw.bytes}) });
   if (op === 'init') return Object.freeze({ ...base, operation: op, config: parseRuntimeConfig(raw.config) });
   if (op === 'unlock') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), passphrase: passphrase(raw.passphrase) });
   if (op === 'create') return Object.freeze({ ...base, operation: op, passphrase: passphrase(raw.passphrase) });
@@ -128,6 +137,23 @@ export function parseRuntimeStatus(input: unknown, generation: number): RuntimeS
   try { const bytes = decodeBase64url(handle.id, 32, 32); bytes.fill(0); } catch { return fail(); }
   if (handle.purpose !== 'vault' || sequence(handle.generation) !== generation) return fail();
   return Object.freeze({ state: 'unlocked', handle: Object.freeze({ id: handle.id as string, generation, purpose: 'vault', profileId: profile(handle.profileId) }) });
+}
+function reviewEntry(input: unknown): RuntimeReviewEntry {
+  const raw = exact(input, ['id', 'bytes']);
+  const bytes = boundedBytes(raw.bytes, MAX_SAVED_REVIEW_BYTES);
+  if (!bytes.length) return fail();
+  return Object.freeze({id: profile(raw.id), bytes});
+}
+function reviews(input: unknown): RuntimeReviews {
+  const raw = exact(input, ['entries']);
+  const list = raw.entries;
+  if (!Array.isArray(list) || Object.getPrototypeOf(list) !== Array.prototype) return fail();
+  const length = own(list, 'length');
+  if (typeof length !== 'number' || length > MAX_SAVED_REVIEWS || Reflect.ownKeys(list).length !== length + 1) return fail();
+  const entries: RuntimeReviewEntry[] = [];
+  for (let i=0; i<length; i++) entries.push(reviewEntry(own(list, String(i))));
+  if (new Set(entries.map(entry => entry.id)).size !== entries.length) return fail();
+  return Object.freeze({entries: Object.freeze(entries)});
 }
 function inventory(input: unknown): RuntimeInventory {
   const raw = exact(input, ['profileIds', 'truncated']);
@@ -181,6 +207,8 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
     return Object.freeze({ ...base, result: runtimeFailure(value) });
   }
   const result = exact(raw.result, ['ok', 'value']); if (ok !== true) return fail();
+  if (base.operation === 'saveTermsReview') { const saved = exact(result.value, ['id']); return Object.freeze({...base, operation: base.operation, result: Object.freeze({ok: true, value: Object.freeze({id: profile(saved.id)})})}); }
+  if (base.operation === 'listTermsReviews') return Object.freeze({...base, operation: base.operation, result: Object.freeze({ok: true, value: reviews(result.value)})});
   if (base.operation === 'exportEncrypted') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: encryptedExport(result.value) }) });
   if (base.operation === 'listProfiles') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: inventory(result.value) }) });
   if (base.operation === 'restore') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: restored(result.value) }) });

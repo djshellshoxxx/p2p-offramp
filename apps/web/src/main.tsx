@@ -34,6 +34,10 @@ function Bootstrap() {
   const [starting, setStarting] = useState(true);
   const [startupError, setStartupError] = useState<string>();
   useEffect(() => {
+    trade.setPersistence(services);
+    return () => trade.setPersistence(null);
+  }, [trade, services]);
+  useEffect(() => {
     let ended = false;
     let owned: AppServices | null = null;
     const dispose = () => { ended = true; if (owned) void owned.dispose(); };

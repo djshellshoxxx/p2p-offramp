@@ -13,7 +13,7 @@ const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers 
 
 export interface AppProps {
   readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined;
-  /** Local terms review session; null when unavailable. Independent of the vault runtime. */
+  /** Local terms review session; encrypted save/load use its injected session-bound persistence port. */
   readonly trade?: TradeReviewController | null;
 }
 

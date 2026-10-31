@@ -84,3 +84,14 @@ test('runtime inventory and restore replies are strict, bounded and contain only
  const create={...command('create'),kind:'response',result:{ok:true,value:{state:'unlocked',handle:{id:'A'.repeat(43),generation:0,purpose:'vault',profileId:id(9)}}}};
  assert.deepEqual(parse(create),create);
 });
+
+test('review commands and replies use strict bounded copies and unique plain entries',()=>{
+ const id='1'.repeat(32),bytes=new Uint8Array([1]);
+ const parsed=api.parseRuntimeCommand(command('saveTermsReview',{id,bytes}));bytes[0]=9;assert.equal(parsed.bytes[0],1);
+ for(const fields of [{id,bytes:new Uint8Array()},{id,bytes:new Uint8Array(65537)},{id:'bad',bytes},{id,bytes:[],extra:1}])assert.throws(()=>api.parseRuntimeCommand(command('saveTermsReview',fields)));
+ let invoked=0;assert.throws(()=>api.parseRuntimeCommand(Object.defineProperty(command('saveTermsReview',{id}),'bytes',{get(){invoked++;return bytes;},enumerable:true})));assert.equal(invoked,0);
+ const reply=value=>({version:1,requestId:1,generation:0,kind:'response',operation:'listTermsReviews',result:{ok:true,value}});
+ assert.equal(api.parseRuntimeMessage(reply({entries:[{id,bytes}]})).result.value.entries.length,1);
+ for(const entries of [[{id,bytes},{id,bytes}],new Array(1),[{id,bytes,extra:1}],Array.from({length:9},(_,i)=>({id:String(i).repeat(32),bytes}))])assert.throws(()=>api.parseRuntimeMessage(reply({entries})));
+ const hostile=[];Object.defineProperty(hostile,'0',{get(){invoked++;return{id,bytes};},enumerable:true});assert.throws(()=>api.parseRuntimeMessage(reply({entries:hostile})));assert.equal(invoked,0);
+});

@@ -33,6 +33,17 @@ async function writeDoc(name, value) {
 function instrument() {
   const observed = { prompts: 0, networkCalls: 0 };
   window.__observed = observed;
+  window.__reviewReplyCodes = [];
+  const NativeWorker = window.Worker;
+  window.Worker = class extends NativeWorker {
+    constructor(...args) {
+      super(...args);
+      this.addEventListener('message', ({data}) => {
+        if (data?.operation === 'saveTermsReview' || data?.operation === 'listTermsReviews')
+          window.__reviewReplyCodes.push(data.result?.ok ? 'OK' : data.result?.error?.code);
+      });
+    }
+  };
   const prompt = async () => { observed.prompts++; throw new Error('FIXTURE_WALLET_DENIED'); };
   Object.defineProperty(window, 'ethereum', { value: { request: prompt, enable: prompt }, configurable: true });
   const originalFetch = window.fetch;
@@ -230,12 +241,99 @@ try {
   assert.equal(await sessionItems(), count);
   assert.equal(await page.getByRole('link', { name: 'Open review', exact: true }).count(), 0, 'no status link to a removed review');
 
+  // 11. Explicit encrypted persistence: real Worker/IndexedDB, reload and fresh-key backup restore.
+  const reviewPass = 'synthetic review persistence test passphrase';
+  const restoredPass = 'synthetic review restored test passphrase';
+  await page.getByRole('link', { name: 'Home', exact: true }).click();
+  await page.getByRole('button', { name: 'Create new profile', exact: true }).click();
+  await page.getByLabel('New passphrase', { exact: true }).fill(reviewPass);
+  await page.getByLabel('Confirm new passphrase', { exact: true }).fill(reviewPass);
+  await page.getByLabel(/no passphrase reset/).check();
+  await page.getByRole('button', { name: 'Create encrypted profile', exact: true }).click();
+  await page.getByText('Vault unlocked', { exact: true }).waitFor();
+  const createdId = /Profile ([0-9a-f]{32}) was created/.exec(await page.getByRole('status').filter({ hasText: 'was created and unlocked' }).innerText())?.[1];
+  assert.ok(createdId);
+  await page.getByRole('link', { name: 'Offers', exact: true }).click();
+  await page.getByRole('button', { name: 'Core native sample (deadlines from now)', exact: true }).click();
+  await page.waitForURL(/#\/trade\//);
+  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
+  await page.waitForFunction(() => /Review saved|review operation did not complete|quota was exceeded/.test(document.querySelector('main').textContent));
+  assert.match(await mainText(), /Review saved/, `encrypted save must report a confirmed result: ${JSON.stringify(await page.evaluate(() => window.__reviewReplyCodes))}`);
+  await page.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
+  // A duplicate save must remain idempotent: loading below must yield one record.
+  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
+  await page.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
+  const unlock = async (id, secret, target = page) => {
+    await target.getByRole('link', { name: 'Home', exact: true }).click();
+    await target.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+    await target.getByLabel('Profile ID', { exact: true }).fill(id);
+    await target.getByLabel('Passphrase', { exact: true }).fill(secret);
+    await target.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+    await target.getByText('Vault unlocked', { exact: true }).waitFor();
+  };
+  let savedCount = 1;
+  const loadReview = async () => {
+    await page.getByRole('link', { name: 'Offers', exact: true }).click();
+    await page.getByRole('button', { name: 'Load saved reviews', exact: true }).click();
+    await page.getByRole('status').filter({ hasText: 'Saved reviews loaded and checked' }).waitFor();
+    assert.equal(await sessionItems(), savedCount, 'all saved reviews survive');
+    await page.locator('.session-list a').filter({ hasText: /^Order c3c3/ }).click();
+    await page.getByRole('heading', { level: 1, name: 'Trade review', exact: true }).waitFor();
+    assert.equal(await amountLine(), '0.25 native');
+    assert.equal(await field('Fiat amount'), '123.45 EUR');
+  };
+  await page.reload();
+  await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
+  await unlock(createdId, reviewPass);
+  await loadReview();
+  // A second tab saves another review; the stale first tab must re-unlock, never overwrite it.
+  const other = await context.newPage();
+  other.on('pageerror', () => unexpected.push('SECOND_TAB_PAGE_ERROR'));
+  await other.goto(origin + '/#/home');
+  await unlock(createdId, reviewPass, other);
+  await other.getByRole('link', { name: 'Offers', exact: true }).click();
+  await other.getByRole('button', { name: 'Frozen scenario: ERC-20 (expired, has capability)', exact: true }).click();
+  await other.waitForURL(/#\/trade\//);
+  await other.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
+  await other.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
+  savedCount = 2;
+  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
+  await page.getByText('Vault locked', { exact: true }).waitFor();
+  await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
+  await other.close();
+  await unlock(createdId, reviewPass);
+  await loadReview();
+  await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
+  await page.getByText('Vault locked', { exact: true }).waitFor();
+  await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
+  assert.ok(!(await mainText()).includes('SYNTHETIC demo instructions.'), 'lock clears decrypted review from DOM');
+  await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+  await page.getByLabel('Profile ID', { exact: true }).fill(createdId);
+  await page.getByLabel(/encrypted export is unchecked/).check();
+  const reviewDownloadReady = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
+  const reviewDownload = await reviewDownloadReady;
+  const reviewBackup = await readFile(await reviewDownload.path());
+  assert.equal(reviewBackup.includes(Buffer.from(reviewPass)), false);
+  assert.equal(reviewBackup.includes(Buffer.from('SYNTHETIC demo instructions.')), false, 'backup contains no plaintext review');
+  await page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles(await reviewDownload.path());
+  await page.getByLabel('Backup passphrase', { exact: true }).fill(reviewPass);
+  await page.getByLabel('New passphrase', { exact: true }).fill(restoredPass);
+  await page.getByLabel('Confirm new passphrase', { exact: true }).fill(restoredPass);
+  await page.getByLabel(/file content is untrusted/).check();
+  await page.getByRole('button', { name: 'Restore as new profile', exact: true }).click();
+  const restoredText = await page.getByRole('status').filter({ hasText: 'Restored as a new locked profile' }).innerText();
+  const restoredId = /profile ([0-9a-f]{32})/.exec(restoredText)?.[1];
+  assert.ok(restoredId && restoredId !== createdId);
+  await unlock(restoredId, restoredPass);
+  await loadReview();
+
   const observed = await page.evaluate(() => ({ ...window.__observed, local: localStorage.length, session: sessionStorage.length }));
   assert.deepEqual(observed, { prompts: 0, networkCalls: 0, local: 0, session: 0 });
   assert.deepEqual(unexpected, []);
   await context.close();
   console.log(JSON.stringify({ fixture: 'synthetic-demo-trade-review-local-chromium', browser: browser.version(), syntheticDemo: true,
-    journey: ['offers', 'sample-review', 'reload-not-in-session', 'file-native', 'file-erc20', 'rejections', 'hostile-instructions', 'cancel-stale', 'session-remove'],
+    journey: ['offers', 'sample-review', 'reload-not-in-session', 'file-native', 'file-erc20', 'rejections', 'hostile-instructions', 'cancel-stale', 'session-remove', 'encrypted-save', 'reload-unlock-load', 'cross-tab-stale-save', 'lock-clears-review', 'fresh-key-backup-restore-load'],
     walletPrompts: observed.prompts, networkCalls: observed.networkCalls, unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }

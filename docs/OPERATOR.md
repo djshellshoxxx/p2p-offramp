@@ -68,4 +68,22 @@ examples are the synthetic sets in `packages/domain/test/fixtures/local-evm-scen
 
 Review never accepts, signs, computes the EIP-712 digest, connects a wallet, reads chain state or funds anything.
 Remaining time uses the device clock for display only. Reviews are kept in memory (at most 8) and are cleared on
-reload; vault persistence needs new Worker record commands, which are not implemented.
+lock, profile switch and reload. In the demo build, unlock a profile, check terms and choose **Save encrypted
+review** to retain the original document, including private payment instructions and agreement salt, in that
+profile. Saving is explicit. **Remove from session** only clears the memory entry; it does not delete its saved copy.
+
+After reloading, unlock the same profile and choose **Load saved reviews** on Offers. Every saved document goes
+through the terms validator against the currently loaded registry before any loaded review is displayed. A failed
+load preserves the existing session list and encrypted data. Default builds have no approved registry and cannot
+display saved reviews. Saved documents do not gain signing, payment or settlement authority.
+
+At most 8 reviews of at most 64 KiB each can be saved per profile. Saves use the vault's compare-and-swap revision
+check; a conflicting tab requires a fresh unlock. Repeating a save from the same session entry is idempotent.
+Saving the same file as a separate newly imported review can create another record. This preview has no saved-record
+deletion control. Recognized review wrappers with invalid bytes are refused; unrecognized trade records are
+preserved and ignored, so a wrapper corrupted beyond recognition may not appear in the saved list.
+
+Locking, cancellation or a timeout can arrive after a save committed. Unlock and load before retrying an uncertain
+save. Saved reviews travel inside the encrypted backup and fresh-key restore path. An unchecked export alone is
+not proof of recovery; the emitted-app Chromium test exercises save → reload/unlock/load and export → fresh-key
+restore/unlock/load. No other browser/device or deployed-host acceptance is implied.

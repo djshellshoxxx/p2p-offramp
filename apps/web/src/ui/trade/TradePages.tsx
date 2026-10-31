@@ -4,7 +4,7 @@ import { tradePageMessages as p } from './trade-messages.ts';
 import { TradeTermsReview } from './TradeTermsReview.tsx';
 
 const noSubscription = () => () => {};
-const missingSnapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'unavailable' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]) });
+const missingSnapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'unavailable' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]), persistence: Object.freeze({ unlocked: false, kind: 'idle' }) });
 const missing = () => missingSnapshot;
 
 export function useTradeReview(trade: TradeReviewController | null): TradeReviewSnapshot {
@@ -21,16 +21,30 @@ function JobStatus({ snapshot }: { readonly snapshot: TradeReviewSnapshot }) {
 }
 
 function SessionList({ trade, snapshot }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot }) {
+  const busy = snapshot.persistence.kind === 'busy' || snapshot.job.kind === 'busy';
   return <section className="plain-section" aria-labelledby="session-title">
     <h2 id="session-title">{p.sessionTitle}</h2><p className="helper">{p.sessionHelp}</p>
+    <p className="helper">{p.persistenceHelp}</p>
+    <button type="button" disabled={!snapshot.persistence.unlocked || busy} onClick={() => { void trade.loadSaved(); }}>{p.loadSaved}</button>
+    <PersistenceStatus trade={trade} snapshot={snapshot} />
     {snapshot.reviews.length === 0 ? <p>{p.sessionEmpty}</p> : <ul className="session-list">
       {snapshot.reviews.map(item => <li key={item.localId}>
         <a href={`#/trade/${item.localId}`}>{p.sessionItem(item.review.orderId, item.review.revision)}</a>
         {item.source === 'synthetic-sample' ? <small className="helper"> (synthetic)</small> : null}
         {' '}<button type="button" onClick={() => trade.remove(item.localId)}>{p.remove}</button>
+        {' '}<button type="button" disabled={!snapshot.persistence.unlocked || busy} onClick={() => { void trade.save(item.localId); }}>{p.save}</button>
       </li>)}
     </ul>}
   </section>;
+}
+
+function PersistenceStatus({ trade, snapshot }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot }) {
+  const state = snapshot.persistence;
+  if (state.kind === 'busy') return <p className="notice" role="status">{p.persistenceBusy} <button type="button" onClick={() => trade.cancel()}>{p.cancelPersistence}</button></p>;
+  if (state.kind === 'saved') return <p className="notice" role="status">{p.persistenceSaved}</p>;
+  if (state.kind === 'loaded') return <p className="notice" role="status">{p.persistenceLoaded}</p>;
+  if (state.kind === 'failed') return <p className="notice error" role="alert">{state.code === 'QUOTA_EXCEEDED' ? p.persistenceQuota : state.code === 'INVALID_SAVED_REVIEW' ? p.persistenceInvalid : p.persistenceFailed}</p>;
+  return null;
 }
 
 function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot }) {
@@ -113,8 +127,11 @@ export function TradePage({ trade, localId }: { readonly trade: TradeReviewContr
   return <>
     {snapshot.registry.kind === 'ready' && snapshot.registry.label === 'synthetic-demo' ? <p className="warning" role="note">{p.demoBanner}</p> : null}
     <TradeTermsReview review={stored.review} nowSeconds={now} source={stored.source} />
+    <p className="helper">{p.persistenceHelp}</p>
+    <PersistenceStatus trade={trade} snapshot={snapshot} />
     <div className="actions">
       <a href="#/offers">{p.backToOffers}</a>
+      <button type="button" disabled={!snapshot.persistence.unlocked || snapshot.persistence.kind === 'busy' || snapshot.job.kind === 'busy'} onClick={() => { void trade.save(localId); }}>{p.save}</button>
       <button type="button" onClick={() => { trade.remove(localId); window.location.hash = '#/offers'; }}>{p.remove}</button>
     </div>
   </>;

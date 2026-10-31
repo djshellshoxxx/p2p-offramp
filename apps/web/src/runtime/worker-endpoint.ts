@@ -1,6 +1,7 @@
-/** Worker-private composition root. The narrow protocol cannot read, mutate or return private records. */
+/** Worker-private composition root; bounded local review storage has no trading authority. */
 import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
 import {
+  parseStrictJsonBytes, decodeBase64url, MAX_SAVED_REVIEWS, MAX_SAVED_REVIEW_BYTES,
   encodeBase64url, parseRuntimeCommand, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeHandle, type RuntimeMessage, type RuntimeResult,
@@ -8,13 +9,25 @@ import {
 } from '../../../../packages/schemas/index.ts';
 
 export interface WorkerPrivateServices {
-  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'create' | 'listProfiles' | 'lock' | 'lockAll' | 'captureSession' | 'dispose'>;
+  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'create' | 'listProfiles' | 'lock' | 'lockAll' | 'captureSession' | 'dispose' | 'assertFresh' | 'list' | 'commit'>;
   readonly backup: Pick<EncryptedBackupService, 'exportWithStatus' | 'restore' | 'dispose'>;
 }
 export interface WorkerEndpointOptions {
   readonly createServices?: () => WorkerPrivateServices;
   readonly now?: () => number;
   readonly random?: (bytes: Uint8Array<ArrayBuffer>) => Uint8Array<ArrayBuffer>;
+}
+const REVIEW_FORMAT = 'p2p-offramp/saved-review/v1';
+function reviewBytes(record: {kind: string; schemaVersion: number; payload: string}): Uint8Array | null {
+  if (record.kind !== 'trade' || record.schemaVersion !== 1) return null;
+  let raw: unknown;
+  try { raw = parseStrictJsonBytes(decodeBase64url(record.payload, 0, 100000), 100000); }
+  catch { return null; }
+  if (typeof raw !== 'object' || raw === null || !('format' in raw) || raw.format !== REVIEW_FORMAT) return null;
+  try {
+    if (Object.keys(raw).sort().join() !== 'bytes,format' || !('bytes' in raw)) throw new Error();
+    return decodeBase64url(raw.bytes, 1, MAX_SAVED_REVIEW_BYTES);
+  } catch { throw new RuntimeBoundaryError('INVALID_INPUT'); }
 }
 interface ActiveJob { readonly generation: number; readonly controller: AbortController; }
 interface Selection { readonly handle: RuntimeHandle; readonly lease: VaultSessionLease; }
@@ -154,6 +167,37 @@ class VaultWorkerEndpoint {
           } catch (error) { lease?.dispose(); this.#services.vault.lock(session.sessionId); throw error; }
           if (this.#time() - started >= RUNTIME_REQUEST_TIMEOUT_MS) { this.#clear(); throw new RuntimeBoundaryError('TIMEOUT'); }
           this.#guard(job); this.#reply(command, { ok: true, value: this.#status() });
+        } else if (command.operation === 'saveTermsReview' || command.operation === 'listTermsReviews') {
+          if (this.#status().state !== 'unlocked') throw new RuntimeBoundaryError('LOCKED');
+          const lease = this.#selection!.lease;
+          const session = lease.current();
+          if (!session) throw new RuntimeBoundaryError('LOCKED');
+          const revision = vaultValue(await this.#services.vault.assertFresh(session.sessionId, job.controller.signal));
+          this.#guard(job);
+          const records = vaultValue(await this.#services.vault.list(session.sessionId));
+          const entries = records.flatMap(record => { const bytes = reviewBytes(record); return bytes ? [{id:record.id,bytes}] : []; });
+          if (entries.length > MAX_SAVED_REVIEWS) throw new RuntimeBoundaryError('LIMIT_EXCEEDED');
+          this.#guard(job);
+          if (command.operation === 'listTermsReviews') {
+            vaultValue(await this.#services.vault.assertFresh(session.sessionId, job.controller.signal));
+            this.#guard(job);
+            if (!lease.current()) throw new RuntimeBoundaryError('LOCKED');
+            this.#reply(command, {ok:true,value:{entries}});
+          } else if (command.operation === 'saveTermsReview') {
+            const existing = records.find(record => record.id === command.id);
+            if (existing) {
+              const bytes = reviewBytes(existing);
+              if (!bytes || bytes.length !== command.bytes.length || bytes.some((byte,index) => byte !== command.bytes[index])) throw new RuntimeBoundaryError('CONFLICT');
+              vaultValue(await this.#services.vault.assertFresh(session.sessionId, job.controller.signal));
+            } else {
+              if (entries.length >= MAX_SAVED_REVIEWS) throw new RuntimeBoundaryError('LIMIT_EXCEEDED');
+              const payload = encodeBase64url(new TextEncoder().encode(JSON.stringify({format:REVIEW_FORMAT,bytes:encodeBase64url(command.bytes)})));
+              vaultValue(await this.#services.vault.commit(session.sessionId, revision, [{op:'put',record:{id:command.id,kind:'trade',schemaVersion:1,payload}}], job.controller.signal));
+            }
+            this.#guard(job);
+            if (!lease.current()) throw new RuntimeBoundaryError('LOCKED');
+            this.#reply(command, {ok:true,value:{id:command.id}});
+          }
         } else if (command.operation === 'listProfiles') {
           const value = vaultValue(await this.#services.vault.listProfiles(job.controller.signal)); this.#guard(job);
           this.#reply(command, { ok: true, value: Object.freeze({ profileIds: Object.freeze([...value.profileIds]), truncated: value.truncated }) });

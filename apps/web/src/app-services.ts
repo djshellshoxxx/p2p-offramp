@@ -1,5 +1,5 @@
-/** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
-import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore } from '../../../packages/schemas/index.ts';
+/** Offline composition boundary. UI receives bounded review bytes, never vault capabilities. */
+import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore, type RuntimeReviewSaved, type RuntimeReviews } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
@@ -8,10 +8,13 @@ export interface PublicStatus { readonly state: 'locked' | 'unlocked'; }
 export interface CreatedProfile { readonly state: 'unlocked'; readonly profileId: string; }
 export interface AppServices {
   readonly current: PublicStatus;
+  readonly profileId: string | null;
   getSnapshot(): PublicStatus;
   subscribe(listener: () => void): () => void;
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<AppResult<PublicStatus>>;
   create(passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>>;
+  saveTermsReview(id: string, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeReviewSaved>>;
+  listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeReviews>>;
   listProfiles(signal?: AbortSignal): Promise<AppResult<RuntimeInventory>>;
   restore(bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<AppResult<RuntimeRestore>>;
   status(): Promise<AppResult<PublicStatus>>;
@@ -38,6 +41,7 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     catch { return runtimeFailure('PROTOCOL_ERROR'); }
   };
   const services: AppServices = Object.freeze({
+    get profileId() { const status = runtime.current; return status.state === 'unlocked' ? status.handle.profileId : null; },
     get current() { return snapshot(); }, getSnapshot: snapshot,
     subscribe: (listener: () => void) => runtime.subscribe(listener),
     unlock: (profileId: string, passphrase: string, signal?: AbortSignal) => stateCommand(() => runtime.unlock(profileId, passphrase, signal)),
@@ -47,6 +51,8 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
         return result.ok ? Object.freeze({ ok: true, value: Object.freeze({ state: 'unlocked' as const, profileId: result.value.profileId }) }) : result;
       } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
+    saveTermsReview: (id: string, bytes: Uint8Array, signal?: AbortSignal) => runtime.saveTermsReview(id, bytes, signal),
+    listTermsReviews: (signal?: AbortSignal) => runtime.listTermsReviews(signal),
     listProfiles: async (signal?: AbortSignal): Promise<AppResult<RuntimeInventory>> => {
       try { return await runtime.listProfiles(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },

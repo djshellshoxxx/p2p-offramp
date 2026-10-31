@@ -112,3 +112,37 @@ test('Worker reports storage quota as a typed QUOTA_EXCEEDED for create and rest
  await e.send('restore',{bytes:new Uint8Array([1]),sourcePassphrase:pass,destinationPassphrase:pass});assert.equal(e.messages.at(-1).result.error.code,'QUOTA_EXCEEDED');
  assert.doesNotMatch(JSON.stringify(e.messages),/SECRET/);e.service.dispose();
 });
+
+test('review storage is session-bound, bounded, idempotent and preserves foreign records', async()=>{
+ const rows = new Map(); let revision=0, code, commits=0, live=true;
+ const success=value=>({ok:true,value});
+ const fake={create:async()=>success({sessionId:'session',profileId:'a'.repeat(32),revision}),captureSession:()=>success({current:()=>live?{sessionId:'session',revision}:null,dispose(){}}),lockAll(){live=false;},dispose(){},assertFresh:async()=>success(revision),list:async()=>success([...rows.values()]),commit:async(_session,expected,mutations)=>{if(code)return{ok:false,error:{code}};assert.equal(expected,revision);for(const m of mutations)rows.set(m.record.id,m.record);commits++;return success(++revision);}};
+ const s=endpoint({createServices:()=>({vault:fake,backup:{dispose(){}}})});
+ await s.send('init',{config});
+ await s.send('listTermsReviews');assert.equal(s.messages.at(-1).result.error.code,'LOCKED');
+ // create clears old selection before opening a fresh session.
+ fake.create=async()=>{live=true;return success({sessionId:'session',profileId:'a'.repeat(32),revision});};
+ await s.send('create',{passphrase:pass});
+ const id='1'.repeat(32),bytes=new Uint8Array([1,2,3]);
+ await s.send('saveTermsReview',{id,bytes});assert.equal(s.messages.at(-1).result.ok,true);
+ await s.send('saveTermsReview',{id,bytes});assert.equal(commits,1);
+ await s.send('saveTermsReview',{id,bytes:new Uint8Array([4])});assert.equal(s.messages.at(-1).result.error.code,'CONFLICT');
+ rows.set('f'.repeat(32),{id:'f'.repeat(32),kind:'trade',schemaVersion:1,payload:'e30'});
+ await s.send('saveTermsReview',{id:'f'.repeat(32),bytes});assert.equal(s.messages.at(-1).result.error.code,'CONFLICT');
+ code='QUOTA_EXCEEDED';await s.send('saveTermsReview',{id:'2'.repeat(32),bytes});assert.equal(s.messages.at(-1).result.error.code,code);code='CONFLICT';await s.send('saveTermsReview',{id:'2'.repeat(32),bytes});assert.equal(s.messages.at(-1).result.error.code,code);code=undefined;
+ for(let i=2;i<=8;i++)await s.send('saveTermsReview',{id:String(i).repeat(32),bytes});
+ await s.send('saveTermsReview',{id:'9'.repeat(32),bytes});assert.equal(s.messages.at(-1).result.error.code,'LIMIT_EXCEEDED');
+ await s.send('listTermsReviews');assert.equal(s.messages.at(-1).result.value.entries.length,8);assert.equal(rows.size,9);
+ rows.set('c'.repeat(32),{id:'c'.repeat(32),kind:'trade',schemaVersion:1,payload:Buffer.from(JSON.stringify({format:'p2p-offramp/saved-review/v1',bytes:''})).toString('base64url')});
+ await s.send('listTermsReviews');assert.equal(s.messages.at(-1).result.error.code,'INVALID_INPUT');
+ await s.send('lock',{},1);await s.send('listTermsReviews',{},1);assert.equal(s.messages.at(-1).result.error.code,'LOCKED');s.service.dispose();
+});
+
+test('review list suppresses private results after lock while an uncancellable read drains',async()=>{
+ const pending=deferred();let live=true;
+ const success=value=>({ok:true,value});
+ const fake={create:async()=>{live=true;return success({sessionId:'s',profileId:'a'.repeat(32),revision:0});},captureSession:()=>success({current:()=>live?{sessionId:'s',revision:0}:null,dispose(){}}),lockAll(){live=false;},dispose(){},assertFresh:async()=>success(0),list:()=>pending.promise};
+ const s=endpoint({createServices:()=>({vault:fake,backup:{dispose(){}}})});await s.send('init',{config});await s.send('create',{passphrase:pass});
+ const job=s.send('listTermsReviews');await Promise.resolve();await Promise.resolve();await s.send('lock',{},1);pending.resolve(success([]));await job;
+ assert.equal(s.messages.some(m=>m.operation==='listTermsReviews'&&m.result.ok),false);s.service.dispose();
+});
