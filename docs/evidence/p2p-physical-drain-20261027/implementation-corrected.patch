@@ -1,0 +1,88 @@
+--- a/packages/wallet/test/lib/evm-agreement-host.ts
++++ b/packages/wallet/test/lib/evm-agreement-host.ts
+@@ -23,10 +23,20 @@
+   /** Timer seam; the 30000ms bound itself is not configurable. */
+   readonly timer?: EvmAgreementHostTimer;
+ }
++/** Qualification-only snapshot of existing host state. terminal never means physically idle. */
++export interface EvmAgreementHostPhysicalState {
++  readonly generation: number;
++  readonly held: boolean;
++  readonly terminal: boolean;
++}
+ export interface EvmAgreementHost {
+   dispatch(input: unknown): Promise<Readonly<EvmAgreementCheckReply> | undefined>;
+   invalidate(): void;
+   dispose(): void;
++  /** Pure frozen primitives from existing state; invokes no clock, timer or RNG. */
++  physicalState(): Readonly<EvmAgreementHostPhysicalState>;
++  /** Synchronously disposes; resolves only after the actual verifier work released its slot. */
++  disposeAndDrain(): Promise<void>;
+   readonly generation: number;
+ }
+ 
+@@ -61,6 +71,16 @@
+   let generation = 0, lastRequest = 0, nextJobId = 1;
+   let disposed = false, closed = false;
+   let active: Job | undefined;
++  /** Shared completion for terminal drain; created only while a slot is held, cleared on release. */
++  let drainPromise: Promise<void> | undefined;
++  let drainResolve: (() => void) | undefined;
++  const releaseSlot = (job: Job): void => {
++    if (active !== job) return;
++    active = undefined;
++    const resolve = drainResolve;
++    drainPromise = undefined; drainResolve = undefined;
++    if (resolve) resolve();
++  };
+   /** Parse reservation: set synchronously before the strict parser so a reentrant dispatch cannot parse concurrently. */
+   let parsing = false;
+ 
+@@ -108,6 +128,14 @@
+     if (job) terminate(job);
+     // `active` is retained until the underlying promise actually settles (identity-bound release below).
+   };
++  const physicalState = (): Readonly<EvmAgreementHostPhysicalState> =>
++    Object.freeze({ generation, held: active !== undefined, terminal: disposed || closed });
++  const disposeAndDrain = (): Promise<void> => {
++    dispose();
++    if (!active) return Promise.resolve();
++    if (!drainPromise) drainPromise = new Promise<void>(resolve => { drainResolve = resolve; });
++    return drainPromise;
++  };
+ 
+   async function dispatch(input: unknown): Promise<Readonly<EvmAgreementCheckReply> | undefined> {
+     if (disposed || closed) return undefined;
+@@ -168,12 +196,12 @@
+         // Host is terminal after a request timeout; the slot stays held until the real job settles.
+         closed = true;
+       }, RUNTIME_REQUEST_TIMEOUT_MS);
+-    } catch { terminate(job); active = undefined; return refuse('UNAVAILABLE'); }
++    } catch { terminate(job); releaseSlot(job); return refuse('UNAVAILABLE'); }
+ 
+     // Timer seam may have reentered invalidate/dispose during setup: stop before starting the verifier.
+     if (job.logicallyDone || disposed || closed || job.generation !== generation) {
+       terminate(job);
+-      if (active === job) active = undefined;
++      releaseSlot(job);
+       return undefined;
+     }
+ 
+@@ -214,7 +242,7 @@
+       job.settled = true;
+       stopTimer(job);
+       wipe(job.signatures);
+-      if (active === job) active = undefined;
++      releaseSlot(job);
+     });
+ 
+     const outcome = await logical;
+@@ -252,6 +280,8 @@
+     dispatch,
+     invalidate,
+     dispose,
++    physicalState,
++    disposeAndDrain,
+     get generation(): number { return generation; },
+   });
+ }

@@ -1,0 +1,94 @@
+✔ G11 loads a strict registry only after the exact-byte SHA-256 matches, then serves frozen lookups (6.84023ms)
+✔ G11 digest is checked before parsing; mismatched, malformed or reused-different digests fail closed (2.883704ms)
+✔ G11 rejects encoding, version, size and JSON-shape abuse (6.787091ms)
+✔ G11 rejects bad IDs, duplicates, wrong family pairs, decimals and missing references (11.502481ms)
+✔ G11 rejects mutable deployments and credential-bearing or non-HTTPS endpoints (3.7103ms)
+✖ G11 direct parser enforces actual view byte bound despite forged own byteLength (24.04953ms)
+✖ G11 service rejects actual oversized view before hashing despite forged byteLength (0.739937ms)
+✖ G11 genuine byte views ignore byteLength and length getters without leaking foreign exceptions (0.840747ms)
+✖ G11 proxy and revoked views return fixed direct-parser/typed-service failures without inspecting foreign errors (0.496556ms)
+✔ G11 offset view hashes and parses only its bounded bytes and keeps an owned snapshot across hash await (6.367629ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 6
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 176.806829
+
+✖ failing tests:
+
+test at packages/domain/test/registry.test.mjs:105:1
+✖ G11 direct parser enforces actual view byte bound despite forged own byteLength (24.04953ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:108:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at packages/domain/test/registry.test.mjs:111:1
+✖ G11 service rejects actual oversized view before hashing despite forged byteLength (0.739937ms)
+  RangeError: offset is out of bounds
+      at Uint8Array.set (<anonymous>)
+      at RegistryService.load (file:///workspace/p2p-offramp-pr5-validation/packages/domain/src/registry.ts:28:57)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:116:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at packages/domain/test/registry.test.mjs:120:1
+✖ G11 genuine byte views ignore byteLength and length getters without leaking foreign exceptions (0.840747ms)
+  RangeError: offset is out of bounds
+      at Uint8Array.set (<anonymous>)
+      at RegistryService.load (file:///workspace/p2p-offramp-pr5-validation/packages/domain/src/registry.ts:28:57)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:127:48)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at packages/domain/test/registry.test.mjs:132:1
+✖ G11 proxy and revoked views return fixed direct-parser/typed-service failures without inspecting foreign errors (0.496556ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  TypeError: Method get TypedArray.prototype.byteLength called on incompatible receiver [object Uint8Array]
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:136:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: TypeError: Method get TypedArray.prototype.byteLength called on incompatible receiver [object Uint8Array]
+        at get byteLength (<anonymous>)
+        at parseRegistryBytes (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/src/registry.ts:218:13)
+        at file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:136:25
+        at getActual (node:assert:611:5)
+        at strict.throws (node:assert:759:24)
+        at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/domain/test/registry.test.mjs:136:12)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+        at Test.postRun (node:internal/test_runner/test:1522:19),
+    operator: 'throws',
+    diff: 'simple'
+  }

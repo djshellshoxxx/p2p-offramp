@@ -2,6 +2,7 @@
 import { decodeBase64url, encodeBase64url, MAX_PAYLOAD_BYTES, ValidationError, type PrivateRecordV1, type RecordKind } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionAuthority } from '../../schemas/index.ts';
 import type { EncryptedVaultService, ResealReceipt } from './vault-service.ts';
+import { claimRecoverySlot } from './recovery-slot.ts';
 
 export const MAX_MIGRATION_STEPS = 64;
 /** G09 step 4 bound for one G02 commit. Larger plans need the G03 resealer, which does not exist yet. */
@@ -167,6 +168,10 @@ export class RecordMigrationService {
   }
 }
 
+/** G03 §5: reseal returns typed G02 errors plus BUSY while another recovery job holds the document slot. */
+export type ResealResult = Result<ResealReceipt> | { ok: false; error: { code: 'BUSY'; retryable: false; message: string } };
+const RESEAL_BUSY = Object.freeze({ ok: false as const, error: Object.freeze({ code: 'BUSY' as const, retryable: false as const,
+  message: 'Another backup or recovery operation is still running.' }) });
 /** G03 MigrationResealRequest. `migrationId` names a bundled registry; imported code is never accepted. */
 export interface MigrationResealRequest {
   readonly sourceSessionId: string;
@@ -185,10 +190,15 @@ export class InternalMigrationResealer {
   constructor(vault: Pick<EncryptedVaultService, 'resealSnapshot'>, registries: ReadonlyMap<string, MigrationRegistry>) {
     this.#vault = vault; this.#registries = new Map(registries);
   }
-  async migrateAndReseal(request: MigrationResealRequest, destinationPassphrase: string, signal?: AbortSignal): Promise<Result<ResealReceipt>> {
+  async migrateAndReseal(request: MigrationResealRequest, destinationPassphrase: string, signal?: AbortSignal): Promise<ResealResult> {
     const registry = typeof request?.migrationId === 'string' ? this.#registries.get(request.migrationId) : undefined;
     if (!registry) return failed(new MigrationError('UNSUPPORTED_VERSION'));
-    return this.#vault.resealSnapshot(request.sourceSessionId, request.expectedKeyId, request.expectedRevision,
-      records => records.map(record => registry.migrate(record)), destinationPassphrase, signal);
+    // Shares the G03 one-recovery-job slot with backup export/restore (two PBKDF2 derivations plus an add).
+    const release = claimRecoverySlot();
+    if (release === undefined) return RESEAL_BUSY;
+    try {
+      return await this.#vault.resealSnapshot(request.sourceSessionId, request.expectedKeyId, request.expectedRevision,
+        records => records.map(record => registry.migrate(record)), destinationPassphrase, signal);
+    } finally { release(); }
   }
 }

@@ -1,0 +1,28 @@
+{
+  "recordedAtUtc": "2026-10-27T04:39:53.363140+00:00",
+  "sessionId": 5792,
+  "state": "incomplete;no terminal exit captured",
+  "explicitObservedFailures": [
+    "BUSY/A-next schedule",
+    "invalidate/BUSY/C schedule"
+  ],
+  "lastProgress": "clock-fault fake-timer case did not complete; fixed-tick pump lacks a real backend-completion barrier",
+  "sourceHashesBeforeHarnessFix": {
+    "packages/wallet/src/evm-agreement-host.ts": "519cf4cc763506fbae32d121da99244e9e45f82d16b6c5a190df6e80bcdb9d85",
+    "packages/wallet/test/evm-agreement-host.test.mjs": "be5ca5454fc472b458e7f18f64ddd6a3feb5e25851b7ae5efd003b6e841d8cbb",
+    "scripts/fixtures/g16-browser.mjs": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8"
+  },
+  "partialLogSha256": "e2ae0dd1aedd1f16c1c0bf39799d58cee8b22c5d5471d8fc63e36011c292ec49",
+  "stopAttempts": [
+    {
+      "operation": "SIGTERM exact owned child via proc",
+      "result": "not executed; no matching Node process visible in subsequent command session"
+    },
+    {
+      "operation": "write_stdin Ctrl-C session5792",
+      "result": "session still reported running; stop unverified"
+    }
+  ],
+  "noDenialOrPermissionsChange": true,
+  "next": "retain incomplete run without success claim; correct test-only barriers and use existing bounded shared runner for new source"
+}

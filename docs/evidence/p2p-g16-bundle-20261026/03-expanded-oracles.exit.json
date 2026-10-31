@@ -1,0 +1,15 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/wallet/test/evm-agreement.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T22:37:30.862738+00:00",
+  "finishedAtUtc": "2026-10-26T22:37:31.304232+00:00",
+  "exitCode": 1,
+  "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+  "sourceFiles": {
+    "packages/wallet/src/evm-agreement.ts": "af1b82ce81eea4201cac1960ab6f5dc3a319a37de327e60bbaf2dc429a699f95",
+    "packages/wallet/test/evm-agreement.test.mjs": "534b688611daa5817c826755978565bef9f1864a2196d4992d68f4b0a794570b"
+  }
+}

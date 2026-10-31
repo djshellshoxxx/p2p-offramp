@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/payment-preflight.test.mjs"
+  ],
+  "sourceBase": "2228ee82419cbdaed514db8fb2f436161ebe3fc0",
+  "startedAtUtc": "2026-10-26T21:42:55.299817+00:00",
+  "finishedAtUtc": "2026-10-26T21:42:55.509159+00:00",
+  "exitCode": 0,
+  "sourceFiles": {
+    "packages/domain/src/payment-preflight.ts": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+    "packages/domain/test/payment-preflight.test.mjs": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+  }
+}

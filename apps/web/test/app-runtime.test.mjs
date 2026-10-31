@@ -143,11 +143,11 @@ test('trusted activity never blocks a click save or reopening and late activity 
  const oldWindow=globalThis.window,oldDocument=globalThis.document;globalThis.window=new EventTarget();globalThis.document=new EventTarget();
  const port=new Port();let held,state={state:'locked',handle:null};
  port.handler=command=>{
-  const {config,passphrase,profileId,id,bytes,...base}=command;
+  const {config,passphrase,profileId,source,bytes,...base}=command;
   if(command.operation==='activity'){held={base,state};return;}
   if(command.operation==='unlock'||command.operation==='create')state={state:'unlocked',handle:{id:'A'.repeat(43),generation:command.generation,purpose:'vault',profileId:profileId??'b'.repeat(32)}};
   if(command.operation==='lock'||command.operation==='dispose')state={state:'locked',handle:null};
-  port.reply(response(base,command.operation==='saveTermsReview'?{id}:state));
+  port.reply(response(base,command.operation==='saveTermsReview'?{recordId:'1'.repeat(32)}:state));
  };
  const runtime=val(await api.AppRuntime.start(config,{createWorker:()=>port}));
  const activity=async()=>{const event=new Event('pointerdown');Object.defineProperty(event,'isTrusted',{value:true});globalThis.document.dispatchEvent(event);await flush();assert.ok(held);};
@@ -155,7 +155,7 @@ test('trusted activity never blocks a click save or reopening and late activity 
   await runtime.unlock('a'.repeat(32),pass);
   for(const operation of ['saveTermsReview','unlock','create']){
    await activity();
-   const result=operation==='saveTermsReview'?await runtime.saveTermsReview('1'.repeat(32),new Uint8Array([1])):operation==='unlock'?await runtime.unlock('c'.repeat(32),pass):await runtime.create(pass);
+   const result=operation==='saveTermsReview'?await runtime.saveTermsReview('file',new Uint8Array([1])):operation==='unlock'?await runtime.unlock('c'.repeat(32),pass):await runtime.create(pass);
    val(result);port.reply(response(held.base,held.state));held=undefined;await flush();assert.equal(runtime.current.state,'unlocked');
   }
  }finally{await runtime.dispose();if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}

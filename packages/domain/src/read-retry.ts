@@ -32,21 +32,24 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
       try { return !options.signal.aborted && (options.isCurrent === undefined || options.isCurrent() === true); } catch { return false; }
     };
     if (!current()) return error('CANCELLED');
-    let runtimeFailed = false, previousTime = -Infinity;
+    let runtimeFailed = false, clockFault = false, previousTime = -Infinity;
     const now = (): number => {
       try {
         const value = time.now();
-        if (!Number.isFinite(value) || value < 0 || value < previousTime) throw new Error();
+        if (!Number.isFinite(value)) return value;
+        if (value < 0 || value < previousTime) throw new Error();
         previousTime = value; return value;
-      } catch { runtimeFailed = true; return NaN; }
+      } catch { clockFault = true; return NaN; }
     };
     const started = now();
-    if (runtimeFailed) return error('UNAVAILABLE');
+    if (!current()) return error('CANCELLED');
+    if (!Number.isFinite(started) || clockFault) return error('UNAVAILABLE');
     const cancelTimer = (cancel: () => void): void => { try { cancel(); } catch { runtimeFailed = true; } };
     let elapsed = 0;
     const remaining = (): number => {
       const value = now();
-      if (runtimeFailed) return 0;
+      if (!current()) return -1;
+      if (!Number.isFinite(value)) return 0;
       elapsed = Math.max(elapsed, value - started);
       return Math.max(0, READ_OPERATION_BUDGET_MS - elapsed);
     };
@@ -114,22 +117,26 @@ export function createReadRetrier(time: ReadRetryRuntime): Retrier {
     for (let index = 0; index < READ_MAX_ATTEMPTS; index++) {
       if (!current()) return error('CANCELLED');
       const budget = remaining();
-      if (runtimeFailed) return error('UNAVAILABLE');
-      if (budget <= 0) return error('TIMEOUT');
+      if (budget < 0) return error('CANCELLED');
+      if (runtimeFailed || clockFault) return error('UNAVAILABLE');
+      if (budget === 0) return error('TIMEOUT');
       const { result, operationSettled } = await attempt(budget);
       last = result;
       if (!current()) return error('CANCELLED');
       const left = remaining();
-      if (runtimeFailed) return error('UNAVAILABLE');
-      if (left <= 0) return error('TIMEOUT');
+      if (left < 0) return error('CANCELLED');
+      if (runtimeFailed || clockFault) return error('UNAVAILABLE');
+      if (left === 0) return error('TIMEOUT');
       if (result.ok || !result.error.retryable || !operationSettled || index === READ_MAX_ATTEMPTS - 1) return result;
       let sample: number;
-      try { sample = time.random(); } catch { return error('UNAVAILABLE'); }
+      try { sample = time.random(); } catch { return error(!current() ? 'CANCELLED' : 'UNAVAILABLE'); }
+      if (!current()) return error('CANCELLED');
       if (!Number.isFinite(sample) || sample < 0 || sample >= 1) return error('UNAVAILABLE');
       const ceiling = index === 0 ? 500 : 1000;
       const delay = Math.floor(sample * (ceiling + 1));
       const backoffBudget = remaining();
-      if (runtimeFailed) return error('UNAVAILABLE');
+      if (backoffBudget < 0) return error('CANCELLED');
+      if (runtimeFailed || clockFault) return error('UNAVAILABLE');
       if (delay >= backoffBudget) return error('TIMEOUT');
       if (!await backoff(delay)) return error(runtimeFailed ? 'UNAVAILABLE' : 'CANCELLED');
       if (runtimeFailed) return error('UNAVAILABLE');

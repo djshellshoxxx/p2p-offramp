@@ -1,0 +1,33 @@
+{
+  "observedDate": "2026-10-26",
+  "keySource": "https://registry.npmjs.org/-/npm/v1/keys",
+  "messageContract": "https://docs.npmjs.com/about-registry-signatures/",
+  "node": "v24.19.0",
+  "scope": "Authenticates registry assertion over name@version:integrity; does NOT sign gitHead or approve package safety",
+  "keyEvidenceSha256": "14748632f92fc8f1e0370a4eb637d162574d6e81ad865ee15962e55d16a016e5",
+  "signedMetadataSha256": "0a781870ea3143ece98f5a5875a44ac575cd3b0d43baf61fe538a32b08a7fcc2",
+  "results": [
+    {
+      "package": "@noble/curves",
+      "version": "2.4.0",
+      "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+      "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+      "keyExpires": null,
+      "registrySignatureVerified": true,
+      "tamperedMessageRejected": true,
+      "tamperedSignatureRejected": true,
+      "wrongKeyRejected": true
+    },
+    {
+      "package": "@noble/hashes",
+      "version": "2.4.0",
+      "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+      "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+      "keyExpires": null,
+      "registrySignatureVerified": true,
+      "tamperedMessageRejected": true,
+      "tamperedSignatureRejected": true,
+      "wrongKeyRejected": true
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+--- a/tests/test_encoding_helper.py
++++ b/tests/test_encoding_helper.py
+@@ -68,8 +68,66 @@
+         self.exports.write_text(FAKE_TARGET.replace('__FAULT__',json.dumps(fault)))
+         cmd=[NODE,str(ROOT/'harnesses/invoice-encoding-fuzz.mjs'),'--project-root',str(self.project),'--seed','1592598566','--cases',str(cases),'--output',str(output or self.output)]
+         result=subprocess.run(cmd,env=self.env,capture_output=True,text=True,timeout=20)
+-        metrics=json.loads(self.output.read_text()) if self.output.exists() else None
++        metrics_path=output or self.output
++        metrics=json.loads(metrics_path.read_text()) if metrics_path.exists() else None
+         return result,metrics
++
++    def controlled_check_result(self, *, interrupted=False, num_runs=20, num_skips=0):
++        """Use real arbitrary constructors, but control only check's result."""
++        package=self.project/'node_modules/fast-check'
++        if package.is_symlink():
++            package.unlink()
++        (package/'lib').mkdir(parents=True,exist_ok=True)
++        (package/'package.json').write_text('{"type":"module"}')
++        actual=(FC/'lib/fast-check.js').resolve().as_uri()
++        details={'failed':False,'interrupted':interrupted,'numRuns':num_runs,
++                 'numSkips':num_skips,'numShrinks':0,'seed':1592598566,
++                 'counterexamplePath':'0:1','counterexample':['retained synthetic corpus']}
++        (package/'lib/fast-check.js').write_text(
++            'export * from '+json.dumps(actual)+';\n'
++            'export async function check() { return '+json.dumps(details)+'; }\n')
++
++    def test_interrupted_nonfailed_results_never_pass(self):
++        for num_runs in [0,7,20]:
++            with self.subTest(num_runs=num_runs):
++                self.controlled_check_result(interrupted=True,num_runs=num_runs)
++                result,metrics=self.run_helper(output=self.base/f'interrupted-{num_runs}.json')
++                self.assertNotEqual(result.returncode,0,result.stdout)
++                self.assertTrue(all(p['status']=='interrupted' for p in metrics['properties']))
++                self.assertTrue(all(p['interrupted'] is True for p in metrics['properties']))
++                self.assertTrue(all(p['numRuns']==num_runs for p in metrics['properties']))
++                self.assertTrue(all(p['requested_numRuns']==20 for p in metrics['properties']))
++                self.assertTrue(all(p['seed']==1592598566 for p in metrics['properties']))
++                self.assertTrue(all(p['counterexamplePath']=='0:1' for p in metrics['properties']))
++                for prop in metrics['properties']:
++                    corpus=prop['counterexample']
++                    self.assertFalse(corpus['truncated'])
++                    self.assertEqual(bytes.fromhex(corpus['utf16_hex']).decode('utf-16-be'),'retained synthetic corpus')
++                self.assertTrue(all('interrupt' in p['failure_message'].lower() for p in metrics['properties']))
++                self.assertEqual(metrics['totals']['numRuns'],13*num_runs)
++                self.assertEqual(metrics['totals']['interrupted_properties'],13)
++
++    def test_short_noninterrupted_result_is_incomplete_with_provenance(self):
++        self.controlled_check_result(num_runs=19)
++        result,metrics=self.run_helper()
++        self.assertNotEqual(result.returncode,0,result.stdout)
++        self.assertTrue(all(p['status']=='incomplete' for p in metrics['properties']))
++        self.assertTrue(all(p['interrupted'] is False for p in metrics['properties']))
++        self.assertEqual(metrics['totals']['numRuns'],13*19)
++        self.assertEqual(metrics['totals']['incomplete_properties'],13)
++        self.assertEqual(metrics['seed'],1592598566)
++        for key in ['harness','fast_check_entry','target_entry']:
++            self.assertRegex(metrics['provenance'][key]['sha256'],r'^[0-9a-f]{64}$')
++        self.assertIn('--seed',metrics['provenance']['argv'])
++        self.assertEqual(metrics['provenance']['metrics_file'],str(self.output))
++
++    def test_skipped_result_is_not_an_ordinary_pass(self):
++        self.controlled_check_result(num_runs=20,num_skips=1)
++        result,metrics=self.run_helper()
++        self.assertNotEqual(result.returncode,0,result.stdout)
++        self.assertTrue(all(p['status']=='incomplete' for p in metrics['properties']))
++        self.assertEqual(metrics['totals']['numRuns'],13*20)
++        self.assertEqual(metrics['totals']['numSkips'],13)
+ 
+     def test_reference_target_passes_and_measures_generated_cases(self):
+         result,metrics=self.run_helper()

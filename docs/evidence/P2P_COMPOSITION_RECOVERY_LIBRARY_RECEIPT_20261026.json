@@ -1,0 +1,28 @@
+{
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "fileId": "file_0000000013e081f594b070b078585ca1",
+  "version": 2,
+  "libraryPath": "/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 127918,
+  "sha256": "81aede562c87d9facd9f5a97c4f2e5db02d7eaa87fd2f02a80f0b936f0d78711",
+  "sourceAndTestsCheckpoint": "b14dfafce10e12588cb1b5a0bed530ac433e0547",
+  "checkpointTree": "667d36a59a51b9225ae9ca2b49c19808ef745356",
+  "runtimeImplementationCommit": "fa4e1f4ddd1fef95befb7ab7b6bb72b3ad22ba6a",
+  "recoveryBase": "4bc005bf3f1b7784e2e153a0d06a40ca08e89a00",
+  "runtimeChanged": false,
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-composition-recovery/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "guardedExpectedVersion": 1,
+  "priorVersionsPreserved": [
+    0,
+    1
+  ],
+  "consumerDownloadTested": false,
+  "sourcePatchRoundTripVerified": true,
+  "canonicalQueueReadOrModified": false,
+  "metadataHelperExit": 0,
+  "localXattrNames": [
+    "user.library-file-version",
+    "user.library-file-id"
+  ]
+}

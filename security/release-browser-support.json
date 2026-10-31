@@ -1,0 +1,28 @@
+{
+  "profile": "WebCrypto-G15-v1",
+  "observed": [
+    {
+      "engine": "Chromium",
+      "version": "154.0.8037.57",
+      "platform": "Linux x86_64",
+      "qualification": "private local document and dedicated Worker automation only; not provider acceptance",
+      "checks": [
+        "Published RFC6979 P256 SHA256 public primitive known-answer and changed-message refusal",
+        "Synthetic complete manifest/signature/asset and guarded G11 identity/revocation cases:66 assertions per runtime",
+        "Node OpenSSL generated ephemeral complete-envelope fixtures; not an independent complete-protocol provider",
+        "No signing/wallet/private-key export in browser; no persistent data or unexpected requests",
+        "Original in-memory proof required; cloned metadata refused; nested-revocation network/post-load cases; G11 diagnostics retain their existing RNG path"
+      ]
+    }
+  ],
+  "unassessed": [
+    "Firefox",
+    "WebKit",
+    "mobile and physical devices",
+    "independent full-envelope signer/verifier implementation",
+    "provider/security audit acceptance",
+    "signing/key generation and custody",
+    "production bootstrap/rotation/locator/archive extraction",
+    "non-empty deployment wire schema and live chain validation"
+  ]
+}

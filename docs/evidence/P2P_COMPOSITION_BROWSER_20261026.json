@@ -1,0 +1,221 @@
+{
+  "kind": "native Chromium IndexedDB cross-document authority/composition acceptance fixture",
+  "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+  "recordedAtUtc": "2026-10-26T22:19:05.742262+00:00",
+  "sourceFiles": {
+    "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+    "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+    "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+    "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+    "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+  },
+  "runtimeChanged": false,
+  "changedHarness": "scripts/test-vault-browser.mjs",
+  "browser": "154.0.8037.57",
+  "playwrightCore": "1.64.1",
+  "nativeReport": {
+    "fixture": "native-indexeddb-authority-composition",
+    "browser": "154.0.8037.57",
+    "reports": [
+      {
+        "schedule": "before-preflight",
+        "stale": "CONFLICT",
+        "recoveredState": "prepared",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      },
+      {
+        "schedule": "after-snapshot",
+        "stale": "CONFLICT",
+        "recoveredState": "prepared",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      },
+      {
+        "schedule": "peer-marker",
+        "stale": "CONFLICT",
+        "recoveredState": "broadcast-unknown",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      },
+      {
+        "cancellation": "abort",
+        "stale": "CANCELLED",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      },
+      {
+        "cancellation": "dispose",
+        "stale": "CANCELLED",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      },
+      {
+        "cancellation": "wallet-generation",
+        "stale": "CANCELLED",
+        "reserved": 1,
+        "ciphertextUnchanged": true
+      }
+    ],
+    "syntheticChainObservationsOnly": true,
+    "economicPreparationAllowed": false,
+    "pageErrors": 0,
+    "externalEgress": 0
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "scripts/test-vault-browser.mjs"
+      ],
+      "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+      "startedAtUtc": "2026-10-26T22:13:09.398152+00:00",
+      "finishedAtUtc": "2026-10-26T22:13:27.338926+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+        "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+      },
+      "newRuntimeCode": false,
+      "exitRecord": "docs/evidence/p2p-composition-browser-20261026/01-native-browser-first-run.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+      "startedAtUtc": "2026-10-26T22:15:24.434931+00:00",
+      "finishedAtUtc": "2026-10-26T22:15:27.554807+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+        "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+      },
+      "newRuntimeCode": false,
+      "exitRecord": "docs/evidence/p2p-composition-browser-20261026/02-node-composition.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+      "startedAtUtc": "2026-10-26T22:15:27.555374+00:00",
+      "finishedAtUtc": "2026-10-26T22:15:29.176555+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+        "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+      },
+      "newRuntimeCode": false,
+      "exitRecord": "docs/evidence/p2p-composition-browser-20261026/03-types.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+      "startedAtUtc": "2026-10-26T22:15:29.177483+00:00",
+      "finishedAtUtc": "2026-10-26T22:15:29.630472+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+        "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+      },
+      "newRuntimeCode": false,
+      "exitRecord": "docs/evidence/p2p-composition-browser-20261026/04-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "53d9ccf253ae524cc617a346aeed0482bab8b453",
+      "startedAtUtc": "2026-10-26T22:15:29.631047+00:00",
+      "finishedAtUtc": "2026-10-26T22:15:30.106992+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "scripts/test-vault-browser.mjs": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+        "packages/domain/src/authority.ts": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/src/intent-journal.ts": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+        "packages/storage/src/idb-vault-store.ts": "1dd0bfd7ce00ccaffb5b190c43ef05edbe4c618e23c5e2689789f21c9ae1035b"
+      },
+      "newRuntimeCode": false,
+      "exitRecord": "docs/evidence/p2p-composition-browser-20261026/05-build-policy.exit.json"
+    }
+  ],
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-composition-browser-20261026/01-native-browser-first-run.log.gz",
+      "sha256": "5970ef8e212dbd8e827bcda92ed6f41d4b4c463d2a66f80feacad4f2d93b0806",
+      "rawSha256": "645d4eaa2ae206f1737e07e6c019fb8741fe18b30c35d077f34ac5a6da6ebd10",
+      "rawBytes": 1577
+    },
+    {
+      "path": "docs/evidence/p2p-composition-browser-20261026/02-node-composition.log.gz",
+      "sha256": "cc589956939dc61b718ecef358e4a6ad911072e4678bb6d197a22a0d839b3fed",
+      "rawSha256": "07639edd842034576405782899f403cbda9cd3111c4c4bb4137be8f5a81220c7",
+      "rawBytes": 1916
+    },
+    {
+      "path": "docs/evidence/p2p-composition-browser-20261026/03-types.log.gz",
+      "sha256": "485945fc6ca655912f127e755e1cfd2b0e62de54d64846e5c061f9e7cc827a94",
+      "rawSha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+      "rawBytes": 399
+    },
+    {
+      "path": "docs/evidence/p2p-composition-browser-20261026/04-boundaries.log.gz",
+      "sha256": "43e8a6454e5c21c75c36d7fa0084bfda39d4ad5f5c313c47cef59e7234e1f23b",
+      "rawSha256": "78d264998949c6180f7064a553649c48b1831fa4a0347ff95c7a84840827cd62",
+      "rawBytes": 240
+    },
+    {
+      "path": "docs/evidence/p2p-composition-browser-20261026/05-build-policy.log.gz",
+      "sha256": "1a810ad6ffb23a66bed146cdd8da28d8c215ed86ab3e0c954e78ffb814ddf019",
+      "rawSha256": "fffffcdd86c96cce8e0419368c0e368e6cc7c9915d044f58dfabb58e4a47b2a6",
+      "rawBytes": 985
+    }
+  ],
+  "freshCounts": {
+    "nativeCompositionSchedules": 6,
+    "nodeCompositionTests": 15,
+    "buildPolicyTests": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "originalHarnessAssertionsRetained": true,
+  "originalLaunchArgumentsAndLimitsUnchanged": true,
+  "firstRunDisposition": "new browser cases and existing harness passed first execution; no RED/defect/runtime fix fabricated",
+  "verificationLimits": [
+    "headless Linux Chromium only; not physical-device, other-browser or representative-wallet qualification",
+    "chain observation adapter is synthetic; no native chain/finality/deployment/ABI/G16 evidence authentication",
+    "zero out-of-origin page requests observed by harness routing; not machine-wide network audit",
+    "full npm suite, full app build, other browser scripts, Python/spec gates not rerun; prior exact-source evidence remains separate"
+  ],
+  "spendingDisabled": true,
+  "newDependencies": false,
+  "newNetworkPolicy": false,
+  "workersStarted": 0,
+  "ghostPayTouched": false,
+  "canonicalQueueReadOrWritten": false,
+  "remaining": "reviewed native terms/header-time/expected hash/deployment/finality binding, trusted journal lifecycle and actual trading implementation; keep all external trust/review/deployment/live gates"
+}

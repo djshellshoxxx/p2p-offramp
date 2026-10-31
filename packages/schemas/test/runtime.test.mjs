@@ -87,11 +87,21 @@ test('runtime inventory and restore replies are strict, bounded and contain only
 
 test('review commands and replies use strict bounded copies and unique plain entries',()=>{
  const id='1'.repeat(32),bytes=new Uint8Array([1]);
- const parsed=api.parseRuntimeCommand(command('saveTermsReview',{id,bytes}));bytes[0]=9;assert.equal(parsed.bytes[0],1);
- for(const fields of [{id,bytes:new Uint8Array()},{id,bytes:new Uint8Array(65537)},{id:'bad',bytes},{id,bytes:[],extra:1}])assert.throws(()=>api.parseRuntimeCommand(command('saveTermsReview',fields)));
- let invoked=0;assert.throws(()=>api.parseRuntimeCommand(Object.defineProperty(command('saveTermsReview',{id}),'bytes',{get(){invoked++;return bytes;},enumerable:true})));assert.equal(invoked,0);
+ const parsed=api.parseRuntimeCommand(command('saveTermsReview',{profileId:id,source:'file',bytes}));bytes[0]=9;assert.equal(parsed.bytes[0],1);
+ for(const fields of [{profileId:id,source:'file',bytes:new Uint8Array()},{profileId:id,source:'file',bytes:new Uint8Array(65537)},{profileId:'bad',source:'file',bytes},{profileId:id,source:'file',bytes:[],extra:1}])assert.throws(()=>api.parseRuntimeCommand(command('saveTermsReview',fields)));
+ let invoked=0;assert.throws(()=>api.parseRuntimeCommand(Object.defineProperty(command('saveTermsReview',{profileId:id,source:'file'}),'bytes',{get(){invoked++;return bytes;},enumerable:true})));assert.equal(invoked,0);
  const reply=value=>({version:1,requestId:1,generation:0,kind:'response',operation:'listTermsReviews',result:{ok:true,value}});
- assert.equal(api.parseRuntimeMessage(reply({entries:[{id,bytes}]})).result.value.entries.length,1);
- for(const entries of [[{id,bytes},{id,bytes}],new Array(1),[{id,bytes,extra:1}],Array.from({length:9},(_,i)=>({id:String(i).repeat(32),bytes}))])assert.throws(()=>api.parseRuntimeMessage(reply({entries})));
- const hostile=[];Object.defineProperty(hostile,'0',{get(){invoked++;return{id,bytes};},enumerable:true});assert.throws(()=>api.parseRuntimeMessage(reply({entries:hostile})));assert.equal(invoked,0);
+ assert.equal(api.parseRuntimeMessage(reply({items:[{recordId:id,source:'file',bytes}],skipped:0})).result.value.items.length,1);
+ for(const items of [[{recordId:id,source:'file',bytes},{recordId:id,source:'file',bytes}],new Array(1),[{recordId:id,source:'file',bytes,extra:1}],Array.from({length:9},(_,i)=>({recordId:String(i).repeat(32),source:'file',bytes}))])assert.throws(()=>api.parseRuntimeMessage(reply({items,skipped:0})));
+ const hostile=[];Object.defineProperty(hostile,'0',{get(){invoked++;return{recordId:id,source:'file',bytes};},enumerable:true});assert.throws(()=>api.parseRuntimeMessage(reply({items:hostile,skipped:0})));assert.equal(invoked,0);
+});
+
+test('runtime response rejects a changing result discriminator in both branches',()=>{
+ const parse=fn('parseRuntimeMessage');
+ for(const first of [true,false]){
+  let reads=0;
+  const original=first?{ok:true,value:{state:'locked',handle:null}}:{ok:false,error:{code:'LOCKED',messageKey:'runtime.error.locked'}};
+  const result=new Proxy(original,{getOwnPropertyDescriptor(target,key){const descriptor=Reflect.getOwnPropertyDescriptor(target,key);return key==='ok'?{...descriptor,value:++reads===1?first:!first}:descriptor;}});
+  invalid(()=>parse({...command('status'),kind:'response',result}));assert.equal(reads,2);
+ }
 });

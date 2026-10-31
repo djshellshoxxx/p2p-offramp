@@ -1,0 +1,14 @@
+--- a/packages/domain/src/trade-terms.ts
++++ b/packages/domain/src/trade-terms.ts
+@@ -89,7 +89,10 @@
+ const utf8 = new TextEncoder();
+ /** Exact UTF-8 of an already-valid JS string; lone surrogates are rejected rather than replaced. */
+ function text(input: unknown, minimum: number, maximum: number, ascii = false): Uint8Array {
+-  if (typeof input !== 'string' || /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(input)) return fail();
++  if (typeof input !== 'string') return fail();
++  // UTF-8 needs at least one byte per UTF-16 code unit, so a longer string can never fit: refuse before regex/encode allocation.
++  if (input.length > maximum) return fail('LIMIT_EXCEEDED');
++  if (/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(input)) return fail();
+   if (ascii && !/^[\x21-\x7e]*$/.test(input)) return fail();
+   const bytes = utf8.encode(input);
+   if (bytes.byteLength < minimum) return fail();

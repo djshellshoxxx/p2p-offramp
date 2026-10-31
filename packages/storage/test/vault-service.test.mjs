@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { webcrypto } from 'node:crypto';
+import { createEnvelope, encryptRevision, disposeMaterial } from '../src/vault-crypto.ts';
+import { MAX_REVISION } from '../../schemas/index.ts';
 const api = await import('../src/vault-service.ts').catch(error => { if (error.code === 'ERR_MODULE_NOT_FOUND') return {}; throw error; });
 const clone = value => structuredClone(value);
 const pass = 'portable test passphrase';
@@ -309,4 +311,47 @@ test('G02 persisted readback decrypts the stored row with the live key and refus
   store.rows.set(session.profileId, tampered); error(await vault.readPersisted(session.sessionId), 'CONFLICT');
   store.rows.set(session.profileId, good); assert.equal(value(await vault.readPersisted(session.sessionId)).length, 1);
   assert.equal(rev, 1); vault.lock(session.sessionId); error(await vault.readPersisted(session.sessionId), 'LOCKED');
+});
+
+function settlesWithin(promise, ms = 2000) {
+  let timer; const late = new Promise((_, fail) => { timer = setTimeout(() => fail(new Error('operation never settled')), ms); });
+  return Promise.race([promise, late]).finally(() => clearTimeout(timer));
+}
+test('G02 rejects a signal that is not an AbortSignal without wedging the session queue', async () => {
+  const { vault, store } = service(); const session = value(await vault.create(pass));
+  for (const signal of [new AbortController(), {}, { aborted: false, addEventListener() { throw new Error('SECRET'); } }]) {
+    error(await settlesWithin(vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }], signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.readPersisted(session.sessionId, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.assertFresh(session.sessionId, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.resealSnapshot(session.sessionId, id(1), 0, records => records, 'another passphrase', signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.listProfiles(signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.unlock(session.profileId, pass, signal)), 'INVALID_INPUT');
+    error(await settlesWithin(vault.create(pass, signal)), 'INVALID_INPUT');
+  }
+  assert.equal(store.writes, 1); assert.equal(store.rows.size, 1);
+  // The session stayed live and its serialization tail still advances.
+  assert.equal(value(await settlesWithin(vault.commit(session.sessionId, 0, [{ op: 'put', record: record(1) }]))), 1);
+  assert.equal(value(await settlesWithin(vault.assertFresh(session.sessionId))), 1);
+});
+test('G02 revision cap: the last allowed commit succeeds; the next returns REKEY_REQUIRED without encrypting or writing', async () => {
+  const profileId = id(7), keyId = id(8);
+  const base = { format: 'p2p-offramp-private-records', version: 1, profileId, keyId, revision: 0, records: [] };
+  const sealed = await createEnvelope(base, pass, webcrypto);
+  const nearCap = await encryptRevision(sealed.material, { ...base, revision: MAX_REVISION - 1, records: [record(1)] }, MAX_REVISION - 2);
+  disposeMaterial(sealed.material);
+  let encryptions = 0;
+  const provider = { getRandomValues: webcrypto.getRandomValues.bind(webcrypto), subtle: new Proxy(webcrypto.subtle, { get(target, name) {
+    if (name === 'encrypt') return (...args) => { encryptions++; return target.encrypt(...args); };
+    const member = Reflect.get(target, name); return typeof member === 'function' ? member.bind(target) : member;
+  } }) };
+  const store = new Store(); store.rows.set(profileId, clone(nearCap));
+  const { vault } = service(store, provider);
+  const session = value(await vault.unlock(profileId, pass)); assert.equal(session.revision, MAX_REVISION - 1);
+  assert.equal(value(await vault.commit(session.sessionId, MAX_REVISION - 1, [{ op: 'put', record: record(2) }])), MAX_REVISION);
+  const writes = store.writes, encrypted = encryptions, row = clone(store.rows.get(profileId));
+  error(await vault.commit(session.sessionId, MAX_REVISION, [{ op: 'put', record: record(3) }]), 'REKEY_REQUIRED');
+  assert.equal(store.writes, writes); assert.equal(encryptions, encrypted); assert.deepEqual(store.rows.get(profileId), row);
+  // An empty batch at the cap writes nothing and reports the current revision; the session stays usable for reads.
+  assert.equal(value(await vault.commit(session.sessionId, MAX_REVISION, [])), MAX_REVISION);
+  assert.equal(store.writes, writes); assert.equal(value(await vault.assertFresh(session.sessionId)), MAX_REVISION);
 });

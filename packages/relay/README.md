@@ -1,4 +1,21 @@
-# Local advertisement and relay boundary
+# Consolidated relay implementations
+
+The canonical G19/G21 API is `createRelayPool` from `src/pool.ts`, with `src/ad.ts`
+and `src/nip01.ts`, exported through `index.ts` and used by the private exchange.
+It uses the G05 broker, the full project advertisement schema, native NIP-01 frames
+and the established relay-lifetime regression suite. Those modules and their
+history were consolidated from the preserved remote integration.
+
+The independently developed restricted local profile is retained without replacing
+that API: `src/advertisement.ts` and `RelayPool` in `src/local-pool.ts`. Its tests
+are `advertisement.test.mjs`, `bip340-vectors.test.mjs` and `local-pool.test.mjs`.
+It is used only for local compatibility/evidence and is not exported through the
+canonical package facade. Its exact wire profile differs from the canonical API;
+do not mix books, filters, frames or constructors across these implementations.
+Both remain excluded from the default app graph. The canonical normative contracts
+and remote evidence remain at their original specification/handoff paths.
+
+## Restricted local advertisement and relay boundary
 
 These modules implement test-only G19/G21 validation and bounded relay orchestration. They are excluded from the
 application core graph, open no global WebSocket/fetch connection, choose no endpoint, and grant no trading authority.
@@ -66,6 +83,6 @@ Run from repo root:
 
 ```sh
 node packages/relay/test/advertisement.test.mjs
-node packages/relay/test/pool.test.mjs
+node packages/relay/test/local-pool.test.mjs
 npm run typecheck
 ```

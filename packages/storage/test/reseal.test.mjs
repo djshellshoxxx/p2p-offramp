@@ -4,6 +4,7 @@ import { webcrypto } from 'node:crypto';
 import { EncryptedVaultService, VaultStorageError } from '../src/vault-service.ts';
 import { MigrationRegistry, InternalMigrationResealer, MAX_IN_PLACE_CHANGES } from '../src/migration-service.ts';
 import { MAX_VAULT_PROFILES } from '../../schemas/index.ts';
+import { EncryptedBackupService } from '../src/backup-service.ts';
 const clone = v => structuredClone(v);
 const pass = 'reseal source passphrase', dest = 'reseal destination passphrase';
 const id = n => n.toString(16).padStart(32, '0');
@@ -113,4 +114,27 @@ test('G03 reseal respects the profile bound, cancellation and a durable add that
   assert.equal(raced.store.rows.has(receipt.newProfileId), true, 'committed copy is reported, not hidden');
   const locked = await seeded([trade(1)]); locked.vault.lock(locked.session.sessionId);
   code(await locked.resealer.migrateAndReseal(locked.request, dest), 'LOCKED');
+});
+
+function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
+test('G03 reseal and backup jobs share the one recovery slot per document', async () => {
+  // A backup export holds the slot: reseal refuses BUSY before any key derivation or write.
+  const held = deferred(), entered = deferred();
+  const blocked = { get: async () => { entered.resolve(); await held.promise; return undefined; }, subscribeInvalidation: () => () => {} };
+  const backup = new EncryptedBackupService(blocked, webcrypto);
+  const s = await seeded([trade(1)]);
+  const exporting = backup.exportWithStatus(id(1)); await entered.promise;
+  code(await s.resealer.migrateAndReseal(s.request, dest), 'BUSY'); assert.equal(s.store.rows.size, 1);
+  held.resolve(); await assert.rejects(exporting, error => error.code === 'NOT_FOUND');
+  // A reseal in flight holds the slot: backup jobs refuse BUSY until it settles, then run again.
+  const adding = deferred(), added = deferred();
+  s.store.beforeAdd = async () => { added.resolve(); await adding.promise; };
+  const resealing = s.resealer.migrateAndReseal(s.request, dest); await added.promise;
+  const other = new EncryptedBackupService(new Store(), webcrypto);
+  await assert.rejects(other.exportWithStatus(s.session.profileId), error => error.code === 'BUSY');
+  adding.resolve(); value(await resealing); assert.equal(s.store.rows.size, 2);
+  await assert.rejects(other.exportWithStatus(s.session.profileId), error => error.code === 'NOT_FOUND');
+  // An invalid request releases the slot it never needed.
+  code(await s.resealer.migrateAndReseal({ ...s.request, migrationId: 'unknown' }, dest), 'UNSUPPORTED_VERSION');
+  backup.dispose(); other.dispose();
 });

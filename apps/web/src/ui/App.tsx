@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
-import { errorMessage, parseRoute } from './routes.ts';
+import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
@@ -9,6 +9,7 @@ import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
+const noScope = () => 0;
 const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
 
 export interface AppProps {
@@ -20,11 +21,19 @@ export interface AppProps {
 export function App({ services, starting = false, startupError, trade = null }: AppProps) {
   const tradeSnapshot = useTradeReview(trade);
   const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
+  const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
   const [pending, setPending] = useState('');
+  // A confirmed restore may offer an explicit handoff; never persist selection or put it in a route.
+  const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
+  const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
+  // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
+  // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
+  useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const initialRoute = useRef(true);
@@ -33,7 +42,11 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const locking = useRef(false);
   useEffect(() => {
     mounted.current = true;
-    const navigate = () => { setRoute(parseRoute(window.location.hash)); setNotice(''); };
+    const navigate = () => {
+      const next = parseRoute(window.location.hash);
+      setRoute(next); setNotice('');
+      if (next.page !== 'home') setRestoredProfileId('');
+    };
     const connectivity = () => setOnline(navigator.onLine);
     window.addEventListener('hashchange', navigate);
     window.addEventListener('online', connectivity); window.addEventListener('offline', connectivity);
@@ -74,7 +87,8 @@ export function App({ services, starting = false, startupError, trade = null }: 
     <div className="workspace">
       <header className="status-bar">
         <div><strong>{m.fundsDisabled}</strong><span>{m.networkDisabled}</span><span>{online ? m.online : m.offline}</span>
-          {syntheticDemo ? <strong className="demo-badge">{m.syntheticDemo}</strong> : null}</div>
+          {syntheticDemo ? <strong className="demo-badge">{m.syntheticDemo}</strong> : null}
+          {testnet ? <strong className="demo-badge">{m.testnet}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
           {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === m.locking}>{m.lock}</button> : null}
@@ -86,9 +100,12 @@ export function App({ services, starting = false, startupError, trade = null }: 
         {starting ? <p className="notice" role="status">{m.starting}</p> : !services ? <p className="notice error" role="alert">{startupError ? errorMessage(startupError) : m.unavailable}</p> : null}
         {pending ? <p role="status">{pending}</p> : null}
         {notice ? <p className="notice error" role="alert">{notice}</p> : null}
-        {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} /> :
-          route.page === 'recovery' ? <Recovery services={services} /> : route.page === 'settings' ? <Settings /> :
-          route.page === 'offers' ? <OffersPage trade={trade} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} /> :
+        {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
+          route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
+            if (!isProfileId(id)) return;
+            setRestoredProfileId(id); window.location.hash = '#/home';
+          }} /> : route.page === 'settings' ? <Settings /> :
+          route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>

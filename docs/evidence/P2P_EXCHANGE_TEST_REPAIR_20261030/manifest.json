@@ -1,0 +1,30 @@
+{
+  "source": "08d83a5dd07054b0dfecdf1581eca17101fa35a8",
+  "runtime": "0054543f81f48e928a46bd58c1dab14f91d0edeb",
+  "runtimeBlob": "2f936ca502357460aa48841e406739dabdf052bf",
+  "testBlob": "043d2fb455198a31b61517df3e57220edec3ae3f",
+  "node": "24.22.1",
+  "nobleVersions": {
+    "curves": "2.4.0",
+    "hashes": "2.4.0",
+    "ciphers": "2.4.0"
+  },
+  "artifacts": {
+    "open-findings.test.mjs": {
+      "sha256": "601ad33a7b9ec69e22dd461d976e758f5ddd873a645f52cf21afc698920215b1",
+      "bytes": 7914
+    },
+    "open-findings-red.tap": {
+      "sha256": "bb9d229c921a2c5302927c8c6fb2fa172f6978a95fa3fd0bd5dc82d65eef501d",
+      "bytes": 4981
+    }
+  },
+  "command": "node --test --test-reporter=tap docs/evidence/P2P_EXCHANGE_TEST_REPAIR_20261030/open-findings.test.mjs",
+  "exitCode": 1,
+  "tests": 5,
+  "pass": 0,
+  "fail": 5,
+  "skipped": 0,
+  "cancelled": 0,
+  "qualification": "Open-defect evidence using real crypto and registry review. Not a runtime fix, release acceptance or audit."
+}

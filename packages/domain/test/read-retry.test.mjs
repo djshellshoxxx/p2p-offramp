@@ -96,3 +96,133 @@ test('scheduler failure removes abort listeners; canceller failure cannot skip r
   assert.equal(result.error.code,'UNAVAILABLE');assert.equal(added,removed);controller.abort();
  }
 });
+
+test('a throwing initial now() resolves a fixed UNAVAILABLE result with zero operation calls',async()=>{
+ const{retry,time}=setup();let calls=0;
+ time.runtime.now=()=>{throw Error('SECRET https://rpc.test');};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:new AbortController().signal,operationId:id});
+ assert.equal(result.ok,false);assert.equal(result.error.code,'UNAVAILABLE');assert.equal(result.error.correlationId,id);
+ assert.equal(calls,0);assert.doesNotMatch(JSON.stringify(result),/SECRET|rpc.test/);assert.equal(time.pending,0);
+});
+test('a later throwing now() after a settled failed attempt stops with UNAVAILABLE, no further reads or timers',async()=>{
+ const{retry,time}=setup();let calls=0,armed=false;
+ time.runtime.now=()=>{if(armed)throw Error('SECRET later');return 0;};
+ const task=retry(async()=>{calls++;armed=true;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id});
+ await flush();const result=await task;
+ assert.equal(result.ok,false);assert.equal(result.error.code,'UNAVAILABLE');assert.equal(result.error.correlationId,id);
+ assert.equal(calls,1);assert.doesNotMatch(JSON.stringify(result),/SECRET/);
+ await time.advance(50_000);assert.equal(calls,1);assert.equal(time.pending,0);
+});
+test('a throwing random() after a settled retryable read stops with UNAVAILABLE, no backoff or retry',async()=>{
+ const{retry,time}=setup();let calls=0;
+ time.runtime.random=()=>{throw Error('SECRET rng');};
+ const task=retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id});
+ await flush();const result=await task;
+ assert.equal(result.ok,false);assert.equal(result.error.code,'UNAVAILABLE');assert.equal(result.error.correlationId,id);
+ assert.equal(calls,1);assert.doesNotMatch(JSON.stringify(result),/SECRET/);
+ await time.advance(50_000);assert.equal(calls,1);assert.equal(time.pending,0);
+});
+test('initial now() that aborts then throws resolves CANCELLED with zero calls',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0;
+ time.runtime.now=()=>{controller.abort();throw Error('SECRET');};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:controller.signal,operationId:id});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.doesNotMatch(JSON.stringify(result),/SECRET/);assert.equal(time.pending,0);
+});
+test('initial now() that aborts then returns a valid number resolves CANCELLED with zero calls',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0;
+ time.runtime.now=()=>{controller.abort();return 0;};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:controller.signal,operationId:id});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.equal(time.pending,0);
+});
+test('initial now() that makes isCurrent false then throws resolves CANCELLED',async()=>{
+ const{retry,time}=setup();let live=true,calls=0;
+ time.runtime.now=()=>{live=false;throw Error('SECRET');};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:new AbortController().signal,operationId:id,isCurrent:()=>live});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.doesNotMatch(JSON.stringify(result),/SECRET/);assert.equal(time.pending,0);
+});
+test('now() that aborts while returning a valid number at the budget read before an attempt resolves CANCELLED',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0,reads=0;
+ time.runtime.now=()=>{reads++;if(reads===2)controller.abort();return 0;};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:controller.signal,operationId:id});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.equal(time.pending,0);
+});
+test('now() that aborts then returns a non-finite value at the budget-zero path resolves CANCELLED, not TIMEOUT',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0,reads=0;
+ time.runtime.now=()=>{reads++;if(reads===2){controller.abort();return Number.NaN;}return 0;};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:controller.signal,operationId:id});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.equal(time.pending,0);
+});
+test('now() that aborts then returns 40000 (budget exhausted) at the first budget read resolves CANCELLED, not TIMEOUT',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0,reads=0;
+ time.runtime.now=()=>{reads++;if(reads===2){controller.abort();return 40_000;}return 0;};
+ const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:controller.signal,operationId:id});
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,0);assert.equal(time.pending,0);
+});
+test('post-attempt now() that aborts then throws resolves CANCELLED with no retry or timers',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0,armed=false;
+ time.runtime.now=()=>{if(armed){controller.abort();throw Error('SECRET');}return 0;};
+ const task=retry(async()=>{calls++;armed=true;return failure('UNAVAILABLE');},{signal:controller.signal,operationId:id});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.doesNotMatch(JSON.stringify(result),/SECRET/);
+ await time.advance(50_000);assert.equal(calls,1);assert.equal(time.pending,0);
+});
+test('post-attempt now() that makes isCurrent false and returns 40000 resolves CANCELLED, not TIMEOUT',async()=>{
+ const{retry,time}=setup();let live=true,calls=0,armed=false;
+ time.runtime.now=()=>{if(armed){live=false;return 40_000;}return 0;};
+ const task=retry(async()=>{calls++;armed=true;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id,isCurrent:()=>live});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.equal(time.pending,0);
+});
+test('random() that aborts then returns a valid number resolves CANCELLED with no backoff scheduled',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0;
+ time.runtime.random=()=>{controller.abort();return 0.5;};
+ const task=retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:controller.signal,operationId:id});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.equal(time.delays.length,1);assert.equal(time.pending,0);
+ await time.advance(50_000);assert.equal(calls,1);
+});
+test('random() that aborts then throws resolves CANCELLED, not UNAVAILABLE',async()=>{
+ const{retry,time}=setup();const controller=new AbortController();let calls=0;
+ time.runtime.random=()=>{controller.abort();throw Error('SECRET rng');};
+ const task=retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:controller.signal,operationId:id});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.doesNotMatch(JSON.stringify(result),/SECRET/);assert.equal(time.pending,0);
+});
+test('random() that makes isCurrent false and returns an invalid value resolves CANCELLED, not UNAVAILABLE',async()=>{
+ const{retry,time}=setup();let live=true,calls=0;
+ time.runtime.random=()=>{live=false;return 2;};
+ const task=retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id,isCurrent:()=>live});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.equal(time.pending,0);
+});
+test('now() that goes stale at the delay-vs-budget read after a valid random resolves CANCELLED, not TIMEOUT',async()=>{
+ const{retry,time}=setup(0.5);let live=true,calls=0,armed=false;
+ time.runtime.random=()=>{armed=true;return 0.5;};
+ time.runtime.now=()=>{if(armed){live=false;return 40_000;}return 0;};
+ const task=retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id,isCurrent:()=>live});
+ await flush();const result=await task;
+ assert.equal(result.error.code,'CANCELLED');assert.equal(calls,1);assert.equal(time.delays.length,1);assert.equal(time.pending,0);
+});
+test('live non-finite initial clock samples retain UNAVAILABLE before any read',async()=>{
+ for(const sample of [Number.NaN,Number.POSITIVE_INFINITY,Number.NEGATIVE_INFINITY]){
+  const{retry,time}=setup();let calls=0;time.runtime.now=()=>sample;
+  const result=await retry(async()=>{calls++;return{ok:true,value:1};},{signal:new AbortController().signal,operationId:id});
+  assert.equal(result.error.code,'UNAVAILABLE');assert.equal(calls,0);assert.equal(time.pending,0);assert.equal(time.delays.length,0);
+ }
+});
+test('live non-finite later clock samples retain TIMEOUT at every remaining-budget site',async()=>{
+ for(const failureAt of [2,3,4])for(const sample of [Number.NaN,Number.POSITIVE_INFINITY,Number.NEGATIVE_INFINITY]){
+  const{retry,time}=setup();let reads=0,calls=0;time.runtime.now=()=>++reads===failureAt?sample:0;
+  const result=await retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id});
+  assert.equal(result.error.code,'TIMEOUT');assert.equal(calls,failureAt===2?0:1);assert.equal(time.delays.length,failureAt===2?0:1);
+  await time.advance(50_000);assert.equal(calls,failureAt===2?0:1);assert.equal(time.pending,0);
+ }
+});
+test('live thrown later clock samples resolve UNAVAILABLE at every remaining-budget site',async()=>{
+ for(const failureAt of [2,3,4]){
+  const{retry,time}=setup();let reads=0,calls=0;time.runtime.now=()=>{if(++reads===failureAt)throw Error('SECRET https://rpc.test');return 0;};
+  const result=await retry(async()=>{calls++;return failure('UNAVAILABLE');},{signal:new AbortController().signal,operationId:id});
+  assert.equal(result.error.code,'UNAVAILABLE');assert.equal(calls,failureAt===2?0:1);assert.equal(time.delays.length,failureAt===2?0:1);
+  assert.doesNotMatch(JSON.stringify(result),/SECRET|rpc.test/);await time.advance(50_000);assert.equal(calls,failureAt===2?0:1);assert.equal(time.pending,0);
+ }
+});

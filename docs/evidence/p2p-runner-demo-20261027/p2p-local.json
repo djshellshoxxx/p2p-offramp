@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "a9135412158144ff2ac01461bc77654c5fab38ca",
+      "expected_tree": "6de276d73153fb373d0f414b018baf819830e026",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "locked-source",
+          "argv": [
+            "node",
+            "-e",
+            "const fs=require('node:fs'),c=require('node:crypto');console.log(JSON.stringify({lockSha256:c.createHash('sha256').update(fs.readFileSync('package-lock.json')).digest('hex')}));"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "parser",
+          "suites": [
+            {
+              "id": "fixed-regressions",
+              "categories": [
+                "unit"
+              ],
+              "argv": [
+                "node",
+                "--test",
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_files": [
+                "packages/schemas/test/evm-agreement-input.test.mjs"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "profiles": [
+                "quick"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "method": "existing deterministic fixed regressions; not seeded generation/mutation or coverage-guided fuzz",
+                "seedApplied": false,
+                "profileCasesApplied": false,
+                "sourceMapping": "p2p.parser",
+                "existingAssertionsAndThresholdsUnchanged": true,
+                "memoryHardLimit": false,
+                "singleIteration": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "read-retry",
+          "suites": [
+            {
+              "id": "fixed-regressions",
+              "categories": [
+                "unit"
+              ],
+              "argv": [
+                "node",
+                "--test",
+                "packages/domain/test/read-retry.test.mjs",
+                "packages/domain/test/errors.test.mjs"
+              ],
+              "required_files": [
+                "packages/domain/test/read-retry.test.mjs",
+                "packages/domain/test/errors.test.mjs"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "profiles": [
+                "quick"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "method": "existing deterministic fixed regressions; not seeded generation/mutation or coverage-guided fuzz",
+                "seedApplied": false,
+                "profileCasesApplied": false,
+                "sourceMapping": "p2p.read-retry",
+                "existingAssertionsAndThresholdsUnchanged": true,
+                "memoryHardLimit": false,
+                "singleIteration": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

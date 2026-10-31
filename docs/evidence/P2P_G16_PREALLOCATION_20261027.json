@@ -1,0 +1,432 @@
+{
+  "kind": "integrator-executed test-first intake of bounded Claude proposal; no app inclusion",
+  "assignment": "P2P-G16-PREALLOC-01",
+  "packetBase": "673006c1a9cb1e8a1e6eb1a665738b5312f3edc2",
+  "preImplementationHead": "68354100e95f839966bef91aac2d22b026be8b07",
+  "proposalLibrary": "libfile_79762651b9248191825f75d46520a9b0",
+  "proposalVersion": 0,
+  "proposalSha256": "53b97a313f52a054eecfc81ef004c6cf53fe99c75f1474412bd6f1f417fcce46",
+  "nativeCompleteBytesVerified": true,
+  "patches": [
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "base_sha256": "8b748874fb626e680ffd2957a6ccb0f7564754a6307bfee2e98db97b74ed6c4c",
+      "proposed_sha256": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+      "patch_sha256": "c7ab56f2551773c150f7450cfc226d8fb837b2b54d0b2d236668398a356c5af0",
+      "patch": "P2P-G16-tests-017.patch",
+      "checkExit": 0,
+      "numstat": "76\t0\tpackages/domain/test/trade-terms.test.mjs"
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "base_sha256": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+      "proposed_sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+      "patch_sha256": "e5e4b5c22bff980e5058cd1ae6dc1f1c232ae77f669123f5449e308891fabf0c",
+      "patch": "P2P-G16-implementation-017.patch",
+      "checkExit": 0,
+      "numstat": "4\t1\tpackages/domain/src/trade-terms.ts"
+    }
+  ],
+  "brokerRequest": "req_011CgRk5c4hn9ntunsGVB6dD",
+  "proposedByModel": "claude-sonnet-5-5",
+  "brokerAccountingReported": {
+    "tag": "p2p-g16-prealloc-017",
+    "model": "claude-sonnet-5-5",
+    "timestamp_utc": "2026-10-26T23:49:04.191396+00:00",
+    "completed_at_utc": "2026-10-26T23:49:23.833540+00:00",
+    "request_id": "req_011CgRk5c4hn9ntunsGVB6dD",
+    "usage": {
+      "input_tokens": 15378,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 3467,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "stop_reason": "end_turn",
+    "estimated_cost_usd": "0.065426",
+    "worst_case_reserved_usd": "2.09",
+    "state": "completed"
+  },
+  "integratorPaidApiCalls": 0,
+  "integrationOwner": "Codex coordinator; sole P2P integrator; no implementation worker started",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-terms.test.mjs"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:18:26.812888+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:18:27.017778+00:00",
+      "exitCode": 1,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/01-red-tests-only.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/01-red-tests-only.log.gz",
+      "logRawBytes": 3001,
+      "logRawSha256": "4a634bfa6e2870fbc1a8e7077f7ebeccb71bb2b9a00200dbeb6b3e73e8e687bf",
+      "logGzipSha256": "6cc27a8dcb997d6c76f4f4acd84f57bcae86d397aa2e8cb7916e68e95af70705"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-terms.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:18:49.606663+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:18:50.091162+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/02-green-focused.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/02-green-focused.log.gz",
+      "logRawBytes": 3495,
+      "logRawSha256": "09d128511de03b54349b5d732297d1c534dd55681a418d4bbd4b72b571d6ef70",
+      "logGzipSha256": "608e766706f17bf5d828429e05538eee85993f611febe8607f8c4c39376c753d"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/test-g16-browser.mjs"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:18:50.292259+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:18:51.820352+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/03-browser.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/03-browser.log.gz",
+      "logRawBytes": 3196,
+      "logRawSha256": "b91fe50e08c81d647e6041c8cf4a0c45aa9409f15ba6366cf7ee2281c0d86887",
+      "logGzipSha256": "73cd661028c3312920a6ba761bfae940766323f42fef70cf7e32b1b457fb5d6f"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:19:31.866240+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:19:48.393215+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/04-unit.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/04-unit.log.gz",
+      "logRawBytes": 41144,
+      "logRawSha256": "82a2971b79fa1eab53572c692b2653f30d58c90014a0e35a92566f4bf839e5c3",
+      "logGzipSha256": "b2f988adf5c90043b551030f848a3b39346da4e7332f493c8b58f1d1b53ad384"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:19:31.886080+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:19:35.383987+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/05-build-types.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/05-build-types.log.gz",
+      "logRawBytes": 1510,
+      "logRawSha256": "7ca692aebf5c885d46a9ae1e6dd4f08b157d98665c85dc9d7a6bb20a6c58dfa2",
+      "logGzipSha256": "52fb27f570c9106c6fe3feb1456f976942275b3ad85a14931dfd2f842c2d158f"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:19:31.869407+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:19:33.299968+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/06-boundaries.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/06-boundaries.log.gz",
+      "logRawBytes": 448,
+      "logRawSha256": "86d0244ce8422f965c4e947e8bcd62fad9359ea3d88a41abe3e15e3b168c9b23",
+      "logGzipSha256": "120fc19a010ca2cb5e8db73cc3cbd17edb3985149673837f1a2992ba8f3d2d2e"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "base": "68354100e95f839966bef91aac2d22b026be8b07",
+      "startedAtUtc": "2026-10-27T00:19:31.882288+00:00",
+      "sourceFiles": {
+        "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+        "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+        "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+        "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+        "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+      },
+      "processLocalEnvironment": {
+        "P2P_CHROMIUM": "/usr/bin/chromium"
+      },
+      "finishedAtUtc": "2026-10-27T00:19:33.364036+00:00",
+      "exitCode": 0,
+      "sourceFilesUnchangedDuringRun": true,
+      "terminalRecord": "docs/evidence/p2p-g16-preallocation-20261027/07-build-policy.exit.json",
+      "log": "docs/evidence/p2p-g16-preallocation-20261027/07-build-policy.log.gz",
+      "logRawBytes": 987,
+      "logRawSha256": "16c8dfa85285726ef623688fc92051161141a4b5e0f1329ffbfd474d51cb8760",
+      "logGzipSha256": "94cfb025703210e1915ea1dcdeee3226017764a2bcba717026890e5146497d33"
+    }
+  ],
+  "finalSourceHashes": {
+    "packages/domain/src/trade-terms.ts": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+    "packages/domain/test/trade-terms.test.mjs": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+    "packages/wallet/src/evm-terms.ts": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+    "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+    "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+    "package-lock.json": "f96aad7a517eae4ee654deecf1cc8b43a5eda2bd034ff058a842fd4b8dd29171",
+    "security/crypto-inventory.json": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e"
+  },
+  "red": {
+    "tests": 10,
+    "pass": 8,
+    "fail": 2,
+    "skip": 0,
+    "cause": "specific oversized strings reached native TextEncoder; source still exact packet base"
+  },
+  "greenFocused": {
+    "tests": 32,
+    "pass": 32,
+    "fail": 0,
+    "skip": 0
+  },
+  "greenAggregate": {
+    "tests": 383,
+    "pass": 383,
+    "fail": 0,
+    "skip": 0
+  },
+  "buildPolicy": {
+    "tests": 5,
+    "pass": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "browserReport": {
+    "fixture": "private-g16-public-data-chromium",
+    "browser": "154.0.8037.57",
+    "node": "24.19.0",
+    "providerVersions": {
+      "@noble/hashes": "2.4.0",
+      "@noble/curves": "2.4.0"
+    },
+    "providerManifestHashes": {
+      "@noble/hashes": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf",
+      "@noble/curves": "63d976a6ee72f2dcdc81e6c8bf907edff54eb20e8423218578fbfaf29cff96e6"
+    },
+    "fixtureHashes": {
+      "packages/wallet/test/fixtures/eip712-keccak-vectors.json": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+      "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af"
+    },
+    "document": {
+      "assertions": 153,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "document",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "worker": {
+      "assertions": 153,
+      "groups": [
+        "independent public digest and EOA known answers",
+        "retained Python-implementation private encoding and SHA256 expectations",
+        "same-provider native ERC20 and nonempty-capability integration bundles",
+        "private commitment tamper domain replay and distinct role binding",
+        "bounded malformed accessor proxy sparse UTF8 and low-s refusal",
+        "intrinsic signature copy without caller overrides",
+        "abort and generation guards at both native SHA awaits",
+        "immutable snapshot and private buffer clearing before later hash completes",
+        "sanitized hash failure and terminal buffer clearing"
+      ],
+      "independentKeccakKats": 2,
+      "independentG16Digests": 6,
+      "independentG16Signatures": 4,
+      "officialMailRecovery": true,
+      "retainedPrivateEncodingVectors": 2,
+      "sameProviderIntegrationBundles": 3,
+      "heldCancellationSchedules": 4,
+      "runtime": "dedicated-module-worker",
+      "testOnly": true,
+      "economicPreparationAllowed": false,
+      "privateDetailsReturned": false
+    },
+    "browserArtifactSha256": "8c614bcc6ceefa5f60dc2963f4506ca3d4332418b334530968ef3d7556379596",
+    "fixtureModuleCount": 24,
+    "allowedFixturePaths": [
+      "/",
+      "/qualification.js",
+      "/worker.js"
+    ],
+    "unexpectedRequests": 0,
+    "consoleMessages": 0,
+    "pageErrors": 0,
+    "privateSurfaces": {
+      "local": 0,
+      "session": 0,
+      "databases": 0,
+      "cacheEntries": 0,
+      "serviceWorkers": 0
+    },
+    "integrationFixtureProvenance": "Node-only existing Noble-family deterministic synthetic signing; not independent qualification",
+    "appInclusion": false,
+    "providerApproval": false,
+    "auditAcceptance": false,
+    "deviceAcceptance": false,
+    "releaseEnabled": 0,
+    "economicPreparationAllowed": false
+  },
+  "strictTypesBuildBoundaries": "exit0;all4strict configurations;46production/18core static graph",
+  "originalGoldenBytesUnchanged": true,
+  "appliedFilesMatchBrokerProposedHashes": true,
+  "appGraphs": {
+    "core-graph-document.json": "51465478212d250eb7aa4d599c3e77f33350a49db2521405050953c7347028e5",
+    "core-graph-worker.json": "7328f99ebd34c7a4b03edd85ccba1857fd83943f8931ac2bf2a7ac6ddfbf92b5"
+  },
+  "noEvmVerifierWalletOrQualificationInAppGraphs": true,
+  "releaseEnabled": 0,
+  "connectOrigins": [],
+  "economicPreparationAllowed": false,
+  "unchangedLimits": "4096UTF8 instruction bytes,64ASCII capability ID,32ASCII version,16384private bytes,8sorted unique capabilities; postencode byte checks unchanged",
+  "errorPrecedence": "oversized strings receive LIMIT_EXCEEDED before surrogate/ASCII scan/UTF8; bounded malformed inputs preserve INVALID_INPUT",
+  "scopeLimit": "bounds the encoder temporary only; caller strings and document-to-Worker structured-clone intake remain separate",
+  "notRerun": [
+    "emitted-app UI browser suite",
+    "separate vault/runtime/content/reseal browser suite",
+    "Python/spec suite",
+    "other browsers/devices"
+  ],
+  "policyDependenciesChanged": false,
+  "ghostPayAccess": false,
+  "sourcePublicationOrCi": false,
+  "next": "bounded typed document/Worker intake and actual UI/lifecycle/privacy integration remain separate reviewed conditions; no provider/app promotion"
+}

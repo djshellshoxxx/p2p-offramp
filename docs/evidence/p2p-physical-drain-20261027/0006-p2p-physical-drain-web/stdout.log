@@ -1,0 +1,50 @@
+
+> p2p-offramp@0.1.0 test:web:browser
+> node scripts/test-web-build-browser.mjs
+
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 32 modules transformed.
+rendering chunks...
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/_headers                           0.34 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/content-policy.json                1.00 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/index.html                         1.25 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/core-graph-worker.json             2.89 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/third-party-licenses.json          3.62 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/core-graph-document.json           4.78 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/assets/vault.worker-CQBexgMb.js   43.73 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/assets/index-D9Ait9nD.css          5.85 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/meta/assets/index-CNb8pu06.js         270.47 kB
+
+✓ built in 204ms
+vite v8.3.5 building client environment for header...
+transforming...
+✓ 32 modules transformed.
+rendering chunks...
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/_headers                           0.34 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/index.html                         0.92 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/content-policy.json                0.97 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/core-graph-worker.json             2.89 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/third-party-licenses.json          3.62 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/core-graph-document.json           4.78 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/assets/vault.worker-CQBexgMb.js   43.73 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/assets/index-D9Ait9nD.css          5.85 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/header/assets/index-CNb8pu06.js         270.47 kB
+
+✓ built in 135ms
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 32 modules transformed.
+rendering chunks...
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/_headers                           0.34 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/content-policy.json                1.00 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/index.html                         1.25 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/core-graph-worker.json             2.89 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/third-party-licenses.json          3.62 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/core-graph-document.json           4.78 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/assets/vault.worker-CQBexgMb.js   43.73 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/assets/index-D9Ait9nD.css          5.85 kB
+../../tmp/p2pdrain27/jobs/0006-p2p-physical-drain-web/tmp/p2p-emitted-web-Zq5Dpa/repeat-meta/assets/index-CNb8pu06.js         270.47 kB
+
+✓ built in 134ms
+{"fixture":"emitted-react-vite-shell-local-chromium","browser":"154.0.8037.57","reports":[{"delivery":"meta","base":"/ipfs/bafy-local-fixture/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"meta","base":"/nested/project/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"meta","base":"/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"header","base":"/ipfs/bafy-local-fixture/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"header","base":"/nested/project/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"header","base":"/","widths":[320,768,1024,1440],"hashReload":true,"lockedBoot":true,"hostileRouteAndTextbox":true},{"delivery":"meta","actualArtifactPolicyDenials":true},{"delivery":"header","actualArtifactPolicyDenials":true},{"delivery":"header","localFraming":"blocked","deployedAttestation":false},{"delivery":"meta","localFraming":"permitted-as-disclosed","deployedAttestation":false},{"mode":"missing-entry","encryptedSourcePreserved":true},{"mode":"missing-worker","encryptedSourcePreserved":true},{"mode":"unsupported-document-crypto","encryptedSourcePreserved":true},{"mode":"unsupported-worker-storage","encryptedSourcePreserved":true}],"localRebuildByteMatch":true,"nativeEncryptedUnlockExport":true,"uiCreateRestoreInventory":true,"uiRestoreReconciliation":true,"automaticWalletPrompts":0,"forbiddenLoopbackRequests":0,"unexpectedRequests":0,"deviceAcceptance":false,"deployedFramingAttestation":false,"signedRelease":false,"releaseAcceptance":false}

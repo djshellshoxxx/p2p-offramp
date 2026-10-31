@@ -1,0 +1,266 @@
+{
+  "base_sha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+  "base_tree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+  "status": "UNEXECUTED inert proposal only; no P2P code applied/imported/compiled/tested",
+  "files": [
+    {
+      "path": "scripts/tests/evm-agreement-fuzz.test.mjs",
+      "baseState": "absent",
+      "base_sha256": null,
+      "target_bytes": 21209,
+      "target_lines": 378,
+      "target_sha256": "26ba88a05fcc4eaa6734d34fe9e91dbd6fe7dc09d6f0360b9d38a8bb0a63661b"
+    },
+    {
+      "path": "scripts/fuzz-evm-agreement-input.mjs",
+      "baseState": "absent",
+      "base_sha256": null,
+      "target_bytes": 32193,
+      "target_lines": 454,
+      "target_sha256": "4d50652a8737478c0a5b4c20bf2082b2402543a302bcc3452ddc512733d5cd15"
+    }
+  ],
+  "provenance_requests": [
+    "054 no code",
+    "055 helper",
+    "056 incomplete discarded",
+    "057 correction",
+    "058 complete tests"
+  ],
+  "broker_adjustments": [
+    "Normalized model correction hunk context/counts monotonically against exact055 source, preserving unchanged line suffix where producer abbreviated context",
+    "Applied producer057explicit quotedMAXP1key precision correction",
+    "Added one bounded test comparing actual accepted generated text across seeds rather than metadata digest alone",
+    "Rejected057 false text-before-all-decimals assumption: actual privateAgreement validates fiatMinorUnits before paymentInstructions. Replaced compound2fieldresourcecase with one40digitfiatwidth refusal INVALID_INPUT/instrumentedBigInt40 guard; existing code-unit/UTF8 tests remain."
+  ],
+  "correction_application": [
+    {
+      "hunk": 1,
+      "offset": 285,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 2,
+      "offset": 763,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 4,
+      "offset": 7339,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 5,
+      "offset": 8017,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 6,
+      "offset": 9478,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 7,
+      "offset": 12980,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 8,
+      "offset": 14523,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 9,
+      "offset": 15860,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 10,
+      "offset": 17080,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 11,
+      "offset": 19407,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 12,
+      "offset": 19965,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 13,
+      "offset": 20563,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 14,
+      "offset": 21741,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 15,
+      "offset": 22551,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 16,
+      "offset": 24060,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 17,
+      "offset": 27825,
+      "mode": "exact producer line-prefix replacement preserving unchanged suffix"
+    },
+    {
+      "hunk": 18,
+      "offset": 28547,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 19,
+      "offset": 28918,
+      "mode": "exact monotonic context"
+    },
+    {
+      "hunk": 20,
+      "offset": 30461,
+      "mode": "exact monotonic context"
+    }
+  ],
+  "test_generation_scope_limits": [
+    "No campaign or test executed by broker; sole integrator must reproduce missing-helper RED and actual GREEN",
+    "Invalid counterexample could reflect generator expectation/evaluator bug; never label unexecuted proposal as parser defect",
+    "Fixture/source graphs elsewhere remain untouched"
+  ],
+  "request_evidence": [
+    {
+      "tag": "p2p-parser-seeded-fuzz-054",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T03:48:17.861881+00:00",
+      "completed_at_utc": "2026-10-27T03:48:28.716930+00:00",
+      "request_id": "req_011CgS4KgETP9Pi7t3EmWR3L",
+      "usage": {
+        "input_tokens": 15274,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 1118,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.041728"
+    },
+    {
+      "tag": "p2p-parser-fuzz-helper-055",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T03:51:38.764574+00:00",
+      "completed_at_utc": "2026-10-27T03:53:05.934822+00:00",
+      "request_id": "req_011CgS4aV2wLuX6s7HZiPAJG",
+      "usage": {
+        "input_tokens": 17634,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 16422,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.199488"
+    },
+    {
+      "tag": "p2p-parser-fuzz-selftests-056",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T03:51:38.771796+00:00",
+      "completed_at_utc": "2026-10-27T03:52:43.144470+00:00",
+      "request_id": "req_011CgS4aUwUSVi8vmbKr6yUN",
+      "usage": {
+        "input_tokens": 17735,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 12000,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "max_tokens",
+      "estimated_cost_usd": "0.15547"
+    },
+    {
+      "tag": "p2p-parser-fuzz-helper-correction-057",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T03:56:57.372897+00:00",
+      "completed_at_utc": "2026-10-27T03:57:41.130948+00:00",
+      "request_id": "req_011CgS4yy91ForVqcTYXviqc",
+      "usage": {
+        "input_tokens": 34028,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8260,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.150656"
+    },
+    {
+      "tag": "p2p-parser-fuzz-selftests-complete-058",
+      "model": "claude-sonnet-5-5",
+      "timestamp_utc": "2026-10-27T03:56:57.375700+00:00",
+      "completed_at_utc": "2026-10-27T03:57:47.313868+00:00",
+      "request_id": "req_011CgS4yy9WS2PbkctuCdpSp",
+      "usage": {
+        "input_tokens": 34327,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 9282,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.161474"
+    }
+  ],
+  "total_assignment_estimated_usd": "0.708816"
+}

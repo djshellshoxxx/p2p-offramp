@@ -1,0 +1,366 @@
+Unexecuted proposal; nothing here was compiled or run. Test file first, implementation second.
+
+## Decisions and limits
+
+- The implementation mirrors the existing `exact`/`meta`/`counter` pattern from `evm-agreement-protocol.ts`. It imports `CoreSchemaError` from `./core.ts` and `MAX_RUNTIME_SEQUENCE` from `./runtime.ts` directly, with no heavy body parser.
+- Unlike the reference `exact`, my helper also rejects non-enumerable fields; the packet requires this.
+- The `result` discriminator is read through a descriptor with no getter invocation; then `exact` re-validates the full key set.
+- The hybrid `{ok:true,value,error}` fails on key count. `held` must be a real boolean.
+- All failures throw a fresh `CoreSchemaError('INVALID_INPUT')`. Thrown meta-trap errors are discarded uninspected.
+- Transparent proxies are not rejected (cannot be). Trap-time and `Reflect.ownKeys` cost are not bounded.
+- No replay, generation or authentication state exists. Ack/closed are structural claims only.
+- Test import guard: the entry is imported dynamically. Only `ERR_MODULE_NOT_FOUND` whose message contains the exact target URL is converted to a missing-parser state. Any other error rethrows. Each test then calls the parser, so the missing-module state yields a real assertion failure (RED), not a crash-only test.
+- The test imports the `.ts` source directly, assuming Node 24 type stripping as the sibling protocol file's `./core.ts` imports imply. The existing protocol test's import style was not provided, so this is an assumption.
+
+## Patch 1: tests (first)
+
+```diff
+diff --git a/packages/schemas/test/evm-agreement-control.test.mjs b/packages/schemas/test/evm-agreement-control.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/packages/schemas/test/evm-agreement-control.test.mjs
+@@ -0,0 +1,264 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++
++const TARGET = new URL('../src/evm-agreement-control.ts', import.meta.url);
++let mod = null;
++try {
++  mod = await import(TARGET.href);
++} catch (error) {
++  const exactMissing = error && error.code === 'ERR_MODULE_NOT_FOUND' &&
++    typeof error.message === 'string' && error.message.includes(TARGET.pathname);
++  if (!exactMissing) throw error;
++}
++const missing = () => assert.fail('evm-agreement-control.ts is absent (expected RED)');
++const P = {
++  request: (v) => (mod ? mod.parseEvmAgreementControlRequest(v) : missing()),
++  ack: (v) => (mod ? mod.parseEvmAgreementControlAck(v) : missing()),
++  closed: (v) => (mod ? mod.parseEvmAgreementHostClosed(v) : missing()),
++};
++const MAX = Number.MAX_SAFE_INTEGER - 1;
++const SENTINEL = 'PRIVATE_SENTINEL_9f3a';
++const OPS = ['invalidateEvmAgreement', 'disposeEvmAgreementHost'];
++const REASONS = ['TIMEOUT', 'LIMIT_EXCEEDED', 'INVALID_INPUT', 'DISPOSED'];
++const req = (o = {}) => ({ version: 1, requestId: 1, generation: 0, operation: OPS[0], kind: 'control', ...o });
++const ackOk = (o = {}) => ({ version: 1, requestId: 1, generation: 0, operation: OPS[0], kind: 'ack', result: { ok: true, value: { held: true } }, ...o });
++const ackBad = (code = 'CONFLICT') => ackOk({ result: { ok: false, error: { code } } });
++const closed = (o = {}) => ({ version: 1, generation: 0, kind: 'closed', reason: 'TIMEOUT', ...o });
++
++function rejects(parse, input) {
++  let thrown;
++  try { parse(input); } catch (e) { thrown = e; }
++  assert.ok(thrown, 'expected throw');
++  assert.equal(thrown.name, 'CoreSchemaError');
++  assert.equal(thrown.code, 'INVALID_INPUT');
++  assert.equal(thrown.message, 'Invalid core data.');
++  return thrown;
++}
++function deepFrozen(v) {
++  if (typeof v !== 'object' || v === null) return true;
++  return Object.isFrozen(v) && Object.values(v).every(deepFrozen);
++}
++const trap = () => { throw Object.assign(new Error(SENTINEL), { code: 'INVALID_INPUT' }); };
++
++test('valid request frames, both operations, bounds and null prototype', () => {
++  for (const operation of OPS) {
++    const out = P.request(req({ operation }));
++    assert.deepEqual(out, req({ operation }));
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.request(req({ requestId: MAX, generation: MAX })).requestId, MAX);
++  const nul = Object.assign(Object.create(null), req());
++  assert.deepEqual(P.request(nul), req());
++  assert.deepEqual(Object.keys(P.request(req())), ['version', 'requestId', 'generation', 'operation', 'kind']);
++});
++
++test('valid ack frames cover held values, both failure codes, both ops', () => {
++  for (const operation of OPS) for (const held of [true, false]) {
++    const input = ackOk({ operation, result: { ok: true, value: { held } } });
++    const out = P.ack(input);
++    assert.deepEqual(out, input);
++    assert.ok(deepFrozen(out));
++    assert.notEqual(out.result, input.result);
++    assert.notEqual(out.result.value, input.result.value);
++  }
++  for (const code of ['CONFLICT', 'INVALID_INPUT']) {
++    const out = P.ack(ackBad(code));
++    assert.deepEqual(out.result, { ok: false, error: { code } });
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.ack(ackOk({ requestId: MAX, generation: MAX })).generation, MAX);
++});
++
++test('valid closed frames cover all four reasons and bounds', () => {
++  for (const reason of REASONS) {
++    const out = P.closed(closed({ reason }));
++    assert.deepEqual(out, closed({ reason }));
++    assert.ok(deepFrozen(out));
++  }
++  assert.equal(P.closed(closed({ generation: MAX })).generation, MAX);
++});
++
++test('caller mutation has no effect and repeated parses are identical', () => {
++  const input = ackOk();
++  const a = P.ack(input);
++  input.result.value.held = false;
++  input.requestId = 7;
++  assert.equal(a.result.value.held, true);
++  assert.equal(a.requestId, 1);
++  const fresh = ackOk();
++  assert.deepEqual(P.ack(fresh), P.ack(fresh));
++  assert.deepEqual(fresh, ackOk());
++  assert.deepEqual(P.request(req()), P.request(req()));
++});
++
++function shapeCases(name, parse, make, nested) {
++  test(`${name}: outer structural rejections`, () => {
++    for (const bad of [null, undefined, 1, 'x', true, [], [make()], () => 0]) rejects(parse, bad);
++    const missingKey = make(); delete missingKey.version; rejects(parse, missingKey);
++    rejects(parse, { ...make(), extra: 1 });
++    rejects(parse, { ...make(), [SENTINEL]: { deep: { deeper: 1 } } });
++    const sym = make(); sym[Symbol('x')] = 1; rejects(parse, sym);
++    const hidden = make();
++    Object.defineProperty(hidden, 'version', { value: 1, enumerable: false });
++    rejects(parse, hidden);
++    let called = 0;
++    const acc = make();
++    Object.defineProperty(acc, 'version', { get() { called++; return 1; }, enumerable: true });
++    rejects(parse, acc);
++    assert.equal(called, 0);
++    class K { constructor() { Object.assign(this, make()); } }
++    rejects(parse, new K());
++    rejects(parse, Object.assign(Object.create({ inherited: 1 }), make()));
++  });
++  test(`${name}: meta traps yield fresh fixed errors`, () => {
++    for (const handler of [{ ownKeys: trap }, { getPrototypeOf: trap }, { getOwnPropertyDescriptor: trap }]) {
++      const e = rejects(parse, new Proxy(make(), handler));
++      assert.ok(!JSON.stringify(e.message).includes(SENTINEL));
++    }
++    const forged = new Proxy(make(), { ownKeys() { throw new (class extends Error { get code() { throw new Error('read'); } })(); } });
++    rejects(parse, forged);
++    rejects(parse, new Proxy([], {}));
++  });
++  test(`${name}: giant extra graph is not traversed`, () => {
++    let touched = 0;
++    const giant = new Proxy({}, { get() { touched++; return 1; }, ownKeys() { touched++; return []; } });
++    rejects(parse, { ...make(), extra: giant });
++    assert.equal(touched, 0);
++    rejects(parse, { ...make(), extra: 'x'.repeat(1_000_000) });
++  });
++  if (nested) nested();
++}
++
++shapeCases('request', P.request, req, () => {
++  test('request: discriminator and counter rejections', () => {
++    for (const v of [2, 0, '1', 1n, null]) rejects(P.request, req({ version: v }));
++    for (const o of ['checkEvmAgreement', '', 'invalid', null, 1]) rejects(P.request, req({ operation: o }));
++    for (const k of ['ack', 'closed', 'response', null]) rejects(P.request, req({ kind: k }));
++    for (const v of [0, -1, MAX + 1, NaN, Infinity, -Infinity, 1.5, 1n, '1', {}, [], null, undefined, true]) rejects(P.request, req({ requestId: v }));
++    for (const v of [-1, MAX + 1, NaN, Infinity, 0.5, 1n, '0', {}, [], null, undefined, false]) rejects(P.request, req({ generation: v }));
++    assert.equal(P.request(req({ requestId: 1, generation: 0 })).generation, 0);
++  });
++  test('request: authority/private extras rejected and sentinel excluded', () => {
++    for (const k of ['signature', 'privateAgreement', 'terms', 'payment', 'status', 'key', 'url', 'input']) rejects(P.request, { ...req(), [k]: SENTINEL });
++    assert.ok(!JSON.stringify(P.request(req())).includes(SENTINEL));
++  });
++});
++
++shapeCases('ack', P.ack, ackOk, () => {
++  test('ack: discriminators, counters, result shapes', () => {
++    for (const o of ['checkEvmAgreement', null, 1]) rejects(P.ack, ackOk({ operation: o }));
++    for (const k of ['control', 'closed', null]) rejects(P.ack, ackOk({ kind: k }));
++    for (const v of [0, -1, MAX + 1, NaN, Infinity, 1.5, 1n, '1', {}, null]) rejects(P.ack, ackOk({ requestId: v }));
++    for (const v of [-1, MAX + 1, NaN, 0.5, 1n, '0', {}, null]) rejects(P.ack, ackOk({ generation: v }));
++    for (const r of [null, 1, 'x', [], undefined, {}, { ok: 1 }, { ok: 'true' }, { ok: true }, { ok: false }]) rejects(P.ack, ackOk({ result: r }));
++    rejects(P.ack, ackOk({ result: { ok: true, value: { held: true }, error: { code: 'CONFLICT' } } }));
++    rejects(P.ack, ackOk({ result: { ok: false, error: { code: 'CONFLICT' }, value: { held: true } } }));
++    rejects(P.ack, ackOk({ result: { ok: true, error: { code: 'CONFLICT' } } }));
++    rejects(P.ack, ackOk({ result: { ok: false, value: { held: true } } }));
++    for (const v of [null, undefined, 1, [], 'x', {}, { held: 1 }, { held: 'true' }, { held: null }, { held: undefined }, { held: true, extra: 1 }]) rejects(P.ack, ackOk({ result: { ok: true, value: v } }));
++    for (const e of [null, undefined, [], 'x', {}, { code: 'TIMEOUT' }, { code: 'BUSY' }, { code: '' }, { code: 1 }, { code: 'CONFLICT', message: SENTINEL }]) rejects(P.ack, ackOk({ result: { ok: false, error: e } }));
++  });
++  test('ack: nested exact-shape hardening', () => {
++    const nestedBases = [
++      () => ackOk().result,
++      () => ackOk().result.value,
++      () => ackBad().result.error,
++    ];
++    const wrap = [
++      (n) => ackOk({ result: n }),
++      (n) => ackOk({ result: { ok: true, value: n } }),
++      (n) => ackOk({ result: { ok: false, error: n } }),
++    ];
++    nestedBases.forEach((mk, i) => {
++      const sym = mk(); sym[Symbol('s')] = 1; rejects(P.ack, wrap[i](sym));
++      const hidden = mk(); const k = Object.keys(hidden)[0];
++      Object.defineProperty(hidden, k, { value: hidden[k], enumerable: false }); rejects(P.ack, wrap[i](hidden));
++      let called = 0;
++      const acc = mk(); const key = Object.keys(acc)[0];
++      Object.defineProperty(acc, key, { get() { called++; return acc[key]; }, enumerable: true });
++      rejects(P.ack, wrap[i](acc)); assert.equal(called, 0);
++      rejects(P.ack, wrap[i](Object.assign(Object.create({ p: 1 }), mk())));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { ownKeys: trap })));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { getOwnPropertyDescriptor: trap })));
++      rejects(P.ack, wrap[i](new Proxy(mk(), { getPrototypeOf: trap })));
++      rejects(P.ack, wrap[i]({ ...mk(), extra: 'x'.repeat(100000) }));
++    });
++    const nul = ackOk({ result: Object.assign(Object.create(null), { ok: true, value: Object.assign(Object.create(null), { held: false }) }) });
++    assert.deepEqual(P.ack(nul).result, { ok: true, value: { held: false } });
++  });
++  test('ack: sentinel excluded from output and errors', () => {
++    assert.ok(!JSON.stringify(P.ack(ackOk())).includes(SENTINEL));
++    const e = rejects(P.ack, ackOk({ result: { ok: false, error: { code: SENTINEL } } }));
++    assert.ok(!e.message.includes(SENTINEL));
++  });
++});
++
++shapeCases('closed', P.closed, closed, () => {
++  test('closed: discriminators and counters', () => {
++    for (const r of ['DRAINED', 'CONFLICT', 'timeout', '', null, 1, undefined]) rejects(P.closed, closed({ reason: r }));
++    for (const k of ['ack', 'control', null]) rejects(P.closed, closed({ kind: k }));
++    for (const v of [2, 0, '1', null]) rejects(P.closed, closed({ version: v }));
++    for (const v of [-1, MAX + 1, NaN, Infinity, 0.5, 1n, '0', {}, null, undefined]) rejects(P.closed, closed({ generation: v }));
++    for (const k of ['requestId', 'operation', 'result', 'drained', 'signature']) rejects(P.closed, { ...closed(), [k]: 1 });
++  });
++});
++
++test('Reflect trap on transparent proxy without traps is not asserted rejected', () => {
++  assert.deepEqual(P.request(new Proxy(req(), {})), req());
++});
+```
+
+## Patch 2: implementation (second)
+
+```diff
+diff --git a/packages/schemas/src/evm-agreement-control.ts b/packages/schemas/src/evm-agreement-control.ts
+new file mode 100644
+--- /dev/null
++++ b/packages/schemas/src/evm-agreement-control.ts
+@@ -0,0 +1,118 @@
++/** Private strict SCHEMA for tiny EVM agreement host control frames (request, ack, closed). Structural parsing only:
++ * an ack or closed frame is a structural CLAIM, never authentication, physical settlement or Worker-replacement
++ * authority. Request IDs and generations are validated integers; the future adapter owns correlation and replay.
++ * Synchronous, stateless, no timers/RNG/crypto/storage/network. Failures are always a fresh fixed CoreSchemaError;
++ * foreign errors thrown by hostile meta traps are discarded uninspected. Not exported by any package facade.
++ */
++import { CoreSchemaError } from './core.ts';
++import { MAX_RUNTIME_SEQUENCE } from './runtime.ts';
++
++export type EvmAgreementControlOperation = 'invalidateEvmAgreement' | 'disposeEvmAgreementHost';
++export interface EvmAgreementControlRequest {
++  readonly version: 1; readonly requestId: number; readonly generation: number;
++  readonly operation: EvmAgreementControlOperation; readonly kind: 'control';
++}
++export type EvmAgreementControlAckResult =
++  | Readonly<{ ok: true; value: Readonly<{ held: boolean }> }>
++  | Readonly<{ ok: false; error: Readonly<{ code: 'CONFLICT' | 'INVALID_INPUT' }> }>;
++export interface EvmAgreementControlAck {
++  readonly version: 1; readonly requestId: number; readonly generation: number;
++  readonly operation: EvmAgreementControlOperation; readonly kind: 'ack';
++  readonly result: EvmAgreementControlAckResult;
++}
++export interface EvmAgreementHostClosed {
++  readonly version: 1; readonly generation: number; readonly kind: 'closed';
++  readonly reason: 'TIMEOUT' | 'LIMIT_EXCEEDED' | 'INVALID_INPUT' | 'DISPOSED';
++}
++
++const OPERATIONS: readonly string[] = ['invalidateEvmAgreement', 'disposeEvmAgreementHost'];
++const REASONS: readonly string[] = ['TIMEOUT', 'LIMIT_EXCEEDED', 'INVALID_INPUT', 'DISPOSED'];
++const ACK_CODES: readonly string[] = ['CONFLICT', 'INVALID_INPUT'];
++const ownKeys = Reflect.ownKeys, getDesc = Object.getOwnPropertyDescriptor, getProto = Object.getPrototypeOf, isArr = Array.isArray;
++
++const fail = (): never => { throw new CoreSchemaError('INVALID_INPUT'); };
++/** Untrusted meta-operation boundary: whatever a hostile trap throws is discarded uninspected. */
++function meta<T>(read: () => T): T {
++  try { return read(); } catch { return fail(); }
++}
++/** Exact-field plain/null-prototype data record; reads own enumerable data values only, never getters. */
++function exact(input: unknown, keys: readonly string[]): Record<string, unknown> {
++  if (typeof input !== 'object' || input === null) return fail();
++  if (meta(() => isArr(input))) return fail();
++  const proto = meta(() => getProto(input));
++  if (proto !== Object.prototype && proto !== null) return fail();
++  const actual = meta(() => ownKeys(input));
++  if (actual.length !== keys.length) return fail();
++  for (const k of actual) if (typeof k !== 'string' || !keys.includes(k)) return fail();
++  const out = Object.create(null) as Record<string, unknown>;
++  for (const key of keys) {
++    const d = meta(() => getDesc(input, key));
++    if (!d || !d.enumerable || !('value' in d)) return fail();
++    out[key] = d.value;
++  }
++  return out;
++}
++function counter(v: unknown, min: number): number {
++  if (typeof v !== 'number' || !Number.isSafeInteger(v) || v < min || v > MAX_RUNTIME_SEQUENCE) return fail();
++  return v;
++}
++function operation(v: unknown): EvmAgreementControlOperation {
++  if (typeof v !== 'string' || !OPERATIONS.includes(v)) return fail();
++  return v as EvmAgreementControlOperation;
++}
++
++export function parseEvmAgreementControlRequest(input: unknown): Readonly<EvmAgreementControlRequest> {
++  const r = exact(input, ['version', 'requestId', 'generation', 'operation', 'kind']);
++  if (r.version !== 1 || r.kind !== 'control') return fail();
++  const op = operation(r.operation);
++  const requestId = counter(r.requestId, 1), generation = counter(r.generation, 0);
++  return Object.freeze({ version: 1 as const, requestId, generation, operation: op, kind: 'control' as const });
++}
++
++function ackResult(input: unknown): EvmAgreementControlAckResult {
++  if (typeof input !== 'object' || input === null || meta(() => isArr(input))) return fail();
++  const ok = meta(() => {
++    const d = getDesc(input, 'ok');
++    return d && d.enumerable && 'value' in d ? d.value : undefined;
++  });
++  if (ok === true) {
++    const r = exact(input, ['ok', 'value']);
++    const v = exact(r.value, ['held']);
++    if (typeof v.held !== 'boolean') return fail();
++    return Object.freeze({ ok: true as const, value: Object.freeze({ held: v.held }) });
++  }
++  if (ok === false) {
++    const r = exact(input, ['ok', 'error']);
++    const e = exact(r.error, ['code']);
++    if (typeof e.code !== 'string' || !ACK_CODES.includes(e.code)) return fail();
++    return Object.freeze({ ok: false as const, error: Object.freeze({ code: e.code as 'CONFLICT' | 'INVALID_INPUT' }) });
++  }
++  return fail();
++}
++
++export function parseEvmAgreementControlAck(input: unknown): Readonly<EvmAgreementControlAck> {
++  const r = exact(input, ['version', 'requestId', 'generation', 'operation', 'kind', 'result']);
++  if (r.version !== 1 || r.kind !== 'ack') return fail();
++  const op = operation(r.operation);
++  const requestId = counter(r.requestId, 1), generation = counter(r.generation, 0);
++  return Object.freeze({ version: 1 as const, requestId, generation, operation: op, kind: 'ack' as const, result: ackResult(r.result) });
++}
++
++export function parseEvmAgreementHostClosed(input: unknown): Readonly<EvmAgreementHostClosed> {
++  const r = exact(input, ['version', 'generation', 'kind', 'reason']);
++  if (r.version !== 1 || r.kind !== 'closed') return fail();
++  if (typeof r.reason !== 'string' || !REASONS.includes(r.reason)) return fail();
++  const generation = counter(r.generation, 0);
++  return Object.freeze({ version: 1 as const, generation, kind: 'closed' as const,
++    reason: r.reason as EvmAgreementHostClosed['reason'] });
++}
+```
+
+Note: the `@@ -0,0 +1,N @@` counts above (264 test, 118 implementation) are my best estimates, not machine-counted. Run `git apply --check` (below) to verify them before acceptance.
+
+## UNEXECUTED verification commands (for the integrator after review)
+
+```
+git apply --check <test-patch> && git apply --check <impl-patch>
+node --test packages/schemas/test/evm-agreement-control.test.mjs   # before the impl patch: expect RED
+node --test packages/schemas/test/evm-agreement-control.test.mjs   # after: GREEN is unverified
+node --test packages/schemas/test/evm-agreement-control.test.mjs packages/schemas/test/evm-agreement-protocol.test.mjs
+npm test
+npm run build
+npm run check:boundaries
+npm run test:build-policy
+```
+
+I make no claim of RED, GREEN, compilation or acceptance.

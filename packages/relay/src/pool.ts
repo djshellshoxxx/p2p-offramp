@@ -1,201 +1,407 @@
-/** Injected local relay boundary. No global network driver, endpoint discovery or privacy assertion. */
-import { parseStrictJsonBytes } from '../../schemas/index.ts';
-import { AdvertisementBook, MAX_EVENT_BYTES, validateAdvertisement, type OrderAdvertisement, type RelayResult } from './advertisement.ts';
+/**
+ * Bounded Nostr relay pool (G21). Relay data is untrusted discovery input: every delivered event passes size, shape,
+ * subscription, filter, rate, dedupe and signature checks, and carries no trade authority (G08).
+ *
+ * Every socket is opened only after the G05 broker issues a permit for the exact relay endpoint id (channel 'relay');
+ * a refusal (strict mode without verified-private coverage, unknown endpoint, expiry, revocation) means no connection
+ * and no direct fallback. The scope is re-checked on every inbound frame and revokes the socket when it lapses.
+ *
+ * Known limits (see spec G21): the broker does not hand the registered URL to the caller, so `relays[].url` comes from
+ * the same trusted composition root as the registry and is not cross-checked here. The platform WebSocket assembles a
+ * whole message before this code sees it, so the frame cap bounds parse/crypto cost, not transient network buffering.
+ */
+import type { Permit, SessionTransportPolicy, TransportScope } from '../../transport/index.ts';
+import type { RouteError } from '../../transport/index.ts';
+import { encodeClose, encodeEvent, encodeReq, matchesFilters, parseEvent, parseRelayFrame, FRAME_LIMITS, isHex64, withinBytes } from './nip01.ts';
+import type { EventCrypto, NostrEvent, RelayFilter } from './nip01.ts';
 
-export const MAX_RELAYS = 4, MAX_SUBSCRIPTIONS_PER_RELAY = 4, MAX_OUTBOUND_QUEUED_EVENTS = 32;
-const utf8 = new TextEncoder();
-export interface RelaySocket { send(frame: string): void; close(): void | Promise<void>; }
-export interface RelayHandlers { message(bytes: Uint8Array): void; closed(): void; }
-export interface RelayConnector {
-  /** The caller provides approved relay IDs. Implementations must honor transport policy and never fall back. */
-  connect(relayId: string, handlers: RelayHandlers, signal: AbortSignal): Promise<RelaySocket>;
+const GIFT_WRAP_KIND = 1059;
+export type RelayBroker = Pick<SessionTransportPolicy, 'authorize' | 'capture'>;
+/** The subset of WebSocket this pool uses. The default connector is the platform WebSocket. */
+export interface RelaySocketLike {
+  onopen: ((event: unknown) => void) | null;
+  onmessage: ((event: { readonly data: unknown }) => void) | null;
+  onclose: ((event: unknown) => void) | null;
+  onerror: ((event: unknown) => void) | null;
+  send(text: string): void;
+  close(): void;
 }
-export interface RelayPoolOptions {
-  readonly relayIds: readonly string[]; readonly connector: RelayConnector;
-  readonly nowSeconds: () => bigint | null; readonly nowMs?: () => number; readonly random?: () => number;
-  readonly ackTimeoutMs?: number;
-}
-export interface OrderFilter {readonly since: number; readonly limit: number;}
-export interface RelayPublishOutcome {readonly relayId: string; readonly eventId: string; readonly status: 'accepted' | 'rejected' | 'unknown';}
-interface Subscription {readonly id:string; readonly filter:OrderFilter; readonly listener:(orders:readonly OrderAdvertisement[])=>void;}
-interface PendingAck {readonly finish:(status:RelayPublishOutcome['status'])=>void;}
-interface Connection {
-  readonly id:string; controller:AbortController; socket:RelaySocket|undefined;
-  pending:Promise<void>|undefined; stopped:boolean; unsafe:boolean; draining:boolean; attempts:number; stableAt:number|null;
-  drain:Promise<void>|undefined;
-  retry:ReturnType<typeof setTimeout>|undefined; tokens:number; tokenAt:number; overloadWindow:number; overloads:number;
-  connectTimer:ReturnType<typeof setTimeout>|undefined;
-  readonly acks:Map<string,PendingAck>;
-}
-const failure = (code:'INVALID_INPUT'|'LIMIT_EXCEEDED'|'CANCELLED'|'UNAVAILABLE'):RelayResult<never> => ({ok:false,code});
+export type RelayConnector = (url: string, signal: AbortSignal) => RelaySocketLike;
+export const webSocketConnector: RelayConnector = url => new WebSocket(url) as unknown as RelaySocketLike;
 
-export class RelayPool {
-  readonly #options:RelayPoolOptions;
-  readonly #connections=new Map<string,Connection>();
-  readonly #subscriptions=new Map<string,Subscription>();
-  readonly #book=new AdvertisementBook();
-  readonly #publications=new Set<object>();
-  #sequence=0; #disposed=false; #lastTime=-Infinity;
-  #disposal:Promise<void>|undefined;
-  constructor(options:RelayPoolOptions) {
-    if (!Array.isArray(options.relayIds) || options.relayIds.length>MAX_RELAYS || new Set(options.relayIds).size!==options.relayIds.length ||
-      options.relayIds.some(id=>typeof id!=='string'||!/^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/.test(id)) ||
-      (options.ackTimeoutMs!==undefined&&(!Number.isSafeInteger(options.ackTimeoutMs)||options.ackTimeoutMs<1||options.ackTimeoutMs>30000))) throw new Error('Invalid local relay configuration.');
-    this.#options=options;
-    for(const id of options.relayIds) this.#connections.set(id,{id,controller:new AbortController(),socket:undefined,pending:undefined,stopped:false,unsafe:false,draining:false,drain:undefined,attempts:0,stableAt:null,retry:undefined,connectTimer:undefined,tokens:20,tokenAt:0,overloadWindow:-1,overloads:0,acks:new Map()});
+export type PoolError = RouteError | 'INVALID_FILTER' | 'CLOSED';
+export type PoolResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: PoolError };
+export interface RelayConfig { readonly endpointId: string; readonly url: string; }
+export type RelayState = 'idle' | 'connecting' | 'open' | 'backoff' | 'blocked' | 'failed' | 'banned';
+export interface RelayStatus { readonly endpointId: string; readonly state: RelayState; readonly reason: string | null; readonly failures: number; readonly penalty: number; }
+export interface PublishResult { readonly eventId: string; readonly relayId: string; readonly status: 'accepted' | 'rejected' | 'unknown'; }
+
+export const POOL_LIMITS = Object.freeze({
+  maxCandidates: 16, maxRelays: 4, maxSubscriptionsPerRelay: 4, maxFiltersPerSubscription: 2, maxFilterLimit: 100, maxHistorySeconds: 86_400,
+  /** NIP-59 randomizes wrap timestamps up to 2 days into the past (+ skew), so wrap-only filters may reach back 3 days. */
+  maxGiftWrapHistorySeconds: 259_200,
+  eventsPerMinute: 120, burst: 20, overloadWindowMs: 10_000, overloadWindowsToDisconnect: 3, maxEventsPerSubscription: 1000,
+  maxDedupIds: 4096, maxPublishInFlight: 32, banPenalty: 10, maxReconnects: 6,
+});
+export interface PoolTiming {
+  readonly backoffCeilingsMs: readonly number[]; readonly stableMs: number; readonly connectTimeoutMs: number; readonly publishTimeoutMs: number;
+}
+export const DEFAULT_TIMING: PoolTiming = Object.freeze({ backoffCeilingsMs: [1000, 2000, 4000, 8000, 16_000, 30_000], stableMs: 60_000, connectTimeoutMs: 10_000, publishTimeoutMs: 10_000 });
+const PENALTY = Object.freeze({ oversized: 10, malformed: 3, binary: 3, invalidSignature: 4, wrongSubscription: 3, outsideFilter: 3, unexpected: 2 });
+
+export interface PoolOptions {
+  readonly broker: RelayBroker;
+  /** Approved candidates only (from the trusted registry); at most POOL_LIMITS.maxCandidates. Never discovered from events. */
+  readonly relays: readonly RelayConfig[];
+  readonly verifier: Pick<EventCrypto, 'verifyEvent'>;
+  readonly connect?: RelayConnector;
+  readonly clock?: () => number; // monotonic milliseconds
+  readonly random?: () => number; // jitter only, not security-relevant
+  readonly nowSeconds?: () => number | null; // wall clock for history windows
+  readonly timing?: Partial<PoolTiming>;
+  readonly maxRelays?: number;
+  readonly onStatus?: (status: readonly RelayStatus[]) => void;
+}
+export interface SubscriptionHandlers {
+  /** Called once per distinct, verified, filter-matching event id across all relays. Data is discovery-only. */
+  readonly onEvent: (event: NostrEvent, relayId: string) => void;
+  readonly onEose?: (relayId: string) => void;
+}
+export interface RelaySubscription { readonly id: string; close(): void; }
+export interface RelayPool {
+  subscribe(filters: readonly RelayFilter[], handlers: SubscriptionHandlers): PoolResult<RelaySubscription>;
+  /** One explicit publish: at most one EVENT per selected relay, no automatic retry. ACK means relay acceptance only. */
+  publish(event: NostrEvent, signal?: AbortSignal): Promise<PoolResult<readonly PublishResult[]>>;
+  /** Explicit user retry after a relay reached `failed` or `blocked`. Does not clear `banned`. */
+  retry(endpointId: string): void;
+  status(): readonly RelayStatus[];
+  close(): void;
+}
+
+interface Sub { readonly id: string; readonly filters: readonly RelayFilter[]; readonly handlers: SubscriptionHandlers; }
+interface RelayRec {
+  readonly cfg: RelayConfig; state: RelayState; reason: string | null; failures: number; penalty: number;
+  socket: RelaySocketLike | null; scope: TransportScope | null; timer: ReturnType<typeof setTimeout> | undefined; openedAt: number;
+  tokens: number; refilledAt: number; windowIndex: number; windowDropped: number; overloadedWindows: number;
+  counts: Map<string, number>; closedSubs: Set<string>; generation: number; connecting: AbortController | null;
+}
+const refuse = (error: PoolError): PoolResult<never> => Object.freeze({ ok: false, error });
+
+export function createRelayPool(options: PoolOptions): RelayPool {
+  if (options.relays.length > POOL_LIMITS.maxCandidates) throw new RangeError('too many relays');
+  const timing: PoolTiming = { ...DEFAULT_TIMING, ...options.timing };
+  const clock = options.clock ?? (() => performance.now());
+  const random = options.random ?? Math.random;
+  const connect = options.connect ?? webSocketConnector;
+  const maxActive = Math.max(1, Math.min(options.maxRelays ?? POOL_LIMITS.maxRelays, POOL_LIMITS.maxRelays));
+  const seenIds = new Map<string, true>();
+  const subs = new Map<string, Sub>();
+  const publications = new Set<AbortController>();
+  const seenEndpoints = new Set<string>();
+  const recs: RelayRec[] = [];
+  for (const cfg of options.relays) {
+    if (seenEndpoints.has(cfg.endpointId)) throw new RangeError('duplicate relay');
+    seenEndpoints.add(cfg.endpointId);
+    recs.push({ cfg: Object.freeze({ ...cfg }), state: 'idle', reason: null, failures: 0, penalty: 0, socket: null, scope: null, timer: undefined, openedAt: 0,
+      tokens: POOL_LIMITS.burst, refilledAt: clock(), windowIndex: 0, windowDropped: 0, overloadedWindows: 0, counts: new Map(), closedSubs: new Set(), generation: 0, connecting: null });
   }
-  #time():number {
-    const time=(this.#options.nowMs??(()=>performance.now()))();
-    if(!Number.isFinite(time)||time<0||time<this.#lastTime) throw new Error('Clock unavailable.');
-    this.#lastTime=time;return time;
+  let closed = false, subCounter = 0, inFlight = 0;
+
+  const emitStatus = (): void => { try { options.onStatus?.(status()); } catch { /* observer faults never affect the pool */ } };
+  const status = (): readonly RelayStatus[] => recs.map(r => Object.freeze({ endpointId: r.cfg.endpointId, state: r.state, reason: r.reason, failures: r.failures, penalty: r.penalty }));
+  const active = (r: RelayRec): boolean => r.state === 'connecting' || r.state === 'open' || r.state === 'backoff';
+  const setState = (r: RelayRec, state: RelayState, reason: string | null = null): void => { r.state = state; r.reason = reason; };
+
+  function teardown(r: RelayRec): void {
+    r.generation++;
+    r.connecting?.abort(); r.connecting = null;
+    if (r.timer !== undefined) clearTimeout(r.timer);
+    r.timer = undefined;
+    const socket = r.socket, scope = r.scope; r.socket = null; r.scope = null;
+    if (socket) { socket.onopen = socket.onmessage = socket.onclose = socket.onerror = null; try { socket.close(); } catch { /* already closed */ } }
+    try { scope?.dispose(); } catch { /* broker faults are fixed refusals */ }
+    r.counts.clear(); r.closedSubs.clear();
   }
-  #wanted():boolean {return !this.#disposed&&this.#subscriptions.size>0;}
-  #req(subscription:Subscription):string {return JSON.stringify(['REQ',subscription.id,{kinds:[30078],since:subscription.filter.since,limit:subscription.filter.limit}]);}
-  #send(connection:Connection,frame:string):boolean {
-    if(!connection.socket||connection.draining||connection.stopped||this.#disposed)return false;
-    try{connection.socket.send(frame);return true;}catch{void this.#stop(connection,true);return false;}
+  function fill(): void {
+    if (closed || subs.size === 0) return;
+    let count = recs.filter(active).length;
+    for (const r of recs) {
+      if (count >= maxActive) return;
+      if (r.state === 'idle') { count++; void start(r); }
+    }
   }
-  #open(connection:Connection):void {
-    if(!this.#wanted()||connection.pending||connection.draining||connection.socket||connection.stopped||connection.unsafe)return;
-    connection.controller=new AbortController();
-    connection.stableAt=null;
-    const controller=connection.controller;
-    connection.connectTimer=setTimeout(()=>{if(connection.controller===controller)void this.#stop(connection,true);},30000);
-    const work=(async()=>{
-      let socket:RelaySocket;
-      try{
-        socket=await this.#options.connector.connect(connection.id,{message:bytes=>{
-          if(controller!==connection.controller||controller.signal.aborted||!connection.socket)return;
-          this.#receive(connection,bytes);
-        },closed:()=>{if(controller===connection.controller)void this.#stop(connection,true);}},controller.signal);
-      }catch{
-        connection.pending=undefined;
-        if(!controller.signal.aborted)this.#retry(connection);
-        return;
-      }
-      if(controller.signal.aborted||!this.#wanted()||connection.draining){
-        // A connector ignoring abort remains physically owned until its eventual socket drains.
-        try{await socket.close();}catch{connection.unsafe=true;connection.stopped=true;}
-        return;
-      }
-      connection.socket=socket;connection.stableAt=this.#time();connection.tokenAt=connection.stableAt;connection.tokens=20;
-      for(const subscription of this.#subscriptions.values())this.#send(connection,this.#req(subscription));
-    })();
-    connection.pending=work;
-    void work.finally(()=>{
-      if(connection.controller===controller&&connection.connectTimer!==undefined)clearTimeout(connection.connectTimer);
-      if(connection.pending===work)connection.pending=undefined;
-    }).catch(()=>{connection.stopped=true;void this.#stop(connection,false);});
+  function fail(r: RelayRec, terminal: RelayState | null, reason: string): void {
+    const wasOpenFor = r.state === 'open' ? clock() - r.openedAt : 0;
+    teardown(r);
+    if (closed) return;
+    if (terminal !== null) { setState(r, terminal, reason); emitStatus(); fill(); return; }
+    if (wasOpenFor >= timing.stableMs) r.failures = 0;
+    r.failures++;
+    if (subs.size === 0) { setState(r, 'idle'); emitStatus(); return; }
+    if (r.failures > POOL_LIMITS.maxReconnects) { setState(r, 'failed', reason); emitStatus(); fill(); return; }
+    const ceiling = timing.backoffCeilingsMs[Math.min(r.failures - 1, timing.backoffCeilingsMs.length - 1)] ?? 1000;
+    const delay = Math.floor(random() * ceiling); // full jitter
+    setState(r, 'backoff', reason); emitStatus();
+    const generation = r.generation;
+    r.timer = setTimeout(() => { if (!closed && r.generation === generation && r.state === 'backoff') void start(r); }, delay);
   }
-  #retry(connection:Connection):void {
-    if(!this.#wanted()||connection.stopped||connection.unsafe||connection.retry!==undefined||connection.attempts>=6)return;
-    let sample:number;
-    try{sample=(this.#options.random??Math.random)();if(!Number.isFinite(sample)||sample<0||sample>=1)throw new Error();}catch{connection.stopped=true;return;}
-    const delay=Math.floor(Math.min(30000,1000*2**connection.attempts)*sample);connection.attempts++;
-    connection.retry=setTimeout(()=>{connection.retry=undefined;this.#open(connection);},delay);
-  }
-  #stop(connection:Connection,reconnect:boolean):Promise<void> {
-    if(connection.draining)return connection.drain??Promise.resolve();
-    connection.draining=true;connection.controller.abort();
-    if(connection.connectTimer!==undefined)clearTimeout(connection.connectTimer);connection.connectTimer=undefined;
-    if(connection.retry!==undefined)clearTimeout(connection.retry);connection.retry=undefined;
-    for(const ack of [...connection.acks.values()])ack.finish('unknown');
-    const pending=connection.pending,socket=connection.socket,establishedAt=connection.stableAt;
-    connection.socket=undefined;connection.stableAt=null;
-    // Only actual, continuously established socket uptime can replenish the reconnect budget.
-    // Waiting for a connection (including a timed-out one) is not a stable connection.
-    if(reconnect&&socket&&establishedAt!==null){try{if(this.#time()-establishedAt>=60000)connection.attempts=0;}catch{connection.stopped=true;}}
-    const draining=(async()=>{
-      try{if(socket)await socket.close();if(pending)await pending;}catch{connection.stopped=true;connection.unsafe=true;}
-      finally{connection.draining=false;connection.drain=undefined;if(reconnect)this.#retry(connection);else if(this.#wanted())this.#open(connection);}
-    })();
-    connection.drain=draining;return draining;
-  }
-  #admit(connection:Connection):boolean {
-    const now=this.#time();
-    connection.tokens=Math.min(20,connection.tokens+(now-connection.tokenAt)*.002);connection.tokenAt=now;
-    if(connection.tokens>=1){connection.tokens--;return true;}
-    const window=Math.floor(now/10000);
-    if(window!==connection.overloadWindow){connection.overloads=window===connection.overloadWindow+1?connection.overloads+1:1;connection.overloadWindow=window;}
-    if(connection.overloads>=3)void this.#stop(connection,true);
+  function penalize(r: RelayRec, amount: number, reason: string): boolean {
+    r.penalty += amount;
+    if (r.penalty >= POOL_LIMITS.banPenalty) { fail(r, 'banned', reason); return true; }
     return false;
   }
-  #receive(connection:Connection,bytes:Uint8Array):void {
-    if(this.#disposed||connection.draining||connection.stopped)return;
-    try{
-      if(!(bytes instanceof Uint8Array)||bytes.byteLength>MAX_EVENT_BYTES){void this.#stop(connection,true);return;}
-      if(!this.#admit(connection))return;
-      const frame=parseStrictJsonBytes(bytes,MAX_EVENT_BYTES);
-      if(!Array.isArray(frame))return;
-      if(frame[0]==='OK'&&frame.length===4&&typeof frame[1]==='string'&&typeof frame[2]==='boolean'&&typeof frame[3]==='string'){
-        connection.acks.get(frame[1])?.finish(frame[2]?'accepted':'rejected');return;
-      }
-      if(frame[0]!=='EVENT'||frame.length!==3||typeof frame[1]!=='string'||!this.#subscriptions.has(frame[1]))return;
-      const result=this.#book.ingest(utf8.encode(JSON.stringify(frame[2])),this.#options.nowSeconds());
-      if(!result.ok||result.value==='duplicate'||result.value==='stale')return;
-      const snapshot=this.#book.snapshot(this.#options.nowSeconds());
-      for(const subscription of [...this.#subscriptions.values()]){
-        if(this.#disposed||!this.#subscriptions.has(subscription.id))break;
-        try{subscription.listener(Object.freeze(snapshot.filter(item=>item.value.event.created_at>=subscription.filter.since).slice(-subscription.filter.limit)));}catch{/* observers cannot disrupt other subscriptions */}
-      }
-    }catch{/* fixed rejection; never forward frame contents or parser exceptions */}
+  function take(r: RelayRec): boolean {
+    const now = clock();
+    r.tokens = Math.min(POOL_LIMITS.burst, r.tokens + ((now - r.refilledAt) * POOL_LIMITS.eventsPerMinute) / 60_000);
+    r.refilledAt = now;
+    const index = Math.floor(now / POOL_LIMITS.overloadWindowMs);
+    if (index !== r.windowIndex) {
+      r.overloadedWindows = r.windowDropped > 0 && index === r.windowIndex + 1 ? r.overloadedWindows + 1 : 0;
+      r.windowIndex = index; r.windowDropped = 0;
+    }
+    if (r.tokens >= 1) { r.tokens -= 1; return true; }
+    r.windowDropped++;
+    return false;
   }
-  subscribe(filter:OrderFilter,listener:(orders:readonly OrderAdvertisement[])=>void):RelayResult<()=>void> {
-    if(this.#disposed)return failure('CANCELLED');
-    if(this.#subscriptions.size>=MAX_SUBSCRIPTIONS_PER_RELAY)return failure('LIMIT_EXCEEDED');
-    let now:bigint|null;try{now=this.#options.nowSeconds();}catch{return failure('UNAVAILABLE');}
-    let copy:OrderFilter;
-    try{
-      if(typeof filter!=='object'||filter===null||Object.getPrototypeOf(filter)!==Object.prototype||Reflect.ownKeys(filter).sort().join(',')!=='limit,since')throw new Error();
-      const since=Object.getOwnPropertyDescriptor(filter,'since'),limit=Object.getOwnPropertyDescriptor(filter,'limit');
-      if(!since||!('value'in since)||!limit||!('value'in limit))throw new Error();
-      copy={since:since.value as number,limit:limit.value as number};
-      if(now===null||!Number.isSafeInteger(copy.since)||copy.since<0||BigInt(copy.since)>now||now-BigInt(copy.since)>86400n||
-        !Number.isSafeInteger(copy.limit)||copy.limit<1||copy.limit>100||typeof listener!=='function')throw new Error();
-    }catch{return failure('INVALID_INPUT');}
-    const id=`orders-${++this.#sequence}`,subscription={id,filter:Object.freeze(copy),listener};
-    this.#subscriptions.set(id,subscription);
-    for(const connection of this.#connections.values()){if(connection.socket)this.#send(connection,this.#req(subscription));else this.#open(connection);}
-    let active=true;
-    return {ok:true,value:()=>{
-      if(!active)return;active=false;this.#subscriptions.delete(id);
-      for(const connection of this.#connections.values())this.#send(connection,JSON.stringify(['CLOSE',id]));
-      if(this.#subscriptions.size===0){this.#book.clear();for(const connection of this.#connections.values())void this.#stop(connection,false);}
-    }};
+  function remember(id: string): void {
+    seenIds.set(id, true);
+    if (seenIds.size > POOL_LIMITS.maxDedupIds) seenIds.delete(seenIds.keys().next().value as string);
   }
-  async publish(bytes:Uint8Array,signal?:AbortSignal):Promise<RelayResult<readonly RelayPublishOutcome[]>> {
-    if(this.#disposed||signal?.aborted)return failure('CANCELLED');
-    if(this.#publications.size>=MAX_OUTBOUND_QUEUED_EVENTS)return failure('LIMIT_EXCEEDED');
-    let now:bigint|null;try{now=this.#options.nowSeconds();}catch{return failure('UNAVAILABLE');}
-    const checked=validateAdvertisement(bytes,now);if(!checked.ok)return checked;
-    const event=checked.value.event,job={};this.#publications.add(job);
-    try{
-      const outcomes=await Promise.all([...this.#connections.values()].map(connection=>new Promise<RelayPublishOutcome>(resolve=>{
-        const result=(status:RelayPublishOutcome['status'])=>Object.freeze({relayId:connection.id,eventId:event.id,status});
-        if(!connection.socket||connection.draining||connection.acks.has(event.id)){resolve(result('unknown'));return;}
-        let finished=false;const abort=()=>finish('unknown');
-        const timer=setTimeout(()=>finish('unknown'),this.#options.ackTimeoutMs??10000);
-        const finish=(status:RelayPublishOutcome['status'])=>{
-          if(finished)return;finished=true;clearTimeout(timer);signal?.removeEventListener('abort',abort);connection.acks.delete(event.id);resolve(result(status));
+  function sendReq(r: RelayRec): void {
+    let open = 0;
+    for (const sub of subs.values()) {
+      if (open >= POOL_LIMITS.maxSubscriptionsPerRelay) break;
+      open++; r.counts.set(sub.id, 0);
+      try { r.socket?.send(encodeReq(sub.id, sub.filters)); } catch { fail(r, null, 'send-failed'); return; }
+    }
+  }
+  function onFrame(r: RelayRec, generation: number, data: unknown): void {
+    if (closed || r.generation !== generation || r.state !== 'open') return;
+    if (r.scope === null || !r.scope.current()) { fail(r, null, 'revoked'); return; }
+    if (typeof data !== 'string') { penalize(r, PENALTY.binary, 'binary-frame'); return; }
+    if (!withinBytes(data, FRAME_LIMITS.maxFrameBytes)) { penalize(r, PENALTY.oversized, 'oversized-frame'); return; }
+    if (!take(r)) {
+      if (r.overloadedWindows >= POOL_LIMITS.overloadWindowsToDisconnect) fail(r, null, 'overload');
+      return;
+    }
+    const parsed = parseRelayFrame(data);
+    if (!parsed.ok) { if (parsed.reason !== 'ignored') penalize(r, parsed.reason === 'oversized' ? PENALTY.oversized : PENALTY.malformed, parsed.reason); return; }
+    const frame = parsed.frame;
+    switch (frame.type) {
+      case 'EVENT': {
+        const sub = subs.get(frame.subId);
+        if (!sub || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
+        if (r.closedSubs.has(frame.subId)) return;
+        if (seenIds.has(frame.event.id)) return; // dedupe before any signature work
+        if (!matchesFilters(frame.event, sub.filters)) { penalize(r, PENALTY.outsideFilter, 'outside-filter'); return; }
+        const count = (r.counts.get(frame.subId) ?? 0) + 1;
+        r.counts.set(frame.subId, count);
+        if (count > POOL_LIMITS.maxEventsPerSubscription) {
+          r.closedSubs.add(frame.subId);
+          try { r.socket?.send(encodeClose(frame.subId)); } catch { /* the relay is already misbehaving */ }
+          return;
+        }
+        let valid = false;
+        try { valid = options.verifier.verifyEvent(frame.event) === true; } catch { valid = false; }
+        if (!valid) { penalize(r, PENALTY.invalidSignature, 'invalid-signature'); return; }
+        remember(frame.event.id);
+        try { sub.handlers.onEvent(frame.event, r.cfg.endpointId); } catch { /* handler faults are not relay faults */ }
+        return;
+      }
+      case 'EOSE': {
+        const sub = subs.get(frame.subId);
+        if (!sub || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
+        if (r.closedSubs.has(frame.subId)) return;
+        try { sub.handlers.onEose?.(r.cfg.endpointId); } catch { /* ignore */ }
+        return;
+      }
+      case 'CLOSED':
+        // Only a currently requested subscription can end. Unsolicited ids must not consume
+        // memory or pre-empt a future subscription whose id happens to match.
+        if (!subs.has(frame.subId) || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
+        r.closedSubs.add(frame.subId); return; // relay refused or ended it; never auto-resubscribed
+      case 'NOTICE': return; // text is never interpreted or surfaced
+      case 'OK': penalize(r, PENALTY.unexpected, 'unexpected-ok');
+    }
+  }
+  /** Authorize through G05, capture, and open one socket inside the single-shot scope.run. */
+  async function open(r: RelayRec, method: 'read' | 'publish', signal?: AbortSignal): Promise<{ socket: RelaySocketLike; scope: TransportScope } | RouteError> {
+    const permit: Permit | RouteError = options.broker.authorize({ channel: 'relay', endpointId: r.cfg.endpointId, method });
+    if (typeof permit === 'string') return permit;
+    let scope: TransportScope | RouteError;
+    try { scope = options.broker.capture(permit, signal === undefined ? {} : { signal }); } catch { return 'ROUTE_UNAVAILABLE'; }
+    if (typeof scope === 'string') return scope;
+    const leased = scope;
+    // Keep ownership across scope.run's async boundary, including an open socket whose
+    // successful result is discarded by a concurrent broker/caller cancellation.
+    let socket: RelaySocketLike | null = null;
+    const discard = (): void => {
+      if (socket === null) return;
+      socket.onopen = socket.onclose = socket.onerror = socket.onmessage = null;
+      try { socket.close(); } catch { /* ignore */ }
+      socket = null;
+    };
+    // The operation never rejects: a rejected operation would make the broker block the whole adapter.
+    const result = await leased.run(signal => new Promise<RelaySocketLike | null>(resolve => {
+      let done = false;
+      const finish = (value: RelaySocketLike | null): void => {
+        if (done) return; done = true; clearTimeout(timer); signal.removeEventListener('abort', onAbort);
+        if (value === null) discard();
+        resolve(value);
+      };
+      const onAbort = (): void => finish(null);
+      const timer = setTimeout(() => finish(null), timing.connectTimeoutMs);
+      signal.addEventListener('abort', onAbort, { once: true });
+      try {
+        socket = connect(r.cfg.url, signal);
+        if (done) { discard(); return; }
+        socket.onopen = () => finish(socket);
+        socket.onclose = () => finish(null);
+        socket.onerror = () => finish(null);
+      } catch { finish(null); }
+    }));
+    if (!result.ok) { discard(); leased.dispose(); return result.error; }
+    if (result.value === null) { discard(); leased.dispose(); return 'ROUTE_UNAVAILABLE'; }
+    if (!leased.current()) { discard(); leased.dispose(); return 'CANCELLED'; }
+    return { socket: result.value, scope: leased };
+  }
+  async function start(r: RelayRec): Promise<void> {
+    if (closed) return;
+    const generation = ++r.generation;
+    const connecting = new AbortController(); r.connecting = connecting;
+    setState(r, 'connecting'); emitStatus();
+    if (closed || r.generation !== generation) return;
+    const opened = await open(r, 'read', connecting.signal);
+    if (r.connecting === connecting) r.connecting = null;
+    if (closed || r.generation !== generation) {
+      if (typeof opened !== 'string') { try { opened.socket.close(); } catch { /* ignore */ } opened.scope.dispose(); }
+      return;
+    }
+    if (typeof opened === 'string') {
+      // Policy refusals are final for this session until an explicit retry: no timers, no direct fallback.
+      if (opened === 'POLICY_BLOCKED' || opened === 'INVALID_ENDPOINT') fail(r, 'blocked', opened);
+      else fail(r, null, opened);
+      return;
+    }
+    r.socket = opened.socket; r.scope = opened.scope; r.openedAt = clock();
+    r.tokens = POOL_LIMITS.burst; r.refilledAt = r.openedAt; r.windowIndex = Math.floor(r.openedAt / POOL_LIMITS.overloadWindowMs); r.windowDropped = 0; r.overloadedWindows = 0;
+    setState(r, 'open'); emitStatus();
+    // An observer may close the pool/subscription or revoke the broker synchronously.
+    if (closed || r.generation !== generation) return;
+    if (!opened.scope.current()) { fail(r, null, 'revoked'); return; }
+    const socket = opened.socket;
+    socket.onmessage = event => onFrame(r, generation, event.data);
+    socket.onclose = () => { if (r.generation === generation && !closed) fail(r, null, 'closed'); };
+    socket.onerror = () => { if (r.generation === generation && !closed) fail(r, null, 'error'); };
+    opened.scope.signal.addEventListener('abort', () => { if (r.generation === generation && !closed && r.state === 'open') fail(r, null, 'revoked'); }, { once: true });
+    sendReq(r);
+  }
+  function normalize(filters: readonly RelayFilter[]): readonly RelayFilter[] | null {
+    if (!Array.isArray(filters) || filters.length < 1 || filters.length > POOL_LIMITS.maxFiltersPerSubscription) return null;
+    const wall = options.nowSeconds?.() ?? null;
+    const out: RelayFilter[] = [];
+    for (const f of filters) {
+      if (typeof f !== 'object' || f === null) return null;
+      if (!Array.isArray(f.kinds) || f.kinds.length < 1 || f.kinds.length > 8 || !f.kinds.every((k: number) => Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
+      if (!Number.isSafeInteger(f.limit) || f.limit < 1 || f.limit > POOL_LIMITS.maxFilterLimit) return null;
+      if (!Number.isSafeInteger(f.since) || f.since < 0) return null;
+      if (wall !== null && f.since < wall - (f.kinds.every((k: number) => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
+      const copy: Record<string, unknown> = { kinds: [...f.kinds], since: f.since, limit: f.limit };
+      for (const name of ['authors', '#d', '#t', '#k', '#a', '#p'] as const) {
+        const list = f[name];
+        if (list === undefined) continue;
+        if (!Array.isArray(list) || list.length < 1 || list.length > FRAME_LIMITS.maxFilterValues) return null;
+        if (!list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
+        copy[name] = [...list];
+      }
+      out.push(Object.freeze(copy) as unknown as RelayFilter);
+    }
+    return Object.freeze(out);
+  }
+  function closeSub(id: string): void {
+    if (!subs.delete(id)) return;
+    for (const r of recs) {
+      if (r.state === 'open' && r.counts.delete(id)) { try { r.socket?.send(encodeClose(id)); } catch { /* ignore */ } }
+      r.closedSubs.delete(id);
+    }
+    if (subs.size === 0) for (const r of recs) if (active(r)) { teardown(r); setState(r, 'idle'); r.failures = 0; }
+    emitStatus();
+  }
+  async function publishOne(r: RelayRec, event: NostrEvent, signal: AbortSignal | undefined): Promise<PublishResult> {
+    const unknown = (): PublishResult => ({ eventId: event.id, relayId: r.cfg.endpointId, status: 'unknown' });
+    if (closed || signal?.aborted || r.state === 'banned') return unknown();
+    const controller = new AbortController();
+    const cancel = (): void => controller.abort();
+    publications.add(controller);
+    signal?.addEventListener('abort', cancel, { once: true });
+    try {
+      const opened = await open(r, 'publish', controller.signal);
+      if (typeof opened === 'string') return unknown();
+      const { socket, scope } = opened;
+      // Await keeps this publication owned until ACK, refusal, cancellation or timeout.
+      return await new Promise<PublishResult>(resolve => {
+        let done = false;
+        const finish = (status: PublishResult['status']): void => {
+          if (done) return; done = true; clearTimeout(timer); scope.signal.removeEventListener('abort', abort);
+          socket.onopen = socket.onmessage = socket.onclose = socket.onerror = null; try { socket.close(); } catch { /* ignore */ }
+          scope.dispose(); resolve({ eventId: event.id, relayId: r.cfg.endpointId, status });
         };
-        connection.acks.set(event.id,{finish});signal?.addEventListener('abort',abort,{once:true});
-        if(signal?.aborted){finish('unknown');return;}
-        if(!this.#send(connection,JSON.stringify(['EVENT',event])))finish('unknown');
-      })));
-      return {ok:true,value:Object.freeze(outcomes)};
-    }finally{this.#publications.delete(job);}
+        const abort = (): void => finish('unknown');
+        const timer = setTimeout(() => finish('unknown'), timing.publishTimeoutMs);
+        scope.signal.addEventListener('abort', abort, { once: true });
+        socket.onclose = socket.onerror = () => finish('unknown');
+        socket.onmessage = message => {
+          if (!scope.current()) { finish('unknown'); return; }
+          const parsed = typeof message.data === 'string' ? parseRelayFrame(message.data) : null;
+          if (parsed?.ok && parsed.frame.type === 'OK' && parsed.frame.eventId === event.id) finish(parsed.frame.accepted ? 'accepted' : 'rejected');
+        };
+        // Cancellation can occur after the connect promise resolves but before this continuation.
+        if (closed || controller.signal.aborted || !scope.current()) { finish('unknown'); return; }
+        try { socket.send(encodeEvent(event)); } catch { finish('unknown'); }
+      });
+    } finally {
+      signal?.removeEventListener('abort', cancel);
+      publications.delete(controller);
+    }
   }
-  snapshot():readonly OrderAdvertisement[] {try{return this.#book.snapshot(this.#options.nowSeconds());}catch{return Object.freeze([]);}}
-  /** Explicit retry only after automatic attempts exhaust; never picks a new relay. */
-  retry():void {if(this.#disposed)return;for(const connection of this.#connections.values()){if(connection.unsafe)continue;connection.attempts=0;connection.stopped=false;this.#open(connection);}}
-  dispose():Promise<void> {
-    if(this.#disposal)return this.#disposal;
-    this.#disposed=true;this.#subscriptions.clear();this.#book.clear();
-    this.#disposal=Promise.all([...this.#connections.values()].map(connection=>this.#stop(connection,false))).then(()=>undefined);
-    return this.#disposal;
-  }
-  get retainedOrders():number {return this.#book.retainedOrders;}
-  get dedupIds():number {return this.#book.dedupIds;}
-  /** Failed native close remains uncertain, rather than claiming resource cleanup. */
-  get unsettledSlots():number {return [...this.#connections.values()].filter(connection=>connection.pending!==undefined||connection.draining||connection.socket!==undefined||connection.unsafe).length;}
+  function status_(): readonly RelayStatus[] { return status(); }
+  const pool: RelayPool = {
+    subscribe(filters, handlers) {
+      if (closed) return refuse('CLOSED');
+      const normalized = normalize(filters);
+      if (normalized === null) return refuse('INVALID_FILTER');
+      if (typeof handlers?.onEvent !== 'function') return refuse('INVALID_FILTER');
+      if (subs.size >= POOL_LIMITS.maxSubscriptionsPerRelay) return refuse('LIMIT_EXCEEDED');
+      const id = `s${++subCounter}`;
+      subs.set(id, { id, filters: normalized, handlers });
+      for (const r of recs) if (r.state === 'open') { r.counts.set(id, 0); try { r.socket?.send(encodeReq(id, normalized)); } catch { fail(r, null, 'send-failed'); } }
+      fill();
+      return { ok: true as const, value: Object.freeze({ id, close: () => closeSub(id) }) };
+    },
+    async publish(event, signal) {
+      if (closed) return refuse('CLOSED');
+      const checked = parseEvent(event);
+      let valid = false;
+      try { valid = checked !== null && options.verifier.verifyEvent(checked) === true; } catch { valid = false; }
+      if (checked === null || !valid || signal?.aborted) return refuse('INVALID_FILTER');
+      const targets = recs.filter(r => r.state !== 'banned').slice(0, maxActive);
+      if (inFlight + targets.length > POOL_LIMITS.maxPublishInFlight) return refuse('LIMIT_EXCEEDED');
+      inFlight += targets.length;
+      try { return { ok: true as const, value: Object.freeze(await Promise.all(targets.map(r => publishOne(r, checked, signal)))) }; }
+      finally { inFlight -= targets.length; }
+    },
+    retry(endpointId) {
+      const r = recs.find(x => x.cfg.endpointId === endpointId);
+      if (!r || closed || (r.state !== 'failed' && r.state !== 'blocked')) return;
+      r.failures = 0; setState(r, 'idle'); emitStatus(); fill();
+    },
+    status: status_,
+    close() {
+      if (closed) return; closed = true;
+      for (const controller of publications) controller.abort();
+      for (const r of recs) { teardown(r); setState(r, 'idle'); }
+      subs.clear(); seenIds.clear();
+    },
+  };
+  return Object.freeze(pool);
 }

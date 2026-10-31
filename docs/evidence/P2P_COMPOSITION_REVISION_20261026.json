@@ -1,0 +1,166 @@
+{
+  "kind": "C04 independently unlocked service concurrency evidence; no runtime modification",
+  "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+  "runtimeImplementationCommit": "fa4e1f4ddd1fef95befb7ab7b6bb72b3ad22ba6a",
+  "recordedAtUtc": "2026-10-26T21:26:48.843544+00:00",
+  "sourceFiles": {
+    "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+    "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+  },
+  "runtimeChanged": false,
+  "testAnchors": {
+    "peerJournal": 69,
+    "heldReadFixture": 77,
+    "emptySnapshotReservationRace": 291,
+    "sendingMarkerSnapshotRace": 307
+  },
+  "newTests": 2,
+  "deterministicSchedules": [
+    "peer reserve before first durable preflight read",
+    "peer reserve after old empty journal snapshot",
+    "peer marker after old prepared journal snapshot"
+  ],
+  "observed": [
+    "stale read returns CONFLICT",
+    "revoked original session returns LOCKED",
+    "fresh unlock recovers peer committed intent; marker remains broadcast-unknown",
+    "duplicate/new attempt refused; encrypted envelope/write count unchanged after peer commit",
+    "diagnostic economicPreparationAllowed stays false"
+  ],
+  "counts": {
+    "composition": 15,
+    "aggregate": 356,
+    "buildPolicy": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "redDisposition": "Both added tests passed existing runtime first execution. No demonstrated defect, invented RED or runtime correction. Prior historical RED/bugfix evidence retained separately.",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/domain/test/trade-composition.test.mjs"
+      ],
+      "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+      "startedAtUtc": "2026-10-26T21:23:55.334149+00:00",
+      "finishedAtUtc": "2026-10-26T21:23:58.670546+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-revision-20261026/01-revision-oracles-first-run.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+      "startedAtUtc": "2026-10-26T21:24:42.674758+00:00",
+      "finishedAtUtc": "2026-10-26T21:24:58.453943+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-revision-20261026/02-unit-aggregate.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+      "startedAtUtc": "2026-10-26T21:24:58.454605+00:00",
+      "finishedAtUtc": "2026-10-26T21:24:58.932456+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-revision-20261026/03-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+      "startedAtUtc": "2026-10-26T21:24:58.933015+00:00",
+      "finishedAtUtc": "2026-10-26T21:24:59.446839+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-revision-20261026/04-build-policy.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "sourceBase": "a8a5f790019afa9b7eaa2b10f83b5dae3f2ee7e5",
+      "startedAtUtc": "2026-10-26T21:24:59.447290+00:00",
+      "finishedAtUtc": "2026-10-26T21:25:01.664639+00:00",
+      "exitCode": 0,
+      "runtimeChanged": false,
+      "sourceFiles": {
+        "packages/domain/src/trade-composition.ts": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "packages/domain/test/trade-composition.test.mjs": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c"
+      },
+      "exitRecord": "docs/evidence/p2p-composition-revision-20261026/05-build-and-types.exit.json"
+    }
+  ],
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-composition-revision-20261026/01-revision-oracles-first-run.log.gz",
+      "sha256": "032eb511f604b58ccb57e3be38164e94858e2318100b98ef55cadb2b1412e631",
+      "rawSha256": "6cc6dcccc077020c9ef4af9d4d8788feb1a5c362feed53d92e5860f88b440508",
+      "rawBytes": 1918
+    },
+    {
+      "path": "docs/evidence/p2p-composition-revision-20261026/02-unit-aggregate.log.gz",
+      "sha256": "0b4f7aa2d4bae7231895d2bbdab551463bf2687f8490901bfd8037522faa23b5",
+      "rawSha256": "51e7f542b91286d63e4786f1aebd54f797d66091a29081269ba42dd54cd296b2",
+      "rawBytes": 38201
+    },
+    {
+      "path": "docs/evidence/p2p-composition-revision-20261026/03-boundaries.log.gz",
+      "sha256": "d01a69abf3d6239e8254adb8cffc5795deb1e4a9bc26b2a6d952068c4ac5381b",
+      "rawSha256": "436235af7947a200851fc146b11f651629966d4d654c5981683841802f4a8d41",
+      "rawBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-composition-revision-20261026/04-build-policy.log.gz",
+      "sha256": "d17615c964b1fa60a6f24b5663895f0420c363832d9932d2cd51541061b173b4",
+      "rawSha256": "d0a959f0a0ede46c6a0940956206f517ef72517262bb0b0b089b9f7d7fde8e4e",
+      "rawBytes": 981
+    },
+    {
+      "path": "docs/evidence/p2p-composition-revision-20261026/05-build-and-types.log.gz",
+      "sha256": "b75dcfd96f0f2650b9fccae627be887f04b9c0a2dede828d5336eeef4bd44b8f",
+      "rawSha256": "7ad058823480112cf400614749ccf0473911ee4857d24e4089ff462327ac7abc",
+      "rawBytes": 1510
+    }
+  ],
+  "limitations": [
+    "two real independently unlocked vault/journal services within Node over in-memory exact-CAS Store; not native browser cross-tab",
+    "Store has no invalidation broadcasts; durable revision guards remain authoritative",
+    "no browser/Python/spec rerun; no native terms/time/custody/trading acceptance"
+  ],
+  "review": "coordinator test/source diff inspection, not independent audit",
+  "remaining": "native timestamp and terms/prepared-request/native-trade association; trusted journal observe/reconcile/hash lifecycle; actual trading implementation and trust/deployment/provider/device review gates",
+  "workersStarted": 0,
+  "ghostPayTouched": false,
+  "canonicalQueueReadOrWritten": false
+}

@@ -1,0 +1,326 @@
+{
+  "assignment": "P2P-G16-PRIVATE-HOST-07",
+  "release_stage": "Complete source/tests/browserfixture proposal, UNEXECUTED",
+  "base_sha": "9efb421a6d22ec23312d6bd8ffb466f87103fb1c",
+  "base_tree": "d02201aa99c0ca332fc2004df228178789ad10f5",
+  "input_library": "libfile_7bce3324aea48191a60e89287fd4b2ecv0",
+  "input_bytes": 44452,
+  "input_sha256": "e9784f4a79bdb561cb5db1e5383f825ef03f83b5f772e4af18da5ecba63c56eb",
+  "files": [
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "baseState": "absent",
+      "target_bytes": 22923,
+      "target_lines": 327,
+      "target_sha256": "05fe16336f995a7ecc9bd1b561d9d029559fca0e82e78f760d0ec471c62d7ded"
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement-host.ts",
+      "baseState": "absent",
+      "target_bytes": 13211,
+      "target_lines": 261,
+      "target_sha256": "06d9f7b803cd9ede59e3d386cde01a08ccdf6080fb90f5b1ae8b7527872215f3"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "baseState": "existing",
+      "base_bytes": 22979,
+      "base_sha256": "3d0cc3d7b2d983504d3c976bc0dcf2bcae634ba2e29f13a3042168aa490d75e8",
+      "target_bytes": 28333,
+      "target_lines": 378,
+      "target_sha256": "4cbbb6283bf7c238b9e6133564f84a24813e808927efb5f4033d40b123270426"
+    }
+  ],
+  "review": "Fable066returned end_turn/staticPASS exact064host after061blockingfindings; noNode/browserexecutionclaim",
+  "review_sha256": "c804feae532e266c15618eef2f7c6b22260dcd579b8e87d9796b520facc490a2",
+  "requests": [
+    {
+      "tag": "p2p-private-host-053",
+      "model": "claude-fable-5-1",
+      "state": "completed",
+      "request_id": "req_011CgS4KgGCSE2Jquprwsnxn",
+      "usage": {
+        "input_tokens": 53409,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 48000,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 48000
+        }
+      },
+      "stop_reason": "max_tokens",
+      "estimated_cost_usd": "2.93409",
+      "worst_case_reserved_usd": "5.00116"
+    },
+    {
+      "tag": "p2p-host-invariant-review-059",
+      "model": "claude-fable-5-1",
+      "state": "completed",
+      "request_id": "req_011CgS5VzxUzeHVvEqJwdJ1D",
+      "usage": {
+        "input_tokens": 11354,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 6100,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 2909
+        }
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.41854",
+      "worst_case_reserved_usd": "1.47208"
+    },
+    {
+      "tag": "p2p-host-implementation-060",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS5hJhtFBN3EZCr6QdRe",
+      "usage": {
+        "input_tokens": 53453,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 5640,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.163306",
+      "worst_case_reserved_usd": "2.16"
+    },
+    {
+      "tag": "p2p-host-concrete-review-061",
+      "model": "claude-fable-5-1",
+      "state": "completed",
+      "request_id": "req_011CgS639urMVCxxFgdw4b1P",
+      "usage": {
+        "input_tokens": 19269,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 7368,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 4508
+        }
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.56109",
+      "worst_case_reserved_usd": "1.66872"
+    },
+    {
+      "tag": "p2p-host-selftests-062",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS639w6RmLXbjxUut4Y4",
+      "usage": {
+        "input_tokens": 58292,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 7930,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.195884",
+      "worst_case_reserved_usd": "2.18"
+    },
+    {
+      "tag": "p2p-host-browser-fixture-063",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS67qD7Ji1tJTqwzpBq9",
+      "usage": {
+        "input_tokens": 58360,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 2025,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.13697",
+      "worst_case_reserved_usd": "2.1"
+    },
+    {
+      "tag": "p2p-host-corrected-source-064",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS6T2LcVSHDK89QwQDac",
+      "usage": {
+        "input_tokens": 19466,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 5763,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.096562",
+      "worst_case_reserved_usd": "2.16"
+    },
+    {
+      "tag": "p2p-host-tests-correction-065",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS6T2KNGnCc751GbqEpE",
+      "usage": {
+        "input_tokens": 67280,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 10344,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.238",
+      "worst_case_reserved_usd": "2.18"
+    },
+    {
+      "tag": "p2p-host-final-review-066",
+      "model": "claude-fable-5-1",
+      "state": "completed",
+      "request_id": "req_011CgS6n4Xr5dB7TzFiAqewr",
+      "usage": {
+        "input_tokens": 19567,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 4629,
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard",
+        "output_tokens_details": {
+          "thinking_tokens": 2763
+        }
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.42712",
+      "worst_case_reserved_usd": "1.59446"
+    },
+    {
+      "tag": "p2p-host-browser-focused-067",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS6n4WrTAr4P9fAuqTtG",
+      "usage": {
+        "input_tokens": 16939,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 2601,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.059888",
+      "worst_case_reserved_usd": "2.1"
+    },
+    {
+      "tag": "p2p-host-browser-oracle-correction-068",
+      "model": "claude-sonnet-5-5",
+      "state": "completed",
+      "request_id": "req_011CgS71XxyXQsFiDTrJMtZB",
+      "usage": {
+        "input_tokens": 19483,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 3262,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "stop_reason": "end_turn",
+      "estimated_cost_usd": "0.071586",
+      "worst_case_reserved_usd": "2.1"
+    }
+  ],
+  "host_assignment_completed_estimated_usd": "5.303036",
+  "whole_implementation053": "Knowncompletedmax_tokens48000allthinking/no visiblecode,2.93409USD; no accessdenial/transportuncertainty",
+  "no_P2P_code_applied_imported_or_tested_by_broker": true,
+  "source_corrections": "Sonnet064source and065testreplacement supersede060/062; no brokeralgorithm adaptations",
+  "open_oracle_limits": [
+    "Bodyparserpreimportcopyspy is conditional: emptycapture doesnotprovehostcopyzeroization; integratormustqualifypositiveobservationorretainexplicitgap",
+    "Trustedclockfault/nonterminal behavior andpromptlogicalcancel engineeringdispositions documented, notnewfinancialauthority",
+    "Isolatedbrowserfixture proposal nowcomplete, but notexecuted. Actualmessage/DOM/Worker/appbridge andallfinancial/trust/inclusiongates remainclosed."
+  ],
+  "broker_adjustments": [
+    "Onlynormalizedbrowser068hunklocations/countsagainstuniqueexactbasecontext;source064andtests065codebytesunchanged",
+    "Rejected063nopatch and067manualcleanup-before-assert/racyphysicalslot assumptions;068hasprecleanupassertions andexplicitnativebackendcompletion+oneeventloopdrain, no polling/retries"
+  ]
+}

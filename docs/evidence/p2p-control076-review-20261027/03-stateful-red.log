@@ -1,0 +1,56 @@
+✔ valid request frames, both operations, bounds and null prototype (1.922147ms)
+✔ valid ack frames cover held values, both failure codes, both ops (0.782449ms)
+✔ valid closed frames cover all four reasons and bounds (0.231583ms)
+✔ caller mutation has no effect and repeated parses are identical (0.257301ms)
+✔ request: outer structural rejections (0.539789ms)
+✔ request: meta traps yield fresh fixed errors (0.282929ms)
+✔ request: giant extra graph is not traversed (0.140098ms)
+✔ request: discriminator and counter rejections (0.410168ms)
+✔ request: authority/private extras rejected and sentinel excluded (0.456696ms)
+✔ ack: outer structural rejections (0.291492ms)
+✔ ack: meta traps yield fresh fixed errors (0.217963ms)
+✔ ack: giant extra graph is not traversed (0.24994ms)
+✔ ack: discriminators, counters, result shapes (1.266036ms)
+✔ ack: nested exact-shape hardening (0.828117ms)
+✔ ack: sentinel excluded from output and errors (0.197733ms)
+✔ closed: outer structural rejections (0.304421ms)
+✔ closed: meta traps yield fresh fixed errors (0.160999ms)
+✔ closed: giant extra graph is not traversed (0.089643ms)
+✔ closed: discriminators and counters (0.423908ms)
+✔ Reflect trap on transparent proxy without traps is not asserted rejected (0.100278ms)
+✔ complete nested exact-shape family: success-result (0.602192ms)
+✔ complete nested exact-shape family: failure-result (0.981344ms)
+✔ complete nested exact-shape family: held-value (0.394474ms)
+✔ complete nested exact-shape family: failure-error (0.60761ms)
+✔ genuine and forged CoreSchemaError trap values are discarded fresh without any error-property reads (1.609754ms)
+✔ every ack discriminator and all request/ack/closed integer counter domains are exact (1.219076ms)
+✖ ack discriminator cannot change between probe and exact snapshot (0.895787ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 26
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 144.046692
+
+✖ failing tests:
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:262:1
+✖ ack discriminator cannot change between probe and exact snapshot (0.895787ms)
+  AssertionError [ERR_ASSERTION]: expected throw
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:31:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:271:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

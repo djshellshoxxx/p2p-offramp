@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/trade-composition.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T21:04:24.110710+00:00",
+  "finishedAtUtc": "2026-10-26T21:04:25.385675+00:00",
+  "exitCode": 1,
+  "phase": "RED external abort and synchronous reentrant read ownership before ordering fix"
+}

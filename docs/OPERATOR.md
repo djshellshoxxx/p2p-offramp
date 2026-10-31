@@ -20,6 +20,7 @@ npm run check:boundaries     # core packages: no browser globals/npm imports; ap
 npm run test:build-policy
 npm run build                # default artifact -> apps/web/dist
 npm run build:demo           # synthetic demo artifact -> apps/web/dist-demo
+npm run build:testnet        # Sepolia testnet artifact (owner-signed registry) -> apps/web/dist-testnet
 npm run test:browser         # vault, runtime, content policy, reseal crash (Chromium)
 npm run test:web:browser     # emitted shell journeys + synthetic trade-review journey (Chromium)
 npm run test:specs && npm run check:specs
@@ -34,6 +35,7 @@ a signed manifest.
 |---|---|---|---|
 | default | `npm run build` | none (G11/G15 trust root pending) | Shown as unavailable |
 | demo | `npm run build:demo` | synthetic `test-local-only` registry, chain 31337, digest-pinned | Works on files and built-in samples |
+| testnet | `npm run build:testnet` | owner-signed Sepolia registry (G15 manifest, owner's testnet-only P-256 key), chain 11155111 | Works on files; no samples |
 
 - The demo flag is the compile-time constant `__P2P_SYNTHETIC_DEMO__` (`apps/web/vite.config.ts`). The synthetic
   module is reachable only through a dynamic import behind it.
@@ -41,6 +43,20 @@ a signed manifest.
   digest) appears in any emitted file, and fails the demo build if the markers are missing.
 - The demo build shows a "SYNTHETIC DEMO" badge on every page. Its samples still pass through the same validator
   as user files. Never deploy the demo build as a product, and never use its addresses, keys or amounts on a real network.
+- **Testnet build: what it needs.** Before building, `apps/web/scripts/testnet-trust.mjs` reads four files and verifies them with the app's own G15 verifier:
+  - `security/testnet-trust/sepolia-release-key.pub.json`;
+  - `registry/testnet/sepolia.registry.json`;
+  - `registry/testnet/sepolia.release.json`;
+  - `registry/testnet/sepolia.release.sig.json`.
+- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest or the wrong key ID stops it with `TESTNET_TRUST_INVALID`. So does any registry that is not exactly Sepolia (`TESTNET_TRUST_INVALID: NETWORK`): it must name one network, chain id 11155111 with Sepolia's genesis hash, whatever its `environment` labels say. The app repeats every check at runtime and fails closed. Once a release has been accepted (`npm run sepolia:verify -- --accept` writes `registry/testnet/sepolia.accepted.json`), an older signed release or a different manifest at the accepted sequence stops the build with `TESTNET_TRUST_INVALID: RELEASE_ROLLBACK`.
+- **Testnet build: in the app.**
+  - The verified bundle is embedded through `__P2P_TESTNET_TRUST__`. The app cannot fetch anything, because CSP sets `connect-src 'none'`.
+  - The app verifies the bundle again with the device clock, so after the manifest expires the registry fails closed.
+  - Lookups answer only for `testnet` networks.
+  - Pages show a "SEPOLIA TESTNET" badge and a banner naming the key ID and the manifest expiry.
+- **Testnet build: what it does not do.** It changes no permission: `ReleaseEnabled` stays 0 and `connectOrigins` stays empty. It does not accept, sign or fund anything.
+- `scanBuild` fails every non-testnet build that contains the testnet bundle or the testnet modules, and fails the testnet build if they are missing.
+- The terms files written by `npm run sepolia:trade` (`docs/deployments/sepolia/trades/*.terms-review.json`) can be reviewed in this build.
 
 To view a build locally, serve the output folder over loopback HTTP, for example
 `npx vite preview --config apps/web/vite.config.ts --mode demo --outDir dist-demo` (use `--outDir dist` without `--mode demo` for the default build; `outDir` is relative to `apps/web`), then open
@@ -67,23 +83,10 @@ examples are the synthetic sets in `packages/domain/test/fixtures/local-evm-scen
 ## What review does not do
 
 Review never accepts, signs, computes the EIP-712 digest, connects a wallet, reads chain state or funds anything.
-Remaining time uses the device clock for display only. Reviews are kept in memory (at most 8) and are cleared on
-lock, profile switch and reload. In the demo build, unlock a profile, check terms and choose **Save encrypted
-review** to retain the original document, including private payment instructions and agreement salt, in that
-profile. Saving is explicit. **Remove from session** only clears the memory entry; it does not delete its saved copy.
+Remaining time uses the device clock for display only.
 
-After reloading, unlock the same profile and choose **Load saved reviews** on Offers. Every saved document goes
-through the terms validator against the currently loaded registry before any loaded review is displayed. A failed
-load preserves the existing session list and encrypted data. Default builds have no approved registry and cannot
-display saved reviews. Saved documents do not gain signing, payment or settlement authority.
+Reviews are kept in memory and cleared on reload. At most 8 unsaved reviews are kept.
 
-At most 8 reviews of at most 64 KiB each can be saved per profile. Saves use the vault's compare-and-swap revision
-check; a conflicting tab requires a fresh unlock. Repeating a save from the same session entry is idempotent.
-Saving the same file as a separate newly imported review can create another record. This preview has no saved-record
-deletion control. Recognized review wrappers with invalid bytes are refused; unrecognized trade records are
-preserved and ignored, so a wrapper corrupted beyond recognition may not appear in the saved list.
+While a profile is unlocked, **Save to profile** stores the original terms file, encrypted, in that profile. A profile holds at most 8 saved reviews, and a ninth save is refused rather than evicting one.
 
-Locking, cancellation or a timeout can arrive after a save committed. Unlock and load before retrying an uncertain
-save. Saved reviews travel inside the encrypted backup and fresh-key restore path. An unchecked export alone is
-not proof of recovery; the emitted-app Chromium test exercises save → reload/unlock/load and export → fresh-key
-restore/unlock/load. No other browser/device or deployed-host acceptance is implied.
+**Load saved reviews** checks every saved file again against the registry in the running build. Saved files that no longer pass are listed so they can be deleted. Locking the vault, or switching profile, removes loaded reviews from the page. Saved reviews are included in encrypted backups of the profile.

@@ -32,6 +32,8 @@ function requireId(value: unknown): string {
   return value;
 }
 function requireToken(value: unknown): string { decodeBase64url(value, 32, 32); return value as string; }
+/** Checked before a session tail is swapped: a non-signal would otherwise throw while holding it. */
+function requireSignal(signal: unknown): void { if (signal !== undefined && !(signal instanceof AbortSignal)) throw new ValidationError(); }
 function kind(value: unknown): RecordKind {
   if (value !== 'identity' && value !== 'preference' && value !== 'trade' && value !== 'chat' && value !== 'journal') throw new ValidationError();
   return value;
@@ -208,7 +210,7 @@ export class EncryptedVaultService implements VaultService {
     return { sessionId: token, profileId: snapshot.profileId, revision: snapshot.revision };
   }
   async #openJob<T>(signal: AbortSignal | undefined, operation: (guard: () => void, control: AbortController) => Promise<T>): Promise<T> {
-    const epoch = this.#epoch; const control = this.#control(signal); this.#pending.add(control.controller);
+    requireSignal(signal); const epoch = this.#epoch; const control = this.#control(signal); this.#pending.add(control.controller);
     const previous = this.#opening; let release!: () => void; this.#opening = new Promise(resolve => { release = resolve; });
     const guard = (): void => {
       if (this.#disposed || this.#epoch !== epoch) throw new Failure('LOCKED');
@@ -239,6 +241,7 @@ export class EncryptedVaultService implements VaultService {
   /** Public row keys only; no envelope is read, so this reveals nothing beyond G02's observable profile count. */
   listProfiles(signal?: AbortSignal): Promise<Result<ProfileInventory>> {
     return this.#result(async () => {
+      requireSignal(signal);
       if (signal?.aborted) throw new Failure('CANCELLED');
       const inventory = await this.#store.listProfileIds();
       if (signal?.aborted) throw new Failure('CANCELLED');
@@ -306,6 +309,7 @@ export class EncryptedVaultService implements VaultService {
   commit(sessionId: string, expectedRevision: number, mutations: readonly Mutation[], signal?: AbortSignal): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION) throw new ValidationError();
       const captured = mutationCopies(mutations, state.snapshot!);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
@@ -346,6 +350,7 @@ export class EncryptedVaultService implements VaultService {
   readPersisted(sessionId: string, signal?: AbortSignal): Promise<Result<PrivateRecordV1[]>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       try {
         await previous; this.#guard(state, generation, signal);
@@ -364,6 +369,7 @@ export class EncryptedVaultService implements VaultService {
   assertFresh(sessionId: string, signal?: AbortSignal): Promise<Result<number>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
       try {
         await previous; this.#guard(state, generation, signal);
@@ -384,6 +390,7 @@ export class EncryptedVaultService implements VaultService {
     destinationPassphrase: string, signal?: AbortSignal): Promise<Result<ResealReceipt>> {
     return this.#result(async () => {
       const state = this.#session(sessionId), generation = state.generation;
+      requireSignal(signal);
       requireId(expectedKeyId);
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION || typeof transform !== 'function') throw new ValidationError();
       const password = encodePassphrase(destinationPassphrase); password.fill(0);

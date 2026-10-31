@@ -6,6 +6,12 @@ export class VaultStorageError extends Error {
   constructor(code: VaultErrorCode) { super('Vault storage operation failed.'); this.name = 'VaultStorageError'; this.code = code; }
 }
 export interface StoreWriteOptions { signal?: AbortSignal; assertCurrent?: () => void; }
+/**
+ * IndexedDB's 'default' durability lets a user agent fire `complete` before the write is flushed to disk, so
+ * an OS crash or power loss could roll back a commit already reported (and acted on, e.g. the G12
+ * broadcast-unknown marker written before any wallet send). Engines without the option ignore it.
+ */
+const DURABLE: IDBTransactionOptions = Object.freeze({ durability: 'strict' });
 /** Opaque public row keys only. `truncated` means rows beyond the bound exist and were not listed. */
 export interface ProfileInventory { readonly profileIds: readonly string[]; readonly truncated: boolean; }
 export interface VaultStore {
@@ -177,7 +183,7 @@ export class IndexedDbVaultStore implements VaultStore {
     current(options); this.ensureOpen();
     await new Promise<void>((resolve, reject) => {
       let tx: IDBTransaction;
-      try { tx = db.transaction('vaults', 'readwrite'); this.transactions.add(tx); } catch (error) { reject(storageError(error)); return; }
+      try { tx = db.transaction('vaults', 'readwrite', DURABLE); this.transactions.add(tx); } catch (error) { reject(storageError(error)); return; }
       let failure: VaultStorageError | undefined;
       const abort = (): void => { failure ??= new VaultStorageError('CANCELLED'); try { tx.abort(); } catch { /* terminal completion decides */ } };
       const cleanup = (): void => { this.transactions.delete(tx); options?.signal?.removeEventListener('abort', abort); };

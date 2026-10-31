@@ -1,0 +1,46 @@
+✔ G15 native P-256 verification matches published RFC6979 public primitive vector (6.443714ms)
+✔ G15 binds canonical manifest, explicit public trust and complete raw asset set without enabling a release (5.641115ms)
+✔ G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain (6.490404ms)
+✔ G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures (2.739923ms)
+✔ G15 rejects malformed or private JWKs without invoking accessors (1.147291ms)
+✔ G15 canonical wire rejects duplicate/escaped keys, whitespace, reordering, numeric aliases, BOM and malformed UTF-8 (3.754778ms)
+✔ G15 rejects incomplete/unsupported metadata and unresolved deployment schemas (7.617886ms)
+✔ G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence (5.858077ms)
+✔ G15 compares complete asset paths, lengths and raw hashes, including non-text files (4.733449ms)
+✔ G15 signed path inventory rejects traversal, query, case collision, unsorted paths and aggregate overflow (4.806087ms)
+✔ G15 bounds manifest/key/asset counts before allocation or accessor execution (1.463379ms)
+✔ G15 snapshots caller bytes/metadata/assets before a held asynchronous digest (4.853827ms)
+▶ G15 cancellation/current-generation and late expiry win over a held crypto result
+  ✔ abort (1.216334ms)
+  ✔ generation (1.129916ms)
+  ✔ expiry (1.073892ms)
+  ✔ backward (1.222232ms)
+✔ G15 cancellation/current-generation and late expiry win over a held crypto result (5.290045ms)
+✔ G15 returns fixed errors for thrown callbacks/native failures and cancelled input (1.019531ms)
+✔ G15 cancellation from the last current callback cannot escape as a verified result (2.687215ms)
+▶ G15 fences held importKey results and failures
+  ✔ abort (2.415952ms)
+  ✔ generation (1.950241ms)
+  ✔ expiry (1.349411ms)
+  ✔ native-failure (1.420847ms)
+✔ G15 fences held importKey results and failures (8.057887ms)
+▶ G15 fences held verify results and failures
+  ✔ abort (2.121546ms)
+  ✔ generation (1.478923ms)
+  ✔ expiry (2.132703ms)
+  ✔ native-failure (1.365876ms)
+✔ G15 fences held verify results and failures (7.587581ms)
+▶ G15 fences held asset-digest results and failures
+  ✔ abort (1.835752ms)
+  ✔ generation (1.84098ms)
+  ✔ expiry (1.377573ms)
+  ✔ native-failure (2.914582ms)
+✔ G15 fences held asset-digest results and failures (8.516709ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212.641287

@@ -43,6 +43,38 @@ Production has no service worker in the first core release. Offline read-only be
 
 The application composition root owns a disposable service container: storage, backup, identities, transport, wallets, chain adapters, relay and extension registry. A single `start(publicConfig): Promise<CoreResult<AppServices>>` validates config before services with network authority initialize. `dispose(): Promise<void>` aborts jobs, locks keys, closes sockets/IDB, invalidates handles and subscriptions. React components receive view models and explicit commands, not keys/providers. Routes are home, offers, trade/<opaque local ID>, recovery and settings; a trade route resolves through validated local bindings and cannot treat a URL contract address as an approved deployment.
 
+### Saved terms reviews (implemented 2026-10-28)
+
+Only purpose-bound record commands cross the Worker boundary. There is no generic read, list or commit of records.
+
+**Commands.** The three runtime operations are `saveTermsReview`, `listTermsReviews` and `deleteTermsReview`.
+- Each command names `profileId`. The Worker refuses with `LOCKED` unless that profile is the open selection.
+- The document accepts a reply only if the same profile handle is still open.
+- The commands act only on `trade` records whose payload is exactly `p2p-offramp/saved-terms-review/v1` ([saved-review.ts](../../../packages/schemas/src/saved-review.ts)).
+- Any other `trade` record is reported only as a `skipped` count. These commands never return, replace or delete it.
+
+**What is stored.**
+- The payload holds the original terms-file bytes (1 B to 64 KiB, the domain review bound) and the source label (`file` or `synthetic-sample`).
+- Nothing derived is stored. Every load re-runs the domain terms review against the registry in the running build.
+- Saved bytes that no longer pass review are listed by record id with their rejection code, so the user can delete them. They are never displayed as a review.
+
+**Bounds, retry and ids.**
+- A profile holds at most 8 saved reviews. A ninth save is refused with `LIMIT_EXCEEDED`; nothing is evicted.
+- Saving is idempotent per (source, bytes). A retry after an uncertain reply, for example a lock during the commit, stores at most one copy.
+- Record ids are random 128-bit values. An id that collides with any existing record is refused with `CONFLICT`, never overwritten.
+
+**Lock, unlock and profile switch.**
+- The UI keeps an opaque `selectionScope()` counter that changes on every lock, unlock or profile switch.
+- When it changes, the review controller drops reviews loaded from the profile and discards any saved-review result still in flight.
+
+**Activity pings.** A trusted-activity ping pending from the same click no longer makes that click's command `BUSY`. Only one public command runs at a time.
+
+**Tests.**
+- `packages/schemas/test/saved-review.test.mjs`
+- `apps/web/test/saved-reviews-worker.test.mjs` (real encrypted vault)
+- `apps/web/test/saved-reviews-controller.test.mjs`
+- `scripts/test-saved-reviews-browser.mjs` (emitted demo build in Chromium)
+
 Boundary validation failure produces a fixed error page with local recovery/export where available. Missing Web Crypto/IDB secure context disables encrypted private operations; do not fall back to plaintext persistence. Missing chain/provider capability yields explicit unsupported state. Assets and optional modules failing to load must not reset user data.
 
 ## 6. Threat assessment

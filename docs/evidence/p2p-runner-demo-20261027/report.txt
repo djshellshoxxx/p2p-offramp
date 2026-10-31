@@ -1,0 +1,7 @@
+run 8d4eb732db394441abbf1a59816d78c2 profile=quick seed=1592598566 cases=50 jobs_limit=1
+started 2026-10-27T03:26:48.160763+00:00 finished 2026-10-27T03:26:48.997431+00:00 cancelled=False
+[pass                ] p2p/parser/fixed-regressions rc=0 0.16s 
+[pass                ] p2p/read-retry/fixed-regressions rc=0 0.172s 
+counts: pass=2, fail=0, timeout=0, cancelled=0, skipped=0, missing_prerequisite=0, source_changed=0, unexecuted=0
+exit_code: 0
+environment: only PATH,LANG,LC_ALL,LC_CTYPE,SYSTEMROOT inherited; other parent variables excluded. Not a network sandbox; manifests are trusted local policy.

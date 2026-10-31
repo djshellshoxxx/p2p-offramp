@@ -1,90 +1,354 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { schnorr } from '@noble/curves/secp256k1.js';
-import { advertisementEventId } from '../src/advertisement.ts';
-import { RelayPool } from '../src/pool.ts';
-const encode=value=>new TextEncoder().encode(JSON.stringify(value)),flush=()=>new Promise(resolve=>setImmediate(resolve));
-const key=new Uint8Array(32);key[31]=2;const hex=bytes=>Buffer.from(bytes).toString('hex');
-function event(){const pubkey=hex(schnorr.getPublicKey(key));const ad={app:'p2p-offramp',v:1,orderId:'a'.repeat(64),revision:1,networkId:'local-evm',assetId:'native',amount:'1',currency:'USD',railClass:'manual',maker:pubkey,expiresAtSeconds:'2000',termsDigest:'b'.repeat(64)};const raw={pubkey,created_at:1000,kind:30078,tags:[['d',`p2p-offramp:v1:${ad.orderId}`],['expiration','2000']],content:JSON.stringify(ad)};const id=advertisementEventId(raw);return {...raw,id,sig:hex(schnorr.sign(Buffer.from(id,'hex'),key,new Uint8Array(32)))};}
-function setup(ids=['one']){const connections=[];let now=0;const connector={connect:async(id,handlers,signal)=>{const connection={id,handlers,signal,sent:[],closed:0,send(frame){this.sent.push(JSON.parse(frame));},close(){this.closed++;}};connections.push(connection);return connection;}};const pool=new RelayPool({relayIds:ids,connector,nowSeconds:()=>1000n,nowMs:()=>now,random:()=>.5,ackTimeoutMs:100});return {pool,connections,time:value=>{now=value;}};}
-test('no implicit connections, exact subscription bounds, native events, per-relay ACK and no republish',async()=>{
- const s=setup(['one','two']);assert.equal(s.connections.length,0);let observed=0;
- const subscribed=s.pool.subscribe({since:1000,limit:100},()=>observed++);assert.equal(subscribed.ok,true);await flush();assert.equal(s.connections.length,2);
- const signed=event(),subscription=s.connections[0].sent[0][1];s.connections[0].handlers.message(encode(['EVENT',subscription,signed]));assert.equal(observed,1);
- s.connections[1].handlers.message(encode(['EVENT',subscription,signed]));assert.equal(observed,1,'duplicate relays do not duplicate orders');
- const pending=s.pool.publish(encode(signed));for(const c of s.connections)c.handlers.message(encode(['OK',signed.id,c.id==='one','relay message never forwarded']));
- assert.deepEqual((await pending).value.map(value=>value.status),['accepted','rejected']);for(const c of s.connections)assert.equal(c.sent.filter(frame=>frame[0]==='EVENT').length,1);
- for(let i=0;i<3;i++)assert.equal(s.pool.subscribe({since:1000,limit:1},()=>{}).ok,true);
- assert.equal(s.pool.subscribe({since:1000,limit:1},()=>{}).code,'LIMIT_EXCEEDED');await s.pool.dispose();assert.equal(s.connections.every(c=>c.signal.aborted&&c.closed===1),true);
+import { readFileSync, readdirSync } from 'node:fs';
+import { createRelayPool, POOL_LIMITS, webSocketConnector } from '../src/pool.ts';
+import { createOrderBook, adKey } from '../src/ad.ts';
+import { startFakeRelay } from './support/fake-relay.mjs';
+import { adFor, AD_KIND, FAST, makeBroker, makeCrypto, makeKey, memoryNetwork, NOW, ORDER, seller, sellerCrypto, signedAd, signWith, until, wait } from './support/harness.mjs';
+
+const filter = (extra = {}) => ({ kinds: [AD_KIND], '#t': ['p2p-offramp-ad-v1'], since: NOW - 3600, limit: 50, ...extra });
+const relays = (...fakes) => fakes.map((f, i) => ({ endpointId: `relay-${'abc'[i]}`, url: f.wsUrl }));
+const stateOf = (pool, id) => pool.status().find(s => s.endpointId === id);
+const opts = (fakes, extra = {}) => ({ broker: makeBroker().broker, relays: relays(...fakes), verifier: sellerCrypto, timing: FAST, nowSeconds: () => NOW, ...extra });
+async function withRelays(count, behaviors, body) {
+  const fakes = []; for (let i = 0; i < count; i++) fakes.push(await startFakeRelay(behaviors?.[i]));
+  let pool;
+  try { await body(fakes, p => (pool = p)); } finally { pool?.close(); await Promise.all(fakes.map(f => f.stop())); }
+}
+const collect = () => { const got = []; return { got, handlers: { onEvent: (e, id) => got.push([e.id, id]), onEose: id => got.push(['eose', id]) } }; };
+
+test('connects over the platform WebSocket through the G05 broker, receives a verified ad and dedupes across relays', async () => {
+  await withRelays(2, [], async (fakes, keep) => {
+    const ad = await signedAd(); fakes.forEach(f => f.events.push(ad));
+    const pool = keep(createRelayPool(opts(fakes))); const { got, handlers } = collect();
+    assert.equal(pool.subscribe([filter()], handlers).ok, true);
+    await until(() => got.filter(g => g[0] === 'eose').length === 2);
+    assert.equal(got.filter(g => g[0] === ad.id).length, 1, 'same event id from two relays is delivered once');
+    assert.deepEqual(pool.status().map(s => s.state), ['open', 'open']);
+    const book = createOrderBook({ nowSeconds: () => NOW }); assert.equal(book.ingest(ad), 'accepted');
+  });
 });
-test('ACK loss/cancel stays unknown; 32 outstanding publications bounded; dispose suppresses late frames',async()=>{
- const s=setup();s.pool.subscribe({since:1000,limit:1},()=>{});await flush();const signed=event();const abort=new AbortController();
- const pending=s.pool.publish(encode(signed),abort.signal);abort.abort();assert.equal((await pending).value[0].status,'unknown');
- const jobs=[];for(let i=0;i<32;i++)jobs.push(s.pool.publish(encode({...signed,id:signed.id}))); // concurrent identical IDs are not resent
- assert.equal((await s.pool.publish(encode(signed))).code,'LIMIT_EXCEEDED');
- await Promise.all(jobs); // only first has an ACK timer; the rest resolve unknown
- let notifications=0;s.pool.subscribe({since:1000,limit:1},()=>notifications++);await s.pool.dispose();
- s.connections[0].handlers.message(encode(['EVENT','orders-1',signed]));assert.equal(notifications,0);assert.equal(s.pool.snapshot().length,0);
- assert.equal((await s.pool.publish(encode(signed))).code,'CANCELLED');
+
+test('strict mode without verified-private coverage: no relay is contacted, nothing falls back to direct', async () => {
+  await withRelays(2, [], async (fakes, keep) => {
+    for (const setup of [{ coverage: 'direct', mode: 'strict' }, { coverage: 'unknown', mode: 'ordinary' }, { empty: true, mode: 'strict' }, { empty: true, mode: 'ordinary' }]) {
+      const pool = createRelayPool(opts(fakes, { broker: makeBroker(setup).broker }));
+      assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
+      await until(() => pool.status().every(s => s.state === 'blocked'));
+      await wait(30);
+      pool.close();
+    }
+    assert.equal(fakes[0].connectCount + fakes[1].connectCount, 0);
+  });
 });
-test('unsubscribe/resubscribe waits for physical close; rejected close permanently blocks that slot',async()=>{
- let release;let connects=0;const handlers=[];
- const pool=new RelayPool({relayIds:['only'],nowSeconds:()=>1000n,connector:{connect:async(_id,h)=>{handlers.push(h);connects++;return{send(){},close(){return new Promise(resolve=>release=resolve);}};}}});
- const first=pool.subscribe({since:1000,limit:1},()=>{});await flush();first.value();pool.subscribe({since:1000,limit:1},()=>{});await flush();assert.equal(connects,1);release();await flush();assert.equal(connects,2);
- const closing=pool.dispose();release();await closing;
- let failedCount=0,brokenHandlers;const broken=new RelayPool({relayIds:['only'],nowSeconds:()=>1000n,connector:{connect:async(_id,h)=>{brokenHandlers=h;failedCount++;return{send(){},close(){throw Error('physical close failed');}};}}});
- broken.subscribe({since:1000,limit:1},()=>{});await flush();brokenHandlers.message(new Uint8Array(65537));await flush();broken.retry();assert.equal(failedCount,1);await broken.dispose();
+
+test('ordinary mode with direct coverage and consent is the only direct path; unlisted endpoints stay blocked', async () => {
+  await withRelays(1, [], async (fakes, keep) => {
+    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary', endpoints: ['relay-a'] });
+    const pool = keep(createRelayPool(opts(fakes, { broker, relays: [...relays(...fakes), { endpointId: 'relay-zzz', url: fakes[0].wsUrl }] })));
+    pool.subscribe([filter()], collect().handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    assert.equal(stateOf(pool, 'relay-zzz').state, 'blocked');
+  });
 });
-test('rate burst and oversized frames are bounded before signature work; no fallback relay is selected',async()=>{
- const s=setup();s.pool.subscribe({since:1000,limit:1},()=>{});await flush();const c=s.connections[0];
- for(let i=0;i<21;i++)c.handlers.message(encode(['NOTICE','ignored']));
- s.time(10000);for(let i=0;i<21;i++)c.handlers.message(encode(['NOTICE','ignored']));
- s.time(20000);for(let i=0;i<21;i++)c.handlers.message(encode(['NOTICE','ignored']));await flush();assert.equal(c.closed,1);assert.equal(s.connections.length,1);
- await s.pool.dispose();
- const t=setup();t.pool.subscribe({since:1000,limit:1},()=>{});await flush();t.connections[0].handlers.message(new Uint8Array(65537));await flush();assert.equal(t.connections[0].closed,1);await t.pool.dispose();
+
+test('switching to strict mid-session revokes sockets and the pool does not reconnect', async () => {
+  await withRelays(1, [], async (fakes, keep) => {
+    const { broker } = makeBroker({ coverage: 'direct', mode: 'ordinary' });
+    const pool = keep(createRelayPool(opts(fakes, { broker })));
+    pool.subscribe([filter()], collect().handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    broker.setMode('strict');
+    await until(() => stateOf(pool, 'relay-a').state === 'blocked');
+    await until(() => fakes[0].conns.size === 0);
+    assert.equal(fakes[0].connectCount, 1);
+  });
 });
-test('cancelled late connector stays owned and drains physically before disposal resolves',async()=>{
- let resolveConnect;let closed=0;let callback;const connector={connect:(_id,handlers)=>{callback=handlers;return new Promise(resolve=>resolveConnect=resolve);}};
- const pool=new RelayPool({relayIds:['only'],connector,nowSeconds:()=>1000n});const subscription=pool.subscribe({since:1000,limit:1},()=>{throw Error('late notification');});
- subscription.value();let disposed=false;const disposal=pool.dispose();assert.equal(pool.dispose(),disposal);const done=disposal.then(()=>{disposed=true;});await flush();assert.equal(disposed,false);assert.equal(pool.unsettledSlots,1);
- resolveConnect({send(){throw Error('late send');},close(){closed++;}});await done;assert.equal(closed,1);assert.equal(pool.unsettledSlots,0);callback.message(encode(['NOTICE','late']));assert.equal(pool.snapshot().length,0);
+
+test('bounds: relay candidates, active connections, subscriptions and filter shape', async () => {
+  const net = memoryNetwork();
+  const many = Array.from({ length: 6 }, (_, i) => ({ endpointId: `relay-${i}`, url: 'wss://x.example' }));
+  assert.throws(() => createRelayPool({ broker: makeBroker().broker, relays: Array.from({ length: 17 }, (_, i) => ({ endpointId: `r${i}`, url: 'wss://x' })), verifier: sellerCrypto, connect: net.connector }), RangeError);
+  const { broker } = makeBroker({ endpoints: many.map(r => r.endpointId) });
+  const pool = createRelayPool({ broker, relays: many, verifier: sellerCrypto, connect: net.connector, timing: FAST, nowSeconds: () => NOW, maxRelays: 99 });
+  try {
+    for (let i = 0; i < POOL_LIMITS.maxSubscriptionsPerRelay; i++) assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
+    assert.deepEqual(pool.subscribe([filter()], collect().handlers), { ok: false, error: 'LIMIT_EXCEEDED' });
+    await until(() => pool.status().filter(s => s.state === 'open').length === 4);
+    await wait(20);
+    assert.equal(net.attempts, 4, 'at most four connections');
+    assert.equal(net.sockets[0].sent.filter(m => m[0] === 'REQ').length, 4);
+  } finally { pool.close(); }
+  const p2 = createRelayPool({ broker, relays: many, verifier: sellerCrypto, connect: net.connector, timing: FAST, nowSeconds: () => NOW });
+  try {
+    for (const bad of [filter({ limit: 101 }), filter({ limit: 0 }), filter({ since: NOW - 86_401 }), filter({ kinds: [] }), filter({ authors: ['nothex'] }), { ...filter(), kinds: [1.5] }, filter({ '#t': Array(17).fill('a') })]) {
+      assert.deepEqual(p2.subscribe([bad], collect().handlers), { ok: false, error: 'INVALID_FILTER' }, JSON.stringify(bad).slice(0, 80));
+    }
+    assert.deepEqual(p2.subscribe([], collect().handlers), { ok: false, error: 'INVALID_FILTER' });
+    assert.deepEqual(p2.subscribe([filter(), filter(), filter()], collect().handlers), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(p2.subscribe([filter({ since: NOW - 86_400 })], collect().handlers).ok, true);
+  } finally { p2.close(); }
 });
-test('filters reject unbounded history/limits and retry stops after six reconnect attempts',async t=>{
- let connects=0;const pool=new RelayPool({relayIds:['only'],connector:{connect:async()=>{connects++;throw Error('offline');}},nowSeconds:()=>100000n,random:()=>0});
- assert.equal(pool.subscribe({since:0,limit:1},()=>{}).ok,false);assert.equal(pool.subscribe({since:100000,limit:101},()=>{}).ok,false);
- assert.equal(pool.subscribe(null,()=>{}).code,'INVALID_INPUT');assert.equal(pool.subscribe({get since(){throw Error('hostile');},limit:1},()=>{}).code,'INVALID_INPUT');assert.equal(pool.subscribe(new Proxy({},{ownKeys(){throw Error('hostile');}}),()=>{}).code,'INVALID_INPUT');
- t.mock.timers.enable({apis:['setTimeout']});try{pool.subscribe({since:100000,limit:1},()=>{});for(let i=0;i<12;i++){await flush();t.mock.timers.tick(1);}await flush();assert.equal(connects,7);await pool.dispose();}finally{t.mock.timers.reset();}
+
+test('failover: a relay that never connects exhausts six reconnects, then the next approved relay is used', async () => {
+  await withRelays(2, [], async (fakes, keep) => {
+    fakes[0].refuse = true; const ad = await signedAd(); fakes[1].events.push(ad);
+    const pool = keep(createRelayPool(opts(fakes, { maxRelays: 1 }))); const { got, handlers } = collect();
+    pool.subscribe([filter()], handlers);
+    await until(() => got.some(g => g[0] === ad.id));
+    assert.equal(stateOf(pool, 'relay-a').state, 'failed');
+    assert.equal(fakes[0].connectCount, 1 + POOL_LIMITS.maxReconnects, 'initial attempt plus six reconnects, then explicit retry required');
+    assert.equal(stateOf(pool, 'relay-b').state, 'open');
+    const before = fakes[0].connectCount; await wait(60);
+    assert.equal(fakes[0].connectCount, before, 'no background retry after exhaustion');
+    fakes[0].refuse = false; pool.retry('relay-a');
+    await until(() => stateOf(pool, 'relay-a').state === 'idle' || stateOf(pool, 'relay-a').state === 'open' || fakes[0].connectCount > before);
+  });
 });
-test('connect timeout aborts but retains the physical slot until a late socket drains',async t=>{
- let resolveConnect,signal,connects=0,closes=0;
- const pool=new RelayPool({relayIds:['only'],nowSeconds:()=>1000n,random:()=>.5,connector:{connect:(_id,_handlers,s)=>{signal=s;connects++;return new Promise(resolve=>resolveConnect=resolve);}}});
- t.mock.timers.enable({apis:['setTimeout']});try{
-  pool.subscribe({since:1000,limit:1},()=>{});t.mock.timers.tick(30000);assert.equal(signal.aborted,true);
-  t.mock.timers.tick(30000);assert.equal(connects,1,'no replacement while old connector remains physically unsettled');
-  resolveConnect({send(){throw Error('late send');},close(){closes++;}});await flush();assert.equal(closes,1);
-  const done=pool.dispose();await done;
- }finally{t.mock.timers.reset();}
+
+test('reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery', async () => {
+  await withRelays(1, [], async (fakes, keep) => {
+    const first = await signedAd({ orderId: '1'.repeat(64) }); fakes[0].events.push(first);
+    const pool = keep(createRelayPool(opts(fakes))); const { got, handlers } = collect();
+    pool.subscribe([filter()], handlers);
+    await until(() => got.some(g => g[0] === first.id));
+    fakes[0].dropAll();
+    await until(() => fakes[0].connectCount === 2 && stateOf(pool, 'relay-a').state === 'open');
+    const second = await signedAd({ orderId: '2'.repeat(64) }); fakes[0].conns.values().next().value.send(JSON.stringify(['EVENT', 's1', second]));
+    await until(() => got.some(g => g[0] === second.id));
+    assert.equal(got.filter(g => g[0] === first.id).length, 1, 'replayed history is deduped');
+    assert.equal(fakes[0].received.filter(m => m[0] === 'REQ').length, 2);
+  });
 });
-test('connect timeouts never count as stable uptime or reset the six-retry budget',async t=>{
- let connects=0,now=120000;
- const pool=new RelayPool({relayIds:['only'],nowSeconds:()=>1000n,nowMs:()=>now,random:()=>0,connector:{connect:(_id,_handlers,signal)=>{
-  connects++;return new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('aborted timeout')),{once:true}));
- }}});
- t.mock.timers.enable({apis:['setTimeout']});try{
-  pool.subscribe({since:1000,limit:1},()=>{});
-  for(let i=0;i<10;i++){now+=30000;t.mock.timers.tick(30000);await flush();t.mock.timers.tick(1);await flush();}
-  assert.equal(connects,7,'initial attempt plus six retries, despite clock already exceeding 60 seconds');
-  assert.equal(pool.unsettledSlots,0);await pool.dispose();
- }finally{t.mock.timers.reset();}
+
+test('backoff is full-jitter within the 1/2/4/8/16/30 s ceilings and resets only after stable uptime', async () => {
+  const net = memoryNetwork(); const delays = []; const realSetTimeout = globalThis.setTimeout;
+  let clock = 0;
+  const { broker } = makeBroker();
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW,
+    clock: () => clock, random: () => 0.999, timing: { stableMs: 60_000, connectTimeoutMs: 800 } });
+  globalThis.setTimeout = (fn, ms, ...rest) => { if (ms >= 100 && ms < 30_000 && ms !== 800) { delays.push(ms); return realSetTimeout(fn, 1); } return realSetTimeout(fn, ms, ...rest); };
+  try {
+    pool.subscribe([filter()], collect().handlers);
+    for (let i = 0; i < 4; i++) { await until(() => net.sockets.length === i + 1 && stateOf(pool, 'relay-a').state === 'open'); net.sockets[i].onclose({}); }
+    await until(() => net.sockets.length === 5 && stateOf(pool, 'relay-a').state === 'open');
+    assert.deepEqual(delays, [999, 1998, 3996, 7992].map(v => v), 'ceil(1000,2000,4000,8000) * 0.999');
+    clock = 61_000; net.sockets[4].onclose({});
+    await until(() => net.sockets.length === 6 && stateOf(pool, 'relay-a').state === 'open');
+    assert.equal(delays.at(-1), 999, 'stable for 60 s resets to the first ceiling');
+  } finally { globalThis.setTimeout = realSetTimeout; pool.close(); }
 });
-test('sixty seconds of an actual established socket replenishes reconnect attempts',async t=>{
- let connects=0,now=0,handlers;
- const pool=new RelayPool({relayIds:['only'],nowSeconds:()=>1000n,nowMs:()=>now,random:()=>0,connector:{connect:async(_id,h)=>{
-  connects++;if(connects!==3)throw Error('offline');handlers=h;return{send(){},close(){}};
- }}});
- t.mock.timers.enable({apis:['setTimeout']});try{
-  pool.subscribe({since:1000,limit:1},()=>{});for(let i=0;i<5;i++){await flush();t.mock.timers.tick(1);}await flush();assert.equal(connects,3);
-  now=60000;handlers.closed();for(let i=0;i<15;i++){await flush();t.mock.timers.tick(1);}await flush();
-  assert.equal(connects,9,'stable established connection allows six new reconnect attempts');await pool.dispose();
- }finally{t.mock.timers.reset();}
+
+test('malicious relay: flood is rate limited, valid events pass, memory use stays bounded', async () => {
+  const flood = [];
+  for (let i = 0; i < 200; i++) flood.push(await signedAd({ orderId: i.toString(16).padStart(64, '0') }));
+  await withRelays(1, [{ onMessage(conn, m) { if (m[0] === 'REQ') { conn.subs.set(m[1], []); for (const e of flood) conn.send(JSON.stringify(['EVENT', m[1], e])); return true; } return false; } }], async (fakes, keep) => {
+    const pool = keep(createRelayPool(opts(fakes))); const { got, handlers } = collect();
+    pool.subscribe([filter()], handlers);
+    await until(() => fakes[0].received.length > 0); await wait(300);
+    const delivered = got.filter(g => g[0] !== 'eose').length;
+    assert.ok(delivered >= 1 && delivered <= POOL_LIMITS.burst + 5, `delivered ${delivered}`);
+  });
+});
+
+test('malicious relay: three consecutive overloaded 10 s windows disconnect the relay (deterministic clock)', async () => {
+  const net = memoryNetwork(); let clock = 1_000_000;
+  const { broker } = makeBroker(); const events = [];
+  for (let i = 0; i < 400; i++) events.push(signWith(seller, { kind: AD_KIND, created_at: NOW, tags: [['t', 'p2p-offramp-ad-v1']], content: String(i) }));
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: { ...FAST, backoffCeilingsMs: [60_000] }, random: () => 0.5 });
+  try {
+    pool.subscribe([filter()], collect().handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    const socket = net.sockets[0]; let i = 0;
+    const burst = n => { for (let k = 0; k < n; k++) socket.deliver(JSON.stringify(['EVENT', 's1', events[i++]])); };
+    for (let window = 0; window < 4; window++) { burst(40); clock += 10_000; if (stateOf(pool, 'relay-a').state !== 'open') break; }
+    burst(1);
+    assert.equal(stateOf(pool, 'relay-a').state, 'backoff');
+    assert.equal(stateOf(pool, 'relay-a').reason, 'overload');
+    assert.equal(socket.closed, true);
+  } finally { pool.close(); }
+});
+
+test('malicious relay: an oversized frame bans the relay immediately and it is never reconnected', async () => {
+  const huge = JSON.stringify(['NOTICE', 'x'.repeat(70_000)]);
+  await withRelays(2, [{ onMessage(conn, m) { if (m[0] === 'REQ') { conn.send(huge); return true; } return false; } }, {}], async (fakes, keep) => {
+    const ad = await signedAd(); fakes[1].events.push(ad);
+    const pool = keep(createRelayPool(opts(fakes, { maxRelays: 2 }))); const { got, handlers } = collect();
+    pool.subscribe([filter()], handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'banned');
+    assert.equal(stateOf(pool, 'relay-a').reason, 'oversized-frame');
+    await until(() => got.some(g => g[0] === ad.id));
+    await wait(40); assert.equal(fakes[0].connectCount, 1);
+  });
+});
+
+test('malicious relay: invalid signatures are never delivered, never poison dedupe, and ban the relay', async () => {
+  const good = await signedAd();
+  const forged = { ...good, sig: '1'.repeat(128) };
+  const tampered = { ...good, content: good.content.replace('EUR', 'USD') };
+  await withRelays(2, [{ onMessage(conn, m) { if (m[0] === 'REQ') { conn.send(JSON.stringify(['EVENT', m[1], forged])); conn.send(JSON.stringify(['EVENT', m[1], tampered])); conn.send(JSON.stringify(['EVENT', m[1], forged])); return true; } return false; } }, {}], async (fakes, keep) => {
+    const pool = keep(createRelayPool(opts(fakes, { maxRelays: 2 }))); const { got, handlers } = collect();
+    pool.subscribe([filter()], handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'banned');
+    assert.equal(got.filter(g => g[0] !== 'eose').length, 0);
+    fakes[1].conns.values().next().value.send(JSON.stringify(['EVENT', 's1', good]));
+    await until(() => got.some(g => g[0] === good.id));
+    assert.equal(stateOf(pool, 'relay-a').reason, 'invalid-signature');
+  });
+});
+
+test('malicious relay: wrong-subscription events, events outside the filter and binary frames are dropped and penalized', async () => {
+  const net = memoryNetwork(); const { broker } = makeBroker();
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
+  try {
+    const { got, handlers } = collect(); pool.subscribe([filter()], handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    const s = net.sockets[0], ad = await signedAd();
+    s.deliver(JSON.stringify(['EVENT', 'nope', ad]));
+    assert.equal(stateOf(pool, 'relay-a').penalty, 3);
+    const wrongKind = signWith(seller, { kind: 1, created_at: NOW, tags: [['t', 'p2p-offramp-ad-v1']], content: 'hi' });
+    s.deliver(JSON.stringify(['EVENT', 's1', wrongKind]));
+    assert.equal(stateOf(pool, 'relay-a').penalty, 6);
+    s.deliver(JSON.stringify(['EVENT', 's1', { ...ad, extra: true }]));
+    assert.equal(stateOf(pool, 'relay-a').penalty, 9);
+    s.onmessage({ data: new Uint8Array([1, 2, 3]) });
+    assert.equal(stateOf(pool, 'relay-a').state, 'banned');
+    assert.equal(got.length, 0);
+  } finally { pool.close(); }
+});
+
+test('malformed and unknown frames are ignored safely; NOTICE and CLOSED never create events; AUTH is never answered', async () => {
+  const net = memoryNetwork(); const { broker } = makeBroker();
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW, timing: FAST });
+  try {
+    const { got, handlers } = collect(); pool.subscribe([filter()], handlers);
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    const s = net.sockets[0], sentBefore = s.sent.length;
+    for (const frame of ['["AUTH","challenge"]', '["NOTICE","hello"]', '["CLOSED","s1","auth-required"]']) s.deliver(frame);
+    assert.equal(stateOf(pool, 'relay-a').penalty, 0);
+    s.deliver('{not json'); assert.equal(stateOf(pool, 'relay-a').penalty, 3);
+    s.deliver('["EVENT","s1"]'); assert.equal(stateOf(pool, 'relay-a').penalty, 6);
+    assert.equal(s.sent.length, sentBefore, 'nothing is sent in response to relay frames');
+    assert.equal(got.length, 0);
+    s.deliver(JSON.stringify(['EVENT', 's1', await signedAd()]));
+    assert.equal(got.length, 0, 'a subscription the relay CLOSED stays closed');
+  } finally { pool.close(); }
+});
+
+test('per-subscription event cap closes the subscription on that relay and dedupe memory is bounded', async () => {
+  const net = memoryNetwork(); const { broker } = makeBroker(); let clock = 0;
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
+  try {
+    let delivered = 0; pool.subscribe([filter()], { onEvent: () => { delivered++; } });
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    const s = net.sockets[0];
+    const fake = i => ({ id: i.toString(16).padStart(64, '0'), pubkey: 'b'.repeat(64), created_at: NOW, kind: AD_KIND, tags: [['t', 'p2p-offramp-ad-v1']], content: '', sig: 'c'.repeat(128) });
+    for (let i = 0; i < POOL_LIMITS.maxEventsPerSubscription + 20; i++) { clock += 600; s.deliver(JSON.stringify(['EVENT', 's1', fake(i)])); }
+    assert.equal(delivered, POOL_LIMITS.maxEventsPerSubscription);
+    assert.ok(s.sent.some(m => m[0] === 'CLOSE' && m[1] === 's1'));
+    assert.equal(stateOf(pool, 'relay-a').state, 'open', 'a capped subscription is not a ban');
+  } finally { pool.close(); }
+});
+
+test('dedupe memory evicts the oldest ids beyond 4096', async () => {
+  const net = memoryNetwork(); const { broker } = makeBroker(); let clock = 0;
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: { verifyEvent: () => true }, connect: net.connector, nowSeconds: () => NOW, clock: () => clock, timing: FAST });
+  try {
+    let delivered = 0;
+    const subs = []; for (let i = 0; i < 4; i++) subs.push(pool.subscribe([filter()], { onEvent: () => { delivered++; } }));
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    let s = net.sockets[0];
+    const fake = i => ({ id: i.toString(16).padStart(64, '0'), pubkey: 'b'.repeat(64), created_at: NOW, kind: AD_KIND, tags: [['t', 'p2p-offramp-ad-v1']], content: '', sig: 'c'.repeat(128) });
+    const total = POOL_LIMITS.maxDedupIds + 10;
+    const send = i => { clock += 600; s.deliver(JSON.stringify(['EVENT', `s${1 + (i % 4)}`, fake(i)])); };
+    for (let i = 0; i < 4000; i++) send(i); // 4 subscriptions x per-subscription cap
+    s.onclose({}); await until(() => net.sockets.length === 2 && stateOf(pool, 'relay-a').state === 'open'); s = net.sockets[1];
+    for (let i = 4000; i < total; i++) send(i);
+    assert.equal(delivered, total);
+    send(total - 1); assert.equal(delivered, total, 'recent id still deduped');
+    send(0); assert.equal(delivered, total + 1, 'oldest id was evicted');
+  } finally { pool.close(); }
+});
+
+test('hanging socket: connect timeout fails the attempt without blocking other relays', async () => {
+  const net = { n: 0, connector() { this.n++; return { onopen: null, onmessage: null, onclose: null, onerror: null, send() {}, close() {} }; } };
+  const { broker } = makeBroker(); const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'x' }], verifier: sellerCrypto, connect: () => net.connector(), nowSeconds: () => NOW, timing: { ...FAST, connectTimeoutMs: 20 } });
+  try {
+    pool.subscribe([filter()], collect().handlers);
+    await until(() => net.n >= 3);
+    assert.notEqual(stateOf(pool, 'relay-a').state, 'open');
+  } finally { pool.close(); }
+});
+
+test('closing the last subscription closes sockets and stops reconnecting', async () => {
+  await withRelays(1, [], async (fakes, keep) => {
+    const pool = keep(createRelayPool(opts(fakes))); const sub = pool.subscribe([filter()], collect().handlers).value;
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    sub.close();
+    await until(() => fakes[0].conns.size === 0);
+    assert.equal(stateOf(pool, 'relay-a').state, 'idle');
+    await wait(40); assert.equal(fakes[0].connectCount, 1);
+  });
+});
+
+test('end to end: sign, publish through the broker, discover, supersede with a revision, then request deletion', async () => {
+  await withRelays(1, [], async (fakes, keep) => {
+    const { createAdEvent, createDeletionEvent } = await import('../src/ad.ts');
+    const book = createOrderBook({ nowSeconds: () => NOW + 1 });
+    const pool = keep(createRelayPool(opts(fakes)));
+    const r1 = await createAdEvent(sellerCrypto, adFor({ revision: 1 }), NOW);
+    const out = await pool.publish(r1);
+    assert.deepEqual(out, { ok: true, value: [{ eventId: r1.id, relayId: 'relay-a', status: 'accepted' }] });
+    const r2 = await createAdEvent(sellerCrypto, adFor({ revision: 2, amountMax: '700000000' }), NOW + 1);
+    await pool.publish(r2);
+    pool.subscribe([filter()], { onEvent: e => book.ingest(e) });
+    await until(() => book.size === 1 && book.list()[0]?.ad.revision === 2);
+    // Relay replays the stale revision after the new one: the book keeps revision 2.
+    assert.equal(book.ingest(r1), 'stale-revision');
+    const del = await createDeletionEvent(sellerCrypto, seller.pubkey, ORDER, NOW + 2);
+    assert.equal((await pool.publish(del)).value[0].status, 'accepted');
+    assert.equal(book.ingest(del), 'accepted');
+    assert.equal(book.revalidate(adKey(seller.pubkey, ORDER)).ok, false);
+    assert.ok(fakes[0].events.some(e => e.id === r1.id), 'relay still holds the old ad: deletion is a request, not removal');
+  });
+});
+
+test('publish: strict refusal sends nothing; forged events are rejected locally; relay rejection is reported', async () => {
+  await withRelays(1, [{ onMessage(conn, m) { if (m[0] === 'EVENT') { conn.send(JSON.stringify(['OK', m[1].id, false, 'blocked: spam'])); return true; } return false; } }], async (fakes, keep) => {
+    const ad = await signedAd();
+    const refused = createRelayPool(opts(fakes, { broker: makeBroker({ coverage: 'direct', mode: 'strict' }).broker }));
+    assert.deepEqual(await refused.publish(ad), { ok: true, value: [{ eventId: ad.id, relayId: 'relay-a', status: 'unknown' }] });
+    refused.close(); assert.equal(fakes[0].connectCount, 0);
+    const pool = keep(createRelayPool(opts(fakes)));
+    assert.deepEqual(await pool.publish({ ...ad, sig: '2'.repeat(128) }), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(fakes[0].connectCount, 0);
+    assert.equal((await pool.publish(ad)).value[0].status, 'rejected');
+    assert.equal(fakes[0].received.filter(m => m[0] === 'EVENT').length, 1, 'exactly one EVENT, no automatic retry');
+  });
+});
+
+test('relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled', () => {
+  const dir = new URL('../src/', import.meta.url);
+  const facade = readFileSync(new URL('../index.ts', import.meta.url), 'utf8');
+  assert.deepEqual([...facade.matchAll(/from\s+['\"]\.\/src\/([^'\"]+)['\"]/g)].map(match => match[1]).sort(), ['ad.ts', 'nip01.ts', 'pool.ts'], 'only the canonical injected-crypto relay profile is public');
+  const localDependencies = {
+    'advertisement.ts': new Set(['../../schemas/index.ts', '@noble/curves/secp256k1.js', '@noble/hashes/sha2.js']),
+    'local-pool.ts': new Set(['../../schemas/index.ts']),
+  };
+  for (const name of readdirSync(dir)) {
+    const text = readFileSync(new URL(name, dir), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    for (const spec of text.matchAll(/(?:import|export)[^'"]*from\s+['"]([^'"]+)['"]/g)) {
+      assert.ok(spec[1].startsWith('./') || spec[1] === '../../transport/index.ts' || localDependencies[name]?.has(spec[1]), `${name} imports ${spec[1]}`);
+    }
+    assert.doesNotMatch(text, /TradeBinding|ChainObservation|dispatchLocal|walletGeneration|from\s+['"]node:/);
+  }
+});
+
+test('crypto stays injected: the default verifier is required and signing is never done in the pool', () => {
+  assert.equal(typeof webSocketConnector, 'function');
+  const pool = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: makeCrypto(makeKey('x')), nowSeconds: () => NOW });
+  assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
+  assert.deepEqual(pool.status(), []);
+  pool.close();
+  assert.deepEqual(pool.subscribe([filter()], collect().handlers), { ok: false, error: 'CLOSED' });
 });

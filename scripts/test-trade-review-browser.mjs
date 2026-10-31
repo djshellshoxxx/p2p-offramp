@@ -256,13 +256,16 @@ try {
   await page.getByRole('link', { name: 'Offers', exact: true }).click();
   await page.getByRole('button', { name: 'Core native sample (deadlines from now)', exact: true }).click();
   await page.waitForURL(/#\/trade\//);
-  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
-  await page.waitForFunction(() => /Review saved|review operation did not complete|quota was exceeded/.test(document.querySelector('main').textContent));
-  assert.match(await mainText(), /Review saved/, `encrypted save must report a confirmed result: ${JSON.stringify(await page.evaluate(() => window.__reviewReplyCodes))}`);
-  await page.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
-  // A duplicate save must remain idempotent: loading below must yield one record.
-  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
-  await page.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
+  await page.getByRole('button', { name: 'Save to profile', exact: true }).click();
+  await page.waitForFunction(() => /Saved in the open profile|saved-review operation did not complete|storage is full/.test(document.querySelector('main').textContent));
+  assert.match(await mainText(), /Saved in the open profile/, `encrypted save must report a confirmed result: ${JSON.stringify(await page.evaluate(() => window.__reviewReplyCodes))}`);
+  await page.getByRole('status').filter({ hasText: 'Saved in the open profile.' }).waitFor();
+  // Reimporting and saving identical original bytes is idempotent in the canonical service.
+  await page.getByRole('button', {name:'Remove from session',exact:true}).click();
+  await page.getByRole('button',{name:'Core native sample (deadlines from now)',exact:true}).click();
+  await page.waitForURL(/#\/trade\//);
+  await page.getByRole('button', { name: 'Save to profile', exact: true }).click();
+  await page.getByRole('status').filter({ hasText: 'Saved in the open profile.' }).waitFor();
   const unlock = async (id, secret, target = page) => {
     await target.getByRole('link', { name: 'Home', exact: true }).click();
     await target.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
@@ -275,7 +278,7 @@ try {
   const loadReview = async () => {
     await page.getByRole('link', { name: 'Offers', exact: true }).click();
     await page.getByRole('button', { name: 'Load saved reviews', exact: true }).click();
-    await page.getByRole('status').filter({ hasText: 'Saved reviews loaded and checked' }).waitFor();
+    await page.getByRole('status').filter({ hasText: 'Saved reviews loaded and checked again.' }).waitFor();
     assert.equal(await sessionItems(), savedCount, 'all saved reviews survive');
     await page.locator('.session-list a').filter({ hasText: /^Order c3c3/ }).click();
     await page.getByRole('heading', { level: 1, name: 'Trade review', exact: true }).waitFor();
@@ -294,10 +297,13 @@ try {
   await other.getByRole('link', { name: 'Offers', exact: true }).click();
   await other.getByRole('button', { name: 'Frozen scenario: ERC-20 (expired, has capability)', exact: true }).click();
   await other.waitForURL(/#\/trade\//);
-  await other.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
-  await other.getByRole('status').filter({ hasText: 'Review saved' }).waitFor();
+  await other.getByRole('button', { name: 'Save to profile', exact: true }).click();
+  await other.getByRole('status').filter({ hasText: 'Saved in the open profile.' }).waitFor();
   savedCount = 2;
-  await page.getByRole('button', { name: 'Save encrypted review', exact: true }).click();
+  await page.getByRole('link',{name:'Offers',exact:true}).click();
+  await page.getByRole('button',{name:'Frozen scenario: native (expired, has capability)',exact:true}).click();
+  await page.waitForURL(/#\/trade\//);
+  await page.getByRole('button', { name: 'Save to profile', exact: true }).click();
   await page.getByText('Vault locked', { exact: true }).waitFor();
   await page.getByRole('heading', { name: 'Review not in this session', exact: true }).waitFor();
   await other.close();

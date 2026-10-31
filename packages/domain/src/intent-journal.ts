@@ -1,4 +1,5 @@
 /** G12 worker-private persistence coordinator; native reconciliation is injected and disabled by default.
+ * createLifecycleJournal adds validated transitions for the reconciling submit coordinator (tx-lifecycle.ts) only.
  * A successful marker records conservative recovery metadata; it is not spending authority.
  */
 import { CoreSchemaError, parseTradeBinding, sameBinding, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
@@ -62,9 +63,41 @@ function vaultValue<T>(result: Result<T>): T {
 interface Job { readonly epoch: number; readonly controller: AbortController; readonly operationId: string; revision: number; committed: boolean; markerWrite: boolean; reservedId?: string; }
 interface StoredIntent { readonly recordId: string; readonly intent: IntentV1; }
 const sameAccount = (chain: TradeBinding['chain'], left: string, right: string): boolean => chain === 'evm' ? left.toLowerCase() === right.toLowerCase() : left === right;
-function preparedOnly(intent: IntentV1): void {
+function preparedOnly(intent: IntentV1, allowReplacement = false): void {
   if (intent.state !== 'prepared' || (intent.submission.chain === 'evm' ? intent.submission.hash !== null : intent.submission.signature !== null)) return fail('CONFLICT');
-  if (intent.replacementOf !== null) return fail('UNSUPPORTED_PROVIDER');
+  if (intent.replacementOf !== null && !allowReplacement) return fail('UNSUPPORTED_PROVIDER');
+}
+/** G12 lifecycle transition written only by the reconciling coordinator (tx-lifecycle.ts), never by UI status. */
+export interface LifecycleTransition { readonly state: IntentV1['state']; readonly hash: string | null }
+export const LIFECYCLE_TRANSITIONS: Readonly<Record<IntentV1['state'], readonly IntentV1['state'][]>> = Object.freeze({
+  prepared: Object.freeze(['failed'] as const),
+  'broadcast-unknown': Object.freeze(['pending', 'confirmed', 'finalized', 'replaced', 'expired', 'failed'] as const),
+  pending: Object.freeze(['pending', 'confirmed', 'finalized', 'replaced', 'expired', 'failed', 'reorged'] as const),
+  confirmed: Object.freeze(['finalized', 'reorged'] as const),
+  finalized: Object.freeze(['reorged'] as const),
+  reorged: Object.freeze(['pending', 'confirmed', 'finalized', 'replaced', 'expired', 'failed'] as const),
+  failed: Object.freeze(['reorged'] as const), expired: Object.freeze(['reorged'] as const), replaced: Object.freeze(['reorged'] as const),
+});
+/** States a new intent of the same binding/account may follow without naming them: settled, or never sent. */
+const RELEASED_STATES: readonly IntentV1['state'][] = ['finalized', 'failed'];
+/** Dropped/replaced outcomes are followed only by an explicit successor (replacementOf) chosen by a user action. */
+const SUCCESSOR_STATES: readonly IntentV1['state'][] = ['expired', 'replaced'];
+const TRANSITION = Symbol('lifecycle-transition');
+const LIST = Symbol('lifecycle-list');
+const REVISION = Symbol('lifecycle-revision');
+/** Lifecycle-mode reservation: true when `intent` may coexist with the stored records of its binding/account. */
+function lifecycleReservable(records: readonly StoredIntent[], intent: IntentV1, verified: ReadonlySet<string>): boolean {
+  const matching = records.filter(record => sameBinding(record.intent.binding, intent.binding) && sameAccount(intent.binding.chain, record.intent.account, intent.account));
+  if (intent.replacementOf !== null) {
+    const original = matching.find(record => record.intent.intentId === intent.replacementOf);
+    if (!original || !SUCCESSOR_STATES.includes(original.intent.state) || !verified.has(original.intent.intentId)) return false;
+    // A dropped transaction is superseded only at the same nonce, so at most one of the two can ever be included.
+    if (original.intent.state === 'expired' && (original.intent.submission.chain !== 'evm' || intent.submission.chain !== 'evm' ||
+      original.intent.submission.nonce === null || original.intent.submission.nonce !== intent.submission.nonce)) return false;
+    if (records.some(record => record.intent.replacementOf === intent.replacementOf)) return false;
+  }
+  return matching.every(record => verified.has(record.intent.intentId) && (RELEASED_STATES.includes(record.intent.state) || (SUCCESSOR_STATES.includes(record.intent.state) &&
+    (intent.replacementOf === record.intent.intentId || records.some(other => other.intent.replacementOf === record.intent.intentId)))));
 }
 
 class EncryptedIntentJournal implements IntentJournal {
@@ -72,13 +105,16 @@ class EncryptedIntentJournal implements IntentJournal {
   readonly #validate: IntentJournalOptions['validateCanonical'];
   readonly #now: () => number;
   readonly #readNative: IntentJournalOptions['readNative'];
+  readonly #lifecycle: boolean;
   #lease: VaultSessionLease | undefined;
   #initialError: CoreErrorCode | undefined;
   #closed = false;
   #epoch = 0;
   #active: Job | undefined;
-  constructor(options: IntentJournalOptions) {
-    this.#vault = options.vault; this.#validate = options.validateCanonical; this.#readNative = options.readNative; this.#now = options.now ?? Date.now;
+  readonly #verifiedTerminals = new Set<string>();
+  constructor(options: IntentJournalOptions, lifecycle = false) {
+    this.#vault = options.vault; this.#validate = options.validateCanonical; this.#readNative = options.readNative;
+    this.#now = options.now ?? Date.now; this.#lifecycle = lifecycle;
     try { this.#lease = vaultValue(this.#vault.captureSession(options.session, () => { this.#epoch++; this.#active?.controller.abort(); })); }
     catch (error) { this.#initialError = knownErrorCode(error, 'journal') ?? 'LOCKED'; }
   }
@@ -159,14 +195,18 @@ class EncryptedIntentJournal implements IntentJournal {
       const intent = parseIntent(input);
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION) return fail('INVALID_INPUT');
       if (expectedRevision !== job.revision) return fail('CONFLICT');
-      preparedOnly(intent);
+      preparedOnly(intent, this.#lifecycle);
       const records = await this.#scan(job); await this.#canonical(job, intent); this.#guard(job);
       if (records.some(record => record.intent.intentId === intent.intentId)) return fail('CONFLICT');
+      if (this.#lifecycle && !lifecycleReservable(records, intent, this.#verifiedTerminals)) return fail('CONFLICT');
       for (const record of records) {
-        const sameOwner = record.intent.binding.chain === intent.binding.chain && sameAccount(intent.binding.chain,record.intent.account,intent.account);
+        const sameOwner = record.intent.binding.chain === intent.binding.chain && sameAccount(intent.binding.chain, record.intent.account, intent.account);
         const sameNonce = intent.submission.chain === 'evm' && record.intent.submission.chain === 'evm' && intent.submission.nonce !== null &&
           record.intent.submission.nonce === intent.submission.nonce && record.intent.binding.networkId === intent.binding.networkId;
-        if (sameOwner && (sameBinding(record.intent.binding,intent.binding) || sameNonce) && !await this.#resolved(job,record.intent)) return fail('CONFLICT');
+        // Lifecycle-mode same-binding successors are governed by its explicit transition contract above.
+        // Cross-binding nonce collisions still cannot silently replace another outstanding attempt.
+        if (sameOwner && (!this.#lifecycle && sameBinding(record.intent.binding, intent.binding) || sameNonce && !sameBinding(record.intent.binding, intent.binding)) &&
+            !(this.#lifecycle && RELEASED_STATES.includes(record.intent.state) && this.#verifiedTerminals.has(record.intent.intentId)) && !await this.#resolved(job, record.intent)) return fail('CONFLICT');
       }
       const random = crypto.getRandomValues(new Uint8Array(16)); let recordId: string;
       try { recordId = Array.from(random, byte => byte.toString(16).padStart(2, '0')).join(''); } finally { random.fill(0); }
@@ -181,7 +221,8 @@ class EncryptedIntentJournal implements IntentJournal {
     return this.#run(signal, async job => {
       const intentId = parseIntentId(input); const records = await this.#scan(job);
       const record = records.find(entry => entry.intent.intentId === intentId);
-      if (!record) return fail('CONFLICT'); preparedOnly(record.intent);
+      if (!record) return fail('CONFLICT'); preparedOnly(record.intent, this.#lifecycle);
+      if (record.intent.replacementOf !== null && !lifecycleReservable(records.filter(entry => entry !== record), record.intent, this.#verifiedTerminals)) return fail('CONFLICT');
       await this.#canonical(job, record.intent); this.#guard(job);
       const now = this.#now(); if (!Number.isSafeInteger(now) || now < 0) return fail('INVALID_INPUT');
       const next = parseIntent({ ...record.intent, state: 'broadcast-unknown', updatedAt: Math.max(now, record.intent.updatedAt) });
@@ -264,6 +305,97 @@ class EncryptedIntentJournal implements IntentJournal {
       await this.#synchronize(job); return matches;
     });
   }
-  dispose(): void { if (this.#closed) return; this.#closed = true; this.#epoch++; this.#active?.controller.abort(); this.#lease?.dispose(); this.#lease = undefined; }
+  isTerminalVerified(input: string): boolean {
+    return !this.#closed && this.#lease?.current() != null && this.#verifiedTerminals.has(input);
+  }
+  revokeTerminalVerification(input: string): void { this.#verifiedTerminals.delete(input); }
+  authorizeTerminal(input: string, transition: LifecycleTransition, signal?: AbortSignal): Promise<CoreResult<void>> {
+    return this.#run(signal, async job => {
+      if (!this.#lifecycle) return fail('UNSUPPORTED_PROVIDER');
+      const intentId = parseIntentId(input), raw = intentData(transition, ['state', 'hash']);
+      const records = await this.#scan(job), record = records.find(entry => entry.intent.intentId === intentId);
+      if (!record || record.intent.submission.chain !== 'evm' || record.intent.state !== raw.state || record.intent.submission.hash !== raw.hash ||
+          ![...RELEASED_STATES, ...SUCCESSOR_STATES].includes(record.intent.state)) return fail('CONFLICT');
+      await this.#canonical(job, record.intent); await this.#synchronize(job);
+      this.#verifiedTerminals.add(intentId);
+    });
+  }
+  /** Lifecycle mode only: one CAS write of a validated state/hash transition. Every other field is immutable. */
+  [TRANSITION](input: string, transition: LifecycleTransition, signal?: AbortSignal): Promise<CoreResult<IntentV1>> {
+    return this.#run(signal, async job => {
+      if (!this.#lifecycle) return fail('UNSUPPORTED_PROVIDER');
+      let state: unknown, hash: unknown;
+      try { const raw = intentData(transition, ['state', 'hash']); state = raw.state; hash = raw.hash; } catch { return fail('INVALID_INPUT'); }
+      if (typeof state !== 'string' || !Object.hasOwn(LIFECYCLE_TRANSITIONS, state)) return fail('INVALID_INPUT');
+      if (hash !== null && (typeof hash !== 'string' || !/^0x[0-9a-f]{64}$/.test(hash))) return fail('INVALID_INPUT');
+      const nextState = state as IntentV1['state'], nextHash = hash as string | null;
+      const intentId = parseIntentId(input); const records = await this.#scan(job);
+      const record = records.find(entry => entry.intent.intentId === intentId);
+      if (!record) return fail('CONFLICT');
+      const current = record.intent;
+      if (current.submission.chain !== 'evm') return fail('UNSUPPORTED_PROVIDER');
+      if (!LIFECYCLE_TRANSITIONS[current.state].includes(nextState)) return fail('CONFLICT');
+      // A recorded hash is immutable; a missing one may be learned once. A prepared intent never carries one.
+      if (current.submission.hash !== null && nextHash !== current.submission.hash) return fail('CONFLICT');
+      if (current.state === 'prepared' && nextHash !== null) return fail('CONFLICT');
+      if (nextState === 'pending' && nextHash === null) return fail('INVALID_INPUT');
+      if (current.state === 'pending' && nextState === 'pending') return fail('CONFLICT');
+      await this.#canonical(job, current); this.#guard(job);
+      const now = this.#now(); if (!Number.isSafeInteger(now) || now < 0) return fail('INVALID_INPUT');
+      const next = parseIntent({ ...current, state: nextState, submission: { ...current.submission, hash: nextHash }, updatedAt: Math.max(now, current.updatedAt) });
+      const session = this.#guard(job);
+      // After a send-capable call the stored record is the only evidence; an uncertain write is reported conservatively.
+      job.markerWrite = current.state !== 'prepared';
+      const revision = vaultValue(await this.#vault.commit(session.sessionId, job.revision, [{ op: 'put', record: { id: record.recordId, kind: 'journal', schemaVersion: 1, payload: encodeIntentPayload(next) } }], job.controller.signal));
+      job.committed = true; job.revision = revision; this.#guard(job);
+      this.#verifiedTerminals.delete(intentId);
+      // A live prepared cancellation is known not to have crossed the durable send marker.
+      if (current.state === 'prepared' && next.state === 'failed' && next.submission.chain === 'evm' && next.submission.hash === null) this.#verifiedTerminals.add(intentId);
+      return next;
+    });
+  }
+  /** Lifecycle mode only: every intent in the profile journal, for restart recovery. */
+  [LIST](signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>> {
+    return this.#run(signal, async job => {
+      if (!this.#lifecycle) return fail('UNSUPPORTED_PROVIDER');
+      const records = await this.#scan(job); await this.#synchronize(job); return Object.freeze(records.map(record => record.intent));
+    });
+  }
+  [REVISION](): number | null { return this.#closed ? null : this.#lease?.current()?.revision ?? null; }
+  dispose(): void { if (this.#closed) return; this.#closed = true; this.#epoch++; this.#active?.controller.abort(); this.#lease?.dispose(); this.#lease = undefined; this.#verifiedTerminals.clear(); }
 }
 export function createIntentJournal(options: IntentJournalOptions): IntentJournal { return new EncryptedIntentJournal(options); }
+/**
+ * G12 lifecycle journal, for the reconciling submit coordinator (tx-lifecycle.ts) only. Compared with the
+ * reservation-only journal it (a) lets a new intent follow a finalized/failed intent of the same binding/account,
+ * (b) follows a dropped (expired) or replaced intent only through one explicit successor naming it in
+ * `replacementOf` (at the same nonce when dropped), and (c) records validated state/hash transitions.
+ * It still has no send, clear or delete operation.
+ */
+export interface LifecycleJournal extends IntentJournal {
+  /** Nonpersisted authority used only by the native reconciling coordinator; restored labels never grant it. */
+  isTerminalVerified(intentId: string): boolean;
+  revokeTerminalVerification(intentId: string): void;
+  authorizeTerminal(intentId: string, transition: LifecycleTransition, signal?: AbortSignal): Promise<CoreResult<void>>;
+  observe(intentId: string, transition: LifecycleTransition, signal?: AbortSignal): Promise<CoreResult<IntentV1>>;
+  list(signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>>;
+  /** Vault revision the next reserve must name, or null while locked/disposed. */
+  currentRevision(): number | null;
+}
+export function createLifecycleJournal(options: IntentJournalOptions): LifecycleJournal {
+  const journal = new EncryptedIntentJournal(options, true);
+  return Object.freeze({
+    isTerminalVerified: (intentId: string) => journal.isTerminalVerified(intentId),
+    revokeTerminalVerification: (intentId: string) => journal.revokeTerminalVerification(intentId),
+    authorizeTerminal: (intentId: string, transition: LifecycleTransition, signal?: AbortSignal) => journal.authorizeTerminal(intentId, transition, signal),
+    reserve: (intent: IntentV1, expectedRevision: number, signal?: AbortSignal) => journal.reserve(intent, expectedRevision, signal),
+    markSending: (intentId: string, signal?: AbortSignal) => journal.markSending(intentId, signal),
+    recordBroadcast: (intentId: string, hash: string, signal?: AbortSignal) => journal.recordBroadcast(intentId, hash, signal),
+    reconcileNative: (intentId: string, signal?: AbortSignal) => journal.reconcileNative(intentId, signal),
+    unresolved: (binding: TradeBinding, account: string, signal?: AbortSignal) => journal.unresolved(binding, account, signal),
+    observe: (intentId: string, transition: LifecycleTransition, signal?: AbortSignal) => journal[TRANSITION](intentId, transition, signal),
+    list: (signal?: AbortSignal) => journal[LIST](signal),
+    currentRevision: () => journal[REVISION](),
+    dispose: () => journal.dispose(),
+  });
+}

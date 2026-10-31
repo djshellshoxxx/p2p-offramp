@@ -1,0 +1,35 @@
+test_cancel_after_job_during_git_snapshot_is_cancelled (test_runner.RunnerCLI.test_cancel_after_job_during_git_snapshot_is_cancelled) ... ok
+test_cancel_during_git_snapshot_is_not_source_drift (test_runner.RunnerCLI.test_cancel_during_git_snapshot_is_not_source_drift) ... ok
+test_cancellation_interrupts_version_probe_and_cleans_group (test_runner.RunnerCLI.test_cancellation_interrupts_version_probe_and_cleans_group) ... ok
+test_content_after_first_eight_mib_still_detected (test_runner.RunnerCLI.test_content_after_first_eight_mib_still_detected) ... ok
+test_credentials_source_module_is_fingerprinted (test_runner.RunnerCLI.test_credentials_source_module_is_fingerprinted) ... ok
+test_declared_metrics_fail_closed (test_runner.RunnerCLI.test_declared_metrics_fail_closed) ... ok
+test_dirty_content_change_with_constant_git_status (test_runner.RunnerCLI.test_dirty_content_change_with_constant_git_status) ... ok
+test_existing_output_preserved (test_runner.RunnerCLI.test_existing_output_preserved) ... ok
+test_expected_identity_and_clean_policy_blocks_execution (test_runner.RunnerCLI.test_expected_identity_and_clean_policy_blocks_execution) ... ok
+test_external_prepare_files_and_source_unchanged (test_runner.RunnerCLI.test_external_prepare_files_and_source_unchanged) ... ok
+test_failure_never_retried (test_runner.RunnerCLI.test_failure_never_retried) ... ok
+test_git_probe_failure_is_not_a_non_git_project (test_runner.RunnerCLI.test_git_probe_failure_is_not_a_non_git_project) ... ok
+test_jobs_bound_and_invalid_manifest (test_runner.RunnerCLI.test_jobs_bound_and_invalid_manifest) ... ok
+test_known_credential_config_is_excluded_without_excluding_code (test_runner.RunnerCLI.test_known_credential_config_is_excluded_without_excluding_code) ... ok
+test_leader_exit_still_cleans_child (test_runner.RunnerCLI.test_leader_exit_still_cleans_child) ... ok
+test_manifest_environment_rejected (test_runner.RunnerCLI.test_manifest_environment_rejected) ... ok
+test_minimal_environment_and_private_paths (test_runner.RunnerCLI.test_minimal_environment_and_private_paths) ... ok
+test_pass_fail_and_literal_argv (test_runner.RunnerCLI.test_pass_fail_and_literal_argv) ... ok
+test_prepare_and_metrics_path_escapes_do_not_write_source (test_runner.RunnerCLI.test_prepare_and_metrics_path_escapes_do_not_write_source) ... ok
+test_profile_selection_and_list_matrix_are_honest (test_runner.RunnerCLI.test_profile_selection_and_list_matrix_are_honest) ... ok
+test_profile_values_and_metrics_roundtrip (test_runner.RunnerCLI.test_profile_values_and_metrics_roundtrip) ... ok
+test_run_end_drift_preserves_job_snapshots (test_runner.RunnerCLI.test_run_end_drift_preserves_job_snapshots) ... ok
+test_secret_named_source_module_is_not_excluded (test_runner.RunnerCLI.test_secret_named_source_module_is_not_excluded) ... ok
+test_sigint_cancels_active_and_accounts_queued (test_runner.RunnerCLI.test_sigint_cancels_active_and_accounts_queued) ... ok
+test_skip_and_missing_prerequisites (test_runner.RunnerCLI.test_skip_and_missing_prerequisites) ... ok
+test_skip_only_success_and_reason (test_runner.RunnerCLI.test_skip_only_success_and_reason) ... ok
+test_source_change_detected (test_runner.RunnerCLI.test_source_change_detected) ... ok
+test_timeout_kills_descendants (test_runner.RunnerCLI.test_timeout_kills_descendants) ... ok
+test_two_project_concurrency_and_unique_temp (test_runner.RunnerCLI.test_two_project_concurrency_and_unique_temp) ... ok
+test_unknown_selector_and_output_in_source_rejected (test_runner.RunnerCLI.test_unknown_selector_and_output_in_source_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 20.668s
+
+OK

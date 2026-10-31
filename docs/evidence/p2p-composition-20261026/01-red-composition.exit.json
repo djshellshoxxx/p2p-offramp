@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/trade-composition.test.mjs"
+  ],
+  "cwd": "/workspace/p2p-offramp-pr5-validation",
+  "startedAtUtc": "2026-10-26T20:56:50.206382+00:00",
+  "finishedAtUtc": "2026-10-26T20:56:50.552028+00:00",
+  "exitCode": 1,
+  "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+  "phase": "RED, test added, implementation absent"
+}

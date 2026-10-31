@@ -1,0 +1,41 @@
+{
+  "operation": "replace_library_file",
+  "status": "succeeded",
+  "path": "/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "file_id": "file_00000000fea081f9b47c7aa43965526a",
+  "library_file_id": "libfile_b5734354657c81919d25ed4930348dc9",
+  "file_name": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "current_version_number": 20,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "20"
+    }
+  ],
+  "directory_id": "libdir_30280fe7938081918252daf66e50daba",
+  "mime_type": "application/zip",
+  "library_artifact_type": "report",
+  "file_size_bytes": 10687703,
+  "external_connectors_accessed": false,
+  "localXattrs": {
+    "user.library-file-version": "20",
+    "user.library-file-id": "libfile_b5734354657c81919d25ed4930348dc9"
+  },
+  "verifiedSha256": "c7fae1a053ea30ae59840b7358fcc5263f9ea6379979f339949629da9b340893",
+  "sourceSha": "16c224c4aecc6cbff7a2d7428f46d148b4e0b246",
+  "documentationHead": "b922a992925bd1a200d4db601eaca59e06fe6e45",
+  "targetTree": "8142262c08736d1f156993be4a5682514602f87f",
+  "verifiedBytes": 10687703,
+  "guardedPreviousVersion": 19,
+  "previousVersionBytesRetained": true,
+  "previousVersionSha256": "29b6355fda04fe39b5a5facdb74a4d0afef7473d51fe373aae4ad9903c91b635",
+  "trackedFiles": 1018,
+  "fullTrackedSourceRestoreVerified": true,
+  "gitHistoryRestoreVerified": false,
+  "consumerBinaryRetrievalVerified": false,
+  "sourceArchiveSha256": "d8d5886eb43c8d5f4042a065763508391a4b3c1a373904ede39b73a7d47fdb6d",
+  "patchSha256": "c2d670231ed5f2cb8ccb0550f43608ced7301b1a2b760befad9d21ddf9966b63",
+  "recordedAtUtc": "2026-10-27T07:17:16.236040+00:00",
+  "receiptCommitDocumentationOnly": true
+}

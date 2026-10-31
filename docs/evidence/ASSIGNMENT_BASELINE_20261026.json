@@ -1,0 +1,45 @@
+{
+  "outerLibraryId": "libfile_bc6ed2cb4a7481919459a534ac05e4ba",
+  "outerVersion": 0,
+  "outerSha256": "beda5022b515aa571c06900e78b3e5203b92850a969523b80e90764d95b43b4d",
+  "innerArchive": "p2p-offramp-source-02f75b452045.tar.gz",
+  "innerArchiveSha256": "5f9be0017e87ca677987de6131a521d9a12ad8b550e2b82a8c0dc635f6f8931d",
+  "innerSourceHead": "02f75b452045afd35b71d977c347c331937568ee",
+  "currentSourceHead": "fc969a774750b8752ad126e9aa5f5059313545b9",
+  "currentSourceNotPushed": true,
+  "currentDomainFilesMatchArchivedSource": [
+    {
+      "path": "packages/domain/src/authority.ts",
+      "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha256": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "sha256": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+      "matchesCurrentSource": true
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "16b2b346b6e72021db00f72a4d8a8ff138391ea9b5bde6fdc3bc56bbf64ce554",
+      "matchesCurrentSource": true
+    }
+  ],
+  "consumerRetrievalVerified": false,
+  "laterDelta": "review inventory/tests/docs/attribution; not assumed present in archive; no live enablement",
+  "recommendation": "Fixture-backed composition of existing TradeAuthority, terms and journal for offline trade/recovery timeline; keep economic/wallet/network enablement false; no duplicate authority engine."
+}

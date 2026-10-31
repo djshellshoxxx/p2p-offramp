@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/domain/test/trade-composition.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T20:58:55.639169+00:00",
+  "finishedAtUtc": "2026-10-26T20:58:56.409412+00:00",
+  "exitCode": 1,
+  "phase": "focused cross-module/lifecycle regressions; source uncommitted"
+}

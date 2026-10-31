@@ -1,0 +1,25 @@
+{
+  "libraryFileId": "libfile_b5734354657c81919d25ed4930348dc9",
+  "fileId": "file_00000000b5c881f4977946b555b93153",
+  "version": 1,
+  "libraryPath": "/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "filename": "P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "bytes": 94161,
+  "sha256": "8e579417e6dfd7fb9f52cd2424acd709230d6f306f15de3c9b1d8fa78aaade9e",
+  "sourceImplementationCommit": "fa4e1f4ddd1fef95befb7ab7b6bb72b3ad22ba6a",
+  "documentationCheckpoint": "458a064c208d6ae1263373351d6a395df246614e",
+  "documentationTree": "f6c8da616b3c7b2bc835eb6bf3e5cde64bc5b8b6",
+  "sourceBase": "bfd7df8ab1eb7c7e16206ddf7d237c2eb06ce472",
+  "localPath": "/workspace/checkpoints/2026-10-26-p2p-composition-implementation/P2P-authority-journal-terms-composition-packet-20261026.zip",
+  "scope": "private incremental source additions, exact logs, tests and handoff; not whole repository/history",
+  "guardedExpectedVersion": 0,
+  "previousVersionPreserved": true,
+  "consumerDownloadTested": false,
+  "canonicalQueueReadOrModified": false,
+  "localIdentityHelperExit": 0,
+  "sourceAdditionPatchRoundTripVerified": true,
+  "localXattrNames": [
+    "user.library-file-version",
+    "user.library-file-id"
+  ]
+}

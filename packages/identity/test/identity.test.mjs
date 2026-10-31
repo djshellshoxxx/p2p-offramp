@@ -138,3 +138,106 @@ test('suspended lifecycle deadlines expire before access or trusted input can re
   }
  }finally{if(oldWindow===undefined)delete globalThis.window;else globalThis.window=oldWindow;if(oldDocument===undefined)delete globalThis.document;else globalThis.document=oldDocument;}
 });
+
+async function restoredIdentity({retired=false,provider}={}) {
+ const {EncryptedBackupService}=await import('../../storage/src/backup-service.ts');
+ const s=await setup(provider),created=val(await s.identity.create(s.session));
+ const publicKey=val(await s.identity.publicIdentity(created.handle));
+ if(retired)val(await s.identity.retire(created.handle));
+ const backup=new EncryptedBackupService(s.store),bytes=(await backup.exportWithStatus(s.session.profileId)).bytes;
+ const receipt=await backup.restore(bytes,pass,pass),target=val(await s.vault.unlock(receipt.newProfileId,pass));
+ const source=clone(s.store.rows.get(s.session.profileId));
+ return {...s,created,publicKey,backup,target,source,cleanup(){backup.dispose();s.identity.dispose();s.vault.dispose();}};
+}
+const currentSession=(vault,session)=>{const lease=val(vault.captureSession(session,()=>{}));try{return lease.current();}finally{lease.dispose();}};
+
+test('restored identity adoption is explicit, rebinds only profile metadata, keeps the source and requires a separate unlock',async()=>{
+ const s=await restoredIdentity();
+ try {
+  assert.equal(typeof s.identity.adoptRestored,'function','missing explicit identity consumer migration');
+  err(await s.identity.unlock(s.target,s.created.identityRecordId),'INVALID_IDENTITY');
+  const before=val(await s.vault.read(s.target.sessionId,s.created.identityRecordId));
+  const original=JSON.parse(Buffer.from(before.payload,'base64url').toString('utf8'));
+  const adopted=val(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId));
+  assert.deepEqual(adopted,{profileId:s.target.profileId,identityRecordId:s.created.identityRecordId});
+  assert.equal('handle'in adopted,false);assert.equal('secretKey'in adopted,false);
+  const after=val(await s.vault.read(s.target.sessionId,s.created.identityRecordId));
+  assert.deepEqual({...after,payload:undefined},{...before,payload:undefined});
+  assert.deepEqual(JSON.parse(Buffer.from(after.payload,'base64url').toString('utf8')),{...original,profileId:s.target.profileId});
+  assert.deepEqual(s.store.rows.get(s.session.profileId),s.source);
+  const handle=val(await s.identity.unlock(s.target,s.created.identityRecordId));
+  assert.equal(val(await s.identity.publicIdentity(handle)),s.publicKey);
+  err(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId),'INVALID_IDENTITY');
+ } finally{s.cleanup();}
+});
+
+test('adoption rejects wrong source, same profile, malformed input and key mismatch without writing',async()=>{
+ const s=await restoredIdentity();
+ try {
+  const unchanged=clone(s.store.rows.get(s.target.profileId)),writes=s.store.writes;
+  for(const [recordId,source] of [[s.created.identityRecordId,'ab'.repeat(16)],[s.created.identityRecordId,s.target.profileId],['bad',s.session.profileId],[s.created.identityRecordId,'bad']])
+   err(await s.identity.adoptRestored(s.target,recordId,source),'INVALID_IDENTITY');
+  err(await s.identity.adoptRestored({...s.target,profileId:s.session.profileId},s.created.identityRecordId,s.session.profileId),'LOCKED');
+  assert.equal(s.store.writes,writes);assert.deepEqual(s.store.rows.get(s.target.profileId),unchanged);
+  const record=val(await s.vault.read(s.target.sessionId,s.created.identityRecordId));
+  const identity=JSON.parse(Buffer.from(record.payload,'base64url').toString('utf8'));
+  const current=currentSession(s.vault,s.target);
+  val(await s.vault.commit(current.sessionId,current.revision,[{op:'put',record:{...record,payload:Buffer.from(JSON.stringify({...identity,publicKey:'00'.repeat(32)})).toString('base64url')}}]));
+  const afterTamper=s.store.writes;
+  err(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId),'INVALID_IDENTITY');
+  assert.equal(s.store.writes,afterTamper);
+ } finally{s.cleanup();}
+});
+
+test('retired identity adoption preserves retirement and duplicate active identities prevent adoption',async()=>{
+ for(const retired of [true,false]){
+  const s=await restoredIdentity({retired});
+  try {
+   if(retired){
+    val(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId));
+    err(await s.identity.unlock(s.target,s.created.identityRecordId),'INVALID_IDENTITY');
+   }else{
+    const record=val(await s.vault.read(s.target.sessionId,s.created.identityRecordId)),id='fa'.repeat(16);
+    const identity=JSON.parse(Buffer.from(record.payload,'base64url').toString('utf8'));
+    const current=currentSession(s.vault,s.target);
+    val(await s.vault.commit(current.sessionId,current.revision,[{op:'put',record:{...record,id,payload:Buffer.from(JSON.stringify({...identity,identityRecordId:id})).toString('base64url')}}]));
+    const before=s.store.writes;err(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId),'CONFLICT');assert.equal(s.store.writes,before);
+   }
+   assert.deepEqual(s.store.rows.get(s.session.profileId),s.source);
+  } finally{s.cleanup();}
+ }
+});
+
+test('adoption cancellation, lock and concurrent destination writes cannot publish stale migration or retain scalar bytes',async()=>{
+ for(const mode of ['cancel','lock','concurrent']){
+  const base=adapter.createLocalNobleIdentityProvider(),entered=deferred(),gate=deferred();let hold=false,seen;
+  const s=await restoredIdentity({provider:{...base,publicKey:async secret=>{if(hold){seen=secret;entered.resolve();await gate.promise;}return base.publicKey(secret);}}});
+  try {
+   const before=clone(s.store.rows.get(s.target.profileId)),writes=s.store.writes,controller=new AbortController();hold=true;
+   const pending=s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId,controller.signal);
+   await entered.promise;
+   if(mode==='cancel')controller.abort();
+   if(mode==='lock')s.vault.lock(s.target.sessionId);
+   if(mode==='concurrent'){
+    const current=currentSession(s.vault,s.target);
+    val(await s.vault.commit(current.sessionId,current.revision,[{op:'put',record:{id:'fb'.repeat(16),kind:'preference',schemaVersion:1,payload:'e30'}}]));
+   }else assert.equal(seen.every(byte=>byte===0),true);
+   gate.resolve();err(await pending,mode==='cancel'?'CANCELLED':mode==='lock'?'LOCKED':'CONFLICT');
+   assert.equal(seen.every(byte=>byte===0),true);assert.equal(s.store.writes,writes+(mode==='concurrent'?1:0));
+   if(mode!=='concurrent')assert.deepEqual(s.store.rows.get(s.target.profileId),before);
+   assert.deepEqual(s.store.rows.get(s.session.profileId),s.source);
+  } finally{gate.resolve();s.cleanup();}
+ }
+});
+
+test('a durable adoption winning late cancellation returns only a locked reference and remains discoverable',async()=>{
+ const s=await restoredIdentity(),controller=new AbortController();
+ try {
+  s.store.afterCommit=()=>{s.identity.lockAll();controller.abort();};
+  const reference=val(await s.identity.adoptRestored(s.target,s.created.identityRecordId,s.session.profileId,controller.signal));
+  assert.deepEqual(reference,{profileId:s.target.profileId,identityRecordId:s.created.identityRecordId});
+  s.store.afterCommit=undefined;
+  const handle=val(await s.identity.unlock(s.target,reference.identityRecordId));assert.equal(val(await s.identity.publicIdentity(handle)),s.publicKey);
+  assert.deepEqual(s.store.rows.get(s.session.profileId),s.source);
+ } finally{s.store.afterCommit=undefined;s.cleanup();}
+});

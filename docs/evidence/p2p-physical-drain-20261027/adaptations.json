@@ -1,0 +1,171 @@
+{
+  "baseHead": "8487eb24468ba6c57c104e7ffc189d24c6e190b7",
+  "rawSonnetResponseSha256": "037129a1d5092af52f2e2be052ba48341f9a4956208f6adc8bc1c1d02b79de51",
+  "rawResponseTerminalLf": false,
+  "outerNativeTextBytes": 23274,
+  "outerReportedFileBytes": 23275,
+  "outerFullArtifactChecksumIndependentlyVerified": false,
+  "runtimePayloadVerified": true,
+  "strictLiteralReconstruction": [
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "baseSha256": "8d3939c2fd3b9716fc244045cf4ecbfcf256a6d425c4466d8fce5457e08f3200",
+      "literalProposalTargetSha256": "7ff9a0d299014520c770146f1ab7cd849e3b22ac7edd444d2c649904458ceb00",
+      "hunks": [
+        {
+          "advertised": "@@ -455,3 +455,174 @@",
+          "actualOldLines": 2,
+          "actualNewLines": 176,
+          "application": "verified EOF append"
+        }
+      ]
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "baseSha256": "5a0c027aee93771c01492e1dd304760c53e5b69bf677852c94fe457036938b1f",
+      "literalProposalTargetSha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+      "hunks": [
+        {
+          "advertised": "@@ -28,10 +28,20 @@",
+          "actualOldLines": 9,
+          "actualNewLines": 19,
+          "application": "single exact literal context"
+        },
+        {
+          "advertised": "@@ -74,5 +84,25 @@",
+          "actualOldLines": 3,
+          "actualNewLines": 13,
+          "application": "single exact literal context"
+        },
+        {
+          "advertised": "@@ -128,4 +158,17 @@",
+          "actualOldLines": 4,
+          "actualNewLines": 12,
+          "application": "single exact literal context"
+        },
+        {
+          "advertised": "@@ -196,5 +239,5 @@",
+          "actualOldLines": 8,
+          "actualNewLines": 8,
+          "application": "single exact literal context"
+        },
+        {
+          "advertised": "@@ -247,5 +290,5 @@",
+          "actualOldLines": 4,
+          "actualNewLines": 4,
+          "application": "single exact literal context"
+        },
+        {
+          "advertised": "@@ -298,5 +341,7 @@",
+          "actualOldLines": 6,
+          "actualNewLines": 8,
+          "application": "single exact literal context"
+        }
+      ]
+    }
+  ],
+  "testAdaptations": [
+    {
+      "old": "// Resolves 'settled' only when the promise actually settles; 'pending' after several real event-loop turns.",
+      "new": "// This bounded negative oracle checks pending only while the real backend gate remains held.\n// Successful completion is awaited through the actual drain/backend promises, never inferred from ticks.",
+      "occurrences": 1
+    },
+    {
+      "old": "const turns = async promise => Promise.race([promise.then(() => 'settled', () => 'settled'), tick(4).then(() => 'pending')]);",
+      "new": "const turns = async promise => Promise.race([promise.then(() => 'settled', () => 'settled'), tick(4).then(() => 'pending')]);\nconst complete = async promise => {\n  let timer;\n  try { return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(Error('Physical-drain fixture did not settle')), 30000); })]); }\n  finally { clearTimeout(timer); }\n};",
+      "occurrences": 1
+    },
+    {
+      "old": "    for (const call of held.calls) call.gate.resolve();\n    for (const call of held.calls) await call.native.catch(() => {});\n    // Poll actual physical release without fixed tick guesses.\n    while (phys(host).held) await tick(1);",
+      "new": "    await pump(held.calls); // awaits real native hashes and host continuations, then assert the physical snapshot",
+      "occurrences": 1
+    },
+    {
+      "old": "  while (phys(host).held) await tick(1);",
+      "new": "  await pump(held.calls); // real backend completion is known before the snapshot assertion",
+      "occurrences": 1
+    },
+    {
+      "old": "  while (!calls.length) await tick(1);",
+      "new": "  assert.equal(calls.length, 1, 'actual verifier entered the first injected digest synchronously');",
+      "occurrences": 1
+    },
+    {
+      "old": "  while (phys(host2).held) await tick(1);",
+      "new": "  await complete(drain(host2));",
+      "occurrences": 1
+    },
+    {
+      "old": "await drained;",
+      "new": "await complete(drained);",
+      "occurrences": 3
+    },
+    {
+      "old": "await Promise.all([d1, d2, d3]);",
+      "new": "await complete(Promise.all([d1, d2, d3]));",
+      "occurrences": 1
+    },
+    {
+      "old": "await drain(idle); await drain(idle);",
+      "new": "await complete(drain(idle)); await complete(drain(idle));",
+      "occurrences": 1
+    },
+    {
+      "old": "await drain(host);",
+      "new": "await complete(drain(host));",
+      "occurrences": 4
+    },
+    {
+      "old": "await drain(host2);",
+      "new": "await complete(drain(host2));",
+      "occurrences": 1
+    },
+    {
+      "old": "  const d3 = drain(host);",
+      "new": "  const d3 = drain(host);\n  assert.equal(d1, d2, 'one shared drain Promise while the slot is held');\n  assert.equal(d2, d3);",
+      "occurrences": 1
+    },
+    {
+      "old": "physical-state: generation exhaustion closes the host terminal without false quiescence",
+      "new": "physical-state: idle terminal observation; generation exhaustion remains unexercised",
+      "occurrences": 1
+    },
+    {
+      "old": "for (const action of ['dispose', 'invalidate']) {\n    let hashes = 0, host;\n    const timer = { setTimeout() { host[action](); return {}; }, clearTimeout() {} };",
+      "new": "for (const action of ['dispose', 'invalidate', 'disposeAndDrain']) {\n    let hashes = 0, host, earlyDrain;\n    const timer = { setTimeout() { if (action === 'disposeAndDrain') earlyDrain = drain(host); else host[action](); return {}; }, clearTimeout() {} };",
+      "occurrences": 1
+    },
+    {
+      "old": "assert.equal(phys(host).terminal, action === 'dispose');\n    const settled = await turns(drain(host));\n    assert.equal(settled, 'settled', 'drain does not wait on a phantom physical job');",
+      "new": "assert.equal(phys(host).terminal, action !== 'invalidate');\n    if (earlyDrain) await complete(earlyDrain);\n    await complete(drain(host));\n    assert.equal(phys(host).held, false, 'no phantom physical job or drain waiter');",
+      "occurrences": 1
+    },
+    {
+      "old": "assert.deepEqual(Object.keys(host).sort(), ['dispatch', 'dispose', 'generation', 'invalidate']);",
+      "new": "assert.deepEqual(Object.keys(host).sort(), ['dispatch', 'dispose', 'disposeAndDrain', 'generation', 'invalidate', 'physicalState']);",
+      "why": "exact additive API set, no private members accepted"
+    }
+  ],
+  "newRequiredEarlyReleaseOracles": 2,
+  "productionTimeoutUnchanged": 30000,
+  "testDrainCompletionBound": 30000,
+  "generationExhaustionExecuted": false,
+  "noFuzzyApplication": true,
+  "sourceTreeMetadataCorrection": "Proposal wrapper associates docse70efbde tree with source9ea7b6c; actual9ea source tree6da4429968f81d1447a2803c7f25a93d4e9f223d, docs5aa treee70efbde. Both allowed file hashes match actual source; no whole-checkout provenance inferred.",
+  "failureCleanupAdaptation": "Each new test registers logical host.dispose via t.after, preventing a failed missing-API oracle from leaving production timers alive. No assertion or physical-completion inference changed; successful tests still await actual backend/drain completion.",
+  "initialTestsOnlyRedCleanup": "Initial RED reached native30second timers before exit1; full log retained, not claimed physical settlement evidence.",
+  "finalTestCandidateSha256": "2f6edd83acbf059be937c0c1b13afd0d41a0db93a68dc267b037bece0636f6b3",
+  "freshContextReview": {
+    "agent": "physical_drain_review",
+    "scope": "read-only exact two-file delta",
+    "result": "no demonstrated implementation defect; requested exceptional-settlement coverage",
+    "additionalExecutedOracle": "already-waiting drain; both SHA positions; normal and throwing timer cleanup; controlled backend rejection; real native completion; no unhandled rejection",
+    "qualificationOnly": true
+  },
+  "processDiagnosticBlock": {
+    "action": "read /proc/22931/cwd",
+    "error": "PermissionError: [Errno 13] Permission denied",
+    "operationStopped": true,
+    "oldProcessesUntouched": true
+  }
+}

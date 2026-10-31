@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "run_id": "d543996748284363804f8253921f831c",
+  "manifest_path": "/workspace/checkpoints/2026-10-27-p2p-host07-intake/host-focused.json",
+  "manifest_sha256": "913d49ebdcc017b9cf3bdb908c70363b75e4725daebff6d210afb388969a745a",
+  "profile": "quick",
+  "profile_budget": {
+    "seed": 1592598566,
+    "cases": 50
+  },
+  "jobs_limit": 1,
+  "started_utc": "2026-10-27T04:40:17.469732+00:00",
+  "finished_utc": "2026-10-27T04:40:18.623922+00:00",
+  "cancelled": false,
+  "source_baselines": {
+    "p2p": {
+      "type": "git",
+      "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+      "dirty": true,
+      "dirty_status": [
+        "?? packages/wallet/src/evm-agreement-host.ts",
+        "?? packages/wallet/test/evm-agreement-host.test.mjs"
+      ],
+      "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "tool_versions": {
+    "p2p": {
+      "node": {
+        "version": "v24.19.0",
+        "error": null,
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "p2p/private-host/focused",
+      "project": "p2p",
+      "module": "private-host",
+      "suite": "focused",
+      "categories": [
+        "unit",
+        "integration"
+      ],
+      "status": "pass",
+      "reason": "",
+      "argv": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "argv_template": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement-host.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs"
+      ],
+      "resolved_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "cwd": "/workspace/p2p-offramp-pr5-validation",
+      "returncode": 0,
+      "started_utc": "2026-10-27T04:40:17.650542+00:00",
+      "duration_seconds": 0.82,
+      "timeout_seconds": 120,
+      "job_dir": "/workspace/checkpoints/2026-10-27-p2p-host07-intake/focused-bounded-05/jobs/0001-p2p-private-host-focused",
+      "stdout": "/workspace/checkpoints/2026-10-27-p2p-host07-intake/focused-bounded-05/jobs/0001-p2p-private-host-focused/stdout.log",
+      "stderr": "/workspace/checkpoints/2026-10-27-p2p-host07-intake/focused-bounded-05/jobs/0001-p2p-private-host-focused/stderr.log",
+      "source_before": {
+        "type": "git",
+        "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+        "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+        "dirty": true,
+        "dirty_status": [
+          "?? packages/wallet/src/evm-agreement-host.ts",
+          "?? packages/wallet/test/evm-agreement-host.test.mjs"
+        ],
+        "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+        "excluded_sensitive_paths_count": 0
+      },
+      "source_after": {
+        "type": "git",
+        "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+        "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+        "dirty": true,
+        "dirty_status": [
+          "?? packages/wallet/src/evm-agreement-host.ts",
+          "?? packages/wallet/test/evm-agreement-host.test.mjs"
+        ],
+        "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+        "excluded_sensitive_paths_count": 0
+      },
+      "cleanup": {
+        "process_group": 23060,
+        "term_sent": false,
+        "kill_sent": false,
+        "remaining_active_pids": []
+      },
+      "budget": {
+        "method": "existing fixed regression cases; no seed/fuzz claim",
+        "productionDeadlineMs": 30000,
+        "sourceInitiallyDirty": "authorized3file integration frozen by content fingerprint;clean source commit follows accepted checks"
+      },
+      "prepared_files": [],
+      "harness_metrics": null,
+      "harness_metrics_error": null
+    }
+  ],
+  "counts": {
+    "pass": 1,
+    "fail": 0,
+    "timeout": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "missing_prerequisite": 0,
+    "source_changed": 0,
+    "unexecuted": 0
+  },
+  "exit_code": 0,
+  "environment_policy": {
+    "inherit_names": [
+      "PATH",
+      "LANG",
+      "LC_ALL",
+      "LC_CTYPE",
+      "SYSTEMROOT"
+    ],
+    "secrets": "all other parent variables excluded by construction; no values dumped"
+  },
+  "source_final": {
+    "p2p": {
+      "type": "git",
+      "sha": "9ec33bc3a0e8e35eb764a2a356ffef165bd8913b",
+      "tree": "200e69c40f80372e1a99361563ed96debd7cd86c",
+      "dirty": true,
+      "dirty_status": [
+        "?? packages/wallet/src/evm-agreement-host.ts",
+        "?? packages/wallet/test/evm-agreement-host.test.mjs"
+      ],
+      "fingerprint": "d707c023cdf8727f383d4e2a143bc22f2ba169f1fac7d0eb5dffda6908101ffa",
+      "excluded_sensitive_paths_count": 0
+    }
+  },
+  "source_drift_projects": []
+}

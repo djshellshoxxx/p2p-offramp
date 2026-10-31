@@ -1,0 +1,34 @@
+{
+  "localPath": "/workspace/checkpoints/2026-10-26-attribution-remediation/GhostPay-P2P-reuse-inventories-20261026.zip",
+  "sha256": "ef086405b01c7fb32ee6c27ca197cf264f822bc11f2f77a6d4f7ab292a686b7b",
+  "bytes": 115186,
+  "files": 26,
+  "sources": {
+    "GhostPay": {
+      "head": "6765410e30c3888dd913c12d0d7bb6469fa2e149",
+      "tree": "70336b305b3b7df8cbef10b808817e7713a989a2",
+      "branch": "work/ghostpay-payment-sweep-guards-2026-10-26",
+      "remoteRechecked": false,
+      "publication": "local only"
+    },
+    "P2P": {
+      "head": "8b1c9ef531acf06036693afd764cd2078639bfb2",
+      "tree": "d65d3aa3cd5549de7cec710e0d1b7790de77660f",
+      "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+      "remoteRechecked": false,
+      "publication": "local only"
+    }
+  },
+  "verifiedZipAndPayloads": true,
+  "libraryFileId": "libfile_724075754830819189367812705445ee",
+  "expectedCurrentVersion": 0,
+  "uploadStatus": "succeeded",
+  "operation": "replace_library_file",
+  "version": 1,
+  "fileId": "file_000000005740820eab1a1b46444b26e3",
+  "recordedUTC": "2026-10-26T20:01:56.155579+00:00",
+  "localLibraryIdentityAndVersionPersisted": true,
+  "localHashVerifiedAfterUpload": true,
+  "consumerDownloadTested": false,
+  "priorVersionPreserved": 0
+}

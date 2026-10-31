@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "f94cda226c5338ad82e9318b9a2ad05203195fa0",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "ctl",
+          "suites": [
+            {
+              "id": "focused",
+              "argv": [
+                "node",
+                "--test",
+                "packages/schemas/test/evm-agreement-control.test.mjs",
+                "packages/schemas/test/evm-agreement-protocol.test.mjs"
+              ],
+              "categories": [
+                "unit",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "G11 intrinsic viewbounds/getter/proxy/offset/snapshot and existing G15 regressions",
+                "scope": "no trust/deployment/provider selection"
+              }
+            },
+            {
+              "id": "aggregate",
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "build",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "boundaries",
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "policy",
+              "argv": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "categories": [
+                "static"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged"
+              }
+            },
+            {
+              "id": "workerphysical",
+              "argv": [
+                "node",
+                "scripts/test-g16-physical-browser.mjs"
+              ],
+              "categories": [
+                "browser",
+                "security"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 120,
+              "budget": {
+                "method": "same13trusted fixture schedules, not production wire parser"
+              }
+            }
+          ]
+        }
+      ],
+      "expected_tree": "ec9c0165c9ca3f49d0f7c9837c5085ead4c5fae8"
+    }
+  ]
+}

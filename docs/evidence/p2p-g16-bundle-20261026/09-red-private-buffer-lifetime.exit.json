@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "packages/wallet/test/evm-agreement.test.mjs"
+  ],
+  "startedAtUtc": "2026-10-26T22:40:10.395438+00:00",
+  "finishedAtUtc": "2026-10-26T22:40:10.800110+00:00",
+  "exitCode": 1,
+  "phase": "RED source review: private encoded buffer outlives its completed hash while capabilities digest held"
+}

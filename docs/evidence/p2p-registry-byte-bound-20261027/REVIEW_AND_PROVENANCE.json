@@ -1,0 +1,44 @@
+{
+  "sourceSha": "783f9e7d781310f73a5ad034d27c0bf4df44aefe",
+  "sourceTree": "bf10b6fca18af6ea6f0d50b7beb14fe00c254435",
+  "baseSha": "0694b1f33422420df07663fe559831768f37ed7b",
+  "changedPaths": [
+    "packages/schemas/src/registry.ts",
+    "packages/domain/src/registry.ts",
+    "packages/domain/test/registry.test.mjs"
+  ],
+  "baseHashes": {
+    "packages/schemas/src/registry.ts": "16b2b346b6e72021db00f72a4d8a8ff138391ea9b5bde6fdc3bc56bbf64ce554",
+    "packages/domain/src/registry.ts": "5ac0d06154be215f5fb7ce02e99d3272d969e179cae3d9b955a7b581d049f4a4",
+    "packages/domain/test/registry.test.mjs": "a4ec34b5ddf658aef6891a64bd3d662e2a15b5e1b22e0ef4f3869ef0a6664f64"
+  },
+  "finalHashes": {
+    "packages/schemas/src/registry.ts": "c1262bef2f25a4d9e53bb280b8d5c500794e07cafd26aad26ccc72c519a677b8",
+    "packages/domain/src/registry.ts": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+    "packages/domain/test/registry.test.mjs": "d8de73498b7a7de11d665422a26a2529af89cb2dd8f4e5c79e6458565a00b4ed"
+  },
+  "actualRed": {
+    "tests": 10,
+    "pass": 6,
+    "fail": 4,
+    "skip": 0,
+    "sourceUnchangedDuringTestsFirst": true
+  },
+  "focusedGreen": {
+    "tests": 65,
+    "pass": 65,
+    "fail": 0,
+    "skip": 0
+  },
+  "review": {
+    "agent": "/root/g15_verifier_review",
+    "readOnly": true,
+    "execution": false,
+    "scope": "exact3path intrinsicbounds/typedrefusal delta",
+    "conclusion": "no concrete defect/essential missing oracle found",
+    "trustDigestReloadSemantics": "unchanged"
+  },
+  "noNewDependenciesPublicExportsTrustRootOrFinancialPolicy": true,
+  "guardedG15PathNotDemonstratedExploited": true,
+  "brokerReservedControlPathsUntouched": true
+}

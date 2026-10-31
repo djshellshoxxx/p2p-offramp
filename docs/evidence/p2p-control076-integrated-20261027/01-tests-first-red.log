@@ -1,0 +1,636 @@
+✖ valid request frames, both operations, bounds and null prototype (2.820099ms)
+✖ valid ack frames cover held values, both failure codes, both ops (0.298362ms)
+✖ valid closed frames cover all four reasons and bounds (0.172556ms)
+✖ caller mutation has no effect and repeated parses are identical (0.133868ms)
+✖ request: outer structural rejections (0.740638ms)
+✖ request: meta traps yield fresh fixed errors (0.24962ms)
+✖ request: giant extra graph is not traversed (0.281628ms)
+✖ request: discriminator and counter rejections (0.280495ms)
+✖ request: authority/private extras rejected and sentinel excluded (0.284762ms)
+✖ ack: outer structural rejections (0.206706ms)
+✖ ack: meta traps yield fresh fixed errors (0.26992ms)
+✖ ack: giant extra graph is not traversed (0.180047ms)
+✖ ack: discriminators, counters, result shapes (0.402106ms)
+✖ ack: nested exact-shape hardening (0.35069ms)
+✖ ack: sentinel excluded from output and errors (0.12194ms)
+✖ closed: outer structural rejections (0.113768ms)
+✖ closed: meta traps yield fresh fixed errors (0.105786ms)
+✖ closed: giant extra graph is not traversed (0.104124ms)
+✖ closed: discriminators and counters (0.226055ms)
+✖ Reflect trap on transparent proxy without traps is not asserted rejected (0.141219ms)
+✖ complete nested exact-shape family: success-result (0.264893ms)
+✖ complete nested exact-shape family: failure-result (0.232584ms)
+✖ complete nested exact-shape family: held-value (0.218814ms)
+✖ complete nested exact-shape family: failure-error (0.217653ms)
+✖ genuine and forged CoreSchemaError trap values are discarded fresh without any error-property reads (0.284151ms)
+✖ every ack discriminator and all request/ack/closed integer counter domains are exact (0.197622ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 0
+ℹ fail 26
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.354931
+
+✖ failing tests:
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:43:1
+✖ valid request frames, both operations, bounds and null prototype (2.820099ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.request (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:15:67)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:45:19)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:55:1
+✖ valid ack frames cover held values, both failure codes, both ops (0.298362ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.ack (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:16:59)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:58:19)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:72:1
+✖ valid closed frames cover all four reasons and bounds (0.172556ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.closed (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:17:62)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:74:19)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:81:1
+✖ caller mutation has no effect and repeated parses are identical (0.133868ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.ack (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:16:59)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:83:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:95:3
+✖ request: outer structural rejections (0.740638ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:96:79)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:113:3
+✖ request: meta traps yield fresh fixed errors (0.24962ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:115:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:122:3
+✖ request: giant extra graph is not traversed (0.281628ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:125:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:133:3
+✖ request: discriminator and counter rejections (0.280495ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:134:44)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:141:3
+✖ request: authority/private extras rejected and sentinel excluded (0.284762ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:142:109)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:95:3
+✖ ack: outer structural rejections (0.206706ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:96:79)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:113:3
+✖ ack: meta traps yield fresh fixed errors (0.26992ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:115:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:122:3
+✖ ack: giant extra graph is not traversed (0.180047ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:125:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:148:3
+✖ ack: discriminators, counters, result shapes (0.402106ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:149:53)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:161:3
+✖ ack: nested exact-shape hardening (0.35069ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:173:47
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:172:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:189:3
+✖ ack: sentinel excluded from output and errors (0.12194ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.ack (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:16:59)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:190:33)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:95:3
+✖ closed: outer structural rejections (0.113768ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:96:79)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:113:3
+✖ closed: meta traps yield fresh fixed errors (0.105786ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:115:17)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:122:3
+✖ closed: giant extra graph is not traversed (0.104124ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:125:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:197:3
+✖ closed: discriminators and counters (0.226055ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:198:81)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:206:1
+✖ Reflect trap on transparent proxy without traps is not asserted rejected (0.141219ms)
+  AssertionError [ERR_ASSERTION]: evm-agreement-control.ts is absent (expected RED)
+      at missing (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:13:30)
+      at Object.request (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:15:67)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:207:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:218:35
+✖ complete nested exact-shape family: success-result (0.264893ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:220:57)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:218:35
+✖ complete nested exact-shape family: failure-result (0.232584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:220:57)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:218:35
+✖ complete nested exact-shape family: held-value (0.218814ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:220:57)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:218:35
+✖ complete nested exact-shape family: failure-error (0.217653ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:220:57)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:234:1
+✖ genuine and forged CoreSchemaError trap values are discarded fresh without any error-property reads (0.284151ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:245:19)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/schemas/test/evm-agreement-control.test.mjs:250:1
+✖ every ack discriminator and all request/ack/closed integer counter domains are exact (0.197622ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'AssertionError'
+  - 'CoreSchemaError'
+  
+      at rejects (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:32:10)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/schemas/test/evm-agreement-control.test.mjs:251:74)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'AssertionError',
+    expected: 'CoreSchemaError',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -170,6 +170,38 @@ export class MessagingIdentityService {
       return this.#select(job, recordId, publicKey);
     });
   }
+  /** Explicit G03 consumer migration after byte-preserving restore. Rebinds only profile metadata;
+   * the key, record ID and retirement state stay unchanged. No handle is issued or unlocked.
+   * sourceProfileId is the caller's expected original binding, never an imported migration program.
+   */
+  async adoptRestored(session: VaultSession, identityRecord: string, sourceProfileId: string, signal?: AbortSignal): Promise<IdentityResult<IdentityReference>> {
+    return this.#run<IdentityReference>(session, signal, async job => {
+      const provider = this.#protocol();
+      const recordId = identityRecordId(identityRecord), source = identityRecordId(sourceProfileId);
+      const current = await this.#synchronize(job);
+      if (source === current.profileId) throw new IdentityError();
+      const record = fromVault(await this.#vault.read(current.sessionId, recordId)); this.#guard(job);
+      if (record === null || record.kind !== 'identity' || record.schemaVersion !== 1) throw new IdentityError();
+      const identity = decodeIdentityPayload(record.payload);
+      if (identity.profileId !== source || identity.identityRecordId !== recordId) throw new IdentityError();
+      const records = fromVault(await this.#vault.list(current.sessionId, 'identity')); this.#guard(job);
+      for (const other of records) {
+        if (other.schemaVersion !== 1) throw new IdentityError();
+        const parsed = decodeIdentityPayload(other.payload);
+        if (parsed.identityRecordId !== other.id) throw new IdentityError();
+        if (other.id !== recordId && identity.state === 'active' && parsed.state === 'active') throw new IdentityError('CONFLICT');
+      }
+      const secret = decodeBase64url(identity.secretKey, 32, 32); job.buffers.add(secret);
+      const publicKey = identityPublicKey(await provider.publicKey(secret)); this.#guard(job);
+      if (publicKey !== identity.publicKey) throw new IdentityError();
+      const replacement: PrivateRecordV1 = { ...record, payload: encodeIdentityPayload({ ...identity, profileId: current.profileId }) };
+      job.reference = Object.freeze({ profileId: current.profileId, identityRecordId: recordId });
+      const revision = fromVault(await this.#vault.commit(current.sessionId, current.revision, [{ op: 'put', record: replacement }], job.controller.signal));
+      job.committed = true; job.revision = revision;
+      this.#guard(job);
+      return job.reference;
+    }, job => job.reference!);
+  }
   async publicIdentity(handle: IdentityHandle): Promise<IdentityResult<string>> {
     let state: HandleState;
     try { state = this.#state(handle); } catch (error) { return failure(error instanceof IdentityError ? error.code : 'INVALID_IDENTITY'); }

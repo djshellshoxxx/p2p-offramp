@@ -1,0 +1,397 @@
+{
+  "kind": "private/test-only offline G16 EOA agreement-bundle verification",
+  "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+  "recordedAtUtc": "2026-10-26T22:45:25.055496+00:00",
+  "sourceFiles": {
+    "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+    "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+    "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+    "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:33:33.701746+00:00",
+      "finishedAtUtc": "2026-10-26T22:33:33.958134+00:00",
+      "exitCode": 1,
+      "phase": "RED: absent verifier, regression first",
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/01-red-missing-bundle.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T22:34:52.536348+00:00",
+      "finishedAtUtc": "2026-10-26T22:34:52.769319+00:00",
+      "exitCode": 0,
+      "phase": "initial GREEN; new private/test-only verifier, uncommitted",
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/02-green-initial-bundle.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T22:37:30.862738+00:00",
+      "finishedAtUtc": "2026-10-26T22:37:31.304232+00:00",
+      "exitCode": 1,
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "af1b82ce81eea4201cac1960ab6f5dc3a319a37de327e60bbaf2dc429a699f95",
+        "packages/wallet/test/evm-agreement.test.mjs": "534b688611daa5817c826755978565bef9f1864a2196d4992d68f4b0a794570b"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/03-expanded-oracles.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/domain/test/trade-terms.test.mjs"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:38:14.884417+00:00",
+      "finishedAtUtc": "2026-10-26T22:38:15.348419+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+        "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/04-focused-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:38:15.349015+00:00",
+      "finishedAtUtc": "2026-10-26T22:38:31.505511+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+        "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/05-unit-aggregate.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:38:31.507079+00:00",
+      "finishedAtUtc": "2026-10-26T22:38:32.100712+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+        "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/06-boundaries.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:38:32.101918+00:00",
+      "finishedAtUtc": "2026-10-26T22:38:32.683214+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+        "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/07-build-policy.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:38:32.683740+00:00",
+      "finishedAtUtc": "2026-10-26T22:38:35.027231+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "846df964262a19740dae0315a384c85f6b916b1195f54252656d9ce626b22959",
+        "packages/wallet/test/evm-agreement.test.mjs": "411cb3b7a233960b08d683b9b4b7e8540c3d112ca22126a2c0f425ed12c81f3b",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/08-build-and-types.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs"
+      ],
+      "startedAtUtc": "2026-10-26T22:40:10.395438+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:10.800110+00:00",
+      "exitCode": 1,
+      "phase": "RED source review: private encoded buffer outlives its completed hash while capabilities digest held",
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/09-red-private-buffer-lifetime.exit.json"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/domain/test/trade-terms.test.mjs"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:40:36.800219+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:37.213474+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/10-focused-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:40:37.213996+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:52.926898+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/11-unit-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:40:52.927963+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:53.423695+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/12-boundaries-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:40:53.424669+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:53.971209+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/13-build-policy-final.exit.json"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "sourceBase": "8eddda5fc152ea0561906cef00d47f9989ffcce8",
+      "startedAtUtc": "2026-10-26T22:40:53.971750+00:00",
+      "finishedAtUtc": "2026-10-26T22:40:56.827477+00:00",
+      "exitCode": 0,
+      "sourceFiles": {
+        "packages/wallet/src/evm-agreement.ts": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+        "packages/wallet/test/evm-agreement.test.mjs": "051bd8aca63fcdfd2663c3acff5eda9a4173e429c7e423ef153e4f756f0c9693",
+        "packages/domain/test/fixtures/g16-vectors.json": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+        "packages/wallet/test/fixtures/g16-evm-independent.json": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+      },
+      "exitRecord": "docs/evidence/p2p-g16-bundle-20261026/14-build-and-types-final.exit.json"
+    }
+  ],
+  "rawLogs": [
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/01-red-missing-bundle.log.gz",
+      "sha256": "dcbfdd6229263e4a1e7f4ae506c3101875d45d740b6c3cca955800406b986e9a",
+      "rawSha256": "1644b62665ba8e4360d1a76e4b74415c00e17c81f987a344c7c5e6c1a62d51b3",
+      "rawBytes": 1140
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/02-green-initial-bundle.log.gz",
+      "sha256": "5a318c40fb80f20d9e8ff7fd3dbefe0c1a352169924b7ccf1796dfcc64586462",
+      "rawSha256": "a24cff2a9452e1dbd5e7a53798a73069f12913d85de6681cde65ee0aa0285e5c",
+      "rawBytes": 243
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/03-expanded-oracles.log.gz",
+      "sha256": "7ebe72f5c31b6121daa49f0c8b91f03404e23d5cb929628705676b0a37302088",
+      "rawSha256": "29aa7e43f87e851880186fe6f70f13d0836d5d32439ffd1bf53c27267fd41367",
+      "rawBytes": 2186
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/04-focused-final.log.gz",
+      "sha256": "5393b10abe23c4e8302022ecb9e4e2a7950db8c81a032c19a5125ff304401a7a",
+      "rawSha256": "3ea700947dfb6032b8ddeb5c94d3136e972af3a8837d619790a6b7c9b7112f8c",
+      "rawBytes": 2995
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/05-unit-aggregate.log.gz",
+      "sha256": "b6eb69dd93fa9465cb657e0e6f73496b49483b47a0590510c933561596723937",
+      "rawSha256": "88caa8bf4426f346270844bcae6fa73ca94608f6c721793ea555fcb6f8893db7",
+      "rawBytes": 40673
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/06-boundaries.log.gz",
+      "sha256": "120fc19a010ca2cb5e8db73cc3cbd17edb3985149673837f1a2992ba8f3d2d2e",
+      "rawSha256": "86d0244ce8422f965c4e947e8bcd62fad9359ea3d88a41abe3e15e3b168c9b23",
+      "rawBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/07-build-policy.log.gz",
+      "sha256": "2c4c0e6bcc9d12fcc835db6447f1249ec2e211b8aeda8a9bc668314083c625a3",
+      "rawSha256": "258bf39d74719a25b31e18d7e528968aada3d9ad97c12a1d695be6902af33782",
+      "rawBytes": 984
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/08-build-and-types.log.gz",
+      "sha256": "1dd7f73bb12c5410c7a584a0e426a3077da526815c3650296766045501c96384",
+      "rawSha256": "36d33778d75aed640e0c93265b3be0d60e620c41b90be985ee0eda6549ca1fa4",
+      "rawBytes": 1510
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/09-red-private-buffer-lifetime.log.gz",
+      "sha256": "c66ebb1675677adfacb125f2c1eea7f232626c3dc5f647f964e9084b5a81ccc0",
+      "rawSha256": "544de03051a24fa1adb17cfefe6111e982f394c1988571574bff4507ae48fc37",
+      "rawBytes": 2225
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/10-focused-final.log.gz",
+      "sha256": "63f5760309b2a0437ad22f9eb0ee79b6313f017f573fe39e05cbfc9f1394fff9",
+      "rawSha256": "d2248a5f99cd1a91362f093c53fb747627dc48443dccf08cf104cb1fa6c777c4",
+      "rawBytes": 3086
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/11-unit-final.log.gz",
+      "sha256": "79c22693542205da7e36652f4fca638ffe467477617e524b5014fe032425aa77",
+      "rawSha256": "c2a11bfa8408abe3b7ae950ab6077313c5ff67e4943d11d2b7b80361d67819fd",
+      "rawBytes": 40753
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/12-boundaries-final.log.gz",
+      "sha256": "120fc19a010ca2cb5e8db73cc3cbd17edb3985149673837f1a2992ba8f3d2d2e",
+      "rawSha256": "86d0244ce8422f965c4e947e8bcd62fad9359ea3d88a41abe3e15e3b168c9b23",
+      "rawBytes": 448
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/13-build-policy-final.log.gz",
+      "sha256": "e44d759f0718844a841987eb8eb876453e16933b134183795a63151f983fe6bf",
+      "rawSha256": "82c6d571933f6dd99e605386b8ad7319f243bf3efdedcffc605adf62cb1b18a7",
+      "rawBytes": 984
+    },
+    {
+      "path": "docs/evidence/p2p-g16-bundle-20261026/14-build-and-types-final.log.gz",
+      "sha256": "9b83ce89885ee7293a909a4888e727aaf5bdeae894ebb7e42f7623ae4309d114",
+      "rawSha256": "cfab96e7653cc38b4d79117d50cefaae7066f54b75edbfaf107af0c4b8785f29",
+      "rawBytes": 1510
+    }
+  ],
+  "finalCounts": {
+    "newBundleTests": 12,
+    "focusedRelated": 28,
+    "unitAggregate": 379,
+    "buildPolicy": 5,
+    "fail": 0,
+    "skip": 0
+  },
+  "failuresPreserved": [
+    {
+      "stage": "01",
+      "pass": 0,
+      "fail": 1,
+      "reason": "missing verifier before implementation"
+    },
+    {
+      "stage": "03",
+      "pass": 9,
+      "fail": 1,
+      "reason": "signature proxy classified UNAVAILABLE instead of INVALID_INPUT; fixed intrinsic-copy boundary catch"
+    },
+    {
+      "stage": "09",
+      "pass": 11,
+      "fail": 1,
+      "reason": "private encoding persisted through subsequent public commitment hash; fixed immediate post-hash wipe"
+    }
+  ],
+  "earlierSourceCounts": {
+    "focused": 27,
+    "aggregate": 378,
+    "notTransferredToFinalSource": true
+  },
+  "inputBounds": {
+    "privateAgreementBytes": 16384,
+    "paymentInstructionsUtf8Bytes": 4096,
+    "capabilityCount": 8,
+    "acceptanceCount": 2,
+    "signatureBytesEach": 65,
+    "fiatBits": 128,
+    "fiatScale": "0..6",
+    "revisionBits": 64,
+    "principalBits": 256,
+    "nativeTimeBits": 64
+  },
+  "fixtureProvenance": "Existing independent private commitment golden inputs/expected hashes unchanged. Coherent new EOA bundles generated in tests using public deterministic test keys and existing Noble signing/verifier family; not independent integration/provider qualification. No new key fixture files or actual credentials.",
+  "privacy": "No private agreement/signatures in returned result or runtime logs. Own encoded/signature arrays clear on abort/every exit; private encoded array clears immediately after its hash. Generation change is checked across awaits; without abort notification it is observed when the await settles. Caller strings/inputs and native crypto internal copies are not physically erased by this API.",
+  "trustBoundary": "isCurrent/signal/optional SHA instrumentation are configured worker-owned context, not imported bundle approval. Default hashing reuses native WebCrypto helper; this does not approve providers or capabilities.",
+  "outputScope": {
+    "testOnly": true,
+    "economicPreparationAllowed": false,
+    "appExported": false,
+    "nativeChainOrRegistryApproval": false,
+    "walletPrompts": false,
+    "fundingExpiryOrNonceOutcomeVerified": false,
+    "capabilityPolicyActivated": false,
+    "eip1271Supported": false
+  },
+  "review": "coordinator source/privacy review plus regression tests; no independent security audit",
+  "remaining": "reviewed native ABI/reader/chain time and approved registry/finality, G12 trusted hash/observe/reconcile, real wallet/escrow/offer/trade UI/two-party acceptance; preserve owner/review/deployment/live gates",
+  "workersStarted": 0,
+  "ghostPayTouched": false,
+  "canonicalQueueReadOrWritten": false
+}

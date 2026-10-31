@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "projects": [
+    {
+      "id": "p2p",
+      "root": "/workspace/p2p-offramp-pr5-validation",
+      "expected_sha": "78418e89b4844e420409e23c520c6d4d5ceeecd2",
+      "require_clean": true,
+      "tools": [
+        {
+          "id": "node",
+          "argv": [
+            "node",
+            "--version"
+          ]
+        },
+        {
+          "id": "npm",
+          "argv": [
+            "npm",
+            "--version"
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": "asset11",
+          "suites": [
+            {
+              "id": "aggregate",
+              "argv": [
+                "npm",
+                "test"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "build",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 180,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "boundaries",
+              "argv": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "browser",
+              "argv": [
+                "npm",
+                "run",
+                "test:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "web",
+              "argv": [
+                "npm",
+                "run",
+                "test:web:browser"
+              ],
+              "categories": [
+                "browser"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 240,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specs",
+              "argv": [
+                "npm",
+                "run",
+                "test:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            },
+            {
+              "id": "specaudit",
+              "argv": [
+                "npm",
+                "run",
+                "check:specs"
+              ],
+              "categories": [
+                "integration"
+              ],
+              "required_tools": [
+                "node"
+              ],
+              "timeout_seconds": 60,
+              "budget": {
+                "thresholds": "unchanged",
+                "testMethod": "existing fixed regressions, no fuzz claim",
+                "network": "owned loopback fixtures only"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

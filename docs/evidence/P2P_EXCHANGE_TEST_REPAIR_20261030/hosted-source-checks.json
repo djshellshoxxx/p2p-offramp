@@ -1,0 +1,195 @@
+{
+  "repair": {
+    "sha": "08d83a5dd07054b0dfecdf1581eca17101fa35a8",
+    "checks": [
+      {
+        "id": 124015726616,
+        "name": "SonarCloud Code Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124014820357,
+        "name": "CodeRabbit",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 124014794221,
+        "name": "browser",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014794145,
+        "name": "specs",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014794027,
+        "name": "schemas-and-crypto",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124014793646,
+        "name": "inventory",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014793547,
+        "name": "forge",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014793239,
+        "name": "local-trade",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014679581,
+        "name": "specs",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014679522,
+        "name": "schemas-and-crypto",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014679339,
+        "name": "forge",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124014679292,
+        "name": "browser",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "id": 124014679211,
+        "name": "inventory",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124014678873,
+        "name": "local-trade",
+        "status": "queued",
+        "conclusion": null
+      }
+    ],
+    "node": {
+      "job": 124014794027,
+      "tests": 783,
+      "pass": 782,
+      "fail": 0,
+      "skip": 1
+    }
+  },
+  "relay": {
+    "sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+    "checks": [
+      {
+        "id": 124010247625,
+        "name": "SonarCloud Code Analysis",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009264753,
+        "name": "CodeRabbit",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 124009189531,
+        "name": "schemas-and-crypto",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009189516,
+        "name": "browser",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009189282,
+        "name": "specs",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009188785,
+        "name": "forge",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009188525,
+        "name": "local-trade",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009188397,
+        "name": "inventory",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009162242,
+        "name": "schemas-and-crypto",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124009162240,
+        "name": "local-trade",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009162210,
+        "name": "specs",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124009162059,
+        "name": "browser",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 124009162017,
+        "name": "forge",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 124009161081,
+        "name": "inventory",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "node": {
+      "job": 124009189531,
+      "tests": 788,
+      "pass": 787,
+      "fail": 0,
+      "skip": 1
+    }
+  },
+  "skip": "cast calldata comparison skipped without Foundry in the Node jobs"
+}

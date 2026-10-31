@@ -176,3 +176,16 @@ test('IDB addWithSource rechecks the exact source row, the profile bound and nev
   await assert.rejects(store.addWithSource(envelope, { ...copy(envelope), keyId: 'c'.repeat(32) }), error => error.code === 'INVALID_INPUT');
   await assert.rejects(store.addWithSource(envelope, { ...copy(envelope), profileId: 'b'.repeat(32) }), error => error.code === 'INVALID_INPUT');
 });
+test('IDB readwrite transactions request strict durability so completion means the write was flushed', async () => {
+  const { MAX_VAULT_PROFILES } = await import('../../schemas/index.ts');
+  const next = { ...copy(envelope), profileId: 'b'.repeat(32), keyId: 'c'.repeat(32) };
+  for (const write of [store => store.add(envelope), store => store.compareAndSwap(envelope, { ...copy(envelope), revision: envelope.revision + 1 }),
+    store => store.addWithSource(envelope, next)]) {
+    const fake = factory(); const store = new IndexedDbVaultStore(fake);
+    const pending = write(store); await flush();
+    const db = database({ rows: MAX_VAULT_PROFILES - 2 }), opened = []; const transaction = db.transaction;
+    db.transaction = (name, mode, options) => { opened.push({ mode, options }); return transaction(name, mode, options); };
+    fake.requests[0].result = db; fake.requests[0].onsuccess(); await pending;
+    assert.deepEqual(opened.filter(({ mode }) => mode !== 'readonly'), [{ mode: 'readwrite', options: { durability: 'strict' } }]);
+  }
+});

@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "kind": "read-only preparation/source identity, not executed acceptance",
+  "generatedAtUtc": "2026-10-26T20:49:35+00:00",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "branch": "work/p2p-restore-commit-reconciliation-test-2026-10-26",
+  "sourceHead": "bbba912ba7bd0563fba635f915b4ae71a831c919",
+  "sourceTree": "e0d223783f0c128b2fda025ffe964c3967c62794",
+  "initialWorktree": "clean",
+  "files": [
+    {
+      "path": "packages/domain/src/authority.ts",
+      "gitMode": "100644",
+      "bytes": 11377,
+      "lineCount": 171,
+      "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+      "ranges": [
+        {
+          "start": 9,
+          "end": 26,
+          "sha256": "b8cc105e0e599d198b392dd859c32dc5a5c8212ef56afa088e0cb13bf508d7d6"
+        },
+        {
+          "start": 33,
+          "end": 67,
+          "sha256": "f4e021ca0cf1396e9f3d19a61ba109c0c8d35652223063785c7e384b932d228f"
+        },
+        {
+          "start": 71,
+          "end": 136,
+          "sha256": "ffced09f9ebfe65485547949c5cf28952ff0faa2eede9203e61c2ab1366b84c3"
+        },
+        {
+          "start": 139,
+          "end": 169,
+          "sha256": "3b3a10fbcbbe266f5031eca5fef9e42c43b4c23a7890bed3a623546500f1a794"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "gitMode": "100644",
+      "bytes": 14476,
+      "lineCount": 187,
+      "sha256": "320b55aecbf21991011d67bf872619ce77879258d251064a102579be952e0586",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 24,
+          "sha256": "8ae528e78ed7fbd5d23e2b2647f0baf6a71b206a16dd2cce13e45ec8df4f99be"
+        },
+        {
+          "start": 80,
+          "end": 108,
+          "sha256": "10a623acab7200b79d5bee633a32deb904d6afca1a715a75cc734de595693014"
+        },
+        {
+          "start": 110,
+          "end": 144,
+          "sha256": "a3387ae90f7f26cbd4af8ac5c51da313b10c449c5048f2e6ad5647faa1f28daf"
+        },
+        {
+          "start": 145,
+          "end": 183,
+          "sha256": "914045920c97bd2a916199feaae8b5c04159dc53e7c7a8b6a3c4261ba83dd195"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "gitMode": "100644",
+      "bytes": 12363,
+      "lineCount": 196,
+      "sha256": "7e29fa2011ca83a59dde45aed06afe814a5a0a280c9e88875c2c533276ba793d",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 21,
+          "sha256": "e2b71b35aa777e6e581a43dc264574f1c1fbc1f000f4f5d2d08b4379c4d6c893"
+        },
+        {
+          "start": 130,
+          "end": 159,
+          "sha256": "ff897ea50244b4fbf86356e4d15236793049dbac15de03fb0b0624eddc8b9dad"
+        },
+        {
+          "start": 184,
+          "end": 196,
+          "sha256": "67af6f212550fa043f6dd8a58c6fe7b97412a65fb2e644fe3c391b2eab27ef0f"
+        }
+      ]
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "gitMode": "100644",
+      "bytes": 7446,
+      "lineCount": 108,
+      "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 35,
+          "sha256": "80525ea233577f8da1f13cad58c4cbf7edf3be68142929bd689f9a906a860c77"
+        },
+        {
+          "start": 59,
+          "end": 84,
+          "sha256": "77ebae0c9226fe435c11be4d2474444b2038385cd0db2a5b84099ae27cbb0f49"
+        }
+      ]
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "gitMode": "100644",
+      "bytes": 7912,
+      "lineCount": 89,
+      "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 13,
+          "sha256": "30e8f2cdf234f716b478b82a88d8a29087afd58d4ada554b032776e5d6358520"
+        },
+        {
+          "start": 33,
+          "end": 63,
+          "sha256": "4c5101b9301ccf380b1115b61b502f4b69c80994801a0b35687bc1db5466d658"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "gitMode": "100644",
+      "bytes": 568,
+      "lineCount": 6,
+      "sha256": "0826f416c4e8aebafc88c3c20dfc30fceb2b3b7f2acf7f2864b4fad13efa367f",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 6,
+          "sha256": "0826f416c4e8aebafc88c3c20dfc30fceb2b3b7f2acf7f2864b4fad13efa367f"
+        }
+      ]
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "gitMode": "100644",
+      "bytes": 10494,
+      "lineCount": 163,
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 10,
+          "sha256": "2bf13e7deb3ed710d4283a11c9734d3df8d44325fc5bc861e738dd31b3495f08"
+        },
+        {
+          "start": 80,
+          "end": 122,
+          "sha256": "a21fc68e436e8d8f6ae1ba4213fb71f7be9ac2d322f8591ebeef78d59306f0d4"
+        },
+        {
+          "start": 136,
+          "end": 163,
+          "sha256": "658120f6b6a78607e09ea1d4b2d50235327a88bc782e297c218ca48aae087926"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/test/authority.test.mjs",
+      "gitMode": "100644",
+      "bytes": 9031,
+      "lineCount": 94,
+      "sha256": "bb4e476adaeb3ba74959e03d28e5afb743a820f42a7426b6669d18f46757759f",
+      "ranges": [
+        {
+          "start": 5,
+          "end": 9,
+          "sha256": "4a62fb7489210f18af2946fb427d108f948dfa6dede606871627df463c7aadc4"
+        },
+        {
+          "start": 10,
+          "end": 54,
+          "sha256": "7e3f2998334114af6b20f538ebf2e9bbf258b83061408c976a0bc7c2990bf4c7"
+        },
+        {
+          "start": 72,
+          "end": 94,
+          "sha256": "40ae2b5a2481fead0b195647f684068a63fb0f048437d73556af60d5e364a939"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/test/intent-journal.test.mjs",
+      "gitMode": "100644",
+      "bytes": 18641,
+      "lineCount": 138,
+      "sha256": "af0a39295cc93078778ee7c782e37438f10009a606fa5fb11cbb641bd541a706",
+      "ranges": [
+        {
+          "start": 7,
+          "end": 27,
+          "sha256": "a50f3f2d7ea90a6b74a2cc13b23fc0a4f12d5ea3df4e7d5c05c783e3f5372395"
+        },
+        {
+          "start": 30,
+          "end": 46,
+          "sha256": "45e89ff86118d1f2cb953c2a6360cba081737a2457200053d4eb0a53d22c8594"
+        },
+        {
+          "start": 48,
+          "end": 81,
+          "sha256": "ecf3e3ec72bee2d820136b870fec2e00871a02c2ea5df46827daafcfccd2dba6"
+        },
+        {
+          "start": 82,
+          "end": 110,
+          "sha256": "761e104d31263e6b92bdb10d5b06803e1ef1dc1e4e91147dd42d122832edeb5c"
+        },
+        {
+          "start": 112,
+          "end": 137,
+          "sha256": "f3dd4412f4b86692570e96c0899ba938434ea5f50877bd874ad082b62e82a84a"
+        }
+      ]
+    },
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "gitMode": "100644",
+      "bytes": 6901,
+      "lineCount": 81,
+      "sha256": "8b748874fb626e680ffd2957a6ccb0f7564754a6307bfee2e98db97b74ed6c4c",
+      "ranges": [
+        {
+          "start": 76,
+          "end": 81,
+          "sha256": "e4438910e10043aede5b48cd1f601a163cb999fc0ed0b6f6640c42026db358f4"
+        }
+      ]
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "gitMode": "100644",
+      "bytes": 12298,
+      "lineCount": 145,
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088",
+      "ranges": [
+        {
+          "start": 34,
+          "end": 81,
+          "sha256": "372ef1d5c3ede27277899b935a9479743f869e6bda9a9302e2ee63949ecaa8ab"
+        },
+        {
+          "start": 96,
+          "end": 143,
+          "sha256": "afca99517cbd1879b7a8816f863f8f39a949eb33675785832aab0e673a268889"
+        }
+      ]
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "gitMode": "100644",
+      "bytes": 11316,
+      "lineCount": 217,
+      "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "ranges": []
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "gitMode": "100644",
+      "bytes": 16843,
+      "lineCount": 259,
+      "sha256": "ffed5657e175961de52eefa5366fd6114ea127314681ad48438925115b10e746",
+      "ranges": []
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "gitMode": "100644",
+      "bytes": 4376,
+      "lineCount": 63,
+      "sha256": "d6c77b681c1e8e32304c8531a4d4447310c82a5c769c46f87ccc2b1b85f361df",
+      "ranges": []
+    },
+    {
+      "path": "apps/web/src/workers/vault.worker.ts",
+      "gitMode": "100644",
+      "bytes": 485,
+      "lineCount": 6,
+      "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e",
+      "ranges": []
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "gitMode": "100644",
+      "bytes": 4574,
+      "lineCount": 76,
+      "sha256": "4ca4039a94c1adad471433aae3e2009d4b78870e7b4a60564794e654a81068f8",
+      "ranges": [
+        {
+          "start": 70,
+          "end": 76,
+          "sha256": "c3453f96a347e44527c27c8c026f5484d1e57d0c9d313bf50b4db45cf2947fd8"
+        }
+      ]
+    },
+    {
+      "path": "packages/security/src/content-policy.ts",
+      "gitMode": "100644",
+      "bytes": 8942,
+      "lineCount": 138,
+      "sha256": "a87bfaf12b16f8545e88be15ead1ff99bc85bb48d3a6c90be8483abe059668a2",
+      "ranges": [
+        {
+          "start": 105,
+          "end": 105,
+          "sha256": "110057c089c5044a97cd180f022df9d1178a37251150ed9df57afd41d2c60101"
+        },
+        {
+          "start": 125,
+          "end": 132,
+          "sha256": "0ccdffbd7f97532db9bfba9c0af1c76d8bc101693995389d2013645609494ada"
+        }
+      ]
+    },
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "gitMode": "100644",
+      "bytes": 2835,
+      "lineCount": 41,
+      "sha256": "6e1d8185b24927c5961395081f82eebb83b3ce5b1e5336a588e20380668d7422",
+      "ranges": [
+        {
+          "start": 24,
+          "end": 29,
+          "sha256": "d2a22fca0afcd479644880a9826ccb7055fd854840e0a8200249a435b92bc7ae"
+        }
+      ]
+    },
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "gitMode": "100644",
+      "bytes": 14913,
+      "lineCount": 276,
+      "sha256": "d8bbb73cb4c3675cd5ef0ab8990f23ca5d2712f94ae167b8fa54b21d010eba46",
+      "ranges": [
+        {
+          "start": 23,
+          "end": 37,
+          "sha256": "c1b3feca216dfe9f311c598deed6478eb8bc435faff3be56673fe93e232b09b3"
+        },
+        {
+          "start": 178,
+          "end": 219,
+          "sha256": "dd65b55a610ae9604862c16eb397736cda9cdb7a967b10035e608a1820270c29"
+        }
+      ]
+    },
+    {
+      "path": "package.json",
+      "gitMode": "100644",
+      "bytes": 1395,
+      "lineCount": 34,
+      "sha256": "e5f8bbebfee3834201ee13b17bcfe531ddef25b9679b4349297ff56a75369707",
+      "ranges": []
+    },
+    {
+      "path": "docs/handoffs/LEAN_RELEASE_SCOPE.md",
+      "gitMode": "100644",
+      "bytes": 4095,
+      "lineCount": 36,
+      "sha256": "d977e56fcd629d6ed6ede36d2a9fa81faa1329f5242df933141e97986c5f000f",
+      "ranges": []
+    },
+    {
+      "path": "docs/reviews/NEXT_DISJOINT_PACKAGE_2026-10-26.md",
+      "gitMode": "100644",
+      "bytes": 4519,
+      "lineCount": 23,
+      "sha256": "72df2d16a7d356a960a7030e893576d66d656dadd00d83bb66ac19b719568da1",
+      "ranges": []
+    },
+    {
+      "path": "docs/reviews/G06_QUALIFICATION_2026-10-26.md",
+      "gitMode": "100644",
+      "bytes": 7794,
+      "lineCount": 37,
+      "sha256": "cf0bad6913e889e14714dde75aa4b758a27bcaaf193fc1273515dc2b590e2afa",
+      "ranges": []
+    },
+    {
+      "path": "security/crypto-inventory.json",
+      "gitMode": "100644",
+      "bytes": 6104,
+      "lineCount": 144,
+      "sha256": "bcd46876b17a32d6befa3ad696a5c155bfc7180cb90a82b23905998cd05dbd3e",
+      "ranges": []
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.4_state_management/spec-client-state-authority.md",
+      "gitMode": "100644",
+      "bytes": 5796,
+      "lineCount": 69,
+      "sha256": "e3aad3d72f9df9036df5df5f922e778b05887c60d3d74957a60a2bcda0ccc875",
+      "ranges": [
+        {
+          "start": 17,
+          "end": 47,
+          "sha256": "b3f6b3016aaeb675ff6e0b4a32b98f447e4be9f0655ca1b99f4741dc3050eacd"
+        },
+        {
+          "start": 59,
+          "end": 69,
+          "sha256": "eb7dac7c6476abed18f5ff7ac077922409afb285a0060868567b04e4f8a1a803"
+        }
+      ]
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.7_transaction_recovery/module_1.7.1_transaction_journal/spec-transaction-lifecycle-journal.md",
+      "gitMode": "100644",
+      "bytes": 9088,
+      "lineCount": 73,
+      "sha256": "7b708d3cba8b92c2b9c5501ef56fffd17d54e422db5451ca091bce1022546cd8",
+      "ranges": [
+        {
+          "start": 41,
+          "end": 51,
+          "sha256": "36b024f63b44b0e2be7c6b2de9cf8ad9581d052a38daa2a1d868fedbf8bd2cd8"
+        },
+        {
+          "start": 55,
+          "end": 73,
+          "sha256": "d61a067a4fd203a0ad7c9e374def158894f37429e862c6fed288a8959693b356"
+        }
+      ]
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md",
+      "gitMode": "100644",
+      "bytes": 9790,
+      "lineCount": 73,
+      "sha256": "5b3bca38ee448439b55b72ef66d794b097176fc71938d1f2e9dfedb166be22d3",
+      "ranges": [
+        {
+          "start": 43,
+          "end": 59,
+          "sha256": "41ac49517a32f3c0545476a1b404cc4e6905434828a52b14446580e534fddc8b"
+        },
+        {
+          "start": 69,
+          "end": 73,
+          "sha256": "b9761fea88e196c1fbac667f6c53953eae46a620497bdf227e1c07e57187fa6d"
+        }
+      ]
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.1_multichain_escrow/module_1.1.1_escrow_state_machine/spec-escrow-contract-interface.md",
+      "gitMode": "100644",
+      "bytes": 5973,
+      "lineCount": 57,
+      "sha256": "0c267423829cfccfe87ac3ad0929f15c40d124946e07d6a8a98b36de810c5fc3",
+      "ranges": [
+        {
+          "start": 20,
+          "end": 43,
+          "sha256": "4c37c2fd4da4d7ea5f8e395ca2f521ab01864cd1f1f80e64a30425b5b48ab112"
+        },
+        {
+          "start": 51,
+          "end": 57,
+          "sha256": "4c9fdea4313733638f94ba609495cee9eafbac6d06994541b51e83c0067337e7"
+        }
+      ]
+    }
+  ],
+  "newRuntimeCode": false,
+  "testsOrBuildsRun": false,
+  "canonicalQueue": {
+    "libraryFileId": "libfile_6351165742388191b28bd157407cf0a6",
+    "lastReportedVersion": 57,
+    "logicalVersion": "V55",
+    "readThisSlice": false,
+    "modifiedThisSlice": false
+  }
+}

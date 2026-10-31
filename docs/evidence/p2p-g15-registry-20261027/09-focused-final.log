@@ -1,0 +1,74 @@
+✔ G11 loads a strict registry only after the exact-byte SHA-256 matches, then serves frozen lookups (16.714575ms)
+✔ G11 digest is checked before parsing; mismatched, malformed or reused-different digests fail closed (5.780086ms)
+✔ G11 rejects encoding, version, size and JSON-shape abuse (10.126828ms)
+✔ G11 rejects bad IDs, duplicates, wrong family pairs, decimals and missing references (19.73392ms)
+✔ G11 rejects mutable deployments and credential-bearing or non-HTTPS endpoints (5.606541ms)
+✔ G15 public-data purpose stays pending and cannot inherit another capability provider acceptance (20.302759ms)
+✔ G15 native P-256 verification matches published RFC6979 public primitive vector (3.303263ms)
+✔ G15 binds canonical manifest, explicit public trust and complete raw asset set without enabling a release (8.153267ms)
+✔ G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain (6.678341ms)
+✔ G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures (4.417897ms)
+✔ G15 rejects malformed or private JWKs without invoking accessors (1.232178ms)
+✔ G15 rejects an off-curve trusted JWK even when its fingerprint matches the envelope label (2.271701ms)
+✔ G15 release identity is the manifest digest, independent of valid ECDSA s representation (3.469477ms)
+✔ G15 canonical wire rejects duplicate/escaped keys, whitespace, reordering, numeric aliases, BOM and malformed UTF-8 (4.100309ms)
+✔ G15 rejects incomplete/unsupported metadata and unresolved deployment schemas (9.835168ms)
+✔ G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence (6.882652ms)
+✔ G15 compares complete asset paths, lengths and raw hashes, including non-text files (4.749817ms)
+✔ G15 signed path inventory rejects traversal, query, case collision, unsorted paths and aggregate overflow (4.653334ms)
+✔ G15 bounds manifest/key/asset counts before allocation or accessor execution (1.544919ms)
+✔ G15 accepts the bounded 10000-entry inventory and refuses the next entry within the manifest byte cap (564.637861ms)
+✔ G15 snapshots caller bytes/metadata/assets before a held asynchronous digest (3.880054ms)
+▶ G15 cancellation/current-generation and late expiry win over a held crypto result
+  ✔ abort (1.363711ms)
+  ✔ generation (1.052052ms)
+  ✔ expiry (0.995168ms)
+  ✔ backward (1.114474ms)
+✔ G15 cancellation/current-generation and late expiry win over a held crypto result (5.367934ms)
+✔ G15 returns fixed errors for thrown callbacks/native failures and cancelled input (1.023249ms)
+✔ G15 cancellation from the last current callback cannot escape as a verified result (2.633464ms)
+▶ G15 fences held importKey results and failures
+  ✔ abort (1.981763ms)
+  ✔ generation (2.833139ms)
+  ✔ expiry (1.271276ms)
+  ✔ native-failure (2.41302ms)
+✔ G15 fences held importKey results and failures (8.996081ms)
+▶ G15 fences held verify results and failures
+  ✔ abort (1.648171ms)
+  ✔ generation (1.563947ms)
+  ✔ expiry (2.632128ms)
+  ✔ native-failure (1.183085ms)
+✔ G15 fences held verify results and failures (7.454211ms)
+▶ G15 fences held asset-digest results and failures
+  ✔ abort (2.204042ms)
+  ✔ generation (1.241761ms)
+  ✔ expiry (1.614963ms)
+  ✔ native-failure (1.915006ms)
+✔ G15 fences held asset-digest results and failures (7.3277ms)
+✔ G15→G11 binds one exact verified asset and release ID to guarded immutable registry lookups (25.679541ms)
+✔ G15→G11 rejects copied/scanned/proxy verification metadata without invoking its accessors (4.228127ms)
+✔ G15→G11 refuses unlisted/wrong-path/modified bytes and malformed or mismatched registry assets (9.393016ms)
+✔ G15→G11 expiry and session revocation fence every lookup and cannot revive if a callback changes back (11.7546ms)
+▶ G15→G11 held load snapshots bytes and withholds the private service if expiry/session changes during hash
+  ✔ caller-mutation (3.827917ms)
+  ✔ expiry (2.781843ms)
+  ✔ generation (2.269368ms)
+  ✔ abort (2.150496ms)
+✔ G15→G11 held load snapshots bytes and withholds the private service if expiry/session changes during hash (12.291696ms)
+▶ G15→G11 nested revocation dominates a callback that restores its state before an outer projection
+  ✔ current/network (1.809229ms)
+  ✔ current/deployment (1.699096ms)
+  ✔ current/post-load (2.435833ms)
+  ✔ clock/network (1.705466ms)
+  ✔ clock/deployment (1.996565ms)
+  ✔ clock/post-load (1.883639ms)
+✔ G15→G11 nested revocation dominates a callback that restores its state before an outer projection (12.810758ms)
+✔ G15→G11 a throwing reentrant clock does not call observers after terminal revocation (2.885606ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 60
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 859.842672

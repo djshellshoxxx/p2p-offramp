@@ -1,0 +1,111 @@
+✔ G15 public-data purpose stays pending and cannot inherit another capability provider acceptance (37.386339ms)
+✔ G15 native P-256 verification matches published RFC6979 public primitive vector (3.237151ms)
+✔ G15 binds canonical manifest, explicit public trust and complete raw asset set without enabling a release (6.235509ms)
+✔ G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain (5.955376ms)
+✔ G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures (3.445476ms)
+✔ G15 rejects malformed or private JWKs without invoking accessors (1.125123ms)
+✔ G15 rejects an off-curve trusted JWK even when its fingerprint matches the envelope label (1.713804ms)
+✔ G15 release identity is the manifest digest, independent of valid ECDSA s representation (3.789607ms)
+✔ G15 canonical wire rejects duplicate/escaped keys, whitespace, reordering, numeric aliases, BOM and malformed UTF-8 (3.222368ms)
+✔ G15 rejects incomplete/unsupported metadata and unresolved deployment schemas (16.478046ms)
+✔ G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence (6.199936ms)
+✔ G15 compares complete asset paths, lengths and raw hashes, including non-text files (7.389667ms)
+✔ G15 signed path inventory rejects traversal, query, case collision, unsorted paths and aggregate overflow (13.096602ms)
+✔ G15 bounds manifest/key/asset counts before allocation or accessor execution (1.814216ms)
+✔ G15 accepts the bounded 10000-entry inventory and refuses the next entry within the manifest byte cap (548.623601ms)
+✔ G15 snapshots caller bytes/metadata/assets before a held asynchronous digest (4.527084ms)
+▶ G15 cancellation/current-generation and late expiry win over a held crypto result
+  ✔ abort (1.801498ms)
+  ✔ generation (1.21549ms)
+  ✔ expiry (1.073315ms)
+  ✔ backward (1.072504ms)
+✔ G15 cancellation/current-generation and late expiry win over a held crypto result (5.850497ms)
+✔ G15 returns fixed errors for thrown callbacks/native failures and cancelled input (1.253098ms)
+✔ G15 cancellation from the last current callback cannot escape as a verified result (2.059588ms)
+▶ G15 fences held importKey results and failures
+  ✔ abort (1.911314ms)
+  ✔ generation (1.4927ms)
+  ✔ expiry (1.137572ms)
+  ✔ native-failure (1.173967ms)
+✔ G15 fences held importKey results and failures (6.203933ms)
+▶ G15 fences held verify results and failures
+  ✔ abort (3.673531ms)
+  ✔ generation (1.536306ms)
+  ✔ expiry (1.520912ms)
+  ✔ native-failure (1.385368ms)
+✔ G15 fences held verify results and failures (8.841225ms)
+▶ G15 fences held asset-digest results and failures
+  ✔ abort (2.333462ms)
+  ✔ generation (1.553382ms)
+  ✔ expiry (1.620574ms)
+  ✔ native-failure (1.92218ms)
+✔ G15 fences held asset-digest results and failures (7.902094ms)
+✖ G15 foreign exceptions from metadata traps are never inspected and stay typed; cancellation wins (0.76638ms)
+✖ G15 revoked and primitive thrown metadata values remain fixed typed refusals (0.392675ms)
+✔ G15→G11 binds one exact verified asset and release ID to guarded immutable registry lookups (25.978894ms)
+✔ G15→G11 rejects copied/scanned/proxy verification metadata without invoking its accessors (6.606306ms)
+✔ G15→G11 refuses unlisted/wrong-path/modified bytes and malformed or mismatched registry assets (20.547262ms)
+✔ G15→G11 expiry and session revocation fence every lookup and cannot revive if a callback changes back (13.160113ms)
+▶ G15→G11 held load snapshots bytes and withholds the private service if expiry/session changes during hash
+  ✔ caller-mutation (3.249229ms)
+  ✔ expiry (2.608769ms)
+  ✔ generation (3.459958ms)
+  ✔ abort (3.209249ms)
+✔ G15→G11 held load snapshots bytes and withholds the private service if expiry/session changes during hash (13.503333ms)
+▶ G15→G11 nested revocation dominates a callback that restores its state before an outer projection
+  ✔ current/network (7.08729ms)
+  ✔ current/deployment (2.091025ms)
+  ✔ current/post-load (3.93717ms)
+  ✔ clock/network (1.865784ms)
+  ✔ clock/deployment (2.626356ms)
+  ✔ clock/post-load (4.114008ms)
+✔ G15→G11 nested revocation dominates a callback that restores its state before an outer projection (22.622007ms)
+✔ G15→G11 a throwing reentrant clock does not call observers after terminal revocation (1.996162ms)
+✖ G15→G11 foreign byte-view trap errors are not inspected; terminal cancellation retains precedence (2.218148ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 55
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 856.608224
+
+✖ failing tests:
+
+test at packages/security/test/release-manifest.test.mjs:222:1
+✖ G15 foreign exceptions from metadata traps are never inspected and stay typed; cancellation wins (0.76638ms)
+  Error: SECRET foreign prototype
+      at Object.getPrototypeOf (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-manifest.test.mjs:226:77)
+      at [Symbol.hasInstance] (<anonymous>)
+      at verifyRelease (file:///workspace/p2p-offramp-pr5-validation/packages/security/src/release-manifest.ts:277:40)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-manifest.test.mjs:229:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at packages/security/test/release-manifest.test.mjs:234:1
+✖ G15 revoked and primitive thrown metadata values remain fixed typed refusals (0.392675ms)
+  TypeError: Cannot perform 'getPrototypeOf' on a proxy that has been revoked
+      at [Symbol.hasInstance] (<anonymous>)
+      at verifyRelease (file:///workspace/p2p-offramp-pr5-validation/packages/security/src/release-manifest.ts:277:40)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-manifest.test.mjs:238:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at packages/security/test/release-registry.test.mjs:125:1
+✖ G15→G11 foreign byte-view trap errors are not inspected; terminal cancellation retains precedence (2.218148ms)
+  Error: SECRET foreign prototype
+      at Object.getPrototypeOf (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:129:77)
+      at [Symbol.hasInstance] (<anonymous>)
+      at createReleaseRegistry (file:///workspace/p2p-offramp-pr5-validation/packages/security/src/release-manifest.ts:315:40)
+      at TestContext.<anonymous> (file:///workspace/p2p-offramp-pr5-validation/packages/security/test/release-registry.test.mjs:132:19)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

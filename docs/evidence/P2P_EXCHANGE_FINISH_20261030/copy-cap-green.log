@@ -1,0 +1,11 @@
+{
+  "qualification": "actual exchange source; mocked crypto/review; no network",
+  "result": {
+    "ok": false,
+    "code": "LIMIT_EXCEEDED"
+  },
+  "inputBytes": 1048576,
+  "copies": 0,
+  "copiedBytes": 0,
+  "state": "taken"
+}

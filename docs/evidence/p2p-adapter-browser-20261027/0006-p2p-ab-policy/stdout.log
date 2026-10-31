@@ -1,0 +1,28 @@
+
+> p2p-offramp@0.1.0 test:build-policy
+> node --test apps/web/scripts/artifact-policy.test.mjs scripts/tests/import-boundaries.test.mjs
+
+✔ build inventory binds exact raw bytes for binary (29.750175ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (9.973205ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (4.285769ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (6.407023ms)
+▶ build inventory includes prototype-looking root filenames
+  ✔ __proto__ (14.33943ms)
+  ✔ constructor (5.558805ms)
+  ✔ toString (5.768928ms)
+✔ build inventory includes prototype-looking root filenames (26.759029ms)
+✔ prototype-looking root filename cannot hide a private-key marker (9.906847ms)
+✔ prototype-looking root filename participates in case-collision refusal (8.50171ms)
+✔ application token policy denies HTML execution while allowing text and React events (6.883987ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.275931ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (0.583499ms)
+✔ G07 import boundaries use the TypeScript AST and report fixture violations without false positives (126.097661ms)
+✔ G07 reports missing application graph entry instead of claiming it was checked (73.464508ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 311.389176

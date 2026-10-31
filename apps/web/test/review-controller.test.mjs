@@ -182,15 +182,20 @@ test('cancel during reading, and a file import superseding a sample, both discar
 });
 
 function persistencePort() {
-  let state = 'unlocked', profileId = 'profile-a';
+  let state = 'unlocked', profileId = 'profile-a', scope = 0, counter = 0;
   const listeners = new Set(), saved = new Map();
   return {
     get profileId() { return state === 'unlocked' ? profileId : null; },
     getSnapshot: () => ({ state }),
+    selectionScope:()=>scope,
     subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
-    change(nextState, nextProfile = profileId) { state = nextState; profileId = nextProfile; for (const listener of listeners) listener(); },
-    async saveTermsReview(id, bytes) { saved.set(id, bytes.slice()); return { ok: true, value: { id } }; },
-    async listTermsReviews() { return { ok: true, value: { entries: [...saved].map(([id, bytes]) => ({ id, bytes: bytes.slice() })) } }; },
+    change(nextState, nextProfile = profileId) { state = nextState; profileId = nextProfile; scope++; for (const listener of listeners) listener(); },
+    async saveTermsReview(_source, bytes) {
+      for(const [recordId,existing] of saved)if(Buffer.from(existing).equals(Buffer.from(bytes)))return {ok:true,value:{recordId}};
+      const recordId=(++counter).toString(16).padStart(32,'0');saved.set(recordId,bytes.slice());return {ok:true,value:{recordId}};
+    },
+    async listTermsReviews() { return { ok: true, value: { items: [...saved].map(([recordId, bytes]) => ({ recordId, source:'file', bytes: bytes.slice() })),skipped:0 } }; },
+    deleteTermsReview:async recordId=>{saved.delete(recordId);return {ok:true,value:{recordId}};},
     saved,
   };
 }
@@ -234,7 +239,7 @@ test('load revalidates every saved document and fails atomically on corrupt term
   assert.equal(trade.getSnapshot().persistence.kind, 'loaded');
   assert.equal(trade.getSnapshot().reviews.length, 2);
   const loaded = trade.getSnapshot().reviews.find(item => item.review.orderId === 'good');
-  assert.equal(loaded.source, 'saved-review'); await trade.save(loaded.localId); assert.equal(port.saved.size, 1, 'loaded record keeps saved id');
+  assert.equal(loaded.loaded, true); await trade.save(loaded.localId); assert.equal(port.saved.size, 1, 'loaded record keeps saved id');
 });
 
 test('persistence refuses unavailable registry and locked profile without invoking vault commands', async () => {
@@ -254,14 +259,14 @@ test('lock and unlocked profile switch clear private memory; late save and late 
   port.saveTermsReview = async (_id, _bytes, inputSignal) => { signal = inputSignal; return save.promise; };
   const saving = trade.save(one.localId); port.change('locked');
   assert.equal(signal.aborted, true); assert.equal(trade.getSnapshot().reviews.length, 0); assert.equal(trade.getSnapshot().persistence.kind, 'idle');
-  save.resolve({ ok: true, value: { id: '11'.repeat(16) } }); await saving;
+  save.resolve({ ok: true, value: { recordId: '11'.repeat(16) } }); await saving;
   assert.equal(trade.getSnapshot().persistence.kind, 'idle');
   port.change('unlocked'); await trade.importFile(file('two')); port.change('unlocked', 'profile-b');
   assert.equal(trade.getSnapshot().reviews.length, 0, 'same-state profile switch must clear');
   const load = deferred(); port.listTermsReviews = () => load.promise;
   const loading = trade.loadSaved(); port.change('locked');
   const lateBytes = new TextEncoder().encode('late-private');
-  load.resolve({ ok: true, value: { entries: [{ id: '33'.repeat(16), bytes: lateBytes }] } }); await loading;
+  load.resolve({ ok: true, value: { items: [{ recordId: '33'.repeat(16),source:'file', bytes: lateBytes }],skipped:0 } }); await loading;
   assert.equal(trade.getSnapshot().reviews.length, 0); assert.ok(lateBytes.every(byte => byte === 0));
 });
 
@@ -273,7 +278,7 @@ test('quota and cancelled save report failure without losing memory; overlapping
   port.saveTermsReview = async () => { calls++; return gate.promise; };
   const pending = trade.save(one.localId); await trade.save(one.localId); await trade.loadSaved(); assert.equal(calls, 1);
   trade.cancel(); assert.equal(trade.getSnapshot().persistence.code, 'UNKNOWN_OUTCOME');
-  gate.resolve({ ok: true, value: { id: '11'.repeat(16) } }); await pending;
+  gate.resolve({ ok: true, value: { recordId: '11'.repeat(16) } }); await pending;
   assert.equal(trade.getSnapshot().persistence.code, 'UNKNOWN_OUTCOME'); assert.ok(trade.find(one.localId));
 });
 
