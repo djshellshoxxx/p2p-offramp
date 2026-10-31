@@ -208,8 +208,9 @@ try {
   pass('owner signing refuses a non-Sepolia registry, a deployment not recorded after finality or not matching its record, and more than 30 days');
 
   // Verification by the app's verifier: real-Sepolia identity by default, then the local stand-in.
-  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60 })).error.code, 'NETWORK_NOT_SEPOLIA', 'real-Sepolia identity by default');
-  const check = (nowSeconds = () => now + 60) => verifySepoliaRelease({ root, nowSeconds, expectGenesis: genesisHash });
+  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60, pinnedKeyId: owner.keyId })).error.code, 'NETWORK_NOT_SEPOLIA', 'real-Sepolia identity by default');
+  const check = (nowSeconds = () => now + 60) => verifySepoliaRelease({ root, nowSeconds, expectGenesis: genesisHash, pinnedKeyId: owner.keyId });
+  assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60, expectGenesis: genesisHash })).error.code, 'KEY_UNPINNED', 'ordinary verifier cannot accept a self-supplied fixture root');
   const verified = await check();
   assert.equal(verified.ok, true, JSON.stringify(verified));
   assert.equal(verified.value.escrow, record.contractAddress); assert.equal(verified.value.runtimeKeccak, record.codeDigest.runtime);

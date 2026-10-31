@@ -14,17 +14,12 @@ export const SEPOLIA_NETWORK = Object.freeze({
   genesisHash: '0x25a5cc106eea7138acab33231d7160d69cb777ee0c2c553fcddf5138993e6dd9', environment: 'testnet',
 } as const);
 
-/**
- * keyId (sha256 of the public key) of the owner's testnet release key. Pinning it in code means that replacing the key
- * file, registry, manifest and envelope together in one commit cannot change the trust root. It is null until the owner
- * runs `keygen` and supplies the public key; until then the key file is only checked to be self-consistent, which pins
- * nothing, and the build reports `keyPinned: false`.
- */
+/** Owner-approved testnet release keyId. Null means no trust root is configured: every ordinary path refuses. */
 export const SEPOLIA_RELEASE_KEY_ID: string | null = null;
 
-/** True when `keyId` is the pinned owner key, or when no key is pinned yet (see SEPOLIA_RELEASE_KEY_ID). */
+/** True only for a well-formed keyId equal to an independently configured nonnull pin. */
 export function isPinnedReleaseKey(keyId: string, pinned: string | null = SEPOLIA_RELEASE_KEY_ID): boolean {
-  return pinned === null || keyId === pinned;
+  return typeof pinned === 'string' && /^[0-9a-f]{64}$/.test(pinned) && keyId === pinned;
 }
 
 /** `genesisHash` is overridable only by local proofs on a node started with Sepolia's chain id. */

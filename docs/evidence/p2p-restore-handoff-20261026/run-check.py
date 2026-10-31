@@ -1,10 +1,13 @@
 from pathlib import Path
 from datetime import datetime, timezone
-import hashlib, json, os, subprocess, sys
+import hashlib, json, os, re, subprocess, sys
 
 repo = Path('/workspace/p2p-offramp-pr5-validation')
 out = Path(__file__).resolve().parent
 name, *command = sys.argv[1:]
+# A capture label is one portable filename component, never an output path.
+if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', name) is None:
+    raise SystemExit('Invalid capture label.')
 paths = ['apps/web/src/ui/App.tsx', 'apps/web/src/ui/Pages.tsx', 'apps/web/src/ui/VaultForms.tsx',
          'apps/web/src/ui/messages.ts', 'scripts/test-web-build-browser.mjs']
 def hashes():

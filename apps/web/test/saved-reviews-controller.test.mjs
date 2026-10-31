@@ -68,6 +68,24 @@ test('saved bytes that no longer pass review are listed by record id for deletio
   assert.equal(store.rows.size, 0); assert.deepEqual(trade.getSnapshot().unreviewable, []);
 });
 
+test('a mixed saved load publishes each valid review and refuses invalid records in either listing order without rewriting originals', async () => {
+  for (const texts of [['ok:valid', 'bad:EXPIRED'], ['bad:EXPIRED', 'ok:valid']]) {
+    const store = memoryStore(), trade = await controller();
+    for (const text of texts) await store.saveTermsReview('file', enc(text));
+    const original = [...store.rows].map(([id, row]) => [id, { source: row.source, bytes: row.bytes.slice() }]);
+    const invalidId = [...store.rows].find(([, row]) => dec(row.bytes) === 'bad:EXPIRED')[0];
+    try {
+      await trade.loadSaved(store);
+      assert.deepEqual(trade.getSnapshot().reviews.map(item => item.review.orderId), ['valid']);
+      assert.deepEqual(trade.getSnapshot().unreviewable, [{ recordId: invalidId, code: 'EXPIRED' }]);
+      assert.deepEqual(trade.getSnapshot().saved, { kind: 'failed', action: 'load', code: 'INVALID_SAVED_REVIEW' });
+      assert.deepEqual([...store.rows], original, 'loading neither rewrites nor deletes either encrypted record');
+      assert.equal(trade.getSnapshot().reviews[0].loaded, true);
+      assert.equal(dec(trade.getSnapshot().reviews[0].bytes), 'ok:valid');
+    } finally { trade.dispose(); }
+  }
+});
+
 test('forgetSaved (lock or profile switch) drops loaded reviews, unmarks session ones and resets the job link', async () => {
   const store = memoryStore(), trade = await controller();
   await store.saveTermsReview('file', enc('ok:loaded'));

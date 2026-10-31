@@ -24,6 +24,7 @@ function JobStatus({ snapshot }: { readonly snapshot: TradeReviewSnapshot }) {
 /** Names the trusted source of the loaded registry: synthetic demo data, or the owner-signed Sepolia testnet registry. */
 function RegistryBanner({ registry }: { readonly registry: Extract<TradeReviewSnapshot['registry'], { kind: 'ready' }> }) {
   if (registry.label === 'synthetic-demo') return <p className="warning" role="note">{p.demoBanner}</p>;
+  if (registry.label === 'sepolia-local-proof') return registry.trust ? <p className="warning" role="note">{p.testnetLocalProofBanner(registry.trust.keyId, registry.trust.sequence, registry.trust.expiresAt)}</p> : null;
   return registry.trust ? <p className="warning" role="note">{p.testnetBanner(registry.trust.keyId, registry.trust.sequence, registry.trust.expiresAt)}</p> : null;
 }
 

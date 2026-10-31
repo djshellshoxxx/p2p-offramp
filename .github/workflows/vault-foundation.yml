@@ -33,6 +33,7 @@ jobs:
       - run: npm test
       - run: npm run check:boundaries
       - run: npm run test:build-policy
+      - run: npm run test:diagnostics
       - run: npm run test:fuzz
       - run: npm run build
   browser:

@@ -22,6 +22,7 @@ export function App({ services, starting = false, startupError, trade = null }: 
   const tradeSnapshot = useTradeReview(trade);
   const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
   const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
+  const testnetLocalProof = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-local-proof';
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
@@ -88,7 +89,7 @@ export function App({ services, starting = false, startupError, trade = null }: 
       <header className="status-bar">
         <div><strong>{m.fundsDisabled}</strong><span>{m.networkDisabled}</span><span>{online ? m.online : m.offline}</span>
           {syntheticDemo ? <strong className="demo-badge">{m.syntheticDemo}</strong> : null}
-          {testnet ? <strong className="demo-badge">{m.testnet}</strong> : null}</div>
+          {testnetLocalProof ? <strong className="demo-badge">{m.testnetLocalProof}</strong> : null}{testnet ? <strong className="demo-badge">{m.testnet}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
           {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === m.locking}>{m.lock}</button> : null}

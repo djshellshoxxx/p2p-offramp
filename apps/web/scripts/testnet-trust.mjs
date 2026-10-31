@@ -3,7 +3,7 @@
  * the registry and its signed G15 manifest from the repository, verifies them with the app's own verifier before the
  * build starts, and returns the bundle the build embeds. Missing or invalid inputs stop the build (fail closed).
  * `verifyTestnetTrust` is the single verifier shared with scripts/sepolia (sepolia:verify and the trade tool): the
- * signature, the keyId (pinned once SEPOLIA_RELEASE_KEY_ID is set), the registry asset and the Sepolia-only network rule are checked the same way everywhere.
+ * signature, the independently pinned keyId (an unset pin refuses verification), the registry asset and the Sepolia-only network rule are checked the same way everywhere.
  */
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -34,14 +34,16 @@ async function acceptedRelease(root) {
 }
 
 /**
- * Verifies the trust files under `root`: G15 signature by the trusted key, its keyId (and SEPOLIA_RELEASE_KEY_ID when set), the registry asset, then
+ * Verifies the trust files under `root`: G15 signature by the independently pinned key, its keyId, the registry asset, then
  * the Sepolia-only rule. When a release was accepted before (TESTNET_ACCEPTED_FILE), a lower sequence, or another
  * manifest at the accepted sequence, is RELEASE_ROLLBACK (G25 §4.3). Never throws for bad input; failure codes are
- * MISSING, JSON, ACCEPTED_INVALID, KEY_ID, NETWORK or a G15 code.
+ * KEY_UNPINNED, MISSING, JSON, ACCEPTED_INVALID, KEY_ID, NETWORK or a G15 code.
  * `genesisHash` is overridable only by local proofs on a node started with Sepolia's chain id.
  */
 export async function verifyTestnetTrust(root, { nowSeconds = () => Math.floor(Date.now() / 1000), highestSequence = 0, genesisHash, pinnedKeyId = SEPOLIA_RELEASE_KEY_ID } = {}) {
   const failed = code => ({ ok: false, error: { code } });
+  if (pinnedKeyId === null) return failed('KEY_UNPINNED');
+  if (!isPinnedReleaseKey(pinnedKeyId, pinnedKeyId)) return failed('KEY_ID');
   let key, registry, manifest, envelope;
   try {
     [key, registry, manifest, envelope] = await Promise.all(Object.values(TESTNET_TRUST_FILES).map(path => readFile(resolve(root, path))));

@@ -60,10 +60,10 @@ function signDigest(key, digestHex) {
   return Uint8Array.from([...raw.subarray(1), raw[0] + 27]);
 }
 
-async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis }) {
+async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis, pinnedKeyId }) {
   const registryBytes = new Uint8Array(await readFile(resolve(root, REGISTRY_ASSET)));
   let signed;
-  try { signed = await loadVerifiedRegistry({ root, expectGenesis, ...(nowSeconds ? { nowSeconds } : {}) }); }
+  try { signed = await loadVerifiedRegistry({ root, expectGenesis, ...(nowSeconds ? { nowSeconds } : {}), ...(pinnedKeyId !== undefined ? { pinnedKeyId } : {}) }); }
   catch (error) { signed = { ok: false, error: { code: error?.code === 'ENOENT' ? 'RELEASE_MISSING' : 'RELEASE_UNREADABLE' } }; }
   if (signed.ok) return { lookup: signed.value.registry, trust: { verified: true, keyId: signed.value.keyId, sequence: signed.value.sequence, manifestSha256: signed.value.manifestSha256 } };
   if (requireSignedRegistry) fail(`REGISTRY_NOT_VERIFIED_${signed.error.code}`);
@@ -82,7 +82,7 @@ async function saveState(path, state) {
 }
 
 export async function runTrades({
-  env = process.env, root = ROOT, run, statePath, amountWei = 10n ** 14n, expectGenesis = SEPOLIA.genesisHash, requireSignedRegistry = true,
+  env = process.env, root = ROOT, run, statePath, amountWei = 10n ** 14n, expectGenesis = SEPOLIA.genesisHash, requireSignedRegistry = true, pinnedKeyId,
   wait = false, waitFinalized = false, maxWaitSeconds = 3600, pollSeconds = 15, advanceTime, nowSeconds, log = () => {},
   /** eth_getLogs range per request: hosted providers cap the span, so wide ranges are paged. */
   logChunk = 2000,
@@ -96,7 +96,7 @@ export async function runTrades({
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
   if (identity.genesisHash !== expectGenesis) fail('WRONG_GENESIS');
 
-  const { lookup, trust } = await loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis });
+  const { lookup, trust } = await loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis, pinnedKeyId });
   const network = lookup.network(NETWORK_ID), deployment = lookup.deployment(NETWORK_ID, DEPLOYMENT_ID);
   if (!network || !deployment || network.chainIdentity !== SEPOLIA.chainId.toString() || network.genesisHash !== identity.genesisHash) fail('REGISTRY_NETWORK_MISMATCH');
   if (!deployment.supportedAssetIds.includes('native')) fail('REGISTRY_ASSET_UNSUPPORTED');
@@ -133,6 +133,10 @@ export async function runTrades({
   if (state) {
     if (state.escrow !== escrow || state.seller !== seller || state.buyer !== buyer || state.genesisHash !== identity.genesisHash ||
         state.amountWei !== amountWei.toString() || !Array.isArray(state.trades)) fail('STATE_MISMATCH');
+    // Labels are protocol slots, never output path components supplied by an editable saved state.
+    // Check even planned trades before negotiation can write a terms-review document.
+    if (state.trades.length !== 2 || state.trades.some(trade => trade?.label !== 'release' && trade?.label !== 'refund') ||
+        new Set(state.trades.map(trade => trade.label)).size !== 2) fail('STATE_MISMATCH');
     for (const trade of state.trades) if (trade?.status !== 'planned') await checkStoredTrade(trade);
   } else {
     state = { format: 'p2p-offramp/sepolia-trade-run/v1', run, network: NETWORK_ID, chainId: domain.chainId, genesisHash: identity.genesisHash, escrow,

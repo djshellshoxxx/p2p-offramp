@@ -37,11 +37,13 @@ function base64url(input: unknown): Uint8Array {
 
 /**
  * Registry source for the embedded bundle; `nowSeconds` is injectable for tests and defaults to the device clock.
- * `pinnedKeyId` defaults to SEPOLIA_RELEASE_KEY_ID; a bundle signed by any other key fails once that is set.
+ * `pinnedKeyId` defaults to SEPOLIA_RELEASE_KEY_ID; an unset or mismatched pin fails.
+ * The explicit localProof argument labels test-owned fixture composition; it grants no release authority.
  */
-export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number, pinnedKeyId: string | null = SEPOLIA_RELEASE_KEY_ID): RegistrySource {
+export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number, pinnedKeyId: string | null = SEPOLIA_RELEASE_KEY_ID, localProof = false): RegistrySource {
   return async () => {
     try {
+      if (pinnedKeyId === null || !isPinnedReleaseKey(pinnedKeyId, pinnedKeyId)) return { kind: 'failed' };
       const raw = plainObject(bundle, ['format', 'keyId', 'publicKey', 'registry', 'manifest', 'envelope']);
       if (raw.format !== TESTNET_TRUST_FORMAT || typeof raw.keyId !== 'string' || !/^[0-9a-f]{64}$/.test(raw.keyId)) return { kind: 'failed' };
       const registryBytes = base64url(raw.registry), manifestBytes = base64url(raw.manifest);
@@ -57,7 +59,7 @@ export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number
         network: (id: string) => { const network = guarded.network(id); return isSepolia(network) ? network : null; },
         deployment: (networkId: string, deploymentId: string) => registry.network(networkId) ? guarded.deployment(networkId, deploymentId) : null,
       });
-      return { kind: 'ready', label: 'sepolia-testnet', registry, samples: [],
+      return { kind: 'ready', label: localProof ? 'sepolia-local-proof' : 'sepolia-testnet', registry, samples: [],
         trust: Object.freeze({ keyId: raw.keyId, sequence: verified.value.manifest.sequence, expiresAt: verified.value.manifest.expiresAt }) };
     } catch { return { kind: 'failed' }; }
   };

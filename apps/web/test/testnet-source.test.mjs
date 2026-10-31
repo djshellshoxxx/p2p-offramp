@@ -4,7 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { sepoliaRegistrySource, TESTNET_TRUST_FORMAT as RUNTIME_FORMAT } from '../src/testnet/sepolia-source.ts';
-import { loadTestnetTrust, TESTNET_TRUST_FORMAT, TESTNET_TRUST_FILES } from '../scripts/testnet-trust.mjs';
+import { loadTestnetTrust, verifyTestnetTrust, TESTNET_TRUST_FORMAT, TESTNET_TRUST_FILES } from '../scripts/testnet-trust.mjs';
 import { fixtureRegistry, fixtureTermsDocument, FIXTURE_ESCROW, writeTestnetTrust } from '../../../scripts/lib/testnet-fixture.mjs';
 import { reviewTermsBytes } from '../../../packages/domain/index.ts';
 
@@ -20,9 +20,9 @@ test('build-time and runtime agree on the bundle format', () => assert.equal(RUN
 
 test('a verified bundle yields a ready, testnet-only registry that the app terms review accepts', async t => {
   const { root, keyId, expiresAt } = await trustRoot(t);
-  const { bundle, summary } = await loadTestnetTrust(root);
+  const { bundle, summary } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
   assert.equal(summary.keyId, keyId); assert.equal(summary.expiresAt, expiresAt); assert.equal(summary.sequence, 1);
-  const result = await sepoliaRegistrySource(structuredClone(bundle))();
+  const result = await sepoliaRegistrySource(structuredClone(bundle), undefined, keyId)();
   assert.equal(result.kind, 'ready'); assert.equal(result.label, 'sepolia-testnet'); assert.deepEqual(result.samples, []);
   assert.deepEqual(result.trust, { keyId, sequence: 1, expiresAt });
   assert.equal(result.registry.deployment('sepolia', 'escrow-sepolia-v1').address, FIXTURE_ESCROW);
@@ -33,32 +33,32 @@ test('a verified bundle yields a ready, testnet-only registry that the app terms
 });
 
 test('runtime refuses an expired manifest, a swapped key id, altered bytes and malformed bundles (fail closed)', async t => {
-  const { root, expiresAt } = await trustRoot(t);
-  const { bundle } = await loadTestnetTrust(root);
-  assert.deepEqual(await sepoliaRegistrySource(bundle, () => expiresAt)(), { kind: 'failed' }, 'expired at runtime');
-  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, keyId: 'f'.repeat(64) })(), { kind: 'failed' });
+  const { root, keyId, expiresAt } = await trustRoot(t);
+  const { bundle } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
+  assert.deepEqual(await sepoliaRegistrySource(bundle, () => expiresAt, keyId)(), { kind: 'failed' }, 'expired at runtime');
+  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, keyId: 'f'.repeat(64) }, undefined, keyId)(), { kind: 'failed' });
   const registry = Buffer.from(bundle.registry, 'base64url'); registry[registry.length - 3] ^= 1;
-  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, registry: registry.toString('base64url') })(), { kind: 'failed' });
+  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, registry: registry.toString('base64url') }, undefined, keyId)(), { kind: 'failed' });
   for (const bad of [null, undefined, 'x', [], { ...bundle, format: 'other' }, { ...bundle, extra: 1 }, (({ envelope, ...rest }) => rest)(bundle),
     { ...bundle, manifest: '!!' }, Object.assign(Object.create({ inherited: true }), bundle)]) {
-    assert.deepEqual(await sepoliaRegistrySource(bad)(), { kind: 'failed' });
+    assert.deepEqual(await sepoliaRegistrySource(bad, undefined, keyId)(), { kind: 'failed' });
   }
 });
 
 test('a signed registry naming a non-testnet network is never served by the testnet build', async t => {
-  const { root } = await trustRoot(t, { registry: fixtureRegistry({ environment: 'mainnet' }) });
-  await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_INVALID: NETWORK/);
+  const { root, keyId } = await trustRoot(t, { registry: fixtureRegistry({ environment: 'mainnet' }) });
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: NETWORK/);
 });
 
 test('build-time loader fails closed on missing files, a tampered registry and an expired manifest', async t => {
-  const { root, expiresAt } = await trustRoot(t);
-  await assert.rejects(loadTestnetTrust(root, { nowSeconds: () => expiresAt }), /TESTNET_TRUST_INVALID: MANIFEST_EXPIRED/);
+  const { root, keyId, expiresAt } = await trustRoot(t);
+  await assert.rejects(loadTestnetTrust(root, { nowSeconds: () => expiresAt, pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: MANIFEST_EXPIRED/);
   const registryPath = resolve(root, TESTNET_TRUST_FILES.registry);
   const original = await readFile(registryPath, 'utf8');
   await writeFile(registryPath, original.replace(FIXTURE_ESCROW, `0x${'6f'.repeat(20)}`));
-  await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_INVALID: ASSET_MISMATCH/);
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: ASSET_MISMATCH/);
   await rm(registryPath);
-  await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_MISSING/);
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_MISSING/);
 });
 
 const MAINNET = { id: 'ethereum', chain: 'evm', chainIdentity: '1', genesisHash: '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3',
@@ -83,19 +83,38 @@ test('a signed registry that is not exactly Sepolia (chain id and genesis) is re
     'Sepolia under another network id': [{ ...sepolia, id: 'sepolia-alt' }],
   };
   for (const [name, networks] of Object.entries(cases)) {
-    const { root } = await trustRoot(t, { registry: { ...fixtureRegistry(), networks } });
-    await assert.rejects(loadTestnetTrust(root), /TESTNET_TRUST_INVALID: NETWORK/, name);
-    assert.deepEqual(await sepoliaRegistrySource(await rawBundle(root))(), { kind: 'failed' }, name);
+    const { root, keyId } = await trustRoot(t, { registry: { ...fixtureRegistry(), networks } });
+    await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: NETWORK/, name);
+    assert.deepEqual(await sepoliaRegistrySource(await rawBundle(root), undefined, keyId)(), { kind: 'failed' }, name);
   }
 });
 
-test('a pinned release keyId refuses any other key at build time and at runtime; unpinned builds say so', async t => {
+test('a pinned release keyId refuses any other key at build time and at runtime; an unset pin blocks builds', async t => {
   const { root, keyId } = await trustRoot(t);
   const other = 'e'.repeat(64);
-  assert.equal((await loadTestnetTrust(root)).summary.keyPinned, false, 'SEPOLIA_RELEASE_KEY_ID is null until the owner supplies a key');
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: null }), /TESTNET_TRUST_INVALID: KEY_UNPINNED/);
   const { bundle, summary } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
   assert.equal(summary.keyPinned, true);
   assert.equal((await sepoliaRegistrySource(structuredClone(bundle), undefined, keyId)()).kind, 'ready');
   await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: other }), /TESTNET_TRUST_INVALID: KEY_ID/);
   assert.deepEqual(await sepoliaRegistrySource(structuredClone(bundle), undefined, other)(), { kind: 'failed' });
+});
+
+
+test('an unset owner pin blocks substituted self-consistent bundles at build, runtime and CLI acceptance', async t => {
+  const first = await trustRoot(t), second = await trustRoot(t);
+  assert.notEqual(first.keyId, second.keyId, 'independent ephemeral fixture keys');
+  const { verifySepoliaRelease, acceptSepoliaRelease } = await import('../../../scripts/sepolia/verify-release.mjs');
+  for (const fixture of [first, second]) {
+    assert.deepEqual(await verifyTestnetTrust(fixture.root), { ok: false, error: { code: 'KEY_UNPINNED' } });
+    await assert.rejects(loadTestnetTrust(fixture.root), /^Error: TESTNET_TRUST_INVALID: KEY_UNPINNED$/);
+    assert.deepEqual(await sepoliaRegistrySource(await rawBundle(fixture.root))(), { kind: 'failed' });
+    const unpinned = await verifySepoliaRelease({ root: fixture.root });
+    assert.deepEqual(unpinned, { ok: false, error: { code: 'KEY_UNPINNED' } });
+    await assert.rejects(acceptSepoliaRelease(unpinned, { root: fixture.root }), /^Error: NOT_VERIFIED$/);
+  }
+  assert.equal((await verifyTestnetTrust(first.root, { pinnedKeyId: first.keyId })).ok, true);
+  assert.deepEqual(await verifyTestnetTrust(second.root, { pinnedKeyId: first.keyId }), { ok: false, error: { code: 'KEY_ID' } });
+  assert.deepEqual(await sepoliaRegistrySource(await rawBundle(second.root), undefined, first.keyId)(), { kind: 'failed' });
+  assert.equal((await verifySepoliaRelease({ root: second.root, pinnedKeyId: second.keyId })).ok, true, 'explicit fixture pin is library composition only');
 });

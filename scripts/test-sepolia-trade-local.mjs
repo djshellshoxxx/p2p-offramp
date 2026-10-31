@@ -102,15 +102,16 @@ try {
   const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now: Math.floor(Date.now() / 1000) - 60, root, sourceCommit: 'b'.repeat(40), expectGenesis: genesisHash });
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
   await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope));
-  await assert.rejects(runTrades({ env, root, run: 'wrong-genesis' }), code('WRONG_GENESIS'));
-  await assert.rejects(runTrades({ env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: SELLER_KEY }, root, run: 'same-party', expectGenesis: genesisHash }), code('BUYER_EQUALS_SELLER'));
-  await assert.rejects(runTrades({ env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: '' }, root, run: 'no-buyer', expectGenesis: genesisHash }), code('BUYER_KEY_MISSING'));
-  await assert.rejects(runTrades({ env, root, run: 'Bad Id', expectGenesis: genesisHash }), code('RUN_ID_INVALID'));
+  await assert.rejects(runTrades({ env, root, run: 'key-unpinned', expectGenesis: genesisHash }), code('REGISTRY_NOT_VERIFIED_KEY_UNPINNED'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'wrong-genesis' }), code('WRONG_GENESIS'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: SELLER_KEY }, root, run: 'same-party', expectGenesis: genesisHash }), code('BUYER_EQUALS_SELLER'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: '' }, root, run: 'no-buyer', expectGenesis: genesisHash }), code('BUYER_KEY_MISSING'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'Bad Id', expectGenesis: genesisHash }), code('RUN_ID_INVALID'));
   assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), '0x1', 'only the deployment was sent');
   pass('refuses an unverified registry, wrong genesis, buyer = seller, missing buyer key and a bad run id before sending anything');
 
   // Run 1: release trade settles; refund trade is funded and waits for its deadline.
-  const first = await runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash });
+  const first = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash });
   const statePath = first.path;
   assert.equal((await stat(statePath)).mode & 0o777, 0o600, 'trade state (payment instructions, signatures) is owner-only');
   for (const name of (await readdir(resolve(statePath, '..'))).filter(entry => entry.endsWith('.terms-review.json'))) {
@@ -136,7 +137,7 @@ try {
     acceptance: recorded.trades[1].acceptance, fund: { requestedAt: recorded.trades[1].fund.requestedAt, tx: null } };
   await writeFile(statePath, JSON.stringify(recorded));
   await advanceTime(901); // past acceptBefore (negotiation + 900 s), still before the refund deadline (negotiation + 2700 s)
-  const resumed = await runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash });
+  const resumed = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash });
   assert.equal(resumed.state.trades[1].fund.tx, lostHash, 'the fund transaction is recovered from the escrow logs');
   assert.equal(resumed.state.trades[1].status, 'awaiting-deadline');
   for (const check of ['escrow record and Funded event match the signed terms', 'replay: funding the same terms again: reverts TradeIdUsed',
@@ -145,7 +146,7 @@ try {
   pass('a crash between broadcast and save, resumed after the acceptance window, recovers the funding and runs the replay controls at the funding block');
 
   // Run 2 with time advanced past the deadline: refund settles to the seller.
-  const second = await runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash, wait: true, advanceTime, pollSeconds: 0 });
+  const second = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash, wait: true, advanceTime, pollSeconds: 0 });
   const settled = second.state.trades[1];
   assert.equal(settled.status, 'refunded');
   for (const check of ['expiry control (after deadline): release: reverts DeadlinePassed', 'seller balance rose by exactly the principal minus the refund fee in the refund block',
@@ -157,7 +158,7 @@ try {
   const settledState = JSON.parse(await readFile(statePath, 'utf8'));
   settledState.trades[0].settle.blockHash = `0x${'00'.repeat(32)}`;
   await writeFile(statePath, JSON.stringify(settledState));
-  const rechecked = await runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash });
+  const rechecked = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash });
   assert.deepEqual(rechecked.state.trades.map(trade => trade.status), ['released', 'refunded']);
   assert.equal(rechecked.state.trades[0].settle.reincluded, true);
   assert.equal(rechecked.state.trades[0].settle.blockHash, (await rpc('eth_getTransactionReceipt', [rechecked.state.trades[0].settle.tx])).blockHash);
@@ -171,14 +172,14 @@ try {
   const cappedEnv = { ...env, SEPOLIA_RPC_URL: capped.url };
   const interrupted = new Error('interrupted before settlement');
   let interruptions = 0;
-  await assert.rejects(runTrades({ env: cappedEnv, root, run: 'late-release', expectGenesis: genesisHash, logChunk: 3,
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: cappedEnv, root, run: 'late-release', expectGenesis: genesisHash, logChunk: 3,
     beforeSettle: async trade => { if (trade.label === 'release' && interruptions++ === 0) throw interrupted; } }), error => error === interrupted);
   const lateState = JSON.parse(await readFile(resolve(root, 'docs/deployments/sepolia/trades/late-release.json'), 'utf8'));
   assert.deepEqual(lateState.trades.map(trade => trade.status), ['funded', 'awaiting-deadline'], 'the refund trade ran despite the release trade failing');
   assert.equal(lateState.trades[0].lastError.code, 'FAILED');
   assert.ok(lateState.trades.every(trade => /^[0-9]+$/.test(trade.fromBlock)), 'each trade records its own lower log bound');
   await advanceTime(7300);
-  const late = await runTrades({ env: cappedEnv, root, run: 'late-release', expectGenesis: genesisHash, logChunk: 3, wait: true, advanceTime, pollSeconds: 0 });
+  const late = await runTrades({ pinnedKeyId: owner.keyId, env: cappedEnv, root, run: 'late-release', expectGenesis: genesisHash, logChunk: 3, wait: true, advanceTime, pollSeconds: 0 });
   assert.deepEqual(late.state.trades.map(trade => trade.status), ['refunded-after-release-deadline', 'refunded']);
   for (const check of ['release window missed (deadline too close or passed): settled by refund after the deadline', 'expiry control (after deadline): release: reverts DeadlinePassed',
     'Refunded event pays the right party the exact principal']) assert.ok(late.state.trades[0].checks.includes(check), check);
@@ -188,7 +189,7 @@ try {
   // A release that passes simulation but is mined after the deadline reverts on chain: the transaction is recorded with
   // its hash (TX_REVERTED), never reported as "nothing sent", and the next run settles the trade by refund.
   const nonceBeforeRevert = BigInt(await rpc('eth_getTransactionCount', [SELLER, 'latest']));
-  await assert.rejects(runTrades({ env, root, run: 'revert-after-broadcast', expectGenesis: genesisHash,
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'revert-after-broadcast', expectGenesis: genesisHash,
     beforeSettle: async trade => {
       if (trade.label !== 'release') return;
       const deadline = Number(trade.terms.escrowExpirySeconds);
@@ -208,7 +209,7 @@ try {
   assert.equal((await rpc('eth_getTransactionReceipt', [failedRelease.tx])).status, '0x0', 'the recorded transaction really reverted on chain');
   assert.equal(reverted.trades[0].status, 'funded'); assert.equal(reverted.trades[0].lastError.code, 'TX_REVERTED');
   assert.equal(reverted.trades[1].status, 'awaiting-deadline', 'the refund trade ran despite the failed release');
-  const recovered = await runTrades({ env, root, run: 'revert-after-broadcast', expectGenesis: genesisHash, wait: true, advanceTime, pollSeconds: 0 });
+  const recovered = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'revert-after-broadcast', expectGenesis: genesisHash, wait: true, advanceTime, pollSeconds: 0 });
   assert.deepEqual(recovered.state.trades.map(trade => trade.status), ['refunded-after-release-deadline', 'refunded']);
   assert.equal(BigInt(await rpc('eth_getTransactionCount', [SELLER, 'latest'])), nonceBeforeRevert + 5n, 'fund, failed release, fund, refund, refund');
   pass('a release mined after its deadline is recorded as TX_REVERTED with its hash, and the next run refunds the trade');
@@ -216,7 +217,7 @@ try {
   // A lapsed acceptance window is an honest terminal outcome: nothing is funded.
   const nonceBefore = await rpc('eth_getTransactionCount', [SELLER, 'latest']);
   let lapsed = false;
-  const expired = await runTrades({ env, root, run: 'lapsed', expectGenesis: genesisHash,
+  const expired = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'lapsed', expectGenesis: genesisHash,
     beforeFund: async trade => { if (trade.label === 'release' && !lapsed) { lapsed = true; await advanceTime(901); } } });
   assert.equal(expired.state.trades[0].status, 'expired-unfunded');
   assert.equal(expired.state.trades[0].fund, undefined);
@@ -228,14 +229,14 @@ try {
   const lapsedPath = resolve(root, 'docs/deployments/sepolia/trades/lapsed.json');
   const wrong = JSON.parse(await readFile(lapsedPath, 'utf8')); wrong.trades[1].status = 'expired-unfunded';
   await writeFile(lapsedPath, JSON.stringify(wrong));
-  const reprocessed = await runTrades({ env, root, run: 'lapsed', expectGenesis: genesisHash });
+  const reprocessed = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'lapsed', expectGenesis: genesisHash });
   assert.deepEqual(reprocessed.state.trades.map(trade => trade.status), ['expired-unfunded', 'awaiting-deadline']);
   assert.ok(reprocessed.state.trades[1].checks.includes('re-observed funded for a trade recorded as expired-unfunded: processing again'));
   pass('a terminal status that the chain contradicts is re-observed and processed again');
 
   // A negotiated trade is re-validated from the state file before any transaction: edited terms are refused.
   const crash = new Error('crash after negotiation, before funding');
-  await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash, beforeFund: async () => { throw crash; } }), error => error === crash);
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'tamper', expectGenesis: genesisHash, beforeFund: async () => { throw crash; } }), error => error === crash);
   const tamperPath = resolve(root, 'docs/deployments/sepolia/trades/tamper.json');
   const negotiated = JSON.parse(await readFile(tamperPath, 'utf8'));
   assert.equal(negotiated.trades[0].status, 'negotiated');
@@ -246,24 +247,24 @@ try {
     trade => { trade.acceptance.buyer = trade.acceptance.seller; }, trade => { trade.privateAgreement.fiatMinorUnits = '999'; }]) {
     const edited = structuredClone(negotiated); change(edited.trades[0]); edited.trades[0].tradeId = evmTermsHash(domain, edited.trades[0].terms);
     await writeFile(tamperPath, JSON.stringify(edited));
-    await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
+    await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
   }
   // The invocation, not the file, sets the amount: a consistently edited file amount is refused as well.
   const larger = structuredClone(negotiated); larger.amountWei = '5000000000000000000';
   await writeFile(tamperPath, JSON.stringify(larger));
-  await assert.rejects(runTrades({ env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'tamper', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
   assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), nonceAtTamper, 'nothing was sent for an edited state file');
   pass('a resumed run re-validates every negotiated trade (parties, amount, terms review, termsHash, both signatures) before any transaction');
 
   // A Forge failure that is not a simulated revert is reported, never swallowed as "not funded".
-  await assert.rejects(runTrades({ env: { ...env, PATH: '/usr/bin:/bin' }, root, run: 'no-forge', expectGenesis: genesisHash }), code('FORGE_FAILED'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: { ...env, PATH: '/usr/bin:/bin' }, root, run: 'no-forge', expectGenesis: genesisHash }), code('FORGE_FAILED'));
   assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), nonceAtTamper);
   pass('a Forge failure other than a revert stops the run as FORGE_FAILED');
 
   // A state file that names another deployment or party is refused.
   const tampered = JSON.parse(await readFile(statePath, 'utf8')); tampered.escrow = `0x${'ab'.repeat(20)}`;
   await writeFile(statePath, JSON.stringify(tampered));
-  await assert.rejects(runTrades({ env, root, run: 'local-proof', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash }), code('STATE_MISMATCH'));
   pass('refuses to resume a state file bound to a different escrow');
 
   // Evidence holds no secrets, and each trade's terms file passes the app review against the registry.

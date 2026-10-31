@@ -49,15 +49,23 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
  * `demo` is a meta-delivery build that additionally includes the synthetic local registry and samples. `testnet` is a
  * meta-delivery build that embeds the owner-signed Sepolia registry, verified here first (fail closed) and again at
  * runtime. `trustRoot` (testnet only) is the directory holding the trust files; it defaults to the repository root.
+ * `testOnlyLocalProof` is a library-only fixture seam requiring explicit paths and an independently supplied pin;
+ * its artifacts are labelled unapproved local proofs and keep every trading/network permission disabled.
  */
-export async function buildWeb({ delivery = 'meta', outDir, trustRoot, nowSeconds } = {}) {
+export async function buildWeb({ delivery = 'meta', outDir, trustRoot, nowSeconds, testOnlyLocalProof } = {}) {
   if (!['meta', 'header', 'demo', 'testnet'].includes(delivery)) throw new Error('UNSUPPORTED_BUILD_PROFILE');
   const syntheticDemo = delivery === 'demo', testnet = delivery === 'testnet';
-  const trust = testnet ? await loadTestnetTrust(trustRoot ?? resolve(root, '../..'), nowSeconds ? { nowSeconds } : {}) : null;
+  // Test harnesses may supply an independent ephemeral pin. No CLI/environment input exposes this seam.
+  // Requiring explicit paths keeps a fixture artifact separate from the ordinary output and repository trust files.
+  if (testOnlyLocalProof !== undefined && (!testnet || !outDir || !trustRoot ||
+      typeof testOnlyLocalProof?.pinnedKeyId !== 'string' || !/^[0-9a-f]{64}$/.test(testOnlyLocalProof.pinnedKeyId))) throw new Error('TESTNET_LOCAL_PROOF_INVALID');
+  const trust = testnet ? await loadTestnetTrust(trustRoot ?? resolve(root, '../..'), {
+    ...(nowSeconds ? { nowSeconds } : {}), ...(testOnlyLocalProof ? { pinnedKeyId: testOnlyLocalProof.pinnedKeyId } : {}) }) : null;
   outDir ??= resolve(root, syntheticDemo ? 'dist-demo' : testnet ? 'dist-testnet' : 'dist');
   await build({ configFile: resolve(root, 'vite.config.ts'), mode: delivery, build: { outDir },
-    ...(trust ? { define: { __P2P_TESTNET_TRUST__: JSON.stringify(trust.bundle) } } : {}) });
-  const evidence = { ...await scanBuild(outDir, { syntheticDemo, testnet }), ...(trust ? { testnetTrust: trust.summary } : {}) };
+    ...(trust ? { define: { __P2P_TESTNET_TRUST__: JSON.stringify(trust.bundle),
+      __P2P_TESTNET_LOCAL_PROOF_KEY_ID__: JSON.stringify(testOnlyLocalProof?.pinnedKeyId ?? null) } } : {}) });
+  const evidence = { ...await scanBuild(outDir, { syntheticDemo, testnet }), ...(trust ? { testnetTrust: { ...trust.summary, localProof: testOnlyLocalProof !== undefined, ownerApproved: testOnlyLocalProof === undefined } } : {}) };
   await writeFile(resolve(outDir, 'local-build-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
   return evidence;
 }

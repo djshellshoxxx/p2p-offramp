@@ -41,6 +41,7 @@ jobs:
           version: v1.5.1
       - run: npm ci --ignore-scripts
       - run: npm run test:evm:local
+      - run: npm run test:exchange:evm
       - run: npm run test:evm:reconcile
       - run: npm run test:sepolia:kit
       - run: npm run test:sepolia:trade

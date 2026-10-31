@@ -221,7 +221,7 @@ test('explicit save preserves original document bytes including salt; stable rec
   await trade.save(outcome.localId); assert.equal(trade.getSnapshot().persistence.code, 'REVIEW_MISSING');
 });
 
-test('load revalidates every saved document and fails atomically on corrupt terms without changing memory or vault', async () => {
+test('load revalidates every saved document and preserves valid reviews while refusing corrupt terms without changing the vault', async () => {
   const checked = [];
   const { trade, port } = await persistentController(async (_registry, bytes) => {
     const text = new TextDecoder().decode(bytes); checked.push(text);
@@ -233,7 +233,10 @@ test('load revalidates every saved document and fails atomically on corrupt term
   await trade.loadSaved();
   assert.deepEqual(checked, ['existing', 'good', 'bad']);
   assert.equal(trade.getSnapshot().persistence.code, 'INVALID_SAVED_REVIEW');
-  assert.equal(trade.getSnapshot().reviews.length, 1); assert.ok(trade.find(existing.localId));
+  assert.equal(trade.getSnapshot().reviews.length, 2); assert.ok(trade.find(existing.localId));
+  assert.ok(trade.getSnapshot().reviews.some(item => item.review.orderId === 'good'));
+  assert.equal(trade.getSnapshot().reviews.some(item => item.review.orderId === 'bad'), false);
+  assert.deepEqual(trade.getSnapshot().unreviewable, [{ recordId: '22'.repeat(16), code: 'MALFORMED' }]);
   assert.equal(port.saved.size, 2, 'load is read only');
   port.saved.delete('22'.repeat(16)); await trade.loadSaved();
   assert.equal(trade.getSnapshot().persistence.kind, 'loaded');

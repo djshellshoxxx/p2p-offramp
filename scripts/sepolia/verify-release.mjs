@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Verify the signed Sepolia testnet release (G15) and the registry it covers (G11) against the trusted testnet public
- * key with the same verifier the testnet build uses (apps/web/scripts/testnet-trust.mjs): signature, keyId (pinned once SEPOLIA_RELEASE_KEY_ID is set),
+ * key with the same verifier the testnet build uses (apps/web/scripts/testnet-trust.mjs): signature, independently pinned keyId (an unset owner pin refuses verification),
  * registry asset, the Sepolia-only network rule and rollback against the last accepted release. Needs no network and
  * no private key. With --accept it records the verified release as accepted (registry/testnet/sepolia.accepted.json,
  * commit it), so an older or substituted signed registry is refused from then on.
@@ -21,8 +21,8 @@ const CODES = Object.freeze({ MISSING: 'RELEASE_MISSING', JSON: 'RELEASE_UNREADA
  * Verifies the signed release and returns the guarded registry (a RegistryLookup bound to the verified manifest).
  * `expectGenesis` is for the local proofs on a node started with Sepolia's chain id; it defaults to real Sepolia.
  */
-export async function loadVerifiedRegistry({ root = ROOT, nowSeconds, highestSequence = 0, expectGenesis } = {}) {
-  const checked = await verifyTestnetTrust(root, { ...(nowSeconds ? { nowSeconds } : {}), highestSequence, genesisHash: expectGenesis });
+export async function loadVerifiedRegistry({ root = ROOT, nowSeconds, highestSequence = 0, expectGenesis, pinnedKeyId } = {}) {
+  const checked = await verifyTestnetTrust(root, { ...(nowSeconds ? { nowSeconds } : {}), highestSequence, genesisHash: expectGenesis, ...(pinnedKeyId !== undefined ? { pinnedKeyId } : {}) });
   if (!checked.ok) return { ok: false, error: { code: CODES[checked.error.code] ?? checked.error.code } };
   const { registry, verified } = checked.value;
   return { ok: true, value: { registry, keyId: verified.keyId, sequence: verified.manifest.sequence,

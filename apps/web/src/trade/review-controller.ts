@@ -22,7 +22,7 @@ export interface TermsSample {
   load(nowSeconds: bigint): Promise<Uint8Array>;
 }
 /** Which trusted composition supplied the registry: synthetic local demo data, or the owner-signed Sepolia registry. */
-export type RegistryLabel = 'synthetic-demo' | 'sepolia-testnet';
+export type RegistryLabel = 'synthetic-demo' | 'sepolia-testnet' | 'sepolia-local-proof';
 /** Public facts about a verified testnet registry, for display (manifest sequence, expiry in unix seconds). */
 export interface RegistryTrustSummary { readonly keyId: string; readonly sequence: number; readonly expiresAt: number; }
 export type RegistrySourceResult =
@@ -295,7 +295,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
           unreviewable.push(Object.freeze({ recordId: item.recordId, code: item.result.code }));
           continue;
         }
-        if(checked.some(entry=>!entry.result.ok))continue;
+        // Each record has its own review verdict; one invalid record cannot hide unrelated valid reviews.
         const accepted = item.result.value;
         const index = reviews.findIndex(entry => entry.savedId === item.recordId || (entry.savedId === null && entry.source === item.source && sameReview(entry.review, accepted)));
         // The fresh result replaces any earlier one, so the display always reflects today's registry and checks.

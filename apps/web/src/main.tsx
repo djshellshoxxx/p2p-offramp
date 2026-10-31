@@ -13,7 +13,7 @@ import './ui/app.css';
 const registrySource: RegistrySource = __P2P_SYNTHETIC_DEMO__
   ? async () => (await import('./demo/synthetic-local.ts')).syntheticDemoSource()
   : __P2P_TESTNET__
-    ? async () => (await import('./testnet/sepolia-source.ts')).sepoliaRegistrySource(__P2P_TESTNET_TRUST__)()
+    ? async () => (await import('./testnet/sepolia-source.ts')).sepoliaRegistrySource(__P2P_TESTNET_TRUST__, undefined, __P2P_TESTNET_LOCAL_PROOF_KEY_ID__ ?? undefined, __P2P_TESTNET_LOCAL_PROOF_KEY_ID__ !== null)()
     : noApprovedRegistry;
 
 /**

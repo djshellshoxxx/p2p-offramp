@@ -22,17 +22,21 @@ try {
   const trustRoot = resolve(temporary, 'trust');
   const { keyId, expiresAt } = await writeTestnetTrust(trustRoot);
   // Build refusals first: missing and tampered trust roots never produce an artifact.
-  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'missing'), trustRoot: resolve(temporary, 'nowhere') }), /TESTNET_TRUST_MISSING/);
+  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'missing'), trustRoot: resolve(temporary, 'nowhere'), testOnlyLocalProof: { pinnedKeyId: keyId } }), /TESTNET_TRUST_MISSING/);
   const tamperedRoot = resolve(temporary, 'tampered');
-  await writeTestnetTrust(tamperedRoot);
+  const tampered = await writeTestnetTrust(tamperedRoot);
+  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'substitution-out'), trustRoot: tamperedRoot, testOnlyLocalProof: { pinnedKeyId: keyId } }), /TESTNET_TRUST_INVALID: KEY_ID/, 'a replacement key and complete signed bundle cannot replace the independently supplied fixture pin');
+  await assert.rejects(buildWeb({ delivery: 'meta', outDir: resolve(temporary, 'bad-fixture-mode'), trustRoot, testOnlyLocalProof: { pinnedKeyId: keyId } }), /TESTNET_LOCAL_PROOF_INVALID/);
   const registryPath = resolve(tamperedRoot, TESTNET_TRUST_FILES.registry);
   await writeFile(registryPath, (await readFile(registryPath, 'utf8')).replace('sepolia-public', 'sepolia-other'));
-  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'tampered-out'), trustRoot: tamperedRoot }), /TESTNET_TRUST_INVALID/);
+  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'tampered-out'), trustRoot: tamperedRoot, testOnlyLocalProof: { pinnedKeyId: tampered.keyId } }), /TESTNET_TRUST_INVALID/);
 
+  await assert.rejects(buildWeb({ delivery: 'testnet', outDir: resolve(temporary, 'unpinned-out'), trustRoot }), /TESTNET_TRUST_INVALID: KEY_UNPINNED/);
   const out = resolve(temporary, 'testnet');
-  const evidence = await buildWeb({ delivery: 'testnet', outDir: out, trustRoot });
+  const evidence = await buildWeb({ delivery: 'testnet', outDir: out, trustRoot, testOnlyLocalProof: { pinnedKeyId: keyId } });
   assert.equal(evidence.testnet, true); assert.equal(evidence.syntheticDemo, false); assert.equal(evidence.ReleaseEnabled, 0);
   assert.equal(evidence.testnetTrust.keyId, keyId);
+  assert.equal(evidence.testnetTrust.localProof, true); assert.equal(evidence.testnetTrust.ownerApproved, false);
 
   server = createServer((request, response) => {
     response.setHeader('Cache-Control', 'no-store'); response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -65,14 +69,16 @@ try {
     return { context, page };
   }
 
-  // 1. Valid manifest: testnet badge and banner name the verified key; no synthetic samples exist.
+  // 1. Valid local fixture: badge and banner disclose the unapproved fixture key and signed manifest; no samples exist.
   {
     const { context, page } = await open();
-    await page.getByText('SEPOLIA TESTNET · owner-signed registry', { exact: true }).waitFor();
-    const banner = page.getByRole('note').filter({ hasText: 'SEPOLIA TESTNET: the network registry is signed' });
+    await page.getByText('SEPOLIA LOCAL PROOF · unapproved fixture key', { exact: true }).waitFor();
+    const banner = page.getByRole('note').filter({ hasText: 'SEPOLIA LOCAL PROOF: this registry uses fixture key' });
     await banner.waitFor();
     const bannerText = await banner.innerText();
+    assert.ok(bannerText.includes('not an owner-approved trust root'), bannerText);
     assert.ok(bannerText.includes(`key ${keyId.slice(0, 16)}… (manifest 1, valid until ${new Date(expiresAt * 1000).toISOString()})`), bannerText);
+    assert.equal(await page.getByText('SEPOLIA TESTNET · owner-signed registry', { exact: true }).count(), 0);
     assert.equal(await page.getByText('SYNTHETIC', { exact: false }).count(), 0, 'no synthetic data or samples in the testnet build');
     assert.equal(await page.getByRole('heading', { name: 'Synthetic samples' }).count(), 0);
     // 2. A Sepolia terms file for the signed deployment is reviewed with exact values.
@@ -81,7 +87,7 @@ try {
     await page.waitForURL(/#\/trade\/[A-Za-z0-9_-]{22}$/);
     await page.getByRole('heading', { level: 1, name: 'Trade review', exact: true }).waitFor();
     const text = await page.locator('main').innerText();
-    for (const expected of ['11155111', FIXTURE_ESCROW, '0.0001 native', '1.00 EUR', 'SEPOLIA TESTNET: the network registry is signed', 'Trading, wallet connections, signing and funding are disabled in this build.']) {
+    for (const expected of ['11155111', FIXTURE_ESCROW, '0.0001 native', '1.00 EUR', 'SEPOLIA LOCAL PROOF: this registry uses fixture key', 'Trading, wallet connections, signing and funding are disabled in this build.']) {
       assert.ok(text.includes(expected), `review shows ${expected}`);
     }
     assert.equal(await page.locator('main').getByRole('button', { name: /accept|sign|fund/i }).count(), 0, 'no accept/sign/fund controls');
@@ -98,7 +104,7 @@ try {
     const { context, page } = await open(new Date((expiresAt + 60) * 1000));
     await page.getByRole('alert').filter({ hasText: 'The network registry failed its integrity check and was not used.' }).waitFor();
     assert.equal(await page.getByRole('button', { name: 'Check terms', exact: true }).count(), 0);
-    assert.equal(await page.getByText('SEPOLIA TESTNET · owner-signed registry', { exact: true }).count(), 0, 'no testnet badge for a failed registry');
+    assert.equal(await page.getByText('SEPOLIA LOCAL PROOF · unapproved fixture key', { exact: true }).count(), 0, 'no testnet badge for a failed registry');
     await context.close();
   }
 
