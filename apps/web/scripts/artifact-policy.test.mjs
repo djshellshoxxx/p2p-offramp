@@ -1,6 +1,17 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
+import { staticBuildPlugin } from './static-build-plugin.mjs';
+import { resolve } from 'node:path';
+
+test('default and demo module graphs reject test-only wallet execution and signing', async () => {
+  for (const worker of [false, true]) for (const delivery of ['meta', 'header']) for (const name of ['execution', 'adapter', 'terms']) {
+    const root = resolve(import.meta.dirname, '../../..');
+    const plugin = staticBuildPlugin(root, delivery, worker);
+    const path = resolve(root, `packages/wallet/src/evm-${name}.ts`);
+    await assert.rejects(plugin.generateBundle.call({getModuleIds:()=>[path],getModuleInfo:()=>({isExternal:false}),emitFile(){throw Error('should not emit');}}, {}, {}), /NON_CORE_MODULE/);
+  }
+});
 
 test('application token policy denies HTML execution while allowing text and React events', () => {
   assert.doesNotThrow(() => inspectApplicationSource('view.tsx', 'const C = () => <button onClick={() => command()}>{text}</button>; node.textContent = text;'));

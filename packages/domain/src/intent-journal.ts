@@ -1,4 +1,4 @@
-/** Partial G12 worker-private persistence coordinator, with no wallet/send/clear/reconciliation API.
+/** G12 worker-private persistence coordinator; native reconciliation is injected and disabled by default.
  * A successful marker records conservative recovery metadata; it is not spending authority.
  */
 import { CoreSchemaError, parseTradeBinding, sameBinding, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
@@ -14,12 +14,23 @@ export interface IntentJournalOptions {
   /** Bundled native adapter validates canonical encoding only; never an imported/UI approval.
    * No adapter exists by default. Test fixture validators do not establish chain or wallet truth. */
   readonly validateCanonical?: (intent: Readonly<IntentV1>) => CoreResult<void> | Promise<CoreResult<void>>;
+  /** Trusted bundled reader verifies exact request, receipt, nonce, deployment and canonical chain anchor. */
+  readonly readNative?: (intent: Readonly<IntentV1>, signal: AbortSignal) => Promise<CoreResult<NativeIntentObservation>>;
   readonly now?: () => number;
+}
+export interface NativeIntentObservation {
+  readonly binding: TradeBinding; readonly account: string; readonly action: IntentV1['action'];
+  readonly state: 'broadcast-unknown' | 'pending' | 'confirmed' | 'finalized' | 'failed' | 'reorged' | 'replaced';
+  readonly hash: string | null; readonly nonce: string | null; readonly replacementHash: string | null;
+  readonly anchor: { readonly height: string; readonly hash: string };
+  readonly canonical: boolean; readonly finalized: boolean;
 }
 export interface IntentJournal {
   reserve(intent: IntentV1, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<string>>;
   markSending(intentId: string, signal?: AbortSignal): Promise<CoreResult<void>>;
-  /** All persisted states remain reserved until a future trusted reconciliation integration exists. */
+  recordBroadcast(intentId: string, hash: string, signal?: AbortSignal): Promise<CoreResult<void>>;
+  reconcileNative(intentId: string, signal?: AbortSignal): Promise<CoreResult<IntentV1>>;
+  /** Terminal labels release a reservation only after fresh native verification on every lookup. */
   unresolved(binding: TradeBinding, account: string, signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>>;
   dispose(): void;
 }
@@ -60,13 +71,14 @@ class EncryptedIntentJournal implements IntentJournal {
   readonly #vault: JournalVaultPort;
   readonly #validate: IntentJournalOptions['validateCanonical'];
   readonly #now: () => number;
+  readonly #readNative: IntentJournalOptions['readNative'];
   #lease: VaultSessionLease | undefined;
   #initialError: CoreErrorCode | undefined;
   #closed = false;
   #epoch = 0;
   #active: Job | undefined;
   constructor(options: IntentJournalOptions) {
-    this.#vault = options.vault; this.#validate = options.validateCanonical; this.#now = options.now ?? Date.now;
+    this.#vault = options.vault; this.#validate = options.validateCanonical; this.#readNative = options.readNative; this.#now = options.now ?? Date.now;
     try { this.#lease = vaultValue(this.#vault.captureSession(options.session, () => { this.#epoch++; this.#active?.controller.abort(); })); }
     catch (error) { this.#initialError = knownErrorCode(error, 'journal') ?? 'LOCKED'; }
   }
@@ -149,7 +161,13 @@ class EncryptedIntentJournal implements IntentJournal {
       if (expectedRevision !== job.revision) return fail('CONFLICT');
       preparedOnly(intent);
       const records = await this.#scan(job); await this.#canonical(job, intent); this.#guard(job);
-      if (records.some(record => record.intent.intentId === intent.intentId || sameBinding(record.intent.binding, intent.binding) && sameAccount(intent.binding.chain, record.intent.account, intent.account))) return fail('CONFLICT');
+      if (records.some(record => record.intent.intentId === intent.intentId)) return fail('CONFLICT');
+      for (const record of records) {
+        const sameOwner = record.intent.binding.chain === intent.binding.chain && sameAccount(intent.binding.chain,record.intent.account,intent.account);
+        const sameNonce = intent.submission.chain === 'evm' && record.intent.submission.chain === 'evm' && intent.submission.nonce !== null &&
+          record.intent.submission.nonce === intent.submission.nonce && record.intent.binding.networkId === intent.binding.networkId;
+        if (sameOwner && (sameBinding(record.intent.binding,intent.binding) || sameNonce) && !await this.#resolved(job,record.intent)) return fail('CONFLICT');
+      }
       const random = crypto.getRandomValues(new Uint8Array(16)); let recordId: string;
       try { recordId = Array.from(random, byte => byte.toString(16).padStart(2, '0')).join(''); } finally { random.fill(0); }
       const session = this.#guard(job); const collision = vaultValue(await this.#vault.read(session.sessionId, recordId)); this.#guard(job);
@@ -172,13 +190,77 @@ class EncryptedIntentJournal implements IntentJournal {
       job.committed = true; job.revision = revision; this.#guard(job);
     });
   }
+  async #native(job: Job, intent: IntentV1): Promise<NativeIntentObservation> {
+    if (!this.#readNative || intent.binding.chain !== 'evm' || intent.submission.chain !== 'evm') return fail('UNSUPPORTED_PROVIDER');
+    const result: unknown = await this.#readNative(intent, job.controller.signal); this.#guard(job);
+    const ok = Object.getOwnPropertyDescriptor(result, 'ok');
+    if (!ok || !('value' in ok)) return fail('INTEGRITY_FAILURE');
+    if (ok.value !== true) {
+      if (ok.value !== false) return fail('INTEGRITY_FAILURE');
+      const raw = intentData(result, ['ok', 'error']); return fail(normalizeError(raw.error, {operationId:job.operationId,phase:'read'}).code);
+    }
+    const success = intentData(result, ['ok', 'value']);
+    const raw = intentData(success.value, ['binding','account','action','state','hash','nonce','replacementHash','anchor','canonical','finalized']);
+    const binding = parseTradeBinding(raw.binding), anchor = intentData(raw.anchor, ['height','hash']);
+    const hash = (value: unknown): value is string => typeof value === 'string' && /^0x[0-9a-f]{64}$/.test(value);
+    const nonce = (value: unknown): value is string => typeof value === 'string' && /^(0|[1-9][0-9]{0,77})$/.test(value) && BigInt(value) < (1n << 256n);
+    const states = ['broadcast-unknown','pending','confirmed','finalized','failed','reorged','replaced'];
+    if (!sameBinding(binding,intent.binding) || raw.account !== intent.account.toLowerCase() || raw.action !== intent.action ||
+        typeof raw.state !== 'string' || !states.includes(raw.state) || typeof raw.canonical !== 'boolean' || typeof raw.finalized !== 'boolean' ||
+        (raw.hash !== null && !hash(raw.hash)) || (raw.nonce !== null && !nonce(raw.nonce)) || (raw.replacementHash !== null && !hash(raw.replacementHash)) ||
+        !nonce(anchor.height) || !hash(anchor.hash)) return fail('INTEGRITY_FAILURE');
+    if (intent.submission.hash !== null && raw.hash !== intent.submission.hash || intent.submission.nonce !== null && raw.nonce !== intent.submission.nonce) return fail('INTEGRITY_FAILURE');
+    if (raw.state === 'replaced' && (!raw.replacementHash || raw.replacementHash === raw.hash || raw.nonce === null) || raw.state !== 'replaced' && raw.replacementHash !== null) return fail('INTEGRITY_FAILURE');
+    if (['pending','confirmed','finalized','failed','replaced'].includes(raw.state) && (!raw.hash || raw.nonce === null) ||
+        raw.state === 'confirmed' && !raw.canonical ||
+        raw.finalized && (!raw.canonical || !['finalized','failed','replaced'].includes(raw.state)) || raw.state === 'finalized' && !raw.finalized) return fail('INTEGRITY_FAILURE');
+    return Object.freeze({...raw,binding,anchor:Object.freeze(anchor)}) as unknown as NativeIntentObservation;
+  }
+  async #resolved(job: Job, intent: IntentV1): Promise<boolean> {
+    if (!this.#readNative || !['finalized','failed','replaced'].includes(intent.state)) return false;
+    const observation = await this.#native(job,intent);
+    return observation.finalized && observation.canonical && ['finalized','failed','replaced'].includes(observation.state);
+  }
+  recordBroadcast(input: string, hash: string, signal?: AbortSignal): Promise<CoreResult<void>> {
+    return this.#run(signal, async job => {
+      const intentId = parseIntentId(input);
+      if (typeof hash !== 'string' || !/^0x[0-9a-f]{64}$/.test(hash)) return fail('INVALID_INPUT');
+      const records = await this.#scan(job), record = records.find(entry => entry.intent.intentId === intentId);
+      if (!record || record.intent.submission.chain !== 'evm') return fail('CONFLICT');
+      if (record.intent.state === 'pending' && record.intent.submission.hash === hash) return;
+      if (record.intent.state !== 'broadcast-unknown' || record.intent.submission.hash !== null) return fail('CONFLICT');
+      const next = parseIntent({...record.intent,state:'pending',submission:{...record.intent.submission,hash},updatedAt:this.#updatedAt(record.intent)});
+      await this.#write(job,record.recordId,next);
+    });
+  }
+  #updatedAt(intent: IntentV1): number {
+    const now = this.#now(); if (!Number.isSafeInteger(now) || now < 0) return fail('INVALID_INPUT');
+    return Math.max(now,intent.updatedAt);
+  }
+  async #write(job: Job, recordId: string, intent: IntentV1): Promise<void> {
+    const session = this.#guard(job); job.markerWrite = true;
+    const revision = vaultValue(await this.#vault.commit(session.sessionId,job.revision,[{op:'put',record:{id:recordId,kind:'journal',schemaVersion:1,payload:encodeIntentPayload(intent)}}],job.controller.signal));
+    job.committed = true; job.revision = revision; this.#guard(job);
+  }
+  reconcileNative(input: string, signal?: AbortSignal): Promise<CoreResult<IntentV1>> {
+    return this.#run(signal, async job => {
+      const intentId = parseIntentId(input), records = await this.#scan(job), record = records.find(entry => entry.intent.intentId === intentId);
+      if (!record || record.intent.state === 'prepared' || record.intent.submission.chain !== 'evm') return fail('CONFLICT');
+      const observation = await this.#native(job,record.intent);
+      // Noncanonical results only revoke confidence; they never turn a receipt into terminal authority.
+      const state = observation.canonical ? observation.state : 'reorged';
+      const next = parseIntent({...record.intent,state,submission:{...record.intent.submission,hash:observation.hash,nonce:observation.nonce},updatedAt:this.#updatedAt(record.intent)});
+      await this.#write(job,record.recordId,next); return next;
+    });
+  }
   unresolved(input: TradeBinding, accountInput: string, signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>> {
     return this.#run(signal, async job => {
       const binding = parseTradeBinding(input), account = parseIntentAccount(accountInput, binding.chain);
       const records = await this.#scan(job);
-      // Serialized terminal labels, restored backups and wall-clock age cannot
-      // prove safe release of a reservation without a trusted native reconciliation.
-      const matches = Object.freeze(records.filter(record => sameBinding(record.intent.binding, binding) && sameAccount(binding.chain, record.intent.account, account)).map(record => record.intent));
+      // Persisted terminal labels never prove release: #resolved re-observes current native evidence.
+      const matching: IntentV1[] = [];
+      for (const record of records) if (sameBinding(record.intent.binding,binding) && sameAccount(binding.chain,record.intent.account,account) && !await this.#resolved(job,record.intent)) matching.push(record.intent);
+      const matches = Object.freeze(matching);
       await this.#synchronize(job); return matches;
     });
   }
