@@ -1,0 +1,27 @@
+{
+  "source": "/workspace/p2p-offramp-pr14-finish-20261030/packages/exchange/src/exchange.ts",
+  "qualification": "isolated lifecycle only; mocked crypto/review",
+  "observations": [
+    {
+      "case": "take-crosses-ad-expiry",
+      "result": "AD_EXPIRED",
+      "sessionCount": 0
+    },
+    {
+      "case": "accept-crosses-terms-deadline",
+      "result": "EXPIRED",
+      "state": "offered"
+    },
+    {
+      "case": "review-crosses-session-replacement",
+      "result": "OUT_OF_ORDER",
+      "buyerAddress": "0x2222222222222222222222222222222222222222",
+      "state": "taken"
+    },
+    {
+      "case": "outgoing-replay-budget",
+      "configuredMaxSeenMessages": 1,
+      "successfulDistinctMessages": 1
+    }
+  ]
+}
