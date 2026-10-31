@@ -8,7 +8,7 @@
  */
 import { schnorr } from '@noble/curves/secp256k1.js';
 import { sha256 } from '@noble/hashes/sha2.js';
-import { bytesToHex, fail, hexToBytes, isLowerHex, utf8Encode } from './bytes.ts';
+import { bytesToHex, fail, hexToBytes, isLowerHex, nostrCryptoErrorCode, utf8Encode } from './bytes.ts';
 import type { NostrMessagingProvider } from './provider.ts';
 
 export const KIND_NIP04_DM = 4;
@@ -24,6 +24,11 @@ export interface EventLimits {
 export const DEFAULT_EVENT_LIMITS: EventLimits = Object.freeze({ maxContentBytes: 131_072, maxTags: 64, maxTagItems: 8, maxTagItemBytes: 1024, maxJsonBytes: 262_144 });
 
 const FORBIDDEN_CHARACTERS = /[\u0000-\u0007\u000b\u000e-\u001f]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+function checked<T>(read: () => T): T {
+  try { return read(); } catch (error) { return fail(nostrCryptoErrorCode(error) ?? 'INVALID_INPUT'); }
+}
+/** A foreign reflection trap cannot choose even a locally shaped failure code. */
+function meta<T>(read: () => T): T { try { return read(); } catch { return fail(); } }
 function safeString(input: unknown, maxBytes: number): string {
   if (typeof input !== 'string') return fail();
   if (input.length > maxBytes || utf8Encode(input).byteLength > maxBytes) return fail('LIMIT_EXCEEDED');
@@ -39,20 +44,24 @@ function kind(input: unknown, limits: EventLimits): number {
 }
 /** Exact own data properties of a plain object or array; getters, prototypes and extra keys are rejected. */
 function record(input: unknown, keys: readonly string[]): Record<string, unknown> {
-  if (typeof input !== 'object' || input === null || Array.isArray(input)) return fail();
-  const prototype: unknown = Object.getPrototypeOf(input);
-  if (prototype !== Object.prototype && prototype !== null) return fail();
-  const own = Reflect.ownKeys(input);
-  if (own.length !== keys.length || own.some(key => typeof key !== 'string' || !keys.includes(key))) return fail();
-  const out: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
-  for (const key of keys) { const descriptor = Object.getOwnPropertyDescriptor(input, key); if (!descriptor || !('value' in descriptor)) return fail(); out[key] = descriptor.value; }
-  return out;
+  return checked(() => {
+    if (typeof input !== 'object' || input === null || meta(() => Array.isArray(input))) return fail();
+    const prototype: unknown = meta(() => Object.getPrototypeOf(input));
+    if (prototype !== Object.prototype && prototype !== null) return fail();
+    const own = meta(() => Reflect.ownKeys(input));
+    if (own.length !== keys.length || own.some(key => typeof key !== 'string' || !keys.includes(key))) return fail();
+    const out: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+    for (const key of keys) { const descriptor = meta(() => Object.getOwnPropertyDescriptor(input, key)); if (!descriptor || !('value' in descriptor)) return fail(); out[key] = descriptor.value; }
+    return out;
+  });
 }
 function array(input: unknown, max: number): unknown[] {
-  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return fail();
-  const length = Object.getOwnPropertyDescriptor(input, 'length')?.value as unknown;
-  if (typeof length !== 'number' || length > max || Reflect.ownKeys(input).length !== length + 1) return fail('LIMIT_EXCEEDED');
-  return Array.from({ length }, (_, index) => { const descriptor = Object.getOwnPropertyDescriptor(input, String(index)); if (!descriptor || !('value' in descriptor)) return fail(); return descriptor.value; });
+  return checked(() => {
+    if (!meta(() => Array.isArray(input)) || meta(() => Object.getPrototypeOf(input)) !== Array.prototype) return fail();
+    const length = meta(() => Object.getOwnPropertyDescriptor(input, 'length'))?.value as unknown;
+    if (typeof length !== 'number' || length > max || meta(() => Reflect.ownKeys(input)).length !== length + 1) return fail('LIMIT_EXCEEDED');
+    return Array.from({ length }, (_, index) => { const descriptor = meta(() => Object.getOwnPropertyDescriptor(input, String(index))); if (!descriptor || !('value' in descriptor)) return fail(); return descriptor.value; });
+  });
 }
 function tags(input: unknown, limits: EventLimits): readonly (readonly string[])[] {
   return Object.freeze(array(input, limits.maxTags).map(tag => {
@@ -66,24 +75,30 @@ function template(input: Record<string, unknown>, limits: EventLimits): EventTem
 }
 
 export function serializeEvent(pubkey: string, event: EventTemplate): string {
-  if (!isLowerHex(pubkey, 32)) return fail();
-  return JSON.stringify([0, pubkey, event.created_at, event.kind, event.tags, event.content]);
+  return checked(() => {
+    if (!isLowerHex(pubkey, 32)) return fail();
+    return JSON.stringify([0, pubkey, event.created_at, event.kind, event.tags, event.content]);
+  });
 }
 export function computeEventId(pubkey: string, event: EventTemplate): string { return bytesToHex(sha256(utf8Encode(serializeEvent(pubkey, event)))); }
 
 /** Validate a template, derive the author key from the secret, hash and sign. The returned event is frozen. */
 export async function signEvent(input: EventTemplate, secretKey: Uint8Array, provider: NostrMessagingProvider, limits: EventLimits = DEFAULT_EVENT_LIMITS): Promise<NostrEvent> {
-  const event = template(record({ ...input }, ['created_at', 'kind', 'tags', 'content']), limits);
-  const pubkey = await provider.publicKey(secretKey);
-  const id = computeEventId(pubkey, event);
-  const sig = bytesToHex(await provider.signSchnorr(hexToBytes(id, 32), secretKey));
-  if (!(await provider.verifySchnorr(hexToBytes(sig, 64), hexToBytes(id, 32), hexToBytes(pubkey, 32)))) return fail('INTEGRITY_FAILURE');
-  return Object.freeze({ id, pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content, sig });
+  try {
+    const event = template(record(input, ['created_at', 'kind', 'tags', 'content']), limits);
+    const pubkey = await provider.publicKey(secretKey);
+    const id = computeEventId(pubkey, event);
+    const sig = bytesToHex(await provider.signSchnorr(hexToBytes(id, 32), secretKey));
+    if (!(await provider.verifySchnorr(hexToBytes(sig, 64), hexToBytes(id, 32), hexToBytes(pubkey, 32)))) return fail('INTEGRITY_FAILURE');
+    return Object.freeze({ id, pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content, sig });
+  } catch (error) { return fail(nostrCryptoErrorCode(error) ?? 'INVALID_INPUT'); }
 }
 /** Create a rumor (unsigned event with id). NIP-59: rumors are never signed. */
 export function createUnsignedEvent(pubkey: string, input: EventTemplate, limits: EventLimits = DEFAULT_EVENT_LIMITS): UnsignedEvent {
-  const event = template(record({ ...input }, ['created_at', 'kind', 'tags', 'content']), limits);
-  return Object.freeze({ id: computeEventId(pubkey, event), pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
+  return checked(() => {
+    const event = template(record(input, ['created_at', 'kind', 'tags', 'content']), limits);
+    return Object.freeze({ id: computeEventId(pubkey, event), pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
+  });
 }
 
 /** Exact keys, bounds and id recomputation of an untrusted signed event; the signature is not checked here. */
@@ -96,9 +111,11 @@ function parseSignedUnverified(input: unknown, limits: EventLimits): NostrEvent 
 }
 /** Strict parse of an untrusted signed event: exact keys, bounds, id recomputation, then BIP340 verification. */
 export async function verifyEvent(input: unknown, provider: NostrMessagingProvider, limits: EventLimits = DEFAULT_EVENT_LIMITS): Promise<NostrEvent> {
-  const event = parseSignedUnverified(input, limits);
-  if (!(await provider.verifySchnorr(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)))) return fail('INTEGRITY_FAILURE');
-  return event;
+  try {
+    const event = parseSignedUnverified(input, limits);
+    if (!(await provider.verifySchnorr(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)))) return fail('INTEGRITY_FAILURE');
+    return event;
+  } catch (error) { return fail(nostrCryptoErrorCode(error) ?? 'INVALID_INPUT'); }
 }
 /**
  * Synchronous form of verifyEvent for callers that must not yield between checks (the relay pool dedupes, filters,
@@ -106,19 +123,23 @@ export async function verifyEvent(input: unknown, provider: NostrMessagingProvid
  * the primitive the local provider wraps. Verification needs only public data, so no provider key is involved.
  */
 export function verifyEventSync(input: unknown, limits: EventLimits = DEFAULT_EVENT_LIMITS): NostrEvent {
-  const event = parseSignedUnverified(input, limits);
-  let valid = false;
-  try { valid = schnorr.verify(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)) === true; } catch { valid = false; }
-  if (!valid) return fail('INTEGRITY_FAILURE');
-  return event;
+  return checked(() => {
+    const event = parseSignedUnverified(input, limits);
+    let valid = false;
+    try { valid = schnorr.verify(hexToBytes(event.sig, 64), hexToBytes(event.id, 32), hexToBytes(event.pubkey, 32)) === true; } catch { valid = false; }
+    if (!valid) return fail('INTEGRITY_FAILURE');
+    return event;
+  });
 }
 /** Strict parse of an untrusted rumor: exact keys (a `sig` key is rejected), bounds and id recomputation. */
 export function parseUnsignedEvent(input: unknown, limits: EventLimits = DEFAULT_EVENT_LIMITS): UnsignedEvent {
-  const raw = record(input, ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content']);
-  if (!isLowerHex(raw.id, 32) || !isLowerHex(raw.pubkey, 32)) return fail();
-  const event = template(raw, limits);
-  if (computeEventId(raw.pubkey, event) !== raw.id) return fail('INTEGRITY_FAILURE');
-  return Object.freeze({ id: raw.id, pubkey: raw.pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
+  return checked(() => {
+    const raw = record(input, ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content']);
+    if (!isLowerHex(raw.id, 32) || !isLowerHex(raw.pubkey, 32)) return fail();
+    const event = template(raw, limits);
+    if (computeEventId(raw.pubkey, event) !== raw.id) return fail('INTEGRITY_FAILURE');
+    return Object.freeze({ id: raw.id, pubkey: raw.pubkey, created_at: event.created_at, kind: event.kind, tags: event.tags, content: event.content });
+  });
 }
 
 /**

@@ -113,3 +113,13 @@ test('a hostile relay cannot crash receive with arbitrary input', async () => {
     assert.equal(result.ok, false); assert.doesNotMatch(JSON.stringify(result), /SECRET/);
   }
 });
+
+test('hostile thrown proxies from a relay or provider stay fixed typed failures', async () => {
+  const s = await setup();
+  const {proxy: revoked, revoke} = Proxy.revocable({}, {}); revoke();
+  const hostile = new Proxy({}, {ownKeys(){throw revoked;}});
+  const result = await s.buyerChat.receive(hostile, s.buyer.secret);
+  assert.equal(result.ok, false); assert.equal(result.error.code, 'INVALID_INPUT');
+  assert.doesNotMatch(JSON.stringify(result), /SECRET|proxy|TypeError/);
+  s.buyerChat.close(); s.sellerChat.close();
+});

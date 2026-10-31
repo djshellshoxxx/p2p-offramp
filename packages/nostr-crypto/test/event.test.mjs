@@ -6,6 +6,7 @@ import { schnorr } from '@noble/curves/secp256k1.js';
 import { createLocalNobleIdentityProvider } from '../../identity/index.ts';
 import { createLocalNobleNostrProvider } from '../src/provider.ts';
 import * as ev from '../src/event.ts';
+import { NostrCryptoError } from '../src/bytes.ts';
 
 const provider = createLocalNobleNostrProvider();
 const bytes = hex => Uint8Array.from(Buffer.from(hex, 'hex'));
@@ -86,4 +87,20 @@ test('strict JSON parser rejects duplicate keys, __proto__, depth, trailing data
   }
   assert.throws(() => ev.parseEventJson('"' + 'x'.repeat(300000) + '"'), code('LIMIT_EXCEEDED'));
   assert.equal(Object.getPrototypeOf(ev.parseEventJson('{"a":1}')), Object.prototype);
+});
+
+test('hostile reflection and provider throws never leak foreign diagnostics', async () => {
+  const {proxy: revoked, revoke} = Proxy.revocable({}, {}); revoke();
+  const foreign = new Proxy({}, {ownKeys(){throw Error('SECRET relay diagnostic');}});
+  const revokedThrow = new Proxy({}, {ownKeys(){throw revoked;}});
+  const forged = new Proxy({}, {ownKeys(){throw new NostrCryptoError('UNAUTHORIZED');}});
+  for (const input of [foreign, revokedThrow, forged]) {
+    await assert.rejects(ev.verifyEvent(input, provider), error => error.code === 'INVALID_INPUT' && error.message === 'Nostr cryptographic operation failed.');
+    assert.throws(() => ev.verifyEventSync(input), error => error.code === 'INVALID_INPUT' && error.message === 'Nostr cryptographic operation failed.');
+    assert.throws(() => ev.createUnsignedEvent('a'.repeat(64), input), error => error.code === 'INVALID_INPUT' && error.message === 'Nostr cryptographic operation failed.');
+  }
+  const key = new Uint8Array(32); key[31] = 1;
+  const broken = { ...provider, publicKey: async () => {throw revoked;} };
+  await assert.rejects(ev.signEvent({created_at:1700000000,kind:1,tags:[],content:'x'}, key, broken), error => error.code === 'INVALID_INPUT' && error.message === 'Nostr cryptographic operation failed.');
+  key.fill(0);
 });

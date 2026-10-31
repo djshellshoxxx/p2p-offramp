@@ -9,7 +9,7 @@
 import { sha256 } from '@noble/hashes/sha2.js';
 import { createCoreError, createOperationId } from '../../domain/index.ts';
 import { parseTradeBinding, type CoreErrorCode, type CoreResult, type TradeBinding } from '../../schemas/index.ts';
-import { bytesToHex, isLowerHex, NostrCryptoError, utf8Encode } from './bytes.ts';
+import { bytesToHex, isLowerHex, nostrCryptoErrorCode, utf8Encode } from './bytes.ts';
 import { createUnsignedEvent, DEFAULT_EVENT_LIMITS, type EventLimits, type NostrEvent, type UnsignedEvent } from './event.ts';
 import { createGiftWrap, createSeal, unwrapGiftWrap } from './nip59.ts';
 import type { NostrMessagingProvider } from './provider.ts';
@@ -49,11 +49,13 @@ export interface TradeChat {
   close(): void;
 }
 
-class Stop extends Error { readonly code: CoreErrorCode; constructor(code: CoreErrorCode) { super('Trade chat operation stopped.'); this.code = code; } }
+const stopCodes = new WeakMap<object, CoreErrorCode>();
+class Stop extends Error { readonly code: CoreErrorCode; constructor(code: CoreErrorCode) { super('Trade chat operation stopped.'); this.code = code; stopCodes.set(this, code); } }
 function failure(code: CoreErrorCode): CoreResult<never> { return { ok: false, error: createCoreError(code, { operationId: createOperationId(), readOnly: false }) }; }
 function codeOf(error: unknown): CoreErrorCode {
   // Anything else (an IdentityError for a malformed secret, a hostile provider throw) is reported as invalid input.
-  return error instanceof Stop || error instanceof NostrCryptoError ? error.code : 'INVALID_INPUT';
+  const stopped = typeof error === 'object' && error !== null ? stopCodes.get(error) : undefined;
+  return stopped ?? nostrCryptoErrorCode(error) ?? 'INVALID_INPUT';
 }
 
 export function tradeConversationId(binding: TradeBinding, participants: readonly [string, string]): string {

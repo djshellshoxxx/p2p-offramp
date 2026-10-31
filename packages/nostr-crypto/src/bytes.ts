@@ -1,8 +1,13 @@
 /** Strict byte, hex, base64 and UTF-8 helpers for the G20 Nostr profile. Errors never carry input content. */
 export type NostrCryptoErrorCode = 'INVALID_INPUT' | 'UNSUPPORTED_VERSION' | 'UNSUPPORTED_PROVIDER' | 'UNAUTHORIZED' | 'LIMIT_EXCEEDED' | 'INTEGRITY_FAILURE';
+const errorCodes = new WeakMap<object, NostrCryptoErrorCode>();
 export class NostrCryptoError extends Error {
   readonly code: NostrCryptoErrorCode;
-  constructor(code: NostrCryptoErrorCode = 'INVALID_INPUT') { super('Nostr cryptographic operation failed.'); this.name = 'NostrCryptoError'; this.code = code; }
+  constructor(code: NostrCryptoErrorCode = 'INVALID_INPUT') { super('Nostr cryptographic operation failed.'); this.name = 'NostrCryptoError'; this.code = code; errorCodes.set(this, code); }
+}
+/** Identity lookup only: a revoked proxy or hostile rejection is never reflected upon. */
+export function nostrCryptoErrorCode(error: unknown): NostrCryptoErrorCode | undefined {
+  return typeof error === 'object' && error !== null ? errorCodes.get(error) : undefined;
 }
 export function fail(code: NostrCryptoErrorCode = 'INVALID_INPUT'): never { throw new NostrCryptoError(code); }
 
