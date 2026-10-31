@@ -2,6 +2,12 @@
 
 Updated: 2026-10-30 (America/Los_Angeles). The specification expansion baseline is complete structurally; product implementation has begun. The application is not complete. Current continuation scope and verification are tracked in [delivery coordination](handoffs/DELIVERY-2026-10-30.md); earlier implementation history remains in `handoffs/SESSION_STATUS.md` and `HANDOFF-2026-10-24-CLIENT-SHELL.md`.
 
+Latest continuation: [autonomous execution status](execution/EXECUTION-STATUS.md) and
+[full first-party code audit](execution/CODE-AUDIT-2026-10-30.md). Local escrow, native chain reads,
+journaled wallet execution and bounded offer/transport modules now have real local-EVM integration
+evidence. They are excluded from the offline app; trading and release gates remain disabled.
+Historical milestone counts below are retained as historical evidence.
+
 ## Authoritative scope and branches
 
 `DEVELOPMENT_ROADMAP.md` controls delivery phases: M0 foundation, M1 recoverable static shell,

@@ -47,3 +47,10 @@ unlocked profile and revalidate them on load. Reload, cross-tab conflict, lock a
 covered in emitted-app Chromium checks. Independent-library EIP-712 vectors also check native/ERC-20 terms and
 both parties' signatures outside the shipped app. See [delivery coordination](docs/handoffs/DELIVERY-2026-10-30.md).
 Trading remains disabled; these checks do not qualify a real-funds release.
+
+The [autonomous local EVM pass](docs/execution/EXECUTION-STATUS.md) adds immutable test escrow,
+read-only chain/receipt validation, explicit journaled execution, bounded signed discovery/transport,
+and a real two-party loopback-chain recovery test. Run `npm ci --ignore-scripts --prefix packages/escrow-evm`
+on Linux x64, then `npm run test:escrow` and `npm run test:local-evm`. These modules remain excluded from
+the shipped app. The [full code audit](docs/execution/CODE-AUDIT-2026-10-30.md) records nine resolved
+findings, verification and remaining human-input/later-integration gates.
