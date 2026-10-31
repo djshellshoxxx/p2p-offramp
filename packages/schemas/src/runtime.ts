@@ -1,10 +1,12 @@
 /**
  * Partial G07/MEM01 offline Worker boundary. No network or signer operation exists. The only record operations are the
- * three purpose-bound saved-terms-review commands (G07 "saved terms reviews"); no generic record read or write exists.
+ * purpose-bound saved terms reviews and scalar offline recovery inspection; no generic record read or write exists.
  */
 import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
 import { MAX_BACKUP_BYTES, parseBackupBytes } from './backup.ts';
 import { isSavedReviewSource, MAX_SAVED_REVIEW_BYTES, MAX_SAVED_REVIEWS, type SavedReviewSource } from './saved-review.ts';
+import { parseRecoveryReferences, parseRecoveryOffset, parseRecoveryRevision, type RuntimeRecoveryReferences } from './recovery-reference.ts';
+export * from './recovery-reference.ts';
 
 export const MAX_RUNTIME_SEQUENCE = Number.MAX_SAFE_INTEGER - 1;
 export const RUNTIME_REQUEST_TIMEOUT_MS = 30_000;
@@ -36,11 +38,11 @@ export interface RuntimeSavedReviewRef { readonly recordId: string; }
 export interface RuntimeSavedReview { readonly recordId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array; }
 /** `skipped` counts `trade` records that are not readable saved reviews; they are never returned or changed. */
 export interface RuntimeSavedReviews { readonly items: readonly RuntimeSavedReview[]; readonly skipped: number; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews;
+export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences;
 export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity' |
-  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview';
+  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences';
 const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity',
-  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview'];
+  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
@@ -51,6 +53,7 @@ export type RuntimeCommand = Header & (
   { readonly operation: 'saveTermsReview'; readonly profileId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array } |
   { readonly operation: 'listTermsReviews'; readonly profileId: string } |
   { readonly operation: 'deleteTermsReview'; readonly profileId: string; readonly recordId: string } |
+  { readonly operation: 'listRecoveryReferences'; readonly profileId: string; readonly offset: number; readonly expectedRevision: number | null } |
   { readonly operation: 'status' | 'listProfiles' | 'lock' | 'dispose' | 'activity' });
 export type RuntimeResponse = Header & { readonly kind: 'response'; readonly operation: RuntimeOperation } & (
   { readonly result: { readonly ok: false; readonly error: RuntimeError } } |
@@ -60,7 +63,8 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'saveTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'deleteTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviews } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: 'listRecoveryReferences'; readonly result: { readonly ok: true; readonly value: RuntimeRecoveryReferences } } |
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -128,7 +132,7 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
   const op = operation(own(input, 'operation'));
   const extra = op === 'init' ? ['config'] : op === 'unlock' ? ['profileId', 'passphrase'] : op === 'create' ? ['passphrase'] :
     op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' ? ['profileId'] :
-    op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : [];
+    op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
   if (raw.operation !== op) return fail();
   if (op === 'init') return Object.freeze({ ...base, operation: op, config: parseRuntimeConfig(raw.config) });
@@ -144,6 +148,13 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), source: source(raw.source), bytes });
   }
   if (op === 'deleteTermsReview') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), recordId: recordId(raw.recordId) });
+  if (op === 'listRecoveryReferences') {
+    try {
+      const offset = parseRecoveryOffset(raw.offset), expectedRevision = raw.expectedRevision === null ? null : parseRecoveryRevision(raw.expectedRevision);
+      if (offset > 0 && expectedRevision === null) return fail();
+      return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), offset, expectedRevision });
+    } catch { return fail(); }
+  }
   return Object.freeze({ ...base, operation: op });
 }
 export function parseRuntimeStatus(input: unknown, generation: number): RuntimeStatus {
@@ -234,5 +245,8 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
   if (base.operation === 'saveTermsReview') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: savedRef(result.value) }) });
   if (base.operation === 'deleteTermsReview') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: savedRef(result.value) }) });
   if (base.operation === 'listTermsReviews') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: savedReviews(result.value) }) });
+  if (base.operation === 'listRecoveryReferences') {
+    try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseRecoveryReferences(result.value) }) }); } catch { return fail(); }
+  }
   return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseRuntimeStatus(result.value, base.generation) }) });
 }

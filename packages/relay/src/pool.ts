@@ -6,8 +6,8 @@
  * a refusal (strict mode without verified-private coverage, unknown endpoint, expiry, revocation) means no connection
  * and no direct fallback. The scope is re-checked on every inbound frame and revokes the socket when it lapses.
  *
- * Known limits (see spec G21): the broker does not hand the registered URL to the caller, so `relays[].url` comes from
- * the same trusted composition root as the registry and is not cross-checked here. The platform WebSocket assembles a
+ * The relay URL is canonically bound to the broker's detached registered endpoint before either read or publication
+ * opens a socket. Only credential/fragment-free WSS destinations are supported. The platform WebSocket assembles a
  * whole message before this code sees it, so the frame cap bounds parse/crypto cost, not transient network buffering.
  * Read and publication sockets share maxRelays slots, including sockets closing without a close event. Publications
  * return LIMIT_EXCEEDED before opening any socket when all targets cannot fit; they are never queued or retried.
@@ -231,10 +231,17 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   /** Authorize through G05, capture, and open one socket inside the single-shot scope.run. */
   async function open(r: RelayRec, method: 'read' | 'publish', signal?: AbortSignal): Promise<{ socket: RelaySocketLike; scope: TransportScope } | RouteError> {
     if (sockets.size >= maxActive) return 'LIMIT_EXCEEDED';
+    let destination: string;
+    try {
+      if (typeof r.cfg.url !== 'string' || r.cfg.url.length > 2048 || !/^wss:\/\//i.test(r.cfg.url) || /[\u0000-\u0020\u007f\\#]/.test(r.cfg.url)) return 'INVALID_ENDPOINT';
+      const target = new URL(r.cfg.url), authority = r.cfg.url.slice(r.cfg.url.indexOf('://') + 3).split(/[/?]/, 1)[0];
+      if (target.protocol !== 'wss:' || target.username || target.password || authority?.includes('@')) return 'INVALID_ENDPOINT';
+      destination = target.href;
+    } catch { return 'INVALID_ENDPOINT'; }
     const permit: Permit | RouteError = options.broker.authorize({ channel: 'relay', endpointId: r.cfg.endpointId, method });
     if (typeof permit === 'string') return permit;
     let scope: TransportScope | RouteError;
-    try { scope = options.broker.capture(permit, signal === undefined ? {} : { signal }); } catch { return 'ROUTE_UNAVAILABLE'; }
+    try { scope = options.broker.capture(permit, { expectedURL: destination, ...(signal === undefined ? {} : { signal }) }); } catch { return 'ROUTE_UNAVAILABLE'; }
     if (typeof scope === 'string') return scope;
     const leased = scope;
     // Keep ownership across scope.run's async boundary, including an open socket whose
@@ -262,7 +269,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         if (sockets.size >= maxActive) { capacityRefused = true; finish(null); return; }
         const token = {}; sockets.add(token);
         let native: RelaySocketLike;
-        try { native = connect(r.cfg.url, signal); }
+        try { native = connect(destination, signal); }
         catch (error) { sockets.delete(token); throw error; }
         const wrapped: RelaySocketLike = { onopen: null, onmessage: null, onclose: null, onerror: null,
           send: text => native.send(text), close: () => native.close() };

@@ -1,5 +1,7 @@
 # Session status
 
+**Historical session record:** current source/unfinished-work ownership is in [the continuation inventory](../execution/INCOMPLETE-WORK-2026-10-31.md), [execution prompt](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md). Merged `eaa1fe5` supersedes earlier source/absence claims. Preserve the dated results below as provenance; do not rerun an old next step merely because it appears here.
+
 Session: https://claude.ai/code/session_01BAvLvxSNjWLPiMmSdfUyJQ, 2026-10-24 UTC.
 Owner: this session is the only integration owner for `djshellshoxxx/p2p-offramp`. A sibling session owns GhostPay; the two share no files.
 Workers: none spawned. The work was sequential because the context was already loaded, and a cold worker would have to re-read the same files. No model routing claim is made.

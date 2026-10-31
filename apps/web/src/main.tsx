@@ -4,6 +4,7 @@ import { startAppServices, type AppServices } from './app-services.ts';
 import { App } from './ui/App.tsx';
 import { createTradeReviewController, noApprovedRegistry, type RegistrySource, type TradeReviewController } from './trade/review-controller.ts';
 import './ui/app.css';
+import { createLocalDiagnostics } from './diagnostics.ts';
 
 /**
  * Compile-time constants from vite.config.ts: `__P2P_SYNTHETIC_DEMO__` is true only for the `demo` build and
@@ -32,6 +33,7 @@ function useTradeReviewController(): TradeReviewController {
 }
 
 function Bootstrap() {
+  const [diagnostics] = useState(() => createLocalDiagnostics());
   const trade = useTradeReviewController();
   const [services, setServices] = useState<AppServices | null>(null);
   const [starting, setStarting] = useState(true);
@@ -57,7 +59,7 @@ function Bootstrap() {
     })();
     return () => { window.removeEventListener('pagehide', pagehide); dispose(); };
   }, []);
-  return <App services={services} starting={starting} startupError={startupError} trade={trade} />;
+  return <App services={services} starting={starting} startupError={startupError} trade={trade} diagnostics={diagnostics} />;
 }
 
 const host = document.getElementById('root');

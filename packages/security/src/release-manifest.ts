@@ -1,10 +1,12 @@
 /** Bounded G15 offline verifier mechanics, not a release/install authority.
  * No trust root, storage write, network, signing operation or application export.
  * Non-empty deployment entries remain unsupported until their exact wire schema is reconciled.
- * Locator/rotation/bootstrap/archive extraction and independent enabled-build review remain gates.
+ * Locator verification is separate in release-locator.ts. Rotation/bootstrap/archive
+ * extraction, installation and independent enabled-build review remain gates.
  */
 import { decodeBase64url, MAX_REGISTRY_BYTES, type NetworkV1, type DeploymentV1 } from '../../schemas/index.ts';
 import { RegistryService } from '../../domain/index.ts';
+import { registerReleaseProof } from './release-proof.ts';
 
 export const RELEASE_LIMITS = Object.freeze({ manifestBytes: 1024 * 1024, assets: 10_000, bundleBytes: 256 * 1024 * 1024, trustedKeys: 32 });
 export type ReleaseErrorCode = 'SIGNATURE_INVALID' | 'KEY_UNTRUSTED' | 'MANIFEST_EXPIRED' | 'RELEASE_ROLLBACK' | 'ASSET_MISMATCH' | 'MANIFEST_UNSUPPORTED' | 'CANCELLED' | 'UNAVAILABLE';
@@ -41,6 +43,13 @@ interface ReleaseProof {
 }
 // Only successful local verifier results acquire identity. No raw assets, keys or signatures are retained.
 const proofs = new WeakMap<object, ReleaseProof>();
+/** Separate lexical scope: the retained bridge callback cannot capture verification buffers. */
+function registerLiveResult(value: Extract<ReleaseResult, { ok: true }>['value']): void {
+  registerReleaseProof(value, () => {
+    try { checkProof(proofs.get(value)!); return Object.freeze({ ok: true as const, value }); }
+    catch (error) { return Object.freeze({ ok: false as const, error: Object.freeze({ code: refusalCode(error, 'UNAVAILABLE') }) }); }
+  });
+}
 const nativeUtcSeconds = (): number => Math.floor(Date.now() / 1000);
 // Native brand check without instanceof or property reads on an arbitrary rejection.
 function isNativeDataError(error: unknown): boolean {
@@ -284,6 +293,7 @@ export async function verifyRelease(input: unknown, detached: unknown, trustedKe
     guard();
     const value = Object.freeze({ manifest: m, manifestSha256: digest, keyId, assetsVerified: true as const, deploymentsVerified: false as const, releaseEnabled: false as const });
     proofs.set(value, { manifest: m, manifestSha256: digest, signal, current, clock, lastTime, failure: undefined });
+    registerLiveResult(value);
     return Object.freeze({ ok: true, value });
   } catch (error) {
     let code: ReleaseErrorCode = refusalCode(error, 'MANIFEST_UNSUPPORTED');

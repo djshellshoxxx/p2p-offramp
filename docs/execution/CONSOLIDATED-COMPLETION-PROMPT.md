@@ -1,5 +1,7 @@
 # Consolidated completion prompt
 
+**Historical checkpoint:** use the [current continuation contract](AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
+
 Continue `p2p-offramp` from local intake `8ff3d28`. The user authorizes consolidation
 of all unmerged compatible work, completion of unfinished features that need no
 human input, and a whole-repository code audit. The user explicitly requires

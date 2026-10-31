@@ -3,9 +3,13 @@
 Status: development builds only. No release, deployment, signed artifact or real-funds readiness is claimed.
 `ReleaseEnabled` is `0` and `connectOrigins` is empty in every build mode.
 
+Current implementation work and remaining gates are tracked in the
+[source-derived inventory](execution/INCOMPLETE-WORK-2026-10-31.md) and
+[task ledger](../tasks/todo.md); old milestone counts are historical.
+
 ## Requirements
 
-- Node 24 (CI) or Node 22.18+ (local runs used 22.22; the package `engines` field says `>=24`).
+- Node 24+ (the package `engines` contract; CI and current local verification use Node 24).
 - Python 3.11+ for the spec tools (3.12 in CI).
 - Chromium for browser checks. `scripts/lib/chromium-path.mjs` uses `P2P_CHROMIUM`, then `/usr/bin/chromium`,
   then the newest `/opt/pw-browsers/chromium-*`. Chromium is a test tool, not an app server.
@@ -28,6 +32,22 @@ npm run test:specs && npm run check:specs
 
 Both builds write `local-build-evidence.json` (asset SHA-256 list, `syntheticDemo` flag). It is local evidence, not
 a signed manifest.
+
+The ordinary testnet build currently refuses `KEY_UNPINNED`: no owner-approved
+`SEPOLIA_RELEASE_KEY_ID` is configured. CLI signed verification/`--accept` and
+runtime verification also refuse an unset pin. Replacing a key and signed bundle
+together cannot establish trust. Browser/native proof harnesses use an explicit
+independent fixture pin through their test-owned API composition and display
+unapproved local-proof labels; no CLI/environment pin override is provided.
+The existing manual `--unsigned-registry` experiment remains `verified:false`.
+
+The offline acceptance report can be run with
+`npm run acceptance:report -- candidate.json records.json`. Its local-v1 schemas
+are defined in `packages/security/src/acceptance-gates.ts`. The CLI intentionally
+has no review-policy override: imported review names and pass claims do not
+authenticate approval. Exit 1 means blocked evidence; exit 2 means invalid input.
+The library can receive a separately trusted review-verification capability.
+Even a passing consistency report grants no promotion or runtime authority.
 
 ## Build modes
 

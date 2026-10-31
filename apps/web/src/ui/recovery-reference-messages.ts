@@ -1,0 +1,17 @@
+export const recoveryReferenceMessages = {
+  title: 'Offline transaction recovery references',
+  help: 'Inspect the open profile’s stored journal references without connecting a wallet, relay or node. This view makes no writes and cannot retry or clear a transaction.',
+  unverified: 'Every entry is an unverified offline reference. A stored label such as finalized does not prove current chain state, receipt, payment or safe resubmission. Reconcile against the original network and escrow using compatible recovery software.',
+  private: 'This view and its export contain wallet, trade and transaction identifiers. Keep the file private; these fields can link your activity. No spending key, prepared calldata or signing authorization is exported.',
+  locked: 'Unlock the local profile to inspect its recovery references. Locking or changing profile clears this view.',
+  load: 'Inspect recovery references', loading: 'Reading unverified local references…', refresh: 'Restart reference inspection', previous: 'Previous reference page', next: 'Next reference page',
+  empty: 'No supported journal references exist on this page. Unknown or future records are retained in the encrypted profile and backup.',
+  page: (offset: number, total: number, revision: number) => `Journal records ${total ? offset + 1 : 0}–${Math.min(offset + 64, total)} of ${total}; local snapshot revision ${revision}. This is not a chain height.`,
+  unsupported: (count: number) => `${count} record${count === 1 ? '' : 's'} on this page could not be interpreted. Nothing was deleted or rewritten. Keep a complete encrypted backup for compatible recovery software.`,
+  select: 'Select references for a private recovery file', reference: (index: number) => `Reference ${index}`,
+  consent: 'I understand the selected file contains private recovery metadata, remains unverified and cannot authorize a transaction.',
+  preview: 'Preview selected private references', previewTitle: 'Private recovery-reference preview', exact: 'Exact private recovery export (UTF-8 JSON)',
+  previewHelp: 'These are the exact selected fields and bytes. Only the current page is exported; the full encrypted backup preserves all records. Sharing is a separate action outside this app.',
+  download: 'Download previewed private recovery file', downloaded: 'The previewed private file was prepared for your browser. No network request or transaction was made.',
+  storedLabel: 'Stored label (unverified)', transaction: 'Public chain transaction reference (unverified)', nonce: 'Recorded EVM nonce', unknown: 'Not recorded',
+} as const;

@@ -4,7 +4,7 @@ import {
   parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource,
+  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences,
 } from '../../../../packages/schemas/index.ts';
 import { capturePendingMetadata, type PendingMetadata } from './pending-metadata.ts';
 
@@ -168,13 +168,13 @@ export class AppRuntime {
     if (pending.metadata.operation !== message.operation || pending.metadata.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
     if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
-        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview') {
+        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
       if (!message.result.ok && (pending.metadata.operation === 'unlock' || pending.metadata.operation === 'create')) this.#resetStatus();
       // Saved-review replies belong to the profile the command named; it must still be the open profile.
-      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview') &&
+      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
       }
@@ -262,8 +262,8 @@ export class AppRuntime {
     if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation)) return runtimeFailure('LOCKED');
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
-  /** Saved terms reviews of the open profile. Each call names that profile; a reply after lock or a switch is refused. */
-  async #savedReviews<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview', fields: Record<string, unknown>,
+  /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -275,13 +275,17 @@ export class AppRuntime {
     return !result.ok ? result : accept(result.value) ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
-    return this.#savedReviews('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
+    return this.#profileCommand('saveTermsReview', { source, bytes }, (value): value is RuntimeSavedReviewRef => 'recordId' in value, signal);
   }
   listTermsReviews(signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviews>> {
-    return this.#savedReviews('listTermsReviews', {}, (value): value is RuntimeSavedReviews => 'items' in value, signal);
+    return this.#profileCommand('listTermsReviews', {}, (value): value is RuntimeSavedReviews => 'items' in value, signal);
   }
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<RuntimeResult<RuntimeSavedReviewRef>> {
-    return this.#savedReviews('deleteTermsReview', { recordId }, (value): value is RuntimeSavedReviewRef => 'recordId' in value && value.recordId === recordId, signal);
+    return this.#profileCommand('deleteTermsReview', { recordId }, (value): value is RuntimeSavedReviewRef => 'recordId' in value && value.recordId === recordId, signal);
+  }
+  listRecoveryReferences(offset = 0, expectedRevision: number | null = null, signal?: AbortSignal): Promise<RuntimeResult<RuntimeRecoveryReferences>> {
+    return this.#profileCommand('listRecoveryReferences', { offset, expectedRevision }, (value): value is RuntimeRecoveryReferences => 'authority' in value && value.offset === offset &&
+      (expectedRevision === null || value.revision === expectedRevision), signal);
   }
   lock(): Promise<RuntimeResult<RuntimeStatus>> {
     if (this.#closed || this.#disposing || !this.#invalidate('LOCKED')) return Promise.resolve(runtimeFailure('LOCKED'));

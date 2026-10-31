@@ -1,5 +1,7 @@
 # Continue P2P Offramp to lean EVM acceptance
 
+**Historical checkpoint:** use the [current continuation contract](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
+
 Continue `djshellshoxxx/p2p-offramp` autonomously until the owner-approved lean acceptance criteria pass, coding capacity is exhausted, or a specific access/ownership/approval gate prevents further independent progress. Implement accepted, dependency-ready work; do not manufacture tasks or repeat completed checks to stay busy.
 
 ## Start from the live checkpoint

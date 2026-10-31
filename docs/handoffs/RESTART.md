@@ -1,5 +1,13 @@
 # P2P Offramp restart — one EVM trade
 
+**Current restart contract (2026-10-31):** use the
+[source-derived inventory](../execution/INCOMPLETE-WORK-2026-10-31.md) and
+[coordinated prompt](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md).
+Compatible work was merged through `eaa1fe5`; the discriminator, provider-error,
+registry, adapter/drain and full local EVM slices described below are historical
+and must not be rebuilt from these old next-step instructions. Retain the dated
+receipts as provenance. Production trust/approval gates remain closed.
+
 Latest: [runtime discriminator fix](P2P_RUNTIME_DISCRIMINATOR_2026-10-27.md), source6e5c42f:35focused/571Node/eight gates pass. Next typed G16 result-only contract, no Worker/app enablement; compact full-source checkpoint links v25.
 
 Latest: [actual adapter Worker qualification](P2P_ADAPTER_BROWSER_2026-10-27.md), sourceb91c459:51assertions/9schedules, eight affected gates,570Node. App boundary conditions remain unmet; synthetic messageerror only. Library v24 contains previous adapter source; next guarded checkpoint must preserve browser source.

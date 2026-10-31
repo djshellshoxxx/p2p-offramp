@@ -1,5 +1,7 @@
 # Autonomous completion prompt
 
+**Historical checkpoint:** use the [current continuation contract](AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and [task ledger](../../tasks/todo.md) before executing unfinished-work instructions below. Merged `eaa1fe5` supersedes earlier source/absence claims; retain these original instructions and results as provenance.
+
 Execute this prompt against baseline 7cd4900 in p2p-offramp. The user requests review of all unfinished work that needs no human input, implementation, then a full code audit. This prompt is the execution contract, not a claim that unfinished work is already done.
 
 ## Product and boundaries

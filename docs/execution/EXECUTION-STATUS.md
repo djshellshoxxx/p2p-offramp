@@ -1,5 +1,11 @@
 # Autonomous execution status
 
+**Historical local-only pass:** implementation/schema absence, `work` branch and
+no-publication statements below describe that earlier checkpoint. Compatible
+work was subsequently merged through `eaa1fe5`. Current continuation is
+[the inventory](INCOMPLETE-WORK-2026-10-31.md) and [task ledger](../../tasks/todo.md);
+the prior full merge/audit is [recorded separately](CONSOLIDATED-AUDIT-2026-10-30.md).
+
 Prompt: [AUTONOMOUS-COMPLETION-PROMPT.md](AUTONOMOUS-COMPLETION-PROMPT.md).
 Audit and remaining scope: [CODE-AUDIT-2026-10-30.md](CODE-AUDIT-2026-10-30.md).
 Baseline `7cd4900`; all delivery changes are local commits on `work`.

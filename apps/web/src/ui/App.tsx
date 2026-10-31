@@ -5,6 +5,7 @@ import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
+import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
@@ -16,9 +17,10 @@ export interface AppProps {
   readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined;
   /** Local terms review session; encrypted save/load use its injected session-bound persistence port. */
   readonly trade?: TradeReviewController | null;
+  readonly diagnostics?: Diagnostics | null;
 }
 
-export function App({ services, starting = false, startupError, trade = null }: AppProps) {
+export function App({ services, starting = false, startupError, trade = null, diagnostics = null }: AppProps) {
   const tradeSnapshot = useTradeReview(trade);
   const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
   const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
@@ -105,7 +107,7 @@ export function App({ services, starting = false, startupError, trade = null }: 
           route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /> : route.page === 'settings' ? <Settings /> :
+          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} /> :
           route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>

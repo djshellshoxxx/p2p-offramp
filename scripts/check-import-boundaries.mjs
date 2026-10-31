@@ -21,6 +21,9 @@ import {
 
 const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.mts', '.cts', '.mjs', '.cjs'];
 const CORE_PACKAGES = new Set(['domain', 'schemas']);
+// Explicit narrow facade; other package subpaths remain private. Its imports are
+// still traversed and checked like the ordinary index facade.
+const PUBLIC_SIDE_ENTRIES = new Set(['packages/security/release-context.ts']);
 const BROWSER_GLOBALS = new Set([
   'window', 'document', 'navigator', 'localStorage', 'sessionStorage', 'indexedDB',
   'Worker', 'SharedWorker', 'WebSocket', 'fetch', 'XMLHttpRequest', 'EventSource',
@@ -42,6 +45,7 @@ function within(root, path) {
   return rel === '' || (!rel.startsWith(`..${sep}`) && rel !== '..' && !isAbsolute(rel));
 }
 function sourceKind(path) {
+  if (PUBLIC_SIDE_ENTRIES.has(posix(path))) return { kind: 'package', name: 'security', facade: true };
   const parts = posix(path).split('/');
   const packageIndex = parts.indexOf('packages');
   if (packageIndex >= 0 && parts[packageIndex + 2] === 'src') return { kind: 'package', name: parts[packageIndex + 1], facade: false };
@@ -115,7 +119,8 @@ function packageForPath(root, path) {
   return match?.[1];
 }
 function isPublicPackageFacade(root, path) {
-  return /^packages\/[^/]+\/index\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(posix(relative(root, path)));
+  const rel = posix(relative(root, path));
+  return PUBLIC_SIDE_ENTRIES.has(rel) || /^packages\/[^/]+\/index\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs)$/.test(rel);
 }
 function isAppSource(root, path) {
   return /^apps\/web\/src(?:\/|$)/.test(posix(relative(root, path)));
