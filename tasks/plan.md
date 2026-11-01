@@ -36,3 +36,75 @@ Checkpoints: focused owner tests and independent review per slice; final combine
 tests/build/browser/native checks; exact-head hosted review; guarded merge and
 post-merge tree/ancestry verification. User's explicit autonomous execution and
 merge instruction authorizes these steps; no routine human checkpoint is needed.
+
+## Continued review from merged PR #20
+
+The user's continuation resumes the same execution contract at clean merged
+`b700085`. T1–T9 remain complete. The next intake reproduced two chain-read bugs
+and found a missing cross-package acceptance journey; admit only these bounded
+slices before implementation. Branch: `autonomous/continuation-20261031`.
+
+| Task | Single writer | Owned area | Dependencies |
+| --- | --- | --- | --- |
+| T10 | continue_chain | canonical payment-preflight/chain-reader source and tests; native payment fixture | finalized evidence stays positive proof; latest state only vetoes; numbered observations recheck anchor |
+| T11 | continue_chat | existing encrypted-exchange/native escrow harness; messaging README and G20 implementation status | existing chat, relay, vault and native settlement APIs; no new protocol |
+| T12 | root | integration, prompt/status/evidence; coordinated whole-source audit and guarded merge | T10/T11 freeze, different reviewers, integrated checks |
+| T13 | continue_foundations | app-local English catalog/typed variables/metadata, UI message migration, locale tests | existing localization spec; no reviewed translations/funds locale or accessibility approval |
+| T14 | root | Sepolia operator-tool observation and focused state tests | reproduced same numbered-header consistency defect as T10 in the separate CLI path |
+| T15 | audit_runtime_build | Sepolia tool Forge environment/provenance guard and hygiene tests | reproduced optimizer/EVM-version overrides contradict the recorded committed build recipe |
+| T16 | audit_evm | Sepolia deployment-record canonical inclusion/guard proof; deployment regression/native kit tests | independently reproduced wrong/orphan receipt and unproved known-hash guard clearing; T15 library interface freezes first |
+| T17 | continue_chain | standalone canonical-EVM recovery package/tool, strict existing reference-export parser and tests/docs | existing opaque G15 proof, exact authenticated canonical ABI, archived G11 deployment; T10/T15/T16 and separate independent review |
+| T18 | continue_foundations | acceptance report CLI main detection and subprocess regression | reproduced symlink invocation silently exits 0 without running the evaluator |
+
+T10 requires regressions for finalized funded/latest terminal or mismatched state
+and a reorg between header capture and state observation. T11 must demonstrate
+authenticated durable chat, reopen/dedup and fresh-key recovery in the existing
+canonical exchange journey without additional app/network/wallet authority.
+Independent reviewers must inspect the final slices, and whole-source audit
+assignments must use disjoint subsystem scopes. Any newly reproduced defect
+enters this ledger before its owner edits it. No duplicate reader, outbox, cursor,
+trust-root decision or production enablement is authorized by this plan.
+
+T13 was admitted by the final foundation intake: the localization specification
+requires one typed catalog, while current UI strings are split across unrelated
+plain objects and inline labels. Implement the English source foundation and
+draft-only test pseudolocale without adding a dependency or claiming completed
+multilingual/tooltip/accessibility acceptance. The owner must enumerate migrated
+UI paths and preserve visible copy and canonical data; no alternate locale is
+approved or selectable for funds actions. Root does not edit the owner's UI files.
+
+T14 entered during whole-source tooling review: a changed/missing numbered block
+after logs/state reads still reached the CLI's pre-funding hook. Four controlled
+regressions fail on the original source. Recheck height/hash/time before creating
+the observation, use a fixed refusal, and retain a stable-snapshot positive test.
+Runtime/build auditor independently reviews this root-owned change.
+
+T15 entered after the tooling auditor reproduced inherited `FOUNDRY_*` settings
+changing compiler output while the DeploymentRecord still claims the committed
+recipe. Restrict inherited build overrides and verify the actual canonical recipe
+with the pinned toolchain; preserve explicit controlled output-directory and
+compiler-path seams. A different reviewer checks this auditor-authored fix.
+
+T16 entered after both tooling and EVM reviewers independently reproduced a
+deployment receipt mismatch accepted as finalized by height. Bind the requested
+CREATE transaction, receipt and canonical numbered block; pin code/allowlist reads
+and recheck their anchor. Neither known-hash nor unknown-attempt guard clearing
+may use imported metadata alone as proof. Preserve unknown outcomes and fixed
+errors; native loopback verification must remain reproducible under T15.
+
+T17 is a bounded G25 implementation, not another generic chain reader. Build a
+portable Node recovery bundle only from a live verified release and its exact
+authenticated registry/ABI bytes. Pin one original canonical deployment inside
+the independently authenticated executable. Reuse existing generic identity
+validation without the incompatible isolated-profile decoder, and use canonical
+state/calldata builders. Explicit reads/unsigned release/refund/fixed-beneficiary
+withdrawal never send, sign, fund or replay a journal request. Archived original
+escrow exits remain available after the originating manifest expires; no current
+release/new-funding authority is granted. Root owns shared facades, commands and
+CI after the interface freezes. New package distribution authenticity, witnesses,
+qualified live deployment and Solana remain separate gates.
+
+T18 is a small tooling-audit regression: executing the acceptance-report CLI via
+a symlink skips its literal-path main guard and silently exits successfully.
+Resolve the entry path robustly and require the same fixed invalid/blocked result
+as direct invocation. Keep imported-library use inert and evaluator policy closed.

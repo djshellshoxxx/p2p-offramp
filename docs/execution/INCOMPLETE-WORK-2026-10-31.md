@@ -1,6 +1,7 @@
 # Current incomplete-work inventory
 
-Source intake: merged `eaa1fe5`. This is the current continuation index; dated
+Original source intake: merged `eaa1fe5`; current continuation starts at merged
+PR #20, `b700085`. This is the current continuation index; dated
 handoffs and prior test counts remain historical evidence. The execution contract
 is [the single prompt](AUTONOMOUS-NEXT-PROMPT-2026-10-31.md); implementation state
 is tracked in [the task ledger](../../tasks/todo.md).
@@ -9,6 +10,31 @@ The local tasks below are now implemented and independently reviewed; the table
 preserves what was missing at intake. [Final evidence](AUTONOMOUS-RESULT-2026-10-31.md)
 records 1,028 passing tests. The external/undefined and later milestones remain
 incomplete. Verify publication/merge state from the final PR's live metadata.
+
+The user's subsequent continuation is tracked in the same ledger as T10–T18.
+See the [continuation evidence](CONTINUATION-RESULT-2026-10-31.md) and
+[whole-source audit](CONTINUATION-AUDIT-2026-10-31.md) for its actual verification
+and coverage limits. Prior completed tasks are reused, not reopened.
+
+## Continued intake from merged PR #20
+
+| Task | Source-derived gap | Boundary |
+| --- | --- | --- |
+| T10 | Finalized funding can lag latest settlement; canonical observation can cross a numbered-block reorg | Latest state vetoes only; finalized proof still required; no send |
+| T11 | Existing native exchange journey does not exercise durable chat alongside journal recovery | Existing explicit relay publication; memory-store native fixture and separate actual IndexedDB evidence |
+| T13 | English UI copy lacks the specified single typed locale catalog | English foundation only; reviewed translations and accessibility acceptance stay external |
+| T14 | Separate operator CLI can label replacement state with a stale header/time | Recheck before observation/funding decision; no retry or new authority |
+| T15 | Ambient Foundry overrides contradict the deployment record's committed recipe claim | Explicit build environment/recipe verification; pinned tools unchanged |
+| T16 | Wrong/orphan deployment receipts and reverted-status cleanup can bypass native inclusion proof | Exact CREATE/receipt/canonical inclusion; unknown attempts retain reservation |
+| T17 | ABI/builders/reference exports are not a portable frontend-independent recovery package | Canonical EVM only; authenticated original pins, read-only inspection and unsigned exits |
+| T18 | Acceptance CLI symlink invocation exits successfully without evaluation | Canonical entry detection, invalid/blocked refusal, inert library import |
+
+These slices pass combined local acceptance and independent review. T12 coordinates
+final audit, integration and consolidation; live hosting/merge state belongs in
+final PR metadata. Additional findings must enter the authoritative ledger before
+source edits. G25 now has a canonical-EVM portable package; distribution authenticity,
+an approved maintained release including its ABI, witnesses and Solana remain
+separate requirements.
 
 ## Specified implementation that can proceed locally
 
@@ -59,6 +85,27 @@ would duplicate those services or CI and is not a separate task.
 
 These block the corresponding authority or interoperability claim. They do not
 block the synthetic/offline tasks above. No approval is manufactured here.
+
+## Remaining local engineering follow-ons
+
+The English catalog is an implemented foundation, not the complete localization
+specification. A complete TooltipRegistry and its hover/focus/tap interactions,
+broader draft RTL/CJK/long-text layout stress and supported-language engineering
+remain follow-ons. They can be planned without inventing human translation or
+WCAG approval. Current critical warnings remain visible helper text. New locale
+selection for funds remains unavailable.
+
+The ordinary recovery builder is implemented against maintained trust files and
+refuses the current unset key pin. A real maintainer-approved release must list
+both original registry and canonical ABI; the existing registry-only signing
+profile cannot substitute for that asset proof. No unconditional placeholder
+builder or public key override is provided. The tested programmatic builder uses
+a genuine synthetic G15 proof and the copied runtime completes native recovery.
+
+These follow-ons and the defined later milestones are not represented as completed
+or as human-blocked solely because this bounded continuation did not implement
+them. The ledger/prompt provides a source-derived next intake rather than claiming
+the entire product has no remaining engineering work.
 
 ## Deliberately later milestones
 

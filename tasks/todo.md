@@ -19,3 +19,37 @@ Exact-head hosted checks, source publication, guarded merge and main tree/ancest
 readback are recorded in the final PR metadata. This immutable source checkpoint
 cannot certify its own future merge. Verify live GitHub state on continuation;
 the checked implementation tasks above must not be repeated.
+
+Continuation from merged `b700085`:
+
+| Task | Status | Owner / latest handoff |
+| --- | --- | --- |
+| T10 | DONE | continue_chain; owner/native and independent review pass; combined unit/native acceptance passes |
+| T11 | DONE | continue_chat; 10-check native journey independently rerun and combined acceptance passes |
+| T12 | INTEGRATING | root; whole-source audit and all combined checks pass; exact-head hosting/guarded merge readback pending |
+| T13 | DONE | continue_foundations + root HTML integration; independent review, types, builds and all browser journeys pass |
+| T14 | DONE | root; eight focused tests independently checked; native operator trade passes 13 checks |
+| T15 | DONE | audit_runtime_build; independent eight-test/config probe review; combined deployment kit passes |
+| T16 | DONE | audit_evm; independent proof/revert review; updated legacy fixture + proof tests 13/13 and native kit 10 pass |
+| T17 | DONE | continue_chain; independent mutation/FIFO fixes verified; 5 focused + 6 copied-bundle native checks pass |
+| T18 | DONE | continue_foundations; independent entrypoint review and three combined subprocess tests pass |
+
+All use `autonomous/continuation-20261031` with serialized shared edits and one
+writer per assigned path. The plan defines outcomes, exclusions, dependencies,
+contracts and required checks. Checkboxes become DONE only after combined
+acceptance, not merely after an owner's handoff. Existing managed workspace and
+tool slots are reused; no additional cloud instance or paid resource is created.
+
+- [x] T10 Fix canonical chain-read consistency: latest-state veto for finalized payment guidance and reorg-safe numbered observations.
+- [x] T11 Compose durable authenticated chat/reopen/fresh-key recovery into the existing canonical encrypted exchange/native settlement journey.
+- [ ] T12 Reassess remaining work, independently audit whole-source subsystem coverage, run integrated checks, consolidate and merge with exact-head evidence. Owner root.
+- [x] T13 Implement the specified English localization catalog, typed variable and metadata validation, current UI migration and draft pseudolocalization tests. Translated/funds/accessibility approval remains external.
+- [x] T14 Reject torn state/header observations in the separate Sepolia operator tool before any funding decision.
+- [x] T15 Prevent ambient Foundry build overrides from contradicting the recorded deployment recipe.
+- [x] T16 Authenticate requested deployment/receipt/canonical block before recording finality or clearing known/unknown pending guards.
+- [x] T17 Build and test a portable canonical-EVM recovery package with explicit read-only inspection and unsigned external-wallet exits, preserving historical escrow recovery after release expiry. Live distribution/deployment/Solana approval remains outside local scope.
+- [x] T18 Make symlink invocation of the acceptance-report CLI execute its checks and preserve refusal exit codes.
+
+This is the frozen-source checkpoint. T12's live hosted/merge status is recorded
+in final PR metadata after publication; this document cannot certify its own
+future merge. The result/audit documents record local evidence and retained gates.
