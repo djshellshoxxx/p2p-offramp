@@ -108,7 +108,7 @@ export function App({ services, starting = false, startupError, trade = null, di
           route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} /> :
+          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
           route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>

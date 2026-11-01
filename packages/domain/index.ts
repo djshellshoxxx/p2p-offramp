@@ -6,3 +6,7 @@ export { encodePrivateAgreement, encodeCapabilities, encodeSolanaTerms, checkFun
 export type { PrivateAgreementV1, CapabilityV1, SolanaTermsInput } from './src/trade-terms.ts';
 export { reviewTermsBytes, reviewTermsDocument, TERMS_REVIEW_FORMAT, MAX_TERMS_REVIEW_BYTES } from './src/terms-review.ts';
 export type { EvmTradeTermsV1, TermsReviewDocumentV1, TermsReviewRejection, RegistryLookup, ReviewedEvmTerms, TermsReviewResult } from './src/terms-review.ts';
+export { createPrivacyViewReader } from './src/privacy-view.ts';
+export type { PrivacyView, PrivacyViewReader, PrivacyTransportPort, PrivacyObservationPort, PrivacyObservationSnapshot, PrivacyCapabilityObservation, PrivacyIndicator, PrivacyRouteIndicator, PrivacyReason, VaultPrivacyState, MessagingPrivacyState, ProofPrivacyState } from './src/privacy-view.ts';
+export { createJourneyProjection } from './src/journey-view.ts';
+export type { JourneyStep, JourneyView, JourneyProjection } from './src/journey-view.ts';

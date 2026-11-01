@@ -2,6 +2,32 @@
 import { createMessage, formatMessage, type MessageEntry, type MessageVariables, type MessageValues } from './catalog.ts';
 
 const definitions = {
+  privacy: {
+    title: 'Independent privacy observations', intro: 'These local observations do not verify anonymity, encrypted messaging or payment settlement.',
+    selected: 'Selected policy', observed: 'Observed state', source: 'Evidence source', reason: 'Observation reason',
+    noPolicy: 'No network policy selected', none: 'No trusted observation', unknown: 'Unknown', unavailable: 'Unavailable', unsupported: 'Unsupported',
+    ordinary: 'Ordinary', strict: 'Strict', direct: 'Direct connection', privateRoute: 'Verified private route', blocked: 'Blocked by policy',
+    rpc: 'RPC channel', relay: 'Relay channel', map: 'Map channel', proofChannel: 'Proof channel', update: 'Update channel', wallet: 'Wallet channel',
+    vault: 'Local vault', messaging: 'Message encryption', proof: 'Proof availability', locked: 'Locked', unlocked: 'Unlocked',
+    authenticated: 'Authenticated encryption observed', available: 'Available', localVault: 'Local vault service inspection', transport: 'Live transport policy inspection', messagingProvider: 'Trusted messaging service', proofProvider: 'Trusted proof service',
+    notObserved: 'Not observed', observedReason: 'Fresh observation', expired: 'Observation expired', invalid: 'Observation rejected', scopeChanged: 'Local scope changed', clockReversed: 'Monotonic clock reversed', policyBlocked: 'Selected or observed policy blocks direct transport',
+    chainTitle: 'Public chain visibility', chainWarning: 'Public chain transactions reveal metadata. Local vault encryption and private routing do not make chain activity anonymous.',
+    fiatTitle: 'Manual fiat settlement', fiatWarning: 'Fiat receipt depends on seller attestation. Proof availability does not prove that a payment is irreversible.',
+    authorityWarning: 'Display only. These observations cannot enable trading, prepare transactions or authorize spending.',
+    time: { source: 'Inspected at {milliseconds} milliseconds on this session’s monotonic clock. This is not a wall-clock timestamp.', variables: { milliseconds: 'text' } },
+    refresh: 'The local vault is inspected again on each render and when vault status or selection changes. Network, messaging and proof services are not connected in this shell.',
+    noTime: 'No evidence timestamp is available.', error: 'Privacy observations are unavailable. No privacy coverage or transaction authority is established.',
+  },
+  help: {
+    profile: "A profile ID locates local encrypted data on this origin. It is not a wallet address or counterparty authentication.",
+    unlock: "Unlocking exposes local plaintext to this browser session. It grants no wallet or transaction permission.",
+    create: "Use a unique secret you can retain. This local operation creates storage keys, not external-wallet spending keys.",
+    file: "Select your own encrypted backup. File names and checksums cannot establish that its contents are authentic.",
+    restore: "The new passphrase seals a separate profile with fresh keys. Keep the original file and its old passphrase until recovery is verified.",
+    export: "Downloading ciphertext does not test its passphrase or restore it. Keep the exported file private and retain its passphrase separately.",
+    createConsent: "Consent applies only to creating this local profile. There is no server account or administrator able to reset its passphrase.",
+    restoreConsent: "A successful local restore is not confirmation that a referenced transaction failed or that it is safe to submit again.",
+    label: "Help", show: { source: "Help for {control}", variables: { control: "text" } } },
   "shell": {
     "appName": "P2P Off-ramp",
     "development": "Development shell",
@@ -476,6 +502,8 @@ type Variables<D> = D extends { readonly variables: infer V extends MessageVaria
 type Entries = { readonly [G in Group]: { readonly [K in keyof Definitions[G]]: MessageEntry<Variables<Definitions[G][K]>> } };
 type StaticGroup<G extends Group> = { readonly [K in keyof Definitions[G] as Definitions[G][K] extends string ? K : never]: string };
 const contexts: Record<Group, string> = {
+  privacy: 'Independent local privacy observations; no anonymity, settlement or economic authority',
+  help: 'Local accessible control guidance; no private input or authority',
   shell: 'Local profile, recovery and offline application shell', shellErrors: 'Fixed local operation errors and recovery guidance',
   trade: 'Read-only canonical trade terms and seller-withholding disclosure', tradePage: 'Offline trade-terms review and encrypted saved copies',
   tradePageSavedBusy: 'Pending encrypted review operation', tradePageSavedDone: 'Confirmed encrypted review operation',

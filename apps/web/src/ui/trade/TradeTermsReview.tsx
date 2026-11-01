@@ -19,14 +19,14 @@ function Address({ value }: { readonly value: string }) {
   const result = fullAddress(value);
   if (!result.ok) return <span className="notice error">{t.invalid}</span>;
   return <>
-    <code className="exact">{result.value.full}</code>
-    <br /><small className="helper">{t.groupedLabel}: <code>{result.value.grouped}</code></small>
+    <code className="exact"><bdi dir="ltr">{result.value.full}</bdi></code>
+    <br /><small className="helper">{t.groupedLabel}: <code><bdi dir="ltr">{result.value.grouped}</bdi></code></small>
   </>;
 }
 function Deadline({ target, now }: { readonly target: string; readonly now: string }) {
   const result = describeDeadline(target, now);
   if (!result.ok) return <span className="notice error">{t.invalid}</span>;
-  return <>{result.value.text} <small className="helper">({t.unixSeconds}: <code>{target}</code>)</small></>;
+  return <>{result.value.text} <small className="helper">({t.unixSeconds}: <code><bdi dir="ltr">{target}</bdi></code>)</small></>;
 }
 function Amount({ review }: { readonly review: ReviewedEvmTerms }) {
   const result = formatUnits(review.amountBaseUnits, review.asset.decimals);
@@ -74,7 +74,7 @@ export function TradeTermsReview({ review, nowSeconds, source }: TradeTermsRevie
       <dt>{t.escrowExpiry}</dt><dd><Deadline target={review.escrowExpirySeconds} now={nowSeconds} /></dd>
       <dt>{t.instructions}</dt><dd><Instructions text={agreement.paymentInstructions} /></dd>
       <dt>{t.capabilities}</dt><dd>{agreement.capabilities.length === 0 ? t.capabilitiesNone : <ul>
-        {agreement.capabilities.map(capability => <li key={capability.id}><code>{capability.id}</code> <CapabilityVersion version={capability.version} />
+        {agreement.capabilities.map(capability => <li key={capability.id}><code><bdi dir="ltr">{capability.id}</bdi></code> <CapabilityVersion version={capability.version} />
           {review.unsupportedCapabilities.includes(capability.id) ? <> <span className="notice error">{t.capabilityUnsupported}</span></> : null}</li>)}
       </ul>}</dd>
       <dt>{t.network}</dt><dd>{review.network.id}</dd>
@@ -82,15 +82,15 @@ export function TradeTermsReview({ review, nowSeconds, source }: TradeTermsRevie
       <dt>{t.environment}</dt><dd>{review.network.environment}</dd>
       <dt>{t.deployment}</dt><dd>{review.deployment.id}</dd>
       <dt>{t.contract}</dt><dd><Address value={review.deployment.address} /></dd>
-      <dt>{t.orderId}</dt><dd><code className="exact">{review.orderId}</code></dd>
+      <dt>{t.orderId}</dt><dd><code className="exact"><bdi dir="ltr">{review.orderId}</bdi></code></dd>
       <dt>{t.revision}</dt><dd>{review.revision}</dd>
-      <dt>{t.sellerNonce}</dt><dd><code className="exact">{review.sellerNonce}</code></dd>
+      <dt>{t.sellerNonce}</dt><dd><code className="exact"><bdi dir="ltr">{review.sellerNonce}</bdi></code></dd>
     </dl>
     <p className="helper">{t.clockNote}</p>
     <h3>{t.hashes}</h3>
     <dl className="terms">
-      <dt>{t.agreementHash}</dt><dd><code className="exact">{review.privateAgreementSha256}</code></dd>
-      <dt>{t.capabilitiesHash}</dt><dd><code className="exact">{review.capabilitiesSha256}</code></dd>
+      <dt>{t.agreementHash}</dt><dd><code className="exact"><bdi dir="ltr">{review.privateAgreementSha256}</bdi></code></dd>
+      <dt>{t.capabilitiesHash}</dt><dd><code className="exact"><bdi dir="ltr">{review.capabilitiesSha256}</bdi></code></dd>
       <dt>{t.termsDigest}</dt><dd>{t.termsDigestUnavailable}</dd>
     </dl>
     <section className="warning" aria-labelledby="settlement-risk-title"><h3 id="settlement-risk-title">{t.riskTitle}</h3><p>{t.risk}</p></section>

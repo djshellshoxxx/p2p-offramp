@@ -1,3 +1,5 @@
+Current continuation: [2026-11-01 remaining work](GUIDANCE-REMAINING-2026-11-01.md) and [audit](GUIDANCE-AUDIT-2026-11-01.md). The dated evidence below is historical.
+
 # Autonomous execution status
 
 **Historical local-only pass:** implementation/schema absence, `work` branch and

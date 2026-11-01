@@ -84,3 +84,18 @@ test('escrowCallFor builds each action from evm-escrow with its required prior e
   assert.deepEqual(escrowCallFor({ action: 'refund', escrow: ESCROW, tradeId }), { call: buildRefund(ESCROW, tradeId), expectedEscrowState: 'funded' });
   assert.notEqual(buildGetTrade(ESCROW, tradeId).data, fund.call.data);
 });
+test('every reader operation normalizes hostile thrown prototypes without escaping private diagnostics', async () => {
+  const operations = [
+    reader => reader.chainId(signal), reader => reader.head('latest',signal), reader => reader.blockHashAt('1',signal),
+    reader => reader.transactionCount('0x'+'31'.repeat(20),'latest',signal), reader => reader.transaction(H,signal), reader => reader.receipt(H,signal),
+    reader => reader.escrowState(binding,'1',signal), reader => reader.escrowObservation(binding,{signal,generation:0,requestSequence:1}),
+  ];
+  for (const operation of operations) {
+    const hostile = new Proxy({}, { getPrototypeOf() { throw Error('PRIVATE prototype https://private.invalid'); },
+      getOwnPropertyDescriptor() { throw Error('PRIVATE descriptor'); } });
+    const reader = createEip1193ChainReader({request:async()=>{throw hostile;},escrow:ESCROW});
+    const result = await operation(reader);
+    assert.equal(result.ok,false);assert.equal(result.error.code,'UNAVAILABLE');
+    assert.doesNotMatch(JSON.stringify(result),/PRIVATE|https|private\.invalid/);
+  }
+});

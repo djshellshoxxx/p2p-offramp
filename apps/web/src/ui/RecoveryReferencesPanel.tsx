@@ -76,10 +76,10 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
             const checked = event.currentTarget.checked; discardPreview(); setNotice(''); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
           }} /><span>{m.reference(page.offset + index + 1)} · {item.action}</span></label>
           <dl className="terms"><dt>{m.storedLabel}</dt><dd>{item.storedState}</dd>
-            <dt>{m.networkDeployment}</dt><dd><code>{item.binding.networkId} / {item.binding.deploymentId}</code></dd>
-            <dt>{m.tradeId}</dt><dd><code>{item.binding.tradeId}</code></dd><dt>{m.walletAccount}</dt><dd><code>{item.account}</code></dd>
-            <dt>{m.intentId}</dt><dd><code>{item.intentId}</code></dd><dt>{m.transaction}</dt><dd><code>{item.chainReference ?? m.unknown}</code></dd>
-            {item.nonce !== null ? <><dt>{m.nonce}</dt><dd><code>{item.nonce}</code></dd></> : null}
+            <dt>{m.networkDeployment}</dt><dd><code><bdi dir="ltr">{item.binding.networkId} / {item.binding.deploymentId}</bdi></code></dd>
+            <dt>{m.tradeId}</dt><dd><code><bdi dir="ltr">{item.binding.tradeId}</bdi></code></dd><dt>{m.walletAccount}</dt><dd><code><bdi dir="ltr">{item.account}</bdi></code></dd>
+            <dt>{m.intentId}</dt><dd><code><bdi dir="ltr">{item.intentId}</bdi></code></dd><dt>{m.transaction}</dt><dd><code><bdi dir="ltr">{item.chainReference ?? m.unknown}</bdi></code></dd>
+            {item.nonce !== null ? <><dt>{m.nonce}</dt><dd><code><bdi dir="ltr">{item.nonce}</bdi></code></dd></> : null}
           </dl>
         </div>)}
       </fieldset>}

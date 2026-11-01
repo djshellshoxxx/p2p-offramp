@@ -12,6 +12,8 @@
 - **Delivery:** Core messaging/policy/display where consumed by Phase 2; other privacy extensions are opt-in Phase 3 or later, subject to the roadmap.
 - **Normative language:** MUST is a release gate; SHOULD deviations require a recorded reason.
 
+**Local implementation status:** Bounded local display reader implemented in `packages/domain/src/privacy-view.ts`; broader integration and independent review pending. `createPrivacyViewReader` returns an immutable `CoreResult` from synchronous trusted service ports, rereads the real G05 broker on every `buildPrivacyView`, and never establishes routing or economic authority. Route timestamps identify inspection time; underlying route TTL/revocation remains owned by G05. Independent local capability observations have a maximum 30-second monotonic lifetime and opaque caller-owned generation, with unknown defaults, scope checks, expiry and clock-reversal invalidation. Imported/configuration JSON is not an observation authority. Fixed public-chain/manual-fiat disclosures and `economicPreparationAllowed:false` remain unconditional. Focused tests cover missing services, actual unconfigured G05, policy mismatch, generations, TTL, clock reversal, malformed data, redaction and disposal; they do not qualify browser routing, encrypted messaging, proof providers, signing-time disclosure or interoperability. Consumers must refresh on invalidation; this synchronous slice owns no subscriptions, async jobs or transport resources.
+
 ## 2. Objective and boundary
 
 Define privacy and verification status shown during each trade. Display observed capability state without implying guarantees from configuration alone.
