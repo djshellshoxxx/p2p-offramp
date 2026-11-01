@@ -47,3 +47,7 @@ Limits remain: native interaction and layout qualification is T20's responsibili
 - apps/web/test/locale-catalog.test.mjs: 0533697718d9a3f6647932e915acfba7b8017a24439358bf669c8e7f794c3a6c
 - apps/web/test/locale-source.test.mjs: ae79e52db639b8c251b9120785d293e4897ec2aec0387d4a9564dc539d7fe5b8
 - apps/web/test/trade-terms-review.render.test.mjs: 878fd374b6d58bbf81efa57ce61bfb50d869c0194d32de9bc8430f99229c0c36
+
+## Later catalog ownership and identity
+
+The en.ts identity above is the T19/T21 review snapshot before the separately assigned T23 privacy catalog group was appended. It is historical, not the shipped whole-catalog hash. T23's later privacy-only addition was independently reviewed by audit_runtime_build with its integration; its complete-catalog SHA256 is `9a07138673edf4df49b636d1ed0291bea5d6716672d4c0b775c029aad6c7a1ff`, recorded in runtime-build.md. The original help entries and formatter scope were unchanged by that addition. T26 subsequently simplified help-registry.ts exact keys; schema-keys.md records its independent review and superseding source hash. The final source inventory identifies shipped files, and subsequent T27 wording changes receive their own reviewed identity.

@@ -112,7 +112,7 @@
     },
     {
       "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
-      "sha256": "d403d741add871ae9b711f96c49b18f97b02816b29ecb020b790b161dd296956"
+      "sha256": "0fe6dd11d0414735d8f4cfbfd6881d3701b734d04191ccee4e0eb262fb5f1d97"
     },
     {
       "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
@@ -136,7 +136,7 @@
     },
     {
       "path": "apps/web/src/ui/locale/en.ts",
-      "sha256": "9a07138673edf4df49b636d1ed0291bea5d6716672d4c0b775c029aad6c7a1ff"
+      "sha256": "2da03ee222262d5a66c4cbfedc4dd0b9861e5644485a0f275bb9dc761d5790ac"
     },
     {
       "path": "apps/web/src/ui/messages.ts",
@@ -1236,7 +1236,7 @@
     },
     {
       "path": "scripts/test-locale-layout-browser.mjs",
-      "sha256": "1bcee3f3b498710dc382968b16bd85e7a8db7b17e04329a323efb70e13db860c"
+      "sha256": "8bbbb7cedf3d8dd0afcba1ec19bdfb093374820f11e12ad9515bbc9b0ad378f9"
     },
     {
       "path": "scripts/test-payment-preflight-local.mjs",

@@ -141,6 +141,77 @@ try {
   await form.getByRole('button', { name: 'Cancel', exact: true }).click();
   assert.equal(await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).evaluate(node => document.activeElement === node), true, 'closing the form restores its opening control');
   pass('hover/focus/emulated-tap help, Escape, privacy and form focus restoration use the real UI');
+  // T27: actual emitted Settings refreshes without a vault transition. A separate controlled
+  // clock page preserves all T20 stress/keyboard assertions above.
+  const privacyPage = await context.newPage();
+  privacyPage.on('pageerror', () => unexpected.push('PAGE_ERROR'));
+  await privacyPage.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+  await privacyPage.addInitScript(() => {
+    const timers = new Set(), timeout = window.setTimeout.bind(window), clear = window.clearTimeout.bind(window);
+    window.__privacyDeadlineTimers = timers;
+    window.__privacyResumeListeners = { visibilitychange: new Set(), pageshow: new Set() };
+    for (const [target, event] of [[document, 'visibilitychange'], [window, 'pageshow']]) {
+      const add = target.addEventListener.bind(target), remove = target.removeEventListener.bind(target);
+      target.addEventListener = (name, callback, options) => { if (name === event) window.__privacyResumeListeners[event].add(callback); add(name, callback, options); };
+      target.removeEventListener = (name, callback, options) => { if (name === event) window.__privacyResumeListeners[event].delete(callback); remove(name, callback, options); };
+    }
+    window.setTimeout = (callback, delay, ...args) => {
+      let id;
+      const tracked = typeof callback === 'function' && delay >= 29_000 && delay <= 30_000;
+      id = timeout(tracked ? (...values) => { timers.delete(id); callback(...values); } : callback, delay, ...args);
+      if (tracked) timers.add(id);
+      return id;
+    };
+    window.clearTimeout = id => { timers.delete(id); clear(id); };
+  });
+  await privacyPage.goto(origin + '/#/settings');
+  const vaultObservation = privacyPage.locator('#privacy-observations-title').locator('..').locator('li').filter({ has: privacyPage.getByRole('heading', { name: 'Local vault', exact: true }) });
+  await vaultObservation.getByText('Local vault service inspection', { exact: true }).waitFor();
+  const inspectionTime = async () => Number((await vaultObservation.innerText()).match(/Inspected at (\d+) milliseconds/)[1]);
+  const firstInspection = await inspectionTime();
+  assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'one bounded local expiry timer is active');
+  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [1, 1], 'one resume listener per event');
+  await privacyPage.clock.runFor(30_001);
+  await privacyPage.waitForFunction(before => {
+    const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
+    return Number(row?.textContent.match(/Inspected at (\d+) milliseconds/)?.[1]) >= before + 30_000;
+  }, firstInspection);
+  const renewedInspection = await inspectionTime();
+  assert.ok(renewedInspection >= firstInspection + 30_000, 'expiry renews actual monotonic inspection without vault events');
+  assert.ok((await vaultObservation.innerText()).includes('Locked'), 'expiry does not manufacture an unlocked state');
+  assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'renewed view owns only one deadline');
+  await privacyPage.clock.runFor(1000);
+  await privacyPage.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  await privacyPage.waitForFunction(before => {
+    const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
+    return Number(row?.textContent.match(/Inspected at (\d+) milliseconds/)?.[1]) > before;
+  }, renewedInspection);
+  const visibleInspection = await inspectionTime();
+  await privacyPage.clock.runFor(1000);
+  await privacyPage.evaluate(() => window.dispatchEvent(new Event('pageshow')));
+  await privacyPage.waitForFunction(before => {
+    const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
+    return Number(row?.textContent.match(/Inspected at (\d+) milliseconds/)?.[1]) > before;
+  }, visibleInspection);
+  await privacyPage.getByRole('link', { name: 'Home', exact: true }).click();
+  await privacyPage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
+  assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'leaving Settings clears its local deadline');
+  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [0, 0], 'unmount removes both resume listeners');
+  await privacyPage.clock.runFor(60_001);
+  assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'unmounted Settings does not reschedule');
+  await privacyPage.getByRole('button', { name: 'Create new profile', exact: true }).click();
+  await privacyPage.locator('#create-passphrase').fill('LOCAL_T27_TEST_ONLY_PASSPHRASE');
+  await privacyPage.locator('#create-confirm').fill('LOCAL_T27_TEST_ONLY_PASSPHRASE');
+  await privacyPage.locator('#create-consent').check();
+  await privacyPage.getByRole('button', { name: 'Create encrypted profile', exact: true }).click();
+  await privacyPage.getByRole('button', { name: 'Lock vault', exact: true }).waitFor();
+  await privacyPage.getByRole('link', { name: 'Settings', exact: true }).click();
+  await vaultObservation.getByText('Unlocked', { exact: true }).waitFor();
+  await privacyPage.getByRole('button', { name: 'Lock vault', exact: true }).click();
+  await vaultObservation.getByText('Locked', { exact: true }).waitFor();
+  assert.ok((await vaultObservation.innerText()).includes('Local vault service inspection'), 'actual lock notification refreshes observed state immediately');
+  await privacyPage.close();
+  pass('Settings expiry/resume reinspects the real local vault and unmount clears its sole deadline without network access');
   assert.deepEqual(unexpected, []);
   console.log(JSON.stringify({ fixture: 'draft-locale-emitted-layout', browser: browser.version(), checks: checks.length,
     stress: 'test-only DOM static-catalog substitution; not a translated locale implementation',

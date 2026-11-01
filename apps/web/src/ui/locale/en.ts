@@ -15,7 +15,7 @@ const definitions = {
     fiatTitle: 'Manual fiat settlement', fiatWarning: 'Fiat receipt depends on seller attestation. Proof availability does not prove that a payment is irreversible.',
     authorityWarning: 'Display only. These observations cannot enable trading, prepare transactions or authorize spending.',
     time: { source: 'Inspected at {milliseconds} milliseconds on this session’s monotonic clock. This is not a wall-clock timestamp.', variables: { milliseconds: 'text' } },
-    refresh: 'The local vault is inspected again on each render and when vault status or selection changes. Network, messaging and proof services are not connected in this shell.',
+    refresh: 'The local vault is inspected again when its observation expires, vault status or selection changes, or this page becomes visible again. Network, messaging and proof services are not connected in this shell.',
     noTime: 'No evidence timestamp is available.', error: 'Privacy observations are unavailable. No privacy coverage or transaction authority is established.',
   },
   help: {

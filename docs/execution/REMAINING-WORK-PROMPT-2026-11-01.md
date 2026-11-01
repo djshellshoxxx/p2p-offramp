@@ -11,7 +11,8 @@ human-only inputs, review it independently, consolidate and merge when authorize
 
 ## Preserve the completed foundation
 
-Read AGENTS.md and runtime/network instructions, DEVELOPMENT_ROADMAP.md,
+Read applicable repository instruction files, if present, and the documented
+runtime/network instructions. Also read DEVELOPMENT_ROADMAP.md,
 tasks/plan.md, tasks/todo.md, the current incomplete-work inventory, continuation
 result/audit and PR #21's live metadata. T1–T18 are completed implementation;
 T12's source INTEGRATING label is an intentional pre-merge snapshot. Verify the

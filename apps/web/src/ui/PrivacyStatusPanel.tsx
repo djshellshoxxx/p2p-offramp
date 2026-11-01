@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
 import { english, englishGroup } from './locale/en.ts';
@@ -14,6 +14,7 @@ const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel
  * App owns the existing vault/scope subscription and rerenders this panel on its notifications.
  */
 export function PrivacyStatusPanel({ services = null, scope }: { readonly services?: AppServices | null; readonly scope?: number }) {
+  const [, refresh] = useState(0);
   // Reader owns no subscriptions/resources. Replacing this memo drops only the old display reader.
   const reader = useMemo(() => createPrivacyViewReader({ monotonicNow: clock, ...(services ? { observations: {
     get generation() { return services.selectionScope(); },
@@ -25,6 +26,23 @@ export function PrivacyStatusPanel({ services = null, scope }: { readonly servic
     },
   } } : {}) }), [services]);
   const result = reader.buildPrivacyView(null, services ? scope : undefined);
+  const expiresAt = result.ok ? result.value.vault.expiresAt : null;
+  useEffect(() => {
+    if (!services) return;
+    let active = true;
+    const inspect = () => { if (active) refresh(value => value + 1); };
+    const visible = () => { if (document.visibilityState === 'visible') inspect(); };
+    // One local deadline, renewed by the next inspection. No transport or service polling.
+    const timer = expiresAt === null ? undefined : window.setTimeout(inspect, Math.max(0, expiresAt - clock()));
+    document.addEventListener('visibilitychange', visible);
+    window.addEventListener('pageshow', inspect);
+    return () => {
+      active = false;
+      if (timer !== undefined) window.clearTimeout(timer);
+      document.removeEventListener('visibilitychange', visible);
+      window.removeEventListener('pageshow', inspect);
+    };
+  }, [services, scope, expiresAt]);
   function indicator(label: string, item: PrivacyIndicator<string>, selected?: string) {
     return <li key={label}><h3>{label}</h3><dl>
       {selected ? <><dt>{p.selected}</dt><dd>{selected}</dd></> : null}
