@@ -83,3 +83,16 @@ test('reverted status is actionable only after native CREATE inclusion and empty
  await assert.rejects(inspectDeployment(fixture((m,p,v)=>m==='eth_getTransactionReceipt'?{...v,status:'0x0',contractAddress:null}:v).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOYMENT_PROOF_INVALID','a substituted reverted receipt cannot hide existing code');
  await assert.rejects(inspectDeployment(fixture((m,p,v)=>m==='eth_getBlockByNumber'&&p[0]==='0x5'&&v.read===2?{...v,hash:finalHash}:reverted(m,p,v)).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOYMENT_PROOF_INVALID');
 });
+test('geth-style reverted CREATE address must equal the authenticated sender/nonce derivation',async()=>{
+ const reverted=(contractAddress)=>(m,p,v)=>m==='eth_getTransactionReceipt'?{...v,status:'0x0',contractAddress}:m==='eth_getCode'?'0x':v;
+ for(const contractAddress of [null,address])await assert.rejects(inspectDeployment(fixture(reverted(contractAddress)).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOY_REVERTED');
+ for(const contractAddress of [undefined,finalHash,'0x'+'77'.repeat(20)])await assert.rejects(inspectDeployment(fixture(reverted(contractAddress)).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOYMENT_PROOF_INVALID');
+ const dir=await mkdtemp(join(tmpdir(),'geth-reverted-')),pendingPath=join(dir,'pending.json');
+ try{
+  for(const pending of [{tx,address},{format:'p2p-offramp/deployment-attempt/v1',state:'broadcast-unknown',tx:null,chainId:'11155111',from,nonce:'0'}]){
+   await writeFile(pendingPath,JSON.stringify(pending));
+   assert.equal(await clearRecordedAttempt({pendingPath,txHash:tx,record:{initializationTx:tx,chainId:'11155111',genesisIdentity:SEPOLIA.genesisHash},rpc:fixture(reverted('0x'+'77'.repeat(20))).rpc}),false);
+   assert.deepEqual(JSON.parse(await readFile(pendingPath)),pending);
+  }
+ }finally{await rm(dir,{recursive:true,force:true});}
+});

@@ -22,7 +22,7 @@ import { deploy } from './sepolia/deploy.mjs';
 import { PENDING_FILE, recordDeployment, clearRecordedAttempt } from './sepolia/record-deployment.mjs';
 import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
 import { acceptSepoliaRelease, TRUSTED_KEY_PATH, verifySepoliaRelease } from './sepolia/verify-release.mjs';
-import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, ROOT, rpcClient, SEPOLIA, TOOLCHAIN } from './sepolia/lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, ROOT, rpcClient, SEPOLIA, TOOLCHAIN, keccakHex, hexToBytes } from './sepolia/lib.mjs';
 import { TESTNET_ACCEPTED_FILE } from '../apps/web/scripts/testnet-trust.mjs';
 
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
@@ -171,6 +171,23 @@ try {
   await assert.rejects(recordInto(transfer), code('NOT_A_DEPLOYMENT'));
   const revertedCreate = await node.rpc('eth_sendTransaction', [{ from: DEPLOYER, data: '0x60006000fd', gas: '0x30000' }]);
   await assert.rejects(recordInto(revertedCreate), code('DEPLOY_REVERTED'));
+  const nativeRevertReceipt = await node.rpc('eth_getTransactionReceipt', [revertedCreate]);
+  const nativeRevertTx = await node.rpc('eth_getTransactionByHash', [revertedCreate]);
+  assert.equal(nativeRevertReceipt.status, '0x0', 'explicit gas submits a genuinely mined failed CREATE');
+  const failedNonce = BigInt(nativeRevertTx.nonce);
+  let rlpNonce = failedNonce === 0n ? '80' : failedNonce.toString(16).padStart(Math.ceil(failedNonce.toString(16).length / 2) * 2, '0');
+  if (failedNonce >= 128n) rlpNonce = (128 + rlpNonce.length / 2).toString(16) + rlpNonce;
+  const rlpPayload = '94' + nativeRevertTx.from.slice(2) + rlpNonce;
+  const derivedFailureAddress = '0x' + keccakHex(hexToBytes('0x' + (192 + rlpPayload.length / 2).toString(16) + rlpPayload)).slice(-40);
+  assert.equal(await node.rpc('eth_getCode', [derivedFailureAddress, nativeRevertReceipt.blockNumber]), '0x');
+  // This adapter changes only the receipt representation to geth's derived-address style.
+  // Transaction, nonce, canonical headers and empty native code remain real Anvil responses.
+  const gethShape = await disagreeingProxy(node.url, (call, reply) => {
+    if (call.method === 'eth_getTransactionReceipt' && reply.result?.transactionHash === revertedCreate) reply.result.contractAddress = derivedFailureAddress;
+  });
+  try { await assert.rejects(recordInto(revertedCreate, { rpcUrl: gethShape.url }), code('DEPLOY_REVERTED')); }
+  finally { await gethShape.close(); }
+  pass('a mined reverted CREATE classifies for deploy cleanup with native null or geth-style exact derived receipt address');
   // The runtime code does not depend on the allowlist, so only the allowlist read stops a token-enabled deployment.
   // The constructor only requires code at each allowlisted address; the contract created above serves as a stand-in token.
   const standInToken = (await node.rpc('eth_getTransactionReceipt', [other])).contractAddress;
