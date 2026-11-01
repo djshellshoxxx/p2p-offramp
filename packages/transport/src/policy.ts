@@ -162,7 +162,7 @@ export class SessionTransportPolicy {
     const now = this.#time(); if (now === null) return false;
     let inspectedExpired = false;
     for (const [channel, expiry] of this.#inspectionExpiries) if (now >= expiry) { this.#inspectionExpiries.delete(channel); inspectedExpired = true; }
-    if (inspectedExpired) { this.#transition('CANCELLED'); return false; }
+    if (inspectedExpired) this.#notify();
     for (const state of this.#states.values()) {
       if (state.projection.evidence.expiresAt !== null && now >= state.projection.evidence.expiresAt) { this.#transition('CANCELLED'); return false; }
     }

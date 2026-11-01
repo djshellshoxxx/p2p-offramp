@@ -166,3 +166,16 @@ test('last display unsubscribe removes only inspection watches, retaining actual
   assert.equal(leased.signal.aborted,true);assert.equal(leased.current(),false);
  }finally{s.broker.dispose();t.mock.timers.reset();}
 });
+test('inspection expiry notifies observers without revoking active permits',async t=>{
+ const s=setup();t.mock.timers.enable({apis:['setTimeout']});let notifications=0;
+ s.registry.inspectHook=channel=>({channel,coverage:'direct',adapterId:'fixture-adapter',expiresAt:channel==='rpc'?100:2000});
+ try{
+  s.broker.subscribeInvalidation(()=>{notifications++;});
+  s.broker.inspect('rpc');
+  const leased=scope(s.broker.capture(permit(s.broker.authorize(request('relay')))));
+  s.setTime(100);t.mock.timers.tick(100);await Promise.resolve();
+  assert.equal(notifications,1);assert.equal(leased.current(),true);
+  assert.deepEqual(await leased.run(async()=> 'ok'),{ok:true,value:'ok'});
+  leased.dispose();
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
