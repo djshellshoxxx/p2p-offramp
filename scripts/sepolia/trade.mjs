@@ -147,8 +147,8 @@ export async function runTrades({
   }
   state.registryTrust = trust;
 
-  const latestBlock = async () => {
-    const block = await rpc('eth_getBlockByNumber', ['latest', false]);
+  const latestBlock = async (tag = 'latest') => {
+    const block = await rpc('eth_getBlockByNumber', [tag, false]);
     return { number: BigInt(block.number), hash: block.hash, timestamp: Number(BigInt(block.timestamp)) };
   };
   const chainTime = async () => (await latestBlock()).timestamp;
@@ -190,6 +190,10 @@ export async function runTrades({
         at = await latestBlock();
         const logs = await tradeLogs(trade, at.number);
         const getTradeReturn = await rpc('eth_call', [{ to: escrow, data: buildGetTrade(escrow, trade.tradeId).data }, qty(at.number)]);
+        // Numbered state/log reads may straddle a reorg. Never label replacement
+        // state with the original header or use its old timestamp to fund.
+        const rechecked = await latestBlock(qty(at.number));
+        if (rechecked.number !== at.number || rechecked.hash !== at.hash || rechecked.timestamp !== at.timestamp) fail('OBSERVATION_REJECTED');
         return { ok: true, value: buildChainObservation(escrow, { binding: binding(trade.tradeId), generation: request.generation, requestSequence: request.requestSequence,
           getTradeReturn, logs, anchor: { height: at.number.toString(), hash: at.hash }, finality: 'confirmed', observedAt: Date.now() }) };
       } });

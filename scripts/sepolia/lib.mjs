@@ -24,15 +24,15 @@ const run = promisify(execFile);
 
 const FORGE_BASE_ENV = new Set(['PATH', 'HOME', 'TMPDIR', 'TMP', 'TEMP', 'LANG', 'LC_ALL', 'SystemRoot', 'USERPROFILE']);
 /**
- * Environment for a Forge child: OS basics, FOUNDRY_* settings and SEPOLIA_RPC_URL (read by foundry.toml), plus `extra`,
- * which carries the one key that script reads. Every other variable, including the other parties' private keys, is dropped.
+ * Environment for a Forge child: OS basics, the checked compiler path and SEPOLIA_RPC_URL (read by foundry.toml), plus `extra`,
+ * which carries the one key that script reads and controlled per-run runtime settings. Ambient compiler/profile/config overrides and the other parties' private keys are dropped.
  */
 export function forgeEnv(env, extra = {}) {
   const out = {};
   for (const [name, value] of Object.entries(env)) {
-    if (typeof value === 'string' && (FORGE_BASE_ENV.has(name) || name.startsWith('FOUNDRY_') || name === 'SEPOLIA_RPC_URL')) out[name] = value;
+    if (typeof value === 'string' && (FORGE_BASE_ENV.has(name) || name === 'FOUNDRY_SOLC' || name === 'SEPOLIA_RPC_URL')) out[name] = value;
   }
-  return { ...out, ...extra };
+  return { ...out, ...extra, FOUNDRY_CONFIG: resolve(EVM_DIR, 'foundry.toml'), FOUNDRY_PROFILE: 'default' };
 }
 
 /**
@@ -51,6 +51,23 @@ export const TOOLCHAIN = Object.freeze({
 });
 export class KitError extends Error { constructor(code) { super(code); this.name = 'KitError'; this.code = code; } }
 
+/** Compiler-affecting effective settings, including values otherwise inherited from global config.
+ * This is the pinned deployment recipe; an unusual local setup fails rather than silently changing artifact identity.
+ */
+const EFFECTIVE_RECIPE = Object.freeze({
+  src: 'src', test: 'test', script: 'script', out: 'out', libs: ['lib'],
+  remappings: ['forge-std/=lib/forge-std/src/', '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/',
+    'erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/', 'halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/',
+    'openzeppelin-contracts/=lib/openzeppelin-contracts/'],
+  libraries: [], evm_version: 'cancun', auto_detect_solc: false, optimizer: true, optimizer_runs: 200,
+  optimizer_details: null, via_ir: false, use_literal_content: false, bytecode_hash: 'ipfs', cbor_metadata: true,
+  revert_strings: null, additional_compiler_profiles: [], compilation_restrictions: [],
+});
+export function checkFoundryRecipe(config, solc = TOOLCHAIN.solcVersion) {
+  if (typeof config !== 'object' || config === null || Array.isArray(config) || config.solc !== solc ||
+      Object.entries(EFFECTIVE_RECIPE).some(([key, value]) => JSON.stringify(config[key]) !== JSON.stringify(value))) throw new KitError('TOOLCHAIN_MISMATCH');
+}
+
 /** The forge on PATH and the solc Foundry will use must be the pinned ones; returns what was checked, for the record. */
 export async function checkToolchain(env = process.env) {
   let version;
@@ -61,6 +78,10 @@ export async function checkToolchain(env = process.env) {
   let solc;
   try { solc = await readFile(solcPath); } catch { throw new KitError('TOOLCHAIN_MISSING'); }
   if (sha256Hex(solc) !== TOOLCHAIN.solcSha256) throw new KitError('TOOLCHAIN_MISMATCH');
+  let config;
+  try { config = JSON.parse((await run('forge', ['config', '--json'], { cwd: EVM_DIR, env: forgeEnv(env) })).stdout); }
+  catch { throw new KitError('TOOLCHAIN_MISMATCH'); }
+  checkFoundryRecipe(config, env.FOUNDRY_SOLC || TOOLCHAIN.solcVersion);
   return { forgeVersion, forgeCommit, solcVersion: TOOLCHAIN.solcVersion, solcSha256: TOOLCHAIN.solcSha256 };
 }
 

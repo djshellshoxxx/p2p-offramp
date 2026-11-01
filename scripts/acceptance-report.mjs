@@ -3,7 +3,7 @@
  * Files configure evidence, never review authority. No CLI/env hook loads a reviewer or executable policy;
  * an otherwise complete candidate remains pending until a trusted library caller verifies its reviews.
  */
-import { constants } from 'node:fs';
+import { constants, realpathSync } from 'node:fs';
 import { lstat, open } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { evaluateGate } from '../packages/security/src/acceptance-gates.ts';
@@ -73,7 +73,13 @@ export async function acceptanceReport(candidatePath, recordsPath) {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+/** Node canonicalizes the module URL while argv can still name a symlink. Imports remain inert. */
+function isCliEntry() {
+  if (!process.argv[1]) return false;
+  try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+}
+if (isCliEntry()) {
   const result = process.argv.length === 4 ? await acceptanceReport(process.argv[2], process.argv[3]) : refused('INVALID_INPUT');
   process.stdout.write(JSON.stringify(result.report) + '\n');
   process.exitCode = result.exitCode;
