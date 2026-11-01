@@ -76,3 +76,21 @@ one writer; reviewers must not silently edit another owner's implementation.
 T19–T25 combined local acceptance: 1,074 package/UI tests, all four TS configs, boundaries118/59, build-policy22, Python12/spec173, CLI11/diagnostics16/fuzz26, default/demo and affected native Chromium journeys. Foundry82, canonical exchange/chat10, portable recovery12+6 pass. Different reviewers approved fixes; see docs/execution/GUIDANCE-AUDIT-2026-11-01.md. T22 remains INTEGRATING only for exact-head hosting/guarded merge; live PR metadata records actual delivery. T24 is partial G22, T23 absent providers stay unknown, real400% zoom unqualified. No funds release/deployment.
 
 T27 final combined refresh: 1,074 package/UI zero failures/skips/cancellations; all four types, boundaries118/59, policy22, default/demo/specs pass; actual emitted locale/Settings browser5/5 with independently reviewed expiry/resume/unmount/real lock proof. Final hosting/merge remains T22 live PR metadata.
+
+## Invoked journey/provider continuation — 2026-11-01
+
+Baseline merged PR23 `f421fdcb1d127a087991270d0e5f60a3be323ba3`. T1–T27 implementation reused. T22's source INTEGRATING label is historical; live PR23 records DONE and guarded merge/tree/hash readback.
+
+| Task | Status | Owner / scope / acceptance |
+| --- | --- | --- |
+| T28 | DONE | remaining_inventory owns domain journey-view + focused test; optional trusted actual G18 read/view, fresh finalized exact-match funded/no unresolved G12 -> read-only payment-coordination; existing receipts unchanged; independent review + actual native adapter journey |
+| T29 | DONE | audit_domain_transport proposes existing broker lifecycle subscription + optional trusted privacy consumer integration; no default broker/evidence, contract before edits; disjoint ownership |
+| T30 | INTEGRATING | root integrates, reassesses, audits changed authority/lifecycle/UX paths independently, runs final checks, publishes/guarded merge + live readback |
+| T31 | DONE | audit_domain_transport; current Qodo inspection-expiry permission-isolation + missed reentrant invalidation findings; RED/GREEN fixed without notification loops, independent storage reviewer |
+| T32 | DONE | guidance_writer; hosted native-fixture immediate-receipt race, deterministic pending receipt RED, bounded read-only wait with one send, independent runtime review |
+
+T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfourTS; boundaries118/59; policy22; Python12/spec173; default/demo; Foundry82; nativeexchange12/scopedreads128/zerojourneysends; emittedbrowser6 including independently reproduced/fixed sameidentitylease. Reviews/scope and final identities: docs/execution/JOURNEY-AUDIT-2026-11-01.md. T30 hosting/guardedmerge status remains live PR metadata. Trading stays disabled; no newdefaultbroker or protocol/crypto qualification.
+
+T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
+
+T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.

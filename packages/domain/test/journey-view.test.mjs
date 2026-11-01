@@ -77,3 +77,102 @@ test('cancellation triggered while projecting a source cannot publish late succe
   Object.defineProperty(source,'chain',{get(){controller.abort();return chain();}});
   const result=await fixture(source).read(controller.signal);assert.equal(result.ok,false);assert.equal(result.error.code,'CANCELLED');
 });
+
+const fundedBinding = Object.freeze({ ...binding, tradeId: 'ab'.repeat(32) });
+const fundedAnchor = '0x' + 'cd'.repeat(32);
+const fundedSource = (overrides = {}) => snapshot({ binding: fundedBinding, chain: chain({ binding: fundedBinding, state: 'funded', anchor: { height: '20', hash: fundedAnchor } }), ...overrides });
+const gateObservation = (overrides = {}) => ({ evidence: 'native-rpc', economicPreparationAllowed: false, binding: fundedBinding, termsHash: fundedBinding.tradeId, finalizedAnchor: fundedAnchor, decision: 'allow-guidance', reason: 'ok', ...overrides });
+const fixedFailure = () => ({ ok: false, error: { code: 'UNAVAILABLE' } });
+function guidedFixture({ before = fundedSource(), after = before, read = async () => ok(gateObservation()), view = () => ok(gateObservation()) } = {}) {
+  let reads = 0;
+  return createJourneyProjection({ composition: { read: async () => ok(reads++ === 0 ? before : after) }, paymentGuidance: { read, view } });
+}
+test('funded coordination requires matching trusted native read and a final live view; output stays read-only', async () => {
+  const output = value(await guidedFixture().read());
+  assert.equal(output.kind, 'resolved'); assert.equal(output.view.step, 'payment-coordination');
+  assert.deepEqual(output.view.binding, fundedBinding); assert.deepEqual(output.view.actions, []);
+  assert.equal(output.view.economicPreparationAllowed, false); assert.equal(output.view.recoveryAvailable, true);
+  assert.ok(Object.isFrozen(output.view)); assert.ok(Object.isFrozen(output.view.binding));
+  // A newer validated request at the same canonical anchor is coherent.
+  const after = fundedSource({ chain: { ...fundedSource().chain, requestSequence: 2 } });
+  assert.equal(value(await guidedFixture({ after }).read()).view.step, 'payment-coordination');
+});
+test('missing gate stays unchanged, receipt bypasses unavailable payment, newly finalized receipt wins', async () => {
+  const missing = createJourneyProjection({ composition: { read: async () => ok(fundedSource()) } });
+  assert.equal(value(await missing.read()).blockingReason, 'journey-prerequisites-unavailable');
+  let calls = 0;
+  const terminal = fundedSource({ chain: { ...fundedSource().chain, state: 'released' } });
+  const beforeTerminal = guidedFixture({ before: terminal, read: async () => { calls++; throw Error('PRIVATE'); } });
+  assert.equal(value(await beforeTerminal.read()).view.step, 'receipt'); assert.equal(calls, 0);
+  assert.equal(value(await guidedFixture({ after: terminal, read: async () => fixedFailure() }).read()).view.step, 'receipt');
+});
+test('native failures and gate refusal remain fixed blockers without raw diagnostics', async () => {
+  for (const read of [async () => fixedFailure(), async () => { throw Error('PRIVATE_NATIVE_SECRET'); }]) {
+    const output = value(await guidedFixture({ read }).read()); assert.equal(output.blockingReason, 'payment-guidance-unavailable');
+    assert.doesNotMatch(JSON.stringify(output), /PRIVATE/);
+  }
+  for (const reason of ['near-expiry', 'unfunded', 'stale', 'mismatch']) {
+    const output = value(await guidedFixture({ read: async () => ok(gateObservation({ decision: 'block', reason })) }).read());
+    assert.equal(output.blockingReason, 'payment-guidance-blocked');
+  }
+  assert.equal(value(await guidedFixture({ view: fixedFailure }).read()).blockingReason, 'payment-guidance-unavailable');
+  assert.equal(value(await guidedFixture({ view: () => ok(gateObservation({ decision: 'block', reason: 'stale' })) }).read()).blockingReason, 'payment-guidance-blocked');
+});
+test('gate network/deployment/trade/anchor/evidence contradictions cannot produce coordination', async () => {
+  const bad = [
+    { evidence: 'fixture-only' }, { economicPreparationAllowed: true }, { termsHash: 'ef'.repeat(32) }, { finalizedAnchor: '0x' + 'ef'.repeat(32) },
+    { binding: { ...fundedBinding, networkId: 'other' } }, { binding: { ...fundedBinding, deploymentId: 'other' } },
+    { binding: { ...fundedBinding, tradeId: 'ef'.repeat(32) } }, { decision: 'allow-guidance', reason: 'near-expiry' }, { termsHash: 'f'.repeat(1_000_000) },
+  ];
+  for (const overrides of bad) for (const phase of ['read', 'view']) {
+    const options = phase === 'read' ? { read: async () => ok(gateObservation(overrides)) } : { view: () => ok(gateObservation(overrides)) };
+    const output = value(await guidedFixture(options).read()); assert.equal(output.kind, 'blocked'); assert.equal(output.blockingReason, 'payment-guidance-mismatch');
+  }
+});
+test('final source health, unresolved journal, finality, binding and generations veto late guidance', async () => {
+  const scenarios = [
+    [{ chainHealth: 'stale' }, 'chain-stale'], [{ chainHealth: 'reorged' }, 'chain-reorged'], [{ pendingIntentIds: ['PRIVATE_ID'] }, 'reconcile-required'],
+    [{ chain: { ...fundedSource().chain, finality: 'confirmed' } }, 'finality-required'],
+    [{ walletGeneration: 1 }, 'scope-changed'], [{ chain: { ...fundedSource().chain, generation: 1 } }, 'scope-changed'],
+    [{ chain: { ...fundedSource().chain, anchor: { height: '21', hash: fundedAnchor } } }, 'scope-changed'],
+    [{ chain: { ...fundedSource().chain, anchor: { height: '20', hash: '0x' + 'ef'.repeat(32) } } }, 'scope-changed'],
+    [{ chain: { ...fundedSource().chain, state: 'absent' } }, 'scope-changed'],
+  ];
+  for (const [overrides, reason] of scenarios) {
+    const output = value(await guidedFixture({ after: fundedSource(overrides) }).read()); assert.equal(output.blockingReason, reason); assert.doesNotMatch(JSON.stringify(output), /PRIVATE_ID/);
+  }
+  const rebound = { ...fundedBinding, tradeId: 'ef'.repeat(32) };
+  assert.equal(value(await guidedFixture({ after: fundedSource({ binding: rebound, chain: { ...fundedSource().chain, binding: rebound } }) }).read()).blockingReason, 'scope-changed');
+});
+test('gate accessors cannot execute, and final view callback cancellation/disposal cannot publish', async () => {
+  let getterCalls = 0;
+  const hostile = gateObservation(); Object.defineProperty(hostile, 'decision', { get() { getterCalls++; return 'allow-guidance'; } });
+  assert.equal(value(await guidedFixture({ view: () => ok(hostile) }).read()).blockingReason, 'payment-guidance-mismatch'); assert.equal(getterCalls, 0);
+  const external = new AbortController();
+  const cancelled = guidedFixture({ view: () => { external.abort(); return ok(gateObservation()); } });
+  assert.equal((await cancelled.read(external.signal)).error.code, 'CANCELLED');
+  let disposed;
+  disposed = guidedFixture({ view: () => { disposed.dispose(); return ok(gateObservation()); } });
+  assert.equal((await disposed.read()).error.code, 'CANCELLED');
+});
+test('superseding or disposing an asynchronous G18 read suppresses late native guidance', async () => {
+  const pending = [], signals = [];
+  const service = createJourneyProjection({ composition: { read: async () => ok(fundedSource()) }, paymentGuidance: {
+    read(signal) { const work = deferred(); pending.push(work); signals.push(signal); return work.promise; }, view: () => ok(gateObservation()),
+  } });
+  const first = service.read(); await Promise.resolve(); const second = service.read(); await Promise.resolve();
+  assert.equal(signals[0].aborted, true);
+  pending[0].resolve(ok(gateObservation())); assert.equal((await first).error.code, 'CANCELLED');
+  pending[1].resolve(ok(gateObservation())); assert.equal(value(await second).view.step, 'payment-coordination');
+  const last = service.read(); await Promise.resolve(); service.dispose(); assert.equal(signals[2].aborted, true);
+  pending[2].resolve(ok(gateObservation())); assert.equal((await last).error.code, 'CANCELLED');
+});
+test('actual G08/G12 composition is reread after G18 and blocks a newly unresolved intent', async t => {
+  let ids = [];
+  const authority = createTradeAuthority({ binding: fundedBinding, generation: 0, walletGeneration: 0, readValidated: async (_binding, request) => ok({ ...fundedSource().chain, generation: request.generation, requestSequence: request.requestSequence }) });
+  const composition = createTradeComposition({ binding: fundedBinding, account: '0x' + '33'.repeat(20), authority, journal: { unresolved: async () => ok(ids.map(intentId => ({ intentId }))) }, now: () => 1000 });
+  const service = createJourneyProjection({ composition, paymentGuidance: { read: async () => { ids = ['PRIVATE_NEW_ID']; return ok(gateObservation()); }, view: () => ok(gateObservation()) } });
+  t.after(() => { service.dispose(); composition.dispose(); authority.dispose(); });
+  value(await authority.refresh(fundedBinding));
+  const output = value(await service.read()); assert.equal(output.blockingReason, 'reconcile-required'); assert.doesNotMatch(JSON.stringify(output), /PRIVATE_NEW_ID/);
+});

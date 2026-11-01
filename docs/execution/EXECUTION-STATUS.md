@@ -1,3 +1,5 @@
+Latest continuation: [journey/provider audit](JOURNEY-AUDIT-2026-11-01.md) and [updated remaining work](GUIDANCE-REMAINING-2026-11-01.md). Earlier records below are historical.
+
 Current continuation: [2026-11-01 remaining work](GUIDANCE-REMAINING-2026-11-01.md) and [audit](GUIDANCE-AUDIT-2026-11-01.md). The dated evidence below is historical.
 
 # Autonomous execution status

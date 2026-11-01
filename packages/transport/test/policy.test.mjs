@@ -125,3 +125,70 @@ test('destination credentials, fragments, controls, malformed schemes and hostil
   assert.equal(s.registry.issued.size,0);
  }finally{s.broker.dispose();}
 });
+test('bounded invalidation observers see completed revocation, isolate faults and unsubscribe',async()=>{
+ const s=setup();const leased=scope(s.broker.capture(permit(s.broker.authorize(request()))));let calls=0;
+ const bad=s.broker.subscribeInvalidation(()=>{throw Error('private observer fault');});
+ const off=s.broker.subscribeInvalidation(()=>{calls++;assert.equal(leased.current(),false);assert.equal(leased.signal.aborted,true);});
+ s.broker.setMode('strict');assert.equal(calls,0);await Promise.resolve();assert.equal(calls,1);
+ off();off();bad();s.registry.change();await Promise.resolve();assert.equal(calls,1);
+ const offs=Array.from({length:64},()=>s.broker.subscribeInvalidation(()=>{}));assert.throws(()=>s.broker.subscribeInvalidation(()=>{}),/LIMIT_EXCEEDED/);offs.forEach(dispose=>dispose());s.broker.dispose();
+ let closedCalls=0;const recur=()=>{closedCalls++;s.broker.subscribeInvalidation(recur);assert.equal(s.broker.inspect('rpc').coverage,'unsupported');};s.broker.subscribeInvalidation(recur);assert.equal(closedCalls,1);
+});
+test('inspection-only evidence expires on existing timer, without permits or expired rearm loops',async t=>{
+ const s=setup();let calls=0;const off=s.broker.subscribeInvalidation(()=>{calls++;s.broker.inspect('relay');});
+ t.mock.timers.enable({apis:['setTimeout']});try{
+  assert.equal(s.broker.inspect('relay').coverage,'direct');s.setTime(1000);t.mock.timers.tick(1000);await Promise.resolve();assert.equal(calls,1);assert.equal(s.broker.inspect('relay').coverage,'unknown');
+  t.mock.timers.tick(100000);await Promise.resolve();assert.equal(calls,1);
+  s.registry.expiresAt=200000;s.broker.inspect('relay');off();s.setTime(200000);t.mock.timers.tick(200000);await Promise.resolve();assert.equal(calls,1,'last unsubscribe cancels inspection-only deadline');
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('reentrant modes and repeated malformed async consumer reads cannot livelock notifications',async()=>{
+ const s=setup();let calls=0;
+ const off=s.broker.subscribeInvalidation(()=>{calls++;s.broker.setMode(s.broker.mode==='strict'?'ordinary':'strict');});
+ s.broker.setMode('strict');for(let i=0;i<20;i++)await Promise.resolve();assert.equal(calls,1);off();
+ let renders=0;s.registry.inspectHook=()=>{throw Error('private issuer fault');};
+ const render=()=>{renders++;s.broker.inspect('rpc');};const done=s.broker.subscribeInvalidation(()=>queueMicrotask(render));
+ render();for(let i=0;i<20;i++)await Promise.resolve();assert.equal(renders,2);
+ const generation=s.broker.generation;for(let i=0;i<20;i++){s.broker.inspect('rpc');await Promise.resolve();}assert.equal(s.broker.generation,generation);
+ s.registry.change();for(let i=0;i<20;i++)await Promise.resolve();assert.equal(renders,4,'real registry invalidation permits one new fault notification');done();s.broker.dispose();
+});
+test('real broker feeds synchronous privacy reader; notification adds no authority',async()=>{
+ const {createPrivacyViewReader}=await import('../../domain/src/privacy-view.ts');const s=setup();const reader=createPrivacyViewReader({transport:s.broker,monotonicNow:()=>0});let view;
+ const off=s.broker.subscribeInvalidation(()=>{view=reader.buildPrivacyView(s.broker.mode);});
+ assert.equal(reader.buildPrivacyView('ordinary').value.routes.find(r=>r.channel==='relay').state,'direct');
+ s.broker.setMode('strict');await Promise.resolve();assert.equal(view.value.routes.find(r=>r.channel==='relay').state,'blocked');assert.equal(view.value.economicPreparationAllowed,false);assert.equal(s.broker.authorize(request('relay')),'POLICY_BLOCKED');
+ s.broker.dispose();await Promise.resolve();assert.equal(view.value.routes.find(r=>r.channel==='relay').state,'unsupported');off();reader.dispose();
+});
+test('last display unsubscribe removes only inspection watches, retaining actual permit expiry',async t=>{
+ const s=setup();t.mock.timers.enable({apis:['setTimeout']});try{
+  const issued=permit(s.broker.authorize(request()));const leased=scope(s.broker.capture(issued));
+  const off=s.broker.subscribeInvalidation(()=>{});s.broker.inspect('relay');off();s.setTime(1000);t.mock.timers.tick(1000);
+  assert.equal(leased.signal.aborted,true);assert.equal(leased.current(),false);
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('inspection-only expiry does not revoke a longer live permit or its operation',async t=>{
+ const s=setup(),pending=deferred();let hints=0;s.broker.subscribeInvalidation(()=>hints++);
+ const leased=scope(s.broker.capture(permit(s.broker.authorize(request()))));const generation=s.broker.generation;
+ s.registry.inspectHook=channel=>({channel,coverage:'direct',adapterId:'fixture-adapter',expiresAt:10});
+ t.mock.timers.enable({apis:['setTimeout']});try{
+  s.broker.inspect('relay');const run=leased.run(()=>pending.promise);s.setTime(10);t.mock.timers.tick(10);await Promise.resolve();
+  assert.equal(hints,1);assert.equal(s.broker.generation,generation);assert.equal(leased.current(),true);assert.equal(leased.signal.aborted,false);
+  pending.resolve(7);assert.deepEqual(await run,{ok:true,value:7});
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('earlier stable observer sees the final state after later observers mutate or dispose',async()=>{
+ for(const terminal of ['strict','dispose']){
+  const s=setup();let observed;let mutations=0;
+  s.broker.subscribeInvalidation(()=>{observed=s.broker.inspect('rpc').coverage+':'+s.broker.mode;});
+  s.broker.subscribeInvalidation(()=>{mutations++;if(terminal==='dispose')s.broker.dispose();else s.broker.setMode('strict');});
+  s.registry.change();await Promise.resolve();assert.equal(mutations,1);
+  assert.equal(observed,terminal==='dispose'?'unsupported:ordinary':'direct:strict');s.broker.dispose();
+ }
+});
+test('catch-up handles a full reverse-order chain of mutators within one bounded batch',async()=>{
+ const s=setup();let next=63,callbacks=0,stableMode,mutations=0;
+ s.broker.subscribeInvalidation(()=>{callbacks++;stableMode=s.broker.mode;});
+ for(let index=1;index<=63;index++)s.broker.subscribeInvalidation(()=>{callbacks++;if(next===index){next--;mutations++;s.broker.setMode(s.broker.mode==='ordinary'?'strict':'ordinary');}});
+ s.registry.change();await Promise.resolve();assert.equal(mutations,63);assert.equal(stableMode,s.broker.mode);assert.ok(callbacks<=4096,'64 eligible callbacks, at most64 catch-up passes');
+ const completed=callbacks;for(let i=0;i<10;i++)await Promise.resolve();assert.equal(callbacks,completed,'no recursive notification microtasks');s.broker.dispose();
+});

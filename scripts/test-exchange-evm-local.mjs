@@ -12,9 +12,12 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { RegistryService, TERMS_REVIEW_FORMAT, checkFundingWindow, encodePrivateAgreement, encodeCapabilities, reviewTermsBytes } from '../packages/domain/index.ts';
+import { RegistryService, TERMS_REVIEW_FORMAT, checkFundingWindow, encodePrivateAgreement, encodeCapabilities, reviewTermsBytes, createJourneyProjection } from '../packages/domain/index.ts';
+import { createTradeAuthority } from '../packages/domain/src/authority.ts';
+import { createTradeComposition } from '../packages/domain/src/trade-composition.ts';
+import { createEvmPaymentPreflight } from '../packages/wallet/src/evm-payment-preflight.ts';
 import { evmTermsHash, keccak256, verifyEoaAcceptance } from '../packages/wallet/src/evm-terms.ts';
-import { buildGetTrade, buildTradeIdOf, decodeTrade, tradeMatchesTerms } from '../packages/wallet/src/evm-escrow.ts';
+import { buildGetTrade, buildTradeIdOf, decodeTrade, tradeMatchesTerms, buildChainObservation } from '../packages/wallet/src/evm-escrow.ts';
 import { createEip1193ChainReader, escrowCallFor } from '../packages/wallet/src/evm-submit.ts';
 import { createLifecycleJournal } from '../packages/domain/src/intent-journal.ts';
 import { createEvmTxLifecycle, evmFinalityPolicy } from '../packages/domain/src/tx-lifecycle.ts';
@@ -25,7 +28,7 @@ import { createRelayEventCrypto, createTermsExchange, adBookKey } from '../packa
 import { createDurableTradeChat, encodeMessage } from '../packages/messaging/index.ts';
 import { EncryptedVaultService, EncryptedBackupService } from '../packages/storage/index.ts';
 import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
-import { decodeIntentPayload } from '../packages/schemas/index.ts';
+import { decodeIntentPayload, sameBinding } from '../packages/schemas/index.ts';
 import { rpcClient, checkToolchain, forgeEnv, TOOLCHAIN } from './sepolia/lib.mjs';
 import { startFakeRelay } from '../packages/relay/test/support/fake-relay.mjs';
 import { makeBroker, FAST, until, loopbackRelayFixture } from '../packages/relay/test/support/harness.mjs';
@@ -55,7 +58,7 @@ const store = {
   compareAndSwap: async (expected,next,opts) => { opts?.assertCurrent?.(); if(opts?.signal?.aborted)throw new VaultStorageError('CANCELLED'); if(JSON.stringify(rows.get(expected.profileId))!==JSON.stringify(expected))throw new VaultStorageError('CONFLICT'); rows.set(next.profileId,structuredClone(next)); },
   listProfileIds: async()=>({profileIds:[...rows.keys()],truncated:false}), subscribeInvalidation:()=>()=>{},
 };
-const allowed = new Map(), parties = [], pools = [], brokers = [], clients = new Set(), historyProfiles = new Set(), results=[];
+const allowed = new Map(), parties = [], pools = [], brokers = [], clients = new Set(), historyProfiles = new Set(), journeyContexts = new Set(), journeyMethods = [], results=[];
 let anvil, relay, rpc, escrow, clock=0, sends=0, markers=0, chatMessages=0, chatReopens=0, chatRecoveries=0;
 const pass = name => { results.push(name); console.log(`ok - ${name}`); };
 const freePort = () => new Promise((done,reject)=>{const server=createServer();server.once('error',reject);server.listen(0,'127.0.0.1',()=>{const port=server.address().port;server.close(error=>error?reject(error):done(port));});});
@@ -113,6 +116,44 @@ async function reconcileFinal(self,intentId){
   assert.fail('local finality did not arrive within bounded mining');
 }
 function asTerms(r){return{orderId:r.orderId,revision:r.revision,networkId:r.network.id,deploymentId:r.deployment.id,seller:r.seller,buyer:r.buyer,assetKind:r.asset.kind,asset:r.asset.address??ZERO,amountBaseUnits:r.amountBaseUnits,privateAgreementHash:r.privateAgreementSha256,capabilitiesHash:r.capabilitiesSha256,sellerNonce:r.sellerNonce,acceptBeforeSeconds:r.acceptBeforeSeconds,escrowExpirySeconds:r.escrowExpirySeconds};}
+/** Native loopback fixture composition, not a shipped G08 adapter or registry approval. */
+function journeyFor(self, binding, terms, registry) {
+  const read = (method, params = []) => { journeyMethods.push(method); return rpc(method, params); };
+  const network = registry.network(binding.networkId), deployment = registry.deployment(binding.networkId, binding.deploymentId);
+  const gate = val(createEvmPaymentPreflight({ registry, binding, terms, request: ({method, params}) => read(method, params) }));
+  const authority = createTradeAuthority({ binding, generation: 0, walletGeneration: 1,
+    readValidated: async (_binding, request) => {
+      assert.equal(BigInt(await read('eth_chainId')), BigInt(network.chainIdentity));
+      assert.equal((await read('eth_getBlockByNumber', ['0x0', false])).hash, network.genesisHash);
+      const anchor = await read('eth_getBlockByNumber', ['finalized', false]);
+      assert.equal(hex(keccak256(bytes((await read('eth_getCode', [escrow, anchor.number])).slice(2)))), deployment.runtime.keccak256);
+      const getTradeReturn = await read('eth_call', [{to:escrow,data:buildGetTrade(escrow,binding.tradeId).data},anchor.number]);
+      const logs = await read('eth_getLogs', [{address:escrow,fromBlock:'0x0',toBlock:anchor.number}]);
+      assert.ok(logs.length <= 64, 'bounded native fixture log history');
+      const repeated = await read('eth_getBlockByNumber', [anchor.number, false]);
+      assert.deepEqual([repeated.number,repeated.hash,repeated.timestamp], [anchor.number,anchor.hash,anchor.timestamp]);
+      return {ok:true,value:buildChainObservation(escrow,{binding,generation:request.generation,requestSequence:request.requestSequence,
+        getTradeReturn,logs:logs.filter(entry=>entry.topics[1]===`0x${binding.tradeId}`),anchor:{height:BigInt(anchor.number).toString(),hash:anchor.hash},finality:'finalized',observedAt:Date.now()})};
+    } });
+  // The lifecycle journal has no readNative port in this fixture. Its raw unresolved()
+  // correctly treats persisted terminal labels as unproven. Adapt the real coordinator,
+  // rechecking each matching encrypted intent rather than trusting a label or clearing IDs.
+  const reconciledJournal = { async unresolved(wanted, account, signal) {
+    const records = val(await self.journal.list(signal));assert.ok(records.length <= 32);
+    const unresolved = [];
+    for (const record of records) if (sameBinding(record.binding,wanted) && record.account===account) {
+      if (record.state!=='finalized') { unresolved.push(record);continue; }
+      const native = await self.life.reconcile(record.intentId,signal);
+      if (!native.ok) return native;
+      if (native.value.outcome!=='finalized' || !self.journal.isTerminalVerified(record.intentId)) unresolved.push(native.value.intent);
+    }
+    return {ok:true,value:Object.freeze(unresolved)};
+  } };
+  const composition = createTradeComposition({binding,account:addresses[0],authority,journal:reconciledJournal});
+  const journey = createJourneyProjection({composition,paymentGuidance:gate});
+  const context = {authority,gate,journey,close(){journey.dispose();composition.dispose();authority.dispose();gate.dispose();journeyContexts.delete(context);}};
+  journeyContexts.add(context);return context;
+}
 async function pull(pool,who,kind=1059){
   const got=[];let eose=false;
   const filters=kind===1059?[{kinds:[1059],'#p':[who.pub],since:clock-250000,limit:50}]:[{kinds:[AD_KIND],'#t':['p2p-offramp-ad-v1'],since:clock-3600,limit:50}];
@@ -298,7 +339,20 @@ try{
         pass('fresh-key restore reauthenticates original chat proofs and dedup alongside unknown G12 recovery without changing the source or resending');
       }finally{backup.dispose();}
     }else val(sent,'send accepted fund');
+    await mine(5); // Deployment/funding are native-finalized; the local unknown result still needs reconciliation.
+    const journey = journeyFor(self,binding,acceptedTerms,registry), beforeJourneySends=sends;
+    val(await journey.authority.refresh(binding));
+    assert.equal(val(await journey.journey.read()).blockingReason,'reconcile-required','durable unknown/pending intent vetoes native funded guidance');
     const funded=await reconcileFinal(self,prepared.intentId);assert.equal(funded.escrowState,'funded');
+    val(await journey.authority.refresh(binding));
+    const coordination=val(await journey.journey.read());
+    assert.equal(coordination.kind,'resolved',JSON.stringify(coordination));assert.equal(coordination.view.step,'payment-coordination');
+    assert.deepEqual(coordination.view.actions,[]);assert.equal(coordination.view.economicPreparationAllowed,false);
+    assert.equal(sends,beforeJourneySends,'read-only journey never sends a wallet transaction');
+    val(journey.authority.invalidate(binding));journey.gate.invalidate();
+    assert.equal(val(await journey.journey.read()).blockingReason,'chain-stale');
+    val(await journey.authority.refresh(binding));assert.equal(val(await journey.journey.read()).view.step,'payment-coordination');
+    pass(`native ${terminal} journey joins actual encrypted G12, finalized G08 and fresh exact-match G18 without wallet actions`);
     assert.equal(BigInt(await rpc('eth_getTransactionCount',[addresses[0],'latest'])),nonceBefore+1n,'unknown recovery never resends');
     assert.equal(tradeMatchesTerms(await trade(tradeId),acceptedTerms),true);
     fail(await buyer.exchange.cancel(take.sessionId,'withdrawn',buyer.secret),'OUT_OF_ORDER');
@@ -307,11 +361,18 @@ try{
     const buyerBefore=BigInt(await rpc('eth_getBalance',[addresses[1],'latest']));
     const sellerBefore=BigInt(await rpc('eth_getBalance',[addresses[0],'latest']));
     assert.equal(BigInt(await rpc('eth_getBalance',[escrow,'latest'])),amount,'escrow holds exactly the funded principal');
-    if(terminal==='refund'){await rpc('evm_setNextBlockTimestamp',[Number(terms.escrowExpirySeconds)]);await mine();clock=await now();}
+    if(terminal==='refund'){
+      await rpc('evm_setNextBlockTimestamp',[Number(terms.escrowExpirySeconds)-900]);await mine();clock=await now();
+      val(await journey.authority.refresh(binding));assert.equal(val(await journey.journey.read()).blockingReason,'payment-guidance-blocked');
+      await rpc('evm_setNextBlockTimestamp',[Number(terms.escrowExpirySeconds)]);await mine();clock=await now();
+    }
     const action=escrowCallFor({action:terminal,escrow,tradeId});allowed.set(callKey(binding,terminal),{call:action.call,state:'funded',account:addresses[0]});
     const terminalPrepared=val(await self.life.prepare({binding,action:terminal,expectedEscrowState:'funded',call:action.call}),'prepare terminal');
     const terminalSent=val(await self.life.submit(terminalPrepared),'send terminal');
     const done=await reconcileFinal(self,terminalPrepared.intentId);assert.equal(done.escrowState,terminal==='release'?'released':'refunded');
+    val(await journey.authority.refresh(binding));journey.gate.invalidate();
+    assert.equal(val(await journey.journey.read()).view.step,'receipt','original finalized receipt remains independent of unavailable payment guidance');
+    journey.close();
     assert.equal(BigInt(await rpc('eth_getBalance',[addresses[1],'latest'])),buyerBefore+(terminal==='release'?amount:0n));
     const receipt=await rpc('eth_getTransactionReceipt',[terminalSent.hash]);
     const fee=BigInt(receipt.gasUsed)*BigInt(receipt.effectiveGasPrice);
@@ -326,9 +387,11 @@ try{
   assert.equal(JSON.stringify([...rows.values()]).includes('SYNTHETIC durable private chat'),false,'vault snapshots contain encrypted chat rather than plaintext');
   assert.equal(chatMessages,4);assert.equal(chatReopens,2);assert.equal(chatRecoveries,1);
   assert.equal(sends,4);assert.equal(markers,sends);
+  assert.ok(journeyMethods.length>0&&journeyMethods.every(method=>['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','eth_getLogs'].includes(method)),'journey ports perform native reads only');
   pass('altered bytes, replay, pre-accept preparation, changed call value and repeat funding are refused; every send had a durable marker');
-  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
+  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,journeyReads:journeyMethods.length,journeySendOrSignCalls:0,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
 } finally {
+  for(const context of [...journeyContexts])context.close();
   for(const owner of [...historyProfiles])owner.close();
   for(const self of [...clients])self.close();
   for(const party of parties){party.exchange.close();party.eventCrypto.dispose();party.secret.fill(0);}

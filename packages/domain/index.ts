@@ -9,4 +9,4 @@ export type { EvmTradeTermsV1, TermsReviewDocumentV1, TermsReviewRejection, Regi
 export { createPrivacyViewReader } from './src/privacy-view.ts';
 export type { PrivacyView, PrivacyViewReader, PrivacyTransportPort, PrivacyObservationPort, PrivacyObservationSnapshot, PrivacyCapabilityObservation, PrivacyIndicator, PrivacyRouteIndicator, PrivacyReason, VaultPrivacyState, MessagingPrivacyState, ProofPrivacyState } from './src/privacy-view.ts';
 export { createJourneyProjection } from './src/journey-view.ts';
-export type { JourneyStep, JourneyView, JourneyProjection } from './src/journey-view.ts';
+export type { JourneyStep, JourneyView, JourneyProjection, JourneyPaymentGuidanceObservation, JourneyPaymentGuidancePort } from './src/journey-view.ts';
