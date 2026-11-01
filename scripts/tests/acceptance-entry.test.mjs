@@ -7,7 +7,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const entry = fileURLToPath(new URL('../acceptance-report.mjs', import.meta.url));
-const run = (path, args = []) => spawnSync(process.execPath, [path, ...args], { encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024 });
+// Node 24.0–24.2 may warn for native TypeScript stripping. Suppress that category only;
+// unexpected warnings/errors remain visible and every report assertion still requires empty stderr.
+const childNode = (args, options = {}) => spawnSync(process.execPath, ['--disable-warning=ExperimentalWarning', ...args], {
+  encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024, ...options,
+});
+const run = (path, args = []) => childNode([path, ...args]);
 const report = (result, exitCode) => {
   assert.equal(result.error, undefined); assert.equal(result.signal, null); assert.equal(result.status, exitCode);
   assert.equal(result.stderr, ''); assert.equal(result.stdout.trim().split('\n').length, 1);
@@ -53,11 +58,38 @@ test('direct and symlink CLI entries evaluate real matching evidence and stay bl
 test('importing the CLI through direct or symlink module URLs is inert', async t => {
   const { link } = await fixture(t);
   for (const path of [entry, link]) {
-    const result = spawnSync(process.execPath, ['--input-type=module', '--eval', 'await import(process.env.P2P_ACCEPTANCE_TEST_IMPORT)'], {
-      encoding: 'utf8', timeout: 10000, maxBuffer: 1024 * 1024,
+    const result = childNode(['--input-type=module', '--eval', 'await import(process.env.P2P_ACCEPTANCE_TEST_IMPORT)'], {
       env: { ...process.env, P2P_ACCEPTANCE_TEST_IMPORT: pathToFileURL(path).href },
     });
     assert.equal(result.error, undefined); assert.equal(result.signal, null); assert.equal(result.status, 0);
     assert.equal(result.stdout, ''); assert.equal(result.stderr, '');
   }
+});
+
+test('eval aliases and long forms keep imports inert when argv[1] names the imported CLI', async t => {
+  const { link, candidatePath, recordsPath } = await fixture(t), source = 'await import(process.argv[1])';
+  const forms = [['-e', source], ['--eval', source], [`--eval=${source}`]];
+  for (const path of [entry, link]) for (const form of forms) {
+    const result = childNode(['--input-type=module', ...form, path, candidatePath, recordsPath]);
+    assert.equal(result.error, undefined); assert.equal(result.signal, null); assert.equal(result.status, 0, form[0]);
+    assert.equal(result.stdout, '', 'an import must not emit an acceptance report or evaluate its files'); assert.equal(result.stderr, '');
+  }
+});
+
+test('print aliases and long forms print only their expression when importing argv[1]', async t => {
+  const { link, candidatePath, recordsPath } = await fixture(t), source = '(import(process.argv[1]), "IMPORT-ONLY")';
+  const forms = [['-p', source], ['--print', source], ['-pe', source], ['-p', '-e', source], ['--print', '--eval', source]];
+  for (const path of [entry, link]) for (const form of forms) {
+    const result = childNode([...form, path, candidatePath, recordsPath]);
+    assert.equal(result.error, undefined); assert.equal(result.signal, null); assert.equal(result.status, 0, form[0]);
+    assert.equal(result.stdout, 'IMPORT-ONLY\n', 'the imported CLI must add no report or evaluation side effect'); assert.equal(result.stderr, '');
+  }
+});
+
+test('child setup suppresses only ExperimentalWarning and retains unrelated warnings and failures', () => {
+  const result = childNode(['--eval', "process.emitWarning('native-typescript-test', 'ExperimentalWarning'); process.emitWarning('unexpected-entry-test', 'AcceptanceEntryWarning');"]);
+  assert.equal(result.error, undefined); assert.equal(result.status, 0); assert.equal(result.stdout, '');
+  assert.match(result.stderr, /AcceptanceEntryWarning: unexpected-entry-test/); assert.doesNotMatch(result.stderr, /native-typescript-test/);
+  const failed = childNode(['--eval', "throw Error('unexpected-entry-failure')"]);
+  assert.equal(failed.error, undefined); assert.equal(failed.status, 1); assert.equal(failed.stdout, ''); assert.match(failed.stderr, /unexpected-entry-failure/);
 });

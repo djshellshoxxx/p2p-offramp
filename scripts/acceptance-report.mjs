@@ -73,8 +73,11 @@ export async function acceptanceReport(candidatePath, recordsPath) {
   }
 }
 
-/** Node canonicalizes the module URL while argv can still name a symlink. Imports remain inert. */
+/** Eval/print modes can put an imported module in argv[1]; that does not make it the entrypoint.
+ * Ordinary script invocation can retain a symlink in argv while Node canonicalizes its module URL.
+ */
 function isCliEntry() {
+  if (process.execArgv.some(arg => /^(?:-(?:e|p|pe)$|--(?:eval|print)(?:=|$))/.test(arg))) return false;
   if (!process.argv[1]) return false;
   try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
   catch { return false; }
