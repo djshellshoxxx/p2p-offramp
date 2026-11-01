@@ -166,3 +166,29 @@ test('last display unsubscribe removes only inspection watches, retaining actual
   assert.equal(leased.signal.aborted,true);assert.equal(leased.current(),false);
  }finally{s.broker.dispose();t.mock.timers.reset();}
 });
+test('inspection-only expiry does not revoke a longer live permit or its operation',async t=>{
+ const s=setup(),pending=deferred();let hints=0;s.broker.subscribeInvalidation(()=>hints++);
+ const leased=scope(s.broker.capture(permit(s.broker.authorize(request()))));const generation=s.broker.generation;
+ s.registry.inspectHook=channel=>({channel,coverage:'direct',adapterId:'fixture-adapter',expiresAt:10});
+ t.mock.timers.enable({apis:['setTimeout']});try{
+  s.broker.inspect('relay');const run=leased.run(()=>pending.promise);s.setTime(10);t.mock.timers.tick(10);await Promise.resolve();
+  assert.equal(hints,1);assert.equal(s.broker.generation,generation);assert.equal(leased.current(),true);assert.equal(leased.signal.aborted,false);
+  pending.resolve(7);assert.deepEqual(await run,{ok:true,value:7});
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('earlier stable observer sees the final state after later observers mutate or dispose',async()=>{
+ for(const terminal of ['strict','dispose']){
+  const s=setup();let observed;let mutations=0;
+  s.broker.subscribeInvalidation(()=>{observed=s.broker.inspect('rpc').coverage+':'+s.broker.mode;});
+  s.broker.subscribeInvalidation(()=>{mutations++;if(terminal==='dispose')s.broker.dispose();else s.broker.setMode('strict');});
+  s.registry.change();await Promise.resolve();assert.equal(mutations,1);
+  assert.equal(observed,terminal==='dispose'?'unsupported:ordinary':'direct:strict');s.broker.dispose();
+ }
+});
+test('catch-up handles a full reverse-order chain of mutators within one bounded batch',async()=>{
+ const s=setup();let next=63,callbacks=0,stableMode,mutations=0;
+ s.broker.subscribeInvalidation(()=>{callbacks++;stableMode=s.broker.mode;});
+ for(let index=1;index<=63;index++)s.broker.subscribeInvalidation(()=>{callbacks++;if(next===index){next--;mutations++;s.broker.setMode(s.broker.mode==='ordinary'?'strict':'ordinary');}});
+ s.registry.change();await Promise.resolve();assert.equal(mutations,63);assert.equal(stableMode,s.broker.mode);assert.ok(callbacks<=4096,'64 eligible callbacks, at most64 catch-up passes');
+ const completed=callbacks;for(let i=0;i<10;i++)await Promise.resolve();assert.equal(callbacks,completed,'no recursive notification microtasks');s.broker.dispose();
+});

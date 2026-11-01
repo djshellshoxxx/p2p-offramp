@@ -9,3 +9,5 @@ Independent directfocusedtests24/24PASS, zero skips; nofullsuite/nativeI/O. Cust
 ## Final hashes
 - `packages/transport/src/policy.ts` `50d5e3a02c6dbeca49807e020e479ca5f448abd1722a683721f2d76ef2fe41f4`
 - `packages/transport/test/policy.test.mjs` `16559ce0a65ca2ca0e47b46a6e737704fc29bd3041abe0e5bca9685fc8ae87ca`
+
+This initial approval is historical and superseded by broker-followup.md: hosted review reproduced two missed defects, repaired and independently rechecked as T31.

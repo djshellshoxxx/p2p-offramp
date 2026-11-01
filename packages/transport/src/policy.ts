@@ -85,6 +85,9 @@ export class SessionTransportPolicy {
   readonly #inspectionFaults = new Set<TransportChannel>();
   #notificationQueued = false;
   #notifying = false;
+  #notificationDirty = false;
+  #activeObserver: (() => void) | undefined;
+  #batchMutators = new Set<() => void>();
   constructor(options: TransportPolicyOptions = {}) {
     this.#registry = options.trustedRegistry ?? EMPTY; this.#clock = options.now ?? (() => performance.now());
     try {
@@ -94,7 +97,7 @@ export class SessionTransportPolicy {
   }
   get mode(): TransportMode { return this.#mode; }
   get generation(): number { return this.#generation; }
-  /** Invalidation hints only, never authority. Reentrant transitions coalesce into the current bounded pass. */
+  /** Invalidation hints only, never authority. Stable observers catch up after reentrant mutations in a bounded batch. */
   subscribeInvalidation(listener: () => void): () => void {
     if (typeof listener !== 'function') throw new TypeError('INVALID_INPUT');
     if (this.#closed) {
@@ -112,16 +115,32 @@ export class SessionTransportPolicy {
     };
   }
   #notify(): void {
-    if (this.#notificationQueued || this.#notifying || !this.#observers.size) return;
+    if (this.#notifying) {
+      this.#notificationDirty = true;
+      if (this.#activeObserver) this.#batchMutators.add(this.#activeObserver);
+      return;
+    }
+    if (this.#notificationQueued || !this.#observers.size) return;
     this.#notificationQueued = true;
     queueMicrotask(() => {
       this.#notificationQueued = false; this.#notifying = true;
+      // A fixed cohort bounds catch-up: every dirty pass excludes at least one new mutator.
+      // Stable observers see the final state; mutators run at most once, without recursive microtasks.
+      const eligible = [...this.#observers]; this.#batchMutators.clear();
       try {
-        for (const listener of [...this.#observers]) {
-          if (!this.#observers.has(listener)) continue;
-          try { listener(); } catch { /* One observer cannot suppress others or revoke cleanup. */ }
-        }
-      } finally { this.#notifying = false; if (this.#closed) this.#observers.clear(); }
+        do {
+          this.#notificationDirty = false;
+          for (const listener of eligible) {
+            if (!this.#observers.has(listener) || this.#batchMutators.has(listener)) continue;
+            this.#activeObserver = listener;
+            try { listener(); } catch { /* One observer cannot suppress others or revoke cleanup. */ }
+            finally { this.#activeObserver = undefined; }
+          }
+        } while (this.#notificationDirty);
+      } finally {
+        this.#activeObserver = undefined; this.#batchMutators.clear(); this.#notifying = false;
+        if (this.#closed) this.#observers.clear();
+      }
     });
   }
   #time(): number | null {
@@ -162,7 +181,8 @@ export class SessionTransportPolicy {
     const now = this.#time(); if (now === null) return false;
     let inspectedExpired = false;
     for (const [channel, expiry] of this.#inspectionExpiries) if (now >= expiry) { this.#inspectionExpiries.delete(channel); inspectedExpired = true; }
-    if (inspectedExpired) { this.#transition('CANCELLED'); return false; }
+    // Display deadlines are not transport revocations. Only actual permit expiry retires authority.
+    if (inspectedExpired) this.#notify();
     for (const state of this.#states.values()) {
       if (state.projection.evidence.expiresAt !== null && now >= state.projection.evidence.expiresAt) { this.#transition('CANCELLED'); return false; }
     }

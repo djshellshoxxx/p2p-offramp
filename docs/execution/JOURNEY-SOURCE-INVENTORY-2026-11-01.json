@@ -956,7 +956,7 @@
     },
     {
       "path": "packages/transport/src/policy.ts",
-      "sha256": "50d5e3a02c6dbeca49807e020e479ca5f448abd1722a683721f2d76ef2fe41f4"
+      "sha256": "3c43f86148864a500f3e7d74dbcd7a7c4a990701c6566c67edd6b18841d46fa6"
     },
     {
       "path": "packages/transport/test/http-driver.test.mjs",
@@ -964,7 +964,7 @@
     },
     {
       "path": "packages/transport/test/policy.test.mjs",
-      "sha256": "16559ce0a65ca2ca0e47b46a6e737704fc29bd3041abe0e5bca9685fc8ae87ca"
+      "sha256": "e2362d75405b492b7c634cb40c10958c5f8d4c6fba972b6425c9ab4d60f618fb"
     },
     {
       "path": "packages/wallet/src/discovery.ts",
