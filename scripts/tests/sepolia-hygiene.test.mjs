@@ -11,8 +11,9 @@ const parent = {
 };
 
 test('forgeEnv pins the canonical config/profile, drops ambient build settings and private keys', () => {
-  assert.deepEqual(forgeEnv({...parent,FOUNDRY_OPTIMIZER_RUNS:'9999',FOUNDRY_EVM_VERSION:'shanghai',FOUNDRY_PROFILE:'other',FOUNDRY_CONFIG:'/tmp/other.toml',DAPP_OPTIMIZER_RUNS:'9999'}), { PATH: '/bin', HOME: '/home/op', FOUNDRY_SOLC: '/opt/solc', SEPOLIA_RPC_URL: 'https://rpc.example/KEY', FOUNDRY_CONFIG: EVM_DIR + 'foundry.toml', FOUNDRY_PROFILE: 'default' });
-  const seller = forgeEnv(parent, { SEPOLIA_SELLER_PRIVATE_KEY: KEY, CALL_TO: '0x01' });
+  assert.deepEqual(forgeEnv({...parent,FOUNDRY_OPTIMIZER_RUNS:'9999',FOUNDRY_EVM_VERSION:'shanghai',FOUNDRY_PROFILE:'other',FOUNDRY_OFFLINE:'true',FOUNDRY_CONFIG:'/tmp/other.toml',DAPP_OPTIMIZER_RUNS:'9999'}), { PATH: '/bin', HOME: '/home/op', FOUNDRY_SOLC: '/opt/solc', SEPOLIA_RPC_URL: 'https://rpc.example/KEY', FOUNDRY_CONFIG: EVM_DIR + 'foundry.toml', FOUNDRY_PROFILE: 'default' });
+  const seller = forgeEnv(parent, { SEPOLIA_SELLER_PRIVATE_KEY: KEY, CALL_TO: '0x01', FOUNDRY_OFFLINE: 'true' });
+  assert.equal(seller.FOUNDRY_OFFLINE, 'true', 'trusted call-site policy survives the restrictive parent filter');
   assert.equal(seller.SEPOLIA_SELLER_PRIVATE_KEY, KEY);
   for (const name of ['SEPOLIA_DEPLOYER_PRIVATE_KEY', 'SEPOLIA_BUYER_PRIVATE_KEY', 'SEPOLIA_CROSSCHECK_RPC_URL', 'GITHUB_TOKEN', 'AWS_SECRET_ACCESS_KEY']) {
     assert.equal(name in seller, false, name);

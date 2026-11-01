@@ -23,7 +23,7 @@ import { checkToolchain, forgeEnv, rpcClient } from './sepolia/lib.mjs';
 const run = promisify(execFile), ROOT = fileURLToPath(new URL('../', import.meta.url));
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
 const inherited = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('SEPOLIA_')));
-const ENV = { ...inherited, PATH: `${FOUNDRY}:${inherited.PATH ?? ''}`, FOUNDRY_OFFLINE: 'true' };
+const ENV = { ...inherited, PATH: `${FOUNDRY}:${inherited.PATH ?? ''}` };
 const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const KEY = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'; // Published Anvil development key.
 const ZERO = `0x${'0'.repeat(40)}`, AMOUNT = 1_000_000_000_000_000n;
@@ -84,7 +84,7 @@ async function cli(command, args, { succeeds = true, fault = null, endpointId = 
 }
 async function deploy(target, args = []) {
   const result = await run('forge', ['create', target, '--rpc-url', rpc.url, '--private-key', KEY, '--broadcast', '--json', ...args],
-    { cwd: resolve(ROOT, 'contracts/evm'), env: forgeEnv(ENV), timeout: 30_000, maxBuffer: 1 << 20 });
+    { cwd: resolve(ROOT, 'contracts/evm'), env: forgeEnv(ENV, { FOUNDRY_OFFLINE: 'true' }), timeout: 30_000, maxBuffer: 1 << 20 });
   return JSON.parse(result.stdout.slice(result.stdout.indexOf('{'))).deployedTo.toLowerCase();
 }
 

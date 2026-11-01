@@ -19,7 +19,7 @@ import { checkToolchain, forgeEnv, rpcClient } from './sepolia/lib.mjs';
 
 const run = promisify(execFile);
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
-const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}`, FOUNDRY_OFFLINE: 'true' };
+const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}` };
 const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 // Documented public Anvil development key: never an operator credential.
@@ -88,7 +88,7 @@ try {
   assert.equal(BigInt(await rpc('eth_chainId')), 31337n);
   accounts = (await rpc('eth_accounts')).map(account => account.toLowerCase());
   const deployed = await run('forge', ['create', 'src/BasicEscrow.sol:BasicEscrow', '--rpc-url', url, '--private-key', `0x${KEY}`, '--broadcast', '--json', '--constructor-args', '[]'],
-    { cwd: EVM_DIR, env: forgeEnv(ENV), timeout: 30_000, maxBuffer: 1 << 20 });
+    { cwd: EVM_DIR, env: forgeEnv(ENV, { FOUNDRY_OFFLINE: 'true' }), timeout: 30_000, maxBuffer: 1 << 20 });
   escrow = JSON.parse(deployed.stdout.slice(deployed.stdout.indexOf('{'))).deployedTo.toLowerCase();
   const raw = JSON.parse(await readFile(new URL('../packages/domain/test/fixtures/local-evm-scenario/registry.json', import.meta.url)));
   const network = raw.networks[0]; network.genesisHash = (await block('0x0')).hash;

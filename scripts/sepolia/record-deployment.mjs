@@ -134,7 +134,7 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   // Provenance: the chain is compared with the committed sources built by the pinned toolchain, nothing else.
   const sourceCommit = await checkCleanSource(root);
   const toolchain = await checkToolchain(env);
-  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }) }); } catch { fail('BUILD_FAILED'); }
   const artifact = await escrowArtifact();
   const rpc = rpcClient(rpcUrl);
   const primary = await inspectDeployment(rpc, txHash, expectGenesis);

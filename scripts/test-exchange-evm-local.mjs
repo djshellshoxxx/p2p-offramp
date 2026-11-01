@@ -32,7 +32,7 @@ import { makeBroker, FAST, until, loopbackRelayFixture } from '../packages/relay
 
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
-const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}`, FOUNDRY_OFFLINE: 'true' };
+const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}` };
 const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const run = promisify(execFile), utf8 = new TextEncoder();
 const ZERO = `0x${'0'.repeat(40)}`, PASS = 'public synthetic canonical exchange journey passphrase';
@@ -162,7 +162,7 @@ try{
   let spawnError;anvil.once('error',error=>{spawnError=error;});
   for(let attempt=0;;attempt++){try{await rpc('eth_chainId');break;}catch{if(spawnError||anvil.exitCode!==null||attempt>=100)throw new Error('Local Anvil startup failed');await new Promise(done=>setTimeout(done,50));}}
   assert.equal(BigInt(await rpc('eth_chainId')),31337n);
-  const {stdout}=await run('forge',['create','src/BasicEscrow.sol:BasicEscrow','--rpc-url',url,'--private-key',`0x${KEYS[0]}`,'--broadcast','--json','--constructor-args','[]'],{cwd:EVM_DIR,env:forgeEnv(ENV),maxBuffer:1<<20,timeout:30000});
+  const {stdout}=await run('forge',['create','src/BasicEscrow.sol:BasicEscrow','--rpc-url',url,'--private-key',`0x${KEYS[0]}`,'--broadcast','--json','--constructor-args','[]'],{cwd:EVM_DIR,env:forgeEnv(ENV, { FOUNDRY_OFFLINE: 'true' }),maxBuffer:1<<20,timeout:30000});
   escrow=JSON.parse(stdout.slice(stdout.indexOf('{'))).deployedTo.toLowerCase();clock=await now();
   const registryInput=JSON.parse(await readFile(new URL('../packages/domain/test/fixtures/local-evm-scenario/registry.json',import.meta.url)));
   const network=registryInput.networks[0];network.genesisHash=(await rpc('eth_getBlockByNumber',['0x0',false])).hash;network.assets=network.assets.filter(asset=>asset.kind==='native');
