@@ -9,6 +9,8 @@
 - **Delivery phase:** 2
 - **Normative language:** MUST is a release gate; SHOULD deviations need a recorded reason.
 
+Local implementation checkpoint (2026-11-01, T28): the existing bounded journey projection now accepts a trusted native G18 read/view port and resolves read-only payment coordination only for coherent finalized funded G08/G12 state with no unresolved intents, matching original binding/hash/anchor and current native allow-guidance. Terminal receipts remain independent of that optional gate. Actions stay empty; no setup/backup verification, authenticated negotiation, wallet consent or browser native-provider composition is inferred. The canonical encrypted exchange/native harness covers actual journal recovery, matching guidance, stale/near-expiry refusal and terminal receipt. This is partial G22 engineering, not completed release acceptance.
+
 ## 2. Objective and boundaries
 
 Deliver a complete recoverable manual trade with optional proof/privacy/physical/dispute modules absent.

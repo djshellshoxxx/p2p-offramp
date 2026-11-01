@@ -11,6 +11,7 @@ import {
   type TransportGrantProjection, type TransportMode, type TransportResult,
 } from '../../schemas/index.ts';
 export const MAX_TRANSPORT_PERMITS = 64;
+export const MAX_TRANSPORT_OBSERVERS = 64;
 export const MAX_UNSETTLED_TRANSPORT_OPERATIONS = 64;
 export const TRANSPORT_OPERATION_TIMEOUT_MS = 30_000;
 const MAX_GENERATION = Number.MAX_SAFE_INTEGER - 1;
@@ -79,15 +80,50 @@ export class SessionTransportPolicy {
   #blocked = new Set<string>();
   #unsettled = new Set<object>();
   #timer: ReturnType<typeof setTimeout> | undefined;
+  readonly #observers = new Set<() => void>();
+  readonly #inspectionExpiries = new Map<TransportChannel, number>();
+  readonly #inspectionFaults = new Set<TransportChannel>();
+  #notificationQueued = false;
+  #notifying = false;
   constructor(options: TransportPolicyOptions = {}) {
     this.#registry = options.trustedRegistry ?? EMPTY; this.#clock = options.now ?? (() => performance.now());
     try {
-      const unsubscribe = this.#registry.subscribeInvalidation(() => { this.#blocked.clear(); this.#transition('CANCELLED'); });
+      const unsubscribe = this.#registry.subscribeInvalidation(() => { this.#blocked.clear(); this.#inspectionFaults.clear(); this.#transition('CANCELLED'); });
       if (typeof unsubscribe !== 'function') throw new Error(); this.#unsubscribe = unsubscribe;
     } catch { this.#closed = true; }
   }
   get mode(): TransportMode { return this.#mode; }
   get generation(): number { return this.#generation; }
+  /** Invalidation hints only, never authority. Reentrant transitions coalesce into the current bounded pass. */
+  subscribeInvalidation(listener: () => void): () => void {
+    if (typeof listener !== 'function') throw new TypeError('INVALID_INPUT');
+    if (this.#closed) {
+      if (!this.#notifying) {
+        this.#notifying = true;
+        try { listener(); } catch { /* Closed observation cannot grant authority. */ } finally { this.#notifying = false; }
+      }
+      return () => undefined;
+    }
+    if (this.#observers.size >= MAX_TRANSPORT_OBSERVERS && !this.#observers.has(listener)) throw new RangeError('LIMIT_EXCEEDED');
+    this.#observers.add(listener);
+    return () => {
+      this.#observers.delete(listener);
+      if (!this.#observers.size) { this.#inspectionExpiries.clear(); this.#schedule(); }
+    };
+  }
+  #notify(): void {
+    if (this.#notificationQueued || this.#notifying || !this.#observers.size) return;
+    this.#notificationQueued = true;
+    queueMicrotask(() => {
+      this.#notificationQueued = false; this.#notifying = true;
+      try {
+        for (const listener of [...this.#observers]) {
+          if (!this.#observers.has(listener)) continue;
+          try { listener(); } catch { /* One observer cannot suppress others or revoke cleanup. */ }
+        }
+      } finally { this.#notifying = false; if (this.#closed) this.#observers.clear(); }
+    });
+  }
   #time(): number | null {
     try {
       const now = this.#clock();
@@ -113,10 +149,10 @@ export class SessionTransportPolicy {
     if (this.#changing) return;
     this.#changing = true;
     if (this.#generation >= MAX_GENERATION) this.#closed = true; else this.#generation++;
-    const states = [...this.#states.values()]; this.#states.clear();
+    const states = [...this.#states.values()]; this.#states.clear(); this.#inspectionExpiries.clear();
     if (this.#timer !== undefined) clearTimeout(this.#timer); this.#timer = undefined;
     for (const state of states) { state.reason = reason; this.#cleanup(state); }
-    this.#changing = false;
+    this.#changing = false; this.#notify();
   }
   #block(adapterId: string, reason: RouteError): void {
     if (this.#blocked.size >= MAX_TRANSPORT_PERMITS && !this.#blocked.has(adapterId)) { this.dispose(); return; }
@@ -124,6 +160,9 @@ export class SessionTransportPolicy {
   }
   #expire(): boolean {
     const now = this.#time(); if (now === null) return false;
+    let inspectedExpired = false;
+    for (const [channel, expiry] of this.#inspectionExpiries) if (now >= expiry) { this.#inspectionExpiries.delete(channel); inspectedExpired = true; }
+    if (inspectedExpired) { this.#transition('CANCELLED'); return false; }
     for (const state of this.#states.values()) {
       if (state.projection.evidence.expiresAt !== null && now >= state.projection.evidence.expiresAt) { this.#transition('CANCELLED'); return false; }
     }
@@ -131,9 +170,10 @@ export class SessionTransportPolicy {
   }
   #schedule(): void {
     if (this.#timer !== undefined) clearTimeout(this.#timer); this.#timer = undefined;
-    if (this.#closed || this.#changing || !this.#states.size) return;
+    if (this.#closed || this.#changing || !this.#states.size && !this.#inspectionExpiries.size) return;
     const now = this.#time(); if (now === null) return;
     let earliest = Infinity;
+    for (const expiry of this.#inspectionExpiries.values()) earliest = Math.min(earliest, expiry);
     for (const state of this.#states.values()) earliest = Math.min(earliest, state.projection.evidence.expiresAt ?? Infinity);
     if (earliest !== Infinity) this.#timer = setTimeout(() => { this.#expire(); this.#schedule(); }, Math.min(0x7fffffff, Math.max(0, earliest - now)));
   }
@@ -151,7 +191,7 @@ export class SessionTransportPolicy {
     if (this.#mode !== input) { this.#mode = input; this.#transition('CANCELLED'); }
   }
   inspect(input: TransportChannel): Readonly<RouteEvidence> {
-    const channel = transportChannel(input); this.#expire();
+    const channel = transportChannel(input); this.#expire(); this.#inspectionExpiries.delete(channel);
     let coverage: RouteEvidence['coverage'] = this.#closed ? 'unsupported' : 'unknown', adapterId = 'unconfigured';
     if (!this.#closed && !this.#changing) {
       try {
@@ -161,11 +201,19 @@ export class SessionTransportPolicy {
           const evidence = parseTransportEvidence(issued), now = this.#time();
           if (evidence.channel !== channel) throw new Error();
           adapterId = evidence.adapterId;
+          if (this.#observers.size && generation === this.#generation && !this.#closed && evidence.expiresAt !== null && now !== null && evidence.expiresAt > now)
+            this.#inspectionExpiries.set(channel, evidence.expiresAt);
           coverage = this.#closed || generation !== this.#generation || this.#blocked.has(adapterId) ||
             (evidence.expiresAt !== null && (now === null || evidence.expiresAt <= now)) ? 'unknown' : evidence.coverage;
         }
-      } catch { coverage = 'unsupported'; this.#transition('ROUTE_UNAVAILABLE'); }
+        this.#inspectionFaults.delete(channel);
+      } catch {
+        coverage = 'unsupported';
+        // A render reading the same malformed issuer result must not become a notification/render loop.
+        if (!this.#inspectionFaults.has(channel)) { this.#inspectionFaults.add(channel); this.#transition('ROUTE_UNAVAILABLE'); }
+      }
     }
+    this.#schedule();
     return Object.freeze({ channel, coverage, adapterId, generation: this.#generation });
   }
   authorize(input: RequestPolicy): Permit | RouteError {

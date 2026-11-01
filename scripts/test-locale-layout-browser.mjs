@@ -2,13 +2,15 @@
  * not a selectable translation, reviewed locale or assistive-technology audit. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, sep } from 'node:path';
 import { chromium } from 'playwright-core';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { sourceCatalog } from '../apps/web/src/ui/locale/en.ts';
+import { build as buildFixture } from 'vite';
+import react from '@vitejs/plugin-react';
 
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-locale-layout-'));
 const out = resolve(temporary, 'demo'), checks = [], unexpected = [];
@@ -58,6 +60,13 @@ async function assertGeometry(page, label) {
 try {
   const evidence = await buildWeb({ delivery: 'demo', outDir: out });
   assert.equal(evidence.ReleaseEnabled, 0);
+  const fixtureRoot = resolve(temporary, 'fixture-source');
+  await mkdir(fixtureRoot);
+  await writeFile(resolve(fixtureRoot, 'index.html'), '<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/entry.tsx"></script></body></html>');
+  await writeFile(resolve(fixtureRoot, 'entry.tsx'), `import ${JSON.stringify(resolve('scripts/fixtures/privacy-status-fixture.tsx'))};`);
+  await buildFixture({ configFile: false, root: fixtureRoot, base: '/privacy-fixture/', plugins: [react()],
+    resolve: { alias: { 'react-dom': resolve('node_modules/react-dom'), react: resolve('node_modules/react') } },
+    build: { outDir: resolve(out, 'privacy-fixture'), emptyOutDir: true } });
   server = createServer((request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
     const path = resolve(out, pathname === '/' ? 'index.html' : '.' + pathname);
@@ -212,6 +221,68 @@ try {
   assert.ok((await vaultObservation.innerText()).includes('Local vault service inspection'), 'actual lock notification refreshes observed state immediately');
   await privacyPage.close();
   pass('Settings expiry/resume reinspects the real local vault and unmount clears its sole deadline without network access');
+  const brokerPage = await context.newPage();
+  await brokerPage.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+  await brokerPage.clock.pauseAt(new Date('2026-01-01T00:00:01Z'));
+  brokerPage.on('pageerror', () => unexpected.push('FIXTURE_PAGE_ERROR'));
+  await brokerPage.goto(origin + '/privacy-fixture/index.html');
+  const routeRow = brokerPage.locator('li').filter({ has: brokerPage.getByRole('heading', { name: 'RPC channel', exact: true }) });
+  const invoke = (method, argument) => brokerPage.evaluate(({ method, argument }) => window.privacyFixture[method](argument), { method, argument });
+  const snapshot = () => invoke('snapshot');
+  await routeRow.getByText('Direct connection', { exact: true }).waitFor();
+  assert.equal((await snapshot()).metrics[0].subscribed, 1, 'real broker subscription precedes positive UI');
+  await invoke('strict');
+  await routeRow.getByText('Blocked by policy', { exact: true }).waitFor();
+  await invoke('revoke');
+  await routeRow.getByText('Unknown', { exact: true }).waitFor();
+  await invoke('renew');
+  await routeRow.getByText('Blocked by policy', { exact: true }).waitFor();
+  await brokerPage.clock.runFor(1001);
+  await routeRow.getByText('Unknown', { exact: true }).waitFor();
+  await invoke('renew');
+  await routeRow.getByText('Blocked by policy', { exact: true }).waitFor();
+  await invoke('dispose');
+  await routeRow.getByText('Unsupported', { exact: true }).waitFor();
+  await invoke('select', 1);
+  await invoke('renew');
+  await routeRow.getByText('Direct connection', { exact: true }).waitFor();
+  const replaced = await snapshot();
+  assert.equal(replaced.metrics[0].unsubscribed, 1, 'replacement unregisters the old broker');
+  await invoke('late', 0);
+  await brokerPage.clock.runFor(32);
+  assert.equal((await snapshot()).metrics[1].inspected, replaced.metrics[1].inspected, 'retained old callbacks cannot rerender the new broker');
+  await invoke('select', 2);
+  await routeRow.getByText('Unknown', { exact: true }).waitFor();
+  await brokerPage.getByRole('status').getByText('Privacy observations are unavailable. No privacy coverage or transaction authority is established.', { exact: true }).waitFor();
+  const exhausted = await snapshot();
+  assert.equal(exhausted.metrics[2].inspected, 0, 'real 64-observer exhaustion prevents inspection');
+  const syntheticVault = brokerPage.locator('li').filter({ has: brokerPage.getByRole('heading', { name: 'Local vault', exact: true }) });
+  await syntheticVault.getByText('Locked', { exact: true }).waitFor();
+  await syntheticVault.getByText('Local vault service inspection', { exact: true }).waitFor();
+  assert.equal(exhausted.metrics[1].unsubscribed, 1);
+  await invoke('select', 1); await invoke('renew');
+  await routeRow.getByText('Direct connection', { exact: true }).waitFor();
+  await invoke('detach');
+  await routeRow.getByText('Unknown', { exact: true }).waitFor();
+  const detached = await snapshot();
+  await invoke('reattachSameExhausted');
+  await brokerPage.getByRole('status').getByText('Privacy observations are unavailable. No privacy coverage or transaction authority is established.', { exact: true }).waitFor();
+  assert.equal((await snapshot()).metrics[1].inspected, detached.metrics[1].inspected, 'same broker identity cannot inspect using a detached registration before failed reattachment');
+  await routeRow.getByText('Unknown', { exact: true }).waitFor();
+  await syntheticVault.getByText('Locked', { exact: true }).waitFor();
+  // A separate fresh broker verifies active successful-registration unmount cleanup.
+  await invoke('select', 3); await invoke('renew');
+  await routeRow.getByText('Direct connection', { exact: true }).waitFor();
+  const beforeUnmount = await snapshot();
+  await invoke('unmount');
+  await invoke('late', 3);
+  await brokerPage.clock.runFor(2000);
+  const unmounted = await snapshot();
+  assert.deepEqual(unmounted.metrics.map(item => item.inspected), beforeUnmount.metrics.map(item => item.inspected), 'unmounted panel cannot reinspect');
+  assert.equal(unmounted.metrics[3].unsubscribed, 1, 'unmount unregisters the currently active successful subscription');
+  assert.equal(unmounted.captures, 0); assert.equal(unmounted.authorizations, 0);
+  await invoke('cleanup'); await brokerPage.close();
+  pass('separate test-only emitted panel uses real direct-only broker invalidation, inspect-only expiry, disposal, replacement and bounded-subscription failure');
   assert.deepEqual(unexpected, []);
   console.log(JSON.stringify({ fixture: 'draft-locale-emitted-layout', browser: browser.version(), checks: checks.length,
     stress: 'test-only DOM static-catalog substitution; not a translated locale implementation',
