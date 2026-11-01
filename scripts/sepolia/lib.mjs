@@ -56,9 +56,8 @@ export class KitError extends Error { constructor(code) { super(code); this.name
  */
 const EFFECTIVE_RECIPE = Object.freeze({
   src: 'src', test: 'test', script: 'script', out: 'out', libs: ['lib'],
-  remappings: ['forge-std/=lib/forge-std/src/', '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/',
-    'erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/', 'halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/',
-    'openzeppelin-contracts/=lib/openzeppelin-contracts/'],
+  auto_detect_remappings: false,
+  remappings: ['forge-std/=lib/forge-std/src/', '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],
   libraries: [], evm_version: 'cancun', auto_detect_solc: false, optimizer: true, optimizer_runs: 200,
   optimizer_details: null, via_ir: false, use_literal_content: false, bytecode_hash: 'ipfs', cbor_metadata: true,
   revert_strings: null, additional_compiler_profiles: [], compilation_restrictions: [],

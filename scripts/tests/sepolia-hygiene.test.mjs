@@ -159,9 +159,19 @@ test('unknown deployment guard clears only after finalized matching native accou
 // Compiler settings can also come from a global Foundry config. A pinned binary alone is not a pinned recipe.
 test('effective compiler recipe rejects global or profile configuration drift',()=>{
  const recipe={src:'src',test:'test',script:'script',out:'out',libs:['lib'],
- remappings:['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/','erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/','halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/','openzeppelin-contracts/=lib/openzeppelin-contracts/'],
+ auto_detect_remappings:false,remappings:['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],
  libraries:[],evm_version:'cancun',solc:'0.8.30',auto_detect_solc:false,optimizer:true,optimizer_runs:200,optimizer_details:null,via_ir:false,use_literal_content:false,bytecode_hash:'ipfs',cbor_metadata:true,revert_strings:null,additional_compiler_profiles:[],compilation_restrictions:[]};
  assert.doesNotThrow(()=>checkFoundryRecipe(recipe));
  assert.doesNotThrow(()=>checkFoundryRecipe({...recipe,solc:'/opt/solc'},'/opt/solc'));
- for(const [key,value]of Object.entries({optimizer:false,optimizer_runs:9999,evm_version:'shanghai',via_ir:true,solc:'0.8.31',optimizer_details:{yul:false},use_literal_content:true,bytecode_hash:'none',cbor_metadata:false,revert_strings:'strip',libraries:['x:y'],remappings:['@openzeppelin/contracts/=/tmp/x/'],additional_compiler_profiles:[{}],compilation_restrictions:[{}],out:'other',src:'other',libs:['/tmp/lib']}))assert.throws(()=>checkFoundryRecipe({...recipe,[key]:value}),e=>e.code==='TOOLCHAIN_MISMATCH',key);
+ for(const [key,value]of Object.entries({auto_detect_remappings:true,optimizer:false,optimizer_runs:9999,evm_version:'shanghai',via_ir:true,solc:'0.8.31',optimizer_details:{yul:false},use_literal_content:true,bytecode_hash:'none',cbor_metadata:false,revert_strings:'strip',libraries:['x:y'],remappings:['@openzeppelin/contracts/=/tmp/x/'],additional_compiler_profiles:[{}],compilation_restrictions:[{}],out:'other',src:'other',libs:['/tmp/lib']}))assert.throws(()=>checkFoundryRecipe({...recipe,[key]:value}),e=>e.code==='TOOLCHAIN_MISMATCH',key);
+});
+
+// The guard and committed recipe must both opt out; a checkout's vendor nesting is not compiler input.
+test('committed compiler recipe disables inferred vendor remappings',async()=>{
+ const {readFile}=await import('node:fs/promises');
+ const config=await readFile(EVM_DIR+'foundry.toml','utf8');
+ assert.match(config,/^auto_detect_remappings = false$/m);
+ const mappings=config.match(/^remappings = \[([\s\S]*?)^\]/m)?.[1];
+ assert.ok(mappings);
+ assert.deepEqual([...mappings.matchAll(/"([^"\n]+)"/g)].map(match=>match[1]),['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/']);
 });
