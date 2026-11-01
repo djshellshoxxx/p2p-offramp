@@ -96,3 +96,16 @@ Run the focused Node tests with `node --import ./scripts/test-support/register-t
 `node scripts/test-chat-history-browser.mjs`: real IndexedDB, two-tab CAS, document
 reload, durable replay refusal and fresh-key restore, with no wallet calls or
 application network access.
+
+`npm run test:exchange:evm` also composes this package with real Nostr terms
+exchange, the canonical relay pool and canonical escrow on owned loopback
+Anvil/relay fixtures. Both release and refund journeys persist text before
+explicit publication and reauthenticate/deduplicate it after closing and
+reopening the encrypted profile. The lost-wallet-response journey restores chat
+and G12 records together under a fresh vault key, retains the original messaging
+identity, reauthenticates the same native proofs and refuses replay without
+changing the source or resending funding. Settlement completes after chat closes.
+This runner uses encrypted in-memory storage; the separate Chromium proof above
+supplies actual IndexedDB/document-reload evidence. Relay acknowledgement is no
+delivery or payment proof. Neither runner supplies an outbox, reconnect protocol,
+production provider approval, app wiring or release acceptance.
