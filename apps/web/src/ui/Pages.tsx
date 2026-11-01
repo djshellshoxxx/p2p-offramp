@@ -6,6 +6,7 @@ import type { Route } from './routes.ts';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
+import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 
 export const pageTitle: Readonly<Record<Route['page'], string>> = {
   home: m.homeTitle, offers: m.offersTitle, trade: m.tradeTitle,
@@ -74,9 +75,10 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
   </>;
 }
 
-export function Settings({ diagnostics = null }: { readonly diagnostics?: Diagnostics | null }) {
+export function Settings({ diagnostics = null, services = null, scope }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number }) {
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
+    <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>
     <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p></section>

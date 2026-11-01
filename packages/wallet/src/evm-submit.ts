@@ -49,7 +49,8 @@ export function createEip1193ChainReader(options: Eip1193ChainReaderOptions) {
       if (signal.aborted) return { ok: false, error: createCoreError('CANCELLED', { operationId, readOnly: true }) };
       return { ok: true, value };
     } catch (error) {
-      if (error instanceof ReaderFailure) return { ok: false, error: createCoreError(error.code, { operationId, readOnly: true }) };
+      // The canonical normalizer reads own code descriptors safely, including local ReaderFailure.
+      // Foreign thrown proxies must never reach instanceof/prototype reflection here.
       return { ok: false, error: normalizeError(error, { operationId, phase: 'read' }) };
     }
   }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createMessage, formatMessage, validateLocale, LocaleError } from '../src/ui/locale/catalog.ts';
+import { createMessage, formatMessage, validateLocale, localeDirection, LocaleError } from '../src/ui/locale/catalog.ts';
 
 const definition = (changes = {}) => ({ key: 'recovery.records', source: '{count} {count|record|records} for {profile}',
   context: 'Private local profile recovery status', severity: 'warning', variables: { count: 'count', profile: 'identifier' },
@@ -65,4 +65,18 @@ test('locale metadata and complete message/variable parity are required; source 
   }
   const structuralOnly = validateLocale({ ...input, status: 'published', translator: 'translator', reviewer: 'reviewer' }, catalog);
   assert.equal(structuralOnly.status, 'published', 'structural validation alone is never a selectable-locale or review-authority API');
+});
+
+test('address-purpose display retains exact canonical bytes and refuses spoofing controls', () => {
+  const entry=createMessage(definition({source:'{address}',variables:{address:'address'}}));
+  const address='0x'+'Ab'.repeat(20);
+  assert.equal(formatMessage(entry,{address}),address);
+  for(const value of ['0x1234',address+'\u202e','１２３４','<script>','a'.repeat(80)]) refuses(()=>formatMessage(entry,{address:value}),'MESSAGE_VARIABLE_MISMATCH');
+});
+test('direction is derived from a supported locale and imported status grants no selection authority', () => {
+  assert.equal(localeDirection('ar'),'rtl');assert.equal(localeDirection('ja'),'ltr');
+  refuses(()=>localeDirection('PRIVATE'),'LOCALE_INCOMPLETE');
+  const entry=createMessage(definition()), source={[entry.key]:entry};
+  const locale=validateLocale({locale:'ar',translator:null,reviewer:null,revision:1,status:'draft',messages:{[entry.key]:entry.source}},source);
+  assert.equal(locale.direction,'rtl');assert.equal(locale.status,'draft');
 });

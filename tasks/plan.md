@@ -140,3 +140,31 @@ one Node-only helper now holds the rule. A copied fuzz fixture adds that helper.
 Independent preload-query/fragment probes then required URL-suffix rejection
 before canonical path matching. Ordinary/direct/symlink and literal filename
 behavior remain tested. No unconditional test executable was redesigned.
+
+## Guidance continuation — 2026-11-01
+
+User invoked the remaining-work execution prompt. Baseline merged PR21 f264cab;
+T1–T18 remain complete. Root owns integration/manifests/CI and this ledger.
+T19/T21 owner guidance_writer owns help/catalog/UI and focused tests; T20 owner
+layout_qualification owns test-only layout/browser fixtures. Agree interfaces
+before dependent edits; CSS ownership transfers explicitly. Different agents
+review frozen slices. Preserve disabled trading, draft-only fixtures and all
+trust/approval gates. Execute docs/execution/REMAINING-WORK-PROMPT-2026-11-01.md;
+reassess source-derived unblocked work after this tranche, then audit/consolidate.
+
+Reassessment admits T23: G23 independent display-only privacy indicators. Owner
+remaining_inventory owns a new domain model/tests and its specification status;
+root owns public facade and later app composition after T19/T21 catalog freeze.
+Reuse actual G05/vault/core observation ports, exact bounds and stale/generation
+refusal; no second transport authority, global anonymity badge, approval inference
+or economic preparation. Agree the input trust seam before implementation.
+
+T24: guidance_writer owns new domain journey-view source/test only. Reuse existing TradeView/journal facts, exact specified steps, unknown unsupported prerequisites; no signing/actions or economic authority. Root owns facade/integration. Independent review required.
+
+T25: audit_evm exclusively owns wallet evm-submit reader and focused reader test. Guard hostile thrown error classification, retain fixed diagnostic surface, no economic behavior change. Independent review by another agent after freeze.
+
+Final T23 ownership extension serialized after guidance freeze: remaining_inventory owns PrivacyStatusPanel, App/Pages wiring, privacy-only en catalog group and UI tests. Runtime/build reviewer independently approved final absent-service correction. T20 actual-shell RTL correction independently reviewed; T24 reviewed by storage auditor; T25 minimal wallet fix reviewed by a different auditor. Combined evidence and unchanged-source identities are retained under docs/execution.
+
+T26 root owns help-registry exact-key membership simplification and source receipts; guidance reviewer independently checks strict shape preservation. Sonar failure on b8571ce was the exposed key-sort rule; no scanner settings/exclusions/gates changed.
+
+T27 remaining_inventory owns PrivacyStatusPanel, privacy-only catalog text, UItest if needed and locale harness expiry regression. Root owns G23/prompt/review-receipt documentation corrections. audit_runtime_build independently reviews frozen timer/browser source. No transport/provider authority or network introduced.

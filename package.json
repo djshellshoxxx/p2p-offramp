@@ -40,7 +40,8 @@
     "test:fuzz": "node --test scripts/tests/evm-agreement-fuzz.test.mjs",
     "test:private:browser": "node scripts/test-g16-browser.mjs && node scripts/test-g16-adapter-browser.mjs && node scripts/test-g16-physical-browser.mjs && node scripts/test-release-browser.mjs",
     "test:escrow": "npm --prefix packages/escrow-evm test",
-    "test:local-evm": "node scripts/test-local-evm.mjs"
+    "test:local-evm": "node scripts/test-local-evm.mjs",
+    "test:locale:browser": "node scripts/test-locale-layout-browser.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",

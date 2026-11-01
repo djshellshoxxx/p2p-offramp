@@ -53,3 +53,26 @@ tool slots are reused; no additional cloud instance or paid resource is created.
 This is the frozen-source checkpoint. T12's live hosted/merge status is recorded
 in final PR metadata after publication; this document cannot certify its own
 future merge. The result/audit documents record local evidence and retained gates.
+
+## Invoked guidance continuation — 2026-11-01
+
+| Task | Status | Owner / acceptance |
+| --- | --- | --- |
+| T19 | DONE | guidance_writer; strict help registry and visible-warning-preserving hover/focus/tap/keyboard lifecycle, focused and native review |
+| T20 | DONE | layout_qualification; draft-only actual browser stress, canonical copy, focus/keyboard/status, accurate zoom evidence |
+| T21 | DONE | guidance_writer; specified locale-purpose/direction/completeness gaps, strict negative tests and no approval inference |
+| T22 | INTEGRATING | root; independent reviews, source reassessment, integrated checks, audit and guarded source delivery |
+| T23 | DONE | remaining_inventory; G23 display-only independent channel/vault/encryption/chain/manual-settlement model with scope/freshness checks; trusted-port contract before edits |
+| T24 | DONE | guidance_writer; bounded G22 read-only journey projection over existing authority/journal facts; no new economic reducer or fabricated setup/backup proof |
+| T25 | DONE | audit_evm; reproduced hostile thrown provider prototype escapes wallet reader error boundary; minimal fixed-diagnostic repair and regression, independent review required |
+| T26 | DONE | root; replace unnecessary sorted schema-key comparison with exact fixed key membership after current Sonar report; same strict negative behavior, independent review and refreshed exact-head checks |
+| T27 | DONE | remaining_inventory + root docs; refresh expiring local privacy snapshot with owned timer/cleanup and native browser regression; reconcile three minor current review documentation findings; independent runtime reviewer |
+
+Existing managed workspace reused; no paid infrastructure. Shared files have
+one writer; reviewers must not silently edit another owner's implementation.
+
+
+
+T19–T25 combined local acceptance: 1,074 package/UI tests, all four TS configs, boundaries118/59, build-policy22, Python12/spec173, CLI11/diagnostics16/fuzz26, default/demo and affected native Chromium journeys. Foundry82, canonical exchange/chat10, portable recovery12+6 pass. Different reviewers approved fixes; see docs/execution/GUIDANCE-AUDIT-2026-11-01.md. T22 remains INTEGRATING only for exact-head hosting/guarded merge; live PR metadata records actual delivery. T24 is partial G22, T23 absent providers stay unknown, real400% zoom unqualified. No funds release/deployment.
+
+T27 final combined refresh: 1,074 package/UI zero failures/skips/cancellations; all four types, boundaries118/59, policy22, default/demo/specs pass; actual emitted locale/Settings browser5/5 with independently reviewed expiry/resume/unmount/real lock proof. Final hosting/merge remains T22 live PR metadata.

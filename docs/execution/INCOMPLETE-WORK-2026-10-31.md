@@ -1,3 +1,5 @@
+Current continuation: [2026-11-01 remaining work](GUIDANCE-REMAINING-2026-11-01.md) and [audit](GUIDANCE-AUDIT-2026-11-01.md). The dated evidence below is historical.
+
 # Current incomplete-work inventory
 
 Original source intake: merged `eaa1fe5`; current continuation starts at merged

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES, type AppServices, type RuntimeInventory } from '../app-services.ts';
+import { ControlHelp } from './ControlHelp.tsx';
 import { messages as m } from './messages.ts';
 import { errorMessage, isProfileId } from './routes.ts';
 
@@ -81,10 +82,12 @@ export function UnlockForm({ services, onCancel, initialProfileId = '' }: { read
     <label htmlFor="unlock-profile">{m.profile}</label>
     <input id="unlock-profile" name="profile" type="text" defaultValue={initialProfileId} required maxLength={32} pattern="[0-9a-f]{32}" autoCapitalize="none" spellCheck={false} aria-describedby="unlock-profile-help" readOnly={busy} />
     <p id="unlock-profile-help" className="helper">{m.profileHelp}</p>
+    <ControlHelp controlId="unlock-profile" label={m.profile} />
     <ProfileChoices inventory={inventory} failed={failed} target="unlock-profile" disabled={busy} />
     <label htmlFor="unlock-passphrase">{m.passphrase}</label>
     <input id="unlock-passphrase" name="passphrase" type="password" required maxLength={1024} autoComplete="off" aria-describedby="unlock-passphrase-help" readOnly={busy} />
     <p id="unlock-passphrase-help" className="helper">{m.passphraseHelp}</p>
+    <ControlHelp controlId="unlock-passphrase" label={m.passphrase} />
     <div className="actions">
       <button className="primary" type="submit" disabled={busy}>{m.submitUnlock}</button>
       <button type="button" onClick={() => { request.current?.abort(); form.current?.reset(); onCancel(); }}>{m.cancel}</button>
@@ -143,11 +146,13 @@ export function ExportForm({ services, refresh = 0 }: { readonly services: AppSe
     <label htmlFor="export-profile">{m.profile}</label>
     <input id="export-profile" name="profile" type="text" required maxLength={32} pattern="[0-9a-f]{32}" autoCapitalize="none" spellCheck={false} aria-describedby="export-profile-help" readOnly={busy} />
     <p id="export-profile-help" className="helper">{m.profileHelp}</p>
+    <ControlHelp controlId="export-profile" label={m.profile} />
     <ProfileChoices inventory={inventory} failed={failed} target="export-profile" disabled={busy} />
     <label className="checkbox-label" htmlFor="export-consent">
       <input id="export-consent" name="consent" type="checkbox" required disabled={busy} />
-      <span>{m.consent}</span>
+      <span id="export-consent-help">{m.consent}</span>
     </label>
+    <ControlHelp controlId="export-consent" label={m.backupTitle} />
     <button className="primary" type="submit" disabled={busy}>{m.export}</button>
     {busy ? <p role="status">{m.exporting}</p> : null}
     <NoticeText notice={notice} />
@@ -206,12 +211,14 @@ export function CreateForm({ services, onDone }: { readonly services: AppService
     <label htmlFor="create-passphrase">{m.newPassphrase}</label>
     <input id="create-passphrase" name="passphrase" type="password" required minLength={12} maxLength={1024} autoComplete="new-password" aria-describedby="create-passphrase-help" readOnly={busy} />
     <p id="create-passphrase-help" className="helper">{m.newPassphraseHelp}</p>
+    <ControlHelp controlId="create-passphrase" label={m.newPassphrase} />
     <label htmlFor="create-confirm">{m.confirmPassphrase}</label>
     <input id="create-confirm" name="confirm" type="password" required minLength={12} maxLength={1024} autoComplete="new-password" readOnly={busy} />
     <label className="checkbox-label" htmlFor="create-consent">
       <input id="create-consent" name="consent" type="checkbox" required disabled={busy} />
-      <span>{m.createConsent}</span>
+      <span id="create-consent-help">{m.createConsent}</span>
     </label>
+    <ControlHelp controlId="create-consent" label={m.create} />
     <div className="actions">
       <button className="primary" type="submit" disabled={busy || full}>{m.submitCreate}</button>
       <button type="button" onClick={() => { request.current?.abort(); form.current?.reset(); onDone(null); }}>{m.cancel}</button>
@@ -300,17 +307,20 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
     <label htmlFor="restore-file">{m.restoreFile}</label>
     <input id="restore-file" name="file" type="file" accept=".json,application/json" required disabled={busy} aria-describedby="restore-file-help" />
     <p id="restore-file-help" className="helper">{m.restoreFileHelp}</p>
+    <ControlHelp controlId="restore-file" label={m.restoreFile} />
     <label htmlFor="restore-source">{m.sourcePassphrase}</label>
     <input id="restore-source" name="source" type="password" required maxLength={1024} autoComplete="off" readOnly={busy} />
     <label htmlFor="restore-passphrase">{m.newPassphrase}</label>
     <input id="restore-passphrase" name="passphrase" type="password" required minLength={12} maxLength={1024} autoComplete="new-password" aria-describedby="restore-passphrase-help" readOnly={busy} />
     <p id="restore-passphrase-help" className="helper">{m.restorePassphraseHelp}</p>
+    <ControlHelp controlId="restore-passphrase" label={m.newPassphrase} />
     <label htmlFor="restore-confirm">{m.confirmPassphrase}</label>
     <input id="restore-confirm" name="confirm" type="password" required minLength={12} maxLength={1024} autoComplete="new-password" readOnly={busy} />
     <label className="checkbox-label" htmlFor="restore-consent">
       <input id="restore-consent" name="consent" type="checkbox" required disabled={busy} />
-      <span>{m.restoreConsent}</span>
+      <span id="restore-consent-help">{m.restoreConsent}</span>
     </label>
+    <ControlHelp controlId="restore-consent" label={m.restoreTitle} />
     <div className="actions">
       <button className="primary" type="submit" disabled={busy || uncertain}>{m.submitRestore}</button>
       {busy ? <button type="button" onClick={() => { request.current?.abort(); setBusy(false); setUncertain(true); setNotice(null); }}>{m.cancel}</button> : null}

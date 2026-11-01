@@ -72,6 +72,9 @@ jobs:
       - run: npm run test:recovery:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:locale:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   specs:
     runs-on: ubuntu-latest
     steps:

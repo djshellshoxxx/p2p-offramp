@@ -63,7 +63,7 @@ test('exact amounts: native 18 decimals, ERC-20 6 decimals, uint256 maximum, fia
 test('full addresses: seller, buyer and contract appear exactly, never shortened', () => {
   const html = render({ review: review() });
   for (const address of [SELLER, BUYER, CONTRACT]) {
-    assert.ok(html.includes(`<code class="exact">${address}</code>`), address);
+    assert.ok(html.includes(`<code class="exact"><bdi dir="ltr">${address}</bdi></code>`), address);
     const grouped = `0x ${address.slice(2).match(/.{4}/g).join(' ')}`;
     assert.ok(html.includes(grouped), `grouped ${address}`);
   }
@@ -113,7 +113,7 @@ test('capabilities: core trade shows none; listed capabilities are flagged unsup
   assert.ok(text(render({ review: review() })).includes(t.capabilitiesNone));
   const capsHtml = render({ review: review({ agreement: { ...review().agreement, capabilities: [{ id: 'local-test-cap', version: '1', policyHash: '9c'.repeat(32) }] },
     unsupportedCapabilities: ['local-test-cap'] }) });
-  assert.ok(capsHtml.includes('<code>local-test-cap</code> v<bdi>1</bdi>'));
+  assert.ok(capsHtml.includes('<code><bdi dir="ltr">local-test-cap</bdi></code> v<bdi>1</bdi>'));
   const caps = text(capsHtml);
   assert.ok(caps.includes(t.capabilityUnsupported));
   assert.ok(caps.includes(t.blockedCapabilities));

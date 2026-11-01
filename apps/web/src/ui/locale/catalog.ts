@@ -3,14 +3,19 @@
  * This module formats display text only. Canonical amounts, signed bytes and stored data never enter it for parsing.
  */
 export const LOCALE_TARGETS = Object.freeze(['en', 'fr', 'es', 'pt-BR', 'de', 'it', 'nl', 'ar', 'hi', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'tr', 'ru', 'uk', 'vi', 'th'] as const);
-export type VariablePurpose = 'text' | 'identifier' | 'count' | 'base-unit amount' | 'currency' | 'chain' | 'duration';
+export type VariablePurpose = 'text' | 'identifier' | 'count' | 'base-unit amount' | 'currency' | 'chain' | 'duration' | 'address';
 export type MessageVariables = Readonly<Record<string, VariablePurpose>>;
 export type MessageValues<V extends MessageVariables> = { readonly [K in keyof V]: V[K] extends 'count' ? number : string };
 export interface MessageEntry<V extends MessageVariables = MessageVariables> {
   readonly key: string; readonly source: string; readonly context: string; readonly severity: 'information' | 'warning' | 'critical';
   readonly variables: V; readonly reviewRequired: boolean; readonly docsAnchor: string;
 }
+export function localeDirection(locale: typeof LOCALE_TARGETS[number]): 'ltr' | 'rtl' {
+  if (!LOCALE_TARGETS.includes(locale)) throw new LocaleError('LOCALE_INCOMPLETE');
+  return locale === 'ar' ? 'rtl' : 'ltr';
+}
 export interface LocaleCatalog {
+  readonly direction: 'ltr' | 'rtl';
   readonly locale: typeof LOCALE_TARGETS[number]; readonly translator: string | null; readonly reviewer: string | null;
   readonly revision: number; readonly status: 'draft' | 'reviewed' | 'published'; readonly messages: Readonly<Record<string, MessageEntry>>;
 }
@@ -19,7 +24,7 @@ export class LocaleError extends Error {
   constructor(code: LocaleError['code']) { super('The message or locale is unavailable.'); this.name = 'LocaleError'; this.code = code; }
 }
 const refuse = (code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): never => { throw new LocaleError(code); };
-const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'base-unit amount', 'currency', 'chain', 'duration'];
+const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
 const names = /^[A-Za-z][A-Za-z0-9]*$/, identifiers = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\ud800-\udfff]/u;
 type Part = string | Readonly<{ name: string; one?: string; other?: string }>;
@@ -68,6 +73,8 @@ function displayValue(purpose: VariablePurpose, value: unknown): string {
   if (!plain(value, 4096)) return refuse();
   if (purpose === 'base-unit amount' || purpose === 'duration') { if (!/^(0|[1-9][0-9]{0,77})$/.test(value)) return refuse(); }
   else if (purpose === 'currency') { if (!/^[A-Z]{3}$/.test(value)) return refuse(); }
+  // Display shape only: this neither validates chain membership/checksums nor authenticates an address.
+  else if (purpose === 'address') { if (!/^(?:0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{32,44})$/.test(value)) return refuse(); }
   else if (purpose === 'identifier' || purpose === 'chain') { if (!identifiers.test(value)) return refuse(); }
   return value;
 }
@@ -97,7 +104,7 @@ export function validateLocale(input: unknown, source: Readonly<Record<string, M
       const original = source[key]!; if (!compiled.has(original) || original.key !== key) return refuse('LOCALE_INCOMPLETE');
       messages[key] = createMessage({ ...original, source: texts[key] as string });
     }
-    return Object.freeze({ locale: raw.locale as LocaleCatalog['locale'], translator: raw.translator as string | null, reviewer: raw.reviewer as string | null,
+    return Object.freeze({ locale: raw.locale as LocaleCatalog['locale'], direction: localeDirection(raw.locale as LocaleCatalog['locale']), translator: raw.translator as string | null, reviewer: raw.reviewer as string | null,
       revision: raw.revision, status: raw.status as LocaleCatalog['status'], messages: Object.freeze(messages) });
   } catch (error) { if (error instanceof LocaleError) throw error; return refuse('LOCALE_INCOMPLETE'); }
 }
