@@ -4,6 +4,7 @@ export interface TooltipEntry {
   readonly controlId: string; readonly messageKey: string; readonly severity: 'information' | 'warning' | 'critical';
   readonly helpLink: string; readonly interactionTests: readonly string[];
 }
+const entryKeys = Object.freeze(['controlId', 'helpLink', 'interactionTests', 'messageKey', 'severity'] as const);
 const interactions = Object.freeze(['hover', 'focus', 'tap', 'escape', 'blur'] as const);
 const bad = (): never => { throw new Error('Invalid local help registry.'); };
 function list(input: unknown, maximum: number): readonly unknown[] {
@@ -23,9 +24,9 @@ export function createTooltipRegistry(input: readonly TooltipEntry[]): Readonly<
     const items = list(input, 64);
     const entries = new Map<string, Readonly<TooltipEntry>>();
     for (const entry of items) {
-      if (!entry || Object.getPrototypeOf(entry) !== Object.prototype || Reflect.ownKeys(entry).sort().join() !== 'controlId,helpLink,interactionTests,messageKey,severity') return bad();
+      if (!entry || Object.getPrototypeOf(entry) !== Object.prototype || Reflect.ownKeys(entry).length !== entryKeys.length || !entryKeys.every(key => Object.hasOwn(entry, key))) return bad();
       const copy: Record<string, unknown> = Object.create(null);
-      for (const key of ['controlId', 'helpLink', 'interactionTests', 'messageKey', 'severity']) {
+      for (const key of entryKeys) {
         const d = Object.getOwnPropertyDescriptor(entry, key); if (!d || !d.enumerable || !('value' in d)) return bad(); copy[key] = d.value;
       }
       if (typeof copy.controlId !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(copy.controlId) || entries.has(copy.controlId) ||

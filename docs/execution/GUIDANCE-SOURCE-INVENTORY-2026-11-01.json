@@ -128,7 +128,7 @@
     },
     {
       "path": "apps/web/src/ui/help-registry.ts",
-      "sha256": "3b7e75fe597f30572197600b2585d095122b32eda655e7518195a7b7f9c77286"
+      "sha256": "91a8f51f9ab9094a2cf19f761a3f394091ee6347cfc3d2a4f9ae9730b5d34e32"
     },
     {
       "path": "apps/web/src/ui/locale/catalog.ts",

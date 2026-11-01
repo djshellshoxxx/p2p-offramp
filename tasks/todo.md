@@ -72,3 +72,5 @@ one writer; reviewers must not silently edit another owner's implementation.
 | T25 | DONE | audit_evm; reproduced hostile thrown provider prototype escapes wallet reader error boundary; minimal fixed-diagnostic repair and regression, independent review required |
 
 T19–T25 combined local acceptance: 1,074 package/UI tests, all four TS configs, boundaries118/59, build-policy22, Python12/spec173, CLI11/diagnostics16/fuzz26, default/demo and affected native Chromium journeys. Foundry82, canonical exchange/chat10, portable recovery12+6 pass. Different reviewers approved fixes; see docs/execution/GUIDANCE-AUDIT-2026-11-01.md. T22 remains INTEGRATING only for exact-head hosting/guarded merge; live PR metadata records actual delivery. T24 is partial G22, T23 absent providers stay unknown, real400% zoom unqualified. No funds release/deployment.
+
+| T26 | DONE | root; replace unnecessary sorted schema-key comparison with exact fixed key membership after current Sonar report; same strict negative behavior, independent review and refreshed exact-head checks |

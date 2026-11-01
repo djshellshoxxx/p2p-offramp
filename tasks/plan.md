@@ -164,3 +164,5 @@ T24: guidance_writer owns new domain journey-view source/test only. Reuse existi
 T25: audit_evm exclusively owns wallet evm-submit reader and focused reader test. Guard hostile thrown error classification, retain fixed diagnostic surface, no economic behavior change. Independent review by another agent after freeze.
 
 Final T23 ownership extension serialized after guidance freeze: remaining_inventory owns PrivacyStatusPanel, App/Pages wiring, privacy-only en catalog group and UI tests. Runtime/build reviewer independently approved final absent-service correction. T20 actual-shell RTL correction independently reviewed; T24 reviewed by storage auditor; T25 minimal wallet fix reviewed by a different auditor. Combined evidence and unchanged-source identities are retained under docs/execution.
+
+T26 root owns help-registry exact-key membership simplification and source receipts; guidance reviewer independently checks strict shape preservation. Sonar failure on b8571ce was the exposed key-sort rule; no scanner settings/exclusions/gates changed.

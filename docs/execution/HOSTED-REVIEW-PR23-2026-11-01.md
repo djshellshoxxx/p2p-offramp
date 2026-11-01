@@ -1,0 +1,7 @@
+# Hosted review checkpoint — PR #23
+
+Initial published head `b8571ce4fff871b80f74c58914c804a1dbffae70` passed all functional push/PR jobs, both CodeQL languages and aggregate, advanced-security and Snyk. Qodo reported zero material bugs/rule violations/requirement gaps at that head. CodeRabbit remained in progress at this checkpoint.
+
+Sonar check `124837595344` failed D new-code reliability (required A). Its single exposed annotation `98077569005`, issue `AaGW6c7cNBQiGCnb9sIo`, requested an explicit comparator at help-registry.ts:26. The existing sort compared exact ASCII schema keys; no human collation or ordering authority was involved. T26 instead removes unnecessary sorting, uses one immutable fixed key list for exact own-key membership and descriptor copying, and retains all strict boundaries. Independent review/probes confirm equivalence; see [receipt](reviews-2026-11-01/schema-keys.md). No scanner settings, exclusions, gate or issue dismissal was changed.
+
+This checkpoint does not transfer initial checks or review to the corrected head. Final exact revision, fresh hosted CI/Sonar/security/review states, guarded merge and main tree/ancestry/hash/clean readback are recorded in [live PR #23 metadata](https://github.com/djshellshoxxx/p2p-offramp/pull/23). The source ledger intentionally records INTEGRATING until delivery; immutable source cannot certify its own future merge. No production deployment or funds release.
