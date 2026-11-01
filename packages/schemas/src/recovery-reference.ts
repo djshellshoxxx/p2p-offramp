@@ -2,6 +2,7 @@
 import { parseTradeBinding, type TradeBinding } from './core.ts';
 import { decodeIntentPayload, parseIntentAccount, parseIntentId, intentData, type IntentState } from './intent.ts';
 import { MAX_RECORDS, MAX_REVISION, type PrivateRecordV1 } from './vault.ts';
+import { parseStrictJsonBytes } from './registry.ts';
 export const RECOVERY_REFERENCE_PAGE_SIZE = 64;
 export const MAX_RECOVERY_REFERENCE_EXPORT_BYTES = 128 * 1024;
 export interface RuntimeRecoveryReference {
@@ -13,6 +14,10 @@ export interface RuntimeRecoveryReference {
 export interface RuntimeRecoveryReferences {
   readonly authority: 'unverified-offline-reference'; readonly revision: number; readonly offset: number; readonly nextOffset: number | null;
   readonly totalJournalRecords: number; readonly unsupported: number; readonly items: readonly RuntimeRecoveryReference[];
+}
+export interface RecoveryReferenceExport {
+  readonly format: 'p2p-offramp/offline-recovery-references/v1'; readonly authority: 'unverified-offline-reference';
+  readonly localSnapshotRevision: number; readonly items: readonly RuntimeRecoveryReference[];
 }
 const states = Object.freeze(['prepared', 'broadcast-unknown', 'pending', 'confirmed', 'finalized', 'failed', 'reorged', 'expired', 'replaced'] as const);
 const invalid = (): never => { throw new Error('Invalid offline recovery reference.'); };
@@ -27,6 +32,24 @@ function parseReference(value: unknown): RuntimeRecoveryReference {
   if (raw.chainReference !== null && (typeof raw.chainReference !== 'string' || !(binding.chain === 'evm' ? /^0x[0-9a-f]{64}$/ : /^[1-9A-HJ-NP-Za-km-z]{64,88}$/).test(raw.chainReference))) return invalid();
   if (raw.nonce !== null && (binding.chain !== 'evm' || typeof raw.nonce !== 'string' || !/^(0|[1-9][0-9]{0,77})$/.test(raw.nonce))) return invalid();
   return Object.freeze({ recordId: raw.recordId, intentId, binding, account, action: raw.action, storedState: raw.storedState as IntentState, chainReference: raw.chainReference as string | null, nonce: raw.nonce as string | null });
+}
+/** Reads the existing private UI export. Every value remains a discovery hint, never native authority. */
+export function parseRecoveryReferenceExportBytes(bytes: Uint8Array): RecoveryReferenceExport {
+  const raw = intentData(parseStrictJsonBytes(bytes, MAX_RECOVERY_REFERENCE_EXPORT_BYTES), ['format', 'authority', 'localSnapshotRevision', 'items']);
+  if (raw.format !== 'p2p-offramp/offline-recovery-references/v1' || raw.authority !== 'unverified-offline-reference') return invalid();
+  const revision = parseRecoveryRevision(raw.localSnapshotRevision), list = raw.items;
+  if (!Array.isArray(list) || Object.getPrototypeOf(list) !== Array.prototype) return invalid();
+  const size = Object.getOwnPropertyDescriptor(list, 'length')?.value;
+  const length = count(size, RECOVERY_REFERENCE_PAGE_SIZE);
+  if (!length || Reflect.ownKeys(list).length !== length + 1) return invalid();
+  const items: RuntimeRecoveryReference[] = [];
+  for (let index = 0; index < length; index++) {
+    const item = Object.getOwnPropertyDescriptor(list, String(index));
+    if (!item || !('value' in item)) return invalid();
+    items.push(parseReference(item.value));
+  }
+  if (new Set(items.map(item => item.recordId)).size !== length) return invalid();
+  return Object.freeze({ format: raw.format, authority: raw.authority, localSnapshotRevision: revision, items: Object.freeze(items) });
 }
 export function parseRecoveryReferences(value: unknown): RuntimeRecoveryReferences {
   const raw = intentData(value, ['authority', 'revision', 'offset', 'nextOffset', 'totalJournalRecords', 'unsupported', 'items']);
