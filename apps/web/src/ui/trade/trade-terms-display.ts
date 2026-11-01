@@ -1,7 +1,9 @@
 /**
- * Pure, deterministic display formatters for an already-validated trade-terms view. No DOM, globals, locale or
- * network. Formatting is not validation of a trade: nothing here accepts, signs or funds anything.
+ * Pure, deterministic display formatters for an already-validated trade-terms view and bundled English source.
+ * No DOM, global clock or network. Formatting is not validation: nothing here accepts, signs or funds anything.
  */
+import { english, englishGroup } from '../locale/en.ts';
+const display = englishGroup('display');
 export type DisplayErrorCode = 'INVALID_AMOUNT' | 'INVALID_DECIMALS' | 'INVALID_CURRENCY' | 'INVALID_TIME' | 'INVALID_ADDRESS';
 export type DisplayResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly code: DisplayErrorCode };
 const ok = <T,>(value: T): DisplayResult<T> => ({ ok: true, value });
@@ -51,22 +53,22 @@ function unsignedTime(input: unknown): bigint | null {
   return value > U64_MAX ? null : value;
 }
 function duration(total: bigint): string {
-  const units: readonly (readonly [bigint, string])[] = [[86400n, 'd'], [3600n, 'h'], [60n, 'min'], [1n, 's']];
+  const units: readonly (readonly [bigint, string])[] = [[86400n, display.day], [3600n, display.hour], [60n, display.minute], [1n, display.second]];
   const parts: string[] = [];
   let rest = total;
   for (const [size, label] of units) {
     const count = rest / size; rest %= size;
     if (count > 0n) parts.push(`${count} ${label}`);
   }
-  return parts.length === 0 ? '0 s' : parts.join(' ');
+  return parts.length === 0 ? `0 ${display.second}` : parts.join(' ');
 }
 /** Expiry is inclusive: now >= target is expired. `seconds` is a decimal string so u64 values stay exact. */
 export function describeDeadline(targetSeconds: string, nowSeconds: string): DisplayResult<DeadlineDescription> {
   const target = unsignedTime(targetSeconds), now = unsignedTime(nowSeconds);
   if (target === null || now === null) return bad('INVALID_TIME');
-  if (now >= target) return ok({ state: { kind: 'expired' }, text: 'Expired' });
+  if (now >= target) return ok({ state: { kind: 'expired' }, text: display.expired });
   const remaining = target - now;
-  return ok({ state: { kind: 'remaining', seconds: remaining.toString() }, text: `${duration(remaining)} remaining` });
+  return ok({ state: { kind: 'remaining', seconds: remaining.toString() }, text: english('display', 'remaining', { duration: duration(remaining) }) });
 }
 
 export interface AddressDisplay {

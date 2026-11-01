@@ -10,6 +10,8 @@ Delivery: M1 / M2C.
 
 Status: substantive design baseline; implementation, interoperability evidence and independent review pending. This document does not certify a deployed or audited product. DEVELOPMENT_ROADMAP.md controls milestone order.
 
+Implementation checkpoint (2026-10-31): the offline UI uses one bundled draft English source catalog with per-message metadata, typed exact variables, complete locale-key/variable validation and test-only pseudolocalization. Its bounded plain-text message profile supports `{name}` and count-only `{name|one text|other text}`; nested/full ICU grammar and translated markup are refused. Existing canonical amounts, addresses, signed terms, diagnostic/export bytes and demo agreement data remain outside translation. No alternate locale is loaded or selected, imported reviewer/status fields grant no review authority, and translated publication, the complete tooltip registry, assistive-technology/device evidence and WCAG acceptance remain pending.
+
 ## 2. Objective and scope
 
 Make irreversible actions, privacy limits and recovery understandable in supported locales. English source strings are not a legal/safety substitute for human review. WCAG 2.2 AA is the acceptance target and requires audit evidence, not a self-declared badge.

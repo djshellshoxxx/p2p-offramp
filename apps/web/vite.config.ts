@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { staticBuildPlugin } from './scripts/static-build-plugin.mjs';
+import { sourceLocalePlugin } from './scripts/source-locale.mjs';
 
 const root = fileURLToPath(new URL('./', import.meta.url));
 const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
@@ -15,7 +16,7 @@ export default defineConfig(({ mode }) => {
     // verified it (a bare `vite build --mode testnet` embeds null and the registry fails closed). Neither mode changes a
     // runtime permission: ReleaseEnabled stays 0 and connectOrigins stays empty in every mode.
     define: { __P2P_SYNTHETIC_DEMO__: JSON.stringify(mode === 'demo'), __P2P_TESTNET__: JSON.stringify(mode === 'testnet'), __P2P_TESTNET_TRUST__: 'null', __P2P_TESTNET_LOCAL_PROOF_KEY_ID__: 'null' },
-    plugins: [react(), staticBuildPlugin(repositoryRoot, delivery)],
+    plugins: [react(), sourceLocalePlugin(), staticBuildPlugin(repositoryRoot, delivery)],
     build: { outDir: 'dist', emptyOutDir: true, sourcemap: false, assetsInlineLimit: 0, modulePreload: false,
       target: 'es2023', reportCompressedSize: false, license: { fileName: 'third-party-licenses.json' } },
     worker: { format: 'es', plugins: () => [staticBuildPlugin(repositoryRoot, delivery, true)] },
