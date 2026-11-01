@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import fsPromises, { mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { execFile } from 'node:child_process';
@@ -48,6 +49,89 @@ test('builder requires original live proof and exact authenticated canonical ABI
   assert.ok(f.files.some(file => file.path === 'recover.mjs'));
   for (const change of [{ verifiedRelease: { ...f.options.verifiedRelease } }, { registryBytes: new Uint8Array([1]) }, { abiBytes: new Uint8Array([1]) }, { abiPath: 'other.json' }])
     await assert.rejects(builder.buildEvmRecoveryPackage({ ...f.options, ...change, outDir: resolve(temporary, 'bad') }));
+});
+test('only a missing accepted-release file permits an empty rollback floor', async () => {
+  assert.equal(typeof builder.readAcceptedEvmRecoveryRelease,'function');
+  const root=resolve(temporary,'accepted-policy'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  await mkdir(directory,{recursive:true});
+  assert.equal(await builder.readAcceptedEvmRecoveryRelease(root),null);
+  for(const raw of ['null','false','0','""','true','1','[]','{}','{"sequence":2}',
+    '{"sequence":0,"manifestSha256":"'+'a'.repeat(64)+'"}',
+    '{"sequence":2,"manifestSha256":"wrong"}',
+    '{"sequence":2,"manifestSha256":"'+'a'.repeat(64)+'","extra":true}',
+    '{"sequence":2,"sequence":3,"manifestSha256":"'+'a'.repeat(64)+'"}',
+    '{', ' '.repeat(8193)]) {
+    await writeFile(path,raw);
+    await assert.rejects(builder.readAcceptedEvmRecoveryRelease(root),error=>error.code==='RELEASE_ROLLBACK',raw.slice(0,120));
+  }
+  await rm(path); await mkdir(path);
+  await assert.rejects(builder.readAcceptedEvmRecoveryRelease(root),error=>error.code==='RELEASE_ROLLBACK');
+  await rm(path,{recursive:true});
+});
+test('accepted sequence and digest preserve the signature verifier rollback floor and exact resume', async () => {
+  assert.equal(typeof builder.readAcceptedEvmRecoveryRelease,'function');
+  const root=resolve(temporary,'accepted-resume'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  await mkdir(directory,{recursive:true});
+  const f=registryFixture();
+  for(const [sequence,manifestSha256,allowed] of [[3,'a'.repeat(64),false],[2,'a'.repeat(64),false],[2,f.envelope.manifestSha256,true],[1,'a'.repeat(64),true]]) {
+    await writeFile(path,JSON.stringify({sequence,manifestSha256}));
+    const accepted=await builder.readAcceptedEvmRecoveryRelease(root);
+    assert.deepEqual(accepted,{sequence,manifestSha256}); assert.equal(Object.isFrozen(accepted),true);
+    const proof=await verifyRelease(f.bytes,f.envelope,[f.key],accepted.sequence,{...f.options,installedManifestSha256:accepted.manifestSha256});
+    assert.equal(proof.ok,allowed); if(!allowed)assert.equal(proof.error.code,'RELEASE_ROLLBACK');
+  }
+});
+test('accepted-release rollback state rejects symlinks instead of inheriting another file floor', async () => {
+  const root=resolve(temporary,'accepted-symlink'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  await mkdir(directory,{recursive:true});
+  const target=resolve(temporary,'accepted-target.json'); await writeFile(target,JSON.stringify({sequence:9,manifestSha256:'a'.repeat(64)}));
+  await symlink(target,path);
+  await assert.rejects(builder.readAcceptedEvmRecoveryRelease(root),error=>error.code==='RELEASE_ROLLBACK');
+});
+test('accepted-release FIFO is refused promptly without waiting for a writer or configured trust pin', async () => {
+  const root=resolve(temporary,'accepted-fifo'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json'), run=promisify(execFile);
+  await mkdir(directory,{recursive:true});await run('mkfifo',[path]);
+  const body=`import {readAcceptedEvmRecoveryRelease} from ${JSON.stringify(new URL('../recovery/build-evm.mjs',import.meta.url).href)};try{await readAcceptedEvmRecoveryRelease(process.argv[1]);console.log(JSON.stringify({ok:true}));}catch(error){console.log(JSON.stringify({ok:false,error:{code:error.code}}));process.exitCode=1;}`;
+  let result;
+  try {result=await run(process.execPath,['--input-type=module','--eval',body,root],{timeout:1000,env:{PATH:process.env.PATH??'',TZ:'UTC'}});}catch(error){result=error;}
+  assert.notEqual(result.killed,true,'rollback state cannot block opening a FIFO');
+  assert.equal(result.code,1);assert.deepEqual(JSON.parse(result.stdout),{ok:false,error:{code:'RELEASE_ROLLBACK'}});
+});
+test('oversized accepted-release file is refused before any whole-file allocation', async () => {
+  const root=resolve(temporary,'accepted-oversize'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  await mkdir(directory,{recursive:true});await writeFile(path,' '.repeat(8193));
+  const original=fsPromises.readFile;let wholeFileReads=0;
+  fsPromises.readFile=async function(file,...args){if(file===path)wholeFileReads++;return original.call(this,file,...args);};syncBuiltinESMExports();
+  try {
+    await assert.rejects(builder.readAcceptedEvmRecoveryRelease(root),error=>error.code==='RELEASE_ROLLBACK');
+    assert.equal(wholeFileReads,0,'the size guard must precede whole-file allocation');
+  } finally {fsPromises.readFile=original;syncBuiltinESMExports();}
+});
+test('accepted-release inspection rejects file replacement between lstat and open', async () => {
+  const root=resolve(temporary,'accepted-replaced'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  const record=JSON.stringify({sequence:9,manifestSha256:'a'.repeat(64)});
+  await mkdir(directory,{recursive:true});await writeFile(path,record);
+  const original=fsPromises.open;let replaced=false;
+  fsPromises.open=async function(file,...args){
+    if(file===path&&!replaced){replaced=true;await rename(path,path+'.old');await writeFile(path,record);}
+    return original.call(this,file,...args);
+  };syncBuiltinESMExports();
+  try {await assert.rejects(builder.readAcceptedEvmRecoveryRelease(root),error=>error.code==='RELEASE_ROLLBACK');assert.equal(replaced,true);}
+  finally {fsPromises.open=original;syncBuiltinESMExports();}
+});
+test('accepted-release reader closes its file and wipes its bounded owned read buffer', async () => {
+  const root=resolve(temporary,'accepted-wipe'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');
+  const record={sequence:9,manifestSha256:'a'.repeat(64)};
+  await mkdir(directory,{recursive:true});await writeFile(path,JSON.stringify(record));
+  const original=fsPromises.open;let captured,closed=false;
+  fsPromises.open=async function(file,...args){
+    const handle=await original.call(this,file,...args);if(file!==path)return handle;
+    return {stat:handle.stat.bind(handle),read:async(buffer,...readArgs)=>{captured=buffer;return handle.read(buffer,...readArgs);},close:async()=>{await handle.close();closed=true;}};
+  };syncBuiltinESMExports();
+  try {
+    assert.deepEqual(await builder.readAcceptedEvmRecoveryRelease(root),record);
+    assert.equal(closed,true);assert.ok(captured);assert.ok(captured.length<=8193);assert.equal(captured.every(byte=>byte===0),true);
+  } finally {fsPromises.open=original;syncBuiltinESMExports();}
 });
 test('recovery uses stored latest immutable fields and creates only bound unsigned exits', async () => {
   assert.equal(typeof api.prepareEvmRecovery, 'function');

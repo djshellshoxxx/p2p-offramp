@@ -1,6 +1,7 @@
 /** Package an authenticated original profile. This grants no current release or spending authority. */
 import { createHash } from 'node:crypto';
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { cp, lstat, mkdir, mkdtemp, open, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -68,6 +69,38 @@ export async function buildEvmRecoveryPackage({verifiedRelease,registryPath,regi
   } finally { if (staging) await rm(staging,{recursive:true,force:true}); }
 }
 
+/** Only ENOENT means no retained rollback floor; present files require the exact accepted-release record. */
+export async function readAcceptedEvmRecoveryRelease(root=ROOT) {
+  const path = resolve(root,TESTNET_ACCEPTED_FILE);
+  let initial;
+  try { initial = await lstat(path,{bigint:true}); }
+  catch (error) { if (error?.code === 'ENOENT') return null; return refuseRecovery('RELEASE_ROLLBACK'); }
+  let handle, buffer;
+  try {
+    if (!initial.isFile() || initial.isSymbolicLink() || initial.size > 8192n) return refuseRecovery('RELEASE_ROLLBACK');
+    handle = await open(path,constants.O_RDONLY|constants.O_NOFOLLOW|constants.O_NONBLOCK);
+    const sameFile = stat => stat.isFile() && stat.dev === initial.dev && stat.ino === initial.ino && stat.size === initial.size;
+    if (!sameFile(await handle.stat({bigint:true}))) return refuseRecovery('RELEASE_ROLLBACK');
+    buffer = Buffer.alloc(8193);
+    let length=0;
+    while (length < buffer.length) {
+      const {bytesRead} = await handle.read(buffer,length,buffer.length-length,length);
+      if (!bytesRead) break;
+      length+=bytesRead;
+    }
+    if (length > 8192 || BigInt(length) !== initial.size || !sameFile(await handle.stat({bigint:true}))) return refuseRecovery('RELEASE_ROLLBACK');
+    const accepted = parseStrictJsonBytes(new Uint8Array(buffer.buffer,buffer.byteOffset,length),8192);
+    if (typeof accepted !== 'object' || accepted === null || Array.isArray(accepted) ||
+        Object.keys(accepted).sort().join() !== 'manifestSha256,sequence' || !Number.isSafeInteger(accepted.sequence) || accepted.sequence < 1 ||
+        typeof accepted.manifestSha256 !== 'string' || !/^[0-9a-f]{64}$/.test(accepted.manifestSha256)) return refuseRecovery('RELEASE_ROLLBACK');
+    return Object.freeze({sequence:accepted.sequence,manifestSha256:accepted.manifestSha256});
+  } catch { return refuseRecovery('RELEASE_ROLLBACK'); }
+  finally {
+    buffer?.fill(0);
+    if (handle) { try { await handle.close(); } catch { refuseRecovery('RELEASE_ROLLBACK'); } }
+  }
+}
+
 /** Maintained Sepolia build policy only; no public-key, genesis or policy override. */
 export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
   if (SEPOLIA_RELEASE_KEY_ID === null) return refuseRecovery('KEY_UNPINNED');
@@ -76,13 +109,10 @@ export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
     const [keyBytes,registry,manifest,envelope,abi] = await Promise.all([names.key,names.registry,names.manifest,names.envelope,CANONICAL_ABI_PATH].map(path => readFile(resolve(root,path))));
     const key = parseStrictJsonBytes(new Uint8Array(keyBytes),8192), detached = parseStrictJsonBytes(new Uint8Array(envelope),8192);
     if (key.keyId !== SEPOLIA_RELEASE_KEY_ID) return refuseRecovery('KEY_UNTRUSTED');
-    let accepted;
-    try { accepted = parseStrictJsonBytes(new Uint8Array(await readFile(resolve(root,TESTNET_ACCEPTED_FILE))),8192); }
-    catch (error) { if (error?.code !== 'ENOENT') return refuseRecovery('RELEASE_ROLLBACK'); }
-    if (accepted && (Object.keys(accepted).sort().join() !== 'manifestSha256,sequence' || !Number.isSafeInteger(accepted.sequence) || accepted.sequence < 1 || !/^[0-9a-f]{64}$/.test(accepted.manifestSha256))) return refuseRecovery('RELEASE_ROLLBACK');
-    const proof = await verifyRelease(new Uint8Array(manifest),detached,[key.publicKey],accepted?.sequence ?? 0,
+    const accepted = await readAcceptedEvmRecoveryRelease(root);
+    const proof = await verifyRelease(new Uint8Array(manifest),detached,[key.publicKey],accepted === null ? 0 : accepted.sequence,
       {channel:'sepolia-testnet',assets:[{path:names.registry,bytes:new Uint8Array(registry)},{path:CANONICAL_ABI_PATH,bytes:new Uint8Array(abi)}],
-        ...(accepted ? {installedManifestSha256:accepted.manifestSha256} : {})});
+        ...(accepted === null ? {} : {installedManifestSha256:accepted.manifestSha256})});
     if (!proof.ok) return refuseRecovery(proof.error.code);
     if (proof.value.keyId !== SEPOLIA_RELEASE_KEY_ID || !isSepoliaOnly(parseRegistryBytes(new Uint8Array(registry)))) return refuseRecovery('WRONG_CHAIN');
     return buildEvmRecoveryPackage({verifiedRelease:proof.value,registryPath:names.registry,registryBytes:new Uint8Array(registry),abiPath:CANONICAL_ABI_PATH,

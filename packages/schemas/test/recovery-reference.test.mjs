@@ -55,4 +55,8 @@ test('private export bytes preserve existing reference hints with strict bounded
   assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(new Uint8Array([0xff])));
   const oversized=new Uint8Array(128*1024+1);Object.defineProperty(oversized,'byteLength',{get(){throw Error('PRIVATE');}});
   assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(oversized));
+  const shadowed=bytes(JSON.stringify(value));let byteLengthReads=0;
+  Object.defineProperty(shadowed,'byteLength',{get(){byteLengthReads++;return 0;}});
+  assert.deepEqual(recoveryApi.parseRecoveryReferenceExportBytes(shadowed),value);
+  assert.equal(byteLengthReads,0,'genuine view length must bypass caller-owned byteLength getters');
 });
