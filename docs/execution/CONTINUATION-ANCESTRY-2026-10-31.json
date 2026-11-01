@@ -1,0 +1,169 @@
+{
+  "format": "p2p-offramp/continuation-ancestry/v1",
+  "checkpoint": "db1b14f9a9fca77f5844367742dfd60054de704b",
+  "scope": "Published heads read during final source consolidation, before final documentation/CI/merge. Live final-main readback is recorded in PR21 metadata.",
+  "heads": [
+    {
+      "branch": "autonomous/completion-20261031",
+      "sha": "b3519180eb56c9913a8568a3ac878fa94a7eca19",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "autonomous/continuation-20261031",
+      "sha": "aa108b53046a28f7c0d07fdf0d82cae63f406d1b",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/adoring-wozniak-850ue6",
+      "sha": "81c2dc889fa2a66eec2259ce3a911132386d1aa1",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/docs-screenshots",
+      "sha": "c1e31918ed5e4e370e7217a6a654ea360c71f4b4",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/p2p-offramp-integration-aan57u",
+      "sha": "48074e750cf64fefc3df6b0a7997e40a4c8fcb31",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/post-merge-followups",
+      "sha": "ec65012dbb94189180d3da52de2619cc22fe0482",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/recovery-consolidation",
+      "sha": "7586b5fd0a9daa0ec7f0b610a3a6de25442a6a25",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/sweet-noether-arf6ne",
+      "sha": "391653eaba946f77057b01fd03d3c234958bcf1d",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/sweet-shannon-grykla",
+      "sha": "7165626c17d8afb7ad7fce461ae7df9cbfcdba07",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "claude/trade-review-integration",
+      "sha": "1450c537deadf2abbb56ebf18f2bbd5e71bad62d",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "docs/lean-release-handoff-2026-10-24",
+      "sha": "474f0505a409b7ba6f31ea5fc55618e280661c8f",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "docs/security-spec-expansion-20261021",
+      "sha": "0ea82ded188ed7392622616f28a1cf33c87c2ed8",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "docs/spec-readiness-and-foundations",
+      "sha": "6b6004bdf35b7aea14530f965756ca6d54336682",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "feat/custodial-ledger-foundation",
+      "sha": "52e6987e77d9ef6bc403c0129b3f52531986ade8",
+      "includedAtCheckpoint": false,
+      "disposition": "incompatible archival custodial architecture; preserved separately"
+    },
+    {
+      "branch": "fix/remediation-09f20d73-9524c0",
+      "sha": "9f5201dd44a85fa90841d9a2882752b41db9360e",
+      "includedAtCheckpoint": true,
+      "disposition": "included; closed PR22 proposal behavior is subsumed by stronger tested T16 implementation"
+    },
+    {
+      "branch": "integration/all-compatible-work",
+      "sha": "dce515996f3e7b965a4cf3576b6da509c14a73e1",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "main",
+      "sha": "b7000850398712a855b79e669302445b0ada2556",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/noncustodial-reconstruction-2026-10-24",
+      "sha": "bc996aac828ce63856193c9114edfef480153325",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-client-shell-2026-10-24",
+      "sha": "8a88d11d8e419cd402b28428947e8fe4fbcfe893",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-consolidated-20261030",
+      "sha": "68fb46920431e3311c78f931432bc4a21d066c17",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-exchange-close-20261030",
+      "sha": "2d3135b646bf99f63935287a082856ea7fe6b74d",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-exchange-test-repair-20261030",
+      "sha": "adfbec52f964d9b07c571b8924d31fa03d54e03a",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-gate-reconciliation-20261030",
+      "sha": "e762e649600493221e3bd10f0c3525858722bc94",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-independent-branch-review-20261030",
+      "sha": "9f80c9b27b943b30409710dea76a53d97a761832",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-pr14-finish-handoff-20261030",
+      "sha": "8c8911e2dd3c7af4d515e645a6501eedc6178111",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-relay-lifetime-20261030",
+      "sha": "e0961edc8cb64b466a2a3193aa37158bfc8c3487",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    },
+    {
+      "branch": "work/p2p-validation-20261030",
+      "sha": "11ce9e42bea9e5f27e303ee6db66e463d38ebdda",
+      "includedAtCheckpoint": true,
+      "disposition": "included"
+    }
+  ]
+}

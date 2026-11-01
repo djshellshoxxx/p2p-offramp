@@ -42,9 +42,9 @@
     },
     {
       "path": "apps/web/scripts/build.mjs",
-      "sha256": "cdf7bbddab2630f1c3e34d373e68ef3d5e2af2d7b7fc5dff01b8a9e85c6110b5",
+      "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd",
       "scope": "build",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "apps/web/scripts/source-locale.mjs",
@@ -840,9 +840,9 @@
     },
     {
       "path": "scripts/acceptance-report.mjs",
-      "sha256": "65a35ece765de774724effb24aaa388a97241bfb94741a579d7d489320317588",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e",
       "scope": "implementation",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "scripts/check-crypto-cache.py",
@@ -852,9 +852,9 @@
     },
     {
       "path": "scripts/check-import-boundaries.mjs",
-      "sha256": "8eb95ee81aebae89f820d84489931211dbf1934d0648002d00f2f151b05aa419",
+      "sha256": "77f7f72309c427a94b8bd29a1a0abf2755152ca6b8f656f03618158a3481e46e",
       "scope": "tooling/support",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "scripts/check-npm-registry-signatures.mjs",
@@ -918,9 +918,9 @@
     },
     {
       "path": "scripts/fuzz-evm-agreement-input.mjs",
-      "sha256": "5f78a910d6ac4caec64a8218df505a5315339f23c9d99215ae9cf196713d9930",
+      "sha256": "4fa379e441356d7476dfae17da05802ad784fe0066bc28916c215329c7a47b5c",
       "scope": "tooling/support",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "scripts/initialize-specifications.sh",
@@ -935,6 +935,12 @@
       "reviewer": "audit_runtime_build"
     },
     {
+      "path": "scripts/lib/is-main.mjs",
+      "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb",
+      "scope": "implementation",
+      "reviewer": "continue_sonar (T18 final shared guard)"
+    },
+    {
       "path": "scripts/lib/testnet-fixture.mjs",
       "sha256": "c7a3506bb01c4d6c96fa25fe462e53be0c94ed2fcd58e5abc2ae8a1b9083d166",
       "scope": "tooling/support",
@@ -942,9 +948,9 @@
     },
     {
       "path": "scripts/recovery/build-evm.mjs",
-      "sha256": "3f5802f72618645a8ce70c454d2ef9f55ac84172162a4f2666421abf33cbe415",
+      "sha256": "986ccec90db4df3e98d61d69e7f30c409becd339b89fa3c8dc96a53e40391fc6",
       "scope": "implementation",
-      "reviewer": "audit_evm"
+      "reviewer": "audit_storage (final rollback/file bounds) / audit_evm (T17)"
     },
     {
       "path": "scripts/recovery/evm-cli.mjs",
@@ -960,13 +966,13 @@
     },
     {
       "path": "scripts/sepolia/deploy.mjs",
-      "sha256": "5e3cb12987e4803b4c014cefbe9cb2ffc662f73f4657317fededc852ce6b44ec",
+      "sha256": "f0b9d0bd0503d07f77ac65d02e9a48de42ff55f73e662847fba0a3ac1416f2b4",
       "scope": "implementation",
       "reviewer": "audit_runtime_build"
     },
     {
       "path": "scripts/sepolia/lib.mjs",
-      "sha256": "b9051a0d22f5f68b32155248b0c032c43b644d55239640489dc6b15c9833c619",
+      "sha256": "3c140a197bb17c19f43d3d7c95323c16da8b818bd2e986aaed5108dd08046bf7",
       "scope": "implementation",
       "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
     },
@@ -978,7 +984,7 @@
     },
     {
       "path": "scripts/sepolia/record-deployment.mjs",
-      "sha256": "1b39cddfece47bd3b350dea8228cdc421ebe7cbdb4c1b48cc97d33a028e35e6d",
+      "sha256": "eadbf177119e706e63485323118389df21a8fdb5562278125824153f08fdaf54",
       "scope": "implementation",
       "reviewer": "audit_runtime_build"
     },
@@ -1038,13 +1044,13 @@
     },
     {
       "path": "scripts/test-evm-recovery-local.mjs",
-      "sha256": "6f778afdd167d7fe0bc03933ea29f9da883dad2f2ee018035363fc83aa555134",
+      "sha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
     {
       "path": "scripts/test-exchange-evm-local.mjs",
-      "sha256": "5b4a0741069cd8ce5064851c1cec4a2e7fb2d95ffee89cb561bc27dd5dce8f4c",
+      "sha256": "58f211e6e9ce50fc3873805753d57ce70f32838f1d248074d2696f3bbf13bb11",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
@@ -1080,7 +1086,7 @@
     },
     {
       "path": "scripts/test-payment-preflight-local.mjs",
-      "sha256": "e169e472de52e464d39b43164bdeb59ca88e5f628c3f56a4cb3f2e23ebbe7ce9",
+      "sha256": "a1603c9d6a81a80f86b8190316fcbe290120a7667d0b931d740c720a276711f1",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
@@ -1122,7 +1128,7 @@
     },
     {
       "path": "scripts/test-sepolia-kit-local.mjs",
-      "sha256": "c049974ea2d775289ab681a33c05c80dc81775cbd873b90411093b711419055a",
+      "sha256": "d485260e5ed44e8fceeaa87427d4dfeb9491bcc7fe8407469f53408cb47fde50",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
@@ -1170,9 +1176,9 @@
     },
     {
       "path": "scripts/tests/acceptance-entry.test.mjs",
-      "sha256": "1d704364e2897b4bcad3e1343326b93e57775cd424326294a3e93f9c82d5fe05",
+      "sha256": "dc95fcad7cdd2d755b0b8f93ecb27ca347cad07af42a67f7665126ed94cf6511",
       "scope": "tooling/support",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "scripts/tests/capture-labels.test.mjs",
@@ -1182,19 +1188,19 @@
     },
     {
       "path": "scripts/tests/deployment-record.test.mjs",
-      "sha256": "d0cae1c7158fdd06e9663ab495d3aa6880a90ba410bd8d70240eeea2c3098e86",
+      "sha256": "0138857a6605c6b1cf7cf838bf6072910f7cdf0345b8de33fe131ef2a7b116fb",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
     {
       "path": "scripts/tests/evm-agreement-fuzz.test.mjs",
-      "sha256": "b4d6ab5d13a488d3782984122b7bd89af5e7c66d35f7b36e6418849338933311",
+      "sha256": "a21488516035fefa2327717771e862215fd75bed16f0d0d76b9c85c65e35dfa5",
       "scope": "tooling/support",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
     },
     {
       "path": "scripts/tests/evm-recovery.test.mjs",
-      "sha256": "c32dc2a4348e9835e782fb99465c3fe56ef1d5b65c1e06ac75605f434b0133cb",
+      "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38",
       "scope": "tooling/support",
       "reviewer": "audit_runtime_build"
     },
@@ -1206,7 +1212,7 @@
     },
     {
       "path": "scripts/tests/sepolia-hygiene.test.mjs",
-      "sha256": "d3a1db515ba6865c8ca75d1199d5d8150b9e36175e7491f740d4a71fe7ee196e",
+      "sha256": "1509baf4593639d24e8e745944ed05cd41e63479b37ab556e8bfc7cd4c623a77",
       "scope": "tooling/support",
       "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
     },

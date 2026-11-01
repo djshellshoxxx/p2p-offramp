@@ -29,10 +29,10 @@ Continuation from merged `b700085`:
 | T12 | INTEGRATING | root; whole-source audit and all combined checks pass; exact-head hosting/guarded merge readback pending |
 | T13 | DONE | continue_foundations + root HTML integration; independent review, types, builds and all browser journeys pass |
 | T14 | DONE | root; eight focused tests independently checked; native operator trade passes 13 checks |
-| T15 | DONE | audit_runtime_build; deterministic explicit remapping fix independently reviewed (9 tests/layout/config/bytecode probes); affected native sequence and ABI readback pass |
-| T16 | DONE | audit_evm; independent proof/revert review; updated legacy fixture + proof tests now 14/14 and native kit 10 pass |
-| T17 | DONE | continue_chain; independent mutation/FIFO fixes verified; 5 focused + 6 copied-bundle native checks pass |
-| T18 | DONE | continue_foundations; independent entrypoint review and three combined subprocess tests pass |
+| T15 | DONE | audit_runtime_build; deterministic recipe and explicit controlled offline settings independently reviewed; affected native compiler paths pass |
+| T16 | DONE | audit_evm; geth-shaped reverted CREATE support independently reviewed; 15 focused + 11 native checks pass without weakening proof |
+| T17 | DONE | continue_chain; strict bounded accepted-state reader, actual G15 rollback/resume and getter sensitivity independently verified; recovery 12 + schema 6 + native 6 pass |
+| T18 | DONE | continue_foundations; shared Node-only entry detector with eval/print/preload/literal-path review; CLI 11 and combined entry/G24/fuzz/policy 80 pass |
 
 All use `autonomous/continuation-20261031` with serialized shared edits and one
 writer per assigned path. The plan defines outcomes, exclusions, dependencies,
@@ -45,10 +45,10 @@ tool slots are reused; no additional cloud instance or paid resource is created.
 - [ ] T12 Reassess remaining work, independently audit whole-source subsystem coverage, run integrated checks, consolidate and merge with exact-head evidence. Owner root.
 - [x] T13 Implement the specified English localization catalog, typed variable and metadata validation, current UI migration and draft pseudolocalization tests. Translated/funds/accessibility approval remains external.
 - [x] T14 Reject torn state/header observations in the separate Sepolia operator tool before any funding decision.
-- [x] T15 Prevent ambient Foundry build overrides from contradicting the recorded deployment recipe; make the recipe deterministic across fresh and recursively populated checkouts.
-- [x] T16 Authenticate requested deployment/receipt/canonical block before recording finality or clearing known/unknown pending guards.
-- [x] T17 Build and test a portable canonical-EVM recovery package with explicit read-only inspection and unsigned external-wallet exits, preserving historical escrow recovery after release expiry. Live distribution/deployment/Solana approval remains outside local scope.
-- [x] T18 Make symlink invocation of the acceptance-report CLI execute its checks and preserve refusal exit codes.
+- [x] T15 Prevent ambient Foundry build overrides from contradicting the recorded deployment recipe; preserve deliberate offline native-tool composition.
+- [x] T16 Authenticate requested deployment/receipt/canonical block before recording finality or clearing known/unknown pending guards, including supported reverted-CREATE receipt shapes.
+- [x] T17 Build and test a portable canonical-EVM recovery package with strict rollback-state validation, explicit read-only inspection and unsigned external-wallet exits. Live distribution/deployment/Solana approval remains outside local scope.
+- [x] T18 Make direct/symlink CLI execution and eval/print/preload imports behave correctly across the supported Node 24 range.
 
 This is the frozen-source checkpoint. T12's live hosted/merge status is recorded
 in final PR metadata after publication; this document cannot certify its own

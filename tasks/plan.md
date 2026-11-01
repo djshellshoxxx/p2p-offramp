@@ -99,6 +99,13 @@ and recheck their anchor. Neither known-hash nor unknown-attempt guard clearing
 may use imported metadata alone as proof. Preserve unknown outcomes and fixed
 errors; native loopback verification must remain reproducible under T15.
 
+Hosted review reopened T16 at PR #21: geth derives a CREATE address in failed
+receipts, while the initial proof accepted only null for failure. Reproduce the
+actual native client and support null or the exact authenticated nonce-derived
+address, never a substitute; canonical inclusion, empty code and all guard proofs
+remain mandatory. The same owner fixes it after the reproduction, with a different
+reviewer and an actual reverted-CREATE fixture.
+
 T17 is a bounded G25 implementation, not another generic chain reader. Build a
 portable Node recovery bundle only from a live verified release and its exact
 authenticated registry/ABI bytes. Pin one original canonical deployment inside
@@ -115,3 +122,21 @@ T18 is a small tooling-audit regression: executing the acceptance-report CLI via
 a symlink skips its literal-path main guard and silently exits successfully.
 Resolve the entry path robustly and require the same fixed invalid/blocked result
 as direct invocation. Keep imported-library use inert and evaluator policy closed.
+
+Completed hosted CodeRabbit review at initial `5a6dfac` admitted follow-ups under
+the same owners: T15 must deliberately pass offline runtime settings through the
+trusted native harness seam; T17 must reject present falsy accepted-state files
+instead of treating them as absent, and make the hostile-byteLength regression
+sensitive to getter evaluation; T18 must exclude eval/print entry modes and allow
+the known older-Node experimental warning in test setup. No review-policy/key
+override or broad inherited Foundry option is introduced. Different reviewers
+verify the final fixes; source tests are repeated only where the findings affect
+behavior.
+
+T18's entry defect also affected the shared Sepolia/recovery gate and the three
+other already-guarded libraries (static build, fuzz and boundaries). Ownership
+transferred sequentially to the same writer for imports/main conditions only;
+one Node-only helper now holds the rule. A copied fuzz fixture adds that helper.
+Independent preload-query/fragment probes then required URL-suffix rejection
+before canonical path matching. Ordinary/direct/symlink and literal filename
+behavior remain tested. No unconditional test executable was redesigned.

@@ -19,8 +19,8 @@ evidence of their own revisions, not a substitute for this pass.
 Scopes cover owned implementation and build/operational boundaries. Test support,
 vectors and CI are inspected as supporting evidence; this is not line-by-line
 cryptanalysis of dependencies or vendored Solidity libraries. The
-[207-entry coverage inventory](CONTINUATION-AUDIT-COVERAGE-2026-10-31.json) records
-final hashes: 132 implementation entries, 7 build entries, 10 configuration entries
+[208-entry coverage inventory](CONTINUATION-AUDIT-COVERAGE-2026-10-31.json) records
+final hashes: 133 implementation entries, 7 build entries, 10 configuration entries
 and 58 presentation/tooling/support entries. Support coverage is structural and
 selected-test review, not a claim that every test assertion was audited.
 No overlap authorizes a
@@ -49,6 +49,10 @@ also caught reverted-status cleanup occurring before authentication; the final
 code delays that error until native proof and empty derived-address code agree.
 The independent reviewer passed all five proof tests, then rechecked the updated
 legacy hygiene fixture; combined local tests and actual native kit pass.
+Hosted review later identified geth's valid derived-address failure representation.
+The same proof now accepts null or that exact derived address; actual Anvil null
+and a labelled geth-shaped native adapter are tested. All 15 focused and 11 native
+kit checks pass, with malformed/foreign values still refused.
 
 T17's independent reviewer reproduced a mutable-input bug that inspected escrow A
 but constructed a request to B. Synchronous detached/frozen inputs and one selected
@@ -57,6 +61,11 @@ before file validation; nonblocking open now refuses it promptly. Both original
 shapes failed controlled probes and both fixes passed independent probes and five
 focused tests. The copied executable's six native checks pass over registered
 HTTPS with a temporary trusted fixture certificate, never a TLS bypass.
+Later hosted review found present falsy rollback files treated as absence. Only
+initial ENOENT now permits no floor; exact accepted records preserve actual G15
+rollback/resume checks. Independent review also required regular-file/size/inode
+bounds before reading, no symlinks/FIFOs, buffer cleanup and replacement refusal.
+Final recovery tests pass 12/12 and schema tests 6/6; no trust pin was selected.
 
 T13 review found loading/noscript/static safety copy outside the catalog. The
 shared dev/build HTML transform now sources all four strings from the same draft
@@ -68,6 +77,14 @@ checks pass. All 328 entries remain draft source, not published locale approval.
 T18's symlink invocation silently exited successfully without running acceptance
 checks. Canonical path detection executes direct and symlink entries equally;
 independent subprocess tests verify invalid/blocked codes and inert imports.
+Completed hosted review then reproduced eval/print import side effects and an
+early-Node warning-sensitive test. One tiny Node-only helper now gates all
+identified guarded tools, keeping ordinary CLI behavior and sterile imports.
+Independent query/fragment preload probes caught a further duplicate-entry bug
+before merge; suffix identity is now preserved without breaking literal filenames.
+The final CLI suite has 11 tests, and shared-entry/G24/fuzz/policy review passes 80.
+The full [hosted-review ledger](HOSTED-REVIEW-PR21-2026-10-31.md) records all
+findings, optional dispositions and exact-head scanner limits.
 
 The audit investigated whether age/absence-based `dropped` classification could
 permit duplicate transaction execution. Ordinary reprepare remains blocked;

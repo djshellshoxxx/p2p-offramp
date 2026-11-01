@@ -74,14 +74,14 @@ Native verification with pinned Foundry/Anvil 1.5.1 and solc 0.8.30 passes:
 | Canonical encrypted exchange/chat/recovery/settlement | 10 checks; four messages, two reopens, fresh-key recovery, exactly four sends/markers |
 | Native payment preflight | 7 checks; 163 reads, zero adapter send/sign calls |
 | Native journal reconciliation | 5 checks |
-| Deployment hygiene/proof + native Sepolia kit | 14 focused tests + 10 native checks |
+| Deployment hygiene/proof + native Sepolia kit | 15 focused tests + 11 native checks |
 | Operator trade state + native trade | 8 focused tests + 13 native checks |
-| Portable recovery package | 5 focused tests + 6 native checks; 141 reads, zero runtime send/sign calls, copied Node-only executable over registered HTTPS |
+| Portable recovery package | 12 focused tests + 6 native checks; 141 reads, zero runtime send/sign calls, copied Node-only executable over registered HTTPS |
 | Isolated escrow profile | 7 integration tests + separate two-party native/ERC-20 journal/recovery journey |
 
 Python tests pass 12/12; all 173 specification structural/link checks pass;
 diagnostic-runner tests pass 16/16; seeded fuzz passes 26/26; acceptance CLI tests
-pass 3/3. Fresh npm advisory queries report zero advisories in both lockfile
+pass 11/11. Fresh npm advisory queries report zero advisories in both lockfile
 graphs. No dependency pins were changed.
 
 Integration caught an obsolete legacy guard-test fixture after T16 added required
@@ -98,7 +98,8 @@ the guard requires exactly its two explicit mappings. Independent nine-test,
 hostile-global-config and populated/empty vendor-layout probes pass. The entire
 affected canonical native sequence, 82 Foundry tests and unchanged ABI readback
 pass again after committing the recipe. The final combined hygiene/proof count
-is 14. This fixes the cause without weakening the guard or changing CI settings.
+was 14 at that checkpoint. This fixes the cause without weakening the guard or
+changing CI settings. Later receipt interoperability coverage brings it to 15.
 
 Removing inferred mappings changes Solidity metadata and therefore raw creation
 and runtime digests; those old digests must not qualify new artifacts. The
@@ -106,6 +107,21 @@ executable runtime with CBOR metadata removed is byte-identical (SHA-256
 `c0f2fa69fef2e9faa053a3d65f61a5ad7d099df56b6469911c53fceeb1809e0d`).
 No live deployment or original archived profile was rewritten. New deployments
 record their actual new code hash; recovery keeps each original deployment's pin.
+
+The [hosted-review ledger](HOSTED-REVIEW-PR21-2026-10-31.md) records the subsequent
+geth-shaped reverted receipt fix and all four reproduced CodeRabbit findings.
+Present falsy rollback records now refuse, accepted-state file reads are bounded
+against links/FIFOs/replacement, deliberate offline compiler settings survive,
+and every identified guarded Node tool shares correct import/entry detection.
+Independent preload probes also caught and closed query/fragment double entry.
+Final focused verification includes 12 recovery, 6 schema and 11 CLI tests;
+shared-entry/G24/fuzz/policy verification passes 80 tests. The affected exchange,
+payment, deployment, operator trade and copied recovery journeys pass again.
+
+The compatible closed PR #22 proposal is fully subsumed by the tested receipt
+fix and its commit ancestry is preserved without changing the tested source
+tree. The [final intake ancestry snapshot](CONTINUATION-ANCESTRY-2026-10-31.json)
+records 26 included compatible heads and the one excluded archival custodial head.
 
 Local CLI tests require the managed environment's network/IPC capability even
 when using no external network. Default restricted child-process attempts caused
