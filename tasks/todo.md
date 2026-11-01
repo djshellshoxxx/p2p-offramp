@@ -87,7 +87,10 @@ Baseline merged PR23 `f421fdcb1d127a087991270d0e5f60a3be323ba3`. T1–T27 implem
 | T29 | DONE | audit_domain_transport proposes existing broker lifecycle subscription + optional trusted privacy consumer integration; no default broker/evidence, contract before edits; disjoint ownership |
 | T30 | INTEGRATING | root integrates, reassesses, audits changed authority/lifecycle/UX paths independently, runs final checks, publishes/guarded merge + live readback |
 | T31 | DONE | audit_domain_transport; current Qodo inspection-expiry permission-isolation + missed reentrant invalidation findings; RED/GREEN fixed without notification loops, independent storage reviewer |
+| T32 | DONE | guidance_writer; hosted native-fixture immediate-receipt race, deterministic pending receipt RED, bounded read-only wait with one send, independent runtime review |
 
 T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfourTS; boundaries118/59; policy22; Python12/spec173; default/demo; Foundry82; nativeexchange12/scopedreads128/zerojourneysends; emittedbrowser6 including independently reproduced/fixed sameidentitylease. Reviews/scope and final identities: docs/execution/JOURNEY-AUDIT-2026-11-01.md. T30 hosting/guardedmerge status remains live PR metadata. Trading stays disabled; no newdefaultbroker or protocol/crypto qualification.
 
 T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
+
+T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.

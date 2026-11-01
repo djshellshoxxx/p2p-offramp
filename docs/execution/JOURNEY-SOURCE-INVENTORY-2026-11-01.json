@@ -1248,7 +1248,7 @@
     },
     {
       "path": "scripts/test-payment-preflight-local.mjs",
-      "sha256": "a1603c9d6a81a80f86b8190316fcbe290120a7667d0b931d740c720a276711f1"
+      "sha256": "3fa239dd0c861099ff8ef7a40be6c991a9df4cdeee8971887f8e81020b947e5b"
     },
     {
       "path": "scripts/test-recovery-references-browser.mjs",
@@ -1281,6 +1281,10 @@
     {
       "path": "scripts/test-sepolia-trade-local.mjs",
       "sha256": "0318df0e08d62fe88ab01b64d2cfded02db7d64e528a6b9397608083c11fa655"
+    },
+    {
+      "path": "scripts/test-support/fixture-receipt.mjs",
+      "sha256": "1b376fc97e2afdabfd8ecb56b6c56347c148454926fd8f3edd156856ab5f9822"
     },
     {
       "path": "scripts/test-support/register-tsx.mjs",
@@ -1325,6 +1329,10 @@
     {
       "path": "scripts/tests/evm-recovery.test.mjs",
       "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38"
+    },
+    {
+      "path": "scripts/tests/fixture-receipt.test.mjs",
+      "sha256": "6d833e0e4edff5f43d9e866bf9549bf9c2de1b6857778c8e00444a3a78617f7a"
     },
     {
       "path": "scripts/tests/import-boundaries.test.mjs",

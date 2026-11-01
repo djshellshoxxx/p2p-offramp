@@ -16,6 +16,7 @@ import { buildFundNative, buildGetTrade, buildRefund, buildRelease, decodeTrade 
 import { evmTermsHash, keccak256 } from '../packages/wallet/src/evm-terms.ts';
 import { createEvmPaymentPreflight } from '../packages/wallet/src/evm-payment-preflight.ts';
 import { checkToolchain, forgeEnv, rpcClient } from './sepolia/lib.mjs';
+import { waitForFixtureReceipt } from './test-support/fixture-receipt.mjs';
 
 const run = promisify(execFile);
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
@@ -48,8 +49,7 @@ async function tradeAt(tradeId, tag) {
 }
 async function send(from, call) {
   const hash = await rpc('eth_sendTransaction', [{ from, to: call.to, data: call.data, value: quantity(call.value) }]);
-  const receipt = await rpc('eth_getTransactionReceipt', [hash]);
-  assert.equal(receipt?.status, '0x1'); return receipt;
+  return waitForFixtureReceipt(rpc, hash);
 }
 async function loadRegistry(raw) {
   const service = new RegistryService(), bytes = new TextEncoder().encode(JSON.stringify(raw));
