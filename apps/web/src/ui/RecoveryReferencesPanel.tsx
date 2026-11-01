@@ -76,9 +76,9 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
             const checked = event.currentTarget.checked; discardPreview(); setNotice(''); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
           }} /><span>{m.reference(page.offset + index + 1)} · {item.action}</span></label>
           <dl className="terms"><dt>{m.storedLabel}</dt><dd>{item.storedState}</dd>
-            <dt>Network / deployment</dt><dd><code>{item.binding.networkId} / {item.binding.deploymentId}</code></dd>
-            <dt>Trade ID</dt><dd><code>{item.binding.tradeId}</code></dd><dt>Wallet account</dt><dd><code>{item.account}</code></dd>
-            <dt>Intent ID</dt><dd><code>{item.intentId}</code></dd><dt>{m.transaction}</dt><dd><code>{item.chainReference ?? m.unknown}</code></dd>
+            <dt>{m.networkDeployment}</dt><dd><code>{item.binding.networkId} / {item.binding.deploymentId}</code></dd>
+            <dt>{m.tradeId}</dt><dd><code>{item.binding.tradeId}</code></dd><dt>{m.walletAccount}</dt><dd><code>{item.account}</code></dd>
+            <dt>{m.intentId}</dt><dd><code>{item.intentId}</code></dd><dt>{m.transaction}</dt><dd><code>{item.chainReference ?? m.unknown}</code></dd>
             {item.nonce !== null ? <><dt>{m.nonce}</dt><dd><code>{item.nonce}</code></dd></> : null}
           </dl>
         </div>)}

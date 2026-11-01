@@ -64,6 +64,19 @@ test('hostile or failing provider output becomes fixed typed errors with no copi
   assert.equal((await createEip1193ChainReader({ request: provider().request, escrow: ESCROW }).chainId(aborted.signal)).error.code, 'CANCELLED');
 });
 
+test('escrow observations reject a changed, missing or wrong-height anchor after the state read', async () => {
+  for (const after of [null, { number: '0x10', hash: `0x${'13'.repeat(32)}` }, { number: '0x11', hash: H }]) {
+    let stateRead = false;
+    const p = provider({
+      eth_getBlockByNumber: () => stateRead ? after : { number: '0x10', hash: H },
+      eth_call: () => { stateRead = true; return `0x${word(0).repeat(6)}`; },
+    });
+    const result = await createEip1193ChainReader({ request: p.request, escrow: ESCROW }).escrowObservation(binding,
+      { signal, generation: 2, requestSequence: 3 });
+    assert.equal(result.ok, false); assert.equal(result.error.code, 'INTEGRITY_FAILURE');
+  }
+});
+
 test('escrowCallFor builds each action from evm-escrow with its required prior escrow state', () => {
   const fund = escrowCallFor({ action: 'fund', domain, terms: sets.native.terms }), built = buildFundNative(domain, sets.native.terms);
   assert.deepEqual(fund, { call: { to: built.to, data: built.data, value: built.value }, expectedEscrowState: 'absent' });

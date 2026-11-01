@@ -21,6 +21,8 @@ Status: operator runbook design baseline; implementation, interoperability evide
 - Order used for the testnet registry: deploy, re-record after finality (§4.2), exercise release and refund with the unsigned registry draft, owner signing (which requires the finalized, clean-source record), verify and accept (§4.3 rollback refusal against the accepted sequence).
 - Recorded deviations: `reviewEvidence` stays null (no independent review of the deployed code), and the trade tool reconciles from its own state file and chain state rather than through the G12 journal, so the crash-and-reconcile exercise through G12 is not performed.
 
+**Local implementation checkpoint (2026-10-31).** The [canonical EVM recovery package](../../../docs/recovery/CANONICAL-EVM.md) now packages exact authenticated G15 registry/ABI bytes into a portable Node-only tool. It reads original native state/time and prepares unsigned release/refund/fixed-beneficiary withdrawal calls, never sends or replays a journal. The copied bundle passes six local native checks over registered HTTPS, including original escrow exits after release expiry. This does not record a live deployment, independent distribution/witness approval or Solana recovery. The separate canonical exchange harness exercises durable chat and G12 unknown-result fresh-key recovery; the operator trade-tool deviation above remains its own limitation.
+
 ## 2. Objective and scope
 
 Deploy one reviewed static release and separately verified EVM and Solana escrows to a selected test network; support frontend rollback without pretending immutable funded terms or public artifacts can be rolled back; and give an operator a procedure to recover funds directly from chain state when the frontend, origin or gateway is unavailable.

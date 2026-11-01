@@ -1,10 +1,12 @@
 # P2P Off-ramp
 
-Current source: [autonomous completion report](docs/execution/AUTONOMOUS-RESULT-2026-10-31.md),
+Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
+[whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
 [autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
 and [task ledger](tasks/todo.md). The prior [consolidation audit](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md)
-records merged compatible work; historical local-only reports below are superseded.
+records merged compatible work; the [PR #20 report](docs/execution/AUTONOMOUS-RESULT-2026-10-31.md)
+records T1–T9. Historical local-only reports below are superseded.
 
 
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.

@@ -6,8 +6,10 @@
 import { RegistryService, encodeCapabilities, encodePrivateAgreement, sha256Hex } from '../../../../packages/domain/index.ts';
 import type { RegistrySource, TermsSample } from '../trade/review-controller.ts';
 import { FROZEN_ERC20_DOCUMENT, FROZEN_NATIVE_DOCUMENT, SYNTHETIC_REGISTRY_JSON, SYNTHETIC_REGISTRY_SHA256 } from './synthetic-data.ts';
+import { englishGroup } from '../ui/locale/en.ts';
 
 const utf8 = new TextEncoder();
+const sampleLabels = englishGroup('samples');
 const SELLER = '0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e';
 const BUYER = '0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5';
 
@@ -33,9 +35,9 @@ export async function freshCoreNativeDocument(nowSeconds: bigint): Promise<Uint8
 }
 
 export const SYNTHETIC_SAMPLES: readonly TermsSample[] = Object.freeze([
-  Object.freeze({ id: 'fresh-native', label: 'Core native sample (deadlines from now)', load: (now: bigint) => freshCoreNativeDocument(now) }),
-  Object.freeze({ id: 'frozen-native', label: 'Frozen scenario: native (expired, has capability)', load: async () => utf8.encode(FROZEN_NATIVE_DOCUMENT) }),
-  Object.freeze({ id: 'frozen-erc20', label: 'Frozen scenario: ERC-20 (expired, has capability)', load: async () => utf8.encode(FROZEN_ERC20_DOCUMENT) }),
+  Object.freeze({ id: 'fresh-native', label: sampleLabels.freshNative, load: (now: bigint) => freshCoreNativeDocument(now) }),
+  Object.freeze({ id: 'frozen-native', label: sampleLabels.frozenNative, load: async () => utf8.encode(FROZEN_NATIVE_DOCUMENT) }),
+  Object.freeze({ id: 'frozen-erc20', label: sampleLabels.frozenErc20, load: async () => utf8.encode(FROZEN_ERC20_DOCUMENT) }),
 ]);
 
 /** Loads the synthetic registry through the real digest-first RegistryService. Refuses anything not `local`. */

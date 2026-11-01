@@ -19,10 +19,10 @@ import { homedir, tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { deploy } from './sepolia/deploy.mjs';
-import { PENDING_FILE, recordDeployment } from './sepolia/record-deployment.mjs';
+import { PENDING_FILE, recordDeployment, clearRecordedAttempt } from './sepolia/record-deployment.mjs';
 import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
 import { acceptSepoliaRelease, TRUSTED_KEY_PATH, verifySepoliaRelease } from './sepolia/verify-release.mjs';
-import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, ROOT, rpcClient, SEPOLIA, TOOLCHAIN } from './sepolia/lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, ROOT, rpcClient, SEPOLIA, TOOLCHAIN, keccakHex, hexToBytes } from './sepolia/lib.mjs';
 import { TESTNET_ACCEPTED_FILE } from '../apps/web/scripts/testnet-trust.mjs';
 
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
@@ -52,11 +52,13 @@ async function startAnvil(chainId) {
   return { url, rpc, stop: () => child.kill('SIGTERM') };
 }
 /** A JSON-RPC proxy that reports a different block hash in every receipt: an endpoint that disagrees with the primary. */
-async function disagreeingProxy(target) {
+async function disagreeingProxy(target, mutate = (call, reply) => {
+  if (call.method === 'eth_getTransactionReceipt' && reply.result) reply.result.blockHash = `0x${'ab'.repeat(32)}`;
+}) {
   const server = createHttpServer(async (request, response) => {
     let body = ''; for await (const part of request) body += part;
     const call = JSON.parse(body), reply = await (await fetch(target, { method: 'POST', headers: { 'content-type': 'application/json' }, body })).json();
-    if (call.method === 'eth_getTransactionReceipt' && reply.result) reply.result.blockHash = `0x${'ab'.repeat(32)}`;
+    mutate(call, reply);
     response.setHeader('content-type', 'application/json'); response.end(JSON.stringify(reply));
   });
   await new Promise(done => server.listen(0, '127.0.0.1', done));
@@ -169,6 +171,23 @@ try {
   await assert.rejects(recordInto(transfer), code('NOT_A_DEPLOYMENT'));
   const revertedCreate = await node.rpc('eth_sendTransaction', [{ from: DEPLOYER, data: '0x60006000fd', gas: '0x30000' }]);
   await assert.rejects(recordInto(revertedCreate), code('DEPLOY_REVERTED'));
+  const nativeRevertReceipt = await node.rpc('eth_getTransactionReceipt', [revertedCreate]);
+  const nativeRevertTx = await node.rpc('eth_getTransactionByHash', [revertedCreate]);
+  assert.equal(nativeRevertReceipt.status, '0x0', 'explicit gas submits a genuinely mined failed CREATE');
+  const failedNonce = BigInt(nativeRevertTx.nonce);
+  let rlpNonce = failedNonce === 0n ? '80' : failedNonce.toString(16).padStart(Math.ceil(failedNonce.toString(16).length / 2) * 2, '0');
+  if (failedNonce >= 128n) rlpNonce = (128 + rlpNonce.length / 2).toString(16) + rlpNonce;
+  const rlpPayload = '94' + nativeRevertTx.from.slice(2) + rlpNonce;
+  const derivedFailureAddress = '0x' + keccakHex(hexToBytes('0x' + (192 + rlpPayload.length / 2).toString(16) + rlpPayload)).slice(-40);
+  assert.equal(await node.rpc('eth_getCode', [derivedFailureAddress, nativeRevertReceipt.blockNumber]), '0x');
+  // This adapter changes only the receipt representation to geth's derived-address style.
+  // Transaction, nonce, canonical headers and empty native code remain real Anvil responses.
+  const gethShape = await disagreeingProxy(node.url, (call, reply) => {
+    if (call.method === 'eth_getTransactionReceipt' && reply.result?.transactionHash === revertedCreate) reply.result.contractAddress = derivedFailureAddress;
+  });
+  try { await assert.rejects(recordInto(revertedCreate, { rpcUrl: gethShape.url }), code('DEPLOY_REVERTED')); }
+  finally { await gethShape.close(); }
+  pass('a mined reverted CREATE classifies for deploy cleanup with native null or geth-style exact derived receipt address');
   // The runtime code does not depend on the allowlist, so only the allowlist read stops a token-enabled deployment.
   // The constructor only requires code at each allowlisted address; the contract created above serves as a stand-in token.
   const standInToken = (await node.rpc('eth_getTransactionReceipt', [other])).contractAddress;
@@ -177,6 +196,27 @@ try {
   const tokenDeployment = /Transaction hash: (0x[0-9a-f]{64})/.exec(created)?.[1];
   assert.ok(tokenDeployment, 'forge create reported its transaction');
   await assert.rejects(recordInto(tokenDeployment), code('ALLOWLIST_NOT_EMPTY'));
+  // Inconsistent native provenance must neither write a finalized record nor clear an attempt guard.
+  const guardPath = resolve(temporary, 'native-proof-pending.json');
+  for (const field of ['transactionHash', 'blockHash', 'missing-status', 'reverted-hash', 'reverted-orphan', 'reverted-existing']) {
+    const proofProxy = await disagreeingProxy(node.url, (call, reply) => {
+      if (call.method === 'eth_getTransactionReceipt' && reply.result) {
+        if (field === 'missing-status') delete reply.result.status;
+        else if (field.startsWith('reverted-')) { reply.result.status = '0x0'; reply.result.contractAddress = null;
+          if (field === 'reverted-hash') reply.result.transactionHash = `0x${'ab'.repeat(32)}`;
+          if (field === 'reverted-orphan') reply.result.blockHash = `0x${'ab'.repeat(32)}`;
+        } else reply.result[field] = `0x${'ab'.repeat(32)}`;
+      }
+    });
+    try {
+      await assert.rejects(recordInto(pendingTx, { rpcUrl: proofProxy.url }), code('DEPLOYMENT_PROOF_INVALID'));
+      const guard = { tx: pendingTx, address: record.contractAddress };
+      await writeFile(guardPath, JSON.stringify(guard));
+      assert.equal(await clearRecordedAttempt({ pendingPath: guardPath, txHash: pendingTx, record, rpc: rpcClient(proofProxy.url) }), false);
+      assert.deepEqual(JSON.parse(await readFile(guardPath, 'utf8')), guard);
+    } finally { await proofProxy.close(); }
+  }
+  pass('wrong-hash, orphan, missing-status and substituted reverted native receipts cannot create records or clear known attempt guards');
   proxy = await disagreeingProxy(node.url);
   await assert.rejects(recordInto(pendingTx, { crosscheckUrl: proxy.url }), code('CROSSCHECK_MISMATCH'));
   pass('recorder refuses foreign runtime code, wrong genesis, a non-https endpoint, an unexpected deployer, a non-deployment, a reverted deployment, a non-empty allowlist and a disagreeing cross-check');

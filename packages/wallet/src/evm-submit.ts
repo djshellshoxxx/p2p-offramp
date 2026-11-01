@@ -95,6 +95,8 @@ export function createEip1193ChainReader(options: Eip1193ChainReaderOptions) {
       if (head === null) return corrupt();
       const getTrade = buildGetTrade(escrow, binding.tradeId);
       const getTradeReturn = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, hex(head.number)]));
+      const checkedHead = await block(hex(head.number));
+      if (checkedHead === null || checkedHead.number !== head.number || checkedHead.hash !== head.hash) return corrupt();
       return buildChainObservation(escrow, { binding, generation: reconcile.generation, requestSequence: reconcile.requestSequence, getTradeReturn,
         anchor: { height: head.number, hash: head.hash }, finality: 'pending', observedAt: now() });
     }),

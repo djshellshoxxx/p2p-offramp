@@ -45,7 +45,7 @@ function Instructions({ text }: { readonly text: string }) {
 /** G16 allows any UTF-8 version text; screen it like instructions and isolate it so it cannot reorder nearby warnings. */
 function CapabilityVersion({ version }: { readonly version: string }) {
   const checked = checkDisplayText(version);
-  return checked.ok && !checked.text.includes('\n') ? <>v<bdi>{checked.text}</bdi></> : <span className="notice error">{t.versionHidden}</span>;
+  return checked.ok && !checked.text.includes('\n') ? <>{t.versionPrefix}<bdi>{checked.text}</bdi></> : <span className="notice error">{t.versionHidden}</span>;
 }
 
 /** True when the device clock is at or past the acceptance deadline (display only, never chain authority). */

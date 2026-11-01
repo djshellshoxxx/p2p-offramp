@@ -12,14 +12,14 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { RegistryService } from '../packages/domain/index.ts';
-import { buildFundNative, buildRefund, buildRelease } from '../packages/wallet/src/evm-escrow.ts';
+import { buildFundNative, buildGetTrade, buildRefund, buildRelease, decodeTrade } from '../packages/wallet/src/evm-escrow.ts';
 import { evmTermsHash, keccak256 } from '../packages/wallet/src/evm-terms.ts';
 import { createEvmPaymentPreflight } from '../packages/wallet/src/evm-payment-preflight.ts';
 import { checkToolchain, forgeEnv, rpcClient } from './sepolia/lib.mjs';
 
 const run = promisify(execFile);
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
-const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}`, FOUNDRY_OFFLINE: 'true' };
+const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}` };
 const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 // Documented public Anvil development key: never an operator credential.
@@ -42,6 +42,10 @@ const mine = (count = 1) => rpc('anvil_mine', [quantity(count)]);
 const block = tag => rpc('eth_getBlockByNumber', [tag, false]);
 const time = async () => BigInt((await block('latest')).timestamp);
 const request = ({ method, params }) => { methods.push(method); return rpc(method, params ?? []); };
+async function tradeAt(tradeId, tag) {
+  const call = buildGetTrade(escrow, tradeId);
+  return decodeTrade(await rpc('eth_call', [{ to: call.to, data: call.data }, tag]));
+}
 async function send(from, call) {
   const hash = await rpc('eth_sendTransaction', [{ from, to: call.to, data: call.data, value: quantity(call.value) }]);
   const receipt = await rpc('eth_getTransactionReceipt', [hash]);
@@ -84,7 +88,7 @@ try {
   assert.equal(BigInt(await rpc('eth_chainId')), 31337n);
   accounts = (await rpc('eth_accounts')).map(account => account.toLowerCase());
   const deployed = await run('forge', ['create', 'src/BasicEscrow.sol:BasicEscrow', '--rpc-url', url, '--private-key', `0x${KEY}`, '--broadcast', '--json', '--constructor-args', '[]'],
-    { cwd: EVM_DIR, env: forgeEnv(ENV), timeout: 30_000, maxBuffer: 1 << 20 });
+    { cwd: EVM_DIR, env: forgeEnv(ENV, { FOUNDRY_OFFLINE: 'true' }), timeout: 30_000, maxBuffer: 1 << 20 });
   escrow = JSON.parse(deployed.stdout.slice(deployed.stdout.indexOf('{'))).deployedTo.toLowerCase();
   const raw = JSON.parse(await readFile(new URL('../packages/domain/test/fixtures/local-evm-scenario/registry.json', import.meta.url)));
   const network = raw.networks[0]; network.genesisHash = (await block('0x0')).hash;
@@ -98,6 +102,17 @@ try {
   const { reader, tradeId } = readerFor(terms);
   assert.equal(good(await reader.read()).decision, 'allow-guidance');
   pass('native finalized funding matches canonical terms, registry runtime, chain and genesis');
+
+  const fundedSnapshot = await rpc('evm_snapshot');
+  await send(accounts[0], buildRelease(escrow, tradeId));
+  assert.equal((await tradeAt(tradeId, 'finalized')).state, 'funded');
+  assert.equal((await tradeAt(tradeId, 'latest')).state, 'released');
+  const releasedBeforeFinality = good(await reader.read());
+  assert.ok(BigInt(releasedBeforeFinality.remainingSeconds) > 900n);
+  assert.equal(releasedBeforeFinality.decision, 'block'); assert.equal(releasedBeforeFinality.reason, 'unfunded');
+  pass('native latest release vetoes guidance while finalized escrow still reports funded and time remains');
+  assert.equal(await rpc('evm_revert', [fundedSnapshot]), true); reader.invalidate();
+  assert.equal(good(await reader.read()).decision, 'allow-guidance');
 
   await latestTime(BigInt(terms.escrowExpirySeconds) - 901n);
   const clockHead = await block('latest'), stateHead = await block('finalized');
@@ -129,14 +144,19 @@ try {
   const refund = readerFor(refundTerms); assert.equal(good(await refund.reader.read()).decision, 'allow-guidance');
   await latestTime(BigInt(refundTerms.escrowExpirySeconds));
   assert.equal(good(await refund.reader.read()).reason, 'near-expiry');
-  await send(accounts[2], buildRefund(escrow, refund.tradeId)); await mine(5);
+  await send(accounts[2], buildRefund(escrow, refund.tradeId));
+  assert.equal((await tradeAt(refund.tradeId, 'finalized')).state, 'funded');
+  assert.equal((await tradeAt(refund.tradeId, 'latest')).state, 'refunded');
+  assert.equal(good(await refund.reader.read()).reason, 'unfunded');
+  await mine(5);
   assert.equal(good(await refund.reader.read()).reason, 'unfunded');
   assert.equal(BigInt(await rpc('eth_getBalance', [escrow, 'latest'])), 0n);
   pass('native timeout refund remains available with guidance blocked and leaves no escrow principal');
 
   assert.ok(methods.every(method => ['eth_chainId', 'eth_getBlockByNumber', 'eth_getCode', 'eth_call'].includes(method)));
   console.log(JSON.stringify({ fixture: 'canonical-native-payment-preflight', checks: checks.length, adapterReads: methods.length,
-    adapterSendOrSignCalls: 0, finalizedPolicy: true, latestClockWhileFinalizedLags: true, nativeBoundary901And900: true, externalNetwork: false, tradingEnabled: false, releaseAcceptance: false }));
+    adapterSendOrSignCalls: 0, finalizedPolicy: true, latestClockWhileFinalizedLags: true, latestSettlementVetoWhileFinalizedFunded: true,
+    nativeBoundary901And900: true, externalNetwork: false, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   readers.forEach(reader => reader.dispose());
   if (anvil?.pid && anvil.exitCode === null && anvil.signalCode === null) {

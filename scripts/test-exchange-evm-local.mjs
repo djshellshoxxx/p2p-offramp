@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Canonical cross-layer LOCAL evidence: real Nostr crypto/relay/exchange -> reviewed exact bytes -> G12 -> canonical escrow.
+/** Canonical cross-layer LOCAL evidence: real Nostr crypto/relay/exchange -> reviewed exact bytes -> durable chat/G12 -> canonical escrow.
  * Loopback Anvil and relay only; published development wallets, temporary messaging keys and encrypted in-memory storage.
  * No default app wiring, live trust root, external relay/privacy claim or production funds. */
 import assert from 'node:assert/strict';
@@ -22,6 +22,7 @@ import { createLocalNobleNostrProvider } from '../packages/nostr-crypto/index.ts
 import { createRelayPool, createAdEvent, createOrderBook, AD_KIND } from '../packages/relay/index.ts';
 import { matchesFilters } from '../packages/relay/src/nip01.ts';
 import { createRelayEventCrypto, createTermsExchange, adBookKey } from '../packages/exchange/index.ts';
+import { createDurableTradeChat, encodeMessage } from '../packages/messaging/index.ts';
 import { EncryptedVaultService, EncryptedBackupService } from '../packages/storage/index.ts';
 import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
 import { decodeIntentPayload } from '../packages/schemas/index.ts';
@@ -31,7 +32,7 @@ import { makeBroker, FAST, until, loopbackRelayFixture } from '../packages/relay
 
 const EVM_DIR = fileURLToPath(new URL('../contracts/evm/', import.meta.url));
 const FOUNDRY = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
-const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}`, FOUNDRY_OFFLINE: 'true' };
+const ENV = { ...process.env, PATH: `${FOUNDRY}:${process.env.PATH ?? ''}` };
 const ANVIL = existsSync(`${FOUNDRY}/anvil`) ? `${FOUNDRY}/anvil` : 'anvil';
 const run = promisify(execFile), utf8 = new TextEncoder();
 const ZERO = `0x${'0'.repeat(40)}`, PASS = 'public synthetic canonical exchange journey passphrase';
@@ -54,8 +55,8 @@ const store = {
   compareAndSwap: async (expected,next,opts) => { opts?.assertCurrent?.(); if(opts?.signal?.aborted)throw new VaultStorageError('CANCELLED'); if(JSON.stringify(rows.get(expected.profileId))!==JSON.stringify(expected))throw new VaultStorageError('CONFLICT'); rows.set(next.profileId,structuredClone(next)); },
   listProfileIds: async()=>({profileIds:[...rows.keys()],truncated:false}), subscribeInvalidation:()=>()=>{},
 };
-const allowed = new Map(), parties = [], pools = [], brokers = [], clients = new Set(), results=[];
-let anvil, relay, rpc, escrow, clock=0, sends=0, markers=0;
+const allowed = new Map(), parties = [], pools = [], brokers = [], clients = new Set(), historyProfiles = new Set(), results=[];
+let anvil, relay, rpc, escrow, clock=0, sends=0, markers=0, chatMessages=0, chatReopens=0, chatRecoveries=0;
 const pass = name => { results.push(name); console.log(`ok - ${name}`); };
 const freePort = () => new Promise((done,reject)=>{const server=createServer();server.once('error',reject);server.listen(0,'127.0.0.1',()=>{const port=server.address().port;server.close(error=>error?reject(error):done(port));});});
 const mine = (count=1) => rpc('anvil_mine',[`0x${count.toString(16)}`]);
@@ -86,7 +87,7 @@ async function client(profileId, {loseNextResponse=false}={}) {
   const journal=createLifecycleJournal({vault,session,validateCanonical});
   const request=({method,params})=>rpc(method,params??[]);
   const reader=createEip1193ChainReader({request,escrow});
-  const self={vault,session,journal,life:null,loseNextResponse,close(){self.life.dispose();journal.dispose();vault.dispose();clients.delete(self);}};
+  const self={vault,session,journal,life:null,loseNextResponse,chats:new Set(),close(){for(const chat of self.chats)chat.close();self.life.dispose();journal.dispose();vault.dispose();clients.delete(self);}};
   const wallet=async args=>{
     if(args.method==='eth_sendTransaction'){
       // Inspect the actual encrypted-vault consumer before touching the native wallet boundary.
@@ -124,6 +125,32 @@ async function deliver(message,pool,recipient,recipientPool){
   const exact=wraps.find(wrap=>wrap.id===message.recipientWrap.id);assert.ok(exact,'recipient receives exact published wrap');
   return val(await recipient.exchange.receive(exact,recipient.secret),'receive encrypted message');
 }
+async function historyProfile(profileId){
+  const vault=new EncryptedVaultService(store,crypto,{lifecycle:false});
+  const session=profileId?val(await vault.unlock(profileId,PASS),'reopen chat profile'):val(await vault.create(PASS),'create chat profile');
+  const owner={vault,session,chats:new Set(),close(){for(const chat of owner.chats)chat.close();vault.dispose();historyProfiles.delete(owner);}};
+  historyProfiles.add(owner);return owner;
+}
+function openChat(owner,party,binding,provider){
+  const chat=val(createDurableTradeChat({vault:owner.vault,session:owner.session,provider,binding,
+    participants:parties.map(peer=>peer.pub),selfPublicKey:party.pub,now:()=>clock,nowMs:()=>clock*1000}),'open durable chat');
+  owner.chats.add(chat);return chat;
+}
+async function deliverChat(from,to,binding,messageId,body){
+  const beforeSends=sends,beforeEvents=relay.events.length;
+  const content=val(encodeMessage({format:'p2p-offramp-message',version:1,binding,termsHash:binding.tradeId,
+    messageId,sender:from.party.pub,recipient:to.party.pub,kind:'text',createdAt:clock*1000,body}),'encode private text');
+  try{
+    const sent=val(await from.chat.send(content,from.party.secret),'persist outbound chat');assert.equal(sent.duplicate,false);
+    assert.ok(val(await from.owner.vault.list(from.owner.session.sessionId,'chat'),'durable outbound record').some(record=>record.id===sent.recordId));
+    assert.equal(relay.events.length,beforeEvents,'durable send does not publish automatically');
+    val(await from.party.pool.publish(sent.recipientWrap),'explicit chat publication');
+    const exact=(await pull(to.party.pool,to.party)).find(wrap=>wrap.id===sent.recipientWrap.id);assert.ok(exact,'canonical relay returns exact encrypted chat wrap');
+    const received=val(await to.chat.receive(exact,to.party.secret),'authenticate and persist inbound chat');assert.equal(received.duplicate,false);
+    assert.equal(sends,beforeSends,'chat and relay acknowledgement do not call the wallet');chatMessages++;
+    return {sent,received,wrap:exact};
+  }finally{content.fill(0);}
+}
 
 try{
   await checkToolchain(ENV);
@@ -135,7 +162,7 @@ try{
   let spawnError;anvil.once('error',error=>{spawnError=error;});
   for(let attempt=0;;attempt++){try{await rpc('eth_chainId');break;}catch{if(spawnError||anvil.exitCode!==null||attempt>=100)throw new Error('Local Anvil startup failed');await new Promise(done=>setTimeout(done,50));}}
   assert.equal(BigInt(await rpc('eth_chainId')),31337n);
-  const {stdout}=await run('forge',['create','src/BasicEscrow.sol:BasicEscrow','--rpc-url',url,'--private-key',`0x${KEYS[0]}`,'--broadcast','--json','--constructor-args','[]'],{cwd:EVM_DIR,env:forgeEnv(ENV),maxBuffer:1<<20,timeout:30000});
+  const {stdout}=await run('forge',['create','src/BasicEscrow.sol:BasicEscrow','--rpc-url',url,'--private-key',`0x${KEYS[0]}`,'--broadcast','--json','--constructor-args','[]'],{cwd:EVM_DIR,env:forgeEnv(ENV, { FOUNDRY_OFFLINE: 'true' }),maxBuffer:1<<20,timeout:30000});
   escrow=JSON.parse(stdout.slice(stdout.indexOf('{'))).deployedTo.toLowerCase();clock=await now();
   const registryInput=JSON.parse(await readFile(new URL('../packages/domain/test/fixtures/local-evm-scenario/registry.json',import.meta.url)));
   const network=registryInput.networks[0];network.genesisHash=(await rpc('eth_getBlockByNumber',['0x0',false])).hash;network.assets=network.assets.filter(asset=>asset.kind==='native');
@@ -198,6 +225,30 @@ try{
     assert.deepEqual(seller.exchange.session(take.sessionId).terms.bytes,acceptedBytes);
     fail(await seller.exchange.receive(acceptance.recipientWrap,seller.secret),'DUPLICATE');
     assert.equal((await trade(tradeId)).state,'absent','negotiation alone never funds escrow');
+    let chatEvidence;
+    if(!scenario.deny){
+      const sender={party:seller,owner:self,chat:openChat(self,seller,binding,provider)};
+      const peer=await historyProfile(),recipient={party:buyer,owner:peer,chat:openChat(peer,buyer,binding,provider)};
+      const first=await deliverChat(sender,recipient,binding,sha(`seller-chat-${index}`).slice(0,32),`SYNTHETIC durable private chat ${terminal}: manual payment remains unverified.`);
+      const initialHistory=val(await recipient.chat.list(buyer.secret),'native authenticated recipient history');
+      assert.equal(initialHistory.provenance,'native-reauthenticated-local-history');assert.equal(initialHistory.economicAuthority,false);
+      assert.equal(initialHistory.messages.length,1);assert.equal(initialHistory.messages[0].direction,'inbound');
+      const peerId=peer.session.profileId,peerCiphertext=JSON.stringify(rows.get(peerId));peer.close();
+      fail(await recipient.chat.list(buyer.secret),'LOCKED');
+      recipient.owner=await historyProfile(peerId);recipient.chat=openChat(recipient.owner,buyer,binding,provider);
+      assert.deepEqual(val(await recipient.chat.list(buyer.secret),'reopened authenticated history'),initialHistory);
+      assert.deepEqual(val(await recipient.chat.receive(first.wrap,buyer.secret),'durable relay replay'),{...first.received,duplicate:true});
+      assert.equal(JSON.stringify(rows.get(peerId)),peerCiphertext,'reopen/replay does not rewrite recipient ciphertext');chatReopens++;
+      const reply=await deliverChat(recipient,sender,binding,sha(`buyer-chat-${index}`).slice(0,32),`SYNTHETIC durable private chat ${terminal}: a message is not fiat receipt.`);
+      const sellerHistory=val(await sender.chat.list(seller.secret),'seller bidirectional history');
+      assert.equal(sellerHistory.economicAuthority,false);assert.deepEqual(sellerHistory.messages.map(message=>message.direction),['outbound','inbound']);
+      assert.equal(val(await recipient.chat.list(buyer.secret),'buyer bidirectional history').messages.length,2);
+      assert.equal(allowed.has(callKey(binding,'fund')),false,'chat never grants the canonical preparation gate');
+      assert.equal((await self.life.prepare(initialInput)).ok,false,'authenticated chat alone cannot prepare funding');
+      assert.equal((await trade(tradeId)).state,'absent','chat and relay acknowledgements never establish funded state');
+      chatEvidence={sender,recipient,reply,sellerHistory};
+      pass(`canonical ${terminal} journey persists authenticated bidirectional text before explicit relay publication and deduplicates after reopen`);
+    }
     // This gate is populated only from the exact bytes both exchange peers stored after review/acceptance.
     const detached=val(await reviewTermsBytes(registry,acceptedBytes),'accepted bytes re-review');
     const acceptedTerms=asTerms(detached),acceptedDomain={chainId:detached.network.chainId,verifyingContract:detached.deployment.address};
@@ -233,15 +284,26 @@ try{
       const backup=new EncryptedBackupService(store);try{
         const exported=await backup.exportWithStatus(self.session.profileId),restored=await backup.restore(exported.bytes,PASS,PASS);assert.notEqual(restored.newProfileId,self.session.profileId);
         assert.notEqual(restored.newKeyId,rows.get(self.session.profileId).keyId,'restore creates a fresh encryption key identity');
-        const sourceId=self.session.profileId;self.close();self=await client(restored.newProfileId);
+        const sourceId=self.session.profileId,sourceCiphertext=JSON.stringify(rows.get(sourceId));self.close();self=await client(restored.newProfileId);
         assert.ok(rows.has(sourceId),'fresh-key recovery retains source');
+        chatEvidence.sender.owner=self;chatEvidence.sender.chat=openChat(self,seller,binding,provider);
+        fail(await chatEvidence.sender.chat.list(buyer.secret),'UNAUTHORIZED');
+        assert.deepEqual(val(await chatEvidence.sender.chat.list(seller.secret),'fresh-key authenticated chat history'),chatEvidence.sellerHistory);
+        const restoredCiphertext=JSON.stringify(rows.get(self.session.profileId));
+        assert.deepEqual(val(await chatEvidence.sender.chat.receive(chatEvidence.reply.wrap,seller.secret),'fresh-key durable relay replay'),{...chatEvidence.reply.received,duplicate:true});
+        assert.equal(JSON.stringify(rows.get(self.session.profileId)),restoredCiphertext,'restored chat replay does not rewrite ciphertext');
         const recovered=val(await self.life.recover(),'restored journal');assert.ok(recovered.some(intent=>intent.intentId===prepared.intentId));
+        assert.equal(JSON.stringify(rows.get(sourceId)),sourceCiphertext,'chat and journal recovery preserve original source ciphertext/history');
+        assert.equal(sends,before+1,'chat recovery does not resend the unknown funding transaction');chatRecoveries++;
+        pass('fresh-key restore reauthenticates original chat proofs and dedup alongside unknown G12 recovery without changing the source or resending');
       }finally{backup.dispose();}
     }else val(sent,'send accepted fund');
     const funded=await reconcileFinal(self,prepared.intentId);assert.equal(funded.escrowState,'funded');
     assert.equal(BigInt(await rpc('eth_getTransactionCount',[addresses[0],'latest'])),nonceBefore+1n,'unknown recovery never resends');
     assert.equal(tradeMatchesTerms(await trade(tradeId),acceptedTerms),true);
     fail(await buyer.exchange.cancel(take.sessionId,'withdrawn',buyer.secret),'OUT_OF_ORDER');
+    // Core release/refund remains available after all chat consumers are closed.
+    chatEvidence.sender.chat.close();chatEvidence.recipient.owner.close();
     const buyerBefore=BigInt(await rpc('eth_getBalance',[addresses[1],'latest']));
     const sellerBefore=BigInt(await rpc('eth_getBalance',[addresses[0],'latest']));
     assert.equal(BigInt(await rpc('eth_getBalance',[escrow,'latest'])),amount,'escrow holds exactly the funded principal');
@@ -260,11 +322,14 @@ try{
     pass(`encrypted canonical exchange -> exact reviewed acceptance -> G12 fund -> native ${terminal}${index===0?' with lost-response/fresh-key native recovery':''}`);
   }
   const wire=JSON.stringify(relay.events);
-  for(const privateText of ['SYNTHETIC private manual payment note',addresses[0],addresses[1],'terms-accept','sellerNonce'])assert.equal(wire.includes(privateText),false,'relay sees ciphertext/public advertisement only');
+  for(const privateText of ['SYNTHETIC private manual payment note','SYNTHETIC durable private chat',addresses[0],addresses[1],'terms-accept','sellerNonce'])assert.equal(wire.includes(privateText),false,'relay sees ciphertext/public advertisement only');
+  assert.equal(JSON.stringify([...rows.values()]).includes('SYNTHETIC durable private chat'),false,'vault snapshots contain encrypted chat rather than plaintext');
+  assert.equal(chatMessages,4);assert.equal(chatReopens,2);assert.equal(chatRecoveries,1);
   assert.equal(sends,4);assert.equal(markers,sends);
   pass('altered bytes, replay, pre-accept preparation, changed call value and repeat funding are refused; every send had a durable marker');
-  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
+  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
 } finally {
+  for(const owner of [...historyProfiles])owner.close();
   for(const self of [...clients])self.close();
   for(const party of parties){party.exchange.close();party.eventCrypto.dispose();party.secret.fill(0);}
   pools.forEach(pool=>pool.close());brokers.forEach(broker=>broker.dispose());

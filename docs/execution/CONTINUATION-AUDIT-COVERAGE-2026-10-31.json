@@ -1,0 +1,1262 @@
+{
+  "format": "p2p-offramp/continuation-audit-coverage/v1",
+  "baseline": "b7000850398712a855b79e669302445b0ada2556",
+  "branch": "autonomous/continuation-20261031",
+  "engineeringReviewOnly": true,
+  "limits": [
+    "Hashes identify the frozen source, not an independent audit certificate.",
+    "Implementation review is split by subsystem; tooling/support entries include structural boundary and selected-test review, not every assertion.",
+    "Vendored Solidity and npm dependencies rely on pins, provenance and advisory checks; no independent cryptanalysis is claimed.",
+    "Live hosted CI and source merge state are recorded in the final PR metadata."
+  ],
+  "entries": [
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "sha256": "96adad8beb2414ae991c3fa831e2433ef4ad375fc36ffcd6fd430051575ea526",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "sha256": "d2991f96a394f4d2365344827dbb853ee0101e503d1badd824d5dab85d2ab1d0",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "sha256": "fceb599489e68cd1350d5d00826808d7a481eba445d2102ef1f495d0f18bd53e",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "37be441d4b6f158036495584fa0e83af0af0a941eb539574855a4c6726cecc2c",
+      "scope": "build",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/scripts/artifact-policy.mjs",
+      "sha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7",
+      "scope": "build",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd",
+      "scope": "build",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "apps/web/scripts/source-locale.mjs",
+      "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5",
+      "scope": "build",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/scripts/static-build-plugin.mjs",
+      "sha256": "47030c17ae0885cc3f9df8810b4b1815db47a6d608a98b99e5846b866aa98ea8",
+      "scope": "build",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/scripts/testnet-trust.mjs",
+      "sha256": "c88641b7430e260372e46a8d0fa2c75d0508737f29776f890e40d3558965fffb",
+      "scope": "build",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "26708746736cc91f463153916ffd1559fab291c13b1eaf02ef0cf76f3c0beae1",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/build-flags.d.ts",
+      "sha256": "bf8b084bcce8934c9785fb384b7657e3bf3a614cd36d16c52dba0fb5173ac89c",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/demo/synthetic-data.ts",
+      "sha256": "5da69478862d29c7dbb9ab91e2d58eb95764ac0350be67e00f82576e254d2ccd",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/demo/synthetic-local.ts",
+      "sha256": "bab3fe9ec00c86a5faa63e049bed449e674b9341898e491a1c8c650662577663",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/diagnostics.ts",
+      "sha256": "fa760d26a8928d3501164585d4afaab43c70e34b1453175c0829a05525227559",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "f1a2163ba88ac04a115091e7ca382d6cfe053629c1d60c185e349d4dd213f861",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "9bd7f2c5a6aeb843fd2aebf1f0c28394eaa7eb5e084b51a5c433c63bef791164",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "2660f60828d7d4a7b524b14ca952268e3f3b5838d29f25e710027baad3f213dd",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "28a78e3406455eb59e83f01cf78492edf2bcf0c3e4105840621795b887791a5b",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-network.ts",
+      "sha256": "971cb235c38250a7d78c18d760b5dc0b810e4422a037e3f67b4da97db727f704",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-source.ts",
+      "sha256": "55cc7f12e140a03c57ab5580f947113b1fbdb31aff20aef07e00e859e5792e37",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/trade/review-controller.ts",
+      "sha256": "633f5779bc13369c35a6c1323e1bb58395db81ce6e513057053faf2de290d8a0",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "sha256": "3db49f461b2191f9b00b99a15028270ec8332926a4e821b0e3561990861e3588",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/DiagnosticsPanel.tsx",
+      "sha256": "af0e388530656953e93453e1a3c9314b86c7217a8f07948a4f3f9c42e6ee9131",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "fb639cab198c4189769bee55a508129bdfab32ead40077ba122af311b90afa17",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+      "sha256": "c45e9d913abfc3fdd8fb501221dc0706d977e3d424bbac330e5112d70219d01a",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/VaultForms.tsx",
+      "sha256": "487d84f95c11d9f37ac4b73d5988de491bd264709597e60a165e76712a025ab4",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/app.css",
+      "sha256": "bb70d1a601a8eeb41aea2ee87c79422c02afc9ca511b9287e113760b823129e0",
+      "scope": "presentation/support",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/diagnostics-messages.ts",
+      "sha256": "3d08d4d1b5694eb6eba804a2a2ad79a5a85ca6a651715c8b617b4f269ae337a1",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/locale/catalog.ts",
+      "sha256": "12e4997a4d3e2e89a48abd1bdf5e9cb25ff605f9521f4d25fc2b73fb0a0d9d49",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "b744a9afab3228a33f753498c432b629effe5436680b540154aacbfbca5263f0",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "sha256": "60e90893121a453f26028eb28a1dcb72489259eeef5643f4c84a33b22d0f5887",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/recovery-reference-messages.ts",
+      "sha256": "ae5d99475c7fce4e67c80c0eb06ca39d5a0cc641fec130ec2fe88f53edd43f30",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/routes.ts",
+      "sha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/styles.d.ts",
+      "sha256": "28e0b0de8c50a7e1daa4f6dca791beb9dcf4084e164c9468694f579406a63d73",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradePages.tsx",
+      "sha256": "e1edb14df83173602d19d990080140a4154901bb52a3c10875d767d923088d8c",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradeTermsReview.tsx",
+      "sha256": "22cf9f0eed5e36a2a3817e6429c0307f52f6cf898f5d07918a4f02f6ac4e53e5",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/trade/display-text.ts",
+      "sha256": "34bc307987270784e9c5fa68789e6eb3d699d0fb9dcff6edb1f6a1f5576bf5c3",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-messages.ts",
+      "sha256": "0ec659ccaca58431b2b82f776ef3c3b6fa70ef9154678ca1bd7cb2a4f6a542f0",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+      "sha256": "f6cf76c77b9631c886ccc85b13d81e1684098015edccd360db9c89404352f415",
+      "scope": "implementation",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "apps/web/src/workers/vault.worker.ts",
+      "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "5456718bed05f18e4ac0e508909c84848907456ad24bf22e3c55fc1241fc9536",
+      "scope": "build",
+      "reviewer": "continue_sonar"
+    },
+    {
+      "path": "contracts/evm/abi/BasicEscrow.json",
+      "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "contracts/evm/foundry.toml",
+      "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
+    },
+    {
+      "path": "contracts/evm/script/DeployBasicEscrow.s.sol",
+      "sha256": "f50d312d37be76ce1b32767baccfe6053645b67d877bb4f0c90b8e86bf6341b8",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "contracts/evm/script/SendCall.s.sol",
+      "sha256": "8145ea9c5271556e10b4f3f258c043ee2813d79db92740f8093ea3298bd26c4a",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "contracts/evm/script/export-abi.sh",
+      "sha256": "6a5d9474c519a60a71458b3fb33566e0e7e65c1a2189ba5f01e96c59e2a2a710",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "package.json",
+      "sha256": "192182826cfce56f34a0e7c95b702e05cd5f86c954cc2526900fab770c92ed2e",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "packages/chain-evm/src/reader.ts",
+      "sha256": "c99586e244dc6bd94c850a356381b10a7a2a038a8c9fafe7e5adb9ca790863d8",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/diagnostics/index.ts",
+      "sha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/diagnostics/src/diagnostics.ts",
+      "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "f2feb3311d0301c7d02c4ba584ff5086dd5e400d98dbd1fd5e104fd95fecf751",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/authority.ts",
+      "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/payment-preflight.ts",
+      "sha256": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "sha256": "50001c753a7f5fd4d3a764896fba52019619511122edf3ad38f87588931e34cc",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "sha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/trade-composition.ts",
+      "sha256": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/escrow-evm/contracts/BasicEscrow.sol",
+      "sha256": "42c1020620dc987caf6c2af13139f635a3fb363016f7ab3288ecf8549a96e821",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/escrow-evm/contracts/TestActors.sol",
+      "sha256": "c3dcaf61eb11f6af19498dbc36ee3320918f4c44d0f9012affc5d8b3116b811f",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/escrow-evm/package-lock.json",
+      "sha256": "1153d63e76110354be9ec1be3ec23ae547a59e47e656b488abfab791d2aec35a",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/escrow-evm/package.json",
+      "sha256": "bf52edc22491ebe772a065513aa27dcb4ecec3bb58fefd9b1521d8bfd2f92ec9",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/escrow-evm/scripts/compile.mjs",
+      "sha256": "fe2d596ee48acd133b589d839f5c2325c44fcc91a9aca38982f0600d632b50dd",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/escrow-evm/scripts/evidence.mjs",
+      "sha256": "1baea73ac7dc1256603b369cbf35bfbb142f39fd7d309570803e27e6fd8dff09",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/exchange/index.ts",
+      "sha256": "c8363ff04c91d4bb05d3270966cafcd486b00ba6192706f88b5749bd0755555a",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "sha256": "263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/exchange/src/machine.ts",
+      "sha256": "9b895887b53ff79e675702a024afaf62d3a8a5ad561de9ffb2a9ca6b21faa2b2",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/exchange/src/messages.ts",
+      "sha256": "035f0f6f7c84245f19efba85d6f256372b042af1a6167a4c8a22617cccf64fc1",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/extensions/index.ts",
+      "sha256": "fa52854156cc34d5c01495afaf14024b71afdeb171fa42e87a56903065a666af",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/extensions/src/manifest.ts",
+      "sha256": "3a4fe523f3a9c2ff1932d879d2d8813a6a9694b8b739ad160ade0780f7526d79",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/extensions/src/registry.ts",
+      "sha256": "653b58de32a6f3cca66c3fde38e720e9a047e5a885b08b16c29fa315669266ec",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/identity/index.ts",
+      "sha256": "8bd31d2e15bb8c93ded20b89c6d8b5c7e7145b446e7ff27e1415f75e271d7f32",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "sha256": "806c73a3ea508a6393f35edae09ac16346a68f1031373f6e05a29c3872f4016d",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/identity/src/noble-provider.ts",
+      "sha256": "13141582aed59021cf103a42548e37bdced3d10dff4b3d39819ff7f8616cbbaa",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/messaging/index.ts",
+      "sha256": "33ad97305b743bff8e5172e0ed92c35b6b5b12be1bade28213f28685a266f8a5",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/messaging/src/envelope.ts",
+      "sha256": "84082a8ad1645a4fd3b5205de866639a2e763298bf33ad52160412d67eddd952",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/nostr-crypto/index.ts",
+      "sha256": "bf1d7cbe60b5d1e2c676fc57397fc113df93e96c292b2b8bea76dc3e7cd31f41",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/bytes.ts",
+      "sha256": "26692b46a8a2036d2d455245036f8f771c8798e1430fee09f1e59ffc96c66ab3",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/chacha20.ts",
+      "sha256": "95b4fa0d70efbce3e61ce7cbb7445643867d36e708bc7bbd58a4fd8041b9b20b",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/event.ts",
+      "sha256": "ffd49dcf254ace4b0c64cf0445fedd61ccae22d9da2a7c9e21178e2c5b3ac4d2",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip17.ts",
+      "sha256": "db78a289ed91201ff6d2194c9ab90bb02d03a9cd324c25c35e1233e3c938d786",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "sha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "sha256": "c4e7d40299f8392dc8b8a9f0eb00cb8eb953b08f453fc39f98b1b2b634d27507",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/provider.ts",
+      "sha256": "044e498bd230d2373a8d3ff2c593755f499ffebea2636c621e960e7462b7cc6f",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/nostr-crypto/src/relay-event-crypto.ts",
+      "sha256": "e3761b1af8377a0ecbb1c4fbca8d81df255e3d2f4ef4d39418993592a1801bbd",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "sha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/relay/src/ad.ts",
+      "sha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/relay/src/advertisement.ts",
+      "sha256": "718a130271cbce06099bd8ed25f447ff6c1a38ecf6a14d30412c85922b587d78",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/relay/src/local-pool.ts",
+      "sha256": "279a8cbd10feea0ed66200635f4f1c02927c837b72eaea8d88ff5ca7f5f1ce7e",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "c609546026dc895057aa26c4f5b6af1b5452e07f0247dbf75107038560bec98f",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha256": "d59f5ae03d8b8463cb9f2f875f6ec10a914dd3c28db549987930eadf14631fc2",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "079ac1a941b77111500a6642b95430571d89f3e2d93b377a583c27e9cb013f36",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-control.ts",
+      "sha256": "f847624e30aa27539808c57bcf30082ccc31d36c32bcaaf5283e78bd1b93e4fb",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-input.ts",
+      "sha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/evm-agreement-protocol.ts",
+      "sha256": "443cbf82644994864fc4374bd087b0835e868fdc8569811471b2f3bc9ccb014e",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/identity.ts",
+      "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/recovery-reference.ts",
+      "sha256": "56a9646c2dbbb26647398ac10e3217f8507c34773825d2d145f19d411b3bf30a",
+      "scope": "implementation",
+      "reviewer": "audit_storage (baseline) / audit_evm (T17)"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "baf83a2d5f5966e4fc7364839316fecefd71ab199b36aad973ab8272b050cfb4",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "sha256": "5d6ad0a31b5c0ff880f2e7202a602bf8aa961166f51db3dc8b821cc33dd8f9c5",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/transport.ts",
+      "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha256": "4465d3ef755c2137ee5a5da8b203e144aee7a3d27a36f39dc84011b3083441e6",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/index.ts",
+      "sha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/release-context.ts",
+      "sha256": "c161a996f3242c7efd3873c4f222e41ced61fe7ff8cc528dcc863da81171aae9",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/acceptance-gates.ts",
+      "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/content-policy.ts",
+      "sha256": "a87bfaf12b16f8545e88be15ead1ff99bc85bb48d3a6c90be8483abe059668a2",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/crypto-inventory.ts",
+      "sha256": "c25bca2268cc49f798b6be7a1ec158aebcc0ccf1bda96753552fe0d5c40087b8",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/release-locator.ts",
+      "sha256": "4005aedac3fe9cfbe38e2b6f8473e942ea232cf26971b00b9b332af02a24bbf1",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/release-manifest.ts",
+      "sha256": "6ada222cabe3ddf2026e9b97971a8bfde99e95b50e39c5818851c295a543d818",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/security/src/release-proof.ts",
+      "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/index.ts",
+      "sha256": "48810ac2a28cfa79323e36645309df61745e446823953c5a443c2e0883bdcd2b",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/backup-service.ts",
+      "sha256": "eace452cd17a81ac0204b75da40a5e6d09c18ce2d5f7d3ce4754be929bab37d0",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "sha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/migration-service.ts",
+      "sha256": "40dbc711ee9e4a8d0f5ad26a5915c413e4e8312b9d48870a3ffdb75a84bc2ed0",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/recovery-slot.ts",
+      "sha256": "2109cf7445bd8fbc58c22c410822030f50b8fb5bf909b5d46b3fcbeead8a08b4",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/vault-crypto.ts",
+      "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "sha256": "91ae261faaecbd49ffd7cc203036a4a7dafc9c2d94f6c1fd1db83c0ed6ee9d5e",
+      "scope": "implementation",
+      "reviewer": "audit_storage"
+    },
+    {
+      "path": "packages/transport/index.ts",
+      "sha256": "8214daf6696e4a76b0f23af1e9ed9072c097b0bff9445f852aac9d5385c785de",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/transport/src/http-driver.ts",
+      "sha256": "5b279fdff6ba77574c28e94628519df386e5bab459d4bd57ad79418bba3ecb42",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha256": "7d969fb3df67d0f12c67c1b861e18509508412f4877d7e6735c1d1bc310409ef",
+      "scope": "implementation",
+      "reviewer": "audit_domain_transport"
+    },
+    {
+      "path": "packages/wallet/src/discovery.ts",
+      "sha256": "b20d7e2759af9d4c8bdf863474f53a869df6929341e55eb3ef8febc72926e729",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement.ts",
+      "sha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "sha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-payment-preflight.ts",
+      "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-submit.ts",
+      "sha256": "b358d944ea211f5abd0041cff50d8ff086a3683cd889607bb208b01ae02a8a79",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e",
+      "scope": "implementation",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "scripts/check-crypto-cache.py",
+      "sha256": "5f06213fe9bb0ba604b7e14466422ab34a21dcf1a3fc93994826516fae12696c",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "sha256": "77f7f72309c427a94b8bd29a1a0abf2755152ca6b8f656f03618158a3481e46e",
+      "scope": "tooling/support",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "scripts/check-npm-registry-signatures.mjs",
+      "sha256": "360db30855c444bd11af952fe6eb26c890fa6c7a33610db7b531641d2057168c",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/check-upstream-source-correspondence.py",
+      "sha256": "39fe1cbb902385c3bb55263437cadbbe04c48d850f20573ac3f784b6303e5449",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/chat-history-browser.mjs",
+      "sha256": "c0f02b13639afbd2db4c0abf4d05c881a347e1cee9ef3f01d2ee970ade663555",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/diagnostics-browser.mjs",
+      "sha256": "d988feacd45653b641ec40e3be256301144785b0e18668bce2533c6d843f187c",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/g16-adapter-worker.mjs",
+      "sha256": "25815535d979c47dd3ae8afcfd9897f1a2fedda90edea83852b0bb4d82e66c89",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/g16-browser.mjs",
+      "sha256": "eba44bad3cbfab549db4ad6f4a218fb619b15bf13c1b27a1f88ddf668e7af937",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/g16-physical-worker.mjs",
+      "sha256": "1ee2f5eeac637a43d62dec19513ddf01c6f5a7c6c0c8a91ae948bf48d4aac303",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/recovery-references-browser.mjs",
+      "sha256": "616884690d841a91ec91990a49de966e220fea0e4d1021ee71a04c6d462f5c20",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/release-browser.mjs",
+      "sha256": "7a4f4af8c9b76be3d744ff0774e17f147ed52bed9dbb694731dba92f6f36574d",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fixtures/release-locator-browser.mjs",
+      "sha256": "61e1dabf2acdc068b760c422009376ca5e319aa4e4c31b38b500aa1af5f41f2b",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/fuzz-evm-agreement-input.mjs",
+      "sha256": "4fa379e441356d7476dfae17da05802ad784fe0066bc28916c215329c7a47b5c",
+      "scope": "tooling/support",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "scripts/initialize-specifications.sh",
+      "sha256": "8f232f561819fcd80116fc8d368cf269e68af897169ea9dd34ddc0474b14a320",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/lib/chromium-path.mjs",
+      "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/lib/is-main.mjs",
+      "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb",
+      "scope": "implementation",
+      "reviewer": "continue_sonar (T18 final shared guard)"
+    },
+    {
+      "path": "scripts/lib/testnet-fixture.mjs",
+      "sha256": "c7a3506bb01c4d6c96fa25fe462e53be0c94ed2fcd58e5abc2ae8a1b9083d166",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/recovery/build-evm.mjs",
+      "sha256": "986ccec90db4df3e98d61d69e7f30c409becd339b89fa3c8dc96a53e40391fc6",
+      "scope": "implementation",
+      "reviewer": "audit_storage (final rollback/file bounds) / audit_evm (T17)"
+    },
+    {
+      "path": "scripts/recovery/evm-cli.mjs",
+      "sha256": "67d9db1d4b627d61912a911650f4f7683fe0e39b78daa9938f904b6c38afd8cf",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "scripts/recovery/evm-recovery.mjs",
+      "sha256": "fec5fcf398c538ad40eb0e9cb8d431204fdcdbb8be13a177379d48db407002b2",
+      "scope": "implementation",
+      "reviewer": "audit_evm"
+    },
+    {
+      "path": "scripts/sepolia/deploy.mjs",
+      "sha256": "f0b9d0bd0503d07f77ac65d02e9a48de42ff55f73e662847fba0a3ac1416f2b4",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "sha256": "3c140a197bb17c19f43d3d7c95323c16da8b818bd2e986aaed5108dd08046bf7",
+      "scope": "implementation",
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
+    },
+    {
+      "path": "scripts/sepolia/owner-release.mjs",
+      "sha256": "ca366d7aa299fc134e051d0b938675267508eec63a5a965799d9870b95571f20",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/sepolia/record-deployment.mjs",
+      "sha256": "eadbf177119e706e63485323118389df21a8fdb5562278125824153f08fdaf54",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/sepolia/send.mjs",
+      "sha256": "0a55772d4c3fb9e8ca9435e8849eefb90b7afdf3209d5f926cf44c979cb472a2",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "sha256": "740e62c5363f21aa59735c07a3d7af42db0bb638d629bd2863eb5126546185e1",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/sepolia/verify-release.mjs",
+      "sha256": "fc4059a11b364de40adce86129b530ca9f8dd5153739515cdcf14f7ca7f97db8",
+      "scope": "implementation",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/spec_audit.py",
+      "sha256": "1ac834262840726cc559533dab783d951f07548e8ee86c08b15cc08ae7a5a643",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-chat-history-browser.mjs",
+      "sha256": "f62cbd978cf6329caae5dd101786336ea9a7e9fefe911139aa0c044bdf1627da",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-content-policy-browser.mjs",
+      "sha256": "3201993aa50e5e7b5384142309d103379a815c03181b5380971513e6e264c190",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-diagnostics-browser.mjs",
+      "sha256": "f39a01a4356f2dc91a722a48814976d68de14a49525a2c455ab5d93741d6557f",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-evm-local-trade.mjs",
+      "sha256": "a84762701ccf67c38a0d62bb4bb6e3b3ec7ff9dd6971e16417ffdbbdc320d0a4",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-evm-reconcile-local.mjs",
+      "sha256": "18794773e92e3023bb61d03acb8bba0f36b7f8d81ea8b8fab34c4e85ad3d65e7",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-evm-recovery-local.mjs",
+      "sha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-exchange-evm-local.mjs",
+      "sha256": "58f211e6e9ce50fc3873805753d57ce70f32838f1d248074d2696f3bbf13bb11",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-g16-adapter-browser.mjs",
+      "sha256": "87f3970e3c22d179b39f246bf9aa7b514609fb207b6f835001e8d4e88238e216",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-g16-browser.mjs",
+      "sha256": "fb2a00ad0ec4482df33ad444117b2d64f0382a8b7d5e68aed3a4788591aee3d7",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-g16-physical-browser.mjs",
+      "sha256": "da70d260aa57f7b7491e4a1d2df04e54c6cd1ebda2433f74b9306d9ed5d3b133",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-lifecycle-tabs-browser.mjs",
+      "sha256": "6baed78bcc6e16e89331fcef53f88ffd887c8b6626deabc5330caeadb30d5226",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-local-evm.mjs",
+      "sha256": "94aeeb1e5488efa0742cfb8e05f390fe978884efb1662786127a40c4232db840",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-payment-preflight-local.mjs",
+      "sha256": "a1603c9d6a81a80f86b8190316fcbe290120a7667d0b931d740c720a276711f1",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-recovery-references-browser.mjs",
+      "sha256": "21733fa10c812f40bcaf5192feee0dcee56cfcd1330ff40156c77a7cb70e6e29",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-release-browser.mjs",
+      "sha256": "d5f3159ce9887ee410e065285bac730810f250a31deb4516eda4dd01c3ba2fb1",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-release-locator-browser.mjs",
+      "sha256": "6560040c94dc354c05362fe264aee16bfca7119421d7e288b3a6a660389c1365",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-reseal-crash-browser.mjs",
+      "sha256": "7f95e445a2f313678aaddced9ad17a7592131a9e8cfffafbd6fc01099f6a8ac8",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-runtime-browser.mjs",
+      "sha256": "bc46d6f72a3d25a2c2e6a57a61a16193628798b4d3e1d8b7faf429d7a7b6c428",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-saved-reviews-browser.mjs",
+      "sha256": "651a8857a575a0014348ffd8093b760510d6ba4843091bd6ad441ac940bdffa6",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-sepolia-kit-local.mjs",
+      "sha256": "d485260e5ed44e8fceeaa87427d4dfeb9491bcc7fe8407469f53408cb47fde50",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-sepolia-trade-local.mjs",
+      "sha256": "0318df0e08d62fe88ab01b64d2cfded02db7d64e528a6b9397608083c11fa655",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-support/register-tsx.mjs",
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-support/tsx-hooks.mjs",
+      "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-testnet-build-browser.mjs",
+      "sha256": "8f8a6d82b2f72795a7ae79927d3bd159b810d03ee0a233d0efde5808975b78d5",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-trade-review-browser.mjs",
+      "sha256": "a6f78e30d355d787c9d2721f3b0db8b547a0103fba8d7b01c019f3556abfa08a",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-vault-browser.mjs",
+      "sha256": "e2fc72fff690caa5487f8c1b7f6408d9ac05be5726364f9797f8a534576febed",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/test-web-build-browser.mjs",
+      "sha256": "59aab7070a4050a63200ff9ed57de1b31921ae35c247a4f14c857b300f1a257e",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/acceptance-entry.test.mjs",
+      "sha256": "dc95fcad7cdd2d755b0b8f93ecb27ca347cad07af42a67f7665126ed94cf6511",
+      "scope": "tooling/support",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/capture-labels.test.mjs",
+      "sha256": "7b05d3805f0b6830558e907979407a53beedb58549e08a78c75b39ae2533ddf2",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/deployment-record.test.mjs",
+      "sha256": "0138857a6605c6b1cf7cf838bf6072910f7cdf0345b8de33fe131ef2a7b116fb",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/evm-agreement-fuzz.test.mjs",
+      "sha256": "a21488516035fefa2327717771e862215fd75bed16f0d0d76b9c85c65e35dfa5",
+      "scope": "tooling/support",
+      "reviewer": "continue_sonar (T18 shared guard) / audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/evm-recovery.test.mjs",
+      "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "sha256": "3ae6222402f9d3a250a59b9df360849b34211f201405bca8b7902ab9d8030d89",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/sepolia-hygiene.test.mjs",
+      "sha256": "1509baf4593639d24e8e745944ed05cd41e63479b37ab556e8bfc7cd4c623a77",
+      "scope": "tooling/support",
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
+    },
+    {
+      "path": "scripts/tests/sepolia-trade-state.test.mjs",
+      "sha256": "4e1331204d8bdf681fb7435ce80dd5e65fc1a1c0a40b7decc7c927dbe506a34c",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/test_g16_vectors.py",
+      "sha256": "e97c5c07a46fe4b0acfffdbdf3ed9c7f75a4f8a301dcf061b10400d47351cafa",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/tests/test_spec_audit.py",
+      "sha256": "b6a4529bbe0ecba0da88a88a79e2809f9055f53fea0453a08a032210269bb672",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "sha256": "efd62a22e2fbd5c973fbc5248658216fcd4492106c6cfd63b3837c0acd154cb3",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/vectors/g16_evm_independent.mjs",
+      "sha256": "650483be964b74bb94980f88dd9044e09ed3fd72b43b2477e9bdd6dca63a117a",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "scripts/vectors/g16_vectors.py",
+      "sha256": "f8bac7350d8d681972c2217b43b3c1996ec065b424e8559d28133920f83093c1",
+      "scope": "tooling/support",
+      "reviewer": "audit_runtime_build"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89",
+      "scope": "configuration/provenance",
+      "reviewer": "audit_runtime_build"
+    }
+  ]
+}

@@ -3,15 +3,15 @@
 ## 1. Metadata
 
 - **Specification ID:** PRIV-NIP17-TRADE-CHAT (roadmap G20)
-- **Version:** 2.0 (Iteration 3; reflects `packages/nostr-crypto` NIP-59/NIP-17 core)
+- **Version:** 2.0 (Iteration 3; native wire contract unchanged; implementation status includes optional durable text composition)
 - **Owner:** p2p-offramp maintainers
-- **Status:** Expanded design baseline — package-level gift-wrap and trade-chat core present (test-only, no relay transport, not wired into the app); independent review pending
+- **Status:** Design baseline; package-level gift-wrap/trade-chat core and optional authenticated durable text composition present, with separate native browser and canonical loopback relay/escrow evidence; not wired into the app; independent cryptographic review pending
 - **Section:** 05_ADVANCED_PRIVACY_INFRASTRUCTURE
 - **Feature:** feature_5.3_encrypted_messaging
 - **Module:** module_5.3.2_private_chat
 - **Delivery:** Core messaging/policy/display where consumed by Phase 2; other privacy extensions are opt-in Phase 3 or later, subject to the roadmap.
 - **Normative language:** MUST is a release gate; SHOULD deviations require a recorded reason.
-- **Implementation:** gift wrap [nip59.ts](../../../packages/nostr-crypto/src/nip59.ts), trade chat [nip17.ts](../../../packages/nostr-crypto/src/nip17.ts). These build on the NIP-01/NIP-44 core in [spec-nip44-messaging-adapter](../module_5.3.1_message_adapters/spec-nip44-messaging-adapter.md). The package has no facade, is not bundled, and `apps/web/**` and the runtime/Worker do not call it.
+- **Implementation:** gift wrap [nip59.ts](../../../packages/nostr-crypto/src/nip59.ts), trade chat [nip17.ts](../../../packages/nostr-crypto/src/nip17.ts), and optional [durable text composition](../../../packages/messaging/README.md). These build on the NIP-01/NIP-44 core in [spec-nip44-messaging-adapter](../module_5.3.1_message_adapters/spec-nip44-messaging-adapter.md). Private package facades exist; `apps/web/**` and the default runtime/Worker do not expose messaging identity or chat authority. Publication is owned by the caller, and is exercised through the canonical pool only in the isolated loopback acceptance harness.
 
 ## 2. Objective and boundary
 
@@ -22,11 +22,11 @@ The system authority contract governs this module: external wallets authorize sp
 Boundaries of this iteration:
 
 - **In scope:** the cryptographic and validation core. That covers building and opening rumor, seal and gift-wrap layers, binding them to a G16 trade, an authorization rule limited to the two counterparties, and per-session deduplication.
+- **Separate implemented composition:** `packages/messaging` validates the text-only application envelope and stores native authenticated proofs in existing encrypted G02 `chat` records. Every history read reauthenticates those proofs with the original messaging identity. Authenticated sender/message-ID deduplication survives vault reopen and G03 fresh-key restore; receipt order and timestamps have no economic authority. Existing canonical G21 relay publication/read is exercised by the local exchange/escrow harness, with no automatic publication or retry in the chat package.
 - **Not implemented:**
-  - relay connections, subscriptions, reconnect cursors and delivery states (G21);
+  - chat reconnect cursors, outbox and durable delivery states (G21);
   - kind 10050 relay-list discovery;
-  - encrypted G02 chat history and durable deduplication;
-  - the application message envelope (`spec-application-message-envelope`); the rumor `content` is opaque text bounded by its limits;
+  - non-text application envelope profiles; the bare native core still treats rumor `content` as opaque text bounded by its limits;
   - `subject`/`e` reply tags;
   - groups with more than two members.
 
@@ -151,7 +151,7 @@ Gift wrapping reduces exposed social graph but relay subscriptions, IP, timing, 
 
 Residual limits:
 
-- Deduplication is per session and in memory, so after a reload a relay can replay old messages until durable G02 history exists.
+- Bare `createTradeChat` deduplication is per session and in memory. Consumers using the optional G02 durable composition retain replay memory across reload/restore; consumers of the bare core must provide that persistence themselves.
 - Each counterparty sees the other's long-term messaging key. A compromised messaging key decrypts all past and future messages (no forward secrecy).
 - The self copy reveals to the sender's relays that the sender received a wrap.
 - `claimedCreatedAt` can be any value the sender chooses.
@@ -177,14 +177,15 @@ Recorded evidence (`npm test`):
   - abort, and close during an in-flight send;
   - invalid configuration;
   - hostile relay input, including a throwing Proxy, with redaction checks.
+- [Durable text composition tests](../../../packages/messaging/test/durable-chat.test.mjs) and [envelope tests](../../../packages/messaging/test/envelope.test.mjs) cover exact text schema/bounds, native proof authentication, durable deduplication/conflicts, CAS races, cancellation/drain, capacity refusal and source-preserving fresh-key recovery. [Native Chromium evidence](../../../scripts/test-chat-history-browser.mjs) exercises real IndexedDB, two-tab CAS, document reload and fresh-key restore independently of app networking.
+- [Canonical exchange/native escrow harness](../../../scripts/test-exchange-evm-local.mjs) (`npm run test:exchange:evm`) adds explicitly published bidirectional text through the canonical relay pool to both local release/refund journeys. Encrypted in-memory profiles persist before publication, reauthenticate and deduplicate after close/reopen, and restore chat alongside the unknown G12 funding intent under a fresh vault key without rewriting the source or resending. Chat closes before native settlement. Its owned loopback connector mapping proves no native TLS, production routing, cross-client interoperability or delivery guarantee.
 
 Still required and **not** claimed:
 
-- relay transport, reconnect gaps, relay rejection and acknowledgement handling (G21);
+- product chat recovery across relay reconnect gaps and recipient unavailability; no durable delivery/outbox contract is supplied by the local relay evidence;
 - interoperability with two independent clients (for example gift wraps produced by another NIP-17 implementation);
 - key rotation across messaging identities;
-- durable deduplication and encrypted history in G02;
-- application envelope validation;
+- non-text application envelope profiles and their provider-independent sequencing/expiry contracts;
 - browser and device matrix;
 - named G06 review of the pinned noble dependencies, including `@noble/ciphers` 2.4.0 for ChaCha20;
 - app/Worker wiring and UI.

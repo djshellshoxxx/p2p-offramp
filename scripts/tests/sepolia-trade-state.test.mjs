@@ -7,6 +7,7 @@ import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { runTrades } from '../sepolia/trade.mjs';
 import { SEPOLIA, keccakHex } from '../sepolia/lib.mjs';
 import { evmTermsHash } from '../../packages/wallet/src/evm-terms.ts';
+import { buildGetTrade } from '../../packages/wallet/src/evm-escrow.ts';
 
 // Native keypair/signature and terms-review checks run against a temporary fixture registry. Every RPC
 // request is intercepted; the first observation after negotiation fails before any transaction is sent.
@@ -44,17 +45,27 @@ function decodeTerms(data) {
     sellerNonce: word(11), acceptBeforeSeconds: number(12), escrowExpirySeconds: number(13) };
 }
 
-function interceptRpc(t, s) {
+function interceptRpc(t, s, observation) {
   const calls = [];
+  const selector = buildGetTrade(s.escrow, '0'.repeat(64)).data.slice(0, 10);
   t.mock.method(globalThis, 'fetch', async (_url, options) => {
     const request = JSON.parse(options.body); calls.push(request.method);
     let result, error;
     switch (request.method) {
       case 'eth_chainId': result = '0xaa36a7'; break;
-      case 'eth_getBlockByNumber': result = { number: '0x1', hash: request.params[0] === '0x0' ? SEPOLIA.genesisHash : `0x${'22'.repeat(32)}`, timestamp: '0x6553f100' }; break;
+      case 'eth_getBlockByNumber':
+        result = { number: '0x1', hash: request.params[0] === '0x0' ? SEPOLIA.genesisHash : `0x${'22'.repeat(32)}`, timestamp: '0x6553f100' };
+        if (observation && request.params[0] === '0x1') result = observation(result);
+        break;
       case 'eth_getCode': result = '0x6000'; break;
-      case 'eth_call': result = `0x${evmTermsHash({ chainId: SEPOLIA.chainId.toString(), verifyingContract: s.escrow }, decodeTerms(request.params[0].data))}`; break;
-      case 'eth_getLogs': error = { code: -32000, message: 'Synthetic stop before funding.' }; break;
+      case 'eth_call':
+        result = observation && request.params[0].data.startsWith(selector) ? `0x${'0'.repeat(384)}` :
+          `0x${evmTermsHash({ chainId: SEPOLIA.chainId.toString(), verifyingContract: s.escrow }, decodeTerms(request.params[0].data))}`;
+        break;
+      case 'eth_getLogs':
+        if (observation) result = [];
+        else error = { code: -32000, message: 'Synthetic stop before funding.' };
+        break;
       default: assert.fail(`Unexpected RPC method ${request.method}`);
     }
     return new Response(JSON.stringify({ jsonrpc: '2.0', id: request.id, ...(error ? { error } : { result }) }), { headers: { 'content-type': 'application/json' } });
@@ -88,6 +99,37 @@ test('valid saved labels still negotiate beside an explicitly selected operator 
     const generated = JSON.parse(await readFile(resolve(statePath, '..', 'r.release.terms-review.json'), 'utf8'));
     assert.equal(generated.format, 'p2p-offramp/local-terms-review/v1');
     assert.equal(calls.includes('eth_call'), true);
+    assert.equal(calls.some(method => method.startsWith('eth_send') || method.startsWith('eth_sign')), false);
+  } finally { await s.dispose(); }
+});
+
+test('an observation whose numbered block changes or disappears is refused before funding', async t => {
+  for (const [name, change] of [
+    ['hash', block => ({ ...block, hash: `0x${'33'.repeat(32)}` })],
+    ['height', block => ({ ...block, number: '0x2' })],
+    ['time', block => ({ ...block, timestamp: '0x6553f101' })],
+    ['missing', () => null],
+  ]) await t.test(name, async t => {
+    const s = await fixture(), calls = interceptRpc(t, s, change);
+    let fundingDecisions = 0;
+    try {
+      await assert.rejects(runTrades({ ...s, run: 'r', requireSignedRegistry: false,
+        beforeFund() { fundingDecisions++; throw Object.assign(new Error('Synthetic stop.'), { code: 'TEST_STOP' }); },
+      }), error => error?.code === 'OBSERVATION_REJECTED');
+      assert.equal(fundingDecisions, 0, 'no funding decision may use a torn state/header snapshot');
+      assert.equal(calls.some(method => method.startsWith('eth_send') || method.startsWith('eth_sign')), false);
+    } finally { await s.dispose(); }
+  });
+});
+
+test('a stable anchored absence still reaches the explicit pre-funding hook without a send', async t => {
+  const s = await fixture(), calls = interceptRpc(t, s, block => block);
+  let fundingDecisions = 0;
+  try {
+    await assert.rejects(runTrades({ ...s, run: 'r', requireSignedRegistry: false,
+      beforeFund() { fundingDecisions++; throw Object.assign(new Error('Synthetic stop.'), { code: 'TEST_STOP' }); },
+    }), error => error?.code === 'TEST_STOP');
+    assert.equal(fundingDecisions, 2, 'both planned trades accept the coherent native snapshot');
     assert.equal(calls.some(method => method.startsWith('eth_send') || method.startsWith('eth_sign')), false);
   } finally { await s.dispose(); }
 });

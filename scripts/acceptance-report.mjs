@@ -5,7 +5,7 @@
  */
 import { constants } from 'node:fs';
 import { lstat, open } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { isMain } from './lib/is-main.mjs';
 import { evaluateGate } from '../packages/security/src/acceptance-gates.ts';
 
 const MAX_INPUT_BYTES = 4 * 1024 * 1024;
@@ -73,7 +73,7 @@ export async function acceptanceReport(candidatePath, recordsPath) {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const result = process.argv.length === 4 ? await acceptanceReport(process.argv[2], process.argv[3]) : refused('INVALID_INPUT');
   process.stdout.write(JSON.stringify(result.report) + '\n');
   process.exitCode = result.exitCode;

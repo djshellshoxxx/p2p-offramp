@@ -83,6 +83,38 @@ these complete, add justified newly unblocked tasks, and continue until no scope
 specified task is actionable without an external input. Avoid redundant runners
 or speculative optional protocols just to expand the diff.
 
+The authorized continuation from merged PR #20 (`b700085`) resumes completed
+T1–T9 rather than repeating them. The current ownership plan admits T10 canonical
+chain-read consistency (latest terminal/mismatch state can veto finalized payment
+guidance; recheck an observation's numbered block after reading state), T11 the
+existing canonical exchange journey's durable authenticated chat/reopen/fresh-key
+recovery integration, and T12 independent whole-source audit, integration and
+guarded consolidation. Reproduce each defect or missing acceptance assertion,
+keep one writer per path, rotate reviewers, and record actual checks and remaining
+gates. Future intakes must still derive additional work from current source/specs.
+
+The same intake admits T13: implement the localization spec's shared English
+source catalog, typed variable/metadata validation and draft-only pseudolocale
+tests; migrate current UI text while preserving copy and canonical data. This
+does not approve translated locales, funds actions or accessibility acceptance.
+Keep this independent UI slice under one writer and a different reviewer.
+
+Whole-source continuation review also admits T14 the separate CLI observation
+anchor fix, T15 the canonical Foundry recipe/environment guard, and T16 requested
+deployment/receipt/canonical inclusion proof before record finality or pending
+guard clearing. Reproduce each original failure and rotate independent reviewers.
+T17 completes a bounded canonical-EVM G25 recovery package: authenticated original
+registry/ABI inputs, a portable Node bundle, exact read-only state/time checks and
+unsigned external-wallet release/refund/fixed-beneficiary withdrawal requests.
+Never use the isolated-profile decoder, send/sign/fund/replay, or let release
+expiry disable exits from original escrows. Validate the copied bundle outside
+the checkout with actual pinned native chain evidence. Preserve distribution,
+professional/device, qualified deployment and Solana gates explicitly.
+
+T18 closes the audit's acceptance-report entrypoint defect: direct and symlink
+execution must run the same evaluator and preserve invalid/blocked exit codes;
+library imports stay inert. Do not repeat completed T10–T18 on a future intake.
+
 ## Acceptance and delivery
 
 Each owner reproduces missing behavior, implements a complete thin slice, runs

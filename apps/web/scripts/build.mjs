@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
 import { loadTestnetTrust, TESTNET_TRUST_FORMAT } from './testnet-trust.mjs';
+import { isMain } from '../../../scripts/lib/is-main.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 /** Strings that only the synthetic demo module contains (registry release ID and pinned registry digest). */
@@ -69,7 +70,7 @@ export async function buildWeb({ delivery = 'meta', outDir, trustRoot, nowSecond
   await writeFile(resolve(outDir, 'local-build-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
   return evidence;
 }
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   if (process.argv.length > 3) throw new Error('BUILD_ARGUMENTS');
   const evidence = await buildWeb({ delivery: process.argv[2] ?? 'meta' });
   console.log(JSON.stringify({ localStaticBuild: true, syntheticDemo: evidence.syntheticDemo, ...evidence.inspection, signedRelease: false, releaseAcceptance: false }));

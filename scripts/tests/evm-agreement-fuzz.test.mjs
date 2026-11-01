@@ -397,7 +397,7 @@ test('generated text respects the declared 4097 UTF16-unit construction cap', ()
 test('CLI refuses a dot-dot-prefixed basename within an isolated source fixture', () => {
   withTemp(dir => {
     const root = path.join(dir, 'fixture-project');
-    const files = ['package.json', 'scripts/fuzz-evm-agreement-input.mjs',
+    const files = ['package.json', 'scripts/fuzz-evm-agreement-input.mjs', 'scripts/lib/is-main.mjs',
       'packages/schemas/src/evm-agreement-input.ts', 'packages/schemas/src/core.ts', 'packages/schemas/src/vault.ts'];
     for (const name of files) {
       const target = path.join(root, name);

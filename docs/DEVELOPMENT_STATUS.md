@@ -3,7 +3,10 @@
 Current source-derived continuation: [incomplete-work inventory](execution/INCOMPLETE-WORK-2026-10-31.md),
 [execution prompt](execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and
 [task ledger](../tasks/todo.md). The historical milestone descriptions below do
-not reopen tasks already completed in merged `eaa1fe5`.
+not reopen tasks already completed in merged `eaa1fe5` or PR #20 (`b700085`).
+Current continuation evidence and fresh whole-source audit are recorded in
+[the continuation report](execution/CONTINUATION-RESULT-2026-10-31.md) and
+[audit coverage](execution/CONTINUATION-AUDIT-2026-10-31.md).
 
 Current combined-source status and audit: [consolidation report](execution/CONSOLIDATED-AUDIT-2026-10-30.md). All published compatible work is integrated; historical local-only reports below are superseded.
 

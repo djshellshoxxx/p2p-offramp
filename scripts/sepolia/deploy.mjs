@@ -90,7 +90,7 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
   if (balance < minBalanceWei) fail('DEPLOYER_UNFUNDED');
   await checkCleanSource(root);
   await checkToolchain(env);
-  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }) }); } catch { fail('BUILD_FAILED'); }
   const created = await broadcastPreparedDeployment({ env, rpc, from, outDir, broadcastDir });
   const tx = created.hash, address = typeof created.contractAddress === 'string' ? created.contractAddress.toLowerCase() : null;
   // From here a contract may exist on chain: every failure names it, and the marker blocks a second deployment.

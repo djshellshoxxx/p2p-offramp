@@ -3,7 +3,8 @@
 import { createHash } from 'node:crypto';
 import { existsSync, statSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import { isMain } from './lib/is-main.mjs';
 
 export const MAPPING_VERSION = 'p2p-parser-fuzz-08/v2';
 const LABEL = 'p2p-parser-fuzz-08/nonsecurity-test-input';
@@ -453,6 +454,6 @@ export function main(argv) {
   return metrics.status === 'counterexample' ? 1 : 3;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+if (isMain(import.meta.url)) {
   process.exitCode = main(process.argv.slice(2));
 }

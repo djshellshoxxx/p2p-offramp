@@ -25,9 +25,9 @@ async function fixture(overrides = {}) {
   const state = { clock: 50, timestamp: 1500, latestTimestamp: null, latestHeight: 17, latestHash: OTHER,
     phase: 'funded', readCount: 0, headers: 0, code: CODE, stored: { ...terms }, ...overrides };
   const calls = [];
-  const encodedTrade = () => state.phase === 'absent' ? `0x${word(0).repeat(6)}` : `0x${[
-    state.stored.seller, state.stored.escrowExpirySeconds, ['absent', 'funded', 'released', 'refunded'].indexOf(state.phase),
-    state.stored.buyer, state.stored.asset, state.stored.amountBaseUnits,
+  const encodedTrade = (phase, stored) => phase === 'absent' ? `0x${word(0).repeat(6)}` : `0x${[
+    stored.seller, stored.escrowExpirySeconds, ['absent', 'funded', 'released', 'refunded'].indexOf(phase),
+    stored.buyer, stored.asset, stored.amountBaseUnits,
   ].map(word).join('')}`;
   const request = async args => {
     calls.push(structuredClone(args)); state.readCount++;
@@ -44,7 +44,9 @@ async function fixture(overrides = {}) {
         return { number: '0x10', hash: ANCHOR, timestamp: uint(state.timestamp) };
       }
       case 'eth_getCode': return state.code;
-      case 'eth_call': return args.params[0].data.startsWith(state.tradeIdSelector ?? '0x00') ? `0x${binding.tradeId}` : encodedTrade();
+      case 'eth_call': return args.params[0].data.startsWith(state.tradeIdSelector ?? '0x00') ? `0x${binding.tradeId}` :
+        args.params[1] === uint(state.latestHeight) && state.latestHeight !== 16 ?
+          encodedTrade(state.latestPhase ?? state.phase, state.latestStored ?? state.stored) : encodedTrade(state.phase, state.stored);
       default: assert.fail(`Unexpected read method ${args.method}`);
     }
   };
@@ -63,8 +65,40 @@ test('canonical finalized funded state yields read-only guidance; every call is 
   assert.ok(Object.isFrozen(value)); assert.ok(Object.isFrozen(value.binding));
   const allowed = new Set(['eth_chainId', 'eth_getBlockByNumber', 'eth_getCode', 'eth_call']);
   assert.ok(f.calls.every(call => allowed.has(call.method)));
-  assert.ok(f.calls.filter(call => ['eth_call', 'eth_getCode'].includes(call.method)).every(call => call.params[1] === '0x10'));
-  assert.ok(f.calls.length <= 12); assert.deepEqual(good(f.reader.view()), value);
+  assert.ok(f.calls.filter(call => call.method === 'eth_getCode' || call.method === 'eth_call' && call.params[0].data.startsWith(f.state.tradeIdSelector)).every(call => call.params[1] === '0x10'));
+  assert.deepEqual(f.calls.filter(call => call.method === 'eth_call' && !call.params[0].data.startsWith(f.state.tradeIdSelector)).map(call => call.params[1]), ['0x10', '0x11']);
+  assert.ok(f.calls.length <= 13); assert.deepEqual(good(f.reader.view()), value);
+});
+
+test('latest settled or absent state vetoes guidance while finalized funding still matches', async () => {
+  for (const latestPhase of ['released', 'refunded', 'absent']) {
+    const f = await fixture({ latestPhase });
+    const value = good(await f.reader.read());
+    assert.equal(value.decision, 'block', latestPhase); assert.equal(value.reason, 'unfunded');
+    assert.equal(value.economicPreparationAllowed, false); assert.equal(value.finalizedAnchor, ANCHOR);
+  }
+});
+
+test('latest funding cannot replace finalized funding and latest immutable mismatch vetoes guidance', async () => {
+  const unfinalized = await fixture({ phase: 'absent', latestPhase: 'funded' });
+  assert.equal(good(await unfinalized.reader.read()).reason, 'unfunded');
+  for (const patch of [{ buyer: `0x${'21'.repeat(20)}` }, { seller: `0x${'22'.repeat(20)}` }, { amountBaseUnits: '1' },
+    { asset: `0x${'23'.repeat(20)}` }, { escrowExpirySeconds: '2402' }]) {
+    const f = await fixture(); f.state.latestStored = { ...f.terms, ...patch };
+    const value = good(await f.reader.read());
+    assert.equal(value.decision, 'block'); assert.equal(value.reason, 'mismatch');
+  }
+});
+
+test('malformed latest trade or a reorg during its read cannot produce guidance', async () => {
+  for (const returned of ['0x', `0x${word(7).repeat(6)}`]) {
+    const f = await fixture({ intercept: args => args.method === 'eth_call' && args.params[1] === '0x11' ? returned : undefined });
+    refused(await f.reader.read(), 'INTEGRITY_FAILURE'); refused(f.reader.view(), 'UNAVAILABLE');
+  }
+  const shifted = await fixture({ intercept: (args, state) => {
+    if (args.method === 'eth_call' && args.params[1] === '0x11') state.latestHash = ANCHOR;
+  } });
+  refused(await shifted.reader.read(), 'INTEGRITY_FAILURE'); refused(shifted.reader.view(), 'UNAVAILABLE');
 });
 
 test('lagging finalized state cannot overstate the latest chain-time payment buffer', async () => {

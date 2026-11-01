@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { projectRecoveryReferences, parseRecoveryReferences, parseRuntimeCommand, parseRuntimeMessage, encodeIntentPayload, RECOVERY_REFERENCE_PAGE_SIZE } from '../index.ts';
+import * as recoveryApi from '../src/recovery-reference.ts';
 const profileId='a'.repeat(32), binding={chain:'evm',networkId:'evm:1',deploymentId:'escrow-v1',tradeId:'trade-1'};
 const intent=(n,change={})=>({version:1,intentId:Buffer.alloc(32,n).toString('base64url'),binding,account:'0x'+'12'.repeat(20),action:'fund',state:'finalized',walletGeneration:0,expectedEscrowState:'absent',preparedRequest:'PRIVATE_CALLDATA_BANK_SECRET',submission:{chain:'evm',hash:'0x'+'12'.repeat(32),nonce:'7'},replacementOf:null,createdAt:0,updatedAt:0,...change});
 const record=n=>({id:n.toString(16).padStart(32,'0'),kind:'journal',schemaVersion:1,payload:encodeIntentPayload(intent(n))});
@@ -38,4 +39,24 @@ test('changing array length and item getters cannot exceed the fixed page bound 
   assert.equal(reads,0);
   const one=[item];Object.defineProperty(one,'0',{get(){reads++;return item;},enumerable:true});
   assert.throws(()=>parseRecoveryReferences({authority:'unverified-offline-reference',revision:0,offset:0,nextOffset:null,totalJournalRecords:1,unsupported:0,items:one}));assert.equal(reads,0);
+});
+test('private export bytes preserve existing reference hints with strict bounded JSON and no authority promotion',()=>{
+  assert.equal(typeof recoveryApi.parseRecoveryReferenceExportBytes,'function');
+  const item=projectRecoveryReferences([record(1)],0,0).items[0];
+  const value={format:'p2p-offramp/offline-recovery-references/v1',authority:'unverified-offline-reference',localSnapshotRevision:7,items:[item]};
+  const bytes=text=>new TextEncoder().encode(text);
+  const parsed=recoveryApi.parseRecoveryReferenceExportBytes(bytes(JSON.stringify(value,null,2)));
+  assert.deepEqual(parsed,value);assert.equal(Object.isFrozen(parsed.items[0]),true);
+  for(const bad of [{...value,authority:'verified'},{...value,profileId:'hint'},{...value,items:[]},{...value,items:Array(65).fill(item)},
+    {...value,items:[item,item]},{...value,items:[{...item,preparedRequest:'PRIVATE'}]}])
+    assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(bytes(JSON.stringify(bad))));
+  assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(bytes(JSON.stringify(value).replace('"authority":','"authority":"verified","authority":'))));
+  assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(new Uint8Array(128*1024+1)));
+  assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(new Uint8Array([0xff])));
+  const oversized=new Uint8Array(128*1024+1);Object.defineProperty(oversized,'byteLength',{get(){throw Error('PRIVATE');}});
+  assert.throws(()=>recoveryApi.parseRecoveryReferenceExportBytes(oversized));
+  const shadowed=bytes(JSON.stringify(value));let byteLengthReads=0;
+  Object.defineProperty(shadowed,'byteLength',{get(){byteLengthReads++;return 0;}});
+  assert.deepEqual(recoveryApi.parseRecoveryReferenceExportBytes(shadowed),value);
+  assert.equal(byteLengthReads,0,'genuine view length must bypass caller-owned byteLength getters');
 });

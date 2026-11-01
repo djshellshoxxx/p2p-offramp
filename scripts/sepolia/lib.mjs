@@ -5,11 +5,10 @@
  */
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { realpathSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
 import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
@@ -24,25 +23,18 @@ const run = promisify(execFile);
 
 const FORGE_BASE_ENV = new Set(['PATH', 'HOME', 'TMPDIR', 'TMP', 'TEMP', 'LANG', 'LC_ALL', 'SystemRoot', 'USERPROFILE']);
 /**
- * Environment for a Forge child: OS basics, FOUNDRY_* settings and SEPOLIA_RPC_URL (read by foundry.toml), plus `extra`,
- * which carries the one key that script reads. Every other variable, including the other parties' private keys, is dropped.
+ * Environment for a Forge child: OS basics, the checked compiler path and SEPOLIA_RPC_URL (read by foundry.toml), plus `extra`,
+ * which carries the one key that script reads and controlled per-run runtime settings. Ambient compiler/profile/config overrides and the other parties' private keys are dropped.
  */
 export function forgeEnv(env, extra = {}) {
   const out = {};
   for (const [name, value] of Object.entries(env)) {
-    if (typeof value === 'string' && (FORGE_BASE_ENV.has(name) || name.startsWith('FOUNDRY_') || name === 'SEPOLIA_RPC_URL')) out[name] = value;
+    if (typeof value === 'string' && (FORGE_BASE_ENV.has(name) || name === 'FOUNDRY_SOLC' || name === 'SEPOLIA_RPC_URL')) out[name] = value;
   }
-  return { ...out, ...extra };
+  return { ...out, ...extra, FOUNDRY_CONFIG: resolve(EVM_DIR, 'foundry.toml'), FOUNDRY_PROFILE: 'default' };
 }
 
-/**
- * True when the module at `moduleUrl` is the script node was started with. Compares real paths as file URLs, so a
- * checkout path with spaces, non-ASCII characters or a symlink still runs the CLI (a raw `file://${argv[1]}` string
- * comparison silently skips it and exits 0).
- */
-export function isMain(moduleUrl) {
-  try { return process.argv[1] !== undefined && moduleUrl === pathToFileURL(realpathSync(process.argv[1])).href; } catch { return false; }
-}
+export { isMain } from '../lib/is-main.mjs';
 
 /** Toolchain pins, as recorded in contracts/evm/README.md (the kit test checks the README agrees). */
 export const TOOLCHAIN = Object.freeze({
@@ -50,6 +42,22 @@ export const TOOLCHAIN = Object.freeze({
   solcVersion: '0.8.30', solcSha256: 'f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7',
 });
 export class KitError extends Error { constructor(code) { super(code); this.name = 'KitError'; this.code = code; } }
+
+/** Compiler-affecting effective settings, including values otherwise inherited from global config.
+ * This is the pinned deployment recipe; an unusual local setup fails rather than silently changing artifact identity.
+ */
+const EFFECTIVE_RECIPE = Object.freeze({
+  src: 'src', test: 'test', script: 'script', out: 'out', libs: ['lib'],
+  auto_detect_remappings: false,
+  remappings: ['forge-std/=lib/forge-std/src/', '@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],
+  libraries: [], evm_version: 'cancun', auto_detect_solc: false, optimizer: true, optimizer_runs: 200,
+  optimizer_details: null, via_ir: false, use_literal_content: false, bytecode_hash: 'ipfs', cbor_metadata: true,
+  revert_strings: null, additional_compiler_profiles: [], compilation_restrictions: [],
+});
+export function checkFoundryRecipe(config, solc = TOOLCHAIN.solcVersion) {
+  if (typeof config !== 'object' || config === null || Array.isArray(config) || config.solc !== solc ||
+      Object.entries(EFFECTIVE_RECIPE).some(([key, value]) => JSON.stringify(config[key]) !== JSON.stringify(value))) throw new KitError('TOOLCHAIN_MISMATCH');
+}
 
 /** The forge on PATH and the solc Foundry will use must be the pinned ones; returns what was checked, for the record. */
 export async function checkToolchain(env = process.env) {
@@ -61,6 +69,10 @@ export async function checkToolchain(env = process.env) {
   let solc;
   try { solc = await readFile(solcPath); } catch { throw new KitError('TOOLCHAIN_MISSING'); }
   if (sha256Hex(solc) !== TOOLCHAIN.solcSha256) throw new KitError('TOOLCHAIN_MISMATCH');
+  let config;
+  try { config = JSON.parse((await run('forge', ['config', '--json'], { cwd: EVM_DIR, env: forgeEnv(env) })).stdout); }
+  catch { throw new KitError('TOOLCHAIN_MISMATCH'); }
+  checkFoundryRecipe(config, env.FOUNDRY_SOLC || TOOLCHAIN.solcVersion);
   return { forgeVersion, forgeCommit, solcVersion: TOOLCHAIN.solcVersion, solcSha256: TOOLCHAIN.solcSha256 };
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
+import { SOURCE_LOCALE } from './locale/en.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
@@ -80,7 +81,7 @@ export function App({ services, starting = false, startupError, trade = null, di
     }
   }
 
-  return <div className="app-shell">
+  return <div className="app-shell" lang={SOURCE_LOCALE.locale} dir={SOURCE_LOCALE.direction}>
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); main.current?.focus(); }}>{m.skip}</a>
     <aside className="sidebar">
       <a className="brand" href="#/home"><span className="brand-symbol" aria-hidden="true">↔</span><span>{m.appName}<small>{m.development}</small></span></a>

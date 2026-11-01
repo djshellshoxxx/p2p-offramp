@@ -71,7 +71,7 @@ function SessionList({ trade, snapshot, store }: { readonly trade: TradeReviewCo
     {snapshot.reviews.length === 0 ? <p>{p.sessionEmpty}</p> : <ul className="session-list">
       {snapshot.reviews.map(item => <li key={item.localId}>
         <a href={`#/trade/${item.localId}`}>{p.sessionItem(item.review.orderId, item.review.revision)}</a>
-        {item.source === 'synthetic-sample' ? <small className="helper"> (synthetic)</small> : null}
+        {item.source === 'synthetic-sample' ? <small className="helper">{p.syntheticBadge}</small> : null}
         <SavedActions trade={trade} item={item} store={store} busy={snapshot.saved.kind === 'busy'} />
         {' '}<button type="button" onClick={() => trade.remove(item.localId)}>{p.remove}</button>
       </li>)}

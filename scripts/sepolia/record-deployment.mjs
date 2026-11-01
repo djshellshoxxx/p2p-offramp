@@ -42,38 +42,86 @@ export function checkPublicEndpoint(publicEndpoint) {
   try { parseRegistryBytes(new TextEncoder().encode(JSON.stringify(probe))); } catch { fail('PUBLIC_ENDPOINT_INVALID'); }
 }
 
-async function inspect(rpc, txHash, expectedGenesis) {
+const HASH = /^0x[0-9a-f]{64}$/, ADDRESS = /^0x[0-9a-f]{40}$/;
+const quantity = value => typeof value === 'string' && /^0x(?:0|[1-9a-f][0-9a-f]{0,63})$/.test(value) ? BigInt(value) : fail('DEPLOYMENT_PROOF_INVALID');
+function header(raw) {
+  if (!raw || !HASH.test(raw.hash ?? '')) fail('DEPLOYMENT_PROOF_INVALID');
+  return { number: quantity(raw.number), hash: raw.hash };
+}
+function createAddress(sender, nonce) {
+  // RLP([20-byte sender, nonce]); nonce is bounded by the native EVM account width.
+  if (nonce >= 1n << 64n) fail('DEPLOYMENT_PROOF_INVALID');
+  let encoded = nonce === 0n ? '80' : nonce.toString(16).padStart(Math.ceil(nonce.toString(16).length / 2) * 2, '0');
+  if (nonce >= 128n) encoded = (128 + encoded.length / 2).toString(16) + encoded;
+  const payload = '94' + sender.slice(2) + encoded;
+  return '0x' + keccakHex(hexToBytes('0x' + (192 + payload.length / 2).toString(16) + payload)).slice(-40);
+}
+/** Native inclusion proof. Early canonical records are permitted; finality is never inferred without inclusion. */
+export async function inspectDeployment(rpc, txHash, expectedGenesis, expectedCreation) {
+  if (!HASH.test(txHash ?? '')) fail('TX_HASH_INVALID');
   const identity = await chainIdentity(rpc);
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
   if (identity.genesisHash !== expectedGenesis) fail('WRONG_GENESIS');
   const receipt = await rpc('eth_getTransactionReceipt', [txHash]);
   if (!receipt) fail('RECEIPT_MISSING');
-  if (receipt.status !== '0x1') fail('DEPLOY_REVERTED');
-  const address = typeof receipt.contractAddress === 'string' ? receipt.contractAddress.toLowerCase() : fail('NOT_A_DEPLOYMENT');
-  const code = hexToBytes(await rpc('eth_getCode', [address, 'latest']));
-  if (code.length === 0) fail('NO_CODE');
-  const allowlist = await rpc('eth_call', [{ to: address, data: ALLOWLIST_SELECTOR }, 'latest']);
-  const finalized = await rpc('eth_getBlockByNumber', ['finalized', false]).catch(() => null);
-  return { identity, receipt, address, runtimeKeccak: keccakHex(code), allowlist, finalizedBlock: finalized?.number ? BigInt(finalized.number) : null };
+  if (receipt.status !== '0x1' && receipt.status !== '0x0') fail('DEPLOYMENT_PROOF_INVALID');
+  const reverted = receipt.status === '0x0';
+  const address = reverted ? null : typeof receipt.contractAddress === 'string' ? receipt.contractAddress.toLowerCase() : fail('NOT_A_DEPLOYMENT');
+  if (!reverted && (!ADDRESS.test(address) || address === '0x' + '0'.repeat(40))) fail('NOT_A_DEPLOYMENT');
+  const from = typeof receipt.from === 'string' ? receipt.from.toLowerCase() : '';
+  if (receipt.transactionHash !== txHash || !ADDRESS.test(from) || !HASH.test(receipt.blockHash ?? '') || receipt.to !== null) fail('DEPLOYMENT_PROOF_INVALID');
+  const height = quantity(receipt.blockNumber), tag = '0x' + height.toString(16);
+  const transaction = await rpc('eth_getTransactionByHash', [txHash]);
+  if (!transaction || transaction.hash !== txHash || transaction.from?.toLowerCase() !== from || transaction.to !== null ||
+      transaction.blockHash !== receipt.blockHash || quantity(transaction.blockNumber) !== height || !reverted && createAddress(from, quantity(transaction.nonce)) !== address) fail('DEPLOYMENT_PROOF_INVALID');
+  if (expectedCreation !== undefined && transaction.input?.toLowerCase() !== expectedCreation) fail('DEPLOYMENT_CREATION_MISMATCH');
+  const anchor = header(await rpc('eth_getBlockByNumber', [tag, false]));
+  if (anchor.number !== height || anchor.hash !== receipt.blockHash) fail('DEPLOYMENT_PROOF_INVALID');
+  const createdAddress = createAddress(from, quantity(transaction.nonce));
+  // Clients differ: Anvil may return null, while geth derives the CREATE address even on failure.
+  // Accept either only after authenticating the transaction and canonical inclusion above.
+  if (reverted && receipt.contractAddress !== null && (typeof receipt.contractAddress !== 'string' || receipt.contractAddress.toLowerCase() !== createdAddress)) fail('DEPLOYMENT_PROOF_INVALID');
+  const code = hexToBytes(await rpc('eth_getCode', [createdAddress, tag]));
+  if (reverted ? code.length !== 0 : code.length === 0) fail(reverted ? 'DEPLOYMENT_PROOF_INVALID' : 'NO_CODE');
+  const allowlist = reverted ? null : await rpc('eth_call', [{ to: address, data: ALLOWLIST_SELECTOR }, tag]);
+  const finalizedRaw = await rpc('eth_getBlockByNumber', ['finalized', false]).catch(() => null);
+  const finalized = finalizedRaw === null ? null : header(finalizedRaw);
+  const check = header(await rpc('eth_getBlockByNumber', [tag, false]));
+  if (check.number !== anchor.number || check.hash !== anchor.hash) fail('DEPLOYMENT_PROOF_INVALID');
+  if (finalized) {
+    const finalCheck = header(await rpc('eth_getBlockByNumber', ['0x' + finalized.number.toString(16), false]));
+    if (finalCheck.number !== finalized.number || finalCheck.hash !== finalized.hash) fail('DEPLOYMENT_PROOF_INVALID');
+  }
+  const identityAfter = await chainIdentity(rpc);
+  if (identityAfter.chainId !== identity.chainId || identityAfter.genesisHash !== identity.genesisHash) fail('DEPLOYMENT_PROOF_INVALID');
+  // Only a successful exact inclusion proof can authorize the deployer's reverted-attempt cleanup.
+  if (reverted) fail('DEPLOY_REVERTED');
+  return { identity, receipt, transaction, address, runtimeKeccak: keccakHex(code), allowlist, finalizedBlock: finalized?.number ?? null };
 }
 
-/** Clear only this verified native deployment's guard. Unknown attempts need finalized account/nonce
- * and canonical inclusion proof, not a missing file, imported terminal label or a new deployment request.
+/** Both known and hashless attempts need canonical native proof. Known attempts may be recorded before
+ * finality; unknown attempts additionally require finalized inclusion and exact account/nonce binding.
+ * Failure preserves the guard; no imported record or pending hash alone authorizes clearing it.
  */
 export async function clearRecordedAttempt({ pendingPath, txHash, record, rpc }) {
   const pending = await readFile(pendingPath, 'utf8').then(JSON.parse, () => null);
-  if (pending?.tx === txHash) { await rm(pendingPath, { force: true }); return true; }
-  if (pending?.format !== 'p2p-offramp/deployment-attempt/v1' || pending.state !== 'broadcast-unknown' ||
-      pending.tx !== null || pending.chainId !== record.chainId || pending.from !== record.deployer || !record.finalizedAtRecording) return false;
-  let transaction, canonical;
+  const known = pending?.tx === txHash;
+  const unknown = pending?.format === 'p2p-offramp/deployment-attempt/v1' && pending.state === 'broadcast-unknown' && pending.tx === null;
+  if (!known && !unknown) return false;
   try {
-    transaction = await rpc('eth_getTransactionByHash', [txHash]);
-    if (!transaction || transaction.hash !== txHash || transaction.from?.toLowerCase() !== pending.from || transaction.to !== null ||
-        BigInt(transaction.nonce) !== BigInt(pending.nonce) || BigInt(transaction.blockNumber) !== BigInt(record.deployBlock) ||
-        transaction.blockHash !== record.deployBlockHash) return false;
-    canonical = await rpc('eth_getBlockByNumber', [transaction.blockNumber, false]);
-    if (!canonical || canonical.hash !== record.deployBlockHash || BigInt(canonical.number) !== BigInt(record.deployBlock)) return false;
+    if (record.initializationTx !== txHash || record.chainId !== SEPOLIA.chainId.toString()) return false;
+    const proof = await inspectDeployment(rpc, txHash, record.genesisIdentity);
+    if (proof.address !== record.contractAddress || proof.receipt.from.toLowerCase() !== record.deployer ||
+        proof.receipt.blockHash !== record.deployBlockHash || quantity(proof.receipt.blockNumber).toString() !== record.deployBlock ||
+        proof.runtimeKeccak !== record.codeDigest?.runtime) return false;
+    if (known && (pending.address !== undefined && pending.address !== proof.address || pending.chainId !== undefined && pending.chainId !== record.chainId ||
+        pending.from !== undefined && pending.from !== record.deployer || pending.nonce !== undefined && BigInt(pending.nonce) !== quantity(proof.transaction.nonce))) return false;
+    if (unknown && (pending.chainId !== record.chainId || pending.from !== record.deployer || BigInt(pending.nonce) !== quantity(proof.transaction.nonce) ||
+        proof.finalizedBlock === null || proof.finalizedBlock < quantity(proof.receipt.blockNumber))) return false;
   } catch { return false; }
+  // Do not remove a guard replaced while native reads were outstanding.
+  const current = await readFile(pendingPath, 'utf8').then(JSON.parse, () => null);
+  if (JSON.stringify(current) !== JSON.stringify(pending)) return false;
   await rm(pendingPath, { force: true }); return true;
 }
 
@@ -86,16 +134,20 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   // Provenance: the chain is compared with the committed sources built by the pinned toolchain, nothing else.
   const sourceCommit = await checkCleanSource(root);
   const toolchain = await checkToolchain(env);
-  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env) }); } catch { fail('BUILD_FAILED'); }
+  try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }) }); } catch { fail('BUILD_FAILED'); }
   const artifact = await escrowArtifact();
   const rpc = rpcClient(rpcUrl);
-  const primary = await inspect(rpc, txHash, expectGenesis);
+  const primary = await inspectDeployment(rpc, txHash, expectGenesis);
   if (primary.runtimeKeccak !== artifact.runtimeKeccak) fail('RUNTIME_CODE_MISMATCH');
+  const expectedCreation = '0x' + Buffer.from(artifact.creation).toString('hex') + '20'.padStart(64, '0') + '0'.repeat(64);
   if (expectedDeployer !== undefined && primary.receipt.from?.toLowerCase() !== expectedDeployer) fail('UNEXPECTED_DEPLOYER');
   // An ABI-encoded empty address[]: offset 0x20, length 0. Native-only deployments must have no ERC-20 allowlist.
   if (primary.allowlist !== '0x' + '20'.padStart(64, '0') + '0'.repeat(64)) fail('ALLOWLIST_NOT_EMPTY');
+  if (primary.transaction.input?.toLowerCase() !== expectedCreation) fail('DEPLOYMENT_CREATION_MISMATCH');
   if (crosscheckUrl) {
-    const second = await inspect(rpcClient(crosscheckUrl), txHash, expectGenesis);
+    let second;
+    try { second = await inspectDeployment(rpcClient(crosscheckUrl), txHash, expectGenesis); }
+    catch (error) { if (error instanceof RecordError) fail('CROSSCHECK_MISMATCH'); throw error; }
     if (second.address !== primary.address || second.runtimeKeccak !== primary.runtimeKeccak || second.receipt.blockHash !== primary.receipt.blockHash) fail('CROSSCHECK_MISMATCH');
   }
   const deployBlock = BigInt(primary.receipt.blockNumber);
