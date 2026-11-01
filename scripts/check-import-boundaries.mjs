@@ -2,7 +2,7 @@
 /** Static source-boundary checks. This does not prove runtime isolation or inspect arbitrary bundler transforms. */
 import { readdir, realpath } from 'node:fs/promises';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { isMain } from './lib/is-main.mjs';
 import { API } from 'typescript/unstable/sync';
 import {
   isCallExpression,
@@ -267,7 +267,7 @@ export async function inspectImportBoundaries(rootDir = process.cwd()) {
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (isMain(import.meta.url)) {
   const root = resolve(process.argv[2] ?? process.cwd());
   const result = await inspectImportBoundaries(root);
   for (const finding of result.findings) {

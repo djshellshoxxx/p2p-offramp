@@ -5,11 +5,10 @@
  */
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { realpathSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
 import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
@@ -35,14 +34,7 @@ export function forgeEnv(env, extra = {}) {
   return { ...out, ...extra, FOUNDRY_CONFIG: resolve(EVM_DIR, 'foundry.toml'), FOUNDRY_PROFILE: 'default' };
 }
 
-/**
- * True when the module at `moduleUrl` is the script node was started with. Compares real paths as file URLs, so a
- * checkout path with spaces, non-ASCII characters or a symlink still runs the CLI (a raw `file://${argv[1]}` string
- * comparison silently skips it and exits 0).
- */
-export function isMain(moduleUrl) {
-  try { return process.argv[1] !== undefined && moduleUrl === pathToFileURL(realpathSync(process.argv[1])).href; } catch { return false; }
-}
+export { isMain } from '../lib/is-main.mjs';
 
 /** Toolchain pins, as recorded in contracts/evm/README.md (the kit test checks the README agrees). */
 export const TOOLCHAIN = Object.freeze({

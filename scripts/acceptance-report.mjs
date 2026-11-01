@@ -3,9 +3,9 @@
  * Files configure evidence, never review authority. No CLI/env hook loads a reviewer or executable policy;
  * an otherwise complete candidate remains pending until a trusted library caller verifies its reviews.
  */
-import { constants, realpathSync } from 'node:fs';
+import { constants } from 'node:fs';
 import { lstat, open } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { isMain } from './lib/is-main.mjs';
 import { evaluateGate } from '../packages/security/src/acceptance-gates.ts';
 
 const MAX_INPUT_BYTES = 4 * 1024 * 1024;
@@ -73,16 +73,7 @@ export async function acceptanceReport(candidatePath, recordsPath) {
   }
 }
 
-/** Eval/print modes can put an imported module in argv[1]; that does not make it the entrypoint.
- * Ordinary script invocation can retain a symlink in argv while Node canonicalizes its module URL.
- */
-function isCliEntry() {
-  if (process.execArgv.some(arg => /^(?:-(?:e|p|pe)$|--(?:eval|print)(?:=|$))/.test(arg))) return false;
-  if (!process.argv[1]) return false;
-  try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
-  catch { return false; }
-}
-if (isCliEntry()) {
+if (isMain(import.meta.url)) {
   const result = process.argv.length === 4 ? await acceptanceReport(process.argv[2], process.argv[3]) : refused('INVALID_INPUT');
   process.stdout.write(JSON.stringify(result.report) + '\n');
   process.exitCode = result.exitCode;
