@@ -74,7 +74,7 @@ Native verification with pinned Foundry/Anvil 1.5.1 and solc 0.8.30 passes:
 | Canonical encrypted exchange/chat/recovery/settlement | 10 checks; four messages, two reopens, fresh-key recovery, exactly four sends/markers |
 | Native payment preflight | 7 checks; 163 reads, zero adapter send/sign calls |
 | Native journal reconciliation | 5 checks |
-| Deployment hygiene/proof + native Sepolia kit | 13 focused tests + 10 native checks |
+| Deployment hygiene/proof + native Sepolia kit | 14 focused tests + 10 native checks |
 | Operator trade state + native trade | 8 focused tests + 13 native checks |
 | Portable recovery package | 5 focused tests + 6 native checks; 141 reads, zero runtime send/sign calls, copied Node-only executable over registered HTTPS |
 | Isolated escrow profile | 7 integration tests + separate two-party native/ERC-20 journal/recovery journey |
@@ -87,9 +87,25 @@ graphs. No dependency pins were changed.
 Integration caught an obsolete legacy guard-test fixture after T16 added required
 native proof. Its fixture now supplies identity/CREATE/inclusion/code data,
 retains the mismatch negatives and tests native finality instead of trusting an
-imported flag. The combined 13-test suite and native kit pass. G20 status wording
+imported flag. The updated suite and native kit pass. G20 status wording
 also explicitly calls its specification a design baseline; structural checks
 were preserved. No failing check was skipped or weakened.
+
+Hosted CI on initial `5a6dfac` then exposed a recipe portability error: the guard
+expected unused auto-detected vendor-test remappings found only in the local
+recursive checkout. The committed recipe now disables remapping discovery and
+the guard requires exactly its two explicit mappings. Independent nine-test,
+hostile-global-config and populated/empty vendor-layout probes pass. The entire
+affected canonical native sequence, 82 Foundry tests and unchanged ABI readback
+pass again after committing the recipe. The final combined hygiene/proof count
+is 14. This fixes the cause without weakening the guard or changing CI settings.
+
+Removing inferred mappings changes Solidity metadata and therefore raw creation
+and runtime digests; those old digests must not qualify new artifacts. The
+executable runtime with CBOR metadata removed is byte-identical (SHA-256
+`c0f2fa69fef2e9faa053a3d65f61a5ad7d099df56b6469911c53fceeb1809e0d`).
+No live deployment or original archived profile was rewritten. New deployments
+record their actual new code hash; recovery keeps each original deployment's pin.
 
 Local CLI tests require the managed environment's network/IPC capability even
 when using no external network. Default restricted child-process attempts caused

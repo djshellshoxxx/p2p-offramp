@@ -85,6 +85,13 @@ recipe. Restrict inherited build overrides and verify the actual canonical recip
 with the pinned toolchain; preserve explicit controlled output-directory and
 compiler-path seams. A different reviewer checks this auditor-authored fix.
 
+Hosted PR #21 at `5a6dfac` reopened T15: the strict recipe guard assumed extra
+auto-detected vendor-test remappings present locally but absent in the fresh CI
+checkout. The same owner now also owns `contracts/evm/foundry.toml` for an explicit
+deterministic remapping policy. Require the exact committed mappings rather than
+ignoring drift. A different reviewer checks configuration/bytecode equivalence;
+root commits the clean recipe before native provenance checks can run.
+
 T16 entered after both tooling and EVM reviewers independently reproduced a
 deployment receipt mismatch accepted as finalized by height. Bind the requested
 CREATE transaction, receipt and canonical numbered block; pin code/allowlist reads

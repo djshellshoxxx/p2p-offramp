@@ -35,8 +35,12 @@ snapshots must agree before any observation is published.
 
 T15 is a reproduced build-provenance issue: inherited compiler settings can differ
 from the recipe the deployment record claims. It is tracked explicitly rather
-than dismissed as style. The fix passed a different reviewer's eight tests and
-actual hostile-environment pinned-toolchain probe.
+than dismissed as style. The fix passed a different reviewer's final nine tests,
+actual hostile-environment pinned-toolchain probe and hostile global-config
+refusal. Hosted CI also reproduced checkout-dependent inferred vendor mappings;
+the final committed recipe disables inference and requires exactly two explicit
+mappings. Both vendor layouts agree. Raw metadata digests change while executable
+runtime is identical; previous raw deployment hashes are not reused.
 
 T16's wrong/orphan deployment receipt and unproved guard clearing were reproduced
 by two reviewers. Final proof binds the requested CREATE, derived address, receipt

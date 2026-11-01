@@ -264,9 +264,9 @@
     },
     {
       "path": "contracts/evm/foundry.toml",
-      "sha256": "b31b96164e21583c15db5623b849a18a67601268b5f07ebcfa077a968e1454b1",
+      "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64",
       "scope": "configuration/provenance",
-      "reviewer": "audit_evm"
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
     },
     {
       "path": "contracts/evm/script/DeployBasicEscrow.s.sol",
@@ -966,9 +966,9 @@
     },
     {
       "path": "scripts/sepolia/lib.mjs",
-      "sha256": "95c796eabe2aa36c6a8db1a2ec816bf9a781998d2552ba8a12e59a83a1b879fe",
+      "sha256": "b9051a0d22f5f68b32155248b0c032c43b644d55239640489dc6b15c9833c619",
       "scope": "implementation",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
     },
     {
       "path": "scripts/sepolia/owner-release.mjs",
@@ -1206,9 +1206,9 @@
     },
     {
       "path": "scripts/tests/sepolia-hygiene.test.mjs",
-      "sha256": "47d0a1af141ab6c78cea7ba79485289b8a2a07f071c9dfca46b70146595db299",
+      "sha256": "d3a1db515ba6865c8ca75d1199d5d8150b9e36175e7491f740d4a71fe7ee196e",
       "scope": "tooling/support",
-      "reviewer": "audit_runtime_build"
+      "reviewer": "audit_storage (final deterministic recipe) / audit_runtime_build / audit_evm (T16 fixture)"
     },
     {
       "path": "scripts/tests/sepolia-trade-state.test.mjs",
