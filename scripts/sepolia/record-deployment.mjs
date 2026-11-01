@@ -68,17 +68,17 @@ export async function inspectDeployment(rpc, txHash, expectedGenesis, expectedCr
   const reverted = receipt.status === '0x0';
   const address = reverted ? null : typeof receipt.contractAddress === 'string' ? receipt.contractAddress.toLowerCase() : fail('NOT_A_DEPLOYMENT');
   if (!reverted && (!ADDRESS.test(address) || address === '0x' + '0'.repeat(40))) fail('NOT_A_DEPLOYMENT');
-  if (reverted && receipt.contractAddress !== null) fail('DEPLOYMENT_PROOF_INVALID');
   const from = typeof receipt.from === 'string' ? receipt.from.toLowerCase() : '';
   if (receipt.transactionHash !== txHash || !ADDRESS.test(from) || !HASH.test(receipt.blockHash ?? '') || receipt.to !== null) fail('DEPLOYMENT_PROOF_INVALID');
   const height = quantity(receipt.blockNumber), tag = '0x' + height.toString(16);
   const transaction = await rpc('eth_getTransactionByHash', [txHash]);
+  const createdAddress = transaction && createAddress(from, quantity(transaction.nonce));
   if (!transaction || transaction.hash !== txHash || transaction.from?.toLowerCase() !== from || transaction.to !== null ||
-      transaction.blockHash !== receipt.blockHash || quantity(transaction.blockNumber) !== height || !reverted && createAddress(from, quantity(transaction.nonce)) !== address) fail('DEPLOYMENT_PROOF_INVALID');
+      transaction.blockHash !== receipt.blockHash || quantity(transaction.blockNumber) !== height || !reverted && createdAddress !== address ||
+      reverted && receipt.contractAddress !== null && (typeof receipt.contractAddress !== 'string' || receipt.contractAddress.toLowerCase() !== createdAddress)) fail('DEPLOYMENT_PROOF_INVALID');
   if (expectedCreation !== undefined && transaction.input?.toLowerCase() !== expectedCreation) fail('DEPLOYMENT_CREATION_MISMATCH');
   const anchor = header(await rpc('eth_getBlockByNumber', [tag, false]));
   if (anchor.number !== height || anchor.hash !== receipt.blockHash) fail('DEPLOYMENT_PROOF_INVALID');
-  const createdAddress = createAddress(from, quantity(transaction.nonce));
   const code = hexToBytes(await rpc('eth_getCode', [createdAddress, tag]));
   if (reverted ? code.length !== 0 : code.length === 0) fail(reverted ? 'DEPLOYMENT_PROOF_INVALID' : 'NO_CODE');
   const allowlist = reverted ? null : await rpc('eth_call', [{ to: address, data: ALLOWLIST_SELECTOR }, tag]);

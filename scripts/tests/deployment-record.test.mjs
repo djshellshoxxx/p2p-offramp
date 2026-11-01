@@ -80,6 +80,8 @@ test('reverted status is actionable only after native CREATE inclusion and empty
  }
  const reverted=(m,p,v)=>m==='eth_getTransactionReceipt'?{...v,status:'0x0',contractAddress:null}:m==='eth_getCode'?'0x':v;
  await assert.rejects(inspectDeployment(fixture(reverted).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOY_REVERTED');
+ const revertedWithDerivedAddress=(m,p,v)=>m==='eth_getTransactionReceipt'?{...v,status:'0x0',contractAddress:address}:m==='eth_getCode'?'0x':v;
+ await assert.rejects(inspectDeployment(fixture(revertedWithDerivedAddress).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOY_REVERTED');
  await assert.rejects(inspectDeployment(fixture((m,p,v)=>m==='eth_getTransactionReceipt'?{...v,status:'0x0',contractAddress:null}:v).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOYMENT_PROOF_INVALID','a substituted reverted receipt cannot hide existing code');
  await assert.rejects(inspectDeployment(fixture((m,p,v)=>m==='eth_getBlockByNumber'&&p[0]==='0x5'&&v.read===2?{...v,hash:finalHash}:reverted(m,p,v)).rpc,tx,SEPOLIA.genesisHash),error=>error.code==='DEPLOYMENT_PROOF_INVALID');
 });
