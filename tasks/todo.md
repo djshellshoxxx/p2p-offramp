@@ -229,3 +229,8 @@ T99 investigation complete: enforced destination policy excludes cdn.playwright.
 
 
 Final selected-test source identity **12bb8f1650227479e744cd899273f533eb94fe53**: T98/T100 accepted, all1,713 current package cases pass with zero failures/skips/cancellations and502 unchanged captured source/test/config rows. All282 production-file bytes remain cf73208/a2; fresh-lab1,712 retains its actual clean a2 checkpoint. T38 only requires final exact-head hosted CI/scanners/reviews and guarded delivery/main readback.
+
+
+| Task | Status | Owner / exclusive scope / acceptance |
+|---|---|---|
+| T101 | DONE | Root narrow2-workflow literal-block repair; independent audit_build_ops AST/duplicate-key/pin/command review; all3 workflows parse, exact prior shell commands unchanged. D8 hosted definition failures/no jobs preserved. New-head functional/scanner/review results remain T38 live delivery. |

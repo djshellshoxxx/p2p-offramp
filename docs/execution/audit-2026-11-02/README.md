@@ -99,3 +99,9 @@ All 30 compatible live branch heads were present in the integrated ancestry at
 the current readback. The separate custodial proposal remains preserved. Final
 guarded merge, tested-tree equality, current audit hashes and clean main readback
 must be checked live; this source document does not certify its future merge.
+
+Late configuration delta [T101](../reviews/T101-final.md) fixes the hosted YAML
+definition failure using literal block scalars; decoded oracle commands, pins,
+permissions and gates are unchanged. All three workflows parse with distinct
+review. Prior failed/no-job D8 runs remain retained; actual new-head hosting
+results stay in PR26. Production282-file/36220-line counts are unchanged.

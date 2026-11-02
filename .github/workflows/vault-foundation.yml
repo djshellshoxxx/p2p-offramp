@@ -115,6 +115,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install pinned independent crypto oracle
-        run: python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
+        run: |
+          python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
       - run: npm run test:specs
       - run: npm run check:specs
