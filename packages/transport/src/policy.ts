@@ -211,7 +211,7 @@ export class SessionTransportPolicy {
     if (this.#mode !== input) { this.#mode = input; this.#transition('CANCELLED'); }
   }
   inspect(input: TransportChannel): Readonly<RouteEvidence> {
-    const channel = transportChannel(input); this.#expire(); this.#inspectionExpiries.delete(channel);
+    const channel = transportChannel(input); this.#expire();
     let coverage: RouteEvidence['coverage'] = this.#closed ? 'unsupported' : 'unknown', adapterId = 'unconfigured';
     if (!this.#closed && !this.#changing) {
       try {
@@ -222,7 +222,9 @@ export class SessionTransportPolicy {
           if (evidence.channel !== channel) throw new Error();
           adapterId = evidence.adapterId;
           if (this.#observers.size && generation === this.#generation && !this.#closed && evidence.expiresAt !== null && now !== null && evidence.expiresAt > now)
-            this.#inspectionExpiries.set(channel, evidence.expiresAt);
+            // Earlier observers may still hold that channel's previous snapshot. Keep its first
+            // outstanding deadline until expiry/invalidation, even if another inspection renews it.
+            this.#inspectionExpiries.set(channel, Math.min(this.#inspectionExpiries.get(channel) ?? Infinity, evidence.expiresAt));
           coverage = this.#closed || generation !== this.#generation || this.#blocked.has(adapterId) ||
             (evidence.expiresAt !== null && (now === null || evidence.expiresAt <= now)) ? 'unknown' : evidence.coverage;
         }
