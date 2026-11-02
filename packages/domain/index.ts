@@ -10,3 +10,5 @@ export { createPrivacyViewReader } from './src/privacy-view.ts';
 export type { PrivacyView, PrivacyViewReader, PrivacyTransportPort, PrivacyObservationPort, PrivacyObservationSnapshot, PrivacyCapabilityObservation, PrivacyIndicator, PrivacyRouteIndicator, PrivacyReason, VaultPrivacyState, MessagingPrivacyState, ProofPrivacyState } from './src/privacy-view.ts';
 export { createJourneyProjection } from './src/journey-view.ts';
 export type { JourneyStep, JourneyView, JourneyProjection, JourneyPaymentGuidanceObservation, JourneyPaymentGuidancePort } from './src/journey-view.ts';
+export { createObservationDispatcher, OBSERVATION_TTL_MS, MAX_HINT_OBSERVERS } from './src/observation-dispatcher.ts';
+export type { ObservationDispatcher, ObservationDispatcherOptions, ContextHintPublisher, ContextHintSnapshot } from './src/observation-dispatcher.ts';
