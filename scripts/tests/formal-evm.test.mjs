@@ -53,8 +53,10 @@ test('owned process groups drain on success, timeout and output overflow includi
  const directory=await mkdtemp(join(tmpdir(),'formal-process-'));const pids=[];
  const dead=async pid=>{try{const stat=await readFile(`/proc/${pid}/stat`,'utf8');return stat.slice(stat.lastIndexOf(')')+2).startsWith('Z');}catch(error){if(error.code==='ENOENT')return true;throw error;}};
  try{for(const mode of['success','timeout','overflow']){
-  const file=join(directory,mode);const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},5000)'],{stdio:'ignore'});child.unref();fs.writeFileSync(${JSON.stringify(file)},String(child.pid));${mode==='timeout'?'setTimeout(()=>{},5000)':mode==='overflow'?"process.stdout.write('x'.repeat(8192));setTimeout(()=>{},5000)":"process.stdout.write('done');process.stderr.write('separate')"}`;
-  const result=await processBounded(process.execPath,['-e',script],{timeoutMs:mode==='timeout'?300:2000,maxOutput:mode==='overflow'?1024:8192});const pid=Number(await readFile(file,'utf8'));pids.push(pid);
+  const file=join(directory,mode);
+  // Pass data as arguments; the child program stays a literal independent of paths.
+  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},5000)'],{stdio:'ignore'});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));const mode=process.argv[2];if(mode==='timeout')setTimeout(()=>{},5000);else if(mode==='overflow'){process.stdout.write('x'.repeat(8192));setTimeout(()=>{},5000);}else{process.stdout.write('done');process.stderr.write('separate');}`;
+  const result=await processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?300:2000,maxOutput:mode==='overflow'?1024:8192});const pid=Number(await readFile(file,'utf8'));pids.push(pid);
   for(let i=0;i<40&&!await dead(pid);i++)await new Promise(resolve=>setTimeout(resolve,25));assert.equal(await dead(pid),true,mode+' left descendant alive');
   if(mode==='success'){assert.equal(result.code,0);assert.equal(result.stdout,'done');assert.equal(result.stderr,'separate');}if(mode==='timeout')assert.equal(result.timedOut,true);if(mode==='overflow')assert.equal(result.limited,true);
  }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
