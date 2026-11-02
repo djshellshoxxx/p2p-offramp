@@ -328,6 +328,36 @@ test('publish: strict refusal sends nothing; forged events are rejected locally;
   });
 });
 
+test('publish: missing OK over an owned loopback WebSocket settles unknown without replay', { timeout: 5000 }, async t => {
+  let suppressedAcks = 0;
+  await withRelays(1, [{ onMessage(_conn, message) {
+    if (message[0] !== 'EVENT') return false;
+    suppressedAcks++; return true;
+  } }], async (fakes, keep) => {
+    const relay = fakes[0], ad = await signedAd(), pool = keep(createRelayPool(opts(fakes)));
+    assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
+    await until(() => stateOf(pool, 'relay-a').state === 'open' && relay.received.some(message => message[0] === 'REQ'));
+    const connectionsBeforePublish = relay.connectCount;
+    let settled = false;
+    const pending = pool.publish(ad).then(result => { settled = true; return result; });
+    await until(() => relay.received.some(message => message[0] === 'EVENT'));
+    const connectionsAfterEvent = relay.connectCount;
+    assert.deepEqual(relay.received.filter(message => message[0] === 'EVENT'), [['EVENT', ad]], 'the actual TCP peer received the one explicitly published event');
+    assert.equal(settled, false, 'receipt of EVENT without OK does not acknowledge publication');
+    const result = await pending;
+    assert.deepEqual(result, { ok: true, value: [{ eventId: ad.id, relayId: 'relay-a', status: 'unknown' }] });
+    assert.equal(stateOf(pool, 'relay-a').state, 'open', 'missing acknowledgement times out without closing the subscribed socket');
+    await wait(FAST.publishTimeoutMs);
+    assert.equal(relay.received.filter(message => message[0] === 'EVENT').length, 1, 'no automatic EVENT replay during another acknowledgement timeout window');
+    assert.equal(suppressedAcks, 1);
+    assert.equal(relay.connectCount, connectionsAfterEvent, 'missing OK starts no additional connection after the explicit publication');
+    assert.equal(relay.received.filter(message => message[0] === 'REQ').length, 1, 'the live subscription is not restarted by publish timeout');
+    t.diagnostic(JSON.stringify({ fixture: 'owned-loopback-ws-missing-publish-ack', receivedEvents: relay.received.filter(message => message[0] === 'EVENT').length, suppressedDefaultAcks: suppressedAcks,
+      outcome: result.value[0].status, connectionsBeforePublish, connectionsAfterEvent, finalConnections: relay.connectCount,
+      publishTimeoutMs: FAST.publishTimeoutMs, postTimeoutObservationMs: FAST.publishTimeoutMs }));
+  });
+});
+
 test('relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled', () => {
   const dir = new URL('../src/', import.meta.url);
   const facade = readFileSync(new URL('../index.ts', import.meta.url), 'utf8');

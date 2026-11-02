@@ -1,0 +1,182 @@
+{
+  "schema": "p2p-offramp/bounded-relay-ack-evidence/v1",
+  "task": "T100",
+  "status": "FROZEN_READY_FOR_ROOT_INDEPENDENT_REVIEW",
+  "observedAtUtc": "2026-11-02T19:02:01.754840+00:00",
+  "baseHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+  "exclusiveWrittenPath": "packages/relay/test/pool.test.mjs",
+  "original": {
+    "sha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60",
+    "bytes": 32169,
+    "nodeTestDeclarations": 27,
+    "snapshot": {
+      "path": "/workspace/work/t100-relay-ack/pool.before.test.mjs",
+      "bytes": 32169,
+      "sha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60"
+    }
+  },
+  "current": {
+    "sha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09",
+    "bytes": 34583,
+    "nodeTestDeclarations": 28,
+    "snapshot": {
+      "path": "/workspace/work/t100-relay-ack/pool.final.test.mjs",
+      "bytes": 34583,
+      "sha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09"
+    }
+  },
+  "delta": {
+    "addedTestcases": 1,
+    "addedLines": 30,
+    "allOriginalBytesAndAssertionsPreserved": true,
+    "proof": "Removing the exact new testcase block yields byte-for-byte original file. No existing test, assertion, limit, helper, production module or runner changed.",
+    "testcase": "publish: missing OK over an owned loopback WebSocket settles unknown without replay",
+    "patch": {
+      "path": "/workspace/work/t100-relay-ack/one-test.patch",
+      "bytes": 2832,
+      "sha256": "7bdba576235a47ab5ccff0ef0521c57d7f952a4e1e27b35444f898e2f79fa0e1"
+    }
+  },
+  "nativeTcpEvidence": {
+    "observations": {
+      "fixture": "owned-loopback-ws-missing-publish-ack",
+      "receivedEvents": 1,
+      "suppressedDefaultAcks": 1,
+      "outcome": "unknown",
+      "connectionsBeforePublish": 1,
+      "connectionsAfterEvent": 2,
+      "finalConnections": 2,
+      "publishTimeoutMs": 800,
+      "postTimeoutObservationMs": 800
+    },
+    "mechanism": "Existing startFakeRelay binds node:http to127.0.0.1 and performs actual HTTP101/RFC6455 upgrade over TCP. Existing loopbackRelayFixture maps the G05-bound logical WSS URL to exactly that owned plain WS target. onMessage returns true for the EVENT, suppressing its default OK handler.",
+    "assertions": [
+      "Owned peer receives exactly the one explicit EVENT payload and no altered/replayed event.",
+      "Receipt of EVENT alone does not settle the pending publication; absent OK resolves the existing800ms timeout as unknown.",
+      "Held subscription remains open; another800ms observation window sees no EVENT replay or added connection and still only one REQ.",
+      "Initial subscription and explicit publication have separate sockets: observed1before publish,2after EVENT,2after timeout observation."
+    ],
+    "cleanup": "Existing withRelays finally closes the pool and awaits stop of all owned HTTP/WebSocket relay fixtures. Test completion is after that cleanup; no new cleanup helper."
+  },
+  "verification": {
+    "command": "/workspace/work/t87-native-diagnostic/node24.22.1/node --import ./scripts/test-support/register-tsx.mjs --test packages/relay/test/pool.test.mjs",
+    "node": "v24.22.1",
+    "nodeExecutable": {
+      "path": "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+      "bytes": 126879696,
+      "sha256": "e32e2d16081cf644f88392934288086e7662529d0d43277c34f7aad2207cfafb"
+    },
+    "registeredTsx": true,
+    "normalPerFileTestIsolation": true,
+    "managedLocalTcpAndIpcCapability": true,
+    "exitCode": 0,
+    "tests": 28,
+    "pass": 28,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "log": {
+      "path": "/workspace/work/t100-relay-ack/pool-final.log",
+      "bytes": 3543,
+      "sha256": "101319b4852e5d3f365211c91ca0fea94dbcce41c231e8047f05f5716a430f00"
+    },
+    "diffWhitespace": "git diff --check on only the owned path exits0; no full suite run"
+  },
+  "preservedFirstAttempt": {
+    "log": {
+      "path": "/workspace/work/t100-relay-ack/pool-current.log",
+      "bytes": 4138,
+      "sha256": "ff4d9dbec9c5454873404bdf5a645ff57c47e0d44d2830ed11971ae9e46c47cf"
+    },
+    "exitCode": 1,
+    "tests": 28,
+    "pass": 27,
+    "fail": 1,
+    "cause": "New extra assertion incorrectly assumed subscription and publication shared one socket. EVENT count, unknown result and no EVENT replay already passed; production publishOne intentionally opens its own publication socket.",
+    "correction": "Only the new unjustified absolute connection assertion changed to a post-EVENT baseline comparison; diagnostics distinguish subscription and explicit publication connections. Existing assertions were untouched.",
+    "interpretation": "Test-author assumption failure, not a production defect or a relaxation of any original required behavior."
+  },
+  "reusedNativeTcpEvidence": {
+    "reason": "Existing actual TCP failover/refusal and drop/reconnect/REQ replay were already present; no duplicate testcase was added. Both are also retained and pass in the affected28-case run.",
+    "originalLineNumbers": [
+      94,
+      110
+    ],
+    "originalNames": [
+      "failover: a relay that never connects exhausts six reconnects, then the next approved relay is used",
+      "reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery"
+    ],
+    "runs": [
+      {
+        "sourceCommit": "a1cda134f9f33dd3a39e07c3915b9a71331e9020",
+        "log": {
+          "path": "/workspace/work/t38-root-package-tests.log",
+          "bytes": 183262,
+          "sha256": "4fb1651c5ce45e32f30e53babdf65e7ceac06f04534de8b484ce570d48bccb43"
+        },
+        "rootPackageCases": 1712,
+        "retainedActualTcpCases": [
+          "\u2714 failover: a relay that never connects exhausts six reconnects, then the next approved relay is used (107.257411ms)",
+          "\u2714 reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery (33.149493ms)"
+        ],
+        "testFileSha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60"
+      },
+      {
+        "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "log": {
+          "path": "/workspace/work/t71-final-lab/foundation/command-2.log",
+          "bytes": 182994,
+          "sha256": "ea346186f7c075d39d8da9d80a8fa3fd85e181f9c6cdffce803e2169fa594805"
+        },
+        "rootPackageCases": 1712,
+        "retainedActualTcpCases": [
+          "\u2714 failover: a relay that never connects exhausts six reconnects, then the next approved relay is used (102.124524ms)",
+          "\u2714 reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery (27.464435ms)"
+        ],
+        "testFileSha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60"
+      }
+    ],
+    "rootSourceGuard": {
+      "path": "/workspace/work/t38-root-package-source-hashes.json",
+      "bytes": 56658,
+      "sha256": "bb7034bc09888de12a724e80bce35913cef5cc506a47fdf08293dfd4c090117d"
+    },
+    "freshLabQualification": {
+      "path": "/workspace/work/t71-final-lab/qualification.json",
+      "bytes": 24160,
+      "sha256": "726f4306dbe880eeaa72b63c449daafe180f3f7d0b5eee08719a3f3a32cbcaeb"
+    },
+    "scope": "Earlier1712-case runs bind original27-case pool file. They do not claim to include this new28th testcase or a fresh install of changed T100 source."
+  },
+  "unchangedScopeBindings": [
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "36dc97f50fbebdd7d4f3fe15a95509c6da1391a33817587328e01ad8c85f40e9",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/harness.mjs",
+      "sha256": "c87370deea81f9cfae6e4719db3696c9a81b2a88fc928a273ae71301f485b0c1",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/fake-relay.mjs",
+      "sha256": "255704badb94595fefd4d7bdc923808fe2ac7024da2307ab3843cba795cec4a2",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/crypto-double.mjs",
+      "sha256": "767f8df4c137e6ab8f1e7c89ee92dadb30bc0152621019d654645c5e54a9eb2b",
+      "unchangedFromCommit": true
+    }
+  ],
+  "limits": [
+    "Finite missing-OK timeout plus one additional800ms no-replay observation; not an indefinite no-network-work proof. Existing subscription reconnect behavior remains separately tested.",
+    "Logical WSS identity maps explicitly to owned plain loopback WS. No native TLS/private routing, third-party relay, production endpoint or network interoperability approval.",
+    "signedAd uses existing injected crypto-double fixture. Functional framing/signature-shaped data here does not certify cryptography or a provider.",
+    "No new outbox/cursor/provider/wallet/crypto authority, production/helper/runner/dependency/source edits outside the one test, weakening of old assertions, skips, full/native/browser/solver suites or commits.",
+    "Root owns independent review/run, the changed assurance test-file hash, final aggregate/audit/docs refresh and delivery."
+  ],
+  "ownership": "Frozen; exclusive writer ownership returned to root.",
+  "commits": false
+}

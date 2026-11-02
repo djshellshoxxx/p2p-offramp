@@ -11,6 +11,9 @@
  *   3. dropped: the pending fund is removed from anvil's pool; past the expiry it reconciles to dropped and a
  *      same-nonce successor confirms.
  *   4. receipt path: fund -> finalized, then release through the lifecycle -> confirmed.
+ *   5. retention: a released escrow with deferred credit stays protected until a finalized native withdrawal.
+ *   6. native rollback: one explicit fund reaches a finalized receipt, then an owned pre-fund snapshot is
+ *      reverted and alternate blocks replace its inclusion; fresh clients persist/recover reorged without resending.
  * Run: npm run test:evm:reconcile  (needs Foundry in ~/.foundry/bin or on PATH).
  */
 import assert from 'node:assert/strict';
@@ -354,6 +357,92 @@ async function main() {
       assert.equal(receipt.deletedCount,2);assert.equal(scoped.store.writes,beforeWrites+1);assert.equal(val(await scoped.vault.list(scoped.session.sessionId),'deferred copy deletion readback').length,0);assert.equal(await rpc('eth_getTransactionCount',[seller,'pending']),beforeNonce);assert.deepEqual(await client.store.get(profileId),original);
       pass('retention: actual Released deferred-credit blocks old leaf; finalized successful withdrawal mints zero-credit lease for one copy-only CAS, source preserved with no sends or reconciliation writes');
     }finally{retention.dispose();authority.dispose();scoped.close();client.close();}
+  }
+  // ---- 6. An actual finalized fund is reorganized away; only the chain rolls back, never the encrypted journal. ----
+  {
+    const walletMethods = [];
+    const trackedWallet = args => { walletMethods.push(args.method); return request(args); };
+    let client = await openClient(storePath, profileId, escrow, trackedWallet);
+    try {
+      const terms = await makeTerms(domain, seller, buyer, 10n ** 16n), input = fundInput(terms);
+      const tradeCall = buildGetTrade(escrow, input.binding.tradeId);
+      const tradeAt = async tag => decodeTrade(await rpc('eth_call', [{ to: tradeCall.to, data: tradeCall.data }, tag]));
+      const beforeHead = await rpc('eth_getBlockByNumber', ['latest', false]);
+      const nonceBefore = BigInt(await rpc('eth_getTransactionCount', [seller, 'latest']));
+      const escrowBalanceBefore = BigInt(await rpc('eth_getBalance', [escrow, 'latest']));
+      const runtimeBefore = await rpc('eth_getCode', [escrow, 'latest']);
+      assert.notEqual(runtimeBefore, '0x');
+      assert.equal((await tradeAt('latest')).state, 'absent', 'this distinct trade does not exist before the explicit fund');
+      const snapshot = await rpc('evm_snapshot');
+      const prepared = val(await client.life.prepare(input), 'native rollback fund prepare');
+      assert.equal(BigInt(prepared.request.nonce), nonceBefore);
+      const sent = val(await client.life.submit(prepared), 'native rollback fund submit');
+      const walletCallsAfterSubmit = [...walletMethods];
+      assert.deepEqual(walletCallsAfterSubmit, ['eth_accounts', 'eth_chainId', 'eth_sendTransaction'], 'the wallet performs one explicit initial send and no separate signing request');
+      await mine();
+      const finalized = await reconcileUntil(client.life, prepared.intentId, 'finalized', 'native rollback fund finality');
+      assert.deepEqual([finalized.evidence, finalized.intent.state, finalized.intent.submission.hash, finalized.escrowState], ['receipt', 'finalized', sent.hash, 'funded']);
+      const receipt = await rpc('eth_getTransactionReceipt', [sent.hash]);
+      const includedBlock = await rpc('eth_getBlockByNumber', [receipt.blockNumber, false]);
+      const fundedHead = await rpc('eth_getBlockByNumber', ['latest', false]);
+      const finalizedHead = await rpc('eth_getBlockByNumber', ['finalized', false]);
+      assert.equal(receipt.status, '0x1'); assert.equal(receipt.transactionHash, sent.hash);
+      assert.equal(receipt.blockHash, includedBlock.hash); assert.ok(BigInt(receipt.blockNumber) <= BigInt(finalizedHead.number));
+      assert.equal((await tradeAt('finalized')).state, 'funded'); assert.equal(tradeMatchesTerms(await tradeAt('finalized'), terms), true);
+      assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'latest'])), nonceBefore + 1n);
+      assert.equal(BigInt(await rpc('eth_getBalance', [escrow, 'latest'])), escrowBalanceBefore + BigInt(terms.amountBaseUnits));
+      assert.equal(client.journal.isTerminalVerified(prepared.intentId), true);
+      const intentIds = val(await client.journal.list(), 'native rollback original journal').map(intent => intent.intentId).sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
+      client.close(); client = undefined;
+
+      assert.equal(await rpc('evm_revert', [snapshot]), true, 'the owned snapshot actually restores the pre-fund native chain');
+      assert.equal((await rpc('eth_getBlockByNumber', ['latest', false])).hash, beforeHead.hash);
+      assert.equal(await rpc('eth_getTransactionReceipt', [sent.hash]), null, 'the original finalized receipt is gone on the native node');
+      const alternateBlocks = Number(BigInt(fundedHead.number) - BigInt(beforeHead.number));
+      assert.ok(alternateBlocks > 0 && alternateBlocks <= 80, 'the alternate chain uses the existing bounded finality window');
+      await rpc('evm_setNextBlockTimestamp', [Number(BigInt(includedBlock.timestamp) + 1n)]);
+      await mine(alternateBlocks);
+      const alternateBlock = await rpc('eth_getBlockByNumber', [receipt.blockNumber, false]);
+      const alternateFinalized = await rpc('eth_getBlockByNumber', ['finalized', false]);
+      assert.notEqual(alternateBlock.hash, receipt.blockHash, 'the original inclusion height now has a different canonical block');
+      assert.ok(BigInt(alternateFinalized.number) >= BigInt(receipt.blockNumber));
+      assert.equal(await rpc('eth_getTransactionReceipt', [sent.hash]), null);
+      assert.equal(await rpc('eth_getTransactionByHash', [sent.hash]), null);
+      assert.equal((await tradeAt('latest')).state, 'absent'); assert.equal((await tradeAt('finalized')).state, 'absent');
+      assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'latest'])), nonceBefore, 'the canonical account nonce rolled back');
+      assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'pending'])), nonceBefore, 'no wallet resend waits in the pool');
+      assert.equal(BigInt(await rpc('eth_getBalance', [escrow, 'latest'])), escrowBalanceBefore);
+      assert.equal(await rpc('eth_getCode', [escrow, 'latest']), runtimeBefore, 'the real BasicEscrow deployment survives the funding rollback');
+
+      client = await openClient(storePath, profileId, escrow, trackedWallet);
+      const recovered = val(await client.life.recover(), 'native rollback fresh-client recover').find(intent => intent.intentId === prepared.intentId);
+      assert.deepEqual([recovered.state, recovered.submission.hash], ['finalized', sent.hash], 'the encrypted finalized journal survived the native rollback');
+      const revisionBefore = client.journal.currentRevision(), writesBefore = client.store.writes;
+      const reorged = val(await client.life.reconcile(prepared.intentId), 'native rollback fresh-client reconcile');
+      assert.deepEqual([reorged.outcome, reorged.evidence, reorged.intent.state, reorged.intent.submission.hash, reorged.escrowState], ['reorged', 'receipt', 'reorged', sent.hash, 'absent']);
+      assert.equal(reorged.intent.preparedRequest, finalized.intent.preparedRequest);
+      assert.equal(reorged.intent.submission.nonce, finalized.intent.submission.nonce);
+      assert.equal(client.journal.isTerminalVerified(prepared.intentId), false);
+      assert.equal(client.journal.currentRevision(), revisionBefore + 1); assert.equal(client.store.writes, writesBefore + 1, 'one encrypted CAS durably records reorged');
+      assert.deepEqual(val(await client.journal.list(), 'native rollback reconciled journal').map(intent => intent.intentId).sort((left, right) => left < right ? -1 : left > right ? 1 : 0), intentIds, 'reconciliation creates no replacement preparation');
+      client.close(); client = await openClient(storePath, profileId, escrow, trackedWallet);
+      const durable = val(await client.life.recover(), 'native rollback durable fresh-client recover').find(intent => intent.intentId === prepared.intentId);
+      assert.deepEqual([durable.state, durable.submission.hash, durable.preparedRequest], ['reorged', sent.hash, finalized.intent.preparedRequest]);
+      const stored = val(await client.vault.list(client.session.sessionId), 'native rollback encrypted journal readback').filter(record => record.kind === 'journal').map(record => decodeIntentPayload(record.payload)).find(intent => intent.intentId === prepared.intentId);
+      assert.deepEqual([stored.state, stored.submission.hash], ['reorged', sent.hash]);
+      assert.deepEqual(val(await client.journal.list(), 'native rollback reopened journal').map(intent => intent.intentId).sort((left, right) => left < right ? -1 : left > right ? 1 : 0), intentIds);
+      assert.deepEqual(walletMethods, walletCallsAfterSubmit, 'finality, native rollback, reconciliation and both fresh recoveries never call the wallet again');
+      assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'latest'])), nonceBefore);
+      assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'pending'])), nonceBefore);
+      console.log(JSON.stringify({ fixture: 'g12-native-finalized-receipt-rollback', chainId: '31337', intentId: prepared.intentId, originalHash: sent.hash,
+        originalReceiptBlock: receipt.blockNumber, originalReceiptBlockHash: receipt.blockHash, alternateCanonicalBlockHash: alternateBlock.hash,
+        alternateBlocks, nonceBefore: nonceBefore.toString(), nonceAfterRollback: nonceBefore.toString(), walletSendCalls: walletMethods.filter(method => method === 'eth_sendTransaction').length,
+        walletCallsAfterInitialSubmit: walletMethods.length - walletCallsAfterSubmit.length, durableState: stored.state, freshClientReopens: 2,
+        originalHashRetained: true, receiptAbsentAfterRollback: true, canonicalFundingAbsent: true, encryptedReorgTransitionWrites: 1, replacementPreparations: 0,
+        escrowRuntimeSha256: createHash('sha256').update(Buffer.from(runtimeBefore.slice(2), 'hex')).digest('hex'), anvilPid: anvil.pid, ownedTemporaryDirectory: workDir,
+        externalNetwork: false, tradingEnabled: false, realFunds: false }));
+      pass('native rollback: one finalized funding receipt disappears on an alternate canonical chain; fresh clients persist/recover reorged with original hash, rolled-back nonce and no resend or reprepare');
+    } finally { client?.close(); }
   }
   console.log(`\n${results.length} reconcile checks passed`);
 }
