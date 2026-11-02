@@ -120,11 +120,11 @@
     },
     {
       "path": "packages/messaging/src/durable-chat.ts",
-      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e"
+      "sha256": "04bcee7a1850f8473a62a51611a1d88243b464564969648ac9513ad00d6bf5da"
     },
     {
       "path": "packages/messaging/test/durable-chat.test.mjs",
-      "sha256": "188c2d8a0f83324fe24ee640902c31689d3782ed8bcc2d21bc7ca00fb4739c05"
+      "sha256": "a3fdfdcd42d5e7971790b75effe10bbe34cf1b547f8831009c8585b73ceb237d"
     },
     {
       "path": "packages/nostr-crypto/src/nip44.ts",
@@ -144,11 +144,11 @@
     },
     {
       "path": "packages/relay/src/pool.ts",
-      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24"
+      "sha256": "36dc97f50fbebdd7d4f3fe15a95509c6da1391a33817587328e01ad8c85f40e9"
     },
     {
       "path": "packages/relay/test/pool.test.mjs",
-      "sha256": "61f4739b9ccdf793ffed85e8e9c826102bd7d75b9d8c588c611acbdbfbacc38b"
+      "sha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60"
     },
     {
       "path": "packages/security/src/acceptance-gates.ts",
@@ -180,7 +180,7 @@
     },
     {
       "path": "packages/wallet/src/evm-execution.ts",
-      "sha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900"
+      "sha256": "17280d0c12e2ac8daacf66bd1c3fd831367c80b955fafcaf8e11cb39e6936f47"
     },
     {
       "path": "packages/wallet/src/evm-payment-preflight.ts",
@@ -200,7 +200,7 @@
     },
     {
       "path": "packages/wallet/test/evm-execution.test.mjs",
-      "sha256": "503b5efbf8a5a9dc83a242ea40e40712d05bcf7652da7492d0b1c1374e920bc6"
+      "sha256": "c5f49c00d52156110c26b951b2852aff9e3470a8c48369c1d849638b29c56d9c"
     },
     {
       "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
@@ -232,7 +232,7 @@
     },
     {
       "path": "scripts/tests/import-boundaries.test.mjs",
-      "sha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac"
+      "sha256": "58ea9f3e1b19faa0c90f94ecbf396249baa40a4b49540da63e9ecf080ff07e7b"
     }
   ]
 }
