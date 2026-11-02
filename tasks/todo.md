@@ -159,16 +159,30 @@ serialized leases and bounded recovery slot are reused.
 | T63 | DONE | Source78f77fe; independent remaining_privacy24 actual isolated proof controls/8 cases/audit0/provenance/cancel/cleanup. Original17 affected packages preserved; experimental Node-only profile, no adoption. |
 | T64 | DONE | Source76c2005; independent review_delivery_docs30 specified rows/94 anchors/58 hashes/default-isolation7 cases/four partial drills; historical T49 scope and final shared integration explicit. |
 | T65 | DONE | Source7bb8126; independent remaining_liquidity12 cases/types/boundaries/actual11 native/ERC20 sends plus recovery probes on exact8+11 graph. T67 current composition remains pending. |
-| T66 | IN_PROGRESS | completion_requirements read-only supported-asset G15 update intake; exact source admission pending; null maintained pin stays offline |
-| T67 | IN_PROGRESS | retention_integration native Worker/UI review; purpose-specific G01 port approved; opaque previews and one <=256 CAS; unknown/nonzero payout credits protected |
-| T68 | READY | root to assign actual G23 endpoint/signing disclosure after T65/T67 interfaces freeze; no new authority |
+| T66 | DONE | G15 e833e13; independent root integration + actual HTTPS/G05/current-backup/two-origin proof after both reentry repairs; default null pin refuses before fetch. Final composition in T38. |
+| T67 | DONE | Retention a8b754f; root review +34 native/storage +13 runtime +9 pinned Anvil checks and actual15-group browser proof; old journal-only zero-credit gap repaired, source unchanged. Final composition in T38. |
+| T68 | DONE | Endpoint/signing f210cb9; independent last-awaited-marker RED/GREEN,37 focused, actual11 sends/16 signatures/32 explicit reviews; default unknown stays unknown. Final composition in T38. |
 | T69 | DONE | Meetup verification b11e745; independent58 cases/native CAS and caps;100000 native samples/tolerance0.01;13 runtime files unchanged |
 | T70 | DONE | Sourcea685f8f; root independently matched native Chromium/version/Playwright metadata/absent pinned engines and exact JSON. Firefox/WebKit remain unmeasured; no bypass or fake rejection. |
 | T71 | INTEGRATING | Fresh693c66c install/cache/tools/types pass; foundation1441/1442 stopped on stale assurance hash; preserve failed snapshot and retry new source |
-| T72 | IN_REVIEW | audit_domain_transport seven NEW proof-inputs paths frozen;15 hostile cases/scoped types/boundaries pass. Root distinct review pending; opaque unverified data, no selected semantic/crypto profile. |
+| T72 | DONE | Source d11acf2; root independent15 cases/scoped types plus UTF8 boundary/getter/late-detachment probes; structural unverified only, semantic catalogs empty. |
 
 T38 remains active through final full audit, exact-head checks and guarded source
 delivery. T67 changes require T58/T65 compatibility rechecks and strict
 documentation bindings. Historical approvals do not cover new dependency bytes.
 
-| T73 | IN_PROGRESS | remaining_privacy investigates native desktop page-zoom via owned local browser API; profile default-zoom probe had no effect and is not qualification. Verification-only new runner admission; no product edits without transfer. |
+| T73 | DONE | Finite native App zoom checkpoint79a53b5; independent normal keyboard1x/2x/4x with fixed1280px window and layout1280/640/320, exact values/controls/focus/owned cleanup. Qualification2f5c0cf; final changed App rerun under T38. |
+
+| T74 | INTEGRATING | root CI full-history/literal child-program repairs independently approved by audit_domain_transport, source54e5b62;7 cases pass; fresh hosted checks pending. T49 screen compatibility repair is T68 plus root consumer call. |
+| T75 | DONE | Source e72fa04 public-only isolated candidate evaluation independently reproduced ws6/6, Waku13/14 strict sint64-min failure, mobile4/5 stronger application expectation failure; no provider adoption. Historical signatures/license and daemon-timeout limitations explicit. |
+| T76 | DONE | Diagnostic models e72dfa4; root independent source review and43 affected cases/types; private equality and unverified party assertions gain no source/economic authority. Final composition in T38. |
+
+| T77 | DONE | Read-only103-record/173-spec/8281-clause reassessment frozen in work artifacts; remaining internal consumers admitted T80-T83. Root T38 owns final canonical coverage/current-source refresh. |
+
+| T78 | DONE | Cleanup verification1680093; measured asynchronous SIGKILL delivery, preserved deadline150ms/readiness, real native bounded exit; independent6/6, aggregate31/31 and1551/1551 no skips. Cleanup-removal negative control still fails. |
+| T79 | DONE | Tooling/bindings2bf608c; independent72 immutable source rows, additive pinned Foundry setup, actual cast1/1 +assurance7/7/docs; approvals/claims unchanged. |
+| T80 | IN_PROGRESS | draft_contract read-only finite internal draft/template/repeat-default contract; no accepted IDs/nonces/parties/private instructions copied; implementation admission follows exact review. |
+| T81 | IN_PROGRESS | privacy_selector read-only actual same-broker ordinary/strict selector contract; compiled controlled channels only, explicit relaxation, truthful unknown RPC/wallet coverage; no cosmetic broker. |
+| T82 | IN_PROGRESS | favorites_consumer owns encrypted saved-review favorite package and explicitly transferred scalar schema/Worker/runtime/services/TradePages integration; root owns shared catalog and CI. Max8, fresh current-registry re-review, real native CAS/restore/lifecycle proof required. |
+| T83 | IN_PROGRESS | cleanup_debug owns new generic-app-link/helper/component/tests/native browser runner; root actual entry-module main/App/Settings/copy enrollment. No current private-route input, identifier/tracking/fees/network or production host selection. |
+| T84 | IN_PROGRESS | review_intakes read-only final gap/coverage intake beyond already-owned consumers; distinguish internal contracts from real interoperability/qualification blockers; no duplicate code or probes. |

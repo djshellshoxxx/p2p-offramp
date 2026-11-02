@@ -461,3 +461,18 @@ commitment selection, VerifiedReceipt or economic authority is admitted. Root
 enrolls commands after a different reviewer approves exact frozen bytes.
 
 T73 remaining_privacy owns actual native page-zoom investigation and new verification-only runner if executable tooling works. Device scale/pinch/viewport changes cannot stand in for native browser zoom; no product/locale edits without a coordinated transfer. Root reviews independently.
+
+T74 root owns CI history/literal-child repairs (independently approved); T68 owns vault-only screen option, root its origin-screen consumer. T75 remains read-only pending admission. T76 owns only new arbitration payment-assertions module/test, narrow index/README/shared ReferenceAction extension and new meetup signaling-model/test with narrow index/README-POLICIES. No actual source authentication or signaling execution/restart/durable-wire claim; private byte equality cannot trust an imported artifactHash. Root reviews separately.
+
+T78 native process cleanup test repair is accepted; runner behavior is unchanged.
+T79 pinned Foundry CI setup and immutable metadata bindings independently reviewed.
+T80 draft_contract and T81 privacy_selector are read-only until explicit source
+admission; no duplicate ownership of T82 runtime integration. T82 transfers
+packages/schemas/src/runtime.ts; apps/web/src/runtime/{app-runtime.ts,
+pending-metadata.ts,worker-endpoint.ts}; apps/web/src/app-services.ts;
+apps/web/src/ui/trade/TradePages.tsx plus its NEW favorites package/component/
+tests/native harness. Root retains schemas/index.ts, main.tsx, App.tsx, Pages.tsx,
+messages.ts, English catalog, CI and task ledgers. T83 cleanup_debug owns NEW
+sharing/generic-app-link.ts, GenericAppShare.tsx, generic-app-share test and native
+runner only. Root enrolls trusted main entry URL through App to Settings.
+T84 review_intakes owns no source: final source/spec gap intake only.
