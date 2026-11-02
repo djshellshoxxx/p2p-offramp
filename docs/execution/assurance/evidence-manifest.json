@@ -1,0 +1,98 @@
+{
+  "format": "p2p-offramp/assurance-local-evidence/v1",
+  "scope": "Local source-byte integrity only; not test execution, legal opinion, professional review or release authority.",
+  "files": [
+    {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "sha256": "735382c708d3a6e52ee2cd3437a2f5c9095c6e2fab87281024db216b34c9b24a"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrow.t.sol",
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d"
+    },
+    {
+      "path": "docs/OPERATOR.md",
+      "sha256": "b508d662a21ed934a49986efc822064cc3baddd098c7aa228f0388e8c7069931"
+    },
+    {
+      "path": "docs/execution/assurance/README.md",
+      "sha256": "c712223ef75ed652d68a320562bd6120a3a22d28e0c35534609b5dd5c5329e19"
+    },
+    {
+      "path": "docs/execution/assurance/attack-cases.json",
+      "sha256": "5eb3150595e28052516c51c9348516f7089720dedb20ea1a4e621e7dd10e5935"
+    },
+    {
+      "path": "docs/execution/assurance/incident-recovery-checklist.md",
+      "sha256": "3b21cbaf0dc69373c615de2c07cf762552bfe494bef9bc81300964c869251a0f"
+    },
+    {
+      "path": "docs/execution/assurance/jurisdiction-matrix.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/execution/assurance/role-facts.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/recovery/CANONICAL-EVM.md",
+      "sha256": "21298f026b6eafdf42d977a6cae3b69b67420ef4a0fc072b66f798dcd08a03f3"
+    },
+    {
+      "path": "packages/courier/test/secrets.test.mjs",
+      "sha256": "7d4c7e5ee7d1fb8251e9278b489c817a49eb09e58b4982345fd4dfa382ed5edc"
+    },
+    {
+      "path": "packages/diagnostics/index.ts",
+      "sha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e"
+    },
+    {
+      "path": "packages/diagnostics/test/diagnostics.test.mjs",
+      "sha256": "b44477b78a8241e72ed6ef1456e591ab2a30f080cd5169c6795c7da6d2a5aaed"
+    },
+    {
+      "path": "packages/governance/index.ts",
+      "sha256": "acad5a41601396a099430eefe49e11e46114c9e75414d2f19078b973657bc354"
+    },
+    {
+      "path": "packages/governance/src/assurance.ts",
+      "sha256": "c862f07ab195abc3714246257a3aa662eb4103d2b4d4d81214ea667bad65be3a"
+    },
+    {
+      "path": "packages/governance/test/assurance.test.mjs",
+      "sha256": "728a42b74a62e79087f3503826bd2f2e2b2deb5c313539e232c2d1e7fc19141a"
+    },
+    {
+      "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "sha256": "f36c852b62b48330babd0d9929a46e6309c03c5f91ac69b893cdc23f7bf6c5d4"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088"
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e"
+    },
+    {
+      "path": "scripts/recovery/evm-cli.mjs",
+      "sha256": "67d9db1d4b627d61912a911650f4f7683fe0e39b78daa9938f904b6c38afd8cf"
+    },
+    {
+      "path": "scripts/tests/evm-recovery.test.mjs",
+      "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "sha256": "166ee63fb080218791bd465a9c4ab098c4361877fdc3fbc23c856f68d619a6ec"
+    }
+  ]
+}

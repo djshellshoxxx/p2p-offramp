@@ -1,0 +1,176 @@
+[
+  {
+    "id": "C-01",
+    "capability": "canonical-basic-escrow",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Terminal effects and shared reentrancy guard precede native/token payout callbacks.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. Only named callback fixtures; not every token behavior."
+  },
+  {
+    "id": "C-02",
+    "capability": "canonical-basic-escrow",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Release/refund cross-entry callbacks cannot create a second terminal disposition.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. Named shared-lock regression assertions; no global formal proof."
+  },
+  {
+    "id": "C-04",
+    "capability": "evm-acceptance",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Seller nonce reuse and economic-field substitutions are refused in the exact tested profile.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. No universal signature/profile or live wallet qualification."
+  },
+  {
+    "id": "C-05",
+    "capability": "evm-acceptance",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Trade digest binds the deployment and chain in the exact fixture.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "packages/wallet/test/evm-terms.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. Fork/provider honesty and reviewed wallet profile remain assumptions."
+  },
+  {
+    "id": "C-06",
+    "capability": "canonical-token-admission",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Fee-on-transfer funding is refused and callback funding cannot reenter guarded transitions.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. Issuer/proxy/rebase/freeze semantics require external evaluated admission."
+  },
+  {
+    "id": "C-13",
+    "capability": "canonical-basic-escrow",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Release/refund half-open deadline boundaries preserve fixed recipients and one terminal state.",
+    "fixturePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "contracts/evm/test/BasicEscrowFuzz.t.sol"
+    ],
+    "evidencePaths": [
+      "contracts/evm/test/BasicEscrow.t.sol",
+      "contracts/evm/test/BasicEscrowFuzz.t.sol"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. No wall-clock liveness on halted/censored chains or fiat/physical guarantee."
+  },
+  {
+    "id": "C-17",
+    "capability": "evm-native-readers",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Native chain/genesis/code and numbered observation anchors reject scoped hostile/mismatched fixture responses.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-submit.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/test/evm-submit.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. No cryptographic consensus proof or transport preallocation guarantee."
+  },
+  {
+    "id": "C-24",
+    "capability": "evm-native-readers",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Reorg and noncanonical/insufficient finality observations cannot publish scoped ready guidance.",
+    "fixturePaths": [
+      "packages/wallet/test/evm-submit.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/wallet/test/evm-submit.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. No bridge qualification or proof against consistently dishonest RPC."
+  },
+  {
+    "id": "C-23",
+    "capability": "local-private-lifecycle",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Allowlisted diagnostic exports omit injected secrets; owned borrowed secret buffers are cleared/refused across lock and expiry boundaries.",
+    "fixturePaths": [
+      "packages/diagnostics/test/diagnostics.test.mjs",
+      "packages/courier/test/secrets.test.mjs"
+    ],
+    "evidencePaths": [
+      "packages/diagnostics/test/diagnostics.test.mjs",
+      "packages/courier/test/secrets.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. XSS, extensions, screenshots, strings, user copies and backups remain outside erasure guarantees."
+  },
+  {
+    "id": "C-29",
+    "capability": "build-policy",
+    "preconditions": [
+      "Owned public synthetic regression or reviewed source; no external target or live funds."
+    ],
+    "invariant": "Default artifact policy and public import boundaries reject named forbidden source/graph cases.",
+    "fixturePaths": [
+      "apps/web/scripts/artifact-policy.test.mjs",
+      "scripts/tests/import-boundaries.test.mjs"
+    ],
+    "evidencePaths": [
+      "apps/web/scripts/artifact-policy.test.mjs",
+      "scripts/tests/import-boundaries.test.mjs"
+    ],
+    "status": "specified",
+    "rationale": "Existing concrete test/invariant mapping; execution and broader variants require scoped evidence. Not a supply-chain certification, reviewer approval or authenticated release-root proof."
+  }
+]
