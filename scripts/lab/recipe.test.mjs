@@ -4,6 +4,7 @@ import fsPromises, { mkdtemp, mkdir, writeFile, symlink, rm, readFile, rename } 
 import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { scheduler } from 'node:timers/promises';
 import { cleanLabEnvironment, digestFiles, validatePortPolicy, IMAGE_DIGEST } from './recipe.mjs';
 import { LAB_COMMANDS, runLab } from './run.mjs';
 import { runLabCommand } from './command.mjs';
@@ -42,16 +43,46 @@ test('lab subprocess bounds logs, timeout and cancellation without a shell', asy
   const controller = new AbortController(); controller.abort();
   await assert.rejects(runLabCommand(process.execPath, [], { ...options, signal: controller.signal }), /LAB_CANCELLED/);
 });
-test('successful and terminated parents cannot leave their owned process group running', async () => {
-  for (const hang of [false, true]) {
-    const program = 'const {spawn}=require("node:child_process");const c=spawn(process.execPath,["-e","setInterval(()=>{},1000)"],{stdio:"ignore"});c.unref();console.log(c.pid);' + (hang ? 'setInterval(()=>{},1000);' : '');
-    const result = await runLabCommand(process.execPath, ['-e', program], { root: process.cwd(), env: cleanLabEnvironment(process.env), timeoutMs: hang ? 150 : 3000 });
-    assert.equal(result.timedOut, hang);
-    const pid = Number(result.log.toString().trim()); assert.ok(Number.isSafeInteger(pid) && pid > 1);
+test('successful and terminated parents cannot leave their owned process group running', { timeout: 12000 }, async t => {
+  const directory = await mkdtemp(join(tmpdir(), 'p2p-lab-descendants-')); const pids = [];
+  const exited = async pid => {
     try {
-      const state = (await readFile(`/proc/${pid}/stat`, 'utf8')).split(' ')[2];
-      assert.ok(state === 'Z' || state === 'X', 'descendant must have exited, even if not yet reaped');
-    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      const stat = await readFile(`/proc/${pid}/stat`, 'utf8');
+      const state = stat.slice(stat.lastIndexOf(')') + 2).split(' ')[0];
+      return state === 'Z' || state === 'X';
+    } catch (error) { if (error.code === 'ENOENT') return true; throw error; }
+  };
+  t.after(async () => {
+    for (const pid of pids) { try { process.kill(pid, 'SIGKILL'); } catch (error) { if (error.code !== 'ESRCH') throw error; } }
+    await rm(directory, { recursive: true, force: true });
+  });
+  for (const hang of [false, true]) {
+    const file = join(directory, hang ? 'timeout' : 'success'); const controller = new AbortController();
+    const program = 'const {spawn}=require("node:child_process");const fs=require("node:fs");const c=spawn(process.execPath,["-e","setInterval(()=>{},1000)"],{stdio:"ignore"});c.unref();process.stdout.write(String(c.pid)+"\\n",()=>fs.writeFileSync(process.argv[1],String(c.pid)));if(process.argv[2]==="hang")setInterval(()=>{},1000);';
+    // Keep the 150ms timeout, but arm its test clock after startup and PID output.
+    // Native scheduler.wait and subprocess exit observation remain on the real clock.
+    if (hang) t.mock.timers.enable({ apis: ['setTimeout'] });
+    const pending = runLabCommand(process.execPath, ['-e', program, file, hang ? 'hang' : 'exit'], { root: process.cwd(), env: cleanLabEnvironment(process.env), signal: controller.signal, timeoutMs: hang ? 150 : 3000 });
+    try {
+      if (hang) {
+        let readyPid;
+        for (let i = 0; i < 40; i++) {
+          try { readyPid = Number(await readFile(file, 'utf8')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+          if (Number.isSafeInteger(readyPid) && readyPid > 1) break;
+          await scheduler.wait(25);
+        }
+        assert.ok(Number.isSafeInteger(readyPid) && readyPid > 1, 'timeout fixture must first publish its descendant PID');
+        pids.push(readyPid); t.mock.timers.tick(150);
+      }
+      const result = await pending; assert.equal(result.timedOut, hang);
+      const pid = Number(result.log.toString().trim()); assert.ok(Number.isSafeInteger(pid) && pid > 1); pids.push(pid);
+      // SIGKILL delivery is asynchronous; observe native exit, including pending reap.
+      for (let i = 0; i < 40 && !await exited(pid); i++) await scheduler.wait(25);
+      assert.equal(await exited(pid), true, 'descendant must have exited, even if not yet reaped');
+    } finally {
+      controller.abort(); if (hang) t.mock.timers.tick(2000);
+      await pending; if (hang) t.mock.timers.reset();
+    }
   }
 });
 test('a file swapped for a symlink after metadata inspection is never hashed', async t => {
