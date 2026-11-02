@@ -1,0 +1,136 @@
+{
+  "task": "T51",
+  "reviewer": "chain_reader",
+  "author": "branch_inventory/later_phase_requirements; root repaired lifecycle",
+  "status": "APPROVED_OFFLINE_COMPARISON_ONLY",
+  "sourceManifest": "/workspace/work/t51-root-repaired-freeze.json",
+  "files": [
+    {
+      "path": "packages/stealth/DECISIONS.json",
+      "sha256": "9e01375c43aea3ac9e0ebdc2d439f87bc51c46639b5dc24cab91dde7977f8483"
+    },
+    {
+      "path": "packages/stealth/README.md",
+      "sha256": "8eb7b21cbde72f7feca8760f5855c91d8b9b748afaf3af17ab6b5ed4d18a5222"
+    },
+    {
+      "path": "packages/stealth/index.ts",
+      "sha256": "3492844b6ea632a38e6ed77e8fb0414079eb2fa1c4c4ed6c60e7cefb93de8d57"
+    },
+    {
+      "path": "packages/stealth/src/announcer.ts",
+      "sha256": "8c2dca4c461cd15a937fb13902d544b8269f90a92226667be8c874a37afc9426"
+    },
+    {
+      "path": "packages/stealth/src/math.ts",
+      "sha256": "ba1fc879f27aadd5ab73c44a69ad1586e2e13361f553bfdd2859af87be13ea1b"
+    },
+    {
+      "path": "packages/stealth/src/pages.ts",
+      "sha256": "4e0207e7a8ab4a55624778695621dd9557698a037558f93f291952b6797d5972"
+    },
+    {
+      "path": "packages/stealth/src/profiles.ts",
+      "sha256": "e67a30dba9532a4fb24d022f489c5b1c784f8540156942c22fa5fc03a24945bc"
+    },
+    {
+      "path": "packages/stealth/src/records.ts",
+      "sha256": "429bb7789bc5abfd8f788b423ecba59be818c77e0a8f970a6cbba1161dd85235"
+    },
+    {
+      "path": "packages/stealth/src/service.ts",
+      "sha256": "3f800178b40558e4e622d70f296799a3a6b8c17a3445c6d389049ac461e790b6"
+    },
+    {
+      "path": "packages/stealth/src/shared.ts",
+      "sha256": "13a30ca236a296a10578f85d78d8eac40f5424d02bddd4b89da22b8a4cb17dbc"
+    },
+    {
+      "path": "packages/stealth/src/store.ts",
+      "sha256": "e9433473463ab72729559149243cf753a64f34464603765dc5695c0ccdf9817c"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/comparison-vectors.json",
+      "sha256": "a56fd329e6dfcce3077d7c0e9f557e3b48b5fb53591b3123deaeec6111770276"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/helpers.mjs",
+      "sha256": "c5c4b38472c7a90ea8a75aafb1ae0bcc0d0c4850b42a45f18d3cfd58ecdcb3dd"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/verify-native-keccak.mjs",
+      "sha256": "dcac1555e499b7c55851b989935ff4456bf4fc99173c828faaec170593858d69"
+    },
+    {
+      "path": "packages/stealth/test/pages.test.mjs",
+      "sha256": "8455de73e340481c6070c1c9a3243bbb8cf43f60148782cb36b363aecc0da7c1"
+    },
+    {
+      "path": "packages/stealth/test/profiles.test.mjs",
+      "sha256": "3b8a2214a6fa01bc93cb9e0d7ce489f75511499e705732bd54d32a69cc676563"
+    },
+    {
+      "path": "packages/stealth/test/service.test.mjs",
+      "sha256": "f1cf7f6ab0b9bb9840e02ce5c60609c9053bb87e1872f9e458a1abf7eb3fed6d"
+    }
+  ],
+  "hashesMatchedBeforeAndAfter": true,
+  "ordinaryTests": {
+    "passed": 38,
+    "failed": 0,
+    "skipped": 0,
+    "logs": [
+      "/workspace/work/t51-final-profiles.log",
+      "/workspace/work/t51-final-service.log",
+      "/workspace/work/t51-final-pages.log"
+    ]
+  },
+  "nativeByteChecks": {
+    "passed": 3,
+    "log": "/workspace/work/t51-final-native-keccak.json",
+    "tool": "Foundry1.5.1 cast b0a9dd9"
+  },
+  "typescript": "PASS /workspace/work/t51-final-types.log",
+  "boundaries": "PASS /workspace/work/t51-final-boundaries.log",
+  "findings": [
+    {
+      "id": "T51-IDLE-LOCK",
+      "severity": "P2",
+      "status": "RESOLVED",
+      "problem": "Completed comparison discarded the G02-to-service lifetime edge; actual idle lock retained native viewing scalar and usable handle.",
+      "red": "/workspace/work/t51-idle-lock-red.log",
+      "green": "/workspace/work/t51-final-idle-lock.log",
+      "repair": "Persistent store lifetime signal plus bounded deduplicated service subscriptions, removed on service closure."
+    }
+  ],
+  "targetedLifetimeEvidence": {
+    "log": "/workspace/work/t51-final-lifetime-cap.log",
+    "completedJobsDeduplicated": 21,
+    "maxLifetimeBindings": 16,
+    "seventeenthSourceCalls": 0,
+    "listenersAfterServiceClose": 0,
+    "actualG02IdleLockWipesNativeBuffer": true,
+    "explicitIdleStoreCloseCovered": true,
+    "ignoredCancelPhysicalAdmissionCovered": true
+  },
+  "qualityAxes": {
+    "contractArchitecture": "PASS exact named64-byte-reference and33-byte-comparison profiles; no default/autodetection or economic/native activation.",
+    "correctnessSecurity": "PASS canonical points/scalars/ABI, opaque purpose handles, actual G02 session/MAC/CAS, atomic all-page cursor/candidates, cached rederivation and repaired idle revocation.",
+    "robustnessPerformance": "PASS bounded keys/store subscriptions/entropy/pages/logs/derivations, hostile callback/reentry guards, ignored-cancel physical drain, clock/deadline checks, CAS/capacity/ambiguous-write refusal.",
+    "maintainability": "PASS focused modules and narrow facade; documented namespace, source decisions and memory/resource qualification.",
+    "testEvidence": "PASS38 ordinary,3 independent native hash/topic checks, actual G02 red-to-green, native lifetime dedup/cap/unsubscribe probe and exact17 hashes/vector bytes."
+  },
+  "requiredFindingsOpen": [],
+  "qualifications": [
+    "The published reference64-byte x||y and SDK-source33-byte compressed preimages deliberately disagree; no interoperable scheme1 profile selected.",
+    "Upstream ScopeLift SDK not installed/executed; native cast checks hashes/topic, not full independent ECDH/interoperability.",
+    "No native emitter/code/deposit/balance/reorg, transport, new-unfunded terms binding, durable external view-purpose recovery, external-wallet spending/gas workflow, specialist review or hardware-erasure qualification.",
+    "Trusted constructor G02 ports/local fixture callbacks are composition capabilities, not imported authority or an I/O sandbox.",
+    "Offline comparison engineering approval only; production/funding/spending/network activation false."
+  ],
+  "networkActivation": false,
+  "fundingAuthority": false,
+  "spendingAuthority": false,
+  "productionProfileApproved": false,
+  "sourceEditedByReviewer": false
+}
