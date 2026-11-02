@@ -29,6 +29,7 @@ import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
 import { createLifecycleJournal } from '../packages/domain/src/intent-journal.ts';
 import { createEvmTxLifecycle, evmFinalityPolicy } from '../packages/domain/src/tx-lifecycle.ts';
 import { createEip1193ChainReader, escrowCallFor } from '../packages/wallet/src/evm-submit.ts';
+import {buildGetTrade,decodeTrade,tradeMatchesTerms,buildPendingWithdrawals,buildSetAccept,buildWithdraw} from '../packages/wallet/src/evm-escrow.ts';
 import { evmTermsHash, keccak256 } from '../packages/wallet/src/evm-terms.ts';
 
 const run = promisify(execFile);
@@ -43,12 +44,13 @@ const POLICY = evmFinalityPolicy({ chain: 'evm', finality: { kind: 'evm-finalize
 
 /** File-backed G02 envelope store: atomic rename + fsync, so a SIGKILLed writer leaves the last committed envelope. */
 class FileStore {
+  writes=0;
   constructor(path) { this.path = path; }
   #load() { return existsSync(this.path) ? JSON.parse(readFileSync(this.path, 'utf8')) : {}; }
   #save(rows) {
     const temp = `${this.path}.tmp`, fd = openSync(temp, 'w');
     try { writeSync(fd, JSON.stringify(rows)); fsyncSync(fd); } finally { closeSync(fd); }
-    renameSync(temp, this.path);
+    renameSync(temp, this.path);this.writes++;
   }
   async get(id) { return this.#load()[id]; }
   async listProfileIds() { return Object.keys(this.#load()); }
@@ -79,18 +81,44 @@ async function rpc(method, params = []) {
 const request = ({ method, params }) => rpc(method, params ?? []);
 
 /** One "process": an unlocked vault session, lifecycle journal and lifecycle over the shared file store. */
-async function openClient(storePath, profileId, escrow, wallet = request) {
+async function openClient(storePath, profileId, escrow, wallet = request, readOnly = false) {
   const nativeUrl = rpcUrl; let closed = false;
-  const vault = new EncryptedVaultService(new FileStore(storePath), crypto, { lifecycle: false });
+  const store=new FileStore(storePath);
+  const vault = new EncryptedVaultService(store, crypto, { lifecycle: false });
   const unlocked = await vault.unlock(profileId, PASS);
   assert.equal(unlocked.ok, true, 'vault unlocks');
-  const journal = createLifecycleJournal({ vault, session: unlocked.value, validateCanonical: () => ({ ok: true, value: undefined }) });
+  const journalVault=readOnly?{read:vault.read.bind(vault),list:vault.list.bind(vault),captureSession:vault.captureSession.bind(vault),commit:(id,revision,mutations,signal,guard)=>mutations.length?Promise.resolve({ok:false,error:{code:'CONFLICT',retryable:false,message:'Read-only retention review.'}}):vault.commit(id,revision,[],signal,guard)}:vault;
+  const journal = createLifecycleJournal({ vault:journalVault, session: unlocked.value, validateCanonical: () => ({ ok: true, value: undefined }) });
   const base = createEip1193ChainReader({ request, escrow });
   const reader = process.env.DEBUG_RECONCILE ? Object.fromEntries(Object.entries(base).map(([name, fn]) => [name, async (...args) => { const r = await fn(...args); console.error('READ', name, JSON.stringify(args.filter(a => !(a instanceof AbortSignal) && !(a?.signal))), JSON.stringify(r)); return r; }])) : base;
   const life = createEvmTxLifecycle({ journal, reader, wallet, policy: POLICY });
   const [account] = await rpc('eth_accounts');
   await life.walletChanged({ account: account.toLowerCase(), chainId: String(BigInt(await rpc('eth_chainId'))), generation: 1 });
-  return { vault, journal, life, session:unlocked.value, nativeSourceCurrent:()=>!closed&&rpcUrl===nativeUrl, close() { closed=true; life.dispose(); journal.dispose(); vault.dispose(); } };
+  return { store,vault, journal, life, session:unlocked.value, nativeSourceCurrent:()=>!closed&&rpcUrl===nativeUrl, close() { closed=true; life.dispose(); journal.dispose(); vault.dispose(); } };
+}
+/** Actual finalized native ABI reads mint this identity-bound lease; no paid/status JSON can grant it. */
+function payoutClosureFor(client,domain,terms){
+  const stableDomain=Object.freeze({...domain}),stableTerms=Object.freeze({...terms});
+  return {async reviewPayoutClosure(scope,intents,signal){
+    let disposed=false,revoked=false;const start=performance.now();
+    const lease=val(client.vault.captureSession(client.session,()=>{revoked=true;}),'capture native payout scope');
+    const current=()=>{const session=lease.current();return !disposed&&!revoked&&!signal.aborted&&client.nativeSourceCurrent()&&!!session&&session.profileId===scope.profileId&&session.revision===scope.revision&&performance.now()-start<30000;};
+    const guard=()=>{if(!current())throw Error('Native payout closure unavailable.');};
+    const dispose=()=>{if(disposed)return;disposed=true;lease.dispose();};
+    try{
+      guard();const tradeId=evmTermsHash(stableDomain,stableTerms);
+      if(!Object.isFrozen(intents)||intents.some(intent=>intent.binding.chain!=='evm'||intent.binding.tradeId!==tradeId||intent.binding.networkId!==stableTerms.networkId||intent.binding.deploymentId!==stableTerms.deploymentId))throw Error('Native payout binding unavailable.');
+      const head=await rpc('eth_getBlockByNumber',['finalized',false]);guard();
+      const call=buildGetTrade(stableDomain.verifyingContract,tradeId),trade=decodeTrade(await rpc('eth_call',[{to:call.to,data:call.data},head.number]));guard();
+      if(!['released','refunded'].includes(trade.state)||!tradeMatchesTerms(trade,stableTerms))throw Error('Native payout remains unresolved.');
+      const payout=buildPendingWithdrawals(stableDomain.verifyingContract,trade.state==='released'?stableTerms.buyer:stableTerms.seller,stableTerms.asset);
+      const credit=await rpc('eth_call',[{to:payout.to,data:payout.data},head.number]);guard();
+      if(!/^0x[0-9a-f]{64}$/.test(credit)||BigInt(credit)!==0n)throw Error('Native payout credit remains unresolved.');
+      const repeated=await rpc('eth_getBlockByNumber',[head.number,false]);guard();
+      if(repeated.hash!==head.hash||repeated.number!==head.number)throw Error('Native payout anchor changed.');
+      return Object.freeze({scope,intents,current,dispose});
+    }catch(error){dispose();throw error;}
+  }};
 }
 const val = (result, label) => { assert.equal(result.ok, true, `${label}: ${JSON.stringify(result)}`); return result.value; };
 
@@ -159,6 +187,7 @@ async function main() {
   const [seller, buyer, third] = (await rpc('eth_accounts')).map(account => account.toLowerCase());
   const token = await deploy('test/mocks/Mocks.sol:MockERC20', ['Test USD', 'TUSD']);
   const escrow = await deploy('src/BasicEscrow.sol:BasicEscrow', [`[${token}]`]);
+  const receiver=await deploy('test/mocks/Mocks.sol:RevertingReceiver');
   const domain = { chainId: '31337', verifyingContract: escrow };
   const bindingOf = tradeId => ({ chain: 'evm', networkId: 'local-evm', deploymentId: 'escrow-local-v1', tradeId });
   const fundInput = terms => { const tradeId = evmTermsHash(domain, terms), { call, expectedEscrowState } = escrowCallFor({ action: 'fund', domain, terms });
@@ -173,7 +202,7 @@ async function main() {
 
   // ---- 1. unknown outcome: kill the client after send-started ----
   {
-    const input = fundInput(await makeTerms(domain, seller, buyer, 10n ** 17n));
+    const terms=await makeTerms(domain,seller,buyer,10n ** 17n),input=fundInput(terms);
     const child = spawn(process.execPath, [...process.execArgv, fileURLToPath(import.meta.url), '--client', JSON.stringify({ rpcUrl, storePath, profileId, escrow, input })],
       { env: ENV, stdio: ['ignore', 'pipe', 'inherit'] });
     let output = '';
@@ -196,10 +225,10 @@ async function main() {
     const finalized = await reconcileUntil(client.life, intentId, 'finalized', 'unknown outcome finality');
     assert.equal(finalized.intent.state, 'finalized');
     assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'latest'])), before, 'exactly one transaction was ever sent');
-    const retentionAuthority=new JournalNativeRetentionAuthority({vault:client.vault,session:client.session,journal:client.journal,reconciler:client.life,currentScope:client.nativeSourceCurrent,maxAgeMs:30000});
+    const retentionAuthority=new JournalNativeRetentionAuthority({vault:client.vault,session:client.session,journal:client.journal,reconciler:client.life,payoutClosure:payoutClosureFor(client,domain,terms),currentScope:client.nativeSourceCurrent,maxAgeMs:30000});
     const retention=new RetentionService(client.vault,client.session,retentionAuthority);
     try {
-      const revision=client.journal.currentRevision();const review=await retention.planRetention(Date.now()+RETENTION_REVIEW_AGE_MS);
+      const revision=client.journal.currentRevision();const review=await retention.reviewRetention(Date.now()+RETENTION_REVIEW_AGE_MS);
       assert.equal(review.ok,false,'finalized fund receipt does not make funded escrow safe to delete');assert.equal(review.error.code,'NATIVE_PROOF_REQUIRED');
       assert.equal(client.journal.currentRevision(),revision,'rejected retention review writes no marker');
       assert.equal(BigInt(await rpc('eth_getTransactionCount',[seller,'latest'])),before,'retention rejection cannot resend');
@@ -280,12 +309,15 @@ async function main() {
     const fresh=val(await fixtureVault.create(PASS),'create distinct retention fixture profile');
     val(await fixtureVault.commit(fresh.sessionId,fresh.revision,selected.map(record=>({op:'put',record}))),'copy actual local journal bytes');
     fixtureVault.dispose();
-    const scoped=await openClient(storePath,fresh.profileId,escrow);
-    const authority=new JournalNativeRetentionAuthority({vault:scoped.vault,session:scoped.session,journal:scoped.journal,reconciler:scoped.life,currentScope:scoped.nativeSourceCurrent,maxAgeMs:30000});
+    const scoped=await openClient(storePath,fresh.profileId,escrow,request,true);
+    const omitted=new JournalNativeRetentionAuthority({vault:scoped.vault,session:scoped.session,journal:scoped.journal,reconciler:scoped.life,currentScope:scoped.nativeSourceCurrent});
+    const unqualified=new RetentionService(scoped.vault,scoped.session,omitted);
+    try{const before=scoped.store.writes,result=await unqualified.reviewRetention(Date.now());assert.equal(result.ok,false);assert.equal(result.error.code,'NATIVE_PROOF_REQUIRED');assert.equal(scoped.store.writes,before);pass('retention: old journal-only construction without a live payout closure refuses all deletion');}finally{unqualified.dispose();omitted.dispose();}
+    const authority=new JournalNativeRetentionAuthority({vault:scoped.vault,session:scoped.session,journal:scoped.journal,reconciler:scoped.life,payoutClosure:payoutClosureFor(scoped,domain,terms),currentScope:scoped.nativeSourceCurrent,maxAgeMs:30000});
     const retention=new RetentionService(scoped.vault,scoped.session,authority);
     try {
       const nonceBefore=await rpc('eth_getTransactionCount',[seller,'pending']);
-      const plan=val(await retention.planRetention(Date.now()+RETENTION_REVIEW_AGE_MS),'native terminal retention preview');
+      const plan=val(await retention.reviewRetention(Date.now()+RETENTION_REVIEW_AGE_MS),'native terminal retention preview');
       assert.equal(plan.reviewedDeleteCount,2);assert.equal(plan.archiveReviewCount,2);
       const receipt=val(await retention.deleteReviewedRecords(plan,{version:1,expectedRevision:plan.revision,consentRevision:plan.revision,reviewed:true,logicalOnly:true,backupAndRemoteLimitsAcknowledged:true}),'native terminal retention delete');
       assert.equal(receipt.deletedCount,2);assert.equal(receipt.revision,plan.revision+1);
@@ -297,6 +329,31 @@ async function main() {
     } finally {retention.dispose();authority.dispose();scoped.close();}
     client.close();
     pass('receipt path: fund -> finalized (anvil finalized tag), then release via the lifecycle -> confirmed; buyer paid');
+  }
+  // ---- 5. Terminal escrow can still owe a deferred native payout: old leaf needs actual credit closure. ----
+  {
+    const client=await openClient(storePath,profileId,escrow),terms=await makeTerms(domain,seller,receiver,10n**16n),input=fundInput(terms);
+    const funded=val(await client.life.prepare(input),'deferred fund prepare');val(await client.life.submit(funded),'deferred fund submit');await mine();await reconcileUntil(client.life,funded.intentId,'finalized','deferred fund finalized');
+    const release=escrowCallFor({action:'release',escrow,tradeId:input.binding.tradeId});
+    const released=val(await client.life.prepare({binding:input.binding,action:'release',expectedEscrowState:release.expectedEscrowState,call:release.call}),'deferred release prepare');
+    val(await client.life.submit(released),'deferred release submit');await mine();await reconcileUntil(client.life,released.intentId,'finalized','deferred release finalized');
+    const creditCall=buildPendingWithdrawals(escrow,receiver,terms.asset);
+    assert.equal(BigInt(await rpc('eth_call',[{to:creditCall.to,data:creditCall.data},'finalized'])),BigInt(terms.amountBaseUnits));
+    const original=await client.store.get(profileId),records=val(await client.vault.list(client.session.sessionId),'deferred source rows').filter(record=>record.kind==='journal'&&decodeIntentPayload(record.payload).binding.tradeId===input.binding.tradeId);assert.equal(records.length,2);
+    const copier=new EncryptedVaultService(new FileStore(storePath),crypto,{lifecycle:false}),fresh=val(await copier.create(PASS),'deferred copy profile');val(await copier.commit(fresh.sessionId,fresh.revision,records.map(record=>({op:'put',record}))),'deferred copy rows');copier.dispose();
+    const scoped=await openClient(storePath,fresh.profileId,escrow,request,true),authority=new JournalNativeRetentionAuthority({vault:scoped.vault,session:scoped.session,journal:scoped.journal,reconciler:scoped.life,payoutClosure:payoutClosureFor(scoped,domain,terms),currentScope:scoped.nativeSourceCurrent,maxAgeMs:30000}),retention=new RetentionService(scoped.vault,scoped.session,authority);
+    try{
+      const writes=scoped.store.writes,nonce=await rpc('eth_getTransactionCount',[seller,'pending']),rejected=await retention.reviewRetention(Date.now());
+      assert.equal(rejected.ok,false);assert.equal(rejected.error.code,'NATIVE_PROOF_REQUIRED');assert.equal(scoped.store.writes,writes);assert.equal(await rpc('eth_getTransactionCount',[seller,'pending']),nonce);assert.deepEqual(await client.store.get(profileId),original);
+      const enable=buildSetAccept(receiver,true),enabled=await rpc('eth_sendTransaction',[{from:seller,to:enable.to,data:enable.data,value:'0x0',gas:'0x7a120'}]);await mine();assert.equal((await rpc('eth_getTransactionReceipt',[enabled])).status,'0x1');
+      const withdraw=buildWithdraw(escrow,receiver,terms.asset),withdrawn=await rpc('eth_sendTransaction',[{from:seller,to:withdraw.to,data:withdraw.data,value:'0x0',gas:'0x7a120'}]);await mine(8);
+      const withdrawalReceipt=await rpc('eth_getTransactionReceipt',[withdrawn]),finalized=await rpc('eth_getBlockByNumber',['finalized',false]);assert.equal(withdrawalReceipt.status,'0x1');assert.ok(BigInt(withdrawalReceipt.blockNumber)<=BigInt(finalized.number));
+      assert.equal(BigInt(await rpc('eth_call',[{to:creditCall.to,data:creditCall.data},'finalized'])),0n);
+      const beforeNonce=await rpc('eth_getTransactionCount',[seller,'pending']),beforeWrites=scoped.store.writes,plan=val(await retention.reviewRetention(Date.now()),'actual withdrawn-zero payout preview');assert.equal(plan.reviewedDeleteCount,2);assert.equal(scoped.store.writes,beforeWrites,'already terminal review cannot persist a transition');
+      const receipt=val(await retention.deleteReviewedRecords(plan,{version:1,expectedRevision:plan.revision,consentRevision:plan.revision,reviewed:true,logicalOnly:true,backupAndRemoteLimitsAcknowledged:true}),'actual withdrawn-zero payout delete');
+      assert.equal(receipt.deletedCount,2);assert.equal(scoped.store.writes,beforeWrites+1);assert.equal(val(await scoped.vault.list(scoped.session.sessionId),'deferred copy deletion readback').length,0);assert.equal(await rpc('eth_getTransactionCount',[seller,'pending']),beforeNonce);assert.deepEqual(await client.store.get(profileId),original);
+      pass('retention: actual Released deferred-credit blocks old leaf; finalized successful withdrawal mints zero-credit lease for one copy-only CAS, source preserved with no sends or reconciliation writes');
+    }finally{retention.dispose();authority.dispose();scoped.close();client.close();}
   }
   console.log(`\n${results.length} reconcile checks passed`);
 }

@@ -9,6 +9,8 @@ export const messages = mergeMessageViews(englishGroup('shell'), {
   inventoryTitle: (count: number, max: number) => english('shell', 'inventoryTitle', { count, max }),
   useProfile: (id: string) => english('shell', 'useProfile', { id }),
   reconciledTitle: (count: number) => english('shell', 'reconciledTitle', { count }),
+  retentionCounts: (archive: number, reviewed: number, protectedCount: number, revision: number) => english('shell', 'retentionCounts', {archive,reviewed,protected:protectedCount,revision}),
+  retentionDeleted: (count: number, revision: number) => english('shell', 'retentionDeleted', {count,revision}),
   errors: englishGroup('shellErrors'),
   compatibility: mergeMessageViews(englishGroup('compatibility'), {
     missingFeatures: (features: string) => english('compatibility', 'missingFeatures', { features }),

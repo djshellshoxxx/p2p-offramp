@@ -1,6 +1,6 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
 import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences } from '../../../packages/schemas/index.ts';
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeRetentionPreview, type RuntimeRetentionConsent, type RuntimeRetentionDelete } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
@@ -31,9 +31,15 @@ export interface AppServices {
   /** Saved terms reviews of the open profile only (raw terms bytes; the caller re-reviews them). */
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
+  /** Legacy compatibility: refuses deletion; use the reviewed retention flow in Settings. */
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   /** Read-only unverified scalar journal references; no calldata, native truth or resend capability. */
   listRecoveryReferences(offset?: number, expectedRevision?: number | null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>>;
+  /** Offline counts only; never constructs or invokes a native provider. */
+  planRetention(signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>>;
+  /** Explicit native eligibility check; absent native composition protects all records. */
+  reviewRetention(signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>>;
+  deleteReviewedRecords(consent: RuntimeRetentionConsent, signal?: AbortSignal): Promise<AppResult<RuntimeRetentionDelete>>;
   dispose(): Promise<void>;
 }
 export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource };
@@ -77,6 +83,15 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     },
     restore: async (bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<AppResult<RuntimeRestore>> => {
       try { return await runtime.restore(bytes, sourcePassphrase, destinationPassphrase, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    planRetention: async (signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>> => {
+      try { return await runtime.planRetention(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    reviewRetention: async (signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>> => {
+      try { return await runtime.reviewRetention(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    deleteReviewedRecords: async (consent: RuntimeRetentionConsent,signal?: AbortSignal): Promise<AppResult<RuntimeRetentionDelete>> => {
+      try { return await runtime.deleteReviewedRecords(consent,signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     status: () => stateCommand(() => runtime.status()), lock: () => stateCommand(() => runtime.lock()),
     exportEncrypted: async (profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>> => {

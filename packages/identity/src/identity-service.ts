@@ -1,10 +1,19 @@
 /** G01 local messaging identity lifecycle. This service exposes no signing, decryption or spending interface. */
-import { decodeBase64url, encodeBase64url, type PrivateRecordV1 } from '../../schemas/index.ts';
+import { decodeBase64url, encodeBase64url, parseTradeBinding, type TradeBinding, type PrivateRecordV1 } from '../../schemas/index.ts';
 import type { VaultService, VaultSession, VaultSessionAuthority, VaultSessionLease, Result } from '../../schemas/index.ts';
 import { decodeIdentityPayload, encodeIdentityPayload, identityPublicKey, identityRecordId, IDENTITY_PROVIDER_ID, IdentityError, parseIdentityHandle, type CreatedIdentity, type IdentityErrorCode, type IdentityHandle, type IdentityReference, type IdentityResult, type PrivateIdentityRecordV1 } from '../../schemas/index.ts';
-import type { MessagingIdentityProvider } from './noble-provider.ts';
+import { createLocalNobleIdentityProvider, type MessagingIdentityProvider } from './noble-provider.ts';
+import { createLocalNobleNostrProvider } from '../../nostr-crypto/index.ts';
+import { createDurableTradeChat, MAX_HISTORY_MESSAGES } from '../../messaging/index.ts';
 
 type IdentityVault = VaultService & VaultSessionAuthority;
+/** Worker-private dependency metadata only. No message, wrap, signature or secret leaves this operation. */
+export interface IdentityHistoryContext { readonly binding:TradeBinding; readonly participants:readonly [string,string]; }
+export interface IdentityHistoryDependencies {
+  readonly profileId:string; readonly revision:number; readonly conversationId:string; readonly binding:TradeBinding; readonly selfPublicKey:string;
+  readonly records:readonly Readonly<{recordId:string;receivedSequence:number;receivedAt:number}>[];
+}
+
 interface Job { epoch: number; lease: VaultSessionLease; controller: AbortController; buffers: Set<Uint8Array>; kept: boolean; committed: boolean; revision?: number; reference?: IdentityReference; handle?: HandleState; }
 interface HandleState { handle: IdentityHandle; session: Readonly<VaultSession>; lease: VaultSessionLease; profileId: string; recordId: string; publicKey: string; active: boolean; }
 export interface IdentityServiceOptions { readonly provider?: MessagingIdentityProvider; readonly lifecycle?: boolean; readonly now?: () => number; }
@@ -227,6 +236,27 @@ export class MessagingIdentityService {
       return job.reference;
     }, job => job.reference!);
   }
+  /** Purpose-specific DATA01 native history authentication. This is not a generic key/decryption callback. */
+  authenticateHistoryDependencies(session:VaultSession,identityRecord:string,context:IdentityHistoryContext,signal?:AbortSignal):Promise<IdentityResult<IdentityHistoryDependencies>> {
+    return this.#run(session,signal,async job=>{
+      const recordId=identityRecordId(identityRecord),identity=await this.#load(job,recordId);
+      if(identity.state!=='active')throw new IdentityError();
+      const binding=parseTradeBinding(context.binding);
+      const secret=decodeBase64url(identity.secretKey,32,32);job.buffers.add(secret);
+      const provider=createLocalNobleNostrProvider();
+      const publicKey=identityPublicKey(await provider.publicKey(secret));this.#guard(job);
+      if(publicKey!==identity.publicKey)throw new IdentityError();
+      const opened=createDurableTradeChat({vault:this.#vault,session:this.#guard(job),provider,binding,participants:context.participants,selfPublicKey:publicKey,maxMessages:MAX_HISTORY_MESSAGES});
+      if(!opened.ok)throw new IdentityError(opened.error.code==='LOCKED'||opened.error.code==='CANCELLED'||opened.error.code==='CONFLICT'||opened.error.code==='LIMIT_EXCEEDED'?opened.error.code:'INVALID_IDENTITY');
+      try{
+        const history=await opened.value.list(secret,job.controller.signal);this.#guard(job);
+        if(!history.ok)throw new IdentityError(history.error.code==='LOCKED'||history.error.code==='CANCELLED'||history.error.code==='CONFLICT'||history.error.code==='LIMIT_EXCEEDED'?history.error.code:'INVALID_IDENTITY');
+        const current=this.#guard(job);
+        const records=Object.freeze(history.value.messages.map(message=>Object.freeze({recordId:message.recordId,receivedSequence:message.receivedSequence,receivedAt:message.receivedAt})));
+        return Object.freeze({profileId:current.profileId,revision:current.revision,conversationId:opened.value.conversationId,binding,selfPublicKey:publicKey,records});
+      }finally{secret.fill(0);job.buffers.delete(secret);opened.value.close();}
+    });
+  }
   async publicIdentity(handle: IdentityHandle): Promise<IdentityResult<string>> {
     let state: HandleState;
     try { state = this.#state(handle); } catch (error) { return failure(errorCode(error, 'INVALID_IDENTITY')); }
@@ -260,3 +290,13 @@ export class MessagingIdentityService {
     if (this.#lifecycle) { window.removeEventListener('pagehide', this.#pagehide); document.removeEventListener('keydown', this.#activity, { capture: true }); document.removeEventListener('pointerdown', this.#activity, { capture: true }); }
   }
 }
+
+/** Narrow public composition capability intended only for an explicitly constructed private Worker. */
+export function createIdentityHistoryRetention(vault:IdentityVault){
+  const service=new MessagingIdentityService(vault,{provider:createLocalNobleIdentityProvider(),lifecycle:false});
+  return Object.freeze({
+    authenticate:(session:VaultSession,identityRecordId:string,context:IdentityHistoryContext,signal?:AbortSignal)=>service.authenticateHistoryDependencies(session,identityRecordId,context,signal),
+    dispose:()=>service.dispose(),
+  });
+}
+export type IdentityHistoryRetention=ReturnType<typeof createIdentityHistoryRetention>;

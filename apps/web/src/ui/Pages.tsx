@@ -7,6 +7,7 @@ import type { Route } from './routes.ts';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
+import { RetentionPanel } from './RetentionPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 
 export const pageTitle: Readonly<Record<Route['page'], string>> = Object.freeze({
@@ -40,6 +41,7 @@ export function Home({ services, unlocked, restoredProfileId, onSelectionConsume
       <h2 id="available-title">{m.readyTitle}</h2>
       <p>{services ? m.readyText : m.unavailable}</p>
       {restoredProfileId ? <p role="status">{m.restoredSelection(restoredProfileId)}</p> : null}
+      {restoredProfileId ? <p className="warning">{m.retentionRestoreWarning}</p> : null}
       {restoredProfileId && unlocked ? <p>{m.lockToOpenRestored}</p> : null}
       {unlocked ? <>{createdId ? <p className="notice" role="status">{m.created(createdId)}</p> : null}<p role="status">{m.unlockedHelp}</p></> :
         services ? open === 'unlock' ? <UnlockForm services={services} initialProfileId={restoredProfileId} onCancel={() => { setOpen('none'); onSelectionConsumed(); }} />
@@ -73,7 +75,7 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
       {services ? <BackupVerificationForm services={services} /> : <p>{m.unavailable}</p>}
     </section>
     <section className="panel" aria-labelledby="restore-title">
-      <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
+      <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p><p className="warning">{m.retentionRestoreWarning}</p>
       {services ? <RestoreForm services={services} onOpenRestored={onOpenRestored} onInventoryChanged={() => setInventoryVersion(v => v + 1)} /> : <p>{m.unavailable}</p>}
     </section>
     <RecoveryReferencesPanel services={services} />
@@ -83,6 +85,7 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
 export function Settings({ diagnostics = null, services = null, scope }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number }) {
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
+    <RetentionPanel services={services} />
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>

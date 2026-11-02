@@ -127,27 +127,29 @@ try {
   await offers();
   assert.equal(await sessionItems(), 0, 'locking clears both loaded and unsaved reviews');
 
-  // 5. Unlock, load, delete from the profile; a reload + load finds nothing.
+  // 5. Saved deletion navigates to explicit retention review. This offline build protects unknown dependencies.
   await unlock(profileId);
   await offers();
   await page.getByRole('button', { name: 'Load saved reviews', exact: true }).click();
   await page.getByRole('status').filter({ hasText: 'Saved reviews loaded and checked again.' }).waitFor();
-  await page.locator('.session-list li').getByRole('button', { name: 'Delete from profile', exact: true }).click();
-  await page.getByRole('status').filter({ hasText: 'Deleted from the open profile.' }).waitFor();
-  assert.equal(await sessionItems(), 0, 'a deleted loaded review leaves memory too');
+  await page.locator('.session-list li').getByRole('link', { name: 'Review deletion in Settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Preview local records offline', exact: true }).click();
+  await page.getByRole('status').filter({ hasText: '0 records eligible for this complete reviewed deletion; 1 record protected' }).waitFor();
+  assert.equal(await page.getByRole('button',{name:'Delete the reviewed eligible group',exact:true}).count(),0);
+  await page.getByText('This build has no native dependency provider.',{exact:false}).waitFor();
   await page.reload();
   await unlock(profileId);
   await offers();
   await page.getByRole('button', { name: 'Load saved reviews', exact: true }).click();
   await page.getByRole('status').filter({ hasText: 'Saved reviews loaded and checked again.' }).waitFor();
-  assert.equal(await sessionItems(), 0);
+  assert.equal(await sessionItems(), 1, 'unknown native dependencies preserve the encrypted saved copy across reload');
 
   const surfaces = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));
   assert.deepEqual(surfaces, { local: 0, session: 0 });
   assert.deepEqual(unexpected, []);
   await context.close();
   console.log(JSON.stringify({ fixture: 'synthetic-demo-saved-reviews-local-chromium', browser: browser.version(),
-    journey: ['locked-no-save', 'create', 'save', 'encrypted-at-rest', 'reload-unlock-load', 'lock-hides', 'delete', 'reload-empty'],
+    journey: ['locked-no-save', 'create', 'save', 'encrypted-at-rest', 'reload-unlock-load', 'lock-hides', 'explicit-retention-review', 'unknown-protected', 'reload-preserved'],
     unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }

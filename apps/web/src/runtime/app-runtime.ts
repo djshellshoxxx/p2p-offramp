@@ -1,10 +1,10 @@
 /** Partial G07 document composition root. Public commands never expose a provider, record payload or key. */
 import {
   MAX_RUNTIME_SEQUENCE, RUNTIME_DISPOSE_TIMEOUT_MS, RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
-  parseRuntimeCommand, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
+  parseRuntimeCommand, parseRuntimeRetentionConsent, parseRuntimeConfig, parseRuntimeMessage, parseBackupBytes, runtimeFailure, RuntimeBoundaryError,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeExport, type RuntimeHandle, type RuntimeInventory, type RuntimeMessage,
   type RuntimeOperation, type RuntimeRestore, type RuntimeResult, type RuntimeStatus, type RuntimeValue,
-  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences,
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeRetentionPreview, type RuntimeRetentionConsent, type RuntimeRetentionDelete,
 } from '../../../../packages/schemas/index.ts';
 import { capturePendingMetadata, type PendingMetadata } from './pending-metadata.ts';
 
@@ -168,16 +168,17 @@ export class AppRuntime {
     if (pending.metadata.operation !== message.operation || pending.metadata.generation !== message.generation) { this.#close('PROTOCOL_ERROR'); return; }
     this.#checkIdle(); if (!this.#pending.has(message.requestId)) return;
     if (message.result.ok && message.operation !== 'exportEncrypted' && message.operation !== 'listProfiles' && message.operation !== 'restore' &&
-        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' && message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification') {
+        message.operation !== 'saveTermsReview' && message.operation !== 'listTermsReviews' && message.operation !== 'deleteTermsReview' && message.operation !== 'listRecoveryReferences' && message.operation !== 'verifyBackup' && message.operation !== 'checkBackupVerification' && message.operation !== 'planRetention' && message.operation !== 'reviewRetention' && message.operation !== 'deleteReviewedRecords') {
       if (!this.#acceptStatus(message, message.result.value, pending)) { this.#close('PROTOCOL_ERROR'); return; }
       this.#settle(message.requestId, Object.freeze({ ok: true, value: this.#current }));
     } else {
       if (!message.result.ok && (pending.metadata.operation === 'unlock' || pending.metadata.operation === 'create')) this.#resetStatus();
       // Saved-review replies belong to the profile the command named; it must still be the open profile.
-      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' || message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification') &&
+      if (message.result.ok && (message.operation === 'saveTermsReview' || message.operation === 'listTermsReviews' || message.operation === 'deleteTermsReview' || message.operation === 'listRecoveryReferences' || message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification' || message.operation === 'planRetention' || message.operation === 'reviewRetention' || message.operation === 'deleteReviewedRecords') &&
           (!('profileId' in pending.metadata) || this.#current.state !== 'unlocked' || this.#current.handle.profileId !== pending.metadata.profileId)) {
         this.#settle(message.requestId, runtimeFailure('LOCKED')); return;
       }
+      if (message.result.ok && (message.operation === 'planRetention' || message.operation === 'reviewRetention' || message.operation === 'deleteReviewedRecords') && (!('profileId' in pending.metadata) || message.result.value.profileId !== pending.metadata.profileId)) { this.#close('PROTOCOL_ERROR'); return; }
       if (message.result.ok && (message.operation === 'verifyBackup' || message.operation === 'checkBackupVerification')) {
         const receipt = message.operation === 'verifyBackup' ? message.result.value : message.result.value.verification;
         if (receipt && (!('profileId' in pending.metadata) || receipt.profileId !== pending.metadata.profileId)) { this.#close('PROTOCOL_ERROR'); return; }
@@ -267,7 +268,7 @@ export class AppRuntime {
     return !result.ok ? result : 'bytes' in result.value ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
   }
   /** Purpose-bound open-profile commands. Replies after lock or profile switch are refused. */
-  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification', fields: Record<string, unknown>,
+  async #profileCommand<T extends RuntimeValue>(operation: 'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention' | 'reviewRetention' | 'deleteReviewedRecords', fields: Record<string, unknown>,
     accept: (value: RuntimeValue) => value is T, signal?: AbortSignal): Promise<RuntimeResult<T>> {
     this.#checkIdle();
     const current = this.#current;
@@ -277,6 +278,15 @@ export class AppRuntime {
     this.#checkIdle();
     if (result.ok && (this.#closed || this.#disposing || this.#generation !== generation || !this.isCurrent(current.handle))) return runtimeFailure('LOCKED');
     return !result.ok ? result : accept(result.value) ? Object.freeze({ ok: true, value: result.value }) : runtimeFailure('PROTOCOL_ERROR');
+  }
+  planRetention(signal?: AbortSignal): Promise<RuntimeResult<RuntimeRetentionPreview>> {
+    return this.#profileCommand('planRetention',{},(value):value is RuntimeRetentionPreview=>'previewId' in value,signal);
+  }
+  reviewRetention(signal?: AbortSignal): Promise<RuntimeResult<RuntimeRetentionPreview>> {
+    return this.#profileCommand('reviewRetention',{},(value):value is RuntimeRetentionPreview=>'previewId' in value,signal);
+  }
+  deleteReviewedRecords(consent: RuntimeRetentionConsent,signal?: AbortSignal): Promise<RuntimeResult<RuntimeRetentionDelete>> {
+    try { const parsed=parseRuntimeRetentionConsent(consent);return this.#profileCommand('deleteReviewedRecords',{...parsed},(value):value is RuntimeRetentionDelete=>'deletedCount' in value,signal); } catch { return Promise.resolve(runtimeFailure('INVALID_INPUT')); }
   }
   verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<RuntimeResult<BackupVerificationReceipt>> {
     return this.#profileCommand('verifyBackup', {bytes,passphrase}, (value): value is BackupVerificationReceipt => 'scope' in value && value.scope === 'complete-profile-v1', signal);

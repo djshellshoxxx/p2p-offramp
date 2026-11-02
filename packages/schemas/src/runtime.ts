@@ -1,8 +1,8 @@
 /**
- * Partial G07/MEM01 offline Worker boundary. No network or signer operation exists. The only record operations are the
- * purpose-bound saved terms reviews and scalar offline recovery inspection; no generic record read or write exists.
+ * G07/MEM01 Worker boundary. Default construction is offline. Explicit native retention review uses only a
+ * trusted private constructor provider; no IPC provider, signer or generic record read/write operation exists.
  */
-import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
+import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, MAX_REVISION, ValidationError } from './vault.ts';
 import { parseBackupVerificationReceipt, type BackupVerificationReceipt, type RuntimeBackupVerification } from './backup-verification.ts';
 import { MAX_BACKUP_BYTES, parseBackupBytes } from './backup.ts';
 import { isSavedReviewSource, MAX_SAVED_REVIEW_BYTES, MAX_SAVED_REVIEWS, type SavedReviewSource } from './saved-review.ts';
@@ -14,9 +14,9 @@ export const RUNTIME_REQUEST_TIMEOUT_MS = 30_000;
 export const RUNTIME_DISPOSE_TIMEOUT_MS = 1_000;
 export const RUNTIME_IDLE_TIMEOUT_MS = 5 * 60_000;
 export type RuntimeErrorCode = 'INVALID_INPUT' | 'UNSUPPORTED_ENVIRONMENT' | 'UNSUPPORTED_VERSION' | 'NOT_FOUND' |
-  'AUTHENTICATION_FAILED' | 'LOCKED' | 'CONFLICT' | 'LIMIT_EXCEEDED' | 'QUOTA_EXCEEDED' | 'STORAGE_UNAVAILABLE' | 'CANCELLED' | 'BUSY' | 'PROTOCOL_ERROR' | 'TIMEOUT';
+  'AUTHENTICATION_FAILED' | 'LOCKED' | 'CONFLICT' | 'LIMIT_EXCEEDED' | 'QUOTA_EXCEEDED' | 'STORAGE_UNAVAILABLE' | 'CANCELLED' | 'BUSY' | 'PROTOCOL_ERROR' | 'TIMEOUT' | 'NATIVE_PROOF_REQUIRED';
 const CODES: readonly RuntimeErrorCode[] = ['INVALID_INPUT', 'UNSUPPORTED_ENVIRONMENT', 'UNSUPPORTED_VERSION', 'NOT_FOUND',
-  'AUTHENTICATION_FAILED', 'LOCKED', 'CONFLICT', 'LIMIT_EXCEEDED', 'QUOTA_EXCEEDED', 'STORAGE_UNAVAILABLE', 'CANCELLED', 'BUSY', 'PROTOCOL_ERROR', 'TIMEOUT'];
+  'AUTHENTICATION_FAILED', 'LOCKED', 'CONFLICT', 'LIMIT_EXCEEDED', 'QUOTA_EXCEEDED', 'STORAGE_UNAVAILABLE', 'CANCELLED', 'BUSY', 'PROTOCOL_ERROR', 'TIMEOUT', 'NATIVE_PROOF_REQUIRED'];
 export class RuntimeBoundaryError extends Error {
   readonly code: RuntimeErrorCode;
   constructor(code: RuntimeErrorCode = 'INVALID_INPUT') { super('Local runtime operation unavailable.'); this.name = 'RuntimeBoundaryError'; this.code = code; }
@@ -39,11 +39,25 @@ export interface RuntimeSavedReviewRef { readonly recordId: string; }
 export interface RuntimeSavedReview { readonly recordId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array; }
 /** `skipped` counts `trade` records that are not readable saved reviews; they are never returned or changed. */
 export interface RuntimeSavedReviews { readonly items: readonly RuntimeSavedReview[]; readonly skipped: number; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | BackupVerificationReceipt | RuntimeBackupVerification;
+/** Worker-owned preview capability. Counts contain no records, parties, payloads or native proof. */
+export interface RuntimeRetentionPreview {
+  readonly version: 1; readonly profileId: string; readonly previewId: string; readonly revision: number;
+  readonly archiveReviewCount: number; readonly reviewedDeleteCount: number; readonly protectedCount: number;
+  readonly nativeReviewAvailable: boolean; readonly logicalOnly: true; readonly backupAndRemoteCopiesUnaffected: true;
+}
+export interface RuntimeRetentionConsent {
+  readonly previewId: string; readonly expectedRevision: number; readonly consentRevision: number;
+  readonly reviewed: true; readonly logicalOnly: true; readonly backupAndRemoteLimitsAcknowledged: true;
+}
+export interface RuntimeRetentionDelete {
+  readonly profileId: string; readonly revision: number; readonly deletedCount: number;
+  readonly logicalOnly: true; readonly backupAndRemoteCopiesUnaffected: true;
+}
+export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | BackupVerificationReceipt | RuntimeBackupVerification | RuntimeRetentionPreview | RuntimeRetentionDelete;
 export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity' |
-  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification';
+  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention' | 'reviewRetention' | 'deleteReviewedRecords';
 const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity',
-  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'verifyBackup', 'checkBackupVerification'];
+  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'verifyBackup', 'checkBackupVerification', 'planRetention', 'reviewRetention', 'deleteReviewedRecords'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
@@ -51,7 +65,8 @@ export type RuntimeCommand = Header & (
   { readonly operation: 'create'; readonly passphrase: string } |
   { readonly operation: 'restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string } |
   { readonly operation: 'verifyBackup'; readonly profileId: string; readonly bytes: Uint8Array; readonly passphrase: string } |
-  { readonly operation: 'checkBackupVerification'; readonly profileId: string } |
+  { readonly operation: 'checkBackupVerification' | 'planRetention' | 'reviewRetention'; readonly profileId: string } |
+  ({ readonly operation: 'deleteReviewedRecords'; readonly profileId: string } & RuntimeRetentionConsent) |
   { readonly operation: 'exportEncrypted'; readonly profileId: string } |
   { readonly operation: 'saveTermsReview'; readonly profileId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array } |
   { readonly operation: 'listTermsReviews'; readonly profileId: string } |
@@ -60,6 +75,9 @@ export type RuntimeCommand = Header & (
   { readonly operation: 'status' | 'listProfiles' | 'lock' | 'dispose' | 'activity' });
 export type RuntimeResponse = Header & { readonly kind: 'response'; readonly operation: RuntimeOperation } & (
   { readonly result: { readonly ok: false; readonly error: RuntimeError } } |
+  { readonly operation: 'planRetention'; readonly result: { readonly ok: true; readonly value: RuntimeRetentionPreview } } |
+  { readonly operation: 'reviewRetention'; readonly result: { readonly ok: true; readonly value: RuntimeRetentionPreview } } |
+  { readonly operation: 'deleteReviewedRecords'; readonly result: { readonly ok: true; readonly value: RuntimeRetentionDelete } } |
   { readonly operation: 'verifyBackup'; readonly result: { readonly ok: true; readonly value: BackupVerificationReceipt } } |
   { readonly operation: 'checkBackupVerification'; readonly result: { readonly ok: true; readonly value: RuntimeBackupVerification } } |
   { readonly operation: 'exportEncrypted'; readonly result: { readonly ok: true; readonly value: RuntimeExport } } |
@@ -69,7 +87,7 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'deleteTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviews } } |
   { readonly operation: 'listRecoveryReferences'; readonly result: { readonly ok: true; readonly value: RuntimeRecoveryReferences } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification' | 'planRetention' | 'reviewRetention' | 'deleteReviewedRecords'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -136,8 +154,8 @@ export function parseRuntimeConfig(input: unknown): RuntimeConfig {
 export function parseRuntimeCommand(input: unknown): RuntimeCommand {
   const op = operation(own(input, 'operation'));
   const extra = op === 'init' ? ['config'] : op === 'unlock' ? ['profileId', 'passphrase'] : op === 'create' ? ['passphrase'] :
-    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'verifyBackup' ? ['profileId', 'bytes', 'passphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification' ? ['profileId'] :
-    op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] : [];
+    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'verifyBackup' ? ['profileId', 'bytes', 'passphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification' || op === 'planRetention' || op === 'reviewRetention' ? ['profileId'] :
+    op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] : op === 'deleteReviewedRecords' ? ['profileId', 'previewId', 'expectedRevision', 'consentRevision', 'reviewed', 'logicalOnly', 'backupAndRemoteLimitsAcknowledged'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
   if (raw.operation !== op) return fail();
   if (op === 'init') return Object.freeze({ ...base, operation: op, config: parseRuntimeConfig(raw.config) });
@@ -148,7 +166,8 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
       sourcePassphrase: passphrase(raw.sourcePassphrase), destinationPassphrase: passphrase(raw.destinationPassphrase) });
   }
   if (op === 'verifyBackup') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES), passphrase: passphrase(raw.passphrase) });
-  if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
+  if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification' || op === 'planRetention' || op === 'reviewRetention') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
+  if (op === 'deleteReviewedRecords') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), ...retentionConsent(raw) });
   if (op === 'saveTermsReview') {
     const bytes = boundedBytes(raw.bytes, MAX_SAVED_REVIEW_BYTES); if (bytes.byteLength === 0) return fail();
     return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), source: source(raw.source), bytes });
@@ -226,6 +245,34 @@ function savedReviews(input: unknown): RuntimeSavedReviews {
     return Object.freeze({ items: Object.freeze(items), skipped });
   } catch (error) { if (error instanceof RuntimeBoundaryError) throw error; return fail(); }
 }
+function retentionRevision(value: unknown): number {
+  const result = sequence(value); if (result > MAX_REVISION) return fail(); return result;
+}
+function previewId(value: unknown): string {
+  try { const bytes = decodeBase64url(value, 32, 32); bytes.fill(0); return value as string; } catch { return fail(); }
+}
+function retentionConsent(raw: Record<string, unknown>): RuntimeRetentionConsent {
+  if (raw.reviewed !== true || raw.logicalOnly !== true || raw.backupAndRemoteLimitsAcknowledged !== true) return fail();
+  const expectedRevision = retentionRevision(raw.expectedRevision), consentRevision = retentionRevision(raw.consentRevision);
+  if (expectedRevision !== consentRevision) return fail();
+  return Object.freeze({ previewId: previewId(raw.previewId), expectedRevision, consentRevision, reviewed: true, logicalOnly: true, backupAndRemoteLimitsAcknowledged: true });
+}
+export function parseRuntimeRetentionConsent(input: unknown): RuntimeRetentionConsent {
+  return retentionConsent(exact(input, ['previewId','expectedRevision','consentRevision','reviewed','logicalOnly','backupAndRemoteLimitsAcknowledged']));
+}
+function retentionPreview(input: unknown): RuntimeRetentionPreview {
+  const raw = exact(input, ['version','profileId','previewId','revision','archiveReviewCount','reviewedDeleteCount','protectedCount','nativeReviewAvailable','logicalOnly','backupAndRemoteCopiesUnaffected']);
+  if (raw.version !== 1 || raw.logicalOnly !== true || raw.backupAndRemoteCopiesUnaffected !== true || typeof raw.nativeReviewAvailable !== 'boolean') return fail();
+  const archiveReviewCount = sequence(raw.archiveReviewCount), reviewedDeleteCount = sequence(raw.reviewedDeleteCount), protectedCount = sequence(raw.protectedCount);
+  if (archiveReviewCount > reviewedDeleteCount + protectedCount || reviewedDeleteCount + protectedCount > MAX_RECORDS || !raw.nativeReviewAvailable && reviewedDeleteCount !== 0) return fail();
+  return Object.freeze({version:1,profileId:profile(raw.profileId),previewId:previewId(raw.previewId),revision:retentionRevision(raw.revision),archiveReviewCount,reviewedDeleteCount,protectedCount,nativeReviewAvailable:raw.nativeReviewAvailable,logicalOnly:true,backupAndRemoteCopiesUnaffected:true});
+}
+function retentionDeleted(input: unknown): RuntimeRetentionDelete {
+  const raw = exact(input, ['profileId','revision','deletedCount','logicalOnly','backupAndRemoteCopiesUnaffected']);
+  const deletedCount = sequence(raw.deletedCount,1);
+  if (deletedCount > 256 || raw.logicalOnly !== true || raw.backupAndRemoteCopiesUnaffected !== true) return fail();
+  return Object.freeze({profileId:profile(raw.profileId),revision:retentionRevision(raw.revision),deletedCount,logicalOnly:true,backupAndRemoteCopiesUnaffected:true});
+}
 export function parseRuntimeMessage(input: unknown): RuntimeMessage {
   const kind = own(input, 'kind');
   if (kind === 'locked' || kind === 'closed') {
@@ -245,6 +292,9 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
     return Object.freeze({ ...base, result: runtimeFailure(value) });
   }
   const result = exact(raw.result, ['ok', 'value']); if (ok !== true || result.ok !== true) return fail();
+  if (base.operation === 'planRetention') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: retentionPreview(result.value) }) });
+  if (base.operation === 'reviewRetention') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: retentionPreview(result.value) }) });
+  if (base.operation === 'deleteReviewedRecords') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: retentionDeleted(result.value) }) });
   if (base.operation === 'verifyBackup') {
     try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseBackupVerificationReceipt(result.value) }) }); } catch { return fail(); }
   }

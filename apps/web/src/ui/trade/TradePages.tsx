@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
 import type { ImportOutcome, SavedReviewStore, StoredReview, TradeReviewController, TradeReviewSnapshot } from '../../trade/review-controller.ts';
 import { tradePageMessages as p, tradeMessages } from './trade-messages.ts';
+import { messages as m } from '../messages.ts';
 import { TradeTermsReview } from './TradeTermsReview.tsx';
 
 const noSubscription = () => () => {};
@@ -34,7 +35,7 @@ export type SavedStoreProp = { readonly store: SavedReviewStore | null };
 function SavedActions({ trade, item, store, busy }: { readonly trade: TradeReviewController; readonly item: StoredReview; readonly store: SavedReviewStore | null; readonly busy: boolean }) {
   if (item.savedId !== null) return <>
     <small className="helper"> ({p.savedBadge})</small>
-    {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.savedId!, store); }}>{p.deleteFromProfile}</button></> : null}
+    {store ? <>{' '}<a href="#/settings">{m.retentionManageSaved}</a></> : null}
   </>;
   return store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.saveToProfile(item.localId, store); }}>{p.saveToProfile}</button></> : null;
 }
@@ -59,7 +60,7 @@ function SavedPanel({ trade, snapshot, store }: { readonly trade: TradeReviewCon
       <h3>{p.unreviewableTitle}</h3>
       <ul className="session-list">{snapshot.unreviewable.map(item => <li key={item.recordId}>
         {p.unreviewableItem(item.recordId)}: {p.rejected[item.code]}
-        {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.recordId, store); }}>{p.deleteFromProfile}</button></> : null}
+        {store ? <>{' '}<a href="#/settings">{m.retentionManageSaved}</a></> : null}
       </li>)}</ul>
     </> : null}
   </section>;

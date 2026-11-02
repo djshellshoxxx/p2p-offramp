@@ -180,10 +180,18 @@ export class RetentionService {
     } catch(thrown){try{dispose?.();}catch{/* do not expose callback failures */}throw thrown;}
   }
 
+  /** Local classification only. This never invokes the native authority or performs network work. */
   planRetention(nowMs:number,signal?:AbortSignal):Promise<RetentionResult<RetentionPlan>>{
+    return this.#plan(nowMs,false,signal);
+  }
+  /** Explicit native dependency review, separate from the offline age/count preview. */
+  reviewRetention(nowMs:number,signal?:AbortSignal):Promise<RetentionResult<RetentionPlan>>{
+    return this.#plan(nowMs,true,signal);
+  }
+  #plan(nowMs:number,nativeReview:boolean,signal?:AbortSignal):Promise<RetentionResult<RetentionPlan>>{
     return this.#run(signal,async job=>{
       if(!integer(nowMs))return fail('INVALID_INPUT');
-      const scope=await this.#scan(job);const proof=await this.#review(scope,job);
+      const scope=await this.#scan(job);const proof=nativeReview?await this.#review(scope,job):undefined;
       let plan:RetentionPlan;
       let selected:readonly string[];
       try {
@@ -237,27 +245,40 @@ export interface RetentionReconcilerPort {
     readonly outcome:string; readonly intent:IntentV1; readonly evidence:string; readonly escrowState:string|null;
   }>>;
 }
+/** Worker-private live capability minted only after actual finalized native payout/credit checks.
+ * Imported receipts or a terminal status are not a payout closure. The producer must read the
+ * correct asset/recipient at coherent canonical anchors and revoke on scope/source/freshness changes.
+ */
+export interface NativePayoutClosureLease {
+  readonly scope:RetentionScope; readonly intents:readonly IntentV1[];
+  current():boolean; dispose():void;
+}
+export interface NativePayoutClosureAuthority {
+  reviewPayoutClosure(scope:RetentionScope,intents:readonly IntentV1[],signal:AbortSignal):Promise<NativePayoutClosureLease>;
+}
 export interface JournalRetentionOptions {
   readonly vault:RetentionVault; readonly session:VaultSession;
+  /** Reconciliation must use a read-only vault; needed transitions require ordinary reconciliation first. */
   readonly journal:RetentionJournalPort; readonly reconciler:RetentionReconcilerPort;
+  readonly payoutClosure?:NativePayoutClosureAuthority;
   /** Maintained source/lifecycle capability, never imported freshness metadata. Invalidate on native source changes. */
   readonly currentScope:()=>boolean;
   readonly now?:()=>number; readonly maxAgeMs?:number;
 }
-/** Narrow real adapter: journal-only profiles, EVM finalized/failed records AND released/refunded escrow, current native reconciliation.
+/** Narrow real adapter: journal-only profiles, EVM finalized/failed records AND released/refunded escrow, current native reconciliation and a live exact-scope native payout-closure lease.
  * Saved terms, chat, identities, opaque payloads and nonterminal profiles remain unsupported by THIS adapter.
  * An actual reconciliation that changes the G02 revision requires a new explicit review; no hidden retry/write.
  */
 export class JournalNativeRetentionAuthority implements NativeRetentionAuthority {
   readonly #lease:VaultSessionLease; readonly #journal:RetentionJournalPort;
-  readonly #reconciler:RetentionReconcilerPort; readonly #currentScope:()=>boolean;
+  readonly #reconciler:RetentionReconcilerPort; readonly #payoutClosure:NativePayoutClosureAuthority|undefined; readonly #currentScope:()=>boolean;
   readonly #now:()=>number; readonly #maxAge:number;
   #disposed=false; #epoch=0; #active:AbortController|undefined;
   constructor(options:JournalRetentionOptions){
     const maxAge=options.maxAgeMs??5000;
     if(typeof options.currentScope!=='function'||typeof (options.now??performance.now)!=='function'||
       !integer(maxAge)||maxAge<1||maxAge>30_000)throw new Failure('INVALID_INPUT');
-    this.#journal=options.journal;this.#reconciler=options.reconciler;this.#currentScope=options.currentScope;
+    this.#journal=options.journal;this.#reconciler=options.reconciler;this.#payoutClosure=options.payoutClosure;this.#currentScope=options.currentScope;
     this.#now=options.now??(()=>performance.now());this.#maxAge=maxAge;
     this.#lease=unwrap(options.vault.captureSession(options.session,()=>this.dispose()));
   }
@@ -266,6 +287,7 @@ export class JournalNativeRetentionAuthority implements NativeRetentionAuthority
     const controller=new AbortController(),epoch=++this.#epoch;
     this.#active?.abort();this.#active=controller;
     const abort=()=>controller.abort();listen(external,abort);if(isAborted(external))abort();
+    let payoutDispose:(()=>void)|undefined,payoutCurrent:(()=>boolean)|undefined;
     let proofDisposed=false,handedOff=false,last=Number.NaN,started=Number.NaN;
     // No injected callback may run after this final owned lifecycle predicate.
     const ownedCurrent=():boolean=>!this.#disposed&&!proofDisposed&&this.#epoch===epoch&&!controller.signal.aborted;
@@ -283,14 +305,15 @@ export class JournalNativeRetentionAuthority implements NativeRetentionAuthority
       }catch{return false;}
     };
     const guard=()=>{if(!current())return fail('NATIVE_PROOF_REQUIRED');};
-    const dispose=()=>{if(proofDisposed)return;proofDisposed=true;unlisten(external,abort);controller.abort();if(this.#active===controller)this.#active=undefined;};
+    const dispose=()=>{if(proofDisposed)return;proofDisposed=true;try{unlisten(external,abort);}finally{controller.abort();try{payoutDispose?.();}catch{/* Cleanup cannot alter a durable outcome. */}if(this.#active===controller)this.#active=undefined;}};
     try {
+      const reviewPayout=this.#payoutClosure?.reviewPayoutClosure;if(typeof reviewPayout!=='function')return fail('NATIVE_PROOF_REQUIRED');
       started=last=this.#now();
       if(!Number.isFinite(started)||started<0)return fail('NATIVE_PROOF_REQUIRED');
       guard();
       if(scope.records.length<1||scope.records.length>MAX_RETENTION_DELETES||scope.records.some(r=>r.kind!=='journal'||r.schemaVersion!==1)||
         scope.candidates.length!==scope.records.length||scope.candidates.some(c=>c.purpose!=='terminal-intent'))return fail('NATIVE_PROOF_REQUIRED');
-      const expected=scope.records.map(record=>decodeIntentPayload(record.payload));
+      const expected=Object.freeze(scope.records.map(record=>decodeIntentPayload(record.payload)));
       if(expected.some(intent=>intent.binding.chain!=='evm'||!['finalized','failed'].includes(intent.state))||
         new Set(expected.map(intent=>intent.intentId)).size!==expected.length)return fail('NATIVE_PROOF_REQUIRED');
       const listed=await this.#journal.list(controller.signal);guard();
@@ -305,12 +328,22 @@ export class JournalNativeRetentionAuthority implements NativeRetentionAuthority
           !['released','refunded'].includes(result.value.escrowState??'')||result.value.evidence==='none'||!this.#journal.isTerminalVerified(intent.intentId))return fail('NATIVE_PROOF_REQUIRED');
         verified.push(intent.intentId);
       }
+      let received:NativePayoutClosureLease;
+      try{received=await reviewPayout.call(this.#payoutClosure,scope,expected,controller.signal);}catch{return fail('NATIVE_PROOF_REQUIRED');}
+      let payout:Record<string,unknown>;try{payout=intentData(received,['scope','intents','current','dispose']);}catch{return fail('NATIVE_PROOF_REQUIRED');}
+      if(typeof payout.current!=='function'||typeof payout.dispose!=='function')return fail('NATIVE_PROOF_REQUIRED');
+      const payoutCurrentMethod=payout.current,payoutDisposeMethod=payout.dispose;let payoutDisposed=false;
+      payoutDispose=()=>{if(payoutDisposed)return;payoutDisposed=true;payoutDisposeMethod.call(received);};
+      payoutCurrent=()=>{if(payoutDisposed)return false;const result=payoutCurrentMethod.call(received);return result===true&&!payoutDisposed;};
+      guard();
+      // These are live original object identities, not a cloneable receipt or imported paid flag.
+      if(payout.scope!==scope||payout.intents!==expected||!payoutCurrent())return fail('NATIVE_PROOF_REQUIRED');
       guard();
       const proofCurrent=():boolean=>{
-        if(!current())return false;
+        if(!current()||!payoutCurrent?.())return false;
         for(const id of verified)if(!this.#journal.isTerminalVerified(id))return false;
-        // Terminal callbacks can revoke this authority while returning true. Do not call anything external after this check.
-        return ownedCurrent();
+        // Source/terminal callbacks may retire the payout lease while returning true. End with both payout and owned lifecycle checks.
+        return current()&&payoutCurrent?.()===true&&ownedCurrent();
       };
       if(!proofCurrent())return fail('NATIVE_PROOF_REQUIRED');
       const proof=Object.freeze({scope,safeRecordIds:Object.freeze(scope.records.map(r=>r.id)),current:proofCurrent,dispose});
