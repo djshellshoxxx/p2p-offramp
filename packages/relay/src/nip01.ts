@@ -44,27 +44,49 @@ export function withinBytes(value: string, max: number): boolean {
 const isSubId = (value: unknown): value is string => typeof value === 'string' && /^[\x21-\x7e]{1,64}$/.test(value);
 const isMessage = (value: unknown): value is string => typeof value === 'string' && value.length <= FRAME_LIMITS.maxMessageLength;
 
-export function parseEvent(input: unknown): NostrEvent | null {
-  if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
-  const keys = Object.keys(input);
-  if (keys.length !== 7 || !['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig'].every(key => keys.includes(key))) return null;
-  const { id, pubkey, created_at, kind, tags, content, sig } = input as Record<string, unknown>;
-  if (!isHex64(id) || !isHex64(pubkey) || typeof sig !== 'string' || !HEX128.test(sig)) return null;
-  if (typeof created_at !== 'number' || !Number.isSafeInteger(created_at) || created_at < 0 || created_at > 0xffffffff) return null;
-  if (typeof kind !== 'number' || !Number.isSafeInteger(kind) || kind < 0 || kind > 65_535) return null;
-  if (typeof content !== 'string' || !withinBytes(content, FRAME_LIMITS.maxEventBytes)) return null;
-  if (!Array.isArray(tags) || tags.length > FRAME_LIMITS.maxTags) return null;
-  const outTags: string[][] = [];
-  for (const tag of tags as unknown[]) {
-    if (!Array.isArray(tag) || tag.length < 1 || tag.length > FRAME_LIMITS.maxTagItems) return null;
-    const items: string[] = [];
-    for (const item of tag as unknown[]) {
-      if (typeof item !== 'string' || !withinBytes(item, FRAME_LIMITS.maxTagItemBytes)) return null;
-      items.push(item);
-    }
-    outTags.push(items);
+/** Called only inside the guarded event boundary; no foreign iterator or indexed getter is used. */
+function indexedValues(input: unknown, minimum: number, maximum: number): unknown[] | null {
+  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return null;
+  const length: unknown = Object.getOwnPropertyDescriptor(input, 'length')?.value;
+  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < minimum || length > maximum || Reflect.ownKeys(input).length !== length + 1) return null;
+  const values: unknown[] = [];
+  for (let index = 0; index < length; index++) {
+    const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
+    if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+    values.push(descriptor.value);
   }
-  return Object.freeze({ id, pubkey, created_at, kind, tags: Object.freeze(outTags.map(tag => Object.freeze(tag))), content, sig });
+  return values;
+}
+export function parseEvent(input: unknown): NostrEvent | null {
+  try {
+    if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
+    const proto: unknown = Object.getPrototypeOf(input); if (proto !== Object.prototype && proto !== null) return null;
+    const expected = ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig'], keys = Reflect.ownKeys(input);
+    if (keys.length !== expected.length || keys.some(key => typeof key !== 'string' || !expected.includes(key))) return null;
+    const raw: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+    for (const key of expected) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, key);
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+      raw[key] = descriptor.value;
+    }
+    const { id, pubkey, created_at, kind, tags, content, sig } = raw;
+    if (!isHex64(id) || !isHex64(pubkey) || typeof sig !== 'string' || !HEX128.test(sig)) return null;
+    if (typeof created_at !== 'number' || !Number.isSafeInteger(created_at) || created_at < 0 || created_at > 0xffffffff) return null;
+    if (typeof kind !== 'number' || !Number.isSafeInteger(kind) || kind < 0 || kind > 65_535) return null;
+    if (typeof content !== 'string' || !withinBytes(content, FRAME_LIMITS.maxEventBytes)) return null;
+    const captured = indexedValues(tags, 0, FRAME_LIMITS.maxTags); if (captured === null) return null;
+    const outTags: string[][] = [];
+    for (const tag of captured) {
+      const capturedItems = indexedValues(tag, 1, FRAME_LIMITS.maxTagItems); if (capturedItems === null) return null;
+      const items: string[] = [];
+      for (const item of capturedItems) {
+        if (typeof item !== 'string' || !withinBytes(item, FRAME_LIMITS.maxTagItemBytes)) return null;
+        items.push(item);
+      }
+      outTags.push(items);
+    }
+    return Object.freeze({ id, pubkey, created_at, kind, tags: Object.freeze(outTags.map(tag => Object.freeze(tag))), content, sig });
+  } catch { return null; }
 }
 
 export function parseRelayFrame(text: unknown): FrameParse {
