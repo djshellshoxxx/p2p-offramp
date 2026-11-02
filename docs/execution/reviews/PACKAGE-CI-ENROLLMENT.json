@@ -1,0 +1,71 @@
+{
+  "task": "package-ci-enrollment-review",
+  "reviewer": "/root/review_delivery_docs",
+  "author": "/root",
+  "reviewedAt": "2026-11-02T13:03:34.824299+00:00",
+  "verdict": "APPROVE_EXACT_THREE_FILE_ENROLLMENT_ONLY",
+  "reviewedFiles": [
+    {
+      "path": "package.json",
+      "bytes": 6863,
+      "sha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141"
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "bytes": 4422,
+      "sha256": "b0b213818da311867e97c034aba67b3eee2d98da23b49d4270b0548284c2662e"
+    },
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "bytes": 1933,
+      "sha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684"
+    }
+  ],
+  "findings": [],
+  "checks": {
+    "baseTypecheck": "Original four configurations/flags exactly retained. Optional proof-jobs worker/fixture and proof-inputs configs are additive and all paths exist.",
+    "existingCommands": "Every existing workflow run remains in original order; existing package aliases retained except intended completion-tools additions and imperative distribution correction.",
+    "actionsAndPermissions": "Exact existing action pins, contents:read permissions, jobs and install steps unchanged; no continue-on-error, skip, assertion bypass or isolation workaround added.",
+    "distributionCLI": "browser.test.mjs is imperative top-level actual browser code, not node:test; direct CLI retains three assertion groups and exception/cleanup behavior with the established TSX loader.",
+    "formalAndReputation": "Tools aggregation adds the exact existing formal7 and isolated reputation-intake8 files with loader. Dedicated aliases independently passed all7/8 under default Node isolation; no third-party SDK/proof or native formal pipeline executed.",
+    "newBrowserPaths": "Proof browser uses owner verified TSX command and supplied P2P_CHROMIUM; memory uses owner plain Node command. Privacy/meetup/update paths and Chromium environment match owner scripts. EVM retention runs after same pinned Foundry/Chromium setup as existing journey.",
+    "retentionPlainNodeLoader": "Only direct host imports sepolia/lib.mjs, evm-terms.ts and evm-escrow.ts are evaluated by plain Node24; independent cheap import probe passed. Browser TSX remains compiled by Vite. Actual final aliases remain root verification, not claimed here.",
+    "zoom": "Alias requires explicit absolute P2P_X11_TOOLS, bounded hash-checked Xvfb/xdotool/libxdo provenance and existing xauth. No fallback/pass on unavailable tools; no hosted zoom workflow enrollment or physical/hosted acceptance claimed.",
+    "sdkBoundary": "Failing/unadopted provider SDK probes are absent from product CI aliases. Reputation intake verifies retained public metadata/bounds, with activation qualifications false; it does not adopt SDK/proof code.",
+    "dependencies": "Root dependency/devDependency pins unchanged.",
+    "whitespace": "git diff --check passed for three tracked files."
+  },
+  "executedCheapUnits": [
+    {
+      "path": "/workspace/work/package-ci-formal-unit.tap",
+      "sha256": "ea7879ceb3f907cb367733983ba5e23abff3f9b35ab8f417e31444b3ff937625",
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "/workspace/work/package-ci-reputation-unit.tap",
+      "sha256": "4c57b5af8e67e0ea6a10634a805fd54c3a8f6ecdf68c91d5e8717237cc254396",
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "notExecuted": [
+    "Unstable whole native/browser graphs",
+    "Stale document/governance validators before manifest refresh",
+    "Hosted Actions workflows",
+    "Unadopted SDK probes or actual proof/formal evaluation",
+    "Zoom browser without explicit tooling"
+  ],
+  "pendingRootVerification": "Root executes final frozen enrollment aliases after legacy payout and T68 repairs freeze. Approval concerns these exact three enrollment files only, not those evolving implementation graphs.",
+  "sourceEditsOrCommits": false
+}

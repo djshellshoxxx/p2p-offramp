@@ -32,6 +32,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
+      - run: npm run typecheck:optional
       - run: npm test
       - run: npm run test:acceptance:cli
       - run: npm run check:boundaries
@@ -88,6 +89,19 @@ jobs:
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:distribution:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:proof:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:proof:memory
+      - run: npm run test:privacy-controls:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:meetup:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:updates:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   specs:
