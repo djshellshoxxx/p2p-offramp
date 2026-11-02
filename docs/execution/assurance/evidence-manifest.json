@@ -156,7 +156,7 @@
     },
     {
       "path": "packages/security/src/release-manifest.ts",
-      "sha256": "6ada222cabe3ddf2026e9b97971a8bfde99e95b50e39c5818851c295a543d818"
+      "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969"
     },
     {
       "path": "packages/security/test/acceptance-gates.test.mjs",

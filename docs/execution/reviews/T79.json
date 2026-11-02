@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "task": "T79",
+  "reviewer": "review_zoom",
+  "status": "PASS_INDEPENDENT_CHECKPOINT_REVIEW",
+  "observedAt": "2026-11-02T15:32:55.481357+00:00",
+  "baseCommit": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+  "reviewedFiles": [
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "bytes": 4546,
+      "sha256": "0913a63825a4ea70e5140ffb6a7c056fba107b788fb0d667e69d5f5b44d3d151"
+    },
+    {
+      "path": "docs/wiki-source/claims-register.json",
+      "bytes": 5397,
+      "sha256": "742a97688b686bdf51238c1b2a3a2a77400cf5a06fcf95f091d4b9833617d435"
+    },
+    {
+      "path": "docs/wiki-source/docs-manifest.json",
+      "bytes": 2473,
+      "sha256": "4e4275678de47ae804c47b3f6b4c149d214862939e6fc3b455c3896ab74f7cb7"
+    },
+    {
+      "path": "docs/execution/assurance/evidence-manifest.json",
+      "bytes": 9229,
+      "sha256": "21fe301e522ee769e47da6d15282d3960eb5cc18dfe3809807fc4da46b36558e"
+    }
+  ],
+  "checks": {
+    "workflowExactAdditiveLines": 3,
+    "foundryAction": "foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf",
+    "foundryVersion": "v1.5.1",
+    "matchesExistingEvmEscrowSetup": true,
+    "allPriorRunStepsAndActionPinsUnchanged": true,
+    "priorConditionalCastTestUnchanged": "packages/wallet/test/evm-escrow.test.mjs:89; npm test glob includes this existing comparison",
+    "metadataSemanticChangeScope": [
+      "claims/docs sourceCommit advanced to existing immutable commit",
+      "claims English copySource hash refreshed",
+      "assurance release-manifest source hash refreshed"
+    ],
+    "claimsAndCopyKeyBindingsUnchanged": true,
+    "approvalStatusAndReleaseFieldsUnchanged": true,
+    "referencedRowsVerifiedAgainstCommitAndWorkingTree": 72,
+    "uniqueReferencedFiles": 70
+  },
+  "findings": [],
+  "limitations": [
+    "Static workflow review does not attest a hosted Actions execution.",
+    "Byte integrity does not grant semantic, security, professional or release approval."
+  ],
+  "referencedFilesDigest": "c52dfdc2af650e256d02f11b297b5d50134a1dc3a79f3ee0f9b7a28c48a42319",
+  "validation": {
+    "logs": [
+      {
+        "path": "/workspace/work/t79-cast-comparison-review.log",
+        "sha256": "0d948f4d0c54324a23e45576bb942069c30e2b3ee8e15a7a7ff7854e01152423",
+        "bytes": 325,
+        "exitCode": 1
+      },
+      {
+        "path": "/workspace/work/t79-cast-comparison-review-with-ipc.log",
+        "sha256": "434ad4eb2cf0ad572b39abf9c326a54f468212aba579368d9489e78eb3134530",
+        "bytes": 218,
+        "exitCode": 0,
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      {
+        "path": "/workspace/work/t79-docs-check-review.log",
+        "sha256": "00cdf569207b046d9164c15c556240602c61850bcb146ca270d1c04de9fd61ca",
+        "bytes": 7258,
+        "exitCode": 0,
+        "engineeringConsistency": true,
+        "semanticApproval": false,
+        "published": false,
+        "approvedRelease": null
+      },
+      {
+        "path": "/workspace/work/t79-assurance-check-review-with-ipc.log",
+        "sha256": "83972c30ccf703047a794db1df2c9ad5ffbc06c41de8204670ec5641387fa080",
+        "bytes": 847,
+        "exitCode": 0,
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    ],
+    "castTool": {
+      "path": "/workspace/work/foundry-1.5.1/cast",
+      "version": "1.5.1-v1.5.1",
+      "commit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2"
+    },
+    "initialCastAttempt": "Managed IPC/network capability was omitted; Node test-file wrapper failed without subtest diagnostics. Raw failure preserved. The identical source/test command passed after supplying the required managed IPC capability; no code or tests changed.",
+    "finalReviewedBytesStillMatch": true
+  },
+  "sourceOrLedgerEdits": false,
+  "commitsCreated": false
+}

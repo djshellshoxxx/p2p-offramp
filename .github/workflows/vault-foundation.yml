@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: '24'
           cache: npm
+      - uses: foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf
+        with:
+          version: v1.5.1
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm run typecheck:optional

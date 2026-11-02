@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceCommit": "7d019dda311a0c17a66c13f5b16294e7be31e517",
+  "sourceCommit": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
   "reviewers": [],
   "approvedRelease": null,
   "claims": [
@@ -132,7 +132,7 @@
   ],
   "copySource": {
     "path": "apps/web/src/ui/locale/en.ts",
-    "sha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa"
+    "sha256": "39efb36163f0b2222967137ad4e3dda70d4ce47a8cc094fbfec11e117242a031"
   },
   "copyKeys": [
     {
