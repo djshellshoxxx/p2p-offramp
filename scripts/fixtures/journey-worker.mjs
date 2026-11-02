@@ -1,5 +1,6 @@
 /** Compiled LOCALPROOF root: public development wallets and owned loopback endpoints only. Never a default app Worker. */
 import {createPrivateTradeJourney} from '../../apps/web/src/journey/private-trade.ts';
+import {RegistryService} from '../../packages/domain/index.ts';
 import {EncryptedVaultService,EncryptedBackupService} from '../../packages/storage/index.ts';
 import {IndexedDbVaultStore} from '../../packages/storage/src/idb-vault-store.ts';
 import {MessagingIdentityService} from '../../packages/identity/src/identity-service.ts';
@@ -17,7 +18,7 @@ import {createTradeComposition} from '../../packages/domain/src/trade-compositio
 import {decodeIntentPayload} from '../../packages/schemas/index.ts';
 import {createRelayPool} from '../../packages/relay/index.ts';
 import {makeBroker,FAST} from '../../packages/relay/test/support/harness.mjs';
-let journey,setupPromise,lastId=0,activeRequests=0,controlPending=false,commandEpoch=0,rpcId=0,loseResponse=true;const walletEventTargets=new Set();
+let journey,setupPromise,lastId=0,activeRequests=0,controlPending=false,commandEpoch=0,rpcId=0,loseResponse=true,privacyRevoke,invalidateDuringInspect,shortNextReview=false,markerListMode=null,releaseMarkerList;const walletEventTargets=new Set();
 const hex=bytes=>Array.from(bytes,v=>v.toString(16).padStart(2,'0')).join('');
 async function request({method,params=[]}){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),10000);
@@ -38,20 +39,36 @@ async function readObservation({registry,binding,terms,domain,request,generation
 }
 async function setup(){
  const config=await(await fetch('/configuration.json')).json();const store=new IndexedDbVaultStore(),vault=new EncryptedVaultService(store,crypto,{lifecycle:false}),backup=new EncryptedBackupService(store);
+ // Negative-only native test seam: pause an ACTUAL read of a durable unknown marker.
+ const originalList=vault.list.bind(vault);
+ vault.list=async(...args)=>{const result=await originalList(...args);if(markerListMode&&args[1]==='journal'&&result.ok&&result.value.some(row=>decodeIntentPayload(row.payload).state==='broadcast-unknown')){const mode=markerListMode;markerListMode=null;await new Promise(done=>{releaseMarkerList=done;self.postMessage({kind:'fixture-marker-list-held',mode});});releaseMarkerList=undefined;if(mode==='revocation')privacyRevoke?.();self.postMessage({kind:'fixture-marker-list-released',mode,durableState:'broadcast-unknown'});}return result;};
+ const registryBytes=new TextEncoder().encode(JSON.stringify(config.registry)),registry=new RegistryService(),loaded=await registry.load(registryBytes,config.registryDigest);if(!loaded.ok)throw Error('INTEGRITY_FAILURE');
+ const node=registry.network('local-evm')?.endpoints[0];if(!node)throw Error('INTEGRITY_FAILURE');
+ const listeners=new Set();let invalidateNextInspection=false;invalidateDuringInspect=()=>{invalidateNextInspection=true;};let primaryBroker,seenBroker,seenGeneration=-1,detailsGeneration=0;
+ const generation=()=>{const next=primaryBroker?.generation??-1;if(primaryBroker!==seenBroker||next!==seenGeneration){if(detailsGeneration>=Number.MAX_SAFE_INTEGER-1)throw Error('LIMIT_EXCEEDED');detailsGeneration++;seenBroker=primaryBroker;seenGeneration=next;}return detailsGeneration;};
+ const notify=()=>{generation();for(const listener of [...listeners])listener();};
+ const privacy={
+  transport:{get generation(){return generation();},get mode(){return primaryBroker?.mode??'ordinary';},inspect(channel){if(channel==='relay'&&invalidateNextInspection){invalidateNextInspection=false;notify();}const inspected=channel==='relay'&&primaryBroker?primaryBroker.inspect(channel):null;return{channel,coverage:inspected?.coverage??'unknown',adapterId:inspected?.adapterId??'no-app-route-observation',generation:generation()};}},
+  endpoints:{get generation(){return generation();},read(){const observedAt=Math.floor(performance.now()),lifetime=shortNextReview?2000:30000;shortNextReview=false;return{version:1,generation:generation(),observedAt,expiresAt:observedAt+lifetime,endpoints:[{channel:'rpc',id:node.id,configuredUrl:node.url,connectionUrl:new URL('/rpc',self.location.href).href},...(primaryBroker?[{channel:'relay',id:'relay-a',configuredUrl:'wss://relay-a.fixture.invalid/',connectionUrl:config.relayURL}]:[])]};}},
+  subscribeInvalidation(listener){if(listeners.size>=64)throw Error('LIMIT_EXCEEDED');listeners.add(listener);return()=>listeners.delete(listener);},
+ };
+ privacyRevoke=()=>{primaryBroker?.revoke('fixture-adapter');notify();};
  const native={selectorOf,decodeIntentPayload,MessagingIdentityService,createIdentityProvider:createLocalNobleIdentityProvider,EvmWalletAdapter,verifyEvmAgreementBundle,evmTermsHash,createEip1193ChainReader,escrowCallFor,createEvmPaymentPreflight,createLifecycleJournal,createEvmTxLifecycle,createTradeAuthority,createTradeComposition,readObservation,policy:evmFinalityPolicy({chain:'evm',finality:{kind:'evm-finalized-tag'}},2,3),walletProvider(index){const listeners=new Map(),emit=(event,args)=>{for(const listener of listeners.get(event)??[])listener(args);};return{async request({method,params=[]}){if(method==='eth_requestAccounts'||method==='eth_accounts')return[(await request({method:'eth_accounts'}))[index]];return request({method,params});},on(event,listener){const set=listeners.get(event)??new Set();set.add(listener);listeners.set(event,set);walletEventTargets.add(emit);},removeListener(event,listener){const set=listeners.get(event);set?.delete(listener);if(set?.size===0)listeners.delete(event);if(listeners.size===0)walletEventTargets.delete(emit);}};}};
- journey=createPrivateTradeJourney({services:{vault,backup},native,registryBytes:new TextEncoder().encode(JSON.stringify(config.registry)),registryDigest:config.registryDigest,request,
+ journey=createPrivateTradeJourney({services:{vault,backup},native,registryBytes,registryDigest:config.registryDigest,request,privacy,
   onInvalidated:snapshot=>self.postMessage({kind:'scope-invalidated',snapshot}),
+  onSigningReviewInvalidated:snapshot=>self.postMessage({kind:'signing-review-invalidated',snapshot}),
   localPeerAcceptance:async({wallet,session,domain,terms})=>{const result=await wallet.signTerms(session,domain,terms,'buyer');if(!result.ok)throw Error('PEER_SIGNATURE_FAILED');return result.value;},
-  createRelay({verifier,nowSeconds}){const url='wss://relay-a.fixture.invalid/',broker=makeBroker({endpoints:['relay-a'],endpointURLs:{'relay-a':url},coverage:'direct',mode:'ordinary'}).broker;const pool=createRelayPool({broker,relays:[{endpointId:'relay-a',url}],connect:(target,signal)=>{if(signal.aborted||target!==url)throw Error('DENIED');return new WebSocket(config.relayURL);},verifier,timing:FAST,nowSeconds});return Object.freeze({...pool,close(){pool.close();broker.dispose();}});},
+  createRelay({verifier,nowSeconds}){const url='wss://relay-a.fixture.invalid/',broker=makeBroker({endpoints:['relay-a'],endpointURLs:{'relay-a':url},coverage:'direct',mode:'ordinary'}).broker;if(!primaryBroker){primaryBroker=broker;notify();}const off=broker.subscribeInvalidation(()=>{if(primaryBroker===broker)notify();});const pool=createRelayPool({broker,relays:[{endpointId:'relay-a',url}],connect:(target,signal)=>{if(signal.aborted||target!==url)throw Error('DENIED');return new WebSocket(config.relayURL);},verifier,timing:FAST,nowSeconds});return Object.freeze({...pool,close(){pool.close();off();broker.dispose();if(primaryBroker===broker){primaryBroker=undefined;notify();}}});},
  });
 }
 self.onmessage=async({data})=>{
+ if(data?.kind==='fixture-privacy-event'){if(data.event==='revoke')privacyRevoke?.();if(data.event==='expire-next-review')shortNextReview=true;if(data.event==='invalidate-during-inspect')invalidateDuringInspect?.();if(data.event==='arm-marker-list'&&(data.mode==='expiry'||data.mode==='revocation'))markerListMode=data.mode;if(data.event==='release-marker-list')releaseMarkerList?.();return;}
  // Negative native-provider event seam exists only in this compiled fixture root; it cannot grant any fact.
  if(data?.kind==='fixture-wallet-event'){if(data.event!=='accountsChanged'||!Array.isArray(data.accounts)||data.accounts.length!==1||!/^0x[0-9a-f]{40}$/.test(data.accounts[0]))return;for(const emit of walletEventTargets)emit('accountsChanged',data.accounts);self.postMessage({kind:'fixture-event-applied'});return;}
- const id=data?.id;if(!Number.isSafeInteger(id)||id<=lastId||!data||Object.keys(data).some(key=>!['id','kind','input','action','recordId','attestFiatReceived','reviewRiskAccepted','assetId','amountBaseUnits'].includes(key))){self.postMessage({id,error:'INVALID_INPUT'});return;}lastId=id;
+ const id=data?.id;if(!Number.isSafeInteger(id)||id<=lastId||!data||Object.keys(data).some(key=>!['id','kind','input','action','signingAction','recordId','attestFiatReceived','reviewRiskAccepted','assetId','amountBaseUnits'].includes(key))){self.postMessage({id,error:'INVALID_INPUT'});return;}lastId=id;
  const control=data.kind==='runtime'&&(data.input?.operation==='lock'||data.input?.operation==='dispose');if(control)commandEpoch++;const mine=commandEpoch;
  if(activeRequests>0&&(!control||controlPending)){self.postMessage({id,error:'BUSY'});return;}
- activeRequests++;if(control)controlPending=true;try{setupPromise??=setup();await setupPromise;if(!control&&mine!==commandEpoch)throw Error('LOCKED');const value=data.kind==='runtime'?await journey.runtime(data.input):data.kind==='action'?await journey.act(data.action,{assetId:data.assetId,amountBaseUnits:data.amountBaseUnits,recordId:data.recordId,attestFiatReceived:data.attestFiatReceived,reviewRiskAccepted:data.reviewRiskAccepted}):(()=>{throw Error('INVALID_INPUT');})();self.postMessage({id,value});}
+ activeRequests++;if(control)controlPending=true;try{setupPromise??=setup();await setupPromise;if(!control&&mine!==commandEpoch)throw Error('LOCKED');const value=data.kind==='runtime'?await journey.runtime(data.input):data.kind==='action'?await journey.act(data.action,{signingAction:data.signingAction,assetId:data.assetId,amountBaseUnits:data.amountBaseUnits,recordId:data.recordId,attestFiatReceived:data.attestFiatReceived,reviewRiskAccepted:data.reviewRiskAccepted}):(()=>{throw Error('INVALID_INPUT');})();self.postMessage({id,value});}
  catch(error){const code=/^[A-Z_]{1,64}$/.test(error?.message??'')?error.message:'OPERATION_FAILED';self.postMessage({id,error:code,snapshot:journey?.snapshot()});}
  finally{if(data?.input?.bytes instanceof Uint8Array)data.input.bytes.fill(0);activeRequests--;if(control)controlPending=false;}
 };

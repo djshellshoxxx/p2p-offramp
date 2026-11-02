@@ -35,3 +35,10 @@ test('restored status and direct approval/reset requests cannot fabricate accept
 });
 
 test('native receipt fee arithmetic rejects oversized words/product instead of emitting an unbounded or rounded fee',async()=>{const{feeProduct}=await import('../src/journey/private-trade.ts');assert.equal(feeProduct('21000','1000000000'),'21000000000000');assert.equal(feeProduct('0','0'),'0');for(const pair of[['01','2'],['-1','2'],[String(1n<<256n),'0'],[String((1n<<256n)-1n),'2'],['1e9','2']])assert.throws(()=>feeProduct(...pair));});
+
+test('public signing-review requests cannot import a confirmation, provider or native capability',async()=>{
+ const s=setup();try{await onboard(s);for(const options of[{}, {signingAction:'fund',reviewId:'imported',reviewRiskAccepted:true}, {signingAction:'accept',signingReview:{action:'accept',expiresAt:Number.MAX_SAFE_INTEGER,wallets:[{providerId:'forged'}]}}])await assert.rejects(s.journey.act('confirm-signing',options),/SIGNING_REVIEW_REQUIRED/);
+  for(const signingAction of['accept','accept-recovered','approve','reset-approval','fund','release','refund'])await assert.rejects(s.journey.act('review-signing',{signingAction}),/OUT_OF_ORDER/);
+  await assert.rejects(s.journey.act('review-signing',{signingAction:'imported-action'}),/INVALID_INPUT/);assert.equal(s.calls,0);assert.equal(s.journey.snapshot().signingReview,null);assert.equal(s.journey.snapshot().tradingEnabled,false);
+ }finally{s.journey.dispose();}
+});

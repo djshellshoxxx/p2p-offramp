@@ -1,5 +1,5 @@
 /** Structural contracts for trusted private constructors; no production/private package facade is widened. */
-import type {CoreResult,RegistryService,PrivateAgreementV1,ReviewedEvmTerms,createJourneyProjection} from '../../../../packages/domain/index.ts';
+import type {CoreResult,RegistryService,PrivateAgreementV1,ReviewedEvmTerms,createJourneyProjection,PrivacyView,PrivacyTransportPort,PrivacyEndpointPort} from '../../../../packages/domain/index.ts';
 import type {EncryptedVaultService,EncryptedBackupService} from '../../../../packages/storage/index.ts';
 import type {MessagingIdentityProvider} from '../../../../packages/identity/index.ts';
 import type {CreatedIdentity,IdentityHandle,IdentityResult,VaultSession,IntentV1,TradeBinding,ChainObservation,TradeView,RuntimeResponse} from '../../../../packages/schemas/index.ts';
@@ -24,6 +24,20 @@ export interface EscrowCall {readonly to:string;readonly data:string;readonly va
 export interface TokenCheck {readonly token:string;readonly spender:string;readonly principal:string;readonly balance:string;readonly allowance:string;readonly anchor:{readonly height:string;readonly hash:string};}
 export interface ActionFee {readonly action:IntentV1['action'];readonly transactionHash:string;readonly fee:string;readonly nativeAssetId:string;readonly nativeDecimals:number;}
 export interface AssetChoice {readonly id:string;readonly kind:'native'|'erc20';readonly decimals:number;}
+export type SigningAction='accept'|'accept-recovered'|'approve'|'reset-approval'|'fund'|'release'|'refund';
+export interface JourneyPrivacyServices {
+ readonly transport:PrivacyTransportPort;
+ readonly endpoints:PrivacyEndpointPort;
+ subscribeInvalidation(listener:()=>void):()=>void;
+}
+export interface SigningReview {
+ readonly version:1;readonly action:SigningAction;readonly profileId:string;readonly scopeGeneration:number;
+ readonly observedAt:number;readonly expiresAt:number;readonly clockOrigin:number;readonly networkId:string;readonly chainId:string;readonly deploymentId:string;
+ readonly escrow:string;readonly termsHash:string;readonly destination:string;readonly spender:string|null;readonly value:string;readonly amount:string;
+ readonly wallets:readonly {readonly role:'seller'|'buyer';readonly providerId:string;readonly account:string;readonly networkId:string;readonly generation:number}[];
+ readonly extensions:readonly {readonly id:string;readonly version:string;readonly policyHash:string}[];
+ readonly privacy:PrivacyView;
+}
 export type EscrowAction={readonly action:'approve';readonly token:string;readonly spender:string;readonly amountBaseUnits:string}|{readonly action:'fund';readonly domain:EvmDomain;readonly terms:EvmTerms}|{readonly action:'release'|'refund';readonly escrow:string;readonly tradeId:string};
 export interface PrepareInput {readonly binding:TradeBinding;readonly action:IntentV1['action'];readonly expectedEscrowState:'absent'|'funded';readonly call:EscrowCall;}
 export interface PreparedIntent {readonly intentId:string;readonly request:PreparedRequest;readonly generation:number;}
@@ -54,13 +68,13 @@ export interface NativeFactories {
  createTradeAuthority(options:{binding:TradeBinding;generation:number;walletGeneration:number;readValidated:(binding:TradeBinding,request:{signal:AbortSignal;generation:number;requestSequence:number})=>Promise<CoreResult<ChainObservation>>}):Authority;
  createTradeComposition(options:{binding:TradeBinding;account:string;authority:Authority;journal:Journal}):TradeComposition;
 }
-export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly services:{vault:EncryptedVaultService;backup:EncryptedBackupService};readonly native:NativeFactories;readonly registryBytes:Uint8Array<ArrayBuffer>;readonly registryDigest:string;readonly request:Request;readonly createRelay:(options:{verifier:Awaited<ReturnType<typeof createRelayEventCrypto>>;nowSeconds:()=>number})=>RelayPool;readonly localPeerAcceptance?:((options:{wallet:WalletAdapter;session:WalletSession;domain:EvmDomain;terms:EvmTerms})=>Promise<Uint8Array<ArrayBuffer>>)|undefined;}
+export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly onSigningReviewInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly privacy?:JourneyPrivacyServices|undefined;readonly services:{vault:EncryptedVaultService;backup:EncryptedBackupService};readonly native:NativeFactories;readonly registryBytes:Uint8Array<ArrayBuffer>;readonly registryDigest:string;readonly request:Request;readonly createRelay:(options:{verifier:Awaited<ReturnType<typeof createRelayEventCrypto>>;nowSeconds:()=>number})=>RelayPool;readonly localPeerAcceptance?:((options:{wallet:WalletAdapter;session:WalletSession;domain:EvmDomain;terms:EvmTerms})=>Promise<Uint8Array<ArrayBuffer>>)|undefined;}
 export interface WatchParty {readonly kind:'watch';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;}
 export interface NegotiatingParty {readonly kind:'negotiation';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;readonly pub:string;readonly secret:Uint8Array;readonly eventCrypto:Awaited<ReturnType<typeof createRelayEventCrypto>>;readonly book:ReturnType<typeof createOrderBook>;readonly exchange:ReturnType<typeof createTermsExchange>;readonly pool:RelayPool;}
 export type Party=WatchParty|NegotiatingParty;
 export type Phase='setup'|'wallet'|'review'|'accepted'|'fund-prepared'|'approval-reconcile'|'recovered-acceptance-required'|'reconcile'|'payment-coordination'|'payment-guidance-unavailable'|'settling'|'receipt'|'cancelled-before-send';
 export interface NativeFeeReceipt {readonly tradeId:string;readonly transactionHash:string;readonly state:'released'|'refunded';readonly blockNumber:string;readonly gasUsed:string;readonly effectiveGasPrice:string;readonly fee:string;readonly nativeAssetId:string;readonly nativeDecimals:number;}
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
-export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}
-export interface JourneyController {snapshot():JourneySnapshot;runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>;act(action:string,options?:{readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}):Promise<JourneySnapshot>;dispose():void;}
+export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}
+export interface JourneyController {snapshot():JourneySnapshot;runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>;act(action:string,options?:{readonly signingAction?:SigningAction|undefined;readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}):Promise<JourneySnapshot>;dispose():void;}
 export type {ReviewedEvmTerms};
