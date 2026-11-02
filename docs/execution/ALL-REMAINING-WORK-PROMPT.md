@@ -5,8 +5,13 @@ You are the lead engineering coordinator for `djshellshoxxx/p2p-offramp`. Execut
 This prompt is being executed in the 2026-11-02 continuation. Its starting-point
 discussion below preserves the original PR24 snapshot. Read the current task
 ledger and scoped review receipts before choosing work: T33 onward now contains
-implemented slices and scoped follow-on tasks through T97. Read
+implemented slices and scoped follow-on tasks through T100. Read
 `docs/execution/coverage/CURRENT-REMAINDER.json` and the current whole-source audit.
+T98/T100 add accepted actual native reorg/TCP missing-ACK coverage; reuse those
+results rather than treat old model-only matrix wording as a new implementation
+task. T99 records a current enforced cdn.playwright.dev policy prerequisite for
+absent pinned Firefox/WebKit engines: zero requests/executions, no HTTP denial or
+bypass. Read the current G24 overlay and final-local packet for exact scope.
 All three T91 formal partition attempts are spent; preserve their evidence and
 UNKNOWN results rather than repeat that tranche. Neither this historical
 snapshot nor an old coverage status reopens accepted work. Current unmerged source,

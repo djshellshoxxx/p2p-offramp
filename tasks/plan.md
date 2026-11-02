@@ -530,3 +530,25 @@ CI/scanner/review dispositions and guarded merge/readback. The whole first-party
 source audit covers282 current production/module/tool files and36220 lines;
 configuration/selected-test evidence is additional. All30 compatible live branch
 heads are ancestors; the separate custodial proposal is preserved.
+
+
+Final local acceptance at a2b414f is complete: distinct11-command native review,
+new-clone T71 foundation5/journey4 and complete282-file semantic audit. All source
+writers remain frozen. Root exclusively owns final documents, exact-head hosted
+CI/scanner/review dispositions, ordinary publication and expected-head guarded
+merge/main readback. Local engineering remains separate from exact contract,
+device/operator/release qualification. No source approval is transferred.
+
+
+Final matrix follow-ons T98/T99 are admitted after the accepted a2 local baseline.
+T98 privacy_selector exclusively owns scripts/test-evm-reconcile-local.mjs, no App/
+contract/ABI/policy edits. Root supplies independent narrow native acceptance and
+current maintained-tool audit delta. T99 audit_optional owns only work artifacts
+for bounded official Firefox/WebKit tool availability; no repo source writer or
+provider adoption. cleanup_debug holds final documentation review until these
+receipts and the G24 overlay/current bindings freeze. All other source owners
+remain returned; no solver attempts or repeated whole-source audit is admitted.
+
+T100 review_intakes exclusively owns packages/relay/test/pool.test.mjs for missing-ACK native TCP evidence. Existing real refused/drop/reconnect cases are reused. Root owns single assurance hash update, final package/source/tool-audit delta and doc reconciliation. T99 has returned work-only ownership; exact enforced CDN policy blocker is accepted with zero requests.
+
+T98/T100 have frozen/returned source ownership and are distinctly accepted at12bb8f1; current package1713/1713 passes. T99 read-only host-policy prerequisite accepted. No feature/test writer remains active. cleanup_debug now owns only final read-only documentation consistency review; root alone owns final document corrections, exact-head hosting and expected-head guarded merge/readback. All282 production-file hashes remain unchanged.

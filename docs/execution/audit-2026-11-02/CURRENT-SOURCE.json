@@ -6731,5 +6731,24 @@
   ],
   "evidenceMethod": "Current hash must match a semantic review receipt; hashes alone are not an audit or certification. Original findings remain immutable, later repairs have distinct receipts.",
   "professionalOrReleaseApproval": false,
-  "finalVerification": "Still root-owned; subsequent final verification receipts/PR exact-head readback carry outcomes, not future assertions in this manifest."
+  "finalVerification": "Final local packet binds clean a2 baseline native11/lab5+4, accepted T98/T100 supplemental actual tests and current1713 package run at12bb8f1. All282 production hashes remain cf73208 bytes. Exact final-head hosted CI/review/merge/readback is live PR26, not certified by source.",
+  "supportingVerificationDeltas": [
+    {
+      "task": "T98",
+      "path": "scripts/test-evm-reconcile-local.mjs",
+      "sha256": "a363fa1b44184ec2cf7b65c53da9a0e8cd94af56a1893371b74b538f13f1cdbf",
+      "sourceCommit": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "review": "docs/execution/reviews/T98-final.json",
+      "rootExecution": "docs/execution/reviews/T98-root.json",
+      "method": "Distinct full additive-case/ordinal-comparator read plus two actual10/10 native runs; all original9 cases retained. Selected test harness, outside282 production-file count."
+    },
+    {
+      "task": "T100",
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09",
+      "sourceCommit": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "review": "docs/execution/reviews/T100-root.json",
+      "method": "Insertion-only30-line actual TCP silent-ACK case; original27 assertions retained, author/root28/28 and final1713 package pass. Selected test, outside282 production-file count."
+    }
+  ]
 }

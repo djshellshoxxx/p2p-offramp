@@ -1,0 +1,301 @@
+{
+  "task": "T38 live hosting policy/review preflight",
+  "status": "LIVE_READ_ONLY_PREFLIGHT_COMPLETE; DETAILED_CLASSIC_PROTECTION_FIELDS_ACCESS_LIMITED; NO_MERGE_DECISION",
+  "capturedAtUtc": "2026-11-02T18:36:10.463285+00:00",
+  "clockReadbacksUtc": [
+    "2026-11-02 18:33:47 UTC",
+    "2026-11-02 18:34:47 UTC"
+  ],
+  "acquisition": "Fresh connected GitHub reads and ordinary public GitHub rules UI during this task; nontransactional snapshot. No cached prior unprotected-branch assumption used.",
+  "repository": {
+    "fullName": "djshellshoxxx/p2p-offramp",
+    "defaultBranch": "main",
+    "visibility": "public",
+    "ownerType": "User",
+    "archived": false,
+    "allowAutoMerge": false,
+    "allowMergeCommit": true,
+    "allowSquashMerge": true,
+    "allowRebaseMerge": true,
+    "reportedViewerPermissions": {
+      "admin": true,
+      "maintain": true,
+      "pull": true,
+      "push": true,
+      "triage": true
+    },
+    "permissionLimit": "Reported user repository admin permission does not confer integration administration scope; branch protection details returned403."
+  },
+  "main": {
+    "sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+    "branchReadUrl": "https://api.github.com/repos/djshellshoxxx/p2p-offramp/branches/main",
+    "protected": false,
+    "protectionSummary": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "rulesetsIncludingParents": [],
+    "publicMatchingRules": {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/rules?ref=refs%2Fheads%2Fmain",
+      "selectedBranch": "refs/heads/main",
+      "rulesets": [],
+      "matchingRulesets": [],
+      "heading": "You haven't created any rulesets",
+      "anonymousReadOnly": true
+    },
+    "assessment": "Fresh branch read reports unprotected with protection disabled and required-status enforcement off/empty checks. Repository rulesets including parents and public main-matching rulesets are empty. No branch-enforced approval, code-owner or required-status rule is observed. Detailed inaccessible fields are not fabricated as zeros."
+  },
+  "pullRequest": {
+    "number": 26,
+    "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "headBranch": "autonomous/completion-20261102",
+    "headSha": "76c45df0b2f39a928d92ae0af3d60f37737802c5",
+    "baseBranch": "main",
+    "baseSha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+    "mergeable": true,
+    "mergeableState": "unstable",
+    "rebaseable": true,
+    "autoMerge": null,
+    "requestedReviewers": [],
+    "requestedTeams": [],
+    "issueCommentCount": 2,
+    "inlineReviewCommentCount": 1,
+    "updatedAt": "2026-11-02T15:51:22Z",
+    "assessment": "PR remains an open draft at remote76c, so it is not ready to merge. mergeable:true is a conflict calculation, not approval or green CI; raw mergeable_state is unstable. Root owns ready/metadata/push/merge and exact-head checks."
+  },
+  "reviewStatus": {
+    "availableSubmissions": [
+      {
+        "id": "PRR_kwDOVS9R0M8AAAABVejwzQ",
+        "state": "COMMENTED",
+        "body": "",
+        "submitted_at": "2026-11-02T12:07:04Z",
+        "author": {
+          "login": "github-advanced-security",
+          "name": "github-advanced-security",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/in/57789?v=4",
+          "id": null
+        }
+      }
+    ],
+    "submittedApprovals": 0,
+    "submittedChangesRequested": 0,
+    "humanApprovalObserved": false,
+    "availableThreads": [
+      {
+        "id": "PRRT_kwDOVS9R0M6yqF4v",
+        "is_resolved": true,
+        "is_outdated": true,
+        "path": "scripts/tests/formal-evm.test.mjs",
+        "line": null,
+        "diff_side": "RIGHT",
+        "start_line": null,
+        "start_diff_side": null,
+        "original_line": 56,
+        "original_start_line": null,
+        "resolved_by": {
+          "login": "github-advanced-security[bot]",
+          "name": "github-advanced-security[bot]",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/in/57789?v=4",
+          "id": null
+        },
+        "comments": [
+          {
+            "id": "PRRC_kwDOVS9R0M8AAAABCMZXnA",
+            "database_id": 4442183580,
+            "body": "## CodeQL / Improper code sanitization\n\nCode construction depends on an [improperly sanitized value](1).\n\n[Show more details](https://github.com/djshellshoxxx/p2p-offramp/security/code-scanning/4)",
+            "created_at": "2026-11-02T12:07:04Z",
+            "updated_at": "2026-11-02T12:07:04Z",
+            "author": {
+              "login": "github-advanced-security",
+              "name": "github-advanced-security",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/in/57789?v=4",
+              "id": null
+            },
+            "viewer_did_author": false
+          }
+        ]
+      }
+    ],
+    "unresolvedAvailableThreadCount": 0,
+    "requestedReviewers": [],
+    "requestedTeams": [],
+    "assessment": "Only one COMMENTED Advanced Security bot submission is present. There is no submitted approval or CHANGES_REQUESTED. The sole inline CodeQL thread is resolved and outdated. CodeRabbit skipped the draft; it provides no review approval."
+  },
+  "lateReviewFindings": {
+    "newActionableLateSourceReviewFindings": [],
+    "unresolvedAvailableReviewThreads": [],
+    "changesRequestedSubmissions": [],
+    "knownOutsideDiffComments": [
+      {
+        "id": 6576700649,
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26#issuecomment-6576700649",
+        "author": "coderabbitai[bot]",
+        "createdAt": "2026-11-02T12:05:51Z",
+        "updatedAt": "2026-11-02T12:05:51Z",
+        "classification": "DRAFT_REVIEW_SKIPPED",
+        "finding": "CodeRabbit explicitly did not review this draft; no approval or substantive source verdict.",
+        "ownerNextStep": "Root owns final draft/ready state and review collection; no bot trigger or settings change performed."
+      },
+      {
+        "id": 6581552166,
+        "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26#issuecomment-6581552166",
+        "author": "sonarqubecloud[bot]",
+        "createdAt": "2026-11-02T15:51:22Z",
+        "updatedAt": "2026-11-02T15:51:22Z",
+        "classification": "KNOWN_OLD_HEAD_SONAR_GATE_FAILURE",
+        "finding": "D Security and D Reliability, required A/A, already triaged on remote76c. It remains an actionable known hosting result, not a newly raised source-review finding.",
+        "ownerNextStep": "Root owns final push and exact-head CI/Sonar collection. No new check retrieval, rerun, dismissal or source investigation occurred in this preflight."
+      }
+    ],
+    "priorCodeqlThread": {
+      "id": "PRRT_kwDOVS9R0M6yqF4v",
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "originalLine": 56,
+      "currentLine": null,
+      "isResolved": true,
+      "isOutdated": true,
+      "resolvedBy": {
+        "login": "github-advanced-security[bot]",
+        "name": "github-advanced-security[bot]",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/in/57789?v=4",
+        "id": null
+      },
+      "body": "## CodeQL / Improper code sanitization\n\nCode construction depends on an [improperly sanitized value](1).\n\n[Show more details](https://github.com/djshellshoxxx/p2p-offramp/security/code-scanning/4)",
+      "createdAt": "2026-11-02T12:07:04Z",
+      "updatedAt": "2026-11-02T12:07:04Z",
+      "disposition": "Historical resolved/outdated thread; not a current unresolved merge-review objection. It was not resolved or otherwise changed by this preflight."
+    }
+  },
+  "exactUnknowns": {
+    "fullClassicProtectionConfiguration": {
+      "status": "UNAVAILABLE_TO_INTEGRATION",
+      "evidence": {
+        "error": "GitHub API error 403: {\"message\":\"Resource not accessible by integration\",\"documentation_url\":\"https://docs.github.com/rest/branches/branch-protection#get-branch-protection\",\"status\":\"403\"}",
+        "error_code": "FORBIDDEN",
+        "error_data": {
+          "message": "Resource not accessible by integration",
+          "documentation_url": "https://docs.github.com/rest/branches/branch-protection#get-branch-protection",
+          "status": "403"
+        }
+      },
+      "reason": "Explicit403 Resource not accessible by integration. It is not a404 and is not used to infer an unprotected branch. Fresh independent branch/public-rules results supply the observed policy summary."
+    },
+    "effectiveBranchRulesRestEndpoint": {
+      "status": "PLUGIN_URL_UNSUPPORTED",
+      "evidence": {
+        "error": "HTTPError: 400: GitHub Fetch URL is not an allowed public GitHub repository or search endpoint. (Response: None)",
+        "error_code": "INVALID_ARGUMENT"
+      },
+      "fallback": "Ordinary public rules UI for refs/heads/main returned rulesets[] and matchingRulesets[]."
+    },
+    "detailedReviewProtectionFields": {
+      "requiredApprovingReviewCount": null,
+      "requireCodeOwnerReviews": null,
+      "dismissStaleReviews": null,
+      "requireLastPushApproval": null,
+      "requireConversationResolution": null,
+      "adminEnforcement": null,
+      "note": "Detailed admin-only fields were not read. No enabled classic protection or matching ruleset was observed; no branch-enforced review policy was found at this readback."
+    },
+    "serverReviewDecision": {
+      "value": null,
+      "reason": "Not exposed by available normalized review APIs. Submitted reviews/requested-reviewer arrays are reported directly instead."
+    },
+    "futureState": "Policy, PR head, draft/readiness and reviews may change after this live nontransactional snapshot. Root owns final exact-head readback."
+  },
+  "evidence": [
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-branch.json",
+      "bytes": 12042,
+      "sha256": "024cef7fac9520da37524d635779023b07a62b45f1dead3ea56db5e0aea387fc"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-branch_rules.json",
+      "bytes": 401,
+      "sha256": "32f9807a1c18edaabdae37a922a9c94684927f67e0a209d2443f7b2030a895f2"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-comments.json",
+      "bytes": 13080,
+      "sha256": "15f2b773f46d4b20be7955129e7a4cc6dbd9830674564d89f0f51057048f5b85"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-pr-rest.json",
+      "bytes": 38047,
+      "sha256": "83192eb280d36bb4d61f1a0eae1f8837a87dec06ebc84671d75257389e3675c2"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-pr.json",
+      "bytes": 2427,
+      "sha256": "57daec7647d92443107cabca68011e00e6f319ffe5e834d06d6f2d9e9e1cf10c"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-protection.json",
+      "bytes": 788,
+      "sha256": "68a070d128fc161e472d4300115a51e90ad21dabd89d865c559fc8ce40cb3b79"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-repo.json",
+      "bytes": 1265,
+      "sha256": "0b25acb59f53459194ac3f0ccba2fed7ac67842926e8c7303e0159f89cefbd1a"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-reviews.json",
+      "bytes": 569,
+      "sha256": "c19e865c421771352f2d5a4f302a73b4a5ff64d8e26930173f6abb117eb70b47"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-rulesets.json",
+      "bytes": 686,
+      "sha256": "da019c7f89ece34837bbafa21348fe8a28e6914afd6dc51c6c18116bbe37cbb7"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.evidence-threads.json",
+      "bytes": 1562,
+      "sha256": "d7b5fccd5793ec8b8095f5c0e7f69e5fc181aa4986fca185b5ed4b35d735e818"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.late-findings.json",
+      "bytes": 2289,
+      "sha256": "a912bac98fb921b0a9115a76440eb2d112238733342bac648c5057e6d6acf07c"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.public-rules.headers",
+      "bytes": 4918,
+      "sha256": "2f6367a90060072720f9fe03a29d7464b93166e0f787edf904d6346305278bba"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.public-rules.html",
+      "bytes": 143316,
+      "sha256": "3b6af813c89fb2145f6ee0f0308deea8baec7e4248e3d961af60382021a755d5"
+    },
+    {
+      "path": "/workspace/work/t38-live-policy-review.public-rules.json",
+      "bytes": 1345,
+      "sha256": "39b59233a9a6b21ef12b14218010afe17058d56e92783ab3cf6bc15c37e877c6"
+    }
+  ],
+  "constraintsObserved": [
+    "No source/config/ledger changes, commit, push, PR metadata/ready/merge mutation, external comment/message, settings change, waiver or suppression.",
+    "No CI check collection/rerun, functional/native/SDK/probe execution or source finding investigation; those remain root-owned.",
+    "No shell api.github.com call, credentials read, proxy/CA/TLS override or authentication bypass. Only the existing GitHub plugin and normal public GitHub rules HTML were used.",
+    "Anonymous Set-Cookie response values were redacted from saved public headers. API errors and policy/review readbacks remain retained."
+  ],
+  "limits": [
+    "This live branch-policy assessment does not waive project-level acceptance, source-review or exact-head scanner expectations. No automated merge eligibility conclusion is asserted.",
+    "Server admin-only details remain inaccessible even though the separately readable live policy indicators show disabled protection and no rulesets.",
+    "Root must use the final pushed head and then-current policy/reviews/checks for integration; remote76c readback does not qualify unpublished later commits."
+  ]
+}

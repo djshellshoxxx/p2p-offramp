@@ -5,11 +5,14 @@ subsystem source reads and separate review of subsequent changes. The
 [current-source manifest](CURRENT-SOURCE.json) binds every current file to its
 semantic review. Configuration, selected tests, contracts and interface documents
 have additional checks in the subsystem receipts. A hash inventory alone is not
-the audit.
+the audit. The production count stays unchanged; [T98](../reviews/T98-final.md) and
+[T100](../reviews/T100-root.md) add separately reviewed native/TCP test evidence.
 
-Source integrations through T97 are complete. Consolidated native verification,
-the corrected fresh lab and exact-head hosting/merge readback remain root-owned
-until their results appear in the task ledger and final verification receipt.
+Source integrations through T97 and the selected T98/T100 test additions, consolidated native verification and the new-clone
+fresh lab are accepted in the [final local packet](../FINAL-LOCAL-VERIFICATION-2026-11-02.md).
+Exact-head hosted CI/scanner/review and guarded merge/main readback remain a live
+[PR26 record](https://github.com/djshellshoxxx/p2p-offramp/pull/26), rather than a future
+assertion by this source document.
 Trading stays disabled, the maintained release pin stays null, and no deployment
 or professional security/cryptographic approval is established.
 

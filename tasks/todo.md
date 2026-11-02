@@ -111,7 +111,7 @@ is explicitly recorded. Each implementation needs a different reviewer.
 | T35 | DONE | audit_runtime_build: scriptless local-source portal; independent root2 unit +5 actual CSP/readability/download/print browser groups; sourcefea265c, no deployment/signing approval |
 | T36 | DONE | audit_storage: canonical claims/wiki consistency; independent root14 tests + actual checker, real catalog binding and corrected file-auth wording; source737f90b; refresh after T55 immutable policy commit, semantic approval/publication pending |
 | T37 | DONE | branch_inventory: independently corrected/reviewed173 specs,8281 source clauses,103 canonical records; mapping approval is not implementation or qualification of remaining rows |
-| T38 | IN_PROGRESS | root: integrate frozen slices, reassess remaining unblocked requirements, independent full-source audit, final checks and guarded source delivery |
+| T38 | INTEGRATING | root: source through T97 plus T98/T100 selected tests, whole first-party audit and final local/native/new-clone acceptance complete; exact-head CI/scanners/reviews and guarded merge/main readback remain live PR26 delivery |
 | T39 | DONE | root: pinned EVM-only fake-funds lab; independent storage reviewer repaired/rechecked3 reproduced defects,6 focused tests, actual Docker build/tool versions and5 local foundation command groups; sourceeaaa38a; fresh Codespace qualification pending |
 | T40 | DONE | completion_requirements + branch_inventory startup integration; different reviewers13model+14adversarial, root13startup/catalog+18emitted-browser groups; source17172be, no physical-device qualification |
 | T41 | DONE | later_phase_requirements: optional meetup primitives/budget; independent26 cases +actual reentry/raw-cleanup probes and4096vector oracle; sourceab16b3e; no active sensor/provider/default UI |
@@ -164,7 +164,7 @@ serialized leases and bounded recovery slot are reused.
 | T68 | DONE | Endpoint/signing f210cb9; independent last-awaited-marker RED/GREEN,37 focused, actual11 sends/16 signatures/32 explicit reviews; default unknown stays unknown. Final composition in T38. |
 | T69 | DONE | Meetup verification b11e745; independent58 cases/native CAS and caps;100000 native samples/tolerance0.01;13 runtime files unchanged |
 | T70 | DONE | Sourcea685f8f; root independently matched native Chromium/version/Playwright metadata/absent pinned engines and exact JSON. Firefox/WebKit remain unmeasured; no bypass or fake rejection. |
-| T71 | INTEGRATING | Fresh693c66c install/cache/tools/types pass; foundation1441/1442 stopped on stale assurance hash; preserve failed snapshot and retry new source |
+| T71 | DONE | New clean a2b414f clone/cache/dependencies/config, existing pinned non-root image1729; foundation5/journey4,1712 package/82contract tests and audit0. Distinct privacy_selector review accepts local scope; original693c66c1441/1442 failure preserved. |
 | T72 | DONE | Source d11acf2; root independent15 cases/scoped types plus UTF8 boundary/getter/late-detachment probes; structural unverified only, semantic catalogs empty. |
 
 T38 remains active through final full audit, exact-head checks and guarded source
@@ -173,7 +173,7 @@ documentation bindings. Historical approvals do not cover new dependency bytes.
 
 | T73 | DONE | Finite native App zoom checkpoint79a53b5; independent normal keyboard1x/2x/4x with fixed1280px window and layout1280/640/320, exact values/controls/focus/owned cleanup. Qualification2f5c0cf; final changed App rerun under T38. |
 
-| T74 | INTEGRATING | root CI full-history/literal child-program repairs independently approved by audit_domain_transport, source54e5b62;7 cases pass; fresh hosted checks pending. T49 screen compatibility repair is T68 plus root consumer call. |
+| T74 | DONE | Root CI full-history/literal child-program repairs54e5b62 distinctly accepted; local7 cases and final completion tools pass. Exact-head hosted verification belongs solely to final T38 delivery. |
 | T75 | DONE | Source e72fa04 public-only isolated candidate evaluation independently reproduced ws6/6, Waku13/14 strict sint64-min failure, mobile4/5 stronger application expectation failure; no provider adoption. Historical signatures/license and daemon-timeout limitations explicit. |
 | T76 | DONE | Diagnostic models e72dfa4; root independent source review and43 affected cases/types; private equality and unverified party assertions gain no source/economic authority. Final composition in T38. |
 
@@ -181,10 +181,10 @@ documentation bindings. Historical approvals do not cover new dependency bytes.
 
 | T78 | DONE | Cleanup verification1680093; measured asynchronous SIGKILL delivery, preserved deadline150ms/readiness, real native bounded exit; independent6/6, aggregate31/31 and1551/1551 no skips. Cleanup-removal negative control still fails. |
 | T79 | DONE | Tooling/bindings2bf608c; independent72 immutable source rows, additive pinned Foundry setup, actual cast1/1 +assurance7/7/docs; approvals/claims unchanged. |
-| T80 | INTEGRATING | Source32c3449; distinct T80/T81 review approves encrypted8-slot safe defaults, fresh reviewed drafts and actual Worker/UI/factories. Root1712 package cases/7 types and web chain pass; final native/hosting composition remains T38. |
-| T81 | INTEGRATING | Source32c3449; distinct review confirms same actual broker/two pools, explicit Ordinary consent, generation CAS and truthful unknown RPC/wallet coverage. Final native/hosting composition remains T38. |
-| T82 | INTEGRATING | Source32c3449; distinct21 named cases and semantic review, actual favorites native restore proof; root web chain passes. Conservative all-history retention while preference exists is explicit; final hosting graph remains T38. |
-| T83 | INTEGRATING | Source32c3449; independent clipboard-remount finding reproduced and repaired, actual native GREEN plus root7/7 and distinct closure. Maintained browser aliases enrolled; final hosting remains T38. |
+| T80 | DONE | Source32c3449; distinct T80/T81 review accepts encrypted8-slot safe defaults/fresh drafts with actual Worker/UI/factories. Final clean a2 native journey11/16/32 and fresh1712 package/7-type verification; live source delivery T38. |
+| T81 | DONE | Source32c3449; distinct same-broker/two-pool, explicit Ordinary/generation CAS review. Final clean a2 actual native mode/drain/held-wallet/unknown-marker checks pass; default RPC/wallet unknown; delivery T38. |
+| T82 | DONE | Source32c3449; distinct21 named cases and actual UI/Worker/restore proof; root maintained web chain passes. Preference row intentionally protects all history; final source delivery T38. |
+| T83 | DONE | Source32c3449; independent clipboard-remount defect reproduced/repaired, actual native GREEN and distinct7/7 closure. Maintained sharing browser alias enrolled; source delivery T38. |
 | T84 | DONE | review_intakes fresh103-record/173-spec/8281-clause gap intake frozen; finite local analytics, passive XMTP, formal partitions and actual outage follow-ons admitted as T89-T92. Root final current coverage reconciliation remains T38. |
 
 | T85 | DONE | Storage normalization/listener repairs441499d; distinct27-case review, exact four-file receipt. |
@@ -193,9 +193,9 @@ documentation bindings. Historical approvals do not cover new dependency bytes.
 
 | T87 | DONE | Physical Worker admission6f7bd07; root24/24 and exactChrome156/Node24.22 actual14 closures/competing refusal; CDP research port only, browser hard deadlines unqualified. |
 
-| T88 | INTEGRATING | Repairs74d9b87/0867271 with distinct root165 selected cases plus52 relay cases (overlapping suites), root1712 package cases pass. Clean-source native CLI/journey verification remains final T38; original audits/RED preserved. |
+| T88 | DONE | Repairs74d9b87/0867271; distinct165 selected cases plus52 relay cases (overlap explicit), fresh1712 package tests and clean a2 native CLI/journey pass. Failed-release then first distinct timeout-refund preserved; original audits/RED retained. |
 
-| T89 | INTEGRATING | Source32c3449; actual consented five-category memory observer/Settings, independent22 cases, actual App19-group/BFcache proof and root web chain pass. No persistence/IPC/identifiers/network; final hosting remains T38. |
+| T89 | DONE | Source32c3449; consented five-category memory-only observer/Settings, distinct22 cases and actual19-group/BFcache/root web proof. No persistence/IPC/identifiers/network; source delivery T38. |
 
 | T90 | DONE | Passive XMTP intake5d448c0 independently reverified five complete archives/SRI/current signatures/licenses and91 file identities. Published source/nightly mismatch and10 exact missing contracts keep active profile unsupported; no SDK/WASM execution. |
 
@@ -209,6 +209,23 @@ documentation bindings. Historical approvals do not cover new dependency bytes.
 
 | T95 | DONE | Sourcea1cda13;18 explicit ordinal string sorts, byte-identical actual canonical snapshots. Distinct root10 docs/portal cases after genuine metadata refresh; all original T91 evidence/3 spent attempts preserved. |
 
-| T96 | INTEGRATING | Source4488131; all real assertion/negative/cleanup bytes retained under explicit helper names and one awaited native distribution test. Distinct root10/10 stealth cases; final distribution native run remains T38. |
+| T96 | DONE | Source4488131; assertion/negative/cleanup bytes retained under explicit helpers/awaited native test. Distinct10/10 stealth cases and clean a2 actual distribution TAP1/1 with3 smoke checks pass; source delivery T38. |
 
 | T97 | DONE | Sourcecf73208; bounded monotonic docs/literal-import extraction, distinct root26 cases plus296 ordinary grammar equivalence checks. Source/span/budget/comparator semantics retained; no compiler/solver/target rerun. |
+
+
+Final local checkpoint: **a2b414f60c6ceedaa6388701eca7737dfcc7cb12**. T80/T81/T82/T83/T88/T89/T96 local integrations are accepted; earlier pending descriptions in their source receipts are historical. All11 final native/browser commands pass, including11/16/32 journey, first distinct timeout refund after failed release,15-case retention and awaited distribution1/1. T71 new-clone acceptance and whole282-file/36220-line audit are complete. [Final local packet](../docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.md) and [current remainder](../docs/execution/coverage/CURRENT-REMAINDER.json) retain exact scope/original failures.
+
+T38 solely tracks final source delivery at this frozen pre-publication checkpoint. [PR26](https://github.com/djshellshoxxx/p2p-offramp/pull/26) records actual final-head CI/scanner/review and guarded merge/readback; read live metadata before treating this historical INTEGRATING row as new unfinished implementation. Source cannot certify its own future merge. Trading disabled/null maintained pin; original clauses/milestones and qualification requirements remain unpromoted.
+
+
+| Task | Status | Owner / exclusive scope / acceptance |
+|---|---|---|
+| T98 | DONE | privacy_selector: only existing native reconciliation harness; actual finalized-receipt rollback to durable reorged after alternate local chain, one explicit wallet send/no resend. Root independently reviews/runs; preserve all9 existing checks. |
+| T99 | DONE | audit_optional: owned work-only exact Firefox/WebKit tooling availability follow-on to T70; one ordinary bounded official request per engine if permitted, no mirrors/policy bypass/system changes. Tool availability remains separate from product qualification. |
+| T100 | DONE | review_intakes: one actual owned TCP/WebSocket missing-publication-ACK case in existing pool.test.mjs; reuse real existing failover/drop/reconnect evidence, preserve old assertions/bounds. Root narrow review/run, one assurance hash refresh and final current package verification. |
+
+T99 investigation complete: enforced destination policy excludes cdn.playwright.dev; zero download requests or native launches, no HTTP denial/fallback/bypass. Exact Firefox/WebKit qualification remains a precise tooling/environment prerequisite, independent of release approval. T98 author/root actual10/10 checks and distinct current code review accept the local delta; no later wallet calls/reprepare.
+
+
+Final selected-test source identity **12bb8f1650227479e744cd899273f533eb94fe53**: T98/T100 accepted, all1,713 current package cases pass with zero failures/skips/cancellations and502 unchanged captured source/test/config rows. All282 production-file bytes remain cf73208/a2; fresh-lab1,712 retains its actual clean a2 checkpoint. T38 only requires final exact-head hosted CI/scanners/reviews and guarded delivery/main readback.

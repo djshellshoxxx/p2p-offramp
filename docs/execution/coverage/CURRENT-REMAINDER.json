@@ -22,7 +22,7 @@
     "?? docs/execution/reviews/T93-author.json",
     "?? docs/execution/reviews/T93-root.json"
   ],
-  "scope": "Reconcile all103 canonical records/all173 bound specs/original8281 clauses/nine milestones using immutable REQUIREMENTS and frozen T77/T84 plus current committed scoped receipts. No clause status rewrite, new product task, source approval transfer or final root-acceptance claim.",
+  "scope": "Cumulative reconciliation of all103 canonical records/all173 bound specs/original8281 clauses/nine milestones. Frozen intakes and original clause statuses remain historical. Root final local acceptance is source-bound; product qualification and live future hosting remain separate.",
   "immutableInventory": {
     "path": "docs/execution/coverage/REQUIREMENTS.json",
     "sha256": "dc3d69b8e25c21ffd4d9a8eb69e842fc525689e1ce884748e674902935cb471a",
@@ -64,18 +64,23 @@
     "originalClauses": 8281,
     "milestones": 9,
     "currentCanonicalScopeStates": {
+      "LOCAL_SCOPE_COMPLETE": 76,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    },
+    "notAClauseCompletionCount": true,
+    "canonicalStatesAtIntake": {
       "LOCAL_SCOPE_COMPLETE": 74,
       "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
       "ROOT_INTEGRATION_ACTIVE": 2,
       "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
-    },
-    "notAClauseCompletionCount": true
+    }
   },
   "currentFeatureConsumers": [
     {
       "task": "T80",
       "name": "Editable fresh trade drafts, encrypted templates and repeat defaults",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "LOCAL_IMPLEMENTATION_ACCEPTED_FINAL_LOCAL_VERIFICATION_COMPLETE",
       "proposalRefs": [
         "R77-4"
       ],
@@ -96,12 +101,13 @@
       "behavior": "Eight-slot G02 encrypted preference/CAS library reuses only networkId,deploymentId,assetId,amountBaseUnits,fiatCurrency,fiatMinorUnits,fiatScale. Every use clears parties/private instructions/deadlines/confirmations/accepted identities and creates a fresh current-registry review with three independent32-byte CSPRNG values. Accepted IDs/nonces/signatures/expiry or wallet/send authority are never reused.",
       "evidenceScope": "Distinct current-source T80/T81 review; author actual UI/Worker encrypted reload and G03 fresh-key restore, native CAS and stale-scope controls. Separate builder-fed native/ERC20 LOCALPROOF journey retained exact11 sends/16 signatures/32 explicit reviews; fixture peer capability is not a production acceptance carrier.",
       "sourceCommit": "32c344992a12aa4751d89ea5cf360c3d69e27761",
-      "distinctReview": "docs/execution/reviews/T80-T81-final.json"
+      "distinctReview": "docs/execution/reviews/T80-T81-final.json",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "task": "T81",
       "name": "Actual Ordinary/Strict selector for the same constructor-owned broker",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "LOCAL_IMPLEMENTATION_ACCEPTED_FINAL_LOCAL_VERIFICATION_COMPLETE",
       "proposalRefs": [
         "R77-3"
       ],
@@ -122,12 +128,13 @@
       "behavior": "Explicit ordinary-relaxation consent selects the same real broker used by both relay pools. Generation/issuer changes retire prior admissions; physical drain is not inferred from a selector receipt. Default App has no real broker and truthfully stays unavailable/unknown; RPC/wallet routing remains unknown.",
       "evidenceScope": "Distinct T80/T81 source review; actual native selector/two-pool, held wallet and durable marker boundary controls; unchanged final builder-fed journey11/16/32. No provider adoption or automatic wallet/send.",
       "sourceCommit": "32c344992a12aa4751d89ea5cf360c3d69e27761",
-      "distinctReview": "docs/execution/reviews/T80-T81-final.json"
+      "distinctReview": "docs/execution/reviews/T80-T81-final.json",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "task": "T82",
       "name": "Encrypted saved-review favorites",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "LOCAL_IMPLEMENTATION_ACCEPTED_FINAL_LOCAL_VERIFICATION_COMPLETE",
       "proposalRefs": [
         "R77-1"
       ],
@@ -149,12 +156,13 @@
       "retentionLimit": "Unstar removes membership but leaves the preference record. While this row exists, current native complete-closure retention treats preferences as unknown and conservatively protects all history. Existing backups retain earlier contents; favorites do not imply surgical dependency-aware pruning, preference deletion or secure erasure.",
       "evidenceScope": "Distinct final review with21 named managed-IPC cases; author actual UI/Worker/IndexedDB/native WebCrypto encrypted reload and fresh-key restore, foreign preservation, current-registry reopen and stale-controller/CAS controls. No wallet submissions.",
       "sourceCommit": "32c344992a12aa4751d89ea5cf360c3d69e27761",
-      "distinctReview": "docs/execution/reviews/T82-final.json"
+      "distinctReview": "docs/execution/reviews/T82-final.json",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "task": "T83",
       "name": "Generic current-artifact app sharing",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "LOCAL_IMPLEMENTATION_ACCEPTED_FINAL_LOCAL_VERIFICATION_COMPLETE",
       "proposalRefs": [
         "R77-2"
       ],
@@ -171,12 +179,13 @@
       "behavior": "Known canonical root import.meta.url derives a generic hosting subpath, never current route/query/fragment/private IDs. Explicit clipboard action with readonly manual fallback. Root fixed held Settings unmount/remount overlap using page/module-lifetime physical admission; old owner/sequence results remain suppressed. No referral tracking, fee, production-host or release-authenticity claim.",
       "evidenceScope": "Distinct final closure; preserved actual native clipboard success/CDP denial and manual selection; old-source RED and exact Node24.22.1/Chrome156 route/fixture held-remount GREEN, final independent7/7 plus combined22/22 scoped cases.",
       "sourceCommit": "32c344992a12aa4751d89ea5cf360c3d69e27761",
-      "distinctReview": "docs/execution/reviews/T83-T89-final.json"
+      "distinctReview": "docs/execution/reviews/T83-T89-final.json",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "task": "T89",
       "name": "Consented memory-only local screen counts",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "LOCAL_IMPLEMENTATION_ACCEPTED_FINAL_LOCAL_VERIFICATION_COMPLETE",
       "proposalRefs": [
         "R84-A",
         "R84-B"
@@ -196,7 +205,8 @@
       "proposalResolution": "T84 proposed clear-retains-consent; the implemented/reviewed smaller consent lifecycle intentionally makes Clear stop and require fresh opt-in. Final code/copy/15-case lifecycle contract supersedes that proposal; it is not an unresolved human decision.",
       "evidenceScope": "Distinct final source review;15 controller/render cases and independent combined22/22; author actual App browser19 groups include native profile lock, real persisted BFCache, reload and exact durable-state/IPC equality. Ordinary visibility policy is focused-tested; no physical-background/device claim.",
       "sourceCommit": "32c344992a12aa4751d89ea5cf360c3d69e27761",
-      "distinctReview": "docs/execution/reviews/T83-T89-final.json"
+      "distinctReview": "docs/execution/reviews/T83-T89-final.json",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     }
   ],
   "passiveXmtpRemainder": {
@@ -298,7 +308,7 @@
     "nextAction": "Preserve the completed finite tranche and all original evidence. Any genuinely new model/decomposition requires a separately frozen bounded scope; do not rerun identical exhausted targets or promote UNKNOWN."
   },
   "rootIntegrationState": {
-    "status": "ACTIVE_NOT_DONE",
+    "status": "LOCAL_ENGINEERING_COMPLETE_FINAL_HOSTED_DELIVERY_PENDING",
     "owner": "root",
     "notHumanApprovalBlockers": true,
     "work": [
@@ -309,15 +319,19 @@
           "T38"
         ],
         "owner": "root",
-        "state": "FOCUSED_ACCEPTED_NATIVE_FINAL_PENDING",
+        "state": "DONE_SCOPED_LOCAL_ACCEPTANCE",
         "sourceCommit": "74d9b87",
         "dependencies": [
           "clean committed combined source",
           "current native CLI/journey graph"
         ],
-        "nextAction": "Complete clean-source native acceptance and changed-source evidence reconciliation; retain prior DIRTY_SOURCE refusal and original RED/audit packets.",
+        "nextAction": "Reuse the accepted source-bound local evidence; do not repeat work from this historical intake.",
         "evidenceRef": "docs/execution/reviews/T88-root.json",
-        "detail": "142 other focused +23 wallet named cases=165 pass, no failures/skips/cancellations; not final native or whole-tree certification."
+        "detail": "142 other focused +23 wallet named cases=165 pass, no failures/skips/cancellations; not final native or whole-tree certification.",
+        "stateAtIntake": "FOCUSED_ACCEPTED_NATIVE_FINAL_PENDING",
+        "nextActionAtIntake": "Complete clean-source native acceptance and changed-source evidence reconciliation; retain prior DIRTY_SOURCE refusal and original RED/audit packets.",
+        "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "acceptedEvidenceRef": "docs/execution/reviews/T38-final-native.json"
       },
       {
         "id": "CANONICAL_RELAY_DIAGNOSTIC",
@@ -326,7 +340,7 @@
           "T38"
         ],
         "owner": "root-coordinated canonical relay repair owner",
-        "state": "ACTIVE_NOT_DONE",
+        "state": "DONE_SCOPED_LOCAL_ACCEPTANCE",
         "dependencies": [
           "frozen canonical nip01/pool delta",
           "distinct review and focused evidence"
@@ -337,7 +351,11 @@
           "packages/relay/test/ad.test.mjs",
           "packages/relay/test/pool.test.mjs"
         ],
-        "nextAction": "Finish narrow canonical unknown-input/fixed-diagnostic correction, preserve ordinary wire/vector compatibility and obtain distinct review. Restricted local-pool tests cannot substitute for canonical APIs."
+        "nextAction": "Reuse the accepted source-bound local evidence; do not repeat work from this historical intake.",
+        "stateAtIntake": "ACTIVE_NOT_DONE",
+        "nextActionAtIntake": "Finish narrow canonical unknown-input/fixed-diagnostic correction, preserve ordinary wire/vector compatibility and obtain distinct review. Restricted local-pool tests cannot substitute for canonical APIs.",
+        "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "acceptedEvidenceRef": "docs/execution/reviews/T88-canonical-relay-root.json"
       },
       {
         "id": "T93_FALSE_GREEN_TOOLING",
@@ -346,7 +364,7 @@
           "T38"
         ],
         "owner": "root-coordinated tooling repair owner",
-        "state": "ACTIVE_NOT_DONE",
+        "state": "DONE_SCOPED_LOCAL_ACCEPTANCE",
         "dependencies": [
           "scanner/OpenSSL false-green corrections",
           "distinct review",
@@ -358,7 +376,11 @@
           "scripts/vectors/check_g16_evm_openssl.py",
           "scripts/tests/test_g16_vectors.py"
         ],
-        "nextAction": "Finish admitted false-green repairs, retain negative controls and run the affected honest diagnostics before final package/build/foundation acceptance; do not relax scanners or hide test IPC failures."
+        "nextAction": "Reuse the accepted source-bound local evidence; do not repeat work from this historical intake.",
+        "stateAtIntake": "ACTIVE_NOT_DONE",
+        "nextActionAtIntake": "Finish admitted false-green repairs, retain negative controls and run the affected honest diagnostics before final package/build/foundation acceptance; do not relax scanners or hide test IPC failures.",
+        "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "acceptedEvidenceRef": "docs/execution/reviews/T94-root.json"
       },
       {
         "id": "T92_ACTUAL_OUTAGE",
@@ -367,7 +389,7 @@
           "T38"
         ],
         "owner": "privacy_selector under root coordination",
-        "state": "ACTIVE_NOT_DONE",
+        "state": "DONE_SCOPED_LOCAL_ACCEPTANCE",
         "proposalRefs": [
           "R77-5",
           "R84-E"
@@ -381,7 +403,11 @@
         "paths": [
           "scripts/test-journey-origin-browser.mjs"
         ],
-        "nextAction": "Finish actual owned-origin unavailability/fresh-key recovery, retain original partial drill and raw faults, and obtain distinct review. No production incident/key rotation/off-device-retention/fund-recovery claim."
+        "nextAction": "Reuse the accepted source-bound local evidence; do not repeat work from this historical intake.",
+        "stateAtIntake": "ACTIVE_NOT_DONE",
+        "nextActionAtIntake": "Finish actual owned-origin unavailability/fresh-key recovery, retain original partial drill and raw faults, and obtain distinct review. No production incident/key rotation/off-device-retention/fund-recovery claim.",
+        "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "acceptedEvidenceRef": "docs/execution/reviews/T92-root.json"
       },
       {
         "id": "T71_CORRECTED_FRESH_LAB",
@@ -390,14 +416,18 @@
           "T38"
         ],
         "owner": "root and assigned fresh-lab owner",
-        "state": "ACTIVE_NOT_DONE",
+        "state": "DONE_SCOPED_LOCAL_ACCEPTANCE",
         "dependencies": [
           "corrected frozen source",
           "fresh install and native foundation evidence",
           "retained failed693c66c checkpoint"
         ],
         "evidenceRef": "docs/execution/qualification/fresh-lab-693c66c-failed.json",
-        "nextAction": "Complete fresh install/tool/cache/foundation qualification at the corrected frozen source and bind exact recipe/tools/source/results. Old693c66c1441/1442 stale-assurance failure stays retained; a reused install or earlier pass cannot replace the fresh checkpoint."
+        "nextAction": "Reuse the accepted source-bound local evidence; do not repeat work from this historical intake.",
+        "stateAtIntake": "ACTIVE_NOT_DONE",
+        "nextActionAtIntake": "Complete fresh install/tool/cache/foundation qualification at the corrected frozen source and bind exact recipe/tools/source/results. Old693c66c1441/1442 stale-assurance failure stays retained; a reused install or earlier pass cannot replace the fresh checkpoint.",
+        "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+        "acceptedEvidenceRef": "docs/execution/qualification/fresh-lab-a2b414f.json"
       },
       {
         "id": "T38_FINAL_INTEGRATION_DELIVERY",
@@ -406,17 +436,15 @@
           "T74"
         ],
         "owner": "root",
-        "state": "ACTIVE_NOT_DONE",
+        "state": "EXACT_HEAD_HOSTING_AND_GUARDED_MERGE_PENDING",
         "dependencies": [
-          "all admitted repair freezes/distinct reviews",
-          "T88 final native",
-          "canonical relay correction",
-          "T93",
-          "T92",
-          "T71",
-          "exact combined-source build/CI/hosted/G24/claims checks"
+          "frozen final documentation checkpoint",
+          "exact final-head hosted results and reviews",
+          "fresh main/branch-rule readback"
         ],
-        "nextAction": "Validate this reconciliation, refresh current ledgers/claims/matrix/source bindings, complete required exact-source aggregate/native/hosted checks, then commit/deliver through the authorized workflow. These are root integration tasks, not human approval blockers."
+        "nextAction": "Read exact final-head CI, scanners and all review/outside-diff submissions in PR26, then use the expected-head merge guard and verify main tree/hashes/ancestry/clean checkout. This is source delivery, not a human approval blocker or release activation.",
+        "stateAtIntake": "ACTIVE_NOT_DONE",
+        "nextActionAtIntake": "Validate this reconciliation, refresh current ledgers/claims/matrix/source bindings, complete required exact-source aggregate/native/hosted checks, then commit/deliver through the authorized workflow. These are root integration tasks, not human approval blockers."
       }
     ]
   },
@@ -442,8 +470,8 @@
       "Physical Android/iOS/hardware-wallet/VoiceOver/TalkBack and reviewed source/translated safety copy; exact browser/device tuples."
     ],
     "toolingDistinctFromExternal": [
-      "T70 pinned Firefox/WebKit engine/platform/download prerequisites remain unmeasured, not a fabricated permission rejection.",
-      "Current corrected-source fresh lab and aggregate/native/hosted final checks are active root integration tasks.",
+      "T99 establishes exact Firefox/WebKit prerequisite: pinned binaries absent and current enforced host policy excludes cdn.playwright.dev; zero archive requests/native executions and no HTTP denial/bypass. T70 historical unmeasured snapshot unchanged; resume after supported policy readiness.",
+      "Corrected-source fresh lab and aggregate/native local checks are accepted; exact-head hosted checks and source delivery remain root integration tasks.",
       "Missing native program/circuit/vendor/coordinator/wallet artifacts are exact contract/tooling dependencies, not a generic human-approval excuse."
     ]
   },
@@ -479,16 +507,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
-        "T93_FALSE_GREEN_TOOLING",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -549,7 +577,8 @@
       "originalSourceClauseCount": 338,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G01-IDENTITY",
@@ -578,12 +607,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -609,7 +640,8 @@
       "originalSourceClauseCount": 62,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G02-VAULT",
@@ -642,15 +674,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -692,7 +725,8 @@
       "originalSourceClauseCount": 240,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G03-BACKUP",
@@ -726,15 +760,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -774,7 +809,8 @@
       "originalSourceClauseCount": 78,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G04-CSP",
@@ -804,15 +840,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T93_FALSE_GREEN_TOOLING",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -836,7 +873,8 @@
       "originalSourceClauseCount": 45,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G05-TRANSPORT",
@@ -871,12 +909,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -910,7 +950,8 @@
       "originalSourceClauseCount": 65,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G06-PROVENANCE",
@@ -943,15 +984,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T93_FALSE_GREEN_TOOLING",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -980,7 +1022,8 @@
       "originalSourceClauseCount": 173,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G07-SHELL",
@@ -1011,12 +1054,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1041,7 +1086,8 @@
       "originalSourceClauseCount": 92,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G09-MIGRATIONS",
@@ -1069,12 +1115,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1094,7 +1142,8 @@
       "originalSourceClauseCount": 52,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G10-EVM-WALLET",
@@ -1124,15 +1173,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1152,7 +1202,8 @@
       "originalSourceClauseCount": 35,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G11-REGISTRY",
@@ -1181,12 +1232,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1208,7 +1261,8 @@
       "originalSourceClauseCount": 31,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G12-EVM-JOURNAL",
@@ -1244,15 +1298,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1274,7 +1329,8 @@
       "originalSourceClauseCount": 122,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G14-EXTENSIONS",
@@ -1304,12 +1360,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1330,7 +1388,8 @@
       "originalSourceClauseCount": 30,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G15-VERIFY",
@@ -1361,12 +1420,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1388,7 +1449,8 @@
       "originalSourceClauseCount": 34,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G16-EVM-TERMS",
@@ -1421,16 +1483,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
-        "T93_FALSE_GREEN_TOOLING",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1460,7 +1522,8 @@
       "originalSourceClauseCount": 43,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-EVM-ESCROW",
@@ -1491,12 +1554,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1532,7 +1597,8 @@
       "originalSourceClauseCount": 273,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G18-PREFLIGHT",
@@ -1566,12 +1632,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1594,7 +1662,8 @@
       "originalSourceClauseCount": 29,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G19-21-NOSTR",
@@ -1627,16 +1696,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
-        "CANONICAL_RELAY_DIAGNOSTIC",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1662,7 +1731,8 @@
       "originalSourceClauseCount": 269,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G20-CHAT",
@@ -1694,15 +1764,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1729,7 +1800,8 @@
       "originalSourceClauseCount": 387,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G22-PROJECTION",
@@ -1761,12 +1833,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1786,7 +1860,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G23-INDICATORS",
@@ -1820,12 +1895,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1857,7 +1934,8 @@
       "originalSourceClauseCount": 45,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G24-EVALUATOR",
@@ -1890,12 +1968,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -1915,7 +1995,8 @@
       "originalSourceClauseCount": 25,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G25-EVM-RECOVERY",
@@ -1952,16 +2033,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
-        "T92_ACTUAL_OUTAGE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -1982,7 +2063,8 @@
       "originalSourceClauseCount": 1,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-G26-DIAGNOSTICS",
@@ -2012,12 +2094,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -2038,7 +2122,8 @@
       "originalSourceClauseCount": 5,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "D-LOCALE-HELP",
@@ -2070,19 +2155,22 @@
         "T80",
         "T81",
         "T83",
-        "T89"
+        "T89",
+        "T99"
       ],
       "completedOrEvaluatedLocalScope": "Existing independently reviewed local mechanics: Typed English catalog, strict metadata, help and draft locale layout evidence",
       "dependencies": [
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted implementation; root T38 checks final changed source/dependency graph. No repeated implementation from historical labels.",
+      "nextAction": "Preserve accepted local implementation and scoped evidence. Final source delivery is tracked live in PR26; resume only exact contract/tooling/qualification work named in dependencies and scope limits.",
       "unresolvedContractsOrScopeLimits": "This local scope does not qualify enabled artifact/provider/device/legal/crypto/release targets.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -2110,7 +2198,9 @@
       "originalSourceClauseCount": 22,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "exactCurrentToolingFollowon": "docs/execution/qualification/browser-tooling-policy.json"
     },
     {
       "id": "P-ATTACK-TRACEABILITY",
@@ -2139,9 +2229,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T64;root T38 refreshes changed-source applicability only.",
@@ -2171,7 +2263,8 @@
       "originalSourceClauseCount": 328,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-GOVERNANCE",
@@ -2199,9 +2292,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Retain exact compatibility/authority evidence; do not repeat validator implementation.",
@@ -2225,7 +2320,8 @@
       "originalSourceClauseCount": 66,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-COMPLIANCE-MODEL",
@@ -2253,9 +2349,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Use actual operator facts and current qualified assessment when they exist; no new generic legal wrapper.",
@@ -2278,7 +2376,8 @@
       "originalSourceClauseCount": 59,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-RETENTION",
@@ -2308,12 +2407,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted T67; preserve conservative preferences and older backups. Root T38 completes changed-source/native acceptance. Whole-profile deletion remains a separate exact-contract task.",
+      "nextAction": "Reuse accepted T67/T82/T98 evidence, conservative preferences and older backups. Exact-head source delivery remains live PR26. Whole-profile deletion requires its separate exact contract; no surgical pruning/secure erasure follows.",
       "unresolvedContractsOrScopeLimits": "No whole-vault deletion or secure erasure. Favorites do not implement precise preference dependency pruning: while their row exists all history remains conservatively protected. Old backups can restore earlier rows.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -2341,7 +2442,8 @@
       "originalSourceClauseCount": 44,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-CLAIMS",
@@ -2373,12 +2475,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Root T38 refreshes exact artifact/source claims and docs/G24 bindings after the remaining repairs. Reuse T80/T81/T82/T83/T89 rather than reopen their optional consumer proposals.",
+      "nextAction": "Preserve accepted current claims/wiki/source/G24 bindings and unsupported/proposed claim states; final hosted delivery is live PR26. Reuse existing consumers. Future artifact/safety-copy semantic approval remains separate.",
       "unresolvedContractsOrScopeLimits": "No public marketing/source-English funds-safety approval, translated safety-copy review, authenticated production host or release activation. Final source binding/CI/delivery is root integration, not a human blocker.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -2416,7 +2520,8 @@
       "originalSourceClauseCount": 101,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-CTX02-OBSERVERS",
@@ -2444,9 +2549,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Integrate existing adapters only through real source ownership; do not widen imported authority envelope.",
@@ -2468,7 +2575,8 @@
       "originalSourceClauseCount": 5,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-BACKUP-VERIFICATION",
@@ -2496,9 +2604,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse genuine fact and freshness check; do not recreate it from export/unlock/other-profile restore.",
@@ -2519,7 +2629,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G22-BROWSER",
@@ -2557,15 +2668,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse accepted local journey/consumer sources; root T38 finishes remaining repair/native/source graph acceptance. Do not treat local peer fixture acceptance as a production peer wire.",
+      "nextAction": "Preserve accepted local journey/consumer source, final1713 package and scoped native/TCP acceptance. Final-head hosted delivery is live PR26. Production peer signature carrier remains an exact absent profile.",
       "unresolvedContractsOrScopeLimits": "Production remote EOA/EIP1271 acceptance carrier, authenticated trust/deployment, real wallet/device/provider support and Solana remain undefined or unqualified. Final combined checks remain active.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -2615,7 +2727,8 @@
       "originalSourceClauseCount": 52,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G14-TERMS-PROFILE",
@@ -2665,7 +2778,8 @@
       "originalSourceClauseCount": 5,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G15-PROFILE",
@@ -2717,7 +2831,8 @@
       "originalSourceClauseCount": 4,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G15-UPDATE-INTEGRATION",
@@ -2746,9 +2861,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact approved updater. Root T38 records approval and requalifies future changed combined graph;do not redo this supported slice.",
@@ -2770,7 +2887,8 @@
       "originalSourceClauseCount": 22,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-RELEASE-ARTIFACTS",
@@ -2800,15 +2918,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse existing builder;root stages final immutable source and refreshes observed hashes.",
       "unresolvedContractsOrScopeLimits": "Signing/distribution witnesses and archive/deployment/rotation profile remain separate.",
       "rootIntegrationPendingRefs": [
-        "T93_FALSE_GREEN_TOOLING",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -2827,7 +2946,8 @@
       "originalSourceClauseCount": 202,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-FORMAL-EVM",
@@ -2856,9 +2976,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Preserve the completed finite tranche and all original evidence. Any genuinely new model/decomposition requires a separately frozen bounded scope; do not rerun identical exhausted targets or promote UNKNOWN.",
@@ -2888,7 +3010,8 @@
       "originalSourceClauseCount": 53,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-EIP1271",
@@ -2916,9 +3039,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse the native read kernel; broader wallet/carrier composition needs its exact future profile.",
@@ -2940,7 +3065,8 @@
       "originalSourceClauseCount": 4,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G16-SPEC-ALIGNMENT",
@@ -2969,9 +3095,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Maintain that explicit conflict and prepare a versioned decision; do not alter canonical custody/ABI.",
@@ -2995,7 +3123,8 @@
       "originalSourceClauseCount": 1,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-SOLANA-PROFILE",
@@ -3043,7 +3172,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-SOLANA-ENGINEERING",
@@ -3103,7 +3233,8 @@
       "originalSourceClauseCount": 64,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-G24-MATRIX",
@@ -3116,12 +3247,12 @@
         "sourceClauseCount": 23
       },
       "t77DispositionRetainedForHistory": "ACTIVE_ROOT_FINAL_ACCEPTANCE",
-      "currentEngineeringState": "ROOT_INTEGRATION_ACTIVE",
-      "currentDisposition": "ROOT_EXACT_SOURCE_ACCEPTANCE_ACTIVE_NOT_DONE",
+      "currentEngineeringState": "LOCAL_SCOPE_COMPLETE",
+      "currentDisposition": "BOUNDED_LOCAL_ENGINEERING_ACCEPTED_PRODUCT_QUALIFICATION_REMAINS",
       "owner": {
         "coordinator": "root",
-        "mode": "ACTIVE_ROOT_INTEGRATION",
-        "assignment": "Existing T38/T71 acceptance; no human permission blocker"
+        "mode": "COMPLETED_LOCAL_ENGINEERING_WITH_SCOPED_QUALIFICATION_REMAINDER",
+        "assignment": "Root local acceptance and live source delivery; exact external/contract targets remain unqualified."
       },
       "taskRefs": [
         "T38",
@@ -3148,34 +3279,38 @@
         "T89",
         "T90",
         "T91",
-        "T92"
+        "T92",
+        "T99",
+        "T98",
+        "T99",
+        "T100"
       ],
-      "completedOrEvaluatedLocalScope": "Original23-clause/43-case matrix preparation,30 attack rows and scoped local feature/repair receipts are present. Current T80/T81/T82/T83/T89 source reviews do not complete final aggregate/native/hosted/current-G24 acceptance.",
+      "completedOrEvaluatedLocalScope": "All43 cases/23 requirements preserved in current overlay; clean-a2 native11/new-clone lab plus current1713 package at12bb8f1, T98 actual native reorg10/10 and T100 native TCP ACK28/28 accepted. T99 exact enforced engine host-policy prerequisite recorded. Unavailable/partial targets explicit; no full product/G24 activation.",
       "dependencies": [
         {
           "kind": "root integration",
           "activeRefs": [
+            "T38_FINAL_INTEGRATION_DELIVERY"
+          ],
+          "nextAction": "Read exact final-head CI, scanners and all review/outside-diff submissions in PR26, then use the expected-head merge guard and verify main tree/hashes/ancestry/clean checkout. This is source delivery, not a human approval blocker or release activation.",
+          "completedLocalRefs": [
             "T88_FINAL_NATIVE",
             "CANONICAL_RELAY_DIAGNOSTIC",
             "T93_FALSE_GREEN_TOOLING",
             "T92_ACTUAL_OUTAGE",
-            "T71_CORRECTED_FRESH_LAB",
-            "T38_FINAL_INTEGRATION_DELIVERY"
-          ],
-          "nextAction": "Validate this reconciliation, refresh current ledgers/claims/matrix/source bindings, complete required exact-source aggregate/native/hosted checks, then commit/deliver through the authorized workflow. These are root integration tasks, not human approval blockers."
+            "T71_CORRECTED_FRESH_LAB"
+          ]
         }
       ],
-      "nextAction": "Validate this reconciliation, refresh current ledgers/claims/matrix/source bindings, complete required exact-source aggregate/native/hosted checks, then commit/deliver through the authorized workflow. These are root integration tasks, not human approval blockers.",
-      "unresolvedContractsOrScopeLimits": "T88 native final, canonical relay diagnostics, T93 tooling corrections, T92 outage and corrected-source T71 lab remain active. Exact Solana/physical-wallet/device/provider/release/source-copy qualifications remain outside scoped local passes.",
+      "nextAction": "Read exact final-head CI, scanners and all review/outside-diff submissions in PR26, then use the expected-head merge guard and verify main tree/hashes/ancestry/clean checkout. This is source delivery, not a human approval blocker or release activation.",
+      "unresolvedContractsOrScopeLimits": "Exact Solana/provider/peer-carrier profiles, physical wallets/devices, unmeasured pinned engines, reviewed safety copy and professional/production/release acceptance remain target-specific. Local engineering complete; exact-head source delivery live in PR26.",
       "rootIntegrationPendingRefs": [
-        "T93_FALSE_GREEN_TOOLING",
-        "T92_ACTUAL_OUTAGE",
-        "T71_CORRECTED_FRESH_LAB",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
         "docs/execution/acceptance/g24-coverage.json",
-        "tasks/todo.md"
+        "tasks/todo.md",
+        "docs/execution/acceptance/g24-current-local.json"
       ],
       "unresolvedHistoricalPathRefs": [],
       "evidenceRefs": [
@@ -3196,7 +3331,8 @@
         "docs/execution/reviews/T83-T89-final.json",
         "docs/execution/reviews/T88-root.json",
         "docs/execution/reviews/T90-root.json",
-        "docs/execution/reviews/T91-root.json"
+        "docs/execution/reviews/T91-root.json",
+        "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
       ],
       "specRefs": [
         "S-dfc774ae"
@@ -3204,7 +3340,10 @@
       "originalSourceClauseCount": 23,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "stateAtIntake": "ROOT_INTEGRATION_ACTIVE",
+      "exactCurrentToolingFollowon": "docs/execution/qualification/browser-tooling-policy.json"
     },
     {
       "id": "P-OPERATIONS",
@@ -3231,20 +3370,21 @@
         "T66",
         "T92"
       ],
-      "completedOrEvaluatedLocalScope": "T54/T64 four honestly partial synthetic drill records and30-row attack traceability remain valid in scope. The old lost-origin record did not make its source unavailable. R77-5/R84-E are now a single admitted T92 actual outage fixture, still active.",
+      "completedOrEvaluatedLocalScope": "T54/T64 four partial synthetic drills and30-row attack traceability remain immutable. Separate T92 actual outage now passes seven source paths503/reload, old Worker retirement and retained-file restore at a verified fresh local origin; distinct root receipt accepts finite local scope, not production/off-device incident qualification.",
       "dependencies": [
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Finish actual owned-origin unavailability/fresh-key recovery, retain original partial drill and raw faults, and obtain distinct review. No production incident/key rotation/off-device-retention/fund-recovery claim.",
       "unresolvedContractsOrScopeLimits": "T92 current actual outage receipt is not yet accepted. Maintained signed advisory/root cutover/rotation, real affected deployment/operator contacts/split-view providers and off-device retention remain separate.",
       "rootIntegrationPendingRefs": [
-        "T92_ACTUAL_OUTAGE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -3264,7 +3404,8 @@
       "originalSourceClauseCount": 154,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-RELAY-INCREMENTAL-PROFILE",
@@ -3294,15 +3435,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse the accepted exact ws packet. Define companion identity/packaging/G05/session profile and browser preassembly bounds before supported integration; finish the separate active canonical diagnostic repair without relabeling it a transport adoption.",
       "unresolvedContractsOrScopeLimits": "Browser preassembly remains uncapped; exact companion/G05 identity and deployment profile is absent. Static/package/local receiver evidence does not qualify arbitrary production relays.",
       "rootIntegrationPendingRefs": [
-        "CANONICAL_RELAY_DIAGNOSTIC",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -3320,7 +3462,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-WAKU-PROFILE",
@@ -3349,9 +3492,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T75 source/audit/provenance and retained failure. A separately pinned/reviewed coherent codec/network/topic/peer/encryption/G05 profile is required before integration; do not repeat generic provider wrapping.",
@@ -3375,7 +3520,8 @@
       "originalSourceClauseCount": 29,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LIQUIDITY-MODEL",
@@ -3403,9 +3549,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse the reviewed diagnostic model; no duplicate accounting engine.",
@@ -3429,7 +3577,8 @@
       "originalSourceClauseCount": 60,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LIQUIDITY-PROFILE",
@@ -3479,7 +3628,8 @@
       "originalSourceClauseCount": 2,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LIQUIDITY-ENGINEERING",
@@ -3526,7 +3676,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-PROOF-PROFILE",
@@ -3557,9 +3708,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T58/T72. Real provider requires exact SDK/toolchain/artifacts,rail/source/parser/locale/status/time/notary and proof/key/commitment ABI. No further generic parser/Worker wrapper.",
@@ -3598,7 +3751,8 @@
       "originalSourceClauseCount": 129,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-PROOF-JOBS",
@@ -3630,9 +3784,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse the accepted physical-admission supervisor. Root rechecks the changed combined graph; a real provider must first supply exact artifacts/ABI/rail profile and browser CSP compatibility.",
@@ -3659,7 +3815,8 @@
       "originalSourceClauseCount": 59,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-PROOF-IMPLEMENTATION",
@@ -3721,7 +3878,8 @@
       "originalSourceClauseCount": 198,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-REPUTATION-PROFILE",
@@ -3750,9 +3908,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T63. Exact issuer/root/revocation/score/application tuple/durable identity/native consumer contract precedes application engineering.",
@@ -3781,7 +3941,8 @@
       "originalSourceClauseCount": 49,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-REPUTATION-ENGINEERING",
@@ -3838,7 +3999,8 @@
       "originalSourceClauseCount": 161,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-COMPATIBILITY",
@@ -3862,16 +4024,19 @@
         "T38",
         "T40",
         "T70",
-        "T73"
+        "T73",
+        "T99"
       ],
       "completedOrEvaluatedLocalScope": "Exact tuple/startup probe and T70 actual Chromium intake are implemented. T73 finite actual normal-keyboard1x/2x/4x desktop zoom passed at79a53b5 with layout1280/640/320 in a fixed1280px window; later changed App qualification remains root-owned.",
       "dependencies": [
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T70/T73 exact evidence and distinguish target versions. Root completes affected final App checks. Pinned Firefox157/rev1555 and Linux WebKit27.2/rev2370 require their actual tooling/download/platform prerequisites before measurement; no fabricated denial or browser success.",
@@ -3895,7 +4060,9 @@
       "originalSourceClauseCount": 18,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "exactCurrentToolingFollowon": "docs/execution/qualification/browser-tooling-policy.json"
     },
     {
       "id": "P-MOBILE-PROFILE",
@@ -3924,9 +4091,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse evaluated candidate and failure; define exact connector/wallet/version/project/relay/URI/allowed-return/session/checkpoint/recovery/G05 profile before real mobile consumer integration.",
@@ -3950,7 +4119,8 @@
       "originalSourceClauseCount": 4,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-MOBILE-HANDOFF",
@@ -4004,7 +4174,8 @@
       "originalSourceClauseCount": 5,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LOCALE-RUNTIME",
@@ -4036,9 +4207,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse the runtime and final exact source catalog. Root validates the changed App/catalog graph; source/translation safety approval and physical assistive qualification require actual reviewers/targets when that qualification is pursued.",
@@ -4063,7 +4236,8 @@
       "originalSourceClauseCount": 4,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-QR-PROFILE",
@@ -4111,7 +4285,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-QR-ENGINEERING",
@@ -4160,7 +4335,8 @@
       "originalSourceClauseCount": 27,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-CONTENT-CLASSIFICATION",
@@ -4188,9 +4364,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse native crypto/persistence gates and actual consumer integration.",
@@ -4213,7 +4391,8 @@
       "originalSourceClauseCount": 1,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LOCAL-ABUSE-CONSUMERS",
@@ -4243,9 +4422,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse offer/recovery exemptions. Attach10/min only when exact QR profile/consumer exists;no dummy scanner wrapper.",
@@ -4269,7 +4450,8 @@
       "originalSourceClauseCount": 6,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-SCRIPTLESS-PORTAL",
@@ -4297,9 +4479,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse actual served-CSP/download checks at final artifact.",
@@ -4321,7 +4505,8 @@
       "originalSourceClauseCount": 15,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-LAB",
@@ -4334,12 +4519,12 @@
         "sourceClauseCount": 23
       },
       "t77DispositionRetainedForHistory": "ACTIVE_ROOT_FRESH_QUALIFICATION",
-      "currentEngineeringState": "ROOT_INTEGRATION_ACTIVE",
-      "currentDisposition": "CORRECTED_SOURCE_FRESH_LAB_ACTIVE_OLD_FAILED_CHECKPOINT_RETAINED",
+      "currentEngineeringState": "LOCAL_SCOPE_COMPLETE",
+      "currentDisposition": "BOUNDED_LOCAL_ENGINEERING_ACCEPTED_PRODUCT_QUALIFICATION_REMAINS",
       "owner": {
         "coordinator": "root",
-        "mode": "ACTIVE_ROOT_INTEGRATION",
-        "assignment": "Existing T38/T71 acceptance; no human permission blocker"
+        "mode": "COMPLETED_LOCAL_ENGINEERING_WITH_SCOPED_QUALIFICATION_REMAINDER",
+        "assignment": "Root local acceptance and live source delivery; exact external/contract targets remain unqualified."
       },
       "taskRefs": [
         "T38",
@@ -4347,31 +4532,34 @@
         "T71",
         "T93"
       ],
-      "completedOrEvaluatedLocalScope": "Retain693c66c fresh install/cache/tools/types success and1441/1442 foundation stale-assurance failure unchanged. A corrected-source fresh T71 checkpoint is active; neither old result nor reused install is a current fresh pass.",
+      "completedOrEvaluatedLocalScope": "New exacta2 clone/cache/dependencies/npm configs, strict-TLS npmci/audit0 in existing pinned image1729; network:none foundation5/journey4 pass,1712 package/82contract tests. Distinct T71 review accepts bounded Linux/amd64 fake-funds scope. Old693c66c1441/1442 stale-assurance failure unchanged.",
       "dependencies": [
         {
           "kind": "root integration",
           "activeRefs": [
-            "T71_CORRECTED_FRESH_LAB",
-            "T93_FALSE_GREEN_TOOLING",
             "T38_FINAL_INTEGRATION_DELIVERY"
           ],
-          "nextAction": "Complete fresh install/tool/cache/foundation qualification at the corrected frozen source and bind exact recipe/tools/source/results. Old693c66c1441/1442 stale-assurance failure stays retained; a reused install or earlier pass cannot replace the fresh checkpoint."
+          "nextAction": "Read exact final-head CI, scanners and all review/outside-diff submissions in PR26, then use the expected-head merge guard and verify main tree/hashes/ancestry/clean checkout. This is source delivery, not a human approval blocker or release activation.",
+          "completedLocalRefs": [
+            "T71_CORRECTED_FRESH_LAB",
+            "T93_FALSE_GREEN_TOOLING"
+          ]
         }
       ],
-      "nextAction": "Complete fresh install/tool/cache/foundation qualification at the corrected frozen source and bind exact recipe/tools/source/results. Old693c66c1441/1442 stale-assurance failure stays retained; a reused install or earlier pass cannot replace the fresh checkpoint.",
-      "unresolvedContractsOrScopeLimits": "Corrected-source fresh qualification and root final acceptance are pending integration work. Paid/provisioned Codespace visibility and physical targets remain separate external facts; no new environment is fabricated.",
+      "nextAction": "Reuse accepted fresh local qualification. Hosted Codespace/private-port or new-platform qualification needs an actual authorized environment and exact target evidence; do not repeat accepted local lab from its old failed snapshot.",
+      "unresolvedContractsOrScopeLimits": "No paid Codespace/private-port visibility, physical-wallet/browser/production qualification. Existing image reused, not rebuilt; unused nested test-only OZ gitlinks uninitialized.",
       "rootIntegrationPendingRefs": [
-        "T93_FALSE_GREEN_TOOLING",
-        "T71_CORRECTED_FRESH_LAB",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
-        "docs/execution/reviews/T71-failed-checkpoint.json"
+        "docs/execution/reviews/T71-failed-checkpoint.json",
+        "docs/execution/qualification/fresh-lab-a2b414f.json",
+        "docs/execution/reviews/T71-final-lab.json"
       ],
       "unresolvedHistoricalPathRefs": [],
       "evidenceRefs": [
-        "docs/execution/reviews/T39.md"
+        "docs/execution/reviews/T39.md",
+        "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
       ],
       "specRefs": [
         "S-c7f35b51"
@@ -4379,7 +4567,9 @@
       "originalSourceClauseCount": 23,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "stateAtIntake": "ROOT_INTEGRATION_ACTIVE"
     },
     {
       "id": "P-ADR-COMPLETION",
@@ -4407,12 +4597,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Root can integrate exact approved three-document preparation packet; do not create another ADR authority system.",
+      "nextAction": "Preserve committed T62 three-document preparation at693c66c and its distinct scoped review. No second ADR authority system or reintegration task; exact future contracts/qualification remain their own records.",
       "unresolvedContractsOrScopeLimits": "Business/operator/rail/fee/provider/release choices remain explicitly unresolved.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -4432,7 +4624,8 @@
       "originalSourceClauseCount": 31,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "Q-RELEASE",
@@ -4490,7 +4683,8 @@
       "originalSourceClauseCount": 4,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "Q-PHYSICAL-LOCALE",
@@ -4515,7 +4709,8 @@
         "T40",
         "T52",
         "T70",
-        "T73"
+        "T73",
+        "T99"
       ],
       "completedOrEvaluatedLocalScope": "Local compatibility/layout/runtime checks and T73 actual desktop keyboard zoom are complete for their exact tuple. Final changed App remains root integration; physical Android/iOS/hardware-wallet/VoiceOver/TalkBack and reviewed source/translation evidence are not supplied.",
       "dependencies": [
@@ -4546,7 +4741,9 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "exactCurrentToolingFollowon": "docs/execution/qualification/browser-tooling-policy.json"
     },
     {
       "id": "P-TRANSPORT-OBSERVERS",
@@ -4574,9 +4771,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Retain existing timer/permit regressions; do not reopen T31/T33 from historical labels.",
@@ -4596,7 +4795,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-MATH",
@@ -4625,9 +4825,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T69;no duplicate stats/native ledger harness.",
@@ -4653,7 +4855,8 @@
       "originalSourceClauseCount": 131,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-CONSENT",
@@ -4681,9 +4884,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse consent kernel; real sensor/browser owners need their future explicit consumer integration.",
@@ -4705,7 +4910,8 @@
       "originalSourceClauseCount": 39,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-BUDGET",
@@ -4734,9 +4940,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T69;no duplicate stats/native ledger harness.",
@@ -4760,7 +4968,8 @@
       "originalSourceClauseCount": 41,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-RTC-POLICY",
@@ -4788,9 +4997,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse specified local modules; preserve README-POLICIES exact missing signatures/carriers/map-cache fields.",
@@ -4812,7 +5023,8 @@
       "originalSourceClauseCount": 37,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-SIGNAL",
@@ -4842,9 +5054,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse accepted T76 models and exact vectors; define the missing authenticated/versioned carrier, source/grant/root/certificate/native consumer before integration. No duplicate sequencing/conflict engine.",
@@ -4869,7 +5083,8 @@
       "originalSourceClauseCount": 78,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-PROOF",
@@ -4920,7 +5135,8 @@
       "originalSourceClauseCount": 41,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-PROOF-BINDING",
@@ -4970,7 +5186,8 @@
       "originalSourceClauseCount": 39,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-DIRECTORY",
@@ -4998,9 +5215,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse specified local modules; preserve README-POLICIES exact missing signatures/carriers/map-cache fields.",
@@ -5023,7 +5242,8 @@
       "originalSourceClauseCount": 79,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-FENCE",
@@ -5051,9 +5271,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse specified local modules; preserve README-POLICIES exact missing signatures/carriers/map-cache fields.",
@@ -5075,7 +5297,8 @@
       "originalSourceClauseCount": 85,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-MAP-VALIDATION",
@@ -5103,9 +5326,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse specified local modules; preserve README-POLICIES exact missing signatures/carriers/map-cache fields.",
@@ -5127,7 +5352,8 @@
       "originalSourceClauseCount": 75,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-MEET-MAP-CACHE",
@@ -5178,7 +5404,8 @@
       "originalSourceClauseCount": 8,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-COMMON",
@@ -5206,9 +5433,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact local profiles and accepted repairs; do not duplicate state/accounting models.",
@@ -5247,7 +5476,8 @@
       "originalSourceClauseCount": 843,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-CUSTODY",
@@ -5275,9 +5505,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact local profiles and accepted repairs; do not duplicate state/accounting models.",
@@ -5297,7 +5529,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-CONTAINER",
@@ -5325,9 +5558,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact local profiles and accepted repairs; do not duplicate state/accounting models.",
@@ -5347,7 +5582,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-LOCKER-MODEL",
@@ -5376,15 +5612,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact local profiles and accepted repairs; do not duplicate state/accounting models.",
       "unresolvedContractsOrScopeLimits": "Provider/signature domains, physical devices/cash truth, deployed custody/collateral and native handoff remain unselected/unqualified.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -5399,7 +5636,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-LOCKER-LIVE",
@@ -5451,7 +5689,8 @@
       "originalSourceClauseCount": 19,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-ACCOUNTING-MODEL",
@@ -5479,9 +5718,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse exact local profiles and accepted repairs; do not duplicate state/accounting models.",
@@ -5500,7 +5741,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-CIT-COLLATERAL-CONTRACT",
@@ -5548,7 +5790,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-MODEL",
@@ -5576,9 +5819,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse actual Vote vectors and models, preserving missing native/profile distinctions.",
@@ -5613,7 +5858,8 @@
       "originalSourceClauseCount": 498,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-VECTORS",
@@ -5641,9 +5887,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse Vote encoding; define independent evidence/certificate byte vectors only after their exact profiles exist.",
@@ -5670,7 +5918,8 @@
       "originalSourceClauseCount": 265,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-EVIDENCE",
@@ -5700,9 +5949,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse accepted T76 models and exact vectors; define the missing authenticated/versioned carrier, source/grant/root/certificate/native consumer before integration. No duplicate sequencing/conflict engine.",
@@ -5724,7 +5975,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-NATIVE",
@@ -5774,7 +6026,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-VRF-PROFILE",
@@ -5827,7 +6080,8 @@
       "originalSourceClauseCount": 50,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-ARB-ZK-PROFILE",
@@ -5880,7 +6134,8 @@
       "originalSourceClauseCount": 43,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-PLAN",
@@ -5910,12 +6165,14 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse T55/T68/T81 actual broker selector and truthful current indicators. Root finishes the changed combined graph; a nonempty G14-to-G16 commitment/provider profile remains a separate exact contract.",
+      "nextAction": "Preserve T55/T68/T81 same-broker selector/indicators and accepted native mode/drain checks. Final-head source delivery is live PR26. Nonempty G14-to-G16 commitment/provider profile remains an exact absent contract.",
       "unresolvedContractsOrScopeLimits": "Selection alone proves no anonymity, physical drain or RPC/wallet routing. Nonempty capability commitment and real provider/interop profiles remain unselected.",
       "rootIntegrationPendingRefs": [
         "T38_FINAL_INTEGRATION_DELIVERY"
@@ -5950,7 +6207,8 @@
       "originalSourceClauseCount": 413,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-CAPABILITY-BRIDGE",
@@ -6000,7 +6258,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-STEALTH",
@@ -6029,9 +6288,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse math/pages. Any new native-source experiment first needs exact local emitter/anchor/reorg refusal scope;do not relabel claims or pick interop by convenience.",
@@ -6059,7 +6320,8 @@
       "originalSourceClauseCount": 262,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-STEALTH-SPEND",
@@ -6109,7 +6371,8 @@
       "originalSourceClauseCount": 0,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-OPTIONAL-PROVIDER",
@@ -6174,7 +6437,8 @@
       "originalSourceClauseCount": 305,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-DECOY",
@@ -6202,9 +6466,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T59. No executor is specified here;standalone monetary transfer and whole-profile deletion need exact separate contracts.",
@@ -6229,7 +6495,8 @@
       "originalSourceClauseCount": 207,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-PROFILE-REMOVAL",
@@ -6284,7 +6551,8 @@
       "originalSourceClauseCount": 53,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-SWEEP-PLAN",
@@ -6312,9 +6580,11 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
       "nextAction": "Reuse T59. No executor is specified here;standalone monetary transfer and whole-profile deletion need exact separate contracts.",
@@ -6338,7 +6608,8 @@
       "originalSourceClauseCount": 144,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-PRIV-SWEEP-EXECUTION",
@@ -6391,7 +6662,8 @@
       "originalSourceClauseCount": 11,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "L-G23-DETAILS",
@@ -6426,15 +6698,16 @@
         {
           "kind": "final combined-source integration",
           "owner": "root",
-          "state": "ACTIVE_NOT_DONE",
+          "state": "EXACT_HEAD_HOSTED_DELIVERY_PENDING",
           "blocksReuseOfCompletedLocalScope": false,
-          "nextAction": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
+          "nextAction": "All source repairs and local acceptance are frozen/accepted. Read exact final-head CI/scanners/reviews and perform guarded PR26 source delivery/main readback; do not repeat implementation or native acceptance from old READY labels.",
+          "stateAtIntake": "ACTIVE_NOT_DONE",
+          "nextActionAtIntake": "Run only required current-source acceptance and delivery after active repairs freeze; no duplicate implementation from old READY labels."
         }
       ],
-      "nextAction": "Reuse exact T68/T81 final-marker and current-selection boundaries; root final T88/shared native acceptance remains active. Do not substitute baseline approval for changed code or infer native authority from display.",
+      "nextAction": "Preserve exact T68/T81 boundaries and accepted clean a2 T88/shared native mode/drain/unknown-marker acceptance. Final-head hosted source delivery remains live PR26. Display alone never supplies native authority or verified RPC/wallet routing.",
       "unresolvedContractsOrScopeLimits": "Production private routing/wallet endpoint coverage remains unknown unless actually observed. No display/selector receipt authorizes funding, proving privacy or resending an unknown broadcast.",
       "rootIntegrationPendingRefs": [
-        "T88_FINAL_NATIVE",
         "T38_FINAL_INTEGRATION_DELIVERY"
       ],
       "actualCodeAndReceiptPathRefs": [
@@ -6462,7 +6735,8 @@
       "originalSourceClauseCount": 6,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "P-MESSAGE-BODY-PROFILE",
@@ -6515,7 +6789,8 @@
       "originalSourceClauseCount": 1,
       "qualificationRef": "qualificationRemainder",
       "clauseCompletionNotInferred": true,
-      "enabledProductQualified": false
+      "enabledProductQualified": false,
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     }
   ],
   "specifications": [
@@ -10804,7 +11079,7 @@
         "P-RETENTION",
         "Q-RELEASE"
       ],
-      "currentEngineeringState": "ROOT_INTEGRATION_AND_QUALIFICATION_REMAINDER",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-G24-MATRIX",
@@ -10812,9 +11087,12 @@
         "P-RETENTION",
         "Q-RELEASE"
       ],
-      "nextAction": "Existing threat/governance/compliance/claims/retention local scope is reused; final current claims/G24/delivery remain root-owned, and actual operator/legal/release evidence is separate.",
+      "nextAction": "Threat/governance/compliance/claims/retention local scope and final local G24 overlay are accepted. Exact-head source delivery remains live PR26; actual operator/legal/release evidence is separate.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "ROOT_INTEGRATION_AND_QUALIFICATION_REMAINDER",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "nextActionAtIntake": "Existing threat/governance/compliance/claims/retention local scope is reused; final current claims/G24/delivery remain root-owned, and actual operator/legal/release evidence is separate."
     },
     {
       "id": "M1",
@@ -10865,7 +11143,7 @@
         "P-COMPATIBILITY",
         "P-LAB"
       ],
-      "currentEngineeringState": "ROOT_INTEGRATION_ACTIVE",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-LAB",
@@ -10873,9 +11151,12 @@
         "P-G15-PROFILE",
         "P-COMPATIBILITY"
       ],
-      "nextAction": "Core vault/backup/transport/update/build/local optional consumers are implemented. Corrected-source T71, T93 and exact-source build/CI/delivery remain active; maintain null production pin.",
+      "nextAction": "Core vault/backup/transport/update/build/local consumers, corrected T71 and T93/T94 are accepted. Exact-head hosted source delivery remains live PR26; production pin stays null and qualified hosted/device targets remain absent.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "ROOT_INTEGRATION_ACTIVE",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "nextActionAtIntake": "Core vault/backup/transport/update/build/local optional consumers are implemented. Corrected-source T71, T93 and exact-source build/CI/delivery remain active; maintain null production pin."
     },
     {
       "id": "M2A",
@@ -10911,7 +11192,7 @@
         "P-G16-SPEC-ALIGNMENT",
         "P-FORMAL-EVM"
       ],
-      "currentEngineeringState": "LOCAL_EVM_SCOPE_REUSED_EXACT_PROFILE_AND_FINAL_CHECKS_REMAIN",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-G22-BROWSER",
@@ -10919,9 +11200,12 @@
         "P-G16-SPEC-ALIGNMENT",
         "P-FORMAL-EVM"
       ],
-      "nextAction": "Native/ERC20 actual local journey and builder consumers exist; T88 final native and root checks are pending. Production acceptance carrier/G14-G16 protocol and formal UNKNOWN remain distinct.",
+      "nextAction": "Native/ERC20 journey/builders and clean a2 T88 acceptance pass. Exact-head hosted source delivery remains live PR26. Production peer carrier/G14-G16 contracts and formal UNKNOWN remain distinct.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "LOCAL_EVM_SCOPE_REUSED_EXACT_PROFILE_AND_FINAL_CHECKS_REMAIN",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "nextActionAtIntake": "Native/ERC20 actual local journey and builder consumers exist; T88 final native and root checks are pending. Production acceptance carrier/G14-G16 protocol and formal UNKNOWN remain distinct."
     },
     {
       "id": "M2B",
@@ -10940,7 +11224,7 @@
         "P-SOLANA-PROFILE",
         "P-SOLANA-ENGINEERING"
       ],
-      "currentEngineeringState": "EXACT_SOLANA_CONTRACT_AND_TOOLING_REMAINDER",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-SOLANA-PROFILE",
@@ -10948,7 +11232,9 @@
       ],
       "nextAction": "Exact program/PDA/account/instruction/IDL/mint/Token2022/finality profile and supported native toolchain/consumer are absent; EVM is not Solana parity.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "EXACT_SOLANA_CONTRACT_AND_TOOLING_REMAINDER",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "M2C",
@@ -10975,7 +11261,7 @@
         "Q-RELEASE",
         "Q-PHYSICAL-LOCALE"
       ],
-      "currentEngineeringState": "ROOT_OUTAGE_ACCEPTANCE_AND_RELEASE_QUALIFICATION_REMAIN",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-G24-MATRIX",
@@ -10983,9 +11269,12 @@
         "Q-RELEASE",
         "Q-PHYSICAL-LOCALE"
       ],
-      "nextAction": "Static/scriptless/staging scope is implemented; T92 actual outage and T38 final acceptance remain active. Actual authenticated deployment/distribution/device/source-language qualification is separate.",
+      "nextAction": "Static/scriptless/staging, T92 actual local outage and final local G24 overlay are accepted. Exact-head hosting/merge remains live PR26. Authenticated deployment/distribution/device/source-language qualification remains absent.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "ROOT_OUTAGE_ACCEPTANCE_AND_RELEASE_QUALIFICATION_REMAIN",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "nextActionAtIntake": "Static/scriptless/staging scope is implemented; T92 actual outage and T38 final acceptance remain active. Actual authenticated deployment/distribution/device/source-language qualification is separate."
     },
     {
       "id": "M3",
@@ -11011,7 +11300,7 @@
         "P-REPUTATION-ENGINEERING",
         "P-LIQUIDITY-MODEL"
       ],
-      "currentEngineeringState": "LOCAL_MODELS_COMPLETE_EXACT_NATIVE_PROFILES_REMAIN",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "L-PRIV-STEALTH",
@@ -11021,7 +11310,9 @@
       ],
       "nextAction": "Offline stealth, evaluated reputation and diagnostic liquidity are implemented in scope; scheme/issuer/native custody/spending/funding/interop profiles remain absent.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "LOCAL_MODELS_COMPLETE_EXACT_NATIVE_PROFILES_REMAIN",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "M4",
@@ -11042,7 +11333,7 @@
         "P-PROOF-JOBS",
         "P-PROOF-IMPLEMENTATION"
       ],
-      "currentEngineeringState": "STRUCTURAL_JOBS_COMPLETE_EXACT_PROOF_RAIL_PROFILE_REMAINS",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "P-PROOF-PROFILE",
@@ -11050,7 +11341,9 @@
       ],
       "nextAction": "Public fixture supervisor and strict unverified structural inputs exist, including confirmed physical exit admission; no selected circuit/setup/verifier/rail/source receipt or browser WASM provider is qualified.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "STRUCTURAL_JOBS_COMPLETE_EXACT_PROOF_RAIL_PROFILE_REMAINS",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "M5",
@@ -11088,7 +11381,7 @@
         "L-CIT-CUSTODY",
         "L-CIT-CONTAINER"
       ],
-      "currentEngineeringState": "LOCAL_MODELS_COMPLETE_NATIVE_HARDWARE_AND_PROFILE_REMAINDER",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "L-MEET-PROOF",
@@ -11099,7 +11392,9 @@
       ],
       "nextAction": "Local meetup/courier/consent/disclosure/math models and native diagnostic budget tests exist; no sensor/cash truth, large map cache, proximity circuit, live vendor locker or separate collateral vault is supplied.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "LOCAL_MODELS_COMPLETE_NATIVE_HARDWARE_AND_PROFILE_REMAINDER",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     },
     {
       "id": "M6",
@@ -11124,7 +11419,7 @@
         "L-ARB-EVIDENCE",
         "L-ARB-NATIVE"
       ],
-      "currentEngineeringState": "LOCAL_DIAGNOSTIC_MODELS_COMPLETE_EXACT_NATIVE_ARBITRATION_REMAINDER",
+      "currentEngineeringState": "QUALIFICATION_REMAINDER_LOCAL_SOURCE_VERIFIED",
       "owner": "root for integration/admission; actual artifact/target-specific independent qualification owners remain unassigned",
       "dependencies": [
         "L-ARB-VECTORS",
@@ -11134,50 +11429,52 @@
       ],
       "nextAction": "Vote ABI vectors and diagnostic tally/appeal/payment assertion models exist. Separate opted-in case/certificate/custody ABI, evidence/signature tuple, pinned VRF/eligibility profiles remain absent.",
       "milestoneCompleted": false,
-      "qualificationEstablished": false
+      "qualificationEstablished": false,
+      "stateAtIntake": "LOCAL_DIAGNOSTIC_MODELS_COMPLETE_EXACT_NATIVE_ARBITRATION_REMAINDER",
+      "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json"
     }
   ],
   "proposalReconciliation": [
     {
       "proposal": "R77-4",
       "currentTask": "T80",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R77-3",
       "currentTask": "T81",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R77-1",
       "currentTask": "T82",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R77-2",
       "currentTask": "T83",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R84-A",
       "currentTask": "T89",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R84-B",
       "currentTask": "T89",
-      "state": "SCOPED_LOCAL_IMPLEMENTATION_ACCEPTED_ROOT_FINAL_INTEGRATION_PENDING",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
       "proposal": "R77-5 / R84-E",
       "currentTask": "T92",
-      "state": "ACTIVE_NOT_DONE",
+      "state": "SCOPED_LOCAL_IMPLEMENTATION_AND_VERIFICATION_COMPLETE",
       "futureAdmissionStillNeeded": false
     },
     {
@@ -11330,9 +11627,126 @@
       "path": "apps/web/src/ui/locale/en.ts",
       "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
       "bytes": 54724
+    },
+    {
+      "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "sha256": "02ef082937289a4aab6e59049a1254638582df04c00990a6864f425eba8aa80e",
+      "bytes": 24046
+    },
+    {
+      "path": "docs/execution/qualification/fresh-lab-a2b414f.json",
+      "sha256": "a097c4529e75b389c5cb0d1fb1f5bd41c4503527ce0b925edd75d682805d95bf",
+      "bytes": 26660
+    },
+    {
+      "path": "docs/execution/reviews/T38-final-native.json",
+      "sha256": "19e6f781c9d37833192eff7c01c2401620a0a522cdbd4c38b4f2f500ef521113",
+      "bytes": 21986
+    },
+    {
+      "path": "docs/execution/reviews/T71-final-lab.json",
+      "sha256": "362d6b47e299fb757b60eb50e8b7c20ca897fa47f91967fe9c8c08e699acfa6d",
+      "bytes": 31514
+    },
+    {
+      "path": "docs/execution/acceptance/g24-current-local.json",
+      "sha256": "d2e365ee1289c2933996b8cfe17c28fc0181167053a8fc10c660d01f9ce64860",
+      "bytes": 123367
+    },
+    {
+      "path": "docs/execution/reviews/T98-root.json",
+      "sha256": "219ae144fda68dc0e1c5c6b4f3503076734a86422386db4021416abe14099fe0",
+      "bytes": 11260
+    },
+    {
+      "path": "docs/execution/reviews/T98-final.json",
+      "sha256": "06fd05dbd0cfd7d10144b8f0be34a29d8f019df0f4ab49d621ec73cfb0df47e5",
+      "bytes": 21011
+    },
+    {
+      "path": "docs/execution/reviews/T100-root.json",
+      "sha256": "fb0b779badf4cf3fb09e6c30cd9acaba57a5991b96533a51242b89e5f6d7154f",
+      "bytes": 2534
+    },
+    {
+      "path": "docs/execution/qualification/browser-tooling-policy.json",
+      "sha256": "33689fcd63509aca4a58a9d7ed3a878952e0aac4aeb7e181f798ca076ebf22b1",
+      "bytes": 7013
+    },
+    {
+      "path": "docs/execution/audit-2026-11-02/CURRENT-SOURCE.json",
+      "sha256": "89e0983380d25587e959dd1fdc0424a3e36bc16081df93727a390029a7826f49",
+      "bytes": 325685
     }
   ],
   "validation": {
+    "canonicalIdSetsMatchBothFrozenIntakes": true,
+    "all103RecordsHaveOwnerDependenciesNextAction": true,
+    "all173CurrentSpecDigestsMatchImmutableInventory": true,
+    "original8281ClauseIdsUnique": true,
+    "specClauseMembershipBijective": true,
+    "allClauseTaskAndSpecRefsResolve": true,
+    "canonicalOriginalClauseCountsSum": 8281,
+    "allNineMilestonesRetained": true,
+    "allNewFeaturePathsExist": true,
+    "sourceInventoryAndFrozenInputsUnchanged": true,
+    "finalLocalEvidenceRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+    "originalClauseStatusesUnchanged": true,
+    "canonicalStateCountsSum": 103,
+    "newNativeOrSolverExecutionsByThisDocumentationDelta": 0
+  },
+  "limits": [
+    "This report updates scoped current canonical dispositions by evidence; it does not change the immutable8281 statuses or assert every optional clause satisfied. Several canonical preparatory records have zero directly assigned clauses and remain included.",
+    "Scoped executions retain exact source/tool graphs; accepted final local native/new-clone acceptance is bound in FINAL-LOCAL-VERIFICATION. Earlier evidence is not relabeled as current execution.",
+    "T88 native/canonical relay, T93/T94 tooling, T92 outage and corrected T71 are accepted. Only exact-head hosted CI/scanner/review and guarded delivery/readback remain root-owned.",
+    "Exact undefined contracts, unavailable pinned tooling and physical/professional/production evidence remain separate. This documentation delta executes no new SDK/provider and authorizes no deployment, paid resources, outside-person message or funds activation. Earlier isolated SDK evaluations retain their exact scope."
+  ],
+  "rootProgressAtCheckpoint": {
+    "sourceCheckpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+    "completedSourceIntegrations": {
+      "T80_T81_T82_T83_T89": "32c3449",
+      "T88_subsystem_repairs": "74d9b87",
+      "T88_canonical_relay": "0867271",
+      "T90_passive_intake": "5d448c0",
+      "T91_finite_partitions": "fad51da",
+      "T92_local_outage": "689e439",
+      "T93_false_green_tools": "635efc8",
+      "T94_unconditional_oracle": "fcae5dd",
+      "T95_explicit_ordinal_order": "a1cda13",
+      "T96_test_declarations": "4488131",
+      "T97_bounded_extraction": "cf732085499dafb0273972136d3e9f7c34254694",
+      "T98_native_reorg": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "T100_native_tcp_ack": "12bb8f1650227479e744cd899273f533eb94fe53"
+    },
+    "currentRootIntegration": [
+      "Read exact final-head CI, scanners and all review/outside-diff submissions in PR26, then use the expected-head merge guard and verify main tree/hashes/ancestry/clean checkout. This is source delivery, not a human approval blocker or release activation."
+    ],
+    "facts": [
+      "All source/project qualification remains scoped; source integration does not certify the future merge",
+      "Original clause statuses are retained historical data, not current READY task admissions",
+      "Trading disabled/null maintained release pin; no production deployment or external professional approval",
+      "All admitted source integrations, whole first-party audit, final local native/distribution acceptance and new-clone T71 lab accepted. Future hosting/merge remains live, not inferred approval."
+    ],
+    "finalLocalVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+    "acceptedReadOnlyFollowons": {
+      "T99": "docs/execution/qualification/browser-tooling-policy.json"
+    }
+  },
+  "rootFinalUpdate": {
+    "owner": "root",
+    "observedAtUtc": "2026-11-02T18:43:43.276104+00:00",
+    "sourceCheckpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+    "productionCodeCheckpoint": "cf732085499dafb0273972136d3e9f7c34254694",
+    "localVerificationRef": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+    "futureDeliveryRecord": "https://github.com/djshellshoxxx/p2p-offramp/pull/26",
+    "noClauseOrMilestonePromotion": true,
+    "cleanNativeAndFreshLabBaseline": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "selectedTestDeltas": [
+      "T98",
+      "T100"
+    ]
+  },
+  "initialReadOnlyValidationRetained": {
     "canonicalIdSetsMatchBothFrozenIntakes": true,
     "all103RecordsHaveOwnerDependenciesNextAction": true,
     "all173CurrentSpecDigestsMatchImmutableInventory": true,
@@ -11347,36 +11761,10 @@
     "repoFilesEdited": 0,
     "commitsCreated": 0
   },
-  "limits": [
+  "limitsAtIntake": [
     "This report updates scoped current canonical dispositions by evidence; it does not change the immutable8281 statuses or assert every optional clause satisfied. Several canonical preparatory records have zero directly assigned clauses and remain included.",
     "Scoped author/native results apply to their recorded source graphs. Distinct current-source review does not substitute for the remaining T38 combined-source/native/CI/hosted/fresh-lab/outage acceptance.",
     "T88 native final, canonical relay diagnostics, T93, T92, corrected T71 and root T38 verification/delivery are explicitly active, regardless of earlier DONE/READY or IN_REVIEW ledger labels.",
     "Unknown tooling/formal/provider/profile and actual physical/professional/production evidence stays exact. No deployment, new SDK execution, active provider selection, outside messaging, paid resource or production release is authorized or performed."
-  ],
-  "rootProgressAtCheckpoint": {
-    "sourceCheckpoint": "a1cda13",
-    "completedSourceIntegrations": {
-      "T80_T81_T82_T83_T89": "32c3449",
-      "T88_subsystem_repairs": "74d9b87",
-      "T88_canonical_relay": "0867271",
-      "T90_passive_intake": "5d448c0",
-      "T91_finite_partitions": "fad51da",
-      "T92_local_outage": "689e439",
-      "T93_false_green_tools": "635efc8",
-      "T94_unconditional_oracle": "fcae5dd",
-      "T95_explicit_ordinal_order": "a1cda13",
-      "T96_test_declarations": "4488131"
-    },
-    "currentRootIntegration": [
-      "T97 bounded parser implementation/distinct review",
-      "Consolidated package/native/browser/distribution verification after final metadata",
-      "Corrected fresh T71 clone/install/foundation/journey",
-      "Exact-head hosted CI/scanner/review readback and guarded source merge"
-    ],
-    "facts": [
-      "All source/project qualification remains scoped; source integration does not certify the future merge",
-      "Original clause statuses are retained historical data, not current READY task admissions",
-      "Trading disabled/null maintained release pin; no production deployment or external professional approval"
-    ]
-  }
+  ]
 }
