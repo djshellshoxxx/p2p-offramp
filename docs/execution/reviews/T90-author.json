@@ -1,0 +1,116 @@
+{
+  "task": "T90",
+  "result": "PASSIVE_COMPLETE_ACTIVE_EVALUATION_BLOCKED",
+  "sourceFreeze": {
+    "path": "/workspace/work/t90-source-freeze.json",
+    "bytes": 1808,
+    "sha256": "0868bbd1f940a43b2fd0448fed3c8bbc8ef049338a2cbec89b0b43d2db81d84e"
+  },
+  "evidenceIndex": {
+    "path": "/workspace/work/t90-evidence-index.json",
+    "bytes": 26469,
+    "sha256": "d0ab7837d655b7ff5ced608e57312672ec6dea458c0fead8f580f221ddc2db3b"
+  },
+  "packet": {
+    "path": "/workspace/p2p-offramp/security/intake/xmtp/pins.json",
+    "bytes": 123358,
+    "sha256": "32889ecd85a7440f2c31db44be687b03e29a6737dcfae30bcd60cf3c8e4c9130"
+  },
+  "checks": {
+    "path": "/workspace/work/t90-xmtp/passive-packet-check.json",
+    "bytes": 881,
+    "sha256": "890e4624cf12e9da6b42ca91b33dcb4db967668d81f0046976d6713b923fd615"
+  },
+  "files": [
+    {
+      "path": "security/intake/xmtp/README.md",
+      "bytes": 6812,
+      "sha256": "a2cce9ee7c9f19e9bb0d2d9bd6c5908e86aac4c2e192142ba32955e811efd657"
+    },
+    {
+      "path": "security/intake/xmtp/package.json",
+      "bytes": 374,
+      "sha256": "94049ba4152c4692feb0face6a76b56d23411280127717dee3a2ee503ecd35a1"
+    },
+    {
+      "path": "security/intake/xmtp/package-lock.json",
+      "bytes": 2630,
+      "sha256": "88592823acfef27b04fa373df1eaea9512be5b55f25f612d92dd8d04969f7bc8"
+    },
+    {
+      "path": "security/intake/xmtp/pins.json",
+      "bytes": 123358,
+      "sha256": "32889ecd85a7440f2c31db44be687b03e29a6737dcfae30bcd60cf3c8e4c9130"
+    }
+  ],
+  "sourceCommit": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "actualResults": {
+    "checkedAt": "2026-11-02T17:01:00.586797+00:00",
+    "result": "PASSIVE_PACKET_CHECKS_PASS_ACTIVE_EVALUATION_BLOCKED",
+    "completeLockEntries": 5,
+    "fullSriVerified": 5,
+    "currentNpmSignaturesVerified": 5,
+    "alteredSignatureMessagesRejected": 5,
+    "historicalExpiredPackageAssertions": 0,
+    "archiveFilesReadAsData": 91,
+    "compressedBytes": 85214038,
+    "unpackedBytes": 248044585,
+    "completeArchiveMitLicenseTexts": 5,
+    "npmAdvisories": 0,
+    "publishedSourceMatches": 46,
+    "candidateSourceMatches": 39,
+    "candidateSourceMismatches": 7,
+    "t50SourceIndexBindingsMatch": 2,
+    "staticTriggerObservations": 21,
+    "wasmStaticImportCounts": [
+      254,
+      253
+    ],
+    "rootDependenciesUnchanged": true,
+    "installedSdkTree": false,
+    "executedSdkOrWasm": false,
+    "sdkNetworkTrafficMeasured": false,
+    "activeEvaluationQualified": false,
+    "productionProviderSelected": false
+  },
+  "blockingFindings": [
+    {
+      "id": "XMTP-ARTIFACT-SOURCE-MISMATCH",
+      "severity": "qualification-blocker",
+      "description": "Published browser SDK 7.0.0 uses WASM 1.10.0 and unsigned gitHead eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc. T50 source 8993ef24144532e53fdfcfd04eddf27dce8a5a53 uses separately available nightly 1.11.0-nightly.20260603.89c3fc3. All 46 packaged source files match published tree; seven differ from T50. No override joins these snapshots."
+    },
+    {
+      "id": "XMTP-PROFILE-CONTRACTS-ABSENT",
+      "severity": "qualification-blocker",
+      "description": "Ten explicit absent profile contracts retained in pins: coherent build; network/G05 routing; wallet/inbox/participants; installation limits; consent/G14; envelope; G02/G03 key/database/recovery; history/retention; disposal/errors/bounds; independent browser/interoperability/identity/privacy/retention review."
+    }
+  ],
+  "limits": [
+    "Audit 0 applies to known npm advisories for all five lock entries at observation, not opaque Rust/WASM/native dependency vulnerability coverage.",
+    "Registry signatures bind archive integrity; unsigned gitHead, metadata and source match do not prove generated JS or reproducible WASM/native builds. Publisher attestations were declared but not verified.",
+    "Five complete npm archive MIT texts retained; full embedded Rust/native transitive notices and legal approval absent.",
+    "Passive means no SDK imports, identity/key/database creation or Worker/WASM/native execution. SDK traffic/egress/closure/provider/browser behavior were not measured.",
+    "One scratch excerpt-preparation run rejected an incorrect source line range; its raw error is retained, ranges were corrected before the passing passive packet check. No product/harness expectation was changed."
+  ],
+  "publicReadBounds": {
+    "metadataMaxBytesPerResponse": 4194304,
+    "registryKeyMaxBytes": 65536,
+    "archiveMaxBytes": 134217728,
+    "allArchiveMaxBytes": 268435456,
+    "archiveMembersMax": 8192,
+    "memberMaxBytes": 67108864,
+    "archiveUnpackedMaxBytes": 268435456,
+    "allUnpackedMaxBytes": 536870912,
+    "textReadbackMaxBytesPerFile": 4194304,
+    "symlinksAndHardlinksAccepted": false,
+    "unsafeTarPathsAccepted": false,
+    "observedCompressedBytes": 85214038,
+    "observedUnpackedBytes": 248044585,
+    "observedRegularFiles": 91
+  },
+  "noRootDependencyChanges": true,
+  "noOverridesOmissionsScannerWaivers": true,
+  "noProductChanges": true,
+  "noCommit": true,
+  "independentRootReview": "PENDING"
+}
