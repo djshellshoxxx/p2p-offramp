@@ -90,3 +90,52 @@ round/root mutations, timing edges, replay, cancellation/reentrancy, sampler
 bounds, one-appeal/fallback combinations and BigInt conservation. They supply
 synthetic trusted ports and claim no provider interoperability, named independent
 cryptographic review, native settlement or production qualification.
+
+## T76 party-assertion diagnostics
+
+`createPaymentAssertionModel` adds an optional **in-memory diagnostic** collection
+and conflict matrix. It reuses the existing complete CaseBinding, current-owner,
+chain-clock and actor-authentication ports. Constructor options freeze round,
+evidence root, buyer/seller, expected terms/amount/currency/recipient/reference
+and half-open evidence window. These are trusted local model inputs, not imported
+proof or an approved native case mapping. No public root/ID encoder is introduced.
+
+`submitPartyAssertion(actor, record, artifactBytes)` accepts the exact ARB-PAY
+in-memory DTO only when assurance is `party-assertion`. Imported
+`authenticated-source` refuses **before artifact inspection**. Identifiers follow
+ARB's specified lowercase0x Hex32; positive bigint amounts and observation times
+use the existing local uint256 ceiling. Currency is three uppercase ASCII letters
+only, not an enabled rail. There is no JSON codec or invented version field.
+At most32 records per party,1MiB actual native bytes per artifact and8MiB actual
+bytes per case are admitted. Shared/detached/proxy/foreign views reject. Bytes are
+never retained; caller buffers remain caller-owned. A private SHA256 byte
+fingerprint plus exact record/actor/size comparison detects changed duplicate
+artifacts even when imported artifactHash is unchanged. The fingerprint is local
+comparison state, never exported or used as evidence ID/root/verification.
+
+`recordResponse(actor,evidenceId,responseHash,bytes)` admits at most4096 actual
+bytes; one response **total** per record is an explicit conservative LOCAL policy
+because per-party response multiplicity is not specified. Either bound party may
+respond. Exact duplicate responses are idempotent; changed bytes/hash/actor
+conflict. Only hash/actor/length metadata is retained. No plaintext or user HTML is
+rendered. Corrected submissions before evidenceEnd use a new explicit supplied
+ID, preserving earlier records/responses; no silent replacement or auto-extension.
+
+`matrix()` freezes deterministic code-point-ordered record/group/issue projections.
+Reference/recipient/currency groups remain separate; partial amounts are never
+summed. Mismatched amounts/currencies/recipients and related claims with different
+status/time are unresolved diagnostic issues. Pending/reversed/unknown remain
+exactly those labels; no record is promoted or assigned a verdict. All outputs
+have diagnosticOnly true, economicAuthority false, sourceAuthenticated false and
+verdictAvailable false. No artifacts/proofs are verified, no source state
+supersedes another, and silence implies no guilty party. Unknown source clocks,
+24h freshness/rail interval/scale semantics, invalid-proof adjudication and global
+receipt allocation remain unavailable without evaluated profiles. Clock/actor/
+owner callbacks and reentry use existing scopeFor guards. `close()` clears local
+records and never creates a native action. There is no persistence, root freezing
+transaction, G12 command, provider/Worker allocation or custody authority.
+
+Run `test/payment-assertions.test.mjs` for native-byte bounds, contextual/actor/
+time mutations, duplicate-byte substitution,64-record bounds, deterministic
+permutations, hostile records and callback retirement. Fixtures are synthetic;
+these checks confer no named cryptographic or tribunal qualification.

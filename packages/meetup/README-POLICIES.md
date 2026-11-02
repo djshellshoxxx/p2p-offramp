@@ -49,3 +49,66 @@ npm run check:boundaries
 ```
 
 The independent XYZ fixture uses Python `log(tan(pi/4+latitude/2))`, while TypeScript uses `asinh(tan(latitude))`; the generator and fixed provenance are in `test/fixtures/generate_xyz_oracle.py`. Tests exercise default-unconfigured behavior, IPv6/SDP bounds, immutable no-STUN template, dwell/boundaries/clock changes, native encrypted history/reload/races, replay/retention, malformed signatures/fields, manifest namespaces/hash mutations, dateline/display clipping and fixed neighbor query sets. G02 tests use real WebCrypto with an explicit encrypted memory store, not IndexedDB/browser qualification. Selected signature/moderation/geodesic ports are synthetic unqualified fixtures. No test adopts a provider, performs external networking or authorizes funds.
+
+## T76 MEET05 sequence/time diagnostic model
+
+`createSignalDiagnosticModel({scope,consentGeneration,sessionId,isCurrent,clock})`
+uses the actual existing PolicyScope (full TradeBinding, trade/terms hashes and
+both bound keys) and createPolicyOwner lifetime discipline. It provides async
+`observe`, `tick`, `inspect` and synchronous idempotent `close`. Every projection
+is diagnosticOnly and denies economicAuthority/authenticated/wireCompatible/
+networkExecutionAllowed, with physicalPresence unverified. Only counters/fixed
+reasons leave it. It constructs no peer/channel, sends nothing, signs nothing,
+uses no transport or sensor and exports no payloads. Default registration stays
+absent. Ordinary close or owner/consent/time loss cannot reopen the model.
+
+The exact published SignalV1 object is parsed without adding fields. Available
+trade/terms/session/sender/recipient fields must match the constructor scope.
+**SignalV1 omits full TradeBinding, consentGeneration, replay message ID and
+restart nonce although prose requires them.** Local constructor scope cannot
+prove those omitted values were authenticated remotely. The model refuses added
+binding/consent/messageId fields rather than inventing a new wire. There is no
+restart/resetGeneration API. Only generation0 is observed; other generations are
+ignored diagnostic candidates and cannot create a channel. Session IDs remain
+opaque nonempty local strings<=128 characters, not a selected128-bit wire codec.
+The existing PolicyScope hash/key encodings are used only for this local model;
+they do not adopt a missing interoperable SignalV1 signing profile.
+
+Available checks: one lower-key offer and one upper-key answer; candidates after
+answer; per-sender sequence0 onward, duplicate exact(sender,generation,seq) tuples
+ignored, changed tuples close; gap<=32 buffers for strictly less than5s, gap>32
+closes. At most32 pending entries and **262144 combined encoded-envelope bytes**
+are retained; max256 replay tuples/session, no live-entry eviction to admit a
+257th. Delivered payload strings are dropped, private replay equality retains
+only local SHA256 fingerprints/expiry, never exported commitments. Pending
+payloads/replay references drop on close; JavaScript strings cannot be wiped.
+No claim of exact JS heap/OS memory erasure follows from encoded-byte accounting.
+
+Envelope UTF8 JSON.stringify size is capped73728 bytes, candidate payload2048
+bytes. These bytes are a LOCAL size calculation, not a new canonical wire codec.
+Raw SDP/candidate strings are conservatively inspected using existing MEET04
+subset; this local fixture convention can reject otherwise valid browser SDP and
+does not select a payload/carrier format. Close payloads are ignored data and may
+be empty. Lone surrogates/accessors/prototype records reject. The model checks
+safe integer timestamps, expiry strictly after issuance and lifetime<=60000ms,
+issuance at most30000ms ahead of local wall time, strict local expiry, and a
+30000ms monotonic negotiation deadline. Backward/unknown wall or monotonic time
+closes conservatively. Source clock skew is not authenticated or repaired. No
+background timer or retry sends work: time/gap/replay expiry is checked on explicit
+observe/tick/inspect and after callbacks. Owner's bounded per-call timer only
+cancels local processing. Replay tuples expire logically at their envelope expiry
+plus300000ms; arithmetic overflow refuses. This tuple is local diagnostic state,
+not the missing protocol message-ID definition.
+
+This model is in-memory only, **not active MEET05 encrypted durable replay
+compliance**. It cannot auto-resend/reconnect or provide MEET06 DTLS fingerprint/
+challenge authentication. An adopted non-text core carrier, missing-field schema,
+reviewed signed domain and restart nonce, encrypted replay profile, G05 RTC route
+and TURN/browser qualification remain separate activation gates. No certificate,
+relay signature or supplied authenticatedPeer string upgrades these projections.
+
+Focused `test/signaling-model.test.mjs` covers exact envelope/pending/replay/gap/
+time boundaries, candidate permutations, same-tuple substitution, every available
+binding field, missing-field additions, UTF8/prototype restrictions, callback
+reentry/retirement and100 local close cycles. These synthetic vectors are not two
+independent clients or browser/network interoperability evidence.

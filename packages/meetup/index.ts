@@ -113,3 +113,6 @@ export type {
   PolicyCode as MeetupPolicyCode,
   PolicyVaultOptions as MeetupPolicyVaultOptions,
 } from "./src/policy-data.ts";
+
+export {createSignalDiagnosticModel} from './src/signaling-model.ts';
+export type {SignalDiagnosticOptions} from './src/signaling-model.ts';

@@ -12,3 +12,6 @@ export type { AppealModel, AppealOptions, AppealPorts, AppealView, OutcomeProjec
 export { calculateNonRevealPenalty } from './src/penalty.ts';
 export { quoteFeeReserve, calculateFeeConservation, checkBondConservation, quoteSeatBond } from './src/accounting.ts';
 export type { CaseBinding, DiagnosticOnly, ReferenceResult, ReferenceError, TrustedReferencePorts, ActorRequest } from './src/shared.ts';
+
+export {createPaymentAssertionModel} from './src/payment-assertions.ts';
+export type {PaymentAssertion,PaymentAssertionOptions} from './src/payment-assertions.ts';

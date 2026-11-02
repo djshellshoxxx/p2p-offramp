@@ -41,7 +41,7 @@ export function bindingOf(input: unknown): CaseBinding {
   return Object.freeze({ chainId, escrow: address(raw.escrow), tribunal: address(raw.tribunal), policyHash: hex32(raw.policyHash), tradeId: hex32(raw.tradeId), caseId: hex32(raw.caseId) });
 }
 export const sameBinding = (a: CaseBinding, b: CaseBinding): boolean => Object.keys(a).every(key => a[key as keyof CaseBinding] === b[key as keyof CaseBinding]);
-export type ReferenceAction = 'commit' | 'reveal' | 'accept-seat' | 'appeal';
+export type ReferenceAction = 'commit' | 'reveal' | 'accept-seat' | 'appeal' | 'submit-evidence' | 'respond-evidence';
 export interface ActorRequest { readonly binding: CaseBinding; readonly round: 0 | 1; readonly action: ReferenceAction; readonly actor: string; readonly jurorId: string | null; }
 export interface TrustedReferencePorts {
   readonly isCurrent: () => boolean;
