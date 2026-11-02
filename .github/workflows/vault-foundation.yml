@@ -34,6 +34,8 @@ jobs:
       - run: npm run test:acceptance:cli
       - run: npm run check:boundaries
       - run: npm run test:build-policy
+      - run: npm run test:completion:tools
+      - run: npm run test:distribution
       - run: npm run test:diagnostics
       - run: npm run test:fuzz
       - run: npm run build
@@ -73,6 +75,15 @@ jobs:
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:locale:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:portal:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:journey:origins
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:distribution:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   specs:

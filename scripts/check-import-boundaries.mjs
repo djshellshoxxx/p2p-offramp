@@ -37,6 +37,7 @@ const NODE_BUILTINS = new Set([
 const ADVANCED_PACKAGES = new Set([
   'advanced', 'extensions', 'proof', 'proofs', 'zk', 'zktls', 'stealth', 'reputation',
   'maps', 'map', 'meetup', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
+  'privacy-policy', 'privacy-controls', 'proof-jobs', 'liquidity',
 ]);
 
 function posix(value) { return value.split(sep).join('/'); }
@@ -128,7 +129,9 @@ function isAppSource(root, path) {
 function isAdvancedOrServerPath(root, path) {
   const rel = posix(relative(root, path));
   const parts = rel.toLowerCase().split('/').flatMap(part => part.split(/[-_]/));
-  return parts.some(part => part === 'server' || part === 'servers' || ADVANCED_PACKAGES.has(part));
+  const packageName = packageForPath(root, path)?.toLowerCase();
+  return (packageName !== undefined && ADVANCED_PACKAGES.has(packageName))
+    || parts.some(part => part === 'server' || part === 'servers' || ADVANCED_PACKAGES.has(part));
 }
 function checkGlobalReferences(root, file, source, findings) {
   const kind = sourceKind(relative(root, file.fileName));

@@ -119,6 +119,21 @@ test('G07 permits only the narrow native acceptance side entry and still exclude
     await put(root, 'packages/wallet/src/native-reader.ts', "export * from '../../meetup/index.ts';\n");
     result = await inspectImportBoundaries(root);
     assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/meetup/index.ts'), 'approved side entry cannot pull optional location code into the core graph');
+    await put(root, 'packages/privacy-policy/index.ts', 'export const optional = true;\n');
+    await put(root, 'packages/wallet/src/native-reader.ts', "export * from '../../privacy-policy/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/privacy-policy/index.ts'), 'compound optional package names stay excluded');
+    for (const name of ['privacy-controls', 'proof-jobs', 'liquidity']) {
+      await put(root, `packages/${name}/index.ts`, 'export const optional = true;\n');
+      await put(root, 'packages/wallet/src/native-reader.ts', `export * from '../../${name}/index.ts';\n`);
+      result = await inspectImportBoundaries(root);
+      assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === `packages/${name}/index.ts`), name + ' remains outside the default core graph');
+    }
+    await put(root, 'packages/domain/index.ts', "export * from './src/privacy.ts';\n");
+    await put(root, 'packages/domain/src/privacy.ts', 'export const corePrivacy = true;\n');
+    await put(root, 'packages/wallet/src/native-reader.ts', "export * from '../../domain/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(!result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE'), 'core privacy helpers remain available');
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
