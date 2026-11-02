@@ -16,6 +16,27 @@ function exact(v,keys ) {
   if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join()!==[...keys].sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join())refuse();
   return v;
 }
+/** Closed inline-link extraction; every delimiter search advances the cursor. */
+export function docLinkTargets(text) {
+  if(typeof text!=='string'||Buffer.byteLength(text)>65536)refuse();
+  const targets=[];
+  let cursor=0;
+  while(cursor<text.length) {
+    const label=text.indexOf('[',cursor);
+    if(label<0)break;
+    const close=text.indexOf(']',label+1);
+    if(close<0)break;
+    cursor=close+1;
+    if(text[cursor]!=='(')continue;
+    const start=cursor+1,end=text.indexOf(')',start);
+    if(end<0)break;
+    cursor=end+1;
+    if(end===start)continue;
+    if(targets.length>=128||end-start>240)refuse();
+    targets.push(text.slice(start,end));
+  }
+  return targets;
+}
 async function file(root,path,max=1048576 ) {
   safeClaimPath(path);
   const parts=path.split('/');
@@ -94,10 +115,8 @@ export async function inspectDocs(root=ROOT ) {
     // Closed authored grammar: unverified examples, HTML and reference links are refused.
     if (/```|~~~|<[^>]+>|^\s*\[[^\]]+\]:|\[[^\]]*\]\s*\[[^\]]*\]/m.test(text)) refuse();
     if (/^\s*(?:This app is|We provide|Guaranteed)\s+(?:anonymous|trustless fiat|audited|guaranteed recovery)/im.test(text)) refuse();
-    for (const match of text.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)) {
+    for (const target of docLinkTargets(text)) {
       if (reports.length >= 128) refuse();
-      const target = match[1];
-      if (target.length > 240) refuse();
       if (/^https:\/\//.test(target)) {
         reports.push({source:doc.sourcePath,target,status:'remote-unverified'});
         continue;

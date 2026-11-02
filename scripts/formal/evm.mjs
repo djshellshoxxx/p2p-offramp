@@ -62,11 +62,48 @@ export function classifyPartition(formal,file,span){
  if(formal.incomplete||formal.stopReason||!clean||classified.unsupported.length)return{...classified,result:'PROOF_UNKNOWN',qualification:'Missing/zero queries, stderr, unsupported abstractions and incomplete work remain unknown; raw solver polarity is not a proof.'};
  return classified;
 }
+/** Literal extraction only; the compiler still validates the untouched source. */
+export function literalImports(source){
+ if(typeof source!=='string'||Buffer.byteLength(source)>1048576)stop('SOURCE_LIMIT');
+ const afterSpace=new Uint32Array(source.length+1),quoted=new Map(),matches=[];
+ afterSpace[source.length]=source.length;
+ const space=at=>/\s/.test(source[at]??'');
+ let nextQuote=-1,from=null;
+ // Index suffix delimiters once, rather than rescan them for each import/from.
+ for(let at=source.length-1;at>=0;at--){
+  const char=source[at];
+  afterSpace[at]=space(at)?afterSpace[at+1]:at;
+  if(char===';')from=null;
+  if(char==='"'||char==="'"){
+   if(nextQuote>at+1){
+    const semicolon=afterSpace[nextQuote+1];
+    if(source[semicolon]===';')quoted.set(at,{quote:at,close:nextQuote,end:semicolon+1});
+   }
+   nextQuote=at;
+  }
+  if(source.startsWith('from',at)&&space(at-1)&&space(at+4)){
+   const quote=afterSpace[at+4];
+   if(quoted.has(quote))from={at,quote,next:from};
+  }
+  if(!source.startsWith('import',at)||!space(at+6))continue;
+  const direct=afterSpace[at+6],prefix=from?.at===direct?from.next:from;
+  // Preserve the optional from-clause priority and greedy initial whitespace.
+  const quote=prefix?.quote??(quoted.has(direct)?direct:undefined)??(from?.at===direct&&direct>at+7?from.quote:undefined);
+  if(quote!==undefined)matches.push({at,...quoted.get(quote)});
+ }
+ const imports=[];let end=0;
+ for(let i=matches.length-1;i>=0;i--){
+  const match=matches[i];
+  if(match.at<end)continue;
+  // Copy paths only after nonoverlapping matches have been selected.
+  imports.push(source.slice(match.quote+1,match.close));end=match.end;
+ }
+ return imports;
+}
 async function collectSources(entry){
  const sources={},digests={};let total=0;
  async function visit(key){if(Object.hasOwn(sources,key))return;if(Object.keys(sources).length>=256)stop('SOURCE_LIMIT');const path=resolve(EVM,key);if(!path.startsWith(EVM+'/'))stop('SOURCE_PATH_INVALID');const bytes=await readFile(path);total+=bytes.length;if(bytes.length>1048576||total>8*1048576)stop('SOURCE_LIMIT');const content=bytes.toString('utf8');sources[key]={content};digests[key]=sha(bytes);
-  const imports=content.matchAll(/import\s+(?:[^;]*?\s+from\s+)?["']([^"']+)["']\s*;/g);
-  for(const match of imports){const name=match[1];const imported=name.startsWith('forge-std/')?'lib/forge-std/src/'+name.slice(10):name.startsWith('@openzeppelin/contracts/')?'lib/openzeppelin-contracts/contracts/'+name.slice(24):resolve(dirname(path),name).slice(EVM.length+1);await visit(imported);}
+  for(const name of literalImports(content)){const imported=name.startsWith('forge-std/')?'lib/forge-std/src/'+name.slice(10):name.startsWith('@openzeppelin/contracts/')?'lib/openzeppelin-contracts/contracts/'+name.slice(24):resolve(dirname(path),name).slice(EVM.length+1);await visit(imported);}
  }
  await visit(entry);return{sources,digests};
 }

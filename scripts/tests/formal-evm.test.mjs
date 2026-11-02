@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {queryIdentity,solverAnswer,assertionSpan,classifyProperty,validateProbe,nativeWitness,LIMITS} from '../formal/evm.mjs';
+import * as formal from '../formal/evm.mjs';
 const spec=JSON.parse(await readFile(new URL('../../contracts/evm/formal/properties.json',import.meta.url)));
 test('query binding uses Keccak and rejects oversized work; unknown or contaminated solver output stays unknown',()=>{
  assert.equal(queryIdentity(''),'0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470');
@@ -102,4 +103,51 @@ test('partition results require nonzero complete clean work and exact compiler d
  }
  const violation=structuredClone(complete);violation.output.errors[0].errorCode='6328';assert.equal(classifyPartition(violation,file,span).result,'COUNTEREXAMPLE_FOUND');
  violation.incomplete=true;assert.equal(classifyPartition(violation,file,span).result,'PROOF_UNKNOWN');
+});
+
+test('literal imports retain direct, named, wildcard, multiline and mapped source order',()=>{
+ const source=`import "./direct.sol";\nimport './single.sol';\nimport { A as B,\n C } from "forge-std/Test.sol";\nimport * as Token from '@openzeppelin/contracts/token/ERC20/IERC20.sol'\t;\nimport\r\n{ D }\r\nfrom\t"../relative.sol";`;
+ assert.deepEqual(formal.literalImports(source),['./direct.sol','./single.sol','forge-std/Test.sol','@openzeppelin/contracts/token/ERC20/IERC20.sol','../relative.sol']);
+ assert.deepEqual(formal.literalImports('import\u00a0"./nonbreaking.sol"; import {X}\u2028from\ufeff"./unicode-space.sol";'),['./nonbreaking.sol','./unicode-space.sol']);
+});
+
+test('literal import delimiters neither hide later matches nor split quoted semicolons',()=>{
+ const cases=[
+  ['import"./missing-space.sol"; IMPORT "./upper.sol";',[]],
+  ['import ""; import {X}; import "./unfinished.sol"',[]],
+  ['import {X}; import "./next.sol";', ['./next.sol']],
+  ['import orphan import "./next.sol";', ['./next.sol']],
+  ['import orphan import {X} from "./next.sol";', ['./next.sol']],
+  ['import "./semi;colon.sol"; import "./last.sol";', ['./semi;colon.sol','./last.sol']],
+  ['import "./unsupported.sol" as Alias; import {X} from "./valid.sol";', ['./valid.sol']],
+  ['import {X} from "./missing-terminator.sol"\nimport "./valid.sol";', ['./valid.sol']],
+  ['import  from "./existing-whitespace-form.sol";', ['./existing-whitespace-form.sol']],
+ ];
+ for(const [source,expected]of cases)assert.deepEqual(formal.literalImports(source),expected);
+});
+
+test('literal extraction stays inside the existing UTF-8 source byte bound',()=>{
+ const source='é'.repeat(524288);
+ assert.equal(Buffer.byteLength(source),1048576);
+ assert.deepEqual(formal.literalImports(source),[]);
+ assert.throws(()=>formal.literalImports(source+'a'),{message:'SOURCE_LIMIT'});
+});
+
+test('import extraction leaves exact UTF-8 source bytes and assertion diagnostic spans unchanged',()=>{
+ const prefix='// π🧪\r\nimport {X} from "./X.sol";\r\ncontract T { function f() external pure { ',assertion='assert(true);',source=prefix+assertion+' } }\n',bytes=Buffer.from(source);
+ const span=assertionSpan(source,assertion);
+ assert.deepEqual(formal.literalImports(source),['./X.sol']);
+ assert.deepEqual(Buffer.from(source),bytes);
+ assert.deepEqual(span,{start:Buffer.byteLength(prefix),end:Buffer.byteLength(prefix+'assert(true)')});
+ assert.deepEqual(assertionSpan(source,assertion),span);
+ const diagnostic={errorCode:'9576',sourceLocation:{file:'Fixture.sol',...span},message:'CHC: Assertion violation check is safe!'};
+ assert.equal(classifyProperty({errors:[diagnostic]},'Fixture.sol',span).result,'PROVED_UNDER_DECLARED_MODEL');
+ assert.equal(classifyProperty({errors:[diagnostic]},'Foreign.sol',span).result,'PROOF_UNKNOWN');
+});
+
+test('actual canonical and model import literals retain their pinned dependency inputs without tools',async()=>{
+ const canonical=await readFile(new URL('../../contracts/evm/src/BasicEscrow.sol',import.meta.url),'utf8');
+ const model=await readFile(new URL('../../contracts/evm/formal/CanonicalRefinement.t.sol',import.meta.url),'utf8');
+ assert.deepEqual(formal.literalImports(canonical),['@openzeppelin/contracts/token/ERC20/IERC20.sol','@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol','@openzeppelin/contracts/utils/ReentrancyGuard.sol']);
+ assert.deepEqual(formal.literalImports(model),['../src/BasicEscrow.sol','../test/mocks/Mocks.sol','forge-std/Test.sol']);
 });

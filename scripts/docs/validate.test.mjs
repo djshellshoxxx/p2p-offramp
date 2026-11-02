@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import{resolve,dirname}from'node:path';
 import{fileURLToPath}from'node:url';
 import{inspectDocs}from'./validate.mjs';
+import * as docs from './validate.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 async function fixture(change ) {
   const temp=await mkdtemp(resolve(tmpdir(),'p2p-docs-'));
@@ -76,4 +77,63 @@ test('real UI copy key, canonical mapping, value hash and immutable catalog byte
     const changed=original.replace('Authenticated encryption observed','Everything is anonymous');await writeFile(path,changed);
     if(updateDeclaredHash){const{createHash}=await import('node:crypto');r.copySource.sha256=createHash('sha256').update(changed).digest('hex');await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(r));}
   }));
+});
+
+test('inline link extraction preserves nested labels, delimiters and authored order',()=>{
+  const cases=[
+    ['plain text',[]],
+    ['[outer [inner](first) [next](second)', ['first','second']],
+    ['[not a link] [valid](target)', ['target']],
+    ['[empty]() [open](unfinished', []],
+    ['[label](a(b)c) [label](last)', ['a(b','last']],
+    ['[label]([nested](target))', ['[nested](target']],
+    ['[label](line\nbreak)', ['line\nbreak']],
+    ['[unfinished [still unfinished', []],
+  ];
+  for(const [text,expected] of cases)assert.deepEqual(docs.docLinkTargets(text),expected);
+});
+
+test('link extraction enforces completed target, link count and UTF-8 document boundaries',()=>{
+  assert.deepEqual(docs.docLinkTargets(`[x](${'a'.repeat(240)})`),['a'.repeat(240)]);
+  assert.throws(()=>docs.docLinkTargets(`[x](${'a'.repeat(241)})`),{message:'DOCS_STALE'});
+  assert.deepEqual(docs.docLinkTargets(`[unclosed](${'a'.repeat(241)}`),[]);
+  assert.equal(docs.docLinkTargets('[x](a)'.repeat(128)).length,128);
+  assert.throws(()=>docs.docLinkTargets('[x](a)'.repeat(129)),{message:'DOCS_STALE'});
+  const exact='é'.repeat(32768);
+  assert.equal(Buffer.byteLength(exact),65536);
+  assert.deepEqual(docs.docLinkTargets(exact),[]);
+  assert.throws(()=>docs.docLinkTargets(exact+'a'),{message:'DOCS_STALE'});
+});
+
+async function changedDocument(baseline,text,targets){
+  const {createHash}=await import('node:crypto'),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+  return fixture(async(temp,_register,manifest)=>{
+    const document=manifest.documents[0],bytes=Buffer.from(text);
+    await writeFile(resolve(temp,document.sourcePath),bytes);
+    document.sha256=sha(bytes);
+    const reports=[...baseline.links.filter(link=>link.source!==document.sourcePath),...targets.map(target=>({source:document.sourcePath,target,status:'remote-unverified'}))];
+    reports.sort((a,b)=>JSON.stringify(a)<JSON.stringify(b)?-1:JSON.stringify(a)>JSON.stringify(b)?1:0);
+    manifest.linkReportDigest=sha(JSON.stringify(reports));
+    await writeFile(resolve(temp,'docs/wiki-source/docs-manifest.json'),JSON.stringify(manifest));
+  });
+}
+
+test('actual inspection keeps 240-character targets and the global 128-link limit across pages',async()=>{
+  const baseline=await fixture(async()=>{}),target='https://example.invalid/'+ 'a'.repeat(216);
+  assert.equal(target.length,240);
+  const accepted=await changedDocument(baseline,`[remote](${target})`,[target]);
+  assert.ok(accepted.links.some(link=>link.target===target&&link.status==='remote-unverified'));
+  await assert.rejects(changedDocument(baseline,`[remote](${target}a)`,[target+'a']),{message:'DOCS_STALE'});
+  const otherCount=baseline.links.filter(link=>link.source!=='docs/wiki-source/Home.md').length;
+  assert.ok(otherCount>0&&otherCount<128);
+  const targets=Array.from({length:128-otherCount},(_,i)=>`https://example.invalid/${i}`);
+  assert.equal((await changedDocument(baseline,targets.map(value=>`[remote](${value})`).join('\n'),targets)).links.length,128);
+  targets.push('https://example.invalid/overflow');
+  await assert.rejects(changedDocument(baseline,targets.map(value=>`[remote](${value})`).join('\n'),targets),{message:'DOCS_STALE'});
+});
+
+test('actual document reads retain the 64 KiB UTF-8 byte limit',async()=>{
+  const baseline=await fixture(async()=>{}),text='é'.repeat(32768);
+  assert.equal((await changedDocument(baseline,text,[])).engineeringConsistency,true);
+  await assert.rejects(changedDocument(baseline,text+'a',[]),{message:'DOCS_STALE'});
 });
