@@ -67,3 +67,39 @@ test('trusted tool roots are explicit and preserve existing Foundry compiler res
  assert.equal(tools.z3,'/tmp/public-z3/bin/z3');assert.equal(tools.artifact,'/tmp/public.whl');assert.equal(tools.forge,'/tmp/foundry/forge');assert.equal(tools.solc,'/tmp/compiler');assert.equal(tools.env.PATH,'/tmp/foundry:/usr/bin');
  assert.equal(resolveTools({FORMAL_Z3_ROOT:'/tmp/z3',FORMAL_Z3_ARTIFACT:'/tmp/z3.whl',HOME:'/tmp/local-home'}).solc,'/tmp/local-home/.svm/0.8.30/solc-0.8.30');
 });
+
+test('the finite partition list binds exact original checks, helpers, actors, assumptions and assertions',async()=>{
+ const {PARTITION_TARGETS,partitionBinding}=await import('../formal/evm.mjs');
+ assert.equal(typeof partitionBinding,'function');
+ assert.deepEqual(PARTITION_TARGETS.map(target=>target.contract),['NativeConstructor','UnauthorizedRelease','EarlyRefund']);
+ const original=await readFile(new URL('../../contracts/evm/formal/CanonicalRefinement.t.sol',import.meta.url),'utf8');
+ for(const target of PARTITION_TARGETS){
+  const source=await readFile(new URL('../../contracts/evm/'+target.source,import.meta.url),'utf8');
+  const bound=partitionBinding(target.id,source,original,spec);
+  assert.equal(bound.property.id,target.id);assert.equal(bound.fragments.length,target.contract==='NativeConstructor'?1:3);
+  assert.equal(source.match(/\bassert\s*\(/g).length,1);
+  for(const fragment of bound.fragments)assert.equal(Buffer.from(source).subarray(fragment.partition.start,fragment.partition.end).toString(),Buffer.from(original).subarray(fragment.original.start,fragment.original.end).toString());
+  const changed=source.replace('new address[](0)','new address[](1)');
+  assert.throws(()=>partitionBinding(target.id,changed,original,spec));
+  assert.throws(()=>partitionBinding(target.id,source+'\ncontract Extra {}\n',original,spec));
+  if(target.contract!=='NativeConstructor')assert.throws(()=>partitionBinding(target.id,source.replace('msg.value > 0','msg.value > 1'),original,spec));
+  assert.throws(()=>partitionBinding(target.id,source,original.replace('block.timestamp + 1800','block.timestamp + 1801'),spec));
+ }
+ assert.throws(()=>partitionBinding('ARBITRARY',original,original,spec));
+ assert.deepEqual([LIMITS.compilerMs,LIMITS.queryMs,LIMITS.totalMs,LIMITS.queries,LIMITS.rounds],[25000,5000,120000,64,8]);
+});
+
+test('partition results require nonzero complete clean work and exact compiler diagnostics, never raw polarity',async()=>{
+ const {classifyPartition}=await import('../formal/evm.mjs');assert.equal(typeof classifyPartition,'function');
+ const {createHash}=await import('node:crypto');const empty=createHash('sha256').update('').digest('hex');
+ const file='formal/partitions/NativeConstructor.sol',span={start:10,end:25};
+ const safe={errorCode:'9576',severity:'info',sourceLocation:{file,...span},message:'CHC: Assertion violation check is safe!'};
+ const complete={incomplete:false,stopReason:null,queries:[{answer:'sat',exitCode:0,timedOut:false,limited:false,stderrSha256:empty}],compilerRuns:[{exitCode:0,error:null,timedOut:false,limited:false,stderrSha256:empty}],output:{errors:[safe]}};
+ assert.equal(classifyPartition(complete,file,span).result,'PROVED_UNDER_DECLARED_MODEL');
+ assert.equal(classifyPartition({...complete,queries:[{...complete.queries[0],answer:'unsat'}]},file,span).result,'PROVED_UNDER_DECLARED_MODEL');
+ for(const change of [p=>{p.queries=[];},p=>{p.incomplete=true;},p=>{p.stopReason='TOTAL_DEADLINE';},p=>{p.compilerRuns=[];},p=>{p.compilerRuns[0].timedOut=true;},p=>{p.compilerRuns[0].stderrSha256='nonempty';},p=>{p.queries[0].stderrSha256='nonempty';},p=>{p.queries[0].answer='unknown';},p=>{p.output.errors.push({message:'Inline assembly abstraction is not supported'});},p=>{p.output.errors=[];},p=>{p.output.errors[0].sourceLocation.file='foreign.sol';}]){
+  const bad=structuredClone(complete);change(bad);assert.equal(classifyPartition(bad,file,span).result,'PROOF_UNKNOWN');
+ }
+ const violation=structuredClone(complete);violation.output.errors[0].errorCode='6328';assert.equal(classifyPartition(violation,file,span).result,'COUNTEREXAMPLE_FOUND');
+ violation.incomplete=true;assert.equal(classifyPartition(violation,file,span).result,'PROOF_UNKNOWN');
+});

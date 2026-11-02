@@ -76,5 +76,29 @@
     ],
     "scope": "Exact compiler AST pre-payout side-effect-free revert predicates only; no modifier/storage/payout/bytecode theorem",
     "domains": "state 0..3, address uint160, timestamp uint256, deadline uint64; actual Funded enum value1"
+  },
+  "partitionInvestigation": {
+    "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+    "scope": "At most one attempt per unchanged original property under one finite shared budget; does not replace original UNKNOWNs, guard-only proofs or native credit counterexample.",
+    "targets": [
+      {
+        "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+        "source": "formal/partitions/NativeConstructor.sol",
+        "contract": "NativeConstructor",
+        "method": "checkNativeAssetExcludedFromTokenAllowlist"
+      },
+      {
+        "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+        "source": "formal/partitions/UnauthorizedRelease.sol",
+        "contract": "UnauthorizedRelease",
+        "method": "checkUnauthorizedReleaseIsAtomic"
+      },
+      {
+        "id": "EVM-EARLY-REFUND-ATOMIC",
+        "source": "formal/partitions/EarlyRefund.sol",
+        "contract": "EarlyRefund",
+        "method": "checkRefundBeforeDeadlineIsAtomic"
+      }
+    ]
   }
 }
