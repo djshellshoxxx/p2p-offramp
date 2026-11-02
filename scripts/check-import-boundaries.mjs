@@ -23,7 +23,7 @@ const SOURCE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.mts', '.cts', '.mjs',
 const CORE_PACKAGES = new Set(['domain', 'schemas']);
 // Explicit narrow facade; other package subpaths remain private. Its imports are
 // still traversed and checked like the ordinary index facade.
-const PUBLIC_SIDE_ENTRIES = new Set(['packages/security/release-context.ts']);
+const PUBLIC_SIDE_ENTRIES = new Set(['packages/security/release-context.ts', 'packages/wallet/contract-acceptance.ts']);
 const BROWSER_GLOBALS = new Set([
   'window', 'document', 'navigator', 'localStorage', 'sessionStorage', 'indexedDB',
   'Worker', 'SharedWorker', 'WebSocket', 'fetch', 'XMLHttpRequest', 'EventSource',
@@ -36,7 +36,7 @@ const NODE_BUILTINS = new Set([
 ]);
 const ADVANCED_PACKAGES = new Set([
   'advanced', 'extensions', 'proof', 'proofs', 'zk', 'zktls', 'stealth', 'reputation',
-  'maps', 'map', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
+  'maps', 'map', 'meetup', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
 ]);
 
 function posix(value) { return value.split(sep).join('/'); }
@@ -45,7 +45,7 @@ function within(root, path) {
   return rel === '' || (!rel.startsWith(`..${sep}`) && rel !== '..' && !isAbsolute(rel));
 }
 function sourceKind(path) {
-  if (PUBLIC_SIDE_ENTRIES.has(posix(path))) return { kind: 'package', name: 'security', facade: true };
+  if (PUBLIC_SIDE_ENTRIES.has(posix(path))) return { kind: 'package', name: posix(path).split('/')[1], facade: true };
   const parts = posix(path).split('/');
   const packageIndex = parts.indexOf('packages');
   if (packageIndex >= 0 && parts[packageIndex + 2] === 'src') return { kind: 'package', name: parts[packageIndex + 1], facade: false };

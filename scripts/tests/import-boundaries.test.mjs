@@ -103,6 +103,25 @@ test('G07 permits only the explicit read-only release side entry and follows its
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test('G07 permits only the narrow native acceptance side entry and still excludes optional meetup dependencies', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-acceptance-context-'));
+  try {
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'packages/wallet/contract-acceptance.ts', "export * from './src/native-reader.ts';\n");
+    await put(root, 'packages/wallet/src/native-reader.ts', 'export const reader = true;\n');
+    await put(root, 'packages/wallet/not-approved.ts', 'export const hidden = true;\n');
+    await put(root, 'apps/web/src/main.ts', "import '../../../packages/wallet/contract-acceptance.ts'; import '../../../packages/wallet/not-approved.ts';\n");
+    let result = await inspectImportBoundaries(root);
+    const privateImports = result.findings.filter(finding => finding.code === 'APP_PACKAGE_PRIVATE_IMPORT');
+    assert.equal(privateImports.length, 1);
+    assert.equal(privateImports[0].detail, '../../../packages/wallet/not-approved.ts');
+    await put(root, 'packages/meetup/index.ts', "export const optional = true;\n");
+    await put(root, 'packages/wallet/src/native-reader.ts', "export * from '../../meetup/index.ts';\n");
+    result = await inspectImportBoundaries(root);
+    assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/meetup/index.ts'), 'approved side entry cannot pull optional location code into the core graph');
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test('G07 reports missing application graph entry instead of claiming it was checked', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-no-entry-'));
   try {
