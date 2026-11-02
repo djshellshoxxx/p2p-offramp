@@ -13,6 +13,9 @@ export const MAX_HISTORY_BYTES = 2_097_152;
 const MAX_WRAP_BYTES = 131_072;
 const WRAP_LIMITS = Object.freeze({ maxContentBytes: 100_000, maxTags: 1, maxTagItems: 2, maxTagItemBytes: 64,
   maxJsonBytes: MAX_WRAP_BYTES, allowedKinds: Object.freeze([1059]) });
+const nativeAborted = Object.getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!;
+const addSignalListener = EventTarget.prototype.addEventListener, removeSignalListener = EventTarget.prototype.removeEventListener;
+const signalAborted = (signal: AbortSignal | undefined): boolean => signal !== undefined && Reflect.apply(nativeAborted, signal, []) as boolean;
 type HistoryVault = Pick<VaultService, 'list' | 'read' | 'commit'> & VaultSessionAuthority;
 export interface DurableTradeChatOptions extends Omit<Parameters<typeof createTradeChat>[0], 'maxSeenMessages'> {
   readonly vault: HistoryVault; readonly session: VaultSession;
@@ -79,37 +82,44 @@ export function createDurableTradeChat(options: DurableTradeChatOptions): CoreRe
     const guard = (job: Job): Readonly<VaultSession> => {
       const session = currentLease.current();
       if (closed || !session) return stop('LOCKED');
-      if (job.controller.signal.aborted) return stop('CANCELLED');
+      if (signalAborted(job.controller.signal)) return stop('CANCELLED');
       if (session.revision !== job.revision) return stop('CONFLICT');
       return session;
     };
     async function run<T>(secret: unknown, external: AbortSignal | undefined, operation: (job: Job, key: Uint8Array) => Promise<T>): Promise<CoreResult<T>> {
-      if (closed || !currentLease.current()) return failure('LOCKED');
+      let key: Uint8Array | undefined, job: Job | undefined, physicalOwnsCleanup = false;
+      let externalListening = false, internalListening = false, stopped = (): void => undefined;
+      const onExternal = (): void => job?.controller.abort();
+      const cleanup = (): void => {
+        try { if (job) wipe(job); else key?.fill(0); } catch { /* Every later cleanup must still run. */ }
+        job?.buffers.clear();
+        try { if (externalListening) Reflect.apply(removeSignalListener, external, ['abort', onExternal]); } catch { /* Fixed result and admission release remain independent. */ }
+        try { if (internalListening && job) Reflect.apply(removeSignalListener, job.controller.signal, ['abort', stopped]); } catch { /* Do not strand the physical slot. */ }
+        if (job && active === job) active = undefined;
+      };
       try {
-        if (external !== undefined && !(external instanceof AbortSignal)) return failure('INVALID_INPUT');
-        if (external?.aborted) return failure('CANCELLED');
-      } catch { return failure('INVALID_INPUT'); }
-      if (active) return failure('CONFLICT');
-      let key: Uint8Array;
-      try { key = copyBytes(secret, 32, 32); } catch (error) { return failure(errorCode(error)); }
-      const session = currentLease.current(); if (!session) { key.fill(0); return failure('LOCKED'); }
-      const job: Job = { controller: new AbortController(), buffers: new Set([key]), revision: session.revision }; active = job;
-      const onExternal = (): void => job.controller.abort();
-      external?.addEventListener('abort', onExternal, { once: true }); if (external?.aborted) onExternal();
-      let stopped!: () => void;
-      const aborted = new Promise<CoreResult<T>>(resolve => {
-        stopped = () => { wipe(job); resolve(failure(closed ? 'LOCKED' : 'CANCELLED')); };
-        job.controller.signal.addEventListener('abort', stopped, { once: true });
-        if (job.controller.signal.aborted) stopped();
-      });
-      const physical = Promise.resolve().then(async (): Promise<CoreResult<T>> => {
-        guard(job);
-        const value = await operation(job, key); guard(job); return { ok: true, value };
-      }).catch(error => failure<T>(errorCode(error))).finally(() => {
-        wipe(job); job.buffers.clear(); external?.removeEventListener('abort', onExternal);
-        job.controller.signal.removeEventListener('abort', stopped); if (active === job) active = undefined;
-      });
-      return Promise.race([physical, aborted]);
+        if (closed || !currentLease.current()) return failure('LOCKED');
+        if (signalAborted(external)) return failure('CANCELLED');
+        if (active) return failure('CONFLICT');
+        key = copyBytes(secret, 32, 32);
+        const session = currentLease.current(); if (closed || !session) return failure('LOCKED');
+        if (active) return failure('CONFLICT');
+        const owned: Job = { controller: new AbortController(), buffers: new Set([key]), revision: session.revision }; job = owned; active = owned;
+        const aborted = new Promise<CoreResult<T>>(resolve => {
+          stopped = () => { wipe(owned); resolve(failure(closed ? 'LOCKED' : 'CANCELLED')); };
+          Reflect.apply(addSignalListener, owned.controller.signal, ['abort', stopped, { once: true }]); internalListening = true;
+        });
+        if (external !== undefined) { Reflect.apply(addSignalListener, external, ['abort', onExternal, { once: true }]); externalListening = true; }
+        if (signalAborted(external)) onExternal();
+        const ownedKey = key;
+        const physical = Promise.resolve().then(async (): Promise<CoreResult<T>> => {
+          guard(owned);
+          const value = await operation(owned, ownedKey); guard(owned); return { ok: true, value };
+        }).catch(error => failure<T>(errorCode(error))).finally(cleanup);
+        physicalOwnsCleanup = true;
+        return Promise.race([physical, aborted]);
+      } catch (error) { return failure(errorCode(error)); }
+      finally { if (!physicalOwnsCleanup) cleanup(); }
     }
     async function scan(job: Job): Promise<{ records: StoredHistory[]; skippedRecords: number }> {
       const session = guard(job);

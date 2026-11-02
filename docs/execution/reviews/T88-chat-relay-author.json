@@ -1,0 +1,103 @@
+{
+  "task": "T88",
+  "status": "source frozen for root review",
+  "createdAt": "2026-11-02T16:13:44.274461+00:00",
+  "head": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "resolvedAuditFindings": [
+    "T38-B-01",
+    "T38-B-03"
+  ],
+  "remainingUnmodifiedFinding": "T38-B-02 (NIP01/ad/canonical pool reflection; outside repair authorization)",
+  "changes": [
+    "Captured AbortSignal getter and EventTarget listener primitives; own signal accessors and listener overrides cannot define cancellation or inject diagnostics.",
+    "Protected job admission/finally cleanup wipes owned key copies and independently removes both listeners/releases admission; only physical completion releases an admitted operation after prompt cancellation.",
+    "Restricted local relay skips a removed cohort subscriber while retaining later active listeners; same-callback reacquisition belongs to a new cohort."
+  ],
+  "files": [
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "04bcee7a1850f8473a62a51611a1d88243b464564969648ac9513ad00d6bf5da",
+      "bytes": 18219,
+      "lines": 244,
+      "auditBaselineSha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e"
+    },
+    {
+      "path": "packages/messaging/test/durable-chat.test.mjs",
+      "sha256": "a3fdfdcd42d5e7971790b75effe10bbe34cf1b547f8831009c8585b73ceb237d",
+      "bytes": 25226,
+      "lines": 323,
+      "auditBaselineSha256": null
+    },
+    {
+      "path": "packages/relay/src/local-pool.ts",
+      "sha256": "974d3b462d9175955a1283c340c8d4780e75c2aca612248d41b6bef5333b48b0",
+      "bytes": 14412,
+      "lines": 202,
+      "auditBaselineSha256": "279a8cbd10feea0ed66200635f4f1c02927c837b72eaea8d88ff5ca7f5f1ce7e"
+    },
+    {
+      "path": "packages/relay/test/local-pool.test.mjs",
+      "sha256": "6e07178c842a0d4b3a1b9f891cd63f429424a42ce0051c57d4a26854e4c62bde",
+      "bytes": 11116,
+      "lines": 105,
+      "auditBaselineSha256": null
+    }
+  ],
+  "negativeEvidence": {
+    "initialRed": "/workspace/work/t88-red.log",
+    "registrationSpecificRed": "/workspace/work/t88-registration-red.log",
+    "description": "Initial default-isolated run reproduced all five new regressions; the focused registration RED separately shows the admitted addEventListener diagnostic rejection before repair. SECRET markers are synthetic fixture strings."
+  },
+  "verification": {
+    "focusedCommand": "node --import ./scripts/test-support/register-tsx.mjs --test packages/messaging/test/durable-chat.test.mjs packages/relay/test/local-pool.test.mjs",
+    "nodeIsolation": "default isolated; managed IPC permitted through authorized local escalation",
+    "result": {
+      "tests": 27,
+      "pass": 27,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "messaging": 17,
+      "localRelay": 10
+    },
+    "typecheck": "node_modules/.bin/tsc --noEmit (package target) passed",
+    "whitespace": "Scoped git diff --check passed",
+    "fullSuitesRun": false,
+    "browserRun": false,
+    "externalRelayOrWalletIO": false,
+    "fixtures": "Actual native G02/WebCrypto/NIP17 over controlled in-memory storage; local relay connector and synthetic BIP340 events only."
+  },
+  "logs": [
+    {
+      "path": "/workspace/work/t88-red.log",
+      "sha256": "ec3f55336edd4bed533572fdecf139744ecd5329cf0b9a4f88a918c3f9f8d918",
+      "bytes": 8108
+    },
+    {
+      "path": "/workspace/work/t88-registration-red.log",
+      "sha256": "a818709ba21e42c75f9374a817d556688617f7f164dee8e6a90d05e5072f72a7",
+      "bytes": 1773
+    },
+    {
+      "path": "/workspace/work/t88-green.log",
+      "sha256": "e62148d2fd7da7e545641aaa04225c3e18634c666ae3494472612563ced0b30b",
+      "bytes": 3311
+    }
+  ],
+  "initialAuditPreserved": true,
+  "expectedAuditDelta": [
+    {
+      "path": "packages/relay/src/local-pool.ts",
+      "auditSha256": "279a8cbd10feea0ed66200635f4f1c02927c837b72eaea8d88ff5ca7f5f1ce7e",
+      "repairedSha256": "974d3b462d9175955a1283c340c8d4780e75c2aca612248d41b6bef5333b48b0"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "auditSha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e",
+      "repairedSha256": "04bcee7a1850f8473a62a51611a1d88243b464564969648ac9513ad00d6bf5da"
+    }
+  ],
+  "sourceOrLedgerEditsOutsideFourOwnedFiles": false,
+  "commits": false,
+  "ownershipReturnedToRoot": true
+}

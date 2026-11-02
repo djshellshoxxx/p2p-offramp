@@ -1,0 +1,69 @@
+{
+  "task": "T88",
+  "status": "READY_FOR_INDEPENDENT_ROOT_REVIEW",
+  "sourceHeadAtFreeze": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "frozenAtUtc": "2026-11-02T16:10:57.768352+00:00",
+  "ownedFiles": [
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "sha256": "3b875a4414fa2c62f7e7f5485a64985d489d4ab30f1b45dbd727c0372599b6a5",
+      "baselineSha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "sha256": "66f77213feeebcf36a0e0bf33599ec853998e79ed79e4eb4eca818fb040e1db6",
+      "baselineSha256": "503b5efbf8a5a9dc83a242ea40e40712d05bcf7652da7492d0b1c1374e920bc6"
+    }
+  ],
+  "finding": {
+    "auditId": "T38-C:C-P2-1",
+    "severity": "P2",
+    "baselinePath": "packages/wallet/src/evm-execution.ts",
+    "baselineLines": [
+      94,
+      98
+    ],
+    "defect": "The last scope guard ran before foreign final-account reflection and the provider.request property lookup, allowing synchronous scope retirement there followed by invocation of the send-capable provider stub. The module is a local test-only capability, excluded from shipped App.",
+    "callerReviewed": "scripts/test-local-evm.mjs constructs this execution capability from local provider ports, exact session, canonical validator and journal; no shipped default app activation."
+  },
+  "repair": [
+    "Select and canonicalize only the own data descriptor for accounts[0]; never invoke an account accessor. Apply this snapshot to pre-marker and final checks.",
+    "Recheck current/abort immediately after final account reflection, before subsequent reads.",
+    "Capture provider plus request function before the final guard; use Reflect.apply with the captured receiver/function, avoiding a foreign lookup or request.call property after the guard.",
+    "Keep reserve/markSending/unknown marker semantics, single physical admission, hash persistence, no resend and fixed errors unchanged."
+  ],
+  "verification": {
+    "command": "node --test packages/wallet/test/evm-execution.test.mjs",
+    "managedIpcCapability": true,
+    "defaultNodeTestIsolation": true,
+    "red": {
+      "exitCode": 1,
+      "tests": 14,
+      "pass": 11,
+      "fail": 3,
+      "raw": "final-tests.RED.log",
+      "observedSendStubCallsPerNegativeCase": 1
+    },
+    "green": {
+      "exitCode": 0,
+      "tests": 14,
+      "pass": 14,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "raw": "final-reflection.GREEN.log",
+      "sendStubCallsPerNegativeCase": 0,
+      "rejectedAccountAccessorInvocations": 0,
+      "durableState": "broadcast-unknown",
+      "explicitRetryAfterRestoringValidProvider": "CONFLICT; no send stub call"
+    },
+    "negativeCases": [
+      "Final account accessor rejection without invocation",
+      "Final account Proxy reflection synchronously retires scope",
+      "Final request capability getter synchronously retires scope"
+    ],
+    "otherChecks": "git diff --check passed; no whole suite, live provider, wallet, chain or external action."
+  },
+  "evidenceScope": "All provider methods are in-memory synthetic stubs returning literal fake hashes; no signing, broadcast, RPC endpoint or real economic action occurred. Existing happy path and marker/cancel/persistence/physical-drain regressions remain passing.",
+  "next": "Root independent source/test review; resume remaining T38-C source review and update final inventory for the authorized repair. No commits."
+}

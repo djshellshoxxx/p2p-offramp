@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { ValidationError } from '../src/vault.ts';
 const fixture = JSON.parse(await readFile(new URL('../../storage/test/fixtures/vault-python-v1.json', import.meta.url)));
 const api = await import('../src/backup.ts').catch(error => { if (error.code === 'ERR_MODULE_NOT_FOUND') return {}; throw error; });
 const fn = name => { assert.equal(typeof api[name], 'function', `missing ${name}`); return api[name]; };
@@ -63,4 +64,26 @@ test('G03 malformed object trees cannot amplify a bounded input into an unbounde
   Object.create = (...args) => { if (args[0] === null) objects++; return original(...args); };
   try { invalid(() => parse(hostile)); assert.ok(objects <= 4, `allocated ${objects} objects before rejecting a four-object format`); }
   finally { Object.create = original; }
+});
+
+test('G03 foreign reflection failures become fresh fixed errors without reading exception getters', () => {
+  const parse = fn('parseBackupBytes'); let reads = 0;
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const dataCode = new ValidationError('LIMIT_EXCEEDED');
+  Object.defineProperty(dataCode, 'message', { get() { reads++; throw Error('SECRET message'); } });
+  const getterCode = new ValidationError();
+  Object.defineProperty(getterCode, 'code', { get() { reads++; throw Error('SECRET code'); } });
+  const unknownCode = new ValidationError(); unknownCode.code = 'SECRET';
+  const hostile = new Proxy(dataCode, { getPrototypeOf() { throw Error('SECRET reflection'); } });
+  for (const [foreign, expected] of [[revoked.proxy, 'INVALID_INPUT'], [dataCode, 'LIMIT_EXCEEDED'],
+    [getterCode, 'INVALID_INPUT'], [unknownCode, 'INVALID_INPUT'], [hostile, 'INVALID_INPUT']]) {
+    const input = new Proxy(new Uint8Array(1), { getPrototypeOf() { throw foreign; } });
+    let previous;
+    for (let attempt = 0; attempt < 2; attempt++) assert.throws(() => parse(input), error => {
+      assert.ok(error instanceof ValidationError); assert.equal(error.code, expected);
+      assert.equal(error.message, 'Invalid vault data.'); assert.notEqual(error, foreign); assert.notEqual(error, previous);
+      previous = error; return true;
+    });
+  }
+  assert.equal(reads, 0);
 });

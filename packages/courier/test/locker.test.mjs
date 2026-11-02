@@ -61,6 +61,27 @@ test("unknown profile refuses before any action; uncertain unlock cannot be sent
   assert.equal(v.physicalCustodyResolved, false);
   assert.equal(v.economicAuthority, false);
 });
+test("a prepared command can start only strictly before its original expiry", () => {
+  const live = setup();
+  val(live.model.prepare(0, command()));
+  live.setTime(199);
+  const sent = val(live.model.markSendStarted(1));
+  assert.equal(sent.phase, "unknown");
+  assert.equal(sent.economicAuthority, false);
+  fail(live.model.markSendStarted(2), "CONFLICT");
+  live.verifier.close();
+
+  for (const at of [200, 201]) {
+    const f = setup();
+    const prepared = val(f.model.prepare(0, command()));
+    f.setTime(at);
+    fail(f.model.markSendStarted(1), "EXPIRED");
+    assert.deepEqual(val(f.model.inspect()), prepared);
+    fail(f.model.markSendStarted(1), "EXPIRED");
+    assert.deepEqual(val(f.model.inspect()), prepared);
+    f.verifier.close();
+  }
+});
 test("authenticated-looking imported status is not proof; counter rollback/conflicting sensors/jam quarantine without completing delivery", async () => {
   const f = setup();
   val(f.model.prepare(0, command()));

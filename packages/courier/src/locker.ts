@@ -117,6 +117,7 @@ export function createLockerModel(options: {
       status: string | null = null,
       phase: LockerView["phase"] = "idle",
       commandId: string | null = null,
+      commandExpiresAt = 0,
       reads = 0,
       started = 0,
       lastNow = -1;
@@ -175,6 +176,7 @@ export function createLockerModel(options: {
             return stop("UNAUTHORIZED");
           if (now() >= Number(c.expiresAt)) return stop("EXPIRED");
           commandId = hex(c.commandId);
+          commandExpiresAt = Number(c.expiresAt);
           phase = "prepared";
           revision = increment(revision);
           return view();
@@ -183,7 +185,9 @@ export function createLockerModel(options: {
         run(() => {
           expect(expectedRevision);
           if (phase !== "prepared") return stop("CONFLICT");
-          started = now();
+          const at = now();
+          if (at >= commandExpiresAt) return stop("EXPIRED");
+          started = at;
           phase = "unknown";
           revision = increment(revision);
           return view();
