@@ -1,0 +1,92 @@
+# Local arbitration reference models
+
+This optional package implements bounded diagnostic calculations from Section 04.
+Every projection states `diagnosticOnly: true` and `economicAuthority: false`.
+It is absent from the default app, registry and UI. There is no native custody
+contract, provider, wallet, signing, network, transfer, credit or certificate API.
+A calculated outcome cannot affect any existing basic trade.
+
+The reference clock uses the specified **maximum-duration baseline**: 12h
+randomness, then 24h each for acceptance, evidence, commit and reveal, plus one 24h
+initial appeal window. Round 1 begins at the fixed initial appeal boundary and
+has no further appeal. The complete schedule ends at 10 days; the immutable hard
+stop is 14 days, followed by the separate 24h accounting grace. These are eligibility
+calculations against supplied chain time; halted chains and transaction inclusion
+provide no wall-clock liveness guarantee. A deployment choosing shorter reviewed
+stage durations needs its own exact policy profile.
+
+`calculateTally` enumerates counts only and is always marked unclosed. The local
+round model requires trusted current-generation, chain-time and actor-authentication
+functions. Its claimed panel is bounded to 5/9 distinct jurors/voting addresses/
+operator groups. One commit, a matching evidence-root-bound reveal and fixed
+half-open windows are enforced. An invalid reveal does not consume its slot;
+all early votes or a majority still cannot close before revealEnd. Valid abstain
+counts toward quorum but not direction. Initial quorum/direction thresholds are
+4/3; appeal thresholds are 6/5. No caller boolean or JSON certificate substitutes
+for an authentication callback, and even trusted callbacks confer only local
+reference context, not evaluated native authorization.
+
+The draft model freezes an ordered pool of at most 4,096 IDs and chooses 3N candidates
+without replacement. It uses uint256 rejection sampling with at most 256 total word
+attempts and 64 attempts per batch; exhaustion is inconclusive with no biased fallback.
+A full 3N draw requires at least 3N eligible entries. Candidate accepts are bound,
+once-only and closed in frozen candidate order, independent of arrival order;
+only the first N accepted candidates are seated. Prior-round seats must already
+be excluded from the authenticated appeal snapshot; the model refuses to silently
+change a supplied pool/root. The snapshot port must vouch for a timely, first,
+correctly bound seed and eligible group-deduplicated pool. The deterministic word
+port is explicit: **the specification has not pinned the draft hash domain/ABI**.
+The module therefore generates no random word, provider request or proof of VRF
+fulfillment. Fixture words do not establish unbiased real-world randomness.
+
+The appeal model accepts only the two bound trader roles, requires the already
+bound reserve, permits one appeal and asks a trusted local port to close a delayed
+initial round. Timeouts are checked at their original fixed boundaries. Conclusive
+appeal results replace round 0; an unavailable/inconclusive appeal preserves a
+conclusive round 0 result, otherwise seller fallback applies. At hardStop a partial
+unclosed round is never counted. Contradictory closed observations refuse; loss of
+current-generation or canonical read availability preserves uncertainty. A final
+local projection cannot be reopened. These callbacks are trusted model inputs,
+not chain readers, provider attestations or imported evidence verification.
+
+Fee and bond functions are pure checked uint256 BigInt projections. Both rounds'
+14 seat fees, provider reserves and execution cap remain separate from principal.
+Valid reveals earn equal fees regardless of direction; claims cannot exceed
+credits. The bond quote checks the supplied age against 7 days, subtracts supplied
+existing reservations, and assigns each seated operator weight 1. Only accepted, seated, commit-enabled,
+nonrevealing seats receive the floored 10% penalty projection. Minority, abstain,
+nonseated and never-started rounds do not. No arithmetic function records a
+reservation, accrues a native credit, proves solvency or executes a penalty;
+those exact custody/replay adapters remain future work.
+
+The Vote function implements only the exact published fixed-width ABI tuple and
+Keccak type hash. It publishes every word and preimage for **caller-supplied public
+test inputs**. It does not generate or retain a live salt, sign a vote, authenticate
+a juror or persist sealed recovery material. Real vote salt needs fresh trusted
+CSPRNG generation and encrypted lifecycle/journaling before any broadcast, which
+are not implemented here. The tuple deliberately follows the specified fields;
+escrow/trade mapping is inherited from an eventual native case mapping, not
+silently added to the Vote preimage.
+
+`test/fixtures/vote-cast-vectors.json` is independently generated by official
+pinned Foundry cast 1.5.1, separate from the TypeScript encoder and pinned Noble
+Keccak implementation. It contains three fixed public synthetic fixtures,
+including max uint256. The generator and every 320-byte ABI preimage/intermediate
+word/hash are retained. No dependency or cryptographic review is newly claimed.
+
+The exact remaining hash, evidence, native-certificate and provider gaps are in
+[DECISIONS.json](DECISIONS.json). These are distinct from the implemented pure
+math. No guessed evidence tag, signature profile, administrator seed, native ABI
+or custody authority is supplied to fill a gap.
+
+Run focused checks with:
+
+```sh
+node --import ./scripts/test-support/register-tsx.mjs --test packages/arbitration/test/*.test.mjs
+```
+
+Tests cover all 276 count partitions, exact cast byte vectors, role/chain/case/
+round/root mutations, timing edges, replay, cancellation/reentrancy, sampler
+bounds, one-appeal/fallback combinations and BigInt conservation. They supply
+synthetic trusted ports and claim no provider interoperability, named independent
+cryptographic review, native settlement or production qualification.
