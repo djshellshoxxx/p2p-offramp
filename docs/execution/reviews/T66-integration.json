@@ -1,0 +1,7 @@
+{
+  "task": "T66",
+  "owned": 9,
+  "typeOnlyFacadeSha256": "79ea79c49b2d035a4b21bc2dffb2ebe69bba7de555acf2f4ef6aca4f9643750e",
+  "drift": [],
+  "qualification": "Final composition pending T38; original approval does not cover new dependencies or production adoption."
+}
