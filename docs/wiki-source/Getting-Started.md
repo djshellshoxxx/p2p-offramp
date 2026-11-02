@@ -1,6 +1,9 @@
 # Getting started
-**Draft user guide — application not yet implemented.**
 
-Proposed workflow: 1. Review supported jurisdiction, payment rail, token and chain. 2. Connect a compatible wallet, check origin and chain. 3. Read fees, deadlines and counterparty risks. 4. Create or accept a trade, using QR/import where appropriate. 5. Fund escrow only after verifying the wallet's amount and destination. 6. Verify fiat settlement using the defined evidence process. 7. Complete release, refund or dispute according to escrow state. 8. Export an encrypted receipt if desired.
+Implemented local preview: create an encrypted profile, unlock/lock, inspect opaque inventory, export an explicitly unchecked encrypted backup, and restore to a separate fresh-key profile. Check recovery before relying on a backup. Origin changes may isolate browser storage.
 
-Never enter a seed phrase into the website, QR form or support chat. Fiat reversals and chargebacks may occur even after a screenshot or bank notification. No feature described here is guaranteed to exist until implementation and tests are complete.
+Offline review is available with an explicitly loaded synthetic demo registry. Checking terms is not acceptance, funding or fiat proof. The default build has no approved release key. Local Anvil tests use public development keys and cannot qualify a network deployment.
+
+Manual settlement: seller alone releases before expiry after confirming fiat receipt; at or after expiry refund goes to the stored seller. A dishonest seller may withhold release after receiving fiat. Screenshots, chat, buyer assertions and bank notifications do not guarantee irreversible fiat settlement. Review network fees, token decimals, deadlines and full addresses. Protocol fees must never be inferred from a price example.
+
+Never disclose a seed phrase to a website, QR form or support contact. [Recovery](Privacy-and-Recovery.md) and [wallet safety](Wallet-and-QR-Safety.md).
