@@ -418,3 +418,46 @@ plus g24-coverage.json. Reuse existing normative ADR/evaluator semantics. Map al
 evidence classes, remaining acceptance, owner and next action. No invented
 candidate/report success, reviewer approval, production/provider or physical-device
 facts. Final root source/check evidence is a later explicit dependency.
+
+## T63–T72 continuation ownership
+
+Root owns commits, package/CI enrollment, metadata integration and ledgers. T63
+remaining_liquidity owns scripts/reputation and two reputation evidence docs;
+remaining_privacy independently reviews. Original vulnerable SDK observations
+stay passive; experimental overrides cannot inherit vendor support. T64
+continue_chat owns six assurance/drill records; review_delivery_docs checks all
+rows/anchors. Root refreshes strictly observed hashes after source freeze.
+T65 chain_reader owns eight journey/fixture paths; remaining_liquidity reviews
+the original 8+11 frozen graph and later actual shared composition.
+
+T66 completion_requirements is read-only until exact G15 admission. Reuse actual
+G05/manifest/locator services, preserve null-pin/no-fetch and monotonic accepted
+sequence. No missing rotation/archive/deployment contract may be invented.
+
+T67 retention_integration owns storage retention service/test; schema runtime
+and index plus new retention test; app-services; runtime app-runtime, endpoint
+and pending metadata; Pages, messages, source English and new RetentionPanel;
+new native-retention module, retention Worker/native tests and browser fixtures;
+narrow existing saved-review deletion tests, native reconcile fixture and
+TradePages delete-to-Settings navigation. G01 transfer is limited to identity
+service/index and new history-retention test. The purpose-specific Worker-private
+port returns authenticated history metadata only; no key getter, generic decrypt
+or callbacks with secrets. Offline planning never invokes native authority;
+explicit review makes zero journal writes for already-terminal records. Native
+closure protects unknown/nonzero canonical pending payout credits. Opaque
+previews bind profile/revision/session/selection/age; deletion is one consented
+<=256 CAS. Default absent authority stays offline. Old direct saved-review
+removal cannot bypass review. No T65 journey edits are authorized.
+
+T68 waits for T67 UI/catalog and T65 signing interfaces to freeze. T69 changes
+only meetup tests/fixture and one README paragraph; runtime is unchanged. T70
+owns one inert tooling JSON with no speculative engine selector. T71 preserves
+its failed source snapshot; reruns need a new corrected frozen revision.
+
+T72 audit_domain_transport owns NEW proof-inputs only: bounded structural
+unverified parsers with strict JSON and detached bytes. Local safety conventions
+are explicit; semantic catalogs remain empty. No provider/bank/rail/circuit,
+commitment selection, VerifiedReceipt or economic authority is admitted. Root
+enrolls commands after a different reviewer approves exact frozen bytes.
+
+T73 remaining_privacy owns actual native page-zoom investigation and new verification-only runner if executable tooling works. Device scale/pinch/viewport changes cannot stand in for native browser zoom; no product/locale edits without a coordinated transfer. Root reviews independently.

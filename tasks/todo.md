@@ -132,15 +132,15 @@ is explicitly recorded. Each implementation needs a different reviewer.
 | T54 | DONE | audit_evm: inert assurance/role/jurisdiction/attack/incident validators and bounded actual-source evidence; independent13 cases+21hostile after tuple/text/bounds repairs, source540d18e; no operational facts/legal approval invented |
 | T55 | DONE | audit_domain_transport: native read-only observations and G14/G05 transitions; independent71 cases+4 repaired probe classes, sourcebd706fe; broker7f5c8c5, default optional boundaries retained |
 | T56 | DONE | branch_inventory: remaining specified meetup RTC/directory/geofence/map local models and actual encrypted G02 replay/history; frozen55 cases; initial audit_evm findings plus root repaired-source review,58 cases/92 oracle vectors; sourcea6730a4; native/provider/undefined wire gates retained |
-| T57 | IN_REVIEW | continue_chat: frozen5-path unsigned staging, actual5 cases/3 Chromium groups/39assets; independent branch_inventory review; no signing/publication/deployment |
+| T57 | DONE | Unsigned staging d00ae85; root independent5 source paths/5 cases/3 native groups/39assets; no signing or host approval. |
 
 
-| T58 | IN_PROGRESS | completion_requirements: read-only bounded native proof Worker/WASM intake; root must approve exact substantive interface before implementation; no invented provider proof or CSP weakening |
-| T59 | IN_REVIEW | remaining_privacy: approved new privacy-controls only, actual independent G02 decoy/duress transition and encrypted sweep reminders; no hidden credential bootstrap or transfer authority; distinct reviewer pending |
+| T58 | DONE | Proof Worker d3cdc95; independent17 cases/13 native closures after two repairs; T67 shared composition recheck pending. |
+| T59 | DONE | Native decoy/reminders67358e2; independent root32 cases/actual two-page G02 after three repairs; no executor. |
 | T60 | DONE | remaining_liquidity: independent18 cases/4000 extra conservation steps+160 fixture steps, source59a6fa0; bounded local model only, native profiles remain undefined |
-| T61 | IN_PROGRESS | chain_reader: approved five-path actual canonical refinement/native trace/solc-SMT query pipeline; pinned local Z3 tool, UNKNOWN preserved; no contract/ABI edits or fuzz-as-proof claim |
+| T61 | DONE | Source81fdea7; independent root7 ordinary cases and actual pinned pipeline after process cleanup repair; four guard-only proofs, three whole-target UNKNOWN, exact native model gap retained. |
 
-| T62 | IN_PROGRESS | continue_chat: approved three-file architecture/G24 coverage reconciliation; exact23requirements/10decision topics, source-bound local evidence and explicit unresolved gates, no new evaluator |
+| T62 | DONE | Architecture/G24 source693c66c; independent23 requirements/10 topics/78 source hashes/70 anchors; no qualification transfer. |
 
 T34 transfers ownership of backup-verification-related schema/facade/runtime/UI
 edits to chain_reader. Verification authenticates exact exported bytes against the
@@ -151,3 +151,24 @@ switch, timeout and disposal clear it. Async freshness recheck is required befor
 using it; cached UI metadata is explicitly revision-bound, never funds readiness.
 Export/unlock/restore/imported JSON cannot create the fact. Existing native crypto,
 serialized leases and bounded recovery slot are reused.
+
+## Continued autonomous reassessment — 2026-11-02
+
+| Task | Status | Owner / exclusive scope / acceptance |
+| --- | --- | --- |
+| T63 | DONE | Source78f77fe; independent remaining_privacy24 actual isolated proof controls/8 cases/audit0/provenance/cancel/cleanup. Original17 affected packages preserved; experimental Node-only profile, no adoption. |
+| T64 | DONE | Source76c2005; independent review_delivery_docs30 specified rows/94 anchors/58 hashes/default-isolation7 cases/four partial drills; historical T49 scope and final shared integration explicit. |
+| T65 | DONE | Source7bb8126; independent remaining_liquidity12 cases/types/boundaries/actual11 native/ERC20 sends plus recovery probes on exact8+11 graph. T67 current composition remains pending. |
+| T66 | IN_PROGRESS | completion_requirements read-only supported-asset G15 update intake; exact source admission pending; null maintained pin stays offline |
+| T67 | IN_PROGRESS | retention_integration native Worker/UI review; purpose-specific G01 port approved; opaque previews and one <=256 CAS; unknown/nonzero payout credits protected |
+| T68 | READY | root to assign actual G23 endpoint/signing disclosure after T65/T67 interfaces freeze; no new authority |
+| T69 | DONE | Meetup verification b11e745; independent58 cases/native CAS and caps;100000 native samples/tolerance0.01;13 runtime files unchanged |
+| T70 | DONE | Sourcea685f8f; root independently matched native Chromium/version/Playwright metadata/absent pinned engines and exact JSON. Firefox/WebKit remain unmeasured; no bypass or fake rejection. |
+| T71 | INTEGRATING | Fresh693c66c install/cache/tools/types pass; foundation1441/1442 stopped on stale assurance hash; preserve failed snapshot and retry new source |
+| T72 | IN_REVIEW | audit_domain_transport seven NEW proof-inputs paths frozen;15 hostile cases/scoped types/boundaries pass. Root distinct review pending; opaque unverified data, no selected semantic/crypto profile. |
+
+T38 remains active through final full audit, exact-head checks and guarded source
+delivery. T67 changes require T58/T65 compatibility rechecks and strict
+documentation bindings. Historical approvals do not cover new dependency bytes.
+
+| T73 | IN_PROGRESS | remaining_privacy investigates native desktop page-zoom via owned local browser API; profile default-zoom probe had no effect and is not qualification. Verification-only new runner admission; no product edits without transfer. |

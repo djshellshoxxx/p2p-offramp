@@ -5,7 +5,7 @@ You are the lead engineering coordinator for `djshellshoxxx/p2p-offramp`. Execut
 This prompt is being executed in the 2026-11-02 continuation. Its starting-point
 discussion below preserves the original PR24 snapshot. Read the current task
 ledger and scoped review receipts before choosing work: T33 onward now contains
-implemented slices and active follow-on tasks through T62. Neither this historical
+implemented slices and active follow-on tasks through T73. Neither this historical
 snapshot nor an old coverage status reopens accepted work. Current unmerged source,
 pending reviews and final delivery remain the lead agent's responsibility.
 
