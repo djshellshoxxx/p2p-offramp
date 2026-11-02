@@ -99,8 +99,8 @@ test('spherical blur handles deterministic zero/near-one uniforms, dateline and 
   assert.throws(() => blurMarker(source, 500, E, 0, 900_000, () => { throw Error('private RNG error'); }));
   assert.throws(() => blurMarker(claim({ lat: 86 }), 500, E, 0, 900_000, bytes => bytes.fill(0)));
 });
-test('bounded actual WebCrypto blur distribution diagnostic has approximately area-uniform squared radius', () => {
-  const source = claim(), radius = 500, samples = 10_000; let squared = 0;
+test('MEET01 native WebCrypto blur diagnostic uses 100000 samples and squared-radius mean tolerance 0.01', t => {
+  const source = claim(), radius = 500, samples = 100_000; let squared = 0;
   // Independent unit-sphere central-angle calculation, separate from the sampling destination formula.
   for (let i = 0; i < samples; i++) {
     const point = blurMarker(source, radius, E, 0, 900_000, bytes => crypto.getRandomValues(bytes));
@@ -108,7 +108,9 @@ test('bounded actual WebCrypto blur distribution diagnostic has approximately ar
     const d = 6_371_008.8 * Math.atan2(Math.hypot(Math.sin(lon) * Math.cos(lat), Math.sin(lat)), Math.cos(lat) * Math.cos(lon));
     assert.ok(d <= radius + 2); squared += (d / radius) ** 2;
   }
-  assert.ok(Math.abs(squared / samples - 0.5) < 0.03, String(squared / samples));
+  const empiricalMean = squared / samples;
+  t.diagnostic(JSON.stringify({ samples, radiusM: radius, empiricalMean, expectedMean: 0.5, tolerance: 0.01, randomness: 'native-WebCrypto.getRandomValues', runtime: process.version }));
+  assert.ok(Math.abs(empiricalMean - 0.5) < 0.01, String(empiricalMean));
 });
 test('hostile properties, unknown fields and future versions fail without invoking accessors', () => {
   let getters = 0; const hostile = Object.defineProperty({}, 'tradeHash', { enumerable: true, get() { getters++; return H; } });

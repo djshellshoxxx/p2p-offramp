@@ -86,14 +86,20 @@ Focused verification:
 node --import ./scripts/test-support/register-tsx.mjs --test packages/meetup/test/*.test.mjs
 ```
 
-The tests use actual G02/WebCrypto over a synthetic encrypted memory store and an
-explicit exclusive coordinator; they are not native Web Locks/IndexedDB/browser
-qualification. The independent Python integer-grid oracle supplies 1,024 fixed
-points / 4,096 geohashes and conventional public examples. Its generator and exact
-provenance are in `test/fixtures`; it does not reuse the midpoint implementation.
-The bounded actual WebCrypto 10,000-sample diagnostic checks squared-radius behavior
-and independent spherical displacement. It is a distribution diagnostic, not a
-privacy proof or the specification's prospective 100,000-sample release evidence.
-Sensor/TURN/map/proof integration, actual origin-ledger binding, real multi-browser
-coordination and named independent review remain qualification work. Core trading
-and all default application features stay unchanged and disabled as configured.
+The focused tests use actual G02/WebCrypto over a synthetic encrypted memory store
+and an explicit exclusive coordinator. The independent Python integer-grid oracle
+supplies 1,024 fixed points / 4,096 geohashes and conventional public examples; its
+generator in `test/fixtures` does not reuse the midpoint implementation. The MEET01
+diagnostic draws 100,000 native WebCrypto samples, checks independent spherical
+displacement and requires mean squared radius within 0.01 of 0.5. This is a
+statistical diagnostic, not a privacy proof. Separately,
+`node packages/meetup/test/origin-ledger-browser.mjs` exercises actual Chromium,
+IndexedDB and native Web Locks with two concurrent documents sharing one explicitly
+designated local fixture ledger. It checks sticky reuse, the 20-request last-unit
+race, conservative document-loss recovery, hourly/daily/lifetime caps, queued-lock
+cancellation, foreign-record preservation and refusal to reset corrupt state.
+Reopening is explicit; stale native sessions are not automatically retried and no
+instant write broadcast is claimed. Manual claims, clocks and consent ports remain
+synthetic. This local proof does not qualify production origin binding, location
+truth, sensors, TURN, maps, proof providers, other browsers or physical devices.
+Core trading and default application features stay disabled as configured.
