@@ -1,0 +1,60 @@
+{
+  "task": "T94",
+  "reviewer": "/root",
+  "status": "ACCEPTED_DEVELOPMENT_ORACLE_ENROLLMENT",
+  "files": [
+    {
+      "path": "scripts/tests/requirements-crypto.txt",
+      "sha256": "fd3fcbe314d2f7eae173805009a1b40f214fb8ed839905a98228ec4eebbed911"
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "sha256": "66d31387cf7572a6d968783027ab97d176ceccfcbf5a72cdbfe22803b18b31cc"
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "sha256": "6cd74219c7d00d1c69ca78dec308c409ada983e5e4a59c2b836dd53a97223111"
+    },
+    {
+      "path": "scripts/tests/test_g16_vectors.py",
+      "sha256": "3be0db984cb68f4c977ebfb101a25083bffaa41e9f1a278940c1d15e06183782"
+    }
+  ],
+  "semanticChecks": [
+    "Exact cryptography50/cffi2.1.1/pycparser3.0 closure with8 official compatible wheel hashes; binary-only public PyPI, no optional runtime/browser dependency",
+    "Both original Python3.12 spec lanes preserve existing action pins/steps and add only isolated hash-pinned test-tool install",
+    "All4 real fixture/oracle tests are unconditional; old optional skip was removed rather than accepted as CI success",
+    "Fresh isolated venv has no system site packages; installed EC/OpenSSL modules resolve to owned public verified wheels, source/hash/closure failure controls retained"
+  ],
+  "independentVerification": {
+    "command": "/workspace/work/t94-python-oracle-ci.evidence/venv/bin/python -I -m unittest discover -s scripts/tests -p test_g16_vectors.py -v",
+    "tests": 4,
+    "pass": 4,
+    "fail": 0,
+    "skip": 0,
+    "actualSignatureAndNegativeControls": true
+  },
+  "authorReceiptSha256": "676525dfcc89f6d51036e4f1a8aaf15cf5483356c34210d5ad08aca0033a3344",
+  "requirementsPlatform": "CPython3.12 Ubuntu amd64; no unsupported platform/source-build claim",
+  "licenses": [
+    {
+      "name": "cryptography",
+      "version": "50.0.0",
+      "expression": "Apache-2.0 OR BSD-3-Clause"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "expression": "MIT-0"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "expression": "BSD-3-Clause"
+    }
+  ],
+  "limits": [
+    "Wheel/provenance/license records and independent fixture equality do not constitute professional crypto/security review or legal clearance",
+    "Actual hosted spec lanes remain subject to final exact-head CI; no scanner, quality gate, trust root or production runtime change"
+  ]
+}
