@@ -8,6 +8,21 @@ type IdentityVault = VaultService & VaultSessionAuthority;
 interface Job { epoch: number; lease: VaultSessionLease; controller: AbortController; buffers: Set<Uint8Array>; kept: boolean; committed: boolean; revision?: number; reference?: IdentityReference; handle?: HandleState; }
 interface HandleState { handle: IdentityHandle; session: Readonly<VaultSession>; lease: VaultSessionLease; profileId: string; recordId: string; publicKey: string; active: boolean; }
 export interface IdentityServiceOptions { readonly provider?: MessagingIdentityProvider; readonly lifecycle?: boolean; readonly now?: () => number; }
+function errorCode(error: unknown, fallback: IdentityErrorCode): IdentityErrorCode {
+  try {
+    if (!(error instanceof IdentityError)) return fallback;
+    const property = Object.getOwnPropertyDescriptor(error, 'code');
+    const code: unknown = property && 'value' in property ? property.value : undefined;
+    return code === 'LOCKED' || code === 'CANCELLED' || code === 'UNSUPPORTED_PROVIDER' || code === 'INVALID_IDENTITY' || code === 'STORAGE_UNAVAILABLE' || code === 'CONFLICT' || code === 'LIMIT_EXCEEDED' ? code : fallback;
+  } catch { return fallback; }
+}
+const signalAborted = Object.getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!;
+const addSignalListener = EventTarget.prototype.addEventListener;
+const removeSignalListener = EventTarget.prototype.removeEventListener;
+function aborted(signal: unknown): boolean {
+  if (signal === undefined) return false;
+  try { return Reflect.apply(signalAborted, signal, []) as boolean; } catch { throw new IdentityError('INVALID_IDENTITY'); }
+}
 function failure(code: IdentityErrorCode): IdentityResult<never> { return { ok: false, error: Object.freeze({ code, messageKey: `identity.error.${code.toLowerCase()}` }) }; }
 function fromVault<T>(result: Result<T>): T {
   if (result.ok) return result.value;
@@ -57,8 +72,16 @@ export class MessagingIdentityService {
     this.#deadline = this.#lastTime + 5 * 60_000;
     this.#idleTimer = setTimeout(() => { this.#idleTimer = undefined; this.lockAll(); }, 5 * 60_000);
   }
-  #wipe(job: Job): void { for (const bytes of job.buffers) bytes.fill(0); }
-  #revoke(state: HandleState): void { if (!state.active) return; state.active = false; this.#handles.delete(state.handle); state.lease.dispose(); this.#resetIdle(); }
+  #wipe(job: Job): void {
+    for (const bytes of job.buffers) {
+      try { Reflect.apply(Uint8Array.prototype.fill, bytes, [0]); }
+      catch { /* A malformed provider buffer cannot prevent the remaining cleanup. */ }
+    }
+  }
+  #disposeLease(lease: VaultSessionLease): void {
+    try { lease.dispose(); } catch { /* Local revocation and operation results do not depend on observer cleanup. */ }
+  }
+  #revoke(state: HandleState): void { if (!state.active) return; state.active = false; this.#handles.delete(state.handle); this.#disposeLease(state.lease); this.#resetIdle(); }
   #guard(job: Job): Readonly<VaultSession> {
     if (!this.#idleCurrent()) throw new IdentityError('LOCKED');
     const session = job.lease.current();
@@ -74,14 +97,16 @@ export class MessagingIdentityService {
     if (this.#disposed) return failure('LOCKED');
     let job: Job | undefined; let remove = (): void => undefined; let release = (): void => undefined; let tail: Promise<void> | undefined; let profileId: string | undefined;
     try {
+      aborted(signal);
       const controller = new AbortController();
       const lease = fromVault(this.#vault.captureSession(session, () => {
         controller.abort(); if (job) { this.#wipe(job); if (job.handle) this.#revoke(job.handle); }
       }));
       job = { epoch: this.#epoch, lease, controller, buffers: new Set(), kept: false, committed: false };
       const abort = (): void => { controller.abort(); if (job) this.#wipe(job); };
-      signal?.addEventListener('abort', abort, { once: true }); if (signal?.aborted) abort();
-      remove = () => signal?.removeEventListener('abort', abort);
+      remove = () => { try { if (signal !== undefined) Reflect.apply(removeSignalListener, signal, ['abort', abort]); } catch { /* Cleanup cannot expose caller exceptions. */ } };
+      if (signal !== undefined) Reflect.apply(addSignalListener, signal, ['abort', abort, { once: true }]);
+      if (aborted(signal)) abort();
       profileId = this.#guard(job).profileId;
       this.#jobs.add(job);
       const previous = this.#tails.get(profileId) ?? Promise.resolve();
@@ -92,12 +117,12 @@ export class MessagingIdentityService {
     } catch (input) {
       if (job?.committed && committedFallback) return { ok: true, value: committedFallback(job) };
       if (job?.handle) this.#revoke(job.handle);
-      if (job) { try { this.#guard(job); } catch (guardError) { return failure(guardError instanceof IdentityError ? guardError.code : 'LOCKED'); } }
-      const code = input instanceof IdentityError ? input.code : 'STORAGE_UNAVAILABLE';
+      if (job) { try { this.#guard(job); } catch (guardError) { return failure(errorCode(guardError, 'LOCKED')); } }
+      const code = errorCode(input, 'STORAGE_UNAVAILABLE');
       return failure(code);
     } finally {
-      if (job) { this.#wipe(job); job.buffers.clear(); this.#jobs.delete(job); if (!job.kept) job.lease.dispose(); }
-      remove(); release(); if (profileId && this.#tails.get(profileId) === tail) this.#tails.delete(profileId);
+      if (job) { this.#wipe(job); job.buffers.clear(); this.#jobs.delete(job); if (!job.kept) this.#disposeLease(job.lease); }
+      try { remove(); } finally { release(); if (profileId && this.#tails.get(profileId) === tail) this.#tails.delete(profileId); }
     }
   }
   async #synchronize(job: Job): Promise<Readonly<VaultSession>> {
@@ -204,7 +229,7 @@ export class MessagingIdentityService {
   }
   async publicIdentity(handle: IdentityHandle): Promise<IdentityResult<string>> {
     let state: HandleState;
-    try { state = this.#state(handle); } catch (error) { return failure(error instanceof IdentityError ? error.code : 'INVALID_IDENTITY'); }
+    try { state = this.#state(handle); } catch (error) { return failure(errorCode(error, 'INVALID_IDENTITY')); }
     return this.#run(state.session, undefined, async job => {
       const identity = await this.#load(job, state.recordId); this.#state(handle); this.#guard(job);
       if (identity.state !== 'active' || identity.publicKey !== state.publicKey) throw new IdentityError();
@@ -213,7 +238,7 @@ export class MessagingIdentityService {
   }
   async retire(handle: IdentityHandle): Promise<IdentityResult<void>> {
     let state: HandleState;
-    try { state = this.#state(handle); } catch (error) { return failure(error instanceof IdentityError ? error.code : 'INVALID_IDENTITY'); }
+    try { state = this.#state(handle); } catch (error) { return failure(errorCode(error, 'INVALID_IDENTITY')); }
     return this.#run(state.session, undefined, async job => {
       const record = await this.#load(job, state.recordId); this.#state(handle);
       if (record.state !== 'active' || record.publicKey !== state.publicKey) throw new IdentityError();
@@ -226,7 +251,7 @@ export class MessagingIdentityService {
   }
   lockAll(): void {
     this.#epoch++;
-    for (const job of this.#jobs) { job.controller.abort(); this.#wipe(job); job.lease.dispose(); }
+    for (const job of this.#jobs) { job.controller.abort(); this.#wipe(job); this.#disposeLease(job.lease); }
     for (const state of this.#handles.values()) this.#revoke(state);
     this.#resetIdle();
   }
