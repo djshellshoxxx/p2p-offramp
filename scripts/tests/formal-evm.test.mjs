@@ -51,7 +51,7 @@ test('owned process groups drain on success, timeout and output overflow includi
  const {processBounded}=await import('../formal/evm.mjs');
  const {mkdtemp,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');
  const directory=await mkdtemp(join(tmpdir(),'formal-process-'));const pids=[];
- const dead=async pid=>{try{const stat=await readFile(`/proc/${pid}/stat`,'utf8');return stat.slice(stat.lastIndexOf(')')+2).startsWith('Z');}catch(error){if(error.code==='ENOENT')return true;throw error;}};
+ const dead=async pid=>{try{const stat=await readFile(`/proc/${pid}/stat`,'utf8');return stat.slice(stat.lastIndexOf(')')+2).startsWith('Z');}catch(error){if(error.code==='ENOENT'||error.code==='ESRCH')return true;throw error;}};
  try{for(const mode of['success','timeout','overflow']){
   const file=join(directory,mode);
   // Pass data as arguments; the child program stays a literal independent of paths.

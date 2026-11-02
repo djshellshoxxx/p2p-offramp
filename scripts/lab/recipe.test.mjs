@@ -1,5 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
 import fsPromises, { mkdtemp, mkdir, writeFile, symlink, rm, readFile, rename } from 'node:fs/promises';
 import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -45,17 +47,41 @@ test('lab subprocess bounds logs, timeout and cancellation without a shell', asy
 });
 test('successful and terminated parents cannot leave their owned process group running', { timeout: 12000 }, async t => {
   const directory = await mkdtemp(join(tmpdir(), 'p2p-lab-descendants-')); const pids = [];
-  const exited = async pid => {
+  const exited = async (pid, readStat = readFile) => {
     try {
-      const stat = await readFile(`/proc/${pid}/stat`, 'utf8');
+      const stat = await readStat(`/proc/${pid}/stat`, 'utf8');
       const state = stat.slice(stat.lastIndexOf(')') + 2).split(' ')[0];
       return state === 'Z' || state === 'X';
-    } catch (error) { if (error.code === 'ENOENT') return true; throw error; }
+    } catch (error) {
+      // Linux can reap the task after proc open but before read, which reports ESRCH.
+      if (error.code === 'ENOENT' || error.code === 'ESRCH') return true;
+      throw error;
+    }
   };
   t.after(async () => {
     for (const pid of pids) { try { process.kill(pid, 'SIGKILL'); } catch (error) { if (error.code !== 'ESRCH') throw error; } }
     await rm(directory, { recursive: true, force: true });
   });
+  // Opening proc while alive, then reaping before read, deterministically exercises the
+  // same disappearance between open/read that async readFile can encounter under CI.
+  const native = spawn(process.execPath, ['-e', 'setInterval(()=>{},1000)'], { stdio: 'ignore' });
+  const closed = new Promise(resolve => native.once('close', resolve)); let descriptor;
+  try {
+    await once(native, 'spawn'); assert.equal(await exited(native.pid), false, 'a live native process must not count as exited');
+    descriptor = await fsPromises.open(`/proc/${native.pid}/stat`, 'r');
+    assert.equal(native.kill('SIGKILL'), true); await closed;
+    let disappeared;
+    const readDepartedStat = async (path, encoding) => {
+      assert.equal(path, `/proc/${native.pid}/stat`);
+      try { return await descriptor.readFile(encoding); } catch (error) { disappeared = error; throw error; }
+    };
+    assert.equal(await exited(native.pid, readDepartedStat), true, 'a process reaped after proc open must count as exited');
+    assert.equal(disappeared?.code, 'ESRCH'); assert.equal(disappeared?.syscall, 'read');
+    for (const code of ['EACCES', 'EIO']) {
+      const failure = Object.assign(new Error('unrelated proc read failure'), { code });
+      await assert.rejects(exited(native.pid, async () => { throw failure; }), error => error === failure);
+    }
+  } finally { native.kill('SIGKILL'); await closed; await descriptor?.close(); }
   for (const hang of [false, true]) {
     const file = join(directory, hang ? 'timeout' : 'success'); const controller = new AbortController();
     const program = 'const {spawn}=require("node:child_process");const fs=require("node:fs");const c=spawn(process.execPath,["-e","setInterval(()=>{},1000)"],{stdio:"ignore"});c.unref();process.stdout.write(String(c.pid)+"\\n",()=>fs.writeFileSync(process.argv[1],String(c.pid)));if(process.argv[2]==="hang")setInterval(()=>{},1000);';
