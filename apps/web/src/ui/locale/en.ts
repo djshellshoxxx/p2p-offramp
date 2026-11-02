@@ -157,6 +157,9 @@ const definitions = {
     "framingHelp": "A CSP meta tag cannot enforce frame-ancestors. Host response headers require a separate deployment check; this shell does not claim clickjacking protection.",
     "localeTitle": "Language and compatibility",
     "localeHelp": "English source copy only. Browser capability checks are not device certification. Wallet support, physical device tests, translation review, and accessibility acceptance remain pending.",
+    "localeFallback": "The requested language is unavailable or incomplete. The complete English source is shown. Funds remain disabled.",
+    "localeUseSource": "Use English source",
+    "localeFixture": "Development language fixture. This is formatting and layout test data, not a reviewed translation. Funds remain disabled.",
     "unknownTitle": "Page unavailable",
     "unknownHelp": "This route is not supported. Return home or open recovery guidance. Link contents are not used as commands.",
     "returnHome": "Return home",
@@ -337,7 +340,7 @@ const definitions = {
       "variables": {
         "key": "identifier",
         "sequence": "count",
-        "expires": "text"
+        "expires": "date"
       }
     },
     "testnetBanner": {
@@ -345,7 +348,7 @@ const definitions = {
       "variables": {
         "key": "identifier",
         "sequence": "count",
-        "expires": "text"
+        "expires": "date"
       }
     },
     "sessionItem": {
@@ -390,6 +393,7 @@ const definitions = {
     "BUSY": "Another profile operation is running. Try again shortly."
   },
   "tradePageRejected": {
+    "LOCAL_LIMIT_REACHED": "Another file import is still running. Wait for it to finish or cancel it.",
     "TOO_LARGE": "Refused: the file or one of its fields is larger than allowed.",
     "MALFORMED": "Refused: the file is not a valid trade-terms document.",
     "UNSUPPORTED_FORMAT": "Refused: this trade-terms format or version is not supported.",
@@ -531,6 +535,10 @@ type Group = keyof Definitions;
 type Variables<D> = D extends { readonly variables: infer V extends MessageVariables } ? V : Readonly<Record<never, never>>;
 type Entries = { readonly [G in Group]: { readonly [K in keyof Definitions[G]]: MessageEntry<Variables<Definitions[G][K]>> } };
 type StaticGroup<G extends Group> = { readonly [K in keyof Definitions[G] as Definitions[G][K] extends string ? K : never]: string };
+export type SourceGroup = Group;
+export type SourceKey<G extends SourceGroup> = keyof Definitions[G];
+export type SourceVariables<G extends SourceGroup, K extends SourceKey<G>> = Variables<Definitions[G][K]>;
+export type SourceStaticGroup<G extends SourceGroup> = StaticGroup<G>;
 const contexts: Record<Group, string> = {
   compatibility: 'Local browser feature availability and blocked startup recovery; no wallet or device qualification',
   privacy: 'Independent local privacy observations; no anonymity, settlement or economic authority',
@@ -559,8 +567,8 @@ for (const group of Object.keys(definitions) as Group[]) {
 }
 const entries = Object.freeze(groups) as Entries;
 export const sourceCatalog: Readonly<Record<string, MessageEntry>> = Object.freeze(catalog);
-/** No alternate locale is loaded or selected. Draft metadata is not human translation/security approval. */
-export const SOURCE_LOCALE = Object.freeze({ locale: 'en', direction: 'ltr', revision: 1, translator: null, reviewer: null, status: 'draft' } as const);
+/** Pure source metadata. Runtime display selection never changes source or grants translation/security approval. */
+export const SOURCE_LOCALE = Object.freeze({ locale: 'en', direction: 'ltr', revision: 2, translator: null, reviewer: null, status: 'draft' } as const);
 export function english<G extends Group, K extends keyof Definitions[G]>(group: G, key: K, values: MessageValues<Variables<Definitions[G][K]>>): string {
   return formatMessage(entries[group][key] as MessageEntry<Variables<Definitions[G][K]>>, values);
 }

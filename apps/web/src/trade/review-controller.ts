@@ -1,5 +1,6 @@
 /**
- * In-memory trade-terms review session for the document. Owns every asynchronous import it starts: a newer import or
+ * In-memory trade-terms review session for the document. Owns every asynchronous import it starts. Concurrent file
+ * imports are refused until physical work drains. A newer sample/import or
  * cancel() supersedes older work, and results from superseded or disposed work are discarded. Cancelling only stops
  * this local check; nothing here contacts a wallet, relay or chain, so there is no external action to retract.
  *
@@ -9,6 +10,7 @@
  * bypasses today's checks. Locking calls forgetSaved(): reviews loaded from the profile leave memory and any saved-review
  * result still in flight is discarded.
  */
+import { LocalPolicyError, localPolicyCode, runBoundedImport } from '../content-policy/local-policy.ts';
 import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
 import type { RuntimeErrorCode, RuntimeResult, RuntimeSavedReviewRef, RuntimeSavedReviews } from '../../../../packages/schemas/index.ts';
@@ -36,7 +38,7 @@ export const noApprovedRegistry: RegistrySource = async () => ({ kind: 'unavaila
 export type RegistryState =
   | { readonly kind: 'loading' } | { readonly kind: 'unavailable' } | { readonly kind: 'failed' }
   | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly samples: readonly Pick<TermsSample, 'id' | 'label'>[]; readonly trust: RegistryTrustSummary | null };
-export type ImportRejection = TermsReviewRejection | 'FILE_UNREADABLE' | 'REGISTRY_NOT_READY';
+export type ImportRejection = TermsReviewRejection | 'FILE_UNREADABLE' | 'REGISTRY_NOT_READY' | 'LOCAL_LIMIT_REACHED';
 export type ImportState =
   | { readonly kind: 'idle' }
   | { readonly kind: 'busy'; readonly step: 'reading' | 'checking' }
@@ -160,13 +162,13 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   const clearSession = () => { generation++; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; wipe(snapshot.reviews); for(const bytes of transient) bytes.fill(0); transient.clear(); publish({reviews:Object.freeze([]),job:Object.freeze({kind:'idle'}),saved:IDLE_SAVED,unreviewable:Object.freeze([])}); };
   const unavailable = (action: 'save'|'load'|'delete', code: SavedErrorCode) => publish({saved:Object.freeze({kind:'failed',action,code})});
 
-  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>): Promise<ImportOutcome> {
+  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>, admittedGeneration?: number): Promise<ImportOutcome> {
     if (disposed) return { kind: 'stale' };
-    const mine = ++generation;
+    const mine = admittedGeneration ?? ++generation;
     const current = () => mine === generation && !disposed;
     if (!registry) { const job = { kind: 'rejected', code: 'REGISTRY_NOT_READY' } as const; setJob(job); return job; }
     const lookup = registry;
-    setJob({ kind: 'busy', step: 'reading' });
+    if (admittedGeneration === undefined) setJob({ kind: 'busy', step: 'reading' });
     let bytes: Uint8Array | ImportRejection;
     try { bytes = await read(); } catch { bytes = 'FILE_UNREADABLE'; }
     if (!current()) { if(bytes instanceof Uint8Array)bytes.fill(0); return { kind: 'stale' }; }
@@ -199,17 +201,27 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
         if (disposed) return;
         if (result.kind === 'ready') {
           registry = result.registry; samples = result.samples;
-          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(({ id, label }) => Object.freeze({ id, label }))),
+          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(sample => Object.freeze({ id: sample.id, get label() { return sample.label; } }))),
             trust: result.trust ? Object.freeze({ keyId: result.trust.keyId, sequence: result.trust.sequence, expiresAt: result.trust.expiresAt }) : null }) });
         } else publish({ registry: Object.freeze({ kind: result.kind }) });
       })();
       return loading;
     },
     importFile(file: FileLike) {
-      return run('file', async () => {
-        // Size is checked before any bytes are read.
-        if (typeof file.size !== 'number' || file.size > MAX_TERMS_REVIEW_BYTES) return 'TOO_LARGE';
-        return new Uint8Array(await file.arrayBuffer());
+      if (disposed || !registry) return run('file', async () => 'FILE_UNREADABLE');
+      let mine: number | undefined;
+      return runBoundedImport<ImportOutcome>('terms-review', file, undefined, async bytes => {
+        if (disposed || mine !== generation) return { kind: 'stale' };
+        transient.add(bytes);
+        try { return await run('file', async () => bytes, mine); }
+        finally { transient.delete(bytes); }
+      }, () => { mine = ++generation; setJob({ kind: 'busy', step: 'reading' }); if (disposed || mine !== generation) throw new LocalPolicyError('CANCELLED'); }).catch((error: unknown): ImportOutcome => {
+        if (disposed || mine !== undefined && mine !== generation) return { kind: 'stale' };
+        const code = localPolicyCode(error);
+        const rejected = { kind: 'rejected', code: code === 'LOCAL_LIMIT_REACHED' ? 'LOCAL_LIMIT_REACHED' : code === 'LIMIT_EXCEEDED' ? 'TOO_LARGE' : 'FILE_UNREADABLE' } as const;
+        // Rejected overload cannot replace the active import's display or cancel its physical work.
+        if (mine !== undefined || snapshot.job.kind !== 'busy') setJob(rejected);
+        return rejected;
       });
     },
     importSample(id: string) {
@@ -220,6 +232,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       if(snapshot.saved.kind === 'busy'){ const action=snapshot.saved.action; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; unavailable(action,'UNKNOWN_OUTCOME'); }
       if (snapshot.job.kind !== 'busy') return;
       generation++;
+      for (const bytes of transient) bytes.fill(0);
       setJob({ kind: 'cancelled' });
     },
     remove(localId: string) {

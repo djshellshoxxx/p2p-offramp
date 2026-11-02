@@ -9,10 +9,10 @@ import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 
-export const pageTitle: Readonly<Record<Route['page'], string>> = {
-  home: m.homeTitle, offers: m.offersTitle, trade: m.tradeTitle,
-  recovery: m.recoveryTitle, settings: m.settingsTitle, unknown: m.unknownTitle,
-};
+export const pageTitle: Readonly<Record<Route['page'], string>> = Object.freeze({
+  get home() { return m.homeTitle; }, get offers() { return m.offersTitle; }, get trade() { return m.tradeTitle; },
+  get recovery() { return m.recoveryTitle; }, get settings() { return m.settingsTitle; }, get unknown() { return m.unknownTitle; },
+});
 
 export function Home({ services, unlocked, restoredProfileId, onSelectionConsumed }: { readonly services: AppServices | null; readonly unlocked: boolean;
   readonly restoredProfileId: string; readonly onSelectionConsumed: () => void }) {

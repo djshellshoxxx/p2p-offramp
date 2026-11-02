@@ -1,3 +1,4 @@
+import { LocalPolicyError, localPolicyCode, runBoundedImport } from '../content-policy/local-policy.ts';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { MAX_BACKUP_BYTES, type AppServices } from '../app-services.ts';
 import type { BackupVerificationReceipt } from '../../../../packages/schemas/index.ts';
@@ -44,12 +45,9 @@ export function BackupVerificationForm({ services }: { readonly services: AppSer
     const controller = new AbortController(), mine = ++generation.current, scope = services.selectionScope(), profileId = services.profileId;
     request.current = controller; setBusy(kind);
     const current = () => mounted.current && !controller.signal.aborted && generation.current === mine && services.selectionScope() === scope && services.current.state === 'unlocked' && services.profileId === profileId;
-    let bytes: Uint8Array | undefined;
     try {
       if (kind === 'verify') {
-        bytes = new Uint8Array(await file!.arrayBuffer());
-        if (!current()) return;
-        const result = await services.verifyBackup(bytes,secret,controller.signal); secret = '';
+        const result = await runBoundedImport('verify-backup', file!, controller.signal, bytes => { if (!current()) throw new LocalPolicyError('CANCELLED'); return services.verifyBackup(bytes,secret,controller.signal); }); secret = '';
         if (!current()) return;
         if (result.ok) setReceipt({scope,owner:services,value:result.value});
         else setNotice({error:true,text:result.error.code === 'CONFLICT' ? m.backupVerifyMismatch : errorMessage(result.error.code)});
@@ -59,8 +57,8 @@ export function BackupVerificationForm({ services }: { readonly services: AppSer
         if (result.ok && result.value.verification) setReceipt({scope,owner:services,value:result.value.verification});
         else setNotice(result.ok ? {error:false,text:m.backupVerifyNone} : {error:true,text:errorMessage(result.error.code)});
       }
-    } catch { if (current()) setNotice({error:true,text:errorMessage('STORAGE_UNAVAILABLE')}); }
-    finally { secret = ''; bytes?.fill(0); if (mine === generation.current) { request.current = null; if (mounted.current) setBusy(null); } }
+    } catch (error) { if (current()) { const code = localPolicyCode(error); setNotice({error:true,text:errorMessage(code === 'LOCAL_LIMIT_REACHED' ? 'BUSY' : code === 'LIMIT_EXCEEDED' || code === 'INVALID_INPUT' || code === 'CANCELLED' ? code : 'STORAGE_UNAVAILABLE')}); } }
+    finally { secret = ''; if (mine === generation.current) { request.current = null; if (mounted.current) setBusy(null); } }
   }
   const visible = receipt?.owner === services && receipt.scope === services.selectionScope() && services.current.state === 'unlocked' && receipt.value.profileId === services.profileId ? receipt.value : null;
   return <form ref={form} onSubmit={(event: FormEvent<HTMLFormElement>) => { event.preventDefault(); void run('verify',event.currentTarget); }} noValidate autoComplete="off" aria-label={m.backupVerifyTitle} aria-busy={busy !== null}>

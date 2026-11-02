@@ -1,5 +1,5 @@
-/** T20: native emitted UI stress. DOM pseudotext is a test-only layout simulation,
- * not a selectable translation, reviewed locale or assistive-technology audit. */
+/** T20/T52: native emitted UI stress and explicit compiled draft-locale App integration.
+ * DOM stress and draft fixture selection are separate evidence; neither is translation or device approval. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
@@ -67,6 +67,24 @@ try {
   await buildFixture({ configFile: false, root: fixtureRoot, base: '/privacy-fixture/', plugins: [react()],
     resolve: { alias: { 'react-dom': resolve('node_modules/react-dom'), react: resolve('node_modules/react') } },
     build: { outDir: resolve(out, 'privacy-fixture'), emptyOutDir: true } });
+  const localeRoot = resolve(temporary, 'locale-fixture-source'), compiledLocales = resolve(localeRoot, 'compiled-locales.ts');
+  await mkdir(localeRoot);
+  await writeFile(resolve(localeRoot, 'index.html'), '<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/entry.tsx"></script></body></html>');
+  await writeFile(resolve(localeRoot, 'entry.tsx'), `import ${JSON.stringify(resolve('scripts/fixtures/locale-runtime-fixture.tsx'))};`);
+  await writeFile(compiledLocales, `import {sourceCatalog} from ${JSON.stringify(resolve('apps/web/src/ui/locale/en.ts'))};
+import {pseudoMessage} from ${JSON.stringify(resolve('apps/web/test/locale-pseudo.mjs'))};
+const texts=profile=>Object.fromEntries(Object.entries(sourceCatalog).map(([key,entry])=>[key,pseudoMessage(entry,profile).source]));
+const incomplete=texts('rtl');delete incomplete['trade.risk'];
+export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
+ {id:'fixture-rtl',locale:'ar',messages:texts('rtl')},
+ {id:'fixture-expanded',locale:'en',messages:texts('expanded')},
+ {id:'fixture-incomplete',locale:'ar',messages:incomplete}],
+ preferences:{read:()=>localStorage.getItem('p2p-offramp.locale.v1'),write:id=>localStorage.setItem('p2p-offramp.locale.v1',id)}};`);
+  await buildFixture({ configFile: false, root: localeRoot, base: '/locale-fixture/', plugins: [react(), {
+    name: 'explicit-development-locale-registry', enforce: 'pre',
+    resolveId(id, importer) { if (id === './bundled.ts' && importer?.replaceAll('\\', '/') === resolve('apps/web/src/ui/locale/runtime.ts').replaceAll('\\', '/')) return compiledLocales; },
+  }], resolve: { alias: { 'react-dom': resolve('node_modules/react-dom'), react: resolve('node_modules/react') } },
+    worker: { format: 'es' }, build: { target: 'esnext', outDir: resolve(out, 'locale-fixture'), emptyOutDir: true, modulePreload: false } });
   server = createServer((request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
     const path = resolve(out, pathname === '/' ? 'index.html' : '.' + pathname);
@@ -283,9 +301,65 @@ try {
   assert.equal(unmounted.captures, 0); assert.equal(unmounted.authorizations, 0);
   await invoke('cleanup'); await brokerPage.close();
   pass('separate test-only emitted panel uses real direct-only broker invalidation, inspect-only expiry, disposal, replacement and bounded-subscription failure');
+  const localePage = await context.newPage(); localePage.on('pageerror', () => unexpected.push('LOCALE_FIXTURE_PAGE_ERROR'));
+  await localePage.goto(origin + '/locale-fixture/index.html#/home');
+  await localePage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
+  await localePage.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+  await localePage.locator('#unlock-profile').fill('a'.repeat(32)); await localePage.locator('#unlock-passphrase').fill('PRIVATE_LOCALE_FORM_SENTINEL');
+  await localePage.locator('#unlock-profile').evaluate(node => { window.__localeInput = node; node.focus(); });
+  await localePage.locator('#unlock-profile-help-trigger').hover(); await localePage.locator('[role="tooltip"]').waitFor();
+  await localePage.locator('#unlock-profile-help-trigger').click();
+  const localeFocus = await localePage.evaluate(() => document.activeElement.id);
+  const sourceHelp = await localePage.locator('[role="tooltip"]').innerText(), sourceTitle = await localePage.title();
+  const selectLocale = id => localePage.evaluate(id => window.localeRuntimeFixture.select(id), id);
+  const localeSnapshot = () => localePage.evaluate(() => window.localeRuntimeFixture.snapshot());
+  await selectLocale('fixture-rtl');
+  await localePage.waitForFunction(() => document.documentElement.lang === 'ar' && document.documentElement.dir === 'rtl');
+  assert.equal(await localePage.locator('.app-shell').getAttribute('dir'), 'rtl');
+  assert.notEqual(await localePage.title(), sourceTitle); assert.match(await localePage.locator('h1').innerText(), /اختبار/);
+  assert.match(await localePage.locator('nav a').first().innerText(), /اختبار/); assert.match(await localePage.locator('[role="tooltip"]').innerText(), /اختبار/);
+  assert.notEqual(await localePage.locator('[role="tooltip"]').innerText(), sourceHelp);
+  assert.equal(await localePage.locator('#unlock-profile').evaluate(node => node === window.__localeInput), true, 'locale selection never remounts private forms');
+  assert.equal(await localePage.locator('#unlock-profile').inputValue(), 'a'.repeat(32));
+  assert.equal(await localePage.locator('#unlock-passphrase').inputValue(), 'PRIVATE_LOCALE_FORM_SENTINEL');
+  assert.equal(await localePage.evaluate(() => document.activeElement.id), localeFocus, 'language selection preserves focus on the pinned help trigger');
+  assert.equal(await localePage.locator('#locale-number').innerText(), new Intl.NumberFormat('ar-EG', { useGrouping: false }).format(123456));
+  assert.ok(!(await localePage.locator('#locale-date').innerText()).includes('2023-11-14T22:13:20.000Z'));
+  assert.equal((await localeSnapshot()).fundsLocaleEligible, false); assert.equal((await localeSnapshot()).display, 'development-fixture');
+  await selectLocale('fixture-expanded'); await localePage.waitForFunction(() => document.documentElement.dir === 'ltr');
+  assert.notEqual(await localePage.title(), sourceTitle); assert.equal(await localePage.locator('#unlock-passphrase').inputValue(), 'PRIVATE_LOCALE_FORM_SENTINEL');
+  for (const unavailable of ['fr', 'fixture-incomplete']) {
+    await selectLocale(unavailable); await localePage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
+    await localePage.locator('#unlock-profile-help-trigger').focus(); await localePage.locator('[role="tooltip"]').waitFor();
+    assert.equal((await localeSnapshot()).fallback, true); assert.equal((await localeSnapshot()).fundsLocaleEligible, false);
+    assert.equal(await localePage.locator('nav a').first().innerText(), 'Home'); assert.equal(await localePage.locator('[role="tooltip"]').innerText(), sourceHelp);
+    assert.ok((await localePage.locator('main').innerText()).includes('The requested language is unavailable or incomplete.'));
+    await localePage.getByRole('button', { name: 'Use English source', exact: true }).click();
+    assert.equal((await localeSnapshot()).fallback, false);
+    assert.equal(await localePage.evaluate(() => localStorage.getItem('p2p-offramp.locale.v1')), 'en');
+  }
+  await selectLocale('fixture-rtl'); await localePage.reload();
+  await localePage.waitForFunction(() => window.localeRuntimeFixture?.snapshot().id === 'fixture-rtl');
+  assert.equal(await localePage.locator('.app-shell').getAttribute('lang'), 'ar');
+  assert.equal(await localePage.evaluate(() => localStorage.getItem('p2p-offramp.locale.v1')), 'fixture-rtl', 'explicit local preference survives document reload');
+  await selectLocale('en'); await localePage.goto(origin + '/locale-fixture/index.html#/offers');
+  await localePage.getByRole('button', { name: 'Core native sample (deadlines from now)', exact: true }).click();
+  await localePage.getByRole('heading', { name: 'Trade review', exact: true }).waitFor();
+  const exactReview = await localePage.locator('main code, main pre').allTextContents();
+  const exactBytes = await localePage.evaluate(() => window.localeRuntimeFixture.reviewBytes()); assert.equal(exactBytes.length, 1);
+  await selectLocale('fixture-rtl'); await localePage.waitForFunction(() => document.documentElement.dir === 'rtl');
+  assert.deepEqual(await localePage.locator('main code, main pre').allTextContents(), exactReview);
+  assert.deepEqual(await localePage.evaluate(() => window.localeRuntimeFixture.reviewBytes()), exactBytes, 'locale display never changes reviewed canonical terms bytes');
+  for (const width of [320, 768, 1440]) { await localePage.setViewportSize({ width, height: 900 }); await assertGeometry(localePage, `compiled-runtime-RTL/${width}`); }
+  const copyAddress = localePage.locator('main code.exact').first(), rawAddress = await copyAddress.innerText();
+  await copyAddress.evaluate(node => { const range = document.createRange(); range.selectNodeContents(node); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range); });
+  await localePage.keyboard.press('Control+c'); assert.equal(await localePage.evaluate(() => navigator.clipboard.readText()), rawAddress);
+  assert.equal(await localePage.locator('main code bdi').evaluateAll(nodes => nodes.length > 5 && nodes.every(node => getComputedStyle(node).direction === 'ltr')), true);
+  await selectLocale('en'); await localePage.evaluate(() => window.localeRuntimeFixture.dispose()); await localePage.close();
+  pass('compiled draft RTL/expanded catalogs switch the real App, navigation, titles, help, typed date/numerals and preference reload atomically without remounting inputs or changing canonical review/copy bytes');
   assert.deepEqual(unexpected, []);
   console.log(JSON.stringify({ fixture: 'draft-locale-emitted-layout', browser: browser.version(), checks: checks.length,
-    stress: 'test-only DOM static-catalog substitution; not a translated locale implementation',
+    stress: 'DOM static-catalog substitution plus separate explicit development-only compiled runtime registry; no reviewed translation',
     zoom: { requestedPercent: 400, realBrowserZoomQualified: realZoomQualified, before, after,
       fallback: realZoomQualified ? null : '1280/4=320 CSS-pixel reflow simulation; real 400% browser zoom remains unqualified' },
     touch: 'Chromium touchscreen emulation, not physical-device qualification',
