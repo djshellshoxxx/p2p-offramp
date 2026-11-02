@@ -569,6 +569,48 @@ try {
     reports.push({ delivery, base, widths: [320, 768, 1024, 1440], hashReload: true, lockedBoot: true, hostileRouteAndTextbox: true });
     await page.close();
   }
+  // Compatibility is startup guidance only: absent optional APIs never request permission or block core.
+  for (const mode of ['missing-file-export', 'optional-absent', 'runtime-constructor-failure']) {
+    const page = await context.newPage();
+    await page.addInitScript(mode => {
+      window.__compatPermissions = 0; window.__compatWorkerAttempts = 0;
+      const forbidden = () => { window.__compatPermissions++; throw Error('PRIVATE permission probe'); };
+      Object.defineProperty(navigator, 'permissions', { configurable: true, value: { query: forbidden } });
+      Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: mode === 'optional-absent' ? undefined : { getUserMedia: forbidden } });
+      Object.defineProperty(navigator, 'share', { configurable: true, value: mode === 'optional-absent' ? undefined : forbidden });
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: mode === 'optional-absent' ? undefined : { writeText: forbidden } });
+      if (mode === 'missing-file-export') Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: undefined });
+      if (mode === 'runtime-constructor-failure') {
+        // Methods are present, so only the existing runtime's actual construction can find this failure.
+        window.Worker = class {
+          constructor() { window.__compatWorkerAttempts++; throw Error('PRIVATE worker construction failure'); }
+          postMessage() {} terminate() {}
+        };
+      }
+    }, mode);
+    await page.goto(origin + '/#/home');
+    if (mode === 'optional-absent') {
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).waitFor();
+      assert.equal(await page.locator('#startup-compatibility-title').count(), 0, 'normal startup has no distracting API detail table');
+    } else {
+      await page.getByRole('alert').waitFor();
+      await page.getByRole('heading', { level: 2, name: mode === 'missing-file-export' ? 'Read-only browser mode' : 'Recovery remains available', exact: true }).waitFor();
+      if (mode === 'missing-file-export') await page.getByText('Missing or unavailable: encrypted file download.', { exact: true }).waitFor();
+      await page.getByText('This local feature check does not verify wallet or device support. Browser storage can still be blocked or lost.', { exact: true }).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).count(), 0);
+      await page.getByRole('link', { name: 'Read recovery guidance', exact: true }).click();
+      await page.getByRole('heading', { level: 1, name: 'Recovery', exact: true }).waitFor();
+    }
+    const actual = await assertPrivateSurfaces(page, origin + (mode === 'optional-absent' ? '/#/home' : '/#/recovery'));
+    assert.equal(actual.networkCalls, 0); assert.equal(actual.workers.length, mode === 'optional-absent' ? 1 : 0);
+    const counters = await page.evaluate(() => ({ permissions: window.__compatPermissions, attempts: window.__compatWorkerAttempts,
+      privateErrorVisible: document.documentElement.outerHTML.includes('PRIVATE') }));
+    assert.equal(counters.permissions, 0); assert.equal(counters.attempts, mode === 'runtime-constructor-failure' ? 1 : 0);
+    assert.equal(counters.privateErrorVisible, false);
+    reports.push({ mode, startupCompatibility: true, readonlyRecovery: mode !== 'optional-absent', noPermissionOrWalletPrompt: true,
+      actualRuntimeFailurePreserved: mode === 'runtime-constructor-failure', deviceQualification: false });
+    await page.close();
+  }
   // Apply negative probes to the actual generated policy and actual served artifact, rather than
   // interpreting a configuration object as browser enforcement evidence.
   for (const delivery of ['meta', 'header']) {

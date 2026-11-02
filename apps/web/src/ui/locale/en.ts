@@ -2,6 +2,18 @@
 import { createMessage, formatMessage, type MessageEntry, type MessageVariables, type MessageValues } from './catalog.ts';
 
 const definitions = {
+  compatibility: {
+    readOnlyTitle: 'Read-only browser mode',
+    readOnlyHelp: 'A required browser feature is missing or blocked. Local private operations cannot start here.',
+    missingFeatures: { source: 'Missing or unavailable: {features}.', variables: { features: 'text' } },
+    secureContext: 'secure browser context', encryption: 'browser encryption', processing: 'isolated local processing',
+    storage: 'encrypted local storage', fileImport: 'file import', fileExport: 'encrypted file download',
+    recoveryTitle: 'Recovery remains available',
+    runtimeFailure: 'The browser exposes the required features, but local services could not start. Follow the operation error and recovery guidance.',
+    recoveryHelp: 'Preserve this browser’s encrypted data and any backup. Read recovery guidance before changing browser, device or origin.',
+    recoveryLink: 'Read recovery guidance',
+    qualificationWarning: 'This local feature check does not verify wallet or device support. Browser storage can still be blocked or lost.',
+  },
   privacy: {
     title: 'Independent privacy observations', intro: 'These local observations do not verify anonymity, encrypted messaging or payment settlement.',
     selected: 'Selected policy', observed: 'Observed state', source: 'Evidence source', reason: 'Observation reason',
@@ -520,6 +532,7 @@ type Variables<D> = D extends { readonly variables: infer V extends MessageVaria
 type Entries = { readonly [G in Group]: { readonly [K in keyof Definitions[G]]: MessageEntry<Variables<Definitions[G][K]>> } };
 type StaticGroup<G extends Group> = { readonly [K in keyof Definitions[G] as Definitions[G][K] extends string ? K : never]: string };
 const contexts: Record<Group, string> = {
+  compatibility: 'Local browser feature availability and blocked startup recovery; no wallet or device qualification',
   privacy: 'Independent local privacy observations; no anonymity, settlement or economic authority',
   help: 'Local accessible control guidance; no private input or authority',
   shell: 'Local profile, recovery and offline application shell', shellErrors: 'Fixed local operation errors and recovery guidance',

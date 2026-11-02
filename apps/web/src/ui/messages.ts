@@ -11,4 +11,8 @@ export const messages = Object.freeze({
   useProfile: (id: string) => english('shell', 'useProfile', { id }),
   reconciledTitle: (count: number) => english('shell', 'reconciledTitle', { count }),
   errors: englishGroup('shellErrors'),
+  compatibility: Object.freeze({
+    ...englishGroup('compatibility'),
+    missingFeatures: (features: string) => english('compatibility', 'missingFeatures', { features }),
+  }),
 });

@@ -5,6 +5,8 @@ import { App } from './ui/App.tsx';
 import { createTradeReviewController, noApprovedRegistry, type RegistrySource, type TradeReviewController } from './trade/review-controller.ts';
 import './ui/app.css';
 import { createLocalDiagnostics } from './diagnostics.ts';
+import { probeStartupCapabilities } from './compatibility/probe.ts';
+import { startWithRequiredApis } from './compatibility/startup.ts';
 
 /**
  * Compile-time constants from vite.config.ts: `__P2P_SYNTHETIC_DEMO__` is true only for the `demo` build and
@@ -33,6 +35,7 @@ function useTradeReviewController(): TradeReviewController {
 }
 
 function Bootstrap() {
+  const [startupCapabilities] = useState(() => probeStartupCapabilities());
   const [diagnostics] = useState(() => createLocalDiagnostics());
   const trade = useTradeReviewController();
   const [services, setServices] = useState<AppServices | null>(null);
@@ -50,7 +53,7 @@ function Bootstrap() {
     window.addEventListener('pagehide', pagehide);
     void (async () => {
       try {
-        const result = await startAppServices();
+        const result = await startWithRequiredApis(startupCapabilities, () => startAppServices());
         if (ended) { if (result.ok) await result.value.dispose(); return; }
         if (result.ok) { owned = result.value; setServices(result.value); }
         else setStartupError(result.error.code);
@@ -58,8 +61,8 @@ function Bootstrap() {
       finally { if (!ended) setStarting(false); }
     })();
     return () => { window.removeEventListener('pagehide', pagehide); dispose(); };
-  }, []);
-  return <App services={services} starting={starting} startupError={startupError} trade={trade} diagnostics={diagnostics} />;
+  }, [startupCapabilities]);
+  return <App services={services} starting={starting} startupError={startupError} startupCapabilities={startupCapabilities} trade={trade} diagnostics={diagnostics} />;
 }
 
 const host = document.getElementById('root');
