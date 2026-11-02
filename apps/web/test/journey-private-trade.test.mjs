@@ -22,3 +22,16 @@ test('private native transition boundary uses the same exact canonical prepared-
  assert.deepEqual(parseCanonicalPreparedRequest(JSON.stringify(request)),request);
  for(const raw of[JSON.stringify({...request,extension:true}),JSON.stringify(request,null,2),JSON.stringify({chainId:request.chainId,v:request.v,from:request.from,to:request.to,data:request.data,value:request.value,nonce:request.nonce,preparedAtBlock:request.preparedAtBlock}),JSON.stringify({...request,nonce:'01'}),JSON.stringify({...request,data:'0x1'}),JSON.stringify(request).replace('"nonce":"1"','"nonce":"1","nonce":"1"')])assert.throws(()=>parseCanonicalPreparedRequest(raw));
 });
+
+test('token response words and principal are exact bounded uint256, never loose hex or display amounts',async()=>{
+ const {decodeUintWord,canonicalPrincipal}=await import('../src/journey/private-trade.ts');assert.equal(decodeUintWord('0x'+'f'.repeat(64)),String((1n<<256n)-1n));assert.equal(canonicalPrincipal('1'),'1');assert.equal(canonicalPrincipal(String((1n<<256n)-1n)),String((1n<<256n)-1n));
+ for(const raw of['0x','0x01','0x'+'0'.repeat(128),'0x'+'g'.repeat(64),null,{},1])assert.throws(()=>decodeUintWord(raw));for(const raw of['0','01','-1','1.0','1e18',String(1n<<256n),null,1])assert.throws(()=>canonicalPrincipal(raw));
+});
+test('unlisted token selection and malformed principal fail before any native wallet prompt or request',async()=>{
+ for(const options of[{assetId:'unlisted',amountBaseUnits:'1'},{assetId:'test-usd',amountBaseUnits:'0'},{assetId:'test-usd',amountBaseUnits:String(1n<<256n)}]){const s=setup(async()=>{throw Error('UNEXPECTED_PEER');});try{await onboard(s);await assert.rejects(s.journey.act('connect',options),/UNSUPPORTED_ASSET|INVALID_INPUT/);assert.equal(s.calls,0);assert.equal(s.journey.snapshot().tradingEnabled,false);}finally{s.journey.dispose();}}
+});
+test('restored status and direct approval/reset requests cannot fabricate accepted capability',async()=>{
+ const s=setup();try{await onboard(s);for(const action of['approve','reset-approval','accept-recovered','token-check'])await assert.rejects(s.journey.act(action),/OUT_OF_ORDER|RISK_CONFIRMATION_REQUIRED/);assert.equal(s.calls,0);assert.equal(s.journey.snapshot().tokenCheck,null);assert.deepEqual(s.journey.snapshot().fees,[]);}finally{s.journey.dispose();}
+});
+
+test('native receipt fee arithmetic rejects oversized words/product instead of emitting an unbounded or rounded fee',async()=>{const{feeProduct}=await import('../src/journey/private-trade.ts');assert.equal(feeProduct('21000','1000000000'),'21000000000000');assert.equal(feeProduct('0','0'),'0');for(const pair of[['01','2'],['-1','2'],[String(1n<<256n),'0'],[String((1n<<256n)-1n),'2'],['1e9','2']])assert.throws(()=>feeProduct(...pair));});

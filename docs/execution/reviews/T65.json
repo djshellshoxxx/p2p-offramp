@@ -1,0 +1,364 @@
+{
+  "task": "T65",
+  "reviewer": "/root/remaining_liquidity",
+  "author": "/root/chain_reader",
+  "date": "2026-11-02T12:00:23.827038+00:00",
+  "verdict": "APPROVED_EXACT_ORIGINAL_FROZEN_SCOPE",
+  "findings": [],
+  "sourceEditsByReviewer": false,
+  "scope": "Eight frozen LOCALPROOF ERC20 journey/Worker/browser source paths and eleven original frozen direct dependencies. Production/provider/release authority remains disabled.",
+  "authorManifest": {
+    "path": "/workspace/work/t65-freeze.json",
+    "sha256": "105c16a11ae234e141a5034521ae1da1fa69285f3c98d72011f16e9cf6fc0aa6"
+  },
+  "sourceFiles": [
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "f9630ae2238a99dcebd646058ab15494a1c0583b9130e9f6f21249cdab1eac7f"
+    },
+    {
+      "path": "apps/web/src/journey/native-contracts.ts",
+      "sha256": "4d5aed10251cddf2816ba54866332d6b7a2fdaa2d353814114f619e7a34daa4c"
+    },
+    {
+      "path": "apps/web/src/journey/presentation.ts",
+      "sha256": "51ebee67f42f7e6fd19c1e0f482356ed85e94e6453ae906f2c3df495d0524108"
+    },
+    {
+      "path": "apps/web/src/journey/screen.ts",
+      "sha256": "8515d1086ce98c122660e3412ba2570a7597f41e9b9cc21625b71ea05305f91e"
+    },
+    {
+      "path": "apps/web/src/journey/README.md",
+      "sha256": "21bd3b91ac9762781f91938554a9b926069d14ce59e111654b7fedc8eca43dcc"
+    },
+    {
+      "path": "apps/web/test/journey-private-trade.test.mjs",
+      "sha256": "1ad505d7254deb10a7e34550f1ba5b400cd7d7be3fc9b183ecd9835636433a18"
+    },
+    {
+      "path": "scripts/fixtures/journey-worker.mjs",
+      "sha256": "5919e749a287449c7923495c29b5814a955cac6f0b64f487077fdf455d1758c9"
+    },
+    {
+      "path": "scripts/test-journey-browser.mjs",
+      "sha256": "8412c2cc488d0f1c1d5c9f927ad45b96f0598c570f66b8086baea7296bb90e8f"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036"
+    },
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "f2f19e8b860bac77528a03df37bc2434a155ef074f1e53f79a36aabe03a51558"
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01"
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d"
+    },
+    {
+      "path": "packages/wallet/src/evm-submit.ts",
+      "sha256": "c5d23b880e5a150a3c9ad63b724a321927046044174a7feb12cd79b52e36f92b"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000"
+    },
+    {
+      "path": "packages/wallet/src/evm-payment-preflight.ts",
+      "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0"
+    },
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f"
+    },
+    {
+      "path": "contracts/evm/abi/BasicEscrow.json",
+      "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98"
+    },
+    {
+      "path": "contracts/evm/test/mocks/Mocks.sol",
+      "sha256": "7d7bc2e6b11c0d54e5686f81d5275ce90dbb0ef2b72b9550a9aefe45507d323b"
+    }
+  ],
+  "isolation": {
+    "sourceCommit": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+    "archiveSha256": "8e61f1ebc1aba9947766ea6023c2222c1225ddd1bcc3d5f2bf299a63dbe2a417",
+    "overlays": [
+      {
+        "path": "apps/web/src/journey/private-trade.ts",
+        "sha256": "f9630ae2238a99dcebd646058ab15494a1c0583b9130e9f6f21249cdab1eac7f"
+      },
+      {
+        "path": "apps/web/src/journey/native-contracts.ts",
+        "sha256": "4d5aed10251cddf2816ba54866332d6b7a2fdaa2d353814114f619e7a34daa4c"
+      },
+      {
+        "path": "apps/web/src/journey/presentation.ts",
+        "sha256": "51ebee67f42f7e6fd19c1e0f482356ed85e94e6453ae906f2c3df495d0524108"
+      },
+      {
+        "path": "apps/web/src/journey/screen.ts",
+        "sha256": "8515d1086ce98c122660e3412ba2570a7597f41e9b9cc21625b71ea05305f91e"
+      },
+      {
+        "path": "apps/web/src/journey/README.md",
+        "sha256": "21bd3b91ac9762781f91938554a9b926069d14ce59e111654b7fedc8eca43dcc"
+      },
+      {
+        "path": "apps/web/test/journey-private-trade.test.mjs",
+        "sha256": "1ad505d7254deb10a7e34550f1ba5b400cd7d7be3fc9b183ecd9835636433a18"
+      },
+      {
+        "path": "scripts/fixtures/journey-worker.mjs",
+        "sha256": "5919e749a287449c7923495c29b5814a955cac6f0b64f487077fdf455d1758c9"
+      },
+      {
+        "path": "scripts/test-journey-browser.mjs",
+        "sha256": "8412c2cc488d0f1c1d5c9f927ad45b96f0598c570f66b8086baea7296bb90e8f"
+      }
+    ],
+    "dependencies": [
+      {
+        "path": "apps/web/src/journey/vault-composition.ts",
+        "sha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036"
+      },
+      {
+        "path": "apps/web/src/content-policy/local-policy.ts",
+        "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61"
+      },
+      {
+        "path": "apps/web/src/runtime/worker-endpoint.ts",
+        "sha256": "f2f19e8b860bac77528a03df37bc2434a155ef074f1e53f79a36aabe03a51558"
+      },
+      {
+        "path": "packages/domain/src/intent-journal.ts",
+        "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01"
+      },
+      {
+        "path": "packages/domain/src/tx-lifecycle.ts",
+        "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d"
+      },
+      {
+        "path": "packages/wallet/src/evm-submit.ts",
+        "sha256": "c5d23b880e5a150a3c9ad63b724a321927046044174a7feb12cd79b52e36f92b"
+      },
+      {
+        "path": "packages/wallet/src/evm-escrow.ts",
+        "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000"
+      },
+      {
+        "path": "packages/wallet/src/evm-payment-preflight.ts",
+        "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0"
+      },
+      {
+        "path": "contracts/evm/src/BasicEscrow.sol",
+        "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f"
+      },
+      {
+        "path": "contracts/evm/abi/BasicEscrow.json",
+        "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98"
+      },
+      {
+        "path": "contracts/evm/test/mocks/Mocks.sol",
+        "sha256": "7d7bc2e6b11c0d54e5686f81d5275ce90dbb0ef2b72b9550a9aefe45507d323b"
+      }
+    ],
+    "submodules": [
+      {
+        "path": "contracts/evm/lib/forge-std",
+        "gitCommit": "8e40513d678f392f398620b3ef2b418648b33e89"
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts",
+        "gitCommit": "c64a1edb67b6e3f4a15cca8909c9482ad33a02b0"
+      }
+    ],
+    "rootLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+    "extraProbeSha256": "7bd702668faab2649d9f99104346990209705e9a8a91161da1b72e31f15cdedb",
+    "note": "Isolated git archive plus exact frozen eight T65 overlays; shared working tree and T63 source unchanged; node_modules reused from unchanged root lock."
+  },
+  "isolationReceipt": {
+    "path": "/workspace/work/t65-independent-isolation.json",
+    "sha256": "4d15cd5f1db88fb1b75dac0c871a28864b0a94dc9323b962002af00edf3f223f"
+  },
+  "checks": [
+    {
+      "path": "/workspace/work/t65-independent-focused.log",
+      "sha256": "3b6c95cb01826b4a31824aab5f14455b85f115a047324b4fdfe58e337bc42076",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-browser.log",
+      "sha256": "c7ce9c20cf2d8d2440620990a9885fcc94bce631f7555c57adb39fe95fcdb56f",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-extra.log",
+      "sha256": "628a566497d8180df20600ccf55412204fe0cec8c46e01cc7b2b39961de66625",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-types.log",
+      "sha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-boundaries.log",
+      "sha256": "a4668e21234452f2fde3efd1603d87711e4cbd3a4f9cef0a3eeadecfff669f19",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-frozen-focused.log",
+      "sha256": "7172e06af6f527ace827c0cec9a7c955db42e6980af9c31b853a5d28278a0ec8",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-frozen-browser.log",
+      "sha256": "628a566497d8180df20600ccf55412204fe0cec8c46e01cc7b2b39961de66625",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-frozen-types.log",
+      "sha256": "c0324b6a730fb4a53fd47f12a5fbdc038266a6a0af2458504cbe977625294b04",
+      "exitCode": 0
+    },
+    {
+      "path": "/workspace/work/t65-independent-frozen-boundaries.log",
+      "sha256": "7039c1d6de5755be722b3fdb22d32dc529e7f5b37a681278d4c9b112f92c133e",
+      "exitCode": 0
+    }
+  ],
+  "qualifiedNativeBrowserResult": {
+    "independentAllowanceChangedAfterHistoricalApproval": true,
+    "independentUnknownZeroResetFreshKeyRecovery": true,
+    "fixture": "actual-ui-private-worker-native-journey",
+    "nativeSubmissions": 11,
+    "erc20ApprovalUnknownRecovery": true,
+    "erc20FundingUnknownFreshKeyRecovery": true,
+    "hostileTokenReadsAndApprovalTxRejected": true,
+    "explicitZeroReset": true,
+    "erc20ReleaseAndRefund": true,
+    "erc20AllowanceBalancesAndNativeFees": true,
+    "actualCrypto": true,
+    "actualSelectedVault": true,
+    "actualBackupFact": true,
+    "encryptedNegotiation": true,
+    "durableBeforeSend": true,
+    "lostResponseReconciled": true,
+    "finalizedPaymentGuidance": true,
+    "sellerRelease": true,
+    "deadlineRefund": true,
+    "unknownFreshKeyRecovery": true,
+    "failedRefreshClearsGuidance": true,
+    "walletEventRevokesGuidance": true,
+    "lockLateNativeReplyIgnored": true,
+    "startupLockRetiresPendingCreate": true,
+    "heldNativeWorkRejectsNewSelection": true,
+    "authorityRaceRetainsPhysicalAdmission": true,
+    "retiredRpcStartsZeroNewScans": true,
+    "expiredColdPreparationCancelled": true,
+    "canonicalReviewAndReceipt": true,
+    "wrongGenesisAndRuntimeRejected": true,
+    "sourceCiphertextPreserved": true,
+    "nativeReceipt": true,
+    "encryptedWatchExport": true,
+    "productionPeerCarrier": false,
+    "tradingEnabled": false,
+    "externalNetwork": false
+  },
+  "nativeTools": [
+    {
+      "path": "/workspace/work/foundry-1.5.1/forge",
+      "sha256": "a39fc1913b53dde6a35b603756f65d799e13817ef694107ec0d3704c20435cce"
+    },
+    {
+      "path": "/workspace/work/foundry-1.5.1/anvil",
+      "sha256": "b47362d2159aa0f2f575320e5e529bb5a91093cb62dc6bd30c0022018aa9f738"
+    },
+    {
+      "path": "/workspace/work/foundry-1.5.1/cast",
+      "sha256": "7b25a9c61dac49a0718ba3c2d37ba638014f3baf35739777b2d809780914e91d"
+    },
+    {
+      "path": "/workspace/work/foundry-1.5.1/solc-0.8.30",
+      "sha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+    }
+  ],
+  "reviewAxes": {
+    "correctness": "Read all eight complete sources and relevant canonical journal/lifecycle/builder/observation dependencies. Exact asset/principal/network/deployment/genesis/runtime/allowlist/decimals/balance/allowance, ABI words, native values, prepared requests and nonce/receipt/finality are bound through existing APIs. Approval is separate from fund readiness. Local release/refund and fee accounting executed on canonical contracts.",
+    "readability": "Explicit native contracts and README document the action sequence, recovery semantics, exact bounds and production exclusions. Dense existing local implementation style did not hide an observed behavioral defect.",
+    "architecture": "Actual vault Worker, current session/row, genuine backup fact, encrypted negotiation, journal and canonical escrow constructors are retained. Document IPC cannot supply acceptance, prepared capability or native receipt truth. Default App/entry graph remains excluded.",
+    "security": "Actual invalid chain/runtime/token responses and wrong approval nonce/token/spender/amount are refused; durable unknown markers precede sends; fresh-key restore never resends and preserves source ciphertext; actual re-acceptance requires explicit risk confirmation and both native signatures. Existing startup/lock/late-reply/physical-drain/scan races retained.",
+    "performance": "Existing bounded 65-block/128-transactions-per-block native recovery, RPC time/output caps, strict single physical admission, bounded fees and journal/model limits retained. No new service, polling loop or automatic network/send path introduced."
+  },
+  "independentAdditionalScenarios": [
+    {
+      "case": "Current allowance changed after historical exact approval",
+      "method": "Actual owned Anvil approve(escrow,0) executed after successful principal approval before fresh-key recovery. The old exact receipt still finalized; renewed explicit two-wallet acceptance then fund refused TOKEN_ALLOWANCE_INSUFFICIENT with no additional product send. After an explicit fixture-side allowance update, original fund/release flow continued.",
+      "result": "PASS"
+    },
+    {
+      "case": "Unknown zero-reset fresh-key recovery",
+      "method": "Lost response after actual zero-reset broadcast; encrypted export, browser reload, fresh-key restore, explicit watch/reconcile and renewed risk/two-wallet acceptance; unchanged source ciphertext, zero current allowance, no resend; original exact principal approval/fund/refund continued.",
+      "result": "PASS"
+    }
+  ],
+  "currentSharedIntegration": {
+    "status": "SEPARATE_PENDING_T67_COMPATIBILITY_QUALIFICATION",
+    "reason": "The retention author is actively changing the shared Worker dependency. Review/test approval here binds the exact original graph copied from committed HEAD plus the eight frozen T65 overlays. It does not approve in-progress T67 code. Root must verify the final combined graph after that integration freezes.",
+    "divergentDirectDependencies": [
+      {
+        "path": "apps/web/src/runtime/worker-endpoint.ts",
+        "reviewedOriginalSha256": "f2f19e8b860bac77528a03df37bc2434a155ef074f1e53f79a36aabe03a51558",
+        "currentWorkingTreeSha256": "a8fb4a09acc615a47119424b4f944198537c099c407bfa3e3af4216cc4899eb6"
+      }
+    ]
+  },
+  "unchangedT63FrozenFiles": [
+    {
+      "path": "/workspace/p2p-offramp/docs/reputation/SEMAPHORE-V4-EVALUATION.md",
+      "sha256": "d1e506a7b888760129f82bd48cde5dff638088b4dd858b09ed24477d52f76a55"
+    },
+    {
+      "path": "/workspace/p2p-offramp/docs/reputation/SEMAPHORE-V4-ORIGINAL-OBSERVATION.json",
+      "sha256": "d5f4f3be8c6f525360610aa5e1d689364ff00367f26573df9339e8c16b4cef35"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/reputation/evaluation-remediated/package-lock.json",
+      "sha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/reputation/evaluation-remediated/package.json",
+      "sha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/reputation/semaphore-v4-evaluation.mjs",
+      "sha256": "47a2a15801163438035fc947b21dad712f0d2aff3b295214fb84d19de89f645f"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/reputation/semaphore-v4-evaluation.test.mjs",
+      "sha256": "7a26d2aedd9563ac4508a1fb6fbf192e2948376297898410fd4785baf62f876f"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/reputation/semaphore-v4.pins.json",
+      "sha256": "d46e94bde6478752e142e2a1bff2f1ef81c7cac7ad7bd822677b09168c45f4ec"
+    }
+  ],
+  "limitations": [
+    "Public synthetic wallets and owned loopback Anvil/relay/Chromium only.",
+    "Plain 18-decimal exact-transfer MockERC20 only; no proxy, fee/rebase/callback token or real asset qualification.",
+    "Existing G16 fixture peer acceptance capability is not a production peer-carrier definition.",
+    "No live trading, deployment, release trust, issuer policy, service provider, custody activation or independent cryptography approval is granted."
+  ]
+}
