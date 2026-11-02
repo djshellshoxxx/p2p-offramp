@@ -23,6 +23,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { EncryptedVaultService } from '../packages/storage/src/vault-service.ts';
+import { RetentionService, JournalNativeRetentionAuthority, RETENTION_REVIEW_AGE_MS } from '../packages/storage/src/retention-service.ts';
+import { decodeIntentPayload } from '../packages/schemas/index.ts';
 import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
 import { createLifecycleJournal } from '../packages/domain/src/intent-journal.ts';
 import { createEvmTxLifecycle, evmFinalityPolicy } from '../packages/domain/src/tx-lifecycle.ts';
@@ -78,6 +80,7 @@ const request = ({ method, params }) => rpc(method, params ?? []);
 
 /** One "process": an unlocked vault session, lifecycle journal and lifecycle over the shared file store. */
 async function openClient(storePath, profileId, escrow, wallet = request) {
+  const nativeUrl = rpcUrl; let closed = false;
   const vault = new EncryptedVaultService(new FileStore(storePath), crypto, { lifecycle: false });
   const unlocked = await vault.unlock(profileId, PASS);
   assert.equal(unlocked.ok, true, 'vault unlocks');
@@ -87,7 +90,7 @@ async function openClient(storePath, profileId, escrow, wallet = request) {
   const life = createEvmTxLifecycle({ journal, reader, wallet, policy: POLICY });
   const [account] = await rpc('eth_accounts');
   await life.walletChanged({ account: account.toLowerCase(), chainId: String(BigInt(await rpc('eth_chainId'))), generation: 1 });
-  return { vault, journal, life, close() { life.dispose(); journal.dispose(); vault.dispose(); } };
+  return { vault, journal, life, session:unlocked.value, nativeSourceCurrent:()=>!closed&&rpcUrl===nativeUrl, close() { closed=true; life.dispose(); journal.dispose(); vault.dispose(); } };
 }
 const val = (result, label) => { assert.equal(result.ok, true, `${label}: ${JSON.stringify(result)}`); return result.value; };
 
@@ -193,6 +196,15 @@ async function main() {
     const finalized = await reconcileUntil(client.life, intentId, 'finalized', 'unknown outcome finality');
     assert.equal(finalized.intent.state, 'finalized');
     assert.equal(BigInt(await rpc('eth_getTransactionCount', [seller, 'latest'])), before, 'exactly one transaction was ever sent');
+    const retentionAuthority=new JournalNativeRetentionAuthority({vault:client.vault,session:client.session,journal:client.journal,reconciler:client.life,currentScope:client.nativeSourceCurrent,maxAgeMs:30000});
+    const retention=new RetentionService(client.vault,client.session,retentionAuthority);
+    try {
+      const revision=client.journal.currentRevision();const review=await retention.planRetention(Date.now()+RETENTION_REVIEW_AGE_MS);
+      assert.equal(review.ok,false,'finalized fund receipt does not make funded escrow safe to delete');assert.equal(review.error.code,'NATIVE_PROOF_REQUIRED');
+      assert.equal(client.journal.currentRevision(),revision,'rejected retention review writes no marker');
+      assert.equal(BigInt(await rpc('eth_getTransactionCount',[seller,'latest'])),before,'retention rejection cannot resend');
+      pass('retention: native finalized fund with still-funded escrow remains protected; no deletion, journal write or resend');
+    } finally {retention.dispose();retentionAuthority.dispose();}
     client.close();
     pass('unknown outcome: client SIGKILLed after send-started and broadcast; fresh process reconciles confirmed -> finalized without resending');
   }
@@ -258,6 +270,31 @@ async function main() {
     const released = await reconcileUntil(client.life, releasing.intentId, 'confirmed', 'release');
     assert.equal(released.escrowState, 'released');
     assert.equal(BigInt(await rpc('eth_getBalance', [buyer, 'latest'])), buyerBefore + 10n ** 17n);
+    // DATA01: a finalized fund is still an unresolved trade until native escrow is terminal.
+    await reconcileUntil(client.life,releasing.intentId,'finalized','release finality for local retention');
+    const sourceRevision=client.journal.currentRevision();
+    const sourceRecords=val(await client.vault.list(client.session.sessionId),'retention source snapshot');
+    const selected=sourceRecords.filter(record=>record.kind==='journal'&&decodeIntentPayload(record.payload).binding.tradeId===input.binding.tradeId);
+    assert.equal(selected.length,2,'only this native fund/release pair is copied for scoped local deletion');
+    const fixtureVault=new EncryptedVaultService(new FileStore(storePath),crypto,{lifecycle:false});
+    const fresh=val(await fixtureVault.create(PASS),'create distinct retention fixture profile');
+    val(await fixtureVault.commit(fresh.sessionId,fresh.revision,selected.map(record=>({op:'put',record}))),'copy actual local journal bytes');
+    fixtureVault.dispose();
+    const scoped=await openClient(storePath,fresh.profileId,escrow);
+    const authority=new JournalNativeRetentionAuthority({vault:scoped.vault,session:scoped.session,journal:scoped.journal,reconciler:scoped.life,currentScope:scoped.nativeSourceCurrent,maxAgeMs:30000});
+    const retention=new RetentionService(scoped.vault,scoped.session,authority);
+    try {
+      const nonceBefore=await rpc('eth_getTransactionCount',[seller,'pending']);
+      const plan=val(await retention.planRetention(Date.now()+RETENTION_REVIEW_AGE_MS),'native terminal retention preview');
+      assert.equal(plan.reviewedDeleteCount,2);assert.equal(plan.archiveReviewCount,2);
+      const receipt=val(await retention.deleteReviewedRecords(plan,{version:1,expectedRevision:plan.revision,consentRevision:plan.revision,reviewed:true,logicalOnly:true,backupAndRemoteLimitsAcknowledged:true}),'native terminal retention delete');
+      assert.equal(receipt.deletedCount,2);assert.equal(receipt.revision,plan.revision+1);
+      assert.equal(val(await scoped.vault.list(scoped.session.sessionId),'retention readback').length,0);
+      assert.equal(await rpc('eth_getTransactionCount',[seller,'pending']),nonceBefore,'retention only reconciles reads; no extra wallet sends');
+      assert.equal(client.journal.currentRevision(),sourceRevision,'source profile remains unchanged');
+      assert.deepEqual(val(await client.vault.list(client.session.sessionId),'retained source'),sourceRecords);
+      pass('retention: fresh native finalized receipt plus released escrow verifies a journal-only copy profile; explicit reviewed CAS deletes two local copies without resending or changing source');
+    } finally {retention.dispose();authority.dispose();scoped.close();}
     client.close();
     pass('receipt path: fund -> finalized (anvil finalized tag), then release via the lifecycle -> confirmed; buyer paid');
   }

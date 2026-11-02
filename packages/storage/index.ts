@@ -7,3 +7,8 @@ export { MigrationRegistry, RecordMigrationService, InternalMigrationResealer, M
 export type { ResealResult } from './src/migration-service.ts';
 export type { RecordMigration, RecordSchema, MigrationPlan, MigrationChange, MigrationResult, MigrationResealRequest } from './src/migration-service.ts';
 export type { ResealReceipt } from './src/vault-service.ts';
+/** DATA01 Worker-private only; no default native dependency proof or UI transport is installed. */
+export { RetentionService, RETENTION_REVIEW_AGE_MS, MAX_RETENTION_DELETES } from './src/retention-service.ts';
+export type { RetentionPlan, RetentionConsent, RetentionDeleteReceipt, RetentionResult, RetentionErrorCode, RetentionCandidate, RetentionPurpose, RetentionScope, NativeRetentionAuthority, NativeRetentionLease } from './src/retention-service.ts';
+export { JournalNativeRetentionAuthority } from './src/retention-service.ts';
+export type { JournalRetentionOptions, RetentionJournalPort, RetentionReconcilerPort } from './src/retention-service.ts';
