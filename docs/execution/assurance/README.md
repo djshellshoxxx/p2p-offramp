@@ -1,6 +1,6 @@
 # Local assurance evidence packet
 
-This packet advances LEGAL01/02 intake, ATTACK01 traceability and G26 preparation. It grants no legal, release, custody, provider, device or spending authority. It contains public repository paths and synthetic regression references only. No legal assessment, professional review, actual incident, publication, disclosure contact or operational drill was performed for this packet.
+This packet advances LEGAL01/02 intake, ATTACK01 defensive traceability and G26 local preparation. It grants no legal, release, custody, provider, device or spending authority. It contains public repository paths and synthetic regression references only. The separate [local drill records](../drills/README.md) retain thirteen observed offline checks and unchanged historical two-origin evidence. No actual incident, professional assessment, operational incident drill, publication or disclosure contact is claimed.
 
 `role-facts.json` and `jurisdiction-matrix.json` intentionally contain empty arrays. Repository source can establish properties of the canonical basic escrow, but does not establish who operates a service, receives fees, handles fiat/cash, controls separate deployments or acts in a jurisdiction. Unknown operational facts must not become false booleans in a finalized RoleFactsV1. A future intake needs every LEGAL02 fact, explicit jurisdiction scope and the actual operator's source-backed evidence. Missing jurisdiction or reviewer is unassessed, not an exemption. Named reviewers, official-source URLs/digests and `approved-profile` labels remain claims until independently authenticated; the validator never offers a commercial profile.
 
@@ -8,7 +8,26 @@ The exact LEGAL01 schema has no assessed-role-revision hash field. No binding or
 
 ## Concrete attack-to-regression mapping
 
-All rows remain `specified`: the mapping identifies real source and an assertion to execute, rather than certifying an entire attack family. `evidence-manifest.json` binds the current bytes of these local files. The focused assurance test checks every path and SHA256; its success proves file integrity for that invocation, not test correctness or that every listed test was executed in this slice.
+All thirty C-01 through C-30 rows are now represented in `attack-cases.json` using
+the existing exact AttackCase schema. Every row remains `specified`: a concrete
+defensive code/test reference is not certification of an entire attack family.
+Each rationale identifies assertion anchors, applicable sub-scope, excluded or
+missing capability, residual risk, accountable role and next action. No row is
+declared reproduced, mitigated or verified by this source inventory.
+
+The core-only/default artifact still has trading disabled. Applicability refers
+to the implemented canonical escrow, client libraries and explicitly bounded local
+fixtures, not an enabled deployment. Oracle/swap, upgrade/admin, proof-authorized
+fiat release, batch settlement, permits, bridges and advanced privacy each have
+distinct absent or unqualified sub-scopes. Those exclusions do not waive related
+core ordering, amount, signature, routing, metadata or recovery requirements.
+
+`evidence-manifest.json` binds the exact current bytes of the finite public
+reference set (at most64 files), excluding its own self-hash. The existing focused
+assurance test checks paths/SHA256 and validates every AttackCase. Its success
+proves packet integrity for that invocation, not that every referenced suite ran.
+Selected actual local checks and reused receipt identities are recorded separately
+under `drills/`; current native aggregate execution belongs to root.
 
 | Attack | Exact existing assertion / source | Scope and residual limit |
 | --- | --- | --- |
@@ -20,7 +39,14 @@ All rows remain `specified`: the mapping identifies real source and an assertion
 | C-23 | `diagnostics.test.mjs`: `known secret strings in every candidate field are refused and getters and foreign errors stay opaque`; `courier/test/secrets.test.mjs` lock/expiry/pending-commit regressions | Allowlisted export and owned borrowed-buffer behavior under synthetic fixtures and actual G02. Same-origin XSS/extensions, screenshots, JavaScript strings and caller/backup copies can still disclose data. |
 | C-29 | `apps/web/scripts/artifact-policy.test.mjs`, `scripts/tests/import-boundaries.test.mjs`, lockfile/source graph | Existing build-policy and graph assertions. No supply-chain or professional cryptographic certification; signed release roots and dependency provenance remain separate. |
 
-The matrix is intentionally incomplete. It is not a waiver for C-03, C-07 through C-12, C-14 through C-16, C-18 through C-22, C-25 through C-28, C-30 or additional variants of mapped rows. Some have other repository tests; their coverage requires separate scoped evidence. No headings or test names alone establish mitigation. Native oracle/automated fiat settlement, VRF/provider attestation, physical-custody devices, legal review and professional security review are not qualified by this packet.
+The table above preserves the original bounded examples; the machine-readable
+matrix now supplies the remaining twenty rows as well. All thirty remain partial
+defensive traceability. Missing native oracle/automatic fiat settlement, actual
+independent-provider split-view evidence, qualified physical custody, legal and
+professional security review are explicit gaps. No headings, hash equality or
+test names alone establish mitigation. Follow each row's next action and the
+[G24 acceptance inventory](../acceptance/README.md), keeping actual outcomes and
+missing mandatory target combinations separate.
 
 ## Local checks
 
