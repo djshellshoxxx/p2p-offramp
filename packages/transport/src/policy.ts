@@ -205,6 +205,11 @@ export class SessionTransportPolicy {
     } catch { this.#block(state.projection.endpoint.adapterId, 'ROUTE_UNAVAILABLE'); return false; }
     return !this.#closed && state.active && state.permit.generation === this.#generation;
   }
+  /** Retire all scopes when a compiled feature policy changes without changing transport mode. */
+  invalidate(): void | RouteError {
+    if (this.#closed || this.#changing) return 'POLICY_BLOCKED';
+    this.#transition('CANCELLED');
+  }
   setMode(input: TransportMode): void | RouteError {
     if (input !== 'ordinary' && input !== 'strict') return 'POLICY_BLOCKED';
     if (this.#closed || this.#changing) return 'POLICY_BLOCKED';
