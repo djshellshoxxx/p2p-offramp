@@ -1,4 +1,5 @@
 /** Real nested local staging smoke. No distribution/host/release/device approval. */
+import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {mkdtemp,readFile,rm} from 'node:fs/promises';
@@ -10,6 +11,7 @@ import {PORTAL_HEADERS} from '../portal/policy.mjs';
 import {offlinePolicy} from '../../apps/web/scripts/static-build-plugin.mjs';
 import {resolveChromiumPath} from '../lib/chromium-path.mjs';
 
+await test('actual unsigned distribution loads, reloads and downloads from nested local paths', async () => {
 const temporary=await mkdtemp(join(tmpdir(),'p2p-stage-browser-')),unexpected=[],checks=[];
 let browser,server;
 const pass=name=>{checks.push(name);console.log('ok - '+name);};
@@ -57,3 +59,4 @@ try{
  console.log(JSON.stringify({fixture:'unsigned-distribution-nested-smoke',checks:checks.length,browser:browser.version(),assets:stage.manifest.assets.length,
   buildPasses:2,localHeaderFixture:true,hostHeadersVerified:false,independentDistributionWitness:false,signedRelease:false,releaseEnabled:false,published:false,unexpectedRequests:unexpected.length}));
 }finally{await browser?.close();if(server)await new Promise(done=>server.close(done));await rm(temporary,{recursive:true,force:true});}
+});
