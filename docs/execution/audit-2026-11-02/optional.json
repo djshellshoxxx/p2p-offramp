@@ -1,0 +1,2864 @@
+{
+  "format": "p2p-offramp-whole-source-audit/v1",
+  "task": "T38-D",
+  "reviewer": "/root/audit_optional",
+  "repository": "/workspace/p2p-offramp",
+  "branch": "autonomous/completion-20261102",
+  "sourceHeadAtStart": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "sourceHeadAtCompletion": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "startedAt": "2026-11-02T15:58:55.657226+00:00",
+  "completedAt": "2026-11-02T16:08:31.462723+00:00",
+  "scope": {
+    "packages": [
+      "arbitration",
+      "courier",
+      "liquidity",
+      "meetup",
+      "stealth",
+      "proof-inputs",
+      "privacy-controls"
+    ],
+    "productionFiles": 56,
+    "productionLinesAtStart": 8599,
+    "allPackageFiles": 112,
+    "allProductionFreshlyRead": true,
+    "testReview": "Selected actual tests freshly read as listed;unchanged remaining test/native/oracle evidence explicitly reused from exact-hash receipts.",
+    "excluded": "proof-jobs/T87;T80 drafts;T81 selector;T82 favorites;T83 share;domain/EVM,transport/messaging,crypto/storage internals and build/ops are separate audit owners."
+  },
+  "authorization": "Owned repository defensive source/correctness review. Local deterministic state tests only. No third-party target,exploit reproduction,provider activation,credentials,real funds or deployment.",
+  "method": [
+    "Full production-file reads,exact package contracts and applicable normative DTO/algorithm/lifecycle sections.",
+    "Checked authority and local-model claims,crypto profile/source match,exact schemas,counts/bytes/overflow,replay/expiry/reentry/cancel and ignored-operation lifetimes.",
+    "Checked actual G02 lease/CAS consumer boundaries,encrypted purpose persistence,owned cleanup,foreign preservation and explicit uncertain durability.",
+    "Compared historical source/test identities before reusing evidence;initial inventory retained independently.",
+    "Root-authorized minimal T88 repair written test-first;default-isolated canonical courier tests ran with managed network/IPC capability."
+  ],
+  "globalConclusions": [
+    "No P0/P1/P2 defect confirmed in these seven bounded optional implementations;one P3 local locker deadline transition repaired under T88 and pending independent root review.",
+    "Every production module remains optional:models/unverified/offline data and encrypted local consumers acquire no wallet,provider,physical presence,cash-value,fiat-finality or basic escrow release/refund authority.",
+    "Stealth explicitly retains two incompatible named preimages,no selected default/wire/network/spending profile. Vote/container encoders follow specified byte profiles;no invented missing signature/circuit domains.",
+    "Imported JSON/status/reviewer labels cannot become opaque handles or trusted authority;constructor callback trust and missing native/provider/wire contracts remain explicit.",
+    "No broad suite,build,browser/native-chain or hosted scanner result is newly claimed by this audit;root owns final integrated verification."
+  ],
+  "findings": [
+    {
+      "id": "T38-D-01/T88-COURIER-EXPIRY",
+      "severity": "P3",
+      "path": "packages/courier/src/locker.ts",
+      "lineAtStart": 182,
+      "lineAfterRepair": 184,
+      "summary": "Prepared local locker command lost its expiry and could be marked sent at/after the original deadline.",
+      "evidence": {
+        "path": "/workspace/work/audit-optional-locker-expiry-observation.json",
+        "sha256": "4e8c0ffeb685bd9d6f4bb8a9202e26f319c057fa104f81ae93e18864b8ef0453",
+        "bytes": 3081,
+        "lines": 107
+      },
+      "failureCondition": "prepare at100 with expiresAt200;markSendStarted at200/201 returned successful unknown/revision2 instead of EXPIRED.",
+      "impact": "Incorrect local reference transition;there is no device executor and outputs deny physical/economic authority. No real unlock,transfer or third-party system involved.",
+      "governingContract": "CIT03 queued action reauthorization and CIT10 expired refusal;local model keeps original command deadline.",
+      "repair": "Retain commandExpiresAt from parsed prepare;read current time once and refuse >=expiry before changing started,phase or revision.",
+      "regression": "Start199 succeeds once;200/201 and repeat starts return EXPIRED preserving prepared projection/revision;existing uncertain no-resend checks retained.",
+      "status": "FIXED_FOCUSED_GREEN_PENDING_ROOT_INDEPENDENT_REVIEW",
+      "approvedWriterScope": "Root admitted exactly locker.ts and existing locker.test.mjs under T88;no other source/ledger/commit.",
+      "repairFiles": [
+        {
+          "path": "packages/courier/src/locker.ts",
+          "sha256": "d28f1976671eaddffcfa67f82d632de6af80f04a9e974b49b329ede95cc0df65",
+          "bytes": 10910,
+          "lines": 330
+        },
+        {
+          "path": "packages/courier/test/locker.test.mjs",
+          "sha256": "3fa9386445d5202126461e5714801f0f449d939522f9b3aa7a6e355cd339afbc",
+          "bytes": 7193,
+          "lines": 248
+        }
+      ]
+    }
+  ],
+  "openBlockingFindings": [],
+  "pendingIndependentReview": [
+    "T88-COURIER-EXPIRY two-file author repair"
+  ],
+  "initialInventory": {
+    "path": "/workspace/work/audit-optional-inventory-start.json",
+    "sha256": "382f1395bd3c08410e80b752f934667216fd8d4dbc076fc7eeefd64ef52af39b",
+    "bytes": 22376,
+    "lines": 680
+  },
+  "authorizedDrift": [
+    "packages/courier/src/locker.ts",
+    "packages/courier/test/locker.test.mjs"
+  ],
+  "unexpectedDrift": [],
+  "files": [
+    {
+      "path": "packages/arbitration/DECISIONS.json",
+      "sha256": "ddcf54cd74275a2c08bf1d9457e8752770b6346a5c0d338881aac0eae83746ec",
+      "lines": 38,
+      "production": false,
+      "sha256AtStart": "ddcf54cd74275a2c08bf1d9457e8752770b6346a5c0d338881aac0eae83746ec",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/arbitration/README.md",
+      "sha256": "6799f8426b754e64b4de77b5fcf30e7b764399fbd4197d69cd3784d0afa1b5d8",
+      "lines": 141,
+      "production": false,
+      "sha256AtStart": "6799f8426b754e64b4de77b5fcf30e7b764399fbd4197d69cd3784d0afa1b5d8",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/arbitration/index.ts",
+      "sha256": "d7e52527974d90ef8325b345c70facf0d305d11f730fb9dd3b03cffd77bfba3f",
+      "lines": 17,
+      "production": true,
+      "sha256AtStart": "d7e52527974d90ef8325b345c70facf0d305d11f730fb9dd3b03cffd77bfba3f",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "ARB/G33",
+        "G34",
+        "ARB-PAY"
+      ],
+      "checks": [
+        "Narrow diagnostic exports; no certificate, wallet, native execution or default-app registration."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/accounting.ts",
+      "sha256": "291088d643e5ec05859e2c09fa9a1f3fd7dcf10f82b7fc351620e945cd84bb4d",
+      "lines": 39,
+      "production": true,
+      "sha256AtStart": "291088d643e5ec05859e2c09fa9a1f3fd7dcf10f82b7fc351620e945cd84bb4d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-FEE",
+        "ARB-WEIGHT",
+        "G33"
+      ],
+      "checks": [
+        "Checked uint256 fee/bond sums and multiplication, fourteen-seat reserve and separate principal.",
+        "Claims cannot exceed credits; seven-day age and existing reservation bounds do not create native funds."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/appeal.ts",
+      "sha256": "035c8cec5f266c34649591adf2b00e608b086dd25464829fed5cd66adddbff15",
+      "lines": 73,
+      "production": true,
+      "sha256AtStart": "035c8cec5f266c34649591adf2b00e608b086dd25464829fed5cd66adddbff15",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-APPEAL",
+        "G34"
+      ],
+      "checks": [
+        "Fixed one-appeal windows; only bound trader actors and prebound reserve port.",
+        "Contradictory closed observations refuse; hard stop counts closed rounds only, falls back to seller, preserves unavailable-read uncertainty.",
+        "Final diagnostic cannot reopen; trusted callbacks checked around invocation and owned busy admission."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/clock.ts",
+      "sha256": "ddfac4b196cee5ab599b6db4e35a9035a050208426bfa87b65e7b74950a73ae6",
+      "lines": 29,
+      "production": true,
+      "sha256AtStart": "ddfac4b196cee5ab599b6db4e35a9035a050208426bfa87b65e7b74950a73ae6",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "G34"
+      ],
+      "checks": [
+        "Twelve-hour randomness plus fixed daily stages total ten scheduled days; immutable fourteen-day hard stop and one-day accounting grace.",
+        "Checked additions and half-open boundaries; no wall-clock substitution or native deadline change."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/draft.ts",
+      "sha256": "fb548f008ccf00a1fecf7876921ec19961f04aeee596f3beaa6079b807ba398e",
+      "lines": 76,
+      "production": true,
+      "sha256AtStart": "fb548f008ccf00a1fecf7876921ec19961f04aeee596f3beaa6079b807ba398e",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-DRAFT",
+        "ARB-RANDOMNESS"
+      ],
+      "checks": [
+        "Frozen 4096-entry pool, distinct IDs/exclusions and explicit authenticated snapshot/word ports.",
+        "Partial Fisher-Yates uses uint256 rejection sampling; max64 steps/call and256 total attempts, no biased fallback.",
+        "Candidate-order seating, once-only accepts and five/nine seat limits; seed timeliness is a trusted-port obligation, not independently proven."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/payment-assertions.ts",
+      "sha256": "8560e83bd4fe0014cc9b6cb4125f5c29688a744dc9f01cd3a39ab9dd454db9fe",
+      "lines": 38,
+      "production": true,
+      "sha256AtStart": "8560e83bd4fe0014cc9b6cb4125f5c29688a744dc9f01cd3a39ab9dd454db9fe",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "ARB-PAY",
+        "ARB-CONFLICT"
+      ],
+      "checks": [
+        "Exact party-assertion DTO and full local case/terms/actor/evidence window; authenticated-source refuses before artifact inspection.",
+        "Actual native nonshared bytes,1MiB/artifact,8MiB/case,32 records/party and4096-byte responses; private SHA256 duplicate-byte fingerprints.",
+        "Deterministic separate groups/issues, no partial-payment sum, no verdict/source/economic authority; close drops metadata."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/penalty.ts",
+      "sha256": "1a6b65027e6ab1cefa00e1d3325858ced85b2c701e4cd4a54a36d596a7e07c28",
+      "lines": 12,
+      "production": true,
+      "sha256AtStart": "1a6b65027e6ab1cefa00e1d3325858ced85b2c701e4cd4a54a36d596a7e07c28",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-PENALTY"
+      ],
+      "checks": [
+        "Floor10% applied only to accepted seated nonreveals after commit-enabled closed round; bounded by remaining bond.",
+        "Valid abstention/minority/nonseated/unstarted rounds have no deduction; unapplied projection only."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/shared.ts",
+      "sha256": "47820465eb4522258ddbc3fb885a889d9a70fdf3b05e940d784982f8b23dc26f",
+      "lines": 69,
+      "production": true,
+      "sha256AtStart": "47820465eb4522258ddbc3fb885a889d9a70fdf3b05e940d784982f8b23dc26f",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "G33",
+        "G34"
+      ],
+      "checks": [
+        "Exact descriptor-safe records and bounded native arrays; lowercase identifiers/addresses and checked uint256 arithmetic.",
+        "Complete chain/escrow/tribunal/policy/trade/case binding; admission before callbacks, monotonic chain-time refusal and terminal scope disposal.",
+        "Only internal errors yield fixed classifications; diagnostic marker overwrites no native authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/tally.ts",
+      "sha256": "b2eac2e94f5c903ed924257e96ee658f13fbc88942f9e513dd4c0f95f1770ec5",
+      "lines": 69,
+      "production": true,
+      "sha256AtStart": "b2eac2e94f5c903ed924257e96ee658f13fbc88942f9e513dd4c0f95f1770ec5",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-TALLY",
+        "ARB-VOTE"
+      ],
+      "checks": [
+        "Five/nine distinct juror/address/operator seats, quorum4/6 and directional3/5.",
+        "One commitment and matching root-bound reveal; invalid reveal consumes no slot; cannot close before revealEnd.",
+        "Actor/current/time callbacks guarded; pure tally stays unclosed and all outputs diagnostic."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/src/vote.ts",
+      "sha256": "41a9f5204fab177ed6c6f3a62d69ccd6e484b0dff1ee4da061eeb8fe85eacf93",
+      "lines": 25,
+      "production": true,
+      "sha256AtStart": "41a9f5204fab177ed6c6f3a62d69ccd6e484b0dff1ee4da061eeb8fe85eacf93",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "contracts": [
+        "ARB-VOTE"
+      ],
+      "checks": [
+        "Exact ten-word320-byte fixed-width ABI including published typehash; Keccak256, not SHA3 or packed encoding.",
+        "Full specified fields and scalar bounds; private preimage buffer wiped, returned vectors explicitly public diagnostic fixtures.",
+        "No live salt generation/storage, signing, juror authentication or extra guessed trade fields."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/arbitration/test/fixtures/generate_vote_vectors.py",
+      "sha256": "2fb1946e524ac255c1a3457acd2914112b93eb6009d8b0b95d0d924beee4f6b4",
+      "lines": 22,
+      "production": false,
+      "sha256AtStart": "2fb1946e524ac255c1a3457acd2914112b93eb6009d8b0b95d0d924beee4f6b4",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/arbitration/test/fixtures/vote-cast-vectors.json",
+      "sha256": "1dc6e11ff56358904d617afe98a5e224306ec838aaf4d8e4cc1b4675f2d4344c",
+      "lines": 93,
+      "production": false,
+      "sha256AtStart": "1dc6e11ff56358904d617afe98a5e224306ec838aaf4d8e4cc1b4675f2d4344c",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/arbitration/test/payment-assertions.test.mjs",
+      "sha256": "672a8243364aa01bd919ecb91ccd7f85d754f5db4854f9a1e13ebd58581ef4c2",
+      "lines": 13,
+      "production": false,
+      "sha256AtStart": "672a8243364aa01bd919ecb91ccd7f85d754f5db4854f9a1e13ebd58581ef4c2",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/arbitration/test/reference.test.mjs",
+      "sha256": "e8886fe38f99acf8c80fc1836b8b57deff2fa1792684c2612a5bc89d127973f7",
+      "lines": 241,
+      "production": false,
+      "sha256AtStart": "e8886fe38f99acf8c80fc1836b8b57deff2fa1792684c2612a5bc89d127973f7",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/arbitration-T46-manifest.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/courier/README.md",
+      "sha256": "0d6faf1ad4563a774c38e8a071a7e8ed43d69782e3c2eeb2bc19666286b2c8a0",
+      "lines": 49,
+      "production": false,
+      "sha256AtStart": "0d6faf1ad4563a774c38e8a071a7e8ed43d69782e3c2eeb2bc19666286b2c8a0",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/courier/index.ts",
+      "sha256": "d027b8689429bf7b063b8ac3a781c30a65b1169146198b1222a0938e05b70ec4",
+      "lines": 62,
+      "production": true,
+      "sha256AtStart": "d027b8689429bf7b063b8ac3a781c30a65b1169146198b1222a0938e05b70ec4",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-01..16",
+        "G32"
+      ],
+      "checks": [
+        "Local parsers/verifiers/models and encrypted-secret consumer only; no transport/device/wallet/settlement executor."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/accounting.ts",
+      "sha256": "87b61bb68842457e789728d9d8933e5f45020ee05bc79ca12f5e6bf12cdcb910",
+      "lines": 362,
+      "production": true,
+      "sha256AtStart": "87b61bb68842457e789728d9d8933e5f45020ee05bc79ca12f5e6bf12cdcb910",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-01",
+        "CIT-13",
+        "CIT-14"
+      ],
+      "checks": [
+        "Checked78-digit integer conservation, cumulative cooperative fees, cancellation cap and pending-fee timeout.",
+        "Stake reservations bounded64 active/128 lifetime; reserve only withdrawable and protect deposits/unbonding.",
+        "Cooperative deduction checks signer/policy/beneficiary/time/cap and never executes native deduction; replay and custody remain explicitly unavailable."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/challenge.ts",
+      "sha256": "950b305b7828d4131ef22c2270b84846ca689c3d230fb6d272981e4131c7f356",
+      "lines": 74,
+      "production": true,
+      "sha256AtStart": "950b305b7828d4131ef22c2270b84846ca689c3d230fb6d272981e4131c7f356",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-15"
+      ],
+      "checks": [
+        "Fresh native64-byte randomness split into32-byte challenge ID/nonce;120-second lifetime and distinct giver/taker.",
+        "Exact local record parsing and owned buffer wipe; no signature, transport, durable replay or presence claim."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/commitment.ts",
+      "sha256": "b62dfccd056e7269101f63421863d824204f278d9ff6f1c6a5571e8ec8e07448",
+      "lines": 94,
+      "production": true,
+      "sha256AtStart": "b62dfccd056e7269101f63421863d824204f278d9ff6f1c6a5571e8ec8e07448",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-08"
+      ],
+      "checks": [
+        "Exact SHA256 domain-NUL plus canonical opening bytes; shipment/container/generation comparisons.",
+        "Public caller-supplied preimage buffer ownership explicit; temporary bytes wiped, opening is knowledge only."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/custody.ts",
+      "sha256": "2f4f1160ef414589451952a74ead5391e8eb4b39b82802874c5d9926f6bd9b44",
+      "lines": 519,
+      "production": true,
+      "sha256AtStart": "2f4f1160ef414589451952a74ead5391e8eb4b39b82802874c5d9926f6bd9b44",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-02",
+        "CIT-03",
+        "CIT-05",
+        "CIT-06",
+        "CIT-15",
+        "CIT-16",
+        "G32"
+      ],
+      "checks": [
+        "Identical three-role consent, seller pickup permission and generation/revision/time checks.",
+        "Fresh mutually signed challenge and matching receipt/head; one-use challenge IDs,128 fork-preserving receipt claims and bounded known custodians.",
+        "Late/conflicting claims remain ambiguity; recovery retains original deadlines and latched financial timeout, never basic settlement.",
+        "Route authorization returns field names only; actual payload delivery and durable multi-leg coordination remain absent."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/locker.ts",
+      "sha256": "d28f1976671eaddffcfa67f82d632de6af80f04a9e974b49b329ede95cc0df65",
+      "lines": 326,
+      "production": true,
+      "sha256AtStart": "7405d387b17590ed05a9558aa2ef31c5860d380d9effd927bf210e025862dc76",
+      "changedDuringAudit": true,
+      "matchingHistoricalHashSources": [],
+      "contracts": [
+        "CIT-09",
+        "CIT-10",
+        "CIT-11",
+        "CIT-12"
+      ],
+      "checks": [
+        "Unknown profile refuses; one prepared/unknown command, no resend/reset; maxthree status reads within60seconds.",
+        "Signed device status cannot clear uncertainty; counter rollback/conflict/jam quarantine, physical custody unresolved.",
+        "Access window equality denies; missing time/revocation/replay storage has no unlock authority.",
+        "Inspection ancestry and damage/seal-change flags persist; T88 retains prepared expiry and refuses markSendStarted at/after it without phase/revision mutation."
+      ],
+      "semanticReview": "fresh whole-file read;T88 minimal author repair independently reviewable by root"
+    },
+    {
+      "path": "packages/courier/src/records.ts",
+      "sha256": "36edeb6c0fd2dbba6d8ea97095c86870b56ea5deedf4aa9a420ac9276b4971fa",
+      "lines": 446,
+      "production": true,
+      "sha256AtStart": "36edeb6c0fd2dbba6d8ea97095c86870b56ea5deedf4aa9a420ac9276b4971fa",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-01..16"
+      ],
+      "checks": [
+        "Exact detached records, descriptors/accessors/duplicates/unknown fields rejected; selected key/signature decoders and16KiB canonical cap.",
+        "Safe revisions/counters, ordered assignment/handshake deadlines, bounded fields,120-second challenges and3600-second access windows.",
+        "No key curve, signature domain, outer message replay format, cash-value authenticity or custody profile invented."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/secrets.ts",
+      "sha256": "8aa2004d00dce68280b14b7d33e4fb20c30f767b89e5fa836100e93535c99354",
+      "lines": 535,
+      "production": true,
+      "sha256AtStart": "8aa2004d00dce68280b14b7d33e4fb20c30f767b89e5fa836100e93535c99354",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-07",
+        "CIT-08",
+        "G02"
+      ],
+      "checks": [
+        "Actual G02 lease/CAS, exact private slot/shipment/container/current generation floor; one active secret and16-generation history.",
+        "Native32-byte secret; no-custody recheck across load/hash/native mutation/publication; no replacement from stale floor after ambiguous commit.",
+        "Commitment and publication checks before authorized reveal; reveal log persists before bytes return and expiry is rechecked after persistence.",
+        "Lock/verifier close/compromise/retirement/release wipe owned raw/reveal buffers; JS strings/backups cannot be erased."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/shared.ts",
+      "sha256": "65f5506b8261c6fec972527d9297775103d8231ed3b22391c84e902ddca25a79",
+      "lines": 220,
+      "production": true,
+      "sha256AtStart": "65f5506b8261c6fec972527d9297775103d8231ed3b22391c84e902ddca25a79",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-03",
+        "CIT-16"
+      ],
+      "checks": [
+        "Exact own enumerable data, bounded arrays, UTF8/control-safe strings and safe counters.",
+        "Canonical JCS-safe subset and16KiB cap; checked78-digit local money without claiming an asset adapter bound.",
+        "WeakMap fixed errors; localModelOnly/physicalContentsVerified:false/economicAuthority:false always present."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/src/verification.ts",
+      "sha256": "89a95c3b92769f39a79e6c372148ceeb10ec380fef9f760491fe590611fb42f2",
+      "lines": 353,
+      "production": true,
+      "sha256AtStart": "89a95c3b92769f39a79e6c372148ceeb10ec380fef9f760491fe590611fb42f2",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "contracts": [
+        "CIT-03",
+        "CIT-16"
+      ],
+      "checks": [
+        "Fixed full TradeBinding/shipment/terms context; selected trusted key/signature/digest/signer policies receive exact detached bytes.",
+        "WeakMap provenance prevents serialized/imported evidence and cross-owner/kind replay from becoming authority.",
+        "Busy admission before callbacks; guard after callbacks/awaits; five-second port timeout permanently retires owner, aborts/wipes and prevents ignored-work accumulation.",
+        "Partial signatures stay one-sided claims; even full attribution denies contents and economic authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/courier/test/accounting.test.mjs",
+      "sha256": "675ae0aa5e4b774ae2b974441bd9f8e7717a4fada37ad641f902319417895de7",
+      "lines": 272,
+      "production": false,
+      "sha256AtStart": "675ae0aa5e4b774ae2b974441bd9f8e7717a4fada37ad641f902319417895de7",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/courier/test/custody.test.mjs",
+      "sha256": "8757374cd44fd06ff64f5760358d195909131c230f3a2975e3506cafe06422ef",
+      "lines": 431,
+      "production": false,
+      "sha256AtStart": "8757374cd44fd06ff64f5760358d195909131c230f3a2975e3506cafe06422ef",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/courier/test/fixtures/container-python-v1.json",
+      "sha256": "60eef009c1e431ec3317f512674ba3fa279e5a375a2ddd991964c6239cb919f1",
+      "lines": 13,
+      "production": false,
+      "sha256AtStart": "60eef009c1e431ec3317f512674ba3fa279e5a375a2ddd991964c6239cb919f1",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/courier/test/locker.test.mjs",
+      "sha256": "3fa9386445d5202126461e5714801f0f449d939522f9b3aa7a6e355cd339afbc",
+      "lines": 227,
+      "production": false,
+      "sha256AtStart": "c9113bc32b89f7df9ed0bb253189cac39b335b2ed2d135b56b2eefe201bf30cd",
+      "changedDuringAudit": true,
+      "matchingHistoricalHashSources": [],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/courier/test/records-commitment.test.mjs",
+      "sha256": "95e98fd3c53ff34948c7f0c9a9f1edafe4f74e4b156796d4045b8101b42d8343",
+      "lines": 184,
+      "production": false,
+      "sha256AtStart": "95e98fd3c53ff34948c7f0c9a9f1edafe4f74e4b156796d4045b8101b42d8343",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/courier/test/secrets.test.mjs",
+      "sha256": "7d4c7e5ee7d1fb8251e9278b489c817a49eb09e58b4982345fd4dfa382ed5edc",
+      "lines": 371,
+      "production": false,
+      "sha256AtStart": "7d4c7e5ee7d1fb8251e9278b489c817a49eb09e58b4982345fd4dfa382ed5edc",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/courier/test/support/fixtures.mjs",
+      "sha256": "1e2cd6c487afb183eb801495b95a04211cc14b73612b5a07b5d604b32ab70259",
+      "lines": 70,
+      "production": false,
+      "sha256AtStart": "1e2cd6c487afb183eb801495b95a04211cc14b73612b5a07b5d604b32ab70259",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/courier/test/verification.test.mjs",
+      "sha256": "9deb751c0daa81a231aada3808893baeffe5fe86b1e553b7d32fdcfec9856980",
+      "lines": 155,
+      "production": false,
+      "sha256AtStart": "9deb751c0daa81a231aada3808893baeffe5fe86b1e553b7d32fdcfec9856980",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t48-repaired-files.sha256"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/liquidity/DECISIONS.json",
+      "sha256": "7d7a5a82755f0280e158d697b928d67c18c63eec6a77738ae312544e7552da2d",
+      "lines": 32,
+      "production": false,
+      "sha256AtStart": "7d7a5a82755f0280e158d697b928d67c18c63eec6a77738ae312544e7552da2d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/liquidity/README.md",
+      "sha256": "b80733686e6b89f30af9f0a05acca37819dfe8300e920cb652c8a85a1376cbfa",
+      "lines": 91,
+      "production": false,
+      "sha256AtStart": "b80733686e6b89f30af9f0a05acca37819dfe8300e920cb652c8a85a1376cbfa",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/liquidity/index.ts",
+      "sha256": "80b9d4e92e8b85a983b6206283dabdb1aca026ade930ac16e60934cacfac716a",
+      "lines": 7,
+      "production": true,
+      "sha256AtStart": "80b9d4e92e8b85a983b6206283dabdb1aca026ade930ac16e60934cacfac716a",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "contracts": [
+        "LIQ-ACCOUNTING",
+        "LIQ-QUOTE"
+      ],
+      "checks": [
+        "Only local diagnostic math/reference exports; no vault contract or provider activation."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/liquidity/src/accounting.ts",
+      "sha256": "1555f70efe10d27ed4e2ab02a92fc93dd8784b507b174c1703a91923a8241e3f",
+      "lines": 41,
+      "production": true,
+      "sha256AtStart": "1555f70efe10d27ed4e2ab02a92fc93dd8784b507b174c1703a91923a8241e3f",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "contracts": [
+        "LIQ-ACCOUNTING"
+      ],
+      "checks": [
+        "Exact versioned canonical decimal ledger; separate custody/surplus and conservation.",
+        "Safe withdrawal min(available,max(custody-reserved,0)); claimed custody is diagnostic, not native solvency."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/liquidity/src/reservations.ts",
+      "sha256": "d08e19c6f81179cace404ac0ff779542bcb38dc6504616f08c268e62150f5630",
+      "lines": 252,
+      "production": true,
+      "sha256AtStart": "d08e19c6f81179cace404ac0ff779542bcb38dc6504616f08c268e62150f5630",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "contracts": [
+        "LIQ-QUOTE",
+        "LIQ-ACCOUNTING"
+      ],
+      "checks": [
+        "Bound maker/taker/EVM network/deployment/asset/terms/principal/nonce; fee0 and <=120-second quotes.",
+        "Prepare full copied next state then publish; failed transitions atomic; no callbacks after final context read.",
+        "128 terminal-retained quote/nonce pairs; exact single fill, expiry/cancel ordering, returned-principal check and consumed native trade identity guard.",
+        "Unknown/reorg latch blocks all allocations/reset/retry; native reserve status unavailable and outcomes remain caller simulation claims."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/liquidity/src/shared.ts",
+      "sha256": "4da2fcc9c751703abaa89e63c420cc65de056e02faed1e58566a4fe47f719f5f",
+      "lines": 58,
+      "production": true,
+      "sha256AtStart": "4da2fcc9c751703abaa89e63c420cc65de056e02faed1e58566a4fe47f719f5f",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "contracts": [
+        "LIQ-ACCOUNTING",
+        "G13"
+      ],
+      "checks": [
+        "Exact records/descriptors, checked U256/U64 decimal parsing and fixed G13 errors.",
+        "No float/coercion/overflows; local diagnostic marker grants no native authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/liquidity/test/accounting.test.mjs",
+      "sha256": "23a8ad21e028a3a4a81b5f9bbe59f83a788e267bf8a997dc2946988ffe9845fc",
+      "lines": 50,
+      "production": false,
+      "sha256AtStart": "23a8ad21e028a3a4a81b5f9bbe59f83a788e267bf8a997dc2946988ffe9845fc",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/liquidity/test/fixtures/conservation-python-v1.json",
+      "sha256": "b7806481972963f3e9d295a9929424695332a1e67f619447a374f53f10572631",
+      "lines": 3705,
+      "production": false,
+      "sha256AtStart": "b7806481972963f3e9d295a9929424695332a1e67f619447a374f53f10572631",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/liquidity/test/fixtures/generate_conservation.py",
+      "sha256": "5a0ffa30f7357a9545e05e88807f06fae600b6811e8c09da479da13799bbcd46",
+      "lines": 102,
+      "production": false,
+      "sha256AtStart": "5a0ffa30f7357a9545e05e88807f06fae600b6811e8c09da479da13799bbcd46",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/liquidity/test/reservations.test.mjs",
+      "sha256": "107bb2e5c6ec0bd93fc5a390c1225031338450564c0209d8fc2531f6458bdc26",
+      "lines": 148,
+      "production": false,
+      "sha256AtStart": "107bb2e5c6ec0bd93fc5a390c1225031338450564c0209d8fc2531f6458bdc26",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t60-freeze.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/meetup/README-POLICIES.md",
+      "sha256": "eee48bae3ea890a553db8de02fbd412eee5f41f61686137ee4935a88fc2de19a",
+      "lines": 114,
+      "production": false,
+      "sha256AtStart": "eee48bae3ea890a553db8de02fbd412eee5f41f61686137ee4935a88fc2de19a",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/meetup/README.md",
+      "sha256": "28de6fa3be2997741b8a53009f77acb1cd92a20bf8f3d3e5641b871f3955c655",
+      "lines": 105,
+      "production": false,
+      "sha256AtStart": "28de6fa3be2997741b8a53009f77acb1cd92a20bf8f3d3e5641b871f3955c655",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T69.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/meetup/index.ts",
+      "sha256": "155d9c875f65df5973d1c0b22598b4d322f9cabec2358cbfa418fff22a3eb643",
+      "lines": 118,
+      "production": true,
+      "sha256AtStart": "155d9c875f65df5973d1c0b22598b4d322f9cabec2358cbfa418fff22a3eb643",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "MEET01..15",
+        "G31"
+      ],
+      "checks": [
+        "Optional primitives/policy diagnostics only; no imported sensor, RTC connection, map renderer, proof or wallet executor."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/blur.ts",
+      "sha256": "b1285a576d5310957101c7e5c8321c5bb1d3201e7ed0b00278f39c72fec369f3",
+      "lines": 22,
+      "production": true,
+      "sha256AtStart": "b1285a576d5310957101c7e5c8321c5bb1d3201e7ed0b00278f39c72fec369f3",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET01"
+      ],
+      "checks": [
+        "Two53-bit native-backed uniforms; spherical area disk r=R*sqrt(U), dateline normalization and microdegree rounding.",
+        "Radius/latitude/accuracy limits and short marker expiry; randomness wiped and no source/random persistence."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/budget-record.ts",
+      "sha256": "62e7416db7da55e349e0f76d64dcce3bf183ac8fce9dd558fad67bea317269eb",
+      "lines": 65,
+      "production": true,
+      "sha256AtStart": "62e7416db7da55e349e0f76d64dcce3bf183ac8fce9dd558fad67bea317269eb",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET03"
+      ],
+      "checks": [
+        "Exact internal encrypted ledger/marker schema, canonical byte equality rejects duplicate/ambiguous JSON.",
+        "128 entries/trades, unique IDs/challenges, kind-context constraints, lifetime count bounds and coordinate-free ledger."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/consent.ts",
+      "sha256": "4d8bfe642d704e7866d4cc75fbafde16203860aefa7747035d6bc8e1352eca37",
+      "lines": 167,
+      "production": true,
+      "sha256AtStart": "4d8bfe642d704e7866d4cc75fbafde16203860aefa7747035d6bc8e1352eca37",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "G31"
+      ],
+      "checks": [
+        "Controller-issued identity-bound capabilities; exact explanation, trusted gesture/foreground/owner and separate collect/share/map/direct permissions.",
+        "Thirty-minute wall/monotonic expiry, generation/reentrancy checks and bounded32 cleanup subscriptions; revoke aborts synchronously and restarts require fresh grant.",
+        "No sensor calls, permission prompt or restored active consent; owner hooks remain trusted composition."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/disclosure-budget.ts",
+      "sha256": "db5b3d2b1d1813409d3ae931f1fca7e6bf07b262455471bc4637c530c4419629",
+      "lines": 307,
+      "production": true,
+      "sha256AtStart": "db5b3d2b1d1813409d3ae931f1fca7e6bf07b262455471bc4637c530c4419629",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET01",
+        "MEET03",
+        "G02"
+      ],
+      "checks": [
+        "Actual designated-profile G02 lease/CAS plus native-exclusive coordinator requirement; missing/corrupt ledger refuses and fresh provisioning requires empty revision0.",
+        "Persist reservation before sample/output; sticky marker reused across peers, clearing marker cannot reset counters.",
+        "Four/hour,twelve/day region/distance caps,three/trade lifetime and128-trade ceiling; unknown restored reservations conservatively consumed.",
+        "Consent/owner/revision/time guards across awaits and native CAS; raw numeric buffers wiped, five-second logical cancellation retains physical slot until drain."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/geofence.ts",
+      "sha256": "a6d8b9cf0c22c8fc8dbcfdb5e2791e59ae439610267904b918dec09d6fb0bcda",
+      "lines": 735,
+      "production": true,
+      "sha256AtStart": "a6d8b9cf0c22c8fc8dbcfdb5e2791e59ae439610267904b918dec09d6fb0bcda",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET08",
+        "MEET12",
+        "MEET13"
+      ],
+      "checks": [
+        "Explicit numerical adapter, scoped consent,50m entry/100m exit,30-second dwell and three separated samples; only gestures confirm.",
+        "Manual/stale/inaccurate/inconsistent claims reset dwell; scope/plan/revocation/silence end generation and wipe owned coordinates.",
+        "Coordinate-free claimed-event schema and encrypted replay diagnostic; full local scope/session/plan match,32-ID window and monotonic sequence.",
+        "Original event expiry and24-hour local session cutoff survive native CAS/publication waits; authentication/presence/economic flags stay false."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/geohash.ts",
+      "sha256": "bf2b64b52012d8da51c95f64b1a810531f538716e419ada70c94d96c8b25723b",
+      "lines": 105,
+      "production": true,
+      "sha256AtStart": "bf2b64b52012d8da51c95f64b1a810531f538716e419ada70c94d96c8b25723b",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET02"
+      ],
+      "checks": [
+        "Conventional longitude-first base32 midpoint grid and precision4..7; complete sorted3x3 neighborhood with dateline wrap.",
+        "Polar/resolution/50km/nine-cell limits; imported extent recomputed, no precise-location query or anonymity guarantee."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/location-claim.ts",
+      "sha256": "50aa7ba8ffa9bcd5d8c0e9a1ae1a6d724a22fb95470a78e8b6ff5abab2e9bae6",
+      "lines": 32,
+      "production": true,
+      "sha256AtStart": "50aa7ba8ffa9bcd5d8c0e9a1ae1a6d724a22fb95470a78e8b6ff5abab2e9bae6",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET08"
+      ],
+      "checks": [
+        "Exact finite browser/manual reports,0<accuracy<=100,wall/future and monotonic30-second freshness plus consent generation.",
+        "Prior sample jump >100m/s marks uncertain, accuracy>25/manual stay uncertain, never GPS/human authentication."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/map-manifest.ts",
+      "sha256": "c4cad7a40d6f49aeedd16f5e54b0badd2e2ea3605abef17acb3219a5f2e8b708",
+      "lines": 492,
+      "production": true,
+      "sha256AtStart": "c4cad7a40d6f49aeedd16f5e54b0badd2e2ea3605abef17acb3219a5f2e8b708",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET14",
+        "MEET15"
+      ],
+      "checks": [
+        "Bound manifest/tile schema, selected signature/license policy and opaque owner-bound evidence; unconfigured defaults deny.",
+        "Exact SHA256 bytes before hypothetical decode/cache; manifest namespace,2MiB compressed,8MiB decompressed and feature/coordinate ceilings.",
+        "XYZ clipping for display only; coarse fixed rectangular plans <=256tiles/20MiB; consent rechecked after callbacks and at publication.",
+        "No URL/fetch/cache/renderer; strict routing unsupported, networkExecutionAllowed:false and decode/cache approval false."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/policy-data.ts",
+      "sha256": "820ca54cc6acc8ca39a760f49d7d22a7dc98610d908921d2546a8d9c37a8d586",
+      "lines": 525,
+      "production": true,
+      "sha256AtStart": "820ca54cc6acc8ca39a760f49d7d22a7dc98610d908921d2546a8d9c37a8d586",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json",
+        "docs/execution/reviews/T69.json",
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "MEET10..15",
+        "G02"
+      ],
+      "checks": [
+        "Fixed policy errors, scope/account/peer binding, canonical safe JSON and defensive native-backed byte copies.",
+        "Admission before callbacks, final owner guard, timeout permanently closes ignored-work owner and wipes owned buffers.",
+        "Actual G02 lease plus atomic chunked96KiB parts/head namespace,2MiB/22parts,hash/length/index and foreign collision checks; no reset or core deletion."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/rtc-policy.ts",
+      "sha256": "2d6fd9866b651aca81389f3bdd76ee2169cf8d30a17b07a959e25b38330f49aa",
+      "lines": 289,
+      "production": true,
+      "sha256AtStart": "2d6fd9866b651aca81389f3bdd76ee2169cf8d30a17b07a959e25b38330f49aa",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json",
+        "docs/execution/reviews/T69.json",
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "MEET04"
+      ],
+      "checks": [
+        "Narrow bounded candidate/SDP inspection rejects host/reflexive/mDNS/related addresses and unknown attributes.",
+        "Relay-only immutable template has no STUN/direct fallback; credentials remain ephemeral inputs and expiration checked.",
+        "Selected pair is observation only; routeVerified:false and constructionAllowed:false everywhere."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/shared.ts",
+      "sha256": "29b1464b375a30a3e7a0a3817ddbf44c6ae4c415958c1a9d72b49ed3d7a95d82",
+      "lines": 66,
+      "production": true,
+      "sha256AtStart": "29b1464b375a30a3e7a0a3817ddbf44c6ae4c415958c1a9d72b49ed3d7a95d82",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json",
+        "docs/execution/reviews/T69.json",
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "G31",
+        "MEET01..15"
+      ],
+      "checks": [
+        "Exact own data/arrays, safe integer/finite/hex/radius checks and fixed WeakMap errors.",
+        "Native CSPRNG helpers and local distance math; no parsed object grants sensor/network/settlement authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/signaling-model.ts",
+      "sha256": "7feb668a99a74530b998bd636509b109b6bb14d8c0e854d30329401cfebdf1ed",
+      "lines": 61,
+      "production": true,
+      "sha256AtStart": "7feb668a99a74530b998bd636509b109b6bb14d8c0e854d30329401cfebdf1ed",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "contracts": [
+        "MEET05"
+      ],
+      "checks": [
+        "Exact published fields without inventing omitted binding/consent/message-ID/restart fields; only generation0 is diagnostic.",
+        "Lower-key offer,upper-key answer,per-sender sequence,32 gap/pending count and256KiB pending-byte bounds;256 replay fingerprints with no live eviction.",
+        "Expiry60seconds/skew30seconds,30-second negotiation and5-second gap deadline; scope/time/callback closure terminal and payloads not exported.",
+        "No carrier,RTCPeerConnection,signing,durable replay,network or presence qualification."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/src/venue-directory.ts",
+      "sha256": "b6a0b5f9eab7ee7c55de98d491fd22c99de7d95f3c995c7e23e017afeaf44033",
+      "lines": 564,
+      "production": true,
+      "sha256AtStart": "b6a0b5f9eab7ee7c55de98d491fd22c99de7d95f3c995c7e23e017afeaf44033",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json",
+        "docs/execution/reviews/T69.json"
+      ],
+      "contracts": [
+        "MEET10",
+        "MEET11"
+      ],
+      "checks": [
+        "Exact canonical8KiB public venue/revocation records with explicit32/64-byte Ed25519 encodings and trusted signature/moderation/license/key ports.",
+        "5000 combined entries/10MiB plus encrypted90-day high-water; sticky equivocation and revocations applied before deterministic decisions.",
+        "Future/expiry/freshness and local blocked keys checked; unknown/stale directories do not recommend, defaults unconfigured.",
+        "Local recommendation is not safety certification; domain framing,revocation domain and distribution remain unselected."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/meetup/test/budget.test.mjs",
+      "sha256": "656e3b1bbaef85ae8c413ef238af2fae32a329ade548e282dc2957957fb8b553",
+      "lines": 262,
+      "production": false,
+      "sha256AtStart": "656e3b1bbaef85ae8c413ef238af2fae32a329ade548e282dc2957957fb8b553",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/generate_geohash_oracle.py",
+      "sha256": "79c47b1d17d0636fa50cfa7a4a7c57930180feaef04f442e31cb42eb732e2900",
+      "lines": 35,
+      "production": false,
+      "sha256AtStart": "79c47b1d17d0636fa50cfa7a4a7c57930180feaef04f442e31cb42eb732e2900",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/generate_xyz_oracle.py",
+      "sha256": "0571475bc0683b5bf9de15a46f0e796c65d29b45b3d046266931efe74312284e",
+      "lines": 21,
+      "production": false,
+      "sha256AtStart": "0571475bc0683b5bf9de15a46f0e796c65d29b45b3d046266931efe74312284e",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/geohash-oracle.json",
+      "sha256": "eedf436f45fc651700ee6045973f458481a6bf58d2930823d5a70e242250e0c0",
+      "lines": 11275,
+      "production": false,
+      "sha256AtStart": "eedf436f45fc651700ee6045973f458481a6bf58d2930823d5a70e242250e0c0",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T41.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/origin-ledger-fixture.ts",
+      "sha256": "2089cd77acbddfd8da7470759aa7daacc570dd5e87ce381dfd070e0afc3eca9d",
+      "lines": 59,
+      "production": false,
+      "sha256AtStart": "2089cd77acbddfd8da7470759aa7daacc570dd5e87ce381dfd070e0afc3eca9d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T69.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/xyz-python-v1.json",
+      "sha256": "2284659699db0bb37a98d93572a1fc2973563e69e96e089e07d6153793532fed",
+      "lines": 741,
+      "production": false,
+      "sha256AtStart": "2284659699db0bb37a98d93572a1fc2973563e69e96e089e07d6153793532fed",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/geofence.test.mjs",
+      "sha256": "f1d94a86926438b77ac341584bc5da14050194dd3d03e240cfd0e57093270d88",
+      "lines": 270,
+      "production": false,
+      "sha256AtStart": "f1d94a86926438b77ac341584bc5da14050194dd3d03e240cfd0e57093270d88",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/map-manifest.test.mjs",
+      "sha256": "2a33bd5bd9bf9b0ba3d0b6391ebc14f0ab7255e74b73c2ab7ff2b66abd2f4ff7",
+      "lines": 408,
+      "production": false,
+      "sha256AtStart": "2a33bd5bd9bf9b0ba3d0b6391ebc14f0ab7255e74b73c2ab7ff2b66abd2f4ff7",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/meetup-replay.test.mjs",
+      "sha256": "464eac185feb25aafa9cdc18d01657f2dd20c4e37a72b2aca0b6d8584f65c2f0",
+      "lines": 186,
+      "production": false,
+      "sha256AtStart": "464eac185feb25aafa9cdc18d01657f2dd20c4e37a72b2aca0b6d8584f65c2f0",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/origin-ledger-browser.mjs",
+      "sha256": "3188caa616102ec69e888bfe3a1223d684b844174772e0a0c6d1f766d15456cc",
+      "lines": 147,
+      "production": false,
+      "sha256AtStart": "3188caa616102ec69e888bfe3a1223d684b844174772e0a0c6d1f766d15456cc",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T69.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/policy-data.test.mjs",
+      "sha256": "b90766e8037887ddbb679191b7be9307101ff6b7024bcded2779310f8c5b1bf4",
+      "lines": 85,
+      "production": false,
+      "sha256AtStart": "b90766e8037887ddbb679191b7be9307101ff6b7024bcded2779310f8c5b1bf4",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/meetup/test/primitives.test.mjs",
+      "sha256": "cf87b50337beed59692dc98431b602aab30cd02c7a8e4914b66159801eb96b94",
+      "lines": 133,
+      "production": false,
+      "sha256AtStart": "cf87b50337beed59692dc98431b602aab30cd02c7a8e4914b66159801eb96b94",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T69.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/meetup/test/rtc-policy.test.mjs",
+      "sha256": "c61fd81555f71d786e128dfec2a242a5b7173ad2781ea57a3e7f2c1c318ea51f",
+      "lines": 152,
+      "production": false,
+      "sha256AtStart": "c61fd81555f71d786e128dfec2a242a5b7173ad2781ea57a3e7f2c1c318ea51f",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/signaling-model.test.mjs",
+      "sha256": "cbb9008c1b96ac9adf938bce0dc336ceab38ed9e36dc5106976c745527d1cb2d",
+      "lines": 29,
+      "production": false,
+      "sha256AtStart": "cbb9008c1b96ac9adf938bce0dc336ceab38ed9e36dc5106976c745527d1cb2d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T76.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/meetup/test/support/policy-fixtures.mjs",
+      "sha256": "19979cdfe4ce2cd26b0b1942baded4127a413e367b456874abefcf1dbce748e8",
+      "lines": 67,
+      "production": false,
+      "sha256AtStart": "19979cdfe4ce2cd26b0b1942baded4127a413e367b456874abefcf1dbce748e8",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/meetup/test/venue-directory.test.mjs",
+      "sha256": "31f1995c5493aa754fd9e1a98a5079267d8dad94956195418db40db1041791c2",
+      "lines": 359,
+      "production": false,
+      "sha256AtStart": "31f1995c5493aa754fd9e1a98a5079267d8dad94956195418db40db1041791c2",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T56.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/privacy-controls/DECISIONS.json",
+      "sha256": "01c2132f870b5681dcbb08a6100c31aa4bb2bb0cf8a9b41f0d057e53074062c7",
+      "lines": 67,
+      "production": false,
+      "sha256AtStart": "01c2132f870b5681dcbb08a6100c31aa4bb2bb0cf8a9b41f0d057e53074062c7",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/privacy-controls/README.md",
+      "sha256": "6e1bed1c75b0ee473a58f596114a4e8ee67afa1302c0f73e48a5079803d09b75",
+      "lines": 148,
+      "production": false,
+      "sha256AtStart": "6e1bed1c75b0ee473a58f596114a4e8ee67afa1302c0f73e48a5079803d09b75",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/privacy-controls/index.ts",
+      "sha256": "79088921d43a8f8438f8ea0d919c647d4c166d6cc44860b2eee83973a6b91c49",
+      "lines": 5,
+      "production": true,
+      "sha256AtStart": "79088921d43a8f8438f8ea0d919c647d4c166d6cc44860b2eee83973a6b91c49",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "contracts": [
+        "DURESS",
+        "DECOY",
+        "SWEEP"
+      ],
+      "checks": [
+        "Only explicit local decoy and sweep reminder APIs; no wallet,transfer,automatic trigger or whole-profile removal."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/privacy-controls/src/duress.ts",
+      "sha256": "dac8df02bcbf33e087658210cc0f49c500303dbb74b6a8c54b6537923d66ff7c",
+      "lines": 169,
+      "production": true,
+      "sha256AtStart": "dac8df02bcbf33e087658210cc0f49c500303dbb74b6a8c54b6537923d66ff7c",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "contracts": [
+        "DURESS",
+        "DECOY",
+        "G02"
+      ],
+      "checks": [
+        "Independent native G02 decoy profile and encrypted marker,branded same-vault enrollment,normal authentication and explained consent.",
+        "Intentional real-lock-before-decoy gap;provisional/native leases and revision freshness prevent late unlock/private publication.",
+        "Five/minute per-profile-vault credential budget survives controller replacement;normal recovery outside budget.",
+        "Scalar persisted receipts survive committed/ambiguous creation;cleanup locks owned decoy and no real data/live bindings copied;flags are metadata,not actual UI/coercion assurance."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/privacy-controls/src/preferences.ts",
+      "sha256": "357d49b449ca26868046d9103ab3058ac162cc8473e5441f05d963824bc63af5",
+      "lines": 64,
+      "production": true,
+      "sha256AtStart": "357d49b449ca26868046d9103ab3058ac162cc8473e5441f05d963824bc63af5",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "contracts": [
+        "G02",
+        "DURESS",
+        "SWEEP"
+      ],
+      "checks": [
+        "Actual G02 captured lease,empty native freshness CAS,per-job revision pins and exact encrypted preference record.",
+        "Fixed size/strict JSON and preservation of unrelated rows;durable CAS returns scalar receipt despite later lock,cancellation never means rollback."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/privacy-controls/src/shared.ts",
+      "sha256": "6f8b1e5e1aa63a5a4adf07de21ae3c083f5d05c9d6419f0b001f1f5e69aefa78",
+      "lines": 84,
+      "production": true,
+      "sha256AtStart": "6f8b1e5e1aa63a5a4adf07de21ae3c083f5d05c9d6419f0b001f1f5e69aefa78",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "contracts": [
+        "DURESS",
+        "SWEEP",
+        "G13"
+      ],
+      "checks": [
+        "Bounded local schemas,decimals/identifiers/consent and native signal checks.",
+        "One physical operation/no queue;cancel epoch blocks late publication and replacement work before drain;native durable receipts intentionally survive scope retirement."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/privacy-controls/src/sweep.ts",
+      "sha256": "f5c5eb05775b2d2a343f807d0e4ed14d56c8d7f50cbf1895497ebb9444a2aa8b",
+      "lines": 136,
+      "production": true,
+      "sha256AtStart": "f5c5eb05775b2d2a343f807d0e4ed14d56c8d7f50cbf1895497ebb9444a2aa8b",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "contracts": [
+        "SWEEP",
+        "G02"
+      ],
+      "checks": [
+        "Detached local EVM plan with full account/network/generation/policy binding,16 sorted unique assets,positive U256 caps,fresh nonce and destination.",
+        "Encrypted internal SHA256 plan/reminder and opaque hash+generation handles;replacement invalidates earlier review.",
+        "Wall/monotonic rollback/disagreement suppress readiness;expiry checked at native mutation guard and final freshness CAS after hashing.",
+        "Only draft/scheduled/ready/cancelled/expired reminders;fresh wallet consent required and executionSupported:false;no native intent,send,timer execution or escrow withdrawal."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/privacy-controls/test/duress.test.mjs",
+      "sha256": "d85e8075492e42226ca11a4cad5d18737f5aab1e0362cf84d6d723cfae66aca4",
+      "lines": 158,
+      "production": false,
+      "sha256AtStart": "d85e8075492e42226ca11a4cad5d18737f5aab1e0362cf84d6d723cfae66aca4",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/privacy-controls/test/native-browser.mjs",
+      "sha256": "e363397c72d556928548302f4832ac0fb374551723a9c6800d3a443e1321c75d",
+      "lines": 90,
+      "production": false,
+      "sha256AtStart": "e363397c72d556928548302f4832ac0fb374551723a9c6800d3a443e1321c75d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/privacy-controls/test/support/native-vault.mjs",
+      "sha256": "1cb924c8632fb581e8e33a88d37571872c809db421d9165ac0aef054a647010c",
+      "lines": 33,
+      "production": false,
+      "sha256AtStart": "1cb924c8632fb581e8e33a88d37571872c809db421d9165ac0aef054a647010c",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/privacy-controls/test/sweep.test.mjs",
+      "sha256": "b229f07b5490d6541e366fc6cc2b00b4db6c5cebb9649248e4e3b280b12e0b1c",
+      "lines": 166,
+      "production": false,
+      "sha256AtStart": "b229f07b5490d6541e366fc6cc2b00b4db6c5cebb9649248e4e3b280b12e0b1c",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "/workspace/work/t59-final-frozen-manifest.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/proof-inputs/README.md",
+      "sha256": "4c1f20ffe1f6afcc40d495387e60d24eed4f204f27f9705e8345837d9a358b82",
+      "lines": 149,
+      "production": false,
+      "sha256AtStart": "4c1f20ffe1f6afcc40d495387e60d24eed4f204f27f9705e8345837d9a358b82",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/proof-inputs/index.ts",
+      "sha256": "15d9ced6a869e041bd9ead3e526dc079b24b55c8f407869b20fc0f1b88dda8d7",
+      "lines": 3,
+      "production": true,
+      "sha256AtStart": "15d9ced6a869e041bd9ead3e526dc079b24b55c8f407869b20fc0f1b88dda8d7",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "contracts": [
+        "PROOF-STRUCTURE"
+      ],
+      "checks": [
+        "Only structural parser/types exports; no provider catalog mutation,proof job/worker,source or wallet executor."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/proof-inputs/src/boundary.ts",
+      "sha256": "5ff8b953ee99c265aa5096291378783f9aee60f6637595bda73c1e22f018cca5",
+      "lines": 49,
+      "production": true,
+      "sha256AtStart": "5ff8b953ee99c265aa5096291378783f9aee60f6637595bda73c1e22f018cca5",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "contracts": [
+        "PROOF-STRUCTURE",
+        "G13"
+      ],
+      "checks": [
+        "Exact detached descriptor-safe records/native arrays and fixed errors; unverified wrapper denies every source/proof/receipt/economic capability.",
+        "Actual native nonshared/nonproxy/nondetached Uint8Array bounds and copies;UTF8/BOM/lone-surrogate checks and32768-byte strict JSON envelope.",
+        "Partial owned buffers wipe best effort;caller buffers never wiped."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/proof-inputs/src/parsers.ts",
+      "sha256": "d684a9833d98c801a11af1747bc29fd5155aed6d5c9123cf0f2b03fb99903209",
+      "lines": 95,
+      "production": true,
+      "sha256AtStart": "d684a9833d98c801a11af1747bc29fd5155aed6d5c9123cf0f2b03fb99903209",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "contracts": [
+        "PROOF-STRUCTURE"
+      ],
+      "checks": [
+        "Exact request/witness/source/statement/advisory shapes,full expected comparisons and empty frozen source/parser/verifier/rail catalogs.",
+        "uint128 positive amounts,uint64 times,scale0..6,status preserved and normalized HTTPS-only local origin policy.",
+        "Witness1MiB response,salt16..64,raw UTF8 caps,total pre-copy budget and<=16 disjoint UTF8-aligned half-open spans.",
+        "Opaque crypto fields and local bounds confer no selected wire/hash/source/parser/freshness semantics;autoRelease:false."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/proof-inputs/src/types.ts",
+      "sha256": "0b72bb663bfa47ae2ba9879e0928e77d44115eb9791cc55adb3400e614e6c895",
+      "lines": 59,
+      "production": true,
+      "sha256AtStart": "0b72bb663bfa47ae2ba9879e0928e77d44115eb9791cc55adb3400e614e6c895",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "contracts": [
+        "PROOF-STRUCTURE"
+      ],
+      "checks": [
+        "Unverified type contract explicitly distinguishes local structural data from source authentication,semantic coverage,proof verification and receipt/economic authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/proof-inputs/test/parsers.test.mjs",
+      "sha256": "c019ae90294909311ba2694748603086de0804d748bd00aea30dbf812163a80b",
+      "lines": 121,
+      "production": false,
+      "sha256AtStart": "c019ae90294909311ba2694748603086de0804d748bd00aea30dbf812163a80b",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/proof-inputs/tsconfig.json",
+      "sha256": "f0f3ce56368c9f1fef41e9d370d7f55e1c4d4fc014a78aac9bd821788384d8d8",
+      "lines": 4,
+      "production": false,
+      "sha256AtStart": "f0f3ce56368c9f1fef41e9d370d7f55e1c4d4fc014a78aac9bd821788384d8d8",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T72.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/stealth/DECISIONS.json",
+      "sha256": "9e01375c43aea3ac9e0ebdc2d439f87bc51c46639b5dc24cab91dde7977f8483",
+      "lines": 31,
+      "production": false,
+      "sha256AtStart": "9e01375c43aea3ac9e0ebdc2d439f87bc51c46639b5dc24cab91dde7977f8483",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/stealth/README.md",
+      "sha256": "8eb7b21cbde72f7feca8760f5855c91d8b9b748afaf3af17ab6b5ed4d18a5222",
+      "lines": 53,
+      "production": false,
+      "sha256AtStart": "8eb7b21cbde72f7feca8760f5855c91d8b9b748afaf3af17ab6b5ed4d18a5222",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "package contract/claim/config read"
+    },
+    {
+      "path": "packages/stealth/index.ts",
+      "sha256": "3492844b6ea632a38e6ed77e8fb0414079eb2fa1c4c4ed6c60e7cefb93de8d57",
+      "lines": 11,
+      "production": true,
+      "sha256AtStart": "3492844b6ea632a38e6ed77e8fb0414079eb2fa1c4c4ed6c60e7cefb93de8d57",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Only named offline math,opaque viewing/store capabilities and strict announcement decoder; no default profile/secret import/spend API."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/announcer.ts",
+      "sha256": "8c2dca4c461cd15a937fb13902d544b8269f90a92226667be8c874a37afc9426",
+      "lines": 42,
+      "production": true,
+      "sha256AtStart": "8c2dca4c461cd15a937fb13902d544b8269f90a92226667be8c874a37afc9426",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL",
+        "ERC5564-ABI"
+      ],
+      "checks": [
+        "Exact four indexed topics,scheme1,address padding,canonical dynamic offsets/lengths/padding and33-byte valid ephemeral point.",
+        "Metadata1..256bytes and total448bytes; emitter/caller/announcement remain offline claims, not transfer proof."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/math.ts",
+      "sha256": "ba1fc879f27aadd5ab73c44a69ad1586e2e13361f553bfdd2859af87be13ea1b",
+      "lines": 59,
+      "production": true,
+      "sha256AtStart": "ba1fc879f27aadd5ab73c44a69ad1586e2e13361f553bfdd2859af87be13ea1b",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Pinned Noble secp256k1 and Keccak256; canonical compressed points,x<p,on-curve/nonzero and scalar1<=k<n.",
+        "Named xy64 versus compressed33 ECDH preimages explicitly separated; zero/out-of-order hash scalar and infinity refused without reduction.",
+        "Distinct spending/viewing public recipient points; no spending scalar product input/output; internal buffers wiped best effort."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/pages.ts",
+      "sha256": "4e0207e7a8ab4a55624778695621dd9557698a037558f93f291952b6797d5972",
+      "lines": 81,
+      "production": true,
+      "sha256AtStart": "4e0207e7a8ab4a55624778695621dd9557698a037558f93f291952b6797d5972",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Explicit offline fixture pages with profile/context/announcer/range/anchor/token/cursor equality and contiguous advance.",
+        "2000 blocks,1000 logs/page,10pages,10000 total derivations including cached rederivation; duplicates/conflicting locator/hash/ordering/partial pages refuse.",
+        "All pages validated before atomic candidate+cursor checkpoint; cancellation yields and no invented native reorg/canonicality policy."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/profiles.ts",
+      "sha256": "e67a30dba9532a4fb24d022f489c5b1c784f8540156942c22fa5fc03a24945bc",
+      "lines": 14,
+      "production": true,
+      "sha256AtStart": "e67a30dba9532a4fb24d022f489c5b1c784f8540156942c22fa5fc03a24945bc",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Exactly two named nondefault profiles and explicit offline-fixture context; field/order constants and128 entropy/16 handle limits."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/records.ts",
+      "sha256": "429bb7789bc5abfd8f788b423ecba59be818c77e0a8f970a6cbba1161dd85235",
+      "lines": 43,
+      "production": true,
+      "sha256AtStart": "429bb7789bc5abfd8f788b423ecba59be818c77e0a8f970a6cbba1161dd85235",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Exact scoped encrypted comparison namespace;both public points/profile/context bound to deterministic IDs.",
+        "Strict public event wrapper and bounded U256 block/index; no stored match flag becomes authority."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/service.ts",
+      "sha256": "3f800178b40558e4e622d70f296799a3a6b8c17a3445c6d389049ac461e790b6",
+      "lines": 185,
+      "production": true,
+      "sha256AtStart": "3f800178b40558e4e622d70f296799a3a6b8c17a3445c6d389049ac461e790b6",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Fresh native CSPRNG viewing-only WeakMap capabilities;16 handles,128 rejection attempts,no secret import/RNG override.",
+        "Busy admission before clocks/owner/entropy and final guards;30-second timeout,cancel/close wipe owned bytes.",
+        "Compare jobs retain physical service/store slot until ignored source/storage drains; completed store lifetime subscriptions deduplicated/capped16 and idle lock revokes keys.",
+        "Public matches/announcements diagnostic,economicAuthority:false; no spending,network or new-trade activation."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/shared.ts",
+      "sha256": "13a30ca236a296a10578f85d78d8eac40f5424d02bddd4b89da22b8a4cb17dbc",
+      "lines": 45,
+      "production": true,
+      "sha256AtStart": "13a30ca236a296a10578f85d78d8eac40f5424d02bddd4b89da22b8a4cb17dbc",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL"
+      ],
+      "checks": [
+        "Exact records/native arrays,canonical lowercase byte hex and bounded uints; fixed errors and native AbortSignal validation."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/src/store.ts",
+      "sha256": "e9433473463ab72729559149243cf753a64f34464603765dc5695c0ccdf9817c",
+      "lines": 111,
+      "production": true,
+      "sha256AtStart": "e9433473463ab72729559149243cf753a64f34464603765dc5695c0ccdf9817c",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "contracts": [
+        "STEALTH-LOCAL",
+        "G02"
+      ],
+      "checks": [
+        "Actual G02 lease/revision CAS;current persisted snapshot synchronized before read and every matching candidate rederived by service.",
+        "Atomic encrypted cursor/candidate commit;scope/key/ID/canonical bytes,foreign collisions and candidate caps guarded.",
+        "Lock closes store/service lifetime;ambiguous reply refuses and requires reopening actual state."
+      ],
+      "semanticReview": "fresh whole-file read"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/comparison-vectors.json",
+      "sha256": "a56fd329e6dfcce3077d7c0e9f557e3b48b5fb53591b3123deaeec6111770276",
+      "lines": 39,
+      "production": false,
+      "sha256AtStart": "a56fd329e6dfcce3077d7c0e9f557e3b48b5fb53591b3123deaeec6111770276",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/helpers.mjs",
+      "sha256": "c5c4b38472c7a90ea8a75aafb1ae0bcc0d0c4850b42a45f18d3cfd58ecdcb3dd",
+      "lines": 49,
+      "production": false,
+      "sha256AtStart": "c5c4b38472c7a90ea8a75aafb1ae0bcc0d0c4850b42a45f18d3cfd58ecdcb3dd",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/stealth/test/fixtures/verify-native-keccak.mjs",
+      "sha256": "dcac1555e499b7c55851b989935ff4456bf4fc99173c828faaec170593858d69",
+      "lines": 16,
+      "production": false,
+      "sha256AtStart": "dcac1555e499b7c55851b989935ff4456bf4fc99173c828faaec170593858d69",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/stealth/test/pages.test.mjs",
+      "sha256": "8455de73e340481c6070c1c9a3243bbb8cf43f60148782cb36b363aecc0da7c1",
+      "lines": 174,
+      "production": false,
+      "sha256AtStart": "8455de73e340481c6070c1c9a3243bbb8cf43f60148782cb36b363aecc0da7c1",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    },
+    {
+      "path": "packages/stealth/test/profiles.test.mjs",
+      "sha256": "3b8a2214a6fa01bc93cb9e0d7ce489f75511499e705732bd54d32a69cc676563",
+      "lines": 60,
+      "production": false,
+      "sha256AtStart": "3b8a2214a6fa01bc93cb9e0d7ce489f75511499e705732bd54d32a69cc676563",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "fresh test-source read; execution only where separately recorded"
+    },
+    {
+      "path": "packages/stealth/test/service.test.mjs",
+      "sha256": "f1cf7f6ab0b9bb9840e02ce5c60609c9053bb87e1872f9e458a1abf7eb3fed6d",
+      "lines": 76,
+      "production": false,
+      "sha256AtStart": "f1cf7f6ab0b9bb9840e02ce5c60609c9053bb87e1872f9e458a1abf7eb3fed6d",
+      "changedDuringAudit": false,
+      "matchingHistoricalHashSources": [
+        "docs/execution/reviews/T51.json"
+      ],
+      "semanticReview": "inventory/hash review; historical test/fixture evidence reused only where matching;not a fresh every-assertion read"
+    }
+  ],
+  "contractsReviewed": [
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.1_tls_handshake_engine/spec-tls-source-authentication.md",
+      "sha256": "9c410093badfc388fa12d8806f6a81828fb0f295085b909dd4098f4221831569",
+      "bytes": 4847,
+      "lines": 54,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.1_tls_handshake_engine/spec-zktls-provider-interface.md",
+      "sha256": "78e7ad054db1c24954ce3f05a4018f4da1185caac4eeca5452407c67bbaabb40",
+      "bytes": 4932,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.2_bank_receipt_verifier/spec-bank-receipt-proof-statement.md",
+      "sha256": "538030ca543bd0a43fe9a3f567331150333d6deae6539a3d1ef7de4d94da95eb",
+      "bytes": 5121,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.2_bank_receipt_verifier/spec-bank-receipt-witness-schema.md",
+      "sha256": "c6c071fa8812dadbec96720d7ab00243a7de449db2d852c52413ac18f0571745",
+      "bytes": 5062,
+      "lines": 55,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.2_zktls_fiat_verification/module_1.2.4_evidence_policy/spec-fiat-proof-settlement-policy.md",
+      "sha256": "e2c15f8d93bd69d2d6994898a9d4cbd9ae126e625b8dfccf1da45457755508a5",
+      "bytes": 4892,
+      "lines": 55,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.5_liquidity_provision/module_1.5.1_market_maker_vaults/spec-liquidity-vault-accounting.md",
+      "sha256": "9a2624573c098ae6d1857c81c92d1dce5d8d3d64ed0405154a3c4cd69e015d60",
+      "bytes": 5261,
+      "lines": 55,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.5_liquidity_provision/module_1.5.1_market_maker_vaults/spec-quote-reservation-interface.md",
+      "sha256": "60f603933c925eb63e0acb191eadfff785412ff1bd87d9d957d4c2fa0558e52d",
+      "bytes": 4859,
+      "lines": 54,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.1_fuzzy_geohashing/module_2.1.1_coordinate_obfuscation/spec-500m-radial-blur-algorithm.md",
+      "sha256": "d015d662841a02119db2e79b628e2a83054164ddd49f3d62a5bdad718d6a2bc3",
+      "bytes": 5425,
+      "lines": 51,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.1_fuzzy_geohashing/module_2.1.1_coordinate_obfuscation/spec-fuzzy-geohash-ring-calculation.md",
+      "sha256": "a6d3b6461ee0a0f1041b6c44934ea1c20ddb5d8740182d43f4cea4e0ec48c000",
+      "bytes": 4909,
+      "lines": 50,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.1_fuzzy_geohashing/module_2.1.1_coordinate_obfuscation/spec-location-disclosure-budget.md",
+      "sha256": "540e7602a17408259733c6e9ac8cd2542c459db65e66659c71ad77e2f9bb4009",
+      "bytes": 5172,
+      "lines": 50,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.2_p2p_proximity_pings/module_2.2.1_webrtc_mesh/spec-ice-candidate-privacy-policy.md",
+      "sha256": "509b989e19fd9042707a38174167514793c611b0f8f1649ef47d60b96ab1f37d",
+      "bytes": 5015,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.2_p2p_proximity_pings/module_2.2.1_webrtc_mesh/spec-proximity-channel-lifecycle.md",
+      "sha256": "34564388d0775e23621f8a6f5932f9b09b372ddfd539b7a8c1a9f0a64470a412",
+      "bytes": 5057,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.2_p2p_proximity_pings/module_2.2.1_webrtc_mesh/spec-webrtc-ephemeral-signaling.md",
+      "sha256": "0a1afb27a10ff0c671e39542af21ef3bdbace1768717c216cb90e0b4bdeb9803",
+      "bytes": 5179,
+      "lines": 48,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.3_proximity_verification/module_2.3.1_zero_knowledge_distance/spec-distance-proof-statement.md",
+      "sha256": "138829f4cce95053964c3a9c4ab3f9b55e565e396268860e6f11b1691e67e537",
+      "bytes": 5509,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.3_proximity_verification/module_2.3.1_zero_knowledge_distance/spec-location-input-authenticity.md",
+      "sha256": "8bc426b392e904f422bb21c533003e1f974f7f8538274ce3816d03321c92257e",
+      "bytes": 5026,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.3_proximity_verification/module_2.3.1_zero_knowledge_distance/spec-proximity-proof-session-binding.md",
+      "sha256": "d0c8bd7f3f92f3ae686dab552f78f3a806e226be144d33e8d0493393da784504",
+      "bytes": 5273,
+      "lines": 48,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.4_safe_zone_discovery/module_2.4.1_signed_zone_directory/spec-safe-zone-publication-policy.md",
+      "sha256": "85c06343603eb9778dba1e434544762b2016c1d9007d96e28acce22419982b70",
+      "bytes": 5414,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.4_safe_zone_discovery/module_2.4.1_signed_zone_directory/spec-safe-zone-record-schema.md",
+      "sha256": "7605caf992929a1359e8fa55fbdba14313cfecdd0459cfe399fa4480bc92193a",
+      "bytes": 5230,
+      "lines": 48,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.5_meetup_presence_trigger/module_2.5.1_geofence_verification/spec-geofence-event-contract.md",
+      "sha256": "cccfb8fec6f67d11ec839d8daa075650159ecffb5fd3267562c7064948889c43",
+      "bytes": 5217,
+      "lines": 48,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.5_meetup_presence_trigger/module_2.5.1_geofence_verification/spec-geofence-trigger-state-machine.md",
+      "sha256": "018ccc2cd3af8e761cbcadd525e7a525b2ab3f96b15bc4be4f26ccad43b96cab",
+      "bytes": 5365,
+      "lines": 50,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.6_private_map_rendering/module_2.6.1_vector_tile_cache/spec-map-fetch-privacy-policy.md",
+      "sha256": "464af22ed8d6dc2770277c33a1a55204a68292ec6c2cea81d4c71848c6ca6edc",
+      "bytes": 5562,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.6_private_map_rendering/module_2.6.1_vector_tile_cache/spec-vector-tile-cache-addressing.md",
+      "sha256": "4ec9cd8f4ab22f0a2bad2b7abb1705e9da427c2e198a83a6c65c91028f693450",
+      "bytes": 5376,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "02_SMART_MEETUP_GEOLOCATION_ENGINE/feature_2.7_consent_management/module_2.7.1_location_permissions/spec-location-consent-lifecycle.md",
+      "sha256": "901c8baafbf1daa93133a09799cf3ed2165d7c48160787bdefb5f56a487ec13b",
+      "bytes": 5216,
+      "lines": 49,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.1_blind_courier_protocol/module_3.1.1_three_party_escrow/spec-courier-compensation-accounting.md",
+      "sha256": "d0eedf5a3b08006f9d110e1c8f9acf40275b836904465b81c02194bf70f68994",
+      "bytes": 6648,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.1_blind_courier_protocol/module_3.1.1_three_party_escrow/spec-courier-handshake-state-machine.md",
+      "sha256": "193aed25d0f548762b23a4a44823074cc9fc07729fdc26baf231979aea971591",
+      "bytes": 6768,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.1_blind_courier_protocol/module_3.1.1_three_party_escrow/spec-courier-role-authorization.md",
+      "sha256": "456baab9feca39e1388e39744bd414fa6bbe9da1c3502624652b27b5e1b024ee",
+      "bytes": 6615,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.2_courier_assignment/module_3.2.1_route_segmentation/spec-courier-leg-assignment-envelope.md",
+      "sha256": "01938932ab8e9fabf12aeb81afea16a1746490c6653ddae5bfa265e738832592",
+      "bytes": 6524,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.2_courier_assignment/module_3.2.1_route_segmentation/spec-leg-handoff-state-machine.md",
+      "sha256": "88a4dbea3cc61150fa74a0623a2f56ec56ccc017b6dab0a381a832e8ec6c4078",
+      "bytes": 6500,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.2_courier_assignment/module_3.2.1_route_segmentation/spec-route-information-access-control.md",
+      "sha256": "2f0fe3d251ffaee4d1190e4ce96e06f9c54aec3bb20a9f52bd568cc3cceb3726",
+      "bytes": 6601,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.3_container_integrity/module_3.3.1_seed_commitment/spec-container-secret-lifecycle.md",
+      "sha256": "b36287ee53edd2b32ca427e508ee9c9dd39e65de08ec45e6712e462c9ee61ad6",
+      "bytes": 6588,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.3_container_integrity/module_3.3.1_seed_commitment/spec-container-seed-commitment.md",
+      "sha256": "3f7b890b18ee427e54ac336aca1335adffd20cce2d8c81fc702d1cf4991b5e0d",
+      "bytes": 6565,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.3_container_integrity/module_3.3.1_seed_commitment/spec-tamper-evidence-attestation.md",
+      "sha256": "0e1d28d9ebedb67b476488dbadee214a75f590a053d7709647f6c97f9bb7133c",
+      "bytes": 6588,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.4_locker_access/module_3.4.1_smart_locker_adapter/spec-locker-command-interface.md",
+      "sha256": "818e161b54de82cb80c71102c1ae0ad2509d5ad92d14ec1f7a2cecfddeb8ff25",
+      "bytes": 6798,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.4_locker_access/module_3.4.1_smart_locker_adapter/spec-locker-failure-recovery.md",
+      "sha256": "25f6bc78ed34f23baaee92acb4e22fe04dd5d73d1f407437bfd460550cb5b3bd",
+      "bytes": 6762,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.4_locker_access/module_3.4.1_smart_locker_adapter/spec-locker-time-window-policy.md",
+      "sha256": "d779abae98ffb3bc963a5933c4cf0a9e4adde794f7c4ed639d38567db9b1d3ca",
+      "bytes": 6621,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.5_courier_collateral/module_3.5.1_staking_vault/spec-courier-slashing-authorization.md",
+      "sha256": "7a2b4398966a0147372703316dde39a47a18aed5539f7fbe56e186c3e8ad7012",
+      "bytes": 6706,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.5_courier_collateral/module_3.5.1_staking_vault/spec-courier-stake-accounting.md",
+      "sha256": "c9678a4615d9d2de25f06575489b1b62710112b95ff7e62fc99d8dd309383a4f",
+      "bytes": 6787,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.6_delivery_confirmation/module_3.6.1_handoff_protocol/spec-delivery-challenge-response.md",
+      "sha256": "6ad18185cff9488d6bef3d88f15dd50f8c9ffe0d8fa7b68b1f62f110c59adf73",
+      "bytes": 6673,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.6_delivery_confirmation/module_3.6.1_handoff_protocol/spec-delivery-receipt-schema.md",
+      "sha256": "f2addde5520d337356839687f69c2e1567ac00a6fd9bdec0c22b992817399bdc",
+      "bytes": 6891,
+      "lines": 62,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.7_coordination_recovery/module_3.7.1_custody_timeouts/spec-physical-handoff-failure-policy.md",
+      "sha256": "651dbe57061200c3d600903e90ed39995ed8cc96b9e15dd22c09e87a3de40f2a",
+      "bytes": 7101,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.1_juror_selection/module_4.1.1_vrf_drafting/spec-juror-draft-state-machine.md",
+      "sha256": "e15d500c68d6206ea5feed0622ff9ab046d89c1eef6ae916fa25ad0ee63756ad",
+      "bytes": 6366,
+      "lines": 61,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.2_juror_incentives/module_4.2.1_voting_stake_accounting/spec-juror-fee-distribution.md",
+      "sha256": "5837b71a0d42170b92b9c311b7d0b70d9291581a3a2db73d020c9cb9d499015b",
+      "bytes": 6142,
+      "lines": 61,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.2_juror_incentives/module_4.2.1_voting_stake_accounting/spec-juror-voting-weight.md",
+      "sha256": "fb096ac73baf6b1717dc333a16c6559668af9197e26f3f5e00ca51c54832c2b9",
+      "bytes": 5739,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.4_fiat_evidence_assessment/module_4.4.1_arbiter_payment_verifier/spec-arbiter-payment-evidence-interface.md",
+      "sha256": "a29994c4004eb26c7c28e3423b207947219d84800e70d0194f43ecacecc42e9b",
+      "bytes": 6482,
+      "lines": 64,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.5_jury_decision/module_4.5.1_commit_reveal_voting/spec-jury-reveal-and-tally.md",
+      "sha256": "77225af14b60defc290e40a4e048b6efa8ad4dfeadfd261b4e047f9c612c08b8",
+      "bytes": 6029,
+      "lines": 61,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.5_jury_decision/module_4.5.1_commit_reveal_voting/spec-jury-vote-commitment.md",
+      "sha256": "5b37b4a547feed40258c44e229621ebc84476185cf1ec5cb96203f8b73e88058",
+      "bytes": 6452,
+      "lines": 63,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.6_dispute_settlement/module_4.6.1_escrow_enforcement/spec-appeal-and-finality-state-machine.md",
+      "sha256": "4c93064c0d606d985564d14646142a5d1b2cd790e395d2cfe955248f99078703",
+      "bytes": 6068,
+      "lines": 62,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.6_dispute_settlement/module_4.6.1_escrow_enforcement/spec-penalty-execution-accounting.md",
+      "sha256": "ae4ab56690fa0d94c8c59c6339bd1a65a5e8d6091ac8dd9234d48da1dfc10966",
+      "bytes": 6272,
+      "lines": 60,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.7_protocol_integration/module_4.7.1_arbitration_opt_in/spec-arbitration-version-binding.md",
+      "sha256": "948c11797c141f1580cc28741f32783791808a92cacfd2ecbb46e42a77290568",
+      "bytes": 6936,
+      "lines": 65,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "04_WEB3_DISPUTE_ARBITERS/feature_4.7_protocol_integration/module_4.7.2_arbitration_liveness/spec-arbitration-outage-and-finality.md",
+      "sha256": "6a71540adc16100765645656ff9f6624c4c71c9359569b94fd8f823951b25d03",
+      "bytes": 6545,
+      "lines": 61,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.6_duress_response/module_5.6.1_duress_pin/spec-duress-action-policy.md",
+      "sha256": "0545726afb2793caabb5fdc1e6ac94f571d1bb804350e05c741d7fd08c9594cf",
+      "bytes": 6330,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.6_duress_response/module_5.6.1_duress_pin/spec-duress-authentication-state-machine.md",
+      "sha256": "9dde4d0ecb8e3400f4d5ccb84065f4a3f3587b1d2c244a2c93ec237fe6a0a493",
+      "bytes": 6397,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-decoy-profile-data-model.md",
+      "sha256": "c47e4cd7830a788611fad38afd9a0f98af666e10cc84238a094c33b4e6660fe6",
+      "bytes": 6278,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-encrypted-storage-compartments.md",
+      "sha256": "1d1dbbf7109fe6f734321bccfe942207c1d352737404b55289a823a949e84d72",
+      "bytes": 6323,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-local-storage-lifecycle.md",
+      "sha256": "30a33d46344dcab5e95c78b08ab265736e77dd6fe31eb1a07edb3d7526c742ee",
+      "bytes": 6294,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-authorization.md",
+      "sha256": "d8772d35bacee0f2913c1acedce1fe7f186f8897359916d03e807a3cfbb7d777",
+      "bytes": 6360,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-execution.md",
+      "sha256": "4481872d1c6ae0b7d0cfc4eece2af22fa7b9abbc35e8f690c42f37671f30b114",
+      "bytes": 6393,
+      "lines": 59,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-timelock.md",
+      "sha256": "beeab1482768c7f9d387b5e1986315b9e71a36043504660d03d45d27c52ab0d9",
+      "bytes": 6342,
+      "lines": 58,
+      "review": "Applicable normative DTO/algorithm/failure sections;unimplemented provider/native contracts remain gaps,not assumed supplied."
+    },
+    {
+      "path": "docs/execution/profiles/stealth-local-contract.json",
+      "sha256": "4618c1db3dea245449d32782f0c06b21bf94e9ba96a298b888efc4526318f354",
+      "bytes": 3638,
+      "lines": 97,
+      "review": "Actual local profile or public G02 consumer contract;dependency implementation audit assigned separately."
+    },
+    {
+      "path": "docs/execution/profiles/08-stealth.md",
+      "sha256": "de5a7345bc69ce71d92736c672e6b37e40f5b4201b006ea5428945794b2e6d4d",
+      "bytes": 8384,
+      "lines": 37,
+      "review": "Actual local profile or public G02 consumer contract;dependency implementation audit assigned separately."
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+      "bytes": 1968,
+      "lines": 28,
+      "review": "Actual local profile or public G02 consumer contract;dependency implementation audit assigned separately."
+    }
+  ],
+  "freshTestSources": [
+    {
+      "path": "packages/arbitration/test/reference.test.mjs",
+      "sha256": "e8886fe38f99acf8c80fc1836b8b57deff2fa1792684c2612a5bc89d127973f7",
+      "bytes": 24585,
+      "lines": 241
+    },
+    {
+      "path": "packages/arbitration/test/payment-assertions.test.mjs",
+      "sha256": "672a8243364aa01bd919ecb91ccd7f85d754f5db4854f9a1e13ebd58581ef4c2",
+      "bytes": 6707,
+      "lines": 13
+    },
+    {
+      "path": "packages/liquidity/test/accounting.test.mjs",
+      "sha256": "23a8ad21e028a3a4a81b5f9bbe59f83a788e267bf8a997dc2946988ffe9845fc",
+      "bytes": 4198,
+      "lines": 50
+    },
+    {
+      "path": "packages/liquidity/test/reservations.test.mjs",
+      "sha256": "107bb2e5c6ec0bd93fc5a390c1225031338450564c0209d8fc2531f6458bdc26",
+      "bytes": 14832,
+      "lines": 148
+    },
+    {
+      "path": "packages/proof-inputs/test/parsers.test.mjs",
+      "sha256": "c019ae90294909311ba2694748603086de0804d748bd00aea30dbf812163a80b",
+      "bytes": 15512,
+      "lines": 121
+    },
+    {
+      "path": "packages/courier/test/locker.test.mjs",
+      "sha256": "3fa9386445d5202126461e5714801f0f449d939522f9b3aa7a6e355cd339afbc",
+      "bytes": 7193,
+      "lines": 248
+    },
+    {
+      "path": "packages/courier/test/verification.test.mjs",
+      "sha256": "9deb751c0daa81a231aada3808893baeffe5fe86b1e553b7d32fdcfec9856980",
+      "bytes": 4333,
+      "lines": 155
+    },
+    {
+      "path": "packages/courier/test/support/fixtures.mjs",
+      "sha256": "1e2cd6c487afb183eb801495b95a04211cc14b73612b5a07b5d604b32ab70259",
+      "bytes": 1764,
+      "lines": 70
+    },
+    {
+      "path": "packages/stealth/test/profiles.test.mjs",
+      "sha256": "3b8a2214a6fa01bc93cb9e0d7ce489f75511499e705732bd54d32a69cc676563",
+      "bytes": 6486,
+      "lines": 60
+    },
+    {
+      "path": "packages/meetup/test/primitives.test.mjs",
+      "sha256": "cf87b50337beed59692dc98431b602aab30cd02c7a8e4914b66159801eb96b94",
+      "bytes": 11646,
+      "lines": 133
+    },
+    {
+      "path": "packages/meetup/test/signaling-model.test.mjs",
+      "sha256": "cbb9008c1b96ac9adf938bce0dc336ceab38ed9e36dc5106976c745527d1cb2d",
+      "bytes": 8425,
+      "lines": 29
+    },
+    {
+      "path": "packages/meetup/test/policy-data.test.mjs",
+      "sha256": "b90766e8037887ddbb679191b7be9307101ff6b7024bcded2779310f8c5b1bf4",
+      "bytes": 2360,
+      "lines": 85
+    }
+  ],
+  "reusedVerificationEvidence": [
+    {
+      "path": "docs/execution/reviews/T41.json",
+      "sha256": "fbb0a2528d9d1458dab16cc1f3485efc3716740f8b00ff4bd759a27386b4b6a6",
+      "bytes": 6027,
+      "lines": 117,
+      "matchingHashEntries": [
+        "packages/meetup/src/blur.ts",
+        "packages/meetup/src/budget-record.ts",
+        "packages/meetup/src/consent.ts",
+        "packages/meetup/src/disclosure-budget.ts",
+        "packages/meetup/src/geohash.ts",
+        "packages/meetup/src/location-claim.ts",
+        "packages/meetup/src/shared.ts",
+        "packages/meetup/test/budget.test.mjs",
+        "packages/meetup/test/fixtures/generate_geohash_oracle.py",
+        "packages/meetup/test/fixtures/geohash-oracle.json"
+      ],
+      "differentHashEntries": [
+        "packages/meetup/README.md",
+        "packages/meetup/index.ts",
+        "packages/meetup/test/primitives.test.mjs"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T46.md",
+      "sha256": "826b4adb260598b3bdf5b209cefb82a0d80df75a13ebd88c88797b4bbad6cc1e",
+      "bytes": 2732,
+      "lines": 11,
+      "matchingHashEntries": [],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T48.md",
+      "sha256": "ef700bd85fc2c8039e77c95c2d4f1653be0c6a9dfae0e24887f520821e7ccd3f",
+      "bytes": 6156,
+      "lines": 27,
+      "matchingHashEntries": [],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T51.json",
+      "sha256": "5d901d3de360994c9c528d46bf9067e85f7d453da6b9a2dd62582b884b385e0c",
+      "bytes": 6110,
+      "lines": 136,
+      "matchingHashEntries": [
+        "packages/stealth/DECISIONS.json",
+        "packages/stealth/README.md",
+        "packages/stealth/index.ts",
+        "packages/stealth/src/announcer.ts",
+        "packages/stealth/src/math.ts",
+        "packages/stealth/src/pages.ts",
+        "packages/stealth/src/profiles.ts",
+        "packages/stealth/src/records.ts",
+        "packages/stealth/src/service.ts",
+        "packages/stealth/src/shared.ts",
+        "packages/stealth/src/store.ts",
+        "packages/stealth/test/fixtures/comparison-vectors.json",
+        "packages/stealth/test/fixtures/helpers.mjs",
+        "packages/stealth/test/fixtures/verify-native-keccak.mjs",
+        "packages/stealth/test/pages.test.mjs",
+        "packages/stealth/test/profiles.test.mjs",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T56.json",
+      "sha256": "6d20479509b07e23bd657bef31711d613f1322a0ade7b94eecb2ed74fae1b4ae",
+      "bytes": 4545,
+      "lines": 95,
+      "matchingHashEntries": [
+        "packages/meetup/src/rtc-policy.ts",
+        "packages/meetup/src/venue-directory.ts",
+        "packages/meetup/src/geofence.ts",
+        "packages/meetup/src/map-manifest.ts",
+        "packages/meetup/src/policy-data.ts",
+        "packages/meetup/test/rtc-policy.test.mjs",
+        "packages/meetup/test/geofence.test.mjs",
+        "packages/meetup/test/venue-directory.test.mjs",
+        "packages/meetup/test/map-manifest.test.mjs",
+        "packages/meetup/test/meetup-replay.test.mjs",
+        "packages/meetup/test/policy-data.test.mjs",
+        "packages/meetup/test/support/policy-fixtures.mjs",
+        "packages/meetup/test/fixtures/xyz-python-v1.json",
+        "packages/meetup/test/fixtures/generate_xyz_oracle.py"
+      ],
+      "differentHashEntries": [
+        "packages/meetup/index.ts",
+        "packages/meetup/README-POLICIES.md"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T59.md",
+      "sha256": "6b39fb9a3917e413fd37f32e5a4b77496d27662bad946a0c7fd3eb73d4f0333a",
+      "bytes": 6414,
+      "lines": 56,
+      "matchingHashEntries": [],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T60.md",
+      "sha256": "6c8e7b5d17b1787a9ddaf582eab56acb1cf9d5db62c3d68f9ee8c9baf35c9a4d",
+      "bytes": 4310,
+      "lines": 37,
+      "matchingHashEntries": [],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T69.json",
+      "sha256": "e699942c749a39bf8ef975a032fca6c533a70bcc44dd7fe1e50a3259ce370c63",
+      "bytes": 6880,
+      "lines": 133,
+      "matchingHashEntries": [
+        "packages/meetup/test/primitives.test.mjs",
+        "packages/meetup/test/origin-ledger-browser.mjs",
+        "packages/meetup/test/fixtures/origin-ledger-fixture.ts",
+        "packages/meetup/README.md",
+        "packages/meetup/src/blur.ts",
+        "packages/meetup/src/budget-record.ts",
+        "packages/meetup/src/consent.ts",
+        "packages/meetup/src/disclosure-budget.ts",
+        "packages/meetup/src/geofence.ts",
+        "packages/meetup/src/geohash.ts",
+        "packages/meetup/src/location-claim.ts",
+        "packages/meetup/src/map-manifest.ts",
+        "packages/meetup/src/policy-data.ts",
+        "packages/meetup/src/rtc-policy.ts",
+        "packages/meetup/src/shared.ts",
+        "packages/meetup/src/venue-directory.ts"
+      ],
+      "differentHashEntries": [
+        "packages/meetup/index.ts"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T72.json",
+      "sha256": "268eab6495a6ea072caf8505c78474bbbc616d683e1aa1f53cc4a49be9554be1",
+      "bytes": 3643,
+      "lines": 94,
+      "matchingHashEntries": [
+        "packages/proof-inputs/README.md",
+        "packages/proof-inputs/index.ts",
+        "packages/proof-inputs/src/boundary.ts",
+        "packages/proof-inputs/src/parsers.ts",
+        "packages/proof-inputs/src/types.ts",
+        "packages/proof-inputs/test/parsers.test.mjs",
+        "packages/proof-inputs/tsconfig.json",
+        "packages/schemas/src/core.ts",
+        "packages/schemas/src/registry.ts",
+        "packages/schemas/src/vault.ts",
+        "packages/domain/src/errors.ts",
+        "tsconfig.json",
+        "/workspace/work/t72-root-focused.log",
+        "/workspace/work/t72-root-types.log",
+        "/workspace/work/t72-root-adversarial.log"
+      ],
+      "differentHashEntries": [
+        "packages/schemas/index.ts",
+        "packages/domain/index.ts"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "docs/execution/reviews/T76.json",
+      "sha256": "adc6cce8961dfc23136be7e79d2de1f8ecc059527a9fb524c3b8b97f02f31f28",
+      "bytes": 4013,
+      "lines": 105,
+      "matchingHashEntries": [
+        "packages/arbitration/src/payment-assertions.ts",
+        "packages/arbitration/test/payment-assertions.test.mjs",
+        "packages/arbitration/index.ts",
+        "packages/arbitration/README.md",
+        "packages/arbitration/src/shared.ts",
+        "packages/meetup/src/signaling-model.ts",
+        "packages/meetup/test/signaling-model.test.mjs",
+        "packages/meetup/index.ts",
+        "packages/meetup/README-POLICIES.md",
+        "packages/meetup/src/policy-data.ts",
+        "packages/meetup/src/shared.ts",
+        "packages/meetup/src/rtc-policy.ts",
+        "packages/schemas/src/core.ts",
+        "packages/schemas/src/registry.ts",
+        "package-lock.json",
+        "tsconfig.json"
+      ],
+      "differentHashEntries": [
+        "packages/schemas/index.ts"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "/workspace/work/arbitration-T46-manifest.json",
+      "sha256": "b6ec8810a3ca9c37eafe2831ed144aa24df663204cefd05d0a1f667f1ad8f26e",
+      "bytes": 3682,
+      "lines": 107,
+      "matchingHashEntries": [
+        "packages/arbitration/DECISIONS.json",
+        "packages/arbitration/src/accounting.ts",
+        "packages/arbitration/src/appeal.ts",
+        "packages/arbitration/src/clock.ts",
+        "packages/arbitration/src/draft.ts",
+        "packages/arbitration/src/penalty.ts",
+        "packages/arbitration/src/tally.ts",
+        "packages/arbitration/src/vote.ts",
+        "packages/arbitration/test/fixtures/generate_vote_vectors.py",
+        "packages/arbitration/test/fixtures/vote-cast-vectors.json",
+        "packages/arbitration/test/reference.test.mjs"
+      ],
+      "differentHashEntries": [
+        "packages/arbitration/README.md",
+        "packages/arbitration/index.ts",
+        "packages/arbitration/src/shared.ts"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "/workspace/work/t48-repaired-files.sha256",
+      "sha256": "39c93c9ec724d0eff18fa21047b83f476e690ceb36f824a9e0f288296615bcbf",
+      "bytes": 1957,
+      "lines": 19,
+      "matchingHashEntries": [
+        "packages/courier/index.ts",
+        "packages/courier/README.md",
+        "packages/courier/src/accounting.ts",
+        "packages/courier/src/challenge.ts",
+        "packages/courier/src/commitment.ts",
+        "packages/courier/src/custody.ts",
+        "packages/courier/src/records.ts",
+        "packages/courier/src/secrets.ts",
+        "packages/courier/src/shared.ts",
+        "packages/courier/src/verification.ts",
+        "packages/courier/test/accounting.test.mjs",
+        "packages/courier/test/custody.test.mjs",
+        "packages/courier/test/records-commitment.test.mjs",
+        "packages/courier/test/secrets.test.mjs",
+        "packages/courier/test/verification.test.mjs",
+        "packages/courier/test/support/fixtures.mjs",
+        "packages/courier/test/fixtures/container-python-v1.json"
+      ],
+      "differentHashEntries": [
+        "packages/courier/src/locker.ts",
+        "packages/courier/test/locker.test.mjs"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "/workspace/work/t59-final-frozen-manifest.json",
+      "sha256": "83992e5c423a3fbda15db7160366754185ceb2d287b479476d5e036d8e4155ad",
+      "bytes": 5854,
+      "lines": 127,
+      "matchingHashEntries": [
+        "packages/privacy-controls/DECISIONS.json",
+        "packages/privacy-controls/README.md",
+        "packages/privacy-controls/index.ts",
+        "packages/privacy-controls/src/duress.ts",
+        "packages/privacy-controls/src/preferences.ts",
+        "packages/privacy-controls/src/shared.ts",
+        "packages/privacy-controls/src/sweep.ts",
+        "packages/privacy-controls/test/duress.test.mjs",
+        "packages/privacy-controls/test/native-browser.mjs",
+        "packages/privacy-controls/test/support/native-vault.mjs",
+        "packages/privacy-controls/test/sweep.test.mjs",
+        "packages/storage/src/vault-service.ts",
+        "packages/storage/src/vault-crypto.ts",
+        "packages/schemas/src/vault.ts",
+        "packages/schemas/src/vault-service.ts",
+        "packages/schemas/src/registry.ts",
+        "packages/domain/src/errors.ts"
+      ],
+      "differentHashEntries": [
+        "packages/storage/src/idb-vault-store.ts"
+      ],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    },
+    {
+      "path": "/workspace/work/t60-freeze.json",
+      "sha256": "aa8c268c7cc41f1095beb589a4aa14df6d8350a708669ac5a0390e7ef175e9bc",
+      "bytes": 2421,
+      "lines": 59,
+      "matchingHashEntries": [
+        "packages/liquidity/DECISIONS.json",
+        "packages/liquidity/README.md",
+        "packages/liquidity/index.ts",
+        "packages/liquidity/src/accounting.ts",
+        "packages/liquidity/src/reservations.ts",
+        "packages/liquidity/src/shared.ts",
+        "packages/liquidity/test/accounting.test.mjs",
+        "packages/liquidity/test/fixtures/conservation-python-v1.json",
+        "packages/liquidity/test/fixtures/generate_conservation.py",
+        "packages/liquidity/test/reservations.test.mjs"
+      ],
+      "differentHashEntries": [],
+      "evidenceUse": "Historical test/native/oracle evidence only; actual matching bytes checked now. Changed entries are not inherited."
+    }
+  ],
+  "freshVerification": [
+    {
+      "path": "/workspace/work/audit-optional-locker-focused.log",
+      "sha256": "1148982e2897833281a428fc36b9f5337c009b6ca48e99d5b4e787a5df7629ba",
+      "bytes": 172,
+      "lines": 9,
+      "kind": "RESTRICTED_FILE_ONLY_RUN",
+      "passed": 1,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "networkIpcCapability": false,
+      "limitation": "Restricted --test baseline reports one file-level case;not used as named-case evidence."
+    },
+    {
+      "path": "/workspace/work/audit-optional-locker-direct.log",
+      "sha256": "846242ad9e5f34b072304e8d181275a32c3be102b32a0fa16c40bae8f2456ed9",
+      "bytes": 676,
+      "lines": 12,
+      "kind": "DIRECT_FOCUSED_BASELINE",
+      "passed": 4,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "networkIpcCapability": false,
+      "limitation": "Synthetic local profile/time inputs;no provider,device,network action or funds."
+    },
+    {
+      "path": "/workspace/work/t88-courier-expiry-red.log",
+      "sha256": "3c8eb653e99cba66fc6ed79b9915e4cf64a9c6af6a92b2f92c26cd9894d61e78",
+      "bytes": 1763,
+      "lines": 37,
+      "kind": "CANONICAL_RED",
+      "passed": 4,
+      "failed": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "networkIpcCapability": true,
+      "limitation": "Synthetic local profile/time inputs;no provider,device,network action or funds."
+    },
+    {
+      "path": "/workspace/work/t88-courier-expiry-green.log",
+      "sha256": "38d8897b0beeba805b13f1a5604f8a8c64180a317c9de6f3ec58f1c6614a891d",
+      "bytes": 765,
+      "lines": 13,
+      "kind": "CANONICAL_GREEN",
+      "passed": 5,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "networkIpcCapability": true,
+      "limitation": "Synthetic local profile/time inputs;no provider,device,network action or funds."
+    },
+    {
+      "path": "/workspace/work/t88-courier-focused-green.log",
+      "sha256": "533864f0111758f95ff29ba49765fd318d46e7a4deb4a3023f56d2d064077b3e",
+      "bytes": 5029,
+      "lines": 47,
+      "kind": "CANONICAL_COURIER_GREEN",
+      "passed": 39,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "networkIpcCapability": true,
+      "limitation": "Synthetic local profile/time inputs;no provider,device,network action or funds."
+    }
+  ],
+  "integrationDependencies": [
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+      "bytes": 878,
+      "lines": 19
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26",
+      "bytes": 10432,
+      "lines": 152
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183",
+      "bytes": 15559,
+      "lines": 248
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+      "bytes": 10407,
+      "lines": 202
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+      "bytes": 1968,
+      "lines": 28
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "0281caaf258c48b8ec45d3856f8785038f2bdae7bf94d838d05932385a0e7fd3",
+      "bytes": 1872,
+      "lines": 16
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+      "bytes": 3150,
+      "lines": 39
+    },
+    {
+      "path": "package.json",
+      "sha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141",
+      "bytes": 6863,
+      "lines": 82
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+      "bytes": 42472,
+      "lines": 1324
+    }
+  ],
+  "limits": [
+    "Engineering source review and local tests are not professional cryptographic,economic,legal,physical-device,hardware,WCAG,network anonymity or real-funds certification.",
+    "Native custody/deployments,source/rail authentication,issuer/VRF/notary/circuit,approved publisher/device/TURN/map profiles,interoperable missing codecs,live finality and external-wallet spending remain separately gated.",
+    "Trusted local callbacks are composition ports,not hostile same-origin JavaScript sandboxes;cache read/list alone is not newest-state evidence and native CAS/reconciliation remains necessary.",
+    "JS strings,bigint/point/runtime copies,backups and recipients cannot be physically erased by local buffer wiping.",
+    "The shared workspace was changing outside this scope. Exact-source final integration,root review of T88 and delta-hash validation remain required before delivery. Trading remains disabled;release pin remains unselected."
+  ]
+}

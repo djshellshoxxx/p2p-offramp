@@ -181,8 +181,34 @@ documentation bindings. Historical approvals do not cover new dependency bytes.
 
 | T78 | DONE | Cleanup verification1680093; measured asynchronous SIGKILL delivery, preserved deadline150ms/readiness, real native bounded exit; independent6/6, aggregate31/31 and1551/1551 no skips. Cleanup-removal negative control still fails. |
 | T79 | DONE | Tooling/bindings2bf608c; independent72 immutable source rows, additive pinned Foundry setup, actual cast1/1 +assurance7/7/docs; approvals/claims unchanged. |
-| T80 | IN_PROGRESS | draft_contract read-only finite internal draft/template/repeat-default contract; no accepted IDs/nonces/parties/private instructions copied; implementation admission follows exact review. |
-| T81 | IN_PROGRESS | privacy_selector read-only actual same-broker ordinary/strict selector contract; compiled controlled channels only, explicit relaxation, truthful unknown RPC/wallet coverage; no cosmetic broker. |
-| T82 | IN_PROGRESS | favorites_consumer owns encrypted saved-review favorite package and explicitly transferred scalar schema/Worker/runtime/services/TradePages integration; root owns shared catalog and CI. Max8, fresh current-registry re-review, real native CAS/restore/lifecycle proof required. |
-| T83 | IN_PROGRESS | cleanup_debug owns new generic-app-link/helper/component/tests/native browser runner; root actual entry-module main/App/Settings/copy enrollment. No current private-route input, identifier/tracking/fees/network or production host selection. |
-| T84 | IN_PROGRESS | review_intakes read-only final gap/coverage intake beyond already-owned consumers; distinguish internal contracts from real interoperability/qualification blockers; no duplicate code or probes. |
+| T80 | INTEGRATING | Source32c3449; distinct T80/T81 review approves encrypted8-slot safe defaults, fresh reviewed drafts and actual Worker/UI/factories. Root1712 package cases/7 types and web chain pass; final native/hosting composition remains T38. |
+| T81 | INTEGRATING | Source32c3449; distinct review confirms same actual broker/two pools, explicit Ordinary consent, generation CAS and truthful unknown RPC/wallet coverage. Final native/hosting composition remains T38. |
+| T82 | INTEGRATING | Source32c3449; distinct21 named cases and semantic review, actual favorites native restore proof; root web chain passes. Conservative all-history retention while preference exists is explicit; final hosting graph remains T38. |
+| T83 | INTEGRATING | Source32c3449; independent clipboard-remount finding reproduced and repaired, actual native GREEN plus root7/7 and distinct closure. Maintained browser aliases enrolled; final hosting remains T38. |
+| T84 | DONE | review_intakes fresh103-record/173-spec/8281-clause gap intake frozen; finite local analytics, passive XMTP, formal partitions and actual outage follow-ons admitted as T89-T92. Root final current coverage reconciliation remains T38. |
+
+| T85 | DONE | Storage normalization/listener repairs441499d; distinct27-case review, exact four-file receipt. |
+
+| T86 | DONE | Native proc ESRCH/read7ff6e9f; root6/6, distinct formal7/7; observation bounds and cleanup negative retained. |
+
+| T87 | DONE | Physical Worker admission6f7bd07; root24/24 and exactChrome156/Node24.22 actual14 closures/competing refusal; CDP research port only, browser hard deadlines unqualified. |
+
+| T88 | INTEGRATING | Repairs74d9b87/0867271 with distinct root165 selected cases plus52 relay cases (overlapping suites), root1712 package cases pass. Clean-source native CLI/journey verification remains final T38; original audits/RED preserved. |
+
+| T89 | INTEGRATING | Source32c3449; actual consented five-category memory observer/Settings, independent22 cases, actual App19-group/BFcache proof and root web chain pass. No persistence/IPC/identifiers/network; final hosting remains T38. |
+
+| T90 | DONE | Passive XMTP intake5d448c0 independently reverified five complete archives/SRI/current signatures/licenses and91 file identities. Published source/nightly mismatch and10 exact missing contracts keep active profile unsupported; no SDK/WASM execution. |
+
+| T91 | DONE | Finite partitions fad51da independently source/classifier reviewed; root9 formal tests, one constructor compiler-model proof, two query-timeout UNKNOWN. All3 target attempts spent; old whole-target UNKNOWN/guard proofs/native model gap retained. |
+
+| T92 | DONE | Source689e439; distinct58-source/log/producer review accepts actual7-path503/reload/Worker retirement/fresh-origin G03 restore and owned cleanup. Finite local outage only; old T64 unchanged. Current full CI composition remains T38. |
+
+| T93 | DONE | Source635efc8; distinct root8 boundary cases and4 oracle cases, missing/non-directory/symlink roots refuse incomplete inventory; zero signature work refuses. Unconditional clean-CI oracle enrollment is T94. |
+
+| T94 | DONE | Sourcefcae5dd; exact8 official wheel hashes/complete3-package closure, root88 evidence identities and fresh isolated4/4 oracle rerun with zero skips. Both spec lanes additive; no runtime dependency or approval. |
+
+| T95 | DONE | Sourcea1cda13;18 explicit ordinal string sorts, byte-identical actual canonical snapshots. Distinct root10 docs/portal cases after genuine metadata refresh; all original T91 evidence/3 spent attempts preserved. |
+
+| T96 | INTEGRATING | Source4488131; all real assertion/negative/cleanup bytes retained under explicit helper names and one awaited native distribution test. Distinct root10/10 stealth cases; final distribution native run remains T38. |
+
+| T97 | DONE | Sourcecf73208; bounded monotonic docs/literal-import extraction, distinct root26 cases plus296 ordinary grammar equivalence checks. Source/span/budget/comparator semantics retained; no compiler/solver/target rerun. |

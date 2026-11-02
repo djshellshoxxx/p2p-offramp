@@ -5,7 +5,10 @@ You are the lead engineering coordinator for `djshellshoxxx/p2p-offramp`. Execut
 This prompt is being executed in the 2026-11-02 continuation. Its starting-point
 discussion below preserves the original PR24 snapshot. Read the current task
 ledger and scoped review receipts before choosing work: T33 onward now contains
-implemented slices and active follow-on tasks through T73. Neither this historical
+implemented slices and scoped follow-on tasks through T97. Read
+`docs/execution/coverage/CURRENT-REMAINDER.json` and the current whole-source audit.
+All three T91 formal partition attempts are spent; preserve their evidence and
+UNKNOWN results rather than repeat that tranche. Neither this historical
 snapshot nor an old coverage status reopens accepted work. Current unmerged source,
 pending reviews and final delivery remain the lead agent's responsibility.
 

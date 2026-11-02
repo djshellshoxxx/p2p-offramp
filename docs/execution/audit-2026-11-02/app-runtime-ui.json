@@ -1,0 +1,1159 @@
+{
+  "schema": "p2p-offramp/whole-app-source-audit/v1",
+  "task": "T38-G",
+  "status": "COMPLETE_TWO_P3_FINDINGS_RESOLVED",
+  "observedAtUtc": "2026-11-02T17:33:13.192982+00:00",
+  "reviewer": "Independent review_intakes agent; root owns product changes and commits",
+  "repository": "/workspace/p2p-offramp",
+  "headAtReview": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "scope": {
+    "root": "apps/web/src",
+    "allRegularFilesIncluded": true,
+    "productionFiles": 64,
+    "bytes": 606696,
+    "newlineLines": 7055,
+    "method": "Full semantic read of every file, including unchanged runtime/worker/native/retention/compatibility/UI/localization files, both READMEs, declarations and all CSS/catalog strings; per-file assessments below. Hash inventory supplements full source review.",
+    "separateAuditors": "Packages/contracts/build configuration; no certification of vendor/third-party sources.",
+    "inventoryDigestAlgorithm": "SHA256 of sorted relative path + NUL + lowercase SHA256 + LF rows",
+    "finalSourceInventorySha256": "2f235ba6bd7c9ddffb38c10b367151d3f1f3754ba13f32d2b02c466787ae5eca",
+    "initialInventory": {
+      "path": "/workspace/work/audit-app-runtime-ui-inventory-start.json",
+      "bytes": 12249,
+      "sha256": "07d511d391076bd3d80d502b1a9e35568c3bb2c5d1361083a19e660cb6e16f8f"
+    },
+    "deltaFromInitial": {
+      "added": [],
+      "removed": [],
+      "changed": [
+        "apps/web/src/ui/GenericAppShare.tsx",
+        "apps/web/src/ui/locale/en.ts"
+      ]
+    },
+    "unchangedFiles": 62
+  },
+  "findings": [
+    {
+      "id": "APP-UI-001",
+      "severity": "P3",
+      "status": "RESOLVED_BY_ROOT_SOURCE_DELTA",
+      "path": "apps/web/src/ui/locale/en.ts",
+      "line": 230,
+      "title": "Home privacy copy overstated what the unlocked shell hides",
+      "before": "This shell does not display private records or enable trading.",
+      "sourceEvidence": [
+        {
+          "path": "apps/web/src/ui/Pages.tsx",
+          "line": 54
+        },
+        {
+          "path": "apps/web/src/ui/trade/TradeDraftEditor.tsx",
+          "line": 67
+        },
+        {
+          "path": "apps/web/src/ui/trade/TradeTermsReview.tsx",
+          "line": 73
+        }
+      ],
+      "impact": "Misleading privacy expectation; no observed authorization bypass or unintended disclosure.",
+      "after": "Private records appear only when you explicitly load or review them. Trading remains disabled.",
+      "disposition": "Final wording accurately describes intentional local review/template viewing and retains disabled trading."
+    },
+    {
+      "id": "APP-UI-002",
+      "severity": "P3",
+      "status": "RESOLVED_BY_ROOT_SOURCE_DELTA",
+      "path": "apps/web/src/ui/locale/en.ts",
+      "line": 559,
+      "title": "Mixed-validity saved load falsely said no reviews loaded",
+      "before": "No new reviews were loaded; encrypted data was retained.",
+      "sourceEvidence": [
+        {
+          "path": "apps/web/src/trade/review-controller.ts",
+          "line": 370
+        },
+        {
+          "path": "apps/web/src/trade/review-controller.ts",
+          "line": 389
+        },
+        {
+          "path": "apps/web/src/ui/trade/TradePages.tsx",
+          "line": 49
+        },
+        {
+          "path": "apps/web/src/ui/FavoriteSavedReviews.tsx",
+          "line": 21
+        }
+      ],
+      "impact": "Confusing load/recovery result despite correct independent review and ciphertext preservation.",
+      "after": "Some saved reviews could not be checked against the current registry. Valid reviews may have loaded; encrypted data was retained.",
+      "disposition": "Conservative statement is true for partial valid-row success and malformed/entirely failed loads; no behavior change."
+    }
+  ],
+  "openFindings": 0,
+  "foundSeverityCount": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "P3": 2
+  },
+  "rootDelta": {
+    "path": "apps/web/src/ui/locale/en.ts",
+    "beforeSha256": "1725098cff11cd549a65cb8f0fbde76f3f6fbbe3ca7eef734f0839ac05c459bb",
+    "afterSha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+    "exactDeltaVerification": "Reversing only the two sentence edits, revision 2 to 3, and eight added critical keys reproduces the exact initial inventory SHA256. All other 62 production files match initial freeze; GenericAppShare.tsx is the separate full-file reviewed physical-admission delta.",
+    "patch": {
+      "path": "/workspace/work/audit-app-runtime-ui-root-copy-delta.patch",
+      "bytes": 3764,
+      "sha256": "69ad71847944f8aa281246e831b09edd12c740ef79025b66c6869328700ef872"
+    },
+    "criticalKeysAdded": [
+      "privacy.policyRelaxConsent",
+      "privacy.policyUnknownCoverage",
+      "drafts.confirmAmounts",
+      "drafts.confirmIdentities",
+      "drafts.confirmEmptyInstructions",
+      "drafts.backupLimits",
+      "analytics.help",
+      "shell.shareAppHelp"
+    ],
+    "localeMetadata": "revision 3; en/ltr; status draft; translator/reviewer null; no reviewed locale or funds approval inferred.",
+    "testSource": {
+      "path": "/workspace/p2p-offramp/apps/web/test/locale-source.test.mjs",
+      "bytes": 8362,
+      "sha256": "6122c02205943c4ef61506ee1dbe1786b31f97bfe0b18c2fc73ea41366c0455d"
+    },
+    "testSourceReview": "Read exact git diff: corresponding eight severity assertions and revision 3 expectation, no assertion deletion or weaker fallback.",
+    "rootReportedValidation": "Root reported 15/15 formal+locale tests; no independent rerun or hash-bound root log was supplied to this reviewer for that new run."
+  },
+  "crossCuttingReview": [
+    {
+      "area": "Authority/default gates",
+      "assessment": "Default App supports local vault/reviews/templates/favorites/privacy selection/analytics; explicit build/source/peer gates remain closed to automatic provider/trading activation. Labels/locales/diagnostics/compatibility observations are not economic authority."
+    },
+    {
+      "area": "Secrets/profile/async ownership",
+      "assessment": "DOM passphrases clear before awaits; primitive IPC metadata excludes secrets; selected profile/worker generation and captured owner guard late replies. Owned bytes retire on rejection/stale/failure/lock/dispose. Physical erasure of JS strings or exported files is not claimed."
+    },
+    {
+      "area": "Native review/unknown broadcast/physical drain",
+      "assessment": "Exact signing review scope/fingerprint/expiry/epoch persists through final durable marker read. Unknown sends reconcile without auto-resend. Early timeout/cancel retains actual native/worker work admission until physical settlement."
+    },
+    {
+      "area": "Retention/recovery",
+      "assessment": "Whole dependent closure, current terminal facts and pending withdrawal checks protect deletion; unknown/missing authority protects records. Favorites/preferences remain dependencies, real verification gates backup readiness, recovery references remain unverified private hints."
+    },
+    {
+      "area": "Analytics/diagnostics/privacy",
+      "assessment": "Real route-category events count only after consent in session memory: fixed five categories, saturating counts, bounded preview/subscribers and fixed-cohort reentry. Export/clear/opt-out explicit; lock/owner/pagehide/BFCache erases counts/consent/preview. No IDs/times/values/persistence/IPC/network; diagnostics stays separate."
+    },
+    {
+      "area": "Accessibility/localization/bounds",
+      "assessment": "Labeled controls, headings/status/alerts, keyboard/focus/tooltips and responsive/focus/forced-colors styles read. Canonical amounts/addresses/hashes stay exact and separate from locale; instructions are bounded screened text. No remote catalog or funds-locale activation."
+    },
+    {
+      "area": "Simplicity",
+      "assessment": "No extra provider install, parallel validation authority, analytics persistence or redundant event layer found. Lifecycle state distinguishes legitimate logical/physical ownership; copy fixes add no abstraction."
+    }
+  ],
+  "validation": {
+    "freshReviewerWork": "Static full-source read; initial/final inventories and exact source delta; SHA256 validation of existing raw evidence.",
+    "testsExecutedByReviewer": false,
+    "wholeSuitesRerun": false,
+    "evidenceReuse": "Existing runs belong to their original owners. Raw logs and receipts were read/hash-checked; no fresh reviewer execution is claimed. Retained failed/red attempts are not counted as passes.",
+    "hashEvidence": {
+      "bindings": {
+        "path": "/workspace/work/audit-app-runtime-ui-evidence-bindings.json",
+        "bytes": 13344,
+        "sha256": "47580a1399b3c36f967b4544d15094af9d608b47a472dffc8181ba2a78673492"
+      },
+      "checkedEntries": 34,
+      "mismatches": 0,
+      "t81SnapshotsChecked": 19,
+      "snapshotMismatches": 0
+    },
+    "t80": {
+      "receiptSourceBindings": 32,
+      "currentMatches": 28,
+      "laterPaths": [
+        "packages/schemas/src/runtime.ts",
+        "apps/web/src/ui/App.tsx",
+        "apps/web/src/ui/trade/draft-copy.ts",
+        "apps/web/src/ui/locale/en.ts"
+      ],
+      "reportedFocusedPass": 75,
+      "reportedPreservationPass": 90,
+      "reportedTypeConfigurations": 4,
+      "actualBrowser": "demo/meta editor with real ModuleWorker/encrypted IndexedDB, backup/fresh-key restore and late reply retirement; default registry absent; zero wallet/unexpected requests",
+      "nativeFollowon": "Actual native/ERC20 consumer: 11 submissions, 16 signatures, 32 explicit reviews. Current private-trade.ts exact SHA256 matches followon sourceAfterSha256 3af0152c41c7186b0e904620069f3b90ed9e97f4b05e4bf92af790ce9ac178f9."
+    },
+    "t81": {
+      "frozenGraphFiles": 19,
+      "snapshotsMatch": 19,
+      "currentGraphMatches": 18,
+      "laterDelta": "Manifest explicitly predates T80 terms factory; private-trade.ts later delta is bound by native-token followon and reviewed here.",
+      "reportedFocusedPass": 33,
+      "actualConsumer": "Same actual Worker broker/selection sequence; strict refusal, fresh ordinary acknowledgement, retained closing physical capacity/held wallet admission and durable unknown. RPC/wallet route status unknown.",
+      "nativeLogSha256": "28e4199f0e138f9509fd0230724c82ef7ba7133149b1c6d977562c509ed11752"
+    },
+    "t89": {
+      "ownedSourceHashesMatch": 5,
+      "rootEnrollmentHashesMatchedAtInitialFreeze": 6,
+      "rootEnrollmentHashesMatchFinal": 5,
+      "remainingEnrollmentDelta": "Only en.ts among the 11 explicit packet source bindings; exact correction reviewed above. The broader native consumer also predates the GenericAppShare page-global clipboard followon.",
+      "reportedUnitRenderPass": 15,
+      "actualNativeReportGroups": 19,
+      "walletPrompts": 0,
+      "unexpectedRequests": 0,
+      "currentControllerMatchesFrozenCorrection": true,
+      "limits": "Actual persisted BFCache retirement and bounded export; ordinary headless visibility policy is unit coverage only. Retained attempt-1 failure precedes successful attempt 2 with corrected baseline, not weakened checks."
+    }
+  },
+  "evidence": [
+    {
+      "path": "/workspace/work/t80-implementation-receipt.json",
+      "bytes": 7781,
+      "sha256": "af0ccffd06b8986461d6f2ee1b8709ef6ee828ddfde95793e37282b3f559d216"
+    },
+    {
+      "path": "/workspace/work/t80-native-token-followon-receipt.json",
+      "bytes": 5674,
+      "sha256": "e2b82c8b2af287f49a1bf7fd2e7f28640c6d98db40ad622e36c2749d50e969e7"
+    },
+    {
+      "path": "/workspace/work/t81-integration-evidence.json",
+      "bytes": 13503,
+      "sha256": "10e2585ffb1f5f8a85636347e0ef9fc768d1a3d5d7bacfdb8c4511e468e2044b"
+    },
+    {
+      "path": "/workspace/work/t81-final-frozen-tree/SOURCE-MANIFEST.json",
+      "bytes": 5272,
+      "sha256": "e645412ab0c9e87acbb67cea8f650f8088a59b1be52c01f7cb98ce09604a0d80"
+    },
+    {
+      "path": "/workspace/work/t89-final-review-packet.json",
+      "bytes": 10890,
+      "sha256": "23444448d4ec2b33d988cf116cd61af0c72e160196c96ab7596c2f1fd50bf2a7"
+    },
+    {
+      "path": "/workspace/work/t89-native-browser-report.json",
+      "bytes": 4314,
+      "sha256": "17557ef121a111baa5b0597f66a66fbc126bf34e6443202a3a47dca09126d907"
+    },
+    {
+      "path": "/workspace/work/t89-controller-correction.json",
+      "bytes": 2562,
+      "sha256": "5810c855c537371e52863841d16cfd67ccd432d1a90df1ba5ebb3226a63075a1"
+    },
+    {
+      "path": "/workspace/work/audit-app-runtime-ui-evidence-bindings.json",
+      "bytes": 13344,
+      "sha256": "47580a1399b3c36f967b4544d15094af9d608b47a472dffc8181ba2a78673492"
+    }
+  ],
+  "qualificationLimits": [
+    "Source review plus finite owned local evidence is not professional vendor/third-party certification or proof of absence of all defects.",
+    "Production carrier/relay/provider interoperability and actual production RPC/wallet private routing remain unqualified; broker selection alone cannot qualify them.",
+    "Physical-device qualification catalog is empty. Local Chromium/encrypted-store evidence does not accept real mobile, passkey/OS or assistive devices.",
+    "Deployed headers/framing, signed release/distribution acceptance and live funded operation remain separate gates. No trading/provider was activated.",
+    "Reviewer performed no installation, endpoint access, vulnerability reproduction or new probes, and made no source/ledger changes or commits."
+  ],
+  "files": [
+    {
+      "path": "apps/web/src/analytics/screen-counts.ts",
+      "sha256": "b12b1ecf2237754a1de9339bc377e73b20943e9ff63ba34b1149be1320039ae7",
+      "bytes": 5364,
+      "lines": 115,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "bounds",
+        "ownership",
+        "reentrancy"
+      ],
+      "assessment": "Controller and navigation observer are separate; five literal categories, saturating counts, fixed subscriber cohort with mutator exclusion, synchronous retirement, no IDs/times/values/persistence/network. Consent belongs to the current in-memory session."
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "3f9fa7202474ff2c7f8b9544e0e77c51dca29b62b1101173723e3aa3333c2af8",
+      "bytes": 12706,
+      "lines": 152,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "ownership",
+        "cancellation",
+        "profile"
+      ],
+      "assessment": "Single AppRuntime facade preserves selected-profile scope, worker generation and typed commands. Review/draft/favorite/retention/policy UI state cannot grant provider authority."
+    },
+    {
+      "path": "apps/web/src/build-flags.d.ts",
+      "sha256": "bf8b084bcce8934c9785fb384b7657e3bf3a614cd36d16c52dba0fb5173ac89c",
+      "bytes": 584,
+      "lines": 8,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "authority"
+      ],
+      "assessment": "Compile-time demo/testnet/trading/framing declarations alone activate no provider or trading behavior."
+    },
+    {
+      "path": "apps/web/src/compatibility/model.ts",
+      "sha256": "5720fbbf12ebb3a805afd721f94ab90a91453462f959c6dc56efe502907d7d28",
+      "bytes": 16902,
+      "lines": 216,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "qualification",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Closed capability states and bounded source-pinned qualification schema; absent facts stay explicit. Physical qualification catalog is empty; feature presence is not device acceptance."
+    },
+    {
+      "path": "apps/web/src/compatibility/probe.ts",
+      "sha256": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793",
+      "bytes": 6349,
+      "lines": 76,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "bounds",
+        "cancellation",
+        "qualification"
+      ],
+      "assessment": "Finite local probes with bounded timers/cleanup and no wallet or permission prompt; capability checks remain distinct from physical-device acceptance."
+    },
+    {
+      "path": "apps/web/src/compatibility/startup.ts",
+      "sha256": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b",
+      "bytes": 641,
+      "lines": 10,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "qualification"
+      ],
+      "assessment": "Startup singleton exposes measured compatibility state; probe failure stays failure and never enables trading."
+    },
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61",
+      "bytes": 9992,
+      "lines": 158,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "bounds",
+        "default-gates"
+      ],
+      "assessment": "Closed bundled policy/source trust inputs and bounded local preferences do not become transaction, chain or counterparty authority."
+    },
+    {
+      "path": "apps/web/src/context-adapters/README.md",
+      "sha256": "f106a5abc6247b84a71c7627f41645dd55053f56f08ef9119c0839e306478302",
+      "bytes": 1840,
+      "lines": 9,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "qualification"
+      ],
+      "assessment": "Environmental observations remain informational; external context cannot become signing/funding permission or device qualification."
+    },
+    {
+      "path": "apps/web/src/context-adapters/observations.ts",
+      "sha256": "23ef1962f87d6dd4d504c2d8456fd86f708fe662b74b4e9b0c37a21c921101d7",
+      "bytes": 9950,
+      "lines": 134,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "bounds",
+        "ownership"
+      ],
+      "assessment": "Closed primitive observations and bounded classifications preserve unknown facts. Signals cannot infer secret input, wallet approval or economic authority."
+    },
+    {
+      "path": "apps/web/src/demo/synthetic-data.ts",
+      "sha256": "5da69478862d29c7dbb9ab91e2d58eb95764ac0350be67e00f82576e254d2ccd",
+      "bytes": 5579,
+      "lines": 12,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "provenance",
+        "bounds"
+      ],
+      "assessment": "Fully read fixed synthetic registry and both example documents; synthetic identities/instructions include no live provider configuration or credentials."
+    },
+    {
+      "path": "apps/web/src/demo/synthetic-local.ts",
+      "sha256": "35eb9d134c50e293b711f12bda0bcb773922a85ec17196f557dfe86d1a37086f",
+      "bytes": 3368,
+      "lines": 49,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "ownership",
+        "bounds"
+      ],
+      "assessment": "Explicit synthetic source owns bounded byte copies and grants display review only; default App source does not activate it."
+    },
+    {
+      "path": "apps/web/src/diagnostics.ts",
+      "sha256": "fa760d26a8928d3501164585d4afaab43c70e34b1453175c0829a05525227559",
+      "bytes": 549,
+      "lines": 10,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "default-gates"
+      ],
+      "assessment": "Diagnostics defaults unconfigured and receives no draft/passphrase/wallet/private-record payload; it is not relabeled analytics."
+    },
+    {
+      "path": "apps/web/src/journey/README.md",
+      "sha256": "1beb089f6d7060eb185db7d5b0dd09d113f7b6840a671cb6b6a9ab385b3694a0",
+      "bytes": 16864,
+      "lines": 105,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "qualification",
+        "unknown-outcome"
+      ],
+      "assessment": "Read all boundary and limitation documentation: controlled native evidence is separate from production carrier/provider selection; unknown outcomes require reconciliation, not resend."
+    },
+    {
+      "path": "apps/web/src/journey/native-contracts.ts",
+      "sha256": "eae22020872aad8187f16fc57693dbc621f1bec10dc4158742360311fd126a34",
+      "bytes": 15003,
+      "lines": 81,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "ownership",
+        "bounds"
+      ],
+      "assessment": "Exact native review scope/fingerprint and finite enums keep display review separate from provider permission and physical work lifetime."
+    },
+    {
+      "path": "apps/web/src/journey/presentation.ts",
+      "sha256": "bcb7d5435d7afc34681cf437c7dd781f223bc1fa7f76bb178a25d9f5e9b13523",
+      "bytes": 21777,
+      "lines": 93,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "localization",
+        "unknown-outcome"
+      ],
+      "assessment": "Pure presentation keeps unknown send, missing chain facts and unqualified carrier states distinct from success or payment guidance."
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "3af0152c41c7186b0e904620069f3b90ed9e97f4b05e4bf92af790ce9ac178f9",
+      "bytes": 58337,
+      "lines": 351,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "physical-drain",
+        "unknown-outcome",
+        "bounds"
+      ],
+      "assessment": "Read every transition. Exact signing review scope/fingerprint/expiry/epoch is rechecked through final durable-marker read; UNKNOWN survives retirement and never auto-resends. Physical admission remains held until native settlement despite early logical cancel/timeout. Registry-bound fresh native/ERC20 drafts and owned bytes preserve default peer/provider gates."
+    },
+    {
+      "path": "apps/web/src/journey/screen.ts",
+      "sha256": "1f1ad2c51fb77189fc5a4123c26aed5f6435c2af159fbcaf45f2b1aca220a0d2",
+      "bytes": 19050,
+      "lines": 70,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "accessibility",
+        "ownership"
+      ],
+      "assessment": "Native screen exposes explicit review/recovery state; bounded action callbacks cannot mint authority from labels. Private inputs retire with the owned journey."
+    },
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "325a9f9455c5e9e5061694fd3a848e3bc1711643a9aa89212c873c7cc8730bb7",
+      "bytes": 6328,
+      "lines": 91,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation"
+      ],
+      "assessment": "Captured exact profile/session binding retires stale callbacks; no implicit carrier/RPC/wallet installation or funding permission."
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "91ca3e07e1671d6d7ae8321539a7785431462594e60ff3feb68f6423aebc6f7c",
+      "bytes": 4928,
+      "lines": 92,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "authority",
+        "ownership",
+        "privacy"
+      ],
+      "assessment": "Default startup constructs the local worker shell behind explicit source/build gates; no automatic native provider. Page lifecycle locks vault ownership, share URL derives from trusted module location, and analytics owns a separate lifetime."
+    },
+    {
+      "path": "apps/web/src/privacy/policy-controller.ts",
+      "sha256": "6dc74fdb5c83ad7c3467910038bf5948afccf53fe0345a7b6df36a6e034367ca",
+      "bytes": 10850,
+      "lines": 182,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "ownership",
+        "profile",
+        "cancellation",
+        "bounds"
+      ],
+      "assessment": "Same actual broker/CAS sequence requires fresh ordinary acknowledgement; strict grants no direct transport. Fixed cohort excludes mutators, stale scope cannot adopt replies, RPC/wallet remain unknown."
+    },
+    {
+      "path": "apps/web/src/retention/native-retention.ts",
+      "sha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8",
+      "bytes": 17146,
+      "lines": 153,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "unknown-outcome",
+        "bounds"
+      ],
+      "assessment": "Both review passes protect whole dependency closure, exact terminal anchor and pending withdrawals. Unknown/future rows and preferences retain dependencies; missing native authority protects all history. Review performs no native write."
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "77a5431fe3c0e3bc60b18d18970ff3309d842e95bbefba21f4aa291207a7c0f6",
+      "bytes": 28197,
+      "lines": 363,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "physical-drain",
+        "bounds"
+      ],
+      "assessment": "Generation invalidation precedes replies; primitive-only pending metadata and exact profile handles guard bounded worker commands. Secret transfers clean up and logical cancel does not assert physical completion."
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "1d2bf3b83a9d3a7bad97cefecba6dddac78d90c90cd764be978bb5a67b27ae9b",
+      "bytes": 2252,
+      "lines": 22,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Whitelist retains only primitive command metadata; no passphrase, record bytes, draft instructions or sensitive object references."
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "0d19e84ad3be12ee547a5ab97c686d537c639652bebcccfe5d2cb2e237f2437d",
+      "bytes": 38819,
+      "lines": 512,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "physical-drain",
+        "bounds"
+      ],
+      "assessment": "Complete dispatcher read: strict command validation/session-profile checks, active physical work ownership across timeout/cancel, owned return buffers, secret cleanup and conservative missing native-retention authority."
+    },
+    {
+      "path": "apps/web/src/sharing/generic-app-link.ts",
+      "sha256": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+      "bytes": 1425,
+      "lines": 20,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Strict trusted module/base URL canonicalization yields a generic path/fragment without document query, private IDs, transaction/URI context or tracking."
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-network.ts",
+      "sha256": "971cb235c38250a7d78c18d760b5dc0b810e4422a037e3f67b4da97db727f704",
+      "bytes": 2107,
+      "lines": 34,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "authority",
+        "provenance"
+      ],
+      "assessment": "Fixed Sepolia identity/genesis and read-only testnet structure; no endpoint discovery or wallet auto-selection."
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-source.ts",
+      "sha256": "8911e9d6bd1981351901e40eeb4b44f5e3e2e0d54094988c27245d5ec8e1551f",
+      "bytes": 5027,
+      "lines": 67,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates",
+        "authority",
+        "provenance",
+        "ownership"
+      ],
+      "assessment": "Default/null pin refuses bundle use; explicit owner-signed sequence/expiry and exact network facts gate read-only review without production/wallet authority."
+    },
+    {
+      "path": "apps/web/src/trade/draft-controller.ts",
+      "sha256": "2e8c750b48267582d630e61d4b5c24c23c889b475fba43b31f6c1df6961b0a6b",
+      "bytes": 18412,
+      "lines": 203,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "bounds"
+      ],
+      "assessment": "Fresh schema/domain review uses current registry choices; defaults omit parties/instructions/deadlines and never preconfirm amounts. Exact preview identity/profile scope guards template writes and stale result retirement."
+    },
+    {
+      "path": "apps/web/src/trade/review-controller.ts",
+      "sha256": "c1fb01bb9df1d24b641173e6513cbd672f175f9422dd01274e80db5c81e5b9ae",
+      "bytes": 32081,
+      "lines": 434,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "bounds"
+      ],
+      "assessment": "Read registry/import/persistence/disposal. Bounded byte copies are owned and wiped on rejection/stale reply/eviction/retirement. Independently valid saved rows merge after fresh review even when another row is rejected; corrected copy now reflects this."
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "sha256": "f489bd5c62372570758b926cf14e60142fef254d15184ce6141b41a148a551ca",
+      "bytes": 9808,
+      "lines": 139,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "accessibility",
+        "localization",
+        "privacy"
+      ],
+      "assessment": "Bounded normalized routes, owned services and scope retirement; heading/skip/focus and locale behavior explicit. Only navigation observer records categories; Settings controller cannot manually increment."
+    },
+    {
+      "path": "apps/web/src/ui/BackupVerificationForm.tsx",
+      "sha256": "d72d79a5efa6af26bee4e16a16bd4fbb10aa58e5f62f30f3b8f05ce27533a4bd",
+      "bytes": 7057,
+      "lines": 82,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "ownership",
+        "cancellation",
+        "accessibility",
+        "bounds"
+      ],
+      "assessment": "Explicit bounded file/passphrase verification checks current profile/revision. DOM secrets clear before await; stale replies retire. Export/restore/unlock cannot mint backup readiness."
+    },
+    {
+      "path": "apps/web/src/ui/ControlHelp.tsx",
+      "sha256": "b9e0f6431935a4bd2731d2c4f8301155c90c7c451a8df59a8f7838ec010fc69c",
+      "bytes": 2371,
+      "lines": 33,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Fixed help never reads its associated input; hover/focus/tap/blur/Escape manage pinned state and focus return, with document listener cleanup."
+    },
+    {
+      "path": "apps/web/src/ui/DiagnosticsPanel.tsx",
+      "sha256": "af0e388530656953e93453e1a3c9314b86c7217a8f07948a4f3f9c42e6ee9131",
+      "bytes": 4921,
+      "lines": 77,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "bounds",
+        "ownership",
+        "accessibility"
+      ],
+      "assessment": "Separate select/preview/confirm redacted export; copies are cleared/object URLs revoked and preview bytes retire. Diagnostics remains separate from screen analytics."
+    },
+    {
+      "path": "apps/web/src/ui/FavoriteSavedReviews.tsx",
+      "sha256": "3261acea055de16af9a95ae3bc06e49e793a19318826a70eb1ec9358a79d727c",
+      "bytes": 8155,
+      "lines": 105,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "physical-drain",
+        "bounds"
+      ],
+      "assessment": "Encrypted review references are not a second terms store. Open requires newly replaced independently valid review. One physical operation remains held across retirement; stale scope cannot navigate."
+    },
+    {
+      "path": "apps/web/src/ui/GenericAppShare.tsx",
+      "sha256": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+      "bytes": 3322,
+      "lines": 62,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "ownership",
+        "accessibility"
+      ],
+      "assessment": "Explicit generic-link copy and visible fallback; trusted precomputed URL only. Final full-file root delta uses page-global physical clipboard admission retained across route/remount until real settlement; mounted owner/sequence still suppresses stale feedback. useSyncExternalStore shares pending state without new persistence or IPC."
+    },
+    {
+      "path": "apps/web/src/ui/LocalScreenAnalytics.tsx",
+      "sha256": "57990434a61aa0aec0e367b87605657d2b4b985cfb644a79041a082c5979e47c",
+      "bytes": 4359,
+      "lines": 59,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "authority",
+        "bounds",
+        "ownership",
+        "accessibility"
+      ],
+      "assessment": "Real Settings consumer supplies consent, aggregate display, exact bounded preview/export and clear/opt-out without manual increment. Current preview/consent rechecks after synchronous file-helper callbacks; retirement clears preview."
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "4bc69541063a8426f45a21fbddbb6d0efd05cd75e7548ff6c79af8be3d52b18a",
+      "bytes": 8009,
+      "lines": 115,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "profile",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Home/Recovery/Settings preserve explicit profile actions, focus and recovery warnings. Root-corrected unlocked Home sentence now acknowledges intentional private-record viewing and disabled trading."
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyPolicySelector.tsx",
+      "sha256": "2e27c7daf0a902414232015eafdf01971dd5f41a0ca89750faccafcdfb132a26",
+      "bytes": 3797,
+      "lines": 61,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "profile",
+        "ownership",
+        "cancellation",
+        "accessibility"
+      ],
+      "assessment": "Actual broker sequence with ordinary acknowledgement and pending/error feedback; selection captures current scope and retires late replies without claiming RPC/wallet assurance."
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyStatusDetails.tsx",
+      "sha256": "960acfac3ce28e597d84ca991f7591b63dd003cbf043459e1b371ee7e44272a9",
+      "bytes": 1599,
+      "lines": 23,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "localization"
+      ],
+      "assessment": "Read-only details distinguish requested/current state and unknown routes; displayed privacy labels carry no request/wallet authority."
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+      "sha256": "4c9638dc3c900444ffce912a0398ed7661a619d5adbcb315ab81973023566928",
+      "bytes": 8614,
+      "lines": 122,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "ownership",
+        "bounds",
+        "accessibility"
+      ],
+      "assessment": "Actual scoped status and bounded refresh remain display only; endpoint/RPC/wallet unknown facts are not upgraded by timers or local labels."
+    },
+    {
+      "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+      "sha256": "4966798b98cab22fb591d507356ff9800cd12c60bb0d4b7f1b17c7bdcc2a94d6",
+      "bytes": 9130,
+      "lines": 95,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "profile",
+        "ownership",
+        "cancellation",
+        "bounds",
+        "accessibility"
+      ],
+      "assessment": "Bounded pages/selection with explicit plaintext consent and exact profile/revision/page recheck before download. Scope retirement aborts and erases preview. References stay unverified hints, not chain/resend authority."
+    },
+    {
+      "path": "apps/web/src/ui/RetentionPanel.tsx",
+      "sha256": "1a256f271e1d4275d288debdbdf92235433fec61061de6fa40c28ca6f76675c8",
+      "bytes": 4903,
+      "lines": 58,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "cancellation",
+        "accessibility"
+      ],
+      "assessment": "Exact captured preview/profile reviewed before confirmation; deletion is local, independent of chain state. Busy/cancel/stale outcomes and conservatively retained favorites/preferences stay explicit."
+    },
+    {
+      "path": "apps/web/src/ui/StartupCompatibilityNotice.tsx",
+      "sha256": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9",
+      "bytes": 1495,
+      "lines": 24,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "qualification",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Measured limitation/read-only recovery notice never promotes missing APIs or runtime failures into device/release acceptance."
+    },
+    {
+      "path": "apps/web/src/ui/VaultForms.tsx",
+      "sha256": "6308584152327ccdb0bb500d223f00b0a0a9d88640945c964039bd7513338cdd",
+      "bytes": 20408,
+      "lines": 339,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "profile",
+        "ownership",
+        "cancellation",
+        "physical-drain",
+        "bounds",
+        "accessibility"
+      ],
+      "assessment": "Read all forms: DOM secrets clear before awaits, files bounded, export consent explicit; uncertain restore reconciles inventory before retry. Actual read/worker admission remains held across early logical cancellation."
+    },
+    {
+      "path": "apps/web/src/ui/app.css",
+      "sha256": "2e475c8a3af6be68c82b09224777f525c0d49bf80d62eeffb9b4c0faccf3c26b",
+      "bytes": 7826,
+      "lines": 99,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "accessibility",
+        "bounds",
+        "simplicity"
+      ],
+      "assessment": "Read complete styles: focus/skip affordances, 44px controls, wrapping exact values, narrow-grid sizing, reduced motion and forced colors. Source structure does not imply assistive-device acceptance."
+    },
+    {
+      "path": "apps/web/src/ui/diagnostics-messages.ts",
+      "sha256": "8725c7b5f7abb508259f06a73a3526fa8330714766af9531ebac6f3f6c5a900f",
+      "bytes": 437,
+      "lines": 6,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "privacy"
+      ],
+      "assessment": "Typed catalog adapter has no dynamic HTML or extra private interpolation."
+    },
+    {
+      "path": "apps/web/src/ui/help-registry.ts",
+      "sha256": "b4c2f82bd172887c52034a7026e83fecd873c6d1f4ef75532cc8e1a61fd775c4",
+      "bytes": 3712,
+      "lines": 47,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Maximum 64 entries; own data descriptors/exact keys/interactions/catalog-variable checks freeze local metadata without handlers or economic authority."
+    },
+    {
+      "path": "apps/web/src/ui/locale/bundled.ts",
+      "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+      "bytes": 683,
+      "lines": 12,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "default-gates",
+        "provenance"
+      ],
+      "assessment": "Explicit bundled catalog map; no remote catalog fetching or runtime installation."
+    },
+    {
+      "path": "apps/web/src/ui/locale/catalog.ts",
+      "sha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+      "bytes": 11699,
+      "lines": 139,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Exact key/variable contracts, bounded own-data validation, immutable copies and whole-catalog fallback; no executable markup or canonical amount parsing from locale."
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+      "bytes": 54724,
+      "lines": 753,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "truthful-outcomes",
+        "privacy"
+      ],
+      "assessment": "Read full source catalog and exact final root delta. Both P3 sentences are corrected; eight new risk/consent/help messages are critical, revision 3 remains draft with null translator/reviewer. No translation or funds approval granted."
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+      "bytes": 8525,
+      "lines": 111,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "privacy",
+        "authority",
+        "bounds"
+      ],
+      "assessment": "Only bundled locale ID preference is stored; bounded notifications/guarded storage, no private fields, funds-locale eligibility false and fallback without economic authority."
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "sha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "bytes": 1514,
+      "lines": 19,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "privacy"
+      ],
+      "assessment": "Typed fixed source-catalog adapters; no raw HTML or translation-based control flow."
+    },
+    {
+      "path": "apps/web/src/ui/recovery-reference-messages.ts",
+      "sha256": "19a55e9fe869fba8a0653f7e232856a12db0c0abc438446e6cdbb03d78660f6e",
+      "bytes": 583,
+      "lines": 8,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "privacy",
+        "authority"
+      ],
+      "assessment": "Catalog labels private/unverified references without recovery/send authority."
+    },
+    {
+      "path": "apps/web/src/ui/routes.ts",
+      "sha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1",
+      "bytes": 1007,
+      "lines": 20,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "bounds",
+        "authority",
+        "privacy"
+      ],
+      "assessment": "Finite route parser/exact local review ID grammar; malformed/foreign fragments fall back, errors use closed mapping."
+    },
+    {
+      "path": "apps/web/src/ui/styles.d.ts",
+      "sha256": "28e0b0de8c50a7e1daa4f6dca791beb9dcf4084e164c9468694f579406a63d73",
+      "bytes": 103,
+      "lines": 2,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "default-gates"
+      ],
+      "assessment": "Style declarations only; no executable behavior or external fetch."
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradeDraftEditor.tsx",
+      "sha256": "41cea3b1e885dc142b07c9d43cafac2fa134b50ee5042f06db16bd0c8f0724d8",
+      "bytes": 14113,
+      "lines": 128,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "profile",
+        "ownership",
+        "bounds",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Complete editor read: finite slots/current identity selectors/bounded canonical input and explicit amount/identity/empty-instruction confirmations. Template consent binds exact preview object; late navigation checks owner. Formatting/deadline clock is display only."
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradePages.tsx",
+      "sha256": "0d94c36af5167aa42c9d13c8514fce0e9755a5ed288109b3862d2b3067892d49",
+      "bytes": 11844,
+      "lines": 180,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "ownership",
+        "cancellation",
+        "bounds",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Explicit trusted-registry/default-unavailable status and controller-driven file/sample/saved/favorite review. Navigation follows accepted owned work; corrected INVALID_SAVED_REVIEW message covers independent valid rows."
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradeTermsReview.tsx",
+      "sha256": "b8dc6a0a70f79f990e01609d06008df973c3ff582042cb699fd3cddbf56b642b",
+      "bytes": 6716,
+      "lines": 106,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "privacy",
+        "bounds",
+        "accessibility",
+        "localization"
+      ],
+      "assessment": "Pure display has no wallet/network/state callbacks; full identities/base units/hashes, screened exact instructions, source limits/device clock and conservative blockers remain visible."
+    },
+    {
+      "path": "apps/web/src/ui/trade/display-text.ts",
+      "sha256": "34bc307987270784e9c5fa68789e6eb3d699d0fb9dcff6edb1f6a1f5576bf5c3",
+      "bytes": 2976,
+      "lines": 55,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "bounds",
+        "provenance"
+      ],
+      "assessment": "Linear bounded code-point screen preserves exact accepted text and rejects control/bidi/ignorable/private/tag/surrogate chars; mixed-script warning and same-script limit explicit. React renders text."
+    },
+    {
+      "path": "apps/web/src/ui/trade/draft-copy.ts",
+      "sha256": "c2cfb16803a99526bbd5dba1c9146605dbd965d2366f39350045a68e35b702e1",
+      "bytes": 832,
+      "lines": 13,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "truthful-outcomes"
+      ],
+      "assessment": "Typed copy now maps UNKNOWN_OUTCOME to operationFailed without implying no write; messages cannot reinterpret authority."
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-messages.ts",
+      "sha256": "1392da9d5d8a5db7ebd35969b37fdb164e2370550350492718f51b8783294eee",
+      "bytes": 1495,
+      "lines": 20,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "localization",
+        "authority"
+      ],
+      "assessment": "Fixed typed trade/source adapters keep canonical values separate from localized display."
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+      "sha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+      "bytes": 5444,
+      "lines": 87,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "bounds",
+        "authority",
+        "localization"
+      ],
+      "assessment": "Exact bigint uint256/fiat/u64 display with bounded scale and full addresses; no float rounding/locale parsing, clock display only."
+    },
+    {
+      "path": "apps/web/src/ui/use-screen-counts.ts",
+      "sha256": "c83532023e90297635a28616cbfea912f3d1048d14b443cf42488075097f41c7",
+      "bytes": 1603,
+      "lines": 28,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "privacy",
+        "ownership",
+        "cancellation",
+        "bounds"
+      ],
+      "assessment": "App hook observes only fixed visible route category; same-category private IDs cannot increment. Lock/scope/owner/pagehide/BFCache retire counts/consent, visible resume explicit."
+    },
+    {
+      "path": "apps/web/src/workers/vault.worker.ts",
+      "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e",
+      "bytes": 485,
+      "lines": 6,
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "authority",
+        "default-gates",
+        "ownership"
+      ],
+      "assessment": "Minimal dedicated-worker entry wires one validated endpoint without ambient provider/network or second protocol."
+    }
+  ],
+  "additionalRootDelta": {
+    "path": "apps/web/src/ui/GenericAppShare.tsx",
+    "beforeSha256": "3109bb26a38a472078a6d4f2a18001ea3697ed4d215c530cf89dc61198fea248",
+    "afterSha256": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d",
+    "review": "Read complete final file: page-global clipboardPending, shared useSyncExternalStore subscriptions, real promise finally releases admission; route/remount cannot release pending work. Owner/sequence guards reject late feedback. No new provider/persistence/IPC or private context.",
+    "validation": "Static source review only at receipt creation; root focused test receipt, if later supplied, is a separate evidence delta."
+  },
+  "sourceEditsByReviewer": false,
+  "ledgerEditsByReviewer": false,
+  "commitsByReviewer": false
+}

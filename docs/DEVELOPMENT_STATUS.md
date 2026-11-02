@@ -1,5 +1,14 @@
 # Development status and continuation contract
 
+The 2026-11-02 continuation is recorded in the [current whole-source
+audit](execution/audit-2026-11-02/README.md) and [complete remaining-requirement
+mapping](execution/coverage/CURRENT-REMAINDER.md). Fresh drafts, encrypted
+templates/repeat defaults and favorites, actual-broker policy selection, generic
+sharing and consented memory-only screen counts are integrated. The English
+catalog is revision3, draft, with no translator/reviewer approval. Local native
+journeys, source-outage recovery and real desktop zoom have scoped evidence;
+final consolidated verification and hosting readback remain in the task ledger.
+
 Current execution uses merged PR24 (`e9b9db3`) as its baseline. The
 [all-remaining-work prompt](execution/ALL-REMAINING-WORK-PROMPT.md),
 [requirement coverage](execution/coverage/COVERAGE.md) and

@@ -476,3 +476,57 @@ messages.ts, English catalog, CI and task ledgers. T83 cleanup_debug owns NEW
 sharing/generic-app-link.ts, GenericAppShare.tsx, generic-app-share test and native
 runner only. Root enrolls trusted main entry URL through App to Settings.
 T84 review_intakes owns no source: final source/spec gap intake only.
+
+T85-T87 are reviewed committed fixes. T88 independent acceptance remains root.
+T81 shared runtime/schema/AppServices paths are released to T80; T81 retains
+journey-worker/screen fixtures and narrow native-contracts/vault-composition/
+private-trade forwarding until actual selector proof freezes. T80 owns named
+draft-library runtime operations, TradePages/review-controller/demo/testnet/
+saved-review and existing saved-review browser/exchange-native harnesses.
+Root owns main/App/Pages/copy/facades/CI/ledgers; live copy is source-draft only.
+T89-T92 are finite T84 follow-ons; no duplicate kernel/evaluator, SDK init,
+production authority or fabricated qualified result is admitted.
+
+All T80–T83 implementations are frozen and in distinct final review.
+T80/T81: audit_optional; T82: audit_build_ops; T83/T89: draft_contract.
+Root owns the T83 clipboard route-remount repair and catalog revision3; no other
+App writer is active. T38-G whole App review is frozen, with those deltas read.
+T38-H review_intakes now owns read-only maintained helper/vector/tool review.
+T90 passive intake and T91 finite partition evidence are integrated; all three
+partition target attempts are spent and must not be repeated. T92 remains the
+existing-runner outage check only. Root final native CLI run refused DIRTY_SOURCE
+before deployment; retain that refusal and rerun only on a committed clean source.
+Root added favorites/share browser aliases to the already CI-enrolled web suite;
+no dependencies, scanner rules, pins or release authority changed.
+
+T93 review_intakes exclusively owns scripts/check-import-boundaries.mjs,
+scripts/tests/import-boundaries.test.mjs, scripts/vectors/check_g16_evm_openssl.py
+and scripts/tests/test_g16_vectors.py. T88 canonical relay diagnostic follow-up
+is exclusively audit_optional: packages/relay/src/{nip01,pool}.ts and existing
+packages/relay/test/{ad,pool}.test.mjs; ad.ts remains unchanged and inherits the
+bounded parser. Root independently accepts each repair. T93 is audit-tool work;
+no speculative favorites/retention integration was admitted.
+
+T93 source fixes passed distinct root8 boundary cases plus4 Python cases and
+actual4-signature verification. Root rejected optional skip on a clean CI image.
+T94 cleanup_debug exclusively owns NEW scripts/tests/requirements-crypto.txt,
+.github/workflows/{specifications,vault-foundation}.yml, and the existing
+scripts/tests/test_g16_vectors.py to make those tests unconditional under a
+hash-pinned development dependency closure. Root retains other shared metadata.
+
+T95 draft_contract exclusively owns the nine named ordinal-order files under
+its admission; existing canonical byte order and all T91 limits/results remain.
+T96 privacy_selector exclusively owns packages/stealth/test/service.test.mjs
+and scripts/distribution/browser.test.mjs for explicit real test declarations.
+T97 audit_optional is READ-ONLY on docs/formal regex candidates until T95 freeze
+and explicit handoff. Root handles all source-path/CLI false-positive dispositions
+from the complete50-annotation Sonar packet without weakening gates or scanners.
+
+All T80–T97 source writers have frozen and returned ownership. Root independently
+accepted T95/T96/T97; source through cf73208 is frozen. No solver target attempt
+remains. Root now owns documentation/bindings, clean-source native/distribution
+verification, new empty-clone T71 install/foundation/journey, exact-head hosted
+CI/scanner/review dispositions and guarded merge/readback. The whole first-party
+source audit covers282 current production/module/tool files and36220 lines;
+configuration/selected-test evidence is additional. All30 compatible live branch
+heads are ancestors; the separate custodial proposal is preserved.

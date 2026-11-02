@@ -1,0 +1,575 @@
+{
+  "auditId": "T38-B",
+  "kind": "read-only defensive static source review",
+  "startedAt": "2026-11-02T15:57:51.743791+00:00",
+  "completedAt": "2026-11-02T16:06:22.378301+00:00",
+  "headAtStart": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "headAtEnd": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "scope": {
+    "packages": [
+      "transport",
+      "relay",
+      "exchange",
+      "messaging",
+      "privacy-policy"
+    ],
+    "productionDefinition": "index.ts plus every src/**/*.ts in each scoped package",
+    "fileCount": 20,
+    "totalBytes": 188657,
+    "totalLines": 2727,
+    "allProductionFilesRead": true,
+    "exclusions": [
+      "personalization and favorite/UI implementation",
+      "current T81 App privacy selector/UI and schemas/transport-selection implementation",
+      "all unrelated production source except named caller/contract excerpts",
+      "third-party targets and exploit reproduction"
+    ]
+  },
+  "verdict": {
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 2,
+    "summary": "No new economic/signature authority or direct strict fallback found. One medium local signal-cleanup gap and two low local input/listener defects require scoped dispositions. Static review is not runtime, cryptographic, provider or release qualification."
+  },
+  "findings": [
+    {
+      "id": "T38-B-01",
+      "priority": "P2",
+      "severity": "medium",
+      "confidence": "high-static",
+      "title": "Durable chat listener registration/cleanup can reject after admission and strand its slot",
+      "path": "packages/messaging/src/durable-chat.ts",
+      "line": 98,
+      "relatedLines": [
+        89,
+        96,
+        109,
+        110,
+        112
+      ],
+      "condition": "An accepted external AbortSignal overrides listener registration or removal and that method throws. This is a local API robustness condition, not a remote-frame exploit.",
+      "evidence": "run validates instanceof, copies the secret and assigns active at line96, then calls external.addEventListener outside a protected admission/finally boundary at98. A throw precedes installation of physical cleanup. At109 a throwing external.removeEventListener runs before native listener removal and active release, so physical.finally can reject and skip release.",
+      "impact": "The documented fixed CoreResult boundary can reject with a foreign diagnostic, and the admitted job/key buffer can remain held until the service is closed/recreated. A late committed write may exist even while this cleanup rejection prevents normal list reconciliation in the same service.",
+      "actualCallerLimit": "Inspected identity-service retention uses a genuine internal AbortController.signal, so the demonstrated default caller does not supply overridden methods. The public durable-chat methods accept signals and promise fixed-result/physical-drain semantics.",
+      "recommendation": "Use captured EventTarget/AbortSignal intrinsics and a protected registration/cleanup boundary; independently wipe buffers, remove native listeners and release active even when foreign cleanup fails. Add scoped regression coverage before repair.",
+      "verification": "Fresh static control-flow proof only. No reproduction, test mutation or network execution performed."
+    },
+    {
+      "id": "T38-B-02",
+      "priority": "P3",
+      "severity": "low",
+      "confidence": "high-static",
+      "title": "Canonical relay object input can escape parser/fixed-result rejection through reflection or accessors",
+      "path": "packages/relay/src/nip01.ts",
+      "line": 49,
+      "relatedLocations": [
+        {
+          "path": "packages/relay/src/nip01.ts",
+          "line": 51
+        },
+        {
+          "path": "packages/relay/src/ad.ts",
+          "line": 203
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "line": 414
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "line": 402
+        }
+      ],
+      "condition": "A caller supplies an object/proxy with throwing reflection or getters to an exported parser/book/pool object boundary; normalize can likewise dispatch filter/clock getters without a guarded rejection.",
+      "evidence": "parseEvent accepts unknown but calls Object.keys and destructures fields without a catch/own-data snapshot. createOrderBook.ingest and pool.publish call it outside their guarded verifier sections. subscribe calls normalize outside a guard.",
+      "impact": "These methods can throw/reject a private foreign diagnostic rather than returning null/invalid/fixed PoolResult. No remote JSON-to-accessor path is established: WebSocket frames are parsed JSON and frozen event snapshots.",
+      "actualCallerLimit": "Inspected production observation/journey callers use native verifiers and native event data; default app excludes these relay packages. This is lower-priority local API hardening, not a demonstrated third-party intrusion or economic authority defect.",
+      "recommendation": "Make unknown-object event parsing an own-data guarded rejection and guard normalization/public entry points, preserving fixed codes and bounded snapshots.",
+      "verification": "Fresh static read. Existing tests around signer-output own-data snapshots do not by themselves cover these other object entry points; no fresh functional test run claimed."
+    },
+    {
+      "id": "T38-B-03",
+      "priority": "P3",
+      "severity": "low",
+      "confidence": "high-static",
+      "title": "Restricted local relay stops notifying later subscribers when a reentrant listener removes one cohort member",
+      "path": "packages/relay/src/local-pool.ts",
+      "line": 138,
+      "relatedLines": [
+        137,
+        139,
+        160,
+        161
+      ],
+      "condition": "During dispatch over the captured subscription cohort, an earlier listener unsubscribes a later listener while another still-active listener remains after it.",
+      "evidence": "The loop tests disposed OR missing subscription together and breaks. Encountering the removed cohort member therefore stops iteration instead of only skipping that member.",
+      "impact": "A live later subscriber misses the current bounded order snapshot until another event, although its subscription was not removed. No trade authority, private transport claim or publication is created.",
+      "actualCallerLimit": "README and facade confirm this is a preserved local compatibility/evidence implementation, not exported through the canonical relay facade or in the default app graph.",
+      "recommendation": "Break only for pool disposal and continue for a missing subscription; cover reentrant removal with the preserved module focused tests.",
+      "verification": "Fresh static control-flow read only; no new fixture or exploitation reproduction."
+    }
+  ],
+  "inventory": [
+    {
+      "path": "packages/transport/index.ts",
+      "bytes": 305,
+      "lines": 5,
+      "sha256": "79ea79c49b2d035a4b21bc2dffb2ebe69bba7de555acf2f4ef6aca4f9643750e",
+      "endSha256": "79ea79c49b2d035a4b21bc2dffb2ebe69bba7de555acf2f4ef6aca4f9643750e",
+      "readAllLines": true,
+      "readRanges": [
+        "1-5"
+      ],
+      "semanticChecks": [
+        "Public facade exports policy broker and schema types; HTTP native class is not exported.",
+        "No endpoint, consent, evidence issuer, key or network activation is created by the facade."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/transport/src/http-driver.ts",
+      "bytes": 5112,
+      "lines": 90,
+      "sha256": "5b279fdff6ba77574c28e94628519df386e5bab459d4bd57ad79418bba3ecb42",
+      "endSha256": "5b279fdff6ba77574c28e94628519df386e5bab459d4bd57ad79418bba3ecb42",
+      "readAllLines": true,
+      "readRanges": [
+        "1-90"
+      ],
+      "semanticChecks": [
+        "Reviewed injected fetch only; HTTPS canonical URL, no credentials/fragments/redirects/cache/referrer or retry.",
+        "64KiB body/response, 8 operations and 1024 reads bound owned allocations; chunk copies are wiped.",
+        "Native fetch/read/cancel continuation owns pending capacity after scope cancellation; caller must bind scope to exact URL. The class has no production caller/export in this snapshot."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "bytes": 20684,
+      "lines": 342,
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6",
+      "endSha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6",
+      "readAllLines": true,
+      "readRanges": [
+        "1-180",
+        "180-342"
+      ],
+      "semanticChecks": [
+        "Default EMPTY issuer gives unknown inspection/no positive permit authority; strict rejects every non-private grant and ordinary direct needs issuer-owned consent.",
+        "Permit object identity, owner, request projection, generation, grant freshness, exact destination and single-shot capture/run are enforced.",
+        "64 permits/unsettled operations/observers bound state; native work retains unsettled token after wrapper cancellation/timeout.",
+        "Inspection deadlines notify without revoking longer permits; earliest cached channel deadline is retained; actual permit expiry revokes authority.",
+        "Reentrant notifications use a bounded fixed cohort and exclude mutators; cleanup isolates observer/grant faults and no direct fallback exists."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "bytes": 221,
+      "lines": 4,
+      "sha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "endSha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "readAllLines": true,
+      "readRanges": [
+        "1-4"
+      ],
+      "semanticChecks": [
+        "Canonical facade exports nip01/ad/pool only.",
+        "Restricted advertisement/local-pool profile is not exported or silently substituted."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/relay/src/ad.ts",
+      "bytes": 15670,
+      "lines": 247,
+      "sha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "endSha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "readAllLines": true,
+      "readRanges": [
+        "1-247"
+      ],
+      "semanticChecks": [
+        "Canonical three-tag ad profile: metadata only, maker-author binding, 2KiB content, fixed ranges and bounded lifetime/skew/expiry.",
+        "Builder snapshots own data before signing and rejects changed signer output; deletion remains best effort/same-author.",
+        "Order book bounds default 1000 orders, 1000 tombstones, 8 conflict IDs per order; higher revisions alone clear conflicts; clock unknown hides actionable views.",
+        "Signature checking is optional at the book boundary because canonical pool already verifies; inspected actual production callers also pass native verifiers.",
+        "Public unknown-object ingest inherits parseEvent exception gap (finding T38-B-02)."
+      ],
+      "findings": [
+        "T38-B-02"
+      ]
+    },
+    {
+      "path": "packages/relay/src/advertisement.ts",
+      "bytes": 8167,
+      "lines": 110,
+      "sha256": "718a130271cbce06099bd8ed25f447ff6c1a38ecf6a14d30412c85922b587d78",
+      "endSha256": "718a130271cbce06099bd8ed25f447ff6c1a38ecf6a14d30412c85922b587d78",
+      "readAllLines": true,
+      "readRanges": [
+        "1-110"
+      ],
+      "semanticChecks": [
+        "Separate restricted local-test wire profile, never canonical interoperable advertisement authority.",
+        "Strict JSON, 64KiB event/8KiB content, bounded fields and lifetime precede native NIP01 hash/BIP340 verification.",
+        "Local book bounds 1000 retained orders/4096 dedup IDs; equal-revision semantic conflict stays sticky until newer revision and expiry is rechecked."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/relay/src/local-pool.ts",
+      "bytes": 14392,
+      "lines": 201,
+      "sha256": "279a8cbd10feea0ed66200635f4f1c02927c837b72eaea8d88ff5ca7f5f1ce7e",
+      "endSha256": "279a8cbd10feea0ed66200635f4f1c02927c837b72eaea8d88ff5ca7f5f1ce7e",
+      "readAllLines": true,
+      "readRanges": [
+        "1-201"
+      ],
+      "semanticChecks": [
+        "Preserved test/evidence-only connector profile: 4 configured slots/4 subscriptions, 32 explicit publications, unknown ACK on cancel/loss, no republish or alternate relay.",
+        "Connector abort and physical close/drain remain owned; uncertain close permanently blocks its slot. Retry budget is six and resets only after actual 60-second established uptime.",
+        "Native frame parser/crypto work is capped/rate-limited; subscriptions enforce exact own-data filter and 24-hour history/100-result bounds.",
+        "Reentrant removal currently breaks the whole listener dispatch cohort, skipping later active subscribers (finding T38-B-03)."
+      ],
+      "findings": [
+        "T38-B-03"
+      ]
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "bytes": 7163,
+      "lines": 112,
+      "sha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "endSha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "readAllLines": true,
+      "readRanges": [
+        "1-112"
+      ],
+      "semanticChecks": [
+        "Frame text is capped before JSON parse and signature work; event/tag/filter sizes and numeric ranges are bounded.",
+        "AUTH/COUNT are ignored, NOTICE/relay error text stays inert, filters must match actual requested subscriptions.",
+        "parseEvent unknown-object reflection/destructuring is not guarded; malformed object traps can throw rather than return null (finding T38-B-02).",
+        "WebSocket whole-message allocation occurs before this parser; 64KiB is a parse/crypto cap, not incremental receive memory qualification."
+      ],
+      "findings": [
+        "T38-B-02"
+      ]
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "bytes": 26841,
+      "lines": 438,
+      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "endSha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "readAllLines": true,
+      "readRanges": [
+        "1-165",
+        "165-330",
+        "330-438"
+      ],
+      "semanticChecks": [
+        "Canonical WSS URL is detached and bound through broker expectedURL for reads and publications; no unapproved destination or direct strict fallback.",
+        "4 shared physical read/publication socket slots remain occupied until native close event; 16 candidates/4 subscriptions/2 filters/100 requested results/4096 dedup IDs/1000 subscription events bound state.",
+        "Token refill/burst, overload windows, signature verification and filter/subscription checks precede delivery. AUTH is unanswered and relay diagnostic text is not surfaced.",
+        "Explicit publication has per-relay accepted/rejected/unknown ACK, max32 in flight, no queue or auto republish; retry applies only to reads and bounded approved candidates.",
+        "Status-observer reentrancy is checked before read I/O; close and generation retirement suppress obsolete open continuations.",
+        "Public object-input parse/normalize calls outside guarded rejection inherit diagnostic exceptions (finding T38-B-02)."
+      ],
+      "findings": [
+        "T38-B-02"
+      ]
+    },
+    {
+      "path": "packages/exchange/index.ts",
+      "bytes": 308,
+      "lines": 5,
+      "sha256": "c8363ff04c91d4bb05d3270966cafcd486b00ba6192706f88b5749bd0755555a",
+      "endSha256": "c8363ff04c91d4bb05d3270966cafcd486b00ba6192706f88b5749bd0755555a",
+      "readAllLines": true,
+      "readRanges": [
+        "1-5"
+      ],
+      "semanticChecks": [
+        "Facade composes existing Nostr provider and communication state machine; no native chain custody/signing/funding authority is exported."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/exchange/src/exchange.ts",
+      "bytes": 27148,
+      "lines": 398,
+      "sha256": "263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a",
+      "endSha256": "263aaf875c457e444aae904fc3f7d53c440e6e2fccc6888a234d932b9af7ae2a",
+      "readAllLines": true,
+      "readRanges": [
+        "1-205",
+        "205-398"
+      ],
+      "semanticChecks": [
+        "Session/author/recipient/ad/order/review hash/exact bytes/amount/revision are bound before synchronous state commits.",
+        "Original accept remains a messaging statement, not the two native wallet signatures. Current production journey explicitly requires a separate compiled localPeerAcceptance capability.",
+        "Default 64 sessions/1024 replay IDs; live replay IDs are never evicted, capacity is rechecked after asynchronous cryptography/review and expired IDs alone free replay capacity.",
+        "Pending-take tokens prevent late same-pair completions from overwriting newer negotiation; commit checks recheck role/state, expiry and accept deadline.",
+        "Close suppresses publication results but this raw API has no signal/physical crypto admission gate; inspected actual journey act() serializes work through its busy/epoch boundary. No stronger generic cancellation qualification is claimed.",
+        "Ad book is consulted at session start; sessions then retain ad expiry by explicit ExchangeOptions contract. This differs from the book generic immediate-rerevalidate guidance and is recorded as a contract limitation, not a proven economic defect."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/exchange/src/machine.ts",
+      "bytes": 1454,
+      "lines": 23,
+      "sha256": "9b895887b53ff79e675702a024afaf62d3a8a5ad561de9ffb2a9ca6b21faa2b2",
+      "endSha256": "9b895887b53ff79e675702a024afaf62d3a8a5ad561de9ffb2a9ca6b21faa2b2",
+      "readAllLines": true,
+      "readRanges": [
+        "1-23"
+      ],
+      "semanticChecks": [
+        "Explicit sender-role transition table makes accepted/rejected/cancelled terminal communication states.",
+        "No transition claims funded/paid/settled or performs a provider action."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/exchange/src/messages.ts",
+      "bytes": 6441,
+      "lines": 96,
+      "sha256": "035f0f6f7c84245f19efba85d6f256372b042af1a6167a4c8a22617cccf64fc1",
+      "endSha256": "035f0f6f7c84245f19efba85d6f256372b042af1a6167a4c8a22617cccf64fc1",
+      "readAllLines": true,
+      "readRanges": [
+        "1-96"
+      ],
+      "semanticChecks": [
+        "Exact versioned decrypted rumor envelope; tags bind recipient/ad/topic/terms hash; sender differs from recipient and ad/order agree.",
+        "terms-accept body is exactly revision, with no signatures, payment claims, alternate carrier or added approval semantics.",
+        "24KiB envelope, 16KiB offer terms and one-hour message lifetime/two-minute future skew constants are enforced by parser and exchange caller; duplicate-key JSON parsing is delegated to native parseEventJson."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/messaging/index.ts",
+      "bytes": 577,
+      "lines": 5,
+      "sha256": "33ad97305b743bff8e5172e0ed92c35b6b5b12be1bade28213f28685a266f8a5",
+      "endSha256": "33ad97305b743bff8e5172e0ed92c35b6b5b12be1bade28213f28685a266f8a5",
+      "readAllLines": true,
+      "readRanges": [
+        "1-5"
+      ],
+      "semanticChecks": [
+        "Facade exposes text envelope and durable native-authenticated history only; no append-author, network publication or wallet capability."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "bytes": 17175,
+      "lines": 234,
+      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e",
+      "endSha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e",
+      "readAllLines": true,
+      "readRanges": [
+        "1-145",
+        "144-234"
+      ],
+      "semanticChecks": [
+        "Native NIP17 proof authentication precedes append AND every history read; inner author/recipient/trade are checked independently of imported wrapper labels.",
+        "Stable authenticated sender+messageId defines durable dedup; changed body conflicts, contiguous local receipt sequence is distinct from sender time and economic authority stays false.",
+        "Native G02 lease, persisted freshness no-op CAS, exact write CAS and rechecks prevent stale session writes; records are encrypted native wraps, not retained plaintext claims.",
+        "64 default/up to256 messages and 2MiB recognized payloads refuse growth without replay eviction; capacity is preflighted before crypto and rechecked after crypto. Foreign/future/damaged records remain preserved or fail closed.",
+        "Normal close/lock/abort wipes owned keys, returns promptly while physical work drains, and committed proof remains recoverable rather than automatically resent.",
+        "Accepted external signal listener methods are dispatched directly outside protected admission/cleanup and can strand the physical slot/key and reject with foreign diagnostics (finding T38-B-01)."
+      ],
+      "findings": [
+        "T38-B-01"
+      ]
+    },
+    {
+      "path": "packages/messaging/src/envelope.ts",
+      "bytes": 5302,
+      "lines": 69,
+      "sha256": "84082a8ad1645a4fd3b5205de866639a2e763298bf33ad52160412d67eddd952",
+      "endSha256": "84082a8ad1645a4fd3b5205de866639a2e763298bf33ad52160412d67eddd952",
+      "readAllLines": true,
+      "readRanges": [
+        "1-69"
+      ],
+      "semanticChecks": [
+        "Exact text-only application shape binds tradeId/termsHash/sender/recipient/messageId; unsupported terms/receipt-status profiles are refused.",
+        "16KiB UTF8 text and 24KiB whole-message bounds precede native wrapping; surrogate/duplicate/depth/UTF8 checks are explicit.",
+        "Content stays inert text; sender time is an untrusted claim; error ownership uses WeakMap and fixed CoreResult errors."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/privacy-policy/index.ts",
+      "bytes": 682,
+      "lines": 7,
+      "sha256": "4795c26212e5e18d7343ad6335bbe05095a5378b854ecdb413dafbb12f731ce0",
+      "endSha256": "4795c26212e5e18d7343ad6335bbe05095a5378b854ecdb413dafbb12f731ce0",
+      "readAllLines": true,
+      "readRanges": [
+        "1-7"
+      ],
+      "semanticChecks": [
+        "Optional inert proposal/evaluation/mode facade; exports no provider implementation, spending permission or positive protection badge."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/privacy-policy/src/mode.ts",
+      "bytes": 10892,
+      "lines": 137,
+      "sha256": "d143283db5ca10052b0ca74e447ecb9809e4d5ed2f4999c798d9bebf5bfd0090",
+      "endSha256": "d143283db5ca10052b0ca74e447ecb9809e4d5ed2f4999c798d9bebf5bfd0090",
+      "readAllLines": true,
+      "readRanges": [
+        "1-137"
+      ],
+      "semanticChecks": [
+        "Actual broker invalidate/setMode precede disposing old G14 instances and initializing fresh generation-owned registry.",
+        "busy/physical transition ownership is claimed before hostile policy/consent reflection; cancel/dispose wait for ignored initialization/drain.",
+        "Strict-to-ordinary requires explicit own-data consent; evidence failure blocks/degrades instead of downgrading; no route fallback or funded-term mutation.",
+        "Active evaluation is rechecked against broker/registry generation and required/previously enabled nodes; the real broker invalidation subscription retires stale preparation."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/privacy-policy/src/plan.ts",
+      "bytes": 12830,
+      "lines": 136,
+      "sha256": "81beca860929e16d6578c0527da21117ce4490e6320326efcfe343388a08b974",
+      "endSha256": "81beca860929e16d6578c0527da21117ce4490e6320326efcfe343388a08b974",
+      "readAllLines": true,
+      "readRanges": [
+        "1-136"
+      ],
+      "semanticChecks": [
+        "WeakMap-issued native runtime prevents cloned/imported status from supplying authority; bounded compiled catalog is snapshotted and dependency/conflict cycles refused.",
+        "Required/optional/disabled references and profiles bind module/protocol/schema; mandatory capability and atomic companion/schema requirements cannot be bypassed.",
+        "Broker mode/generation and real route observations are checked; strict unbrokered static/RTC/SDK paths block; empty native providers never grant private coverage.",
+        "Unavailable optional roots do not initialize incidental dependencies; canPrepare is only configuration prerequisite and economicAuthority is always false."
+      ],
+      "findings": []
+    },
+    {
+      "path": "packages/privacy-policy/src/policy.ts",
+      "bytes": 7293,
+      "lines": 68,
+      "sha256": "9c31011ac0abcc23cc61b2007e80ab30ef73d33271ca87281233a50933431ea6",
+      "endSha256": "9c31011ac0abcc23cc61b2007e80ab30ef73d33271ca87281233a50933431ea6",
+      "readAllLines": true,
+      "readRanges": [
+        "1-68"
+      ],
+      "semanticChecks": [
+        "Strict inert own-data proposal parser:32KiB,32 capability entries in total,32 profiles, exact version/reference/schema hash; getters/proxies fail fixed.",
+        "WeakMap-owned errors avoid foreign diagnostic accessors; policy diff compares roles/hash/version/profiles/mode without granting status authority."
+      ],
+      "findings": []
+    }
+  ],
+  "supplementalCallerReads": [
+    {
+      "path": "apps/web/src/context-adapters/observations.ts",
+      "sha256": "23ef1962f87d6dd4d504c2d8456fd86f708fe662b74b4e9b0c37a21c921101d7",
+      "readRanges": "27-88",
+      "check": "Native verifier/book, fixed compiled discovery-to-context mapping and broker/session generations; relay data publishes a hint only.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "c1989904d0dcf7cda516139f6d5a2cd997fc79c75a47465ee69bfb0856856437",
+      "readRanges": "43-52,137-151,216-235,253-271,291-296",
+      "check": "Busy/epoch-scoped explicit fixture negotiation calls; genuine peer wallet acceptance carrier remains separately required; exchange accepted alone is insufficient.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "sha256": "79ec4442afc353c34e575cb371e9f7e9a41c041438333a5e4e965ff77c2511ff",
+      "readRanges": "239-258",
+      "check": "Native history dependency read uses retained identity/G02 session and internal abort signal; secret and durable chat close in finally.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip17.ts",
+      "sha256": "db78a289ed91201ff6d2194c9ab90bb02d03a9cd324c25c35e1233e3c938d786",
+      "readRanges": "66-134",
+      "check": "Actual native send/receive binds parties, author/seal/tags; signal guards around native wraps and bounded non-evicted rumor replay cache.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "scripts/fixtures/journey-worker.mjs",
+      "sha256": "dd2d0ac87f3c8eb6da3ad89e8bc18d746c0ef95b90a08f4ec899b73fca5b8951",
+      "readRanges": "61",
+      "check": "Test-only canonical relay construction supplies approved logical destination, independent broker and explicit fixture connector.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "packages/relay/README.md",
+      "sha256": "520d8d77a363119ff260c86008c3a9ba0f11908f2ab37623ecabee71c8e699f1",
+      "readRanges": "full",
+      "check": "Documents canonical versus restricted local profile split and missing whole-message/incremental/interoperability qualification.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "packages/messaging/README.md",
+      "sha256": "bfba8d4c4ca4bae171b021260d45470b71e49bb485a212d90cac0ab143ed03eb",
+      "readRanges": "full",
+      "check": "Documents fixed result/drain, late-write reconciliation, durable native proof and unsupported application wire profiles.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    },
+    {
+      "path": "packages/privacy-policy/README.md",
+      "sha256": "5eab39d2c3202b9f49efd47226e5c9ece8cdec0c8db883fd06d86754f525740a",
+      "readRanges": "full",
+      "check": "Documents inert proposal/native runtime/configuration-only prerequisite and strict unbrokered-path gate.",
+      "scopeNote": "Supplemental caller/contract excerpt; not a claim of full audit of this other production file."
+    }
+  ],
+  "freshVerification": {
+    "sourceRead": "All 20 scoped production files read completely against initial hashes; end hashes compared for drift.",
+    "staticChecks": [
+      "rg file inventory and git status/head",
+      "Full numbered source reads and actual caller searches",
+      "End SHA256/size/line inventory and artifact JSON consistency check"
+    ],
+    "functionalTestsRun": [],
+    "fullSuitesRun": [],
+    "networkOrBrowserActions": [],
+    "sourceEdits": false,
+    "ledgerEdits": false,
+    "commits": false
+  },
+  "reusedVerification": {
+    "usedAsFreshProof": false,
+    "testSourceContext": [
+      "transport policy/http driver test names and selected broker fixtures",
+      "relay canonical lifetime/URL/filter bounds tests and local-pool fixtures",
+      "exchange async boundary and terms flow test names",
+      "messaging durable native/cancellation/capacity/history test names and selected assertions",
+      "privacy policy transition/manifest/strict test names"
+    ],
+    "historicalReceipts": "Task-ledger historical receipts were consulted only to identify earlier contracts/work and current T81 ownership. Their pass counts are not reused as an exact-head runtime receipt."
+  },
+  "knownLimits": [
+    "Browser WebSocket has already allocated/assembled a complete message before the 64 KiB parser cap; no incremental inbound memory-cap qualification was found.",
+    "Native crypto/provider correctness and independent BIP340/NIP interoperability review were not performed.",
+    "The canonical and restricted local relay profiles are intentionally distinct and may not be mixed.",
+    "Exchange replay/session state is memory-only; raw API close suppresses results rather than proving generic physical crypto cancellation. Actual inspected journey serialization is a narrower caller guarantee.",
+    "Relay ACK is relay acceptance only. Chat persisted sequence/time is local metadata. Neither proves delivery, fiat receipt, funding or settlement.",
+    "Ordinary/default App has no positive transport issuer; constructor-injected fixtures and inert feature policy cannot establish live privacy, wallet protection or release readiness.",
+    "No dynamic reproduction was performed for static findings, including hostile local JS signal/objects; no third-party system was queried."
+  ],
+  "drift": {
+    "scopedFilesChanged": [],
+    "headChanged": false,
+    "finalDeltaRequired": false,
+    "note": "Root must recheck these exact source hashes against the final merged source; later scoped or caller/authority edits invalidate the corresponding audit portion."
+  }
+}
