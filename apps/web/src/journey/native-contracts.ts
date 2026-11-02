@@ -4,6 +4,7 @@ import type {EncryptedVaultService,EncryptedBackupService} from '../../../../pac
 import type {MessagingIdentityProvider} from '../../../../packages/identity/index.ts';
 import type {CreatedIdentity,IdentityHandle,IdentityResult,VaultSession,IntentV1,TradeBinding,ChainObservation,TradeView,RuntimeResponse} from '../../../../packages/schemas/index.ts';
 import type {createJourneyVaultComposition} from './vault-composition.ts';
+import type {WorkerTransportPolicy} from '../runtime/worker-endpoint.ts';
 import type {createRelayEventCrypto,createTermsExchange} from '../../../../packages/exchange/index.ts';
 import type {createOrderBook,RelayPool} from '../../../../packages/relay/index.ts';
 export type JourneyRuntimeInput=Parameters<ReturnType<typeof createJourneyVaultComposition>['request']>[0];
@@ -68,7 +69,7 @@ export interface NativeFactories {
  createTradeAuthority(options:{binding:TradeBinding;generation:number;walletGeneration:number;readValidated:(binding:TradeBinding,request:{signal:AbortSignal;generation:number;requestSequence:number})=>Promise<CoreResult<ChainObservation>>}):Authority;
  createTradeComposition(options:{binding:TradeBinding;account:string;authority:Authority;journal:Journal}):TradeComposition;
 }
-export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly onSigningReviewInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly privacy?:JourneyPrivacyServices|undefined;readonly services:{vault:EncryptedVaultService;backup:EncryptedBackupService};readonly native:NativeFactories;readonly registryBytes:Uint8Array<ArrayBuffer>;readonly registryDigest:string;readonly request:Request;readonly createRelay:(options:{verifier:Awaited<ReturnType<typeof createRelayEventCrypto>>;nowSeconds:()=>number})=>RelayPool;readonly localPeerAcceptance?:((options:{wallet:WalletAdapter;session:WalletSession;domain:EvmDomain;terms:EvmTerms})=>Promise<Uint8Array<ArrayBuffer>>)|undefined;}
+export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly onSigningReviewInvalidated?:((snapshot:JourneySnapshot)=>void)|undefined;readonly privacy?:JourneyPrivacyServices|undefined;readonly services:{vault:EncryptedVaultService;backup:EncryptedBackupService;readonly transportPolicy?:WorkerTransportPolicy};readonly native:NativeFactories;readonly registryBytes:Uint8Array<ArrayBuffer>;readonly registryDigest:string;readonly request:Request;readonly createRelay:(options:{verifier:Awaited<ReturnType<typeof createRelayEventCrypto>>;nowSeconds:()=>number})=>RelayPool;readonly localPeerAcceptance?:((options:{wallet:WalletAdapter;session:WalletSession;domain:EvmDomain;terms:EvmTerms})=>Promise<Uint8Array<ArrayBuffer>>)|undefined;}
 export interface WatchParty {readonly kind:'watch';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;}
 export interface NegotiatingParty {readonly kind:'negotiation';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;readonly pub:string;readonly secret:Uint8Array;readonly eventCrypto:Awaited<ReturnType<typeof createRelayEventCrypto>>;readonly book:ReturnType<typeof createOrderBook>;readonly exchange:ReturnType<typeof createTermsExchange>;readonly pool:RelayPool;}
 export type Party=WatchParty|NegotiatingParty;

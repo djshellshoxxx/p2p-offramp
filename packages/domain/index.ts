@@ -14,3 +14,5 @@ export { createObservationDispatcher, OBSERVATION_TTL_MS, MAX_HINT_OBSERVERS } f
 export type { ObservationDispatcher, ObservationDispatcherOptions, ContextHintPublisher, ContextHintSnapshot } from './src/observation-dispatcher.ts';
 
 export type { PrivacyEndpointConfiguration, PrivacyEndpointSnapshot, PrivacyEndpointPort, PrivacyEndpointOrigin, PrivacyEndpointDetails } from './src/privacy-view.ts';
+export { buildTradeDraftDocument, draftDefaultsFromReviewed } from './src/trade-draft.ts';
+export type { TradeDraftBuildOptions, TradeDraftBuildResult } from './src/trade-draft.ts';

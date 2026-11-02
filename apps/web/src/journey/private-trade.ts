@@ -2,7 +2,7 @@
  * Native constructors are capabilities supplied by the trusted composition root, never protocol data.
  * No production peer-acceptance carrier is defined here and this module cannot enable the default app.
  */
-import {RegistryService,reviewTermsBytes,TERMS_REVIEW_FORMAT,encodePrivateAgreement,encodeCapabilities,sha256Hex,checkFundingWindow,createJourneyProjection,createCoreError,createOperationId,createPrivacyViewReader,type CoreResult,type PrivateAgreementV1,type PrivacyView} from '../../../../packages/domain/index.ts';
+import {RegistryService,reviewTermsBytes,buildTradeDraftDocument,checkFundingWindow,createJourneyProjection,createCoreError,createOperationId,createPrivacyViewReader,type CoreResult,type PrivateAgreementV1,type PrivacyView} from '../../../../packages/domain/index.ts';
 import {createLocalNobleNostrProvider,type NostrEvent} from '../../../../packages/nostr-crypto/index.ts';
 import {createOrderBook,createAdEvent,AD_KIND} from '../../../../packages/relay/index.ts';
 import {createRelayEventCrypto,createTermsExchange,adBookKey} from '../../../../packages/exchange/index.ts';
@@ -131,7 +131,6 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   quantity(field(raw,'nonce')); // Exact nonce/body binding remains the canonical G12 journal's responsibility.
   assertSigningReview(); // Canonical-builder/descriptor callbacks above cannot retire consent before the provider call.
  }
- const hashOwned=async(bytes:Uint8Array<ArrayBuffer>):Promise<string>=>{try{return await step(sha256Hex(bytes));}finally{bytes.fill(0);}};
  const ownedRequest=(owner:JourneyVaultSelection,mine:number):Request=>args=>{
   const guard=():void=>{if(epoch!==mine)throw Error('LOCKED');owner.assertCurrent();current();};guard();
   const pending=(async()=>{if(args.method==='eth_sendTransaction'){checkSendReview(args);sends++;}const result=await request(args);guard();return result;})();nativeRequests.add(pending);void pending.then(()=>nativeRequests.delete(pending),()=>nativeRequests.delete(pending));return pending;
@@ -254,7 +253,9 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  function initialize():Promise<void>{if(ready)return Promise.resolve();initialization??=(async()=>{value(await registry.load(registryBytes,registryDigest));value<unknown>((await vault.request({operation:'init',config:{version:1,ReleaseEnabled:0,connectOrigins:[]}})).result);ready=true;})();return initialization;}
  return Object.freeze({
   snapshot,
-  async runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>{await initialize();if(busy&&input.operation!=='lock'&&input.operation!=='dispose')throw Error('BUSY');if(['create','unlock','lock','dispose'].includes(input.operation)){clearPrivate();}
+  async runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>{
+   if(input.operation==='getTransportSelection'||input.operation==='selectTransportMode'){if(!ready||closed)throw Error('LOCKED');return vault.request(input);}
+   await initialize();if(busy&&input.operation!=='lock'&&input.operation!=='dispose')throw Error('BUSY');if(['create','unlock','lock','dispose'].includes(input.operation)){clearPrivate();}
    const response=await vault.request(input);if(input.operation==='create'&&response.result.ok){context=await vault.requireCurrent();const identity=new native.MessagingIdentityService(services.vault,{provider:native.createIdentityProvider(),lifecycle:false});try{value(await step(identity.create(selected().session)));await fresh();}finally{identity.dispose();}}if(response.operation==='verifyBackup'&&response.result.ok)backupRevision=response.result.value.revision;return response;
   },
   async act(action:string,options:{readonly signingAction?:SigningAction|undefined;readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}={}):Promise<JourneySnapshot>{
@@ -271,10 +272,23 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      if(typeof localPeerAcceptance!=='function')throw Error('PEER_ACCEPTANCE_CARRIER_UNDEFINED');
      const assetId=options.assetId??'native',asset=registry.network('local-evm')?.assets.find(asset=>asset.id===assetId);if(!asset||asset.kind==='spl'||!registry.deployment('local-evm','escrow-local-v1')?.supportedAssetIds.includes(asset.id)||asset.transferPolicy!=='exact-transfer')throw Error('UNSUPPORTED_ASSET');const principal=canonicalPrincipal(options.amountBaseUnits??'1000000000000000');
      domain={chainId:'31337',verifyingContract:defined(registry.deployment('local-evm','escrow-local-v1')).address};await refreshClock();await makeParties();
-     const [seller,buyer]=negotiating(),orderId=await hashOwned(crypto.getRandomValues(new Uint8Array(32)));current();
-     agreement={v:1,orderId,revision:'1',fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC manual bank transfer instruction. No fiat payment proof.',capabilities:[],agreementSalt:await hashOwned(crypto.getRandomValues(new Uint8Array(32)))};current();
-     terms={orderId,revision:'1',networkId:'local-evm',deploymentId:'escrow-local-v1',seller:seller.walletSession.account,buyer:buyer.walletSession.account,assetKind:asset.kind,asset:asset.address??ZERO,amountBaseUnits:principal,privateAgreementHash:await hashOwned(encodePrivateAgreement(agreement)),capabilitiesHash:await hashOwned(encodeCapabilities([])),sellerNonce:await hashOwned(crypto.getRandomValues(new Uint8Array(32))),acceptBeforeSeconds:String(clock+600),escrowExpirySeconds:String(clock+7200)};current();
-     document=utf8.encode(JSON.stringify({format:TERMS_REVIEW_FORMAT,terms,privateAgreement:agreement}));owned.push(document);binding={chain:'evm',networkId:'local-evm',deploymentId:'escrow-local-v1',tradeId:native.evmTermsHash(domain,terms)};
+     const [seller,buyer]=negotiating();
+     const generated=await buildTradeDraftDocument(registry,{networkId:'local-evm',deploymentId:'escrow-local-v1',assetId,amountBaseUnits:principal,
+      fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC manual bank transfer instruction. No fiat payment proof.',
+      seller:seller.walletSession.account,buyer:buyer.walletSession.account,acceptBeforeSeconds:String(clock+600),escrowExpirySeconds:String(clock+7200)},
+      {nowSeconds:()=>BigInt(observedNow()),isCurrent:()=>{if(epoch!==mine)return false;current();return epoch===mine;}});
+     if(generated.ok)owned.push(generated.bytes); // Own the returned plaintext before any scope check can revoke it.
+     try{
+      current();if(epoch!==mine)throw Error('LOCKED');if(!generated.ok)throw Error(generated.code);
+      const reviewed=value(await step(reviewTermsBytes(registry,generated.bytes)));
+      if(reviewed.network.chainId!==domain.chainId||reviewed.deployment.address!==domain.verifyingContract)throw Error('INTEGRITY_FAILURE');
+      const nextTerms=asTerms(reviewed),nextAgreement:PrivateAgreementV1={v:1,orderId:reviewed.orderId,revision:reviewed.revision,...reviewed.agreement,
+       agreementSalt:text(field(parseStrictJsonBytes(generated.bytes,65536),'privateAgreement'),'agreementSalt',/^[0-9a-f]{64}$/)};
+      const nextBinding={chain:'evm' as const,networkId:'local-evm',deploymentId:'escrow-local-v1',tradeId:native.evmTermsHash(domain,nextTerms)};
+      current();if(epoch!==mine)throw Error('LOCKED');
+      const retained=new Uint8Array(generated.bytes);owned.push(retained);
+      terms=nextTerms;agreement=nextAgreement;document=retained;binding=nextBinding;
+     }finally{if(generated.ok){generated.bytes.fill(0);const index=owned.indexOf(generated.bytes);if(index>=0)owned.splice(index,1);}}
      phase='wallet';
     }else if(action==='watch'){
      if(phase!=='setup'||typeof options.recordId!=='string'||!/^[0-9a-f]{32}$/.test(options.recordId))throw Error('INVALID_INPUT');context=await vault.requireCurrent();

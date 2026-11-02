@@ -45,7 +45,7 @@ export function createJourneyVaultComposition(services: WorkerPrivateServices, n
       const job = pending.get(message.requestId); pending.delete(message.requestId); job?.resolve(message);
     }
     notify(message);
-  }, { createServices: () => ({ vault, backup: services.backup }) });
+  }, { createServices: () => ({ vault, backup: services.backup, ...(services.transportPolicy ? {transportPolicy:services.transportPolicy} : {}) }) });
   const request = async (input: RuntimeInput): Promise<RuntimeResponse> => {
     if (disposed) throw new Error('LOCKED');
     const control = input.operation === 'lock' || input.operation === 'dispose';

@@ -24,7 +24,7 @@ test('every bundled message has frozen metadata and exact variable parity, inclu
     const values = Object.fromEntries(Object.entries(entry.variables).map(([name, purpose]) => [name, example(purpose)]));
     assert.equal(typeof formatMessage(entry, values), 'string');
   }
-  for (const key of ['trade.risk', 'shell.createConsent', 'shell.restoreConsent', 'recovery.unverified', 'diagnostics.privacy']) assert.equal(sourceCatalog[key].severity, 'critical');
+  for (const key of ['trade.risk', 'shell.createConsent', 'shell.restoreConsent', 'recovery.unverified', 'diagnostics.privacy', 'privacy.policyRelaxConsent', 'privacy.policyUnknownCoverage', 'drafts.confirmAmounts', 'drafts.confirmIdentities', 'drafts.confirmEmptyInstructions', 'drafts.backupLimits', 'analytics.help', 'shell.shareAppHelp']) assert.equal(sourceCatalog[key].severity, 'critical');
 });
 
 test('existing English compatibility copy retains plural, page, fingerprint and exact amount behavior', () => {
@@ -46,7 +46,7 @@ test('complete draft translation validates structurally; missing critical copy c
   assert.equal(Object.keys(validateLocale(draft, sourceCatalog).messages).length, Object.keys(sourceCatalog).length);
   delete messages['trade.risk'];
   assert.throws(() => validateLocale(draft, sourceCatalog), error => error.code === 'LOCALE_INCOMPLETE');
-  assert.deepEqual(SOURCE_LOCALE, { locale: 'en', direction: 'ltr', revision: 2, translator: null, reviewer: null, status: 'draft' });
+  assert.deepEqual(SOURCE_LOCALE, { locale: 'en', direction: 'ltr', revision: 3, translator: null, reviewer: null, status: 'draft' });
   assert.ok(Object.isFrozen(SOURCE_LOCALE));
 });
 

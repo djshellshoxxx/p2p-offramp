@@ -3,11 +3,14 @@
  * purpose-bound saved reviews, scalar recovery references and explicit retention counts/consent for the selected profile.
  */
 import { EncryptedVaultService, EncryptedBackupService, BackupError, RetentionService, type NativeRetentionAuthority, type RetentionPlan, type RetentionResult } from '../../../../packages/storage/index.ts';
+import { createSavedReviewFavorites, createTradeDraftStore, type SavedReviewFavorites, type TradeDraftStore } from '../../../../packages/personalization/index.ts';
+import type { SessionTransportPolicy } from '../../../../packages/transport/index.ts';
 import {
   parseBackupVerificationReceipt, type BackupVerificationReceipt, decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
-  RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
+  RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS, parseRuntimeTransportSelection,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeHandle, type RuntimeMessage, type RuntimeResult,
   type RuntimeStatus, type RuntimeSavedReview, type VaultSession, type VaultSessionLease, type Result, type PrivateRecordV1, type SavedReviewPayload,
+  type RuntimeTransportSelection, type RuntimeSelectTransportMode, type AppTransportChannel,
 } from '../../../../packages/schemas/index.ts';
 
 export interface WorkerPrivateServices {
@@ -15,6 +18,14 @@ export interface WorkerPrivateServices {
   /** Trusted Worker construction only. No provider or native proof can arrive through IPC. */
   readonly createRetentionAuthority?: (session: Readonly<VaultSession>) => NativeRetentionAuthority & { dispose(): void };
   readonly backup: Pick<EncryptedBackupService, 'exportWithStatus' | 'restore' | 'dispose'>;
+  /** Same actual broker used by compiled I/O adapters. Never constructed from IPC or as a UI fallback. */
+  readonly transportPolicy?: WorkerTransportPolicy;
+}
+export interface WorkerTransportPolicy {
+  readonly broker: SessionTransportPolicy;
+  readonly brokeredChannels: readonly AppTransportChannel[];
+  /** Synchronous invalidation of the existing native signing review; no provider call or physical admission reset. */
+  readonly onSelectionChanged?: () => void;
 }
 export interface WorkerEndpointOptions {
   readonly createServices?: () => WorkerPrivateServices;
@@ -24,6 +35,8 @@ export interface WorkerEndpointOptions {
 interface ActiveJob { readonly requestId: number; readonly generation: number; readonly controller: AbortController; readonly deadline: number; timedOut: boolean; }
 interface RetentionSelection { readonly handle: RuntimeHandle; readonly service: RetentionService; readonly authority: (NativeRetentionAuthority & {dispose():void}) | undefined; preview: {readonly id:string;readonly plan:RetentionPlan} | undefined; }
 interface Selection { readonly handle: RuntimeHandle; readonly lease: VaultSessionLease; }
+interface FavoriteSelection { readonly handle: RuntimeHandle; readonly service: SavedReviewFavorites; }
+interface DraftSelection { readonly handle: RuntimeHandle; readonly service: TradeDraftStore; }
 const locked = (): RuntimeStatus => Object.freeze({ state: 'locked', handle: null });
 /** Compatibility read only: the earlier local preview used this wrapper, without a source label.
  * Keep the encrypted record intact and return its original bytes through the canonical review API.
@@ -79,6 +92,12 @@ class VaultWorkerEndpoint {
   readonly #send: (message: RuntimeMessage) => void;
   readonly #options: WorkerEndpointOptions;
   #services: WorkerPrivateServices | undefined;
+  #transportBroker: SessionTransportPolicy | undefined;
+  #transportChannels: readonly AppTransportChannel[] = Object.freeze([]);
+  #transportChanged: (() => void) | undefined;
+  #transportReady = false;
+  #selectingTransport = false;
+  #offTransport: () => void = () => undefined;
   #closed = false;
   #generation = 0;
   #lastRequest = 0;
@@ -86,6 +105,8 @@ class VaultWorkerEndpoint {
   #backupVerification: { readonly handle: RuntimeHandle; readonly generation: number; readonly receipt: BackupVerificationReceipt } | undefined;
   #active: ActiveJob | undefined;
   #retention: RetentionSelection | undefined;
+  #favorites: FavoriteSelection | undefined;
+  #drafts: DraftSelection | undefined;
   #deadline: number | undefined;
   #lastTime = -Infinity;
   #timer: ReturnType<typeof setTimeout> | undefined;
@@ -104,12 +125,20 @@ class VaultWorkerEndpoint {
     try { state?.authority?.dispose(); } catch { /* No foreign cleanup may mask a durable result. */ }
   }
   #clear(): void {
+    try { this.#transportBroker?.invalidate(); } catch { /* Other selected resources must still revoke. */ }
+    const favorites = this.#favorites; this.#favorites = undefined;
+    try { favorites?.service.dispose(); } catch { /* Revocation must continue independently. */ }
+    this.#clearDrafts();
     this.#clearRetention();
     this.#backupVerification = undefined;
     if (this.#timer !== undefined) clearTimeout(this.#timer);
     this.#timer = undefined; this.#deadline = undefined;
     const previous = this.#selection; this.#selection = undefined;
     previous?.lease.dispose(); this.#active?.controller.abort(); this.#services?.vault.lockAll();
+  }
+  #clearDrafts(): void {
+    const drafts = this.#drafts; this.#drafts = undefined;
+    try { drafts?.service.dispose(); } catch { /* A failed cleanup cannot retain authority. */ }
   }
   #revoked(): void {
     if (!this.#selection || this.#closed) return;
@@ -158,7 +187,58 @@ class VaultWorkerEndpoint {
   }
   dispose(): void {
     if (this.#closed) return;
-    this.#closed = true; this.#clear(); this.#services?.vault.dispose(); this.#services?.backup.dispose(); this.#services = undefined;
+    this.#closed = true; this.#clear(); this.#transportReady = false;
+    try { this.#offTransport(); } catch { /* Broker ownership still retires. */ } this.#offTransport = () => undefined;
+    try { this.#transportBroker?.dispose(); } catch { /* Finish vault disposal independently. */ } this.#transportBroker = undefined;
+    this.#transportChanged = undefined; this.#services?.vault.dispose(); this.#services?.backup.dispose(); this.#services = undefined;
+  }
+  #bindTransport(): void {
+    const configured = this.#services?.transportPolicy;
+    if (!configured) return;
+    try {
+      const broker = configured.broker;
+      this.#transportBroker = broker;
+      this.#transportChannels = parseRuntimeTransportSelection({version:1,mode:broker.mode,brokerGeneration:broker.generation,brokeredChannels:configured.brokeredChannels}).brokeredChannels;
+      const changed = configured.onSelectionChanged;
+      if (changed !== undefined && typeof changed !== 'function') throw Error();
+      this.#transportChanged = changed;
+      let registered = false, unavailable = false;
+      const off = broker.subscribeInvalidation(() => {
+        if (!registered) { unavailable = true; return; }
+        if (!this.#closed && this.#transportReady) this.#emit({version:1,kind:'transport-selection-invalidated',generation:this.#generation,brokerGeneration:broker.generation});
+      });
+      if (typeof off !== 'function') throw Error();
+      this.#offTransport = off; registered = true;
+      if (unavailable) throw Error();
+      this.#transportReady = true;
+    } catch {
+      // An optional policy source cannot prevent ordinary local vault/recovery work.
+      this.#transportReady = false;
+      try { this.#offTransport(); } catch { /* No source observation remains usable. */ } this.#offTransport = () => undefined;
+    }
+  }
+  #transportSelection(): RuntimeTransportSelection {
+    const broker = this.#transportBroker;
+    if (this.#closed || !this.#transportReady || !broker) throw new RuntimeBoundaryError('LOCKED');
+    return parseRuntimeTransportSelection({version:1,mode:broker.mode,brokerGeneration:broker.generation,brokeredChannels:this.#transportChannels});
+  }
+  #selectTransport(input: RuntimeSelectTransportMode): RuntimeTransportSelection {
+    if (this.#selectingTransport) throw new RuntimeBoundaryError('BUSY');
+    this.#selectingTransport = true;
+    try {
+      const generation = this.#generation, broker = this.#transportBroker, before = this.#transportSelection();
+      if (!broker) throw new RuntimeBoundaryError('LOCKED');
+      if (before.brokerGeneration !== input.expectedBrokerGeneration) throw new RuntimeBoundaryError('CONFLICT');
+      if (before.mode === 'strict' && input.mode === 'ordinary' && !input.ordinaryConsent) throw new RuntimeBoundaryError('INVALID_INPUT');
+      if (broker.setMode(input.mode) !== undefined) throw new RuntimeBoundaryError('LOCKED');
+      if (before.mode !== input.mode) {
+        try { this.#transportChanged?.(); } catch { throw new RuntimeBoundaryError('PROTOCOL_ERROR'); }
+      }
+      if (this.#closed || this.#generation !== generation || this.#transportBroker !== broker) throw new RuntimeBoundaryError('CANCELLED');
+      const selected = this.#transportSelection();
+      if (selected.mode !== input.mode || selected.brokerGeneration !== before.brokerGeneration + (before.mode === input.mode ? 0 : 1)) throw new RuntimeBoundaryError('CONFLICT');
+      return selected;
+    } finally { this.#selectingTransport = false; }
   }
   async dispatch(input: unknown): Promise<void> {
     if (this.#closed) return;
@@ -176,6 +256,7 @@ class VaultWorkerEndpoint {
         if (!this.#options.createServices && (globalThis.isSecureContext !== true || !globalThis.indexedDB ||
             !globalThis.crypto?.subtle || typeof globalThis.crypto.getRandomValues !== 'function')) throw new RuntimeBoundaryError('UNSUPPORTED_ENVIRONMENT');
         this.#services = (this.#options.createServices ?? (() => ({ vault: new EncryptedVaultService(undefined, crypto, { lifecycle: false }), backup: new EncryptedBackupService() })))();
+        this.#bindTransport();
         this.#reply(command, { ok: true, value: locked() }); return;
       }
       if (!this.#services) { this.#protocol(); return; }
@@ -184,9 +265,13 @@ class VaultWorkerEndpoint {
         if (command.operation === 'dispose') this.dispose();
         this.#reply(command, { ok: true, value: locked() }); return;
       }
-      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview' || command.operation === 'verifyBackup' || command.operation === 'deleteReviewedRecords') &&
+      if (command.operation === 'getTransportSelection' || command.operation === 'selectTransportMode') {
+        const selected = command.operation === 'getTransportSelection' ? this.#transportSelection() : this.#selectTransport(command);
+        this.#reply(command, {ok:true,value:selected}); return;
+      }
+      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview' || command.operation === 'setReviewFavorite' || command.operation === 'commitTradeDraftChange' || command.operation === 'verifyBackup' || command.operation === 'deleteReviewedRecords') &&
           this.#selection?.handle.profileId === command.profileId) this.#backupVerification = undefined;
-      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview') && this.#selection?.handle.profileId === command.profileId) this.#clearRetention();
+      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview' || command.operation === 'setReviewFavorite' || command.operation === 'commitTradeDraftChange') && this.#selection?.handle.profileId === command.profileId) this.#clearRetention();
       if (command.operation === 'status' || command.operation === 'activity') {
         const value = this.#status();
         // The document's private trusted-event handler is the only caller of activity.
@@ -195,6 +280,7 @@ class VaultWorkerEndpoint {
         this.#reply(command, { ok: true, value }); return;
       }
       if (this.#active) { this.#reply(command, runtimeFailure('BUSY')); return; }
+      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview' || command.operation === 'setReviewFavorite' || command.operation === 'deleteReviewedRecords') && this.#selection?.handle.profileId === command.profileId) this.#clearDrafts();
       if (command.operation === 'unlock' || command.operation === 'create') this.#clear();
       const job: ActiveJob = { requestId: command.requestId, generation: this.#generation, controller: new AbortController(), deadline: this.#time() + RUNTIME_REQUEST_TIMEOUT_MS, timedOut: false }; this.#active = job;
       const timer = setTimeout(() => this.#expire(job), RUNTIME_REQUEST_TIMEOUT_MS);
@@ -307,6 +393,58 @@ class VaultWorkerEndpoint {
             // The document still discards replies for obsolete selections, generations or cancelled requests.
             if(!this.#closed&&job.generation===this.#generation)this.#emit({version:1,requestId:command.requestId,generation:command.generation,operation:command.operation,kind:'response',result:{ok:true,value:Object.freeze({...receipt,profileId:command.profileId})}});
           }finally{this.#clearRetention();}
+        } else if (command.operation === 'loadTradeDraftLibrary' || command.operation === 'planTradeDraftChange' || command.operation === 'commitTradeDraftChange') {
+          const session = this.#selected(command.profileId), handle = this.#selection!.handle;
+          let drafts = this.#drafts;
+          if (!drafts || drafts.handle !== handle) {
+            this.#clearDrafts(); const vault = this.#services.vault, selectedProfileId = command.profileId;
+            const guardedVault = { list: vault.list.bind(vault), captureSession: vault.captureSession.bind(vault),
+              commit: (sessionId: string, expectedRevision: number, mutations: Parameters<typeof vault.commit>[2], signal?: AbortSignal, assertCurrent?: () => void) => {
+                const owned = this.#active; if (!owned) throw new RuntimeBoundaryError('LOCKED');
+                return vault.commit(sessionId, expectedRevision, mutations, signal, () => {
+                  this.#guard(owned); this.#selected(selectedProfileId); assertCurrent?.(); this.#guard(owned);
+                  if (this.#selection?.handle !== handle) throw new RuntimeBoundaryError('LOCKED');
+                });
+              } };
+            const service = vaultValue(createTradeDraftStore({ vault: guardedVault, session, now: () => this.#time(), isCurrent: () =>
+              !this.#closed && this.#selection?.handle === handle && this.#status().state === 'unlocked' && this.#selection?.handle === handle }));
+            try { this.#guard(job); if (this.#selection?.handle !== handle) throw new RuntimeBoundaryError('LOCKED'); } catch (error) { service.dispose(); throw error; }
+            drafts = { handle, service }; this.#drafts = drafts;
+          }
+          if (command.operation === 'commitTradeDraftChange') {
+            const receipt = vaultValue(await drafts.service.commit(command.previewId, command.expectedRevision, { reviewed: command.reviewed,
+              logicalOnly: command.logicalOnly, backupAndRemoteLimitsAcknowledged: command.backupAndRemoteLimitsAcknowledged }, job.controller.signal));
+            // A successful native CAS remains a durable scalar result; the document rejects obsolete selections.
+            if (!this.#closed && job.generation === this.#generation) this.#emit({ version: 1, requestId: command.requestId, generation: command.generation,
+              operation: command.operation, kind: 'response', result: { ok: true, value: receipt } });
+          } else if (command.operation === 'planTradeDraftChange') {
+            const preview = vaultValue(await drafts.service.plan(command.expectedRevision, command.change, job.controller.signal));
+            this.#guard(job); this.#selected(command.profileId); this.#reply(command, { ok: true, value: preview });
+          } else {
+            const library = vaultValue(await drafts.service.load(job.controller.signal)); this.#guard(job); this.#selected(command.profileId);
+            this.#reply(command, { ok: true, value: library });
+          }
+        } else if (command.operation === 'listReviewFavorites' || command.operation === 'setReviewFavorite') {
+          const session = this.#selected(command.profileId), handle = this.#selection!.handle;
+          let favorites = this.#favorites;
+          if (!favorites || favorites.handle !== handle) {
+            favorites?.service.dispose(); this.#favorites = undefined;
+            const service = vaultValue(createSavedReviewFavorites({ vault: this.#services.vault, session, isCurrent: () =>
+              !this.#closed && this.#selection?.handle === handle && this.#status().state === 'unlocked' && this.#selection?.handle === handle }));
+            try { this.#guard(job); if (this.#selection?.handle !== handle) throw new RuntimeBoundaryError('LOCKED'); }
+            catch (error) { service.dispose(); throw error; }
+            favorites = { handle, service }; this.#favorites = favorites;
+          }
+          if (command.operation === 'listReviewFavorites') {
+            const listed = vaultValue(await favorites.service.list(job.controller.signal)); this.#guard(job);
+            if (this.#selection?.handle !== handle) throw new RuntimeBoundaryError('LOCKED');
+            this.#reply(command, { ok: true, value: listed });
+          } else {
+            const receipt = vaultValue(await favorites.service.set(command.recordId, command.favorite, command.expectedRevision, job.controller.signal));
+            // A confirmed native CAS remains a scalar receipt. Obsolete selections/generations discard it in the document.
+            if (!this.#closed && job.generation === this.#generation) this.#emit({ version: 1, requestId: command.requestId,
+              generation: command.generation, operation: command.operation, kind: 'response', result: { ok: true, value: receipt } });
+          }
         } else if (command.operation === 'saveTermsReview' || command.operation === 'listTermsReviews' || command.operation === 'deleteTermsReview') {
           const vault = this.#services.vault;
           const session = this.#selected(command.profileId);

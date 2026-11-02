@@ -9,6 +9,14 @@ import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
 import { RetentionPanel } from './RetentionPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
+import { GenericAppShare } from './GenericAppShare.tsx';
+import { PrivacyPolicySelector } from './PrivacyPolicySelector.tsx';
+import { messageGroup } from './locale/runtime.ts';
+import { LocalScreenAnalytics } from './LocalScreenAnalytics.tsx';
+import type { ScreenCountsController } from '../analytics/screen-counts.ts';
+
+const policyCopy = messageGroup('privacy');
+const analyticsCopy = messageGroup('analytics');
 
 export const pageTitle: Readonly<Record<Route['page'], string>> = Object.freeze({
   get home() { return m.homeTitle; }, get offers() { return m.offersTitle; }, get trade() { return m.tradeTitle; },
@@ -82,15 +90,19 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
   </>;
 }
 
-export function Settings({ diagnostics = null, services = null, scope }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number }) {
+export function Settings({ diagnostics = null, services = null, scope, genericAppLink = null, screenCounts = null }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number; readonly genericAppLink?: string | null; readonly screenCounts?: ScreenCountsController | null }) {
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
     <RetentionPanel services={services} />
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
+    <PrivacyPolicySelector services={services} {...(scope === undefined ? {} : { scope })} messages={{ ...policyCopy,
+      channelLabels: { rpc: policyCopy.rpc, relay: policyCopy.relay, map: policyCopy.map, proof: policyCopy.proofChannel, update: policyCopy.update } }} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>
     <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p></section>
     <DiagnosticsPanel service={diagnostics} />
+    <GenericAppShare appLink={genericAppLink} />
+    <LocalScreenAnalytics controller={screenCounts} messages={{ ...analyticsCopy, categoryLabels: messageGroup('analyticsCategories') }} />
   </>;
 }
 

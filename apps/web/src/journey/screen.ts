@@ -1,20 +1,36 @@
 /** Isolated LOCALPROOF screen. It has no vault keys, session identifiers, signer or transaction implementation. */
-import {parseRuntimeMessage,type RuntimeResponse} from '../../../../packages/schemas/index.ts';
+import {parseRuntimeMessage,runtimeFailure,parseRuntimeSelectTransportMode,type RuntimeResponse,type RuntimeResult,type RuntimeTransportSelection,type RuntimeSelectTransportMode} from '../../../../packages/schemas/index.ts';
 import {runBoundedImport,profileAttemptAdmission,type ProfileSelectionPort} from '../content-policy/local-policy.ts';
 import {englishGroup} from '../ui/locale/en.ts';
 import {readDisplay,renderTradePresentation} from './presentation.ts';
-export function mountLocalJourney(root: HTMLElement, worker: Worker, options:{readonly vaultOnly?:boolean}={}): () => void {
+import type {TransportPolicyPort} from '../privacy/policy-controller.ts';
+export function mountLocalJourney(root: HTMLElement, worker: Worker, options:{readonly vaultOnly?:boolean;readonly mountTransportPolicy?:(port:TransportPolicyPort)=>()=>void}={}): () => void {
   const vaultOnly=options.vaultOnly===true;
   let id=0,scope=0,busy=false,profileId:string|null=null,tokenTerms=false,phase='setup',guidanceDeadline=0;let guidanceTimer:ReturnType<typeof setTimeout>|undefined;let reviewTimer:ReturnType<typeof setTimeout>|undefined;let pendingSigningAction:string|null=null;const p=englishGroup('privacy');const signingActions=['accept','accept-recovered','approve','reset-approval','fund','release','refund'];let importController:AbortController|undefined;
   const selection:ProfileSelectionPort={get current():ProfileSelectionPort['current']{return{state:profileId===null?'locked':'unlocked'};},get profileId(){return profileId;},selectionScope:()=>scope},offerAdmission=profileAttemptAdmission(selection);
+  let policyScope=0,disposed=false,unmountPolicy:(()=>void)|undefined;
+  const policyListeners=new Set<()=>void>();
+  const notifyPolicy=()=>{if(disposed)return;for(const listener of [...policyListeners]){try{listener();}catch{/* Hints never prevent another current read. */}}};
   const pending=new Map<number,{resolve(value:unknown):void;reject(error:Error):void;timer:ReturnType<typeof setTimeout>}>();
   const request=(body:Record<string,unknown>):Promise<unknown>=>new Promise((resolve,reject)=>{
     const mine=++id,timer=setTimeout(()=>{pending.delete(mine);reject(Error('TIMEOUT'));},30000);
     pending.set(mine,{resolve,reject,timer});worker.postMessage({id:mine,...body});
   });
-  worker.onmessage=({data})=>{if(data?.kind==='signing-review-invalidated'){pendingSigningAction=null;if(reviewTimer!==undefined)clearTimeout(reviewTimer);show(data.snapshot,false);status.textContent=p.signingChanged;return;}if(data?.kind==='scope-invalidated'){scope++;importController?.abort();for(const job of pending.values()){clearTimeout(job.timer);job.reject(Error('WALLET_CHANGED'));}pending.clear();busy=false;fiat.checked=false;risk.checked=false;show(data.snapshot);status.textContent='Wallet selection changed. Original trade recovery remains available; no automatic prompt or resend.';return;}const job=pending.get(data?.id);if(!job)return;pending.delete(data.id);clearTimeout(job.timer);if(data.error){if(data.snapshot)show(data.snapshot,false);job.reject(Error(typeof data.error==='string'?data.error:'OPERATION_FAILED'));}else job.resolve(data.value);};
-  const runtimeReply=async(input:Record<string,unknown>):Promise<RuntimeResponse>=>{const reply=parseRuntimeMessage(await request({kind:'runtime',input}));if(reply.kind!=='response')throw Error('PROTOCOL_ERROR');return reply;};
+  worker.onmessage=({data})=>{if(data?.kind==='native-transport-selection-invalidated'){notifyPolicy();return;}if(data?.kind==='signing-review-invalidated'){pendingSigningAction=null;if(reviewTimer!==undefined)clearTimeout(reviewTimer);show(data.snapshot,false);status.textContent=p.signingChanged;return;}if(data?.kind==='scope-invalidated'){scope++;importController?.abort();for(const job of pending.values()){clearTimeout(job.timer);job.reject(Error('WALLET_CHANGED'));}pending.clear();busy=false;fiat.checked=false;risk.checked=false;show(data.snapshot);status.textContent='Wallet selection changed. Original trade recovery remains available; no automatic prompt or resend.';return;}const job=pending.get(data?.id);if(!job)return;pending.delete(data.id);clearTimeout(job.timer);if(data.error){if(data.snapshot)show(data.snapshot,false);job.reject(Error(typeof data.error==='string'?data.error:'OPERATION_FAILED'));}else job.resolve(data.value);};
+  const runtimeReply=async(input:Record<string,unknown>):Promise<RuntimeResponse>=>{
+    const replacing=input.operation==='create'||input.operation==='unlock'||input.operation==='lock'||input.operation==='dispose';
+    if(replacing){policyScope++;notifyPolicy();}
+    try{const reply=parseRuntimeMessage(await request({kind:'runtime',input}));if(reply.kind!=='response')throw Error('PROTOCOL_ERROR');return reply;}
+    finally{if(replacing||input.operation==='selectTransportMode')notifyPolicy();}
+  };
   const runtime=async(input:Record<string,unknown>):Promise<RuntimeResponse>=>{const reply=await runtimeReply(input);if(!reply.result.ok)throw Error(reply.result.error.code);return reply;};
+  const policyReply=async(operation:'getTransportSelection'|'selectTransportMode',fields:Record<string,unknown>={}):Promise<RuntimeResult<RuntimeTransportSelection>>=>{
+    if(disposed)return runtimeFailure('LOCKED');
+    try{const reply=await runtimeReply({operation,...fields});if(reply.operation!==operation)return runtimeFailure('PROTOCOL_ERROR');if(!reply.result.ok)return reply.result;return 'brokerGeneration'in reply.result.value?{ok:true,value:reply.result.value}:runtimeFailure('PROTOCOL_ERROR');}
+    catch(error){const code=error instanceof Error?error.message:'';return runtimeFailure(code==='LOCKED'||code==='BUSY'||code==='CONFLICT'||code==='CANCELLED'||code==='TIMEOUT'?code:'PROTOCOL_ERROR');}
+  };
+  const policyPort:TransportPolicyPort=Object.freeze({selectionScope:()=>policyScope,subscribe(listener:()=>void){if(typeof listener!=='function')throw Error('INVALID_INPUT');if(!policyListeners.has(listener)&&policyListeners.size>=64)throw Error('LIMIT_EXCEEDED');policyListeners.add(listener);return()=>{policyListeners.delete(listener);};},
+    getTransportSelection:()=>policyReply('getTransportSelection'),selectTransportMode(input:RuntimeSelectTransportMode){let parsed;try{parsed=parseRuntimeSelectTransportMode(input);}catch{return Promise.resolve(runtimeFailure('INVALID_INPUT'));}return policyReply('selectTransportMode',{...parsed});}});
   const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const node=document.createElement(tag);if(text)node.textContent=text;return node;};
   const title=el('h1','LOCALPROOF · encrypted negotiation and native and token escrow'),warning=el('p','Trading disabled by default. This isolated fixture uses two public development wallets and an owned loopback chain/relay. Production peer wallet acceptance and maintained signing trust remain unavailable.');
   const pass=el('input');pass.type='password';pass.autocomplete='new-password';pass.setAttribute('aria-label','Profile and backup passphrase');
@@ -48,6 +64,7 @@ export function mountLocalJourney(root: HTMLElement, worker: Worker, options:{re
   add('discard-signing-review',p.signingDiscard,async()=>{show(await request({kind:'action',action:'discard-signing-review'}),false);});
   const lock=el('button','Lock profile');lock.dataset.action='lock';buttons.set('lock',lock);controls.append(lock);lock.onclick=()=>{scope++;pendingSigningAction=null;if(reviewTimer!==undefined)clearTimeout(reviewTimer);if(guidanceTimer!==undefined)clearTimeout(guidanceTimer);importController?.abort();for(const job of pending.values()){clearTimeout(job.timer);job.reject(Error('LOCKED'));}pending.clear();pass.value='';backup.value='';busy=false;profileId=null;phase='setup';details.textContent='';reviewPanel.replaceChildren();paymentPanel.replaceChildren();receiptPanel.replaceChildren();status.textContent='Locked. Any in-flight broadcast remains a recovery task; no resend.';update();void runtime({operation:'lock'}).catch(()=>{});};
   asset.hidden=amount.hidden=saved.hidden=vaultOnly;root.replaceChildren(title,warning,pass,backup,asset,amount,saved,controls,risk,riskLabel,fiat,fiatLabel,status,reviewPanel,paymentPanel,receiptPanel,diagnostics);update();
-  const dispose=()=>{scope++;if(reviewTimer!==undefined)clearTimeout(reviewTimer);importController?.abort();if(guidanceTimer!==undefined)clearTimeout(guidanceTimer);for(const job of pending.values()){clearTimeout(job.timer);job.reject(Error('LOCKED'));}pending.clear();worker.terminate();};
+  unmountPolicy=options.mountTransportPolicy?.(policyPort);
+  const dispose=()=>{if(disposed)return;disposed=true;scope++;policyScope++;try{unmountPolicy?.();}catch{/* Continue retiring the same Worker. */}policyListeners.clear();if(reviewTimer!==undefined)clearTimeout(reviewTimer);importController?.abort();if(guidanceTimer!==undefined)clearTimeout(guidanceTimer);for(const job of pending.values()){clearTimeout(job.timer);job.reject(Error('LOCKED'));}pending.clear();worker.terminate();};
   window.addEventListener('pagehide',dispose,{once:true});return()=>{window.removeEventListener('pagehide',dispose);dispose();root.replaceChildren();};
 }

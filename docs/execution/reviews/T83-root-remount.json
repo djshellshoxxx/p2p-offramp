@@ -1,0 +1,39 @@
+{
+  "task": "T83",
+  "author": "/root",
+  "finding": "T83-CLIPBOARD-REMOUNT",
+  "originalReviewer": "/root/draft_contract",
+  "oldSourceSha256": "3109bb26a38a472078a6d4f2a18001ea3697ed4d215c530cf89dc61198fea248",
+  "files": [
+    {
+      "path": "apps/web/src/ui/GenericAppShare.tsx",
+      "sha256": "3185010cbfa3070f7345d6ca316c6946400582b65f08a6b5466f6a4d3229db8d"
+    },
+    {
+      "path": "scripts/test-generic-app-share-browser.mjs",
+      "sha256": "353fb8b449b8cf683ed91a3b12887676ea0435c7a3d1d0cb17320085c328da74"
+    }
+  ],
+  "red": {
+    "path": "/workspace/work/t83-route-drain.RED.log",
+    "sha256": "f13148fc7a6a491c5da518d6a9d08f4ce3680afff702da0d9acf8dd1b426d75b",
+    "failure": "route replacement retained no clipboard admission: false != true"
+  },
+  "green": {
+    "path": "/workspace/work/t83-route-drain.GREEN.log",
+    "sha256": "502cb6b5d3d8642cc6d3caa14ec8af078d5cb92eb8acbf05f9f4d6cc88f71f58",
+    "exitCode": 0,
+    "node": "24.22.1",
+    "chromium": "156.0.8078.79"
+  },
+  "changes": [
+    "A single module/page-lifetime physical clipboard admission survives Settings route and component replacements",
+    "Native useSyncExternalStore busy snapshot makes replacement views inert while the original platform promise drains",
+    "Existing owner and sequence suppress stale result publication; no startup clipboard permission or write",
+    "Actual App navigation while held and fixture remount before settlement added; native successful copy, actual browser permission denial/manual fallback and all prior cases preserved"
+  ],
+  "limits": [
+    "Page-lifetime local clipboard check only; no cross-document/device clipboard liveness or physical-device qualification",
+    "No URL authority, production release selection, identifier persistence or egress added"
+  ]
+}

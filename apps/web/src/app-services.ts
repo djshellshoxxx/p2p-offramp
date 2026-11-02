@@ -1,7 +1,8 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
-import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeRetentionPreview, type RuntimeRetentionConsent, type RuntimeRetentionDelete } from '../../../packages/schemas/index.ts';
+import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore, type RuntimeTransportSelection, type RuntimeSelectTransportMode,
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type RuntimeReviewFavorites, type RuntimeReviewFavoriteReceipt, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeRetentionPreview, type RuntimeRetentionConsent, type RuntimeRetentionDelete } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
+import type { RuntimeTradeDraftLibrary, RuntimeTradeDraftPreview, RuntimeTradeDraftConsent, RuntimeTradeDraftReceipt, TradeDraftChangeV1 } from '../../../packages/schemas/index.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
 export interface PublicStatus { readonly state: 'locked' | 'unlocked'; }
@@ -17,6 +18,9 @@ export interface AppServices {
    */
   selectionScope(): number;
   subscribe(listener: () => void): () => void;
+  /** Selected policy of the actual Worker-owned broker only; absent composition remains unavailable. */
+  getTransportSelection(signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>>;
+  selectTransportMode(input: RuntimeSelectTransportMode, signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>>;
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<AppResult<PublicStatus>>;
   create(passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>>;
   listProfiles(signal?: AbortSignal): Promise<AppResult<RuntimeInventory>>;
@@ -31,6 +35,12 @@ export interface AppServices {
   /** Saved terms reviews of the open profile only (raw terms bytes; the caller re-reviews them). */
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
+  /** Purpose-bound encrypted saved-review IDs; writes require the explicitly observed native revision. */
+  listReviewFavorites(signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavorites>>;
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavoriteReceipt>>;
+  loadTradeDraftLibrary(signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftLibrary>>;
+  planTradeDraftChange(expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftPreview>>;
+  commitTradeDraftChange(previewId: string, expectedRevision: number, consent: RuntimeTradeDraftConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftReceipt>>;
   /** Legacy compatibility: refuses deletion; use the reviewed retention flow in Settings. */
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   /** Read-only unverified scalar journal references; no calldata, native truth or resend capability. */
@@ -71,6 +81,12 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     get profileId() { const status = runtime.current; return status.state === 'unlocked' ? status.handle.profileId : null; },
     get current() { return snapshot(); }, getSnapshot: snapshot, selectionScope,
     subscribe: (listener: () => void) => runtime.subscribe(listener),
+    getTransportSelection: async (signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>> => {
+      try { return await runtime.getTransportSelection(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    selectTransportMode: async (input: RuntimeSelectTransportMode, signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>> => {
+      try { return await runtime.selectTransportMode(input, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
     unlock: (profileId: string, passphrase: string, signal?: AbortSignal) => stateCommand(() => runtime.unlock(profileId, passphrase, signal)),
     create: async (passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>> => {
       try {
@@ -108,6 +124,21 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     },
     listTermsReviews: async (signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>> => {
       try { return await runtime.listTermsReviews(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    listReviewFavorites: async (signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavorites>> => {
+      try { return await runtime.listReviewFavorites(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    loadTradeDraftLibrary: async (signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftLibrary>> => {
+      try { return await runtime.loadTradeDraftLibrary(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    planTradeDraftChange: async (expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftPreview>> => {
+      try { return await runtime.planTradeDraftChange(expectedRevision, change, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    commitTradeDraftChange: async (previewId: string, expectedRevision: number, consent: RuntimeTradeDraftConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftReceipt>> => {
+      try { return await runtime.commitTradeDraftChange(previewId, expectedRevision, consent); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    setReviewFavorite: async (recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavoriteReceipt>> => {
+      try { return await runtime.setReviewFavorite(recordId, favorite, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     deleteTermsReview: async (recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.deleteTermsReview(recordId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }

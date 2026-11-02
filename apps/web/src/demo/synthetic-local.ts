@@ -45,5 +45,5 @@ export const syntheticDemoSource: RegistrySource = async () => {
   const registry = new RegistryService();
   const loaded = await registry.load(utf8.encode(SYNTHETIC_REGISTRY_JSON), SYNTHETIC_REGISTRY_SHA256);
   if (!loaded.ok || loaded.value.networks.some(network => network.environment !== 'local')) return { kind: 'failed' };
-  return { kind: 'ready', label: 'synthetic-demo', registry, samples: SYNTHETIC_SAMPLES };
+  return { kind: 'ready', label: 'synthetic-demo', registry, samples: SYNTHETIC_SAMPLES, draftNetworkIds: loaded.value.networks.map(network => network.id) };
 };

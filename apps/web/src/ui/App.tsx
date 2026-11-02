@@ -9,6 +9,9 @@ import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import type { StartupCapabilitySnapshot } from '../compatibility/probe.ts';
 import { StartupCompatibilityNotice } from './StartupCompatibilityNotice.tsx';
+import type { TradeDraftController } from '../trade/draft-controller.ts';
+import type { TradeDraftCopy } from './trade/TradeDraftEditor.tsx';
+import { useScreenCounts } from './use-screen-counts.ts';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
@@ -21,9 +24,12 @@ export interface AppProps {
   readonly trade?: TradeReviewController | null;
   readonly diagnostics?: Diagnostics | null;
   readonly startupCapabilities?: StartupCapabilitySnapshot;
+  readonly genericAppLink?: string | null;
+  readonly drafts?: TradeDraftController | null;
+  readonly draftCopy?: TradeDraftCopy;
 }
 
-export function App({ services, starting = false, startupError, startupCapabilities, trade = null, diagnostics = null }: AppProps) {
+export function App({ services, starting = false, startupError, startupCapabilities, trade = null, diagnostics = null, genericAppLink = null, drafts = null, draftCopy }: AppProps) {
   const locale = useSyncExternalStore(localeStore.subscribe, localeStore.getSnapshot, localeStore.getSnapshot);
   const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
   const tradeSnapshot = useTradeReview(trade);
@@ -38,9 +44,10 @@ export function App({ services, starting = false, startupError, startupCapabilit
   const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
   const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
+  const screenCounts = useScreenCounts(services, scope, route.page === 'unknown' ? null : route.page);
   // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
   // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
-  useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  useLayoutEffect(() => { trade?.forgetSaved(); drafts?.startBlank(); }, [trade, drafts, scope]);
   const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -122,8 +129,8 @@ export function App({ services, starting = false, startupError, startupCapabilit
           route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
-          route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
+          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} genericAppLink={genericAppLink} screenCounts={screenCounts} /> :
+          route.page === 'offers' ? <OffersPage trade={trade} store={store} drafts={drafts} {...(draftCopy === undefined ? {} : { draftCopy })} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>

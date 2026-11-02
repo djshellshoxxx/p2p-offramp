@@ -12,6 +12,7 @@ export const messages = mergeMessageViews(englishGroup('shell'), {
   retentionCounts: (archive: number, reviewed: number, protectedCount: number, revision: number) => english('shell', 'retentionCounts', {archive,reviewed,protected:protectedCount,revision}),
   retentionDeleted: (count: number, revision: number) => english('shell', 'retentionDeleted', {count,revision}),
   errors: englishGroup('shellErrors'),
+  favorites: englishGroup('favorites'),
   compatibility: mergeMessageViews(englishGroup('compatibility'), {
     missingFeatures: (features: string) => english('compatibility', 'missingFeatures', { features }),
   }),
