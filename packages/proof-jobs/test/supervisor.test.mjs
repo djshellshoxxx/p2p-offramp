@@ -9,7 +9,7 @@ const turn=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve;const promise=new Promise(done=>resolve=done);return{promise,resolve};};
 
 class WorkerPort {
-  sent=[];handlers;retained;terminated=0;off=0;termination;
+  sent=[];handlers;retained;terminated=0;off=0;termination=Promise.resolve();
   postMessage(command,transfer){this.sent.push(structuredClone(command,{transfer:[...transfer]}));}
   subscribe(handlers){this.handlers=handlers;this.retained=handlers;return()=>{this.handlers=undefined;this.off++;};}
   terminate(){this.terminated++;return this.termination;}
@@ -45,6 +45,26 @@ test('physical worker termination must drain before another facade acquires the 
   const a=setup(),b=setup(),end=deferred();a.port.termination=end.promise;const result=a.runner.run(a.consent(),async()=>new Uint8Array([1]));await turn();a.runner.cancel();await code(result,'CANCELLED');
   await code(b.runner.run(b.consent(),async()=>new Uint8Array()),'LIMIT_EXCEEDED');end.resolve();await a.runner.dispose();
   const next=b.runner.run(b.consent(),async()=>new Uint8Array([2]));await turn();b.runner.cancel();await code(next,'CANCELLED');await b.runner.dispose();
+});
+
+test('void, rejected and malformed termination cannot admit another collector or Worker',async t=>{
+  const cases=[['void',()=>undefined],['object',()=>({})],['thenable',()=>({then(resolve){resolve();}})],
+    ['nonvoid',()=>Promise.resolve(1)],['rejected',()=>Promise.reject(Error('PRIVATE termination'))],['throws',()=>{throw Error('PRIVATE termination');}]];
+  for(const[name,ending]of cases)await t.test(name,async()=>{
+    // Unknown physical fate intentionally holds admission until document teardown. Each module is a fresh document.
+    const{createPublicResourceRunner:create}=await import(new URL(`../src/supervisor.ts?termination=${name}`,import.meta.url));
+    const first=new WorkerPort();first.terminate=()=>{first.terminated++;return ending();};
+    let collections=0,factories=0;
+    const options={owner:{current:()=>true,subscribeRevocation:()=>()=>{}}};
+    const a=good(create({...options,createWorker:()=>first}));
+    const b=good(create({...options,createWorker:()=>{factories++;const port=new WorkerPort();port.termination=Promise.resolve();return port;}}));
+    const pending=a.run(good(a.consent(scope())),async()=>new Uint8Array([1]));await turn();a.cancel();await code(pending,'CANCELLED');await turn();
+    let observed;
+    const competing=b.run(good(b.consent(scope())),async()=>{collections++;return new Uint8Array([2]);});
+    void competing.then(result=>{observed=result;});await turn();
+    try{assert.equal(observed?.error?.code,'LIMIT_EXCEEDED',name);assert.equal(collections,0,name);assert.equal(factories,0,name);}
+    finally{b.cancel();await competing;await b.dispose();}
+  });
 });
 
 test('opaque consent is single use and invalidated scope cannot collect or spawn',async()=>{

@@ -1,4 +1,4 @@
-/** Actual strict-CSP Chromium: public resource Worker plus the real App/native vault Worker. */
+/** Actual strict-CSP Chromium with an explicit test-only CDP physical-exit port; real App/native vault Worker. */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {mkdtemp,readFile,mkdir,writeFile,rm} from 'node:fs/promises';
@@ -39,10 +39,44 @@ try{
   await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():(unexpected++,route.abort()));
   await context.routeWebSocket('**/*',socket=>{unexpected++;socket.close();});
   const page=await context.newPage(),nativeWorkers=[];
-  page.on('worker',worker=>{if(worker.url().includes('public-resource.worker')){const record={url:worker.url(),closed:false};nativeWorkers.push(record);worker.on('close',()=>record.closed=true);}});
+  const pageClient=await context.newCDPSession(page),{targetInfo:pageTarget}=await pageClient.send('Target.getTargetInfo');await pageClient.detach();
+  const targets=await browser.newBrowserCDPSession(),byUrl=new Map(),targetByUrl=new Map(),urlByTarget=new Map(),destroyed=new Set();
+  const workerUrl=input=>{
+    try{if(typeof input!=='string'||input.length>512)return null;const url=new URL(input),id=url.searchParams.get('resource-instance');
+      return url.href===input&&url.origin===origin&&/^\/assets\/public-resource\.worker-[A-Za-z0-9_-]+\.js$/.test(url.pathname)&&
+        /^[1-9][0-9]?$/.test(id??'')&&Number(id)<=32&&url.search===`?resource-instance=${id}`&&!url.hash?input:null;
+    }catch{return null;}
+  };
+  const confirmExit=record=>{if(record.closed&&record.targetId&&destroyed.has(record.targetId)){record.physicalClosed=true;record.resolveExit();}};
+  const observeTarget=info=>{
+    const url=info.type==='worker'&&info.parentId===pageTarget.targetId?workerUrl(info.url):null;if(!url)return;
+    const prior=targetByUrl.get(url);if(prior&&prior!==info.targetId){errors.push('Duplicate native Worker identity.');return;}
+    targetByUrl.set(url,info.targetId);urlByTarget.set(info.targetId,url);const record=byUrl.get(url);
+    if(record){record.targetId=info.targetId;confirmExit(record);}
+  };
+  targets.on('Target.targetCreated',event=>observeTarget(event.targetInfo));targets.on('Target.targetInfoChanged',event=>observeTarget(event.targetInfo));
+  targets.on('Target.targetDestroyed',event=>{const url=urlByTarget.get(event.targetId);if(!url)return;destroyed.add(event.targetId);const record=byUrl.get(url);if(record)confirmExit(record);});
+  await targets.send('Target.setDiscoverTargets',{discover:true});
+  page.on('worker',worker=>{
+    const url=workerUrl(worker.url());if(!url)return;
+    if(byUrl.has(url)||nativeWorkers.length>=32){errors.push('Duplicate or excessive native resource Worker.');return;}
+    let resolveExit;const exited=new Promise(done=>{resolveExit=done;});
+    const record={url,closed:false,physicalClosed:false,targetId:targetByUrl.get(url),exitRequested:false,exited,resolveExit};
+    byUrl.set(url,record);nativeWorkers.push(record);worker.on('close',()=>{record.closed=true;confirmExit(record);});confirmExit(record);
+  });
+  await page.exposeBinding('__t87NativeResourceExit',({frame},input)=>{
+    const url=frame===page.mainFrame()?workerUrl(input):null,record=url&&byUrl.get(url);
+    if(!record||record.exitRequested)throw Error('TEST_NATIVE_EXIT_IDENTITY_UNAVAILABLE');
+    record.exitRequested=true;return record.exited;
+  });
   page.on('pageerror',error=>{if(!String(error).includes('Public resource fixture crash.'))errors.push(String(error));});
   const response=await page.goto(origin);assert.equal(response.headers()['content-security-policy'],policy.csp);assert.ok(!policy.csp.includes('unsafe-eval'));
   await page.getByRole('heading',{name:'Your local workspace',exact:true}).waitFor();await page.locator('#public-resource-start').waitFor();
+  assert.equal(await page.evaluate(async()=>{
+    for(const input of ['http://127.0.0.1/forged-worker',location.origin+'/assets/public-resource.worker-unobserved.js?resource-instance=32']){
+      try{await window.__t87NativeResourceExit(input);return false;}catch{/* Neither an arbitrary value nor an unobserved URL establishes exit. */}
+    }return true;
+  }),true,'physical-exit evidence requires the exact observed native Worker');
   const snapshot=()=>page.evaluate(()=>window.publicResourceFixture.snapshot());
   const beforeDefault=await snapshot();assert.equal(await page.evaluate(()=>window.publicResourceFixture.defaultRequest()),'UNSUPPORTED_PROVIDER');
   assert.equal((await snapshot()).defaultCollectors,0);assert.equal((await snapshot()).created,beforeDefault.created);
@@ -60,7 +94,7 @@ try{
   assert.equal((await snapshot()).outcomes.length,0,'actual vault status/export/verification finish while independent CPU work remains active');
   await page.getByRole('button',{name:'Lock vault',exact:true}).click();await page.waitForFunction(()=>window.publicResourceFixture.snapshot().outcomes.length===1);
   assert.equal((await snapshot()).outcomes[0].code,'LOCKED');
-  const untilClosed=async()=>{for(let i=0;i<100;i++){if(nativeWorkers.every(worker=>worker.closed))return;await new Promise(done=>setTimeout(done,20));}assert.fail('Native resource Worker did not close.');};
+  const untilClosed=async()=>{for(let i=0;i<100;i++){if(nativeWorkers.every(worker=>worker.closed&&worker.physicalClosed))return;await new Promise(done=>setTimeout(done,20));}assert.ok(nativeWorkers.every(worker=>worker.closed&&worker.physicalClosed),'Native resource Worker did not close.');};
   await untilClosed();
   const run=async(mode,budget='normal',extras={})=>{
     const before=(await snapshot()).outcomes.length;await page.locator('#public-resource-consent').check();
@@ -78,16 +112,24 @@ try{
   const beforeBusy=(await snapshot()).outcomes.length,beforeBusyProve=(await snapshot()).proveCommands;await page.locator('#public-resource-consent').check();await page.evaluate(()=>{void window.publicResourceFixture.begin(1);});await page.waitForFunction(count=>window.publicResourceFixture.snapshot().proveCommands>count,beforeBusyProve);
   const createdBusy=(await snapshot()).created;await page.locator('#public-resource-consent').check();await page.evaluate(()=>{void window.publicResourceFixture.begin(0);});await page.waitForFunction(count=>window.publicResourceFixture.snapshot().outcomes.length>count,beforeBusy);
   assert.equal((await snapshot()).outcomes.at(-1).code,'LIMIT_EXCEEDED');assert.equal((await snapshot()).created,createdBusy);
-  await page.evaluate(()=>window.publicResourceFixture.cancel());await page.waitForFunction(count=>window.publicResourceFixture.snapshot().outcomes.length>=count+2,beforeBusy);await untilClosed();
+  const retiring=nativeWorkers.at(-1);await page.evaluate(()=>window.publicResourceFixture.cancel());
+  assert.equal(retiring.closed,false,'finite busy native Worker is still in its physical shutdown interval');
+  assert.equal(retiring.physicalClosed,false);
+  await page.locator('#public-resource-consent').check();await page.evaluate(()=>window.publicResourceFixture.begin(0));
+  assert.equal((await snapshot()).outcomes.at(-1).code,'LIMIT_EXCEEDED','retiring native Worker retains admission');
+  assert.equal((await snapshot()).created,createdBusy);assert.equal(retiring.physicalClosed,false);
+  await page.waitForFunction(count=>window.publicResourceFixture.snapshot().outcomes.length>=count+3,beforeBusy);await untilClosed();
+  assert.equal((await run(0)).ok,true,'an explicit fresh job is admitted after confirmed native exit');
   const beforeResume=(await snapshot()).outcomes.length,beforeResumeProve=(await snapshot()).proveCommands;await page.locator('#public-resource-consent').check();await page.evaluate(()=>{void window.publicResourceFixture.begin(2);});await page.waitForFunction(count=>window.publicResourceFixture.snapshot().proveCommands>count,beforeResumeProve);await page.evaluate(()=>window.publicResourceFixture.resume());
   await page.waitForFunction(count=>window.publicResourceFixture.snapshot().outcomes.length>count,beforeResume);assert.equal((await snapshot()).outcomes.at(-1).code,'CANCELLED');await untilClosed();
   const oldCount=(await snapshot()).outcomes.length;await page.evaluate(()=>window.publicResourceFixture.replayRetired());assert.equal((await snapshot()).outcomes.length,oldCount);
-  const final=await snapshot();assert.equal(final.created,final.terminated);assert.equal(final.created,final.detached);assert.equal(final.created,nativeWorkers.length);assert.ok(nativeWorkers.every(worker=>worker.closed));assert.equal(final.allInputPublic,true);assert.equal(final.defaultCollectors,0);assert.equal(final.policyHash,policyHash);
+  const final=await snapshot();assert.equal(final.created,final.terminated);assert.equal(final.created,final.detached);assert.equal(final.created,nativeWorkers.length);assert.ok(nativeWorkers.every(worker=>worker.closed&&worker.physicalClosed));assert.equal(final.allInputPublic,true);assert.equal(final.defaultCollectors,0);assert.equal(final.policyHash,policyHash);
   assert.ok(final.cancelCommands>=5);assert.ok(workerAssetBytes>0&&workerAssetBytes<G29_BUDGET.maxNetworkBytes);assert.equal(unexpected,0);assert.deepEqual(errors,[]);
   for(const outcome of final.outcomes)for(const key of ['proofVerified','receiptAuthority','economicPreparationAllowed'])assert.equal(outcome[key],false);
   await page.evaluate(()=>window.publicResourceFixture.dispose());
-  console.log(JSON.stringify({fixture:'actual-native-public-resource-and-vault',browser:browser.version(),nativeResourceWorkers:final.created,actualNativeClosures:nativeWorkers.filter(worker=>worker.closed).length,
+  console.log(JSON.stringify({fixture:'actual-native-public-resource-and-vault',browser:browser.version(),node:process.version,nativeResourceWorkers:final.created,actualNativeClosures:nativeWorkers.filter(worker=>worker.physicalClosed).length,
     emptyProviderBeforeCollector:true,exactInputBoundary:true,oversizedInputBeforeWorker:true,malformedResultIdentityAndMessageCaps:true,actualWorkerCrash:true,heartbeat:true,wallDeadline:true,
-    sharedTabAdmission:true,callbackReentry:true,ignoredCancelTerminated:true,lateReplyIgnored:true,resumeCancellation:true,actualVaultBackupAndLockResponsive:true,allInputsPublic:true,
+    sharedTabAdmission:true,admissionHeldThroughPhysicalExit:true,testOnlyTerminationPort:'constructor-owned-CDP-native-exit-promise',standardBrowserPhysicalDeadlineQualified:false,
+    callbackReentry:true,ignoredCancelTerminated:true,lateReplyIgnored:true,resumeCancellation:true,actualVaultBackupAndLockResponsive:true,allInputsPublic:true,
     browserWasm:'unsupported-under-unchanged-CSP',csp:policy.csp,publicWorkerAssetBytes:workerAssetBytes,providerRuntimeNetworkBytes:0,externalRequests:0,providerApproved:false,proofVerified:false,receiptAuthority:false,releaseEnabled:false}));
 }finally{await browser?.close();if(server)await new Promise(done=>server.close(done));await rm(temporary,{recursive:true,force:true});}

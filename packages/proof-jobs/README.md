@@ -47,7 +47,7 @@ interface WorkerPort {
   subscribe(handlers: {
     message(value: unknown): void; error(): void; messageError(): void;
   }): () => void;
-  terminate(): void | Promise<void>;
+  terminate(): Promise<void>; // resolves only after physical exit
 }
 interface ResourceRunner {
   consent(scope: unknown): CoreResult<object>; // opaque identity, not JSON
@@ -101,9 +101,28 @@ Scope loss, explicit resume uncertainty and disposal cancel rather than resume.
 Every job guard checks elapsed heartbeat and wall time before work, heartbeat
 renewal or result publication; delayed timer dispatch cannot revive expired work.
 This is tab/document-local; no cross-tab or cross-origin exclusivity is claimed.
-If a trusted termination port throws or rejects, physical completion is unknown
-and the slot remains unavailable until document teardown. A pending collector
+The termination port must return a real Promise which resolves with `undefined`
+only after physical exit. A request to terminate is not that acknowledgement.
+Void, thenables, malformed completion, a throw or rejection leave physical
+completion unknown and the slot unavailable until document teardown. A pending collector
 which ignores cancellation similarly retains admission until it actually exits.
+
+Node's native `Worker.terminate()` returns an exit-code promise; a Node port can
+await it and then resolve with no value. Standard browser `Worker.terminate()`
+returns void and exposes no physical-exit promise. It cannot by itself fulfill
+this port. The research browser fixture uses a constructor-owned, **test-only
+CDP exit observer**: one unique public URL identifies each actual Worker, and
+the harness acknowledges only that exact native Worker close plus destruction
+of its owned CDP target. A page-supplied value or unobserved URL is not evidence.
+Fixture outcomes are published after that drain; reported heartbeat/wall/cancel
+elapsed time is captured at logical retirement before drain. The browser test
+keeps its unchanged 100 waits of 20 ms for closure after confirmed physical drain.
+
+Observed Chromium 154 and 156 busy Workers can continue consuming CPU for about two
+seconds after a termination request. The local CDP-backed port qualifies shared
+admission through that interval, not a standard-browser hard CPU/physical-close
+deadline. Production browser physical deadlines remain unqualified. The default
+provider registry stays empty; no browser provider is promoted by this fixture.
 
 The fixture has no provider/network driver. Its Worker runs under the exact
 existing policy: `script-src 'self'; connect-src 'none'; worker-src 'self'`.
@@ -155,7 +174,9 @@ P2P_CHROMIUM=/usr/bin/chromium node --import ./scripts/test-support/register-tsx
 The native browser harness compiles the actual App, custody Worker and separate
 public resource Worker under the existing content-policy builder. It creates an
 actual encrypted profile, exports and authenticates its revision-0 backup during
-finite CPU work, then locks the vault and observes native Worker closure. Other
+finite CPU work, then locks the vault and observes native Worker closure. A
+competing attempt is refused throughout the measured native shutdown interval;
+a fresh explicit attempt becomes admissible only after confirmed physical exit. Other
 bounded cases exercise malformed output/identity/message flood, crash,
 heartbeat/wall expiry, shared admission, callback reentry, ignored cooperative
 cancellation, resume cancellation and late replies. It checks all submitted

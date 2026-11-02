@@ -15,7 +15,8 @@ export interface ResourceOwner {
 export interface ResourceWorkerPort {
   postMessage(command:ProofWorkerCommand,transfer:readonly ArrayBuffer[]):void;
   subscribe(handlers:{message(input:unknown):void;error():void;messageError():void}):()=>void;
-  terminate():void|Promise<void>;
+  /** Resolves only after physical exit. A termination request or imported receipt is not completion. */
+  terminate():Promise<void>;
 }
 export interface ResourceTimers {
   set(callback:()=>void,delay:number):ReturnType<typeof setTimeout>;
@@ -55,6 +56,7 @@ const typed=Object.getPrototypeOf(Uint8Array.prototype) as object;
 const nativeLength=Object.getOwnPropertyDescriptor(typed,'byteLength')!.get!;
 const nativeAborted=Object.getOwnPropertyDescriptor(AbortSignal.prototype,'aborted')!.get!;
 const nativeAdd=EventTarget.prototype.addEventListener,nativeRemove=EventTarget.prototype.removeEventListener;
+const nativeThen=Promise.prototype.then;
 
 function wipe(bytes:Uint8Array|undefined):void{try{if(bytes)Reflect.apply(nativeFill,bytes,[0]);}catch{/* A transferred buffer is already detached. */}}
 /** Only bounded accepted collector/event buffers are owned by this runner. */
@@ -100,12 +102,18 @@ export function createPublicResourceRunner(options:ResourceOptions):CoreResult<R
       if(!job.worker||job.terminationStarted)return;
       job.terminationStarted=true;job.terminationDone=false;
       if(cooperative){try{job.worker.postMessage({v:1,kind:'cancel',jobId:job.consent.jobId,generation:job.consent.scope.generation},[]);}catch{/* Native termination still follows. */}}
-      let ending:void|Promise<void>;
+      let ending:unknown;
       try{ending=job.worker.terminate();}catch{
         // Unknown physical fate cannot release this tab's admission. Native terminate is parameterless.
         return;
       }
-      void Promise.resolve(ending).then(()=>{job.terminationDone=true;release(job);},()=>{/* Unknown termination stays unavailable until document teardown. */});
+      try{
+        // Require a real completion Promise, not void or a thenable claiming the request succeeded.
+        Reflect.apply(nativeThen,ending,[(completion:unknown)=>{
+          if(completion!==undefined)return;
+          job.terminationDone=true;release(job);
+        },()=>{/* Rejected termination stays unavailable until document teardown. */}]);
+      }catch{/* Unknown or malformed completion cannot release physical admission. */}
     };
     const clearTimers=(job:Job):void=>{
       const wall=job.wallTimer,heartbeat=job.heartbeatTimer;job.wallTimer=job.heartbeatTimer=undefined;

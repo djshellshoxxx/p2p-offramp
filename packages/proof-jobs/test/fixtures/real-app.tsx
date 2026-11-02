@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 /** Explicit local test composition; the default App has no proof/resource import. */
 import React from 'react';
 import {createRoot} from 'react-dom/client';
@@ -7,8 +8,13 @@ import {createProofJobs} from '../../index.ts';
 import {createPublicResourceRunner,type ResourceRunner,type ResourceWorkerPort} from '../../src/supervisor.ts';
 import type {ResourceBudget} from '../../src/budget.ts';
 import type {ProofWorkerCommand} from '../../src/protocol.ts';
+import resourceWorkerUrl from '../../worker/public-resource.worker.ts?worker&url';
 import '../../../../apps/web/src/ui/app.css';
 
+declare global {interface Window {__t87NativeResourceExit:(url:string)=>Promise<void>;}}
+// Constructor-owned test capability supplied by the native harness, never a provider or imported receipt.
+const nativeResourceExit=window.__t87NativeResourceExit;
+if(typeof nativeResourceExit!=='function')throw Error('TEST_NATIVE_EXIT_OBSERVER_REQUIRED');
 const opened=await startAppServices();if(!opened.ok)throw Error('Local native vault unavailable.');
 const services=opened.value,root=createRoot(document.getElementById('root')!);root.render(<App services={services}/>);
 declare const __RESOURCE_POLICY_HASH__:string;
@@ -47,7 +53,8 @@ async function begin(selected:number,kind:'normal'|'heartbeat'|'wall'='normal',r
   let runner:ResourceRunner;let reentry=reenter,shouldCancel=cancelOnProgress;
   const createWorker=():ResourceWorkerPort=>{
     if(reentry){reentry=false;void runner.run({},async()=>new Uint8Array()).then(result=>{metrics.reentrantCode=result.ok?'UNEXPECTED':result.error.code;});}
-    const worker=new Worker(new URL('../../worker/public-resource.worker.ts',import.meta.url),{type:'module'});metrics.created++;
+    const url=new URL(resourceWorkerUrl,location.href);url.searchParams.set('resource-instance',String(metrics.created+1));
+    const worker=new Worker(url,{type:'module'});metrics.created++;
     return Object.freeze({
       postMessage(command:ProofWorkerCommand,transfer:readonly ArrayBuffer[]){
         if(command.kind==='cancel')metrics.cancelCommands++;
@@ -63,7 +70,7 @@ async function begin(selected:number,kind:'normal'|'heartbeat'|'wall'='normal',r
         worker.addEventListener('message',message);worker.addEventListener('error',error);worker.addEventListener('messageerror',messageError);
         return()=>{metrics.detached++;worker.removeEventListener('message',message);worker.removeEventListener('error',error);worker.removeEventListener('messageerror',messageError);};
       },
-      terminate(){metrics.terminated++;worker.terminate();},
+      terminate(){metrics.terminated++;worker.terminate();return nativeResourceExit(url.href);},
     });
   };
   const created=createPublicResourceRunner({createWorker,owner,limits});if(!created.ok)throw Error(created.error.code);runner=created.value;runners.add(runner);
@@ -71,13 +78,15 @@ async function begin(selected:number,kind:'normal'|'heartbeat'|'wall'='normal',r
   if(!selectedConsent.ok){await runner.dispose();runners.delete(runner);status.textContent=selectedConsent.error.code;return;}
   if(!current)current=runner;status.textContent='Public resource work pending.';
   const result=await runner.run(selectedConsent.value,async()=>{metrics.collectors++;const bytes=new Uint8Array(length).fill(1);bytes[0]=selected;return bytes;});
+  const elapsedMs=performance.now()-started;
+  // Logical cancellation is measured above. This fixture reports completion only after native physical drain.
+  await runner.dispose();runners.delete(runner);if(current===runner)current=undefined;
   metrics.outcomes.push({sequence:mine,ok:result.ok,code:result.ok?null:result.error.code,kind:result.ok?result.value.kind:null,
-    byteLength:result.ok?result.value.bytes.length:0,firstBytes:result.ok?Array.from(result.value.bytes.slice(0,8)):[],elapsedMs:performance.now()-started,
+    byteLength:result.ok?result.value.bytes.length:0,firstBytes:result.ok?Array.from(result.value.bytes.slice(0,8)):[],elapsedMs,
     proofVerified:false,receiptAuthority:false,economicPreparationAllowed:false});
   if(metrics.outcomes.length>32)metrics.outcomes.shift();
   if(result.ok)result.value.bytes.fill(0);
   status.textContent=result.ok?'Unverified public resource output.':result.error.code;
-  await runner.dispose();runners.delete(runner);if(current===runner)current=undefined;
 }
 start.onclick=()=>{void begin(Number(mode.value));};cancel.onclick=()=>current?.cancel();
 const uncertainResume=()=>current?.resume();document.addEventListener('visibilitychange',uncertainResume);window.addEventListener('pageshow',uncertainResume);window.addEventListener('hashchange',uncertainResume);
