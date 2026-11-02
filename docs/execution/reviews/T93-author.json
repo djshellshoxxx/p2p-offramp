@@ -1,0 +1,181 @@
+{
+  "schema": "p2p-offramp/bounded-tool-corrections/v1",
+  "task": "T93",
+  "status": "READY_FOR_INDEPENDENT_ROOT_REVIEW",
+  "observedAtUtc": "2026-11-02T17:42:12.045871+00:00",
+  "head": "32c344992a12aa4751d89ea5cf360c3d69e27761",
+  "scope": {
+    "changedFiles": 4,
+    "exclusiveOwnedFiles": [
+      "scripts/check-import-boundaries.mjs",
+      "scripts/tests/import-boundaries.test.mjs",
+      "scripts/vectors/check_g16_evm_openssl.py",
+      "scripts/tests/test_g16_vectors.py"
+    ],
+    "noOtherSourceOrLedgerEdits": true,
+    "commits": false,
+    "newRunner": false,
+    "fullSuite": false,
+    "initializationFuzzNativeOrFundsActions": false
+  },
+  "baseline": {
+    "json": {
+      "path": "/workspace/work/audit-maintained-tools.json",
+      "bytes": 11527,
+      "sha256": "6b86891e2ca7cf5720ae077333cb2fa58944942856b82e43081c8faf00a756f4"
+    },
+    "markdown": {
+      "path": "/workspace/work/audit-maintained-tools.md",
+      "bytes": 4360,
+      "sha256": "5508aefa4b81f1185000d18b5d88e99c04f9eeb4c78471156a487abdf1e3b3ff"
+    },
+    "unchanged": true,
+    "notes": "T38-H baseline remains immutable, with open findings at its original exact hashes. This separate T93 receipt records the repair."
+  },
+  "fixes": [
+    {
+      "finding": "TOOLS-001",
+      "status": "IMPLEMENTED_AND_FOCUSED_GREEN_PENDING_INDEPENDENT_REVIEW",
+      "behavior": "Missing/non-directory/symlink expected roots and any directory enumeration error now produce SOURCE_ENUMERATION_FAILED. Source-relevant and package-root symlinks are rejected rather than silently omitted. Incomplete collection returns graphChecked=false and graphModules=0 before constructing any TypeScript API; partial sourceCount is never successful graph coverage. Existing roots must be explicit even for intentionally empty fixtures.",
+      "policyLimits": "Existing production roots, source-kind rules, private facades, forbidden imports and graph rules are retained. Symlinks are not followed. No dependency installation/scanning as product or new scanner suppression."
+    },
+    {
+      "finding": "TOOLS-002",
+      "status": "IMPLEMENTED_AND_FOCUSED_GREEN_PENDING_INDEPENDENT_REVIEW",
+      "behavior": "After real signature verification loop, checked==0 raises ValueError before success output. Committed fixture still verifies four actual signatures. Invalid signature scalar, changed digest and substituted declared public key all fail with no success output.",
+      "policyLimits": "Optional offline dependency remains optional; no crypto/provider/runtime activation or fixture regeneration."
+    }
+  ],
+  "red": {
+    "toolCodeUnchangedFromBaseline": true,
+    "fourFileManifest": {
+      "path": "/workspace/work/t93-tool-corrections/red-four-files.json",
+      "bytes": 901,
+      "sha256": "9eba9fd9b7e13df13930086f1ffd33d823cd62bc78e8fd769b8f16eca0998706"
+    },
+    "boundaries": {
+      "command": "node --test scripts/tests/import-boundaries.test.mjs",
+      "exitCode": 1,
+      "tests": 8,
+      "pass": 6,
+      "fail": 2,
+      "expectedFailures": [
+        "partial inventory was graphChecked=true after missing packages root",
+        "symlink packages root was graphChecked=true"
+      ],
+      "log": {
+        "path": "/workspace/work/t93-tool-corrections/boundaries.RED.log",
+        "bytes": 2324,
+        "sha256": "f0c26bf75419b74c457477615f5219982a0232fe86b64f2bb8928026332b38be"
+      }
+    },
+    "openssl": {
+      "command": "python3 -I scripts/tests/test_g16_vectors.py -v",
+      "exitCode": 1,
+      "tests": 4,
+      "emptyWorkSubtestFailures": 3,
+      "validCommittedAndActualNegativeControlsAlreadyPass": true,
+      "log": {
+        "path": "/workspace/work/t93-tool-corrections/openssl.RED.log",
+        "bytes": 2910,
+        "sha256": "6fa1a113f3bb6c50bd00c942d6993ce2a418bb27246f07f03f2e63a6bd88ea00"
+      }
+    }
+  },
+  "green": {
+    "boundaries": {
+      "command": "node --test scripts/tests/import-boundaries.test.mjs",
+      "exitCode": 0,
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "cases": "Retains five existing AST/facade/optional/missing-entry/dynamic tests; adds missing packages/App root and non-directory root, symlink top/package/App subtree and explicit empty root controls.",
+      "log": {
+        "path": "/workspace/work/t93-tool-corrections/boundaries.GREEN.log",
+        "bytes": 972,
+        "sha256": "02e401432d688bee5ce09cbd1e7869b7879dfbba0649e94f074ae87a84382d54"
+      }
+    },
+    "openssl": {
+      "command": "python3 -I scripts/tests/test_g16_vectors.py -v",
+      "exitCode": 0,
+      "tests": 4,
+      "pass": 4,
+      "skip": 0,
+      "cases": "All three empty-work inputs refuse; committed EVM fixture four actual signatures pass; three actual signature/digest/public-key controls refuse; existing independent private/Solana generator --check remains read-only and passes.",
+      "log": {
+        "path": "/workspace/work/t93-tool-corrections/openssl.GREEN.log",
+        "bytes": 661,
+        "sha256": "a86f594ece777fe1499f0c34ce74b96d82b2f230d0161e8159d1fd3eb04cf766"
+      }
+    },
+    "repositoryBoundary": {
+      "command": "node scripts/check-import-boundaries.mjs",
+      "exitCode": 0,
+      "productionSources": 231,
+      "coreEntryModules": 88,
+      "log": {
+        "path": "/workspace/work/t93-tool-corrections/boundaries-repository.GREEN.log",
+        "bytes": 159,
+        "sha256": "6f2d87329007d38824a9b91dff45e48eff08422787db0ee5a60f13f505792f6e"
+      }
+    },
+    "diffWhitespace": "git diff --check on exactly the four owned files exits0"
+  },
+  "runtime": {
+    "node": "v24.19.0",
+    "python": "3.12.14",
+    "cryptography": "50.0.0",
+    "openssl": "OpenSSL 4.0.1 9 Jun 2026",
+    "managedLocalIpc": "Node commands used additional network capability required by managed Node/TypeScript local process IPC; no external endpoint or target was contacted.",
+    "skill": "Used superpowers:test-driven-development, with root explicit no-full-suite scope overriding its broad-suite recommendation."
+  },
+  "finalFreeze": {
+    "path": "/workspace/work/t93-tool-corrections/final-four-files.json",
+    "bytes": 1600,
+    "sha256": "d470992d817c202bfc1f17371f9404cc3ff69126f2b72d8ff35b6652ede85ff4"
+  },
+  "patch": {
+    "path": "/workspace/work/t93-tool-corrections/four-file.patch",
+    "bytes": 10731,
+    "sha256": "66586498424afd0564a2735745b7a0e63ed128f8aa231e0e4334cd9bb61d49dc"
+  },
+  "files": [
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "bytes": 16414,
+      "sha256": "42edec431e7985f9fcc01a480811d8bec3b6e5d29e7c7627ee666aca8d164ecb",
+      "beforeSha256": "34b2013a7967c6cdb1abfc13d274ab3140f3a3b110ce148bcdab368e2050a724",
+      "snapshot": "/workspace/work/t93-tool-corrections/final/scripts/check-import-boundaries.mjs"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "bytes": 16265,
+      "sha256": "58ea9f3e1b19faa0c90f94ecbf396249baa40a4b49540da63e9ecf080ff07e7b",
+      "beforeSha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac",
+      "snapshot": "/workspace/work/t93-tool-corrections/final/scripts/tests/import-boundaries.test.mjs"
+    },
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "bytes": 1158,
+      "sha256": "402b9c53ff64f056f54d443e9c7880881afacd7cd9245172e00135c5e7197504",
+      "beforeSha256": "efd62a22e2fbd5c973fbc5248658216fcd4492106c6cfd63b3837c0acd154cb3",
+      "snapshot": "/workspace/work/t93-tool-corrections/final/scripts/vectors/check_g16_evm_openssl.py"
+    },
+    {
+      "path": "scripts/tests/test_g16_vectors.py",
+      "bytes": 2993,
+      "sha256": "7deff11eb90f93c8a475411a062e9977fc45c5b1bec07ee77bb95b0315e0bafb",
+      "beforeSha256": "e97c5c07a46fe4b0acfffdbdf3ed9c7f75a4f8a301dcf061b10400d47351cafa",
+      "snapshot": "/workspace/work/t93-tool-corrections/final/scripts/tests/test_g16_vectors.py"
+    }
+  ],
+  "limits": [
+    "No full suite, initialization, fuzz campaign, native probe or funding action was run; root will independently review and validate the exact frozen four-file change.",
+    "Permission-specific EACCES was not induced; real missing/non-directory expected roots and source-directory symlink omissions were tested. The common readdir catch rejects any directory-read failure, including descendant errors.",
+    "No adversarial concurrent-filesystem race proof, complete bundler/runtime isolation or professional dependency/provider certification is claimed.",
+    "The optional OpenSSL tests explicitly skip only if cryptography is absent; it was installed here and all four tests ran without skips. No package installed."
+  ],
+  "rootHandoff": "Review the four-file patch/freeze, run authorized focused independent checks, disposition baseline findings, then root alone commits."
+}

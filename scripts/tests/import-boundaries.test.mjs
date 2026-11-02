@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
@@ -140,6 +140,7 @@ test('G07 permits only the narrow native acceptance side entry and still exclude
 test('G07 reports missing application graph entry instead of claiming it was checked', async () => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-import-no-entry-'));
   try {
+    await mkdir(join(root, 'packages'));
     await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true } }));
     await put(root, 'apps/web/src/component.ts', 'export const component = 1;\n');
     const result = await inspectImportBoundaries(root);
@@ -148,6 +149,53 @@ test('G07 reports missing application graph entry instead of claiming it was che
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test('G07 refuses missing or unreadable expected roots instead of passing a partial inventory', async () => {
+  for (const missing of ['packages', 'apps/web/src', 'packages-is-file']) {
+    const root = await mkdtemp(join(tmpdir(), 'p2p-import-incomplete-'));
+    try {
+      await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+      await mkdir(join(root, 'packages'));
+      await put(root, 'packages/domain/index.ts', 'export const domain = true;\n');
+      await put(root, 'apps/web/src/main.ts', 'export const app = true;\n');
+      const unavailable = missing === 'packages-is-file' ? 'packages' : missing;
+      await rm(join(root, unavailable), { recursive: true });
+      if (missing === 'packages-is-file') await writeFile(join(root, 'packages'), 'not a directory');
+      const result = await inspectImportBoundaries(root);
+      assert.equal(result.graphChecked, false, missing + ' cannot qualify a partial graph');
+      assert.ok(result.findings.some(finding => finding.code === 'SOURCE_ENUMERATION_FAILED' && finding.file === join(root, unavailable)), missing + ' must report its unavailable source root');
+    } finally { await rm(root, { recursive: true, force: true }); }
+  }
+});
+
+test('G07 refuses source-directory symlinks instead of silently omitting their subtree', async () => {
+  for (const link of ['packages', 'packages/linked', 'apps/web/src/linked']) {
+    const root = await mkdtemp(join(tmpdir(), 'p2p-import-linked-'));
+    try {
+      await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+      await mkdir(join(root, 'packages'));
+      await put(root, 'apps/web/src/main.ts', 'export const app = true;\n');
+      await put(root, 'link-target/src/local.ts', 'export const local = true;\n');
+      if (link === 'packages') await rm(join(root, 'packages'), { recursive: true });
+      await symlink(join(root, 'link-target'), join(root, link), 'dir');
+      const result = await inspectImportBoundaries(root);
+      assert.equal(result.graphChecked, false, link + ' cannot silently reduce coverage');
+      assert.ok(result.findings.some(finding => finding.code === 'SOURCE_ENUMERATION_FAILED' && finding.file === join(root, link)), link + ' must report the omitted source subtree');
+    } finally { await rm(root, { recursive: true, force: true }); }
+  }
+});
+
+test('G07 accepts an explicitly empty packages root with a complete application inventory', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'p2p-import-empty-packages-'));
+  try {
+    await mkdir(join(root, 'packages'));
+    await put(root, 'tsconfig.json', JSON.stringify({ compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true }, include: ['packages/**/*', 'apps/web/src/**/*'] }));
+    await put(root, 'apps/web/src/main.ts', 'export const app = true;\n');
+    const result = await inspectImportBoundaries(root);
+    assert.equal(result.graphChecked, true);
+    assert.deepEqual(result.findings, []);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
 
 test('G07 follows literal dynamic imports into the entry graph and still rejects non-literal ones', async () => {
