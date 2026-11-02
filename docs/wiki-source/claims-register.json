@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceCommit": "17172be3e00efab36b6761359fe1ca1fee6d67ab",
+  "sourceCommit": "7d019dda311a0c17a66c13f5b16294e7be31e517",
   "reviewers": [],
   "approvedRelease": null,
   "claims": [
@@ -123,16 +123,16 @@
     },
     {
       "path": "packages/transport/src/policy.ts",
-      "sha256": "a79fe62abfc24dcae65685951fcf9996257d80b6c22027945a9c7f4219b416fa"
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6"
     },
     {
       "path": "packages/transport/test/policy.test.mjs",
-      "sha256": "29e64bcccc2ab2cce860b212c7efce1f18a6066e141d74773dea425a07486922"
+      "sha256": "f915d27e10a90bf01f2805607350bd66bcdaf471f87656b1a323d8053538c5a7"
     }
   ],
   "copySource": {
     "path": "apps/web/src/ui/locale/en.ts",
-    "sha256": "6f22abbb940b8031204147213c9e06912af1a5bfc2e1bdb3b054b0395a597462"
+    "sha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa"
   },
   "copyKeys": [
     {

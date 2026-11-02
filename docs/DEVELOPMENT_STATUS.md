@@ -1,5 +1,30 @@
 # Development status and continuation contract
 
+Current execution uses merged PR24 (`e9b9db3`) as its baseline. The
+[all-remaining-work prompt](execution/ALL-REMAINING-WORK-PROMPT.md),
+[requirement coverage](execution/coverage/COVERAGE.md) and
+[task ledger](../tasks/todo.md) supersede the historical milestone descriptions
+below. Completed T1–T32 work must not be reopened from old unchecked roadmap
+labels. New implementation and independent reviews are recorded as T33 onward.
+
+The local implementation now includes native EVM escrow/journal/exchange/chat
+journeys, the encrypted vault and fresh-key recovery, revision-bound backup file
+authentication, canonical unsigned recovery tooling, typed English/help/privacy
+views, a scriptless source-reference portal and a pinned fake-funds EVM lab.
+These capabilities do not imply an approved deployment, physical-device
+qualification, Solana parity or an enabled production trade journey. Trading
+remains disabled and the maintained release-key pin remains unset.
+
+Every technical specification and later milestone is represented in the coverage
+ledger. Engineering work, missing interoperability contracts and independent
+release/operational evidence have separate statuses. Current peer terms-accept
+messages carry a revision only; they are not the two wallet signatures required
+for funding. Precise proposed decisions are in [the protocol decision
+packet](governance/PENDING-DECISIONS.md); proposed records confer no authority.
+
+The remaining sections are historical evidence and branch descriptions from
+earlier passes; their dates and counts are not current-head test results.
+
 Current source-derived continuation: [incomplete-work inventory](execution/INCOMPLETE-WORK-2026-10-31.md),
 [execution prompt](execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and
 [task ledger](../tasks/todo.md). The historical milestone descriptions below do

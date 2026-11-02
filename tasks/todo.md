@@ -94,3 +94,60 @@ T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfour
 T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
 
 T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.
+
+## Invoked all-remaining-work execution
+
+Baseline: merged PR24 `e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa`.
+T1–T32 source work is reused; historical INTEGRATING labels above are not new
+implementation tasks. The uploaded execution request authorizes ordinary local
+implementation, testing, documentation, source publication and guarded merge.
+Trading remains disabled. Root owns shared build/CI/task ledgers unless a transfer
+is explicitly recorded. Each implementation needs a different reviewer.
+
+| Task | Status | Owner / exclusive scope / acceptance |
+| --- | --- | --- |
+| T33 | DONE | audit_domain_transport: policy.ts + policy.test.mjs only; retain earliest inspection deadline without revoking live permits; RED reproduced, independent audit_storage29/29 GREEN + timer/permit/lifecycle review |
+| T34 | DONE | chain_reader: current-profile/revision backup verification through storage, typed Worker/runtime/services and Recovery UI; independent runtime reviewer16 focused cases + actual final Chromium journey and20 source hashes approved; source4f4ec2d |
+| T35 | DONE | audit_runtime_build: scriptless local-source portal; independent root2 unit +5 actual CSP/readability/download/print browser groups; sourcefea265c, no deployment/signing approval |
+| T36 | DONE | audit_storage: canonical claims/wiki consistency; independent root14 tests + actual checker, real catalog binding and corrected file-auth wording; source737f90b; refresh after T55 immutable policy commit, semantic approval/publication pending |
+| T37 | DONE | branch_inventory: independently corrected/reviewed173 specs,8281 source clauses,103 canonical records; mapping approval is not implementation or qualification of remaining rows |
+| T38 | IN_PROGRESS | root: integrate frozen slices, reassess remaining unblocked requirements, independent full-source audit, final checks and guarded source delivery |
+| T39 | DONE | root: pinned EVM-only fake-funds lab; independent storage reviewer repaired/rechecked3 reproduced defects,6 focused tests, actual Docker build/tool versions and5 local foundation command groups; sourceeaaa38a; fresh Codespace qualification pending |
+| T40 | DONE | completion_requirements + branch_inventory startup integration; different reviewers13model+14adversarial, root13startup/catalog+18emitted-browser groups; source17172be, no physical-device qualification |
+| T41 | DONE | later_phase_requirements: optional meetup primitives/budget; independent26 cases +actual reentry/raw-cleanup probes and4096vector oracle; sourceab16b3e; no active sensor/provider/default UI |
+| T42 | DONE | audit_domain_transport: inert governance validators +6 proposed packets; independent6 focused/3filesystem race/28CLI checks; sourceabed65e; no new protocol approval |
+| T43 | DONE | chain_reader: new apps/web/src/journey plus explicit local-proof fixture Worker/browser only; independent8 focused+actual Chromium/native4-send journey, root final T53 integration rerun; sourced4da628; production peer-signature carrier remains undefined |
+| T44 | DONE | audit_storage:30-day planning +reviewed CAS and real terminal-journal-only native adapter; independent root17/7native, revoked-proof zero-write regression; sourced0c1549; broader DATA01 UI/chat/review adapters remain open |
+| T45 | DONE | audit_evm: bounded EIP1271 observation, independent9/5native/abort/boundary checks after3reproduced fixes; source29bbccd; no funding certificate or live qualification |
+| T46 | DONE | later_phase_requirements: local arbitration reference models; independent audit_evm21 cases/3ABI vectors/14hashes, source637327f; native custody/evidence profiles absent |
+| T47 | DONE | audit_domain_transport: hostile storage/identity errors and signal cleanup, additional throwing-lease cleanup repaired; independent runtime38 meaningful cases, source37fb345 |
+| T48 | DONE | branch_inventory: packages/courier only; independent audit_evm38/38 after five reproduced repairs,19 frozen hashes; sourcebd4ec13; exact local models and encrypted secret lifecycle, no chosen wire/signature/native custody authority |
+| T49 | DONE | chain_reader: independent completion_requirements actual two-origin signed-asset/fresh-key/T34 migration,3 source+12 dependency hashes; source00c33df; no maintained key selection/rotation/archive profiles |
+| T50 | DONE | audit_storage: docs/execution/profiles only; root independently reviewed8 packets/14files, fetched8/33 primary snapshots and checked native Keccak preimages; sourcec06889e; no provider/crypto approval |
+| T51 | DONE | independent38 cases/native3 plus idle-lock/dedup16/lifetime cleanup probes after key-wipe repair; source4d64ec3; offline math only, no native/spending qualification |
+| T52 | DONE | continue_chat: trusted bundled locale runtime +live app copy/direction/fallback; independent25 focused/7native groups; source36cb4d6; English default, no approved translation/device acceptance |
+| T53 | DONE | audit_domain_transport: known-purpose content/import admission; root independent35 focused+actual forms/Worker after2 reproduced cancellation repairs; source36cb4d6; no recovery cooldown/plaintext mode; false App-binding finding withdrawn |
+
+
+| T54 | DONE | audit_evm: inert assurance/role/jurisdiction/attack/incident validators and bounded actual-source evidence; independent13 cases+21hostile after tuple/text/bounds repairs, source540d18e; no operational facts/legal approval invented |
+| T55 | DONE | audit_domain_transport: native read-only observations and G14/G05 transitions; independent71 cases+4 repaired probe classes, sourcebd706fe; broker7f5c8c5, default optional boundaries retained |
+| T56 | DONE | branch_inventory: remaining specified meetup RTC/directory/geofence/map local models and actual encrypted G02 replay/history; frozen55 cases; initial audit_evm findings plus root repaired-source review,58 cases/92 oracle vectors; sourcea6730a4; native/provider/undefined wire gates retained |
+| T57 | IN_REVIEW | continue_chat: frozen5-path unsigned staging, actual5 cases/3 Chromium groups/39assets; independent branch_inventory review; no signing/publication/deployment |
+
+
+| T58 | IN_PROGRESS | completion_requirements: read-only bounded native proof Worker/WASM intake; root must approve exact substantive interface before implementation; no invented provider proof or CSP weakening |
+| T59 | IN_REVIEW | remaining_privacy: approved new privacy-controls only, actual independent G02 decoy/duress transition and encrypted sweep reminders; no hidden credential bootstrap or transfer authority; distinct reviewer pending |
+| T60 | DONE | remaining_liquidity: independent18 cases/4000 extra conservation steps+160 fixture steps, source59a6fa0; bounded local model only, native profiles remain undefined |
+| T61 | IN_PROGRESS | chain_reader: approved five-path actual canonical refinement/native trace/solc-SMT query pipeline; pinned local Z3 tool, UNKNOWN preserved; no contract/ABI edits or fuzz-as-proof claim |
+
+| T62 | IN_PROGRESS | continue_chat: approved three-file architecture/G24 coverage reconciliation; exact23requirements/10decision topics, source-bound local evidence and explicit unresolved gates, no new evaluator |
+
+T34 transfers ownership of backup-verification-related schema/facade/runtime/UI
+edits to chain_reader. Verification authenticates exact exported bytes against the
+same live profile envelope and revision, checks committed storage before/after
+KDF, compares complete snapshots, and returns scalar digests/scope only. Worker
+owns the fact tied to the exact handle/generation. Mutation attempts, lock,
+switch, timeout and disposal clear it. Async freshness recheck is required before
+using it; cached UI metadata is explicitly revision-bound, never funds readiness.
+Export/unlock/restore/imported JSON cannot create the fact. Existing native crypto,
+serialized leases and bounded recovery slot are reused.
