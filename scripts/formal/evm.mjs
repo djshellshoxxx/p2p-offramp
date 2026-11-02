@@ -25,7 +25,7 @@ export function resolveTools(env=process.env){
  return{solc,forge:foundryRoot?resolve(foundryRoot,'forge'):'forge',z3Root,z3:resolve(z3Root,'bin/z3'),artifact:resolve(env.FORMAL_Z3_ARTIFACT),env:forgeEnv({...env,...(foundryRoot?{PATH:foundryRoot+':'+(env.PATH??'')} :{}),FOUNDRY_SOLC:solc})};
 }
 const utf8=new TextEncoder(),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),hex=bytes=>Buffer.from(bytes).toString('hex');
-export const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?'['+value.map(canonical).join(',')+']':'{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';
+export const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?'['+value.map(canonical).join(',')+']':'{'+Object.keys(value).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';
 const stop=code=>{throw Error(code);};
 export function queryIdentity(query){if(typeof query!=='string'||Buffer.byteLength(query)>LIMITS.queryBytes)stop('QUERY_LIMIT');return '0x'+hex(keccak_256(utf8.encode(query)));}
 export function solverAnswer(stdout){if(typeof stdout!=='string'||Buffer.byteLength(stdout)>LIMITS.solverOutputBytes)stop('SOLVER_OUTPUT_LIMIT');const text=stdout.trim();return text==='sat'||text==='unsat'?text:'unknown';}

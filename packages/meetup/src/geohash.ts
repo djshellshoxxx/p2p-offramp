@@ -82,7 +82,7 @@ export function regionFor(input: unknown, nowMs: number, source: 'blurred' | 'ma
       if (Math.abs(centerLat) >= 90) return stop('UNSUPPORTED_RESOLUTION');
       cells.add(encode(centerLat, wrap((center.east + center.west) / 2 + column * lonSpan), chosen));
     }
-    const sorted = Object.freeze([...cells].sort()), extent = dimensions(sorted);
+    const sorted = Object.freeze([...cells].sort((left, right) => left < right ? -1 : left > right ? 1 : 0)), extent = dimensions(sorted);
     if (sorted.length > 9 || extent.diagonalM > 50_000) return stop('UNSUPPORTED_RESOLUTION');
     return Object.freeze({ v: 1, precision: chosen, cells: sorted, source, epoch: marker.epoch, expiresAtMs: marker.expiresAtMs, ...extent });
   });
@@ -94,7 +94,7 @@ export function validateDiscoveryRegion(input: unknown, nowMs: number): MeetupRe
     const precision = precisionOf(raw.precision), cells = list(raw.cells, 9).map(cell => {
       if (typeof cell !== 'string' || cell.length !== precision) return stop(); bounds(cell); return cell;
     });
-    if (!cells.length || new Set(cells).size !== cells.length || [...cells].sort().some((cell, i) => cell !== cells[i])) return stop();
+    if (!cells.length || new Set(cells).size !== cells.length || [...cells].sort((left, right) => left < right ? -1 : left > right ? 1 : 0).some((cell, i) => cell !== cells[i])) return stop();
     if (raw.source !== 'blurred' && raw.source !== 'manual') return stop();
     const now = integer(nowMs), expiry = integer(raw.expiresAtMs); if (expiry <= now) return stop('EXPIRED');
     if (expiry - now > 900_000) return stop();

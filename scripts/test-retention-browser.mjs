@@ -218,11 +218,11 @@ try {
   for (const path of beforeSources.keys()) if (path.startsWith('contracts/evm/') && (path.endsWith('.sol') || path.endsWith('foundry.toml'))) sourcePaths.add(path);
   for (const path of ['package.json', 'package-lock.json', 'scripts/test-retention-browser.mjs', 'scripts/sepolia/lib.mjs', 'scripts/test-support/register-tsx.mjs']) sourcePaths.add(path);
   const sourceInputs = [];
-  for (const path of [...sourcePaths].sort()) {
+  for (const path of [...sourcePaths].sort((left, right) => left < right ? -1 : left > right ? 1 : 0)) {
     const actual = sha(await readFile(resolve(root, path)));
     assert.equal(beforeSources.get(path), actual, `source changed during native/browser run: ${path}`); sourceInputs.push({ path, sha256: actual });
   }
-  const emittedAssets = await Promise.all(assetPaths.sort().map(async path => ({ path, sha256: sha(await readFile(resolve(output, path))) })));
+  const emittedAssets = await Promise.all(assetPaths.sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(async path => ({ path, sha256: sha(await readFile(resolve(output, path))) })));
   report = { fixture: 'actual-native-mixed-retention-worker-ui', browser: browser.version(), toolchain,
     runtimeVersions: { node: process.version, playwright: JSON.parse(await readFile(resolve(root, 'node_modules/playwright-core/package.json'))).version,
       vite: JSON.parse(await readFile(resolve(root, 'node_modules/vite/package.json'))).version },
@@ -231,7 +231,7 @@ try {
     reviewRPCs: reads.filter(read => read.phase === 'review').length, deleteRPCs: reads.filter(read => read.phase === 'delete').length,
     oneConsentedCAS: true, retainedIdentity: true, sourceOldBackupSha256: oldDigest, sourcePreservedAcrossRestore: true,
     actualG01Authentication: true, actualIndexedDB: true, actualDeferredCredit: true, externalRequests: unexpected,
-    moduleSources: [...modules].filter(p => p.startsWith(root)).map(p => p.slice(root.length)).sort(), sourceInputs, emittedAssets, sourceStableBeforeAndAfter: true, releaseEnabled: false,
+    moduleSources: [...modules].filter(p => p.startsWith(root)).map(p => p.slice(root.length)).sort((left, right) => left < right ? -1 : left > right ? 1 : 0), sourceInputs, emittedAssets, sourceStableBeforeAndAfter: true, releaseEnabled: false,
     limits: ['Local Chromium/Anvil native asset fixture only; no ERC20/Solana/device/production acceptance.', 'Clock/identity/deletion mechanics have separate unit coverage; no memory-erasure or off-device retention claim.'] };
 } catch (error) { console.error(JSON.stringify({ phase, completedCases: cases, observedErrors: errors })); throw error; }
 finally { await cleanup(); await rm(output, { recursive: true, force: true }); process.removeListener('SIGTERM', terminate); process.removeListener('SIGINT', terminate); }

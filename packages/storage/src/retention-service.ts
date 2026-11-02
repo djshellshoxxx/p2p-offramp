@@ -196,7 +196,7 @@ export class RetentionService {
       let selected:readonly string[];
       try {
         this.#guard(job);
-        selected=proof?Object.freeze([...proof.safeRecordIds].sort()):Object.freeze([] as string[]);
+        selected=proof?Object.freeze([...proof.safeRecordIds].sort((left, right) => left < right ? -1 : left > right ? 1 : 0)):Object.freeze([] as string[]);
         if(proof&&proof.current()!==true)return fail('NATIVE_PROOF_REQUIRED');
         const archiveReviewCount=scope.candidates.filter(c=>c.reviewTimestamp!==null&&c.reviewTimestamp<=nowMs&&nowMs-c.reviewTimestamp>=RETENTION_REVIEW_AGE_MS).length;
         plan=Object.freeze({version:1,revision:job.revision,archiveReviewCount,reviewedDeleteCount:selected.length,
@@ -221,7 +221,7 @@ export class RetentionService {
       const scope=await this.#scan(job);const proof=await this.#review(scope,job);
       try {
         if(!proof)return fail('NATIVE_PROOF_REQUIRED');
-        const selected=[...proof.safeRecordIds].sort();
+        const selected=[...proof.safeRecordIds].sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
         if(selected.length!==stored.selected.length||selected.some((id,index)=>id!==stored.selected[index]))return fail('CONFLICT');
         const guard=()=>{this.#guard(job);if(proof.current()!==true)return fail('NATIVE_PROOF_REQUIRED');this.#guard(job);};
         guard();

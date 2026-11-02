@@ -54,7 +54,7 @@ export function cleanLabEnvironment(env) {
 
 export async function digestFiles(root, paths) {
   const rows = [];
-  for (const path of [...paths].sort()) {
+  for (const path of [...paths].sort((left, right) => left < right ? -1 : left > right ? 1 : 0)) {
     if (!/^[A-Za-z0-9_./-]+$/.test(path) || path.split('/').some(part => part === '..' || part === '') || path.startsWith('/')) throw new LabError('LAB_PATH_INVALID');
     // Reject symlinks at every component, not just at the final file.
     let current = root;
@@ -95,5 +95,5 @@ async function collectFiles(root, path, state = { count: 0 }, depth = 0) {
     else if (entry.isFile() && ++state.count <= 256) output.push(child);
     else throw new LabError('LAB_PATH_INVALID');
   }
-  return output.sort();
+  return output.sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
 }

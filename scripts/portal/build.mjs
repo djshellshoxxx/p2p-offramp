@@ -54,8 +54,8 @@ async function readRegularFile(path) {
 
 /** Portal-specific HTML contract; app scanBuild intentionally requires workers and must not be used here. */
 export function validatePortalFiles(files) {
-  const expected = ['index.html','portal.css','_headers','content-policy.json',...PORTAL_DOWNLOADS.map(item => item.path)].sort();
-  if (JSON.stringify(Object.keys(files).sort()) !== JSON.stringify(expected)) fail('PORTAL_ASSET_SET');
+  const expected = ['index.html','portal.css','_headers','content-policy.json',...PORTAL_DOWNLOADS.map(item => item.path)].sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
+  if (JSON.stringify(Object.keys(files).sort((left, right) => left < right ? -1 : left > right ? 1 : 0)) !== JSON.stringify(expected)) fail('PORTAL_ASSET_SET');
   for (const [path,bytes] of Object.entries(files)) {
     safeArtifactPath(path);
     if (!(bytes instanceof Uint8Array) || bytes.byteLength > MAX_BYTES) fail('PORTAL_ASSET_LIMIT');
@@ -114,7 +114,7 @@ export async function verifyPortalDirectory(directory, report) {
   if (!reportBytes || !reportBytes.equals(Buffer.from(JSON.stringify(report,null,2)+'\n'))) fail('PORTAL_REPORT_MISMATCH');
   validatePortalFiles(files);
   if (!Array.isArray(report.assets) || report.assets.length !== Object.keys(files).length) fail('PORTAL_ASSET_SET');
-  if (JSON.stringify(report.assets.map(asset=>asset.path).sort()) !== JSON.stringify(Object.keys(files).sort())) fail('PORTAL_ASSET_SET');
+  if (JSON.stringify(report.assets.map(asset=>asset.path).sort((left, right) => left < right ? -1 : left > right ? 1 : 0)) !== JSON.stringify(Object.keys(files).sort((left, right) => left < right ? -1 : left > right ? 1 : 0))) fail('PORTAL_ASSET_SET');
   for (const asset of report.assets) {
     safeArtifactPath(asset.path);
     if (!files[asset.path] || asset.bytes !== files[asset.path].length || asset.sha256 !== sha256(files[asset.path])) fail('PORTAL_ASSET_MISMATCH');

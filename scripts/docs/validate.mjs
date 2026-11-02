@@ -13,7 +13,7 @@ const ROOT=fileURLToPath(new URL('../../',import.meta.url)), sha=b=>createHash('
 const refuse=()=>{throw Error('DOCS_STALE');
 };
 function exact(v,keys ) {
-  if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).sort().join()!==[...keys].sort().join())refuse();
+  if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join()!==[...keys].sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join())refuse();
   return v;
 }
 async function file(root,path,max=1048576 ) {
