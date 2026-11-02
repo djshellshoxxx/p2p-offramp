@@ -410,6 +410,90 @@ try {
       await page.getByText('Vault unlocked', { exact: true }).waitFor();
       const createdId = /Profile ([0-9a-f]{32}) was created/.exec(await page.getByRole('status').filter({ hasText: 'was created and unlocked' }).innerText())?.[1];
       assert.ok(createdId && ![restoredId, fixture.envelope.profileId].includes(createdId));
+      // T34: authenticate actual selected file bytes against the open profile; no export/unlock/restore flag.
+      await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      const verificationForm = page.getByRole('form', { name: 'Authenticate a backup file against this profile', exact: true });
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      const exportCreated = async () => {
+        await page.getByLabel('Profile ID', { exact: true }).fill(createdId);
+        await page.getByLabel(/encrypted export is unchecked/).check();
+        const ready = page.waitForEvent('download');
+        await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
+        return await (await ready).path();
+      };
+      const createdBackupPath = await exportCreated();
+      const verifySelected = async (path, passphrase) => {
+        await verificationForm.getByLabel('Backup file to authenticate', { exact: true }).setInputFiles(path);
+        await verificationForm.getByLabel('Passphrase for this backup file', { exact: true }).fill(passphrase);
+        await verificationForm.getByRole('button', { name: 'Verify this backup file', exact: true }).click();
+      };
+      await verifySelected(await download.path(), fixture.passphrase);
+      await verificationForm.getByRole('alert').filter({ hasText: 'does not match the open profile' }).waitFor();
+      await verifySelected(createdBackupPath, 'wrong but valid backup passphrase');
+      await verificationForm.getByRole('alert').filter({ hasText: 'could not be authenticated' }).waitFor();
+      assert.equal(await verificationForm.getByLabel('Passphrase for this backup file', { exact: true }).inputValue(), '');
+      await verifySelected(createdBackupPath, createPass);
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 0` }).waitFor();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 0` }).waitFor();
+      // A second real Worker on a second page changes that same committed encrypted profile.
+      const writerPage = await context.newPage();
+      await writerPage.goto(href + '#/home');
+      const mutation = await writerPage.evaluate(async ({ profileId, passphrase }) => {
+        const url = window.__observed.workers[0].url, worker = new Worker(url, { type: 'module' });
+        let sequence = 0;
+        const call = (operation, fields = {}) => new Promise((resolve, reject) => {
+          const requestId = ++sequence;
+          const listener = event => {
+            if (event.data.requestId !== requestId) return;
+            worker.removeEventListener('message', listener);
+            if (!event.data.result?.ok) reject(new Error('FIXTURE_BACKUP_MUTATION_FAILED')); else resolve(event.data.result.value);
+          };
+          worker.addEventListener('message', listener);
+          worker.postMessage({ version: 1, requestId, generation: 0, operation, ...fields });
+        });
+        try {
+          await call('init', { config: { version: 1, ReleaseEnabled: 0, connectOrigins: [] } });
+          await call('unlock', { profileId, passphrase });
+          await call('saveTermsReview', { profileId, source: 'file', bytes: new Uint8Array([1]) });
+          return true;
+        } finally { worker.terminate(); }
+      }, { profileId: createdId, passphrase: createPass });
+      assert.equal(mutation, true); await writerPage.close();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      assert.equal(await verificationForm.getByText(/Backup file authenticated against profile/).count(), 0, 'cross-tab freshness failure clears display receipt');
+      const openCreated = async () => {
+        await page.getByRole('link', { name: 'Home', exact: true }).click();
+        await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+        await page.getByLabel('Profile ID', { exact: true }).fill(createdId);
+        await page.getByLabel('Passphrase', { exact: true }).fill(createPass);
+        await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+        await page.getByText('Vault unlocked', { exact: true }).waitFor();
+        await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      };
+      await openCreated();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      await verifySelected(createdBackupPath, createPass);
+      await verificationForm.getByRole('alert').filter({ hasText: 'does not match the open profile' }).waitFor();
+      const latestBackupPath = await exportCreated();
+      await verifySelected(latestBackupPath, createPass);
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 1` }).waitFor();
+      await page.evaluate(() => { window.__observed.holdReplies = ['verifyBackup']; });
+      await verifySelected(latestBackupPath, createPass);
+      await page.waitForFunction(() => window.__observed.heldReplies.verifyBackup?.length === 1);
+      await verificationForm.getByRole('button', { name: 'Cancel verification', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.evaluate(() => window.__observed.releaseReply('verifyBackup'));
+      assert.equal(await verificationForm.getByText(/Backup file authenticated against profile/).count(), 0, 'late native success cannot restore cancelled verification');
+      await openCreated();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      await page.getByRole('link', { name: 'Home', exact: true }).click();
+      await assertSeedPreserved(page);
+      reports.push({ backupVerification: true, currentProfileRevision: true, wrongFileAndPassphrase: true, crossTabStaleCheck: true, lateCancelledVerification: true, noBackupReadinessFromExportUnlockRestore: true });
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
       // Inventory lists all four opaque IDs; choosing one fills the editable field.

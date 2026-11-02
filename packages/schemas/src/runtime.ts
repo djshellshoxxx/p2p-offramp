@@ -3,6 +3,7 @@
  * purpose-bound saved terms reviews and scalar offline recovery inspection; no generic record read or write exists.
  */
 import { decodeBase64url, encodePassphrase, MAX_RECORDS, MAX_VAULT_PROFILES, ValidationError } from './vault.ts';
+import { parseBackupVerificationReceipt, type BackupVerificationReceipt, type RuntimeBackupVerification } from './backup-verification.ts';
 import { MAX_BACKUP_BYTES, parseBackupBytes } from './backup.ts';
 import { isSavedReviewSource, MAX_SAVED_REVIEW_BYTES, MAX_SAVED_REVIEWS, type SavedReviewSource } from './saved-review.ts';
 import { parseRecoveryReferences, parseRecoveryOffset, parseRecoveryRevision, type RuntimeRecoveryReferences } from './recovery-reference.ts';
@@ -38,17 +39,19 @@ export interface RuntimeSavedReviewRef { readonly recordId: string; }
 export interface RuntimeSavedReview { readonly recordId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array; }
 /** `skipped` counts `trade` records that are not readable saved reviews; they are never returned or changed. */
 export interface RuntimeSavedReviews { readonly items: readonly RuntimeSavedReview[]; readonly skipped: number; }
-export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences;
+export type RuntimeValue = RuntimeStatus | RuntimeExport | RuntimeInventory | RuntimeRestore | RuntimeSavedReviewRef | RuntimeSavedReviews | RuntimeRecoveryReferences | BackupVerificationReceipt | RuntimeBackupVerification;
 export type RuntimeOperation = 'init' | 'status' | 'unlock' | 'create' | 'restore' | 'listProfiles' | 'lock' | 'exportEncrypted' | 'dispose' | 'activity' |
-  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences';
+  'saveTermsReview' | 'listTermsReviews' | 'deleteTermsReview' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification';
 const OPERATIONS: readonly RuntimeOperation[] = ['init', 'status', 'unlock', 'create', 'restore', 'listProfiles', 'lock', 'exportEncrypted', 'dispose', 'activity',
-  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences'];
+  'saveTermsReview', 'listTermsReviews', 'deleteTermsReview', 'listRecoveryReferences', 'verifyBackup', 'checkBackupVerification'];
 interface Header { readonly version: 1; readonly requestId: number; readonly generation: number; }
 export type RuntimeCommand = Header & (
   { readonly operation: 'init'; readonly config: RuntimeConfig } |
   { readonly operation: 'unlock'; readonly profileId: string; readonly passphrase: string } |
   { readonly operation: 'create'; readonly passphrase: string } |
   { readonly operation: 'restore'; readonly bytes: Uint8Array; readonly sourcePassphrase: string; readonly destinationPassphrase: string } |
+  { readonly operation: 'verifyBackup'; readonly profileId: string; readonly bytes: Uint8Array; readonly passphrase: string } |
+  { readonly operation: 'checkBackupVerification'; readonly profileId: string } |
   { readonly operation: 'exportEncrypted'; readonly profileId: string } |
   { readonly operation: 'saveTermsReview'; readonly profileId: string; readonly source: SavedReviewSource; readonly bytes: Uint8Array } |
   { readonly operation: 'listTermsReviews'; readonly profileId: string } |
@@ -57,6 +60,8 @@ export type RuntimeCommand = Header & (
   { readonly operation: 'status' | 'listProfiles' | 'lock' | 'dispose' | 'activity' });
 export type RuntimeResponse = Header & { readonly kind: 'response'; readonly operation: RuntimeOperation } & (
   { readonly result: { readonly ok: false; readonly error: RuntimeError } } |
+  { readonly operation: 'verifyBackup'; readonly result: { readonly ok: true; readonly value: BackupVerificationReceipt } } |
+  { readonly operation: 'checkBackupVerification'; readonly result: { readonly ok: true; readonly value: RuntimeBackupVerification } } |
   { readonly operation: 'exportEncrypted'; readonly result: { readonly ok: true; readonly value: RuntimeExport } } |
   { readonly operation: 'listProfiles'; readonly result: { readonly ok: true; readonly value: RuntimeInventory } } |
   { readonly operation: 'restore'; readonly result: { readonly ok: true; readonly value: RuntimeRestore } } |
@@ -64,7 +69,7 @@ export type RuntimeResponse = Header & { readonly kind: 'response'; readonly ope
   { readonly operation: 'deleteTermsReview'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviewRef } } |
   { readonly operation: 'listTermsReviews'; readonly result: { readonly ok: true; readonly value: RuntimeSavedReviews } } |
   { readonly operation: 'listRecoveryReferences'; readonly result: { readonly ok: true; readonly value: RuntimeRecoveryReferences } } |
-  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
+  { readonly operation: Exclude<RuntimeOperation, 'exportEncrypted' | 'listProfiles' | 'restore' | 'saveTermsReview' | 'deleteTermsReview' | 'listTermsReviews' | 'listRecoveryReferences' | 'verifyBackup' | 'checkBackupVerification'>; readonly result: { readonly ok: true; readonly value: RuntimeStatus } });
 export type RuntimeMessage = RuntimeResponse | { readonly version: 1; readonly kind: 'locked'; readonly generation: number } |
   { readonly version: 1; readonly kind: 'closed'; readonly generation: number; readonly code: RuntimeErrorCode };
 
@@ -131,7 +136,7 @@ export function parseRuntimeConfig(input: unknown): RuntimeConfig {
 export function parseRuntimeCommand(input: unknown): RuntimeCommand {
   const op = operation(own(input, 'operation'));
   const extra = op === 'init' ? ['config'] : op === 'unlock' ? ['profileId', 'passphrase'] : op === 'create' ? ['passphrase'] :
-    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' ? ['profileId'] :
+    op === 'restore' ? ['bytes', 'sourcePassphrase', 'destinationPassphrase'] : op === 'verifyBackup' ? ['profileId', 'bytes', 'passphrase'] : op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification' ? ['profileId'] :
     op === 'saveTermsReview' ? ['profileId', 'source', 'bytes'] : op === 'deleteTermsReview' ? ['profileId', 'recordId'] : op === 'listRecoveryReferences' ? ['profileId', 'offset', 'expectedRevision'] : [];
   const raw = exact(input, ['version', 'requestId', 'generation', 'operation', ...extra]); const base = header(raw);
   if (raw.operation !== op) return fail();
@@ -142,7 +147,8 @@ export function parseRuntimeCommand(input: unknown): RuntimeCommand {
     return Object.freeze({ ...base, operation: op, bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES),
       sourcePassphrase: passphrase(raw.sourcePassphrase), destinationPassphrase: passphrase(raw.destinationPassphrase) });
   }
-  if (op === 'exportEncrypted' || op === 'listTermsReviews') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
+  if (op === 'verifyBackup') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), bytes: boundedBytes(raw.bytes, MAX_BACKUP_BYTES), passphrase: passphrase(raw.passphrase) });
+  if (op === 'exportEncrypted' || op === 'listTermsReviews' || op === 'checkBackupVerification') return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId) });
   if (op === 'saveTermsReview') {
     const bytes = boundedBytes(raw.bytes, MAX_SAVED_REVIEW_BYTES); if (bytes.byteLength === 0) return fail();
     return Object.freeze({ ...base, operation: op, profileId: profile(raw.profileId), source: source(raw.source), bytes });
@@ -239,6 +245,13 @@ export function parseRuntimeMessage(input: unknown): RuntimeMessage {
     return Object.freeze({ ...base, result: runtimeFailure(value) });
   }
   const result = exact(raw.result, ['ok', 'value']); if (ok !== true || result.ok !== true) return fail();
+  if (base.operation === 'verifyBackup') {
+    try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: parseBackupVerificationReceipt(result.value) }) }); } catch { return fail(); }
+  }
+  if (base.operation === 'checkBackupVerification') {
+    const value = exact(result.value, ['verification']);
+    try { return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: Object.freeze({ verification: value.verification === null ? null : parseBackupVerificationReceipt(value.verification) }) }) }); } catch { return fail(); }
+  }
   if (base.operation === 'exportEncrypted') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: encryptedExport(result.value) }) });
   if (base.operation === 'listProfiles') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: inventory(result.value) }) });
   if (base.operation === 'restore') return Object.freeze({ ...base, operation: base.operation, result: Object.freeze({ ok: true, value: restored(result.value) }) });

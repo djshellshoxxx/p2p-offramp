@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { CreateForm, ExportForm, RestoreForm, UnlockForm } from './VaultForms.tsx';
+import { BackupVerificationForm } from './BackupVerificationForm.tsx';
 import { messages as m } from './messages.ts';
 import type { Route } from './routes.ts';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
@@ -66,6 +67,10 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
       <h2 id="backup-title">{m.backupTitle}</h2><p>{m.backupHelp}</p>
       <div className="warning"><strong>{m.unchecked}</strong><p>{m.uncheckedHelp}</p></div>
       {services ? <ExportForm services={services} refresh={inventoryVersion} /> : <p>{m.unavailable}</p>}
+    </section>
+    <section className="panel" aria-labelledby="backup-verify-title">
+      <h2 id="backup-verify-title">{m.backupVerifyTitle}</h2><p>{m.backupVerifyHelp}</p><p className="warning">{m.backupVerifyScope}</p>
+      {services ? <BackupVerificationForm services={services} /> : <p>{m.unavailable}</p>}
     </section>
     <section className="panel" aria-labelledby="restore-title">
       <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>

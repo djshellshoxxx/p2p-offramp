@@ -80,6 +80,24 @@ const definitions = {
     "recoveryIntro": "Keep an encrypted copy before changing browser, device, or origin.",
     "originTitle": "Local storage belongs to this origin",
     "originHelp": "A new domain, gateway, or CID origin can have a different IndexedDB vault. An empty browser does not establish that your keys or funds are gone. A changed path on the same origin does not isolate storage.",
+    "backupVerifyTitle": "Authenticate a backup file against this profile",
+    "backupVerifyHelp": "Unlock the profile to check a selected backup file and its passphrase against that exact committed revision. Exporting, downloading, unlocking or restoring another profile does not perform this check.",
+    "backupVerifyScope": "This covers every encrypted local record in one profile, including opaque records. It does not cover external-wallet spending keys, complete relay history, chain truth or file retention on another device. A result is a point-in-time check; recheck before relying on its revision.",
+    "backupVerifyFile": "Backup file to authenticate",
+    "backupVerifyPassphrase": "Passphrase for this backup file",
+    "backupVerify": "Verify this backup file",
+    "backupVerifyCheck": "Recheck verified revision",
+    "backupVerifying": "Authenticating the file and checking the committed profile…",
+    "backupVerifyChecking": "Checking the selected profile revision…",
+    "backupVerifyNone": "No authenticated backup verification is held for this profile selection.",
+    "backupVerifyLocked": "Unlock the matching local profile before verifying its backup. A restored fresh-key profile needs its own exported file and verification.",
+    "backupVerifyMismatch": "The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.",
+    "backupVerifyFileRequired": "Choose the encrypted backup file to authenticate.",
+    "backupVerifyCancelled": "Verification cancelled. No backup verification was established; profile data was not changed.",
+    "backupVerifyCancel": "Cancel verification",
+    "backupVerifyEnvelopeDigest": "Authenticated encrypted envelope SHA-256",
+    "backupVerifyFileDigest": "Verified file SHA-256",
+    "backupVerified": { source: "Backup file authenticated against profile {profileId}, revision {revision}. This result is local to this profile selection and check.", variables: { profileId: "identifier", revision: "count" } },
     "backupTitle": "Export an encrypted file",
     "backupHelp": "Export reads committed ciphertext for a known local profile. It does not include external-wallet spending keys. Keep the file private and retain its passphrase separately.",
     "unchecked": "Authentication not checked",
@@ -514,7 +532,7 @@ const contexts: Record<Group, string> = {
   samples: 'Synthetic built-in trade-terms sample button labels',
 };
 const docsAnchor = '00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md';
-const critical = new Set(['shell.createConsent', 'shell.restoreConsent', 'shell.uncheckedHelp', 'trade.risk', 'recovery.unverified', 'recovery.private', 'diagnostics.privacy']);
+const critical = new Set(['shell.createConsent', 'shell.restoreConsent', 'shell.uncheckedHelp', 'shell.backupVerifyScope', 'trade.risk', 'recovery.unverified', 'recovery.private', 'diagnostics.privacy']);
 const groups: Record<string, Record<string, MessageEntry>> = Object.create(null), catalog: Record<string, MessageEntry> = Object.create(null);
 for (const group of Object.keys(definitions) as Group[]) {
   const entries: Record<string, MessageEntry> = Object.create(null);

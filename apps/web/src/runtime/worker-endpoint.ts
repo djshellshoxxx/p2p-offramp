@@ -4,14 +4,14 @@
  */
 import { EncryptedVaultService, EncryptedBackupService, BackupError } from '../../../../packages/storage/index.ts';
 import {
-  decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
+  parseBackupVerificationReceipt, type BackupVerificationReceipt, decodeBase64url, parseStrictJsonBytes, MAX_SAVED_REVIEW_BYTES, encodeBase64url, encodeSavedReviewPayload, parseSavedReviewPayload, parseRuntimeCommand, MAX_SAVED_REVIEWS, SAVED_REVIEW_SCHEMA_VERSION, parseRuntimeMessage, runtimeFailure, RuntimeBoundaryError, projectRecoveryReferences,
   RUNTIME_IDLE_TIMEOUT_MS, RUNTIME_REQUEST_TIMEOUT_MS,
   type RuntimeCommand, type RuntimeErrorCode, type RuntimeHandle, type RuntimeMessage, type RuntimeResult,
   type RuntimeStatus, type RuntimeSavedReview, type VaultSession, type VaultSessionLease, type Result, type PrivateRecordV1, type SavedReviewPayload,
 } from '../../../../packages/schemas/index.ts';
 
 export interface WorkerPrivateServices {
-  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'create' | 'listProfiles' | 'lock' | 'lockAll' | 'captureSession' | 'dispose' | 'list' | 'commit' | 'assertFresh'>;
+  readonly vault: Pick<EncryptedVaultService, 'unlock' | 'create' | 'listProfiles' | 'lock' | 'lockAll' | 'captureSession' | 'dispose' | 'list' | 'commit' | 'assertFresh' | 'verifyBackup'>;
   readonly backup: Pick<EncryptedBackupService, 'exportWithStatus' | 'restore' | 'dispose'>;
 }
 export interface WorkerEndpointOptions {
@@ -60,7 +60,7 @@ function vaultValue<T>(result: Result<T>): T {
   if (result.ok) return result.value;
   const value = result.error.code;
   throw new RuntimeBoundaryError(value === 'UNSUPPORTED_ENVIRONMENT' || value === 'UNSUPPORTED_VERSION' || value === 'INVALID_INPUT' ||
-    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' ? value : 'STORAGE_UNAVAILABLE');
+    value === 'NOT_FOUND' || value === 'AUTHENTICATION_FAILED' || value === 'LOCKED' || value === 'CONFLICT' || value === 'LIMIT_EXCEEDED' || value === 'QUOTA_EXCEEDED' || value === 'CANCELLED' || value === 'BUSY' ? value : 'STORAGE_UNAVAILABLE');
 }
 
 class VaultWorkerEndpoint {
@@ -71,6 +71,7 @@ class VaultWorkerEndpoint {
   #generation = 0;
   #lastRequest = 0;
   #selection: Selection | undefined;
+  #backupVerification: { readonly handle: RuntimeHandle; readonly generation: number; readonly receipt: BackupVerificationReceipt } | undefined;
   #active: ActiveJob | undefined;
   #deadline: number | undefined;
   #lastTime = -Infinity;
@@ -85,6 +86,7 @@ class VaultWorkerEndpoint {
     } catch { throw new RuntimeBoundaryError('UNSUPPORTED_ENVIRONMENT'); }
   }
   #clear(): void {
+    this.#backupVerification = undefined;
     if (this.#timer !== undefined) clearTimeout(this.#timer);
     this.#timer = undefined; this.#deadline = undefined;
     const previous = this.#selection; this.#selection = undefined;
@@ -121,6 +123,7 @@ class VaultWorkerEndpoint {
   }
   #expire(job: ActiveJob): void {
     if (this.#closed || this.#active !== job || job.generation !== this.#generation) return;
+    this.#backupVerification = undefined;
     job.timedOut = true; job.controller.abort(); this.#services?.vault.lockAll();
   }
   /** The vault session of the selected profile, which must be the profile the command names. */
@@ -142,12 +145,12 @@ class VaultWorkerEndpoint {
     if (this.#closed) return;
     let command: RuntimeCommand;
     try { command = parseRuntimeCommand(input); } catch { this.#protocol(); return; }
-    if (command.requestId <= this.#lastRequest) { this.#protocol(); return; }
-    this.#lastRequest = command.requestId;
-    const control = command.operation === 'lock' || command.operation === 'dispose';
-    if (command.generation < this.#generation) { this.#reply(command, runtimeFailure('CONFLICT')); return; }
-    if (command.generation !== this.#generation + (control ? 1 : 0)) { this.#protocol(); return; }
     try {
+      if (command.requestId <= this.#lastRequest) { this.#protocol(); return; }
+      this.#lastRequest = command.requestId;
+      const control = command.operation === 'lock' || command.operation === 'dispose';
+      if (command.generation < this.#generation) { this.#reply(command, runtimeFailure('CONFLICT')); return; }
+      if (command.generation !== this.#generation + (control ? 1 : 0)) { this.#protocol(); return; }
       this.#checkDeadline();
       if (command.operation === 'init') {
         if (this.#services || command.generation !== 0) { this.#protocol(); return; }
@@ -162,6 +165,8 @@ class VaultWorkerEndpoint {
         if (command.operation === 'dispose') this.dispose();
         this.#reply(command, { ok: true, value: locked() }); return;
       }
+      if ((command.operation === 'saveTermsReview' || command.operation === 'deleteTermsReview' || command.operation === 'verifyBackup') &&
+          this.#selection?.handle.profileId === command.profileId) this.#backupVerification = undefined;
       if (command.operation === 'status' || command.operation === 'activity') {
         const value = this.#status();
         // The document's private trusted-event handler is the only caller of activity.
@@ -197,6 +202,23 @@ class VaultWorkerEndpoint {
             lease = undefined; this.#armDeadline();
           } catch (error) { lease?.dispose(); this.#services.vault.lock(session.sessionId); throw error; }
           this.#guard(job); this.#reply(command, { ok: true, value: this.#status() });
+        } else if (command.operation === 'verifyBackup') {
+          const session = this.#selected(command.profileId), handle = this.#selection!.handle;
+          const receipt = parseBackupVerificationReceipt(vaultValue(await this.#services.vault.verifyBackup(session.sessionId, command.bytes, command.passphrase, job.controller.signal, () => {
+            this.#guard(job);
+            if (this.#selection?.handle !== handle) throw new RuntimeBoundaryError('LOCKED');
+          })));
+          this.#guard(job);
+          const current = this.#selected(command.profileId);
+          if (this.#selection?.handle !== handle || current.revision !== receipt.revision || receipt.profileId !== current.profileId) throw new RuntimeBoundaryError('CONFLICT');
+          this.#backupVerification = {handle,generation:this.#generation,receipt};
+          this.#reply(command, {ok:true,value:receipt});
+        } else if (command.operation === 'checkBackupVerification') {
+          const session = this.#selected(command.profileId), handle = this.#selection!.handle;
+          vaultValue(await this.#services.vault.assertFresh(session.sessionId, job.controller.signal)); this.#guard(job);
+          const current = this.#selected(command.profileId), fact = this.#backupVerification;
+          if (fact && (fact.handle !== handle || fact.generation !== this.#generation || fact.receipt.revision !== current.revision || fact.receipt.profileId !== current.profileId)) this.#backupVerification = undefined;
+          this.#reply(command, {ok:true,value:Object.freeze({verification:this.#backupVerification?.receipt ?? null})});
         } else if (command.operation === 'listProfiles') {
           const value = vaultValue(await this.#services.vault.listProfiles(job.controller.signal)); this.#guard(job);
           this.#reply(command, { ok: true, value: Object.freeze({ profileIds: Object.freeze([...value.profileIds]), truncated: value.truncated }) });
@@ -268,7 +290,7 @@ class VaultWorkerEndpoint {
     } catch (error) {
       if (error instanceof RuntimeBoundaryError && error.code === 'UNSUPPORTED_ENVIRONMENT') { this.#protocol(error.code); return; }
       if (!this.#closed && command.generation === this.#generation) this.#reply(command, runtimeFailure(errorCode(error)));
-    }
+    } finally { if (command.operation === 'verifyBackup') command.bytes.fill(0); }
   }
   #reply(command: RuntimeCommand, result: unknown): void {
     if (this.#active?.requestId === command.requestId && (result as RuntimeResult<unknown>).ok) this.#guard(this.#active);

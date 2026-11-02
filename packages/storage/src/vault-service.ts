@@ -1,10 +1,11 @@
 import {
   decodeBase64url, encodeBase64url, encodePassphrase, MAX_REVISION, parsePrivateSnapshot, parseVaultEnvelope,
-  ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
+  canonicalEnvelopeBytes, parseBackupBytes, MAX_BACKUP_BYTES, type BackupVerificationReceipt, ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
 } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, encryptRevision, decryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
+import { claimRecoverySlot } from './recovery-slot.ts';
 import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type ProfileInventory, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
 export { VaultStorageError } from './idb-vault-store.ts';
 export type { ProfileInventory, VaultStore } from './idb-vault-store.ts';
@@ -20,6 +21,7 @@ const messages: Record<VaultErrorCode, string> = {
   AUTHENTICATION_FAILED: 'Vault authentication failed.', LOCKED: 'The vault session is locked.',
   CONFLICT: 'The vault changed. Unlock it again before writing.', LIMIT_EXCEEDED: 'The vault safety limit was reached.',
   REKEY_REQUIRED: 'Fresh-key migration is required before further writes.', QUOTA_EXCEEDED: 'Encrypted storage quota was exceeded.',
+  BUSY: 'Another backup or recovery operation is still running.',
   STORAGE_UNAVAILABLE: 'Encrypted storage is unavailable. Unlock and reconcile before retrying.', CANCELLED: 'The vault operation was cancelled.',
 };
 function failed(error: unknown): Result<never> {
@@ -30,6 +32,15 @@ function failed(error: unknown): Result<never> {
 function requireId(value: unknown): string {
   if (typeof value !== 'string' || !/^[0-9a-f]{32}$/.test(value)) throw new ValidationError();
   return value;
+}
+function copyBackupBytes(input: Uint8Array): Uint8Array<ArrayBuffer> {
+  try {
+    const getter = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype) as object, 'byteLength')!.get!;
+    const length: unknown = Reflect.apply(getter, input, []);
+    if (!(input instanceof Uint8Array) || typeof length !== 'number') throw new ValidationError();
+    if (length > MAX_BACKUP_BYTES) throw new ValidationError('LIMIT_EXCEEDED');
+    const copy = new Uint8Array(length); Reflect.apply(Uint8Array.prototype.set, copy, [input]); return copy;
+  } catch (error) { if (error instanceof ValidationError) throw error; throw new ValidationError(); }
 }
 function requireToken(value: unknown): string { decodeBase64url(value, 32, 32); return value as string; }
 /** Checked before a session tail is swapped: a non-signal would otherwise throw while holding it. */
@@ -372,6 +383,45 @@ export class EncryptedVaultService implements VaultService {
         const snapshot = await decryptRevision(state.material, latest); this.#guard(state, generation, signal);
         return snapshot.records.map(record => ({ ...record }));
       } finally { release(); }
+    });
+  }
+  /** Authenticate the supplied complete file against this exact live committed profile. Never restores or writes. */
+  verifyBackup(sessionId: string, bytes: Uint8Array, passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<BackupVerificationReceipt>> {
+    return this.#result(async () => {
+      requireSignal(signal);
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
+      const password = encodePassphrase(passphrase); password.fill(0);
+      const state = this.#session(sessionId), generation = state.generation;
+      const releaseRecovery = claimRecoverySlot();
+      if (!releaseRecovery) throw new Failure('BUSY');
+      let backupBytes: Uint8Array<ArrayBuffer>;
+      try { backupBytes = copyBackupBytes(bytes); } catch (error) { releaseRecovery(); throw error; }
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      const control = this.#control(signal); state.operations.add(control.controller);
+      const guard = (): void => {
+        this.#guard(state, generation, control.controller.signal);
+        try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+        this.#guard(state, generation, control.controller.signal);
+      };
+      let snapshot: PrivateSnapshotV1 | undefined;
+      try {
+        await previous; guard();
+        const backup = parseBackupBytes(backupBytes), expected = state.envelope!;
+        const canonical = canonicalEnvelopeBytes(backup.envelope);
+        const checksum = Array.from(new Uint8Array(await this.#provider.subtle.digest('SHA-256', canonical)), value => value.toString(16).padStart(2, '0')).join(''); guard();
+        if (checksum !== backup.checksum) throw new ValidationError();
+        if (!sameEnvelope(backup.envelope, expected)) throw new Failure('CONFLICT');
+        const current = await this.#store.get(expected.profileId); guard();
+        if (!current || !sameEnvelope(parseVaultEnvelope(current), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        const opened = await openEnvelope(backup.envelope, passphrase, this.#provider);
+        try { guard(); snapshot = opened.snapshot; }
+        finally { disposeMaterial(opened.material); }
+        if (JSON.stringify(snapshot) !== JSON.stringify(state.snapshot)) throw new Failure('AUTHENTICATION_FAILED');
+        const backupSha256 = Array.from(new Uint8Array(await this.#provider.subtle.digest('SHA-256', backupBytes)), value => value.toString(16).padStart(2, '0')).join(''); guard();
+        const latest = await this.#store.get(expected.profileId); guard();
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        return Object.freeze({profileId:expected.profileId,revision:expected.revision,scope:'complete-profile-v1' as const,envelopeSha256:checksum,backupSha256});
+      } finally { snapshot = undefined; backupBytes.fill(0); release(); state.operations.delete(control.controller); control.remove(); releaseRecovery(); }
     });
   }
   /**

@@ -2,6 +2,7 @@
 import { english, englishGroup } from './locale/en.ts';
 export const messages = Object.freeze({
   ...englishGroup('shell'),
+  backupVerified: (profileId: string, revision: number) => english('shell', 'backupVerified', { profileId, revision }),
   restored: (id: string, records: number) => english('shell', 'restored', { id, records }),
   restoredSelection: (id: string) => english('shell', 'restoredSelection', { id }),
   created: (id: string) => english('shell', 'created', { id }),

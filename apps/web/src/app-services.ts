@@ -1,6 +1,6 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
 import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences } from '../../../packages/schemas/index.ts';
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
@@ -24,6 +24,10 @@ export interface AppServices {
   status(): Promise<AppResult<PublicStatus>>;
   lock(): Promise<AppResult<PublicStatus>>;
   exportEncrypted(profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>>;
+  /** Authenticates a supplied backup against the open profile's exact committed revision. */
+  verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>>;
+  /** Rechecks the Worker-owned receipt and current persisted profile; imported metadata cannot set it. */
+  checkBackupVerification(signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>>;
   /** Saved terms reviews of the open profile only (raw terms bytes; the caller re-reviews them). */
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
@@ -77,6 +81,12 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     status: () => stateCommand(() => runtime.status()), lock: () => stateCommand(() => runtime.lock()),
     exportEncrypted: async (profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>> => {
       try { return await runtime.exportEncrypted(profileId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    verifyBackup: async (bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>> => {
+      try { return await runtime.verifyBackup(bytes,passphrase,signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    checkBackupVerification: async (signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>> => {
+      try { return await runtime.checkBackupVerification(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     saveTermsReview: async (source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.saveTermsReview(source, bytes, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
