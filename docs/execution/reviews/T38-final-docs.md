@@ -21,7 +21,7 @@ The stale intake dependencies, limits, milestone actions and five canonical next
 
 The remainder distinguishes 76 completed local scopes, 25 exact contract/tooling remainders and two external/tooling qualification scopes. Named peer/G14/G15/Solana/QR/provider/custody profiles, enforced engine policy, physical/assistive/language/operator/professional evidence and production trust remain explicit. They do not reopen accepted local work or imply a generic human-approval block.
 
-Reviewed 19 frozen documents and four retained root records; exact input hashes and resolution details are in [t38-final-docs-review.json](/workspace/work/t38-final-docs-review.json). Root's final docs/spec/diff/source/reference checks were read and attributed, not rerun. This review changed no repository files and executed no tests, SDK, browser/native/solver, container, network, publication or merge action.
+Reviewed 19 frozen documents and four retained root records; exact input hashes and resolution details are in [T38-final-docs.json](T38-final-docs.json); the original `/workspace/work/t38-final-docs-review.json` is workspace-local, not committed. Root's final docs/spec/diff/source/reference checks were read and attributed, not rerun. This review changed no repository files and executed no tests, SDK, browser/native/solver, container, network, publication or merge action.
 
 Trading remains disabled and the maintained release pin null. This verdict is documentation acceptance, not professional certification, production approval or a source-certified future CI/merge result.
 

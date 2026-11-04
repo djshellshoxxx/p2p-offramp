@@ -48,7 +48,7 @@
     "test:portal:browser": "node scripts/test-scriptless-portal-browser.mjs",
     "check:docs": "node --import ./scripts/test-support/register-tsx.mjs scripts/docs/validate.mjs",
     "check:governance": "node --import ./scripts/test-support/register-tsx.mjs scripts/governance/check-all.mjs",
-    "test:completion:tools": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/portal/build.test.mjs scripts/docs/validate.test.mjs scripts/lab/recipe.test.mjs scripts/tests/formal-evm.test.mjs scripts/reputation/semaphore-v4-evaluation.test.mjs scripts/tests/refresh-evidence-manifest.test.mjs scripts/tests/tool-path.test.mjs scripts/tests/governance-check-all.test.mjs && npm run check:docs && npm run check:governance",
+    "test:completion:tools": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/portal/build.test.mjs scripts/docs/validate.test.mjs scripts/lab/recipe.test.mjs scripts/tests/formal-evm.test.mjs scripts/reputation/semaphore-v4-evaluation.test.mjs scripts/tests/refresh-evidence-manifest.test.mjs scripts/tests/execution-doc-links.test.mjs scripts/tests/tool-path.test.mjs scripts/tests/governance-check-all.test.mjs && npm run check:docs && npm run check:governance",
     "test:eip1271:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-eip1271-local.mjs",
     "test:journey:browser": "node scripts/test-journey-browser.mjs",
     "test:journey:origins": "node scripts/test-journey-origin-browser.mjs",
