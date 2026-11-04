@@ -56,7 +56,8 @@
     "test:retention:browser": "node scripts/test-retention-browser.mjs",
     "test:updates:browser": "node scripts/test-release-update-browser.mjs",
     "test:zoom:browser": "node scripts/test-browser-zoom.mjs",
-    "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs"
+    "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs",
+    "test:reputation:intake": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/reputation/semaphore-v4-evaluation.test.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
