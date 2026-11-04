@@ -120,7 +120,14 @@ function fakeChain(){
  const done=result=>Promise.resolve({ok:true,value:result});
  chain.reader=Object.freeze({
   chainId:()=>done('31337'),
-  head:()=>done(head()),
+  // `finalizedLag` keeps the finalized head that many blocks behind latest (0: finalized equals latest);
+  // `finalizedUnavailable` models a node that does not report a finalized head yet.
+  head:tag=>{
+   if(tag!=='finalized')return done(head());
+   if(chain.finalizedUnavailable)return done(null);
+   const height=chain.head-(chain.finalizedLag??0);
+   return done({number:String(height),hash:blockHash(height)});
+  },
   blockHashAt:number=>done(Number(number)<=chain.head?blockHash(Number(number)):null),
   // `queued` counts held transactions the node reports at the next pending nonces.
   transactionCount:(account,tag)=>{
@@ -158,7 +165,8 @@ function fakeChain(){
     chain.failBlockReads--;
     throw Error('RPC_DOWN');
    }
-   const height=['latest','finalized'].includes(params[0])?chain.head:Number(BigInt(params[0]??chain.head));
+   const lag=params[0]==='finalized'?chain.finalizedLag??0:0;
+   const height=['latest','finalized'].includes(params[0])?chain.head-lag:Number(BigInt(params[0]??chain.head));
    const txs=chain.blocks.get(height)??[];
    const transactions=params[1]?txs.map(tx=>({hash:tx.hash,from:tx.from,nonce:hex(tx.nonce)})):txs.map(tx=>tx.hash);
    return{number:hex(height),hash:blockHash(height),timestamp:hex(chain.now),transactions};
@@ -799,6 +807,15 @@ const restartMatrix=[
   const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
   await writeSettleRow(h,{action:'release',state:'pending',hash,nonce:'1'});
  },{watch:'reconcile',reconcile:blocked,refund:'settling'}],
+ ['release broadcast-unknown without a hash, mined and reverted within the scan',async h=>{
+  includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'broadcast-unknown',nonce:'1'});
+ },{watch:'reconcile',reconcile:blocked,refund:'settling'}],
+ ['release reverted with a hash, receipt not yet finalized',async h=>{
+  const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'pending',hash,nonce:'1'});
+  h.chain.finalizedLag=5;
+ },{watch:'settling',reconcile:'settling'}],
  ['release failed with a hash',async h=>{
   const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
   await writeSettleRow(h,{action:'release',state:'failed',hash,nonce:'1'});
@@ -916,5 +933,32 @@ test('a settlement beyond the bounded log search is shown from the canonical sta
   assert.equal(recovered.phase,'receipt');
   assert.equal(recovered.receipt,null,'no transaction, fee or payout is claimed');
   assert.deepEqual(recovered.chainState,{state:'refunded',observedAtHeight:String(h.chain.head)});
+ }finally{h.journey.dispose();}
+});
+
+test('a reverted leftover settles only after finality, then the original refund opens',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  h.tradeId=h.journey.snapshot().tradeId;
+  h.preparedAt=h.chain.head;
+  h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+  h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+  const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'pending',hash,nonce:'1'});
+  // Deep enough for the lifecycle to classify it reverted, but no finalized head yet: not terminal-verified.
+  h.chain.finalizedUnavailable=true;
+  assert.equal((await restartAndWatch(h)).phase,'settling');
+  await assert.rejects(h.journey.act('review-signing',{signingAction:'refund'}),/OUT_OF_ORDER/);
+  assert.equal((await h.journey.act('reconcile')).phase,'settling');
+  // A lagging finalized head that still excludes the receipt keeps it reconcile-only too.
+  h.chain.finalizedUnavailable=false;
+  h.chain.finalizedLag=5;
+  assert.equal((await h.journey.act('reconcile')).phase,'settling');
+  h.chain.finalizedLag=0;
+  await assert.rejects(h.journey.act('reconcile'),/PAYMENT_GUIDANCE_BLOCKED/);
+  assert.equal((await signed(h.journey,'refund')).phase,'settling');
+  assert.equal(h.chain.escrowState,'refunded');
+  assert.equal(h.chain.sends,2,'only the explicit refund is sent');
  }finally{h.journey.dispose();}
 });

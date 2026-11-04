@@ -154,17 +154,23 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  type Leftover={readonly kind:'resolved'}|{readonly kind:'settling'|'external';readonly intentId:string};
  async function classifyLeftovers(intents:readonly IntentV1[]):Promise<Leftover>{
   const {journal,life}=attached();
-  // A null-hash row is never reconciled: whether that wallet request was broadcast cannot be proven either way
-  // without a durable send marker (D9), and lifecycle reconciliation would rewrite the row.
-  const ambiguous=intents.find(settle=>settle.submission.chain!=='evm'||settle.submission.hash===null);
-  if(ambiguous)return{kind:'external',intentId:ambiguous.intentId};
+  // A null-hash row first gets the bounded, read-only nonce scan, which records the hash only when it finds the
+  // exact transaction. If the scan cannot locate it (or is past its bound) the row stays ambiguous without a
+  // durable send marker (D9) and is never handed to lifecycle reconciliation, which would rewrite it.
+  for(const settle of intents){
+   if(settle.submission.chain==='evm'&&settle.submission.hash!==null)continue;
+   const scanned=await step(journal.reconcileNative(settle.intentId));
+   const located=scanned.ok&&scanned.value.submission.chain==='evm'&&scanned.value.submission.hash!==null;
+   if(!located)return{kind:'external',intentId:settle.intentId};
+  }
   let settling:string|undefined;
   for(const settle of intents){
-   await step(journal.reconcileNative(settle.intentId));
+   const hashed=settle.submission.chain==='evm'&&settle.submission.hash!==null;
+   if(hashed)await step(journal.reconcileNative(settle.intentId));
    const result=value(await step(life.reconcile(settle.intentId)));
    if(result.outcome==='reverted'&&journal.isTerminalVerified(settle.intentId))continue;
-   // Still progressing on chain: reconcile alone can resolve it later.
-   if(['pending','confirmed','reorged'].includes(result.outcome)){settling??=settle.intentId;continue;}
+   // Still progressing on chain, or reverted but not yet final: reconcile alone can resolve it later.
+   if(['pending','confirmed','reorged','reverted'].includes(result.outcome)){settling??=settle.intentId;continue;}
    // Expired or replaced rows need a successor the app cannot create; anything else contradicts a funded escrow.
    return{kind:'external',intentId:settle.intentId};
   }
@@ -683,7 +689,11 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
       await enterExternalRecovery(intentId,await preparedAtOf(intentId));
       return snapshot();
      }
-     value(observedNative);const result=value(await step(life.reconcile(intentId)));
+     // A settlement with a known hash keeps settling while native finality is unavailable; the lifecycle's own
+     // read below decides, and nothing terminal is accepted without its verification.
+     const settleSubmission=phase==='settling'?(await intentOf(intentId)).submission:null;
+     const knownSettle=settleSubmission?.chain==='evm'&&settleSubmission.hash!==null;
+     if(!knownSettle)value(observedNative);const result=value(await step(life.reconcile(intentId)));
      // Expired or replaced settlements need a successor the app cannot create (D9): hand over, never resend.
      const handover=result.outcome==='replaced'||result.outcome==='dropped';
      if((result.intent.action==='release'||result.intent.action==='refund')&&handover){
@@ -694,6 +704,8 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      // A settlement the chain reverted (e.g. a release included at or after the deadline) leaves the escrow funded.
      // Re-enter the funded phase from a fresh native read so the original refund path is offered; never resend.
      const settle=result.intent.action==='release'||result.intent.action==='refund';
+     // Only a finalized, terminal-verified revert reopens the funded phase; until then it stays reconcile-only.
+     if(settle&&result.outcome==='reverted'&&!journal.isTerminalVerified(intentId))return snapshot();
      if(settle&&result.outcome==='reverted'&&result.escrowState==='funded'){
       await enterFundedPhase();
       return snapshot();
