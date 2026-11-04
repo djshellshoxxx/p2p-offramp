@@ -53,6 +53,10 @@ Also:
 7. A restored older snapshot showing `prepared` with a null `sendMarkedAt` is treated as possibly sent.
 8. An older build either refuses or ignores the new key set by a stated rule, never silently misreads it.
 
+## A second finding with the same root cause
+
+PR #31 finding F02 (a wallet 4001 leaves the journey reconciling a hash that does not exist) depends on this decision too. An app-level fix moved a declined send into an explicit "declined, checking the chain" state, then allowed a fresh attempt. An independent adversarial review confirmed two defects. A declined fund, release or refund followed by the fresh attempt leaves two intents for the same trade and action, so restart recovery fails and a funded escrow can no longer be reconciled from the app. A declined approval followed by re-approval and funding reaches the same durable state that sank the first Qodo finding 1 fix. That fix was therefore not merged. With a durable send marker, recovery could tell the declined-before-marker case apart, and the fresh attempt could supersede the declined intent explicitly instead of sitting beside it.
+
 ## What this unblocks
 
 Closing Qodo finding 1 without risk to funded escrows, and letting a user continue a trade whose approval was interrupted before it was sent.
