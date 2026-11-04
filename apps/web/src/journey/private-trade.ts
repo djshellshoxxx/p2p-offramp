@@ -574,8 +574,12 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      const ownAmbiguous=!chosen||chosen.submission.chain!=='evm'||chosen.submission.hash===null;
      if(terminalOnChain&&ownAmbiguous&&recovered.length>0){
       const preparedAt=(intent:IntentV1)=>BigInt(parseCanonicalPreparedRequest(intent.preparedRequest).preparedAtBlock);
-      const heights=recovered.map(preparedAt);
-      const fromBlock=heights.reduce((low,height)=>height<low?height:low);
+      // The earliest preparation height bounds the log search; recovered is non-empty here.
+      let fromBlock=preparedAt(defined(recovered[0]));
+      for(const intent of recovered){
+       const height=preparedAt(intent);
+       if(height<fromBlock)fromBlock=height;
+      }
       await enterChainReceipt(observed.state==='released'?'released':'refunded',String(fromBlock));
       return snapshot();
      }

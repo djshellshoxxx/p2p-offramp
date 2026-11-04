@@ -376,6 +376,15 @@ async function funded(h){
  };
 }
 
+/** A funded trade whose escrow deadline has passed: release is closed and only the original refund remains. */
+async function expiredFundedTrade(h){
+ await funded(h);
+ h.tradeId=h.journey.snapshot().tradeId;
+ h.preparedAt=h.chain.head;
+ h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+ h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+}
+
 test('inside the payment-guidance buffer a fresh funded escrow still allows explicit seller release',async()=>{
  const h=harness();
  try{
@@ -858,11 +867,7 @@ for(const[name,arrange,expected]of restartMatrix){
  test(`restart matrix: ${name}`,async()=>{
   const h=harness();
   try{
-   await funded(h);
-   h.tradeId=h.journey.snapshot().tradeId;
-   h.preparedAt=h.chain.head;
-   h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
-   h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+   await expiredFundedTrade(h);
    await arrange(h);
    const sends=h.chain.sends;
    const funded_=['payment-coordination','payment-guidance-closed','payment-guidance-unavailable'];
@@ -888,11 +893,7 @@ test.after(()=>{if(process.env.MATRIX_RECORD)console.log('MATRIX '+JSON.stringif
 
 /** A funded trade restarted with one release row the app cannot reconcile without a durable send marker. */
 async function ambiguousRestart(h){
- await funded(h);
- h.tradeId=h.journey.snapshot().tradeId;
- h.preparedAt=h.chain.head;
- h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
- h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+ await expiredFundedTrade(h);
  await writeSettleRow(h,{action:'release',state:'failed',nonce:'1'});
  return restartAndWatch(h);
 }
@@ -939,11 +940,7 @@ test('a settlement beyond the bounded log search is shown from the canonical sta
 test('a reverted leftover settles only after finality, then the original refund opens',async()=>{
  const h=harness();
  try{
-  await funded(h);
-  h.tradeId=h.journey.snapshot().tradeId;
-  h.preparedAt=h.chain.head;
-  h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
-  h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+  await expiredFundedTrade(h);
   const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
   await writeSettleRow(h,{action:'release',state:'pending',hash,nonce:'1'});
   // Deep enough for the lifecycle to classify it reverted, but no finalized head yet: not terminal-verified.
