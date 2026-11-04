@@ -215,7 +215,11 @@ export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
   assert.ok(renewedInspection >= firstInspection + 30_000, 'expiry renews actual monotonic inspection without vault events');
   assert.ok((await vaultObservation.innerText()).includes('Locked'), 'expiry does not manufacture an unlocked state');
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'renewed view owns only one deadline');
-  assert.deepEqual(await settingsResumeListeners(), [1, 1], 'renewal re-subscribes without duplicating Settings listeners');
+  assert.deepEqual(
+    await settingsResumeListeners(),
+    [1, 1],
+    'renewal re-subscribes without duplicating Settings listeners',
+  );
   await privacyPage.clock.runFor(1000);
   await privacyPage.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await privacyPage.waitForFunction(before => {
