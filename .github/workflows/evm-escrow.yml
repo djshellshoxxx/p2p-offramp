@@ -1,7 +1,12 @@
 name: EVM escrow
 on:
   push:
+    branches: [main]
   pull_request:
+# Cancel superseded runs of the same workflow and ref (first-party feature, no new actions).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
