@@ -296,62 +296,8 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      try{const saved=items.find(item=>item.recordId===options.recordId);if(!saved)throw Error('NOT_FOUND');const reviewed=value(await step(reviewTermsBytes(registry,saved.bytes)));terms=asTerms(reviewed);domain={chainId:reviewed.network.chainId,verifyingContract:reviewed.deployment.address};binding={chain:'evm',networkId:terms.networkId,deploymentId:terms.deploymentId,tradeId:native.evmTermsHash(domain,terms)};agreement={v:1,orderId:terms.orderId,revision:terms.revision,...reviewed.agreement,agreementSalt:text(field(parseStrictJsonBytes(saved.bytes,65536),'privateAgreement'),'agreementSalt',/^[0-9a-f]{64}$/)};}
      finally{for(const item of items)item.bytes.fill(0);}
      const watched=trade();const wallet=new native.EvmWalletAdapter(walletProvider(0),'explicit-original-seller-wallet',registry),unsubscribe=wallet.subscribe(walletInvalidated);cleanup.push(()=>{unsubscribe();wallet.dispose();});const walletSession=value(await step(wallet.connect(watched.binding.networkId)));if(walletSession.account!==watched.terms.seller)throw Error('WALLET_CHANGED');parties.push({kind:'watch',wallet,walletSession});
-     await attachNative();
-     const recoveryBinding=defined(binding),recoveryTerms=defined(terms);
-     // Capture this trade's never-sent intents BEFORE recover() cancels them: recover() omits cancelled
-     // intents from its result, and only this live cancellation (terminal-verified by this journal)
-     // proves that no durable send marker was ever written.
-     const recoveryJournal=value(await step(defined(journal).list()));
-     const originalPrepared=recoveryJournal.filter(intent=>
-      intent.binding.chain===recoveryBinding.chain
-      &&intent.binding.networkId===recoveryBinding.networkId
-      &&intent.binding.deploymentId===recoveryBinding.deploymentId
-      &&intent.binding.tradeId===recoveryBinding.tradeId
-      &&intent.account===recoveryTerms.seller
-      &&intent.state==='prepared');
-     const preparedFunds=originalPrepared.filter(intent=>intent.action==='fund');
-     const preparedApprovals=originalPrepared.filter(intent=>intent.action==='approve');
-     let recovered:readonly IntentV1[];
-     recoveryCancellationEpoch=mine;
-     try{
-      recovered=value(await step(defined(life).recover()));
-     }finally{
-      if(epoch===mine)recoveryCancellationEpoch=undefined;
-     }
-     const observed=value(await step(native.readObservation({
-      registry,binding:watched.binding,terms:watched.terms,domain:watched.domain,
-      request:scopedRequest,generation:0,requestSequence:1,
-     })));
-     const selectedBinding=watched.binding,selectedTerms=watched.terms;
-     const approvalCandidates=recovered.filter(intent=>
-      intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));
-     const action=observed.state==='absent'&&approvalCandidates.length>0?'approve'
-      :observed.state==='released'?'release'
-      :observed.state==='refunded'?'refund'
-      :'fund';
-     const matches=recovered.filter(intent=>
-      intent.binding.tradeId===selectedBinding.tradeId
-      &&intent.binding.networkId===selectedBinding.networkId
-      &&intent.binding.deploymentId===selectedBinding.deploymentId
-      &&intent.account===selectedTerms.seller
-      &&intent.action===action);
-     const cancelledBeforeSend=(intent:IntentV1)=>defined(journal).isTerminalVerified(intent.intentId);
-     const onlyFundCancelled=preparedFunds.length===1&&cancelledBeforeSend(defined(preparedFunds[0]));
-     if(matches.length===0&&observed.state==='absent'&&onlyFundCancelled){
-      phase='cancelled-before-send';
-      return snapshot();
-     }
-     // A never-sent approval cancelled live above changed nothing on chain. With no fund intent, no
-     // escrow and no other intent left to reconcile, return to explicit re-acceptance: a fresh signing
-     // review must precede any new approval. Nothing is resubmitted automatically, and a restored
-     // terminal label alone (not verified by this live cancellation) never reaches this branch.
-     const approvalsCancelled=preparedApprovals.length>0&&preparedApprovals.every(cancelledBeforeSend);
-     const nothingElse=matches.length===0&&recovered.length===0&&preparedFunds.length===0;
-     if(nothingElse&&observed.state==='absent'&&approvalsCancelled){
-      phase='recovered-acceptance-required';
-      return snapshot();
-     }
-     const chosen=action==='approve'?matches.sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
+     await attachNative();const recoveryBinding=defined(binding),recoveryTerms=defined(terms);const originalPrepared=value(await step(defined(journal).list())).filter(intent=>intent.binding.chain===recoveryBinding.chain&&intent.binding.networkId===recoveryBinding.networkId&&intent.binding.deploymentId===recoveryBinding.deploymentId&&intent.binding.tradeId===recoveryBinding.tradeId&&intent.account===recoveryTerms.seller&&intent.action==='fund'&&intent.state==='prepared');let recovered:readonly IntentV1[];recoveryCancellationEpoch=mine;try{recovered=value(await step(defined(life).recover()));}finally{if(epoch===mine)recoveryCancellationEpoch=undefined;}const observed=value(await step(native.readObservation({registry,binding:watched.binding,terms:watched.terms,domain:watched.domain,request:scopedRequest,generation:0,requestSequence:1})));
+     const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?matches.sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
     }else if(action==='offer'){
      if(phase!=='wallet')throw Error('OUT_OF_ORDER');await fresh();await requireAcceptanceTime();const {terms,domain,binding}=trade(),document=definedDocument();const[seller,buyer]=negotiating();
      const ad=await step(createAdEvent(seller.eventCrypto,{app:'p2p-offramp',v:1,orderId:terms.orderId,revision:1,networkId:'eip155:31337',assetId:defined(registry.network(terms.networkId)?.assets.find(asset=>(asset.address??ZERO)===terms.asset)).id,amountMin:terms.amountBaseUnits,amountMax:terms.amountBaseUnits,currency:'USD',railClass:'bank-transfer',expiresAtSeconds:String(clock+1800),maker:seller.pub},clock));
