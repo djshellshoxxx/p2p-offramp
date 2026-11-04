@@ -1,6 +1,6 @@
 # D7 - Disposition of the optional reference packages in PR #26 (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything.
+Status: ACCEPTED — Option 2, recorded 2026-11-04 by the owner (djshellshoxxx). Merge `personalization`, `governance` and `claims` with the rest of PR #26; park the nine optional reference packages that have no importer (meetup, courier, arbitration, liquidity, stealth, proof-jobs, proof-inputs, privacy-controls, privacy-policy) until the core journey leaves `LOCALPROOF`. Parking courier needs the governance assurance manifest update noted in this packet. This records scope only and changes no running behavior.
 
 Paths marked "main" exist on `main` (e9b9db3). "PR #26 only" means the path exists only on the PR #26 branch (94554ec). Import evidence below comes from a static search of `apps/`, `packages/` and `scripts/` for relative import specifiers. It was not produced by running the bundler.
 

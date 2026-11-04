@@ -1,6 +1,6 @@
 # D4 - Capability-to-terms commitments (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything. No hash preimage, manifest format or negotiation rule in it is approved, and nothing here changes running behavior.
+Status: ACCEPTED — Option C now, with Option B as the named target for the first extension, recorded 2026-11-04 by the owner (djshellshoxxx). Core trades continue to commit the count-zero capabilities hash and refuse any other value (fail-closed with `UNSUPPORTED_VERSION` / `UNSUPPORTED_PROVIDER`); no capability-to-terms mapping is shipped until an extension needs one. No running behavior changes.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9).
 

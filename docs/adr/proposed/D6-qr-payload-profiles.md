@@ -1,6 +1,6 @@
 # D6 - QR payload profiles (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything. No envelope, codec, signing rule or size limit in it is approved, and nothing here changes running behavior.
+Status: ACCEPTED — Option B, recorded 2026-11-04 by the owner (djshellshoxxx). The decision fixes the QR direction: an RFC 8785 canonical envelope carried as RFC 9285 base45 behind a version prefix; only trade invites are signed, over a domain-separated digest; secrets never travel in a QR; unsigned types are shown as unauthenticated. The signing-key profile for invites remains open for a follow-up owner decision. No running behavior changes. Implementation still requires the codec test vectors and the physical scan tests the spec mandates.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9).
 
