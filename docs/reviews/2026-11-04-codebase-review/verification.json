@@ -632,5 +632,31 @@
       "embedded_in_this_artifact": false
     }
   ],
-  "approval_scope": "This record documents bounded verification evidence and limitations. It is not a release, security, deployment or financial-use approval."
+  "approval_scope": "This record documents bounded verification evidence and limitations. It is not a release, security, deployment or financial-use approval.",
+  "related_work_at_handoff": {
+    "reviewed_candidate_unchanged": true,
+    "fix_pr": {
+      "number": 28,
+      "head_sha": "34b80eb908f69e1bd9fc69038d067157d618d6e8",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/28",
+      "observed_changes": [
+        "AppServices cancellation signal forwarding",
+        "Locale fixture fixed-count subtraction for unrelated listeners",
+        "Direct imports in unbundled meetup browser fixture"
+      ],
+      "prepared_approval_recovery_status": "still pending according to PR body",
+      "test_results": "PR author reports local reruns in a different environment; not executed or counted by this review"
+    },
+    "decision_proposal_pr": {
+      "number": 29,
+      "head_sha": "dafae9ccb7cc567075872df72c67ca259402b9d1",
+      "status": "proposed; not approved or implemented"
+    },
+    "complementary_research_pr": {
+      "number": 30,
+      "head_sha": "e500c4dc9b9c4c2770b3eae47d5a2f7cee2a0f2d",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/30",
+      "overlap": "deferred-payout presentation; no first-discovery claim"
+    }
+  }
 }

@@ -2,7 +2,7 @@
 
 ## Decision and scope
 
-**Eight new confirmed findings warrant repair: one P1, five P2 and two P3.** The most urgent is an application gate that prevents a willing seller from releasing escrow during the final 15 minutes before expiry, contrary to the repository's explicit settlement rule. The other findings concern transaction rejection recovery, deferred-payout visibility, relay delivery, ordinary compressed HTTP responses, negotiation retry, optional update-store retry and a dormant courier consent helper.
+**Eight confirmed findings warrant repair: one P1, five P2 and two P3.** The most urgent is an application gate that prevents a willing seller from releasing escrow during the final 15 minutes before expiry, contrary to the repository's explicit settlement rule. The other findings concern transaction rejection recovery, deferred-payout visibility, relay delivery, ordinary compressed HTTP responses, negotiation retry, optional update-store retry and a dormant courier consent helper.
 
 These are **repair priorities within the code's actual reachability**, not CVSS scores or claims of deployed exploitation. Four findings affect the explicitly gated LOCALPROOF journey; two concern reusable transport/relay components; the two P3 findings concern optional components. No new direct escrow-custody bypass, vault decryption bypass, key disclosure or unauthorized retention deletion was confirmed. That bounded finding does not establish production safety.
 
@@ -195,6 +195,17 @@ Two defects already have review comments and an active repair owner. A third ite
 | K03 — browser listener assertion assumes no legitimate application listeners | [scripts/test-locale-layout-browser.mjs:176–226](https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/scripts/test-locale-layout-browser.mjs#L176-L226). The fixture counts all visibility/pageshow listeners and assumes absolute totals [1,1]/[0,0]. The current application legitimately has listeners in main, screen counts and PrivacyStatusPanel. CI sees [2,3] versus [1,1]. This evidence does not establish a listener leak. Validate Settings-owned listener identities/deltas against the application baseline and preserve leak-detection controls. |
 
 No production source was changed by this review. These pending fixes still require exact-commit verification; inspecting a working diff is not proof of a merged or passing result.
+
+### Related work received before handoff
+
+Other sessions published the following while this review was being finalized. They do not change the reviewed PR #26 commit or the eight findings above.
+
+- [PR #28](https://github.com/djshellshoxxx/p2p-offramp/pull/28), inspected at 34b80eb908f69e1bd9fc69038d067157d618d6e8, proposes K02 signal forwarding and K03's listener-fixture adjustment. Its body still lists K01 prepared-approval recovery as pending. The published listener patch subtracts fixed background counts [1,2]; it addresses the observed totals but remains coupled to other page features. The callback-ownership/baseline recommendation above remains preferable for durable regression coverage.
+- That repair PR also identifies a separate **meetup browser-fixture import failure** hidden behind the earlier locale failure. The reviewed [fixture imports the package index](https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/meetup/test/fixtures/origin-ledger-fixture.ts#L4-L6); that index re-exports signaling code with a bare noble import, which the unbundled fixture server cannot resolve. PR #28 changes the fixture to direct module imports. This is an additional owner-reported test-infrastructure issue with a matching static import chain, kept separate from the eight review findings. Its reported browser reruns use another environment and are not added to this review's local test counts.
+- [PR #29](https://github.com/djshellshoxxx/p2p-offramp/pull/29) proposes owner decision packets for peer acceptance, optional-package scope and branch protection. These are proposals, not approved production profiles or implemented behavior.
+- [PR #30](https://github.com/djshellshoxxx/p2p-offramp/pull/30) adds complementary security research. Its deferred-payout discussion overlaps F03; the reports make no first-discovery claim. Its protocol, proof-provider, release-trust and supply-chain prerequisites should be read alongside this bug-focused report. In particular, the root lockfile inspection below is not a complete audit of the repository's independent lock roots.
+
+Current status should be checked on those PRs before assigning repair work. Their presence does not establish that a patch is merged, that all relevant tests passed, or that an owner decision has been approved.
 
 ## Missing implementation and release qualification
 
