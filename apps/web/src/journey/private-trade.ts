@@ -9,6 +9,7 @@ import {createRelayEventCrypto,createTermsExchange,adBookKey} from '../../../../
 import {decodeIdentityPayload,decodeBase64url,parseStrictJsonBytes,type IntentV1,type TradeBinding,type RuntimeResponse} from '../../../../packages/schemas/index.ts';
 import {createJourneyVaultComposition} from './vault-composition.ts';
 import type {JourneyOptions,JourneyController,JourneySnapshot,Phase,EvmTerms,EvmDomain,Party,NegotiatingParty,NativeFeeReceipt,PreparedIntent,ChainReader,Journal,Lifecycle,PaymentGuidance,Authority,TradeComposition,NativeIntentObservation,ReviewedEvmTerms,PreparedRequest,JourneyRuntimeInput,EscrowCall,Request,TokenCheck,ActionFee,SigningAction,SigningReview,WalletSession,WalletProvider} from './native-contracts.ts';
+import type {PaymentGuidanceObservation,PayoutStatus,EscrowLogEvent,ChainStateView} from './native-contracts.ts';
 import type {JourneyVaultSelection} from './vault-composition.ts';
 const utf8=new TextEncoder(),ZERO=`0x${'0'.repeat(40)}`;
 // Comparison pin for the unchanged native EvmWalletAdapter payload; this module never signs a replacement domain.
@@ -34,13 +35,23 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  let initialization:Promise<void>|undefined;let recoveryCancellationEpoch:number|undefined;let ready=false,closed=false,busy=false,epoch=0,context:JourneyVaultSelection|undefined,phase:Phase='setup';
  let terms:EvmTerms|undefined,domain:EvmDomain|undefined,binding:TradeBinding|undefined,agreement:PrivateAgreementV1|undefined,document:Uint8Array<ArrayBuffer>|undefined,sessionId:string|undefined,prepared:PreparedIntent|undefined,intentId:string|undefined,receipt:NativeFeeReceipt|null=null,backupRevision:number|null=null,clock=0,clockObservedAt=performance.now(),sends=0;
  let tokenCheck:TokenCheck|null=null,acceptedProof=false,communicationAccepted=false;const fees:ActionFee[]=[];
+ // Owned outgoing negotiation awaiting delivery. The exact signed ad and wraps are kept so an explicit retry
+ // republishes identical events; nothing is re-signed or regenerated. Every field clears with clearPrivate().
+ interface PendingNegotiation {
+  readonly ad:NostrEvent;adDelivered:boolean;take?:{readonly sessionId:string;readonly recipientWrap:NostrEvent};
+  takeDelivered:boolean;offer?:{readonly recipientWrap:NostrEvent};
+ }
+ const MAX_DELIVERY_RETRIES=5;
+ let negotiation:PendingNegotiation|undefined,pendingAccept:{readonly recipientWrap:NostrEvent}|undefined;
+ let deliveryRetries=0;
+ let chainState:ChainStateView|null=null;
  const parties:Party[]=[],owned:Uint8Array[]=[],cleanup:(()=>void)[]=[];const nativeRequests=new Set<Promise<unknown>>();
  interface OwnedReview {readonly view:SigningReview;readonly fingerprint:string;readonly epoch:number;readonly sessionId:string;readonly wallets:readonly WalletSession[];readonly invalidation:number;}
  let pendingReview:OwnedReview|undefined,activeReview:OwnedReview|undefined,privacyOff:(()=>void)|undefined,privacyReady=false,reviewInvalidation=0;
  const monotonic=()=>Math.floor(performance.now());
  const unknownPrivacy=createPrivacyViewReader({monotonicNow:monotonic});
  const privacyReader=createPrivacyViewReader({monotonicNow:monotonic,...(privacy?{transport:privacy.transport,endpoints:privacy.endpoints}:{}),observations:{get generation(){return epoch;},read(){current();const observedAt=monotonic();return{version:1,generation:epoch,vault:{state:'unlocked',observedAt,expiresAt:observedAt+30000},messaging:null,proof:null};}}});
- const snapshot=():JourneySnapshot=>{if(context){try{context.assertCurrent();}catch{clearPrivate();}}if(pendingReview&&monotonic()>=pendingReview.view.expiresAt)pendingReview=undefined;const selectedTerms=terms;const reviewed=selectedTerms?registry.network(selectedTerms.networkId)?.assets.find(asset=>asset.kind===selectedTerms.assetKind&&(asset.address??ZERO)===selectedTerms.asset):undefined;return Object.freeze({label:'LOCALPROOF',tradingEnabled:false,productionBlocker:'Peer wallet-acceptance carrier and maintained signing trust root remain undefined.',phase,profileId:context?.session.profileId??null,backupRevision,account:parties[0]?.walletSession.account??null,terms:terms&&domain&&reviewed?{...terms,assetId:reviewed.id,decimals:reviewed.decimals,chainId:domain.chainId,escrowAddress:domain.verifyingContract}:null,manualPayment:agreement?{currency:agreement.fiatCurrency,minorUnits:agreement.fiatMinorUnits,scale:agreement.fiatScale,instructions:agreement.paymentInstructions}:null,tradeId:binding?.tradeId??null,intentId:intentId??null,receipt,assets:registry.network('local-evm')?.assets.filter(asset=>asset.kind!=='spl'&&registry.deployment('local-evm','escrow-local-v1')?.supportedAssetIds.includes(asset.id)).map(asset=>({id:asset.id,kind:asset.kind==='native'?'native' as const:'erc20' as const,decimals:asset.decimals}))??[],tokenCheck,fees:[...fees],signingReview:pendingReview?.view??null,paymentGuidance:gate?.view()??null,submissionsThisWorker:sends});};
+ const snapshot=():JourneySnapshot=>{if(context){try{context.assertCurrent();}catch{clearPrivate();}}if(pendingReview&&monotonic()>=pendingReview.view.expiresAt)pendingReview=undefined;const selectedTerms=terms;const reviewed=selectedTerms?registry.network(selectedTerms.networkId)?.assets.find(asset=>asset.kind===selectedTerms.assetKind&&(asset.address??ZERO)===selectedTerms.asset):undefined;return Object.freeze({label:'LOCALPROOF',tradingEnabled:false,productionBlocker:'Peer wallet-acceptance carrier and maintained signing trust root remain undefined.',phase,profileId:context?.session.profileId??null,backupRevision,account:parties[0]?.walletSession.account??null,terms:terms&&domain&&reviewed?{...terms,assetId:reviewed.id,decimals:reviewed.decimals,chainId:domain.chainId,escrowAddress:domain.verifyingContract}:null,manualPayment:agreement?{currency:agreement.fiatCurrency,minorUnits:agreement.fiatMinorUnits,scale:agreement.fiatScale,instructions:agreement.paymentInstructions}:null,tradeId:binding?.tradeId??null,intentId:intentId??null,receipt,assets:registry.network('local-evm')?.assets.filter(asset=>asset.kind!=='spl'&&registry.deployment('local-evm','escrow-local-v1')?.supportedAssetIds.includes(asset.id)).map(asset=>({id:asset.id,kind:asset.kind==='native'?'native' as const:'erc20' as const,decimals:asset.decimals}))??[],tokenCheck,fees:[...fees],signingReview:pendingReview?.view??null,paymentGuidance:gate?.view()??null,submissionsThisWorker:sends,chainState});};
  const selected=():JourneyVaultSelection=>defined(context);
  const trade=()=>({terms:defined(terms),domain:defined(domain),binding:defined(binding),agreement:defined(agreement)});
  const negotiating=():[NegotiatingParty,NegotiatingParty]=>{const seller=parties[0],buyer=parties[1];if(!seller||!buyer||seller.kind!=='negotiation'||buyer.kind!=='negotiation')throw Error('LOCKED');return[seller,buyer];};
@@ -73,8 +84,163 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   if(action==='accept'||action==='accept-recovered')return{to:domain.verifyingContract,data:'0x',value:'0'};
   return native.escrowCallFor(action==='approve'||action==='reset-approval'?{action:'approve',token:terms.asset,spender:domain.verifyingContract,amountBaseUnits:action==='reset-approval'?'0':terms.amountBaseUnits}:action==='fund'?{action:'fund',domain,terms}:{action,escrow:domain.verifyingContract,tradeId:binding.tradeId}).call;
  }
+ // A funded escrow in either phase may be released; only payment-coordination also shows payment instructions.
+ const releasePhase=():boolean=>phase==='payment-coordination'||phase==='payment-guidance-closed';
+ // remainingSeconds is measured against the latest block, but a release is included in a strictly later block and
+ // BasicEscrow reverts at block.timestamp >= deadline. The margin covers several block intervals (12 s on Ethereum
+ // L1, more under congestion), mempool delay and a human wallet confirmation of a few minutes. It is far below the
+ // 900-second guidance buffer. It is a client-side refusal only; the chain stays authoritative for the deadline.
+ const RELEASE_DEADLINE_MARGIN_SECONDS=300n;
+ // Release eligibility is independent of the payment-guidance buffer. It needs a fresh, funded, matching native
+ // read (reason ok or near-expiry) with more than the margin left before the actual deadline.
+ function releaseOpen(observation:PaymentGuidanceObservation):boolean{
+  if(observation.termsHash!==trade().binding.tradeId)return false;
+  if(observation.reason!=='ok'&&observation.reason!=='near-expiry')return false;
+  const remaining=observation.remainingSeconds;
+  if(typeof remaining!=='string'||!/^-?(0|[1-9][0-9]{0,77})$/.test(remaining))return false;
+  return BigInt(remaining)>RELEASE_DEADLINE_MARGIN_SECONDS;
+ }
+ // After a blocked projection only a near-expiry read with the deadline ahead keeps release open.
+ function guidanceClosedForRelease(gate:PaymentGuidance):boolean{
+  const viewed=gate.view();
+  return viewed.ok&&viewed.value.reason==='near-expiry'&&releaseOpen(viewed.value);
+ }
+ // Builds the receipt from one finalized, canonical settlement transaction and its own escrow logs.
+ async function enterReceipt(state:'released'|'refunded',hash:string,settledBy:'this-wallet'|'another-account'){
+  const {binding}=trade(),{reader,authority,journey}=attached();
+  value(await step(authority.refresh(binding)));
+  const projected=value(await step(journey.read()));
+  if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
+  const rawReceipt=await rpc('eth_getTransactionReceipt',[hash]);
+  const raw={transactionHash:text(rawReceipt,'transactionHash',/^0x[0-9a-f]{64}$/),
+   status:text(rawReceipt,'status',/^0x1$/),
+   gasUsed:quantity(field(rawReceipt,'gasUsed')),effectiveGasPrice:quantity(field(rawReceipt,'effectiveGasPrice')),
+   blockNumber:quantity(field(rawReceipt,'blockNumber')),blockHash:text(rawReceipt,'blockHash',/^0x[0-9a-f]{64}$/)};
+  const canonical=value(await step(reader.blockHashAt(String(BigInt(raw.blockNumber)),new AbortController().signal)));
+  if(raw.transactionHash!==hash||raw.status!=='0x1'||canonical!==raw.blockHash)throw Error('RECEIPT_UNAVAILABLE');
+  const final=value(await step(reader.head('finalized',new AbortController().signal)));
+  if(!final||BigInt(raw.blockNumber)>BigInt(final.number))throw Error('RECEIPT_UNAVAILABLE');
+  const finalHash=value(await step(reader.blockHashAt(final.number,new AbortController().signal)));
+  if(finalHash!==final.hash)throw Error('RECEIPT_UNAVAILABLE');
+  const payout=await payoutStatus(state,rawReceipt,final.number);
+  const nativeAsset=defined(registry.network(binding.networkId)?.assets.find(asset=>asset.kind==='native'));
+  receipt={nativeAssetId:nativeAsset.id,nativeDecimals:nativeAsset.decimals,tradeId:binding.tradeId,
+   transactionHash:hash,state,blockNumber:String(BigInt(raw.blockNumber)),
+   gasUsed:String(BigInt(raw.gasUsed)),effectiveGasPrice:String(BigInt(raw.effectiveGasPrice)),
+   fee:feeProduct(raw.gasUsed,raw.effectiveGasPrice),payout,settledBy};
+  phase='receipt';
+ }
+ // An escrow settled on chain by another account (refund is callable by anyone at or after the deadline) is shown
+ // from the escrow's own settlement event; who sent it does not change the outcome. Bounded and read-only.
+ async function enterChainReceipt(state:'released'|'refunded',fromBlock:string):Promise<void>{
+  const {binding,domain,terms}=trade(),{reader}=attached();
+  const final=value(await step(reader.head('finalized',new AbortController().signal)));
+  if(!final||BigInt(final.number)<BigInt(fromBlock))throw Error('RECEIPT_UNAVAILABLE');
+  // Beyond the bounded search the outcome is still shown, from the canonical state read alone.
+  if(BigInt(final.number)-BigInt(fromBlock)>50000n)return enterUnlocatedReceipt(state);
+  const range={fromBlock:'0x'+BigInt(fromBlock).toString(16),toBlock:'0x'+BigInt(final.number).toString(16)};
+  const logs=await rpc('eth_getLogs',[{address:domain.verifyingContract,...range,topics:[null,'0x'+binding.tradeId]}]);
+  if(!Array.isArray(logs)||logs.length>16)throw Error('RECEIPT_UNAVAILABLE');
+  const kind=state==='released'?'Released':'Refunded';
+  const settlements=logs.filter(log=>decodeEscrowEvent(log).kind===kind);
+  if(settlements.length===0)return enterUnlocatedReceipt(state);
+  if(settlements.length!==1)throw Error('RECEIPT_UNAVAILABLE');
+  const hash=text(settlements[0],'transactionHash',/^0x[0-9a-f]{64}$/);
+  const sender=text(await rpc('eth_getTransactionReceipt',[hash]),'from',/^0x[0-9a-fA-F]{40}$/).toLowerCase();
+  await enterReceipt(state,hash,sender===terms.seller?'this-wallet':'another-account');
+ }
+ // Reconciles leftover settlement intents read-only. A reverted one becomes terminal-verified, so the original
+ // refund can reserve beside it; the first one the chain has not resolved is returned and nothing else is tried.
+ type Leftover={readonly kind:'resolved'}|{readonly kind:'settling'|'external';readonly intentId:string};
+ async function classifyLeftovers(intents:readonly IntentV1[]):Promise<Leftover>{
+  const {journal,life}=attached();
+  // A null-hash row first gets the bounded, read-only nonce scan, which records the hash only when it finds the
+  // exact transaction. If the scan cannot locate it (or is past its bound) the row stays ambiguous without a
+  // durable send marker (D9) and is never handed to lifecycle reconciliation, which would rewrite it.
+  for(const settle of intents){
+   if(settle.submission.chain==='evm'&&settle.submission.hash!==null)continue;
+   const scanned=await step(journal.reconcileNative(settle.intentId));
+   const located=scanned.ok&&scanned.value.submission.chain==='evm'&&scanned.value.submission.hash!==null;
+   if(!located)return{kind:'external',intentId:settle.intentId};
+  }
+  let settling:string|undefined;
+  for(const settle of intents){
+   const hashed=settle.submission.chain==='evm'&&settle.submission.hash!==null;
+   if(hashed)await step(journal.reconcileNative(settle.intentId));
+   const result=value(await step(life.reconcile(settle.intentId)));
+   if(result.outcome==='reverted'&&journal.isTerminalVerified(settle.intentId))continue;
+   // Still progressing on chain, or reverted but not yet final: reconcile alone can resolve it later.
+   if(['pending','confirmed','reorged','reverted'].includes(result.outcome)){settling??=settle.intentId;continue;}
+   // Expired or replaced rows need a successor the app cannot create; anything else contradicts a funded escrow.
+   return{kind:'external',intentId:settle.intentId};
+  }
+  return settling?{kind:'settling',intentId:settling}:{kind:'resolved'};
+ }
+ async function intentOf(id:string):Promise<IntentV1>{
+  const found=value(await step(attached().journal.list())).find(intent=>intent.intentId===id);
+  if(!found)throw Error('RECONCILE_REQUIRED');
+  return found;
+ }
+ async function preparedAtOf(id:string):Promise<string>{
+  return parseCanonicalPreparedRequest((await intentOf(id)).preparedRequest).preparedAtBlock;
+ }
+ // A null-hash settlement that the bounded 64-block nonce scan can no longer reach stays ambiguous for good.
+ async function nullHashBeyondScan(id:string):Promise<boolean>{
+  const intent=await intentOf(id);
+  if(intent.submission.chain!=='evm'||intent.submission.hash!==null)return false;
+  if(intent.action!=='release'&&intent.action!=='refund')return false;
+  const latest=value(await step(attached().reader.head('latest',new AbortController().signal)));
+  const preparedAt=BigInt(parseCanonicalPreparedRequest(intent.preparedRequest).preparedAtBlock);
+  return latest!==null&&BigInt(latest.number)-preparedAt>64n;
+ }
+ // Fresh finalized escrow-state read for display only; it grants no action.
+ async function readChainState():Promise<ChainStateView>{
+  const {terms,domain,binding}=trade(),{reader}=attached(),request=scopedRequest;
+  const observation={registry,binding,terms,domain,request,generation:0,requestSequence:1};
+  const observed=value(await step(native.readObservation(observation)));
+  const final=value(await step(reader.head('finalized',new AbortController().signal)));
+  if(!final)throw Error('FINALITY_UNAVAILABLE');
+  chainState=Object.freeze({state:observed.state,observedAtHeight:final.number});
+  return chainState;
+ }
+ // The app cannot resolve this settlement row without D9: it shows the chain state, sends nothing and never
+ // touches the row. If the escrow has since been settled on chain (for example with the recovery package), the
+ // outcome is shown as a receipt instead.
+ async function enterExternalRecovery(ambiguousIntentId:string,fromBlock:string):Promise<void>{
+  intentId=ambiguousIntentId;
+  const observed=await readChainState();
+  if(observed.state==='released'||observed.state==='refunded')return enterChainReceipt(observed.state,fromBlock);
+  phase='external-recovery-required';
+ }
+ // Terminal on chain, but the settlement transaction was not located within the bounded search: the outcome comes
+ // from the canonical finalized state read alone, with no transaction, fee or payout detail.
+ async function enterUnlocatedReceipt(state:'released'|'refunded'):Promise<void>{
+  const {binding}=trade(),{authority,journey}=attached();
+  value(await step(authority.refresh(binding)));
+  const projected=value(await step(journey.read()));
+  if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
+  const observed=await readChainState();
+  if(observed.state!==state)throw Error('STATE_MISMATCH');
+  receipt=null;
+  phase='receipt';
+ }
+ // Enters the funded phase from fresh native evidence: payment guidance, guidance-closed release, or neither.
+ async function enterFundedPhase():Promise<void>{
+  const {binding}=trade(),{gate,authority,journey}=attached();
+  value(await step(authority.refresh(binding)));
+  const projected=value(await step(journey.read()));
+  const coordinating=projected.kind==='resolved'&&projected.view.step==='payment-coordination';
+  const closed=projected.kind==='blocked'&&projected.blockingReason==='payment-guidance-blocked';
+  if(coordinating)phase='payment-coordination';
+  else if(closed&&guidanceClosedForRelease(gate))phase='payment-guidance-closed';
+  else{phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}
+ }
  function reviewActionReady(action:SigningAction):void{
-  const allowed=action==='accept'?phase==='review':action==='accept-recovered'?phase==='recovered-acceptance-required':action==='release'?phase==='payment-coordination':action==='refund'?phase==='payment-coordination'||phase==='payment-guidance-unavailable':phase==='accepted'&&acceptedProof;
+  const allowed=action==='accept'?phase==='review'
+   :action==='accept-recovered'?phase==='recovered-acceptance-required'
+   :action==='release'?releasePhase()
+   :action==='refund'?releasePhase()||phase==='payment-guidance-unavailable'
+   :phase==='accepted'&&acceptedProof;
   if(!allowed)throw Error('OUT_OF_ORDER');
   if((action==='approve'||action==='reset-approval')&&trade().terms.assetKind!=='erc20')throw Error('INVALID_INPUT');
  }
@@ -147,7 +313,65 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   const sub=value(party.pool.subscribe(filters,{onEvent:event=>events.push(event),onEose:()=>end(true)}));
   try{if(!await step(done))throw Error('RELAY_TIMEOUT');return events;}finally{clearTimeout(timer);sub.close();}
  };
- const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{value(await step(from.pool.publish(message.recipientWrap)));const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);if(!found)throw Error('MISSING_WRAP');const received=value(await step(to.exchange.receive(found,to.secret)));if('own'in received)throw Error('WRONG_COUNTERPARTY');return received;};
+ // Every negotiation publish goes through here; only these attempts count against the delivery retry budget.
+ let relayPublishes=0;
+ const publish=async(pool:NegotiatingParty['pool'],event:NostrEvent):Promise<void>=>{
+  relayPublishes++;
+  value(await step(pool.publish(event)));
+ };
+ const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{
+  await publish(from.pool,message.recipientWrap);
+  const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);
+  if(!found)throw Error('MISSING_WRAP');
+  const received=value(await step(to.exchange.receive(found,to.secret)));
+  if('own'in received)throw Error('WRONG_COUNTERPARTY');
+  return received;
+ };
+ // Terminal end of an undelivered negotiation. The reviewed trade stays visible; the pending messages are dropped so
+ // nothing republishes, and no state claims the peer received or did not receive them.
+ function stopDelivery():void{
+  negotiation=pendingAccept=undefined;
+  phase='delivery-stopped';
+ }
+ // A retry first asks the owned peer whether it already applied the message, then republishes the identical wrap.
+ async function deliverAcceptance(message:{recipientWrap:NostrEvent}):Promise<void>{
+  const {binding}=trade(),[seller,buyer]=negotiating(),applied=seller.exchange.session(defined(sessionId));
+  if(applied?.state==='accepted'){
+   if(applied.terms?.hash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+   return;
+  }
+  const got=await deliver(message,buyer,seller);
+  if(got.state!=='accepted'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+ }
+ // Resumes ad publication, take and offer from the first undelivered step. Each message is created at most once.
+ async function negotiate(pending:PendingNegotiation):Promise<void>{
+  const {terms,binding}=trade(),document=definedDocument(),[seller,buyer]=negotiating();
+  if(!pending.adDelivered){
+   await publish(seller.pool,pending.ad);
+   const received=(await pull(buyer,AD_KIND)).find(event=>event.id===pending.ad.id);
+   // Re-ingesting this exact event id is a benign duplicate; any other result refuses the ad.
+   const ingested=received?buyer.book.ingest(received):'invalid';
+   if(ingested!=='accepted'&&ingested!=='duplicate')throw Error('BAD_AD');
+   pending.adDelivered=true;
+  }
+  if(!pending.take){
+   const adKey=adBookKey(seller.pub,terms.orderId);
+   pending.take=value(await step(buyer.exchange.take(adKey,terms.buyer,buyer.secret)));
+   sessionId=pending.take.sessionId;
+  }
+  if(!pending.takeDelivered){
+   if(!seller.exchange.session(defined(sessionId)))await deliver(pending.take,buyer,seller);
+   pending.takeDelivered=true;
+  }
+  pending.offer??=value(await step(seller.exchange.offer(defined(sessionId),document,seller.secret)));
+  const applied=buyer.exchange.session(defined(sessionId));
+  if(applied?.state==='offered'){
+   if(applied.terms?.hash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+   return;
+  }
+  const got=await deliver(pending.offer,seller,buyer);
+  if(got.state!=='offered'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+ }
  function approvalAmount(intent:Readonly<IntentV1>):string{
   const {terms,domain}=trade();if(terms.assetKind!=='erc20')throw Error('INVALID_INPUT');const call=parseCanonicalPreparedRequest(intent.preparedRequest);
   for(const amount of['0',terms.amountBaseUnits]){const expected=native.escrowCallFor({action:'approve',token:terms.asset,spender:domain.verifyingContract,amountBaseUnits:amount}).call;if(call.to===expected.to&&call.data===expected.data&&call.value===expected.value)return amount;}throw Error('INTEGRITY_FAILURE');
@@ -170,6 +394,43 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   if(intent.submission.chain!=='evm'||!intent.submission.hash)throw Error('RECEIPT_UNAVAILABLE');const hash=intent.submission.hash,raw=await rpc('eth_getTransactionReceipt',[hash]),height=quantity(field(raw,'blockNumber')),blockHash=text(raw,'blockHash',/^0x[0-9a-f]{64}$/);if(text(raw,'transactionHash',/^0x[0-9a-f]{64}$/)!==hash||field(raw,'status')!=='0x1'||value(await step(definedReader().blockHashAt(height,new AbortController().signal)))!==blockHash)throw Error('RECEIPT_UNAVAILABLE');
   const final=value(await step(definedReader().head('finalized',new AbortController().signal)));if(!final||BigInt(height)>BigInt(final.number)||value(await step(definedReader().blockHashAt(final.number,new AbortController().signal)))!==final.hash)throw Error('RECEIPT_UNAVAILABLE');
   const asset=defined(registry.network(trade().binding.networkId)?.assets.find(asset=>asset.kind==='native'));const fee=feeProduct(quantity(field(raw,'gasUsed')),quantity(field(raw,'effectiveGasPrice')));if(!fees.some(item=>item.transactionHash===hash)){if(fees.length===128)fees.shift();fees.push({action:intent.action,transactionHash:hash,fee,nativeAssetId:asset.id,nativeDecimals:asset.decimals});}
+ }
+ // Escrow disposition and asset delivery are separate facts: a failed push leaves the trade terminal and credits
+ // pendingWithdrawals instead (BasicEscrow _payout). Only this finalized receipt's own escrow logs attribute a credit
+ // to this trade; the aggregate pending balance can include other trades and is reported as such, never as arrived.
+ // Decodes one log of the registry-bound escrow; any other emitter or malformed log is refused.
+ function decodeEscrowEvent(log:unknown):EscrowLogEvent{
+  const topics=field(log,'topics');
+  if(!Array.isArray(topics)||topics.some(topic=>typeof topic!=='string'))throw Error('RECEIPT_UNAVAILABLE');
+  const raw={address:text(log,'address',/^0x[0-9a-fA-F]{40}$/),topics,data:text(log,'data',/^0x(?:[0-9a-fA-F]{2})*$/)};
+  try{return native.decodeEscrowLog(trade().domain.verifyingContract,raw);}catch{throw Error('RECEIPT_UNAVAILABLE');}
+ }
+ async function payoutStatus(state:'released'|'refunded',rawReceipt:unknown,finalHeight:string):Promise<PayoutStatus>{
+  const {terms,domain,binding}=trade(),escrow=domain.verifyingContract;
+  const recipient=state==='released'?terms.buyer:terms.seller,token=terms.assetKind==='native'?ZERO:terms.asset;
+  const logs=field(rawReceipt,'logs');
+  if(!Array.isArray(logs)||logs.length>64)throw Error('RECEIPT_UNAVAILABLE');
+  const fromEscrow=logs.filter(log=>text(log,'address',/^0x[0-9a-fA-F]{40}$/).toLowerCase()===escrow);
+  const events=fromEscrow.map(decodeEscrowEvent).filter(event=>'tradeId'in event&&event.tradeId===binding.tradeId);
+  // The settlement event proves these are this trade's complete escrow logs for the exact receipt.
+  const settled=events.filter(event=>event.kind==='Released'&&state==='released'&&event.buyer===recipient||
+   event.kind==='Refunded'&&state==='refunded'&&event.seller===recipient);
+  const exact=(event:EscrowLogEvent)=>'amount'in event&&event.token===token&&event.amount===terms.amountBaseUnits;
+  if(settled.length!==1||!settled.every(exact))throw Error('RECEIPT_UNAVAILABLE');
+  const deferred=events.filter(event=>event.kind==='PayoutDeferred');
+  if(deferred.length===0)return Object.freeze({status:'pushed',recipient,token,amount:terms.amountBaseUnits});
+  const credit=deferred[0];
+  const owedHere=credit?.kind==='PayoutDeferred'&&credit.recipient===recipient&&exact(credit);
+  if(deferred.length!==1||!owedHere)throw Error('RECEIPT_UNAVAILABLE');
+  const read=native.buildPendingWithdrawals(escrow,recipient,token),tag='0x'+BigInt(finalHeight).toString(16);
+  const outstanding=decodeUintWord(await rpc('eth_call',[{to:read.to,data:read.data},tag]));
+  current();
+  const route=native.buildWithdraw(escrow,recipient,token);
+  const withdraw=Object.freeze({to:route.to,data:route.data,value:route.value});
+  // Aggregate pending below this trade's credit means some or all of it may already have been withdrawn.
+  const creditState=BigInt(outstanding)>=BigInt(terms.amountBaseUnits)?'owed' as const:'possibly-withdrawn' as const;
+  return Object.freeze({status:'credited',recipient,token,amount:terms.amountBaseUnits,creditOutstanding:outstanding,
+   creditObservedAtHeight:finalHeight,creditState,withdraw});
  }
  async function validateCanonical(intent:Readonly<IntentV1>,nativeRequest:Request):Promise<CoreResult<void>>{
   const {terms,domain,binding}=trade();
@@ -249,7 +510,11 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      composition=native.createTradeComposition({binding,account:terms.seller,authority,journal});cleanup.push((owned=>()=>owned.dispose())(composition));journey=createJourneyProjection({composition,paymentGuidance:gate});cleanup.push((owned=>()=>owned.dispose())(journey));
  }
  function walletInvalidated():void{gate?.invalidate();const previous=life;clearPrivate();void previous?.walletChanged(null).catch(()=>{});onInvalidated?.(snapshot());}
- function clearPrivate(){epoch++;reviewInvalidation++;pendingReview=activeReview=undefined;privacyReady=false;const off=privacyOff;privacyOff=undefined;try{off?.();}catch{}recoveryCancellationEpoch=undefined;for(const close of cleanup.splice(0)){try{close();}catch{ /* Continue clearing every owned capability. */ }}for(const bytes of owned.splice(0))bytes.fill(0);parties.length=0;context=undefined;terms=domain=binding=agreement=document=sessionId=prepared=intentId=undefined;journal=life=reader=gate=authority=composition=journey=undefined;receipt=null;tokenCheck=null;acceptedProof=false;communicationAccepted=false;fees.length=0;backupRevision=null;clock=0;clockObservedAt=performance.now();phase='setup';}
+ function clearPrivate(){epoch++;reviewInvalidation++;pendingReview=activeReview=undefined;privacyReady=false;const off=privacyOff;privacyOff=undefined;try{off?.();}catch{}recoveryCancellationEpoch=undefined;for(const close of cleanup.splice(0)){try{close();}catch{ /* Continue clearing every owned capability. */ }}for(const bytes of owned.splice(0))bytes.fill(0);parties.length=0;context=undefined;terms=domain=binding=agreement=document=sessionId=prepared=intentId=undefined;journal=life=reader=gate=authority=composition=journey=undefined;receipt=null;tokenCheck=null;acceptedProof=false;communicationAccepted=false;fees.length=0;backupRevision=null;clock=0;clockObservedAt=performance.now();phase='setup';
+  negotiation=pendingAccept=undefined;
+  deliveryRetries=0;
+  chainState=null;
+ }
  function initialize():Promise<void>{if(ready)return Promise.resolve();initialization??=(async()=>{value(await registry.load(registryBytes,registryDigest));value<unknown>((await vault.request({operation:'init',config:{version:1,ReleaseEnabled:0,connectOrigins:[]}})).result);ready=true;})();return initialization;}
  return Object.freeze({
   snapshot,
@@ -302,17 +567,94 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      // approval therefore stops recovery here, before any re-approval or funding, instead of leaving a funded
      // escrow whose later restart cannot reconcile that approval.
      await attachNative();const recoveryBinding=defined(binding),recoveryTerms=defined(terms);const originalPrepared=value(await step(defined(journal).list())).filter(intent=>intent.binding.chain===recoveryBinding.chain&&intent.binding.networkId===recoveryBinding.networkId&&intent.binding.deploymentId===recoveryBinding.deploymentId&&intent.binding.tradeId===recoveryBinding.tradeId&&intent.account===recoveryTerms.seller&&intent.action==='fund'&&intent.state==='prepared');let recovered:readonly IntentV1[];recoveryCancellationEpoch=mine;try{recovered=value(await step(defined(life).recover()));}finally{if(epoch===mine)recoveryCancellationEpoch=undefined;}const observed=value(await step(native.readObservation({registry,binding:watched.binding,terms:watched.terms,domain:watched.domain,request:scopedRequest,generation:0,requestSequence:1})));
-     const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?[...matches].sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
+     const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?[...matches].sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;
+     // Settled on chain without this wallet's matching intent (e.g. a third-party refund): show the chain outcome.
+     const terminalOnChain=observed.state==='released'||observed.state==='refunded';
+     // An own matching intent without a hash cannot be reconciled, so the chain outcome is shown instead.
+     const ownAmbiguous=!chosen||chosen.submission.chain!=='evm'||chosen.submission.hash===null;
+     if(terminalOnChain&&ownAmbiguous&&recovered.length>0){
+      const preparedAt=(intent:IntentV1)=>BigInt(parseCanonicalPreparedRequest(intent.preparedRequest).preparedAtBlock);
+      // The earliest preparation height bounds the log search; recovered is non-empty here.
+      let fromBlock=preparedAt(defined(recovered[0]));
+      for(const intent of recovered){
+       const height=preparedAt(intent);
+       if(height<fromBlock)fromBlock=height;
+      }
+      await enterChainReceipt(observed.state==='released'?'released':'refunded',String(fromBlock));
+      return snapshot();
+     }
+     if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}
+     // A release or refund sent before this restart may still be unresolved, or may have reverted (e.g. included at
+     // or after the deadline) while the escrow stays funded. Each is reconciled read-only, never cancelled or resent.
+     if(observed.state==='funded'){
+      const isSettle=(intent:IntentV1)=>intent.action==='release'||intent.action==='refund';
+      const leftovers=recovered.filter(intent=>isSettle(intent)&&intent.intentId!==chosen.intentId);
+      const leftover=await classifyLeftovers(leftovers);
+      if(leftover.kind==='external'){
+       const fromBlock=parseCanonicalPreparedRequest(chosen.preparedRequest).preparedAtBlock;
+       await enterExternalRecovery(leftover.intentId,fromBlock);
+       return snapshot();
+      }
+      if(leftover.kind==='settling'){
+       // Reconcile-only on that intent: no refund may be reserved beside an unresolved settlement.
+       intentId=leftover.intentId;
+       phase='settling';
+       return snapshot();
+      }
+     }
+     phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
     }else if(action==='offer'){
-     if(phase!=='wallet')throw Error('OUT_OF_ORDER');await fresh();await requireAcceptanceTime();const {terms,domain,binding}=trade(),document=definedDocument();const[seller,buyer]=negotiating();
+     if(phase!=='wallet')throw Error('OUT_OF_ORDER');
+     await fresh();
+     await requireAcceptanceTime();
+     const {terms}=trade(),[seller]=negotiating();
      const ad=await step(createAdEvent(seller.eventCrypto,{app:'p2p-offramp',v:1,orderId:terms.orderId,revision:1,networkId:'eip155:31337',assetId:defined(registry.network(terms.networkId)?.assets.find(asset=>(asset.address??ZERO)===terms.asset)).id,amountMin:terms.amountBaseUnits,amountMax:terms.amountBaseUnits,currency:'USD',railClass:'bank-transfer',expiresAtSeconds:String(clock+1800),maker:seller.pub},clock));
-     if(seller.book.ingest(ad)!=='accepted')throw Error('BAD_AD');value(await step(seller.pool.publish(ad)));const received=(await pull(buyer,AD_KIND)).find(event=>event.id===ad.id);if(!received||buyer.book.ingest(received)!=='accepted')throw Error('BAD_AD');
-     const take=value(await step(buyer.exchange.take(adBookKey(seller.pub,terms.orderId),terms.buyer,buyer.secret)));sessionId=take.sessionId;await deliver(take,buyer,seller);
-     const offered=value(await step(seller.exchange.offer(defined(sessionId),document,seller.secret)));const got=await deliver(offered,seller,buyer);if(got.state!=='offered'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');phase='review';
+     if(seller.book.ingest(ad)!=='accepted')throw Error('BAD_AD');
+     // The ad is committed locally: from here a failure leaves an explicit, same-event retry, never a new ad.
+     negotiation={ad,adDelivered:false,takeDelivered:false};
+     deliveryRetries=0;
+     phase='delivery-pending';
+     await negotiate(negotiation);
+     negotiation=undefined;
+     phase='review';
+    }else if(action==='retry-delivery'){
+     if(phase!=='delivery-pending'||!negotiation&&!pendingAccept)throw Error('OUT_OF_ORDER');
+     if(deliveryRetries>=MAX_DELIVERY_RETRIES){stopDelivery();throw Error('DELIVERY_RETRY_LIMIT');}
+     // Only a retry that actually reaches the relay uses the budget; vault or chain-clock failures do not.
+     const publishedBefore=relayPublishes;
+     try{
+      await fresh();
+      await requireAcceptanceTime();
+      if(negotiation){
+       await negotiate(negotiation);
+       negotiation=undefined;
+      }else{
+       await deliverAcceptance(defined(pendingAccept));
+       pendingAccept=undefined;
+       communicationAccepted=true;
+      }
+     }catch(error){
+      if(relayPublishes>publishedBefore)deliveryRetries++;
+      // Past acceptBefore or out of attempts nothing can still complete; stop instead of leaving a dead retry.
+      const expired=error instanceof Error&&error.message==='EXPIRED';
+      if(epoch===mine&&(expired||deliveryRetries>=MAX_DELIVERY_RETRIES))stopDelivery();
+      throw error;
+     }
+     // Wallet acceptance still needs its own fresh signing review; delivery never signs.
+     phase='review';
     }else if(action==='accept'){
      if(phase!=='review')throw Error('OUT_OF_ORDER');if(options.reviewRiskAccepted!==true)throw Error('RISK_CONFIRMATION_REQUIRED');assertSigningReview();await fresh();await requireAcceptanceTime();const {terms,domain,binding,agreement}=trade(),document=definedDocument();const[seller,buyer]=negotiating(),exact=defined(buyer.exchange.session(defined(sessionId))?.terms).bytes;
      try{if(!equal(exact,document))throw Error('TERMS_MISMATCH');const reviewed=value(await step(reviewTermsBytes(registry,exact)));if(native.evmTermsHash(domain,asTerms(reviewed))!==binding.tradeId)throw Error('TERMS_MISMATCH');
-      if(!communicationAccepted){const accepted=value(await step(buyer.exchange.accept(defined(sessionId),exact,buyer.secret)));const got=await deliver(accepted,buyer,seller);if(got.state!=='accepted'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');communicationAccepted=true;}
+      if(!communicationAccepted){
+       // Accept commits locally before delivery; a failure keeps this exact message for an explicit retry.
+       pendingAccept=value(await step(buyer.exchange.accept(defined(sessionId),exact,buyer.secret)));
+       deliveryRetries=0;
+       phase='delivery-pending';
+       await deliverAcceptance(pendingAccept);
+       pendingAccept=undefined;
+       communicationAccepted=true;
+       phase='review';
+      }
       await requireAcceptanceTime();const sellerSignature=value(await acquire(seller.wallet.signTerms(seller.walletSession,domain,terms,'seller'),result=>{if(result.ok)result.value.fill(0);}));owned.push(sellerSignature);await requireAcceptanceTime();
       const buyerSignature=await acquire(defined(localPeerAcceptance)({wallet:buyer.wallet,session:buyer.walletSession,domain,terms}),signature=>signature.fill(0));owned.push(buyerSignature);await requireAcceptanceTime();
       const bundle=value(await step(native.verifyEvmAgreementBundle({privateAgreement:agreement,domain,terms,acceptances:[{termsHash:binding.tradeId,role:'seller',walletAccount:terms.seller,signature:sellerSignature},{termsHash:binding.tradeId,role:'buyer',walletAccount:terms.buyer,signature:buyerSignature}]},{isCurrent:()=>{try{current();return true;}catch{return false;}}})));
@@ -334,19 +676,73 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      prepared=value(await step(life.prepare({binding,action:'fund',expectedEscrowState:call.expectedEscrowState,call:call.call})));intentId=prepared.intentId;phase='fund-prepared';
      let sent;try{sent=await step(life.submit(prepared));}finally{if(epoch===mine)phase='reconcile';}if(!sent.ok&&sent.error?.code!=='BROADCAST_UNKNOWN')throw Error(sent.error?.code??'SUBMIT_FAILED');
     }else if(action==='reconcile'){
-     if(!['approval-reconcile','reconcile','settling','payment-coordination','payment-guidance-unavailable'].includes(phase))throw Error('OUT_OF_ORDER');if(phase==='payment-coordination')phase='payment-guidance-unavailable';attached().gate.invalidate();await fresh();const{binding}=trade(),{journal,life,reader,authority,journey}=attached(),intentId=definedIntentId();
-     value(await step(journal.reconcileNative(intentId)));const result=value(await step(life.reconcile(intentId)));if(result.outcome!=='finalized')return snapshot();await recordFee(result.intent);
+     const reconcilable=['approval-reconcile','reconcile','settling','payment-coordination','payment-guidance-closed',
+      'payment-guidance-unavailable','external-recovery-required'];
+     if(!reconcilable.includes(phase))throw Error('OUT_OF_ORDER');
+     if(releasePhase())phase='payment-guidance-unavailable';
+     attached().gate.invalidate();
+     await fresh();
+     const{binding}=trade(),{journal,life,reader,authority,journey}=attached(),intentId=definedIntentId();
+     if(phase==='external-recovery-required'){
+      // Only the chain state is re-read; the ambiguous row is never reconciled, cancelled or rewritten.
+      await enterExternalRecovery(intentId,await preparedAtOf(intentId));
+      return snapshot();
+     }
+     const observedNative=await step(journal.reconcileNative(intentId));
+     if(!observedNative.ok&&phase==='settling'&&await nullHashBeyondScan(intentId)){
+      await enterExternalRecovery(intentId,await preparedAtOf(intentId));
+      return snapshot();
+     }
+     // A settlement with a known hash keeps settling while native finality is unavailable; the lifecycle's own
+     // read below decides, and nothing terminal is accepted without its verification.
+     const settleSubmission=phase==='settling'?(await intentOf(intentId)).submission:null;
+     const knownSettle=settleSubmission?.chain==='evm'&&settleSubmission.hash!==null;
+     if(!knownSettle)value(observedNative);const result=value(await step(life.reconcile(intentId)));
+     // Expired or replaced settlements need a successor the app cannot create (D9): hand over, never resend.
+     const handover=result.outcome==='replaced'||result.outcome==='dropped';
+     if((result.intent.action==='release'||result.intent.action==='refund')&&handover){
+      const fromBlock=parseCanonicalPreparedRequest(result.intent.preparedRequest).preparedAtBlock;
+      await enterExternalRecovery(intentId,fromBlock);
+      return snapshot();
+     }
+     // A settlement the chain reverted (e.g. a release included at or after the deadline) leaves the escrow funded.
+     // Re-enter the funded phase from a fresh native read so the original refund path is offered; never resend.
+     const settle=result.intent.action==='release'||result.intent.action==='refund';
+     // Only a finalized, terminal-verified revert reopens the funded phase; until then it stays reconcile-only.
+     if(settle&&result.outcome==='reverted'&&!journal.isTerminalVerified(intentId))return snapshot();
+     if(settle&&result.outcome==='reverted'&&result.escrowState==='funded'){
+      await enterFundedPhase();
+      return snapshot();
+     }
+     // Reverted while the escrow was settled by someone else: show that on-chain outcome, never resend.
+     const settledOnChain=result.escrowState==='released'||result.escrowState==='refunded';
+     if(settle&&result.outcome==='reverted'&&settledOnChain){
+      const preparedAtBlock=parseCanonicalPreparedRequest(result.intent.preparedRequest).preparedAtBlock;
+      await enterChainReceipt(result.escrowState,preparedAtBlock);
+      return snapshot();
+     }
+     if(result.outcome!=='finalized')return snapshot();await recordFee(result.intent);
      if(result.intent.action==='approve'){await checkToken();phase=acceptedProof?'accepted':'recovered-acceptance-required';return snapshot();}
      if(result.escrowState==='funded'){
-      value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='payment-coordination'){phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}phase='payment-coordination';
+      await enterFundedPhase();
      }else if(result.escrowState==='released'||result.escrowState==='refunded'){
       // Receipt is native and bound to the original exact intent; JSON terminal labels are insufficient.
-      value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
-      if(result.intent.submission.chain!=='evm'||!result.intent.submission.hash)throw Error('RECEIPT_UNAVAILABLE');const hash=result.intent.submission.hash,rawReceipt=await rpc('eth_getTransactionReceipt',[hash]);const raw={transactionHash:text(rawReceipt,'transactionHash',/^0x[0-9a-f]{64}$/),status:text(rawReceipt,'status',/^0x1$/),gasUsed:quantity(field(rawReceipt,'gasUsed')),effectiveGasPrice:quantity(field(rawReceipt,'effectiveGasPrice')),blockNumber:quantity(field(rawReceipt,'blockNumber')),blockHash:text(rawReceipt,'blockHash',/^0x[0-9a-f]{64}$/)};if(!raw||raw.transactionHash!==hash||raw.status!=='0x1'||value(await step(reader.blockHashAt(String(BigInt(raw.blockNumber)),new AbortController().signal)))!==raw.blockHash)throw Error('RECEIPT_UNAVAILABLE');const final=value(await step(reader.head('finalized',new AbortController().signal)));if(!final||BigInt(raw.blockNumber)>BigInt(final.number)||value(await step(reader.blockHashAt(final.number,new AbortController().signal)))!==final.hash)throw Error('RECEIPT_UNAVAILABLE');
-      const nativeAsset=defined(registry.network(binding.networkId)?.assets.find(asset=>asset.kind==='native'));receipt={nativeAssetId:nativeAsset.id,nativeDecimals:nativeAsset.decimals,tradeId:binding.tradeId,transactionHash:hash,state:result.escrowState,blockNumber:String(BigInt(raw.blockNumber)),gasUsed:String(BigInt(raw.gasUsed)),effectiveGasPrice:String(BigInt(raw.effectiveGasPrice)),fee:feeProduct(raw.gasUsed,raw.effectiveGasPrice)};phase='receipt';
+      if(result.intent.submission.chain!=='evm'||!result.intent.submission.hash)throw Error('RECEIPT_UNAVAILABLE');
+      await enterReceipt(result.escrowState,result.intent.submission.hash,'this-wallet');
      }else throw Error('STATE_MISMATCH');
     }else if(action==='release'||action==='refund'){
-     if(phase!=='payment-coordination'&&!(action==='refund'&&phase==='payment-guidance-unavailable'))throw Error('OUT_OF_ORDER');if(action==='release'&&options.attestFiatReceived!==true)throw Error('FIAT_ATTESTATION_REQUIRED');assertSigningReview();phase='payment-guidance-unavailable';attached().gate.invalidate();await fresh();const{terms,domain,binding}=trade(),{gate,life}=attached();if(action==='refund'&&await chainNow()<Number(terms.escrowExpirySeconds))throw Error('REFUND_NOT_AVAILABLE');const guidance=value(await step(gate.read()));if(action==='release'&&guidance.decision!=='allow-guidance')throw Error('PAYMENT_GUIDANCE_BLOCKED');
+     if(!releasePhase()&&!(action==='refund'&&phase==='payment-guidance-unavailable'))throw Error('OUT_OF_ORDER');
+     if(action==='release'&&options.attestFiatReceived!==true)throw Error('FIAT_ATTESTATION_REQUIRED');
+     assertSigningReview();
+     phase='payment-guidance-unavailable';
+     attached().gate.invalidate();
+     await fresh();
+     const{terms,domain,binding}=trade(),{gate,life}=attached();
+     if(action==='refund'&&await chainNow()<Number(terms.escrowExpirySeconds))throw Error('REFUND_NOT_AVAILABLE');
+     const guidance=value(await step(gate.read()));
+     // The guidance buffer only discourages starting a fiat payment. Release re-checks the deadline margin on this
+     // fresh read, immediately before prepare.
+     if(action==='release'&&!releaseOpen(guidance))throw Error('RELEASE_NOT_AVAILABLE');
      const call=native.escrowCallFor({action,escrow:domain.verifyingContract,tradeId:binding.tradeId});prepared=value(await step(life.prepare({binding,action,expectedEscrowState:'funded',call:call.call})));intentId=prepared.intentId;phase='settling';const sent=await step(life.submit(prepared));if(!sent.ok&&sent.error?.code!=='BROADCAST_UNKNOWN')throw Error(sent.error?.code??'SUBMIT_FAILED');
     }else throw Error('INVALID_INPUT');return snapshot();
    }catch(error){if(epoch===mine&&(action==='connect'||action==='watch')&&phase==='setup'){clearPrivate();}throw error;}finally{while(nativeRequests.size>0)await Promise.allSettled([...nativeRequests]);activeReview=undefined;busy=false;}
