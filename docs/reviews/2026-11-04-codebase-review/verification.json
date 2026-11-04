@@ -1,0 +1,636 @@
+{
+  "schema_version": 1,
+  "review_id": "2026-11-04-codebase-review",
+  "artifact_kind": "verification-evidence",
+  "prepared_at_utc": "2026-11-04T02:26:09Z",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "reviewed_revision": {
+    "pull_request": 26,
+    "candidate_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+    "candidate_url": "https://github.com/djshellshoxxx/p2p-offramp/tree/94554ecf9854e4604f9f56afe5bebedeee931994",
+    "main_sha_at_review": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+    "local_import_commit": "bb4ad05eeb67caa098147e2f7b906376d067d78e",
+    "local_import_commit_is_remote_candidate_commit": false,
+    "identity_note": "The local Git commit is an imported snapshot. Reviewed-source identity is the remote PR 26 candidate SHA, established by matching Git blob content identities."
+  },
+  "remote_state_refresh": {
+    "observed_at_utc": "2026-11-04T02:18:55Z",
+    "observed_by": "root reviewer, fresh GitHub reads; supplied to verification artifact preparer",
+    "independently_refetched_by_artifact_preparer": false,
+    "pull_request_26_head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+    "main_sha": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+    "main_protected": false,
+    "repository_rulesets": [],
+    "interpretation": "These are the reported GitHub response fields at the recorded time, not an exercise of repository policy enforcement."
+  },
+  "source_integrity": {
+    "initial_root_comparison": {
+      "input": "source-verification.json",
+      "remote_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "matched_blobs": 653,
+      "copied_blobs": 0,
+      "different_paths": [],
+      "reported_missing_runtime_paths": [],
+      "missing_candidate_blobs_at_initial_import": 1500,
+      "missing_by_top_directory_at_initial_import": {
+        ".devcontainer": 2,
+        "00_PLANNING_AND_THREAT_MODELING": 49,
+        "01_P2P_SHIELDED_OFFRAMP_ENGINE": 39,
+        "02_SMART_MEETUP_GEOLOCATION_ENGINE": 16,
+        "03_CASH_IN_TRANSIT_BLIND_COURIERS": 17,
+        "04_WEB3_DISPUTE_ARBITERS": 19,
+        "05_ADVANCED_PRIVACY_INFRASTRUCTURE": 36,
+        "DEVELOPMENT_ROADMAP.md": 1,
+        "THIRD_PARTY_NOTICES.md": 1,
+        "docs": 1293,
+        "licenses": 4,
+        "security": 23
+      },
+      "scope_note": "The missing-file counts describe the initial import. Root subsequently hydrated selected documentation. They are not a current inventory and do not establish complete review of every remote blob."
+    },
+    "artifact_preparer_recheck": {
+      "basis": "All original tracked blobs from the local import HEAD; no generated review files or subsequently hydrated untracked documents are included.",
+      "candidate_tree_entries": 2666,
+      "candidate_blob_count": 2153,
+      "original_tracked_blobs_checked": 653,
+      "working_files_matching_candidate_blob_identity": 653,
+      "imported_git_blobs_matching_candidate_blob_identity": 653,
+      "checked_bytes": 6570235,
+      "different_or_missing_paths": [],
+      "imported_mode_mismatches": [],
+      "tracked_worktree_changes": [],
+      "hash_method": "Git SHA-1 blob identity: SHA1(b\"blob \" + decimal byte length + b\"\\0\" + file bytes), compared with the exact candidate tree entry; also compared with imported Git object identity.",
+      "verified_manifest_sha256": "d07377f67d965c7c309c04220718086e8cee474429bedc3037d0f973eafee85d",
+      "verified_manifest_definition": "Sorted by path; UTF-8 JSON array of objects containing path, git_blob_sha1, bytes and mode; object keys sorted; compact comma/colon separators; no trailing newline.",
+      "complete_remote_repository_checkout_verified": false
+    }
+  },
+  "local_test_evidence": {
+    "root_existing_unit_test_run": {
+      "executed_by": "root reviewer in this review session",
+      "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "node_version": "v24.22.1",
+      "working_directory": "repository root",
+      "argv": [
+        "node",
+        "--test",
+        "--test-concurrency=4",
+        "packages/schemas/test/backup-verification.test.mjs",
+        "packages/schemas/test/backup.test.mjs",
+        "packages/schemas/test/core.test.mjs",
+        "packages/schemas/test/evm-agreement-control.test.mjs",
+        "packages/schemas/test/evm-agreement-input.test.mjs",
+        "packages/schemas/test/evm-agreement-protocol.test.mjs",
+        "packages/schemas/test/intent.test.mjs",
+        "packages/schemas/test/recovery-reference.test.mjs",
+        "packages/schemas/test/retention-runtime.test.mjs",
+        "packages/schemas/test/runtime.test.mjs",
+        "packages/schemas/test/saved-review.test.mjs",
+        "packages/schemas/test/trade-drafts.test.mjs",
+        "packages/schemas/test/transport-selection.test.mjs",
+        "packages/schemas/test/transport.test.mjs",
+        "packages/schemas/test/vault.test.mjs",
+        "packages/security/test/acceptance-gates.test.mjs",
+        "packages/security/test/content-policy.test.mjs",
+        "packages/security/test/crypto-inventory.test.mjs",
+        "packages/security/test/release-locator.test.mjs",
+        "packages/security/test/release-manifest.test.mjs",
+        "packages/security/test/release-registry.test.mjs",
+        "packages/security/test/release-update.test.mjs",
+        "packages/claims/test/claims.test.mjs",
+        "packages/extensions/test/registry.test.mjs",
+        "packages/governance/test/records.test.mjs",
+        "packages/storage/test/backup-service.test.mjs",
+        "packages/storage/test/backup-verification.test.mjs",
+        "packages/storage/test/hostile-boundary.test.mjs",
+        "packages/storage/test/idb-vault-store.test.mjs",
+        "packages/storage/test/migration-service.test.mjs",
+        "packages/storage/test/reseal.test.mjs",
+        "packages/storage/test/retention-service.test.mjs",
+        "packages/storage/test/vault-crypto.test.mjs",
+        "packages/storage/test/vault-service.test.mjs",
+        "packages/personalization/test/favorites.test.mjs",
+        "packages/personalization/test/trade-draft-store.test.mjs",
+        "packages/meetup/test/meetup-replay.test.mjs",
+        "packages/meetup/test/policy-data.test.mjs",
+        "packages/meetup/test/rtc-policy.test.mjs",
+        "packages/meetup/test/venue-directory.test.mjs",
+        "packages/liquidity/test/accounting.test.mjs",
+        "packages/liquidity/test/reservations.test.mjs",
+        "packages/courier/test/accounting.test.mjs",
+        "packages/courier/test/custody.test.mjs",
+        "packages/courier/test/locker.test.mjs",
+        "packages/courier/test/records-commitment.test.mjs",
+        "packages/courier/test/secrets.test.mjs",
+        "packages/courier/test/verification.test.mjs",
+        "packages/privacy-controls/test/duress.test.mjs",
+        "packages/privacy-controls/test/sweep.test.mjs"
+      ],
+      "shell_command": "node --test --test-concurrency=4 packages/schemas/test/backup-verification.test.mjs packages/schemas/test/backup.test.mjs packages/schemas/test/core.test.mjs packages/schemas/test/evm-agreement-control.test.mjs packages/schemas/test/evm-agreement-input.test.mjs packages/schemas/test/evm-agreement-protocol.test.mjs packages/schemas/test/intent.test.mjs packages/schemas/test/recovery-reference.test.mjs packages/schemas/test/retention-runtime.test.mjs packages/schemas/test/runtime.test.mjs packages/schemas/test/saved-review.test.mjs packages/schemas/test/trade-drafts.test.mjs packages/schemas/test/transport-selection.test.mjs packages/schemas/test/transport.test.mjs packages/schemas/test/vault.test.mjs packages/security/test/acceptance-gates.test.mjs packages/security/test/content-policy.test.mjs packages/security/test/crypto-inventory.test.mjs packages/security/test/release-locator.test.mjs packages/security/test/release-manifest.test.mjs packages/security/test/release-registry.test.mjs packages/security/test/release-update.test.mjs packages/claims/test/claims.test.mjs packages/extensions/test/registry.test.mjs packages/governance/test/records.test.mjs packages/storage/test/backup-service.test.mjs packages/storage/test/backup-verification.test.mjs packages/storage/test/hostile-boundary.test.mjs packages/storage/test/idb-vault-store.test.mjs packages/storage/test/migration-service.test.mjs packages/storage/test/reseal.test.mjs packages/storage/test/retention-service.test.mjs packages/storage/test/vault-crypto.test.mjs packages/storage/test/vault-service.test.mjs packages/personalization/test/favorites.test.mjs packages/personalization/test/trade-draft-store.test.mjs packages/meetup/test/meetup-replay.test.mjs packages/meetup/test/policy-data.test.mjs packages/meetup/test/rtc-policy.test.mjs packages/meetup/test/venue-directory.test.mjs packages/liquidity/test/accounting.test.mjs packages/liquidity/test/reservations.test.mjs packages/courier/test/accounting.test.mjs packages/courier/test/custody.test.mjs packages/courier/test/locker.test.mjs packages/courier/test/records-commitment.test.mjs packages/courier/test/secrets.test.mjs packages/courier/test/verification.test.mjs packages/privacy-controls/test/duress.test.mjs packages/privacy-controls/test/sweep.test.mjs",
+      "existing_test_files": 50,
+      "scope": "Existing dependency-free unit tests, native Node 24 TypeScript stripping; not the full npm test command.",
+      "new_or_modified_tests": false,
+      "rerun_by_artifact_preparer": false,
+      "result": {
+        "tests": 585,
+        "suites": 0,
+        "pass": 585,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 18962.259029
+      },
+      "output": {
+        "file": "local-tests.log",
+        "original_session_filename": "review-tests.tap",
+        "format": "Node.js test-runner spec reporter text, despite .tap filename suffix",
+        "bytes": 59966,
+        "sha256": "16164d2850d308d87e1cef78ce017fd6dfd40a270fb74b7b8de8580f7788c335",
+        "summary_source": "Parsed retained runner footer; not inferred from CI."
+      }
+    },
+    "contracts_reviewer_existing_lifecycle_test": {
+      "evidence_type": "reported execution evidence, separately attributed",
+      "reported_by": "contracts reviewer",
+      "report": "Reviewer execution report in this session, summarized in README.md under F02 and Verification",
+      "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "node_version": "v24.22.1",
+      "working_directory": "repository root",
+      "argv": [
+        "node",
+        "--test",
+        "--test-name-pattern=reads retry through read-retry; sends never retry; rejection and integrity failures",
+        "packages/domain/test/tx-lifecycle.test.mjs"
+      ],
+      "shell_command": "node --test --test-name-pattern='reads retry through read-retry; sends never retry; rejection and integrity failures' packages/domain/test/tx-lifecycle.test.mjs",
+      "existing_test_files": 1,
+      "result": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "exit_code": 0
+      },
+      "new_or_modified_tests": false,
+      "rerun_by_artifact_preparer": false,
+      "separate_raw_log_retained_for_this_artifact": false,
+      "scope": "Existing lower-level lifecycle rejection/retry case only. This is not a full journey test or reproduction of a reported journey defect.",
+      "included_in_root_585_test_count": false
+    },
+    "counting_note": "The 585-case root run and the separately reported one-case contracts run are separate executions with different scopes; neither is the full repository suite."
+  },
+  "environment_and_installation": {
+    "node_version_observed_by_artifact_preparer": "v24.22.1",
+    "offline_dependency_install": {
+      "status": "failed",
+      "evidence_type": "root reviewer report; exact locked Vite version also verified in package-lock.json",
+      "argv": [
+        "npm",
+        "ci",
+        "--offline",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "shell_command": "npm ci --offline --ignore-scripts --no-audit --no-fund",
+      "error_code": "ENOTCACHED",
+      "missing_cached_package": {
+        "name": "vite",
+        "version": "8.3.5"
+      },
+      "raw_error_log_retained_for_this_artifact": false,
+      "error_wording_scope": "Only the reported error code and package/version are retained; no fuller npm error text is asserted.",
+      "consequence": "Exact locked dependencies could not be installed from the offline cache; the full npm suite and build/browser qualification were not rerun locally.",
+      "dependency_versions_substituted": false
+    },
+    "forge_available_in_review_environment": false,
+    "solidity_compiler_available_in_review_environment": false,
+    "tool_availability_source": "root and contracts reviewer reports; no installation or further test execution performed by artifact preparer"
+  },
+  "exact_sha_ci": {
+    "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+    "input": "review-ci.json",
+    "snapshot_time_retained_in_input": null,
+    "interpretation": "Remote CI evidence, not local execution by this review. Repeated check names are retained as distinct recorded runs. Passing checks do not establish complete candidate approval.",
+    "check_records": [
+      {
+        "name": "SonarCloud Code Analysis",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "failure",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/runs/125506154168",
+        "title": "Quality Gate failed"
+      },
+      {
+        "name": "CodeQL",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/runs/125501508909",
+        "title": "No new alerts in code changed by this pull request"
+      },
+      {
+        "name": "CodeRabbit",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "skipped",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/runs/125498435803",
+        "title": "Review skipped: 612 files exceed the limit of 300"
+      },
+      {
+        "name": "local-trade",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786563/job/125498336664",
+        "title": null
+      },
+      {
+        "name": "schemas-and-crypto",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786546/job/125498336495",
+        "title": null
+      },
+      {
+        "name": "specs",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786546/job/125498336435",
+        "title": null
+      },
+      {
+        "name": "local-evm",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786546/job/125498336382",
+        "title": null
+      },
+      {
+        "name": "forge",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786563/job/125498336213",
+        "title": null
+      },
+      {
+        "name": "browser",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "failure",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786546/job/125498335961",
+        "title": null
+      },
+      {
+        "name": "inventory",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509786535/job/125498335859",
+        "title": null
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509778414/job/125498317974",
+        "title": null
+      },
+      {
+        "name": "Analyze (python)",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509778414/job/125498317687",
+        "title": null
+      },
+      {
+        "name": "forge",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509775112/job/125498296122",
+        "title": null
+      },
+      {
+        "name": "local-trade",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509775112/job/125498295787",
+        "title": null
+      },
+      {
+        "name": "inventory",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509775086/job/125498295643",
+        "title": null
+      },
+      {
+        "name": "schemas-and-crypto",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509774995/job/125498295309",
+        "title": null
+      },
+      {
+        "name": "specs",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509774995/job/125498295250",
+        "title": null
+      },
+      {
+        "name": "local-evm",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "success",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509774995/job/125498295141",
+        "title": null
+      },
+      {
+        "name": "browser",
+        "head_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+        "status": "completed",
+        "conclusion": "failure",
+        "details_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41509774995/job/125498294655",
+        "title": null
+      }
+    ],
+    "check_record_count": 19,
+    "conclusion_counts": {
+      "failure": 3,
+      "success": 15,
+      "skipped": 1
+    },
+    "all_checks_green": false,
+    "browser_step_snapshot": {
+      "source": "review-ci.json.browserSteps",
+      "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "job_id_retained_in_input": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run npm ci --ignore-scripts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Install Chromium",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Run npm run test:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Run npm run test:web:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Run npm run test:private:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Run npm run test:locator:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run npm run test:chat:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Run npm run test:diagnostics:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Run npm run test:recovery:browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Run npm run test:locale:browser",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 13
+        },
+        {
+          "name": "Run npm run test:portal:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14
+        },
+        {
+          "name": "Run npm run test:journey:origins",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15
+        },
+        {
+          "name": "Run npm run test:distribution:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16
+        },
+        {
+          "name": "Run npm run test:proof:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17
+        },
+        {
+          "name": "Run npm run test:proof:memory",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18
+        },
+        {
+          "name": "Run npm run test:privacy-controls:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 19
+        },
+        {
+          "name": "Run npm run test:meetup:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20
+        },
+        {
+          "name": "Run npm run test:updates:browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 41
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 42
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 43
+        }
+      ],
+      "first_failed_step": "Run npm run test:locale:browser",
+      "later_update_browser_step": "skipped",
+      "interpretation": "Earlier listed browser steps succeeded, locale browser failed, and the listed downstream browser steps were skipped. This is not a successful full browser qualification."
+    },
+    "additional_commit_status_report": {
+      "reported_by": "root reviewer, fresh GitHub read",
+      "observed_at_utc": "2026-11-04T02:18:55Z",
+      "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+      "provider": "Snyk",
+      "context": "security/snyk (djshellshoxxx)",
+      "description": "1 security test has passed",
+      "state": "success",
+      "reported_test_count": 1,
+      "details_url": "https://app.snyk.io/org/djshellshoxxx/pr-checks/b6a88c32-6203-4f41-aa79-1175b2cea25f",
+      "included_in_retained_19_check_records": false,
+      "independently_refetched_by_artifact_preparer": false,
+      "interpretation": "Reported existing Snyk status success for one test is separate from the failed SonarCloud quality gate and browser checks. It is not a new dependency audit performed in this review."
+    },
+    "analysis_boundaries": [
+      "CodeQL reported no new alerts in code changed by the pull request; that statement is not whole-repository assurance.",
+      "CodeRabbit was skipped because 612 files exceeded its 300-file limit.",
+      "SonarCloud Code Analysis completed with failure and title Quality Gate failed.",
+      "Both retained browser job records completed with failure."
+    ]
+  },
+  "coverage_clarifications": [
+    {
+      "topic": "Accepted-release IndexedDB store",
+      "existing_native_fixture": "scripts/fixtures/release-update-browser.ts",
+      "native_store_construction_lines": [
+        44,
+        60
+      ],
+      "observed_coverage": "A browser fixture instantiates the actual IndexedDbAcceptedReleaseStore, including native CAS coverage. It is inaccurate to claim that all native store tests are missing.",
+      "uncovered_case_identified": "Initial native open failure followed by recovery and a retry on the same store instance.",
+      "recovery_scope": "Recreating the update controller while reusing the failed store does not clear its cached rejected opening promise; a fresh store instance is required until the defect is repaired.",
+      "executed_during_this_review": false,
+      "retained_exact_sha_update_browser_step": "skipped"
+    }
+  ],
+  "not_performed_locally_in_this_review": [
+    "A complete locked dependency installation.",
+    "The full repository npm test command.",
+    "A full production or release build.",
+    "Browser or emitted-worker qualification runs.",
+    "Foundry/Forge or Solidity compilation and contract suites.",
+    "A new fuzzing campaign or formal-proof run.",
+    "A fresh dependency vulnerability audit.",
+    "Production deployment, live chain transactions, exploit proof of concept or adversarial vulnerability reproduction."
+  ],
+  "artifact_preparation_scope": {
+    "new_test_executions": 0,
+    "source_or_test_file_edits": 0,
+    "publishing_actions": 0,
+    "written_file": "docs/reviews/2026-11-04-codebase-review/verification.json",
+    "actions": "Read retained evidence, recompute original tracked Git blob identities and input digests, observe Node version, and serialize this verification record."
+  },
+  "evidence_inputs": [
+    {
+      "file": "source-verification.json",
+      "bytes": 114921,
+      "sha256": "206f91b51b1ef7582c2027911325180665dc2a4ab7ff40dbc802ffc3635f2ffd",
+      "role": "Initial imported-source comparison reported by root.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/source-verification.json",
+      "embedded_in_this_artifact": false
+    },
+    {
+      "file": "executed-tests.json",
+      "bytes": 2833,
+      "sha256": "9710c7e2bd7b4f19e306c142cf85fbe1027680babe2db3cd0a681b5f4edf84ff",
+      "role": "Exact root test invocation and selected test-file count.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/executed-tests.json",
+      "embedded_in_this_artifact": false
+    },
+    {
+      "file": "review-tests.tap",
+      "bytes": 59966,
+      "sha256": "16164d2850d308d87e1cef78ce017fd6dfd40a270fb74b7b8de8580f7788c335",
+      "role": "Retained root test output; filename has .tap suffix, content is Node.js spec reporter text.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/review-tests.tap",
+      "embedded_in_this_artifact": false
+    },
+    {
+      "file": "review-ci.json",
+      "bytes": 7888,
+      "sha256": "1ba9f998fd7169255dadbe9c402e1a27aa375276dd8ef0bd1d68580bebce96cd",
+      "role": "Retained candidate-SHA GitHub check results and browser step results.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/review-ci.json",
+      "embedded_in_this_artifact": false
+    },
+    {
+      "file": "review-remote-tree.json",
+      "bytes": 1298700,
+      "sha256": "b9cfac82a7543833019689f46aae36e75e44efa768e02eb850f0c9940daceb55",
+      "role": "Retained candidate and main Git trees with blob identities.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/review-remote-tree.json",
+      "embedded_in_this_artifact": false
+    },
+    {
+      "file": "contracts-review.md",
+      "bytes": 20122,
+      "sha256": "813fcc2219675f8121e3864a1bc2ebefbb60651f5a8cda082accb398519415e1",
+      "role": "Contracts reviewer report of one unchanged existing lifecycle test.",
+      "location_at_preparation": "/workspace/scratch/240b20c6c9ae/contracts-review.md",
+      "embedded_in_this_artifact": false
+    }
+  ],
+  "approval_scope": "This record documents bounded verification evidence and limitations. It is not a release, security, deployment or financial-use approval."
+}
