@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "decisionId": "ab7aaa1b3607ba0642d35df61ebdd9c0",
+  "scope": "source",
+  "affectedCapability": "peer-acceptance-carrier",
+  "previousArtifactHash": null,
+  "nextArtifactHash": null,
+  "reviewers": [],
+  "evidencePaths": [
+    "docs/governance/PENDING-DECISIONS.md",
+    "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md"
+  ],
+  "status": "proposed"
+}

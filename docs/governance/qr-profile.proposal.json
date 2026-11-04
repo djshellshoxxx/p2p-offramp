@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "qr-profile",
+  "kind": "wire",
+  "priorVersion": "unqualified-current",
+  "proposedVersion": "pending-selection",
+  "affectedSpecs": [
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.4_qr_interchange/spec-qr-everywhere-secure-sharing-and-import-export.md"
+  ],
+  "compatibleReaders": [],
+  "compatibleWriters": [],
+  "migrationId": null,
+  "recoveryArtifactHashes": [],
+  "threatImpactPath": "docs/governance/PENDING-DECISIONS.md",
+  "testEvidencePaths": [
+    "packages/governance/test/records.test.mjs"
+  ],
+  "status": "draft"
+}

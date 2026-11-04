@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "solana-profile",
+  "kind": "escrow",
+  "priorVersion": "unqualified-current",
+  "proposedVersion": "pending-selection",
+  "affectedSpecs": [
+    "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.1_multichain_escrow/module_1.1.2_token_handling/spec-spl-token-adapter.md"
+  ],
+  "compatibleReaders": [],
+  "compatibleWriters": [],
+  "migrationId": null,
+  "recoveryArtifactHashes": [],
+  "threatImpactPath": "docs/governance/PENDING-DECISIONS.md",
+  "testEvidencePaths": [
+    "packages/governance/test/records.test.mjs"
+  ],
+  "status": "draft"
+}

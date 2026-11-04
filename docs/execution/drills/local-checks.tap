@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: wrong chain/genesis/runtime/asset and changed anchors fail closed
+ok 1 - wrong chain/genesis/runtime/asset and changed anchors fail closed
+  ---
+  duration_ms: 11.163848
+  type: 'test'
+  ...
+# Subtest: collection is unavailable without a live branded release; clear needs neither a proof nor vault
+ok 2 - collection is unavailable without a live branded release; clear needs neither a proof nor vault
+  ---
+  duration_ms: 1.266926
+  type: 'test'
+  ...
+# Subtest: known secret strings in every candidate field are refused and getters and foreign errors stay opaque
+ok 3 - known secret strings in every candidate field are refused and getters and foreign errors stay opaque
+  ---
+  duration_ms: 11.038541
+  type: 'test'
+  ...
+# Subtest: release revocation during local access purges before an operation returns any usable result
+ok 4 - release revocation during local access purges before an operation returns any usable result
+  ---
+  duration_ms: 9.280526
+  type: 'test'
+  ...
+# Subtest: imported passed decisions and reviewer names cannot qualify without a trusted verifier
+ok 5 - imported passed decisions and reviewer names cannot qualify without a trusted verifier
+  ---
+  duration_ms: 3.148745
+  type: 'test'
+  ...
+# Subtest: source, spec, asset, compiler, dependency, recipe and deployment changes invalidate evidence
+ok 6 - source, spec, asset, compiler, dependency, recipe and deployment changes invalidate evidence
+  ---
+  duration_ms: 2.523445
+  type: 'test'
+  ...
+# Subtest: G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain
+ok 7 - G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain
+  ---
+  duration_ms: 7.058743
+  type: 'test'
+  ...
+# Subtest: G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures
+ok 8 - G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures
+  ---
+  duration_ms: 2.667521
+  type: 'test'
+  ...
+# Subtest: G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence
+ok 9 - G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence
+  ---
+  duration_ms: 7.329958
+  type: 'test'
+  ...
+# Subtest: G15 compares complete asset paths, lengths and raw hashes, including non-text files
+ok 10 - G15 compares complete asset paths, lengths and raw hashes, including non-text files
+  ---
+  duration_ms: 7.024836
+  type: 'test'
+  ...
+# Subtest: latest settled or absent state vetoes guidance while finalized funding still matches
+ok 11 - latest settled or absent state vetoes guidance while finalized funding still matches
+  ---
+  duration_ms: 19.050098
+  type: 'test'
+  ...
+# Subtest: wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence
+ok 12 - wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence
+  ---
+  duration_ms: 15.563067
+  type: 'test'
+  ...
+# Subtest: recovery uses stored latest immutable fields and creates only bound unsigned exits
+ok 13 - recovery uses stored latest immutable fields and creates only bound unsigned exits
+  ---
+  duration_ms: 148.608071
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 765.849372
