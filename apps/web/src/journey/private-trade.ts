@@ -104,6 +104,19 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   const viewed=gate.view();
   return viewed.ok&&viewed.value.reason==='near-expiry'&&releaseOpen(viewed.value);
  }
+ // Reconciles leftover settlement intents read-only. A reverted one becomes terminal-verified, so the original
+ // refund can reserve beside it; the first one the chain has not resolved is returned and nothing else is tried.
+ async function unresolvedSettlement(intents:readonly IntentV1[]):Promise<string|undefined>{
+  const {journal,life}=attached();
+  for(const settle of intents){
+   // A missing native observation (e.g. no hash yet) leaves the lifecycle's own classification to decide.
+   await step(journal.reconcileNative(settle.intentId));
+   const result=await step(life.reconcile(settle.intentId));
+   const reverted=result.ok&&result.value.outcome==='reverted'&&journal.isTerminalVerified(settle.intentId);
+   if(!reverted)return settle.intentId;
+  }
+  return undefined;
+ }
  // Enters the funded phase from fresh native evidence: payment guidance, guidance-closed release, or neither.
  async function enterFundedPhase():Promise<void>{
   const {binding}=trade(),{gate,authority,journey}=attached();
@@ -445,7 +458,21 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      // approval therefore stops recovery here, before any re-approval or funding, instead of leaving a funded
      // escrow whose later restart cannot reconcile that approval.
      await attachNative();const recoveryBinding=defined(binding),recoveryTerms=defined(terms);const originalPrepared=value(await step(defined(journal).list())).filter(intent=>intent.binding.chain===recoveryBinding.chain&&intent.binding.networkId===recoveryBinding.networkId&&intent.binding.deploymentId===recoveryBinding.deploymentId&&intent.binding.tradeId===recoveryBinding.tradeId&&intent.account===recoveryTerms.seller&&intent.action==='fund'&&intent.state==='prepared');let recovered:readonly IntentV1[];recoveryCancellationEpoch=mine;try{recovered=value(await step(defined(life).recover()));}finally{if(epoch===mine)recoveryCancellationEpoch=undefined;}const observed=value(await step(native.readObservation({registry,binding:watched.binding,terms:watched.terms,domain:watched.domain,request:scopedRequest,generation:0,requestSequence:1})));
-     const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?matches.sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
+     const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?matches.sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}
+     // A release or refund sent before this restart may still be unresolved, or may have reverted (e.g. included at
+     // or after the deadline) while the escrow stays funded. Each is reconciled read-only, never cancelled or resent.
+     if(observed.state==='funded'){
+      const isSettle=(intent:IntentV1)=>intent.action==='release'||intent.action==='refund';
+      const leftovers=recovered.filter(intent=>isSettle(intent)&&intent.intentId!==chosen.intentId);
+      const unresolved=await unresolvedSettlement(leftovers);
+      if(unresolved){
+       // Reconcile-only on that intent: no refund may be reserved beside an unresolved settlement.
+       intentId=unresolved;
+       phase='settling';
+       return snapshot();
+      }
+     }
+     phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
     }else if(action==='offer'){
      if(phase!=='wallet')throw Error('OUT_OF_ORDER');
      await fresh();

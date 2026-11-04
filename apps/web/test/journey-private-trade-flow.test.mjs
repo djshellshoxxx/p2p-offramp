@@ -93,6 +93,26 @@ function fakeChain(){
   }
   return mined.hash;
  };
+ chain.held=[];
+ chain.hold=tx=>{
+  const held={...tx,from:tx.from.toLowerCase(),to:tx.to.toLowerCase(),input:tx.input.toLowerCase()};
+  held.hash='0x'+createHash('sha256').update('held'+JSON.stringify(held)).digest('hex');
+  chain.held.push(held);
+  chain.queued=(chain.queued??0)+1;
+  return held.hash;
+ };
+ /** Includes every held transaction in its own block; `reverted` includes it without any escrow effect. */
+ chain.includeHeld=({reverted})=>{
+  for(const held of chain.held.splice(0)){
+   const mined={...held,blockNumber:++chain.head,reverted};
+   chain.blocks.set(chain.head,[mined]);
+   chain.txs.set(mined.hash,mined);
+   chain.queued--;
+   if(mined.from===SELLER)chain.nonce++;
+   const kind=mined.input.slice(0,10);
+   if(!reverted)chain.escrowState=kind===selector('release')?'released':kind===selector('refund')?'refunded':'funded';
+  }
+ };
  const head=()=>({number:String(chain.head),hash:blockHash(chain.head)});
  const view=tx=>({
   hash:tx.hash,from:tx.from,to:tx.to,nonce:tx.nonce,input:tx.input,value:tx.value,blockNumber:String(tx.blockNumber),
@@ -121,6 +141,9 @@ function fakeChain(){
    chain.sends++;
    const tx=params[0];
    if(chain.send==='reject')throw Object.assign(Error('User rejected the request.'),{code:4001});
+   // 'hold' answers with a hash while the transaction stays in the node's pool until includeHeld().
+   if(chain.send==='hold')return chain.hold({from:tx.from,to:tx.to,input:tx.data,value:String(BigInt(tx.value)),
+    nonce:String(BigInt(tx.nonce))});
    return chain.mine({from:tx.from,to:tx.to,input:tx.data,value:String(BigInt(tx.value)),nonce:String(BigInt(tx.nonce))});
   }
   if(method==='eth_accounts')return[SELLER];
@@ -144,11 +167,24 @@ function fakeChain(){
    // decimals(), balanceOf(address), allowance(address,address); anything else is isAllowlisted(address).
    return data==='0x313ce567'?word(6):data==='0x70a08231'?word(10n**24n):data==='0xdd62ed3e'?word(0):word(1);
   }
+  if(method==='eth_getLogs'){
+   // Escrow logs of included, non-reverted transactions in the block range, matched on address and topic[1].
+   const filter=params[0],from=Number(BigInt(filter.fromBlock)),to=Number(BigInt(filter.toBlock));
+   const logs=[];
+   for(const tx of chain.txs.values()){
+    if(tx.reverted||tx.blockNumber<from||tx.blockNumber>to)continue;
+    for(const log of chain.logsFor?.(tx)??[]){
+     if(log.address.toLowerCase()!==filter.address.toLowerCase()||log.topics[1]!==filter.topics[1])continue;
+     logs.push({...log,transactionHash:tx.hash,blockNumber:hex(tx.blockNumber)});
+    }
+   }
+   return logs;
+  }
   if(method==='eth_getTransactionReceipt'){
    const tx=chain.txs.get(params[0]);
    if(!tx)return null;
    return{
-    transactionHash:tx.hash,blockNumber:hex(tx.blockNumber),blockHash:blockHash(tx.blockNumber),
+    transactionHash:tx.hash,from:tx.from,blockNumber:hex(tx.blockNumber),blockHash:blockHash(tx.blockNumber),
     status:tx.reverted?'0x0':'0x1',
     gasUsed:'0x5208',effectiveGasPrice:'0x1',logs:chain.logsFor?.(tx)??[],
    };
@@ -207,6 +243,12 @@ class FakeWallet{
 function harness(){
  const store=new Store(),chain=fakeChain(),relay=fakeRelay();
  chain.guidance={reason:'ok',remainingSeconds:'7200'};
+ const h={store,chain,relay};
+ h.journey=workerJourney(h);
+ return h;
+}
+/** One Worker-equivalent journey over the harness's shared encrypted store, chain and relay. */
+function workerJourney({store,chain,relay}){
  const vault=new EncryptedVaultService(store,crypto,{lifecycle:false});
  const backup=new EncryptedBackupService(store);
  const inert={invalidate(){},dispose(){}};
@@ -255,11 +297,35 @@ function harness(){
   },
  };
  const localPeerAcceptance=async()=>new Uint8Array(65).fill(9);
- const journey=createPrivateTradeJourney({
+ return createPrivateTradeJourney({
   services:{vault,backup},native,registryBytes,registryDigest,request:chain.request,createRelay:()=>relay.create(),
   localPeerAcceptance,
  });
- return{store,chain,relay,journey};
+}
+/** The Worker stops (tab closed or lock); a fresh one unlocks the same profile and recovers the saved trade. */
+async function restartAndWatch(h){
+ h.journey.dispose();
+ h.journey=workerJourney(h);
+ value(await h.journey.runtime({operation:'unlock',profileId:h.profileId,passphrase:pass}));
+ const [saved]=value(await h.journey.runtime({operation:'listTermsReviews',profileId:h.profileId})).items;
+ for(const item of value(await h.journey.runtime({operation:'listTermsReviews',profileId:h.profileId})).items){
+  item.bytes.fill(0);
+ }
+ return h.journey.act('watch',{recordId:saved.recordId});
+}
+/** Durable journal rows for the profile, read through an independent session. */
+async function journalActions(h){
+ const vault=new EncryptedVaultService(h.store,crypto,{lifecycle:false});
+ try{
+  const session=await vault.unlock(h.profileId,pass);
+  assert.equal(session.ok,true);
+  const rows=await vault.list(session.value.sessionId,'journal');
+  assert.equal(rows.ok,true);
+  return rows.value.map(row=>decodeIntentPayload(row.payload)).map(intent=>`${intent.action}:${intent.state}`).sort();
+ }finally{
+  vault.lockAll();
+  vault.dispose();
+ }
 }
 
 /** Encrypted profile with a verified current backup, as the screen requires before wallet selection. */
@@ -276,7 +342,7 @@ async function signed(journey,signingAction,options={}){
 }
 /** connect -> offer -> accept, with both communication deliveries succeeding. */
 async function accepted(h,options={assetId:'native',amountBaseUnits:'1000000000000000'}){
- await onboard(h.journey);
+ h.profileId=await onboard(h.journey);
  assert.equal((await h.journey.act('connect',options)).phase,'wallet');
  assert.equal((await h.journey.act('offer')).phase,'review');
  assert.equal((await signed(h.journey,'accept',{reviewRiskAccepted:true})).phase,'accepted');
@@ -393,6 +459,54 @@ test('a release that reverts after the deadline returns to the funded escrow and
   assert.equal((await signed(h.journey,'refund')).phase,'settling');
   assert.equal(h.chain.escrowState,'refunded');
   assert.equal((await h.journey.act('reconcile')).receipt.state,'refunded');
+ }finally{h.journey.dispose();}
+});
+
+/** A release sent with a recorded hash that is still in the pool when the Worker stops. */
+async function heldRelease(h){
+ await funded(h);
+ await h.journey.act('review-signing',{signingAction:'release'});
+ h.chain.send='hold';
+ assert.equal((await h.journey.act('confirm-signing',{attestFiatReceived:true})).phase,'settling');
+ h.chain.send='mine';
+ assert.equal(h.chain.sends,2);
+ h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+ h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+}
+
+test('after restart a release that reverted past the deadline is reconciled so the refund can reserve',async()=>{
+ const h=harness();
+ try{
+  await heldRelease(h);
+  // Included only after the deadline: BasicEscrow reverts it and the escrow stays funded.
+  h.chain.includeHeld({reverted:true});
+  h.chain.head+=2;
+  assert.equal((await restartAndWatch(h)).phase,'reconcile');
+  await assert.rejects(h.journey.act('reconcile'),/PAYMENT_GUIDANCE_BLOCKED/);
+  assert.equal(h.journey.snapshot().phase,'payment-guidance-unavailable');
+  assert.equal((await signed(h.journey,'refund')).phase,'settling');
+  assert.equal(h.chain.escrowState,'refunded');
+  assert.equal(h.chain.sends,3,'the reverted release is never resent');
+  assert.equal((await h.journey.act('reconcile')).receipt.state,'refunded');
+ }finally{h.journey.dispose();}
+});
+
+test('after restart an unresolved release offers only reconcile and reserves no refund beside it',async()=>{
+ const h=harness();
+ try{
+  await heldRelease(h);
+  const recovered=await restartAndWatch(h);
+  assert.equal(recovered.phase,'settling');
+  await assert.rejects(h.journey.act('review-signing',{signingAction:'refund'}),/OUT_OF_ORDER/);
+  assert.equal((await h.journey.act('reconcile')).phase,'settling');
+  assert.deepEqual(await journalActions(h),['fund:finalized','release:pending']);
+  // Once the chain resolves the release as reverted, the original refund opens; nothing was cancelled or resent.
+  h.chain.includeHeld({reverted:true});
+  h.chain.head+=2;
+  await assert.rejects(h.journey.act('reconcile'),/PAYMENT_GUIDANCE_BLOCKED/);
+  assert.equal((await signed(h.journey,'refund')).phase,'settling');
+  assert.equal(h.chain.escrowState,'refunded');
+  assert.equal(h.chain.sends,3);
  }finally{h.journey.dispose();}
 });
 
