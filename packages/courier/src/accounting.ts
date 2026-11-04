@@ -104,7 +104,7 @@ export function createFeeModel(options: {
           busy = false;
         }
       });
-    const expect = (value: number) => {
+    const expectRevision = (value: number) => {
       if (integer(value) !== revision) return stop("STALE_REVISION");
     };
     return Object.freeze({
@@ -115,7 +115,7 @@ export function createFeeModel(options: {
         evidence: CourierEvidence,
       ) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (hex(policyHash) !== schedule.policyHash)
             return stop("UNAUTHORIZED");
           const allocation = evidenceOf(evidence, verifier, "fee-allocation");
@@ -153,7 +153,7 @@ export function createFeeModel(options: {
         }),
       timeout: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const now = integer(clock());
           proof.current();
           if (now < resolveBy) return stop("EXPIRED");
@@ -224,7 +224,7 @@ export function createStakeModel(
         activeReservations: [...records.values()].filter((r) => r.active)
           .length,
       });
-    const expect = (value: number) => {
+    const expectRevision = (value: number) => {
       if (integer(value) !== revision) return stop("STALE_REVISION");
     };
     let busy = false;
@@ -242,11 +242,11 @@ export function createStakeModel(
       inspect: () => run(view),
       reserve: (expectedRevision: number, input: unknown) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const r = parsed("reservation", input, profile),
             id = hex(r.reservationId),
             amount = uint(r.amount);
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (r.state !== "active" || amount === 0n) return stop();
           if (records.has(id)) return stop("CONFLICT");
           if (
@@ -275,7 +275,7 @@ export function createStakeModel(
         nowSeconds: number,
       ) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const id = hex(reservationId),
             r = records.get(id);
           if (!r || !r.active) return stop("CONFLICT");
@@ -289,7 +289,7 @@ export function createStakeModel(
         }),
       beginUnbond: (expectedRevision: number, amount: string) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const value = uint(amount);
           if (value === 0n) return stop();
           const next = subtract(withdrawable, value),

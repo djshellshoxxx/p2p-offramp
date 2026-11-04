@@ -151,3 +151,10 @@ test('actual canonical and model import literals retain their pinned dependency 
  assert.deepEqual(formal.literalImports(canonical),['@openzeppelin/contracts/token/ERC20/IERC20.sol','@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol','@openzeppelin/contracts/utils/ReentrancyGuard.sol']);
  assert.deepEqual(formal.literalImports(model),['../src/BasicEscrow.sol','../test/mocks/Mocks.sol','forge-std/Test.sol']);
 });
+test('the CLI evidence directory must resolve inside the checkout, so arguments cannot direct writes elsewhere',()=>{
+ const root=new URL('../../',import.meta.url).pathname.replace(/\/$/,'');
+ assert.equal(formal.evidenceDirectory(undefined,'.formal-evidence'),root+'/.formal-evidence');
+ assert.equal(formal.evidenceDirectory(root+'/.formal-evidence/run-1'),root+'/.formal-evidence/run-1');
+ for(const outside of['/tmp/formal-evidence',root,root+'-sibling/evidence',root+'/../outside','/'])
+  assert.throws(()=>formal.evidenceDirectory(outside),/FORMAL_OUTPUT_OUTSIDE_REPOSITORY/,outside);
+});

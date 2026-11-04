@@ -19,6 +19,7 @@ import {
   stop,
   failure,
   codeOf,
+  result,
   type TradeBinding,
   type CourierResult,
 } from "./shared.ts";
@@ -211,14 +212,14 @@ export function createCourierVerifier(
           abort();
           return;
         }
-        try {
+        // A synchronous throw from the port refuses at once; its promise outcome settles below.
+        const started = result(() =>
           Promise.resolve(call()).then(
             (value) => finish(true, value),
             () => refusal("UNAVAILABLE"),
-          );
-        } catch {
-          refusal("UNAVAILABLE");
-        }
+          ),
+        );
+        if (!started.ok) refusal("UNAVAILABLE");
       });
     const verifier: CourierVerifier = Object.freeze({
       context,
