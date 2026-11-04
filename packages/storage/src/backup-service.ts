@@ -19,15 +19,29 @@ export class BackupError extends Error {
   readonly code: BackupErrorCode;
   readonly retryable: boolean;
   constructor(code: BackupErrorCode) {
-    const known: BackupErrorCode = Object.hasOwn(MESSAGES, code) ? code : 'STORAGE_UNAVAILABLE';
+    const known: BackupErrorCode = typeof code === 'string' && Object.hasOwn(MESSAGES, code) ? code : 'STORAGE_UNAVAILABLE';
     super(MESSAGES[known]); this.name = 'BackupError'; this.code = known;
     this.retryable = known === 'STORAGE_UNAVAILABLE' || known === 'QUOTA_EXCEEDED';
   }
 }
-function normalized(error: unknown): BackupError {
-  if (error instanceof BackupError) return error;
-  if (error instanceof ValidationError || error instanceof VaultCryptoError || error instanceof VaultStorageError) return new BackupError(error.code);
-  return new BackupError('STORAGE_UNAVAILABLE');
+function isStorageError(error: unknown): boolean {
+  try { return error instanceof VaultStorageError; } catch { return false; }
+}
+function errorCode(error: unknown): BackupErrorCode | undefined {
+  try {
+    if (!(error instanceof BackupError || error instanceof ValidationError || error instanceof VaultCryptoError || error instanceof VaultStorageError)) return undefined;
+    const property = Object.getOwnPropertyDescriptor(error, 'code');
+    const code: unknown = property && 'value' in property ? property.value : undefined;
+    return typeof code === 'string' && Object.hasOwn(MESSAGES, code) ? code as BackupErrorCode : undefined;
+  } catch { return undefined; }
+}
+function normalized(error: unknown): BackupError { return new BackupError(errorCode(error) ?? 'STORAGE_UNAVAILABLE'); }
+const signalAborted = Object.getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!;
+const addSignalListener = EventTarget.prototype.addEventListener;
+const removeSignalListener = EventTarget.prototype.removeEventListener;
+function aborted(signal: unknown): boolean {
+  if (signal === undefined) return false;
+  try { return Reflect.apply(signalAborted, signal, []) as boolean; } catch { throw new BackupError('INVALID_INPUT'); }
 }
 export interface BackupExport {
   readonly bytes: Uint8Array;
@@ -59,25 +73,27 @@ export class EncryptedBackupService {
   async #job<T>(signal: AbortSignal | undefined, operation: (guard: () => void, controller: AbortController) => Promise<T>): Promise<T> {
     if (this.#closed) throw new BackupError('LOCKED');
     // Checked before the slot is claimed: a non-signal would otherwise throw while holding it.
-    if (signal !== undefined && !(signal instanceof AbortSignal)) throw new BackupError('INVALID_INPUT');
-    if (signal?.aborted) throw new BackupError('CANCELLED');
+    if (aborted(signal)) throw new BackupError('CANCELLED');
     const release = claimRecoverySlot();
     if (release === undefined) throw new BackupError('BUSY');
     const generation = this.#generation; const controller = new AbortController(); this.#active = controller;
     const onAbort = (): void => { controller.abort(); };
-    signal?.addEventListener('abort', onAbort, { once: true }); if (signal?.aborted) onAbort();
     const guard = (): void => {
       if (this.#closed || this.#generation !== generation) throw new BackupError('LOCKED');
       if (controller.signal.aborted) throw new BackupError('CANCELLED');
     };
-    try { guard(); return await operation(guard, controller); }
+    try {
+      if (signal !== undefined) Reflect.apply(addSignalListener, signal, ['abort', onAbort, { once: true }]);
+      if (aborted(signal)) onAbort();
+      guard(); return await operation(guard, controller);
+    }
     catch (error) {
-      if (error instanceof VaultStorageError && error.code === 'CANCELLED') guard();
+      if (isStorageError(error) && errorCode(error) === 'CANCELLED') guard();
       throw normalized(error);
     } finally {
-      signal?.removeEventListener('abort', onAbort);
-      if (this.#active === controller) this.#active = undefined;
-      release();
+      try { if (signal !== undefined) Reflect.apply(removeSignalListener, signal, ['abort', onAbort]); }
+      catch { /* Cleanup cannot expose caller exceptions or retain recovery capacity. */ }
+      finally { if (this.#active === controller) this.#active = undefined; release(); }
     }
   }
   async #checksum(bytes: Uint8Array<ArrayBuffer>): Promise<string> {
