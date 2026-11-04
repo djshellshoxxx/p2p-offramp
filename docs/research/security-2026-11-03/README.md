@@ -10,6 +10,7 @@ This packet turns remaining P2P Offramp security questions into implementation a
 | [PR #26 at `94554ecf9854e4604f9f56afe5bebedeee931994`](https://github.com/djshellshoxxx/p2p-offramp/pull/26) | Main implementation candidate used for detailed source observations. Candidate-only paths are linked through immutable GitHub URLs in the reports. |
 | [PR #27](https://github.com/djshellshoxxx/p2p-offramp/pull/27) | Separate execution-prompt work; no ownership transfer. |
 | [PR #28](https://github.com/djshellshoxxx/p2p-offramp/pull/28) | Separate active browser/cancellation/recovery repair lane, observed at `9e01b127eae0b12bcc1ce4bbfbf66dce16a395da`; those fixes are not duplicated here. |
+| [PR #29](https://github.com/djshellshoxxx/p2p-offramp/pull/29) | Proposed D1 peer-carrier, D7 optional-package and D8 merge-policy decisions, observed at `dafae9ccb7cc567075872df72c67ca259402b9d1` during final publication. These proposals are not accepted policies. |
 
 Read the candidate's [whole-source audit](https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/execution/audit-2026-11-02/README.md), [current remainder](https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/execution/coverage/CURRENT-REMAINDER.md), and [pending decisions](https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/governance/PENDING-DECISIONS.md) alongside this packet. Local implementation, protocol selection, deployed evidence and release approval remain distinct. Publication of these notes does not imply that PR #26 has merged.
 
@@ -34,6 +35,8 @@ Each report distinguishes implemented controls from open decisions, gives a conf
 6. **Admit optional proof/provider work only against a selected use case.** Require an authenticated evidence source, exact verifier/circuit/claim profile, deterministic semantic parsing and an explicit settlement policy. Apply the same selected-profile discipline to Solana, QR, stealth and reputation. Primary owners: proof/provider and relevant protocol owners. Existing unsupported states should remain explicit while the core journey is qualified.
 
 This order refines the existing backlog. It does not create competing implementation owners or reopen controls already completed in the prior audit. Reconcile source and active PRs again before editing a named seam.
+
+**Late coordination update:** PR #29 appeared while this research was being finalized. Continue its D1 carrier review using the identity-binding and account-policy criteria in the escrow and messaging reports; do not start a competing carrier proposal. Its D7 package disposition and D8 repository-policy proposals remain separate owner decisions. This packet supplies additional evidence and acceptance criteria without choosing those options or changing their status.
 
 ## Bounded dependency result
 
