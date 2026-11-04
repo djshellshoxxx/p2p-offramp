@@ -18,18 +18,20 @@ export const LAB_COMMANDS = Object.freeze({
 });
 
 export async function runLab({ root, mode, output = resolve(root, 'dist-lab'), env = process.env, signal }) {
-  if (!Object.hasOwn(LAB_COMMANDS, mode)) throw new LabError('LAB_UNSUPPORTED');
+  // Use the table's own key from here on, never the caller's string, so CLI input cannot select a command.
+  const selected = Object.keys(LAB_COMMANDS).find(name => name === mode);
+  if (selected === undefined) throw new LabError('LAB_UNSUPPORTED');
   const recipe = await createLabRecipe(root, env);
   await mkdir(output, { recursive: true });
   await writeFile(resolve(output, 'recipe.json'), JSON.stringify(recipe, null, 2) + '\n', { mode: 0o600 });
   const results = [];
-  for (const [command, args] of LAB_COMMANDS[mode]) {
+  for (const [command, args] of LAB_COMMANDS[selected]) {
     const result = await runLabCommand(command, args, { root, env: cleanLabEnvironment(env), signal });
     const { log, ...record } = result;
     const name = `command-${results.length + 1}.log`;
     await writeFile(resolve(output, name), log, { mode: 0o600 });
     results.push({ ...record, report: name });
-    const run = { version: 1, mode, recipeSha256: sha256(JSON.stringify(recipe)), sourceCommit: recipe.sourceCommit, sourceDirty: recipe.sourceDirty, chainIds: recipe.chainIds, fixtureDigest: recipe.fixturesDigest, toolVersions: recipe.toolVersions, results, qualification: 'local-fake-funds-only' };
+    const run = { version: 1, mode: selected, recipeSha256: sha256(JSON.stringify(recipe)), sourceCommit: recipe.sourceCommit, sourceDirty: recipe.sourceDirty, chainIds: recipe.chainIds, fixtureDigest: recipe.fixturesDigest, toolVersions: recipe.toolVersions, results, qualification: 'local-fake-funds-only' };
     await writeFile(resolve(output, 'run.json'), JSON.stringify(run, null, 2) + '\n', { mode: 0o600 });
     if (result.exitCode !== 0 || !result.bounded || result.timedOut || result.cancelled) throw new LabError('LAB_COMMAND_FAILED');
   }
