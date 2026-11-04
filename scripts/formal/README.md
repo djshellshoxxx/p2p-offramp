@@ -46,7 +46,7 @@ node scripts/formal/evm.mjs /path/to/evidence
 
 `report.json` and the retained actual native trace, SMT inputs, queries, responses and diagnostics live in the chosen workspace output directory. A successful evidence run may legitimately report a model gap and unknown proofs. No generated packet is authority to advertise or deploy for real funds.
 
-Tool locations are configuration, never evidence: all selected binaries/artifacts retain identical pinned hashes and version checks. `FORMAL_FOUNDRY_ROOT` is optional; otherwise the existing Foundry `forge` on PATH is checked. `FOUNDRY_SOLC` uses the existing compiler override, falling back to `$HOME/.svm/0.8.30/solc-0.8.30`. Both Z3 paths are required; no managed-workspace tool directory is implicit. The optional positional CLI argument selects the evidence directory (default `.formal-evidence` under the repository).
+Tool locations are configuration, never evidence: all selected binaries/artifacts retain identical pinned hashes and version checks. `FORMAL_FOUNDRY_ROOT` is optional; otherwise the existing Foundry `forge` on PATH is checked. `FOUNDRY_SOLC` uses the existing compiler override, falling back to `$HOME/.svm/0.8.30/solc-0.8.30`. Both Z3 paths are required; no managed-workspace tool directory is implicit. The optional positional CLI argument selects the evidence directory (default `.formal-evidence` under the repository). It must resolve inside the repository checkout; any other path stops with `FORMAL_OUTPUT_OUTSIDE_REPOSITORY` before anything is written.
 
 ## Finite one-property partition investigation
 
