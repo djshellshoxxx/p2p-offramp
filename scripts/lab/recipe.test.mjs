@@ -2,12 +2,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
-import fsPromises, { mkdtemp, mkdir, writeFile, symlink, rm, readFile, rename } from 'node:fs/promises';
+import fsPromises, { mkdtemp, mkdir, writeFile, symlink, rm, readFile, rename, readdir, stat } from 'node:fs/promises';
 import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scheduler } from 'node:timers/promises';
-import { cleanLabEnvironment, digestFiles, validatePortPolicy, IMAGE_DIGEST } from './recipe.mjs';
+import { cleanLabEnvironment, digestFiles, validatePortPolicy, IMAGE_DIGEST, sha256 } from './recipe.mjs';
 import { LAB_COMMANDS, runLab } from './run.mjs';
 import { runLabCommand } from './command.mjs';
 
@@ -25,6 +25,62 @@ test('lab permits only private frontend forwarding and no inferred native RPC fo
   assert.ok(docker.includes('USER node'));
   for (const commands of Object.values(LAB_COMMANDS)) assert.ok(commands.every(([cmd, args]) => cmd === 'npm' && !args.some(value => /deploy|publish|sepolia:trade/.test(value))));
   await assert.rejects(runLab({ root: '/absent', mode: 'production' }), /LAB_UNSUPPORTED/);
+});
+const STUB_RECIPE = Object.freeze({ version: 1, sourceCommit: 'a'.repeat(40), sourceDirty: false, chainIds: [31337] });
+// Deterministic per-command logs, so a later run that rewrote an earlier run's file would change its hash.
+const stubCommand = (failAt = 0) => {
+  let calls = 0;
+  return async (command, args) => {
+    const log = Buffer.from(`${command} ${args.join(' ')}\n`); const exitCode = ++calls === failAt ? 1 : 0;
+    return { command: [command, ...args], exitCode, exitSignal: null, logSha256: sha256(log), log, bounded: true,
+      timedOut: false, cancelled: false };
+  };
+};
+const labRun = (output, mode, runCommand) =>
+  runLab({ root: output, mode, output, env: {}, createRecipe: async () => STUB_RECIPE, runCommand });
+const runEvidence = async directory => {
+  const run = JSON.parse(await readFile(join(directory, 'run.json'), 'utf8'));
+  for (const { report, logSha256 } of run.results) {
+    assert.equal(sha256(await readFile(join(directory, report))), logSha256, `${report} must keep its recorded log`);
+  }
+  assert.deepEqual(JSON.parse(await readFile(join(directory, 'recipe.json'), 'utf8')), STUB_RECIPE);
+  return { run, files: (await readdir(directory)).sort() };
+};
+const runDirectories = async output => {
+  const entries = (await readdir(output)).sort(); const found = `found ${entries.join(', ')}`;
+  assert.equal(entries.length, 2, `expected exactly one directory per run, ${found}`);
+  const foundation = entries.find(name => name.startsWith('foundation-'));
+  const journey = entries.find(name => name.startsWith('journey-'));
+  assert.ok(foundation && journey && foundation !== journey, `expected foundation-* and journey-*, ${found}`);
+  for (const name of entries) assert.equal((await stat(join(output, name))).mode & 0o777, 0o700);
+  return { foundation: join(output, foundation), journey: join(output, journey) };
+};
+const logs = count => Array.from({ length: count }, (_, index) => `command-${index + 1}.log`);
+test('lab runs never overwrite earlier evidence', async t => {
+  const output = await mkdtemp(join(tmpdir(), 'p2p-lab-runs-'));
+  t.after(() => rm(output, { recursive: true, force: true }));
+  const first = await labRun(output, 'foundation', stubCommand());
+  const second = await labRun(output, 'journey', stubCommand());
+  const directories = await runDirectories(output);
+  assert.equal(first.output, directories.foundation); assert.equal(second.output, directories.journey);
+  const foundation = await runEvidence(directories.foundation);
+  assert.equal(foundation.run.mode, 'foundation'); assert.equal(foundation.run.results.length, 5);
+  assert.deepEqual(foundation.files, [...logs(5), 'recipe.json', 'run.json']);
+  const journey = await runEvidence(directories.journey);
+  assert.equal(journey.run.mode, 'journey'); assert.equal(journey.run.results.length, 4);
+  assert.deepEqual(journey.files, [...logs(4), 'recipe.json', 'run.json']);
+});
+test('a failed lab run keeps its evidence when a later run follows', async t => {
+  const output = await mkdtemp(join(tmpdir(), 'p2p-lab-failed-'));
+  t.after(() => rm(output, { recursive: true, force: true }));
+  await assert.rejects(labRun(output, 'foundation', stubCommand(2)), /LAB_COMMAND_FAILED/);
+  await labRun(output, 'journey', stubCommand());
+  const directories = await runDirectories(output);
+  const failed = await runEvidence(directories.foundation);
+  assert.equal(failed.run.mode, 'foundation');
+  assert.deepEqual(failed.run.results.map(result => result.exitCode), [0, 1]);
+  assert.deepEqual(failed.files, [...logs(2), 'recipe.json', 'run.json']);
+  assert.equal((await runEvidence(directories.journey)).run.results.length, 4);
 });
 test('recipe digests bind actual bytes and reject traversal and symlink parents', async t => {
   const root = await mkdtemp(join(tmpdir(), 'p2p-lab-recipe-')); t.after(() => rm(root, { recursive: true, force: true }));
