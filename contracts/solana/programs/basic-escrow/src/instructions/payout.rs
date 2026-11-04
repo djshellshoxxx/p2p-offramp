@@ -94,6 +94,9 @@ pub fn handle_payout_spl(ctx: Context<PayoutSpl>) -> Result<()> {
         to: ctx.accounts.destination.to_account_info(),
         authority: ctx.accounts.escrow.to_account_info(),
     };
+    // Re-check the vault as D5 requires; only the escrow PDA could set either field and it never does.
+    let vault = &ctx.accounts.vault;
+    require!(vault.delegate.is_none() && vault.close_authority.is_none(), EscrowError::VaultMismatch);
     let decimals = ctx.accounts.mint.decimals;
     let program = ctx.accounts.token_program.key();
     token::transfer_checked(CpiContext::new_with_signer(program, transfer, signer), amount, decimals)?;

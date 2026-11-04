@@ -12,7 +12,7 @@ recommended sub-rules on 2026-11-04. Nothing here is deployed to a public cluste
   fields, its own program ID and its compiled genesis constant, and stores their SHA-256 as the trade id.
 - Funding requires `now < acceptBefore` and `1800 <= deadline - now <= 604800`, read from the Clock sysvar
   with a checked conversion. The buyer must differ from the seller, the zero key, the escrow and the vault.
-  A native buyer must not be executable.
+  A native buyer must be writable (reserved sysvar and builtin keys are not) and not executable.
 - `release` needs the stored seller's signature and `now < deadline`. `refund` is permissionless at
   `now >= deadline`. Both only change state and are mutually exclusive.
 - `payout_native` / `payout_spl` are permissionless. They pay exactly the recorded principal once to the
@@ -61,6 +61,16 @@ Tests run on LiteSVM with a controlled Clock against the hash-pinned original SP
 again with the mainnet feature set (p-token at the SPL Token ID, per LiteSVM's 2026-07-10 feature list).
 `vectors/` is an independent JavaScript implementation of PDAs, associated token addresses and Anchor
 discriminators; `tests/vectors.rs` cross-checks it and the G16 Solana terms vectors.
+
+## Deployment prerequisites (from the 2026-11-04 adversarial review)
+
+- Confirm the target cluster has the System program's `CreateAccountAllowPrefund` feature active. Anchor
+  1.2.2 `init` uses it when lamports were donated to a predictable escrow or vault PDA first; without it,
+  such a donation blocks that seller nonce (denial of service, no loss).
+- A native payout keeps the escrow at the current rent-exempt minimum. If rent rises after funding, the
+  payout fails until anyone tops the escrow up; principal is never at risk.
+- The `.so` is not path-reproducible (identical source built in two directories hashed differently).
+  Pin a ProgramData hash only from a verifiable build of the exact tagged source.
 
 ## Not covered
 

@@ -70,8 +70,11 @@
         {
           "name": "buyer",
           "docs": [
-            "account would fail permanently, so such a buyer is refused at funding."
-          ]
+            "payout must credit this account, so it is requested writable now: the runtime demotes reserved",
+            "keys (sysvars, builtin programs) to read-only, and an executable account cannot receive lamports.",
+            "Either would make every later payout fail and lock the principal after a release."
+          ],
+          "writable": true
         },
         {
           "name": "system_program",

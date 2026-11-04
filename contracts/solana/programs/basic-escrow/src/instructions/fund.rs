@@ -39,9 +39,11 @@ pub struct FundNative<'info> {
         bump,
     )]
     pub escrow: Account<'info, EscrowV1>,
-    /// CHECK: only its address and executable flag are read; a native payout to an executable
-    /// account would fail permanently, so such a buyer is refused at funding.
-    #[account(address = args.buyer @ EscrowError::InvalidBuyer)]
+    /// CHECK: never written here; only its address, writability and executable flag are read. A native
+    /// payout must credit this account, so it is requested writable now: the runtime demotes reserved
+    /// keys (sysvars, builtin programs) to read-only, and an executable account cannot receive lamports.
+    /// Either would make every later payout fail and lock the principal after a release.
+    #[account(mut, address = args.buyer @ EscrowError::InvalidBuyer)]
     pub buyer: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
 }

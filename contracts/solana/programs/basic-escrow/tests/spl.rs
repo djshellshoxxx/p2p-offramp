@@ -219,6 +219,11 @@ fn buyer_equal_to_the_vault_is_refused() {
     let terms = args(escrow, 16, AMOUNT, h.now());
     let result = h.send(&[fund_spl_ix(&seller.pubkey(), &terms, &TEST_MINT_OPEN, &token)], &[&seller]);
     assert_eq!(code(result), escrow_error(E::InvalidBuyer));
+    for buyer in [Pubkey::default(), seller.pubkey()] {
+        let terms = args(buyer, 16, AMOUNT, h.now());
+        let result = h.send(&[fund_spl_ix(&seller.pubkey(), &terms, &TEST_MINT_OPEN, &token)], &[&seller]);
+        assert_eq!(code(result), escrow_error(E::InvalidBuyer), "zero or seller buyer");
+    }
 }
 
 #[test]

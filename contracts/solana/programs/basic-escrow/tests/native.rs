@@ -226,18 +226,20 @@ fn invalid_parties_and_zero_values_are_refused() {
     let seller = h.funded_keypair(10 * SOL);
     let now = h.now();
     let (own_escrow, _) = escrow_pda(&seller.pubkey(), &[40; 32]);
-    let refusals: [(Pubkey, u8, u64, u64, E); 5] = [
-        (seller.pubkey(), 41, SOL, 1, E::InvalidBuyer),
-        (Pubkey::default(), 42, SOL, 1, E::InvalidBuyer),
-        (own_escrow, 40, SOL, 1, E::InvalidBuyer),
-        (Pubkey::new_unique(), 43, 0, 1, E::ZeroValue),
-        (Pubkey::new_unique(), 44, SOL, 0, E::ZeroValue),
+    // The zero key is the System Program ID, a reserved key: the writable-buyer rule (Anchor
+    // ConstraintMut, 2000) refuses it before the explicit check, which fund_spl still exercises.
+    let refusals: [(Pubkey, u8, u64, u64, u32); 5] = [
+        (seller.pubkey(), 41, SOL, 1, escrow_error(E::InvalidBuyer)),
+        (Pubkey::default(), 42, SOL, 1, 2000),
+        (own_escrow, 40, SOL, 1, escrow_error(E::InvalidBuyer)),
+        (Pubkey::new_unique(), 43, 0, 1, escrow_error(E::ZeroValue)),
+        (Pubkey::new_unique(), 44, SOL, 0, escrow_error(E::ZeroValue)),
     ];
     for (buyer, nonce, amount, revision, expected) in refusals {
         let mut terms = args(buyer, nonce, amount, now);
         terms.revision = revision;
         let result = h.send(&[fund_native_ix(&seller.pubkey(), &terms)], &[&seller]);
-        assert_eq!(code(result), escrow_error(expected), "nonce {nonce}");
+        assert_eq!(code(result), expected, "nonce {nonce}");
     }
 }
 
