@@ -1,0 +1,65 @@
+
+> p2p-offramp@0.1.0 test:web:browser
+> node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs
+
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 67 modules transformed.
+rendering chunks...
+../p2p-emitted-web-DB9ybx/meta/_headers                           0.34 kB
+../p2p-emitted-web-DB9ybx/meta/content-policy.json                1.00 kB
+../p2p-emitted-web-DB9ybx/meta/index.html                         1.26 kB
+../p2p-emitted-web-DB9ybx/meta/third-party-licenses.json          3.62 kB
+../p2p-emitted-web-DB9ybx/meta/core-graph-worker.json             3.97 kB
+../p2p-emitted-web-DB9ybx/meta/core-graph-document.json           9.89 kB
+../p2p-emitted-web-DB9ybx/meta/assets/vault.worker-CVTEvq6i.js   63.88 kB
+../p2p-emitted-web-DB9ybx/meta/assets/index-BuWtQWG3.css          6.71 kB
+../p2p-emitted-web-DB9ybx/meta/assets/index-DmwcMgWc.js         374.08 kB
+
+✓ built in 1.84s
+vite v8.3.5 building client environment for header...
+transforming...
+✓ 67 modules transformed.
+rendering chunks...
+../p2p-emitted-web-DB9ybx/header/_headers                           0.34 kB
+../p2p-emitted-web-DB9ybx/header/index.html                         0.93 kB
+../p2p-emitted-web-DB9ybx/header/content-policy.json                0.97 kB
+../p2p-emitted-web-DB9ybx/header/third-party-licenses.json          3.62 kB
+../p2p-emitted-web-DB9ybx/header/core-graph-worker.json             3.97 kB
+../p2p-emitted-web-DB9ybx/header/core-graph-document.json           9.89 kB
+../p2p-emitted-web-DB9ybx/header/assets/vault.worker-CVTEvq6i.js   63.88 kB
+../p2p-emitted-web-DB9ybx/header/assets/index-BuWtQWG3.css          6.71 kB
+../p2p-emitted-web-DB9ybx/header/assets/index-DmwcMgWc.js         374.08 kB
+
+✓ built in 1.37s
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 67 modules transformed.
+rendering chunks...
+../p2p-emitted-web-DB9ybx/repeat-meta/_headers                           0.34 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/content-policy.json                1.00 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/index.html                         1.26 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/third-party-licenses.json          3.62 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/core-graph-worker.json             3.97 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/core-graph-document.json           9.89 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/assets/vault.worker-CVTEvq6i.js   63.88 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/assets/index-BuWtQWG3.css          6.71 kB
+../p2p-emitted-web-DB9ybx/repeat-meta/assets/index-DmwcMgWc.js         374.08 kB
+
+✓ built in 1.64s
+node:net:2368
+      const error = new UVExceptionWithHostPort(rval, 'listen', address, port);
+                    ^
+
+Error: listen EPERM: operation not permitted 127.0.0.1
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at node:net:2728:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '127.0.0.1'
+}
+
+Node.js v24.22.2

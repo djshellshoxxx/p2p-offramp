@@ -192,3 +192,7 @@ T32 hosted failure admission: final7ded PUSHlocaltrade job124847036497 failed in
 C54 owns only scripts/sepolia/{lib,trade}.mjs and their two scripts/tests files. C55 owns only relay/messaging source/tests from the ten-file PR39 delta. C56 root owns transport HTTP driver and its encoding regressions. C57 read-only Solana inventory. Root owns status/ledger/evidence. Frozen changes receive a different reviewer; cached source refs are not live GitHub evidence. Publication is blocked by read-only Git metadata/network. ReleaseEnabled=0 and all existing trust/network restrictions persist.
 
 C59 solana_inventory owns only packages/storage/src/idb-vault-store.ts and packages/storage/test/idb-vault-store.test.mjs. Root or foundation reviewer independently reviews after freeze.
+
+## Recovered core continuation ownership
+
+C60 schemas worker owns schemas source/tests (BUSY widening root after freeze); C61 inventory worker owns only crypto inventory source/test; C62 wallet worker owns three EIP1271 read-only files; C63 root owns domain draft/dispatcher/review source/tests/facade. C65 wallet worker exclusively owns vault/backup/migration/recovery-slot and corresponding tests after C62 freeze. C66 schema worker exclusively owns new retention source/test after C60 freeze. Root owns storage facade, manifests, ledger/evidence and isolated commits. Reviews rotate; no self-approval for security paths.
