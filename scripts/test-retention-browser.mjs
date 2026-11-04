@@ -12,6 +12,7 @@ import { createHash } from 'node:crypto';
 import { build } from 'vite';
 import { chromium } from 'playwright-core';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
+import { resolveTool } from './lib/tool-path.mjs';
 import { rpcClient, checkToolchain, forgeEnv } from './sepolia/lib.mjs';
 import { keccak256 } from '../packages/wallet/src/evm-terms.ts';
 import { buildPendingWithdrawals } from '../packages/wallet/src/evm-escrow.ts';
@@ -59,7 +60,7 @@ async function sourceSnapshot() {
 try {
   const beforeSources = await sourceSnapshot();
   const toolchain = await checkToolchain(env), port = await freePort(), rpcURL = `http://127.0.0.1:${port}`, rpc = rpcClient(rpcURL, { timeoutMs: 10000 });
-  anvil = spawn('anvil', ['--host', '127.0.0.1', '--port', String(port), '--silent', '--chain-id', '31337', '--slots-in-an-epoch', '1'], { env: forgeEnv(env), stdio: 'ignore' });
+  anvil = spawn(resolveTool('anvil'), ['--host', '127.0.0.1', '--port', String(port), '--silent', '--chain-id', '31337', '--slots-in-an-epoch', '1'], { env: forgeEnv(env), stdio: 'ignore' });
   for (let n = 0;; n++) { try { await rpc('eth_chainId'); break; } catch { if (n === 100) throw Error('ANVIL_UNAVAILABLE'); await new Promise(done => setTimeout(done, 50)); } }
   const deploy = async (target, args = []) => {
     const result = await run('forge', ['create', target, '--rpc-url', rpcURL, '--private-key',
