@@ -1,5 +1,5 @@
-/** T20: native emitted UI stress. DOM pseudotext is a test-only layout simulation,
- * not a selectable translation, reviewed locale or assistive-technology audit. */
+/** T20/T52: native emitted UI stress and explicit compiled draft-locale App integration.
+ * DOM stress and draft fixture selection are separate evidence; neither is translation or device approval. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
@@ -67,6 +67,24 @@ try {
   await buildFixture({ configFile: false, root: fixtureRoot, base: '/privacy-fixture/', plugins: [react()],
     resolve: { alias: { 'react-dom': resolve('node_modules/react-dom'), react: resolve('node_modules/react') } },
     build: { outDir: resolve(out, 'privacy-fixture'), emptyOutDir: true } });
+  const localeRoot = resolve(temporary, 'locale-fixture-source'), compiledLocales = resolve(localeRoot, 'compiled-locales.ts');
+  await mkdir(localeRoot);
+  await writeFile(resolve(localeRoot, 'index.html'), '<!doctype html><html lang="en"><body><div id="root"></div><script type="module" src="/entry.tsx"></script></body></html>');
+  await writeFile(resolve(localeRoot, 'entry.tsx'), `import ${JSON.stringify(resolve('scripts/fixtures/locale-runtime-fixture.tsx'))};`);
+  await writeFile(compiledLocales, `import {sourceCatalog} from ${JSON.stringify(resolve('apps/web/src/ui/locale/en.ts'))};
+import {pseudoMessage} from ${JSON.stringify(resolve('apps/web/test/locale-pseudo.mjs'))};
+const texts=profile=>Object.fromEntries(Object.entries(sourceCatalog).map(([key,entry])=>[key,pseudoMessage(entry,profile).source]));
+const incomplete=texts('rtl');delete incomplete['trade.risk'];
+export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
+ {id:'fixture-rtl',locale:'ar',messages:texts('rtl')},
+ {id:'fixture-expanded',locale:'en',messages:texts('expanded')},
+ {id:'fixture-incomplete',locale:'ar',messages:incomplete}],
+ preferences:{read:()=>localStorage.getItem('p2p-offramp.locale.v1'),write:id=>localStorage.setItem('p2p-offramp.locale.v1',id)}};`);
+  await buildFixture({ configFile: false, root: localeRoot, base: '/locale-fixture/', plugins: [react(), {
+    name: 'explicit-development-locale-registry', enforce: 'pre',
+    resolveId(id, importer) { if (id === './bundled.ts' && importer?.replaceAll('\\', '/') === resolve('apps/web/src/ui/locale/runtime.ts').replaceAll('\\', '/')) return compiledLocales; },
+  }], resolve: { alias: { 'react-dom': resolve('node_modules/react-dom'), react: resolve('node_modules/react') } },
+    worker: { format: 'es' }, build: { target: 'esnext', outDir: resolve(out, 'locale-fixture'), emptyOutDir: true, modulePreload: false } });
   server = createServer((request, response) => {
     const pathname = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
     const path = resolve(out, pathname === '/' ? 'index.html' : '.' + pathname);
@@ -179,7 +197,15 @@ try {
   const inspectionTime = async () => Number((await vaultObservation.innerText()).match(/Inspected at (\d+) milliseconds/)[1]);
   const firstInspection = await inspectionTime();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'one bounded local expiry timer is active');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [1, 1], 'one resume listener per event');
+  // The page-wide recorder also sees independent features that own their own resume listeners:
+  // use-screen-counts.ts (T89: visibilitychange + pageshow) and main.tsx (BFcache draft lifecycle: pageshow).
+  // Only the Settings panel's share is asserted to be exactly one per event; the others are pinned so a leak shows.
+  const otherFeatureResumeListeners = [1, 2];
+  const settingsResumeListeners = async () => {
+    const sizes = await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size));
+    return sizes.map((size, index) => size - otherFeatureResumeListeners[index]);
+  };
+  assert.deepEqual(await settingsResumeListeners(), [1, 1], 'Settings panel owns one resume listener per event');
   await privacyPage.clock.runFor(30_001);
   await privacyPage.waitForFunction(before => {
     const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
@@ -189,6 +215,11 @@ try {
   assert.ok(renewedInspection >= firstInspection + 30_000, 'expiry renews actual monotonic inspection without vault events');
   assert.ok((await vaultObservation.innerText()).includes('Locked'), 'expiry does not manufacture an unlocked state');
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'renewed view owns only one deadline');
+  assert.deepEqual(
+    await settingsResumeListeners(),
+    [1, 1],
+    'renewal re-subscribes without duplicating Settings listeners',
+  );
   await privacyPage.clock.runFor(1000);
   await privacyPage.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await privacyPage.waitForFunction(before => {
@@ -205,7 +236,7 @@ try {
   await privacyPage.getByRole('link', { name: 'Home', exact: true }).click();
   await privacyPage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'leaving Settings clears its local deadline');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [0, 0], 'unmount removes both resume listeners');
+  assert.deepEqual(await settingsResumeListeners(), [0, 0], 'unmount removes both Settings resume listeners');
   await privacyPage.clock.runFor(60_001);
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'unmounted Settings does not reschedule');
   await privacyPage.getByRole('button', { name: 'Create new profile', exact: true }).click();
@@ -283,9 +314,131 @@ try {
   assert.equal(unmounted.captures, 0); assert.equal(unmounted.authorizations, 0);
   await invoke('cleanup'); await brokerPage.close();
   pass('separate test-only emitted panel uses real direct-only broker invalidation, inspect-only expiry, disposal, replacement and bounded-subscription failure');
+  // T68: a separate fixture mode supplies configuration only. An actual empty
+  // broker owns observer limits/invalidation; no configuration grants coverage.
+  const endpointPage = await context.newPage();
+  await endpointPage.clock.install({ time: new Date('2026-01-01T00:00:00Z') });
+  await endpointPage.clock.pauseAt(new Date('2026-01-01T00:00:01Z'));
+  endpointPage.on('pageerror', () => unexpected.push('ENDPOINT_FIXTURE_PAGE_ERROR'));
+  await endpointPage.goto(origin + '/privacy-fixture/index.html');
+  const endpointInvoke = (method, argument) => endpointPage.evaluate(({ method, argument }) => window.privacyEndpointFixture[method](argument), { method, argument });
+  const endpointSnapshot = () => endpointInvoke('snapshot');
+  await endpointInvoke('mount');
+  const endpointDetails = endpointPage.getByRole('region', { name: 'Configured endpoint origins', exact: true });
+  const endpointRpc = endpointPage.locator('li').filter({ has: endpointPage.getByRole('heading', { name: 'RPC channel', exact: true }) });
+  await endpointDetails.getByText('https://node-a.fixture.invalid', { exact: true }).waitFor();
+  for (const normalized of ['https://app.fixture.invalid', 'wss://relay-a.fixture.invalid', 'ws://127.0.0.1:4321']) assert.ok((await endpointDetails.innerText()).includes(normalized));
+  assert.doesNotMatch(await endpointDetails.innerText(), /PRIVATE_ENDPOINT_SENTINEL|\/rpc|\/socket|\?key|:443/);
+  assert.equal(await endpointDetails.locator('a, button, input, form').count(), 0, 'endpoint details do not open or authorize a connection');
+  await endpointRpc.getByText('Unknown', { exact: true }).waitFor();
+  assert.ok((await endpointDetails.innerText()).includes('Configuration identifies a destination. It does not verify private routing.'));
+  assert.ok((await endpointDetails.innerText()).includes('External wallet routing is unknown and may use connections outside this app.'));
+  assert.equal((await endpointSnapshot()).metrics[0].subscribed, 1, 'metadata is not read before successful subscription');
+  const beforeEndpointExpiry = await endpointSnapshot();
+  await endpointPage.clock.runFor(1001);
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  assert.doesNotMatch(await endpointDetails.innerText(), /node-a\.fixture\.invalid|app\.fixture\.invalid|relay-a\.fixture\.invalid/);
+  assert.ok((await endpointSnapshot()).metrics[0].inspected > beforeEndpointExpiry.metrics[0].inspected, 'own deadline removes expired metadata without an unrelated state change');
+  await endpointInvoke('renew');
+  await endpointDetails.getByText('https://node-a.fixture.invalid', { exact: true }).waitFor();
+  const endpointGeneration = await endpointDetails.locator('dt').filter({ hasText: 'Configuration generation' }).evaluate(node => node.nextElementSibling.textContent);
+  assert.equal(endpointGeneration, '1');
+  await endpointInvoke('revoke');
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  assert.doesNotMatch(await endpointDetails.innerText(), /node-a\.fixture\.invalid/);
+  await endpointInvoke('renew');
+  await endpointDetails.getByText('https://node-a.fixture.invalid', { exact: true }).waitFor();
+  await endpointInvoke('dispose');
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  await endpointInvoke('select', 1); await endpointInvoke('renew');
+  await endpointDetails.getByText('https://node-b.fixture.invalid', { exact: true }).waitFor();
+  const endpointReplaced = await endpointSnapshot();
+  assert.equal(endpointReplaced.metrics[0].unsubscribed, 1, 'replacement removes the previous metadata subscription');
+  await endpointInvoke('late', 0); await endpointPage.clock.runFor(32);
+  assert.equal((await endpointSnapshot()).metrics[1].inspected, endpointReplaced.metrics[1].inspected, 'old metadata callbacks cannot reread the replacement');
+  await endpointInvoke('select', 2);
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  const endpointExhausted = await endpointSnapshot();
+  assert.equal(endpointExhausted.metrics[2].inspected, 0); assert.equal(endpointExhausted.metrics[2].generationReads, 0, 'real observer exhaustion prevents any metadata inspection');
+  await endpointInvoke('select', 1); await endpointInvoke('renew');
+  await endpointDetails.getByText('https://node-b.fixture.invalid', { exact: true }).waitFor();
+  await endpointInvoke('detach');
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  const endpointDetached = await endpointSnapshot();
+  await endpointInvoke('reattachSameExhausted');
+  await endpointPage.clock.runFor(32);
+  await endpointDetails.getByText('No current trusted endpoint configuration is available.', { exact: true }).waitFor();
+  assert.equal((await endpointSnapshot()).metrics[1].inspected, endpointDetached.metrics[1].inspected, 'same metadata object cannot reuse a detached lease before failed reattachment');
+  assert.equal((await endpointSnapshot()).metrics[1].generationReads, endpointDetached.metrics[1].generationReads);
+  await endpointInvoke('select', 3); await endpointInvoke('renew');
+  await endpointDetails.getByText('https://node-d.fixture.invalid', { exact: true }).waitFor();
+  const endpointBeforeUnmount = await endpointSnapshot();
+  await endpointInvoke('unmount'); await endpointInvoke('late', 3); await endpointPage.clock.runFor(2000);
+  const endpointUnmounted = await endpointSnapshot();
+  assert.deepEqual(endpointUnmounted.metrics.map(item => item.inspected), endpointBeforeUnmount.metrics.map(item => item.inspected), 'unmounted metadata cannot be read by late callbacks or timers');
+  assert.equal(endpointUnmounted.metrics[3].unsubscribed, 1);
+  assert.equal(endpointUnmounted.captures, 0); assert.equal(endpointUnmounted.authorizations, 0);
+  await endpointInvoke('cleanup'); await endpointPage.close();
+  pass('normalized endpoint origins stay separate from coverage; real subscription limits, TTL, generation, revocation, replacement and same-object cleanup prevent stale details');
+  const localePage = await context.newPage(); localePage.on('pageerror', () => unexpected.push('LOCALE_FIXTURE_PAGE_ERROR'));
+  await localePage.goto(origin + '/locale-fixture/index.html#/home');
+  await localePage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
+  await localePage.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+  await localePage.locator('#unlock-profile').fill('a'.repeat(32)); await localePage.locator('#unlock-passphrase').fill('PRIVATE_LOCALE_FORM_SENTINEL');
+  await localePage.locator('#unlock-profile').evaluate(node => { window.__localeInput = node; node.focus(); });
+  await localePage.locator('#unlock-profile-help-trigger').hover(); await localePage.locator('[role="tooltip"]').waitFor();
+  await localePage.locator('#unlock-profile-help-trigger').click();
+  const localeFocus = await localePage.evaluate(() => document.activeElement.id);
+  const sourceHelp = await localePage.locator('[role="tooltip"]').innerText(), sourceTitle = await localePage.title();
+  const selectLocale = id => localePage.evaluate(id => window.localeRuntimeFixture.select(id), id);
+  const localeSnapshot = () => localePage.evaluate(() => window.localeRuntimeFixture.snapshot());
+  await selectLocale('fixture-rtl');
+  await localePage.waitForFunction(() => document.documentElement.lang === 'ar' && document.documentElement.dir === 'rtl');
+  assert.equal(await localePage.locator('.app-shell').getAttribute('dir'), 'rtl');
+  assert.notEqual(await localePage.title(), sourceTitle); assert.match(await localePage.locator('h1').innerText(), /اختبار/);
+  assert.match(await localePage.locator('nav a').first().innerText(), /اختبار/); assert.match(await localePage.locator('[role="tooltip"]').innerText(), /اختبار/);
+  assert.notEqual(await localePage.locator('[role="tooltip"]').innerText(), sourceHelp);
+  assert.equal(await localePage.locator('#unlock-profile').evaluate(node => node === window.__localeInput), true, 'locale selection never remounts private forms');
+  assert.equal(await localePage.locator('#unlock-profile').inputValue(), 'a'.repeat(32));
+  assert.equal(await localePage.locator('#unlock-passphrase').inputValue(), 'PRIVATE_LOCALE_FORM_SENTINEL');
+  assert.equal(await localePage.evaluate(() => document.activeElement.id), localeFocus, 'language selection preserves focus on the pinned help trigger');
+  assert.equal(await localePage.locator('#locale-number').innerText(), new Intl.NumberFormat('ar-EG', { useGrouping: false }).format(123456));
+  assert.ok(!(await localePage.locator('#locale-date').innerText()).includes('2023-11-14T22:13:20.000Z'));
+  assert.equal((await localeSnapshot()).fundsLocaleEligible, false); assert.equal((await localeSnapshot()).display, 'development-fixture');
+  await selectLocale('fixture-expanded'); await localePage.waitForFunction(() => document.documentElement.dir === 'ltr');
+  assert.notEqual(await localePage.title(), sourceTitle); assert.equal(await localePage.locator('#unlock-passphrase').inputValue(), 'PRIVATE_LOCALE_FORM_SENTINEL');
+  for (const unavailable of ['fr', 'fixture-incomplete']) {
+    await selectLocale(unavailable); await localePage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
+    await localePage.locator('#unlock-profile-help-trigger').focus(); await localePage.locator('[role="tooltip"]').waitFor();
+    assert.equal((await localeSnapshot()).fallback, true); assert.equal((await localeSnapshot()).fundsLocaleEligible, false);
+    assert.equal(await localePage.locator('nav a').first().innerText(), 'Home'); assert.equal(await localePage.locator('[role="tooltip"]').innerText(), sourceHelp);
+    assert.ok((await localePage.locator('main').innerText()).includes('The requested language is unavailable or incomplete.'));
+    await localePage.getByRole('button', { name: 'Use English source', exact: true }).click();
+    assert.equal((await localeSnapshot()).fallback, false);
+    assert.equal(await localePage.evaluate(() => localStorage.getItem('p2p-offramp.locale.v1')), 'en');
+  }
+  await selectLocale('fixture-rtl'); await localePage.reload();
+  await localePage.waitForFunction(() => window.localeRuntimeFixture?.snapshot().id === 'fixture-rtl');
+  assert.equal(await localePage.locator('.app-shell').getAttribute('lang'), 'ar');
+  assert.equal(await localePage.evaluate(() => localStorage.getItem('p2p-offramp.locale.v1')), 'fixture-rtl', 'explicit local preference survives document reload');
+  await selectLocale('en'); await localePage.goto(origin + '/locale-fixture/index.html#/offers');
+  await localePage.getByRole('button', { name: 'Core native sample (deadlines from now)', exact: true }).click();
+  await localePage.getByRole('heading', { name: 'Trade review', exact: true }).waitFor();
+  const exactReview = await localePage.locator('main code, main pre').allTextContents();
+  const exactBytes = await localePage.evaluate(() => window.localeRuntimeFixture.reviewBytes()); assert.equal(exactBytes.length, 1);
+  await selectLocale('fixture-rtl'); await localePage.waitForFunction(() => document.documentElement.dir === 'rtl');
+  assert.deepEqual(await localePage.locator('main code, main pre').allTextContents(), exactReview);
+  assert.deepEqual(await localePage.evaluate(() => window.localeRuntimeFixture.reviewBytes()), exactBytes, 'locale display never changes reviewed canonical terms bytes');
+  for (const width of [320, 768, 1440]) { await localePage.setViewportSize({ width, height: 900 }); await assertGeometry(localePage, `compiled-runtime-RTL/${width}`); }
+  const copyAddress = localePage.locator('main code.exact').first(), rawAddress = await copyAddress.innerText();
+  await copyAddress.evaluate(node => { const range = document.createRange(); range.selectNodeContents(node); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range); });
+  await localePage.keyboard.press('Control+c'); assert.equal(await localePage.evaluate(() => navigator.clipboard.readText()), rawAddress);
+  assert.equal(await localePage.locator('main code bdi').evaluateAll(nodes => nodes.length > 5 && nodes.every(node => getComputedStyle(node).direction === 'ltr')), true);
+  await selectLocale('en'); await localePage.evaluate(() => window.localeRuntimeFixture.dispose()); await localePage.close();
+  pass('compiled draft RTL/expanded catalogs switch the real App, navigation, titles, help, typed date/numerals and preference reload atomically without remounting inputs or changing canonical review/copy bytes');
   assert.deepEqual(unexpected, []);
   console.log(JSON.stringify({ fixture: 'draft-locale-emitted-layout', browser: browser.version(), checks: checks.length,
-    stress: 'test-only DOM static-catalog substitution; not a translated locale implementation',
+    stress: 'DOM static-catalog substitution plus separate explicit development-only compiled runtime registry; no reviewed translation',
     zoom: { requestedPercent: 400, realBrowserZoomQualified: realZoomQualified, before, after,
       fallback: realZoomQualified ? null : '1280/4=320 CSS-pixel reflow simulation; real 400% browser zoom remains unqualified' },
     touch: 'Chromium touchscreen emulation, not physical-device qualification',

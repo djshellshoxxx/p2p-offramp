@@ -33,7 +33,9 @@
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
     "build:testnet": "npm run typecheck && node apps/web/scripts/build.mjs testnet",
-    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs && npm run test:favorites:browser && npm run test:share:browser",
+    "test:favorites:browser": "node scripts/test-review-favorites-browser.mjs",
+    "test:share:browser": "node scripts/test-generic-app-share-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
     "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs apps/web/scripts/source-locale.test.mjs scripts/tests/import-boundaries.test.mjs",
     "test:diagnostics": "node --test scripts/tests/capture-labels.test.mjs",
@@ -43,6 +45,8 @@
     "test:local-evm": "node scripts/test-local-evm.mjs",
     "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
     "test:eip1271:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-eip1271-local.mjs",
+    "test:updates:browser": "node scripts/test-release-update-browser.mjs",
+    "test:zoom:browser": "node scripts/test-browser-zoom.mjs",
     "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs"
   },
   "devDependencies": {
