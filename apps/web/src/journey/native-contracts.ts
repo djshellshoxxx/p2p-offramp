@@ -89,6 +89,7 @@ export type Party=WatchParty|NegotiatingParty;
 export type Phase=
  |'setup'
  |'wallet'
+ |'delivery-pending'
  |'review'
  |'accepted'
  |'fund-prepared'

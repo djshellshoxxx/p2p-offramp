@@ -35,6 +35,15 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  let initialization:Promise<void>|undefined;let recoveryCancellationEpoch:number|undefined;let ready=false,closed=false,busy=false,epoch=0,context:JourneyVaultSelection|undefined,phase:Phase='setup';
  let terms:EvmTerms|undefined,domain:EvmDomain|undefined,binding:TradeBinding|undefined,agreement:PrivateAgreementV1|undefined,document:Uint8Array<ArrayBuffer>|undefined,sessionId:string|undefined,prepared:PreparedIntent|undefined,intentId:string|undefined,receipt:NativeFeeReceipt|null=null,backupRevision:number|null=null,clock=0,clockObservedAt=performance.now(),sends=0;
  let tokenCheck:TokenCheck|null=null,acceptedProof=false,communicationAccepted=false;const fees:ActionFee[]=[];
+ // Owned outgoing negotiation awaiting delivery. The exact signed ad and wraps are kept so an explicit retry
+ // republishes identical events; nothing is re-signed or regenerated. Every field clears with clearPrivate().
+ interface PendingNegotiation {
+  readonly ad:NostrEvent;adDelivered:boolean;take?:{readonly sessionId:string;readonly recipientWrap:NostrEvent};
+  takeDelivered:boolean;offer?:{readonly recipientWrap:NostrEvent};
+ }
+ const MAX_DELIVERY_RETRIES=5;
+ let negotiation:PendingNegotiation|undefined,pendingAccept:{readonly recipientWrap:NostrEvent}|undefined;
+ let deliveryRetries=0;
  const parties:Party[]=[],owned:Uint8Array[]=[],cleanup:(()=>void)[]=[];const nativeRequests=new Set<Promise<unknown>>();
  interface OwnedReview {readonly view:SigningReview;readonly fingerprint:string;readonly epoch:number;readonly sessionId:string;readonly wallets:readonly WalletSession[];readonly invalidation:number;}
  let pendingReview:OwnedReview|undefined,activeReview:OwnedReview|undefined,privacyOff:(()=>void)|undefined,privacyReady=false,reviewInvalidation=0;
@@ -170,6 +179,45 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   try{if(!await step(done))throw Error('RELAY_TIMEOUT');return events;}finally{clearTimeout(timer);sub.close();}
  };
  const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{value(await step(from.pool.publish(message.recipientWrap)));const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);if(!found)throw Error('MISSING_WRAP');const received=value(await step(to.exchange.receive(found,to.secret)));if('own'in received)throw Error('WRONG_COUNTERPARTY');return received;};
+ // A retry first asks the owned peer whether it already applied the message, then republishes the identical wrap.
+ async function deliverAcceptance(message:{recipientWrap:NostrEvent}):Promise<void>{
+  const {binding}=trade(),[seller,buyer]=negotiating(),applied=seller.exchange.session(defined(sessionId));
+  if(applied?.state==='accepted'){
+   if(applied.terms?.hash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+   return;
+  }
+  const got=await deliver(message,buyer,seller);
+  if(got.state!=='accepted'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+ }
+ // Resumes ad publication, take and offer from the first undelivered step. Each message is created at most once.
+ async function negotiate(pending:PendingNegotiation):Promise<void>{
+  const {terms,binding}=trade(),document=definedDocument(),[seller,buyer]=negotiating();
+  if(!pending.adDelivered){
+   value(await step(seller.pool.publish(pending.ad)));
+   const received=(await pull(buyer,AD_KIND)).find(event=>event.id===pending.ad.id);
+   // Re-ingesting this exact event id is a benign duplicate; any other result refuses the ad.
+   const ingested=received?buyer.book.ingest(received):'invalid';
+   if(ingested!=='accepted'&&ingested!=='duplicate')throw Error('BAD_AD');
+   pending.adDelivered=true;
+  }
+  if(!pending.take){
+   const adKey=adBookKey(seller.pub,terms.orderId);
+   pending.take=value(await step(buyer.exchange.take(adKey,terms.buyer,buyer.secret)));
+   sessionId=pending.take.sessionId;
+  }
+  if(!pending.takeDelivered){
+   if(!seller.exchange.session(defined(sessionId)))await deliver(pending.take,buyer,seller);
+   pending.takeDelivered=true;
+  }
+  pending.offer??=value(await step(seller.exchange.offer(defined(sessionId),document,seller.secret)));
+  const applied=buyer.exchange.session(defined(sessionId));
+  if(applied?.state==='offered'){
+   if(applied.terms?.hash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+   return;
+  }
+  const got=await deliver(pending.offer,seller,buyer);
+  if(got.state!=='offered'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');
+ }
  function approvalAmount(intent:Readonly<IntentV1>):string{
   const {terms,domain}=trade();if(terms.assetKind!=='erc20')throw Error('INVALID_INPUT');const call=parseCanonicalPreparedRequest(intent.preparedRequest);
   for(const amount of['0',terms.amountBaseUnits]){const expected=native.escrowCallFor({action:'approve',token:terms.asset,spender:domain.verifyingContract,amountBaseUnits:amount}).call;if(call.to===expected.to&&call.data===expected.data&&call.value===expected.value)return amount;}throw Error('INTEGRITY_FAILURE');
@@ -305,7 +353,10 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      composition=native.createTradeComposition({binding,account:terms.seller,authority,journal});cleanup.push((owned=>()=>owned.dispose())(composition));journey=createJourneyProjection({composition,paymentGuidance:gate});cleanup.push((owned=>()=>owned.dispose())(journey));
  }
  function walletInvalidated():void{gate?.invalidate();const previous=life;clearPrivate();void previous?.walletChanged(null).catch(()=>{});onInvalidated?.(snapshot());}
- function clearPrivate(){epoch++;reviewInvalidation++;pendingReview=activeReview=undefined;privacyReady=false;const off=privacyOff;privacyOff=undefined;try{off?.();}catch{}recoveryCancellationEpoch=undefined;for(const close of cleanup.splice(0)){try{close();}catch{ /* Continue clearing every owned capability. */ }}for(const bytes of owned.splice(0))bytes.fill(0);parties.length=0;context=undefined;terms=domain=binding=agreement=document=sessionId=prepared=intentId=undefined;journal=life=reader=gate=authority=composition=journey=undefined;receipt=null;tokenCheck=null;acceptedProof=false;communicationAccepted=false;fees.length=0;backupRevision=null;clock=0;clockObservedAt=performance.now();phase='setup';}
+ function clearPrivate(){epoch++;reviewInvalidation++;pendingReview=activeReview=undefined;privacyReady=false;const off=privacyOff;privacyOff=undefined;try{off?.();}catch{}recoveryCancellationEpoch=undefined;for(const close of cleanup.splice(0)){try{close();}catch{ /* Continue clearing every owned capability. */ }}for(const bytes of owned.splice(0))bytes.fill(0);parties.length=0;context=undefined;terms=domain=binding=agreement=document=sessionId=prepared=intentId=undefined;journal=life=reader=gate=authority=composition=journey=undefined;receipt=null;tokenCheck=null;acceptedProof=false;communicationAccepted=false;fees.length=0;backupRevision=null;clock=0;clockObservedAt=performance.now();phase='setup';
+  negotiation=pendingAccept=undefined;
+  deliveryRetries=0;
+ }
  function initialize():Promise<void>{if(ready)return Promise.resolve();initialization??=(async()=>{value(await registry.load(registryBytes,registryDigest));value<unknown>((await vault.request({operation:'init',config:{version:1,ReleaseEnabled:0,connectOrigins:[]}})).result);ready=true;})();return initialization;}
  return Object.freeze({
   snapshot,
@@ -360,15 +411,48 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      await attachNative();const recoveryBinding=defined(binding),recoveryTerms=defined(terms);const originalPrepared=value(await step(defined(journal).list())).filter(intent=>intent.binding.chain===recoveryBinding.chain&&intent.binding.networkId===recoveryBinding.networkId&&intent.binding.deploymentId===recoveryBinding.deploymentId&&intent.binding.tradeId===recoveryBinding.tradeId&&intent.account===recoveryTerms.seller&&intent.action==='fund'&&intent.state==='prepared');let recovered:readonly IntentV1[];recoveryCancellationEpoch=mine;try{recovered=value(await step(defined(life).recover()));}finally{if(epoch===mine)recoveryCancellationEpoch=undefined;}const observed=value(await step(native.readObservation({registry,binding:watched.binding,terms:watched.terms,domain:watched.domain,request:scopedRequest,generation:0,requestSequence:1})));
      const selectedBinding=watched.binding,selectedTerms=watched.terms;const approvalCandidates=recovered.filter(intent=>intent.action==='approve'&&!['failed','expired','replaced'].includes(intent.state));const action=observed.state==='absent'&&approvalCandidates.length>0?'approve':observed.state==='released'?'release':observed.state==='refunded'?'refund':'fund';const matches=recovered.filter(intent=>intent.binding.tradeId===selectedBinding.tradeId&&intent.binding.networkId===selectedBinding.networkId&&intent.binding.deploymentId===selectedBinding.deploymentId&&intent.account===selectedTerms.seller&&intent.action===action);if(matches.length===0&&observed.state==='absent'&&originalPrepared.length===1&&defined(journal).isTerminalVerified(defined(originalPrepared[0]).intentId)){phase='cancelled-before-send';return snapshot();}const chosen=action==='approve'?matches.sort((a,b)=>BigInt(a.submission.chain==='evm'?a.submission.nonce??'0':'0')>BigInt(b.submission.chain==='evm'?b.submission.nonce??'0':'0')?-1:1)[0]:matches.length===1?matches[0]:undefined;if(!chosen)throw Error('RECOVERY_SELECTION_REQUIRED');intentId=chosen.intentId;for(const previous of recovered.filter(intent=>intent.action==='approve'&&intent.intentId!==chosen.intentId)){value(await step(defined(journal).reconcileNative(previous.intentId)));const verified=value(await step(defined(life).reconcile(previous.intentId)));if(verified.outcome!=='finalized')throw Error('APPROVAL_RECOVERY_UNRESOLVED');await recordFee(verified.intent);}phase=action==='approve'?'approval-reconcile':action==='fund'?'reconcile':'settling';
     }else if(action==='offer'){
-     if(phase!=='wallet')throw Error('OUT_OF_ORDER');await fresh();await requireAcceptanceTime();const {terms,domain,binding}=trade(),document=definedDocument();const[seller,buyer]=negotiating();
+     if(phase!=='wallet')throw Error('OUT_OF_ORDER');
+     await fresh();
+     await requireAcceptanceTime();
+     const {terms}=trade(),[seller]=negotiating();
      const ad=await step(createAdEvent(seller.eventCrypto,{app:'p2p-offramp',v:1,orderId:terms.orderId,revision:1,networkId:'eip155:31337',assetId:defined(registry.network(terms.networkId)?.assets.find(asset=>(asset.address??ZERO)===terms.asset)).id,amountMin:terms.amountBaseUnits,amountMax:terms.amountBaseUnits,currency:'USD',railClass:'bank-transfer',expiresAtSeconds:String(clock+1800),maker:seller.pub},clock));
-     if(seller.book.ingest(ad)!=='accepted')throw Error('BAD_AD');value(await step(seller.pool.publish(ad)));const received=(await pull(buyer,AD_KIND)).find(event=>event.id===ad.id);if(!received||buyer.book.ingest(received)!=='accepted')throw Error('BAD_AD');
-     const take=value(await step(buyer.exchange.take(adBookKey(seller.pub,terms.orderId),terms.buyer,buyer.secret)));sessionId=take.sessionId;await deliver(take,buyer,seller);
-     const offered=value(await step(seller.exchange.offer(defined(sessionId),document,seller.secret)));const got=await deliver(offered,seller,buyer);if(got.state!=='offered'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');phase='review';
+     if(seller.book.ingest(ad)!=='accepted')throw Error('BAD_AD');
+     // The ad is committed locally: from here a failure leaves an explicit, same-event retry, never a new ad.
+     negotiation={ad,adDelivered:false,takeDelivered:false};
+     deliveryRetries=0;
+     phase='delivery-pending';
+     await negotiate(negotiation);
+     negotiation=undefined;
+     phase='review';
+    }else if(action==='retry-delivery'){
+     if(phase!=='delivery-pending'||!negotiation&&!pendingAccept)throw Error('OUT_OF_ORDER');
+     if(deliveryRetries>=MAX_DELIVERY_RETRIES)throw Error('DELIVERY_RETRY_LIMIT');
+     deliveryRetries++;
+     await fresh();
+     await requireAcceptanceTime();
+     if(negotiation){
+      await negotiate(negotiation);
+      negotiation=undefined;
+     }else{
+      await deliverAcceptance(defined(pendingAccept));
+      pendingAccept=undefined;
+      communicationAccepted=true;
+     }
+     // Wallet acceptance still needs its own fresh signing review; delivery never signs.
+     phase='review';
     }else if(action==='accept'){
      if(phase!=='review')throw Error('OUT_OF_ORDER');if(options.reviewRiskAccepted!==true)throw Error('RISK_CONFIRMATION_REQUIRED');assertSigningReview();await fresh();await requireAcceptanceTime();const {terms,domain,binding,agreement}=trade(),document=definedDocument();const[seller,buyer]=negotiating(),exact=defined(buyer.exchange.session(defined(sessionId))?.terms).bytes;
      try{if(!equal(exact,document))throw Error('TERMS_MISMATCH');const reviewed=value(await step(reviewTermsBytes(registry,exact)));if(native.evmTermsHash(domain,asTerms(reviewed))!==binding.tradeId)throw Error('TERMS_MISMATCH');
-      if(!communicationAccepted){const accepted=value(await step(buyer.exchange.accept(defined(sessionId),exact,buyer.secret)));const got=await deliver(accepted,buyer,seller);if(got.state!=='accepted'||got.termsHash!==binding.tradeId)throw Error('TERMS_MISMATCH');communicationAccepted=true;}
+      if(!communicationAccepted){
+       // Accept commits locally before delivery; a failure keeps this exact message for an explicit retry.
+       pendingAccept=value(await step(buyer.exchange.accept(defined(sessionId),exact,buyer.secret)));
+       deliveryRetries=0;
+       phase='delivery-pending';
+       await deliverAcceptance(pendingAccept);
+       pendingAccept=undefined;
+       communicationAccepted=true;
+       phase='review';
+      }
       await requireAcceptanceTime();const sellerSignature=value(await acquire(seller.wallet.signTerms(seller.walletSession,domain,terms,'seller'),result=>{if(result.ok)result.value.fill(0);}));owned.push(sellerSignature);await requireAcceptanceTime();
       const buyerSignature=await acquire(defined(localPeerAcceptance)({wallet:buyer.wallet,session:buyer.walletSession,domain,terms}),signature=>signature.fill(0));owned.push(buyerSignature);await requireAcceptanceTime();
       const bundle=value(await step(native.verifyEvmAgreementBundle({privateAgreement:agreement,domain,terms,acceptances:[{termsHash:binding.tradeId,role:'seller',walletAccount:terms.seller,signature:sellerSignature},{termsHash:binding.tradeId,role:'buyer',walletAccount:terms.buyer,signature:buyerSignature}]},{isCurrent:()=>{try{current();return true;}catch{return false;}}})));

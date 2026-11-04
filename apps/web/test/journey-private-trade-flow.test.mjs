@@ -148,7 +148,7 @@ function fakeChain(){
 
 /** An in-memory relay shared by both parties. `failPublishAt` lists 1-based publish attempts that fail. */
 function fakeRelay(){
- const hub={events:[],publishes:0,failPublishAt:new Set()};
+ const hub={events:[],published:[],publishes:0,failPublishAt:new Set()};
  hub.create=()=>({
   subscribe(filters,{onEvent,onEose}){
    let closed=false;
@@ -161,8 +161,11 @@ function fakeRelay(){
   },
   async publish(event){
    hub.publishes++;
+   hub.published.push(event.id);
    if(hub.failPublishAt.has(hub.publishes))return{ok:false,error:{code:'UNAVAILABLE'}};
    if(!hub.events.some(item=>item.id===event.id))hub.events.push(event);
+   // A relay that stored the event but whose acknowledgement was lost.
+   if(hub.lostAckAt?.has(hub.publishes))return{ok:false,error:{code:'TIMEOUT'}};
    return{ok:true,value:[{relayId:'fake',eventId:event.id,status:'accepted'}]};
   },
   retry(){},
@@ -387,5 +390,82 @@ test('a receipt without the escrow settlement event for this trade is not accept
   assert.equal((await signed(h.journey,'release',{attestFiatReceived:true})).phase,'settling');
   await assert.rejects(h.journey.act('reconcile'),/RECEIPT_UNAVAILABLE/);
   assert.equal(h.journey.snapshot().receipt,null);
+ }finally{h.journey.dispose();}
+});
+
+/** Distinct signed events the relay ever accepted: one ad plus one wrap per negotiation message, never more. */
+const distinct=h=>({ads:h.relay.events.filter(event=>event.kind!==1059).length,
+ wraps:h.relay.events.filter(event=>event.kind===1059).length});
+
+for(const[stage,attempt]of[['ad publication',1],['take delivery',2],['offer delivery',3]]){
+ test(`a relay failure at ${stage} resumes by explicit retry of the same signed events`,async()=>{
+  const h=harness();
+  try{
+   await onboard(h.journey);
+   assert.equal((await h.journey.act('connect')).phase,'wallet');
+   h.relay.failPublishAt.add(attempt);
+   await assert.rejects(h.journey.act('offer'),/UNAVAILABLE/);
+   assert.equal(h.journey.snapshot().phase,'delivery-pending');
+   const failed=h.relay.published.at(-1);
+   // Repeating the original step would regenerate committed content; only an explicit retry may resume.
+   await assert.rejects(h.journey.act('offer'),/OUT_OF_ORDER/);
+   assert.equal((await h.journey.act('retry-delivery')).phase,'review');
+   assert.equal(h.relay.published[attempt],failed,'the retry republishes the identical event');
+   assert.deepEqual(distinct(h),{ads:1,wraps:2},'nothing is re-signed or regenerated');
+   assert.equal((await signed(h.journey,'accept',{reviewRiskAccepted:true})).phase,'accepted');
+   assert.deepEqual(distinct(h),{ads:1,wraps:3});
+   assert.equal(h.chain.sends,0);
+  }finally{h.journey.dispose();}
+ });
+}
+
+test('a relay failure delivering acceptance resumes by retry, then signing needs a fresh review',async()=>{
+ const h=harness();
+ try{
+  await onboard(h.journey);
+  await h.journey.act('connect');
+  assert.equal((await h.journey.act('offer')).phase,'review');
+  h.relay.failPublishAt.add(h.relay.publishes+1);
+  await assert.rejects(signed(h.journey,'accept',{reviewRiskAccepted:true}),/UNAVAILABLE/);
+  assert.equal(h.journey.snapshot().phase,'delivery-pending');
+  await assert.rejects(signed(h.journey,'accept',{reviewRiskAccepted:true}),/OUT_OF_ORDER/);
+  assert.equal((await h.journey.act('retry-delivery')).phase,'review');
+  assert.deepEqual(distinct(h),{ads:1,wraps:3});
+  await assert.rejects(h.journey.act('confirm-signing',{reviewRiskAccepted:true}),/SIGNING_REVIEW_REQUIRED/);
+  assert.equal((await signed(h.journey,'accept',{reviewRiskAccepted:true})).phase,'accepted');
+  assert.deepEqual(distinct(h),{ads:1,wraps:3},'the delivered acceptance is never sent again');
+ }finally{h.journey.dispose();}
+});
+
+test('delivery retries are bounded and lock retires the pending message without a late send',async()=>{
+ const h=harness();
+ try{
+  await onboard(h.journey);
+  await h.journey.act('connect');
+  for(let attempt=1;attempt<=20;attempt++)h.relay.failPublishAt.add(attempt);
+  await assert.rejects(h.journey.act('offer'),/UNAVAILABLE/);
+  for(let retry=0;retry<5;retry++)await assert.rejects(h.journey.act('retry-delivery'),/UNAVAILABLE/);
+  const publishes=h.relay.publishes;
+  await assert.rejects(h.journey.act('retry-delivery'),/DELIVERY_RETRY_LIMIT/);
+  assert.equal(h.relay.publishes,publishes,'the limit stops before any further publish');
+  assert.equal(h.journey.snapshot().phase,'delivery-pending');
+  value(await h.journey.runtime({operation:'lock'}));
+  assert.equal(h.journey.snapshot().phase,'setup');
+  await assert.rejects(h.journey.act('retry-delivery'),/OUT_OF_ORDER/);
+  assert.equal(h.relay.publishes,publishes);
+ }finally{h.journey.dispose();}
+});
+
+test('a lost relay acknowledgement after storage resumes without a duplicate negotiation transition',async()=>{
+ const h=harness();
+ try{
+  await onboard(h.journey);
+  await h.journey.act('connect');
+  h.relay.lostAckAt=new Set([2]);
+  await assert.rejects(h.journey.act('offer'),/TIMEOUT/);
+  assert.equal(h.journey.snapshot().phase,'delivery-pending');
+  assert.deepEqual(distinct(h),{ads:1,wraps:1},'the take wrap already reached the relay');
+  assert.equal((await h.journey.act('retry-delivery')).phase,'review');
+  assert.deepEqual(distinct(h),{ads:1,wraps:2});
  }finally{h.journey.dispose();}
 });
