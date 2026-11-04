@@ -109,7 +109,9 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const random = options.random ?? Math.random;
   const connect = options.connect ?? webSocketConnector;
   const maxActive = Math.max(1, Math.min(options.maxRelays ?? POOL_LIMITS.maxRelays, POOL_LIMITS.maxRelays));
-  const seenIds = new Map<string, true>();
+  // Delivery dedupe is keyed by (subscription, event id): one subscription's history never suppresses another's.
+  // Invariant: at most maxDedupIds entries pool-wide (oldest evicted first); each value is its owning subscription id.
+  const seenIds = new Map<string, string>();
   const subs = new Map<string, Sub>();
   const publications = new Set<AbortController>();
   // Read and short-lived publish sockets share one physical budget. Calling close is not proof of closure.
@@ -180,8 +182,10 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     r.windowDropped++;
     return false;
   }
-  function remember(id: string): void {
-    seenIds.set(id, true);
+  // Subscription ids are `s<n>` (no ':') and event ids are 64 hex, so the composite key is unambiguous.
+  const deliveryKey = (subId: string, eventId: string): string => `${subId}:${eventId}`;
+  function remember(subId: string, eventId: string): void {
+    seenIds.set(deliveryKey(subId, eventId), subId);
     if (seenIds.size > POOL_LIMITS.maxDedupIds) seenIds.delete(seenIds.keys().next().value as string);
   }
   function sendReq(r: RelayRec): void {
@@ -209,7 +213,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         const sub = subs.get(frame.subId);
         if (!sub || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
         if (r.closedSubs.has(frame.subId)) return;
-        if (seenIds.has(frame.event.id)) return; // dedupe before any signature work
+        if (seenIds.has(deliveryKey(frame.subId, frame.event.id))) return; // dedupe before any signature work
         if (!matchesFilters(frame.event, sub.filters)) { penalize(r, PENALTY.outsideFilter, 'outside-filter'); return; }
         const count = (r.counts.get(frame.subId) ?? 0) + 1;
         r.counts.set(frame.subId, count);
@@ -221,7 +225,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         let valid = false;
         try { valid = options.verifier.verifyEvent(frame.event) === true; } catch { valid = false; }
         if (!valid) { penalize(r, PENALTY.invalidSignature, 'invalid-signature'); return; }
-        remember(frame.event.id);
+        remember(frame.subId, frame.event.id);
         try { sub.handlers.onEvent(frame.event, r.cfg.endpointId); } catch { /* handler faults are not relay faults */ }
         return;
       }
@@ -376,6 +380,11 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   }
   function closeSub(id: string): void {
     if (!subs.delete(id)) return;
+    // Free the closed subscription's dedupe entries (bounded scan of at most maxDedupIds).
+    // Deleting the current entry while iterating a Map is well-defined.
+    for (const [key, owner] of seenIds) {
+      if (owner === id) seenIds.delete(key);
+    }
     for (const r of recs) {
       if (r.state === 'open' && r.counts.delete(id)) { try { r.socket?.send(encodeClose(id)); } catch { /* ignore */ } }
       r.closedSubs.delete(id);
