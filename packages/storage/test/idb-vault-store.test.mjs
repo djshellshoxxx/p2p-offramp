@@ -77,6 +77,22 @@ test('IDB close is terminal, closes its connection and invalidates subscribers o
   store.close(); store.close(); assert.equal(db.closes, 1); assert.equal(invalidations, 1);
   await failed(store.get(profileId), 'STORAGE_UNAVAILABLE'); assert.equal(fake.requests.length, 1);
 });
+test('IDB invalidation isolates throwing listeners and notifies the original snapshot', async () => {
+  const fake = factory(); const store = new IndexedDbVaultStore(fake); const seen = [];
+  let removeSecond;
+  store.subscribeInvalidation(() => { seen.push('first'); removeSecond(); throw Error('SECRET subscriber'); });
+  removeSecond = store.subscribeInvalidation(() => { seen.push('second'); });
+  const first = store.get(profileId), db = database();
+  fake.requests[0].result = db; fake.requests[0].onsuccess(); await first;
+  assert.doesNotThrow(() => db.onversionchange());
+  assert.deepEqual(seen, ['first', 'second']); assert.equal(db.closes, 1);
+  store.close(); store.close();
+  assert.equal(seen.filter(value => value === 'first').length, 2);
+  let closedCalls = 0;
+  assert.doesNotThrow(() => { const off = store.subscribeInvalidation(() => { closedCalls++; throw Error('SECRET closed subscriber'); }); off(); });
+  assert.equal(closedCalls, 1);
+  await failed(store.get(profileId), 'STORAGE_UNAVAILABLE');
+});
 test('IDB close rejects pending opens and closes any connection which arrives later', async () => {
   const fake = factory(); const store = new IndexedDbVaultStore(fake);
   const pending = store.get(profileId); store.close(); await failed(pending, 'STORAGE_UNAVAILABLE');
