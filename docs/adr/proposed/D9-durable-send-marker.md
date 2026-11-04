@@ -2,7 +2,7 @@
 
 Status: PROPOSED. This packet is for the owner. It does not decide anything, and nothing here changes running behavior.
 
-Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch.
+Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9). The three `packages/` files cited below exist on main and are identical on the PR.
 
 ## The question
 
@@ -17,7 +17,7 @@ A first fix let the trade continue to a fresh approval and funding. An independe
 ## Current source behavior
 
 - A `failed` intent with a null hash is written in exactly two places:
-  - when `recover()` cancels a prepared intent that was never marked for sending (`packages/domain/src/tx-lifecycle.ts:195` and `:442`);
+  - when a prepared intent that was never marked for sending is cancelled. The write is in `#cancelPrepared` (`packages/domain/src/tx-lifecycle.ts:191-195`), which `recover()` reaches (`:442`) and so do `#invalidate` (`:202`, on a wallet change), `prepare` (`:267`) and `submit` before the marker (`:282`, `:286`, `:291`, `:294`). Every one of these is a `prepared` to `failed` change, so the marker was never written;
   - when the wallet answers `eth_sendTransaction` with error 4001 **after** the send marker was written (`tx-lifecycle.ts:296` and `:307-309`).
 - No other path writes that combination: reverted receipts and native `failed` readings carry a hash (`tx-lifecycle.ts:377`, `:414`, `:432`; `packages/domain/src/intent-journal.ts:255`, `:293`).
 - `IntentV1` has no field that records whether the send marker was written (`packages/schemas/src/intent.ts:6-13`). The proof that an intent was never sent exists only in the memory of the journal instance that observed it (`intent-journal.ts:353`, `:365`). The domain already requires restored records to be re-read rather than trusted (`tx-lifecycle.ts:248`, `intent-journal.ts:376`).
@@ -25,7 +25,9 @@ A first fix let the trade continue to a fresh approval and funding. An independe
 
 ## Options
 
-**Option A - add a durable `sendMarkedAt` field to `IntentV1`.** It is written once, in the same compare-and-swap that moves an intent from `prepared` to `broadcast-unknown` in `markSending` (`intent-journal.ts:228`), and never cleared. A `prepared` to `failed` cancellation keeps it null. `recover()` and `prepare()` read it, and `watch` may then skip only `failed` approvals with a null hash **and** a null `sendMarkedAt`. This is a schema change to a persisted record, so it needs a migration rule for existing records: an existing record without the field is treated as "may have been sent".
+**Option A - add a durable `sendMarkedAt` field to `IntentV1`.** It is written once, in the same compare-and-swap that moves an intent from `prepared` to `broadcast-unknown` in `markSending` (`intent-journal.ts:220`, with the next record built at `:228` and the commit at `:230`), and never cleared. A `prepared` to `failed` cancellation keeps it null. `recover()` and `prepare()` read it, and `watch` may then skip only `failed` approvals with a null hash **and** a null `sendMarkedAt`. This is a schema change to a persisted record, so it needs a migration rule for existing records: an existing record without the field is treated as "may have been sent". `parseIntent` accepts exactly the current 13 keys (`intent.ts:46`) and `decodeIntentPayload` requires a record to re-encode byte for byte (`:74`), so simply adding a field would reject every existing record as `INVALID_INPUT`, and an older build could not read new records. Option A therefore needs a versioned parser that accepts both key sets and keeps the byte-for-byte check, plus a stated rule for older builds. The version number is for the owner to choose.
+
+Option A must also change the skip rules. After a 4001, `authorizeTerminal` (`tx-lifecycle.ts:309`) marks the intent verified, so `prepare` (`:249`) and `reconcile` (`:336`) already skip it as never-sent during that session. The 4001 path must be removed from those skips: skipping must require a null `sendMarkedAt`, not `isTerminalVerified`. The skip applies only to `approve`; `fund`, `release` and `refund` are never skipped on `sendMarkedAt` alone. A null `sendMarkedAt` proves never-sent only for records this profile wrote: a restored older vault snapshot can show `prepared` with a null value for an intent that was later sent, so restored or imported records stay "may have been sent". A write-once boolean is enough; a timestamp would come from `now()`, which already needs the `Math.max(now, updatedAt)` handling.
 
 **Option B - a separate durable never-sent tombstone.** Recovery writes a tombstone record when it cancels a never-marked intent. The existing intent schema stays unchanged, but there are two records to keep consistent and a crash between them to handle.
 
@@ -45,9 +47,11 @@ These are the funded-restart cases from the review. Each must reach the normal f
 
 Also:
 
-4. A 4001 after the marker is never treated as never-sent: it is reconciled, never resent.
+4. A 4001 after the marker is never treated as never-sent: it is reconciled, never resent, even within the same session. This fails with the current code until the skip rules above change.
 5. An existing record with no `sendMarkedAt` field is treated as possibly sent.
 6. A crash between the marker write and the wallet call leaves `sendMarkedAt` set.
+7. A restored older snapshot showing `prepared` with a null `sendMarkedAt` is treated as possibly sent.
+8. An older build either refuses or ignores the new key set by a stated rule, never silently misreads it.
 
 ## What this unblocks
 

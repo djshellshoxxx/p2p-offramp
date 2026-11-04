@@ -2,7 +2,7 @@
 
 Status: PROPOSED. This packet is for the owner. It does not decide anything. No program ID, seed, layout, token policy, toolchain pin or upgrade rule in it is approved, and nothing here changes running behavior. It contains no Solana code.
 
-Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (45630ba). The documentation websites could not be reached from this session. Upstream facts were therefore read on 2026-11-04 from the source repositories behind them, at the tags named below. Claims marked **unverified** were not confirmed from a primary source.
+Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9). The documentation websites could not be reached from this session. Upstream facts were therefore read on 2026-11-04 from the source repositories behind them, at the tags named below. Claims marked **unverified** were not confirmed from a primary source.
 
 ## The question
 
@@ -21,7 +21,7 @@ The rules that must carry over come from `contracts/evm/src/BasicEscrow.sol` and
 ## Current source behavior
 
 - **No Solana program, adapter, wallet path or journal path exists.** `docs/governance/PENDING-DECISIONS.md` ("Solana program and token profile", PR #26 only) lists seeds, layout, discriminators, IDL hash, token policy and finality as unselected. The `docs/governance/solana-profile.*.json` records (PR #26 only) are drafts with no reviewers. The three Solana G24 rows are `EXACT_CONTRACT_UNTESTED` (`docs/execution/acceptance/g24-current-local.md:17-18,25`, PR #26 only).
-- **The terms bytes exist.** `encodeSolanaTerms` (`packages/domain/src/trade-terms.ts:11,168-185`, main) writes the prefix `p2p-offramp/solana/basic/v1`, a zero byte, then genesis hash, program ID, keys, mint, token program, hashes and little-endian integers. Asset kind is 0 for native and 2 for SPL. `termsHash` is the SHA-256 of these bytes. Vectors in `packages/domain/test/fixtures/g16-vectors.json` (main) come from `scripts/vectors/g16_vectors.py`, which shares authorship with the TypeScript encoder.
+- **The terms bytes exist.** `encodeSolanaTerms` (`packages/domain/src/trade-terms.ts:11,168-185`, main) writes the prefix `p2p-offramp/solana/basic/v1`, a zero byte, then genesis hash, program ID, keys, mint, token program, hashes and little-endian integers. Asset kind is 0 for native and 2 for SPL. `termsHash` is the SHA-256 of these bytes. Vectors in `packages/domain/test/fixtures/g16-vectors.json` (main) come from `scripts/vectors/g16_vectors.py`, whose first line says it is an independent reference encoder "written from the specification text (not from the TypeScript source)" (`scripts/vectors/g16_vectors.py:1`, main).
 - **G16 asks more of Solana than the EVM contract does.** The program must check both Ed25519 acceptances through the Instructions sysvar, and must embed a genesis constant, because there is no genesis sysvar (`01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md:49`, main). The EVM contract never sees acceptance signatures (`contracts/evm/README.md`, main).
 - **Token handling.** `.../module_1.1.2_token_handling/spec-spl-token-adapter.md:25,32,38` (main) allows the original SPL Token program only, requires `transfer_checked`, rejects delegated, frozen and uninitialized accounts, and leaves vault closure unsupported. `spec-native-asset-accounting.md:31` (main) keeps trade state and rent for replay protection. `docs/WORK-PLAN-2026-10-24.md:57` (main) mentions an "SPL/Token-2022" allowlist instead.
 - **Registry and deployment.** The registry accepts a Solana deployment only with `upgradeAuthority: null`, a `programDataSha256` and `finalized` commitment (`packages/schemas/src/registry.ts:22,31,198`, main). The runbook lets test networks record an upgrade authority, and its step 5 initializes the mint allowlist after deployment (`00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.4_deployment_runbook/spec-mvp-deployment-and-rollback.md:60,96-103`, main).
@@ -64,7 +64,7 @@ Option A, proposed for owner decision. It keeps the EVM rules with the fewest pa
 **Instructions and payout**
 - There are five instructions: `fund_native`, `fund_spl`, `release`, `refund` and `payout`.
 - `release` must be signed by the stored seller and requires clock < deadline. `refund` can be sent by anyone and requires clock >= deadline. Both only move the state from `Funded` to `Released` or `Refunded`.
-- `payout` can be sent by anyone. It pays the exact principal once, only to the bound recipient, and sets `paid_out`.
+- `payout` can be sent by anyone. It pays the exact principal once, and sets `paid_out`. It takes no recipient argument: the recipient comes from stored state, the buyer if `Released` and the seller if `Refunded`. It requires the destination key (native) or the token-account owner (SPL) to equal that stored party.
 - Clients send `release` and `payout` in one transaction. If the payout leg fails (a frozen account, or an empty wallet below the rent minimum), the seller sends `release` alone and anyone retries `payout` later. This is the native counterpart of EVM `pendingWithdrawals`: the recipient can neither block the seller's decision nor redirect funds.
 
 **Trade id and replay**
@@ -75,7 +75,7 @@ Option A, proposed for owner decision. It keeps the EVM rules with the fewest pa
 
 **Accounts**
 - `EscrowV1` holds the layout version, bumps, state, `paid_out`, asset kind, seller, buyer, mint, token program, amount (u64), deadline (u64), `termsHash` and `sellerNonce`. Its exact layout is frozen together with the IDL hash.
-- The SPL vault is a token account at `[b"p2p-offramp-vault-v1", escrow]`, owned by the escrow PDA and created during `fund_spl`. Nobody can create it in advance with a delegate or a close authority.
+- The SPL vault is a token account at `[b"p2p-offramp-vault-v1", escrow]`, owned by the escrow PDA and created during `fund_spl`. `fund_spl` checks that the vault is owned by the escrow PDA with no delegate and no close authority, and `payout` re-derives the vault and checks it again. The stored canonical bump is re-verified on every instruction.
 - Native SOL (asset kind 0) stays as lamports in the program-owned escrow account, with principal recorded separately from rent. Payout debits exactly the principal; rent and any donated surplus stay behind, with no sweep. Both wrapped-SOL mints are refused in v1.
 
 **Rent and closure**
@@ -84,12 +84,13 @@ Option A, proposed for owner decision. It keeps the EVM rules with the fewest pa
 **Funding checks**
 - The seller signs and equals `terms.seller`.
 - The buyer is not the seller, not all zero bytes, not the escrow and not the vault.
-- Amount is at least 1, revision is at least 1, and clock < acceptBefore. The funding window check rejects a negative clock.
+- Amount is at least 1, revision is at least 1, and clock < acceptBefore. The funding window check rejects a negative clock, and `release` and `refund` use a checked i64 to u64 conversion that fails on a negative clock.
+- For native escrows, refuse an executable buyer at funding, because a native payout to an executable account would fail for good (EVM refuses only the contract itself).
 - The program reads time with `Clock::get()` and never from a passed-in account.
 - The token program must equal both the SPL Token ID and `terms.tokenProgram`. The mint must be owned by that program and be on a compiled-in allowlist of at most 32 entries, with matching decimals. A compiled-in list replaces runbook step 5, because a first-caller initializer would be an operator.
 - The source token account must be owned by the seller (no delegate), use the same mint and not be frozen.
 - `transfer_checked` must leave the vault holding exactly the amount. Native funding is a System Program transfer of exactly the amount.
-- An SPL payout goes only to the recipient's canonical associated token account. The caller creates it if missing and pays its rent.
+- An SPL payout goes only to the recipient's canonical associated token account. The caller creates it if missing and pays its rent. Checking the address alone is not enough, because with the original SPL Token program an account owner can be changed by `SetAuthority`. The program also checks destination `owner == recipient`, `mint == escrow.mint`, that the account is initialized and not frozen, and that its owning program is the SPL Token program.
 
 **Token-2022**
 - Refused in v1. A later policy would admit only listed extensions, re-checked at funding and at payout.
@@ -112,7 +113,7 @@ Option A, proposed for owner decision. It keeps the EVM rules with the fewest pa
 - The client ignores any on-chain IDL or metadata account and uses the IDL pinned in the manifest. Anchor 1.2.2 marks legacy on-chain IDL accounts as deprecated (`references/cli.mdx`). Whether deploying creates such an account, and with what authority, is **unverified**.
 
 **Finality and deadlines**
-- The client shows "funded" only when the escrow read at `finalized` shows `Funded` and every field equals the accepted terms. A `confirmed` read is shown as "seen, not final" (`spec-chain-adapter-contract.md:37`).
+- The client shows "funded" only when the escrow read at `finalized` shows `Funded` and every field equals the accepted terms. A `confirmed` read is shown as "seen, not final" (`spec-chain-adapter-contract.md:37`). A payout is shown as complete only at `finalized`.
 - The browser clock only formats the display.
 - The client stops offering release some margin before the deadline, and offers refund only after a recent Clock reading has passed it. The owner sets the margin, because the drift bound is wide.
 
@@ -134,7 +135,9 @@ Option A, proposed for owner decision. It keeps the EVM rules with the fewest pa
 - Test exact-second boundaries in a program-test, LiteSVM or Mollusk harness with a controlled Clock.
 - Run at least one real refund on the validator after the 1800-second minimum. The release build is never changed for tests.
 
-Cases: native and SPL fund, release, payout and refund at the deadline and one second before it; duplicate nonce with the same and with changed terms; substituted mint, token program, vault, escrow, destination, System program or Clock account; delegated or frozen source, frozen destination, wrong decimals; a Token-2022 mint, wrapped SOL, or a buyer equal to the escrow or vault (all refused); release by a non-seller or at the deadline; double payout, payout before a terminal state, and payout to a frozen or empty recipient followed by a retry; donated lamports and tokens (principal unchanged) and a rent shortage; conservation (payouts never exceed funded principal); chain inspection showing no upgrade authority and the pinned hash; and a G12 crash between broadcast and finality, reconciled from the blockhash and `lastValidBlockHeight`.
+Cases: native and SPL fund, release, payout and refund at the deadline and one second before it; duplicate nonce with the same and with changed terms; substituted mint, token program, vault, escrow, destination, System program or Clock account; delegated or frozen source, frozen destination, wrong decimals; a Token-2022 mint, wrapped SOL, or a buyer equal to the escrow or vault (all refused); release by a non-seller or at the deadline; double payout, payout before a terminal state, and payout to a frozen or empty recipient followed by a retry; donated lamports and tokens (principal unchanged), lamports sent to the escrow and vault addresses before `init`, and a rent shortage; conservation (payouts never exceed funded principal); chain inspection showing no upgrade authority and the pinned hash; and a G12 crash between broadcast and finality, reconciled from the blockhash and `lastValidBlockHeight`.
+
+**Conflicts with existing text, in the decision scope.** Compiling the mint allowlist into the program contradicts runbook step 5 (initialize the allowlist after deployment, `spec-mvp-deployment-and-rollback.md`, around line 102). The runbook's `upgradeable(authority)` option (line 60) contradicts the registry, which requires `upgradeAuthority: null` (`registry.ts:22`). Paying only to the recipient's canonical associated token account narrows `spec-spl-token-adapter.md:32` ("destination owner buyer").
 
 ## What this unblocks
 
