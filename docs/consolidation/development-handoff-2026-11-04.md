@@ -52,6 +52,14 @@ Local environment: Node 24.22.2, Python 3.12.3 in `/tmp/p2p-foundation-oracle` (
 | `npm run build` | Passed; default static artifact; unsigned and not release-accepted |
 | `git diff --check` | Passed |
 
-The first package-suite attempt inside the sandbox hit `listen EPERM` at the fake relay's localhost socket. A targeted exchange run confirmed the restriction (13 passed, 1 failed at socket creation). The restricted full run was interrupted, and the full suite rerun with localhost permission. Final result and PR link follow before delivery.
+The first package-suite attempt inside the sandbox hit `listen EPERM` at the fake relay's localhost socket. A targeted exchange run confirmed the restriction (13 passed, 1 failed at socket creation). The restricted full run was interrupted, and the full suite rerun with localhost permission.
+
+Full `npm test` on the working tree: **1,088 passed, two failed, one skipped** (1,091 total). Both failures are inventory assertions in `packages/security/test/crypto-inventory.test.mjs` and `release-manifest.test.mjs`: the starting workspace's uncommitted `peer: true` lockfile fields cause the strict inventory parser to return `UNSUPPORTED_RUNTIME`. The skipped test requires Foundry, which is unavailable locally. This is not a green full-suite claim.
+
+Verified the two affected files separately against a clean `git archive` snapshot of implementation commit `46bf2cb94be8413b71ae8d766f2b4259162e261f` in `/tmp/p2p-foundation-clean-verification`, using the existing installed node_modules: **63 passed, zero failed/skipped**. The committed lockfile is unchanged from main. The starting workspace edits were never reverted or included. Runtime application/package sources are unchanged by this extraction.
+
+Delivery: draft [PR #53](https://github.com/djshellshoxxx/p2p-offramp/pull/53), branch `codex/foundation-gates-20261104`; implementation commit `46bf2cb`. GitHub Actions checks were queued at initial inspection; CodeRabbit skipped the draft. Required hosted checks and review remain outstanding. Do not merge based solely on the local subset checks.
+
+Next action: review #53 and its clean-checkout hosted checks, then tackle the remaining #37 Sepolia findings with reproductions before integrating the rest of the foundation. Continue the stage sequence above, reconciling active D9/journey work rather than overwriting it.
 
 No production deployment or main merge is performed. API usage/cost telemetry is unavailable in this environment; no estimate is claimed.
