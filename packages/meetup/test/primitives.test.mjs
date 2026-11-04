@@ -81,7 +81,7 @@ test('regions stay coarse and stable at dateline, cell boundaries and high latit
   for (const lat of [0, 60, 84.9, -84.9, 85, -85]) for (const lon of [-180, -179.999999, 0, 179.999999]) for (const radiusM of [500, 1000, 2000]) {
     const input = marker({ latE6: Math.round(lat * 1e6), lonE6: Math.round(lon * 1e6), radiusM, uncertaintyM: radiusM + 10 });
     const region = val(regionFor(input, 0)); assert.equal(region.cells.length, 9); assert.ok(region.diagonalM < 50_000);
-    assert.deepEqual(region.cells, [...new Set(region.cells)].sort()); assert.deepEqual(val(validateDiscoveryRegion(region, 0)), region);
+    assert.deepEqual(region.cells, [...new Set(region.cells)].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))); assert.deepEqual(val(validateDiscoveryRegion(region, 0)), region);
     assert.deepEqual(val(regionFor(input, 0)), region); assert.ok(region.precision >= 4 && region.precision <= 7);
     assert.equal(region.source, 'blurred'); assert.equal(val(regionFor(input, 0, 'manual')).source, 'manual');
   }

@@ -241,7 +241,7 @@ test('a wallet-rejected send after its marker leaves the same durable row as a n
   }
   const [row]=await journalRows(store,profileId);
   rows[kind]={state:row.state,submission:row.submission,action:row.action,replacementOf:row.replacementOf,
-   fields:Object.keys(row).sort()};
+   fields:Object.keys(row).sort((a,b)=>a<b?-1:a>b?1:0)};
   // Either way a restart has no durable fact proving "never broadcast", so it fails closed and never sends.
   const journey=await restart(store,chain,profileId);
   try{

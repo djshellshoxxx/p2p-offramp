@@ -22,7 +22,7 @@ export function createSignalDiagnosticModel(options:SignalDiagnosticOptions){ret
  const current=options.isCurrent.bind(options),owner=createPolicyOwner(options.scope,scope=>current(scope,consentGeneration));
  let closed=false,reason:string|null=null,last=-1,started=0,lastWall=-1,pendingBytes=0,offered=false,answered=false;
  const next=new Map<string,number>(),pending=new Map<string,{message:Signal;bytes:number;arrived:number}>(),replay=new Map<string,{fingerprint:string;until:number}>();
- const scope=owner.scope,initiator=[scope.accountKey,scope.peerKey].sort()[0]!;
+ const scope=owner.scope,initiator=[scope.accountKey,scope.peerKey].sort((a,b)=>a<b?-1:a>b?1:0)[0]!;
  const close=(why:string,revoke=true)=>{if(closed)return;closed=true;reason=why;pending.clear();replay.clear();next.clear();pendingBytes=0;if(revoke)owner.close();};
  owner.onClose(()=>{closed=true;reason??='scope-closed';pending.clear();replay.clear();next.clear();pendingBytes=0;});
  const time=()=>{owner.guard();const m=mono();owner.guard();const w=wall();owner.guard();if(!Number.isSafeInteger(m)||m<0||m<last||!Number.isSafeInteger(w)||w<0||w<lastWall){close('clock-uncertain',false);return policyStop('CLOCK_ROLLBACK');}last=m;lastWall=w;return{m,w};};

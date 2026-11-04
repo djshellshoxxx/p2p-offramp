@@ -16,6 +16,7 @@ import type { Permit, SessionTransportPolicy, TransportScope } from '../../trans
 import type { RouteError } from '../../transport/index.ts';
 import { encodeClose, encodeEvent, encodeReq, matchesFilters, parseEvent, parseRelayFrame, FRAME_LIMITS, isHex64, withinBytes } from './nip01.ts';
 import type { EventCrypto, NostrEvent, RelayFilter } from './nip01.ts';
+import { indexedValues } from './snapshot.ts';
 
 const GIFT_WRAP_KIND = 1059;
 export type RelayBroker = Pick<SessionTransportPolicy, 'authorize' | 'capture'>;
@@ -89,19 +90,6 @@ interface RelayRec {
 }
 const refuse = (error: PoolError): PoolResult<never> => Object.freeze({ ok: false, error });
 
-/** Local filter snapshots only; callers guard reflection failure before any subscription admission. */
-function indexedValues(input: unknown, minimum: number, maximum: number): unknown[] | null {
-  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return null;
-  const length: unknown = Object.getOwnPropertyDescriptor(input, 'length')?.value;
-  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < minimum || length > maximum || Reflect.ownKeys(input).length !== length + 1) return null;
-  const values: unknown[] = [];
-  for (let index = 0; index < length; index++) {
-    const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
-    if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
-    values.push(descriptor.value);
-  }
-  return values;
-}
 export function createRelayPool(options: PoolOptions): RelayPool {
   if (options.relays.length > POOL_LIMITS.maxCandidates) throw new RangeError('too many relays');
   const timing: PoolTiming = { ...DEFAULT_TIMING, ...options.timing };
