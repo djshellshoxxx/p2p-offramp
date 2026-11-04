@@ -101,6 +101,7 @@ export type Phase=
  |'payment-guidance-closed'
  |'payment-guidance-unavailable'
  |'settling'
+ |'external-recovery-required'
  |'receipt'
  |'cancelled-before-send';
 /** One raw receipt log, as eth_getTransactionReceipt returns it. */
@@ -138,6 +139,11 @@ export interface NativeFeeReceipt {
  readonly settledBy:'this-wallet'|'another-account';
 }
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
-export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}
+/** A fresh finalized escrow-state read, shown where the app offers no settlement action of its own. */
+export interface ChainStateView {
+ readonly state:'absent'|'funded'|'released'|'refunded';
+ readonly observedAtHeight:string;
+}
+export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;readonly chainState:ChainStateView|null;}
 export interface JourneyController {snapshot():JourneySnapshot;runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>;act(action:string,options?:{readonly signingAction?:SigningAction|undefined;readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}):Promise<JourneySnapshot>;dispose():void;}
 export type {ReviewedEvmTerms};

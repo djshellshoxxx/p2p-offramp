@@ -14,7 +14,7 @@ import {escrowCallFor} from '../../../packages/wallet/src/evm-submit.ts';
 import {decodeEscrowLog,buildPendingWithdrawals,buildWithdraw,topicOf,EVENT_SIGNATURES} from '../../../packages/wallet/src/evm-escrow.ts';
 import {createLifecycleJournal} from '../../../packages/domain/src/intent-journal.ts';
 import {createEvmTxLifecycle,evmFinalityPolicy} from '../../../packages/domain/src/tx-lifecycle.ts';
-import {decodeIntentPayload} from '../../../packages/schemas/index.ts';
+import {decodeIntentPayload,encodeIntentPayload,encodeBase64url} from '../../../packages/schemas/index.ts';
 import {matchesFilters} from '../../../packages/relay/src/nip01.ts';
 import {RegistryService} from '../../../packages/domain/index.ts';
 
@@ -122,7 +122,11 @@ function fakeChain(){
   chainId:()=>done('31337'),
   head:()=>done(head()),
   blockHashAt:number=>done(Number(number)<=chain.head?blockHash(Number(number)):null),
-  transactionCount:account=>done(account.toLowerCase()===SELLER?String(chain.nonce):'0'),
+  // `queued` counts held transactions the node reports at the next pending nonces.
+  transactionCount:(account,tag)=>{
+   if(account.toLowerCase()!==SELLER)return done('0');
+   return done(String(chain.nonce+(tag==='pending'?chain.queued??0:0)));
+  },
   transaction:hash=>done(chain.txs.has(hash)?view(chain.txs.get(hash)):null),
   receipt:hash=>{
    const tx=chain.txs.get(hash);
@@ -724,5 +728,193 @@ test('a lost relay acknowledgement after storage resumes without a duplicate neg
   assert.deepEqual(distinct(h),{ads:1,wraps:1},'the take wrap already reached the relay');
   assert.equal((await h.journey.act('retry-delivery')).phase,'review');
   assert.deepEqual(distinct(h),{ads:1,wraps:2});
+ }finally{h.journey.dispose();}
+});
+
+/**
+ * Writes one durable settlement row exactly as a crashed Worker can leave it. This is a fixture of restart state:
+ * it goes straight to the encrypted vault, so the row needs no live lifecycle to have produced it.
+ */
+async function writeSettleRow(h,{action,state,hash=null,nonce}){
+ const tradeId=h.tradeId;
+ const call=escrowCallFor({action,escrow:ESCROW,tradeId}).call;
+ const preparedRequest=JSON.stringify({v:1,chainId:'31337',from:SELLER,to:call.to,data:call.data,value:call.value,
+  nonce,preparedAtBlock:String(h.preparedAt)});
+ const intent={version:1,intentId:encodeBase64url(crypto.getRandomValues(new Uint8Array(32))),
+  binding:{chain:'evm',networkId:'local-evm',deploymentId:'escrow-local-v1',tradeId},account:SELLER,action,state,
+  walletGeneration:1,expectedEscrowState:'funded',preparedRequest,submission:{chain:'evm',hash,nonce},
+  replacementOf:null,createdAt:NOW,updatedAt:NOW};
+ const vault=new EncryptedVaultService(h.store,crypto,{lifecycle:false});
+ try{
+  const session=await vault.unlock(h.profileId,pass);
+  assert.equal(session.ok,true);
+  const id=Array.from(crypto.getRandomValues(new Uint8Array(16)),byte=>byte.toString(16).padStart(2,'0')).join('');
+  const record={id,kind:'journal',schemaVersion:1,payload:encodeIntentPayload(intent)};
+  assert.equal((await vault.commit(session.value.sessionId,session.value.revision,[{op:'put',record}])).ok,true);
+ }finally{
+  vault.lockAll();
+  vault.dispose();
+ }
+}
+/** The seller's settlement transaction with `nonce`, included now; `reverted` includes it without escrow effect. */
+function includeSettle(h,{action,nonce,reverted}){
+ const call=escrowCallFor({action,escrow:ESCROW,tradeId:h.tradeId}).call;
+ h.chain.revertNext=reverted;
+ const hash=h.chain.mine({from:SELLER,to:call.to,input:call.data,value:'0',nonce:String(nonce)});
+ h.chain.head+=2;
+ return hash;
+}
+function poolSettle(h,{action,nonce}){
+ const call=escrowCallFor({action,escrow:ESCROW,tradeId:h.tradeId}).call;
+ return h.chain.hold({from:SELLER,to:call.to,input:call.data,value:'0',nonce:String(nonce)});
+}
+const randomHash=()=>'0x'+Array.from(crypto.getRandomValues(new Uint8Array(32)),byte=>byte.toString(16).padStart(2,'0'))
+ .join('');
+
+/**
+ * Restart regression matrix for one funded trade: the finalized fund row plus the leftover settlement rows each case
+ * writes. Every case records the phase (or error) after watch, one explicit reconcile and, where offered, one explicit
+ * refund. Only that explicit refund may send. MATRIX_RECORD=1 prints the outcomes instead of asserting them.
+ */
+const recovery='external-recovery-required';
+const blocked='PAYMENT_GUIDANCE_BLOCKED (payment-guidance-unavailable)';
+const restartMatrix=[
+ ['release pending in the pool',async h=>{
+  await writeSettleRow(h,{action:'release',state:'pending',hash:poolSettle(h,{action:'release',nonce:1}),nonce:'1'});
+ },{watch:'settling',reconcile:'settling'}],
+ ['release confirmed, inclusion reorganized away',async h=>{
+  await writeSettleRow(h,{action:'release',state:'confirmed',hash:randomHash(),nonce:'1'});
+ },{watch:'settling',reconcile:'settling'}],
+ ['release reorged with a hash',async h=>{
+  await writeSettleRow(h,{action:'release',state:'reorged',hash:randomHash(),nonce:'1'});
+ },{watch:'settling',reconcile:'settling'}],
+ ['release broadcast-unknown without a hash',async h=>{
+  await writeSettleRow(h,{action:'release',state:'broadcast-unknown',nonce:'1'});
+ },{watch:recovery,reconcile:recovery}],
+ ['release broadcast-unknown beyond the 64-block scan',async h=>{
+  await writeSettleRow(h,{action:'release',state:'broadcast-unknown',nonce:'1'});
+  h.chain.head+=70;
+ },{watch:recovery,reconcile:recovery}],
+ ['release reverted with a hash, row still pending',async h=>{
+  const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'pending',hash,nonce:'1'});
+ },{watch:'reconcile',reconcile:blocked,refund:'settling'}],
+ ['release failed with a hash',async h=>{
+  const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'failed',hash,nonce:'1'});
+ },{watch:'reconcile',reconcile:blocked,refund:'settling'}],
+ ['release failed without a hash (wallet 4001)',async h=>{
+  await writeSettleRow(h,{action:'release',state:'failed',nonce:'1'});
+ },{watch:recovery,reconcile:recovery}],
+ ['two rows: reverted release and a refund pending in the pool',async h=>{
+  const hash=includeSettle(h,{action:'release',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'release',state:'failed',hash,nonce:'1'});
+  await writeSettleRow(h,{action:'refund',state:'pending',hash:poolSettle(h,{action:'refund',nonce:2}),nonce:'2'});
+ },{watch:'settling',reconcile:'settling'}],
+ ['two rows: release failed without a hash and a reverted refund',async h=>{
+  await writeSettleRow(h,{action:'release',state:'failed',nonce:'1'});
+  const hash=includeSettle(h,{action:'refund',nonce:1,reverted:true});
+  await writeSettleRow(h,{action:'refund',state:'pending',hash,nonce:'1'});
+ },{watch:recovery,reconcile:recovery}],
+ ['third-party refund, no own settlement row',async h=>{
+  thirdPartyRefund(h);
+ },{watch:'receipt'}],
+ ['third-party refund, own refund broadcast-unknown without a hash',async h=>{
+  await writeSettleRow(h,{action:'refund',state:'broadcast-unknown',nonce:'1'});
+  thirdPartyRefund(h);
+ },{watch:'receipt'}],
+ ['third-party refund, own release failed without a hash',async h=>{
+  await writeSettleRow(h,{action:'release',state:'failed',nonce:'1'});
+  thirdPartyRefund(h);
+ },{watch:'receipt'}],
+ ['third-party refund beyond the bounded log search',async h=>{
+  thirdPartyRefund(h);
+  h.chain.head+=50_001;
+ },{watch:'receipt'}],
+];
+const outcome=async run=>{
+ try{return(await run()).phase;}
+ catch(error){return error instanceof Error?error.message:'THROWN';}
+};
+const recorded=[];
+for(const[name,arrange,expected]of restartMatrix){
+ test(`restart matrix: ${name}`,async()=>{
+  const h=harness();
+  try{
+   await funded(h);
+   h.tradeId=h.journey.snapshot().tradeId;
+   h.preparedAt=h.chain.head;
+   h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+   h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+   await arrange(h);
+   const sends=h.chain.sends;
+   const funded_=['payment-coordination','payment-guidance-closed','payment-guidance-unavailable'];
+   const step=async run=>{
+    const result=await outcome(run);
+    const now=h.journey.snapshot().phase;
+    return result===now?result:`${result} (${now})`;
+   };
+   const actual={watch:await step(()=>restartAndWatch(h))};
+   if(['reconcile','settling',recovery].includes(h.journey.snapshot().phase)){
+    actual.reconcile=await step(()=>h.journey.act('reconcile'));
+   }
+   assert.equal(h.chain.sends,sends,'watch and reconcile never send');
+   if(funded_.includes(h.journey.snapshot().phase))actual.refund=await step(()=>signed(h.journey,'refund'));
+   if(process.env.MATRIX_RECORD){recorded.push({name,...actual});return;}
+   assert.deepEqual(actual,expected);
+   if(actual.refund==='settling')assert.equal(h.chain.escrowState,'refunded');
+   assert.ok(h.chain.sends-sends<=(actual.refund?1:0),'only the explicit refund may send');
+  }finally{h.journey.dispose();}
+ });
+}
+test.after(()=>{if(process.env.MATRIX_RECORD)console.log('MATRIX '+JSON.stringify(recorded));});
+
+/** A funded trade restarted with one release row the app cannot reconcile without a durable send marker. */
+async function ambiguousRestart(h){
+ await funded(h);
+ h.tradeId=h.journey.snapshot().tradeId;
+ h.preparedAt=h.chain.head;
+ h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+ h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+ await writeSettleRow(h,{action:'release',state:'failed',nonce:'1'});
+ return restartAndWatch(h);
+}
+
+test('an ambiguous settlement row hands over to external recovery with the fresh chain state and no app action',
+ async()=>{
+  const h=harness();
+  try{
+   const recovered=await ambiguousRestart(h);
+   assert.equal(recovered.phase,'external-recovery-required');
+   assert.equal(recovered.chainState.state,'funded');
+   assert.equal(recovered.chainState.observedAtHeight,String(h.chain.head));
+   for(const signingAction of['release','refund']){
+    await assert.rejects(h.journey.act('review-signing',{signingAction}),/OUT_OF_ORDER/);
+   }
+   assert.equal((await h.journey.act('reconcile')).phase,'external-recovery-required');
+   assert.deepEqual(await journalActions(h),['fund:finalized','release:failed'],'the row is never rewritten');
+   // The seller refunds with the recovery package outside the app; reconcile then shows that chain outcome.
+   const call=escrowCallFor({action:'refund',escrow:ESCROW,tradeId:h.tradeId}).call;
+   const hash=h.chain.mine({from:SELLER,to:call.to,input:call.data,value:'0',nonce:'1'});
+   h.chain.head+=2;
+   const settled=await h.journey.act('reconcile');
+   assert.equal(settled.phase,'receipt');
+   assert.equal(settled.receipt.transactionHash,hash);
+   assert.equal(settled.receipt.settledBy,'this-wallet');
+   assert.deepEqual(await journalActions(h),['fund:finalized','release:failed']);
+  }finally{h.journey.dispose();}
+ });
+
+test('a settlement beyond the bounded log search is shown from the canonical state without a transaction',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+  thirdPartyRefund(h);
+  h.chain.head+=50_001;
+  const recovered=await restartAndWatch(h);
+  assert.equal(recovered.phase,'receipt');
+  assert.equal(recovered.receipt,null,'no transaction, fee or payout is claimed');
+  assert.deepEqual(recovered.chainState,{state:'refunded',observedAtHeight:String(h.chain.head)});
  }finally{h.journey.dispose();}
 });

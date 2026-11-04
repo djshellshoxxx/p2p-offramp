@@ -3,7 +3,7 @@ import {formatUnits,formatFiatMinor,fullAddress} from '../ui/trade/trade-terms-d
 import {checkDisplayText} from '../ui/trade/display-text.ts';
 import {english,englishGroup} from '../ui/locale/en.ts';
 import type {TermsDisplay,NativeFeeReceipt,AssetChoice,TokenCheck,ActionFee,SigningReview} from './native-contracts.ts';
-import type {PayoutStatus} from './native-contracts.ts';
+import type {PayoutStatus,ChainStateView} from './native-contracts.ts';
 import type {PrivacyView,PrivacyIndicator,PrivacyReason,PrivacyEndpointDetails} from '../../../../packages/domain/index.ts';
 const labels=englishGroup('trade');
 function field(input:unknown,key:string):unknown{if(typeof input!=='object'||input===null||Array.isArray(input))throw Error('PROTOCOL_ERROR');const d=Object.getOwnPropertyDescriptor(input,key);if(!d||!('value'in d))throw Error('PROTOCOL_ERROR');return d.value;}
@@ -63,7 +63,7 @@ function readReceipt(raw:unknown):NativeFeeReceipt|null{
   effectiveGasPrice:string(raw,'effectiveGasPrice',dec),fee:string(raw,'fee',dec)};
 }
 interface Manual {readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string;}
-export interface DisplaySnapshot {readonly phase:string;readonly terms:TermsDisplay|null;readonly receipt:NativeFeeReceipt|null;readonly manual:Manual|null;readonly guidanceAllowed:boolean;readonly tradeId:string|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly diagnostic:unknown;}
+export interface DisplaySnapshot {readonly chainState:ChainStateView|null;readonly phase:string;readonly terms:TermsDisplay|null;readonly receipt:NativeFeeReceipt|null;readonly manual:Manual|null;readonly guidanceAllowed:boolean;readonly tradeId:string|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly diagnostic:unknown;}
 export function readDisplay(input:unknown):DisplaySnapshot{
  if(field(input,'label')!=='LOCALPROOF'||field(input,'tradingEnabled')!==false)throw Error('PROTOCOL_ERROR');
  const phase=string(input,'phase',/^[a-z-]{1,64}$/),terms=readTerms(field(input,'terms')),receipt=readReceipt(field(input,'receipt')),manualRaw=field(input,'manualPayment');let manual:Manual|null=null;
@@ -75,10 +75,14 @@ export function readDisplay(input:unknown):DisplaySnapshot{
  const own=(key:string):unknown=>typeof input==='object'&&input!==null?Object.getOwnPropertyDescriptor(input,key)?.value:undefined;
  const rawSigning=own('signingReview'),signingReview=rawSigning===undefined?null:readSigningReview(rawSigning);
  const assets:AssetChoice[]=[];const rawAssets=own('assets');if(rawAssets!==undefined){if(!Array.isArray(rawAssets)||rawAssets.length>64)throw Error('PROTOCOL_ERROR');for(const asset of rawAssets){const kind=field(asset,'kind');if(kind!=='native'&&kind!=='erc20')throw Error('PROTOCOL_ERROR');assets.push({id:string(asset,'id',/^[A-Za-z0-9._-]{1,64}$/),kind,decimals:count(asset,'decimals',38)});}}
+ const rawChain=own('chainState');
+ const chainState:ChainStateView|null=rawChain===undefined||rawChain===null?null:Object.freeze({
+  state:choice(rawChain,'state',['absent','funded','released','refunded']),
+  observedAtHeight:string(rawChain,'observedAtHeight',dec)});
  const rawToken=own('tokenCheck');let tokenCheck:TokenCheck|null=null;if(rawToken!==undefined&&rawToken!==null){const anchor=field(rawToken,'anchor');tokenCheck={token:string(rawToken,'token',address),spender:string(rawToken,'spender',address),principal:string(rawToken,'principal',dec),balance:string(rawToken,'balance',dec),allowance:string(rawToken,'allowance',dec),anchor:{height:string(anchor,'height',dec),hash:string(anchor,'hash',/^0x[0-9a-f]{64}$/)}};}
  const fees:ActionFee[]=[];const rawFees=own('fees');if(rawFees!==undefined){if(!Array.isArray(rawFees)||rawFees.length>128)throw Error('PROTOCOL_ERROR');for(const fee of rawFees){const action=field(fee,'action');if(action!=='approve'&&action!=='fund'&&action!=='release'&&action!=='refund')throw Error('PROTOCOL_ERROR');fees.push({action,transactionHash:string(fee,'transactionHash',/^0x[0-9a-f]{64}$/),fee:string(fee,'fee',dec),nativeAssetId:string(fee,'nativeAssetId',/^[A-Za-z0-9._-]{1,64}$/),nativeDecimals:count(fee,'nativeDecimals',38)});}}
  // Diagnostics deliberately omit agreed instructions in every phase. They are rendered only in labelled sections.
- return{phase,terms,receipt,manual,assets,tokenCheck,fees,signingReview,guidanceAllowed,tradeId:rawId,diagnostic:{label:'LOCALPROOF',tradingEnabled:false,phase,profileId,submissionsThisWorker,tradeId:rawId,receipt,terms,tokenCheck,fees,manualPayment:manual?{currency:manual.currency,minorUnits:manual.minorUnits,instructions:'[omitted from diagnostics]'}:null}};
+ return{chainState,phase,terms,receipt,manual,assets,tokenCheck,fees,signingReview,guidanceAllowed,tradeId:rawId,diagnostic:{label:'LOCALPROOF',tradingEnabled:false,phase,profileId,submissionsThisWorker,tradeId:rawId,receipt,terms,tokenCheck,fees,manualPayment:manual?{currency:manual.currency,minorUnits:manual.minorUnits,instructions:'[omitted from diagnostics]'}:null}};
 }
 const node=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const result=document.createElement(tag);if(text!==undefined)result.textContent=text;return result;};
 const display=(result:{ok:true;value:string}|{ok:false}):string=>result.ok?result.value:labels.invalid;
@@ -147,6 +151,29 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
  if(t){const list=node('dl');review.append(node('h2',labels.title),node('p','Exact agreement review only. These terms are not instructions to pay before fresh native funding guidance.'),node('p',labels.risk),node('p',labels.addressHelp),list);
  exactRow(list,labels.amount,`${display(formatUnits(t.amountBaseUnits,t.decimals))} ${t.assetId} (${t.assetKind==='native'?labels.assetNative:labels.assetToken})`);exactRow(list,'Canonical base units',english('trade','baseUnits',{units:t.amountBaseUnits,decimals:t.decimals}));exactRow(list,labels.network,t.networkId);exactRow(list,labels.chainId,t.chainId);exactRow(list,labels.deployment,t.deploymentId);addressRow(list,labels.contract,t.escrowAddress);addressRow(list,labels.seller,t.seller);addressRow(list,labels.buyer,t.buyer);if(t.assetKind==='erc20')addressRow(list,labels.tokenAddress,t.asset);exactRow(list,labels.orderId,t.orderId,true);exactRow(list,labels.revision,t.revision);exactRow(list,labels.acceptBefore,deadline(t.acceptBeforeSeconds));exactRow(list,labels.escrowExpiry,deadline(t.escrowExpirySeconds));exactRow(list,labels.termsDigest,snapshot.tradeId??labels.invalid,true);exactRow(list,labels.agreementHash,t.privateAgreementHash,true);exactRow(list,labels.capabilitiesHash,t.capabilitiesHash,true);
  if(snapshot.manual){exactRow(list,labels.fiat,display(formatFiatMinor(snapshot.manual.minorUnits,snapshot.manual.scale,snapshot.manual.currency)));if(snapshot.phase==='review'||snapshot.phase==='accepted'){const checked=checkDisplayText(snapshot.manual.instructions);review.append(node('h3','Agreed instructions — review only; do not pay yet'));if(checked.ok)copyInstructions(review,labels.instructions,checked.text);else review.append(node('p',labels.instructionsHidden));if(checked.ok&&checked.mixedScript)review.append(node('p',labels.mixedScript));}}
+ }
+ // Without a durable send marker the app cannot resolve this row; it hands over and only shows the chain.
+ if(snapshot.phase==='external-recovery-required'){
+  review.append(node('h3','External recovery required — the app will not send anything for this escrow'));
+  review.append(node('p','An earlier release or refund request from this wallet left a record this app cannot '
+   +'resolve: it cannot prove whether that wallet request was broadcast. Nothing will be sent, retried or cancelled '
+   +'from here, and release and refund are not offered while that record exists.'));
+  review.append(node('p','Recover the escrow with the repository recovery references instead: save the encrypted '
+   +'backup / watch export from this screen, inspect it in the offline transaction recovery references or the '
+   +'scriptless recovery portal (docs/portal/README.md), and use the canonical EVM recovery package '
+   +'(docs/recovery/CANONICAL-EVM.md: inspect, then prepare-refund after the deadline). Reconcile here re-reads '
+   +'the chain only.'));
+ }
+ const unlocated=snapshot.phase==='receipt'&&!snapshot.receipt;
+ if(snapshot.chainState&&(snapshot.phase==='external-recovery-required'||unlocated)){
+  const list=node('dl');
+  review.append(node('h3','Escrow state on chain — fresh finalized read'),list);
+  exactRow(list,'Escrow state',snapshot.chainState.state);
+  exactRow(list,'Finalized height of this read',snapshot.chainState.observedAtHeight);
+  if(snapshot.phase==='receipt'){
+   review.append(node('p','The escrow is terminal on chain, but its settlement transaction was not located within '
+    +'the bounded search, so no transaction, fee or payout detail is shown. This does not verify fiat payment.'));
+  }
  }
  // An unresolved settlement blocks every new one: the chain decides it, never a resend.
  if(snapshot.phase==='settling'){
