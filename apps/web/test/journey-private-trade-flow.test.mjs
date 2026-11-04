@@ -327,12 +327,12 @@ test('at the actual deadline release is refused and only the original refund rem
   assert.equal(h.journey.snapshot().phase,'payment-guidance-unavailable');
   await assert.rejects(h.journey.act('review-signing',{signingAction:'release'}),/OUT_OF_ORDER/);
   // A release review taken while open is re-checked against the fresh native deadline before any send.
-  h.chain.guidance={reason:'near-expiry',remainingSeconds:'1'};
+  h.chain.guidance={reason:'near-expiry',remainingSeconds:'301'};
   assert.equal((await h.journey.act('reconcile')).phase,'payment-guidance-closed');
   await h.journey.act('review-signing',{signingAction:'release'});
-  h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+  h.chain.guidance={reason:'near-expiry',remainingSeconds:'300'};
   await assert.rejects(h.journey.act('confirm-signing',{attestFiatReceived:true}),/RELEASE_NOT_AVAILABLE/);
-  assert.equal(h.chain.sends,1,'no release send at or after the deadline');
+  assert.equal(h.chain.sends,1,'no release send inside the deadline margin');
   assert.equal(h.chain.escrowState,'funded');
   h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
   assert.equal((await signed(h.journey,'refund')).phase,'settling');
@@ -340,6 +340,23 @@ test('at the actual deadline release is refused and only the original refund rem
   const receipt=(await h.journey.act('reconcile')).receipt;
   assert.equal(receipt.state,'refunded');
   assert.deepEqual(receipt.payout,{status:'pushed',recipient:SELLER,token:ZERO,amount:'1000000000000000'});
+ }finally{h.journey.dispose();}
+});
+
+// The latest block time is not the inclusion time: a release read with only seconds left would certainly revert.
+test('release is not offered inside the 300-second margin before the actual deadline',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  for(const remainingSeconds of['1','299','300']){
+   h.chain.guidance={reason:'near-expiry',remainingSeconds};
+   await assert.rejects(h.journey.act('reconcile'),/PAYMENT_GUIDANCE_BLOCKED/);
+   assert.equal(h.journey.snapshot().phase,'payment-guidance-unavailable');
+   await assert.rejects(h.journey.act('review-signing',{signingAction:'release'}),/OUT_OF_ORDER/);
+  }
+  h.chain.guidance={reason:'near-expiry',remainingSeconds:'301'};
+  assert.equal((await h.journey.act('reconcile')).phase,'payment-guidance-closed');
+  assert.equal(h.chain.sends,1);
  }finally{h.journey.dispose();}
 });
 

@@ -85,15 +85,19 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  }
  // A funded escrow in either phase may be released; only payment-coordination also shows payment instructions.
  const releasePhase=():boolean=>phase==='payment-coordination'||phase==='payment-guidance-closed';
- // Release eligibility is independent of the payment-guidance buffer: BasicEscrow accepts a seller release strictly
- // before escrowExpirySeconds. It needs a fresh, funded, matching native read (reason ok or near-expiry) whose
- // actual deadline is still ahead. The chain stays authoritative: a release included too late reverts.
+ // remainingSeconds is measured against the latest block, but a release is included in a strictly later block and
+ // BasicEscrow reverts at block.timestamp >= deadline. The margin covers several block intervals (12 s on Ethereum
+ // L1, more under congestion), mempool delay and a human wallet confirmation of a few minutes. It is far below the
+ // 900-second guidance buffer. It is a client-side refusal only; the chain stays authoritative for the deadline.
+ const RELEASE_DEADLINE_MARGIN_SECONDS=300n;
+ // Release eligibility is independent of the payment-guidance buffer. It needs a fresh, funded, matching native
+ // read (reason ok or near-expiry) with more than the margin left before the actual deadline.
  function releaseOpen(observation:PaymentGuidanceObservation):boolean{
   if(observation.termsHash!==trade().binding.tradeId)return false;
   if(observation.reason!=='ok'&&observation.reason!=='near-expiry')return false;
   const remaining=observation.remainingSeconds;
   if(typeof remaining!=='string'||!/^-?(0|[1-9][0-9]{0,77})$/.test(remaining))return false;
-  return BigInt(remaining)>0n;
+  return BigInt(remaining)>RELEASE_DEADLINE_MARGIN_SECONDS;
  }
  // After a blocked projection only a near-expiry read with the deadline ahead keeps release open.
  function guidanceClosedForRelease(gate:PaymentGuidance):boolean{
@@ -512,7 +516,8 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      const{terms,domain,binding}=trade(),{gate,life}=attached();
      if(action==='refund'&&await chainNow()<Number(terms.escrowExpirySeconds))throw Error('REFUND_NOT_AVAILABLE');
      const guidance=value(await step(gate.read()));
-     // The guidance buffer only discourages starting a fiat payment; release needs the fresh actual deadline ahead.
+     // The guidance buffer only discourages starting a fiat payment. Release re-checks the deadline margin on this
+     // fresh read, immediately before prepare.
      if(action==='release'&&!releaseOpen(guidance))throw Error('RELEASE_NOT_AVAILABLE');
      const call=native.escrowCallFor({action,escrow:domain.verifyingContract,tradeId:binding.tradeId});prepared=value(await step(life.prepare({binding,action,expectedEscrowState:'funded',call:call.call})));intentId=prepared.intentId;phase='settling';const sent=await step(life.submit(prepared));if(!sent.ok&&sent.error?.code!=='BROADCAST_UNKNOWN')throw Error(sent.error?.code??'SUBMIT_FAILED');
     }else throw Error('INVALID_INPUT');return snapshot();

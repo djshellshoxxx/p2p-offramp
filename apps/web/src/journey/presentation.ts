@@ -149,7 +149,8 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
  if(snapshot.phase==='payment-guidance-closed'){
   const closedNotice='Fewer than 15 minutes remain before the on-chain escrow deadline, so payment instructions are '
    +'withheld. Buyer: do not start a fiat payment now. Seller: release only if you independently received the fiat '
-   +'payment; the chain decides whether the deadline has passed, and a late release reverts.';
+   +'payment, and no later than 5 minutes before the deadline; the chain decides whether the deadline has passed, '
+   +'and a late release reverts.';
   payment.append(node('h2','Payment guidance closed — escrow deadline near'));
   payment.append(node('p',closedNotice),node('p',labels.risk));
  }
