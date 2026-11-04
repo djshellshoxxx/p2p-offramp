@@ -1,6 +1,6 @@
 # D9 - Durable send marker on transaction intents (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything, and nothing here changes running behavior.
+Status: ACCEPTED by the owner on 2026-11-04: **Option A**. The owner confirmed it in the coordinating Claude session. The implementation is in progress on a separate Tier C draft PR; nothing here changes running behavior until that PR lands.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9). The three `packages/` files cited below exist on main and are identical on the PR.
 

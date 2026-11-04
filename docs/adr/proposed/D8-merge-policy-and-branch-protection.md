@@ -1,6 +1,6 @@
 # D8 - Merge policy and branch protection on main (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything and changes no repository setting. The click path at the end is instructions for the owner, not something already done.
+Status: ACCEPTED by the owner on 2026-11-04: **Option 2 (tiered)**. The owner confirmed it in the coordinating Claude session, and the M-0 stack is merged under it. No repository setting has changed: the click path at the end is still the owner's to apply.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (94554ec). GitHub facts below were read from the hosted API while drafting (2026-11-04) and can change.
 

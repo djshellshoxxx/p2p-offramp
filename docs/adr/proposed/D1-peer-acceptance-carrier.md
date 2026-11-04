@@ -1,6 +1,6 @@
 # D1 - Peer acceptance carrier (decision packet)
 
-Status: ACCEPTED — Option B, recorded 2026-11-04 by the owner (djshellshoxxx). The decision fixes the direction: a wallet-signed `PeerAcceptance` binding role, account, both Nostr keys and expiry, keyed by `(termsHash, role)`, with no downgrade to a bare `TradeTerms` signature. It changes no running behavior. Before any implementation, Option B still requires the version identifier and exact `PeerAcceptance` field names, the open requirements in this packet, test vectors from two independent implementations, and independent Trust-Path / crypto review.
+Status: ACCEPTED by the owner on 2026-11-04: **Option B**. The owner confirmed it in the coordinating Claude session. Nothing is implemented yet, and the version identifier, exact field names and independent review this packet requires still come first. Until that work lands, no wire format, signing rule or trust transition changes.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (94554ec).
 
