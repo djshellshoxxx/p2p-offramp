@@ -62,14 +62,16 @@ jobs:
       - name: Rust toolchain from rust-toolchain.toml
         working-directory: contracts/solana
         run: rustup show active-toolchain || rustup toolchain install
-      - name: Format and lint
+      - name: Format
         working-directory: contracts/solana
-        run: |
-          cargo fmt --check
-          cargo clippy --locked --features localnet --all-targets -- -D warnings
+        run: cargo fmt --check
       - name: Build program (SBPF v3, platform-tools v1.54)
         working-directory: contracts/solana
         run: cargo build-sbf --manifest-path programs/basic-escrow/Cargo.toml --features localnet --arch v3 -- --locked
+      # The LiteSVM tests embed target/deploy/basic_escrow.so, so lint of all targets runs after the build.
+      - name: Lint
+        working-directory: contracts/solana
+        run: cargo clippy --locked --features localnet --all-targets -- -D warnings
       - name: LiteSVM tests (original SPL Token 3.5.0 and p-token)
         working-directory: contracts/solana
         run: cargo test --locked --features localnet
