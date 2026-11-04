@@ -1,6 +1,6 @@
 # D5 - Solana and SPL basic escrow custody design (decision packet)
 
-Status: PROPOSED. This packet is for the owner. It does not decide anything. No program ID, seed, layout, token policy, toolchain pin or upgrade rule in it is approved, and nothing here changes running behavior. It contains no Solana code.
+Status: ACCEPTED — Option A, recorded 2026-11-04 by the owner (djshellshoxxx). The decision fixes the custody-design direction: an immutable Anchor program holding native SOL or original SPL assets only; Token-2022 and wrapped SOL refused in v1; release and refund are state-only with a permissionless `payout`. It contains no Solana code and changes no running behavior. Implementation is a separate Trust-Path effort that still requires the pinned toolchain, the two-implementation test vectors and the local-validator acceptance suite in this packet, and independent crypto review before any code is written.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9). The documentation websites could not be reached from this session. Upstream facts were therefore read on 2026-11-04 from the source repositories behind them, at the tags named below. Claims marked **unverified** were not confirmed from a primary source.
 
