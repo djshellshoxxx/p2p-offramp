@@ -134,6 +134,8 @@ export interface NativeFeeReceipt {
  readonly nativeAssetId:string;
  readonly nativeDecimals:number;
  readonly payout:PayoutStatus;
+ /** 'another-account': found from the escrow's own settlement event; that account paid the network fee. */
+ readonly settledBy:'this-wallet'|'another-account';
 }
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
 export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}

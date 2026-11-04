@@ -510,6 +510,47 @@ test('after restart an unresolved release offers only reconcile and reserves no 
  }finally{h.journey.dispose();}
 });
 
+/** Anyone may refund at or after the deadline: an unrelated account settles the escrow to the original seller. */
+function thirdPartyRefund(h){
+ const call=escrowCallFor({action:'refund',escrow:ESCROW,tradeId:h.journey.snapshot().tradeId}).call;
+ const hash=h.chain.mine({from:'0x'+'3'.repeat(40),to:call.to,input:call.data,value:'0',nonce:'0'});
+ h.chain.head+=2;
+ return hash;
+}
+
+test('a reverted release beside a third-party refund shows the on-chain refund as the receipt',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  await h.journey.act('review-signing',{signingAction:'release'});
+  h.chain.revertNext=true;
+  assert.equal((await h.journey.act('confirm-signing',{attestFiatReceived:true})).phase,'settling');
+  h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+  const refundHash=thirdPartyRefund(h);
+  const settled=await h.journey.act('reconcile');
+  assert.equal(settled.phase,'receipt');
+  assert.equal(settled.receipt.state,'refunded');
+  assert.equal(settled.receipt.transactionHash,refundHash);
+  assert.equal(settled.receipt.settledBy,'another-account');
+  assert.deepEqual(settled.receipt.payout,{status:'pushed',recipient:SELLER,token:ZERO,amount:'1000000000000000'});
+  assert.equal(h.chain.sends,2);
+ }finally{h.journey.dispose();}
+});
+
+test('after restart a third-party refund beside a reverted release is shown as the receipt, not refused',async()=>{
+ const h=harness();
+ try{
+  await heldRelease(h);
+  h.chain.includeHeld({reverted:true});
+  const refundHash=thirdPartyRefund(h);
+  const recovered=await restartAndWatch(h);
+  assert.equal(recovered.phase,'receipt');
+  assert.equal(recovered.receipt.state,'refunded');
+  assert.equal(recovered.receipt.transactionHash,refundHash);
+  assert.equal(h.chain.sends,2);
+ }finally{h.journey.dispose();}
+});
+
 /** A funded native trade released by the seller, with the receipt logs `deferred` selects. */
 async function released(h,{deferred,pendingCredit}){
  await funded(h);

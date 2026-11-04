@@ -56,7 +56,8 @@ function readReceipt(raw:unknown):NativeFeeReceipt|null{
  if(state!=='released'&&state!=='refunded')throw Error('PROTOCOL_ERROR');
  const payout=readPayout(field(raw,'payout'));
  const transactionHash=string(raw,'transactionHash',/^0x[0-9a-f]{64}$/);
- return{payout,tradeId:string(raw,'tradeId',digest),transactionHash,state,
+ const settledBy=choice(raw,'settledBy',['this-wallet','another-account']);
+ return{payout,settledBy,tradeId:string(raw,'tradeId',digest),transactionHash,state,
   nativeAssetId:string(raw,'nativeAssetId',/^[A-Za-z0-9._-]{1,64}$/),nativeDecimals:count(raw,'nativeDecimals',38),
   blockNumber:string(raw,'blockNumber',dec),gasUsed:string(raw,'gasUsed',dec),
   effectiveGasPrice:string(raw,'effectiveGasPrice',dec),fee:string(raw,'fee',dec)};
@@ -181,4 +182,8 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
  }
  const r=snapshot.receipt;if(r){const list=node('dl');receiptPanel.append(node('h2','Native finalized escrow receipt'),node('p','This is a chain receipt. It does not verify fiat payment.'),list);exactRow(list,'Escrow outcome',r.state);exactRow(list,'Original trade digest',r.tradeId,true);exactRow(list,'Transaction hash',r.transactionHash,true);exactRow(list,'Canonical block height',r.blockNumber);exactRow(list,'Gas used',r.gasUsed);exactRow(list,'Effective gas price (native base units per gas)',r.effectiveGasPrice);exactRow(list,'Actual network fee',`${display(formatUnits(r.fee,r.nativeDecimals))} ${r.nativeAssetId} (${labels.assetNative})`);exactRow(list,'Actual network fee (native base units)',r.fee);if(t){exactRow(list,labels.network,t.networkId);addressRow(list,'Original seller / refund destination',t.seller);addressRow(list,'Original buyer / release destination',t.buyer);}
   payoutPresentation(receiptPanel,r.payout);}
+ if(r?.settledBy==='another-account'){
+  receiptPanel.append(node('p','Another account sent this settlement transaction; the escrow outcome is the same. '
+   +'Its network fee above was paid by that account, not by this wallet.'));
+ }
 }
