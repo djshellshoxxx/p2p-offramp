@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from 'react';
 import type { ImportOutcome, SavedReviewStore, StoredReview, TradeReviewController, TradeReviewSnapshot } from '../../trade/review-controller.ts';
 import { tradePageMessages as p, tradeMessages } from './trade-messages.ts';
+import { messages as m } from '../messages.ts';
 import { TradeTermsReview } from './TradeTermsReview.tsx';
+import type { TradeDraftController } from '../../trade/draft-controller.ts';
+import { TradeDraftEditor, type TradeDraftCopy } from './TradeDraftEditor.tsx';
+import { favoriteStoreOf, FavoriteReviewAction, FavoriteSavedReviews, useReviewFavorites, type ReviewFavoritesModel } from '../FavoriteSavedReviews.tsx';
 
 const noSubscription = () => () => {};
 const missingSnapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'unavailable' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]),
@@ -31,10 +35,11 @@ function RegistryBanner({ registry }: { readonly registry: Extract<TradeReviewSn
 /** The open profile's saved-review commands, or null while no profile is unlocked. */
 export type SavedStoreProp = { readonly store: SavedReviewStore | null };
 
-function SavedActions({ trade, item, store, busy }: { readonly trade: TradeReviewController; readonly item: StoredReview; readonly store: SavedReviewStore | null; readonly busy: boolean }) {
+function SavedActions({ trade, item, store, busy, favorites }: { readonly trade: TradeReviewController; readonly item: StoredReview; readonly store: SavedReviewStore | null; readonly busy: boolean; readonly favorites?: ReviewFavoritesModel }) {
   if (item.savedId !== null) return <>
     <small className="helper"> ({p.savedBadge})</small>
-    {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.savedId!, store); }}>{p.deleteFromProfile}</button></> : null}
+    {store ? <>{' '}<a href="#/settings">{m.retentionManageSaved}</a></> : null}
+    {favorites ? <>{' '}<FavoriteReviewAction model={favorites} recordId={item.savedId} disabled={busy} /></> : null}
   </>;
   return store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.saveToProfile(item.localId, store); }}>{p.saveToProfile}</button></> : null;
 }
@@ -59,20 +64,20 @@ function SavedPanel({ trade, snapshot, store }: { readonly trade: TradeReviewCon
       <h3>{p.unreviewableTitle}</h3>
       <ul className="session-list">{snapshot.unreviewable.map(item => <li key={item.recordId}>
         {p.unreviewableItem(item.recordId)}: {p.rejected[item.code]}
-        {store ? <>{' '}<button type="button" disabled={busy} onClick={() => { void trade.deleteSaved(item.recordId, store); }}>{p.deleteFromProfile}</button></> : null}
+        {store ? <>{' '}<a href="#/settings">{m.retentionManageSaved}</a></> : null}
       </li>)}</ul>
     </> : null}
   </section>;
 }
 
-function SessionList({ trade, snapshot, store }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot } & SavedStoreProp) {
+function SessionList({ trade, snapshot, store, favorites }: { readonly trade: TradeReviewController; readonly snapshot: TradeReviewSnapshot; readonly favorites: ReviewFavoritesModel } & SavedStoreProp) {
   return <section className="plain-section" aria-labelledby="session-title">
     <h2 id="session-title">{p.sessionTitle}</h2><p className="helper">{p.sessionHelp}</p>
     {snapshot.reviews.length === 0 ? <p>{p.sessionEmpty}</p> : <ul className="session-list">
       {snapshot.reviews.map(item => <li key={item.localId}>
         <a href={`#/trade/${item.localId}`}>{p.sessionItem(item.review.orderId, item.review.revision)}</a>
         {item.source === 'synthetic-sample' ? <small className="helper">{p.syntheticBadge}</small> : null}
-        <SavedActions trade={trade} item={item} store={store} busy={snapshot.saved.kind === 'busy'} />
+        <SavedActions trade={trade} item={item} store={store} busy={snapshot.saved.kind === 'busy'} favorites={favorites} />
         {' '}<button type="button" onClick={() => trade.remove(item.localId)}>{p.remove}</button>
       </li>)}
     </ul>}
@@ -118,10 +123,13 @@ function ReviewForm({ trade, snapshot }: { readonly trade: TradeReviewController
   </>;
 }
 
-export function OffersPage({ trade, store = null }: { readonly trade: TradeReviewController | null; readonly store?: SavedReviewStore | null }) {
+export function OffersPage({ trade, store = null, drafts = null, draftCopy }: { readonly trade: TradeReviewController | null; readonly store?: SavedReviewStore | null;
+  readonly drafts?: TradeDraftController | null; readonly draftCopy?: TradeDraftCopy }) {
   const snapshot = useTradeReview(trade);
+  const favorites = useReviewFavorites(favoriteStoreOf(store), trade);
   const registry = snapshot.registry;
   return <>
+    {drafts && draftCopy ? <TradeDraftEditor controller={drafts} copy={draftCopy} onOpenReview={localId => { window.location.hash = `#/trade/${localId}`; }} /> : null}
     <section className="empty-state" aria-labelledby="discovery-title">
       <h2 id="discovery-title">{p.discoveryTitle}</h2><p>{p.discoveryHelp}</p>
     </section>
@@ -133,7 +141,8 @@ export function OffersPage({ trade, store = null }: { readonly trade: TradeRevie
         : <><RegistryBanner registry={registry} /><ReviewForm trade={trade} snapshot={snapshot} /></>}
     </section>
     {trade && registry.kind === 'ready' ? <SavedPanel trade={trade} snapshot={snapshot} store={store} /> : null}
-    {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} store={store} /> : null}
+    {trade && registry.kind === 'ready' ? <FavoriteSavedReviews model={favorites} /> : null}
+    {trade && registry.kind === 'ready' ? <SessionList trade={trade} snapshot={snapshot} store={store} favorites={favorites} /> : null}
   </>;
 }
 
