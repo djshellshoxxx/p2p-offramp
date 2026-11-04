@@ -10,6 +10,7 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'vite';
 import {chromium} from 'playwright-core';
 import {resolveChromiumPath} from './lib/chromium-path.mjs';
+import {resolveTool} from './lib/tool-path.mjs';
 import {fixture,canonical,encode,sha} from '../packages/security/test/lib/release-fixture.mjs';
 import {registryFixture} from '../packages/security/test/lib/release-registry-fixture.mjs';
 import {RAW_CID,DAG_PB_CID} from '../packages/security/test/lib/locator-fixture.mjs';
@@ -18,7 +19,7 @@ const release=fixture(),wallet=registryFixture(),faults=new Set(),requests=[],mo
 const pass='T66 owned source synthetic passphrase',nextPass='T66 fresh destination synthetic passphrase';
 try{
   const certPath=resolve(temporary,'local.crt'),keyPath=resolve(temporary,'local.key');
-  execFileSync('openssl',['req','-x509','-newkey','rsa:2048','-nodes','-keyout',keyPath,'-out',certPath,'-days','1','-subj','/CN=local-only-update-fixture','-addext','subjectAltName=DNS:*.ipfs.localhost,DNS:updates.localhost'],{stdio:'ignore'});
+  execFileSync(resolveTool('openssl'),['req','-x509','-newkey','rsa:2048','-nodes','-keyout',keyPath,'-out',certPath,'-days','1','-subj','/CN=local-only-update-fixture','-addext','subjectAltName=DNS:*.ipfs.localhost,DNS:updates.localhost'],{stdio:'ignore'});
   const cert=await readFile(certPath),spki=createHash('sha256').update(new X509Certificate(cert).publicKey.export({type:'spki',format:'der'})).digest('base64');
   server=createServer({key:await readFile(keyPath),cert},(req,res)=>{
     const url=new URL(req.url??'/',`https://${req.headers.host}`),host=url.hostname;requests.push({host,path:url.pathname,query:url.search});

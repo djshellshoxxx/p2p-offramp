@@ -13,6 +13,7 @@ import {build} from 'vite';
 import react from '@vitejs/plugin-react';
 import {chromium} from 'playwright-core';
 import {resolveChromiumPath} from './lib/chromium-path.mjs';
+import {resolveTool} from './lib/tool-path.mjs';
 import {startFakeRelay} from '../packages/relay/test/support/fake-relay.mjs';
 import {matchesFilters} from '../packages/relay/src/nip01.ts';
 import {keccak256} from '../packages/wallet/src/evm-terms.ts';
@@ -25,7 +26,7 @@ let server,browser,anvil,relay,sends=0,signatures=0,reviewChecks=0,unexpected=0,
 const freePort=()=>new Promise((done,reject)=>{const server=createServer();server.once('error',reject);server.listen(0,'127.0.0.1',()=>{const port=server.address().port;server.close(()=>done(port));});});
 try{
  await checkToolchain(env);const port=await freePort(),rpcURL=`http://127.0.0.1:${port}`,rpc=rpcClient(rpcURL,{timeoutMs:10000});
- anvil=spawn('anvil',['--host','127.0.0.1','--port',String(port),'--silent','--chain-id','31337','--slots-in-an-epoch','1'],{env:forgeEnv(env),stdio:'ignore'});
+ anvil=spawn(resolveTool('anvil'),['--host','127.0.0.1','--port',String(port),'--silent','--chain-id','31337','--slots-in-an-epoch','1'],{env:forgeEnv(env),stdio:'ignore'});
  for(let n=0;;n++){try{await rpc('eth_chainId');break;}catch{if(n===100)throw Error('Anvil unavailable');await new Promise(resolve=>setTimeout(resolve,50));}}
  const tokenDeployment=await run('forge',['create','test/mocks/Mocks.sol:MockERC20','--rpc-url',rpcURL,'--private-key','0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80','--broadcast','--json','--constructor-args','LocalUSD','LUSD'],{cwd:resolve(root,'contracts/evm'),env:forgeEnv(env,{FOUNDRY_OFFLINE:'true'}),timeout:30000,maxBuffer:1<<20});const token=JSON.parse(tokenDeployment.stdout.slice(tokenDeployment.stdout.indexOf('{'))).deployedTo.toLowerCase(),accounts=await rpc('eth_accounts');
  const calldata=async(signature,...args)=>(await run('cast',['calldata',signature,...args],{env:forgeEnv(env),timeout:5000,maxBuffer:8192})).stdout.trim();const tokenRead=async(signature,...args)=>BigInt(await rpc('eth_call',[{to:token,data:await calldata(signature,...args)},'latest']));
