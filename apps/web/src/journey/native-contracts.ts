@@ -1,5 +1,6 @@
 /** Structural contracts for trusted private constructors; no production/private package facade is widened. */
 import type {CoreResult,RegistryService,PrivateAgreementV1,ReviewedEvmTerms,createJourneyProjection,PrivacyView,PrivacyTransportPort,PrivacyEndpointPort} from '../../../../packages/domain/index.ts';
+import type {JourneyPaymentGuidanceObservation} from '../../../../packages/domain/index.ts';
 import type {EncryptedVaultService,EncryptedBackupService} from '../../../../packages/storage/index.ts';
 import type {MessagingIdentityProvider} from '../../../../packages/identity/index.ts';
 import type {CreatedIdentity,IdentityHandle,IdentityResult,VaultSession,IntentV1,TradeBinding,ChainObservation,TradeView,RuntimeResponse} from '../../../../packages/schemas/index.ts';
@@ -48,7 +49,15 @@ export interface Journal {reserve(intent:IntentV1,revision:number,signal?:AbortS
 export interface Lifecycle {walletChanged(next:{account:string;chainId:string;generation:number}|null):Promise<void>;prepare(input:PrepareInput,signal?:AbortSignal):Promise<CoreResult<PreparedIntent>>;submit(prepared:PreparedIntent,signal?:AbortSignal):Promise<CoreResult<{intent:IntentV1;hash:string}>>;reconcile(id:string,signal?:AbortSignal):Promise<CoreResult<Reconciliation>>;recover(signal?:AbortSignal):Promise<CoreResult<readonly IntentV1[]>>;dispose():void;}
 export interface Authority {readonly currentGeneration:number;readView(now:number):Readonly<TradeView>;refresh(binding:TradeBinding,signal?:AbortSignal):Promise<CoreResult<ChainObservation>>;dispose():void;}
 export type TradeComposition=Parameters<typeof createJourneyProjection>[0]['composition']&{dispose():void};
-export type PaymentGuidance=NonNullable<Parameters<typeof createJourneyProjection>[0]['paymentGuidance']>&{invalidate():void;dispose():void};
+/** Native G18 result as this journey reads it. remainingSeconds is the actual escrow deadline minus the latest
+ * anchored chain time and may be zero or negative. The 900-second guidance buffer is not a release deadline. */
+export type PaymentGuidanceObservation=JourneyPaymentGuidanceObservation&{readonly remainingSeconds:string};
+export interface PaymentGuidance {
+ read(signal?:AbortSignal):Promise<CoreResult<PaymentGuidanceObservation>>;
+ view():CoreResult<PaymentGuidanceObservation>;
+ invalidate():void;
+ dispose():void;
+}
 export interface ReadObservationInput {readonly registry:RegistryService;readonly binding:TradeBinding;readonly terms:EvmTerms;readonly domain:EvmDomain;readonly request:Request;readonly generation:number;readonly requestSequence:number;readonly signal?:AbortSignal;}
 export interface NativeFactories {
  readonly MessagingIdentityService:new(vault:EncryptedVaultService,options:{provider:MessagingIdentityProvider;lifecycle:false})=>IdentityService;
@@ -73,7 +82,21 @@ export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnaps
 export interface WatchParty {readonly kind:'watch';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;}
 export interface NegotiatingParty {readonly kind:'negotiation';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;readonly pub:string;readonly secret:Uint8Array;readonly eventCrypto:Awaited<ReturnType<typeof createRelayEventCrypto>>;readonly book:ReturnType<typeof createOrderBook>;readonly exchange:ReturnType<typeof createTermsExchange>;readonly pool:RelayPool;}
 export type Party=WatchParty|NegotiatingParty;
-export type Phase='setup'|'wallet'|'review'|'accepted'|'fund-prepared'|'approval-reconcile'|'recovered-acceptance-required'|'reconcile'|'payment-coordination'|'payment-guidance-unavailable'|'settling'|'receipt'|'cancelled-before-send';
+export type Phase=
+ |'setup'
+ |'wallet'
+ |'review'
+ |'accepted'
+ |'fund-prepared'
+ |'approval-reconcile'
+ |'recovered-acceptance-required'
+ |'reconcile'
+ |'payment-coordination'
+ |'payment-guidance-closed'
+ |'payment-guidance-unavailable'
+ |'settling'
+ |'receipt'
+ |'cancelled-before-send';
 export interface NativeFeeReceipt {readonly tradeId:string;readonly transactionHash:string;readonly state:'released'|'refunded';readonly blockNumber:string;readonly gasUsed:string;readonly effectiveGasPrice:string;readonly fee:string;readonly nativeAssetId:string;readonly nativeDecimals:number;}
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
 export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}

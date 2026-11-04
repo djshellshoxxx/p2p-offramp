@@ -89,5 +89,13 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
  if(snapshot.fees.length){const list=node('dl');review.append(node('h3','Actual finalized action fees — native asset, separate from token principal'),list);for(const fee of snapshot.fees){exactRow(list,`${fee.action} transaction`,fee.transactionHash,true);exactRow(list,`${fee.action} actual network fee`,`${display(formatUnits(fee.fee,fee.nativeDecimals))} ${fee.nativeAssetId}`);exactRow(list,`${fee.action} fee (native base units)`,fee.fee);}}
  if(snapshot.signingReview)signingPresentation(review,snapshot.signingReview);
  if(snapshot.guidanceAllowed&&snapshot.manual){const checked=checkDisplayText(snapshot.manual.instructions);payment.append(node('h2','Fresh native funding guidance — manual payment coordination'),node('p',labels.risk));if(checked.ok){payment.append(node('p',labels.instructions));copyInstructions(payment,labels.instructions,checked.text);if(checked.mixedScript)payment.append(node('p',labels.mixedScript));}else payment.append(node('p',labels.instructionsHidden));}
+ // Inside the guidance buffer instructions stay hidden, but a seller who already received fiat may still release.
+ if(snapshot.phase==='payment-guidance-closed'){
+  const closedNotice='Fewer than 15 minutes remain before the on-chain escrow deadline, so payment instructions are '
+   +'withheld. Buyer: do not start a fiat payment now. Seller: release only if you independently received the fiat '
+   +'payment; the chain decides whether the deadline has passed, and a late release reverts.';
+  payment.append(node('h2','Payment guidance closed — escrow deadline near'));
+  payment.append(node('p',closedNotice),node('p',labels.risk));
+ }
  const r=snapshot.receipt;if(r){const list=node('dl');receiptPanel.append(node('h2','Native finalized escrow receipt'),node('p','This is a chain receipt. It does not verify fiat payment.'),list);exactRow(list,'Escrow outcome',r.state);exactRow(list,'Original trade digest',r.tradeId,true);exactRow(list,'Transaction hash',r.transactionHash,true);exactRow(list,'Canonical block height',r.blockNumber);exactRow(list,'Gas used',r.gasUsed);exactRow(list,'Effective gas price (native base units per gas)',r.effectiveGasPrice);exactRow(list,'Actual network fee',`${display(formatUnits(r.fee,r.nativeDecimals))} ${r.nativeAssetId} (${labels.assetNative})`);exactRow(list,'Actual network fee (native base units)',r.fee);if(t){exactRow(list,labels.network,t.networkId);addressRow(list,'Original seller / refund destination',t.seller);addressRow(list,'Original buyer / release destination',t.buyer);}}
 }

@@ -9,6 +9,7 @@ import {createRelayEventCrypto,createTermsExchange,adBookKey} from '../../../../
 import {decodeIdentityPayload,decodeBase64url,parseStrictJsonBytes,type IntentV1,type TradeBinding,type RuntimeResponse} from '../../../../packages/schemas/index.ts';
 import {createJourneyVaultComposition} from './vault-composition.ts';
 import type {JourneyOptions,JourneyController,JourneySnapshot,Phase,EvmTerms,EvmDomain,Party,NegotiatingParty,NativeFeeReceipt,PreparedIntent,ChainReader,Journal,Lifecycle,PaymentGuidance,Authority,TradeComposition,NativeIntentObservation,ReviewedEvmTerms,PreparedRequest,JourneyRuntimeInput,EscrowCall,Request,TokenCheck,ActionFee,SigningAction,SigningReview,WalletSession,WalletProvider} from './native-contracts.ts';
+import type {PaymentGuidanceObservation} from './native-contracts.ts';
 import type {JourneyVaultSelection} from './vault-composition.ts';
 const utf8=new TextEncoder(),ZERO=`0x${'0'.repeat(40)}`;
 // Comparison pin for the unchanged native EvmWalletAdapter payload; this module never signs a replacement domain.
@@ -73,8 +74,29 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   if(action==='accept'||action==='accept-recovered')return{to:domain.verifyingContract,data:'0x',value:'0'};
   return native.escrowCallFor(action==='approve'||action==='reset-approval'?{action:'approve',token:terms.asset,spender:domain.verifyingContract,amountBaseUnits:action==='reset-approval'?'0':terms.amountBaseUnits}:action==='fund'?{action:'fund',domain,terms}:{action,escrow:domain.verifyingContract,tradeId:binding.tradeId}).call;
  }
+ // A funded escrow in either phase may be released; only payment-coordination also shows payment instructions.
+ const releasePhase=():boolean=>phase==='payment-coordination'||phase==='payment-guidance-closed';
+ // Release eligibility is independent of the payment-guidance buffer: BasicEscrow accepts a seller release strictly
+ // before escrowExpirySeconds. It needs a fresh, funded, matching native read (reason ok or near-expiry) whose
+ // actual deadline is still ahead. The chain stays authoritative: a release included too late reverts.
+ function releaseOpen(observation:PaymentGuidanceObservation):boolean{
+  if(observation.termsHash!==trade().binding.tradeId)return false;
+  if(observation.reason!=='ok'&&observation.reason!=='near-expiry')return false;
+  const remaining=observation.remainingSeconds;
+  if(typeof remaining!=='string'||!/^-?(0|[1-9][0-9]{0,77})$/.test(remaining))return false;
+  return BigInt(remaining)>0n;
+ }
+ // After a blocked projection only a near-expiry read with the deadline ahead keeps release open.
+ function guidanceClosedForRelease(gate:PaymentGuidance):boolean{
+  const viewed=gate.view();
+  return viewed.ok&&viewed.value.reason==='near-expiry'&&releaseOpen(viewed.value);
+ }
  function reviewActionReady(action:SigningAction):void{
-  const allowed=action==='accept'?phase==='review':action==='accept-recovered'?phase==='recovered-acceptance-required':action==='release'?phase==='payment-coordination':action==='refund'?phase==='payment-coordination'||phase==='payment-guidance-unavailable':phase==='accepted'&&acceptedProof;
+  const allowed=action==='accept'?phase==='review'
+   :action==='accept-recovered'?phase==='recovered-acceptance-required'
+   :action==='release'?releasePhase()
+   :action==='refund'?releasePhase()||phase==='payment-guidance-unavailable'
+   :phase==='accepted'&&acceptedProof;
   if(!allowed)throw Error('OUT_OF_ORDER');
   if((action==='approve'||action==='reset-approval')&&trade().terms.assetKind!=='erc20')throw Error('INVALID_INPUT');
  }
@@ -334,11 +356,22 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      prepared=value(await step(life.prepare({binding,action:'fund',expectedEscrowState:call.expectedEscrowState,call:call.call})));intentId=prepared.intentId;phase='fund-prepared';
      let sent;try{sent=await step(life.submit(prepared));}finally{if(epoch===mine)phase='reconcile';}if(!sent.ok&&sent.error?.code!=='BROADCAST_UNKNOWN')throw Error(sent.error?.code??'SUBMIT_FAILED');
     }else if(action==='reconcile'){
-     if(!['approval-reconcile','reconcile','settling','payment-coordination','payment-guidance-unavailable'].includes(phase))throw Error('OUT_OF_ORDER');if(phase==='payment-coordination')phase='payment-guidance-unavailable';attached().gate.invalidate();await fresh();const{binding}=trade(),{journal,life,reader,authority,journey}=attached(),intentId=definedIntentId();
+     const reconcilable=['approval-reconcile','reconcile','settling','payment-coordination','payment-guidance-closed',
+      'payment-guidance-unavailable'];
+     if(!reconcilable.includes(phase))throw Error('OUT_OF_ORDER');
+     if(releasePhase())phase='payment-guidance-unavailable';
+     attached().gate.invalidate();
+     await fresh();
+     const{binding}=trade(),{journal,life,reader,gate,authority,journey}=attached(),intentId=definedIntentId();
      value(await step(journal.reconcileNative(intentId)));const result=value(await step(life.reconcile(intentId)));if(result.outcome!=='finalized')return snapshot();await recordFee(result.intent);
      if(result.intent.action==='approve'){await checkToken();phase=acceptedProof?'accepted':'recovered-acceptance-required';return snapshot();}
      if(result.escrowState==='funded'){
-      value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='payment-coordination'){phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}phase='payment-coordination';
+      value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));
+      const coordinating=projected.kind==='resolved'&&projected.view.step==='payment-coordination';
+      const closed=projected.kind==='blocked'&&projected.blockingReason==='payment-guidance-blocked';
+      if(coordinating)phase='payment-coordination';
+      else if(closed&&guidanceClosedForRelease(gate))phase='payment-guidance-closed';
+      else{phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}
      }else if(result.escrowState==='released'||result.escrowState==='refunded'){
       // Receipt is native and bound to the original exact intent; JSON terminal labels are insufficient.
       value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
@@ -346,7 +379,17 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
       const nativeAsset=defined(registry.network(binding.networkId)?.assets.find(asset=>asset.kind==='native'));receipt={nativeAssetId:nativeAsset.id,nativeDecimals:nativeAsset.decimals,tradeId:binding.tradeId,transactionHash:hash,state:result.escrowState,blockNumber:String(BigInt(raw.blockNumber)),gasUsed:String(BigInt(raw.gasUsed)),effectiveGasPrice:String(BigInt(raw.effectiveGasPrice)),fee:feeProduct(raw.gasUsed,raw.effectiveGasPrice)};phase='receipt';
      }else throw Error('STATE_MISMATCH');
     }else if(action==='release'||action==='refund'){
-     if(phase!=='payment-coordination'&&!(action==='refund'&&phase==='payment-guidance-unavailable'))throw Error('OUT_OF_ORDER');if(action==='release'&&options.attestFiatReceived!==true)throw Error('FIAT_ATTESTATION_REQUIRED');assertSigningReview();phase='payment-guidance-unavailable';attached().gate.invalidate();await fresh();const{terms,domain,binding}=trade(),{gate,life}=attached();if(action==='refund'&&await chainNow()<Number(terms.escrowExpirySeconds))throw Error('REFUND_NOT_AVAILABLE');const guidance=value(await step(gate.read()));if(action==='release'&&guidance.decision!=='allow-guidance')throw Error('PAYMENT_GUIDANCE_BLOCKED');
+     if(!releasePhase()&&!(action==='refund'&&phase==='payment-guidance-unavailable'))throw Error('OUT_OF_ORDER');
+     if(action==='release'&&options.attestFiatReceived!==true)throw Error('FIAT_ATTESTATION_REQUIRED');
+     assertSigningReview();
+     phase='payment-guidance-unavailable';
+     attached().gate.invalidate();
+     await fresh();
+     const{terms,domain,binding}=trade(),{gate,life}=attached();
+     if(action==='refund'&&await chainNow()<Number(terms.escrowExpirySeconds))throw Error('REFUND_NOT_AVAILABLE');
+     const guidance=value(await step(gate.read()));
+     // The guidance buffer only discourages starting a fiat payment; release needs the fresh actual deadline ahead.
+     if(action==='release'&&!releaseOpen(guidance))throw Error('RELEASE_NOT_AVAILABLE');
      const call=native.escrowCallFor({action,escrow:domain.verifyingContract,tradeId:binding.tradeId});prepared=value(await step(life.prepare({binding,action,expectedEscrowState:'funded',call:call.call})));intentId=prepared.intentId;phase='settling';const sent=await step(life.submit(prepared));if(!sent.ok&&sent.error?.code!=='BROADCAST_UNKNOWN')throw Error(sent.error?.code??'SUBMIT_FAILED');
     }else throw Error('INVALID_INPUT');return snapshot();
    }catch(error){if(epoch===mine&&(action==='connect'||action==='watch')&&phase==='setup'){clearPrivate();}throw error;}finally{while(nativeRequests.size>0)await Promise.allSettled([...nativeRequests]);activeReview=undefined;busy=false;}
