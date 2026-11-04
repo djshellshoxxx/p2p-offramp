@@ -1,0 +1,62 @@
+# D3 - Maintained recovery manifest (decision packet)
+
+Status: PROPOSED. This packet is for the owner. It does not decide anything. No manifest format, key, trust root or trust transition in it is approved, and nothing here changes running behavior. Production trust stays null under every option.
+
+Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (45630ba).
+
+## The question
+
+Which signed G15 artifact should authenticate both the registry and the canonical escrow ABI for the maintained recovery package? What is its Sepolia testnet form? And which rules make sure that a later release, registry or key can never rewrite the authority or ABI binding of an escrow that was funded earlier?
+
+Today the maintained package cannot be built. The testnet signing tool and the recovery builder also expect different manifests.
+
+## Current source behavior
+
+- The recovery builder `scripts/recovery/build-evm.mjs` (main) refuses with `KEY_UNPINNED` when `SEPOLIA_RELEASE_KEY_ID` is null (`:106`), before it reads any file. This was run on 45630ba while preparing this packet. With a pin, it checks the key file's `keyId` (`:111`) and calls `verifyRelease` with two assets: the registry and `contracts/evm/abi/BasicEscrow.json` (`:113-115`). `buildEvmRecoveryPackage` requires the ABI to be a manifest asset whose bytes equal the committed file (`:36-38`). It embeds a profile with `release {releaseId, manifestSha256, sequence, expiresAt, sourceCommit}`, the full registry bytes, the ABI digest, `historicalOnly: true` and `releaseEnabled: false` (`:40-44`). Packaging needs a live proof (`:63-64`). It refuses to write into an existing directory (`:61-62`).
+- The G15 verifier requires the supplied assets to equal the manifest's asset list exactly (`packages/security/src/release-manifest.ts:293-297`, main). It refuses any non-empty `deployments` list (`:198`).
+- The testnet signer puts only the registry in the manifest (`scripts/sepolia/owner-release.mjs:63`, main). The testnet build verifier (`apps/web/scripts/testnet-trust.mjs:55-56`, main) and the app's runtime source (`apps/web/src/testnet/sepolia-source.ts:50-51`, main) also supply only the registry. **So no single `sepolia.release.json` can satisfy both the testnet build and the recovery builder.** A synthetic check during preparation, using `packages/security/test/lib/release-registry-fixture.mjs`, confirmed this. A registry-only manifest checked with both assets gives `ASSET_MISMATCH`. A two-asset manifest checked with the registry only also gives `ASSET_MISMATCH`. No real key was used.
+- The portable package checks its embedded hashes before contacting any endpoint (`scripts/recovery/evm-cli.mjs:24-26`, main). It requires the trade's binding to name the profile's network and deployment (`scripts/recovery/evm-recovery.mjs:84`, main), and it rereads chain, genesis and runtime identity live (`:100`). `docs/recovery/CANONICAL-EVM.md:64-79` (main) says that the package keeps working after the release expires and grants no current-release authority. `scripts/test-evm-recovery-local.mjs:141-146` (main) proves exits from an original escrow after expiry. `:200-208` proves that an edited profile, registry or ABI is refused before any RPC call.
+- A trade binding is `{chain, networkId, deploymentId, tradeId}` (`packages/schemas/src/core.ts:66-68`, main). The private recovery-reference export carries that binding (`packages/schemas/src/recovery-reference.ts:8-13`, main). Neither holds an address, a registry digest or an ABI digest: an old escrow is found by deployment name.
+- `scripts/sepolia/record-deployment.mjs:167-183` (main) rewrites the whole registry with one deployment that is always named `escrow-sepolia-v1`. The same id is hard-coded in `scripts/sepolia/trade.mjs:40`, `scripts/sepolia/verify-release.mjs:35` and `build-evm.mjs:119` (all main). **A second Sepolia deployment would therefore reuse the name for a new address.** A package built from that registry would look for an old trade id at the new address and find nothing. That fails closed but loses the maintained exit for the old escrow.
+- Default null trust: the asset-update controller returns `UNCONFIGURED` with no source access when `trust` is null (`packages/security/src/release-update.ts:94-95`, PR #26 only). Its test asserts zero getter calls (`packages/security/test/release-update.test.mjs:34-35`, PR #26 only). The distribution packet records `maintainedTrustKey: null` and a recovery `reason: 'KEY_UNPINNED'` (`scripts/distribution/manifest.mjs:107-108`, PR #26 only).
+- `predecessorDigest` is always null when signing. Rotation, revocation and archive retention are listed as open in `docs/governance/PENDING-DECISIONS.md`, "G15 trust rotation" (PR #26 only).
+
+## Options
+
+All three keep production trust null, `ReleaseEnabled` at `0`, the existing escrow ABI, and the exact-asset rule of the verifier.
+
+**Option A - one signed manifest covering both the registry and the ABI.** The existing G15 format is kept unchanged, with two assets. `owner-release.mjs` adds the ABI asset. `verifyTestnetTrust` (shared by `sepolia:verify` and the trade tool) and the runtime source supply both assets. The testnet bundle therefore carries the ABI bytes (19,392 bytes today) and needs a version 2 bundle format. Security: one signature, one sequence and one rollback floor cover both files, so a registry and an ABI from different releases cannot be mixed. Compatibility: the recovery builder needs no change. Registry-only manifests stop verifying, but none is committed yet, so nothing has to be migrated.
+
+**Option B - separate signed manifests for the registry and the ABI.** Two channels with two sequences. Security: unless the registry manifest names the ABI manifest's digest, an attacker who holds old copies can pair a new registry with an old ABI, or the other way round. G15 has no field for that cross-reference, so a format change is needed. Compatibility: the testnet build stays as it is, but the builder, which takes one verified release, has to change, and there are two rollback floors to keep consistent.
+
+**Option C - pin the ABI by content inside each escrow's recovery reference.** Each registry deployment entry carries an `abiSha256`, and each recovery reference records the release `manifestSha256` and `abiSha256` at funding time. Security: this is the strongest per-escrow binding, because the reference itself says which registry and ABI were in force. Compatibility: the registry schema and the exact-key `offline-recovery-references/v1` export both need new versions, with readers for old and new, and the ABI bytes still have to be fetched from somewhere by digest. This is the most work.
+
+## Recommendation
+
+Option A, proposed for owner decision, for the Sepolia testnet channel only. It is the only option that fits the builder as written, it reuses the reviewed verifier without changes, and it removes the conflict between the build and the recovery manifests. The reference-level digest from Option C can be decided later as an addition. It is not needed to remove today's conflict.
+
+The owner would also be choosing these rules (all proposed):
+
+- **Old escrows keep their original binding.** A deployment id, once signed on a channel, names the same address, runtime keccak and `artifactSha256` in every later release. Signing refuses a release that rebinds an id; `DEPLOYMENT_ID_REBOUND` is a proposed refusal name. A new deployment gets a new id, such as `escrow-sepolia-v2`, which means the hard-coded `escrow-sepolia-v1` sites listed above must become parameters. No release, registry, key or frontend change ever alters an escrow's funded exits, refund destination or ABI.
+- **Archive, never regenerate.** Each package is published and kept under its release `manifestSha256`, and its `checksums.json` is published through an independent channel, as `CANONICAL-EVM.md:8-11` already asks. An escrow is recovered with the package from the release under which it was funded. A later package does not replace an earlier one.
+- **Rotation.** A new key affects only new builds and packages. Existing packages never recheck the signing key or the expiry when they run, so they keep working after a rotation.
+- **Revocation.** Moving the pin stops new builds and packages signed by the old key (`KEY_UNTRUSTED` or `KEY_ID`). It does not and must not disable packages already handed out, because they protect funded exits. If a key is suspected compromised, the owner publishes, through an independent channel, which package digests remain good and which were built after the suspected compromise. Whatever a compromised testnet key signs, the verifiers accept only a registry that names Sepolia alone (`testnet-trust.mjs:67`, `build-evm.mjs:117`). Packages built before the compromise are unaffected.
+- **Production.** No production channel, key or pin is proposed. The null defaults listed above stay in place.
+
+## Acceptance checks
+
+1. Null pin: `buildConfiguredEvmRecovery` gives `KEY_UNPINNED` before reading files. `build:testnet` gives `KEY_UNPINNED`. The update controller with `trust: null` gives `UNCONFIGURED` with zero fetches.
+2. One manifest, every verifier: under a test-only pin, a manifest over the registry and the ABI passes `verifyTestnetTrust`, the runtime source and `buildConfiguredEvmRecovery`. This fails today with `ASSET_MISMATCH` and must pass after the change.
+3. Negative: a registry-only manifest given to the builder gives `ASSET_MISMATCH`. ABI bytes that differ from the committed file give `ASSET_MISMATCH` (`build-evm.mjs:38`). A manifest that lists an asset that was not supplied gives `ASSET_MISMATCH`. Writing over an existing package directory is refused.
+4. Rebinding: release N signs `escrow-sepolia-v1` at address X. Release N+1 with the same id at address Y is refused at signing. Release N+1 with the same id and the same identity is accepted.
+5. Survival: a package from release N, copied outside the checkout, still runs `inspect` and `prepare-refund` for an escrow funded under N after release N+1 is accepted, after N's manifest expires, after the key rotates, and with no app, origin, relay or registry lease. Expiry and copying are already proven (`test-evm-recovery-local.mjs:141-146`). The N+1 and rotation cases are new.
+6. Tampering: an edited profile, registry or ABI is refused before any RPC call (existing, `:200-208`). A reference that names another deployment id is refused with `WRONG_CHAIN` (`evm-recovery.mjs:84`).
+7. Production: no non-null production pin exists anywhere, and non-testnet builds contain no trust data.
+
+Test vectors: do not invent digests. Use the fixture keys in `packages/security/test/lib` for the checks above. Real Sepolia digests come only from the owner's signing step in D2.
+
+## What this unblocks
+
+A maintained Sepolia recovery package built from the owner-signed release, a recovery executable in the distribution packet, and a single signing step for D2. It does not unblock production trust, `ReleaseEnabled`, non-empty manifest deployments, rotation for production, or Solana recovery.
+
+Open questions for the owner: whether the version 2 testnet bundle should carry the ABI bytes, which is proposed, or whether the app should stop checking the manifest itself, which is not recommended; the naming rule for new deployment ids; where archived packages and their checksums are published; and whether to schedule the reference-level digest from Option C.
