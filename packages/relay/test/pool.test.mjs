@@ -328,6 +328,36 @@ test('publish: strict refusal sends nothing; forged events are rejected locally;
   });
 });
 
+test('publish: missing OK over an owned loopback WebSocket settles unknown without replay', { timeout: 5000 }, async t => {
+  let suppressedAcks = 0;
+  await withRelays(1, [{ onMessage(_conn, message) {
+    if (message[0] !== 'EVENT') return false;
+    suppressedAcks++; return true;
+  } }], async (fakes, keep) => {
+    const relay = fakes[0], ad = await signedAd(), pool = keep(createRelayPool(opts(fakes)));
+    assert.equal(pool.subscribe([filter()], collect().handlers).ok, true);
+    await until(() => stateOf(pool, 'relay-a').state === 'open' && relay.received.some(message => message[0] === 'REQ'));
+    const connectionsBeforePublish = relay.connectCount;
+    let settled = false;
+    const pending = pool.publish(ad).then(result => { settled = true; return result; });
+    await until(() => relay.received.some(message => message[0] === 'EVENT'));
+    const connectionsAfterEvent = relay.connectCount;
+    assert.deepEqual(relay.received.filter(message => message[0] === 'EVENT'), [['EVENT', ad]], 'the actual TCP peer received the one explicitly published event');
+    assert.equal(settled, false, 'receipt of EVENT without OK does not acknowledge publication');
+    const result = await pending;
+    assert.deepEqual(result, { ok: true, value: [{ eventId: ad.id, relayId: 'relay-a', status: 'unknown' }] });
+    assert.equal(stateOf(pool, 'relay-a').state, 'open', 'missing acknowledgement times out without closing the subscribed socket');
+    await wait(FAST.publishTimeoutMs);
+    assert.equal(relay.received.filter(message => message[0] === 'EVENT').length, 1, 'no automatic EVENT replay during another acknowledgement timeout window');
+    assert.equal(suppressedAcks, 1);
+    assert.equal(relay.connectCount, connectionsAfterEvent, 'missing OK starts no additional connection after the explicit publication');
+    assert.equal(relay.received.filter(message => message[0] === 'REQ').length, 1, 'the live subscription is not restarted by publish timeout');
+    t.diagnostic(JSON.stringify({ fixture: 'owned-loopback-ws-missing-publish-ack', receivedEvents: relay.received.filter(message => message[0] === 'EVENT').length, suppressedDefaultAcks: suppressedAcks,
+      outcome: result.value[0].status, connectionsBeforePublish, connectionsAfterEvent, finalConnections: relay.connectCount,
+      publishTimeoutMs: FAST.publishTimeoutMs, postTimeoutObservationMs: FAST.publishTimeoutMs }));
+  });
+});
+
 test('relay data is discovery-only: the package imports no authority, chain, wallet or escrow module and ad outputs are labelled', () => {
   const dir = new URL('../src/', import.meta.url);
   const facade = readFileSync(new URL('../index.ts', import.meta.url), 'utf8');
@@ -352,4 +382,78 @@ test('crypto stays injected: the default verifier is required and signing is nev
   assert.deepEqual(pool.status(), []);
   pool.close();
   assert.deepEqual(pool.subscribe([filter()], collect().handlers), { ok: false, error: 'CLOSED' });
+});
+
+test('canonical subscribe refuses local filter reflection and indexed getters before admission', () => {
+  const net = memoryNetwork(), pool = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW });
+  let getters = 0; const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const inputs = ['getPrototypeOf', 'ownKeys', 'getOwnPropertyDescriptor'].map(trap => [new Proxy(filter(), { [trap]() { throw revoked.proxy; } })]);
+  const field = filter(); Object.defineProperty(field, 'kinds', { enumerable: true, get() { getters++; throw Error('PRIVATE filter'); } }); inputs.push([field]);
+  const kinds = [AD_KIND]; Object.defineProperty(kinds, '0', { enumerable: true, get() { getters++; throw Error('PRIVATE kind'); } }); inputs.push([filter({ kinds })]);
+  const values = ['topic']; Object.defineProperty(values, Symbol.iterator, { get() { getters++; throw Error('PRIVATE values'); } }); inputs.push([filter({ '#t': values })]);
+  const outer = [filter()]; Object.defineProperty(outer, '0', { enumerable: true, get() { getters++; throw Error('PRIVATE filter index'); } }); inputs.push(outer, revoked.proxy);
+  inputs.push([filter({ unknown: true })], [filter({ kinds: Object.assign([AD_KIND], { extra: true }) })]);
+  try {
+    for (const input of inputs) assert.deepEqual(pool.subscribe(input, { onEvent() {} }), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(getters, 0); assert.equal(net.attempts, 0);
+    assert.equal(pool.subscribe([filter()], { onEvent() {} }).value.id, 's1', 'refused input consumes no subscription ID or slot');
+  } finally { pool.close(); }
+});
+
+test('canonical subscribe snapshots handler functions without invoking accessors or consuming refused capacity', async () => {
+  const net = memoryNetwork(), pool = createRelayPool({ broker: makeBroker().broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW });
+  let getters = 0; const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const accessor = {}; Object.defineProperty(accessor, 'onEvent', { get() { getters++; throw Error('PRIVATE handler'); } });
+  const eose = { onEvent() {} }; Object.defineProperty(eose, 'onEose', { get() { getters++; throw Error('PRIVATE eose'); } });
+  try {
+    for (const handlers of [accessor, eose, revoked.proxy, { onEvent() {}, onEose: 1 }]) assert.deepEqual(pool.subscribe([filter()], handlers), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(getters, 0); assert.equal(net.attempts, 0);
+    const received = [], handlers = { marker: 'original receiver', onEvent(event) { assert.equal(this, handlers); received.push(event.id); }, onEose: undefined };
+    assert.equal(pool.subscribe([filter({ authors: undefined })], handlers).ok, true);
+    Object.defineProperty(handlers, 'onEvent', { get() { getters++; throw Error('PRIVATE changed callback'); } });
+    await until(() => stateOf(pool, 'relay-a').state === 'open'); const event = await signedAd(); net.sockets[0].deliver(JSON.stringify(['EVENT', 's1', event]));
+    assert.deepEqual(received, [event.id]); assert.equal(getters, 0);
+  } finally { pool.close(); }
+});
+
+test('canonical subscribe refuses malformed or throwing local clocks and rechecks closure after validation', () => {
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  for (const wall of [NaN, Infinity, -1, 1.5, 'PRIVATE clock', {}]) {
+    const pool = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: sellerCrypto, nowSeconds: () => wall });
+    try { assert.deepEqual(pool.subscribe([filter()], { onEvent() {} }), { ok: false, error: 'INVALID_FILTER' }); } finally { pool.close(); }
+  }
+  const throwing = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: sellerCrypto, nowSeconds: () => { throw revoked.proxy; } });
+  try { assert.deepEqual(throwing.subscribe([filter()], { onEvent() {} }), { ok: false, error: 'INVALID_FILTER' }); } finally { throwing.close(); }
+  let closed; closed = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: sellerCrypto, nowSeconds: () => { closed.close(); return NOW; } });
+  assert.deepEqual(closed.subscribe([filter()], { onEvent() {} }), { ok: false, error: 'CLOSED' });
+});
+
+test('canonical publish maps hostile local events to fixed refusal before verifier or connector work', async () => {
+  const net = memoryNetwork(); let verifications = 0, getters = 0;
+  const pool = createRelayPool({ broker: makeBroker().broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: { verifyEvent() { verifications++; return true; } }, connect: net.connector, nowSeconds: () => NOW });
+  const valid = await signedAd(), revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const accessor = { ...valid }; Object.defineProperty(accessor, 'content', { enumerable: true, get() { getters++; throw Error('PRIVATE event'); } });
+  try {
+    for (const event of [accessor, revoked.proxy, new Proxy(valid, { ownKeys() { throw revoked.proxy; } })]) assert.deepEqual(await pool.publish(event), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(getters, 0); assert.equal(verifications, 0); assert.equal(net.attempts, 0);
+    const retiring = new Proxy(valid, { getOwnPropertyDescriptor(target, key) { if (key === 'id') pool.close(); return Reflect.getOwnPropertyDescriptor(target, key); } });
+    assert.deepEqual(await pool.publish(retiring), { ok: false, error: 'CLOSED' }); assert.equal(verifications, 0); assert.equal(net.attempts, 0);
+  } finally { pool.close(); }
+});
+
+test('canonical filter snapshots retain optional values, gift-wrap windows and unknown-clock compatibility', async () => {
+  const net = memoryNetwork(), pool = createRelayPool({ broker: makeBroker().broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW });
+  const full = { kinds: [1059], since: NOW - POOL_LIMITS.maxGiftWrapHistorySeconds, limit: POOL_LIMITS.maxFilterLimit, authors: Array(16).fill(seller.pubkey),
+    '#d': Array(16).fill('x'.repeat(256)), '#t': ['topic'], '#k': ['1059'], '#a': ['address'], '#p': [seller.pubkey] };
+  try {
+    assert.deepEqual(pool.subscribe([{ ...full, kinds: [1059, AD_KIND] }], { onEvent() {} }), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(pool.subscribe([full, { ...filter(), authors: undefined }], { onEvent() {} }).ok, true);
+    full.kinds[0] = AD_KIND; full['#t'][0] = 'changed';
+    await until(() => stateOf(pool, 'relay-a').state === 'open');
+    const req = net.sockets[0].sent.find(message => message[0] === 'REQ');
+    assert.deepEqual(req[2].kinds, [1059]); assert.deepEqual(req[2]['#t'], ['topic']); assert.equal(req[2].authors.length, 16); assert.equal(req[2]['#d'][0].length, 256);
+    assert.deepEqual(req[2]['#k'], ['1059']); assert.deepEqual(req[2]['#a'], ['address']); assert.deepEqual(req[2]['#p'], [seller.pubkey]); assert.equal('authors' in req[3], false);
+  } finally { pool.close(); }
+  const unknown = createRelayPool({ broker: makeBroker().broker, relays: [], verifier: sellerCrypto, nowSeconds: () => null });
+  try { assert.equal(unknown.subscribe([{ kinds: [AD_KIND], since: 0, limit: 1 }], { onEvent() {} }).ok, true); } finally { unknown.close(); }
 });
