@@ -3,14 +3,16 @@
 import {spawn} from 'node:child_process';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {resolve,dirname} from 'node:path';
+import {resolve,dirname,sep} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {keccak_256} from '@noble/hashes/sha3.js';
 import {forgeEnv,checkToolchain,TOOLCHAIN} from '../sepolia/lib.mjs';
 import {isMain} from '../lib/is-main.mjs';
 export const LIMITS=Object.freeze({queryBytes:4*1024*1024,totalQueryBytes:32*1024*1024,queries:64,rounds:8,queryMs:5000,totalMs:120000,compilerMs:25000,outputBytes:32*1024*1024,solverOutputBytes:131072});
-export const Z3_PIN=Object.freeze({package:'z3-solver',version:'4.12.2.0',filename:'z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl',artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
+// The version is taken from the pinned wheel name, so the two can never drift apart.
+const Z3_WHEEL='z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl';
+export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
 const ROOT=fileURLToPath(new URL('../../',import.meta.url)),EVM=resolve(ROOT,'contracts/evm'),HARNESS='formal/CanonicalRefinement.t.sol';
 const ORIGINAL_MODEL_SHA256='7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537';
 export const PARTITION_TARGETS=Object.freeze([
@@ -259,4 +261,11 @@ export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal
  const report={version:1,scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_PARTITIONS',releaseEnabled:false,productionApproval:false,result:'BOUNDED_PARTITION_INVESTIGATION',reviewUnit:{sourceCommit:commit.stdout.trim(),canonicalSourceSha256:canonicalBefore,originalModelSourceSha256:ORIGINAL_MODEL_SHA256,interfaceDigest:interfaceBefore,propertySetDigest:sha(specBytes),compilerFlags:{optimizer:true,runs:200,evmVersion:'cancun',viaIR:false,extCalls:'trusted'},modelCommit:null,compiledBytecodeChecked:false},toolchain,solver,limits:LIMITS,budget:{...budget,targetAttempts:results.filter(result=>result.attempted).length,maximumTargetAttempts:3,elapsedMs:performance.now()-started},probe:{sourceSha256:sha(probeSource),sourceInputSha256:probe.sourceInputSha256,queries:probe.queries,compilerRuns:probe.compilerRuns,results:probeResults},formal:{targets:results,properties:results.map(result=>({id:result.id,result:result.result})),queries:results.flatMap(result=>result.queries)},retainedEvidence:{originalWholeTarget:'UNCHANGED_NOT_RERUN',guardProofs:'UNCHANGED_NOT_RERUN',nativeCreditCounterexample:'UNCHANGED_NOT_RERUN'},qualifications:['These exact extractions do not replace the original whole-target UNKNOWN results, four guard-only proofs or STRICT_TERMINAL_ALREADY_PAID native counterexample.','All query/byte/round allowances are shared across the operational probe and at most three ordered target attempts; no target is rerun.','Zero or missing queries, stderr, unsupported abstraction, timeout or incomplete diagnostics remain PROOF_UNKNOWN. Compiler source-bound diagnostics, never raw SAT/UNSAT polarity, classify complete work.','No native witness, deployment, external request or economic action was run by this mode. No ERC20, interleaving, bytecode, whole-contract, production or specialist-review qualification follows.']};
  await writeFile(resolve(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');return report;
 }
-if(isMain(import.meta.url)){const partitions=process.argv[2]==='--partitions',directory=process.argv[partitions?3:2]??resolve(ROOT,partitions?'.formal-partition-evidence':'.formal-evidence');try{const report=await(partitions?runFormalPartitions:runFormal)({outputDirectory:directory});console.log(JSON.stringify({scope:report.scope,result:report.result,properties:report.formal.properties.map(p=>({id:p.id,result:p.result})),queries:report.formal.queries.length,native:report.native?.nativeRefinement??'NOT_RERUN',releaseEnabled:false,report:resolve(directory,'report.json')}));}catch(error){console.error(JSON.stringify({result:'TOOL_INCOMPLETE',code:/^[A-Z_]{1,64}$/.test(error?.message??'')?error.message:'UNAVAILABLE',releaseEnabled:false}));process.exitCode=1;}}
+// The CLI argument picks where evidence is written. It must resolve inside this checkout, so a stray or
+// injected argument cannot direct writes anywhere else on the machine. Relative paths still resolve from cwd.
+export function evidenceDirectory(input,fallback){
+ const target=input===undefined?resolve(ROOT,fallback):resolve(input),inside=resolve(ROOT)+sep;
+ if(!target.startsWith(inside))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
+ return target;
+}
+if(isMain(import.meta.url)){const partitions=process.argv[2]==='--partitions';let directory;try{directory=evidenceDirectory(process.argv[partitions?3:2],partitions?'.formal-partition-evidence':'.formal-evidence');const report=await(partitions?runFormalPartitions:runFormal)({outputDirectory:directory});console.log(JSON.stringify({scope:report.scope,result:report.result,properties:report.formal.properties.map(p=>({id:p.id,result:p.result})),queries:report.formal.queries.length,native:report.native?.nativeRefinement??'NOT_RERUN',releaseEnabled:false,report:resolve(directory,'report.json')}));}catch(error){console.error(JSON.stringify({result:'TOOL_INCOMPLETE',code:/^[A-Z_]{1,64}$/.test(error?.message??'')?error.message:'UNAVAILABLE',releaseEnabled:false}));process.exitCode=1;}}

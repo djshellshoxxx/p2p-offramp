@@ -13,7 +13,7 @@ function specimen(){
   'client/assets/index-demo123.js','client/assets/index-demo123.css','client/assets/vault.worker-demo123.js',
   ...['index.html','portal.css','_headers','content-policy.json','portal-build.json','downloads/BasicEscrow.json','downloads/BasicEscrow.sol','downloads/CANONICAL-EVM.md'].map(path=>'portal/'+path),
   ...PUBLIC_COPIES.map(([,path])=>path),'wiki/docs-consistency.json','review-packet.json'];
- const assets=paths.sort(compare).map(path=>({path,bytes:1,sha256:sha256('x')}));
+ const assets=[...paths].sort(compare).map(path=>({path,bytes:1,sha256:sha256('x')}));
  const inputs=[...new Set([...RECIPE_INPUTS,...PUBLIC_COPIES.map(([path])=>path)])].sort(compare).map(path=>({path,bytes:1,sha256:sha256('x')}));
  return{format:FORMAT,source:{commit:'a'.repeat(40),dirty:true,statusSha256:sha256('dirty'),inputs},
   build:{profile:'default-meta-client+scriptless-source-portal+unpublished-wiki',node:'v24.19.0',npm:'11.9.0',vite:'8.3.5',typescript:'7.0.2',react:'19.3.1',reactDom:'19.3.1',
