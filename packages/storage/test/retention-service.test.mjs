@@ -28,7 +28,7 @@ test('30-day archive threshold is read-only and never turns persisted terminal l
   const s=await setup(t,[journal(1),journal(2,'pending'),chat(3),saved(4),opaque(5),opaque(6,'identity'),opaque(7,'preference')]);const writes=s.store.writes;
   const before=good(await s.service.planRetention(AGE-1));assert.equal(before.archiveReviewCount,0);
   const exact=good(await s.service.planRetention(AGE));assert.equal(exact.archiveReviewCount,2);assert.equal(exact.reviewedDeleteCount,0);assert.equal(exact.protectedCount,7);assert.equal(s.store.writes,writes);
-  assert.deepEqual(Object.keys(exact).sort(),['version','revision','archiveReviewCount','reviewedDeleteCount','protectedCount','logicalOnly','backupAndRemoteCopiesUnaffected'].sort());
+  assert.deepEqual(new Set(Object.keys(exact)),new Set(['version','revision','archiveReviewCount','reviewedDeleteCount','protectedCount','logicalOnly','backupAndRemoteCopiesUnaffected']));
   assert.doesNotMatch(JSON.stringify(exact),/trade-1|private-record|payload|recordId|conversationId/);
   bad(await s.service.deleteReviewedRecords(exact,consent(exact)),'NATIVE_PROOF_REQUIRED');assert.equal(s.store.writes,writes);
 });

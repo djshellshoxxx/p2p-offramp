@@ -248,7 +248,7 @@ test('proven funding allows the first distinct exit, preserves each kind, and ne
     assert.equal(estimates, 3, 'only the first distinct timeout refund reaches a send boundary');
     const final = JSON.parse(await readFile(s.statePath, 'utf8')).trades[0].attempts;
     assert.deepEqual(final.release, first, 'unknown prior release evidence is not overwritten by a refund');
-    assert.deepEqual(Object.keys(final).sort(), ['fund', 'refund', 'release']);
+    assert.deepEqual(new Set(Object.keys(final)), new Set(['fund', 'refund', 'release']));
     assert.equal(calls.some(method => method.startsWith('eth_send') || method.startsWith('eth_sign')), false);
   } finally { await s.dispose(); }
 });

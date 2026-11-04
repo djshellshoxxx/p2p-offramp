@@ -10,7 +10,9 @@ import {keccak_256} from '@noble/hashes/sha3.js';
 import {forgeEnv,checkToolchain,TOOLCHAIN} from '../sepolia/lib.mjs';
 import {isMain} from '../lib/is-main.mjs';
 export const LIMITS=Object.freeze({queryBytes:4*1024*1024,totalQueryBytes:32*1024*1024,queries:64,rounds:8,queryMs:5000,totalMs:120000,compilerMs:25000,outputBytes:32*1024*1024,solverOutputBytes:131072});
-export const Z3_PIN=Object.freeze({package:'z3-solver',version:'4.12.2.0',filename:'z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl',artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
+// The version is taken from the pinned wheel name, so the two can never drift apart.
+const Z3_WHEEL='z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl';
+export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
 const ROOT=fileURLToPath(new URL('../../',import.meta.url)),EVM=resolve(ROOT,'contracts/evm'),HARNESS='formal/CanonicalRefinement.t.sol';
 const ORIGINAL_MODEL_SHA256='7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537';
 export const PARTITION_TARGETS=Object.freeze([

@@ -25,8 +25,8 @@ test('purpose-specific native G01 history capability reauthenticates actual NIP1
  const s=await setup(t),writes=s.store.writes;const view=good(await s.history.authenticate(s.session,s.reference.identityRecordId,{binding,participants:s.participants}));
  assert.equal(view.profileId,s.session.profileId);assert.equal(view.selfPublicKey,s.selfPublicKey);assert.equal(view.revision,2);assert.deepEqual(view.binding,binding);
  assert.deepEqual(view.records,[{recordId:s.sent.recordId,receivedSequence:1,receivedAt:100}]);assert.equal(s.store.writes,writes);
- assert.deepEqual(Object.keys(view).sort(),['profileId','revision','conversationId','binding','selfPublicKey','records'].sort());
- assert.doesNotMatch(JSON.stringify(view),/PRIVATE ORIGINAL|secret|wrap|content|signature|rumorId/);assert.deepEqual(Object.keys(s.history).sort(),['authenticate','dispose']);
+ assert.deepEqual(new Set(Object.keys(view)),new Set(['profileId','revision','conversationId','binding','selfPublicKey','records']));
+ assert.doesNotMatch(JSON.stringify(view),/PRIVATE ORIGINAL|secret|wrap|content|signature|rumorId/);assert.deepEqual(new Set(Object.keys(s.history)),new Set(['authenticate','dispose']));
 });
 test('wrong participants, modified native wrap and lock never mint authenticated history metadata',async t=>{
  const s=await setup(t),provider=createLocalNobleNostrProvider(),other=await provider.generate();t.after(()=>other.secretKey.fill(0));
