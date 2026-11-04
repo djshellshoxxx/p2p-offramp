@@ -1,26 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort } from '../../../../packages/domain/index.ts';
+import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort, type PrivacyEndpointPort } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
-import { english, englishGroup } from './locale/en.ts';
+import { PrivacyStatusDetails } from './PrivacyStatusDetails.tsx';
+import { message as english, messageGroup as englishGroup } from './locale/runtime.ts';
 
 const p = englishGroup('privacy');
 const clock = () => Math.floor(performance.now());
-const states: Readonly<Record<string, string>> = { unknown: p.unknown, unavailable: p.unavailable, unsupported: p.unsupported, direct: p.direct, 'verified-private': p.privateRoute, blocked: p.blocked, locked: p.locked, unlocked: p.unlocked, 'authenticated-encryption': p.authenticated, available: p.available };
-const reasons: Readonly<Record<PrivacyReason, string>> = { 'not-observed': p.notObserved, observed: p.observedReason, expired: p.expired, 'invalid-observation': p.invalid, 'scope-changed': p.scopeChanged, 'clock-reversed': p.clockReversed, 'policy-blocked': p.policyBlocked, unavailable: p.unavailable };
-const sources = { none: p.none, 'local-vault': p.localVault, 'transport-policy': p.transport, 'messaging-provider': p.messagingProvider, 'proof-provider': p.proofProvider };
-const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel, update: p.update, wallet: p.wallet };
 
 /** Bundled composition supplies the same real broker it uses for transport.
  * A subscription is an invalidation hint; only a fresh coherent inspection is evidence. */
 export type PrivacyStatusTransport = PrivacyTransportPort & {
   subscribeInvalidation(listener: () => void): () => void;
 };
-export function PrivacyStatusPanel({ services = null, scope, transport = null }: {
-  readonly services?: AppServices | null; readonly scope?: number; readonly transport?: PrivacyStatusTransport | null;
+export type PrivacyStatusEndpoints = PrivacyEndpointPort & { subscribeInvalidation(listener: () => void): () => void; };
+export function PrivacyStatusPanel({ services = null, scope, transport = null, endpoints = null }: {
+  readonly services?: AppServices | null; readonly scope?: number; readonly transport?: PrivacyStatusTransport | null; readonly endpoints?: PrivacyStatusEndpoints | null;
 }) {
+  const states: Readonly<Record<string, string>> = { unknown: p.unknown, unavailable: p.unavailable, unsupported: p.unsupported, direct: p.direct, 'verified-private': p.privateRoute, blocked: p.blocked, locked: p.locked, unlocked: p.unlocked, 'authenticated-encryption': p.authenticated, available: p.available };
+  const reasons: Readonly<Record<PrivacyReason, string>> = { 'not-observed': p.notObserved, observed: p.observedReason, expired: p.expired, 'invalid-observation': p.invalid, 'scope-changed': p.scopeChanged, 'clock-reversed': p.clockReversed, 'policy-blocked': p.policyBlocked, unavailable: p.unavailable };
+  const sources = { none: p.none, 'local-vault': p.localVault, 'transport-policy': p.transport, 'messaging-provider': p.messagingProvider, 'proof-provider': p.proofProvider };
+  const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel, update: p.update, wallet: p.wallet };
   const [, refresh] = useState(0);
   const activeSubscription = useRef<PrivacyStatusTransport | null>(null);
   const [subscription, setSubscription] = useState<{ readonly transport: PrivacyStatusTransport; readonly ready: boolean } | null>(null);
+  const activeEndpoints = useRef<PrivacyStatusEndpoints | null>(null);
+  const [endpointSubscription, setEndpointSubscription] = useState<{readonly endpoints:PrivacyStatusEndpoints;readonly ready:boolean}|null>(null);
+  useEffect(() => {
+    if (!endpoints) return;
+    let active=true, off:(()=>void)|undefined;
+    try {
+      const unsubscribe=endpoints.subscribeInvalidation(()=>{if(active)refresh(value=>value+1);});
+      if(typeof unsubscribe!=='function')throw new Error();
+      off=unsubscribe;activeEndpoints.current=endpoints;setEndpointSubscription({endpoints,ready:true});
+    }catch{setEndpointSubscription({endpoints,ready:false});}
+    return()=>{active=false;activeEndpoints.current=null;try{off?.();}catch{/* No stale observer can publish. */}};
+  },[endpoints]);
   useEffect(() => {
     if (!transport) return;
     let active = true;
@@ -41,6 +55,7 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
   // State can retain a formerly-ready broker across A → null → A. The active
   // lease must also match: a new registration may fail or exhaust its limit.
   const liveTransport = subscription?.transport === transport && subscription.ready && activeSubscription.current === transport ? transport : null;
+  const liveEndpoints=endpointSubscription!==null&&endpointSubscription.endpoints===endpoints&&endpointSubscription.ready&&activeEndpoints.current===endpoints?endpoints:null;
   const observations = useMemo(() => services ? {
     get generation() { return services.selectionScope(); },
     read() {
@@ -51,13 +66,13 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
     },
   } : undefined, [services]);
   // Readers retain no subscriptions/resources; the effect above owns the broker observer.
-  const localReader = useMemo(() => createPrivacyViewReader({ monotonicNow: clock, ...(observations ? { observations } : {}) }), [observations]);
+  const localReader = useMemo(() => createPrivacyViewReader({ monotonicNow: clock, ...(observations ? { observations } : {}), ...(liveEndpoints ? {endpoints:liveEndpoints} : {}) }), [observations,liveEndpoints]);
   const reader = useMemo(() => createPrivacyViewReader({ monotonicNow: clock, ...(observations ? { observations } : {}),
-    ...(liveTransport ? { transport: liveTransport } : {}) }), [observations, liveTransport]);
+    ...(liveTransport ? { transport: liveTransport } : {}), ...(liveEndpoints ? {endpoints:liveEndpoints} : {}) }), [observations, liveTransport, liveEndpoints]);
   const expectedScope = services ? scope : undefined;
   let transportError = subscription?.transport === transport && !subscription.ready;
   const inspect = () => {
-    if (!liveTransport) return localReader.buildPrivacyView(null, expectedScope);
+    if (!liveTransport) return reader.buildPrivacyView(null, expectedScope);
     try {
       const generation = liveTransport.generation, mode = liveTransport.mode;
       if (!Number.isSafeInteger(generation) || generation < 0 || (mode !== 'ordinary' && mode !== 'strict')) throw new Error();
@@ -70,9 +85,10 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
     }
   };
   const result = inspect();
-  const expiresAt = result.ok ? result.value.vault.expiresAt : null;
+  const deadlines=result.ok?[result.value.vault.expiresAt,result.value.endpointDetails.expiresAt].filter((value):value is number=>value!==null):[];
+  const expiresAt=deadlines.length?Math.min(...deadlines):null;
   useEffect(() => {
-    if (!services && !transport) return;
+    if (!services && !transport && !endpoints) return;
     let active = true;
     const inspect = () => { if (active) refresh(value => value + 1); };
     const visible = () => { if (document.visibilityState === 'visible') inspect(); };
@@ -86,7 +102,7 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
       document.removeEventListener('visibilitychange', visible);
       window.removeEventListener('pageshow', inspect);
     };
-  }, [services, scope, transport, expiresAt]);
+  }, [services, scope, transport, endpoints, expiresAt]);
   function indicator(label: string, item: PrivacyIndicator<string>, selected?: string) {
     return <li key={label}><h3>{label}</h3><dl>
       {selected ? <><dt>{p.selected}</dt><dd>{selected}</dd></> : null}
@@ -100,6 +116,7 @@ export function PrivacyStatusPanel({ services = null, scope, transport = null }:
     {transportError ? <p role="status">{p.error}</p> : null}
     {result.ok ? <ul>{result.value.routes.map(item => indicator(channels[item.channel], item, item.selectedPolicy === 'ordinary' ? p.ordinary : item.selectedPolicy === 'strict' ? p.strict : p.noPolicy))}
       {indicator(p.vault, result.value.vault)}{indicator(p.messaging, result.value.messaging)}{indicator(p.proof, result.value.proof)}</ul> : <p role="status">{p.error}</p>}
+    {result.ok ? <PrivacyStatusDetails details={result.value.endpointDetails} /> : null}
     <h3>{p.chainTitle}</h3><p>{p.chainWarning}</p><h3>{p.fiatTitle}</h3><p>{p.fiatWarning}</p><p className="warning">{p.authorityWarning}</p>
   </section>;
 }

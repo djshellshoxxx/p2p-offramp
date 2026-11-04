@@ -122,6 +122,140 @@ async function assertSeedPreserved(page) {
   }), fixture.envelope);
   assert.equal(same, true, 'Recovery failures must preserve the original encrypted fixture');
 }
+
+/** Actual compiled consumer; the observer is never imported or called by this fixture. */
+async function probeLocalScreenCounts(origin) {
+  const native = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'],
+    ignoreDefaultArgs: ['--disable-back-forward-cache'] });
+  try {
+    const context = await native.newContext({ serviceWorkers: 'block', acceptDownloads: true });
+    await context.addInitScript(instrument);
+    await context.addInitScript(() => {
+      window.__analyticsLifecycle = { hides: [], shows: [] };
+      addEventListener('pagehide', event => window.__analyticsLifecycle.hides.push(event.persisted));
+      addEventListener('pageshow', event => window.__analyticsLifecycle.shows.push(event.persisted));
+    });
+    await context.route('**/*', route => {
+      if (new URL(route.request().url()).origin === origin) return route.continue();
+      unexpected.push('UNEXPECTED_ANALYTICS_REQUEST'); return route.abort();
+    });
+    await context.routeWebSocket('**/*', socket => { unexpected.push('UNEXPECTED_ANALYTICS_SOCKET'); socket.close(); });
+    const page = await context.newPage(); let pageErrors = 0, downloads = 0;
+    page.on('pageerror', () => { pageErrors++; }); page.on('download', () => { downloads++; });
+    const href = origin + '/analytics-fixture/?profile=PRIVATE_ANALYTICS_QUERY_20261102';
+    const panel = page.locator('section[aria-labelledby="local-screen-counts-title"]');
+    const frame = () => page.evaluate(() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))));
+    const counts = async () => (await panel.locator('tbody td').allTextContents()).map(Number);
+    const expectCounts = async expected => {
+      await page.waitForFunction(expected => JSON.stringify([...document.querySelectorAll('section[aria-labelledby="local-screen-counts-title"] tbody td')].map(node => Number(node.textContent))) === JSON.stringify(expected), expected);
+      assert.deepEqual(await counts(), expected);
+    };
+    const settings = async () => { await page.getByRole('navigation').getByRole('link', { name: 'Settings', exact: true }).click(); await panel.waitFor(); await frame(); };
+    const durable = () => page.evaluate(async () => {
+      const databases = [];
+      for (const info of (await indexedDB.databases()).sort((a, b) => a.name < b.name ? -1 : 1)) {
+        const db = await new Promise((done, fail) => { const request = indexedDB.open(info.name); request.onsuccess = () => done(request.result); request.onerror = fail; });
+        try {
+          const stores = [];
+          for (const name of [...db.objectStoreNames].sort()) {
+            const rows = await new Promise((done, fail) => { const tx = db.transaction(name), request = tx.objectStore(name).getAll(); request.onsuccess = () => done(request.result); request.onerror = fail; });
+            stores.push({ name, rows });
+          }
+          databases.push({ name: info.name, version: db.version, stores });
+        } finally { db.close(); }
+      }
+      return JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage }, caches: await caches.keys(), databases });
+    });
+    await page.goto(href + '#/settings');
+    await page.getByRole('button', { name: 'Refresh vault status', exact: true }).waitFor(); await panel.waitFor();
+    // Recovery's native inventory creates the existing empty vault schema. Establish it
+    // with counting still off so the complete durable snapshot can stay byte-exact below.
+    await page.getByRole('navigation').getByRole('link', { name: 'Recovery', exact: true }).click();
+    await page.getByText('No local profiles exist on this origin yet. Create or restore one first.', { exact: true }).first().waitFor();
+    await settings();
+    await expectCounts([0, 0, 0, 0, 0]);
+    const persistedBefore = await durable(), operationsBefore = await page.evaluate(() => [...window.__observed.operations]);
+    assert.equal(await panel.locator('#local-screen-counts-export').count(), 0); assert.equal(downloads, 0);
+    await panel.locator('#local-screen-counts-opt-in').click(); await expectCounts([0, 0, 0, 0, 1]);
+    await page.evaluate(() => { dispatchEvent(new HashChangeEvent('hashchange')); dispatchEvent(new Event('online')); });
+    await frame(); await expectCounts([0, 0, 0, 0, 1]);
+    assert.deepEqual(await page.evaluate(() => window.__observed.operations), operationsBefore, 'consent and duplicate commits add no Worker IPC');
+    await page.getByRole('navigation').getByRole('link', { name: 'Offers', exact: true }).click(); await frame(); await settings();
+    await expectCounts([0, 1, 0, 0, 2]);
+    for (const id of ['PRIVATE_TRADE_ALPHA_20261102', 'PRIVATE_TRADE_BETA_20261102']) {
+      await page.evaluate(id => { location.hash = '#/trade/' + id; }, id);
+      await page.getByRole('heading', { level: 1, name: 'Trade review', exact: true }).waitFor(); await frame();
+    }
+    await settings(); await expectCounts([0, 1, 1, 0, 3]);
+    await page.getByRole('navigation').getByRole('link', { name: 'Recovery', exact: true }).click(); await frame();
+    await page.getByRole('navigation').getByRole('link', { name: 'Home', exact: true }).click(); await frame();
+    await settings(); await expectCounts([1, 1, 1, 1, 4]);
+    await page.evaluate(() => { location.hash = '#/PRIVATE_UNKNOWN_ANALYTICS_ROUTE'; });
+    await page.getByRole('heading', { level: 1, name: 'Page unavailable', exact: true }).waitFor(); await frame();
+    await settings(); await expectCounts([1, 1, 1, 1, 5]);
+    const operationsBeforeExport = await page.evaluate(() => [...window.__observed.operations]);
+    await panel.locator('#local-screen-counts-review').click();
+    const text = await panel.locator('#local-screen-counts-export').inputValue();
+    assert.ok(Buffer.byteLength(text) <= 1024);
+    assert.deepEqual(JSON.parse(text), { format: 'p2p-offramp/local-screen-counts/v1', counts: { home: 1, offers: 1, trade: 1, recovery: 1, settings: 5 } });
+    assert.doesNotMatch(text, /PRIVATE|profile|tradeId|url|timestamp|duration|release|session|label/i);
+    assert.equal(downloads, 0, 'review is never an automatic download');
+    const ready = page.waitForEvent('download'); await panel.locator('#local-screen-counts-download').click(); const download = await ready;
+    assert.equal(download.suggestedFilename(), 'p2p-offramp-screen-counts.json'); assert.equal((await readFile(await download.path(), 'utf8')), text);
+    assert.equal(downloads, 1);
+    assert.equal(await durable(), persistedBefore, 'analytics changes no local/session/cache/IndexedDB bytes or schema');
+    assert.deepEqual(await page.evaluate(() => window.__observed.operations), operationsBeforeExport, 'analytics review/download add no Worker IPC');
+    await panel.locator('#local-screen-counts-clear').click(); await expectCounts([0, 0, 0, 0, 0]);
+    assert.equal(await panel.locator('#local-screen-counts-export').count(), 0);
+    await page.getByRole('navigation').getByRole('link', { name: 'Home', exact: true }).click(); await settings(); await expectCounts([0, 0, 0, 0, 0]);
+    await panel.locator('#local-screen-counts-opt-in').click(); await expectCounts([0, 0, 0, 0, 1]);
+    await panel.locator('#local-screen-counts-opt-out').click(); await expectCounts([0, 0, 0, 0, 0]);
+    await panel.locator('#local-screen-counts-opt-in').click(); await panel.locator('#local-screen-counts-review').click();
+    await page.evaluate(() => {
+      const create = URL.createObjectURL, revoke = URL.revokeObjectURL;
+      window.__analyticsBlobs = { created: 0, revoked: 0 };
+      URL.createObjectURL = blob => { const url = create(blob); window.__analyticsBlobs.created++; dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true })); return url; };
+      URL.revokeObjectURL = url => { window.__analyticsBlobs.revoked++; return revoke(url); };
+      window.__restoreAnalyticsFileHelpers = () => { URL.createObjectURL = create; URL.revokeObjectURL = revoke; };
+    });
+    await panel.locator('#local-screen-counts-download').click(); await frame();
+    assert.equal(downloads, 1, 'retirement in a file helper invalidates the exact preview before click');
+    assert.deepEqual(await page.evaluate(() => window.__analyticsBlobs), { created: 1, revoked: 1 });
+    await page.evaluate(() => { window.__restoreAnalyticsFileHelpers(); dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })); });
+    await panel.locator('#local-screen-counts-opt-in').waitFor(); await expectCounts([0, 0, 0, 0, 0]);
+    // Actual native BFCache, separately from the preceding controlled lifecycle boundary.
+    await panel.locator('#local-screen-counts-opt-in').click(); await panel.locator('#local-screen-counts-review').click();
+    await page.evaluate(() => { window.__analyticsCacheMarker = 'PUBLIC_CACHED_DOCUMENT'; });
+    const showsBeforeCache = await page.evaluate(() => window.__analyticsLifecycle.shows.length);
+    await page.goto(origin + '/analytics-away.html'); await page.goBack({ waitUntil: 'commit' });
+    await page.waitForFunction(before => window.__analyticsCacheMarker === 'PUBLIC_CACHED_DOCUMENT' && window.__analyticsLifecycle.shows.length === before + 1 && window.__analyticsLifecycle.shows.at(-1) === true && window.__analyticsLifecycle.hides.at(-1) === true, showsBeforeCache);
+    await panel.locator('#local-screen-counts-opt-in').waitFor(); await expectCounts([0, 0, 0, 0, 0]);
+    assert.equal(await panel.locator('#local-screen-counts-export').count(), 0);
+    // Actual native profile ownership changes, not a cosmetic lock flag.
+    await page.getByRole('navigation').getByRole('link', { name: 'Home', exact: true }).click(); await seed(page);
+    await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+    await page.getByLabel('Profile ID', { exact: true }).fill(fixture.envelope.profileId); await page.getByLabel('Passphrase', { exact: true }).fill(fixture.passphrase);
+    await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click(); await page.getByText('Vault unlocked', { exact: true }).waitFor();
+    await settings(); await panel.locator('#local-screen-counts-opt-in').click(); await panel.locator('#local-screen-counts-review').click();
+    await page.getByRole('button', { name: 'Lock vault', exact: true }).click(); await page.getByText('Vault locked', { exact: true }).waitFor();
+    await panel.locator('#local-screen-counts-opt-in').waitFor(); await expectCounts([0, 0, 0, 0, 0]);
+    assert.equal(await panel.locator('#local-screen-counts-export').count(), 0); await assertSeedPreserved(page);
+    await panel.locator('#local-screen-counts-opt-in').click(); await panel.locator('#local-screen-counts-review').click();
+    for (const width of [320, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'analytics controls/export fit the existing layout');
+    }
+    await panel.locator('#local-screen-counts-download').focus(); assert.equal(await panel.locator('#local-screen-counts-download').evaluate(node => document.activeElement === node), true);
+    await page.reload(); await page.getByRole('button', { name: 'Refresh vault status', exact: true }).waitFor();
+    await panel.locator('#local-screen-counts-opt-in').waitFor(); await expectCounts([0, 0, 0, 0, 0]);
+    const actual = await assertPrivateSurfaces(page, href + '#/settings'); assert.equal(actual.networkCalls, 0); assert.equal(pageErrors, 0);
+    reports.push({ localScreenCounts: true, foregroundCategoryNavigation: true, sameCategoryPrivateIdsNotCounted: true,
+      noQueryOrIdentifierExport: true, explicitBoundedDownload: true, noPersistenceOrWorkerIpc: true, nativeProfileLockErasure: true,
+      reentrantFileHelperRetirement: true, actualBfCacheErasure: true, reloadRequiresFreshConsent: true, ordinaryVisibilityPolicy: 'unit-tested; headless tabs all report visible',
+      bfcacheFixture: 'same emitted meta bytes at an owned cacheable prefix; only Playwright disable-BFCache argument omitted', deviceAcceptance: false });
+    await context.close();
+  } finally { await native.close(); }
+}
 try {
   const outputs = {};
   for (const delivery of ['meta', 'header']) {
@@ -144,6 +278,10 @@ try {
   server = createServer((request, response) => {
     response.setHeader('Cache-Control', 'no-store'); response.setHeader('X-Content-Type-Options', 'nosniff');
     const url = new URL(request.url ?? '/', 'http://127.0.0.1'), path = url.pathname;
+    if (path === '/analytics-away.html') {
+      response.setHeader('Cache-Control', 'private,max-age=3600'); response.setHeader('Content-Type', 'text/html');
+      response.end('<!doctype html><title>Owned analytics history target</title><h1>Owned history target</h1>'); return;
+    }
     const delivery = path.startsWith('/header/') ? 'header' : 'meta';
     if (delivery === 'header') for (const [name, value] of Object.entries(offlinePolicy('header').headers)) response.setHeader(name, value);
     const localPath = delivery === 'header' ? path.slice('/header'.length) : path;
@@ -152,7 +290,8 @@ try {
       response.end(`(${probeActualPolicy.toString()})(${JSON.stringify(forbiddenOrigin)});`); return;
     }
 
-    const base = bases.find(candidate => localPath.startsWith(candidate));
+    if (localPath.startsWith('/analytics-fixture/')) response.setHeader('Cache-Control', 'private,max-age=3600');
+    const base = (localPath.startsWith('/analytics-fixture/') ? ['/analytics-fixture/'] : bases).find(candidate => localPath.startsWith(candidate));
     const relative = base === undefined ? undefined : localPath.slice(base.length) || 'index.html';
     const target = relative === undefined ? '' : resolve(outputs[delivery], relative);
     if (relative === undefined || !target.startsWith(outputs[delivery] + sep) || !/\.(?:html|js|css|json)$/.test(target)) { response.writeHead(404); response.end(); return; }
@@ -410,6 +549,90 @@ try {
       await page.getByText('Vault unlocked', { exact: true }).waitFor();
       const createdId = /Profile ([0-9a-f]{32}) was created/.exec(await page.getByRole('status').filter({ hasText: 'was created and unlocked' }).innerText())?.[1];
       assert.ok(createdId && ![restoredId, fixture.envelope.profileId].includes(createdId));
+      // T34: authenticate actual selected file bytes against the open profile; no export/unlock/restore flag.
+      await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      const verificationForm = page.getByRole('form', { name: 'Authenticate a backup file against this profile', exact: true });
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      const exportCreated = async () => {
+        await page.getByLabel('Profile ID', { exact: true }).fill(createdId);
+        await page.getByLabel(/encrypted export is unchecked/).check();
+        const ready = page.waitForEvent('download');
+        await page.getByRole('button', { name: 'Download unchecked encrypted backup', exact: true }).click();
+        return await (await ready).path();
+      };
+      const createdBackupPath = await exportCreated();
+      const verifySelected = async (path, passphrase) => {
+        await verificationForm.getByLabel('Backup file to authenticate', { exact: true }).setInputFiles(path);
+        await verificationForm.getByLabel('Passphrase for this backup file', { exact: true }).fill(passphrase);
+        await verificationForm.getByRole('button', { name: 'Verify this backup file', exact: true }).click();
+      };
+      await verifySelected(await download.path(), fixture.passphrase);
+      await verificationForm.getByRole('alert').filter({ hasText: 'does not match the open profile' }).waitFor();
+      await verifySelected(createdBackupPath, 'wrong but valid backup passphrase');
+      await verificationForm.getByRole('alert').filter({ hasText: 'could not be authenticated' }).waitFor();
+      assert.equal(await verificationForm.getByLabel('Passphrase for this backup file', { exact: true }).inputValue(), '');
+      await verifySelected(createdBackupPath, createPass);
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 0` }).waitFor();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 0` }).waitFor();
+      // A second real Worker on a second page changes that same committed encrypted profile.
+      const writerPage = await context.newPage();
+      await writerPage.goto(href + '#/home');
+      const mutation = await writerPage.evaluate(async ({ profileId, passphrase }) => {
+        const url = window.__observed.workers[0].url, worker = new Worker(url, { type: 'module' });
+        let sequence = 0;
+        const call = (operation, fields = {}) => new Promise((resolve, reject) => {
+          const requestId = ++sequence;
+          const listener = event => {
+            if (event.data.requestId !== requestId) return;
+            worker.removeEventListener('message', listener);
+            if (!event.data.result?.ok) reject(new Error('FIXTURE_BACKUP_MUTATION_FAILED')); else resolve(event.data.result.value);
+          };
+          worker.addEventListener('message', listener);
+          worker.postMessage({ version: 1, requestId, generation: 0, operation, ...fields });
+        });
+        try {
+          await call('init', { config: { version: 1, ReleaseEnabled: 0, connectOrigins: [] } });
+          await call('unlock', { profileId, passphrase });
+          await call('saveTermsReview', { profileId, source: 'file', bytes: new Uint8Array([1]) });
+          return true;
+        } finally { worker.terminate(); }
+      }, { profileId: createdId, passphrase: createPass });
+      assert.equal(mutation, true); await writerPage.close();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      assert.equal(await verificationForm.getByText(/Backup file authenticated against profile/).count(), 0, 'cross-tab freshness failure clears display receipt');
+      const openCreated = async () => {
+        await page.getByRole('link', { name: 'Home', exact: true }).click();
+        await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).click();
+        await page.getByLabel('Profile ID', { exact: true }).fill(createdId);
+        await page.getByLabel('Passphrase', { exact: true }).fill(createPass);
+        await page.getByRole('button', { name: 'Unlock local vault', exact: true }).click();
+        await page.getByText('Vault unlocked', { exact: true }).waitFor();
+        await page.getByRole('link', { name: 'Recovery', exact: true }).click();
+      };
+      await openCreated();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      await verifySelected(createdBackupPath, createPass);
+      await verificationForm.getByRole('alert').filter({ hasText: 'does not match the open profile' }).waitFor();
+      const latestBackupPath = await exportCreated();
+      await verifySelected(latestBackupPath, createPass);
+      await verificationForm.getByRole('status').filter({ hasText: `profile ${createdId}, revision 1` }).waitFor();
+      await page.evaluate(() => { window.__observed.holdReplies = ['verifyBackup']; });
+      await verifySelected(latestBackupPath, createPass);
+      await page.waitForFunction(() => window.__observed.heldReplies.verifyBackup?.length === 1);
+      await verificationForm.getByRole('button', { name: 'Cancel verification', exact: true }).click();
+      await page.getByText('Vault locked', { exact: true }).waitFor();
+      await page.evaluate(() => window.__observed.releaseReply('verifyBackup'));
+      assert.equal(await verificationForm.getByText(/Backup file authenticated against profile/).count(), 0, 'late native success cannot restore cancelled verification');
+      await openCreated();
+      await verificationForm.getByRole('button', { name: 'Recheck verified revision', exact: true }).click();
+      await verificationForm.getByText('No authenticated backup verification is held for this profile selection.', { exact: true }).waitFor();
+      await page.getByRole('link', { name: 'Home', exact: true }).click();
+      await assertSeedPreserved(page);
+      reports.push({ backupVerification: true, currentProfileRevision: true, wrongFileAndPassphrase: true, crossTabStaleCheck: true, lateCancelledVerification: true, noBackupReadinessFromExportUnlockRestore: true });
       await page.getByRole('button', { name: 'Lock vault', exact: true }).click();
       await page.getByText('Vault locked', { exact: true }).waitFor();
       // Inventory lists all four opaque IDs; choosing one fills the editable field.
@@ -485,6 +708,48 @@ try {
     reports.push({ delivery, base, widths: [320, 768, 1024, 1440], hashReload: true, lockedBoot: true, hostileRouteAndTextbox: true });
     await page.close();
   }
+  // Compatibility is startup guidance only: absent optional APIs never request permission or block core.
+  for (const mode of ['missing-file-export', 'optional-absent', 'runtime-constructor-failure']) {
+    const page = await context.newPage();
+    await page.addInitScript(mode => {
+      window.__compatPermissions = 0; window.__compatWorkerAttempts = 0;
+      const forbidden = () => { window.__compatPermissions++; throw Error('PRIVATE permission probe'); };
+      Object.defineProperty(navigator, 'permissions', { configurable: true, value: { query: forbidden } });
+      Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: mode === 'optional-absent' ? undefined : { getUserMedia: forbidden } });
+      Object.defineProperty(navigator, 'share', { configurable: true, value: mode === 'optional-absent' ? undefined : forbidden });
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: mode === 'optional-absent' ? undefined : { writeText: forbidden } });
+      if (mode === 'missing-file-export') Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: undefined });
+      if (mode === 'runtime-constructor-failure') {
+        // Methods are present, so only the existing runtime's actual construction can find this failure.
+        window.Worker = class {
+          constructor() { window.__compatWorkerAttempts++; throw Error('PRIVATE worker construction failure'); }
+          postMessage() {} terminate() {}
+        };
+      }
+    }, mode);
+    await page.goto(origin + '/#/home');
+    if (mode === 'optional-absent') {
+      await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).waitFor();
+      assert.equal(await page.locator('#startup-compatibility-title').count(), 0, 'normal startup has no distracting API detail table');
+    } else {
+      await page.getByRole('alert').waitFor();
+      await page.getByRole('heading', { level: 2, name: mode === 'missing-file-export' ? 'Read-only browser mode' : 'Recovery remains available', exact: true }).waitFor();
+      if (mode === 'missing-file-export') await page.getByText('Missing or unavailable: encrypted file download.', { exact: true }).waitFor();
+      await page.getByText('This local feature check does not verify wallet or device support. Browser storage can still be blocked or lost.', { exact: true }).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'Unlock existing profile', exact: true }).count(), 0);
+      await page.getByRole('link', { name: 'Read recovery guidance', exact: true }).click();
+      await page.getByRole('heading', { level: 1, name: 'Recovery', exact: true }).waitFor();
+    }
+    const actual = await assertPrivateSurfaces(page, origin + (mode === 'optional-absent' ? '/#/home' : '/#/recovery'));
+    assert.equal(actual.networkCalls, 0); assert.equal(actual.workers.length, mode === 'optional-absent' ? 1 : 0);
+    const counters = await page.evaluate(() => ({ permissions: window.__compatPermissions, attempts: window.__compatWorkerAttempts,
+      privateErrorVisible: document.documentElement.outerHTML.includes('PRIVATE') }));
+    assert.equal(counters.permissions, 0); assert.equal(counters.attempts, mode === 'runtime-constructor-failure' ? 1 : 0);
+    assert.equal(counters.privateErrorVisible, false);
+    reports.push({ mode, startupCompatibility: true, readonlyRecovery: mode !== 'optional-absent', noPermissionOrWalletPrompt: true,
+      actualRuntimeFailurePreserved: mode === 'runtime-constructor-failure', deviceQualification: false });
+    await page.close();
+  }
   // Apply negative probes to the actual generated policy and actual served artifact, rather than
   // interpreting a configuration object as browser enforcement evidence.
   for (const delivery of ['meta', 'header']) {
@@ -528,6 +793,7 @@ try {
     const reader = await context.newPage(); await reader.goto(origin + '/'); await assertSeedPreserved(reader); await reader.close();
     reports.push({ mode, encryptedSourcePreserved: true });
   }
+  await probeLocalScreenCounts(origin);
   assert.equal(forbiddenRequests, 0); assert.deepEqual(unexpected, []);
   await context.close();
   console.log(JSON.stringify({ fixture: 'emitted-react-vite-shell-local-chromium', browser: browser.version(), reports,
