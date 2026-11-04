@@ -1,0 +1,94 @@
+{
+  "task": "T72",
+  "reviewer": "root (different from author audit_domain_transport)",
+  "disposition": "APPROVED_STRUCTURAL_UNVERIFIED_PARSERS_ONLY",
+  "files": [
+    {
+      "path": "packages/proof-inputs/README.md",
+      "sha256": "4c1f20ffe1f6afcc40d495387e60d24eed4f204f27f9705e8345837d9a358b82"
+    },
+    {
+      "path": "packages/proof-inputs/index.ts",
+      "sha256": "15d9ced6a869e041bd9ead3e526dc079b24b55c8f407869b20fc0f1b88dda8d7"
+    },
+    {
+      "path": "packages/proof-inputs/src/boundary.ts",
+      "sha256": "5ff8b953ee99c265aa5096291378783f9aee60f6637595bda73c1e22f018cca5"
+    },
+    {
+      "path": "packages/proof-inputs/src/parsers.ts",
+      "sha256": "d684a9833d98c801a11af1747bc29fd5155aed6d5c9123cf0f2b03fb99903209"
+    },
+    {
+      "path": "packages/proof-inputs/src/types.ts",
+      "sha256": "0b72bb663bfa47ae2ba9879e0928e77d44115eb9791cc55adb3400e614e6c895"
+    },
+    {
+      "path": "packages/proof-inputs/test/parsers.test.mjs",
+      "sha256": "c019ae90294909311ba2694748603086de0804d748bd00aea30dbf812163a80b"
+    },
+    {
+      "path": "packages/proof-inputs/tsconfig.json",
+      "sha256": "f0f3ce56368c9f1fef41e9d370d7f55e1c4d4fc014a78aac9bd821788384d8d8"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "b2fcb768180ee40b2227db0369c3216298e00c6d1cd9313fe4b0a22081aa6c87"
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89"
+    }
+  ],
+  "review": "Read all seven files and exact witness/statement/advisory normative schemas; inspected reused strict JSON/TradeBinding/error contracts. Checked native view copying/wiping, UTF-8/local bounds, exact comparisons and unverified flags.",
+  "verification": {
+    "ordinaryCases": 15,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "strictPackageTypes": true,
+    "extraProbe": "{\"unicodeBoundaryPairs\":76,\"nestedGetterCalls\":0,\"lateDetachRefused\":true,\"authority\":false}",
+    "logs": [
+      {
+        "path": "/workspace/work/t72-root-focused.log",
+        "sha256": "561d75bb36b402faaffc6decc75264883a5f7c7590aaeb307125e60e58af8ee6"
+      },
+      {
+        "path": "/workspace/work/t72-root-types.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/workspace/work/t72-root-adversarial.log",
+        "sha256": "a4196143df36c5f8ff2fd696362c601e5befaa7a403eeca02aa4ed6640589f51"
+      }
+    ]
+  },
+  "limits": [
+    "Empty semantic catalogs; structural parsing authenticates no source, field coverage, proof, receipt or economic command.",
+    "Opaque crypto fields and local safety bounds are not a negotiated interoperability profile.",
+    "No bank/provider/rail/circuit/nullifier or native G30 transition selected.",
+    "New T67/T68 dependencies require final composition checks; approval binds listed bytes."
+  ]
+}

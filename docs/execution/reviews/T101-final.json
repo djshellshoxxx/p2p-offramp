@@ -1,0 +1,585 @@
+{
+  "task": "T101 independent narrow CI scalar repair review",
+  "verdict": "APPROVE_TWO_FILE_SYNTAX_ONLY_REPAIR",
+  "capturedAtUtc": "2026-11-02T19:23:08.584033+00:00",
+  "baseHead": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+  "yamlVersion": "6.0.3",
+  "parser": "PyYAML BaseLoader subclass rejects duplicate keys and preserves on as a string key; no arbitrary object construction",
+  "exactChangedTrackedFiles": [
+    ".github/workflows/specifications.yml",
+    ".github/workflows/vault-foundation.yml"
+  ],
+  "workflows": [
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "oldSha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684",
+      "currentSha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684",
+      "parsed": true,
+      "duplicateKeyCheck": true,
+      "triggerEvents": [
+        "push",
+        "pull_request"
+      ],
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": [
+        "forge",
+        "local-trade"
+      ],
+      "actionPins": [
+        {
+          "job": "forge",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "forge",
+          "step": 1,
+          "uses": "foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf"
+        },
+        {
+          "job": "local-trade",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "local-trade",
+          "step": 1,
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+        },
+        {
+          "job": "local-trade",
+          "step": 2,
+          "uses": "foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf"
+        },
+        {
+          "job": "local-trade",
+          "step": 12,
+          "uses": "browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce"
+        }
+      ],
+      "commands": [
+        {
+          "job": "forge",
+          "step": 2,
+          "name": null,
+          "run": "forge --version"
+        },
+        {
+          "job": "forge",
+          "step": 3,
+          "name": null,
+          "run": "forge build --sizes"
+        },
+        {
+          "job": "forge",
+          "step": 4,
+          "name": null,
+          "run": "forge test -vvv"
+        },
+        {
+          "job": "forge",
+          "step": 5,
+          "name": "Verify committed ABI is current",
+          "run": "bash script/export-abi.sh\ngit diff --exit-code -- abi/BasicEscrow.json\n"
+        },
+        {
+          "job": "local-trade",
+          "step": 3,
+          "name": null,
+          "run": "npm ci --ignore-scripts"
+        },
+        {
+          "job": "local-trade",
+          "step": 4,
+          "name": null,
+          "run": "npm run test:evm:local"
+        },
+        {
+          "job": "local-trade",
+          "step": 5,
+          "name": null,
+          "run": "npm run test:exchange:evm"
+        },
+        {
+          "job": "local-trade",
+          "step": 6,
+          "name": null,
+          "run": "npm run test:payment:preflight"
+        },
+        {
+          "job": "local-trade",
+          "step": 7,
+          "name": null,
+          "run": "npm run test:evm:reconcile"
+        },
+        {
+          "job": "local-trade",
+          "step": 8,
+          "name": null,
+          "run": "npm run test:recovery:evm"
+        },
+        {
+          "job": "local-trade",
+          "step": 9,
+          "name": null,
+          "run": "npm run test:sepolia:kit"
+        },
+        {
+          "job": "local-trade",
+          "step": 10,
+          "name": null,
+          "run": "npm run test:sepolia:trade"
+        },
+        {
+          "job": "local-trade",
+          "step": 11,
+          "name": null,
+          "run": "npm run test:eip1271:local"
+        },
+        {
+          "job": "local-trade",
+          "step": 13,
+          "name": null,
+          "run": "npm run test:journey:browser"
+        },
+        {
+          "job": "local-trade",
+          "step": 14,
+          "name": null,
+          "run": "npm run test:retention:browser"
+        }
+      ],
+      "stepGateOptions": [],
+      "changed": false,
+      "unchangedFromPrior": true
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "oldSha256": "66d31387cf7572a6d968783027ab97d176ceccfcbf5a72cdbfe22803b18b31cc",
+      "currentSha256": "b5ba93ec49551f59d47c39eb11b84739ad254f1438bca6ea769d9cc9fd3500a4",
+      "parsed": true,
+      "duplicateKeyCheck": true,
+      "triggerEvents": [
+        "push",
+        "pull_request"
+      ],
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": [
+        "inventory"
+      ],
+      "actionPins": [
+        {
+          "job": "inventory",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "inventory",
+          "step": 1,
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065"
+        }
+      ],
+      "commands": [
+        {
+          "job": "inventory",
+          "step": 2,
+          "name": "Install pinned independent crypto oracle",
+          "run": "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n"
+        },
+        {
+          "job": "inventory",
+          "step": 3,
+          "name": null,
+          "run": "python -m unittest discover -s scripts/tests -v"
+        },
+        {
+          "job": "inventory",
+          "step": 4,
+          "name": "Validate expanded structure, local links and catalog coverage",
+          "run": "python scripts/spec_audit.py --check"
+        },
+        {
+          "job": "inventory",
+          "step": 5,
+          "name": "Verify committed inventory is current",
+          "run": "python scripts/spec_audit.py --markdown docs/SPEC_READINESS.md\ngit diff --exit-code -- docs/SPEC_READINESS.md\n"
+        }
+      ],
+      "stepGateOptions": [],
+      "changed": true,
+      "priorParseFailure": {
+        "class": "ScannerError",
+        "problem": "mapping values are not allowed here",
+        "line": 16,
+        "column": 125
+      },
+      "exactOnlyScalarSyntaxDelta": true,
+      "reverseSyntaxRestoresPriorBytes": true,
+      "quotedPriorSemanticReferenceEqualsCurrent": true,
+      "oracleCommand": "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n",
+      "oracleArgv": [
+        "python",
+        "-m",
+        "pip",
+        "--isolated",
+        "install",
+        "--disable-pip-version-check",
+        "--no-cache-dir",
+        "--require-hashes",
+        "--only-binary=:all:",
+        "-r",
+        "scripts/tests/requirements-crypto.txt"
+      ],
+      "literalBlockAppendsOnlyFinalLf": true
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "oldSha256": "6cd74219c7d00d1c69ca78dec308c409ada983e5e4a59c2b836dd53a97223111",
+      "currentSha256": "2fb56fc3aebf73b8279bb6dee8b239de23b4ea4f5c6f7c8bd5ebb7df5641c931",
+      "parsed": true,
+      "duplicateKeyCheck": true,
+      "triggerEvents": [
+        "push",
+        "pull_request"
+      ],
+      "permissions": {
+        "contents": "read"
+      },
+      "jobs": [
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs"
+      ],
+      "actionPins": [
+        {
+          "job": "local-evm",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "local-evm",
+          "step": 1,
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 1,
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 2,
+          "uses": "foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf"
+        },
+        {
+          "job": "browser",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "browser",
+          "step": 1,
+          "uses": "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020"
+        },
+        {
+          "job": "browser",
+          "step": 3,
+          "uses": "browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce"
+        },
+        {
+          "job": "specs",
+          "step": 0,
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262"
+        },
+        {
+          "job": "specs",
+          "step": 1,
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065"
+        }
+      ],
+      "commands": [
+        {
+          "job": "local-evm",
+          "step": 2,
+          "name": null,
+          "run": "npm ci --ignore-scripts"
+        },
+        {
+          "job": "local-evm",
+          "step": 3,
+          "name": null,
+          "run": "npm ci --ignore-scripts --prefix packages/escrow-evm"
+        },
+        {
+          "job": "local-evm",
+          "step": 4,
+          "name": null,
+          "run": "npm run test:escrow"
+        },
+        {
+          "job": "local-evm",
+          "step": 5,
+          "name": null,
+          "run": "npm run test:local-evm"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 3,
+          "name": null,
+          "run": "npm ci --ignore-scripts"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 4,
+          "name": null,
+          "run": "npm run typecheck"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 5,
+          "name": null,
+          "run": "npm run typecheck:optional"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 6,
+          "name": null,
+          "run": "npm test"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 7,
+          "name": null,
+          "run": "npm run test:acceptance:cli"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 8,
+          "name": null,
+          "run": "npm run check:boundaries"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 9,
+          "name": null,
+          "run": "npm run test:build-policy"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 10,
+          "name": null,
+          "run": "npm run test:completion:tools"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 11,
+          "name": null,
+          "run": "npm run test:distribution"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 12,
+          "name": null,
+          "run": "npm run test:diagnostics"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 13,
+          "name": null,
+          "run": "npm run test:fuzz"
+        },
+        {
+          "job": "schemas-and-crypto",
+          "step": 14,
+          "name": null,
+          "run": "npm run build"
+        },
+        {
+          "job": "browser",
+          "step": 2,
+          "name": null,
+          "run": "npm ci --ignore-scripts"
+        },
+        {
+          "job": "browser",
+          "step": 4,
+          "name": null,
+          "run": "npm run test:browser"
+        },
+        {
+          "job": "browser",
+          "step": 5,
+          "name": null,
+          "run": "npm run test:web:browser"
+        },
+        {
+          "job": "browser",
+          "step": 6,
+          "name": null,
+          "run": "npm run test:private:browser"
+        },
+        {
+          "job": "browser",
+          "step": 7,
+          "name": null,
+          "run": "npm run test:locator:browser"
+        },
+        {
+          "job": "browser",
+          "step": 8,
+          "name": null,
+          "run": "npm run test:chat:browser"
+        },
+        {
+          "job": "browser",
+          "step": 9,
+          "name": null,
+          "run": "npm run test:diagnostics:browser"
+        },
+        {
+          "job": "browser",
+          "step": 10,
+          "name": null,
+          "run": "npm run test:recovery:browser"
+        },
+        {
+          "job": "browser",
+          "step": 11,
+          "name": null,
+          "run": "npm run test:locale:browser"
+        },
+        {
+          "job": "browser",
+          "step": 12,
+          "name": null,
+          "run": "npm run test:portal:browser"
+        },
+        {
+          "job": "browser",
+          "step": 13,
+          "name": null,
+          "run": "npm run test:journey:origins"
+        },
+        {
+          "job": "browser",
+          "step": 14,
+          "name": null,
+          "run": "npm run test:distribution:browser"
+        },
+        {
+          "job": "browser",
+          "step": 15,
+          "name": null,
+          "run": "npm run test:proof:browser"
+        },
+        {
+          "job": "browser",
+          "step": 16,
+          "name": null,
+          "run": "npm run test:proof:memory"
+        },
+        {
+          "job": "browser",
+          "step": 17,
+          "name": null,
+          "run": "npm run test:privacy-controls:browser"
+        },
+        {
+          "job": "browser",
+          "step": 18,
+          "name": null,
+          "run": "npm run test:meetup:browser"
+        },
+        {
+          "job": "browser",
+          "step": 19,
+          "name": null,
+          "run": "npm run test:updates:browser"
+        },
+        {
+          "job": "specs",
+          "step": 2,
+          "name": "Install pinned independent crypto oracle",
+          "run": "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n"
+        },
+        {
+          "job": "specs",
+          "step": 3,
+          "name": null,
+          "run": "npm run test:specs"
+        },
+        {
+          "job": "specs",
+          "step": 4,
+          "name": null,
+          "run": "npm run check:specs"
+        }
+      ],
+      "stepGateOptions": [],
+      "changed": true,
+      "priorParseFailure": {
+        "class": "ScannerError",
+        "problem": "mapping values are not allowed here",
+        "line": 118,
+        "column": 125
+      },
+      "exactOnlyScalarSyntaxDelta": true,
+      "reverseSyntaxRestoresPriorBytes": true,
+      "quotedPriorSemanticReferenceEqualsCurrent": true,
+      "oracleCommand": "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n",
+      "oracleArgv": [
+        "python",
+        "-m",
+        "pip",
+        "--isolated",
+        "install",
+        "--disable-pip-version-check",
+        "--no-cache-dir",
+        "--require-hashes",
+        "--only-binary=:all:",
+        "-r",
+        "scripts/tests/requirements-crypto.txt"
+      ],
+      "literalBlockAppendsOnlyFinalLf": true
+    }
+  ],
+  "requirements": {
+    "path": "scripts/tests/requirements-crypto.txt",
+    "sha256": "fd3fcbe314d2f7eae173805009a1b40f214fb8ed839905a98228ec4eebbed911",
+    "unchangedFromPrior": true,
+    "pins": [
+      "cryptography==50.0.0",
+      "cffi==2.1.1",
+      "pycparser==3.0"
+    ],
+    "hashes": [
+      "06a32a980526a6ab9a4b9bf8f7385800791e2bb960903cb6b530e4817509a3b7",
+      "b42a28c1844fd9de8f3f7d540e36b66f3a9c83fceac7170ebc7a6a19edd9dcae",
+      "82148ec5bddac30b51a5b3c1945075f896fa022cb93f8e4a01e9f6ee95292c5f",
+      "a91296cb61e8df6f86d0c19cc4068228da256bf59bf86049fbd821084565327f",
+      "105110f43a471dbd0060b9c9516cb8a6a79233631a04cc2ba16f28323ac6e025",
+      "37fdb0d0111f1e2ff07139dfb79f1b49531f8e213c46f1163dd7642979b58c47",
+      "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+      "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992"
+    ]
+  },
+  "sourceOrDependencyDelta": false,
+  "skipGatePermissionActionPinDelta": false,
+  "runtimeInstallerOrSuiteExecuted": false,
+  "findings": [],
+  "limits": [
+    "This independently establishes YAML parsing and exact existing job/step/permission/action-pin/command preservation, not fresh hosted workflow creation or passing CI. Root owns commit/push and exact-head hosted readback.",
+    "The old scalars were invalid YAML. A quote-only synthetic parse reference was used solely to compare their intended command and unchanged surrounding data with the new literal scalar. New decoded strings add the literal-block final newline; shell argv are exactly unchanged.",
+    "No repository edit, commit, runtime command, installer, suite, native action or G24/production/package change occurred in this review."
+  ]
+}

@@ -1,0 +1,1269 @@
+{
+  "schemaVersion": 1,
+  "task": "T38-E",
+  "reviewer": "/root/audit_build_ops",
+  "status": "FRESH_SCOPE_REVIEW_COMPLETE; T88_AUTHOR_DELTAS_REQUIRE_DISTINCT_REVIEW",
+  "observedAtUtc": "2026-11-02T16:22:00.162731+00:00",
+  "auditStart": {
+    "head": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+    "branch": "autonomous/completion-20261102"
+  },
+  "currentHead": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "scope": {
+    "productionFiles": 56,
+    "productionLinesAtStart": 6020,
+    "supportFiles": 35,
+    "included": "packages/{claims,governance,extensions,security,diagnostics}; apps/web/scripts; scripts/{sepolia,lib,distribution,acceptance*,governance,docs,lab,formal,portal,reputation}; .github/workflows; .devcontainer",
+    "excluded": "UI/browser/current WIP source; T87 proof-jobs; other assigned subsystems. Test harnesses supporting only.",
+    "initialInventory": "/workspace/work/audit-build-ops-initial-inventory.json"
+  },
+  "findings": [
+    {
+      "id": "T38-E-01",
+      "severity": "P2",
+      "status": "T88_REPAIR_WRITTEN_PENDING_DISTINCT_REVIEW",
+      "path": "scripts/sepolia/lib.mjs",
+      "initialLine": 102,
+      "title": "Private RPC query value could be copied into a public registry endpoint",
+      "evidence": "Offline synthetic marker in private ?api-key=value and the same value alone in public endpoint path passed checkPublicEndpoint while old leaksPrivateRpc returned false; whole query string comparison missed individual values. deploy:80/record-deployment:131 would persist that public endpoint.",
+      "repair": "Only root-authorized redaction pair: bounded per-value literal/decoded/encoded comparison, retained old checks and empty/short/repeated cases. No network or send used."
+    },
+    {
+      "id": "T38-E-02",
+      "severity": "P2",
+      "status": "T88_REPAIR_WRITTEN_PENDING_DISTINCT_REVIEW_AND_NATIVE_INTEGRATION",
+      "path": "scripts/sepolia/trade.mjs",
+      "initialLine": 354,
+      "related": [
+        {
+          "path": "scripts/sepolia/trade.mjs",
+          "line": 200
+        },
+        {
+          "path": "scripts/sepolia/send.mjs",
+          "line": 75
+        }
+      ],
+      "title": "Resuming an uncertain send could submit the same economic action again",
+      "evidence": "Full static trace: persisted requestedAt+tx:null funding or unmarked uncertain settlement could reach send again from currently absent/funded state. Current logs/pending absence cannot resolve old outcome; native trade guards constrain principal duplication but do not prevent repeated submission/gas.",
+      "repair": "Root-authorized trade/state-test pair adds maxone fixed attempt each for fund/release/refund before gas/Forge, preserves legacy/unknown evidence and refuses repeating a kind. Native proven funding keeps the first distinct exit, including first timeout refund after prior release. Terminal native reconciliation stays read-only. No nonce proof/resend flag/generic journal; original native harness unchanged."
+    }
+  ],
+  "productionFiles": [
+    {
+      "path": ".devcontainer/Dockerfile",
+      "sha256": "43cf053c2bc1c5ffb77bf3ad03062e52aeaacaef9ddaf7766deb669d9508bf55",
+      "bytes": 950,
+      "lines": 8,
+      "currentSha256": "43cf053c2bc1c5ffb77bf3ad03062e52aeaacaef9ddaf7766deb669d9508bf55",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Immutable Node image digest, checksum-bound Foundry/solc downloads, fixed extraction, unprivileged final user. No key, deploy command or public RPC service."
+      ]
+    },
+    {
+      "path": ".devcontainer/devcontainer.json",
+      "sha256": "b7c45dbbf5aa32a9a3548c2b34fe24cbd55f05127faedb3efb0be4f74d77de6f",
+      "bytes": 510,
+      "lines": 11,
+      "currentSha256": "b7c45dbbf5aa32a9a3548c2b34fe24cbd55f05127faedb3efb0be4f74d77de6f",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Only frontend3000 forwarded; other auto-forwarding ignored, visibility unverified; npm ci --ignore-scripts and fixed fake-funds foundation recipe."
+      ]
+    },
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "sha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684",
+      "bytes": 1933,
+      "lines": 61,
+      "currentSha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Read-only token, immutable action references, Foundry1.5.1 and active ABI/native/journey checks; no publication/deploy. Node24/Chromium stable remain observed moving CI tools, not reproducibility witnesses."
+      ]
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "sha256": "d2991f96a394f4d2365344827dbb853ee0101e503d1badd824d5dab85d2ab1d0",
+      "bytes": 800,
+      "lines": 21,
+      "currentSha256": "d2991f96a394f4d2365344827dbb853ee0101e503d1badd824d5dab85d2ab1d0",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Read-only token, immutable checkout/Python actions, catalog audit and committed-inventory diff remain required; no generated approval."
+      ]
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "sha256": "0913a63825a4ea70e5140ffb6a7c056fba107b788fb0d667e69d5f5b44d3d151",
+      "bytes": 4546,
+      "lines": 118,
+      "currentSha256": "0913a63825a4ea70e5140ffb6a7c056fba107b788fb0d667e69d5f5b44d3d151",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Read-only token, immutable actions, full history for immutable evidence, active type/package/CLI/policy/docs/distribution/browser gates. Root owns later final enrollment deltas."
+      ]
+    },
+    {
+      "path": "apps/web/scripts/artifact-policy.mjs",
+      "sha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7",
+      "bytes": 5063,
+      "lines": 67,
+      "currentSha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Conservative token sink/network checks handle escapes/templates/regex without evaluation. Final artifact path/count/size/resource/map/private-key checks complement browser evidence; no complete XSS claim."
+      ]
+    },
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd",
+      "bytes": 6576,
+      "lines": 77,
+      "currentSha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Default/demo/testnet separation enforced from final bytes/actual graph; Worker/license/graph assets required. Fixture trust-pin seam needs explicit library paths and cannot be selected through CLI/env. Unsigned funds-disabled evidence."
+      ]
+    },
+    {
+      "path": "apps/web/scripts/source-locale.mjs",
+      "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5",
+      "bytes": 1143,
+      "lines": 20,
+      "currentSha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Maintained English source supplies shell strings; exact one-time placeholders and HTML escaping; no runtime locale fetch or imported translation authority."
+      ]
+    },
+    {
+      "path": "apps/web/scripts/static-build-plugin.mjs",
+      "sha256": "47030c17ae0885cc3f9df8810b4b1815db47a6d608a98b99e5846b866aa98ea8",
+      "bytes": 4346,
+      "lines": 61,
+      "currentSha256": "47030c17ae0885cc3f9df8810b4b1815db47a6d608a98b99e5846b866aa98ea8",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Actual document/Worker graphs exclude external/test/signing/unreviewed-dependency modules and hash/token-check owned sources. CSP precedes resources; header recipe does not attest hosting."
+      ]
+    },
+    {
+      "path": "apps/web/scripts/testnet-trust.mjs",
+      "sha256": "c88641b7430e260372e46a8d0fa2c75d0508737f29776f890e40d3558965fffb",
+      "bytes": 6144,
+      "lines": 79,
+      "currentSha256": "c88641b7430e260372e46a8d0fa2c75d0508737f29776f890e40d3558965fffb",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Null maintained pin refuses before reads; exact signer fingerprint/signature/registry/Sepolia identity and accepted sequence/digest checks. Adjacent labels and programmatic fixture overrides do not supply default/CLI trust."
+      ]
+    },
+    {
+      "path": "packages/claims/index.ts",
+      "sha256": "fe29556ba69d6f6070399db047ce1787a32c7f81f8517be6ef56c3e4e6d5981b",
+      "bytes": 282,
+      "lines": 2,
+      "currentSha256": "fe29556ba69d6f6070399db047ce1787a32c7f81f8517be6ef56c3e4e6d5981b",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exports bounded descriptions and explicit maintained verification seam; no default trusted/tested claim."
+      ]
+    },
+    {
+      "path": "packages/claims/src/claims.ts",
+      "sha256": "e8ba571ee1599c63c152f84241288812198457330ce989b1098d5d78a3e1f9fa",
+      "bytes": 8908,
+      "lines": 141,
+      "currentSha256": "e8ba571ee1599c63c152f84241288812198457330ce989b1098d5d78a3e1f9fa",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Descriptor-safe exact detached records, strict JSON/UTF-8/calendar/list/path bounds, duplicate refusal. Tested copy requires current full-claim/source/evidence/profile verification before/after trusted callback; editorial projection confers no approval."
+      ]
+    },
+    {
+      "path": "packages/diagnostics/index.ts",
+      "sha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e",
+      "bytes": 452,
+      "lines": 3,
+      "currentSha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Local allowlisted diagnostics only; fixed enums, no vault/network/upload port."
+      ]
+    },
+    {
+      "path": "packages/diagnostics/src/diagnostics.ts",
+      "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18",
+      "bytes": 13805,
+      "lines": 187,
+      "currentSha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "No raw errors/URLs/identities; branded live release/schema/clock gate;500 events/1MiB/seven-day pruning. Identity/epoch/ring/byte-bound final export; revocation purges disposable metadata, failed erase consumes old leases."
+      ]
+    },
+    {
+      "path": "packages/extensions/index.ts",
+      "sha256": "fa52854156cc34d5c01495afaf14024b71afdeb171fa42e87a56903065a666af",
+      "bytes": 441,
+      "lines": 3,
+      "currentSha256": "fa52854156cc34d5c01495afaf14024b71afdeb171fa42e87a56903065a666af",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Optional offline registry facade absent from default app; no terms/wallet/network/spend capability."
+      ]
+    },
+    {
+      "path": "packages/extensions/src/manifest.ts",
+      "sha256": "3a4fe523f3a9c2ff1932d879d2d8813a6a9694b8b739ad160ade0780f7526d79",
+      "bytes": 6435,
+      "lines": 92,
+      "currentSha256": "3a4fe523f3a9c2ff1932d879d2d8813a6a9694b8b739ad160ade0780f7526d79",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Descriptor snapshots reject getters/proxies/sparse/custom arrays. Exact version/capability/hash limits;64KiB/depth16/node4096 proposal budget before trusted parser."
+      ]
+    },
+    {
+      "path": "packages/extensions/src/registry.ts",
+      "sha256": "653b58de32a6f3cca66c3fde38e720e9a047e5a885b08b16c29fa315669266ec",
+      "bytes": 15847,
+      "lines": 221,
+      "currentSha256": "653b58de32a6f3cca66c3fde38e720e9a047e5a885b08b16c29fa315669266ec",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exact registered capability/schema sets negotiate atomically. Detached scoped reads and validated proposals retain core authority. Generation/cancel revoke before cleanup; physical initialization drains. Bundled code is not a same-origin sandbox."
+      ]
+    },
+    {
+      "path": "packages/governance/index.ts",
+      "sha256": "acad5a41601396a099430eefe49e11e46114c9e75414d2f19078b973657bc354",
+      "bytes": 464,
+      "lines": 4,
+      "currentSha256": "acad5a41601396a099430eefe49e11e46114c9e75414d2f19078b973657bc354",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Inert records/assurance only; status/reviewer/legal strings do not authorize execution/release."
+      ]
+    },
+    {
+      "path": "packages/governance/src/assurance.ts",
+      "sha256": "c862f07ab195abc3714246257a3aa662eb4103d2b4d4d81214ea667bad65be3a",
+      "bytes": 13035,
+      "lines": 85,
+      "currentSha256": "c862f07ab195abc3714246257a3aa662eb4103d2b4d4d81214ea667bad65be3a",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exact bounded descriptor-safe role/jurisdiction/attack/incident inputs, real calendar dates,<=90-day claimed review windows. Revision changes invalidate bindings; packets deny legal/release/custody/evidence authority."
+      ]
+    },
+    {
+      "path": "packages/governance/src/records.ts",
+      "sha256": "97cce80eff9979cd5b0f8711007ab01791794fda4e9b33460b63a8d550b98300",
+      "bytes": 6258,
+      "lines": 50,
+      "currentSha256": "97cce80eff9979cd5b0f8711007ab01791794fda4e9b33460b63a8d550b98300",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exact bounded decisions/proposals, path/hash/version/duplicate refusal; createCoreError independently allowlists codes. Explicit compatibility tables always deny economic preparation."
+      ]
+    },
+    {
+      "path": "packages/security/index.ts",
+      "sha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9",
+      "bytes": 1117,
+      "lines": 13,
+      "currentSha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Facade omits proof registration writer, updater trust configuration, signing/storage/network/install authority. Acceptance result is consistency only."
+      ]
+    },
+    {
+      "path": "packages/security/release-context.ts",
+      "sha256": "c161a996f3242c7efd3873c4f222e41ced61fe7ff8cc528dcc863da81171aae9",
+      "bytes": 223,
+      "lines": 3,
+      "currentSha256": "c161a996f3242c7efd3873c4f222e41ced61fe7ff8cc528dcc863da81171aae9",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Narrow lease revalidation entry excludes verifier/internal proof writer from read-only consumers."
+      ]
+    },
+    {
+      "path": "packages/security/src/acceptance-gates.ts",
+      "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b",
+      "bytes": 23177,
+      "lines": 277,
+      "currentSha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Detached bounded exact record/candidate graph; source/digest/target/role/freshness checks, acyclic supersession and mandatory/advertised target coverage. Only separately injected trusted exact-scope review verifier authenticates review; reports deny promotion/runtime/release."
+      ]
+    },
+    {
+      "path": "packages/security/src/content-policy.ts",
+      "sha256": "a87bfaf12b16f8545e88be15ead1ff99bc85bb48d3a6c90be8483abe059668a2",
+      "bytes": 8942,
+      "lines": 138,
+      "currentSha256": "a87bfaf12b16f8545e88be15ead1ff99bc85bb48d3a6c90be8483abe059668a2",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Bounded exact UTF-8/UTF-16/plaintext controls and bidi checks; explicit HTTPS link rejects credentials/query/fragment. Offline CSP allows no external connections and cannot attest deployed framing protection."
+      ]
+    },
+    {
+      "path": "packages/security/src/crypto-inventory.ts",
+      "sha256": "c25bca2268cc49f798b6be7a1ec158aebcc0ccf1bda96753552fe0d5c40087b8",
+      "bytes": 22690,
+      "lines": 239,
+      "currentSha256": "c25bca2268cc49f798b6be7a1ec158aebcc0ccf1bda96753552fe0d5c40087b8",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Own-data/byte snapshots precede async hashes; bounded exact graph/vector/browser-profile metadata checks. Candidate/test review cannot silently qualify production; metadata releaseEligible remains narrower than product approval."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-locator.ts",
+      "sha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4",
+      "bytes": 12911,
+      "lines": 170,
+      "currentSha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Canonical narrow CIDv1/4096-byte locator; same live branded manifest/signer/channel/sequence/time/digest bindings. Optional256MiB archive is hash-checked only; no extraction/install authority."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-manifest.ts",
+      "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969",
+      "bytes": 23627,
+      "lines": 346,
+      "currentSha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Canonical wire/signature domain/P256 key fingerprint and scalar ranges; complete raw assets with path/case/count/size bounds; sequence+digest rollback. Sticky proof rechecks every await/lookup; clones and unresolved nonempty deployment schema refuse."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-proof.ts",
+      "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe",
+      "bytes": 1216,
+      "lines": 23,
+      "currentSha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Private WeakMap result identity, register once, live lease revalidation; writer omitted from facade. Explicitly not a sandbox against same-origin executable replacement."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-update-http.ts",
+      "sha256": "844304fa8dd10f8b18afea1eaaef8e74af93fd282d3567b5668412d859ebe9b9",
+      "bytes": 5264,
+      "lines": 62,
+      "currentSha256": "844304fa8dd10f8b18afea1eaaef8e74af93fd282d3567b5668412d859ebe9b9",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "G05 permit/capture with exact HTTPS/no redirect/credentials/referrer, bounded declaration/chunks/native bytes. Single physical admission survives logical cancellation; reader/scopes dispose and chunks wipe."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-update-store.ts",
+      "sha256": "6bff50f89e24b7141e054fd66918b61a1840a380233a3137a905acb63aa575c3",
+      "bytes": 5325,
+      "lines": 47,
+      "currentSha256": "6bff50f89e24b7141e054fd66918b61a1840a380233a3137a905acb63aa575c3",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Separate public origin-local rollback IndexedDB; exact channel/key/sequence/digest, strict durability/CAS and native transaction cancellation/owned close; never vault data."
+      ]
+    },
+    {
+      "path": "packages/security/src/release-update.ts",
+      "sha256": "6359bdc93ae6e24c6391353022f35a2eb5eada68788f1012b07f524d10c187e0",
+      "bytes": 20264,
+      "lines": 190,
+      "currentSha256": "6359bdc93ae6e24c6391353022f35a2eb5eada68788f1012b07f524d10c187e0",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Absent compiled trust refuses without other ports. CID-specific HTTPS origin, monotonic sequence floor, verified assets/locator/schema, opaque candidate identity, explicit gesture/current backup/quiescence/lock before navigation. Physical job ownership survives cancellation; release remains disabled."
+      ]
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e",
+      "bytes": 3724,
+      "lines": 80,
+      "currentSha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Bounded nonblocking/no-follow file reads, JSON depth/duplicate refusal, fixed error identity. No CLI review callback or executable policy loading; imported records cannot self-approve."
+      ]
+    },
+    {
+      "path": "scripts/distribution/manifest.mjs",
+      "sha256": "8c070a6226897a3338f489b95cc393826358e3b723267ab4297384911812e938",
+      "bytes": 10657,
+      "lines": 115,
+      "currentSha256": "8c070a6226897a3338f489b95cc393826358e3b723267ab4297384911812e938",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exact allowlisted public asset/source byte/hash inventories and tool/lock/source identities. All approval flags false; explicit missing trust/witness/host/deployment evidence."
+      ]
+    },
+    {
+      "path": "scripts/distribution/stage.mjs",
+      "sha256": "c6c9f78adbba59806bd6211f43afdfacc129492c8af3c6427ef547b772c974a7",
+      "bytes": 16365,
+      "lines": 180,
+      "currentSha256": "c6c9f78adbba59806bd6211f43afdfacc129492c8af3c6427ef547b772c974a7",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Stable bounded no-follow reads and strict directories/files. Sanitized offline children, two actual byte-equal builds, source/graph/tool rechecks, new output only and inode-owned temp cleanup. No signer/extractor/publication/deploy action."
+      ]
+    },
+    {
+      "path": "scripts/docs/generate.py",
+      "sha256": "8d5a4dafe26eb34dfcd68cd48320b29e65233ce22d571276a295e0497d084eda",
+      "bytes": 11282,
+      "lines": 31,
+      "currentSha256": "8d5a4dafe26eb34dfcd68cd48320b29e65233ce22d571276a295e0497d084eda",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Fixed seven local wiki pages and proposed/unsupported canonical claims. Real source/copy hashes bind immutable HEAD; reviewer/release/publication authority remains empty."
+      ]
+    },
+    {
+      "path": "scripts/docs/validate.mjs",
+      "sha256": "e2731bb6f79c6f874fcf8d2279d77f67806bdd12fb8c23c3aeed19279f2a620b",
+      "bytes": 9103,
+      "lines": 133,
+      "currentSha256": "e2731bb6f79c6f874fcf8d2279d77f67806bdd12fb8c23c3aeed19279f2a620b",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Bounded stable no-follow source and git-show byte equality. Canonical claims/copy mapping and closed Markdown/link/anchor/hash grammar reject stale evidence; consistency is not semantic approval."
+      ]
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c",
+      "bytes": 27371,
+      "lines": 166,
+      "currentSha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Pinned tool artifact/version/source/ABI, finite compiler/query/solver/output budgets, owned process-group termination. Source-span/AST/native deferred-credit results narrowly classified; unknown compiler/whole-contract results remain unknown. T86 runner unchanged."
+      ]
+    },
+    {
+      "path": "scripts/governance/check-all.mjs",
+      "sha256": "49c56fdd0d348590d6c4e31251965e31e870a21cab9ee9ae6011172e8e76fb2f",
+      "bytes": 1505,
+      "lines": 29,
+      "currentSha256": "49c56fdd0d348590d6c4e31251965e31e870a21cab9ee9ae6011172e8e76fb2f",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Finite directory/packet enumeration, canonical checker, no executable evidence or imported reviewer trust."
+      ]
+    },
+    {
+      "path": "scripts/governance/check.mjs",
+      "sha256": "12719510236b36ba798c181731095229305b4eee56a494df2ef76ff9e1eefc16",
+      "bytes": 4294,
+      "lines": 61,
+      "currentSha256": "12719510236b36ba798c181731095229305b4eee56a494df2ef76ff9e1eefc16",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Root-contained paths, stable descriptor/name identity, nonblocking/no-follow bounded reads and aggregate cap. Required artifact hashes match actual bytes; inert statuses and no file execution."
+      ]
+    },
+    {
+      "path": "scripts/lab/command.mjs",
+      "sha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00",
+      "bytes": 2023,
+      "lines": 35,
+      "currentSha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "No shell; finite logs/timeout/cancel and only detached child-owned process-group signaling, including successful-parent descendants. Existing T86 test observation repair was not reimplemented."
+      ]
+    },
+    {
+      "path": "scripts/lab/recipe.mjs",
+      "sha256": "5de3340216d3ee7534ce6c48ea996fe52690b69046b9e2e7eed6a7573f64d1ff",
+      "bytes": 5727,
+      "lines": 99,
+      "currentSha256": "5de3340216d3ee7534ce6c48ea996fe52690b69046b9e2e7eed6a7573f64d1ff",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Exact local Node/npm/Foundry/solc and effective recipe; fixed container/lock/fixture hashes with bounded symlink-safe reads. Environment excludes keys/RPC/publication credentials; visibility unknown, Solana/physical/production unsupported."
+      ]
+    },
+    {
+      "path": "scripts/lab/run.mjs",
+      "sha256": "5795cec01cfe26903f888e840106780ca731bebdce17894bb5b1a6af9febd302",
+      "bytes": 2865,
+      "lines": 46,
+      "currentSha256": "5795cec01cfe26903f888e840106780ca731bebdce17894bb5b1a6af9febd302",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Only fixed foundation/journey commands under clean environment; local0600 logs/reports with failure/bound/cancel classification. No deploy/publication/provisioning command."
+      ]
+    },
+    {
+      "path": "scripts/lib/chromium-path.mjs",
+      "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728",
+      "bytes": 1123,
+      "lines": 34,
+      "currentSha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Explicit operator/browser-fixture executable selector and known path patterns; no download or production browser qualification."
+      ]
+    },
+    {
+      "path": "scripts/lib/is-main.mjs",
+      "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb",
+      "bytes": 942,
+      "lines": 19,
+      "currentSha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Canonical realpath entry detection supports symlinks and refuses eval/print/query/hash preload aliases; imports do not launch tools."
+      ]
+    },
+    {
+      "path": "scripts/portal/build.mjs",
+      "sha256": "838b8f28be12873bc9c2a6adcb1a03a7055a210cc3c92213d1136c3fa25eb268",
+      "bytes": 12737,
+      "lines": 169,
+      "currentSha256": "838b8f28be12873bc9c2a6adcb1a03a7055a210cc3c92213d1136c3fa25eb268",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Fixed real public source references, stable bounded no-follow reads, closed scriptless grammar/CSP/local links. New directory, exact retained artifact/report check and null-key policy; no authenticated executable/wallet/deployment proof."
+      ]
+    },
+    {
+      "path": "scripts/portal/policy.mjs",
+      "sha256": "413b86c19e3febe2b6a9b66302b097e1b191b7584f2d6ea1a6452f1ec2a77975",
+      "bytes": 691,
+      "lines": 8,
+      "currentSha256": "413b86c19e3febe2b6a9b66302b097e1b191b7584f2d6ea1a6452f1ec2a77975",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Scripts/connect/workers/forms/objects/frames denied; host recipe adds frame-ancestors/X-Frame-Options. Generated recipe is not actual hosting evidence."
+      ]
+    },
+    {
+      "path": "scripts/reputation/evaluation-remediated/package.json",
+      "sha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896",
+      "bytes": 659,
+      "lines": 24,
+      "currentSha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Private isolated experimental Node-only graph, exact direct versions and five explicit transitive overrides; no root/app provider install or vendor compatibility approval inferred."
+      ]
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4-evaluation.mjs",
+      "sha256": "47a2a15801163438035fc947b21dad712f0d2aff3b295214fb84d19de89f645f",
+      "bytes": 27056,
+      "lines": 256,
+      "currentSha256": "47a2a15801163438035fc947b21dad712f0d2aff3b295214fb84d19de89f645f",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Public synthetic probe only. Pin/tree/artifact/source bounds before unprivileged read-only no-network/cap-drop Docker execution with CPU/memory/PID/time/output caps. Single admission and confirmed owned cleanup/sticky retirement. Application/issuer/score/browser/release qualifications remain false."
+      ]
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4.pins.json",
+      "sha256": "d46e94bde6478752e142e2a1bff2f1ef81c7cac7ad7bd822677b09168c45f4ec",
+      "bytes": 21806,
+      "lines": 506,
+      "currentSha256": "d46e94bde6478752e142e2a1bff2f1ef81c7cac7ad7bd822677b09168c45f4ec",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Read all artifact/package/source/license/registry-signature/tool/limit/qualification rows. Exact SDK4.14.5/artifact4.13.0 separation and override graph hashes; affected original project remains passive history. Registry assertions/math proof are not issuer/root/score authority."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/deploy.mjs",
+      "sha256": "f0b9d0bd0503d07f77ac65d02e9a48de42ff55f73e662847fba0a3ac1416f2b4",
+      "bytes": 8607,
+      "lines": 126,
+      "currentSha256": "f0b9d0bd0503d07f77ac65d02e9a48de42ff55f73e662847fba0a3ac1416f2b4",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Public endpoint/leak/chain/genesis/source/toolchain guards before CREATE. Exclusive fsynced account/nonce unknown-attempt guard before Forge; native matching reconciliation required to clear uncertainty. No actual deploy during audit."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "sha256": "3c140a197bb17c19f43d3d7c95323c16da8b818bd2e986aaed5108dd08046bf7",
+      "bytes": 12329,
+      "lines": 194,
+      "currentSha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32",
+      "changedSinceStart": true,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Sanitized Forge environment/effective pinned compiler recipe, bounded RPC and fixed diagnostics. T38-E-01 query-value disclosure found and repaired under T88; author delta awaits separate independent review."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/owner-release.mjs",
+      "sha256": "ca366d7aa299fc134e051d0b938675267508eec63a5a965799d9870b95571f20",
+      "bytes": 9355,
+      "lines": 121,
+      "currentSha256": "ca366d7aa299fc134e051d0b938675267508eec63a5a965799d9870b95571f20",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Explicit owner-only keygen/sign, P256 canonical domain/fingerprint, private0600/no-overwrite key output, Sepolia/record/finality checks. Registry-only manifest is not canonical recovery ABI/bootstrap/production trust. No signing performed."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/record-deployment.mjs",
+      "sha256": "eadbf177119e706e63485323118389df21a8fdb5562278125824153f08fdaf54",
+      "bytes": 16064,
+      "lines": 197,
+      "currentSha256": "eadbf177119e706e63485323118389df21a8fdb5562278125824153f08fdaf54",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Native exact CREATE address/input/runtime/allowlist/chain/genesis/receipt/header inclusion and optional crosscheck. Finality read natively; unknown cleanup requires finalized matching account/nonce and unchanged guard. releaseEnabled0."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/send.mjs",
+      "sha256": "0a55772d4c3fb9e8ca9435e8849eefb90b7afdf3209d5f926cf44c979cb472a2",
+      "bytes": 6676,
+      "lines": 98,
+      "currentSha256": "0a55772d4c3fb9e8ca9435e8849eefb90b7afdf3209d5f926cf44c979cb472a2",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "One Forge call, gas cap, isolated broadcast records, exact requested sender/to/data/value/gas and bounded receipt reads. Raw diagnostics withheld, owned cache/temp cleanup. T38-E-02 repaired in caller using before-send fixed kind history; no change here."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "sha256": "740e62c5363f21aa59735c07a3d7af42db0bb638d629bd2863eb5126546185e1",
+      "bytes": 31477,
+      "lines": 421,
+      "currentSha256": "1b6e01384ad928fd0926276685a6b0d7783838daafaf92fa3271e5c01561a4c1",
+      "changedSinceStart": true,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Read full native/terms/signature/amount/party/deployment/reorg/exit flow. T38-E-02 found: missing before-send history allowed resumed resubmission. T88 adds fund/release/refund maxone-each history, conservative legacy migration, durable before-boundary save, repeated-kind refusal, first distinct timeout exit and read-only terminal reconciliation; author delta awaits independent review."
+      ]
+    },
+    {
+      "path": "scripts/sepolia/verify-release.mjs",
+      "sha256": "fc4059a11b364de40adce86129b530ca9f8dd5153739515cdcf14f7ca7f97db8",
+      "bytes": 3536,
+      "lines": 53,
+      "currentSha256": "fc4059a11b364de40adce86129b530ca9f8dd5153739515cdcf14f7ca7f97db8",
+      "changedSinceStart": false,
+      "review": "fresh complete semantic source/data read",
+      "semanticChecks": [
+        "Same null-pin G15/Sepolia checks and live guarded registry as build; explicit accepted sequence/digest action. Library fixture options/imported metadata are not default production trust."
+      ]
+    }
+  ],
+  "supportingFiles": [
+    {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "sha256": "735382c708d3a6e52ee2cd3437a2f5c9095c6e2fab87281024db216b34c9b24a",
+      "bytes": 7347,
+      "lines": 113,
+      "currentSha256": "735382c708d3a6e52ee2cd3437a2f5c9095c6e2fab87281024db216b34c9b24a",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "apps/web/scripts/scan-build.test.mjs",
+      "sha256": "730d3133dc281a045b5b128065434a916c7b2be4aeae73d0f6c4af9d67b62e92",
+      "bytes": 3211,
+      "lines": 49,
+      "currentSha256": "730d3133dc281a045b5b128065434a916c7b2be4aeae73d0f6c4af9d67b62e92",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "apps/web/scripts/source-locale.test.mjs",
+      "sha256": "b7d67b1dede49ef3027197abc32906848a1833f663c286fc471cb6d1db70e1fc",
+      "bytes": 1431,
+      "lines": 25,
+      "currentSha256": "b7d67b1dede49ef3027197abc32906848a1833f663c286fc471cb6d1db70e1fc",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/claims/README.md",
+      "sha256": "85f7c765947e1b80c96072226bc8fe488f01a1b5587857463fcbed8ae95412fe",
+      "bytes": 1586,
+      "lines": 7,
+      "currentSha256": "85f7c765947e1b80c96072226bc8fe488f01a1b5587857463fcbed8ae95412fe",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/claims/test/claims.test.mjs",
+      "sha256": "e411d3d6778c0775dc5e0d02f7ce946f0a6f04281338a80708ad57cf6730a4ae",
+      "bytes": 5274,
+      "lines": 83,
+      "currentSha256": "e411d3d6778c0775dc5e0d02f7ce946f0a6f04281338a80708ad57cf6730a4ae",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/diagnostics/README.md",
+      "sha256": "e961eae69280a2e7d9824c2103b33a223cfe67b36ac6a86328f232e4e3fa3a63",
+      "bytes": 1730,
+      "lines": 27,
+      "currentSha256": "e961eae69280a2e7d9824c2103b33a223cfe67b36ac6a86328f232e4e3fa3a63",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/diagnostics/test/diagnostics.test.mjs",
+      "sha256": "b44477b78a8241e72ed6ef1456e591ab2a30f080cd5169c6795c7da6d2a5aaed",
+      "bytes": 13049,
+      "lines": 141,
+      "currentSha256": "b44477b78a8241e72ed6ef1456e591ab2a30f080cd5169c6795c7da6d2a5aaed",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/extensions/README.md",
+      "sha256": "236eca844cd7472c1a7aa61596e36ef34538b17acca62a8dd504b2f1f33465a2",
+      "bytes": 2600,
+      "lines": 40,
+      "currentSha256": "236eca844cd7472c1a7aa61596e36ef34538b17acca62a8dd504b2f1f33465a2",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/extensions/test/registry.test.mjs",
+      "sha256": "67fc6ec0bbfb43b831c7154807d6b6758b4ac300006d7fd4de6b281d733cd010",
+      "bytes": 16226,
+      "lines": 195,
+      "currentSha256": "67fc6ec0bbfb43b831c7154807d6b6758b4ac300006d7fd4de6b281d733cd010",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/governance/test/assurance.test.mjs",
+      "sha256": "728a42b74a62e79087f3503826bd2f2e2b2deb5c313539e232c2d1e7fc19141a",
+      "bytes": 9950,
+      "lines": 58,
+      "currentSha256": "728a42b74a62e79087f3503826bd2f2e2b2deb5c313539e232c2d1e7fc19141a",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/governance/test/records.test.mjs",
+      "sha256": "f41db574aa2439b4a54f07b0fc8e17bb056a149c030756cde018157fb7cb23ef",
+      "bytes": 7920,
+      "lines": 62,
+      "currentSha256": "f41db574aa2439b4a54f07b0fc8e17bb056a149c030756cde018157fb7cb23ef",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/README-UPDATES.md",
+      "sha256": "e95d66bbcf21c7d5de819b205493b6241585cb231c4f04228aa679d7bb4c69cb",
+      "bytes": 8195,
+      "lines": 125,
+      "currentSha256": "e95d66bbcf21c7d5de819b205493b6241585cb231c4f04228aa679d7bb4c69cb",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/acceptance-gates.test.mjs",
+      "sha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc",
+      "bytes": 15566,
+      "lines": 207,
+      "currentSha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/content-policy.test.mjs",
+      "sha256": "5e314d7d9876b1b27b8b1a6e99ac4df1c0bd3daf80c5de5acfc56540e95166b0",
+      "bytes": 9684,
+      "lines": 71,
+      "currentSha256": "5e314d7d9876b1b27b8b1a6e99ac4df1c0bd3daf80c5de5acfc56540e95166b0",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/crypto-inventory.test.mjs",
+      "sha256": "c19484cc2b6fbe65b0cdfc89e77100acd5b71f5e63e40bb25557e2e7e82f7151",
+      "bytes": 17648,
+      "lines": 134,
+      "currentSha256": "c19484cc2b6fbe65b0cdfc89e77100acd5b71f5e63e40bb25557e2e7e82f7151",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/fixtures/release-locator-README.md",
+      "sha256": "37a0c01e18fb7f3f3e0dd3e36b0bd3c42598d52e347bbae5604b1ef24e3aa722",
+      "bytes": 1373,
+      "lines": 21,
+      "currentSha256": "37a0c01e18fb7f3f3e0dd3e36b0bd3c42598d52e347bbae5604b1ef24e3aa722",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/fixtures/release-locator-openssl.json",
+      "sha256": "81900da0e81d600e246c821e6f425d4f8433aa73be8458be2cd91ffd7ebba929",
+      "bytes": 16451,
+      "lines": 1728,
+      "currentSha256": "81900da0e81d600e246c821e6f425d4f8433aa73be8458be2cd91ffd7ebba929",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/fixtures/rfc6979-p256-public.json",
+      "sha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+      "bytes": 601,
+      "lines": 8,
+      "currentSha256": "5147fe567482f6deb542c9af1ffaf3919a38799e836a76856b03a24fcc19e5a8",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/lib/locator-fixture.mjs",
+      "sha256": "e895aa6f43412e5ed0f86de30a901126efae22d195a2922ae909cd12aea2a5b9",
+      "bytes": 1413,
+      "lines": 19,
+      "currentSha256": "e895aa6f43412e5ed0f86de30a901126efae22d195a2922ae909cd12aea2a5b9",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/lib/release-fixture.mjs",
+      "sha256": "b51b300a221c620ba4118a200247b29c4b8db4ac8588b21eab765605c387155b",
+      "bytes": 2322,
+      "lines": 28,
+      "currentSha256": "b51b300a221c620ba4118a200247b29c4b8db4ac8588b21eab765605c387155b",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/lib/release-registry-fixture.mjs",
+      "sha256": "97ccdc676d9d93131a0c1ef25596b28954b8d0decc6fa8b2fb3e272ddfda8dbc",
+      "bytes": 1345,
+      "lines": 17,
+      "currentSha256": "97ccdc676d9d93131a0c1ef25596b28954b8d0decc6fa8b2fb3e272ddfda8dbc",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/release-locator.test.mjs",
+      "sha256": "0a9cfc60e70060c28026ea40a0cbddc191978b6d99021c5cccdf65f93c58859f",
+      "bytes": 11786,
+      "lines": 149,
+      "currentSha256": "0a9cfc60e70060c28026ea40a0cbddc191978b6d99021c5cccdf65f93c58859f",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/release-manifest.test.mjs",
+      "sha256": "d998074367d9593949390d5ccfd993d19eff11a75a98611847f924b449ba5e13",
+      "bytes": 20132,
+      "lines": 254,
+      "currentSha256": "d998074367d9593949390d5ccfd993d19eff11a75a98611847f924b449ba5e13",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/release-registry.test.mjs",
+      "sha256": "ff171c4d061ce93a53877cd059d3775ba2d27242d35f8334b76ffda45c41ab42",
+      "bytes": 10041,
+      "lines": 135,
+      "currentSha256": "ff171c4d061ce93a53877cd059d3775ba2d27242d35f8334b76ffda45c41ab42",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "packages/security/test/release-update.test.mjs",
+      "sha256": "168767dd7b0eba1ffdfa44a54170aa015db9c4913a680eea0420d55bb8528033",
+      "bytes": 17702,
+      "lines": 157,
+      "currentSha256": "168767dd7b0eba1ffdfa44a54170aa015db9c4913a680eea0420d55bb8528033",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/distribution/browser.test.mjs",
+      "sha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec",
+      "bytes": 5467,
+      "lines": 59,
+      "currentSha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/distribution/stage.test.mjs",
+      "sha256": "47a7f262e6db3041999865e80aa1382bddb560c17f75c87b4ee4372c8bad6d07",
+      "bytes": 8729,
+      "lines": 78,
+      "currentSha256": "47a7f262e6db3041999865e80aa1382bddb560c17f75c87b4ee4372c8bad6d07",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/docs/README.md",
+      "sha256": "ddf69f2f1aedb6acf6235fae249525a1e8d93aa4761f6b11e3466af4b4ededb5",
+      "bytes": 2188,
+      "lines": 7,
+      "currentSha256": "ddf69f2f1aedb6acf6235fae249525a1e8d93aa4761f6b11e3466af4b4ededb5",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/docs/validate.test.mjs",
+      "sha256": "c1a1d09b182c9d41efe2ee97c09219e62f28cab92c04aa45e4b0f20121f8e4af",
+      "bytes": 5918,
+      "lines": 79,
+      "currentSha256": "c1a1d09b182c9d41efe2ee97c09219e62f28cab92c04aa45e4b0f20121f8e4af",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/formal/README.md",
+      "sha256": "837ac662fba3af6c1b92f65dd0a51d84659c75b950f3c0bfe136e7a555b250b7",
+      "bytes": 7247,
+      "lines": 49,
+      "currentSha256": "837ac662fba3af6c1b92f65dd0a51d84659c75b950f3c0bfe136e7a555b250b7",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/lab/recipe.test.mjs",
+      "sha256": "412cbc1a87707de2edb38434ea7d1f457d43c3e52cad95ff17cbaeec8f28ef81",
+      "bytes": 8844,
+      "lines": 128,
+      "currentSha256": "412cbc1a87707de2edb38434ea7d1f457d43c3e52cad95ff17cbaeec8f28ef81",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/lib/testnet-fixture.mjs",
+      "sha256": "c7a3506bb01c4d6c96fa25fe462e53be0c94ed2fcd58e5abc2ae8a1b9083d166",
+      "bytes": 4377,
+      "lines": 55,
+      "currentSha256": "c7a3506bb01c4d6c96fa25fe462e53be0c94ed2fcd58e5abc2ae8a1b9083d166",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/portal/build.test.mjs",
+      "sha256": "618a834504fc89e4f6aff6e4547d087e160aafc266fd30dbdf0912ae461bdf4e",
+      "bytes": 4286,
+      "lines": 47,
+      "currentSha256": "618a834504fc89e4f6aff6e4547d087e160aafc266fd30dbdf0912ae461bdf4e",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/reputation/evaluation-remediated/package-lock.json",
+      "sha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3",
+      "bytes": 60821,
+      "lines": 1677,
+      "currentSha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4-evaluation.test.mjs",
+      "sha256": "7a26d2aedd9563ac4508a1fb6fbf192e2948376297898410fd4785baf62f876f",
+      "bytes": 10492,
+      "lines": 110,
+      "currentSha256": "7a26d2aedd9563ac4508a1fb6fbf192e2948376297898410fd4785baf62f876f",
+      "changedSinceStart": false,
+      "review": "supporting inventory; selected full files/test definitions read, not blanket fresh every-line certification"
+    }
+  ],
+  "additionalSupportingFiles": [
+    {
+      "path": "scripts/tests/sepolia-hygiene.test.mjs",
+      "sha256": "63b93352548e089d042e5840d8c152b45b726caa7b060884b9c482a37fa3a5be",
+      "bytes": 15502,
+      "review": "Full fresh read, then root-authorized T88 regression edits; distinct reviewer required."
+    },
+    {
+      "path": "scripts/tests/sepolia-trade-state.test.mjs",
+      "sha256": "41c0ea5b8767010864922fb7dae31839aacf6d849e373bd3b89c8fa716c570a0",
+      "bytes": 19186,
+      "review": "Full fresh read, then root-authorized T88 regression edits; distinct reviewer required."
+    }
+  ],
+  "freshVerification": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test [8 selected claim/extension/diagnostic/governance/release/locator/update/trade-state files]",
+      "exactFiles": [
+        "packages/claims/test/claims.test.mjs",
+        "packages/extensions/test/registry.test.mjs",
+        "packages/diagnostics/test/diagnostics.test.mjs",
+        "packages/governance/test/records.test.mjs",
+        "packages/security/test/release-manifest.test.mjs",
+        "packages/security/test/release-locator.test.mjs",
+        "packages/security/test/release-update.test.mjs",
+        "scripts/tests/sepolia-trade-state.test.mjs"
+      ],
+      "exitCode": 0,
+      "tests": 130,
+      "pass": 130,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/audit-build-ops-focused-ipc.log",
+      "sha256": "d0621465c092bdc960dcbcd77ee52259491406c21aaabc2d0bf6015160ac5bab",
+      "qualification": "Before T88 trade delta; final changed trade tests are separately verified below."
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs scripts/tests/sepolia-trade-state.test.mjs",
+      "exitCode": 0,
+      "tests": 24,
+      "pass": 24,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "packet": "/workspace/work/t88-review-packet.json",
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false
+    },
+    {
+      "command": "Static isolated reputation lock/pin structure check",
+      "packagesIncludingRoot": 139,
+      "exactResolvedVersionHttpsNpmSha512NoLinkNoInstallScript": true,
+      "packageAndLockMatchPins": true,
+      "qualification": "Not a new network dependency security audit or provider approval."
+    }
+  ],
+  "unusableVerification": [
+    {
+      "log": "/workspace/work/audit-build-ops-focused.log",
+      "reason": "Managed IPC omitted; runner showed only9 file wrappers without individual assertions. Excluded from test counts; superseded by130 actual IPC-enabled cases."
+    }
+  ],
+  "reusedEvidence": [
+    {
+      "path": "docs/execution/reviews/T57.json",
+      "sha256": "2a3fe998b00aacaf294c164727d850f0c8256c26409ff69e850a524d5316e9af",
+      "unchangedRecordedFiles": [
+        {
+          "path": "scripts/distribution/manifest.mjs",
+          "sha256": "8c070a6226897a3338f489b95cc393826358e3b723267ab4297384911812e938"
+        },
+        {
+          "path": "scripts/distribution/stage.mjs",
+          "sha256": "c6c9f78adbba59806bd6211f43afdfacc129492c8af3c6427ef547b772c974a7"
+        },
+        {
+          "path": "scripts/distribution/stage.test.mjs",
+          "sha256": "47a7f262e6db3041999865e80aa1382bddb560c17f75c87b4ee4372c8bad6d07"
+        },
+        {
+          "path": "scripts/distribution/browser.test.mjs",
+          "sha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec"
+        },
+        {
+          "path": "docs/distribution/README.md",
+          "sha256": "25a1110f015cfd90f8f28d25ef471d96236d2ac714bc913883fb9e1621a9a8d9"
+        }
+      ],
+      "changedRecordedFiles": [],
+      "qualification": "Historical scoped execution only; does not certify the current dependency tree or new head."
+    },
+    {
+      "path": "docs/execution/reviews/T61.json",
+      "sha256": "583c629c45dd4cbee8c75dd16a3ff0c8284cf8d5eb3eaabf1653fb132cbaa134",
+      "unchangedRecordedFiles": [
+        {
+          "path": "contracts/evm/formal/CanonicalRefinement.t.sol",
+          "sha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537"
+        },
+        {
+          "path": "contracts/evm/formal/properties.json",
+          "sha256": "ef1649f0aebc7b6030cd4816b660c49ca28ad57f05c13efe6cd7ed470e2a2d15"
+        },
+        {
+          "path": "scripts/formal/evm.mjs",
+          "sha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c"
+        },
+        {
+          "path": "scripts/formal/README.md",
+          "sha256": "837ac662fba3af6c1b92f65dd0a51d84659c75b950f3c0bfe136e7a555b250b7"
+        }
+      ],
+      "changedRecordedFiles": [
+        {
+          "path": "scripts/tests/formal-evm.test.mjs",
+          "sha256": "a4a3c4eee4198eab2e74e850fa63db051ab6e1f3c1980bff795f3e4bcd9c4ac2"
+        }
+      ],
+      "qualification": "Historical scoped execution only; does not certify the current dependency tree or new head."
+    },
+    {
+      "path": "docs/execution/reviews/T63.json",
+      "sha256": "dd84a400c0559d07f15626d49792851e712083147537bf7c053d24fa28f9d827",
+      "unchangedRecordedFiles": [
+        {
+          "path": "docs/reputation/SEMAPHORE-V4-EVALUATION.md",
+          "sha256": "d1e506a7b888760129f82bd48cde5dff638088b4dd858b09ed24477d52f76a55"
+        },
+        {
+          "path": "docs/reputation/SEMAPHORE-V4-ORIGINAL-OBSERVATION.json",
+          "sha256": "d5f4f3be8c6f525360610aa5e1d689364ff00367f26573df9339e8c16b4cef35"
+        },
+        {
+          "path": "scripts/reputation/evaluation-remediated/package-lock.json",
+          "sha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3"
+        },
+        {
+          "path": "scripts/reputation/evaluation-remediated/package.json",
+          "sha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896"
+        },
+        {
+          "path": "scripts/reputation/semaphore-v4-evaluation.mjs",
+          "sha256": "47a2a15801163438035fc947b21dad712f0d2aff3b295214fb84d19de89f645f"
+        },
+        {
+          "path": "scripts/reputation/semaphore-v4-evaluation.test.mjs",
+          "sha256": "7a26d2aedd9563ac4508a1fb6fbf192e2948376297898410fd4785baf62f876f"
+        },
+        {
+          "path": "scripts/reputation/semaphore-v4.pins.json",
+          "sha256": "d46e94bde6478752e142e2a1bff2f1ef81c7cac7ad7bd822677b09168c45f4ec"
+        }
+      ],
+      "changedRecordedFiles": [],
+      "qualification": "Historical scoped execution only; does not certify the current dependency tree or new head."
+    },
+    {
+      "path": "docs/execution/reviews/T79.json",
+      "sha256": "3663a990b390013927f4af82675060a823179e7711b0147ced5c41a067a2c0d0",
+      "unchangedRecordedFiles": [],
+      "changedRecordedFiles": [],
+      "qualification": "Historical scoped execution only; does not certify the current dependency tree or new head."
+    },
+    {
+      "path": "docs/execution/reviews/T86-formal.json",
+      "sha256": "5139a2a166bafa736ef89b3a3af919e0b7f87f01b95930dbaaac1c87b0480c74",
+      "unchangedRecordedFiles": [
+        {
+          "path": "scripts/formal/evm.mjs",
+          "sha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c"
+        }
+      ],
+      "changedRecordedFiles": [],
+      "qualification": "Historical scoped execution only; does not certify the current dependency tree or new head."
+    }
+  ],
+  "sourceDrift": [
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "initialSha256": "3c140a197bb17c19f43d3d7c95323c16da8b818bd2e986aaed5108dd08046bf7",
+      "currentSha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32",
+      "reason": "Root-authorized T88 repair; distinct review required"
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "initialSha256": "740e62c5363f21aa59735c07a3d7af42db0bb638d629bd2863eb5126546185e1",
+      "currentSha256": "1b6e01384ad928fd0926276685a6b0d7783838daafaf92fa3271e5c01561a4c1",
+      "reason": "Root-authorized T88 repair; distinct review required"
+    }
+  ],
+  "falsePositiveDispositions": [
+    {
+      "topic": "Governance foreign error code",
+      "reason": "createCoreError independently revalidates codes against a fixed own-key allowlist; no arbitrary diagnostics exported."
+    },
+    {
+      "topic": "Metadata/approval labels",
+      "reason": "Claims/governance/acceptance/unsigned distributions keep descriptions separate from authenticated callbacks/native proof identity. No automatic release/custody authority found."
+    }
+  ],
+  "limitations": [
+    "Static local defensive review is not professional cryptographic/security, physical-device, hosted-distribution, funds-enabled release or deployment certification.",
+    "No actual Sepolia/Forge send, signing, deployment, Docker evaluation, browser journey or external endpoint request during this audit.",
+    "No whole suite duplicated. Root owns final four TS configs, package suite, builds, scanners and affected native/browser integration.",
+    "Root must refresh later package/CI/source deltas and new files before final delivery; initial hashes are not semantic certification of future bytes.",
+    "Historical T57/T61/T63/T79/T86 executions apply only to their scoped recorded hashes; no current-head execution claim inherited.",
+    "No archive extraction contract invented: locator only checks optional archive hash; reputation runner consumes preselected verified files.",
+    "T88 repair author cannot independently approve own delta. First distinct native failed-release-to-refund integration remains root-owned.",
+    "CLI attempt history is an editable local process-resume safeguard; no new malicious-file integrity, multi-process or filesystem power-loss qualification is claimed."
+  ],
+  "edits": {
+    "sourceFiles": [
+      "scripts/sepolia/lib.mjs",
+      "scripts/sepolia/trade.mjs",
+      "scripts/tests/sepolia-hygiene.test.mjs",
+      "scripts/tests/sepolia-trade-state.test.mjs"
+    ],
+    "authorization": "Explicit root T88 transfer after read-only audit findings.",
+    "ledgerEdits": false,
+    "commits": false,
+    "externalMessagesOrPublication": false,
+    "productionResourcesStarted": false
+  }
+}

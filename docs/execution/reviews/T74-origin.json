@@ -1,0 +1,32 @@
+{
+  "task": "T74/T49",
+  "source": "scripts/fixtures/journey-origin-screen.mjs",
+  "sourceSha256": "596024023aacb0512f9fa80b55594b302e68ed614d3a7c0c3b00ff986e513952",
+  "change": "Explicit constructor-owned vaultOnly composition skips trading asset requests; no wallet source or fake assets response added.",
+  "actualRun": "node scripts/test-journey-origin-browser.mjs",
+  "logSha256": "be0186e4a864dcdf0405e86dae5c4bf2bad3df93fe143868075cac6449d7a99b",
+  "result": {
+    "fixture": "actual-signed-two-origin-profile-migration",
+    "browser": "154.0.8037.57",
+    "origins": 2,
+    "manifestSha256": "71f18d533c4b4ddb0dfab949524a2ee3461ee7fc4f89ed2520bd32c0b6d9bfde",
+    "signedAssets": 4,
+    "compiledSyntheticPublicKey": true,
+    "independentAssetVerification": true,
+    "tamperedAssetRefused": true,
+    "wrongSignatureRefused": true,
+    "untrustedKeyRefused": true,
+    "sourceCurrentBackupVerified": true,
+    "wrongPassphraseRefused": true,
+    "freshDestinationProfileAndKey": true,
+    "sourceCiphertextPreserved": true,
+    "sourceBackupNotDestinationProof": true,
+    "destinationCurrentBackupReverified": true,
+    "opaqueRecordsIncluded": true,
+    "walletCalls": 0,
+    "externalRequests": 0,
+    "productionOriginPolicy": false,
+    "releaseEnabled": false
+  },
+  "qualification": "Current source-only local two-origin fixture, no production root/origin profile adoption. Final exact-head hosted browser check pending."
+}

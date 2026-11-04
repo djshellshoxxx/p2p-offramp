@@ -1,0 +1,162 @@
+{
+  "task": "T88-owned-lifecycle-followup",
+  "status": "READY_FOR_INDEPENDENT_ROOT_REVIEW",
+  "frozenAtUtc": "2026-11-02T17:35:21.057244+00:00",
+  "sourceHead": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "ownedFiles": [
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "baselineSha256": "3b875a4414fa2c62f7e7f5485a64985d489d4ab30f1b45dbd727c0372599b6a5",
+      "sha256": "17280d0c12e2ac8daacf66bd1c3fd831367c80b955fafcaf8e11cb39e6936f47"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "baselineSha256": "66f77213feeebcf36a0e0bf33599ec853998e79ed79e4eb4eca818fb040e1db6",
+      "sha256": "c5f49c00d52156110c26b951b2852aff9e3470a8c48369c1d849638b29c56d9c"
+    }
+  ],
+  "findings": [
+    {
+      "title": "Owned disposal during isCurrent was checked only before callback invocation",
+      "baselinePath": "packages/wallet/src/evm-execution.ts",
+      "baselineLine": 66,
+      "red": "The final native-provider capability check disposed its owner then returned true; the baseline still invoked the in-memory send stub once. Initial callback disposal also began one validator call.",
+      "green": "The post-callback owned disposed check vetoes both cases: zero send calls, and zero initial validator/provider work. Existing broadcast-unknown marker survives final-check disposal."
+    },
+    {
+      "title": "External signal setup/removal could reject outside Result after physical work had started",
+      "baselinePath": "packages/wallet/src/evm-execution.ts",
+      "baselineLines": [
+        73,
+        130,
+        132
+      ],
+      "red": "Malformed or overridden signal accessors/listeners rejected the public Promise or admitted work; suspended validator/provider scenarios returned rejections instead of fixed results.",
+      "green": "Native signal brand access and captured EventTarget primitives avoid ordinary overridden hooks; unsupported signals return fixed INVALID_INPUT before work. Owned signal adaptation isolates journal calls, cleanup cannot replace Result, and active admission persists until actual physical work drains."
+    }
+  ],
+  "repair": [
+    "Check owned disposed state both before and after isCurrent; accept only a true native boolean callback result.",
+    "Capture native AbortSignal aborted getter, EventTarget add/remove and owned AbortController signal/abort primitives at module initialization.",
+    "Validate external signal and install its supported native listener before scheduling any physical validator/provider/journal work; check again after installation and before beginning work.",
+    "Pass a clean owned AbortSignal to journal methods; explicit owned cancellation state and stop callback settle public results promptly without releasing the physical slot.",
+    "Preserve all marker/send/hash/no-resend behavior; after marking begins any cancellation/disposal/exception remains BROADCAST_UNKNOWN.",
+    "Remove listeners with isolated cleanup and release only the owned active job in physical finally; failed setup cleans admission without starting work."
+  ],
+  "verification": {
+    "command": "node --test packages/wallet/test/evm-execution.test.mjs",
+    "defaultNodeTestIsolation": true,
+    "managedIpcCapability": true,
+    "red": {
+      "exitCode": 1,
+      "tests": 23,
+      "pass": 14,
+      "fail": 9,
+      "skipped": 0,
+      "cancelled": 0,
+      "raw": "owned-lifecycle.RED.log"
+    },
+    "green": {
+      "exitCode": 0,
+      "tests": 23,
+      "pass": 23,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "raw": "owned-lifecycle.GREEN.log"
+    },
+    "focusedTypecheck": {
+      "command": "node node_modules/typescript/bin/tsc --project /workspace/work/t88-execution-owned-lifecycle/focused-tsconfig.json",
+      "exitCode": 0,
+      "config": "focused-tsconfig.json",
+      "raw": "focused-typecheck.log",
+      "scope": "One production root source plus required imports, inheriting strict repository compiler settings; no whole suite/App build."
+    },
+    "diffCheck": "passed",
+    "negativeControls": [
+      "Disposal in final current callback returning true: old one synthetic send, repaired zero.",
+      "Disposal in initial current callback returning true: repaired zero validator/provider work.",
+      "Null/plain/EventTarget/hostile/revoked/throwing-proxy signals refuse before work and leave a valid explicit attempt eligible.",
+      "Own aborted/addEventListener/removeEventListener getters on genuine native signals are never invoked, success remains fixed Result, downstream journal sees a clean owned signal, and no listener remains.",
+      "Cancellation while a validator is physically held returns CANCELLED yet blocks another operation until drain; one new explicit attempt is permitted only afterward.",
+      "Cancellation while the send stub is physically held returns BROADCAST_UNKNOWN, retains active admission through drain and leaves its durable unknown marker blocking all later retries.",
+      "Native signal reflection which retires its owner cannot start validation or provider work."
+    ]
+  },
+  "dependencyCheckpoint": [
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1"
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5"
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55"
+    },
+    {
+      "path": "packages/schemas/src/intent.ts",
+      "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26"
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89"
+    },
+    {
+      "path": "package.json",
+      "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "node_modules/typescript/package.json",
+      "sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e"
+    }
+  ],
+  "priorEvidence": {
+    "walletPacket": {
+      "path": "/workspace/work/t88-execution-reflection/T88-review-packet.json",
+      "sha256": "079f1e816db03a36b4e4c373c996f4e4c52d1ae6e5f2fe9f8fa5e178f1f0dd75",
+      "manifestSha256": "2fd72eb63ae5427709a5c3d1c266aaba61ce775ece6407ee52fa0f9639a88852"
+    },
+    "termsPacket": {
+      "path": "/workspace/work/t88-terms-copy-bound/T88-copy-bound-review-packet.json",
+      "sha256": "837934dcc86120db78c8511798cd6e262ac074f8da7bfc2a32acc30bebd66c5b",
+      "manifestSha256": "356decb77f130d7286712f5a963fda4079d6770968b5e3c759393cf2b2806d27"
+    },
+    "t91ManifestSha256": "c153e396d3017f9eee9bb1278075c92678aed0a13f8d0c6f2107a793724491ca",
+    "verification": "All previous manifests reverified unchanged; original14 execution checks remain the first14 tests in this receipt."
+  },
+  "limits": [
+    "All providers, journal ports and hashes are synthetic in-memory controls. No real wallet, RPC, network request, signing, broadcast or economic action occurred.",
+    "Only the explicitly reopened execution source and its existing test changed. No other source, full suite, commit, production activation, original T88/T91 packet modification or additional formal target attempt.",
+    "Native signal capabilities follow platform semantics; the regression also handles native-reflection reentry rather than assuming every proxy is rejected by every native implementation.",
+    "Root independently reviews final source and current dependencies; earlier T88 receipt is retained historical evidence, not silently relabeled for changed source."
+  ],
+  "sourceHeadAtBaseline": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "concurrentHeadChanges": [
+    "fad51dac5560012d63243b2be78c303ed5656cf6 Bind finite formal partitions to original escrow properties",
+    "5d448c08aa4e376826c5db62c5520fcd98826183 Record passive XMTP artifact and profile qualification intake"
+  ],
+  "headScopeNote": "Root T90 passive-intake and T91 formal-partition commits occurred during this slice; both are outside the owned execution pair. Focused evidence binds exact source/test hashes; final dependency list is a checkpoint, not a whole-tree run."
+}

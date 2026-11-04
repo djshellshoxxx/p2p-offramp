@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "task": "T85",
+  "reviewer": "review_zoom",
+  "status": "APPROVED_BOUNDED_DEFENSIVE_REPAIR",
+  "observedAt": "2026-11-02T15:44:50.469118+00:00",
+  "auditStartCommit": "76c45df0b2f39a928d92ae0af3d60f37737802c5",
+  "files": [
+    {
+      "path": "packages/storage/src/migration-service.ts",
+      "bytes": 14018,
+      "sha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357"
+    },
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "bytes": 14152,
+      "sha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69"
+    },
+    {
+      "path": "packages/storage/test/migration-service.test.mjs",
+      "bytes": 16271,
+      "sha256": "faf9e3c07e390772465722ce28b45af73b736ebdc02a1da90c005ad24dc8f952"
+    },
+    {
+      "path": "packages/storage/test/idb-vault-store.test.mjs",
+      "bytes": 14559,
+      "sha256": "0dc4a5b2f8a0f1d637ff9f167c9cb18452389fd5fb6ae2b939ebd130db9e0bff"
+    }
+  ],
+  "patchSha256": "c829b021dc02888d65d94009b4b57b8a37072149950570ee0ef8430c84d62266",
+  "semanticChecks": [
+    "Migration error classification catches foreign prototype/descriptor failures, never invokes code getters, accepts only string values from the fixed VaultErrorCode set and otherwise returns fresh fixed STORAGE_UNAVAILABLE diagnostics.",
+    "Known valid migration/schema errors preserve their existing codes, retryability and fixed messages; no migration transforms, CAS, readback or fresh-key behavior changed.",
+    "IndexedDB invalidation iterates one subscriber snapshot and isolates each exception, including already-closed immediate notification; all original subscribers receive terminal invalidation even when an earlier callback removes another.",
+    "Teardown proceeds through listener clear; existing close idempotence, connection ownership, strict durability, profile bound, exact-envelope CAS and source-bound add paths are unchanged.",
+    "New regressions exercise both reported failures with caller-local fixtures; existing focused storage/migration cases remain enabled."
+  ],
+  "validation": {
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/storage/test/migration-service.test.mjs packages/storage/test/idb-vault-store.test.mjs",
+    "managedIpcCapability": true,
+    "externalTargets": false,
+    "exitCode": 0,
+    "tests": 27,
+    "pass": 27,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "independentLog": {
+      "path": "/workspace/work/t85-independent-storage-focused.log",
+      "sha256": "7f362f08c59b3343321c050c022c5d455a14b343b1a9e5751e36509cd5590a7c"
+    },
+    "authorRedEvidence": {
+      "path": "/workspace/work/t85-storage-errors.RED.log",
+      "sha256": "4f2311b78604715ea1e9f280a144252a82cc66dca97b59e7e2e346f265ccce72",
+      "tests": 27,
+      "pass": 25,
+      "fail": 2,
+      "replayedByReviewer": false
+    },
+    "authorGreenEvidence": {
+      "path": "/workspace/work/t85-storage-errors.GREEN.log",
+      "sha256": "f896efc733b029e89ece06dd6be89e2e8396450e25313a4ec9c4e80e99cf45fb"
+    }
+  },
+  "auditSourceDrift": [
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "beforeSha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3",
+      "afterSha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69"
+    },
+    {
+      "path": "packages/storage/src/migration-service.ts",
+      "beforeSha256": "40dbc711ee9e4a8d0f5ad26a5915c413e4e8312b9d48870a3ffdb75a84bc2ed0",
+      "afterSha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357"
+    }
+  ],
+  "otherAuditSourceUnchanged": true,
+  "findingsClosed": [
+    "T38-A-01",
+    "T38-A-02"
+  ],
+  "remainingFindings": [],
+  "limitations": [
+    "Focused local defensive correctness result; no professional cryptographic, production, physical-device or hosted-CI approval.",
+    "T82 favorites/runtime/UI WIP remains outside this review."
+  ],
+  "sourceEditsOrCommits": false
+}

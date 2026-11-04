@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "recordId": "T70-local-browser-engine-intake",
+  "observedAt": "2026-11-02T11:32:31.312714+00:00",
+  "scope": "Installed tooling, pinned engine targets and managed-network availability on this local host. This inert record does not establish browser, device, wallet, release or production acceptance.",
+  "sourceCheckpoint": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+  "host": {
+    "os": "Debian GNU/Linux 13 (trixie)",
+    "architecture": "x86_64",
+    "playwrightPlatform": "debian13-x64",
+    "nodeVersion": "v24.19.0"
+  },
+  "playwright": {
+    "package": "playwright-core",
+    "version": "1.64.1",
+    "browsersJsonSha256": "2cfd419f71ac6475d81e1301fa86c34cf2a2a6bae2a0da4b5a2b18310216b6bf"
+  },
+  "engines": [
+    {
+      "engine": "chromium",
+      "installedExecutable": "/usr/bin/chromium",
+      "installedVersion": "154.0.8037.57",
+      "installedVersionOutput": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)",
+      "playwrightPinnedRevision": "1248",
+      "playwrightPinnedVersion": "156.0.8078.4",
+      "qualification": "System binary present. No new browser suite was run for this intake; the installed system version differs from the Playwright download pin. Existing Chromium evidence retains its original finite scope."
+    },
+    {
+      "engine": "firefox",
+      "playwrightPinnedRevision": "1555",
+      "playwrightPinnedVersion": "157.0",
+      "expectedExecutable": "/home/agent/.cache/ms-playwright/firefox-1555/firefox/firefox",
+      "executablePresent": false,
+      "officialArchivePath": "builds/firefox/1555/firefox-debian-13.zip",
+      "declaredPackageNamesNotInstalled": [
+        "libasound2",
+        "libdbus-glib-1-2"
+      ],
+      "libraryObservation": "libasound2 is provided by installed libasound2t64 and libasound.so.2 exists. libdbus-glib-1.so.2 is absent. Package-name inspection is not a dynamic dependency or launch check.",
+      "qualification": "Unmeasured: pinned engine binary absent and documented download hosts unavailable under the enforced policy."
+    },
+    {
+      "engine": "webkit",
+      "playwrightPinnedRevision": "2370",
+      "playwrightPinnedVersion": "27.2",
+      "expectedExecutable": "/home/agent/.cache/ms-playwright/webkit-2370/pw_run.sh",
+      "executablePresent": false,
+      "officialArchivePath": "builds/webkit/2370/webkit-debian-13.zip",
+      "declaredPackageNamesNotInstalled": [
+        "gstreamer1.0-libav",
+        "libgles2",
+        "libgtk-4-1",
+        "libharfbuzz-icu0",
+        "libhyphen0",
+        "libmanette-0.2-0",
+        "libwoff1"
+      ],
+      "libraryObservation": "Declared package names were compared with installed Debian packages. With the engine absent, actual dynamic dependencies and launch behavior remain unmeasured.",
+      "qualification": "Unmeasured: pinned engine binary absent and documented download hosts unavailable under the enforced policy. Linux WebKit automation would not establish Safari or physical-device acceptance."
+    }
+  ],
+  "managedNetwork": {
+    "mode": "restricted",
+    "stateObserved": "enforced",
+    "policySha256": "b40e6662f38d1272fb995562ffc812a99c8acf3a81d5c5707f4a3469ea1cc904",
+    "documentedDownloadHosts": [
+      {
+        "host": "cdn.playwright.dev",
+        "allowed": false
+      },
+      {
+        "host": "playwright.download.prss.microsoft.com",
+        "allowed": false
+      }
+    ],
+    "downloadAttempted": false,
+    "networkApprovalRequested": false,
+    "automaticApprovalRejected": false,
+    "bypassAttempted": false
+  },
+  "resume": {
+    "precondition": "The documented official download hosts must be permitted through the managed network policy, or the exact official engine archives must already be available with verified provenance. Preserve the inherited proxy and public CA, strict TLS and pinned package version.",
+    "officialInstallCommand": "PLAYWRIGHT_BROWSERS_PATH=/workspace/work/p2p-playwright-1.64.1 node node_modules/playwright-core/cli.js install firefox webkit",
+    "libraries": "Resolve actual missing libraries using permitted public Debian packages in an owned local workspace or isolated owned container. Do not replace the host configuration or substitute an unpatched system browser for the pinned engine.",
+    "nextImplementation": "Once real engines are available, admit one shared test selector with Chromium as the unchanged default, explicit firefox/webkit selection and failure without fallback. Adapt the existing vault, runtime, emitted-web, journey and origin-journey harnesses after coordinating ownership. Replace the Chromium-specific frame-error URL assertion with an equally strict engine-neutral framing-denial proof. Preserve all substantive assertions.",
+    "verification": "Record the actual OS/architecture, engine build/version, Playwright version and each executed harness result. Existing aggregate commands contain additional Chromium-only scripts, so list the precise adapted harnesses. Preserve failures and unavailable results. Do not promote an installation, hash or proposed selector into acceptance."
+  },
+  "qualification": {
+    "firefoxExecuted": false,
+    "webkitExecuted": false,
+    "newBrowserSupportClaimed": false,
+    "physicalWalletOrDeviceAcceptance": false,
+    "productionAcceptance": false,
+    "tradingEnabled": false
+  }
+}

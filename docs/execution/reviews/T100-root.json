@@ -1,0 +1,61 @@
+{
+  "task": "T100",
+  "reviewer": "root",
+  "status": "ACCEPTED_SCOPED_NATIVE_TCP_EVIDENCE",
+  "command": [
+    "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+    "--import",
+    "./scripts/test-support/register-tsx.mjs",
+    "--test",
+    "packages/relay/test/pool.test.mjs"
+  ],
+  "exitCode": 0,
+  "timedOut": false,
+  "seconds": 4.881911157004652,
+  "sourceSha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09",
+  "originalAssertionsByteExactAfterRemovingNewTest": true,
+  "unchangedBindings": [
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "36dc97f50fbebdd7d4f3fe15a95509c6da1391a33817587328e01ad8c85f40e9",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/harness.mjs",
+      "sha256": "c87370deea81f9cfae6e4719db3696c9a81b2a88fc928a273ae71301f485b0c1",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/fake-relay.mjs",
+      "sha256": "255704badb94595fefd4d7bdc923808fe2ac7024da2307ab3843cba795cec4a2",
+      "unchangedFromCommit": true
+    },
+    {
+      "path": "packages/relay/test/support/crypto-double.mjs",
+      "sha256": "767f8df4c137e6ab8f1e7c89ee92dadb30bc0152621019d654645c5e54a9eb2b",
+      "unchangedFromCommit": true
+    }
+  ],
+  "authorPacketSha256": "f6c9eb5bea7d276471fc0c37fe21743809f083380fb1e7906506c3abade01636",
+  "log": "/workspace/work/t100-root-pool.log",
+  "logSha256": "e67cd0c1e8339ee4a9cd5799c4dae32b4d31b55893bb51c2dd6f99d410383b68",
+  "nativeObservations": [
+    {
+      "fixture": "owned-loopback-ws-missing-publish-ack",
+      "receivedEvents": 1,
+      "suppressedDefaultAcks": 1,
+      "outcome": "unknown",
+      "connectionsBeforePublish": 1,
+      "connectionsAfterEvent": 2,
+      "finalConnections": 2,
+      "publishTimeoutMs": 800,
+      "postTimeoutObservationMs": 800
+    }
+  ],
+  "observedAtUtc": "2026-11-02T19:03:48.492088+00:00",
+  "scope": "Native Node WebSocket/HTTP-upgrade on owned loopback; actual one EVENT and suppressed OK,800ms timeout and another800ms no replay. Uses logical WSS fixture mapping/plainWS and test crypto. Not production relay/TLS/private route/crypto/vendor certification.",
+  "oldActualRefusedAndDroppedSocketCasesReused": true,
+  "firstAuthorFailure": "Preserved incorrect new connectCount1 assertion; source contract uses separate subscription and publication sockets. Corrected new baseline only; no old assertion/production code weakened.",
+  "normalNodeIsolation": true,
+  "codeOrPolicyEditsByReviewer": false
+}

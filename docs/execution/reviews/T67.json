@@ -1,0 +1,158 @@
+{
+  "task": "T67",
+  "reviewer": "root; different from source author retention_integration and fixture author review_delivery_docs",
+  "disposition": "APPROVED_LOCAL_IMPLEMENTATION_ONLY",
+  "files": [
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "sha256": "79ec4442afc353c34e575cb371e9f7e9a41c041438333a5e4e965ff77c2511ff"
+    },
+    {
+      "path": "packages/identity/index.ts",
+      "sha256": "b325686cd8338333af8ba4dfcda075c836a8a5dbeea6de6d1a85830c8213d80c"
+    },
+    {
+      "path": "packages/identity/test/history-retention.test.mjs",
+      "sha256": "22dea8e18a09cbce4086bfbeaa7b4d3af29a2f1f511563b05fcda02972e1c2f4"
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af"
+    },
+    {
+      "path": "packages/storage/test/retention-service.test.mjs",
+      "sha256": "27abdfe08bdc70c4d12080ce5fe3eafc37884f56d3e79293664910afa62b1bf8"
+    },
+    {
+      "path": "apps/web/src/retention/native-retention.ts",
+      "sha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8"
+    },
+    {
+      "path": "apps/web/test/retention-native.test.mjs",
+      "sha256": "c20784846ce18842caa8c1b95747e5cd60d4242cbd8fc823d56d2d6d5793efdb"
+    },
+    {
+      "path": "packages/storage/index.ts",
+      "sha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb"
+    },
+    {
+      "path": "scripts/test-evm-reconcile-local.mjs",
+      "sha256": "11c4f60533ccefe031b7b177470bf87afedecbfe47bbee5311df681f1f559f1a"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "d7ee68ed99ca0efb7c13a97e86221d13d855296e7def6f3e9915fdf80801684c"
+    },
+    {
+      "path": "packages/schemas/test/retention-runtime.test.mjs",
+      "sha256": "fd574d863b138f162ce381221c9046447f29d24709fc066ff9a539b6e062e63d"
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "63c1cf3ab95f1d5688f0e84adacb9e55e0ca1a543d1613d190790f74600f7005"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "dfe0df7259955b1138cba9f85d447061dee9ceafe5a72942be317ea5a31bad41"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "ee1896a67f3014267815806b18240f3f773d10278f7786c6676e5bd6d920962f"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "514be9791b17f7a31885f5eb3f13eb74047fc42a1b64cb90019de3a813242bcf"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "e9f058883ca7f5aa43031ce57aa9263c0bd03f4258c66319f2e507e18cdb34e2"
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "sha256": "d9b4a53d2858330ef4254592f287ca5ac4c0ec962cbfcb65aa5d011715e4b7e3"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "39efb36163f0b2222967137ad4e3dda70d4ce47a8cc094fbfec11e117242a031"
+    },
+    {
+      "path": "apps/web/src/ui/RetentionPanel.tsx",
+      "sha256": "1a256f271e1d4275d288debdbdf92235433fec61061de6fa40c28ca6f76675c8"
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradePages.tsx",
+      "sha256": "afe5ee5b9e08d9efd889fe94ff452a4319aa0d12cba98593ba9c33983853b49b"
+    },
+    {
+      "path": "apps/web/test/retention-worker.test.mjs",
+      "sha256": "dfde96621bc5122f68cd1742f2f96c62665cecf80072a5ff0f83618ee660699a"
+    },
+    {
+      "path": "apps/web/test/saved-reviews-worker.test.mjs",
+      "sha256": "0a617d9b1c0a819955538bdb6ad16d9b552904d0aa04c69e493f4c4bdae25ff5"
+    },
+    {
+      "path": "scripts/test-saved-reviews-browser.mjs",
+      "sha256": "e6325d6b6eac459257f94dcb2e3758e3a2f856c5a0ba629a838de08ae099f515"
+    },
+    {
+      "path": "scripts/fixtures/retention-worker.mjs",
+      "bytes": 13872,
+      "sha256": "6c8435a73b79ef773d40c8051d12c32a7912ad79445e7a9e78b4c345fc5088ed"
+    },
+    {
+      "path": "scripts/fixtures/retention-browser.tsx",
+      "bytes": 6756,
+      "sha256": "37f37f65ced6328f5fa9066b36401e65aec5c4a480567649f202deb92ad2cdac"
+    },
+    {
+      "path": "scripts/test-retention-browser.mjs",
+      "bytes": 25146,
+      "sha256": "d1e3baa91923ef3fc5bc4f5216096d2401a6fbe435c8c6cb67509759b85bd82e"
+    }
+  ],
+  "review": "Read native payout v3, G01 purpose-specific metadata/wiping, offline vs explicit review, same-scope lease identity, coherent finalized credit reads, complete authenticated history, read-only reconciliation, typed IPC, UI consent and all three native fixture sources. Reviewed final CAS/live payout checks and durable receipts.",
+  "closedFindings": [
+    "Root reproduced unadopted authority cleanup leak, repaired with owned resource transfer and six persistent cleanup cases. Original root probe now passes.",
+    "Legacy exported journal-only path now requires native payout-closure lease; missing/unknown/nonzero/revoked credit protects records.",
+    "Terminal callback retirement is rechecked before final CAS."
+  ],
+  "independentRuns": {
+    "nativeStorageIdentityCases": 34,
+    "runtimeSchemaConstructorCases": 13,
+    "actualPinnedAnvilChecks": 9,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0
+  },
+  "reusedActualBrowserEvidence": {
+    "groups": 15,
+    "sourceInputs": 585,
+    "loadedModules": 117,
+    "receiptSha256": "9ce80ceca9903b2f9695382ce403542af8b0e0f4242851c2e0b7cfe2bb5e8b78",
+    "logSha256": "2e11a43b0645dee5222dd6e3cd834ede36752b6721ea5b8b30f8cc47f9677be9",
+    "reviewDeleteSends": 0,
+    "nativeJournalRewrites": 0,
+    "sourceStable": true
+  },
+  "rootLogs": [
+    {
+      "path": "/workspace/work/t67-root-payout-final-focused.log",
+      "sha256": "4c738db2902106544bf4736e611a05eba6689dc59aa23918916448f325d84d02"
+    },
+    {
+      "path": "/workspace/work/t67-root-runtime-reviewed.log",
+      "sha256": "98925c2df01335c39191c4e1960f016f2cbc6cbbe5fd34b3359b25dcee7c0e65"
+    },
+    {
+      "path": "/workspace/work/t67-root-payout-final-native.log",
+      "sha256": "482dccf87019a7604862c9107b41fc92be33496cb67a554fd86df67e442c4e56"
+    }
+  ],
+  "reviewAvailability": "Delegated final Native9 review was stopped by automated safety filtering. It was not retried; root performed the source review and local functional checks directly. Earlier unchanged-scope review is historical.",
+  "limits": [
+    "Default App installs no native authority; offline suggestions authorize no deletion.",
+    "No production provider/chain/crypto review, physical device, memory erasure or off-device copy deletion qualification.",
+    "Final whole-repository/source-head verification remains T38."
+  ]
+}

@@ -1,0 +1,685 @@
+{
+  "task": "Independent final acceptance T82 + T38-B-02 disposition",
+  "reviewer": "audit_build_ops; did not author T82",
+  "status": "T82_SCOPED_CURRENT_SOURCE_ACCEPTED; T38-B-02_CONFIRMED_OPEN_P3",
+  "reviewedAtUtc": "2026-11-02T17:36:42.021391+00:00",
+  "head": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "readOnlySource": true,
+  "sourceEdits": false,
+  "commits": false,
+  "initialInventory": {
+    "path": "/workspace/work/final-review-t82.initial.json",
+    "bytes": 9813,
+    "sha256": "4b069899a0766f2fc0b5af6a306f3378db8072cefec31bf6406208a1607992c0"
+  },
+  "initialFiles": 31,
+  "currentFiles": 37,
+  "changedSinceReviewStart": [],
+  "files": [
+    {
+      "path": "apps/web/src/app-services.ts",
+      "bytes": 12706,
+      "lines": 152,
+      "sha256": "3f9fa7202474ff2c7f8b9544e0e77c51dca29b62b1101173723e3aa3333c2af8",
+      "coverage": "T82-specific paths:39-40,58-83,128-142",
+      "semanticChecks": "Named favorites methods only; runtime remains private; facade maps exceptions to fixed PROTOCOL_ERROR; selectionScope follows opaque handle object identity so profile lock/switch changes owner without exposing keys.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "3f9fa7202474ff2c7f8b9544e0e77c51dca29b62b1101173723e3aa3333c2af8",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "c4d5c9dea308501de2bb7c753f3b2479b810698f1f1f4ee4795eb4ee2fca914e",
+      "matchesReceipt": false
+    },
+    {
+      "path": "apps/web/src/retention/native-retention.ts",
+      "bytes": 17146,
+      "lines": 153,
+      "sha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8",
+      "coverage": "Targeted complete-closure path:58-75",
+      "semanticChecks": "The actual native guard returns an empty deletion lease whenever a nonidentity record is not a known candidate. A favorites preference is not a candidate, so even an empty valid preference conservatively protects all history. No preference whitelist or guessed dependency closure was added.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "bytes": 28197,
+      "lines": 363,
+      "sha256": "77a5431fe3c0e3bc60b18d18970ff3309d842e95bbefba21f4aa291207a7c0f6",
+      "coverage": "T82-specific lifecycle/profile paths:25-139,160-225,287-295,320-322,340-363",
+      "semanticChecks": "Requests and replies bind operation+generation+selected profile; abort invalidates generation and posts lock. Profile methods verify the exact current handle after awaits. Favorite receipts must echo ID/favorite and expectedRevision+1. Late results cannot revive a locked or replaced owner.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "77a5431fe3c0e3bc60b18d18970ff3309d842e95bbefba21f4aa291207a7c0f6",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "2c928fae9c3d552cfc1e329e147cfb95ecbfd2a7ad7dc2be0d12fe379271009a",
+      "matchesReceipt": false
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "bytes": 2252,
+      "lines": 22,
+      "sha256": "1d2bf3b83a9d3a7bad97cefecba6dddac78d90c90cd764be978bb5a67b27ae9b",
+      "coverage": "Full 22 lines",
+      "semanticChecks": "Both named favorites operations are exhaustively profile-bound. Frozen metadata contains only operation/generation/profile ID, with no record payload, passphrase, command closure or private preference contents.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "1d2bf3b83a9d3a7bad97cefecba6dddac78d90c90cd764be978bb5a67b27ae9b",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "a5f5c57f0f73bf44ed80877d4692aeda5dfe4bef24dcb256cf4b8922db611ffc",
+      "matchesReceipt": false
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "bytes": 38819,
+      "lines": 512,
+      "sha256": "0d19e84ad3be12ee547a5ab97c686d537c639652bebcccfe5d2cb2e237f2437d",
+      "coverage": "Full512 lines; semantic focus on clear/dispatch/427-448",
+      "semanticChecks": "Trusted Worker constructs the native consumer from the selected vault session and exact handle. One global active job persists through ignored work; lock clears leases and aborts without releasing physical admission. Favorite changes invalidate backup verification/retention and draft previews. Named list returns only bounded IDs+revision; completed set yields a scalar durable receipt, while obsolete generations suppress publication. No generic record or send IPC exists.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "0d19e84ad3be12ee547a5ab97c686d537c639652bebcccfe5d2cb2e237f2437d",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "f54832dfdff45c7a5068fb8e872c75adae5b90bf983e6ab2633ec94a06a3d50e",
+      "matchesReceipt": false
+    },
+    {
+      "path": "apps/web/src/trade/review-controller.ts",
+      "bytes": 32081,
+      "lines": 434,
+      "sha256": "c1fb01bb9df1d24b641173e6513cbd672f175f9422dd01274e80db5c81e5b9ae",
+      "coverage": "Targeted saved-review paths:1-140,300-434",
+      "semanticChecks": "loadSaved obtains current selected-profile bytes and reruns the existing registry review before merging fresh objects. Duplicate/malformed lists fail; invalid or deleted rows lose saved mappings. Fresh valid rows replace previous object identity even with an unrelated bad row. Buffers and stale-owner results are retired; no favorite can establish validity by itself.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "c1fb01bb9df1d24b641173e6513cbd672f175f9422dd01274e80db5c81e5b9ae",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "apps/web/src/ui/FavoriteSavedReviews.tsx",
+      "bytes": 8155,
+      "lines": 105,
+      "sha256": "3261acea055de16af9a95ae3bc06e49e793a19318826a70eb1ec9358a79d727c",
+      "coverage": "Full 105 lines",
+      "semanticChecks": "Opening always awaits the existing fresh loader, requires a newly replaced target object, and never falls back to a retained old mapping. Owner identity includes exact store+scope+TradeReviewController; owner changes hide previous view immediately and suppress late navigation. Active work remains gated until drain. Errors clear the confirmed value; reload is explicit. UI exposes ID-only favorites, no terms/funding action.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "3261acea055de16af9a95ae3bc06e49e793a19318826a70eb1ec9358a79d727c",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "3261acea055de16af9a95ae3bc06e49e793a19318826a70eb1ec9358a79d727c",
+      "matchesReceipt": true
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "bytes": 54724,
+      "lines": 753,
+      "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+      "coverage": "Targeted favorites copy:161-174 and semantic group description",
+      "semanticChecks": "Current copy states encrypted-profile storage, mandatory fresh current-registry review, uncertainty after unconfirmed writes, and conservative retention while a preference exists. Existing backups are explicitly retained. It makes no secure erasure or automatic history deletion promise.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "bytes": 1514,
+      "lines": 19,
+      "sha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "coverage": "Full 19 lines",
+      "semanticChecks": "Typed favorites group is included through the existing locale view. Canonical IDs and revisions never enter translation parsing as authority.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "apps/web/src/ui/trade/TradePages.tsx",
+      "bytes": 11844,
+      "lines": 180,
+      "sha256": "0d94c36af5167aa42c9d13c8514fce0e9755a5ed288109b3862d2b3067892d49",
+      "coverage": "Full 180 lines; T82 integration only",
+      "semanticChecks": "Offers composes actual favorite store/controller hook with existing current-registry saved review panel. Star controls appear only for saved IDs and use the observed loaded favorite revision. Locked services remove the store; open routes remain existing local review routes. Draft behavior is outside this review.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "0d94c36af5167aa42c9d13c8514fce0e9755a5ed288109b3862d2b3067892d49",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "5d88371339d645a24ec13b4ded947931c29f483f0bcc6a9bd881be77b6414c2c",
+      "matchesReceipt": false
+    },
+    {
+      "path": "apps/web/test/review-favorites-ui.test.mjs",
+      "bytes": 6227,
+      "lines": 66,
+      "sha256": "e17c7ba3191560478c955a16a137c9b6a9aa67c9456417f6b3bcf83c3761949d",
+      "coverage": "Full 66 lines; fresh 6 cases",
+      "semanticChecks": "Tests fresh review on every open, deleted/unreviewable targets, malformed-load retained mapping refusal, one valid target alongside an invalid row, retired owners/busy loads, and ID-only source-message rendering. The controller-replacement real-hook regression is separately retained in the native harness.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "e17c7ba3191560478c955a16a137c9b6a9aa67c9456417f6b3bcf83c3761949d",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "e17c7ba3191560478c955a16a137c9b6a9aa67c9456417f6b3bcf83c3761949d",
+      "matchesReceipt": true
+    },
+    {
+      "path": "apps/web/test/review-favorites-worker.test.mjs",
+      "bytes": 8916,
+      "lines": 86,
+      "sha256": "2bd2bfd6e41eccc9aa0976106d124a819cf083eea487ce63c7f7006466142748",
+      "coverage": "Full 86 lines; fresh 4 cases",
+      "semanticChecks": "Exact named IPC and profile metadata; actual Worker/native vault CAS and backup verification invalidation; ignored committed write retains BUSY until drain then reload discovers membership; AppServices rejects post-lock results.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "2bd2bfd6e41eccc9aa0976106d124a819cf083eea487ce63c7f7006466142748",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "2bd2bfd6e41eccc9aa0976106d124a819cf083eea487ce63c7f7006466142748",
+      "matchesReceipt": true
+    },
+    {
+      "path": "docs/execution/profiles/03-relay-allocation.md",
+      "bytes": 3428,
+      "lines": 15,
+      "sha256": "8ad5017e1c70d4a05c38aab5fc4e192123d650e5c0893d57fdb805b2653557d9",
+      "coverage": "Full 19 lines",
+      "semanticChecks": "Retains direct-browser WebSocket preassembly allocation limit honestly. The T38-B-02 proposal concerns local object parsing and makes no new whole-network/preallocation claim.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/personalization/README.md",
+      "bytes": 1301,
+      "lines": 20,
+      "sha256": "8a8282db95710702fb73bb580139322a36ed5758ddfa8da21734d93e38ef9387",
+      "coverage": "Full 20 lines",
+      "semanticChecks": "Documents one owned encrypted preference, eight IDs, explicit revision/no retry/drain, current-registry open, foreign/future preservation, fresh-key restore, and the empty preference/history/backups retention limit.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "8a8282db95710702fb73bb580139322a36ed5758ddfa8da21734d93e38ef9387",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "8a8282db95710702fb73bb580139322a36ed5758ddfa8da21734d93e38ef9387",
+      "matchesReceipt": true
+    },
+    {
+      "path": "packages/personalization/index.ts",
+      "bytes": 625,
+      "lines": 6,
+      "sha256": "dc0b78d4e739ebe40842bec0f936adc3a4c340edb7552290b6ea8eb2dad736d0",
+      "coverage": "Full 6 lines",
+      "semanticChecks": "Favorites exports remain purpose-bound. The additional T80 draft exports explain the receipt hash delta and do not broaden favorite operations or grant transport/wallet authority.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "dc0b78d4e739ebe40842bec0f936adc3a4c340edb7552290b6ea8eb2dad736d0",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "3a568c1095cca3cff7c9fb06100ac0c8d1bc00681c306229f7347343de47ef70",
+      "matchesReceipt": false
+    },
+    {
+      "path": "packages/personalization/src/favorites.ts",
+      "bytes": 12823,
+      "lines": 164,
+      "sha256": "57b4681a8e871a4de685e64388e29e30e7294986159c36440a8e3824d7628e72",
+      "coverage": "Full 164 lines",
+      "semanticChecks": "Exact fixed preference ID+v1 format+2048-byte canonical payload; unique lowercase32-hex IDs capped by MAX_SAVED_REVIEWS = 8. Foreign/future/damaged namespace collisions refuse without writes. Only canonical/strict legacy saved targets can be starred; deleted targets may be unstarred. Native session lease revocation is sticky, expected revision is explicit, empty commits establish native envelope freshness, every write is guarded CAS, and there is no retry. One physical job remains active until native completion; durable receipts survive later retirement with sessionCurrent false. Guarded error classification reads bounded own data only and never a foreign accessor diagnostic.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "57b4681a8e871a4de685e64388e29e30e7294986159c36440a8e3824d7628e72",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "57b4681a8e871a4de685e64388e29e30e7294986159c36440a8e3824d7628e72",
+      "matchesReceipt": true
+    },
+    {
+      "path": "packages/personalization/src/trade-draft-store.ts",
+      "bytes": 14757,
+      "lines": 191,
+      "sha256": "93294d0ed61cc081b17992a4c462decdc4aa41fcd8cee69de5c4369240d39d7a",
+      "coverage": "Namespace lookup at118-123 only",
+      "semanticChecks": "The other current preference consumer looks up only its own distinct record ID and validates its own kind/schema; no shared-row overwrite with favorites was found. Remaining T80 implementation is excluded.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/personalization/test/favorites.test.mjs",
+      "bytes": 13384,
+      "lines": 177,
+      "sha256": "28e8cc46cd92042a014b8c2e7e0b0d85182e98805769d585d39381c3a02061cd",
+      "coverage": "Full 177 lines; fresh 11 cases",
+      "semanticChecks": "Exercises actual G02/WebCrypto with an in-memory atomic store: encrypted reload/restore/source preservation, bounds/targets, namespace collisions, same-/cross-service stale CAS, cancellation/ignored drain, sticky leases/reentrant current checks, durable late receipt, and four fixed-error reflection/accessor regressions.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "28e8cc46cd92042a014b8c2e7e0b0d85182e98805769d585d39381c3a02061cd",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "28e8cc46cd92042a014b8c2e7e0b0d85182e98805769d585d39381c3a02061cd",
+      "matchesReceipt": true
+    },
+    {
+      "path": "packages/relay/README.md",
+      "bytes": 6673,
+      "lines": 88,
+      "sha256": "520d8d77a363119ff260c86008c3a9ba0f11908f2ab37623ecabee71c8e699f1",
+      "coverage": "Full 88 lines",
+      "semanticChecks": "Explicitly distinguishes canonical createRelayPool/nip01/ad from the separate restricted byte-oriented local profile. Both are excluded from the default app. Restricted-profile fixed-code statements cannot by themselves settle canonical object API behavior.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "520d8d77a363119ff260c86008c3a9ba0f11908f2ab37623ecabee71c8e699f1",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "bytes": 221,
+      "lines": 4,
+      "sha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "coverage": "Full 4 lines",
+      "semanticChecks": "Canonical nip01/ad/pool object APIs are public exports. Restricted local-pool and advertisement implementations are absent from this facade.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/src/ad.ts",
+      "bytes": 15670,
+      "lines": 247,
+      "sha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "coverage": "Targeted builder own-data and book ingest paths:73-135,155-247",
+      "semanticChecks": "The signer builder already snapshots own data safely. OrderBook.ingest explicitly accepts unknown and calls parseEvent before its guarded clock/verifier, inheriting the parser diagnostic gap. Parsed successful output remains relay-discovery-only; it carries no trade authority.",
+      "result": "OPEN_T38-B-02",
+      "initialSha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "bytes": 7163,
+      "lines": 112,
+      "sha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "coverage": "Full 112 lines",
+      "semanticChecks": "parseEvent accepts unknown but unguarded Object.keys/destructuring and array iteration can invoke foreign reflection/accessors. parseRelayFrame accepts bounded strings, JSON parses first, then calls the same parser on plain JSON; no remote JSON-to-accessor path was established. Existing frozen outputs/field bounds are retained strengths.",
+      "result": "OPEN_T38-B-02",
+      "initialSha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "bytes": 26841,
+      "lines": 438,
+      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "coverage": "Targeted public contracts/normalizer/receive/publish paths:1-120,120-240,300-438",
+      "semanticChecks": "subscribe invokes normalize and handler reflection outside guarded rejection; normalize calls the trusted wall-clock callback and caller-owned array methods/getters. publish calls parseEvent before guarded verifier work. The canonical result family already uses INVALID_FILTER for malformed filters/events. Constructor, broker, crypto and connector ports remain trusted composition; no blanket hostile-port guarantee is inferred. Remote onFrame first enforces string/frame parsing.",
+      "result": "OPEN_T38-B-02",
+      "initialSha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "bytes": 11043,
+      "lines": 169,
+      "sha256": "07c11e97f6e0a9da8fda7d007321fbac4ad6edc1b1a14e2e62780f5c0ade6ef7",
+      "coverage": "Canonical contracts at1-48,135-165 only",
+      "semanticChecks": "Canonical book tests and existing signer-output own-data regression are relevant supporting contracts. The protected signer builder does not cover public parseEvent/ingest object inputs. No tests run.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/test/advertisement.test.mjs",
+      "bytes": 3553,
+      "lines": 36,
+      "sha256": "23ba5fbff0efdf09764724366895ca2107746b636bcccf25fbaa41d8e3836c4e",
+      "coverage": "Import/API comparison only",
+      "semanticChecks": "Tests the restricted byte-oriented AdvertisementBook/validateAdvertisement, not the canonical unknown-object parser; these tests are not closure evidence for T38-B-02. Not run.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "23ba5fbff0efdf09764724366895ca2107746b636bcccf25fbaa41d8e3836c4e",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/test/local-pool.test.mjs",
+      "bytes": 11116,
+      "lines": 105,
+      "sha256": "6e07178c842a0d4b3a1b9f891cd63f429424a42ce0051c57d4a26854e4c62bde",
+      "coverage": "Import/API comparison and relevant getter test at70 only",
+      "semanticChecks": "Tests the separate RelayPool class from local-pool.ts and its fixed INVALID_INPUT behavior. That regression does not cover createRelayPool from pool.ts. Not run.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "6e07178c842a0d4b3a1b9f891cd63f429424a42ce0051c57d4a26854e4c62bde",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "bytes": 4801,
+      "lines": 66,
+      "sha256": "3cd2b328f5b44633973d2149330b1b923a470246a7d46897a320269d33bfd9a0",
+      "coverage": "Canonical invalid-publication assertion at56 only",
+      "semanticChecks": "Existing native verifier wiring rejects a tampered ordinary event with INVALID_FILTER before send; typed normal events are current production caller practice. Not executed here.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "bytes": 24805,
+      "lines": 355,
+      "sha256": "61f4739b9ccdf793ffed85e8e9c826102bd7d75b9d8c588c611acbdbfbacc38b",
+      "coverage": "Canonical contract assertions at1-100,219-239,316-328 only",
+      "semanticChecks": "Existing canonical tests establish fixed INVALID_FILTER refusal for malformed filters/events and plain-wire handling, but do not supply the missing object-reflection regression. Uses bounded owned-loopback fixtures when run; not executed here.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "bytes": 38568,
+      "lines": 420,
+      "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+      "coverage": "T82-specific types/exact parser/reply paths:39-46,71-110,121-160,197-227,287-325,376-420",
+      "semanticChecks": "Favorites add only profile-bound named commands and scalar result types. Exact own-data parsing rejects extra keys, nonboolean flags, invalid revisions/IDs, duplicate/oversized ID arrays and forged receipt fields; detached results are frozen. Current repaired catch normalization safely copies recognized own codes. Other T80/T81 command semantics are excluded.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "5a81fe4cd89224375b4c2d8f845d2e651132230553cf2419e6a1b733bf70129e",
+      "matchesReceipt": false
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "bytes": 3250,
+      "lines": 50,
+      "sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+      "coverage": "Full 50 lines",
+      "semanticChecks": "Canonical saved source+terms wrapper, max8 reviews/64KiB terms; validation returns null on wrong formats and exact re-encoding prevents noncanonical authority. Loading always requires domain rereview; preference records contain no cached verdict.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/schemas/src/trade-drafts.ts",
+      "bytes": 8417,
+      "lines": 119,
+      "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+      "coverage": "Namespace constant at8 only",
+      "semanticChecks": "T80 owned preference ID 7032702d64726166742d763100000000 differs from favorite ID d7a6b5c4e3f291807060504030201082. Other draft schema semantics are not reviewed here.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": null,
+      "unchangedSinceReviewStart": null,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "bytes": 1968,
+      "lines": 28,
+      "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+      "coverage": "Full 28 lines",
+      "semanticChecks": "Native captureSession lease is a local authority, with current/dispose and revocation callback. Commit contract takes expectedRevision and a trusted assertion immediately before the atomic write. Ports do not promise support for arbitrary untrusted service objects.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "bytes": 10407,
+      "lines": 202,
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+      "coverage": "Targeted base64 representation bounds:72-95",
+      "semanticChecks": "Encoded payload length is bounded before regex/atob allocation; exact decoder minimum/maximum protects the owned favorite JSON bytes. The remainder of G02 schema is not reaudited here.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/storage/src/backup-service.ts",
+      "bytes": 10600,
+      "lines": 166,
+      "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0",
+      "coverage": "Targeted full-snapshot restore:124-166",
+      "semanticChecks": "Restore authenticates source, copies all private records into a fresh profile/key revision0, reseals/authenticates destination before one add, and preserves source. Favorites need no separate backup channel or migration authority.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "bytes": 24285,
+      "lines": 353,
+      "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+      "coverage": "Targeted classification/planning/delete paths:71-122,145-230",
+      "semanticChecks": "Preferences never become retention candidates. Offline planning grants no deletion; actual deletion needs a current native complete-closure lease, single reviewed plan/set, consent revision and guarded native CAS. T82 deliberately retains even an empty preference.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "bytes": 35560,
+      "lines": 558,
+      "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+      "coverage": "Targeted list/lease/CAS/freshness paths:315-392,457-475",
+      "semanticChecks": "Leases bind the native session token/generation and synchronously revoke. Empty commits check exact persisted envelope without rewriting; mutations use the same guarded atomic compare-and-swap after encryption. Stale storage locks the session. Once native CAS commits, later retirement cannot falsify persistence.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": null,
+      "matchesReceipt": null
+    },
+    {
+      "path": "scripts/test-review-favorites-browser.mjs",
+      "bytes": 20882,
+      "lines": 185,
+      "sha256": "09dca6e98b15ef0dc1c9abbc04a342769f8ce7de37bbc2a502e5d5f3b5a3ef00",
+      "coverage": "Full 185 lines; static review, not rerun",
+      "semanticChecks": "Actual emitted demo App/Worker/native IndexedDB/WebCrypto; additional separate real-React held-controller fixture. Native two-document proof checks encrypted reload, current-registry open/no write, fresh-key restore/nonces/source and foreign preferences, deleted/unreviewable refusal, stale native CAS/no retry, zero external requests/submissions. Owned browsers/servers/temp directory close in finally. The real-hook fixture is additional to actualDocuments = 2.",
+      "result": "SCOPED_CHECK_PASS",
+      "initialSha256": "09dca6e98b15ef0dc1c9abbc04a342769f8ce7de37bbc2a502e5d5f3b5a3ef00",
+      "unchangedSinceReviewStart": true,
+      "receiptSha256": "09dca6e98b15ef0dc1c9abbc04a342769f8ce7de37bbc2a502e5d5f3b5a3ef00",
+      "matchesReceipt": true
+    }
+  ],
+  "t82NewCodeFindings": [],
+  "acceptedRepairs": [
+    {
+      "path": "packages/personalization/src/favorites.ts",
+      "lines": [
+        18,
+        44,
+        127,
+        163
+      ],
+      "finding": "Guarded own-data bounded VaultErrorCode classification; foreign instanceof/descriptor traps and accessors cannot replace the fixed operation/factory results or retain a drained slot.",
+      "receiptMatched": true
+    },
+    {
+      "path": "apps/web/src/ui/FavoriteSavedReviews.tsx",
+      "lines": [
+        33,
+        40,
+        50,
+        62
+      ],
+      "finding": "The exact TradeReviewController participates in owner identity; previous view/held open retire while physical admission remains held until drain.",
+      "receiptMatched": true
+    }
+  ],
+  "acceptedIntentionalLimits": [
+    "A valid favorite is only an encrypted selected-profile saved ID, never registry validity, a payment claim or transaction permission.",
+    "An existing current-format or strict read-only legacy saved row is required to star. Deleted/changed/unreviewable targets are reloaded and reviewed at open; no retained old target may substitute.",
+    "Foreign/future/damaged owned-row collisions remain unchanged; unrelated preferences and all backup records are preserved.",
+    "Unstar removes membership but leaves the preference record. While it exists, current native complete-closure retention keeps all history; current UI and README disclose that conservative limit. Existing backups retain earlier content."
+  ],
+  "verification": {
+    "freshFocused": {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/personalization/test/favorites.test.mjs apps/web/test/review-favorites-worker.test.mjs apps/web/test/review-favorites-ui.test.mjs",
+      "managedNetworkCapability": "Granted only for canonical Node test IPC; no test network/send performed.",
+      "exitCode": 0,
+      "tests": 21,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "log": {
+        "path": "/workspace/work/final-review-t82.focused.log",
+        "bytes": 2537,
+        "sha256": "1b7602a0376389ed2349d8a32829000f4b1cfab8fd2553d2c46ae62a6514696c"
+      }
+    },
+    "reusedNative": {
+      "log": {
+        "path": "/workspace/work/t82-corrections-native-green.log",
+        "bytes": 1559,
+        "sha256": "404ca1bc92ad24dc5d73974abd49bcc179c0d6f6f16961b53f9f230b5649473e"
+      },
+      "report": {
+        "fixture": "T82-encrypted-saved-review-favorites",
+        "browser": "154.0.8037.57",
+        "actualUI": true,
+        "actualWorker": true,
+        "actualDocuments": 2,
+        "actualIndexedDB": true,
+        "nativeWebCrypto": true,
+        "encryptedReload": true,
+        "freshKeyBackupRestore": true,
+        "foreignPreservation": true,
+        "freshRegistryReviewOnOpen": true,
+        "controllerReplacementSuppressesHeldOpen": true,
+        "deletedAndUnreviewableUnavailable": true,
+        "noOpenWrite": true,
+        "nativeStaleCASRefusesWithoutRetry": true,
+        "nativeSubmissions": 0,
+        "unexpectedRequests": 0,
+        "tradingEnabled": false,
+        "releaseAcceptance": false
+      },
+      "harnessCurrentSha256": "09dca6e98b15ef0dc1c9abbc04a342769f8ce7de37bbc2a502e5d5f3b5a3ef00",
+      "relation": "Current repaired favorites package, tests, UI and native harness match corrected frozen hashes. Seven shared original-receipt files differ and received current T82-specific source/path review plus the fresh focused run. Historical native success is reused evidence, not blanket native qualification of the current combined graph.",
+      "executedDuringThisReview": false
+    },
+    "reusedFocusedCountCorrection": {
+      "log": {
+        "path": "/workspace/work/t82-corrections-focused-green.log",
+        "bytes": 313,
+        "sha256": "ca6146085d4c6b0b1fcce2c509226273a30ff7c47d55abde53b35d901b0f34f0"
+      },
+      "observedReportedTests": 3,
+      "observedReportedPass": 3,
+      "note": "The old log exposes three file wrappers, not 21 named cases. It does not independently establish the receipt per-case count. This does not prove cases failed or did not execute. Fresh canonical log explicitly establishes 21 current passing cases."
+    },
+    "sharedReceiptDeltas": [
+      "apps/web/src/app-services.ts",
+      "apps/web/src/runtime/app-runtime.ts",
+      "apps/web/src/runtime/pending-metadata.ts",
+      "apps/web/src/runtime/worker-endpoint.ts",
+      "apps/web/src/ui/trade/TradePages.tsx",
+      "packages/personalization/index.ts",
+      "packages/schemas/src/runtime.ts"
+    ],
+    "noFullSuiteOrNativeDuplicate": true
+  },
+  "receipts": [
+    {
+      "path": "/workspace/work/t82-favorites-receipt.md",
+      "bytes": 6430,
+      "sha256": "0b5f0a04460dbb7f9f2312d9ceb697ffbac87f40d6127f5cea8b45f998ff0879"
+    },
+    {
+      "path": "/workspace/work/t82-corrections-receipt.md",
+      "bytes": 4583,
+      "sha256": "51ec55d3ff70310673bbf40e812ab518f694182fbdf8927e5fcacd64b79fa689"
+    }
+  ],
+  "relayFinding": {
+    "id": "T38-B-02",
+    "disposition": "CONFIRMED_OPEN; NARROW_LOCAL_API_HARDENING_PROPOSED; NO_EDIT",
+    "priority": "P3",
+    "severity": "low",
+    "confidence": "high-static",
+    "paths": [
+      {
+        "path": "packages/relay/src/nip01.ts",
+        "lines": [
+          47,
+          49,
+          51
+        ]
+      },
+      {
+        "path": "packages/relay/src/ad.ts",
+        "lines": [
+          170,
+          202,
+          203
+        ]
+      },
+      {
+        "path": "packages/relay/src/pool.ts",
+        "lines": [
+          333,
+          335,
+          402,
+          404,
+          414
+        ]
+      }
+    ],
+    "contractBasis": [
+      "Canonical facade exports nip01/ad/pool; do not substitute restricted advertisement/local-pool contracts or tests.",
+      "parseEvent explicitly accepts unknown and returns NostrEvent|null. OrderBook.ingest explicitly accepts unknown and returns fixed IngestResult. Unguarded input reflection can escape both before verifier/clock rejection.",
+      "Canonical subscribe/publish use PoolResult and already return INVALID_FILTER for ordinary malformed filters/events. normalize and parseEvent execute outside those guarded verifier/refusal paths.",
+      "Remote onFrame requires a string, caps it, and JSON parses before parseEvent. No remote JSON-to-accessor/Proxy path or new economic authority is demonstrated. Trusted config, signer, connector and broker ports are distinct from unknown-event parsing and are not broadened into a universal hostile-port guarantee."
+    ],
+    "staticEvidence": [
+      "Object.keys/input field destructuring in parseEvent can throw a caller diagnostic; nested array iteration invokes caller-owned array behavior before a detached frozen event exists.",
+      "createOrderBook.ingest calls parseEvent outside its guarded clock and verifier. pool.publish calls it before its guarded verifier. subscribe invokes normalize and reads handler.onEvent without guarded refusal.",
+      "Existing own-data helpers in the ad signer builder defend a different path; restricted local-pool getter tests do not cover canonical createRelayPool."
+    ],
+    "repairProposal": {
+      "productionFiles": [
+        "packages/relay/src/nip01.ts",
+        "packages/relay/src/pool.ts"
+      ],
+      "existingCanonicalTestFiles": [
+        "packages/relay/test/ad.test.mjs",
+        "packages/relay/test/pool.test.mjs"
+      ],
+      "steps": [
+        "In parseEvent, capture exactly the seven expected own data fields inside guarded reflection, reject accessors/foreign reflection failure as null, and copy tags/items via bounded own index descriptors. Preserve current field/time/hex/content/tag limits and frozen outputs; do not execute foreign iterators or getters.",
+        "Make canonical filter normalization/handler input validation a guarded fixed INVALID_FILTER refusal before subscription admission. Snapshot allowed data fields and bounded arrays using descriptors/indexes, retaining currently allowed optional filter semantics. Guard the local wall-clock callback at this validation boundary and recheck closed before admitting a subscription. No generic notification/error framework or protocol/ABI change.",
+        "OrderBook.ingest and pool.publish then inherit parseEvent refusal without needing a broad catch around post-admission/socket work. No ad.ts production edit is required solely for the recorded parseEvent callsite.",
+        "Add bounded existing canonical regression cases for reflection/accessor/array rejection and fixed book/publish/subscribe results, zero connector/verifier work on refused input, and normal frozen native-event/JSON compatibility. Keep existing owned-loopback lifetime/signature tests. Root admission/review is required before any source/test edit or run of new cases."
+      ],
+      "preservedLimits": [
+        "No remote exploit/reproduction, live endpoint, socket, signer, wallet or transaction activity is requested or performed here.",
+        "No activation or canonical/restricted profile interchange, no cap relaxation, no production/preassembly-memory claim."
+      ]
+    },
+    "freshReproduction": "None; source/API-contract inspection only. No new negative probe or relay suite executed."
+  },
+  "limits": [
+    "This is a current T82-specific acceptance review, not a second whole-repository or full shared-schema/runtime audit. Per-file coverage states targeted versus full reads explicitly.",
+    "All source/config hashes from the 31-file initial review inventory remained unchanged. Six additional contextual/contract files were hashed at final review time without claiming a start-of-review stability baseline for them.",
+    "No native acceptance/browser test or full suite was rerun. Existing native receipt remains historical scoped evidence; root owns final combined-source/native CI acceptance and ledger reconciliation.",
+    "No source, task ledger, config or receipt was edited; only these review artifacts and the fresh focused log were written."
+  ]
+}

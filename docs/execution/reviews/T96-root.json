@@ -1,0 +1,35 @@
+{
+  "task": "T96",
+  "reviewer": "/root",
+  "status": "SCOPED_TEST_DECLARATIONS_ACCEPTED_DISTRIBUTION_NATIVE_PENDING",
+  "files": [
+    {
+      "path": "packages/stealth/test/service.test.mjs",
+      "sha256": "eb8654ad21307d8f50a3352489f547215f44e31ad4fa8e117d31d2f02aaa61ca"
+    },
+    {
+      "path": "scripts/distribution/browser.test.mjs",
+      "sha256": "341640fc2b27b157f0358b98fbb1835d89d72594171dad3e74077e71f9ad2474"
+    }
+  ],
+  "semanticChecks": [
+    "Stealth fixture helper aliases expose existing genuine value/failure assertions; all26 value+22 failure calls and direct assertions retained without behavioral change",
+    "Distribution adds one awaited node:test case around byte-identical original assertions/negative controls/JSON expression/finally cleanup; no removed or placeholder tests",
+    "Direct CLI remains supported; one actual JSON record stays present with additive node:test reporting, no in-repo whole-stdout JSON consumer found"
+  ],
+  "independentVerification": {
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/stealth/test/service.test.mjs",
+    "tests": 10,
+    "pass": 10,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "managedIpc": true,
+    "defaultNodeIsolation": true
+  },
+  "remaining": "Root executes actual distribution browser harness after final metadata and clean-source checkpoint; source declaration review is not native success or a green Sonar claim",
+  "limits": [
+    "No production/provider/cryptographic/release change",
+    "Historical fixture receipts keep original exact-source scope"
+  ]
+}

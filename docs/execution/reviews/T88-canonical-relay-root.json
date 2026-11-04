@@ -1,0 +1,44 @@
+{
+  "task": "T88-T38-B-02",
+  "reviewer": "/root",
+  "status": "ACCEPTED_SCOPED_LOCAL_BOUNDARY_REPAIR",
+  "files": [
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha256": "d87c17d6bfc5c7ada1c6a7f86f568df01c20446c397a72a871bbe9e82f61f5c9"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "36dc97f50fbebdd7d4f3fe15a95509c6da1391a33817587328e01ad8c85f40e9"
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "sha256": "bb187285da9f887fb8100d9909f5f65aafa905455bfe300d4775e957d3aa7394"
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60"
+    }
+  ],
+  "semanticChecks": [
+    "Exact own-data event fields, bounded descriptor/index tag snapshots, detached frozen output, fixed null refusal without foreign diagnostics",
+    "Bounded closed filter snapshots and original optional/gift-wrap/unknown-clock behavior retained",
+    "Callbacks captured before admission with original receiver; closed state rechecked after foreign reflection/verifier/clock; failed inputs consume no slot/ID/network work",
+    "ad.ts and native cryptographic verification/caps/routing/physical socket budgets remain unchanged"
+  ],
+  "independentVerification": {
+    "tests": 52,
+    "pass": 52,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "managedIpc": true,
+    "defaultNodeIsolation": true,
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/relay/test/ad.test.mjs packages/relay/test/pool.test.mjs packages/relay/test/local-pool.test.mjs packages/relay/test/lifetime.test.mjs"
+  },
+  "limits": [
+    "Synthetic local JavaScript malformed values, not a remote JSON/accessor or economic vulnerability",
+    "Original WebSocket whole-message preassembly allocation remains a separate exact transport-profile limit",
+    "Final whole-suite and actual native/browser composition remain T38 checks"
+  ]
+}

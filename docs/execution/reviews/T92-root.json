@@ -1,0 +1,34 @@
+{
+  "task": "T92",
+  "reviewer": "/root",
+  "status": "ACCEPTED_LOCAL_NATIVE_OUTAGE_SCOPE",
+  "authorPacketSha256": "251aba1346de43bf08156a51a3e0662d964bd614159bcc6e351a7d38d9d5ebbd",
+  "producer": {
+    "path": "scripts/test-journey-origin-browser.mjs",
+    "sha256": "302cb726bf7b99f1648d66fad9173120aac9de48fd466a5c9061266069df7b5b"
+  },
+  "sourceDependenciesVerified": 58,
+  "semanticChecks": [
+    "Actual same existing signed artifact/G15+G03 origin flow, original migration/tampered-asset/wrong-signature/key/passphrase cases retained",
+    "Owned source all7 app/manifest/registry/Worker paths stay503 across actual reload and retained-file recovery; exact original Worker target destruction and no replacement observed",
+    "Only fresh independent signed destination restores original authenticated file; current destination backup authenticates, source cannot stand in for destination",
+    "Native G02 oracle decrypts/lists exact opaque future preference row; fresh profile/key/salt/nonces and byte-identical source ciphertext preserved",
+    "No wallet or external requests; expected503 errors separate from unexpected errors; owned buffers/targets/browser/servers/temp files cleaned"
+  ],
+  "verification": "Independent semantic read and exact58 source/log/producer identity+assertion checks. Actual author Chrome156/Node24.22 run reused once; no duplicate native run.",
+  "limits": {
+    "localOwnedOriginsOnly": true,
+    "outageMechanism": "all owned source app/manifest/registry/Worker paths stay HTTP503 through recovery and then owned-server cleanup",
+    "recoveryFormat": "existing p2p-offramp-backup v1 unchanged",
+    "trust": "existing compiled synthetic G15 key and signed asset fixture; no new production trust/provider/policy",
+    "permanentOriginLossProven": false,
+    "offDeviceRetentionProven": false,
+    "fundsRecoveryProven": false,
+    "productionOriginPolicy": false,
+    "releaseEnabled": false,
+    "walletSendPerformed": false,
+    "publicationPerformed": false,
+    "physicalErasureClaim": false,
+    "requestScope": "intercepted owned app context plus enumerated owned source probes; expected503 errors separated from unexpected failures"
+  }
+}

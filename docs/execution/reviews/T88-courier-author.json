@@ -1,0 +1,53 @@
+{
+  "task": "T88-courier-expiry",
+  "author": "/root/audit_optional",
+  "independentReview": "PENDING_ROOT",
+  "headAtStart": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "headAtFreeze": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "scope": "Only prepared local locker expiry;no executor/native unlock/economic authority",
+  "files": [
+    {
+      "path": "packages/courier/src/locker.ts",
+      "sha256": "d28f1976671eaddffcfa67f82d632de6af80f04a9e974b49b329ede95cc0df65",
+      "beforeSha256": "7405d387b17590ed05a9558aa2ef31c5860d380d9effd927bf210e025862dc76"
+    },
+    {
+      "path": "packages/courier/test/locker.test.mjs",
+      "sha256": "3fa9386445d5202126461e5714801f0f449d939522f9b3aa7a6e355cd339afbc",
+      "beforeSha256": "c9113bc32b89f7df9ed0bb253189cac39b335b2ed2d135b56b2eefe201bf30cd"
+    }
+  ],
+  "verification": [
+    {
+      "path": "/workspace/work/t88-courier-expiry-red.log",
+      "sha256": "3c8eb653e99cba66fc6ed79b9915e4cf64a9c6af6a92b2f92c26cd9894d61e78",
+      "exitCode": 1,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "path": "/workspace/work/t88-courier-expiry-green.log",
+      "sha256": "38d8897b0beeba805b13f1a5604f8a8c64180a317c9de6f3ec58f1c6614a891d",
+      "exitCode": 0,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "path": "/workspace/work/t88-courier-focused-green.log",
+      "sha256": "533864f0111758f95ff29ba49765fd318d46e7a4deb4a3023f56d2d064077b3e",
+      "exitCode": 0,
+      "passed": 39,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  ],
+  "testEnvironment": "Canonical default-isolated Node v24.19.0 with managed network/IPC capability;no network provider/device actions.",
+  "diffCheck": "git diff --check -- packages/courier/src/locker.ts packages/courier/test/locker.test.mjs passed",
+  "preFixObservation": "/workspace/work/audit-optional-locker-expiry-observation.json",
+  "frozenAt": "2026-11-02T16:09:07.627232+00:00"
+}
