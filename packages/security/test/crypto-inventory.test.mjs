@@ -58,6 +58,32 @@ test('native inventory requires matching bounded browser-profile observations ra
  f.files.push({path:'security/browser-support.json',bytes:bytes(JSON.stringify(profile))});assert.deepEqual(codes(await run(f)),['MISSING_REVIEW']);
  profile.observed=[];f.files.at(-1).bytes=bytes(JSON.stringify(profile));assert.ok(codes(await run(f)).includes('UNSUPPORTED_RUNTIME'));
 });
+test('npm peer-install metadata is boolean-only and does not alter review eligibility',async()=>{
+ const baseline=await run(fixture());
+ for(const peer of [true,false]){
+  const f=fixture();f.lock.packages['node_modules/@test/curve'].peer=peer;
+  assert.deepEqual(await run(f),baseline);
+ }
+ for(const peer of [null,0,1,'true','false',{},[]]){
+  const f=fixture('release-enabled');f.inventory[0].review={status:'accepted',reviewer:'Named Reviewer',evidencePath:'reviews/curve.md'};
+  f.lock.packages['node_modules/@test/curve'].peer=peer;
+  const report=await run(f);assert.equal(report.releaseEligible,false);assert.ok(codes(report).includes('UNSUPPORTED_RUNTIME'));
+ }
+ const f=fixture();let touched=0;
+ Object.defineProperty(f.lock.packages['node_modules/@test/curve'],'peer',{enumerable:true,get(){touched++;throw Error('SECRET peer metadata');}});
+ const report=await run(f);assert.equal(touched,0);assert.ok(codes(report).includes('UNSUPPORTED_RUNTIME'));assert.doesNotMatch(JSON.stringify(report),/SECRET/);
+});
+test('peer-install metadata cannot bypass exact package provenance or dependency closure',async()=>{
+ const controls=[['INTEGRITY_MISMATCH',f=>f.lock.packages['node_modules/@test/curve'].integrity='sha512-'+Buffer.alloc(64,8).toString('base64')],
+  ['UNPINNED_VERSION',f=>f.lock.packages['node_modules/@test/curve'].version='2.4.1'],
+  ['MISSING_LICENSE',f=>f.lock.packages['node_modules/@test/curve'].license='UNREVIEWED'],
+  ['UNDECLARED_CRYPTO',f=>f.lock.packages['node_modules/@test/curve'].peerDependencies={'@test/unreviewed':'1.0.0'}],
+  ['INTEGRITY_MISMATCH',f=>f.lock.packages['node_modules/@test/curve'].link=true],
+  ['UNSUPPORTED_RUNTIME',f=>f.lock.packages['node_modules/@test/curve'].peerOverride=true]];
+ for(const [code,mutate]of controls){const f=fixture('release-enabled');f.inventory[0].review={status:'accepted',reviewer:'Named Reviewer',evidencePath:'reviews/curve.md'};
+  f.lock.packages['node_modules/@test/curve'].peer=true;mutate(f);const report=await run(f);assert.equal(report.releaseEligible,false);assert.ok(codes(report).includes(code),code);
+ }
+});
 test('current inventory has scoped G16 review evidence while other test-only providers remain pending',async()=>{
  const inventory=JSON.parse(readFileSync(new URL('../../../security/crypto-inventory.json',import.meta.url))),lock=JSON.parse(readFileSync(new URL('../../../package-lock.json',import.meta.url)));
  const independentPath='packages/wallet/test/fixtures/g16-evm-independent.json';
