@@ -66,6 +66,9 @@ test('identity responses keep the Content-Length integrity and early-cap checks'
     [{ 'content-length': '2' }, { type: 'basic' }],
     [{ 'content-length': '2' }, { type: 'default' }],
     [{ 'content-length': '2', 'content-encoding': 'identity' }, { type: 'cors' }],
+    // An empty coding list means no coding: the length still describes the body.
+    [{ 'content-length': '2', 'content-encoding': '' }, { type: 'basic' }],
+    [{ 'content-length': '2', 'content-encoding': '  ' }, {}],
   ];
   for (const [headers, options] of truncated) {
     const result = await request(reply([new Uint8Array([1])], headers, options));

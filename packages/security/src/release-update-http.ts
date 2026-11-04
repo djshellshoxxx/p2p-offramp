@@ -19,8 +19,11 @@ const bufferLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLe
  * A port that omits Response.type promises an unfiltered header list. */
 function declaresBodyLength(response:{readonly type?:string;readonly headers:Pick<Headers,'get'>}):boolean{
   const coding=response.headers.get('content-encoding');
+  if(coding!==null&&typeof coding!=='string')return false;
+  // An empty coding list means no coding was applied, exactly like a missing header.
+  const visible=coding===null?'':coding.trim().toLowerCase();
   // A visible coding is authoritative: only an explicit identity coding leaves the length unchanged.
-  if(coding!==null)return typeof coding==='string'&&coding.trim().toLowerCase()==='identity';
+  if(visible!=='')return visible==='identity';
   // A missing coding proves identity only on an unfiltered header list.
   const type=response.type;
   return type===undefined||type==='basic'||type==='default';

@@ -143,6 +143,8 @@ test('identity responses keep the Content-Length truncation and early-cap refusa
     {headers:new Headers({'content-length':'3'})},
     {type:'basic',headers:new Headers({'content-length':'3'})},
     {type:'cors',headers:new Headers({'content-length':'3','content-encoding':'identity'})},
+    // An empty coding list means no coding: the length still describes the body.
+    {type:'basic',headers:new Headers({'content-length':'3','content-encoding':''})},
   ]){
     const body=counted([Uint8Array.from([1,2])],done);
     assert.equal(await readOnce({...response,body},8),'ROUTE_UNAVAILABLE',String(response.type));
