@@ -3,60 +3,20 @@
 // send from a restarted journey is counted and refused.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import {createHash} from 'node:crypto';
-import {createPrivateTradeJourney} from '../src/journey/private-trade.ts';
-import {RegistryService,buildTradeDraftDocument,reviewTermsBytes} from '../../../packages/domain/index.ts';
-import {EncryptedVaultService,EncryptedBackupService} from '../../../packages/storage/index.ts';
-import {MessagingIdentityService} from '../../../packages/identity/src/identity-service.ts';
-import {createLocalNobleIdentityProvider} from '../../../packages/identity/index.ts';
-import {evmTermsHash} from '../../../packages/wallet/src/evm-terms.ts';
+import {buildTradeDraftDocument,reviewTermsBytes} from '../../../packages/domain/index.ts';
 import {escrowCallFor} from '../../../packages/wallet/src/evm-submit.ts';
-import {createLifecycleJournal} from '../../../packages/domain/src/intent-journal.ts';
-import {createEvmTxLifecycle,evmFinalityPolicy} from '../../../packages/domain/src/tx-lifecycle.ts';
-import {decodeIntentPayload,encodeBase64url} from '../../../packages/schemas/index.ts';
+import {evmTermsHash} from '../../../packages/wallet/src/evm-terms.ts';
+import {createEvmTxLifecycle} from '../../../packages/domain/src/tx-lifecycle.ts';
+import {encodeBase64url} from '../../../packages/schemas/index.ts';
+import {
+ registry,ok,Store,value,SELLER,BUYER,NOW,policy,fakeChain as harnessChain,workerJourney,withJournal as harnessJournal,
+ journalIntents,
+} from './support/journey-harness.mjs';
 
-const registryUrl=new URL('../../../packages/domain/test/fixtures/local-evm-scenario/registry.json',import.meta.url);
-const registryBytes=new Uint8Array(await readFile(registryUrl));
-const registryDigest=createHash('sha256').update(registryBytes).digest('hex');
 const pass='Native localproof recovery profile passphrase';
-const SELLER='0x'+'1'.repeat(40);
-const BUYER='0x'+'2'.repeat(40);
 const OTHER='0x'+'3'.repeat(40);
-const NOW=1_900_000_000;
 const SENT_HASH='0x'+'b'.repeat(64);
 const PREPARED_AT=16;
-const policy=evmFinalityPolicy({chain:'evm',finality:{kind:'evm-finalized-tag'}},2,3);
-
-class Store{
- rows=new Map();
- async get(id){return structuredClone(this.rows.get(id));}
- async add(row,o){
-  o?.assertCurrent?.();
-  this.rows.set(row.profileId,structuredClone(row));
- }
- async compareAndSwap(old,row,o){
-  o?.assertCurrent?.();
-  assert.equal(JSON.stringify(this.rows.get(old.profileId)),JSON.stringify(old));
-  this.rows.set(row.profileId,structuredClone(row));
- }
- subscribeInvalidation(){return()=>{};}
- async listProfileIds(){return{profileIds:[...this.rows.keys()],truncated:false};}
-}
-const value=response=>{
- assert.equal(response.result.ok,true,JSON.stringify(response));
- return response.result.value;
-};
-const ok=result=>{
- assert.equal(result.ok,true,JSON.stringify(result));
- return result.value;
-};
-async function loadedRegistry(){
- const registry=new RegistryService();
- ok(await registry.load(registryBytes,registryDigest));
- return registry;
-}
-const registry=await loadedRegistry();
 const deployment=registry.deployment('local-evm','escrow-local-v1');
 const token=registry.network('local-evm').assets.find(asset=>asset.id==='test-usd');
 const domain={chainId:'31337',verifyingContract:deployment.address};
@@ -65,82 +25,12 @@ const bindingOf=terms=>({
 });
 const approveCall=(terms,amount=terms.amountBaseUnits)=>
  escrowCallFor({action:'approve',token:token.address,spender:deployment.address,amountBaseUnits:amount});
-const hex=number=>'0x'+BigInt(number).toString(16);
-const word=number=>'0x'+BigInt(number).toString(16).padStart(64,'0');
-const blockHash=height=>'0x'+'a'+height.toString(16).padStart(63,'0');
 
-/**
- * A minimal fake EVM chain: one block per mined transaction, `finalized` equal to `latest`, and the escrow state
- * that the trade's native observation reports. `sends` counts only sends attempted by a restarted journey.
- */
-function fakeChain(escrowState){
- const chain={escrowState,sends:0,head:PREPARED_AT,nonce:0,blocks:new Map(),txs:new Map()};
- chain.mine=tx=>{
-  const lower={from:tx.from.toLowerCase(),to:tx.to.toLowerCase(),input:tx.input.toLowerCase()};
-  const mined={...tx,...lower,blockNumber:++chain.head};
-  mined.hash='0x'+createHash('sha256').update(JSON.stringify(mined)).digest('hex');
-  chain.blocks.set(chain.head,[mined]);
-  chain.txs.set(mined.hash,mined);
-  if(mined.from===SELLER)chain.nonce++;
-  if(mined.to===deployment.address.toLowerCase())chain.escrowState='funded';
-  return mined.hash;
- };
- chain.advance=blocks=>{chain.head+=blocks;};
- const head=()=>({number:String(chain.head),hash:blockHash(chain.head)});
- const view=tx=>({
-  hash:tx.hash,from:tx.from,to:tx.to,nonce:tx.nonce,input:tx.input,value:tx.value,blockNumber:String(tx.blockNumber),
- });
- const done=result=>Promise.resolve({ok:true,value:result});
- chain.reader=Object.freeze({
-  chainId:()=>done('31337'),
-  head:()=>done(head()),
-  blockHashAt:number=>done(Number(number)<=chain.head?blockHash(Number(number)):null),
-  transactionCount:account=>done(account.toLowerCase()===SELLER?String(chain.nonce):'0'),
-  transaction:hash=>done(chain.txs.has(hash)?view(chain.txs.get(hash)):null),
-  receipt:hash=>{
-   const tx=chain.txs.get(hash);
-   const receipt={transactionHash:hash,blockNumber:String(tx?.blockNumber),blockHash:blockHash(tx?.blockNumber??0)};
-   return done(tx?{...receipt,status:'success'}:null);
-  },
-  escrowState:()=>done(chain.escrowState),
-  escrowObservation:(binding,request)=>done({
-   binding,generation:request.generation,requestSequence:request.requestSequence,
-   anchor:{height:String(chain.head),hash:blockHash(chain.head)},
-   state:chain.escrowState,finality:'finalized',observedAt:Date.now(),
-  }),
- });
- chain.request=async({method,params=[]})=>{
-  if(method==='eth_sendTransaction'){
-   chain.sends++;
-   throw Error('UNEXPECTED_SEND');
-  }
-  if(method==='eth_chainId')return'0x7a69';
-  if(method==='eth_getBlockByNumber'){
-   const height=['latest','finalized'].includes(params[0])?chain.head:Number(BigInt(params[0]??chain.head));
-   const txs=chain.blocks.get(height)??[];
-   const transactions=params[1]?txs.map(tx=>({hash:tx.hash,from:tx.from,nonce:hex(tx.nonce)})):txs.map(tx=>tx.hash);
-   return{number:hex(height),hash:blockHash(height),timestamp:hex(NOW),transactions};
-  }
-  if(method==='eth_getTransactionCount')return hex(chain.nonce);
-  if(method==='eth_getCode')return'0x6001';
-  if(method==='eth_call'){
-   const selector=params[0].data.slice(0,10);
-   // decimals(), balanceOf(address), allowance(address,address); anything else is isAllowlisted(address).
-   return selector==='0x313ce567'?word(token.decimals):selector==='0x70a08231'?word(10n**12n)
-    :selector==='0xdd62ed3e'?word(0):word(1);
-  }
-  if(method==='eth_getTransactionReceipt'){
-   const tx=chain.txs.get(params[0]);
-   if(!tx)return null;
-   return{
-    transactionHash:tx.hash,blockNumber:hex(tx.blockNumber),blockHash:blockHash(tx.blockNumber),status:'0x1',
-    gasUsed:'0x5208',effectiveGasPrice:'0x1',
-   };
-  }
-  throw Error('UNEXPECTED_RPC');
- };
- return chain;
-}
+/** The shared fake chain, prepared at block 16 over the 12-digit-balance test token; every restart send is refused. */
+const fakeChain=escrowState=>harnessChain({
+ escrow:deployment.address,escrowState,send:'refuse',head:PREPARED_AT,decimals:token.decimals,balance:10n**12n,
+});
+const withJournal=(store,profileId,work)=>harnessJournal(store,profileId,pass,work);
 
 class FakeWallet{
  constructor(){
@@ -158,55 +48,14 @@ class FakeWallet{
 
 /** One simulated Worker over a shared encrypted store, reading the shared fake `chain`. */
 function worker(store,chain){
- const vault=new EncryptedVaultService(store,crypto,{lifecycle:false});
- const backup=new EncryptedBackupService(store);
  const unexpected=async()=>{throw Error('UNEXPECTED');};
- const inert={invalidate(){},dispose(){}};
- const anchor=()=>({height:String(chain.head),hash:blockHash(chain.head)});
- const guidance=binding=>({
+ const guidanceOf=(binding,finalizedAnchor)=>({
   evidence:'native-rpc',economicPreparationAllowed:false,binding,termsHash:binding.tradeId,
-  finalizedAnchor:anchor().hash,decision:'allow-guidance',reason:'ok',
+  finalizedAnchor,decision:'allow-guidance',reason:'ok',
  });
- const native={
-  MessagingIdentityService,
-  createIdentityProvider:createLocalNobleIdentityProvider,
-  EvmWalletAdapter:FakeWallet,
-  walletProvider(){return{request:chain.request};},
-  selectorOf(){return'c1d2e3f4';},
-  evmTermsHash,
-  escrowCallFor,
-  decodeIntentPayload,
-  async readObservation(){return{ok:true,value:{state:chain.escrowState}};},
-  verifyEvmAgreementBundle:unexpected,
-  createEip1193ChainReader(){return chain.reader;},
-  createLifecycleJournal,
-  createEvmTxLifecycle,
-  policy,
-  createEvmPaymentPreflight({binding}){
-   return{ok:true,value:{
-    ...inert,view(){return{ok:true,value:guidance(binding)};},async read(){return{ok:true,value:guidance(binding)};},
-   }};
-  },
-  createTradeAuthority(){
-   const refresh=async()=>({ok:true,value:{}});
-   return{...inert,currentGeneration:0,readView(){throw Error('UNEXPECTED');},refresh};
-  },
-  createTradeComposition({binding}){
-   const chainView=()=>({
-    binding,generation:0,requestSequence:1,anchor:anchor(),state:chain.escrowState,finality:'finalized',observedAt:NOW,
-   });
-   const view=()=>({
-    binding,chain:chainView(),chainHealth:'fresh',pendingIntentIds:[],fiatClaim:'none',walletGeneration:0,
-    economicPreparationAllowed:false,
-   });
-   return{...inert,async read(){return{ok:true,value:view()};}};
-  },
- };
- const createRelay=()=>{throw Error('UNEXPECTED_RELAY');};
- const services={vault,backup};
- const request=chain.request;
- const journey=createPrivateTradeJourney({services,native,registryBytes,registryDigest,request,createRelay});
- return{vault,journey};
+ const nativeExtras={verifyEvmAgreementBundle:unexpected};
+ const journeyOptions={createRelay(){throw Error('UNEXPECTED_RELAY');}};
+ return workerJourney({store,chain,FakeWallet,guidanceOf,nativeExtras,journeyOptions});
 }
 
 /** Worker 1: a profile with one saved ERC-20 trade review and a verified backup, then the Worker stops. */
@@ -242,19 +91,6 @@ async function reviewedTerms(bytes){
   privateAgreementHash:r.privateAgreementSha256,capabilitiesHash:r.capabilitiesSha256,sellerNonce:r.sellerNonce,
   acceptBeforeSeconds:r.acceptBeforeSeconds,escrowExpirySeconds:r.escrowExpirySeconds,
  };
-}
-
-/** Runs `work` with a lifecycle journal over its own unlocked session of the shared store. */
-async function withJournal(store,profileId,work){
- const vault=new EncryptedVaultService(store,crypto,{lifecycle:false});
- try{
-  const session=ok(await vault.unlock(profileId,pass));
-  const journal=createLifecycleJournal({vault,session,validateCanonical:async()=>({ok:true,value:undefined})});
-  try{return await work(journal);}finally{journal.dispose();}
- }finally{
-  vault.lockAll();
-  vault.dispose();
- }
 }
 
 /**
@@ -340,16 +176,7 @@ async function restart(store,chain,profileId){
 }
 
 /** Durable journal rows as written, read through an independent session. */
-async function journalRows(store,profileId){
- const vault=new EncryptedVaultService(store,crypto,{lifecycle:false});
- try{
-  const session=ok(await vault.unlock(profileId,pass));
-  return ok(await vault.list(session.sessionId,'journal')).map(row=>decodeIntentPayload(row.payload));
- }finally{
-  vault.lockAll();
-  vault.dispose();
- }
-}
+const journalRows=(store,profileId)=>journalIntents(store,profileId,pass);
 async function journalStates(store,profileId){
  return(await journalRows(store,profileId))
   .map(intent=>({action:intent.action,state:intent.state,hash:intent.submission.hash}))
@@ -362,6 +189,17 @@ async function crashedTrade(escrowState,entriesFor){
  const {profileId,recordId,terms}=await savedTrade(store,chain);
  const intents=await crashAfterPrepare(store,profileId,entriesFor(terms));
  return{store,chain,profileId,recordId,terms,intents};
+}
+
+/** A restart of the crashed trade is refused with a recovery selection, stays in setup and never sends. */
+async function failsClosedAtRestart(escrowState,entriesFor){
+ const {store,chain,profileId,recordId}=await crashedTrade(escrowState,entriesFor);
+ const journey=await restart(store,chain,profileId);
+ try{
+  await assert.rejects(journey.act('watch',{recordId}),/RECOVERY_SELECTION_REQUIRED/);
+  assert.equal(journey.snapshot().phase,'setup');
+  assert.equal(chain.sends,0);
+ }finally{journey.dispose();}
 }
 
 test('an approval prepared but never marked fails closed before funding at every restart, never a send',async()=>{
@@ -458,23 +296,11 @@ test('a never-sent fund intent keeps its terminal cancellation phase at restart'
 
 test('a never-sent approval for another trade does not unlock recovery of the selected trade',async()=>{
  const otherTrade=terms=>[{action:'approve',terms:{...terms,sellerNonce:'0'.repeat(63)+'1'}}];
- const {store,chain,profileId,recordId}=await crashedTrade('absent',otherTrade);
- const journey=await restart(store,chain,profileId);
- try{
-  await assert.rejects(journey.act('watch',{recordId}),/RECOVERY_SELECTION_REQUIRED/);
-  assert.equal(journey.snapshot().phase,'setup');
-  assert.equal(chain.sends,0);
- }finally{journey.dispose();}
+ await failsClosedAtRestart('absent',otherTrade);
 });
 
 test('a cancelled never-sent approval never hides a funded escrow from reconciliation',async()=>{
- const {store,chain,profileId,recordId}=await crashedTrade('funded',terms=>[{action:'approve',terms}]);
- const journey=await restart(store,chain,profileId);
- try{
-  await assert.rejects(journey.act('watch',{recordId}),/RECOVERY_SELECTION_REQUIRED/);
-  assert.equal(journey.snapshot().phase,'setup');
-  assert.equal(chain.sends,0);
- }finally{journey.dispose();}
+ await failsClosedAtRestart('funded',terms=>[{action:'approve',terms}]);
 });
 
 test('an approval that crossed its send marker is reconciled at restart, never resent or cancelled',async()=>{
