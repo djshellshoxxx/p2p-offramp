@@ -18,6 +18,11 @@ test('source-bound compiler assertions reject missing, duplicate, foreign, unsup
  assert.equal(classifyProperty({errors:[safe]},'B.sol',span).result,'PROOF_UNKNOWN');assert.equal(classifyProperty({errors:[safe]},'A.sol',span,true).result,'PROOF_UNKNOWN');
  assert.equal(classifyProperty({errors:[safe,{message:'Inline assembly is not supported'}]},'A.sol',span).result,'PROOF_UNKNOWN');
  assert.equal(classifyProperty({errors:[{...safe,errorCode:'6328'}]},'A.sol',span).result,'COUNTEREXAMPLE_FOUND');
+ // solc tags every unanswered CHC target 6328 "might happen"; partial work must not report a counterexample.
+ const partial={...safe,errorCode:'6328',message:'CHC: Assertion violation might happen here.'};
+ assert.equal(classifyProperty({errors:[partial]},'A.sol',span,true).result,'PROOF_UNKNOWN');
+ const abstracted={errors:[partial,{message:'Inline assembly is not supported'}]};
+ assert.equal(classifyProperty(abstracted,'A.sol',span).result,'PROOF_UNKNOWN');
 });
 test('safe and unsafe operational probes must both bind actual distinct assertion spans; raw SAT polarity is insufficient',()=>{
  const source='contract T { function f(uint x) public { assert(x == x); assert(x != 7); }}';

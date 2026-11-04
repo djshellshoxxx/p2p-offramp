@@ -36,8 +36,11 @@ export function classifyProperty(output,file,span,incomplete=false){
  const errors=Array.isArray(output?.errors)?output.errors:[],matches=errors.filter(error=>error?.sourceLocation?.file===file&&error.sourceLocation.start===span.start&&error.sourceLocation.end===span.end);
  const violation=matches.some(error=>String(error.errorCode)==='6328'),safe=matches.some(error=>String(error.errorCode)==='9576');
  const unsupported=errors.filter(error=>/not (?:yet )?supported|unsupported|not implemented|abstraction/i.test(String(error?.message??'')));
+ // solc also tags unanswered CHC targets 6328 ("might happen"): incomplete or abstracted work decides no outcome.
+ const reported=violation?'ASSERTION_VIOLATION':safe?'SAFE_UNDER_COMPILER_MODEL':'UNPROVED';
+ if(incomplete||unsupported.length)return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
  if(violation)return{result:'COUNTEREXAMPLE_FOUND',toolReported:'ASSERTION_VIOLATION',unsupported,qualification:'Compiler-model counterexample requires native replay before calling it an implementation defect.'};
- if(incomplete||unsupported.length||!safe)return{result:'PROOF_UNKNOWN',toolReported:safe?'SAFE_UNDER_COMPILER_MODEL':'UNPROVED',unsupported};
+ if(!safe)return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
  return{result:'PROVED_UNDER_DECLARED_MODEL',toolReported:'SAFE_UNDER_COMPILER_MODEL',unsupported};
 }
 /** Exact extraction from the frozen original model, not a replacement or stronger precondition. */
