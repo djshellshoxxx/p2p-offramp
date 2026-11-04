@@ -1,0 +1,75 @@
+✔ IDB failed opens retry after remediation without a cached rejection (16.179856ms)
+✔ IDB late blocked-open success closes only itself and preserves the newer cached connection (7.192382ms)
+✔ IDB synchronous add/put quota and unknown storage exceptions preserve their typed failure (58.107249ms)
+✔ IDB close is terminal, closes its connection and invalidates subscribers once (9.968301ms)
+✖ IDB invalidation isolates throwing listeners and notifies the original snapshot (6.399415ms)
+✔ IDB close rejects pending opens and closes any connection which arrives later (0.335907ms)
+✖ IDB direct close completes terminal teardown despite a throwing subscriber (1.605274ms)
+✔ service disposal closes only owned stores; injected shared storage remains usable (6.119382ms)
+✔ default service disposal closes its privately created IndexedDB store (5.329479ms)
+✔ synchronous IDB read failures are normalized and transactions are aborted (0.46633ms)
+✔ IDB stale guards and abort signals return fixed cancellation before opening storage (2.312925ms)
+✔ IDB add counts rows in the same transaction and refuses at the profile bound without writing (5.443973ms)
+✔ IDB compareAndSwap at the profile bound still updates existing rows (4.886131ms)
+✔ IDB inventory lists bounded opaque keys, flags truncation and fails closed on foreign keys (3.596187ms)
+✔ IDB addWithSource rechecks the exact source row, the profile bound and never aliases the source (19.056239ms)
+✔ IDB readwrite transactions request strict durability so completion means the write was flushed (13.629298ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 14
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 961.483477
+
+✖ failing tests:
+
+test at packages/storage/test/idb-vault-store.test.mjs:80:1
+✖ IDB invalidation isolates throwing listeners and notifies the original snapshot (6.399415ms)
+  AssertionError [ERR_ASSERTION]: Got unwanted exception.
+  Actual message: "SECRET subscriber"
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:87:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: Error: SECRET subscriber
+        at file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:83:81
+        at IndexedDbVaultStore.notifyInvalidated (file:///workspaces/p2p-offramp/packages/storage/src/idb-vault-store.ts:56:78)
+        at invalidate (file:///workspaces/p2p-offramp/packages/storage/src/idb-vault-store.ts:88:16)
+        at db.onversionchange (file:///workspaces/p2p-offramp/packages/storage/src/idb-vault-store.ts:90:50)
+        at file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:87:32
+        at getActual (node:assert:611:5)
+        at strict.doesNotThrow (node:assert:779:32)
+        at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:87:10)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: undefined,
+    operator: 'doesNotThrow',
+    diff: 'simple'
+  }
+
+test at packages/storage/test/idb-vault-store.test.mjs:101:1
+✖ IDB direct close completes terminal teardown despite a throwing subscriber (1.605274ms)
+  AssertionError [ERR_ASSERTION]: Got unwanted exception.
+  Actual message: "SECRET close subscriber"
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:107:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: Error: SECRET close subscriber
+        at file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:103:65
+        at IndexedDbVaultStore.notifyInvalidated (file:///workspaces/p2p-offramp/packages/storage/src/idb-vault-store.ts:56:78)
+        at IndexedDbVaultStore.close (file:///workspaces/p2p-offramp/packages/storage/src/idb-vault-store.ts:63:23)
+        at file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:107:35
+        at getActual (node:assert:611:5)
+        at strict.doesNotThrow (node:assert:779:32)
+        at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/idb-vault-store.test.mjs:107:10)
+        at async Test.run (node:internal/test_runner/test:1409:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:974:7),
+    expected: undefined,
+    operator: 'doesNotThrow',
+    diff: 'simple'
+  }

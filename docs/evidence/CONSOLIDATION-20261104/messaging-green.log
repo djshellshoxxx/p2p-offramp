@@ -1,0 +1,310 @@
+TAP version 13
+# Subtest: real NIP-17 send/receive persists authenticated proofs, reauthenticates text and preserves receipt order
+ok 1 - real NIP-17 send/receive persists authenticated proofs, reauthenticates text and preserves receipt order
+  ---
+  duration_ms: 1776.780362
+  type: 'test'
+  ...
+# Subtest: restart and fresh-key backup restore retain durable dedup and native authentication without changing the source
+ok 2 - restart and fresh-key backup restore retain durable dedup and native authentication without changing the source
+  ---
+  duration_ms: 2941.155885
+  type: 'test'
+  ...
+# Subtest: same authenticated sender/messageId is idempotent; changed content conflicts without replacing the first message
+ok 3 - same authenticated sender/messageId is idempotent; changed content conflicts without replacing the first message
+  ---
+  duration_ms: 1944.943509
+  type: 'test'
+  ...
+# Subtest: native author, envelope author/recipient/trade and supported kind are checked before history writes
+ok 4 - native author, envelope author/recipient/trade and supported kind are checked before history writes
+  ---
+  duration_ms: 1847.085208
+  type: 'test'
+  ...
+# Subtest: foreign chat records survive untouched; unknown versions fail closed, and persisted labels cannot fabricate native authentication
+ok 5 - foreign chat records survive untouched; unknown versions fail closed, and persisted labels cannot fabricate native authentication
+  ---
+  duration_ms: 951.136569
+  type: 'test'
+  ...
+# Subtest: two independent encrypted sessions racing append have one durable winner and no lost update
+ok 6 - two independent encrypted sessions racing append have one durable winner and no lost update
+  ---
+  duration_ms: 1688.353322
+  type: 'test'
+  ...
+# Subtest: abort while native crypto ignores cancellation settles promptly, wipes owned keys and holds the physical slot
+ok 7 - abort while native crypto ignores cancellation settles promptly, wipes owned keys and holds the physical slot
+  ---
+  duration_ms: 647.98491
+  type: 'test'
+  ...
+# Subtest: vault revocation during noncooperative native work suppresses late plaintext and closes the history capability
+ok 8 - vault revocation during noncooperative native work suppresses late plaintext and closes the history capability
+  ---
+  duration_ms: 540.530692
+  type: 'test'
+  ...
+# Subtest: genuine signal surface getters cannot reject admitted history reads or expose foreign diagnostics
+ok 9 - genuine signal surface getters cannot reject admitted history reads or expose foreign diagnostics
+  ---
+  duration_ms: 387.351288
+  type: 'test'
+  ...
+# Subtest: throwing signal removal cannot reject completed history work or strand the next operation
+ok 10 - throwing signal removal cannot reject completed history work or strand the next operation
+  ---
+  duration_ms: 335.527081
+  type: 'test'
+  ...
+# Subtest: an already aborted genuine signal cannot hide native cancellation behind an own false flag
+ok 11 - an already aborted genuine signal cannot hide native cancellation behind an own false flag
+  ---
+  duration_ms: 344.647059
+  type: 'test'
+  ...
+# Subtest: cancelled native work retains admission until drain despite a throwing external cleanup surface
+ok 12 - cancelled native work retains admission until drain despite a throwing external cleanup surface
+  ---
+  duration_ms: 446.205522
+  type: 'test'
+  ...
+# Subtest: pre-CAS cancellation prevents writes; late cancellation after atomic success retains recoverable proof without publication
+ok 13 - pre-CAS cancellation prevents writes; late cancellation after atomic success retains recoverable proof without publication
+  ---
+  duration_ms: 1386.219225
+  type: 'test'
+  ...
+# Subtest: message/byte caps refuse growth without eviction while full history and replay remain available
+ok 14 - message/byte caps refuse growth without eviction while full history and replay remain available
+  ---
+  duration_ms: 940.428951
+  type: 'test'
+  ...
+# Subtest: native-authenticated full count and exact used-byte budgets refuse new wraps before signing, while explicit duplicate retry keeps both wraps
+ok 15 - native-authenticated full count and exact used-byte budgets refuse new wraps before signing, while explicit duplicate retry keeps both wraps
+  ---
+  duration_ms: 1085.093746
+  type: 'test'
+  ...
+# Subtest: a preflight capacity check never replaces the post-crypto freshness and CAS check
+ok 16 - a preflight capacity check never replaces the post-crypto freshness and CAS check
+  ---
+  duration_ms: 1001.08937
+  type: 'test'
+  ...
+# Subtest: a valid generic envelope that exceeds the escaped NIP-17 rumor profile is refused before wrapping or persistence
+ok 17 - a valid generic envelope that exceeds the escaped NIP-17 rumor profile is refused before wrapping or persistence
+  ---
+  duration_ms: 488.107525
+  type: 'test'
+  ...
+# Subtest: text envelope has deterministic field order and detached immutable data; markup stays inert data
+ok 18 - text envelope has deterministic field order and detached immutable data; markup stays inert data
+  ---
+  duration_ms: 0.822505
+  type: 'test'
+  ...
+# Subtest: wrong versions/kinds/fields/identity/bindings and hostile object inputs fail closed
+ok 19 - wrong versions/kinds/fields/identity/bindings and hostile object inputs fail closed
+  ---
+  duration_ms: 2.592876
+  type: 'test'
+  ...
+# Subtest: byte/UTF-8/depth/duplicate-key boundaries precede native messaging work
+ok 20 - byte/UTF-8/depth/duplicate-key boundaries precede native messaging work
+  ---
+  duration_ms: 4.215491
+  type: 'test'
+  ...
+# Subtest: oversized hostile text is refused before UTF-8 allocation
+ok 21 - oversized hostile text is refused before UTF-8 allocation
+  ---
+  duration_ms: 0.561647
+  type: 'test'
+  ...
+# Subtest: ad event carries only public metadata with fixed tags and the chosen kind
+ok 22 - ad event carries only public metadata with fixed tags and the chosen kind
+  ---
+  duration_ms: 7.907306
+  type: 'test'
+  ...
+# Subtest: strict content parser rejects unknown keys, floats, bad ranges and oversized content
+ok 23 - strict content parser rejects unknown keys, floats, bad ranges and oversized content
+  ---
+  duration_ms: 0.83135
+  type: 'test'
+  ...
+# Subtest: lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+ok 24 - lifetime is capped at 3600 s, tags must match content, future-dated and already-expired ads are refused
+  ---
+  duration_ms: 66.596096
+  type: 'test'
+  ...
+# Subtest: book accepts, dedupes, orders by revision, and is not decided by created_at
+ok 25 - book accepts, dedupes, orders by revision, and is not decided by created_at
+  ---
+  duration_ms: 39.194576
+  type: 'test'
+  ...
+# Subtest: same revision with a different event id is a conflict that blocks use until a higher revision
+ok 26 - same revision with a different event id is a conflict that blocks use until a higher revision
+  ---
+  duration_ms: 38.338319
+  type: 'test'
+  ...
+# Subtest: expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+ok 27 - expiry: expired ads vanish from the list and fail revalidation; unknown clock blocks everything
+  ---
+  duration_ms: 27.758739
+  type: 'test'
+  ...
+# Subtest: clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+ok 28 - clock skew: a quickly advancing local clock expires early; a lagging one still honours the signed expiry on revalidate
+  ---
+  duration_ms: 8.82046
+  type: 'test'
+  ...
+# Subtest: forged or unverifiable events are rejected by the book when a verifier is supplied
+ok 29 - forged or unverifiable events are rejected by the book when a verifier is supplied
+  ---
+  duration_ms: 6.996528
+  type: 'test'
+  ...
+# Subtest: NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+ok 30 - NIP-09 deletion is best effort: honoured for the same author, ignored from others, and later revisions survive
+  ---
+  duration_ms: 53.906725
+  type: 'test'
+  ...
+# Subtest: capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+ok 31 - capacity: 1001 orders evict the soonest-expiring entry and the book stays bounded
+  ---
+  duration_ms: 90.440936
+  type: 'test'
+  ...
+# Subtest: list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+ok 32 - list order is deterministic: amountMin as integer, ties by event id; outputs are labelled discovery-only and frozen
+  ---
+  duration_ms: 18.304397
+  type: 'test'
+  ...
+# Subtest: advertisement maker must be the signing author, at construction and discovery validation
+ok 33 - advertisement maker must be the signing author, at construction and discovery validation
+  ---
+  duration_ms: 21.446458
+  type: 'test'
+  ...
+# Subtest: ad builder snapshots the maker before signing and rejects hostile signer output without reading getters
+ok 34 - ad builder snapshots the maker before signing and rejects hostile signer output without reading getters
+  ---
+  duration_ms: 11.817108
+  type: 'test'
+  ...
+# Subtest: canonical event and book boundaries discard hostile local reflection before clock or verification
+ok 35 - canonical event and book boundaries discard hostile local reflection before clock or verification
+  ---
+  duration_ms: 5.670825
+  type: 'test'
+  ...
+# Subtest: canonical event snapshots preserve signed JSON, limits and frozen detached indexed tags
+ok 36 - canonical event snapshots preserve signed JSON, limits and frozen detached indexed tags
+  ---
+  duration_ms: 14.968194
+  type: 'test'
+  ...
+# Subtest: no implicit connections, exact subscription bounds, native events, per-relay ACK and no republish
+ok 37 - no implicit connections, exact subscription bounds, native events, per-relay ACK and no republish
+  ---
+  duration_ms: 42.012842
+  type: 'test'
+  ...
+# Subtest: ACK loss/cancel stays unknown; 32 outstanding publications bounded; dispose suppresses late frames
+ok 38 - ACK loss/cancel stays unknown; 32 outstanding publications bounded; dispose suppresses late frames
+  ---
+  duration_ms: 131.89516
+  type: 'test'
+  ...
+# Subtest: reentrant removal skips only that subscriber and same-callback reacquisition waits for the next cohort
+ok 39 - reentrant removal skips only that subscriber and same-callback reacquisition waits for the next cohort
+  ---
+  duration_ms: 22.743756
+  type: 'test'
+  ...
+# Subtest: unsubscribe/resubscribe waits for physical close; rejected close permanently blocks that slot
+ok 40 - unsubscribe/resubscribe waits for physical close; rejected close permanently blocks that slot
+  ---
+  duration_ms: 4.918303
+  type: 'test'
+  ...
+# Subtest: rate burst and oversized frames are bounded before signature work; no fallback relay is selected
+ok 41 - rate burst and oversized frames are bounded before signature work; no fallback relay is selected
+  ---
+  duration_ms: 2.438828
+  type: 'test'
+  ...
+# Subtest: cancelled late connector stays owned and drains physically before disposal resolves
+ok 42 - cancelled late connector stays owned and drains physically before disposal resolves
+  ---
+  duration_ms: 1.120008
+  type: 'test'
+  ...
+# Subtest: filters reject unbounded history/limits and retry stops after six reconnect attempts
+ok 43 - filters reject unbounded history/limits and retry stops after six reconnect attempts
+  ---
+  duration_ms: 2.472881
+  type: 'test'
+  ...
+# Subtest: connect timeout aborts but retains the physical slot until a late socket drains
+ok 44 - connect timeout aborts but retains the physical slot until a late socket drains
+  ---
+  duration_ms: 1.460193
+  type: 'test'
+  ...
+# Subtest: connect timeouts never count as stable uptime or reset the six-retry budget
+ok 45 - connect timeouts never count as stable uptime or reset the six-retry budget
+  ---
+  duration_ms: 1.423425
+  type: 'test'
+  ...
+# Subtest: sixty seconds of an actual established socket replenishes reconnect attempts
+ok 46 - sixty seconds of an actual established socket replenishes reconnect attempts
+  ---
+  duration_ms: 1.770653
+  type: 'test'
+  ...
+# Subtest: an event delivered to one subscription is still delivered once to an overlapping subscription
+ok 47 - an event delivered to one subscription is still delivered once to an overlapping subscription
+  ---
+  duration_ms: 14.180053
+  type: 'test'
+  ...
+# Subtest: a recreated subscription receives requested history that an earlier subscription already saw
+ok 48 - a recreated subscription receives requested history that an earlier subscription already saw
+  ---
+  duration_ms: 8.908356
+  type: 'test'
+  ...
+# Subtest: closing a subscription frees its dedupe entries so they cannot evict another subscription's
+ok 49 - closing a subscription frees its dedupe entries so they cannot evict another subscription's
+  ---
+  duration_ms: 148.436054
+  type: 'test'
+  ...
+# Subtest: verification cannot deliver or penalize after retiring its subscription, transport or pool
+ok 50 - verification cannot deliver or penalize after retiring its subscription, transport or pool
+  ---
+  duration_ms: 63.512519
+  type: 'test'
+  ...
+1..50
+# tests 50
+# suites 0
+# pass 50
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20866.166661

@@ -1,0 +1,35 @@
+✔ build inventory binds exact raw bytes for binary (18.260928ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (10.545607ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (5.827612ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (6.282817ms)
+▶ build inventory includes prototype-looking root filenames
+  ✔ __proto__ (5.932184ms)
+  ✔ constructor (5.281767ms)
+  ✔ toString (5.193346ms)
+✔ build inventory includes prototype-looking root filenames (17.452305ms)
+✔ prototype-looking root filename cannot hide a private-key marker (5.297399ms)
+✔ prototype-looking root filename participates in case-collision refusal (6.174726ms)
+✔ application token policy denies HTML execution while allowing text and React events (3.117814ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.181599ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (0.652086ms)
+✔ default and demo module graphs reject test-only wallet execution and signing (2.035206ms)
+✔ scanBuild: the default artifact refuses synthetic markers or demo modules; the demo artifact requires them (23.693931ms)
+✔ scanBuild: only the testnet artifact may carry the testnet trust bundle or testnet modules, and it must (28.318813ms)
+✔ static loading, no-script and safety copy comes from the same English catalog (0.93301ms)
+✔ missing or duplicated catalog placeholders fail instead of emitting mixed static copy (1.124207ms)
+✔ G07 import boundaries use the TypeScript AST and report fixture violations without false positives (123.781847ms)
+✔ G07 permits only the explicit read-only release side entry and follows its dependencies (194.427074ms)
+✔ G07 permits only the existing release side entry and excludes parked optional dependencies (648.877082ms)
+✔ G07 reports missing application graph entry instead of claiming it was checked (114.111025ms)
+✔ G07 refuses missing or unreadable expected roots instead of passing a partial inventory (20.998662ms)
+✔ G07 refuses source-directory symlinks instead of silently omitting their subtree (31.240471ms)
+✔ G07 accepts an explicitly empty packages root with a complete application inventory (117.183608ms)
+✔ G07 follows literal dynamic imports into the entry graph and still rejects non-literal ones (98.193716ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2153.636177
