@@ -13,6 +13,18 @@ const typed=Object.getPrototypeOf(Uint8Array.prototype) as object;
 const length=Object.getOwnPropertyDescriptor(typed,'byteLength')!.get!;
 const buffer=Object.getOwnPropertyDescriptor(typed,'buffer')!.get!;
 const bufferLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,'byteLength')!.get!;
+/** True only when Content-Length positively describes the bytes the body stream yields.
+ * Fetch removes content codings before exposing the body, while Content-Length keeps the encoded size.
+ * A CORS-filtered response hides Content-Encoding but exposes Content-Length, so absence proves nothing there.
+ * A port that omits Response.type promises an unfiltered header list. */
+function declaresBodyLength(response:{readonly type?:string;readonly headers:Pick<Headers,'get'>}):boolean{
+  const coding=response.headers.get('content-encoding');
+  // A visible coding is authoritative: only an explicit identity coding leaves the length unchanged.
+  if(coding!==null)return typeof coding==='string'&&coding.trim().toLowerCase()==='identity';
+  // A missing coding proves identity only on an unfiltered header list.
+  const type=response.type;
+  return type===undefined||type==='basic'||type==='default';
+}
 export class UpdateHttpReader {
   #pending:Promise<void>=Promise.resolve();#busy=false;
   readonly transport:SessionTransportPolicy;readonly fetch:HttpFetchPort;
@@ -44,7 +56,12 @@ export class UpdateHttpReader {
           reader=response.body?.getReader();current();
           if(!response.ok||response.redirected||response.url!==url.href||!reader)throw new UpdateReadError('ROUTE_UNAVAILABLE');
           const declared=response.headers.get('content-length');
-          if(declared!==null&&(!/^(0|[1-9][0-9]*)$/.test(declared)||declared.length>9||Number(declared)>maximum))throw new UpdateReadError('LIMIT_EXCEEDED');
+          const wellFormed=declared===null||(/^(0|[1-9][0-9]*)$/.test(declared)&&declared.length<=9);
+          if(!wellFormed)throw new UpdateReadError('LIMIT_EXCEEDED');
+          // Invariant: only an identity length may refuse early or be compared with the decoded total.
+          // Otherwise the streamed decoded-byte cap is the sole size bound; signed digests alone prove integrity.
+          const exact=declared!==null&&declaresBodyLength(response)?Number(declared):null;
+          if(exact!==null&&exact>maximum)throw new UpdateReadError('LIMIT_EXCEEDED');
           let total=0,reads=0;
           for(;;){if(++reads>UPDATE_HTTP_READS)throw new UpdateReadError('LIMIT_EXCEEDED');const next=await reader.read();current();if(next.done)break;
             const raw=next.value;if(typeof raw!=='object'||raw===null||Object.getPrototypeOf(raw)!==Uint8Array.prototype)throw new UpdateReadError('ROUTE_UNAVAILABLE');
@@ -52,7 +69,8 @@ export class UpdateHttpReader {
             if(size>maximum-total)throw new UpdateReadError('LIMIT_EXCEEDED');total+=size;
             const owned=new Uint8Array(size);Uint8Array.prototype.set.call(owned,raw);chunks.push(owned);
           }
-          if(declared!==null&&Number(declared)!==total)throw new UpdateReadError('ROUTE_UNAVAILABLE');current();
+          if(exact!==null&&exact!==total)throw new UpdateReadError('ROUTE_UNAVAILABLE');
+          current();
           const output=new Uint8Array(total);let offset=0;for(const chunk of chunks){output.set(chunk,offset);offset+=chunk.length;}current();return output;
         }finally{nativeSignal.removeEventListener('abort',cancel);try{await reader?.cancel();}catch{}for(const chunk of chunks)chunk.fill(0);this.#busy=false;finish();}
       });
