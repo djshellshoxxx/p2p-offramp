@@ -16,6 +16,7 @@ import type { Permit, SessionTransportPolicy, TransportScope } from '../../trans
 import type { RouteError } from '../../transport/index.ts';
 import { encodeClose, encodeEvent, encodeReq, matchesFilters, parseEvent, parseRelayFrame, FRAME_LIMITS, isHex64, withinBytes } from './nip01.ts';
 import type { EventCrypto, NostrEvent, RelayFilter } from './nip01.ts';
+import { indexedValues } from './snapshot.ts';
 
 const GIFT_WRAP_KIND = 1059;
 export type RelayBroker = Pick<SessionTransportPolicy, 'authorize' | 'capture'>;
@@ -96,7 +97,9 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const random = options.random ?? Math.random;
   const connect = options.connect ?? webSocketConnector;
   const maxActive = Math.max(1, Math.min(options.maxRelays ?? POOL_LIMITS.maxRelays, POOL_LIMITS.maxRelays));
-  const seenIds = new Map<string, true>();
+  // Delivery dedupe is keyed by (subscription, event id): one subscription's history never suppresses another's.
+  // Invariant: at most maxDedupIds entries pool-wide (oldest evicted first); each value is its owning subscription id.
+  const seenIds = new Map<string, string>();
   const subs = new Map<string, Sub>();
   const publications = new Set<AbortController>();
   // Read and short-lived publish sockets share one physical budget. Calling close is not proof of closure.
@@ -167,8 +170,10 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     r.windowDropped++;
     return false;
   }
-  function remember(id: string): void {
-    seenIds.set(id, true);
+  // Subscription ids are `s<n>` (no ':') and event ids are 64 hex, so the composite key is unambiguous.
+  const deliveryKey = (subId: string, eventId: string): string => `${subId}:${eventId}`;
+  function remember(subId: string, eventId: string): void {
+    seenIds.set(deliveryKey(subId, eventId), subId);
     if (seenIds.size > POOL_LIMITS.maxDedupIds) seenIds.delete(seenIds.keys().next().value as string);
   }
   function sendReq(r: RelayRec): void {
@@ -196,7 +201,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         const sub = subs.get(frame.subId);
         if (!sub || !r.counts.has(frame.subId)) { penalize(r, PENALTY.wrongSubscription, 'wrong-subscription'); return; }
         if (r.closedSubs.has(frame.subId)) return;
-        if (seenIds.has(frame.event.id)) return; // dedupe before any signature work
+        if (seenIds.has(deliveryKey(frame.subId, frame.event.id))) return; // dedupe before any signature work
         if (!matchesFilters(frame.event, sub.filters)) { penalize(r, PENALTY.outsideFilter, 'outside-filter'); return; }
         const count = (r.counts.get(frame.subId) ?? 0) + 1;
         r.counts.set(frame.subId, count);
@@ -207,8 +212,12 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         }
         let valid = false;
         try { valid = options.verifier.verifyEvent(frame.event) === true; } catch { valid = false; }
+        // Injected verification can retire the subscription, revoke transport or close the pool.
+        // Recheck ownership before either delivery/dedupe or penalties mutate retired state.
+        if (r.scope === null || !r.scope.current() || closed || r.generation !== generation || r.state !== 'open' ||
+            subs.get(frame.subId) !== sub || !r.counts.has(frame.subId) || r.closedSubs.has(frame.subId)) return;
         if (!valid) { penalize(r, PENALTY.invalidSignature, 'invalid-signature'); return; }
-        remember(frame.event.id);
+        remember(frame.subId, frame.event.id);
         try { sub.handlers.onEvent(frame.event, r.cfg.endpointId); } catch { /* handler faults are not relay faults */ }
         return;
       }
@@ -328,22 +337,34 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     sendReq(r);
   }
   function normalize(filters: readonly RelayFilter[]): readonly RelayFilter[] | null {
-    if (!Array.isArray(filters) || filters.length < 1 || filters.length > POOL_LIMITS.maxFiltersPerSubscription) return null;
+    const captured = indexedValues(filters, 1, POOL_LIMITS.maxFiltersPerSubscription); if (captured === null) return null;
     const wall = options.nowSeconds?.() ?? null;
+    if (wall !== null && (typeof wall !== 'number' || !Number.isSafeInteger(wall) || wall < 0)) return null;
     const out: RelayFilter[] = [];
-    for (const f of filters) {
-      if (typeof f !== 'object' || f === null) return null;
-      if (!Array.isArray(f.kinds) || f.kinds.length < 1 || f.kinds.length > 8 || !f.kinds.every((k: number) => Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
-      if (!Number.isSafeInteger(f.limit) || f.limit < 1 || f.limit > POOL_LIMITS.maxFilterLimit) return null;
-      if (!Number.isSafeInteger(f.since) || f.since < 0) return null;
-      if (wall !== null && f.since < wall - (f.kinds.every((k: number) => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
-      const copy: Record<string, unknown> = { kinds: [...f.kinds], since: f.since, limit: f.limit };
-      for (const name of ['authors', '#d', '#t', '#k', '#a', '#p'] as const) {
-        const list = f[name];
-        if (list === undefined) continue;
-        if (!Array.isArray(list) || list.length < 1 || list.length > FRAME_LIMITS.maxFilterValues) return null;
-        if (!list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
-        copy[name] = [...list];
+    const optional = ['authors', '#d', '#t', '#k', '#a', '#p'] as const, allowed: readonly string[] = ['kinds', 'since', 'limit', ...optional];
+    for (const input of captured) {
+      if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
+      const proto: unknown = Object.getPrototypeOf(input); if (proto !== Object.prototype && proto !== null) return null;
+      const keys = Reflect.ownKeys(input);
+      if (keys.length > allowed.length || keys.some(key => typeof key !== 'string' || !allowed.includes(key))) return null;
+      const raw: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+      for (const key of keys as string[]) {
+        const descriptor = Object.getOwnPropertyDescriptor(input, key);
+        if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+        raw[key] = descriptor.value;
+      }
+      const kinds = indexedValues(raw.kinds, 1, 8);
+      if (kinds === null || !kinds.every(k => typeof k === 'number' && Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
+      const { limit, since } = raw;
+      if (typeof limit !== 'number' || !Number.isSafeInteger(limit) || limit < 1 || limit > POOL_LIMITS.maxFilterLimit) return null;
+      if (typeof since !== 'number' || !Number.isSafeInteger(since) || since < 0) return null;
+      if (wall !== null && since < wall - (kinds.every(k => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
+      const copy: Record<string, unknown> = { kinds: Object.freeze(kinds), since, limit };
+      for (const name of optional) {
+        if (raw[name] === undefined) continue;
+        const list = indexedValues(raw[name], 1, FRAME_LIMITS.maxFilterValues);
+        if (list === null || !list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
+        copy[name] = Object.freeze(list);
       }
       out.push(Object.freeze(copy) as unknown as RelayFilter);
     }
@@ -351,6 +372,11 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   }
   function closeSub(id: string): void {
     if (!subs.delete(id)) return;
+    // Free the closed subscription's dedupe entries (bounded scan of at most maxDedupIds).
+    // Deleting the current entry while iterating a Map is well-defined.
+    for (const [key, owner] of seenIds) {
+      if (owner === id) seenIds.delete(key);
+    }
     for (const r of recs) {
       if (r.state === 'open' && r.counts.delete(id)) { try { r.socket?.send(encodeClose(id)); } catch { /* ignore */ } }
       r.closedSubs.delete(id);
@@ -399,12 +425,20 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const pool: RelayPool = {
     subscribe(filters, handlers) {
       if (closed) return refuse('CLOSED');
-      const normalized = normalize(filters);
-      if (normalized === null) return refuse('INVALID_FILTER');
-      if (typeof handlers?.onEvent !== 'function') return refuse('INVALID_FILTER');
+      let normalized: readonly RelayFilter[] | null, captured: SubscriptionHandlers;
+      try {
+        normalized = normalize(filters); if (normalized === null) return refuse('INVALID_FILTER');
+        if (typeof handlers !== 'object' || handlers === null || Array.isArray(handlers)) return refuse('INVALID_FILTER');
+        const event = Object.getOwnPropertyDescriptor(handlers, 'onEvent'), eose = Object.getOwnPropertyDescriptor(handlers, 'onEose');
+        if (!event || !('value' in event) || typeof event.value !== 'function' || eose && (!('value' in eose) || eose.value !== undefined && typeof eose.value !== 'function')) return refuse('INVALID_FILTER');
+        const onEvent = event.value, onEose = eose?.value;
+        captured = Object.freeze({ onEvent: (event: NostrEvent, relayId: string) => { Reflect.apply(onEvent, handlers, [event, relayId]); },
+          ...(onEose === undefined ? {} : { onEose: (relayId: string) => { Reflect.apply(onEose, handlers, [relayId]); } }) });
+      } catch { return refuse('INVALID_FILTER'); }
+      if (closed) return refuse('CLOSED');
       if (subs.size >= POOL_LIMITS.maxSubscriptionsPerRelay) return refuse('LIMIT_EXCEEDED');
       const id = `s${++subCounter}`;
-      subs.set(id, { id, filters: normalized, handlers });
+      subs.set(id, { id, filters: normalized, handlers: captured });
       for (const r of recs) if (r.state === 'open') { r.counts.set(id, 0); try { r.socket?.send(encodeReq(id, normalized)); } catch { fail(r, null, 'send-failed'); } }
       fill();
       return { ok: true as const, value: Object.freeze({ id, close: () => closeSub(id) }) };
@@ -412,8 +446,10 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     async publish(event, signal) {
       if (closed) return refuse('CLOSED');
       const checked = parseEvent(event);
+      if (closed) return refuse('CLOSED');
       let valid = false;
       try { valid = checked !== null && options.verifier.verifyEvent(checked) === true; } catch { valid = false; }
+      if (closed) return refuse('CLOSED');
       if (checked === null || !valid || signal?.aborted) return refuse('INVALID_FILTER');
       const targets = recs.filter(r => r.state !== 'banned').slice(0, maxActive);
       if (inFlight + targets.length > POOL_LIMITS.maxPublishInFlight || sockets.size + targets.length > maxActive) return refuse('LIMIT_EXCEEDED');
