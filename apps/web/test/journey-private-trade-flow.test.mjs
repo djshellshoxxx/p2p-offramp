@@ -81,6 +81,12 @@ function fakeChain(){
   chain.blocks.set(chain.head,[mined]);
   chain.txs.set(mined.hash,mined);
   if(mined.from===SELLER)chain.nonce++;
+  // `revertNext` includes the next transaction with a reverted receipt and no escrow effect.
+  if(chain.revertNext){
+   chain.revertNext=false;
+   mined.reverted=true;
+   return mined.hash;
+  }
   if(mined.to===ESCROW.toLowerCase()){
    const kind=mined.input.slice(0,10);
    chain.escrowState=kind===selector('release')?'released':kind===selector('refund')?'refunded':'funded';
@@ -101,7 +107,7 @@ function fakeChain(){
   receipt:hash=>{
    const tx=chain.txs.get(hash);
    const receipt={transactionHash:hash,blockNumber:String(tx?.blockNumber),blockHash:blockHash(tx?.blockNumber??0)};
-   return done(tx?{...receipt,status:'success'}:null);
+   return done(tx?{...receipt,status:tx.reverted?'reverted':'success'}:null);
   },
   escrowState:()=>done(chain.escrowState),
   escrowObservation:(binding,request)=>done({
@@ -137,7 +143,8 @@ function fakeChain(){
    const tx=chain.txs.get(params[0]);
    if(!tx)return null;
    return{
-    transactionHash:tx.hash,blockNumber:hex(tx.blockNumber),blockHash:blockHash(tx.blockNumber),status:'0x1',
+    transactionHash:tx.hash,blockNumber:hex(tx.blockNumber),blockHash:blockHash(tx.blockNumber),
+    status:tx.reverted?'0x0':'0x1',
     gasUsed:'0x5208',effectiveGasPrice:'0x1',logs:chain.logsFor?.(tx)??[],
    };
   }
@@ -357,6 +364,30 @@ test('release is not offered inside the 300-second margin before the actual dead
   h.chain.guidance={reason:'near-expiry',remainingSeconds:'301'};
   assert.equal((await h.journey.act('reconcile')).phase,'payment-guidance-closed');
   assert.equal(h.chain.sends,1);
+ }finally{h.journey.dispose();}
+});
+
+test('a release that reverts after the deadline returns to the funded escrow and its refund, never a resend',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  await h.journey.act('review-signing',{signingAction:'release'});
+  // The release is included only after the deadline, so BasicEscrow reverts it and the escrow stays funded.
+  h.chain.revertNext=true;
+  assert.equal((await h.journey.act('confirm-signing',{attestFiatReceived:true})).phase,'settling');
+  assert.equal(h.chain.sends,2);
+  assert.equal(h.chain.escrowState,'funded');
+  // Later empty blocks bury the reverted receipt past the confirmation depth.
+  h.chain.head+=2;
+  h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
+  h.chain.guidance={reason:'near-expiry',remainingSeconds:'0'};
+  await assert.rejects(h.journey.act('reconcile'),/PAYMENT_GUIDANCE_BLOCKED/);
+  assert.equal(h.journey.snapshot().phase,'payment-guidance-unavailable');
+  await assert.rejects(h.journey.act('review-signing',{signingAction:'release'}),/OUT_OF_ORDER/);
+  assert.equal(h.chain.sends,2,'the reverted release is never resent');
+  assert.equal((await signed(h.journey,'refund')).phase,'settling');
+  assert.equal(h.chain.escrowState,'refunded');
+  assert.equal((await h.journey.act('reconcile')).receipt.state,'refunded');
  }finally{h.journey.dispose();}
 });
 

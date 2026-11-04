@@ -104,6 +104,17 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   const viewed=gate.view();
   return viewed.ok&&viewed.value.reason==='near-expiry'&&releaseOpen(viewed.value);
  }
+ // Enters the funded phase from fresh native evidence: payment guidance, guidance-closed release, or neither.
+ async function enterFundedPhase():Promise<void>{
+  const {binding}=trade(),{gate,authority,journey}=attached();
+  value(await step(authority.refresh(binding)));
+  const projected=value(await step(journey.read()));
+  const coordinating=projected.kind==='resolved'&&projected.view.step==='payment-coordination';
+  const closed=projected.kind==='blocked'&&projected.blockingReason==='payment-guidance-blocked';
+  if(coordinating)phase='payment-coordination';
+  else if(closed&&guidanceClosedForRelease(gate))phase='payment-guidance-closed';
+  else{phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}
+ }
  function reviewActionReady(action:SigningAction):void{
   const allowed=action==='accept'?phase==='review'
    :action==='accept-recovered'?phase==='recovered-acceptance-required'
@@ -484,16 +495,19 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      if(releasePhase())phase='payment-guidance-unavailable';
      attached().gate.invalidate();
      await fresh();
-     const{binding}=trade(),{journal,life,reader,gate,authority,journey}=attached(),intentId=definedIntentId();
-     value(await step(journal.reconcileNative(intentId)));const result=value(await step(life.reconcile(intentId)));if(result.outcome!=='finalized')return snapshot();await recordFee(result.intent);
+     const{binding}=trade(),{journal,life,reader,authority,journey}=attached(),intentId=definedIntentId();
+     value(await step(journal.reconcileNative(intentId)));const result=value(await step(life.reconcile(intentId)));
+     // A settlement the chain reverted (e.g. a release included at or after the deadline) leaves the escrow funded.
+     // Re-enter the funded phase from a fresh native read so the original refund path is offered; never resend.
+     const settle=result.intent.action==='release'||result.intent.action==='refund';
+     if(settle&&result.outcome==='reverted'&&result.escrowState==='funded'){
+      await enterFundedPhase();
+      return snapshot();
+     }
+     if(result.outcome!=='finalized')return snapshot();await recordFee(result.intent);
      if(result.intent.action==='approve'){await checkToken();phase=acceptedProof?'accepted':'recovered-acceptance-required';return snapshot();}
      if(result.escrowState==='funded'){
-      value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));
-      const coordinating=projected.kind==='resolved'&&projected.view.step==='payment-coordination';
-      const closed=projected.kind==='blocked'&&projected.blockingReason==='payment-guidance-blocked';
-      if(coordinating)phase='payment-coordination';
-      else if(closed&&guidanceClosedForRelease(gate))phase='payment-guidance-closed';
-      else{phase='payment-guidance-unavailable';throw Error('PAYMENT_GUIDANCE_BLOCKED');}
+      await enterFundedPhase();
      }else if(result.escrowState==='released'||result.escrowState==='refunded'){
       // Receipt is native and bound to the original exact intent; JSON terminal labels are insufficient.
       value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
