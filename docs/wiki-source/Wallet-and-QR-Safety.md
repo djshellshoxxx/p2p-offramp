@@ -1,2 +1,5 @@
 # Wallet and QR safety
-Confirm exact domain, network, token, spender allowance, destination, expiry and displayed amount. A QR is a transport mechanism, not a proof of authenticity. Scanned content must be shown for approval before navigating or signing. Do not share mnemonic/private keys or decrypted payment evidence via QR. For same-device flows provide copy, encrypted file and wallet deep-link alternatives. Use disposable testnet wallets during development. Check any contract's deployed code against the signed release manifest.
+
+External wallets retain spending keys. Compare exact origin, network, full address, token, allowance, amount and expiry before wallet confirmation. Never enter wallet seeds or private keys into this app or support chat. QR/file interchange transports untrusted data; it does not authenticate a counterparty or payment. Preview and validate imported payloads before any action. Camera and device interoperability remain separately qualified.
+
+Chain identity and deployed runtime must match the selected signed registry before enabled trading. A same-host checksum or a public URL does not authenticate initial application code. Default key pins remain unset; no deployment address is approved here. [Security and release](Security-and-Release.md).

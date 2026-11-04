@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          fetch-depth: 0 # Immutable source/document evidence resolves historical commits.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
         with:
           node-version: '24'
@@ -39,6 +41,7 @@ jobs:
       - run: npm run test:acceptance:cli
       - run: npm run check:boundaries
       - run: npm run test:build-policy
+      - run: npm run test:distribution
       - run: npm run test:diagnostics
       - run: npm run test:fuzz
       - run: npm run build
@@ -46,6 +49,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          fetch-depth: 0 # Immutable source/document evidence resolves historical commits.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
         with:
           node-version: '24'
@@ -80,7 +85,13 @@ jobs:
       - run: npm run test:locale:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:portal:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:journey:origins
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:distribution:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:updates:browser
