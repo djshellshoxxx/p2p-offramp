@@ -1,0 +1,466 @@
+{
+  "schemaVersion": 1,
+  "task": "T38-A",
+  "reviewer": "review_zoom",
+  "status": "COMPLETE_LOCAL_STATIC_REVIEW_WITH_T85_REPAIRS_VERIFIED",
+  "startedAt": "2026-11-02T15:37:56.848212+00:00",
+  "recordedAt": "2026-11-02T15:46:06.816961+00:00",
+  "sourceCommitAtStart": "76c45df0b2f39a928d92ae0af3d60f37737802c5",
+  "sourceCommitAtReceipt": "441499d1be261f734cb00afbab516b094c8d84eb",
+  "productionFileCount": 21,
+  "productionLinesReadAtStart": 2942,
+  "productionLinesAfterReviewedDelta": 2958,
+  "productionInventory": [
+    {
+      "path": "apps/web/src/retention/native-retention.ts",
+      "bytes": 17146,
+      "lines": 153,
+      "sha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8",
+      "auditStartSha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Private Worker constructor capabilities, read-only methods/no wallet sends; reviewed canonical terms/prepared-request role/account/action binding; finalized release/refund plus exact recipient/asset zero deferred credit at coherent anchors; complete authenticated history; bounded live scope/reentrancy/cleanup and unknown retention."
+    },
+    {
+      "path": "packages/identity/index.ts",
+      "bytes": 598,
+      "lines": 7,
+      "sha256": "b325686cd8338333af8ba4dfcda075c836a8a5dbeea6de6d1a85830c8213d80c",
+      "auditStartSha256": "b325686cd8338333af8ba4dfcda075c836a8a5dbeea6de6d1a85830c8213d80c",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Provider/purpose-specific metadata facade; no generic key/sign/decrypt return."
+    },
+    {
+      "path": "packages/identity/src/identity-service.ts",
+      "bytes": 22616,
+      "lines": 302,
+      "sha256": "79ec4442afc353c34e575cb371e9f7e9a41c041438333a5e4e965ff77c2511ff",
+      "auditStartSha256": "79ec4442afc353c34e575cb371e9f7e9a41c041438333a5e4e965ff77c2511ff",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Messaging purpose; authenticated profile/record/state and active uniqueness; object-bound handles/live leases; monotonic idle/lock/disposal; serialized jobs, await/revision guards and best-effort wiping; durable late receipts; restored adoption changes profile only; authenticated bounded history metadata."
+    },
+    {
+      "path": "packages/identity/src/noble-provider.ts",
+      "bytes": 1246,
+      "lines": 24,
+      "sha256": "13141582aed59021cf103a42548e37bdced3d10dff4b3d39819ff7f8616cbbaa",
+      "auditStartSha256": "13141582aed59021cf103a42548e37bdced3d10dff4b3d39819ff7f8616cbbaa",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Pinned Schnorr keygen/public-key API, scalar validation, CSPRNG, x-only representation and fixed provider errors."
+    },
+    {
+      "path": "packages/nostr-crypto/index.ts",
+      "bytes": 1078,
+      "lines": 13,
+      "sha256": "bf1d7cbe60b5d1e2c676fc57397fc113df93e96c292b2b8bea76dc3e7cd31f41",
+      "auditStartSha256": "bf1d7cbe60b5d1e2c676fc57397fc113df93e96c292b2b8bea76dc3e7cd31f41",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Explicit protocol/provider/event facade; no wallet or vault spending interface."
+    },
+    {
+      "path": "packages/nostr-crypto/src/bytes.ts",
+      "bytes": 5383,
+      "lines": 89,
+      "sha256": "26692b46a8a2036d2d455245036f8f771c8798e1430fee09f1e59ffc96c66ab3",
+      "auditStartSha256": "26692b46a8a2036d2d455245036f8f771c8798e1430fee09f1e59ffc96c66ab3",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Fixed WeakMap error classification; strict hex/base64/UTF-8; full-length MAC comparison; CSPRNG and best-effort wiping."
+    },
+    {
+      "path": "packages/nostr-crypto/src/chacha20.ts",
+      "bytes": 1222,
+      "lines": 15,
+      "sha256": "95b4fa0d70efbce3e61ce7cbb7445643867d36e708bc7bbd58a4fd8041b9b20b",
+      "auditStartSha256": "95b4fa0d70efbce3e61ce7cbb7445643867d36e708bc7bbd58a4fd8041b9b20b",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Pinned Noble output/counter argument order, key/nonce sizes, counter bound, input immutability and typed errors."
+    },
+    {
+      "path": "packages/nostr-crypto/src/event.ts",
+      "bytes": 12833,
+      "lines": 201,
+      "sha256": "ffd49dcf254ace4b0c64cf0445fedd61ccae22d9da2a7c9e21178e2c5b3ac4d2",
+      "auditStartSha256": "ffd49dcf254ace4b0c64cf0445fedd61ccae22d9da2a7c9e21178e2c5b3ac4d2",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Canonical event ID, BIP340 sign/verify, NIP04 refusal; exact own descriptors; field/tag/timestamp bounds; JSON duplicate-key/node/depth bounds."
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip17.ts",
+      "bytes": 9146,
+      "lines": 135,
+      "sha256": "db78a289ed91201ff6d2194c9ab90bb02d03a9cd324c25c35e1233e3c938d786",
+      "auditStartSha256": "db78a289ed91201ff6d2194c9ab90bb02d03a9cd324c25c35e1233e3c938d786",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Authenticated participants and domain-separated trade conversation; exact tags; distinct self/counterparty wraps; finite no-eviction dedup; close/cancel late-output guards; no payment/delivery authority."
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "bytes": 7221,
+      "lines": 117,
+      "sha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643",
+      "auditStartSha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Validated even-y ECDH x; HKDF extract/expand salt/order and 32/12/32 key split; original1..65535-byte padding profile; fresh nonce; HMAC before decrypt; strict size/base64/padding/UTF-8 and cleanup."
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "bytes": 5948,
+      "lines": 83,
+      "sha256": "c4e7d40299f8392dc8b8a9f0eb00cb8eb953b08f453fc39f98b1b2b634d27507",
+      "auditStartSha256": "c4e7d40299f8392dc8b8a9f0eb00cb8eb953b08f453fc39f98b1b2b634d27507",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Fresh ephemeral keys; authenticated seal/wrap/rumor and recipient/author bindings; randomized timestamps/future skew; finite layers and key cleanup."
+    },
+    {
+      "path": "packages/nostr-crypto/src/provider.ts",
+      "bytes": 2532,
+      "lines": 39,
+      "sha256": "044e498bd230d2373a8d3ff2c593755f499ffebea2636c621e960e7462b7cc6f",
+      "auditStartSha256": "044e498bd230d2373a8d3ff2c593755f499ffebea2636c621e960e7462b7cc6f",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Messaging keys distinct from wallet/vault keys; Schnorr32-byte message/64-byte signature and fresh aux; ECDH mandatory, no wallet fallback."
+    },
+    {
+      "path": "packages/nostr-crypto/src/relay-event-crypto.ts",
+      "bytes": 2728,
+      "lines": 49,
+      "sha256": "e3761b1af8377a0ecbb1c4fbca8d81df255e3d2f4ef4d39418993592a1801bbd",
+      "auditStartSha256": "e3761b1af8377a0ecbb1c4fbca8d81df255e3d2f4ef4d39418993592a1801bbd",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Owned key/per-call copies; synchronous public verification; disposal suppresses late signature publication and wipes reachable copies."
+    },
+    {
+      "path": "packages/storage/index.ts",
+      "bytes": 1558,
+      "lines": 14,
+      "sha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb",
+      "auditStartSha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Public service/retention/migration facade excludes raw crypto handles."
+    },
+    {
+      "path": "packages/storage/src/backup-service.ts",
+      "bytes": 10600,
+      "lines": 166,
+      "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0",
+      "auditStartSha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Bounds/schema/checksum before KDF; checksum is not authentication; fresh IDs/DEK/salt/nonces, source retained; destination auth before atomic add; intrinsic cancellation/shared recovery slot; durable late receipts/fixed errors."
+    },
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "bytes": 14152,
+      "lines": 237,
+      "sha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69",
+      "auditStartSha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Secure-context encrypted-row store; strict durability; row bound/add in one transaction; exact-envelope CAS/source-bound distinct add; blocked/late-open ownership; fixed errors; T85 fixed snapshot/per-listener invalidation and closed-store notification."
+    },
+    {
+      "path": "packages/storage/src/migration-service.ts",
+      "bytes": 14018,
+      "lines": 216,
+      "sha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357",
+      "auditStartSha256": "40dbc711ee9e4a8d0f5ad26a5915c413e4e8312b9d48870a3ffdb75a84bc2ed0",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Adjacent max64 bundled transforms; defensive schema-validated copies/downgrade refusal; recomputed max256 CAS; no-op freshness and persisted readback; registered fresh-key reseal retains IDs/kinds/source; T85 guarded allowlisted error classifier."
+    },
+    {
+      "path": "packages/storage/src/recovery-slot.ts",
+      "bytes": 688,
+      "lines": 13,
+      "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181",
+      "auditStartSha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Exact-holder shared module-local token remains held until native work settles; no cross-document/process-global guarantee."
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "bytes": 24285,
+      "lines": 353,
+      "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+      "auditStartSha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Age is suggestion only; unknown/future/identity retention; original-object plans and revision consent; one closed native deletion set/whole-conversation invariant; fresh review/final CAS guard/max256; live original payout identities and terminal checks; durable post-commit cleanup semantics."
+    },
+    {
+      "path": "packages/storage/src/vault-crypto.ts",
+      "bytes": 10704,
+      "lines": 174,
+      "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513",
+      "auditStartSha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Separate DEK/KEK; PBKDF2-SHA256600000/nonextractable AES256GCM; random32-byte salt/12-byte nonce; purpose/profile/key/revision AAD; canonical padded snapshots; fixed auth failure; revision/attempt caps and best-effort key/plaintext-copy wiping."
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "bytes": 35560,
+      "lines": 558,
+      "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+      "auditStartSha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+      "readExtent": "Entire production file at audit start; exact T85 delta independently reviewed where changed.",
+      "semanticChecks": "Native tokens/lease identity/synchronous revoke; monotonic idle; intrinsic signals/fixed errors; FIFO queues; exact-envelope preflight/transaction CAS; await/pre-write guards; current complete-backup authentication; fresh-key source-checked reseal; durable late completion."
+    }
+  ],
+  "absentRequestedScopes": [
+    "packages/domain/src/recovery*",
+    "apps/web/src/recovery/"
+  ],
+  "supportingDependencies": [
+    {
+      "path": "packages/schemas/src/vault.ts",
+      "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+      "readExtent": "Full supporting format/bounds/passphrase/schema read."
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha256": "d59f5ae03d8b8463cb9f2f875f6ec10a914dd3c28db549987930eadf14631fc2",
+      "readExtent": "Full supporting duplicate-safe bounded backup parser."
+    },
+    {
+      "path": "packages/schemas/src/identity.ts",
+      "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e",
+      "readExtent": "Full supporting identity/handle/payload schemas."
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e",
+      "readExtent": "History scan/reauthentication/list/close paths; append paths outside slice."
+    },
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036",
+      "readExtent": "Full stable supporting private current-backup/session/recovery selection composition."
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "c1989904d0dcf7cda516139f6d5a2cd997fc79c75a47465ee69bfb0856856437",
+      "readExtent": "parseCanonicalPreparedRequest only; remaining journey belongs to another slice."
+    },
+    {
+      "path": "security/crypto-inventory.json",
+      "sha256": "6dfe2c9217030f1f67521d953abbc2ecbeb6c6c22971a8f351b9befd1bbf6c2d",
+      "readExtent": "Capability review statuses and fixture bindings; no approvals changed."
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+      "readExtent": "Pinned dependency versions/integrities only."
+    },
+    {
+      "path": "node_modules/@noble/curves/secp256k1.js",
+      "sha256": "b4e7383e0de5064cd200d22f21890bc8730ddaf987b1e989e5e24bbfaae5cf1f",
+      "readExtent": "Schnorr keygen/publicKey/sign/verify API/source excerpts only."
+    },
+    {
+      "path": "node_modules/@noble/curves/abstract/weierstrass.js",
+      "sha256": "d007e949c0d5b912e8c54132983219c8ff8f69bda058a70563b5cc7a8783331c",
+      "readExtent": "Validated compressed ECDH shared-point API/source excerpts only."
+    },
+    {
+      "path": "node_modules/@noble/hashes/hkdf.js",
+      "sha256": "ccb942a8008f974018965eeb1e33b8f4739bf767c6f95f2ceb06f5873a302f67",
+      "readExtent": "Extract/expand argument order API/source excerpts only."
+    },
+    {
+      "path": "node_modules/@noble/ciphers/chacha.js",
+      "sha256": "5f1c00575e227b75163f4bac50b79442dec50ee3047c46c18887808ba8af0a69",
+      "readExtent": "IETF ChaCha counter/nonce profile API/source excerpts only."
+    },
+    {
+      "path": "node_modules/@noble/ciphers/_arx.js",
+      "sha256": "ead142ba410404c0698bb80e0d6f77780799bb77a9e3b098cf0f9fca1c486e37",
+      "readExtent": "Output/counter signature API/source excerpts only."
+    }
+  ],
+  "findings": [
+    {
+      "id": "T38-A-01",
+      "severity": "medium",
+      "path": "packages/storage/src/migration-service.ts",
+      "lineAtAuditStart": 40,
+      "title": "Migration foreign-error classification could throw or relay unvalidated code.",
+      "basis": "Static control-flow review; root independently reproduced against unchanged source under T85.",
+      "resolution": "Root guarded instanceof/own-data-descriptor extraction and fixed VaultErrorCode allowlist. Independent27-case run passes.",
+      "status": "RESOLVED_T85"
+    },
+    {
+      "id": "T38-A-02",
+      "severity": "medium",
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "lineAtAuditStart": 56,
+      "title": "A throwing or mutating subscriber could interrupt other invalidations and teardown.",
+      "basis": "Static callback/lifecycle review; root independently reproduced against unchanged source under T85.",
+      "resolution": "Root snapshots subscribers and isolates each callback, including immediate closed-store delivery. Independent27-case run passes.",
+      "status": "RESOLVED_T85"
+    }
+  ],
+  "remainingFindings": [],
+  "freshVerification": {
+    "scope": "Eight selected existing BIP340/NIP44 keys/encryption vectors and independent native WebCrypto envelope KAT; no full-suite duplication.",
+    "exitCode": 0,
+    "tests": 8,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "log": {
+      "path": "/workspace/work/audit-crypto-storage-fresh-kat.log",
+      "sha256": "7f5bdef6d424772bcb5f45542cb24dc3bce311dfc09f3a094ee403dfaee54f81"
+    },
+    "ipcCapability": true,
+    "externalDestinationsUsed": false
+  },
+  "reviewedDelta": {
+    "task": "T85",
+    "reviewPath": "/workspace/work/t85-independent-storage-review.json",
+    "reviewSha256": "a4c300afaf1593038fbaaa8a4d273ef4b30ec5ed8ff305c07a25278b40f94b95",
+    "sourceDriftReviewed": [
+      {
+        "path": "packages/storage/src/idb-vault-store.ts",
+        "beforeSha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3",
+        "afterSha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69"
+      },
+      {
+        "path": "packages/storage/src/migration-service.ts",
+        "beforeSha256": "40dbc711ee9e4a8d0f5ad26a5915c413e4e8312b9d48870a3ffdb75a84bc2ed0",
+        "afterSha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357"
+      }
+    ],
+    "independentTests": 27,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0
+  },
+  "reusedEvidence": {
+    "reviewPath": "docs/execution/reviews/T67.json",
+    "reviewSha256": "30e18edd067f078eafe3471c18bce0fa0823321c3233674627fe86807588be84",
+    "scope": "Root-reviewed Native9 retention/identity-history/storage/runtime behavior; not a new Native9 execution.",
+    "observedRootCounts": {
+      "nativeStorageIdentityCases": 34,
+      "runtimeSchemaConstructorCases": 13,
+      "actualPinnedAnvilChecks": 9,
+      "failures": 0,
+      "skips": 0,
+      "cancellations": 0
+    },
+    "unchangedRelevantInputs": [
+      {
+        "path": "packages/identity/src/identity-service.ts",
+        "sha256": "79ec4442afc353c34e575cb371e9f7e9a41c041438333a5e4e965ff77c2511ff"
+      },
+      {
+        "path": "packages/identity/index.ts",
+        "sha256": "b325686cd8338333af8ba4dfcda075c836a8a5dbeea6de6d1a85830c8213d80c"
+      },
+      {
+        "path": "packages/identity/test/history-retention.test.mjs",
+        "sha256": "22dea8e18a09cbce4086bfbeaa7b4d3af29a2f1f511563b05fcda02972e1c2f4"
+      },
+      {
+        "path": "packages/storage/src/retention-service.ts",
+        "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af"
+      },
+      {
+        "path": "packages/storage/test/retention-service.test.mjs",
+        "sha256": "27abdfe08bdc70c4d12080ce5fe3eafc37884f56d3e79293664910afa62b1bf8"
+      },
+      {
+        "path": "apps/web/src/retention/native-retention.ts",
+        "sha256": "8a3d082347e1ed74d74af286ce53981025d09fc559684253925716ba126bc0d8"
+      },
+      {
+        "path": "apps/web/test/retention-native.test.mjs",
+        "sha256": "c20784846ce18842caa8c1b95747e5cd60d4242cbd8fc823d56d2d6d5793efdb"
+      },
+      {
+        "path": "packages/storage/index.ts",
+        "sha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb"
+      }
+    ],
+    "hashVerifiedRootLogs": [
+      {
+        "path": "/workspace/work/t67-root-payout-final-focused.log",
+        "sha256": "4c738db2902106544bf4736e611a05eba6689dc59aa23918916448f325d84d02"
+      },
+      {
+        "path": "/workspace/work/t67-root-runtime-reviewed.log",
+        "sha256": "98925c2df01335c39191c4e1960f016f2cbc6cbbe5fd34b3359b25dcee7c0e65"
+      },
+      {
+        "path": "/workspace/work/t67-root-payout-final-native.log",
+        "sha256": "482dccf87019a7604862c9107b41fc92be33496cb67a554fd86df67e442c4e56"
+      }
+    ],
+    "browserEvidence": "T67 browser15-group proof remains historical; T82 WIP runtime/UI is excluded and final changed composition needs root recheck."
+  },
+  "cryptoQualification": {
+    "professionalQualification": false,
+    "scopedInventoryReviews": [
+      {
+        "id": "native-pbkdf2",
+        "status": "pending"
+      },
+      {
+        "id": "native-aes-gcm",
+        "status": "pending"
+      },
+      {
+        "id": "noble-curves-2.4.0",
+        "status": "pending"
+      },
+      {
+        "id": "noble-hashes-2.4.0",
+        "status": "pending"
+      },
+      {
+        "id": "noble-curves-2.4.0-nostr",
+        "status": "pending"
+      },
+      {
+        "id": "noble-hashes-2.4.0-nostr",
+        "status": "pending"
+      },
+      {
+        "id": "noble-ciphers-2.4.0-nostr",
+        "status": "pending"
+      },
+      {
+        "id": "noble-curves-2.4.0-schnorr-verify",
+        "status": "pending"
+      },
+      {
+        "id": "noble-hashes-2.4.0-relay-sha256",
+        "status": "pending"
+      }
+    ],
+    "fixtureHashesVerified": [
+      {
+        "path": "packages/storage/test/fixtures/vault-python-v1.json",
+        "sha256": "c12a25f1fddb68e9b1e976c167d38df4b050dec1d20df2da66fe367466b7f740"
+      },
+      {
+        "path": "packages/identity/test/fixtures/bip340-test-vectors.csv",
+        "sha256": "34c9d1d9c3a88d524bc80778540dc43f8306ec249a7485293063c376db851c2d"
+      },
+      {
+        "path": "packages/nostr-crypto/test/fixtures/nip44.vectors.json",
+        "sha256": "269ed0f69e4c192512cc779e78c555090cebc7c785b609e338a62afc3ce25040"
+      }
+    ],
+    "note": "Existing accepted public-data G16 recovery scope does not qualify messaging signing/ECDH/vault primitives. No inventory status promoted."
+  },
+  "unexpectedProductionDrift": [],
+  "excluded": [
+    "T82 favorites/runtime/UI WIP",
+    "Other repository audit slices",
+    "Old filtered review turn or third-party exploitation/reproduction",
+    "Full vendored primitive internals, side-channel/constant-time proof, new upstream provenance/security-history assessment",
+    "Production deployment and physical/browser/device acceptance"
+  ],
+  "limitations": [
+    "Finite source correctness review and selected tests do not prove absence of all defects or professional crypto qualification.",
+    "JavaScript best-effort wiping does not prove erasure of strings/BigInts/GC copies, backups or remote copies.",
+    "Requested recovery directories do not exist; stable journey vault composition is supporting context, and WIP runtime remains outside fresh coverage.",
+    "Later changes require explicit changed-source review."
+  ],
+  "sourceOrLedgerEditsOrCommits": false
+}

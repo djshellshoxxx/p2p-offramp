@@ -1,0 +1,21 @@
+# Shielded pools and CoinJoin
+
+Decision: no chain/asset/privacy protocol is selected. These are protocol-definition decisions, not merely missing professional approval. Generic successful deposit/withdraw/join implementations would invent custody and transaction semantics.
+
+## Shielded pools
+
+The repo intentionally starts with an empty provider registry. Primary [Zcash ZIP316](https://github.com/zcash/zips/blob/ff594de6e95bb9e9e7d2ace09510281531c30447/zips/zip-0316.rst), commitff594de6e95bb9e9e7d2ace09510281531c30447, distinguishes Orchard/Sapling/transparent receiver and viewing-key formats and receiver preference. It is real protocol-specific evidence, not an EVM shielded pool implementation or bridge. No Zcash/EVM interchangeability follows from “shielded”.
+
+Required selected fields: protocol/revision/source/asset/network; deposit/transfer/withdraw capabilities independently; deployed address/runtime code hash, note/key/address/spending/backup serialization; circuit/proving/verifying key/setup/parameter hashes; custody model; nullifier/withdrawal/reorg rules; relayer/fee/gas policy; exit/recovery tooling and availability. External-wallet custody must remain explicit. Nothing in the present contract chooses a pool, trust setup, spending-key import or recovery format. Do not fabricate a universal note, proof or verifier.
+
+Ready work: exact empty-provider refusal and candidate-manifest validation using the existing extension registry; threat/asset compatibility comparison, actual upstream artifact intake once a concrete candidate is selected, and synthetic noncustodial recovery scenarios that never purport to create a valid shielded note. A genuine pool local chain test becomes implementable after those exact artifacts/protocol fields exist. Independent custody/cryptographic/privacy review and actual exit/interoperability qualification follow; neither can supply an absent protocol choice.
+
+## CoinJoin
+
+Primary [BIP174](https://github.com/bitcoin/bips/blob/5aadddb511a5dcfe4599531bd8ae5e5b96d0f793/bip-0174.mediawiki), commit5aadddb511a5dcfe4599531bd8ae5e5b96d0f793, specifies the PSBT transaction container/key-value maps and v0 semantics. It is not a CoinJoin coordination/anonymity protocol. CoinJoin is UTXO collaborative signing outside this repo's initial EVM/Solana rails. A provider cannot be inferred from PSBT support or added to BasicEscrow by a preference.
+
+Required selected fields: Bitcoin/network and UTXO policy, actual coordinator protocol/version/source, wallet, PSBT/transaction versions and script types; input ownership/availability proofs, output/change ownership, fee/denomination caps, locktime/sequence and sighash restrictions; admission/blame/timeout/dropout policy, exact broadcast/journal/reorg recovery, metadata/routing and coordinator observability. A coordinator must never obtain private keys; input locks/reservations have explicit owned lifetimes and no automatic retries after uncertain broadcast. No coordinator is selected here. A concrete primary CoinJoin source checked was [JoinMarket clientserver](https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/c2dd2534afa59ddcb7f7d9a67e4b57cefcf9e4a4/README.md), whose pinned README explicitly says the repository is archived and not recommended. Its maker/taker fee market is a specific coordination model, not a maintained browser adapter selected by this app. Do not choose an archived implementation simply to fill a provider slot.
+
+Ready work: selected-chain/PSBT compatibility and refusal tests, unsigned transaction inspection threat fixtures (output substitution, fee theft, foreign inputs, unsafe sighash) under an explicitly named future profile, and provider manifest intake. Do not generate a fake successful CoinJoin or claim EVM assets become Bitcoin UTXOs. Real local interoperability requires actual coordinator/wallet protocol selection; independent privacy review and real-wallet qualification are additional gates.
+
+Shared reusable controls are existing extension negotiation, G12 uncertain-outcome recovery, bounded Worker/vault lifetimes and immutable signed terms. Published transaction metadata, timing/amount fingerprints, compromised notes and external copies remain protocol-specific risks; no universal erasure or anonymity statement is supported.

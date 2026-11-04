@@ -1,0 +1,43 @@
+{
+  "reviewer": "/root",
+  "result": "PASSIVE_PACKET_ACCEPTED_ACTIVE_PROFILE_BLOCKED",
+  "packages": [
+    {
+      "package": "@xmtp/browser-sdk",
+      "version": "7.0.0",
+      "archiveAndFullSri": true,
+      "currentSignatureAndNegative": true,
+      "completeInventoryAndLicense": true
+    },
+    {
+      "package": "@xmtp/wasm-bindings",
+      "version": "1.10.0",
+      "archiveAndFullSri": true,
+      "currentSignatureAndNegative": true,
+      "completeInventoryAndLicense": true
+    },
+    {
+      "package": "@xmtp/content-type-primitives",
+      "version": "3.0.0",
+      "archiveAndFullSri": true,
+      "currentSignatureAndNegative": true,
+      "completeInventoryAndLicense": true
+    },
+    {
+      "package": "@xmtp/node-bindings",
+      "version": "1.8.0",
+      "archiveAndFullSri": true,
+      "currentSignatureAndNegative": true,
+      "completeInventoryAndLicense": true
+    },
+    {
+      "package": "@xmtp/wasm-bindings",
+      "version": "1.11.0-nightly.20260603.89c3fc3",
+      "archiveAndFullSri": true,
+      "currentSignatureAndNegative": true,
+      "completeInventoryAndLicense": true
+    }
+  ],
+  "archiveFiles": 91,
+  "note": "Read-only archive, metadata, signatures and licenses. SDK/WASM never imported or executed. Runtime behavior remains unqualified."
+}

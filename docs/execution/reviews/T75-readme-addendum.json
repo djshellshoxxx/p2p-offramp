@@ -1,0 +1,349 @@
+{
+  "task": "T75",
+  "reviewer": "/root/review_intakes",
+  "type": "INDEPENDENT_README_LIMITATION_ADDENDUM",
+  "observedAtUtc": "2026-11-02T15:35:08.372342+00:00",
+  "disposition": "READY_FOR_ROOT_COMMIT_AS_LIMITED_RESEARCH_WITH_PRESERVED_FAILURES",
+  "scope": "Read-only review of three appended README limitations and unchanged other twelve originally frozen intake files. No probes, installs, new source fetches or source edits.",
+  "originalReceipt": {
+    "path": "/workspace/work/t75-independent-review/receipt.json",
+    "sha256": "0c441dcfd9e0c6708ea51c9a995d8f16966084f003be7a759917233817897e6d",
+    "immutableAndStillMatches": true
+  },
+  "originalSourceManifest": {
+    "path": "/workspace/work/t75-frozen-files.sha256",
+    "sha256": "99af1c34c47ce103def670bb8dda83698ac718488324a5d6fc196830eab5a08e"
+  },
+  "originalFreezeSha256": "9144bca508d33fef857d09b510158e34d8bd0b905b5139340ba4f2abc8e85780",
+  "originalEvidenceIndexSha256": "e7fe2d4c9ff80b96c264edb13eae7ed8c397b8216fcc70b9499cb1a6599cefe3",
+  "changedReadmeCount": 3,
+  "unchangedOtherFileCount": 12,
+  "allThreeOriginalReadmePrefixesByteExact": true,
+  "sameExactEightLineAddendumInAllThree": true,
+  "appendUtf8": "\nContainer startup-timeout limitation: an auxiliary Docker version check timed out\nbefore daemon creation completed. Immediate removal/absence preceded a late\n`created` container (never running, PID0); that exact owned container was then\nremoved and absence rechecked. Killing the CLI process group does not cancel an\nin-flight daemon create. The three completed evaluation runs did not time out.\nFuture timed-out starts require resolving that create/start outcome before\nclaiming durable cleanup; a single immediate absence check is insufficient.\n",
+  "appendBytes": 548,
+  "appendLines": 8,
+  "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef",
+  "finalReadmes": [
+    {
+      "path": "security/intake/relay-transport/README.md",
+      "originalBytes": 3673,
+      "originalSha256": "77124a5b7d4cbd5a4252d0066310b228ddfa23353234b8c4159c9332e6a8e889",
+      "finalBytes": 4221,
+      "finalSha256": "2d894ff978bf3f4a1fd6da9834c8a01e87605de4b3a85465c78fbc2a3c46c036",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    },
+    {
+      "path": "security/intake/waku/README.md",
+      "originalBytes": 4445,
+      "originalSha256": "dbabea61649e11e90ae82e317f7a66f4e3dd1a666223e0f57b13f25bc2b42263",
+      "finalBytes": 4993,
+      "finalSha256": "3eb6b00a9c00d4068e63503c3adc50e16bba831dcf199f026920ff3960b55a19",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    },
+    {
+      "path": "security/intake/mobile-wallet/README.md",
+      "originalBytes": 4634,
+      "originalSha256": "86e408199dfa67a3849560164c43309344a23cee80dd7d0f9d812c225b4febd4",
+      "finalBytes": 5182,
+      "finalSha256": "4876e43a57c3389d49495a120ce2c45f0acc9b38c0d8add3732a1a60e782c582",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    }
+  ],
+  "unchangedOtherTwelve": [
+    {
+      "path": "security/intake/relay-transport/package.json",
+      "originalBytes": 313,
+      "originalSha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e",
+      "finalBytes": 313,
+      "finalSha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/package-lock.json",
+      "originalBytes": 960,
+      "originalSha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b",
+      "finalBytes": 960,
+      "finalSha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/pins.json",
+      "originalBytes": 5254,
+      "originalSha256": "dcfa71ab1e68f6d9c8543fa36fb5fdb4d7455737aaa73d68501af313e6975837",
+      "finalBytes": 5254,
+      "finalSha256": "dcfa71ab1e68f6d9c8543fa36fb5fdb4d7455737aaa73d68501af313e6975837",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/evaluation.test.mjs",
+      "originalBytes": 12062,
+      "originalSha256": "a65d4e97ff5f3f4f290f0e6605f57c3539dfe5357ef9aaf84a3b8ee74ce485aa",
+      "finalBytes": 12062,
+      "finalSha256": "a65d4e97ff5f3f4f290f0e6605f57c3539dfe5357ef9aaf84a3b8ee74ce485aa",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/package.json",
+      "originalBytes": 311,
+      "originalSha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314",
+      "finalBytes": 311,
+      "finalSha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/package-lock.json",
+      "originalBytes": 2701,
+      "originalSha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d",
+      "finalBytes": 2701,
+      "finalSha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/pins.json",
+      "originalBytes": 16443,
+      "originalSha256": "7a76bdd0f1905bb7fcedc1007ba7de5051f3e350e92311dfcdcd12a10a547f54",
+      "finalBytes": 16443,
+      "finalSha256": "7a76bdd0f1905bb7fcedc1007ba7de5051f3e350e92311dfcdcd12a10a547f54",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/evaluation.test.mjs",
+      "originalBytes": 13617,
+      "originalSha256": "1d4fdb384677b050263735999374fb40cd8c71d8a10a221faa59ad8e45957a7b",
+      "finalBytes": 13617,
+      "finalSha256": "1d4fdb384677b050263735999374fb40cd8c71d8a10a221faa59ad8e45957a7b",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/package.json",
+      "originalBytes": 329,
+      "originalSha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c",
+      "finalBytes": 329,
+      "finalSha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/package-lock.json",
+      "originalBytes": 31264,
+      "originalSha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211",
+      "finalBytes": 31264,
+      "finalSha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/pins.json",
+      "originalBytes": 95556,
+      "originalSha256": "c0c75ed85950e9d1cec0b7f9d48fe186c4da048c8b717fdb94ff5962f1999b36",
+      "finalBytes": 95556,
+      "finalSha256": "c0c75ed85950e9d1cec0b7f9d48fe186c4da048c8b717fdb94ff5962f1999b36",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/evaluation.test.mjs",
+      "originalBytes": 11996,
+      "originalSha256": "468cd30584c849751cb51cd6f28dcfc23acf44e17ee4545bbc86c0321a28a55f",
+      "finalBytes": 11996,
+      "finalSha256": "468cd30584c849751cb51cd6f28dcfc23acf44e17ee4545bbc86c0321a28a55f",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    }
+  ],
+  "finalSourceFiles": [
+    {
+      "path": "security/intake/relay-transport/README.md",
+      "originalBytes": 3673,
+      "originalSha256": "77124a5b7d4cbd5a4252d0066310b228ddfa23353234b8c4159c9332e6a8e889",
+      "finalBytes": 4221,
+      "finalSha256": "2d894ff978bf3f4a1fd6da9834c8a01e87605de4b3a85465c78fbc2a3c46c036",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    },
+    {
+      "path": "security/intake/relay-transport/package.json",
+      "originalBytes": 313,
+      "originalSha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e",
+      "finalBytes": 313,
+      "finalSha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/package-lock.json",
+      "originalBytes": 960,
+      "originalSha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b",
+      "finalBytes": 960,
+      "finalSha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/pins.json",
+      "originalBytes": 5254,
+      "originalSha256": "dcfa71ab1e68f6d9c8543fa36fb5fdb4d7455737aaa73d68501af313e6975837",
+      "finalBytes": 5254,
+      "finalSha256": "dcfa71ab1e68f6d9c8543fa36fb5fdb4d7455737aaa73d68501af313e6975837",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/relay-transport/evaluation.test.mjs",
+      "originalBytes": 12062,
+      "originalSha256": "a65d4e97ff5f3f4f290f0e6605f57c3539dfe5357ef9aaf84a3b8ee74ce485aa",
+      "finalBytes": 12062,
+      "finalSha256": "a65d4e97ff5f3f4f290f0e6605f57c3539dfe5357ef9aaf84a3b8ee74ce485aa",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/README.md",
+      "originalBytes": 4445,
+      "originalSha256": "dbabea61649e11e90ae82e317f7a66f4e3dd1a666223e0f57b13f25bc2b42263",
+      "finalBytes": 4993,
+      "finalSha256": "3eb6b00a9c00d4068e63503c3adc50e16bba831dcf199f026920ff3960b55a19",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    },
+    {
+      "path": "security/intake/waku/package.json",
+      "originalBytes": 311,
+      "originalSha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314",
+      "finalBytes": 311,
+      "finalSha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/package-lock.json",
+      "originalBytes": 2701,
+      "originalSha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d",
+      "finalBytes": 2701,
+      "finalSha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/pins.json",
+      "originalBytes": 16443,
+      "originalSha256": "7a76bdd0f1905bb7fcedc1007ba7de5051f3e350e92311dfcdcd12a10a547f54",
+      "finalBytes": 16443,
+      "finalSha256": "7a76bdd0f1905bb7fcedc1007ba7de5051f3e350e92311dfcdcd12a10a547f54",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/waku/evaluation.test.mjs",
+      "originalBytes": 13617,
+      "originalSha256": "1d4fdb384677b050263735999374fb40cd8c71d8a10a221faa59ad8e45957a7b",
+      "finalBytes": 13617,
+      "finalSha256": "1d4fdb384677b050263735999374fb40cd8c71d8a10a221faa59ad8e45957a7b",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/README.md",
+      "originalBytes": 4634,
+      "originalSha256": "86e408199dfa67a3849560164c43309344a23cee80dd7d0f9d812c225b4febd4",
+      "finalBytes": 5182,
+      "finalSha256": "4876e43a57c3389d49495a120ce2c45f0acc9b38c0d8add3732a1a60e782c582",
+      "change": "Exactly 548-byte, eight-line append including initial blank line; all original bytes preserved.",
+      "originalPrefixPreserved": true,
+      "appendedBytes": 548,
+      "appendedLines": 8,
+      "appendSha256": "591bbc4e1589b0ec6fae61e493e9b57e4ce25f83f7026fb23f24b7547615d2ef"
+    },
+    {
+      "path": "security/intake/mobile-wallet/package.json",
+      "originalBytes": 329,
+      "originalSha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c",
+      "finalBytes": 329,
+      "finalSha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/package-lock.json",
+      "originalBytes": 31264,
+      "originalSha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211",
+      "finalBytes": 31264,
+      "finalSha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/pins.json",
+      "originalBytes": 95556,
+      "originalSha256": "c0c75ed85950e9d1cec0b7f9d48fe186c4da048c8b717fdb94ff5962f1999b36",
+      "finalBytes": 95556,
+      "finalSha256": "c0c75ed85950e9d1cec0b7f9d48fe186c4da048c8b717fdb94ff5962f1999b36",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    },
+    {
+      "path": "security/intake/mobile-wallet/evaluation.test.mjs",
+      "originalBytes": 11996,
+      "originalSha256": "468cd30584c849751cb51cd6f28dcfc23acf44e17ee4545bbc86c0321a28a55f",
+      "finalBytes": 11996,
+      "finalSha256": "468cd30584c849751cb51cd6f28dcfc23acf44e17ee4545bbc86c0321a28a55f",
+      "change": "UNCHANGED",
+      "matchesOriginalManifest": true
+    }
+  ],
+  "truthfulnessReview": {
+    "lateCreatedContainer": {
+      "observedState": "created",
+      "running": false,
+      "pid": 0,
+      "neverStarted": true,
+      "exactOwnedRemovalSucceeded": true,
+      "finalExactNameAbsenceRecorded": true
+    },
+    "threeCompletedEvaluationRunsHadNoTimeout": true,
+    "completedResultsRetained": {
+      "relayTransport": "6/6",
+      "waku": "13/14, valid sint64-min encoding failure preserved",
+      "mobileWallet": "4/5, stronger application protocol-roundtrip expectation unmet; not vendor-contract defect"
+    },
+    "daemonCreationContinuedAfterCliTimeout": "Supported by later exact-name created-container observation after initial removal/absence. CLI process-group termination does not establish a terminal daemon-side create/start outcome.",
+    "futureTimeoutCleanupDurability": "Explicitly unverified; no durable-cleanup claim accepted from a single immediate absence check.",
+    "noHelperHardeningOrNewPassingEvidenceClaimed": true
+  },
+  "original54IndexedEvidenceFilesUnchanged": true,
+  "allOriginalIndependentReviewArtifactsUnchanged": true,
+  "sourceEditsByReviewer": [],
+  "newProbes": [],
+  "newInstalls": [],
+  "newRemoteSources": [],
+  "commitsByReviewer": [],
+  "remainingLimit": "T75-REVIEW-R1 timeout-cleanup durability remains a separately documented runner issue. This addendum documents its limit; it does not harden or qualify the timeout path.",
+  "qualification": "Ready for root to commit this research intake documentation. No production provider, integration, release, funds, privacy, SDK lifecycle, session authentication or mobile handoff qualification."
+}

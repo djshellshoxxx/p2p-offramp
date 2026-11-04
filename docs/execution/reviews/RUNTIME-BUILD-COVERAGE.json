@@ -1,0 +1,276 @@
+{
+  "headAtCapture": "eaaa38a7ad3670e70f58be4c9bfbbe962e9ebf64",
+  "t34Frozen": [
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "4dd7ec318c6eaa88d896beb0575b5273355f46a3f621adaec4708073c0630561"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "6bee481b2021a3e3b15eae8fd52c8eac4641345c53e560f1ac1a76e3f22712d3"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "0caad34d234453a75b9c1a71b3a41a0c6177ef269ba1efa4daa87d5159b33a9c"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "f2f19e8b860bac77528a03df37bc2434a155ef074f1e53f79a36aabe03a51558"
+    },
+    {
+      "path": "apps/web/src/ui/BackupVerificationForm.tsx",
+      "sha256": "9808de43b3723876935b017a46a148530573a2e725cc0ec71c28704186b111cd"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "e82021bfdb388c8ec2fea76988c45ef0eac24c607d993286a7d2cba4006f1453"
+    },
+    {
+      "path": "apps/web/src/ui/help-registry.ts",
+      "sha256": "b4c2f82bd172887c52034a7026e83fecd873c6d1f4ef75532cc8e1a61fd775c4"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "e092f060e04db12dfb550a3d4d3c98d047167db99afd03dc33e41bc8d3930c2d"
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "sha256": "44352a31189fe75048878f89e5a14df3d3e1f451b10993ef01df69f424522314"
+    },
+    {
+      "path": "apps/web/test/backup-verification-runtime.test.mjs",
+      "sha256": "037a1d96305af36180130fbf2e208f0c2bacd2c908d90d7b5e4496d3bf0dd938"
+    },
+    {
+      "path": "apps/web/test/help-registry.test.mjs",
+      "sha256": "206c1ba4c21f472c359c709399f567e87925359df79a00749cde43139f9d6b9d"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9"
+    },
+    {
+      "path": "packages/schemas/src/backup-verification.ts",
+      "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "5f34c39b7e97ab26346fc53d1bef0318ac880f0dd202a01d1c98e561d0357ed3"
+    },
+    {
+      "path": "packages/schemas/src/vault-service.ts",
+      "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0"
+    },
+    {
+      "path": "packages/schemas/test/backup-verification.test.mjs",
+      "sha256": "3b0a13411bcdf31efabe07b674d512e008f0d96a6e60e34426612d3f9a5cc5cd"
+    },
+    {
+      "path": "packages/storage/src/recovery-slot.ts",
+      "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181"
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "sha256": "9cdd8e4f745132b5d30c323c994096118c8c1ba47404ded9b356556df2d6f860"
+    },
+    {
+      "path": "packages/storage/test/backup-verification.test.mjs",
+      "sha256": "1092765cf7b87d95f6bc98c8925df5821d2b25f52c457c95c73f14fe83f58ddd"
+    },
+    {
+      "path": "scripts/test-web-build-browser.mjs",
+      "sha256": "775db32de681b56c8f9d4ee4cb876ee4cb37a212d3a10ac8e16751cbed935419"
+    }
+  ],
+  "reuseExactMatches": [
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/scripts/artifact-policy.mjs",
+      "sha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/scripts/static-build-plugin.mjs",
+      "sha256": "47030c17ae0885cc3f9df8810b4b1815db47a6d608a98b99e5846b866aa98ea8",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/scripts/testnet-trust.mjs",
+      "sha256": "c88641b7430e260372e46a8d0fa2c75d0508737f29776f890e40d3558965fffb",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/scripts/source-locale.mjs",
+      "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "5456718bed05f18e4ac0e508909c84848907456ad24bf22e3c55fc1241fc9536",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-network.ts",
+      "sha256": "971cb235c38250a7d78c18d760b5dc0b810e4422a037e3f67b4da97db727f704",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-source.ts",
+      "sha256": "55cc7f12e140a03c57ab5580f947113b1fbdb31aff20aef07e00e859e5792e37",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "f1a2163ba88ac04a115091e7ca382d6cfe053629c1d60c185e349d4dd213f861",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/trade/review-controller.ts",
+      "sha256": "633f5779bc13369c35a6c1323e1bb58395db81ce6e513057053faf2de290d8a0",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/ui/DiagnosticsPanel.tsx",
+      "sha256": "af0e388530656953e93453e1a3c9314b86c7217a8f07948a4f3f9c42e6ee9131",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "apps/web/src/diagnostics.ts",
+      "sha256": "fa760d26a8928d3501164585d4afaab43c70e34b1453175c0829a05525227559",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/lib/is-main.mjs",
+      "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "sha256": "77f7f72309c427a94b8bd29a1a0abf2755152ca6b8f656f03618158a3481e46e",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "sha256": "3c140a197bb17c19f43d3d7c95323c16da8b818bd2e986aaed5108dd08046bf7",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/deploy.mjs",
+      "sha256": "f0b9d0bd0503d07f77ac65d02e9a48de42ff55f73e662847fba0a3ac1416f2b4",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/record-deployment.mjs",
+      "sha256": "eadbf177119e706e63485323118389df21a8fdb5562278125824153f08fdaf54",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/send.mjs",
+      "sha256": "0a55772d4c3fb9e8ca9435e8849eefb90b7afdf3209d5f926cf44c979cb472a2",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "sha256": "740e62c5363f21aa59735c07a3d7af42db0bb638d629bd2863eb5126546185e1",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/owner-release.mjs",
+      "sha256": "ca366d7aa299fc134e051d0b938675267508eec63a5a965799d9870b95571f20",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/sepolia/verify-release.mjs",
+      "sha256": "fc4059a11b364de40adce86129b530ca9f8dd5153739515cdcf14f7ca7f97db8",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/recovery/build-evm.mjs",
+      "sha256": "986ccec90db4df3e98d61d69e7f30c409becd339b89fa3c8dc96a53e40391fc6",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/recovery/evm-cli.mjs",
+      "sha256": "67d9db1d4b627d61912a911650f4f7683fe0e39b78daa9938f904b6c38afd8cf",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/recovery/evm-recovery.mjs",
+      "sha256": "fec5fcf398c538ad40eb0e9cb8d431204fdcdbb8be13a177379d48db407002b2",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/check-npm-registry-signatures.mjs",
+      "sha256": "360db30855c444bd11af952fe6eb26c890fa6c7a33610db7b531641d2057168c",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/check-crypto-cache.py",
+      "sha256": "5f06213fe9bb0ba604b7e14466422ab34a21dcf1a3fc93994826516fae12696c",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    },
+    {
+      "path": "scripts/check-upstream-source-correspondence.py",
+      "sha256": "39fe1cbb902385c3bb55263437cadbbe04c48d850f20573ac3f784b6303e5449",
+      "baseline": "f264cab",
+      "sameBaselineBytes": true
+    }
+  ],
+  "notMatched": [],
+  "freshAdditional": [
+    {
+      "path": "packages/diagnostics/src/diagnostics.ts",
+      "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18",
+      "coverage": "fresh full read"
+    },
+    {
+      "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+      "sha256": "4966798b98cab22fb591d507356ff9800cd12c60bb0d4b7f1b17c7bdcc2a94d6",
+      "baseline": "f264cab",
+      "sameBaselineBytes": false,
+      "coverage": "fresh full read; bidi-only baseline diff, export lifecycle unchanged"
+    }
+  ],
+  "excludedIndependentApproval": [
+    "T35 portal authored by this reviewer",
+    "new docs/claims separately reviewed by root",
+    "new developer lab separately reviewed by audit_storage"
+  ],
+  "releaseEnabled": false
+}

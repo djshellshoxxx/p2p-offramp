@@ -1,0 +1,5 @@
+Approved: the two-file repair only changes the pinned Python install commands from invalid plain YAML scalars to literal block scalars. Independently reproduced both prior ScannerErrors, parsed all three workflows with duplicate-key rejection, and verified that reversing exactly the block-scalar syntax restores the prior bytes.
+
+Parsed triggers, jobs, steps, action commit pins, contents:read permissions and every surrounding value are preserved. The decoded installer bodies contain the exact prior command plus the block scalar’s final newline; shell argv are identical, including --isolated, --require-hashes, --only-binary=:all: and the same requirements file. A quote-only valid reference of each prior intended scalar compares equal to the normalized current parse. The pinned requirements bytes are unchanged.
+
+No finding. No source/dependency/skip/gate change, repository edit, commit, installer or suite execution occurred here. This is syntax/command-preservation approval only. Root owns fresh hosted workflow creation and exact-head CI readback after commit/push. Exact hashes, parsed command strings/jobs/steps/pins and failures are in t101-final-review.json.

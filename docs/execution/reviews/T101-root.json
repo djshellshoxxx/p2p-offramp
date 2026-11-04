@@ -1,0 +1,117 @@
+{
+  "task": "T101",
+  "status": "PARSE_AND_EXACT_COMMAND_PRESERVATION_PASS",
+  "priorHead": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+  "priorFailure": "Both changed workflows fail PyYAML ScannerError at colon125; actual GitHub rejected them before any job.",
+  "yamlVersion": "6.0.3",
+  "workflows": [
+    {
+      "path": ".github/workflows/evm-escrow.yml",
+      "parsed": true,
+      "jobs": [
+        "forge",
+        "local-trade"
+      ],
+      "sha256": "68316775f22a6533280475f0d95fb020e7dcde63f888071b16775ab146bbe684",
+      "oracleCommands": []
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "parsed": true,
+      "jobs": [
+        "inventory"
+      ],
+      "sha256": "b5ba93ec49551f59d47c39eb11b84739ad254f1438bca6ea769d9cc9fd3500a4",
+      "oracleCommands": [
+        "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n"
+      ]
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "parsed": true,
+      "jobs": [
+        "local-evm",
+        "schemas-and-crypto",
+        "browser",
+        "specs"
+      ],
+      "sha256": "2fb56fc3aebf73b8279bb6dee8b239de23b4ea4f5c6f7c8bd5ebb7df5641c931",
+      "oracleCommands": [
+        "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt\n"
+      ]
+    }
+  ],
+  "productionOrDependencyChanges": false,
+  "skipOrGateChanges": false,
+  "hostedFailedCheckpoint": {
+    "head": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+    "total": 5,
+    "runs": [
+      {
+        "id": 41508751377,
+        "name": "EVM escrow",
+        "path": ".github/workflows/evm-escrow.yml",
+        "event": "pull_request",
+        "head_sha": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+        "status": "queued",
+        "conclusion": null,
+        "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41508751377"
+      },
+      {
+        "id": 41508747581,
+        "name": "EVM escrow",
+        "path": ".github/workflows/evm-escrow.yml",
+        "event": "push",
+        "head_sha": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+        "status": "queued",
+        "conclusion": null,
+        "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41508747581"
+      },
+      {
+        "id": 41508745535,
+        "name": ".github/workflows/vault-foundation.yml",
+        "path": ".github/workflows/vault-foundation.yml",
+        "event": "push",
+        "head_sha": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41508745535"
+      },
+      {
+        "id": 41508746500,
+        "name": "PR #26",
+        "path": "dynamic/github-code-scanning/codeql",
+        "event": "dynamic",
+        "head_sha": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+        "status": "queued",
+        "conclusion": null,
+        "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41508746500"
+      },
+      {
+        "id": 41508743599,
+        "name": ".github/workflows/specifications.yml",
+        "path": ".github/workflows/specifications.yml",
+        "event": "push",
+        "head_sha": "d8cdb8a7b83f68c7f8860545dfb473723b4adece",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/41508743599"
+      }
+    ]
+  },
+  "failedDefinitionJobCounts": [
+    {
+      "run": 41508745535,
+      "jobs": 0
+    },
+    {
+      "run": 41508743599,
+      "jobs": 0
+    }
+  ],
+  "distinctReview": {
+    "path": "docs/execution/reviews/T101-final.json",
+    "sha256": "dacc9983b0a0bdd3825df860760bdc823b53f245c08cdf5618f5537922e3607b"
+  },
+  "scope": "Only YAML block scalar syntax. Existing decoded pip command/argv, actionpins, permissions, triggers, jobs/steps, dependency hashes and gates unchanged. All282 production bytes and1713 package graph unchanged. Fresh actual hosted results remain live PR26."
+}

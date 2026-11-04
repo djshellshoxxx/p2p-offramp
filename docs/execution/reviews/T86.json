@@ -1,0 +1,179 @@
+{
+  "task": "T86",
+  "status": "READY_FOR_ROOT_REVIEW; TOOLS_AGGREGATE_HAS_SEPARATE_DOCS_STALE_FAILURE",
+  "frozenAtUtc": "2026-11-02T15:53:55.699921+00:00",
+  "sourceHeadAtFreeze": "441499d1be261f734cb00afbab516b094c8d84eb",
+  "sharedWorkingTreeDirty": true,
+  "hostedFailure": {
+    "revision": "76c45df0b2f39a928d92ae0af3d60f37737802c5",
+    "job": "125372469612",
+    "log": "hosted-job-125372469612.RED.log",
+    "sha256": "dd7caba1b71925e894cddd0123fa17edd128a6474ab31b60c2daf0d4225f589b",
+    "originalFetchedLogStillMatches": true,
+    "test": "successful and terminated parents cannot leave their owned process group running",
+    "durationMs": 65.166,
+    "error": {
+      "code": "ESRCH",
+      "syscall": "read",
+      "stack": "async readFileHandle \u2192 exited at recipe.test.mjs:50 \u2192 descendant observation at :80"
+    },
+    "hostedRecipeBytesMatchPreservedBaseline": true,
+    "nodeVersion": "v24.22.1"
+  },
+  "diagnosis": {
+    "rootCause": "Linux procfs distinguishes absence before open (ENOENT/open) from a task disappearing after its proc file was opened but before its read is fulfilled (ESRCH/read). The observation predicate only recognized ENOENT, so successful cleanup/reaping could surface as a test error.",
+    "nativeReproduction": {
+      "node": "v24.19.0",
+      "platform": "linux",
+      "samples": [
+        {
+          "index": 0,
+          "pid": 136730,
+          "liveState": "R",
+          "signal": "SIGKILL",
+          "errors": {
+            "new-open": {
+              "code": "ENOENT",
+              "syscall": "open",
+              "message": "ENOENT: no such file or directory, open '/proc/136730/stat'"
+            },
+            "held-descriptor": {
+              "code": "ESRCH",
+              "syscall": "read",
+              "message": "ESRCH: no such process, read"
+            }
+          }
+        },
+        {
+          "index": 1,
+          "pid": 136735,
+          "liveState": "R",
+          "signal": "SIGKILL",
+          "errors": {
+            "new-open": {
+              "code": "ENOENT",
+              "syscall": "open",
+              "message": "ENOENT: no such file or directory, open '/proc/136735/stat'"
+            },
+            "held-descriptor": {
+              "code": "ESRCH",
+              "syscall": "read",
+              "message": "ESRCH: no such process, read"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "pid": 136736,
+          "liveState": "R",
+          "signal": "SIGKILL",
+          "errors": {
+            "new-open": {
+              "code": "ENOENT",
+              "syscall": "open",
+              "message": "ENOENT: no such file or directory, open '/proc/136736/stat'"
+            },
+            "held-descriptor": {
+              "code": "ESRCH",
+              "syscall": "read",
+              "message": "ESRCH: no such process, read"
+            }
+          }
+        },
+        {
+          "index": 3,
+          "pid": 136737,
+          "liveState": "R",
+          "signal": "SIGKILL",
+          "errors": {
+            "new-open": {
+              "code": "ENOENT",
+              "syscall": "open",
+              "message": "ENOENT: no such file or directory, open '/proc/136737/stat'"
+            },
+            "held-descriptor": {
+              "code": "ESRCH",
+              "syscall": "read",
+              "message": "ESRCH: no such process, read"
+            }
+          }
+        }
+      ],
+      "allOwnedChildrenClosed": true
+    },
+    "determinism": "Four predeclared native samples: hold an unread /proc/owned-child/stat descriptor while alive, kill only that child, await Node close/reap, then perform a fresh path open and the held-descriptor read. Every sample returned ENOENT/open and ESRCH/read respectively. No timing retry, load, fake error code or deadline change was needed."
+  },
+  "ownedSource": {
+    "scripts/lab/recipe.test.mjs": {
+      "baselineSha256": "47ed5e1c588f404cf333ccb83cd3f7c2da88bda96df29793d001b2b2a5235a50",
+      "finalSha256": "412cbc1a87707de2edb38434ea7d1f457d43c3e52cad95ff17cbaeec8f28ef81",
+      "modified": true
+    },
+    "scripts/lab/command.mjs": {
+      "sha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00",
+      "modified": false
+    }
+  },
+  "repair": [
+    "Accept only ENOENT or ESRCH as an absent process in the test-local proc observation predicate. Keep live state classification unchanged and rethrow other read failures.",
+    "Keep the same 40 \u00d7 25 ms bounded native observation, 150 ms readiness-triggered timeout clock, wall-clock timeout/log/cancel tests, fixed runner errors and owned group cleanup.",
+    "Within the existing descendant case, assert an actual live native child is not exited; open proc while alive, kill/reap the owned child, feed the actual held descriptor read through the predicate, and assert actual ESRCH/read. EACCES and EIO are required to propagate unchanged.",
+    "The test-local optional reader only controls the native open/read boundary for this regression; no production runner/helper/module was introduced."
+  ],
+  "verification": [
+    {
+      "command": "node /workspace/work/t86-proc-disappearance/probe-open-proc.mjs",
+      "exitCode": 0,
+      "result": "4/4 deterministic native ENOENT/open versus ESRCH/read observations; all owned direct children killed and reaped.",
+      "raw": [
+        "probe-open-proc.mjs",
+        "native-proc-run.log",
+        "native-proc-results.json"
+      ]
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap scripts/lab/recipe.test.mjs",
+      "beforeFixExitCode": 1,
+      "beforeFixResult": "New held-descriptor regression reproduces exact ESRCH/read; 5/6 pass, no skips/cancellations.",
+      "afterFixExitCode": 0,
+      "afterFixResult": "6/6 pass, no skips/cancellations. A comment was subsequently moved inside catch; the final commented source is exercised by all six cases in tools31.log.",
+      "raw": [
+        "native-guard.RED.log",
+        "recipe.test.mjs.native-guard.RED",
+        "focused.GREEN.log"
+      ]
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap /workspace/work/t86-proc-disappearance/negative-control/scripts/lab/recipe.test.mjs",
+      "exitCode": 1,
+      "expected": "The exact final maintained test against a copied runner with only close-cleanup group SIGKILL removed fails the unchanged live-descendant assertion after 1182.28832 ms. Native ESRCH guard passes first; five other test cases pass. Test-owned after-hook kills its indefinite descendant.",
+      "raw": [
+        "negative-control-metadata.json",
+        "negative-control.RED.log"
+      ]
+    },
+    {
+      "command": "PATH=/workspace/work/foundry-1.5.1:$PATH node --import ./scripts/test-support/register-tsx.mjs --test scripts/portal/build.test.mjs scripts/docs/validate.test.mjs scripts/lab/recipe.test.mjs scripts/tests/formal-evm.test.mjs scripts/reputation/semaphore-v4-evaluation.test.mjs",
+      "exitCode": 1,
+      "result": "30/31 pass. All six lab cases and the formal owned-process group test pass. Sole failure: scripts/docs/validate.test.mjs:33 actual draft has exact immutable evidence and links but no review, approval or publication \u2192 DOCS_STALE at validate.mjs:74:229; shared catalog/docs input reconciliation belongs to root. No rerun or docs edit performed.",
+      "raw": [
+        "tools31.log"
+      ]
+    },
+    {
+      "command": "git diff --check -- scripts/lab/recipe.test.mjs",
+      "exitCode": 0,
+      "result": "Clean"
+    }
+  ],
+  "dependencies": {
+    "path": "/workspace/work/t86-proc-disappearance/source-and-dependency-hashes.json",
+    "sha256": "beb7ab436f1597d102c4b79c2ede337de9b6d017020894108f80e16b271654c5"
+  },
+  "executionAndCleanup": "Default Node per-file test isolation; managed IPC network capability only for native Node/child communication. Only directly spawned owned child objects or captured owned descendants are signalled. Native fixtures await close/reap and close their held descriptors in finally. No full package suite or T83 rerun, per task scope.",
+  "remaining": "Root independent review/execution, then shared docs stale-input reconciliation and final consolidated checks. No remaining T86 source repair is known.",
+  "scope": [
+    "Only scripts/lab/recipe.test.mjs was edited; command.mjs, shared ledgers, CI, app source and trading configuration unchanged by this task. No commits.",
+    "T78 and T83 evidence directories remain intact; their frozen manifest hashes are unchanged."
+  ]
+}

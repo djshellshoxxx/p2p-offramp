@@ -1,0 +1,3938 @@
+{
+  "format": "p2p-offramp/g24-documentation-coverage/v1",
+  "purpose": "source-observed acceptance coverage; not candidate, gate record, executable evaluator or release approval",
+  "sourceCommitAtObservation": "733e0fef0f19007aab4fbb8f7abb54a32eae2bd8",
+  "workingTree": "observed dirty working snapshot; each referenced file bound separately; no final combined-source claim",
+  "scope": {
+    "task": "T62",
+    "engineeringAuthor": "continue_chat",
+    "independentReviewers": [],
+    "approvedRelease": null,
+    "signedArtifact": null,
+    "gateDecision": "pending",
+    "releaseEnabled": false,
+    "promotionAllowed": false,
+    "newNativeSuitesExecutedByThisTask": false,
+    "activeT58T59T61FinalBytesBound": false
+  },
+  "sourceIntegrity": {
+    "algorithm": "SHA-256",
+    "encoding": "raw file bytes",
+    "invalidation": "Any changed reference requires applicability review; historical execution never automatically transfers to changed source/dependency/compiler/recipe/artifact/deployment.",
+    "referenceTable": {
+      "escrow": "contracts/evm/src/BasicEscrow.sol",
+      "escrowTests": "contracts/evm/test/BasicEscrow.t.sol",
+      "escrowFuzz": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "abi": "contracts/evm/abi/BasicEscrow.json",
+      "exchangeNative": "scripts/test-exchange-evm-local.mjs",
+      "tradeNative": "scripts/test-evm-local-trade.mjs",
+      "reconcileNative": "scripts/test-evm-reconcile-local.mjs",
+      "recoveryNative": "scripts/test-evm-recovery-local.mjs",
+      "journeyBrowser": "scripts/test-journey-browser.mjs",
+      "originBrowser": "scripts/test-journey-origin-browser.mjs",
+      "tabsBrowser": "scripts/test-lifecycle-tabs-browser.mjs",
+      "localeBrowser": "scripts/test-locale-layout-browser.mjs",
+      "shellBrowser": "scripts/test-web-build-browser.mjs",
+      "runtimeBrowser": "scripts/test-runtime-browser.mjs",
+      "portalBrowser": "scripts/test-scriptless-portal-browser.mjs",
+      "exchangeTests": "packages/exchange/test/exchange.test.mjs",
+      "exchangeAsync": "packages/exchange/test/async-boundaries.test.mjs",
+      "chatTests": "packages/messaging/test/durable-chat.test.mjs",
+      "relayCryptoTests": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "relayAds": "packages/relay/test/ad.test.mjs",
+      "relayLifetime": "packages/relay/test/pool-lifetime.test.mjs",
+      "journalTests": "packages/domain/test/intent-journal.test.mjs",
+      "lifecycleTests": "packages/domain/test/tx-lifecycle.test.mjs",
+      "preflightTests": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "termsTests": "packages/wallet/test/evm-terms.test.mjs",
+      "adapterTests": "packages/wallet/test/evm-adapter.test.mjs",
+      "readerTests": "packages/chain-evm/test/reader.test.mjs",
+      "submitTests": "packages/wallet/test/evm-submit.test.mjs",
+      "discoveryTests": "packages/wallet/test/discovery.test.mjs",
+      "backupTests": "packages/storage/test/backup-service.test.mjs",
+      "backupVerification": "packages/storage/test/backup-verification.test.mjs",
+      "privateJourneyTests": "apps/web/test/journey-private-trade.test.mjs",
+      "compatibilityTests": "apps/web/test/compatibility-model.test.mjs",
+      "compatibilityProbe": "apps/web/test/compatibility-probe.test.mjs",
+      "acceptanceSchema": "packages/security/src/acceptance-gates.ts",
+      "acceptanceTests": "packages/security/test/acceptance-gates.test.mjs",
+      "acceptanceCli": "scripts/acceptance-report.mjs",
+      "acceptanceCliTests": "scripts/tests/acceptance-entry.test.mjs",
+      "build": "apps/web/scripts/build.mjs",
+      "boundaries": "scripts/check-import-boundaries.mjs",
+      "policy": "packages/transport/src/policy.ts",
+      "localeRuntime": "apps/web/src/ui/locale/runtime.ts",
+      "localeSource": "apps/web/src/ui/locale/en.ts",
+      "releasePin": "apps/web/src/testnet/sepolia-network.ts",
+      "distribution": "scripts/distribution/stage.mjs",
+      "distributionBrowser": "scripts/distribution/browser.test.mjs",
+      "recoveryBuilder": "scripts/recovery/build-evm.mjs",
+      "recoveryGuide": "docs/recovery/CANONICAL-EVM.md",
+      "operatorGuide": "docs/OPERATOR.md",
+      "governance": "docs/governance/PENDING-DECISIONS.md",
+      "solanaDecision": "docs/governance/solana-profile.decision.json",
+      "mobileProfile": "docs/execution/profiles/05-mobile.md",
+      "proofProfile": "docs/execution/profiles/01-proof.md",
+      "torProfile": "docs/execution/profiles/06-tor.md",
+      "profileIndex": "docs/execution/profiles/decision-index.json",
+      "assurance": "docs/execution/assurance/README.md",
+      "roleFacts": "docs/execution/assurance/role-facts.json",
+      "jurisdictionMatrix": "docs/execution/assurance/jurisdiction-matrix.json",
+      "incidentGuide": "docs/execution/assurance/incident-recovery-checklist.md",
+      "E-CONTINUATION": "docs/execution/CONTINUATION-RESULT-2026-10-31.md",
+      "E-T43-SCOPE": "docs/execution/reviews/T43.json",
+      "E-T43": "docs/execution/reviews/T43-final-integration.json",
+      "E-T52": "docs/execution/reviews/T52.json",
+      "E-T34": "docs/execution/reviews/T34.md",
+      "E-T35": "docs/execution/reviews/T35.md",
+      "E-T53": "docs/execution/reviews/T53.md"
+    }
+  },
+  "sources": [
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+      "kind": "G24-specification",
+      "bytes": 3985,
+      "sha256": "53ceacb24db8655c42394a9c0f5f85603c1774ca5beaaf11cf5275e84cc5d18c"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.1_master_plan/spec-completion-roadmap-and-dependencies.md",
+      "kind": "completion-specification",
+      "bytes": 3392,
+      "sha256": "d4b747751fc3e9a718b41ffa5cfc0ecf0d81bf6e16faaf67507ee6b27cecc314"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.2_cross_device/spec-responsive-mobile-wallet-and-browser-compatibility.md",
+      "kind": "completion-specification",
+      "bytes": 4038,
+      "sha256": "17c428eaa37bc57fa11628a064dca628ba5ac51cc73262272241de11e797da4b"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md",
+      "kind": "completion-specification",
+      "bytes": 4712,
+      "sha256": "70dfc4c6ce7d578ccfda95377ce09d8718226e3dbc43629ee58591ca8fa57921"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.4_qr_interchange/spec-qr-everywhere-secure-sharing-and-import-export.md",
+      "kind": "completion-specification",
+      "bytes": 4299,
+      "sha256": "f18fe7c5e723c50c2b2d7d3cadcbdcd4bd7148d7ed039d4da40ece58bfee3b01"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.5_privacy_security/spec-optional-encryption-abuse-controls-and-scriptless-mode.md",
+      "kind": "completion-specification",
+      "bytes": 4204,
+      "sha256": "19f718e47d0be14bc1c9f4360ad0598d615b6103e608f8838d38798ff7896677"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.6_codespaces/spec-codespaces-test-lab-and-github-pages-release.md",
+      "kind": "completion-specification",
+      "bytes": 4120,
+      "sha256": "6fc11e594add6f665857cd948546c109e5fadb52f8de8d7767057e8d56440dd1"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.7_docs_growth/spec-github-wiki-documentation-and-marketability.md",
+      "kind": "completion-specification",
+      "bytes": 4151,
+      "sha256": "5e37f791a37274c26703bf2617e8000435a6b94bb1825269c11def8ed0a9c6b3"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.5_delivery_planning/module_0.5.1_implementation_roadmap/spec-acceptance-gate-matrix.md",
+      "kind": "acceptance-schema-specification",
+      "bytes": 3840,
+      "sha256": "ff32b129b27dd82f63107108b146bf65504710af51ddcf860ebe01da30ff20b7"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.5_delivery_planning/module_0.5.1_implementation_roadmap/spec-implementation-dependency-plan.md",
+      "kind": "dependency-specification",
+      "bytes": 3855,
+      "sha256": "cb6eb612e1eaea7794789e094227e9359b0160527a3dc9ddb71fc64aac0bd134"
+    },
+    {
+      "path": "DEVELOPMENT_ROADMAP.md",
+      "kind": "normative-roadmap",
+      "bytes": 39080,
+      "sha256": "569c3b3d12bbe6bf3eba601630c9364a348a8fa501a7aa59a24cb951e393538b"
+    },
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 6576,
+      "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd"
+    },
+    {
+      "path": "apps/web/src/testnet/sepolia-network.ts",
+      "kind": "source-or-runbook",
+      "bytes": 2107,
+      "sha256": "971cb235c38250a7d78c18d760b5dc0b810e4422a037e3f67b4da97db727f704"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "kind": "source-or-runbook",
+      "bytes": 42577,
+      "sha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa"
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "kind": "source-or-runbook",
+      "bytes": 8525,
+      "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf"
+    },
+    {
+      "path": "apps/web/test/compatibility-model.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 9342,
+      "sha256": "8324fc944a317966438602ed38ac1345c3aecbc6379e577518d245946cd229dd"
+    },
+    {
+      "path": "apps/web/test/compatibility-probe.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 5741,
+      "sha256": "6a933d0232fa761bb016cd958b836a867b08ecb8662eeac6414ad6bbaea37d17"
+    },
+    {
+      "path": "apps/web/test/journey-private-trade.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 4954,
+      "sha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87"
+    },
+    {
+      "path": "contracts/evm/abi/BasicEscrow.json",
+      "kind": "source-or-runbook",
+      "bytes": 19392,
+      "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98"
+    },
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "kind": "source-or-runbook",
+      "bytes": 18601,
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrow.t.sol",
+      "kind": "source-or-runbook",
+      "bytes": 31251,
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "kind": "source-or-runbook",
+      "bytes": 5853,
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d"
+    },
+    {
+      "path": "docs/OPERATOR.md",
+      "kind": "source-or-runbook",
+      "bytes": 8226,
+      "sha256": "b508d662a21ed934a49986efc822064cc3baddd098c7aa228f0388e8c7069931"
+    },
+    {
+      "path": "docs/adr/ADR-CLIENT-SIDE-2026-10-24.md",
+      "kind": "normative-client-boundary",
+      "bytes": 2801,
+      "sha256": "8d3fcf068ed6e1ec8bc969eff24c5871931cc0f6bb7bbd0bda5c986a29600434"
+    },
+    {
+      "path": "docs/execution/CONTINUATION-RESULT-2026-10-31.md",
+      "kind": "execution-receipt",
+      "bytes": 9335,
+      "sha256": "b14365bc3d091234572e519ba084e9d25fbf834cca5387802ee2b142a7809999"
+    },
+    {
+      "path": "docs/execution/assurance/README.md",
+      "kind": "source-or-runbook",
+      "bytes": 5835,
+      "sha256": "c712223ef75ed652d68a320562bd6120a3a22d28e0c35534609b5dd5c5329e19"
+    },
+    {
+      "path": "docs/execution/assurance/incident-recovery-checklist.md",
+      "kind": "source-or-runbook",
+      "bytes": 4640,
+      "sha256": "3b21cbaf0dc69373c615de2c07cf762552bfe494bef9bc81300964c869251a0f"
+    },
+    {
+      "path": "docs/execution/assurance/jurisdiction-matrix.json",
+      "kind": "source-or-runbook",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/execution/assurance/role-facts.json",
+      "kind": "source-or-runbook",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/execution/profiles/01-proof.md",
+      "kind": "source-or-runbook",
+      "bytes": 4308,
+      "sha256": "22e002bc05d7030dbfe92f0bd6d6336a5df436941e4cd1c526d84dd736bf6fd7"
+    },
+    {
+      "path": "docs/execution/profiles/05-mobile.md",
+      "kind": "source-or-runbook",
+      "bytes": 3974,
+      "sha256": "9935dfa9c59dae7d3354d07bd9176b6553621aaec4702f96940ee566c19aa135"
+    },
+    {
+      "path": "docs/execution/profiles/06-tor.md",
+      "kind": "source-or-runbook",
+      "bytes": 3268,
+      "sha256": "ecba19e9466af9dddfa96ded9e3051c67b683ab3c60e384ba9322fb6b210fcb3"
+    },
+    {
+      "path": "docs/execution/profiles/decision-index.json",
+      "kind": "source-or-runbook",
+      "bytes": 5236,
+      "sha256": "a9ff52d858d4a33a396f766056a2a1cb18518dbc7e15aabef3cde9c098afeb9a"
+    },
+    {
+      "path": "docs/execution/reviews/T34.md",
+      "kind": "execution-receipt",
+      "bytes": 12637,
+      "sha256": "5afca1d145a40a694478718cf17cd212dad829f7fcc3485c8bc40c09cc9fb49a"
+    },
+    {
+      "path": "docs/execution/reviews/T35.md",
+      "kind": "execution-receipt",
+      "bytes": 1900,
+      "sha256": "6627f56cbc4ee9fe7a75b255866a355458bc2848ecb5722a18639d87cc5c791c"
+    },
+    {
+      "path": "docs/execution/reviews/T43-final-integration.json",
+      "kind": "execution-receipt",
+      "bytes": 1602,
+      "sha256": "6c68747aecbb2b190738ef70e4e9c2c5f1f39227fd9d7b4eaedbb4cf395d7c5e"
+    },
+    {
+      "path": "docs/execution/reviews/T43.json",
+      "kind": "execution-receipt",
+      "bytes": 9749,
+      "sha256": "d528a3552ae34508c09a7406b2eaeb5920573bcef8dc3fec7e3ee260bc8b3bb9"
+    },
+    {
+      "path": "docs/execution/reviews/T52.json",
+      "kind": "execution-receipt",
+      "bytes": 8894,
+      "sha256": "c54bbf34410ef9ac1eed1ce8b0f4617ccbdd2ce16e6aca018e44cd762432d5de"
+    },
+    {
+      "path": "docs/execution/reviews/T53.md",
+      "kind": "execution-receipt",
+      "bytes": 2380,
+      "sha256": "e192bf6ac47a8ab929b62a84ffe4313e5b5cdb74900126ce0fc35bde1c39d8c3"
+    },
+    {
+      "path": "docs/governance/PENDING-DECISIONS.md",
+      "kind": "source-or-runbook",
+      "bytes": 5088,
+      "sha256": "0afd2e8bc14f7a63d743069c2114710e423cacf7280481f8a77d566f5030c54b"
+    },
+    {
+      "path": "docs/governance/solana-profile.decision.json",
+      "kind": "source-or-runbook",
+      "bytes": 428,
+      "sha256": "a4e92f544b53d0f8b61a38e17dfb65b719a8bf6835f6dd6cfd6fb5711f0b269e"
+    },
+    {
+      "path": "docs/recovery/CANONICAL-EVM.md",
+      "kind": "source-or-runbook",
+      "bytes": 5209,
+      "sha256": "21298f026b6eafdf42d977a6cae3b69b67420ef4a0fc072b66f798dcd08a03f3"
+    },
+    {
+      "path": "packages/chain-evm/test/reader.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 9683,
+      "sha256": "5f568b77e61f81b1471b8976d9757249107c9832aa4f888341c3569c77ef2461"
+    },
+    {
+      "path": "packages/domain/test/intent-journal.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 25021,
+      "sha256": "a3f2e03a113c12c6435cdc57e473038b7187c9f3b8492a626a008b6d0f5389cd"
+    },
+    {
+      "path": "packages/domain/test/tx-lifecycle.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 28571,
+      "sha256": "4002f137575eb76875afc283052e0f53920fb0a72824daf26645f3830dcdda10"
+    },
+    {
+      "path": "packages/exchange/test/async-boundaries.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 11652,
+      "sha256": "bed1b87970cbdd1dc5c5da2b3895c7c5c0c8d29a16b7e83cf24f0e08c0a60413"
+    },
+    {
+      "path": "packages/exchange/test/exchange.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 25522,
+      "sha256": "22de13d365f5e09fb972d798377bdc0ab33d4d0c4219fe65851969b019d91005"
+    },
+    {
+      "path": "packages/messaging/test/durable-chat.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 21432,
+      "sha256": "188c2d8a0f83324fe24ee640902c31689d3782ed8bcc2d21bc7ca00fb4739c05"
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 11043,
+      "sha256": "07c11e97f6e0a9da8fda7d007321fbac4ad6edc1b1a14e2e62780f5c0ade6ef7"
+    },
+    {
+      "path": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 4801,
+      "sha256": "3cd2b328f5b44633973d2149330b1b923a470246a7d46897a320269d33bfd9a0"
+    },
+    {
+      "path": "packages/relay/test/pool-lifetime.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 8359,
+      "sha256": "f132cd79327de5d6703caade5b1e609367393082790522cade400b2512fd9390"
+    },
+    {
+      "path": "packages/security/src/acceptance-gates.ts",
+      "kind": "source-or-runbook",
+      "bytes": 23177,
+      "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b"
+    },
+    {
+      "path": "packages/security/test/acceptance-gates.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 15566,
+      "sha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc"
+    },
+    {
+      "path": "packages/storage/test/backup-service.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 16462,
+      "sha256": "626de8dbe31a26895e799249e0cbff94c2c0756229ce86176b2ba59e4a418aa7"
+    },
+    {
+      "path": "packages/storage/test/backup-verification.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 7618,
+      "sha256": "1092765cf7b87d95f6bc98c8925df5821d2b25f52c457c95c73f14fe83f58ddd"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "kind": "source-or-runbook",
+      "bytes": 20684,
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6"
+    },
+    {
+      "path": "packages/wallet/test/discovery.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 9813,
+      "sha256": "704f3a7b25cfe0d0d3234fe86450001934bbc70852e88926ab91db7b88702e75"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 17430,
+      "sha256": "7120b0a7e3f17129eee3578f77b6482f049bd0222c11fd868ca2b0a2aa5280df"
+    },
+    {
+      "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 17413,
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 7460,
+      "sha256": "f36c852b62b48330babd0d9929a46e6309c03c5f91ac69b893cdc23f7bf6c5d4"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 12298,
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088"
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 3724,
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e"
+    },
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 15645,
+      "sha256": "34b2013a7967c6cdb1abfc13d274ab3140f3a3b110ce148bcdab368e2050a724"
+    },
+    {
+      "path": "scripts/distribution/browser.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 5467,
+      "sha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec"
+    },
+    {
+      "path": "scripts/distribution/stage.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 16365,
+      "sha256": "c6c9f78adbba59806bd6211f43afdfacc129492c8af3c6427ef547b772c974a7"
+    },
+    {
+      "path": "scripts/recovery/build-evm.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 9572,
+      "sha256": "986ccec90db4df3e98d61d69e7f30c409becd339b89fa3c8dc96a53e40391fc6"
+    },
+    {
+      "path": "scripts/test-evm-local-trade.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 23679,
+      "sha256": "a84762701ccf67c38a0d62bb4bb6e3b3ec7ff9dd6971e16417ffdbbdc320d0a4"
+    },
+    {
+      "path": "scripts/test-evm-reconcile-local.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 22300,
+      "sha256": "3bb5f4fc02bd31452d87008e7bff8db214ba8908a8bf5137d3e7a2ef3c1e3e74"
+    },
+    {
+      "path": "scripts/test-evm-recovery-local.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 16889,
+      "sha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b"
+    },
+    {
+      "path": "scripts/test-exchange-evm-local.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 37728,
+      "sha256": "ff1bed5a40c11b5fbea08e9498ed77b2802860a049aaa1e3b5c4a7fbe67fd3e0"
+    },
+    {
+      "path": "scripts/test-journey-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 22591,
+      "sha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603"
+    },
+    {
+      "path": "scripts/test-journey-origin-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 13374,
+      "sha256": "18dc2fc94fe83adff04f6d37b1deacb35691dffd8043470400be3fc281e0014d"
+    },
+    {
+      "path": "scripts/test-lifecycle-tabs-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 16188,
+      "sha256": "6baed78bcc6e16e89331fcef53f88ffd887c8b6626deabc5330caeadb30d5226"
+    },
+    {
+      "path": "scripts/test-locale-layout-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 32949,
+      "sha256": "df451a5369959a301d3eb024c966832384f615efcc1056bb9a9e1241ce8638d5"
+    },
+    {
+      "path": "scripts/test-runtime-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 11584,
+      "sha256": "bc46d6f72a3d25a2c2e6a57a61a16193628798b4d3e1d8b7faf429d7a7b6c428"
+    },
+    {
+      "path": "scripts/test-scriptless-portal-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 7604,
+      "sha256": "b6845d4760659a102b2b6251ca57e5cae4056c5f20d0e88177f7326f49ae03f8"
+    },
+    {
+      "path": "scripts/test-web-build-browser.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 53809,
+      "sha256": "8c970180eaf3bc272c844ef84e62d1a725f23cf9567407c3839f8e1cfe06fdd5"
+    },
+    {
+      "path": "scripts/tests/acceptance-entry.test.mjs",
+      "kind": "source-or-runbook",
+      "bytes": 11882,
+      "sha256": "dc95fcad7cdd2d755b0b8f93ecb27ca347cad07af42a67f7665126ed94cf6511"
+    }
+  ],
+  "completionSpecs": [
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.1_master_plan/spec-completion-roadmap-and-dependencies.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.2_cross_device/spec-responsive-mobile-wallet-and-browser-compatibility.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.4_qr_interchange/spec-qr-everywhere-secure-sharing-and-import-export.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.5_privacy_security/spec-optional-encryption-abuse-controls-and-scriptless-mode.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.6_codespaces/spec-codespaces-test-lab-and-github-pages-release.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.7_docs_growth/spec-github-wiki-documentation-and-marketability.md"
+  ],
+  "architectureTopics": [
+    {
+      "id": "ADR-001",
+      "topic": "escrow/dispute authority",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-002",
+      "topic": "fiat settlement evidence trust",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-003",
+      "topic": "supported jurisdiction/payment rails",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-004",
+      "topic": "identity and optional anonymity",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-005",
+      "topic": "transport and spam defense",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-006",
+      "topic": "hosting/origin trust",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-007",
+      "topic": "encrypted backup",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-008",
+      "topic": "wallets/mobile",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-009",
+      "topic": "optional advanced privacy",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    },
+    {
+      "id": "ADR-010",
+      "topic": "monetization and fees",
+      "record": "../architecture/completion-decisions.md",
+      "state": "recorded-normative-boundary-and-explicit-unresolved-choices"
+    }
+  ],
+  "semantics": {
+    "rowResult": "not-run means complete mandatory target/final-artifact acceptance has not been established; local fixture results are preserved separately.",
+    "localEvidence": "Existing assertion source or reported execution at the original receipt scope, not authenticated reviewer authority or broad release acceptance.",
+    "unsupported": "Only optional unadvertised features may be unavailable in the existing evaluator; mandatory chains/recovery/devices cannot be waived.",
+    "schemaAuthority": "packages/security/src/acceptance-gates.ts",
+    "reportAuthority": "scripts/acceptance-report.mjs",
+    "trustedReview": "Only separately injected trusted verifyReview composition authenticates review; imported names/status do not.",
+    "totalsMeaning": "Counts requirement clauses and planned complete target cases, never a pass percentage or raw suite count."
+  },
+  "commands": {
+    "exchange-native": "npm run test:exchange:evm",
+    "canonical-native-token": "npm run test:evm:local",
+    "native-reconciliation": "npm run test:evm:reconcile",
+    "original-pin-recovery": "npm run test:recovery:evm",
+    "journey-browser": "npm run test:journey:browser",
+    "origin-browser": "node scripts/test-journey-origin-browser.mjs",
+    "tabs-browser": "node scripts/test-lifecycle-tabs-browser.mjs",
+    "locale-browser": "npm run test:locale:browser",
+    "emitted-browser": "npm run test:web:browser",
+    "native-worker-browser": "npm run test:browser",
+    "portal-browser": "npm run test:portal:browser",
+    "canonical-foundry": "npm run test:evm",
+    "default-build": "npm run build",
+    "boundaries": "npm run check:boundaries",
+    "g24-existing": "node --test packages/security/test/acceptance-gates.test.mjs",
+    "distribution-browser": "node scripts/distribution/browser.test.mjs",
+    "focused-assertions": "node --import ./scripts/test-support/register-tsx.mjs --test <exact affected existing test paths>"
+  },
+  "existingExecutionReceipts": {
+    "E-CONTINUATION": {
+      "receipt": "docs/execution/CONTINUATION-RESULT-2026-10-31.md",
+      "observation": "reported-pass-at-recorded-historical-scope",
+      "profile": "2026-10-31 PR21 continuation snapshot; canonical owned-loopback Anvil/relay, Node recovery and Chromium fixtures",
+      "reportedChecks": [
+        "canonical native exchange with durable chat/reopen/fresh-key unknown recovery",
+        "canonical native/ERC-20 settlement and lifecycle adversarial fixtures",
+        "copied original-pin recovery after frontend/release expiry"
+      ],
+      "limit": "Historical report, not current combined source or production/test-network-wallet qualification; isolated escrow results are distinct and excluded from canonical claims.",
+      "sourceComparisonCommit": "320fc4bcc90069cf1d8c869af78caf63efe5b9ea",
+      "sourceComparisonLimit": "Compare selected current fixture bytes with the historical tested continuation source; equality does not reexecute dependencies/tools/targets or transfer release acceptance.",
+      "selectedHistoricalSourceComparisons": [
+        {
+          "path": "scripts/test-exchange-evm-local.mjs",
+          "historicalSha256": "58f211e6e9ce50fc3873805753d57ce70f32838f1d248074d2696f3bbf13bb11",
+          "observedSha256": "ff1bed5a40c11b5fbea08e9498ed77b2802860a049aaa1e3b5c4a7fbe67fd3e0",
+          "bytesEqual": false
+        },
+        {
+          "path": "scripts/test-evm-local-trade.mjs",
+          "historicalSha256": "a84762701ccf67c38a0d62bb4bb6e3b3ec7ff9dd6971e16417ffdbbdc320d0a4",
+          "observedSha256": "a84762701ccf67c38a0d62bb4bb6e3b3ec7ff9dd6971e16417ffdbbdc320d0a4",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/test-evm-reconcile-local.mjs",
+          "historicalSha256": "18794773e92e3023bb61d03acb8bba0f36b7f8d81ea8b8fab34c4e85ad3d65e7",
+          "observedSha256": "3bb5f4fc02bd31452d87008e7bff8db214ba8908a8bf5137d3e7a2ef3c1e3e74",
+          "bytesEqual": false
+        },
+        {
+          "path": "scripts/test-evm-recovery-local.mjs",
+          "historicalSha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b",
+          "observedSha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b",
+          "bytesEqual": true
+        },
+        {
+          "path": "contracts/evm/src/BasicEscrow.sol",
+          "historicalSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+          "observedSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+          "bytesEqual": true
+        },
+        {
+          "path": "contracts/evm/abi/BasicEscrow.json",
+          "historicalSha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+          "observedSha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+          "bytesEqual": true
+        }
+      ]
+    },
+    "E-T43": {
+      "receipt": "docs/execution/reviews/T43-final-integration.json",
+      "observation": "reported-pass-at-recorded-frozen-slice",
+      "profile": "actual-ui-private-worker-native-journey; explicit trusted local two-wallet acceptance; owned loopback; four native submissions",
+      "reportedChecks": [
+        "actual selected vault and current-backup fact",
+        "encrypted negotiation and durable-before-send",
+        "lost-response reconciliation, finalized payment guidance, release/refund",
+        "fresh-key unknown recovery, failed refresh/account invalidation and late reply refusal"
+      ],
+      "limit": "Recorded integration at UI cohort36cb4d6 with helper427ec5...; no production peer carrier or trading activation. Root final source applicability is pending.",
+      "sourceScopeReceipt": "docs/execution/reviews/T43.json",
+      "recordedSourceComparisons": [
+        {
+          "path": "apps/web/src/journey/vault-composition.ts",
+          "recordedSha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036",
+          "observedSha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "recordedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "observedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/native-contracts.ts",
+          "recordedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "observedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/presentation.ts",
+          "recordedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "observedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "recordedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "observedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/README.md",
+          "recordedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "observedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/journey-vault-composition.test.mjs",
+          "recordedSha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f",
+          "observedSha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/journey-private-trade.test.mjs",
+          "recordedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "observedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/journey-screen.mjs",
+          "recordedSha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e",
+          "observedSha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/journey-worker.mjs",
+          "recordedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "observedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/test-journey-browser.mjs",
+          "recordedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "observedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "bytesEqual": true
+        }
+      ]
+    },
+    "E-T52": {
+      "receipt": "docs/execution/reviews/T52.json",
+      "observation": "reported-pass-at-recorded-frozen-slice",
+      "profile": "25 focused cases; seven actual Chromium154.0.8037.57 groups;114 independent Intl/hostile/state probes;18 frozen paths",
+      "reportedChecks": [
+        "live App/Worker/controller draft display locale switch and atomic fallback",
+        "320/768/1440 reflow and RTL fixture",
+        "canonical clipboard bytes and private-input identity preserved; zero unexpected requests"
+      ],
+      "limit": "No reviewed/published translation, actual400percent zoom, physical touch, VoiceOver/TalkBack or WCAG approval; source pins in receipt retain their exact scope.",
+      "sourceScopeReceipt": "docs/execution/reviews/T52.json",
+      "recordedSourceComparisons": [
+        {
+          "path": "apps/web/src/ui/locale/catalog.ts",
+          "recordedSha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+          "observedSha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/en.ts",
+          "recordedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "observedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/bundled.ts",
+          "recordedSha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+          "observedSha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/runtime.ts",
+          "recordedSha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+          "observedSha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/messages.ts",
+          "recordedSha256": "fee415898017f1eff1eb5bba58f8b2cd61321a530da65a58280df9b90519c27e",
+          "observedSha256": "fee415898017f1eff1eb5bba58f8b2cd61321a530da65a58280df9b90519c27e",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/App.tsx",
+          "recordedSha256": "8d29d279688eab0750340869f999c3e2f37bbc2e3edcfd7b2a700292ed8d2f3a",
+          "observedSha256": "8d29d279688eab0750340869f999c3e2f37bbc2e3edcfd7b2a700292ed8d2f3a",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/Pages.tsx",
+          "recordedSha256": "80e88e577beed5bc1d6bfd4f233fa7475e288cf0c5432fb5d0e8d34c09e9e518",
+          "observedSha256": "80e88e577beed5bc1d6bfd4f233fa7475e288cf0c5432fb5d0e8d34c09e9e518",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/diagnostics-messages.ts",
+          "recordedSha256": "8725c7b5f7abb508259f06a73a3526fa8330714766af9531ebac6f3f6c5a900f",
+          "observedSha256": "8725c7b5f7abb508259f06a73a3526fa8330714766af9531ebac6f3f6c5a900f",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/recovery-reference-messages.ts",
+          "recordedSha256": "19a55e9fe869fba8a0653f7e232856a12db0c0abc438446e6cdbb03d78660f6e",
+          "observedSha256": "19a55e9fe869fba8a0653f7e232856a12db0c0abc438446e6cdbb03d78660f6e",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/trade/trade-messages.ts",
+          "recordedSha256": "1392da9d5d8a5db7ebd35969b37fdb164e2370550350492718f51b8783294eee",
+          "observedSha256": "1392da9d5d8a5db7ebd35969b37fdb164e2370550350492718f51b8783294eee",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+          "recordedSha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+          "observedSha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+          "recordedSha256": "137c99b085d5c94e4284c8cb87f225a5498bf954eded1ed22be3b42fdad9be10",
+          "observedSha256": "137c99b085d5c94e4284c8cb87f225a5498bf954eded1ed22be3b42fdad9be10",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/ControlHelp.tsx",
+          "recordedSha256": "b9e0f6431935a4bd2731d2c4f8301155c90c7c451a8df59a8f7838ec010fc69c",
+          "observedSha256": "b9e0f6431935a4bd2731d2c4f8301155c90c7c451a8df59a8f7838ec010fc69c",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/demo/synthetic-local.ts",
+          "recordedSha256": "155b1ddba8cced9a60389fa99df23a91c3ea2bf474061767c744bfb6339bd546",
+          "observedSha256": "155b1ddba8cced9a60389fa99df23a91c3ea2bf474061767c744bfb6339bd546",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/locale-runtime.test.mjs",
+          "recordedSha256": "1fb9a61b144653623d7ea86a4bf1b993df053bfb2ca811e8b86bcf54533efe7e",
+          "observedSha256": "1fb9a61b144653623d7ea86a4bf1b993df053bfb2ca811e8b86bcf54533efe7e",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/locale-source.test.mjs",
+          "recordedSha256": "a4e5c9c3bf301336b92d9ae7cb6e8059ca18e60a700b5903de85c2d46251eda3",
+          "observedSha256": "a4e5c9c3bf301336b92d9ae7cb6e8059ca18e60a700b5903de85c2d46251eda3",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/locale-runtime-fixture.tsx",
+          "recordedSha256": "de0446379010f93522525257f5f8459a28edd7ba1d70609efdfb2047c10c322c",
+          "observedSha256": "de0446379010f93522525257f5f8459a28edd7ba1d70609efdfb2047c10c322c",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/test-locale-layout-browser.mjs",
+          "recordedSha256": "df451a5369959a301d3eb024c966832384f615efcc1056bb9a9e1241ce8638d5",
+          "observedSha256": "df451a5369959a301d3eb024c966832384f615efcc1056bb9a9e1241ce8638d5",
+          "bytesEqual": true
+        }
+      ]
+    },
+    "E-T34": {
+      "receipt": "docs/execution/reviews/T34.md",
+      "observation": "reported-pass-at-recorded-frozen-slice",
+      "profile": "current complete-backup verification; selected profile/revision/Worker facts; Chromium154.0.8037.57",
+      "reportedChecks": [
+        "wrong file/passphrase and stale revision",
+        "actual two-page mutation invalidates old fact",
+        "held native reply plus cancel/lock suppresses late success"
+      ],
+      "limit": "Earlier exact20file snapshot; later T52/T53 changes are separately reviewed. No universal recovery or device qualification."
+    },
+    "E-T35": {
+      "receipt": "docs/execution/reviews/T35.md",
+      "observation": "reported-pass-at-recorded-frozen-slice",
+      "profile": "two unit groups;five Chromium154.0.8037.57 scriptless/hostile/header/local-print groups",
+      "reportedChecks": [
+        "JavaScript-disabled nested navigation and exact canonical downloads",
+        "local served CSP refuses executable/network/frame injections",
+        "320px source portal reflow and actual printPDF;zero external requests"
+      ],
+      "limit": "Unsigned local source-reference portal; no real host header/deployment/release/device approval."
+    },
+    "E-T53": {
+      "receipt": "docs/execution/reviews/T53.md",
+      "observation": "reported-pass-at-recorded-frozen-slice",
+      "profile": "35 focused local input-admission cases and actual emitted Bootstrap/forms/native Worker Chromium proof",
+      "reportedChecks": [
+        "cancelled read buffers wiped while physical admission retained",
+        "metadata cancellation starts zero new read",
+        "terms/backup admission preserved through drain;zero external requests"
+      ],
+      "limit": "Resource limits do not establish Sybil/identity/QR authority; no production/device release claim."
+    }
+  },
+  "requirements": [
+    {
+      "id": "S-dfc774ae:L0015:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "2. Objective and scope",
+        "line": 15,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Validate a recoverable standalone basic trade on EVM and Solana, with all optional privacy/proof/map/courier/arbitration packages absent.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-LOSS-ORIGIN-RECOVERY"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Finish mandatory EVM+Solana recoverable journeys with advanced packages absent; local EVM proof is partial.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root core integration and Solana maintainer",
+      "nextAction": "Finish mandatory EVM+Solana recoverable journeys with advanced packages absent; local EVM proof is partial."
+    },
+    {
+      "id": "S-dfc774ae:L0015:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "2. Objective and scope",
+        "line": 15,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Tests use local/dev/test networks and fake fiat; no real payment or mainnet secrets enter automated tests.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Continue only owned local/dev/test networks and synthetic fiat; inspect final reports for production identity/secret leakage.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "test-fixture maintainer",
+      "nextAction": "Continue only owned local/dev/test networks and synthetic fiat; inspect final reports for production identity/secret leakage."
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "TestCase record: `{id,requirement,chain,asset,wallet,browser,device,locale,routeMode,initialState,faults,steps,expectedAuthority,expectedUi,evidence}`.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Populate the existing TestCase context for actual executions and map their exact report hashes; this documentation is not a test runner.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root acceptance coordinator",
+      "nextAction": "Populate the existing TestCase context for actual executions and map their exact report hashes; this documentation is not a test runner."
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Record exact wallet/browser/OS versions and device hardware at execution.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Capture measured wallet/browser/OS versions and hardware in each actual target report; Node or browser version alone is insufficient.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "target acceptance owner",
+      "nextAction": "Capture measured wallet/browser/OS versions and hardware in each actual target report; Node or browser version alone is insufficient."
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Target list includes Chromium/Firefox/WebKit automation plus physical Android and iPhone/iPad wallet handoff, keyboard, VoiceOver/TalkBack and 320px/400% zoom.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-320PX-400ZOOM",
+        "G24-LOCALE-SAFETY"
+      ],
+      "localEvidence": [
+        "E-T35",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Execute missing Firefox/WebKit and physical Android/iPhone/iPad, keyboard/VoiceOver/TalkBack and actual400percent zoom targets.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "browser/device/accessibility owners",
+      "nextAction": "Execute missing Firefox/WebKit and physical Android/iPhone/iPad, keyboard/VoiceOver/TalkBack and actual400percent zoom targets."
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "A support claim requires an actual passing combination; unsupported combinations are visible and cannot sign.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-LOCALE-SAFETY",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Keep default measured catalog empty until exact authenticated target evidence exists; capability probes and imported status cannot certify support.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "compatibility maintainer",
+      "nextAction": "Keep default measured catalog empty until exact authenticated target evidence exists; capability probes and imported status cannot certify support."
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Journeys: onboard → backup/restore verification → wallet connect → create/discover/accept canonical terms → seller funds → finalized funding → exchange encrypted payment instructions → simulated buyer fiat payment → seller release before chain deadline → finalized receipt/export.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Resolve production peer acceptance carrier; complete actual external-wallet/native+token browser journey at final artifact.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "journey and protocol maintainers",
+      "nextAction": "Resolve production peer acceptance carrier; complete actual external-wallet/native+token browser journey at final artifact."
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Separate journey: seller withholds, deadline passes, any caller triggers refund solely to seller.",
+      "caseIds": [
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-EXPIRY-MINUS1",
+        "G24-EXPIRY-EQUALITY",
+        "G24-EXPIRY-PLUS1"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Retain fixed-recipient withholding warning and execute native/token refund boundaries for each required chain.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "escrow and journey maintainers",
+      "nextAction": "Retain fixed-recipient withholding warning and execute native/token refund boundaries for each required chain."
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Run native and each allowlisted ERC-20/SPL configuration independently.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-SPL-DISALLOWED-EXTENSION"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Run each actual allowed ERC20/SPL profile separately; mandatory Solana native/SPL remains missing engineering.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "chain/asset profile maintainers",
+      "nextAction": "Run each actual allowed ERC20/SPL profile separately; mandatory Solana native/SPL remains missing engineering."
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Adversarial rows: wrong network/account, stale revision/quote, malicious amount/recipient, allowance mismatch, duplicate funding, token transfer failure, disallowed token extension, expiry-1/equality/+1, dropped/replaced/reorged/expired transaction, RPC split view, relay duplicates/offline, encrypted message tampering and unknown broadcast.",
+      "caseIds": [
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-STALE-REVISION-QUOTE",
+        "G24-MALICIOUS-AMOUNT-RECIPIENT",
+        "G24-ALLOWANCE-MISMATCH",
+        "G24-DUPLICATE-FUNDING",
+        "G24-TOKEN-TRANSFER-FAILURE",
+        "G24-SPL-DISALLOWED-EXTENSION",
+        "G24-EXPIRY-MINUS1",
+        "G24-EXPIRY-EQUALITY",
+        "G24-EXPIRY-PLUS1",
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-RPC-SPLIT-VIEW",
+        "G24-RELAY-DUPLICATE",
+        "G24-RELAY-OFFLINE",
+        "G24-MESSAGE-TAMPER"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Execute every explicit adversarial subcase; fill native split-view, Solana extension and real target gaps without adding undefined protocols.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "chain/transport/protocol maintainers",
+      "nextAction": "Execute every explicit adversarial subcase; fill native split-view, Solana extension and real target gaps without adding undefined protocols."
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:05",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 5
+      },
+      "requirement": "Restart at every journal transition; reconcile authoritative chain state before enabling another submission.",
+      "caseIds": [
+        "G24-DUPLICATE-FUNDING",
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-RESTART-CHECKPOINTS"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Retain transition-by-transition checkpoint mapping and final actual encrypted IndexedDB/tab/native reconciliation evidence.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "journal/runtime maintainers",
+      "nextAction": "Retain transition-by-transition checkpoint mapping and final actual encrypted IndexedDB/tab/native reconciliation evidence."
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Use deterministic adapter fault injection for timing and protocol errors, plus real test-network/wallet integration for actual serialization/signature/handoff.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-RPC-SPLIT-VIEW",
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Keep deterministic tests separate from actual selected wallet/test-network serialization/signature/handoff evidence.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "adapter and wallet interoperability owners",
+      "nextAction": "Keep deterministic tests separate from actual selected wallet/test-network serialization/signature/handoff evidence."
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Capture sanitized event timeline, source/artifact hashes and chain transaction identifiers only in explicit test evidence.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-SECRET-LEAK-RESOURCE"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T34",
+        "E-T43",
+        "E-T53"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Attach sanitized event timeline/source/artifact/transaction reports for actual test executions; never include real secrets or private fiat content.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root evidence coordinator",
+      "nextAction": "Attach sanitized event timeline/source/artifact/transaction reports for actual test executions; never include real secrets or private fiat content."
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Assert visible seller-withholding warning before buyer payment, no fiat-finality claim from chat/screenshot/proof, no optional-provider request in core-only build, and no direct connection when G05 strict routing is unsupported.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-MESSAGE-TAMPER",
+        "G24-SELLER-WARNING",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-STRICT-ROUTE-REFUSAL",
+        "G24-LOCALE-SAFETY"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Check visible warnings and no-finality/no-provider/no-direct-fallback assertions in final actual artifact and target combinations.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "journey/transport and safety-copy owners",
+      "nextAction": "Check visible warnings and no-finality/no-provider/no-direct-fallback assertions in final actual artifact and target combinations."
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Cross-origin restore must create fresh G03 data keys while recovering records and pending intents.",
+      "caseIds": [
+        "G24-UNKNOWN-BROADCAST",
+        "G24-CROSS-ORIGIN-RESTORE"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T34",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Combine new-origin fresh-key restore, retained records and pending native reconciliation with authenticated delivery evidence.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "storage/journal/release maintainers",
+      "nextAction": "Combine new-origin fresh-key restore, retained records and pending native reconciliation with authenticated delivery evidence."
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "A failed invariant, unexplained console/network secret leak, unresolved critical/high finding or untested mandatory wallet/chain is a release blocker.",
+      "caseIds": [
+        "G24-SECRET-LEAK-RESOURCE",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [
+        "E-T34",
+        "E-T53"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Preserve every unresolved invariant/leak/high finding and untested mandatory target as blocker; no aggregate green override.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root release coordinator",
+      "nextAction": "Preserve every unresolved invariant/leak/high finding and untested mandatory target as blocker; no aggregate green override."
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "TIMEOUT does not mean transaction failure; test reconciliation after delayed inclusion.",
+      "caseIds": [
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-TIMEOUT-DELAYED-INCLUSION"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Run actual delayed inclusion/timeout reconciliation with marker retained and no duplicate sends.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "transaction lifecycle maintainer",
+      "nextAction": "Run actual delayed inclusion/timeout reconciliation with marker retained and no duplicate sends."
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Automation cannot substitute for physical camera, deep-link, background eviction or assistive technology validation.",
+      "caseIds": [
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-320PX-400ZOOM"
+      ],
+      "localEvidence": [
+        "E-T35",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Obtain real physical camera/handoff/eviction/assistive-technology evidence; browser emulation cannot substitute.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "physical-device/accessibility owner",
+      "nextAction": "Obtain real physical camera/handoff/eviction/assistive-technology evidence; browser emulation cannot substitute."
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Fixtures must never teach production to bypass validation.",
+      "caseIds": [
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-SECRET-LEAK-RESOURCE"
+      ],
+      "localEvidence": [
+        "E-T34",
+        "E-T43",
+        "E-T52",
+        "E-T53"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Verify final graph and trusted constructor seams; synthetic peer/key/RPC ports must not become production bypasses.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "fixture and production-boundary reviewer",
+      "nextAction": "Verify final graph and trusted constructor seams; synthetic peer/key/RPC ports must not become production bypasses."
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Evidence includes per-row results, testnet receipts, screenshots/accessibility observations, network capture showing route policy, crash checkpoints and independent reviewer signoff.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-LOSS-ORIGIN-RECOVERY",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Attach real per-row logs/receipts/observations/network/crash records and independently authenticated scoped review.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root acceptance and independent-review owners",
+      "nextAction": "Attach real per-row logs/receipts/observations/network/crash records and independently authenticated scoped review."
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Repeat only affected rows after bounded changes, then complete the final core-only regression at the signed artifact.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-LOSS-ORIGIN-RECOVERY",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [
+        "E-CONTINUATION",
+        "E-T43",
+        "E-T52"
+      ],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Run affected checks then final core-only regression against the actual authenticated signed artifact; local unsigned stage is not that artifact.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root release/reproducibility owner",
+      "nextAction": "Run affected checks then final core-only regression against the actual authenticated signed artifact; local unsigned stage is not that artifact."
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "No row is passed by this document; implementation, target execution and independent review remain pending.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Keep this record pending until real implementation/target execution/review is bound; this document passes no row.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "root acceptance coordinator",
+      "nextAction": "Keep this record pending until real implementation/target execution/review is bound; this document passes no row."
+    },
+    {
+      "id": "S-dfc774ae:L0037:p002:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 37,
+        "unitKind": "paragraph",
+        "unitOrdinal": 2,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Primary references (exact implementation revisions must be pinned in the evidence record): [Playwright browsers](https://playwright.dev/docs/browsers); [WCAG 2.2](https://www.w3.org/TR/WCAG22/); [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193).",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "localEvidence": [],
+      "result": "not-run",
+      "coverageState": "partial-local-fixtures-and-source",
+      "remainingAcceptance": [
+        "Pin exact implemented browser/WCAG/EIP profile/tool revisions in execution records; reference URLs alone are not pins.",
+        "Final combined root receipt and applicable independent scope remain pending."
+      ],
+      "owner": "evidence provenance owner",
+      "nextAction": "Pin exact implemented browser/WCAG/EIP profile/tool revisions in execution records; reference URLs alone are not pins."
+    }
+  ],
+  "cases": [
+    {
+      "id": "G24-EVM-NATIVE-RELEASE",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0027:p001:02",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "requirement": "Complete canonical native release journey",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Onboard, authenticate current backup, explicitly connect fixture wallet and review canonical negotiated terms.",
+        "Persist intent before funding; validate finalized funding, exchange encrypted instructions and simulate fiat without finality claim.",
+        "Bound seller explicitly releases before native deadline; retain finalized receipt/export."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "encrypted canonical exchange -> exact reviewed acceptance -> G12 fund -> native",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-journey-browser.mjs",
+            "assertion": "unknownFreshKeyRecovery",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION",
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "exchange-native",
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Explicit local fixture peer acceptance is not a defined production peer carrier.",
+        "Root final actual App/Worker/native run, exact receipt/export artifacts and supported real wallet/test-network combination are pending."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-EVM-NATIVE-REFUND",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "requirement": "Seller withholds; timeout refund only to seller",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Seller release is valid only before deadline; at/after deadline any caller pays only stored seller.",
+      "expectedUi": "Seller withholding and fiat loss risk are visible before payment; timeout is a refund to seller, never a buyer guarantee.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_refund_atDeadlineByStrangerPaysSellerOnly",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "terminal:'refund'",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION",
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "exchange-native",
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-EVM-ERC20-RELEASE",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:03"
+      ],
+      "requirement": "Canonical exact-transfer ERC-20 release, distinct from native",
+      "chain": "evm",
+      "asset": "each independently admitted exact-transfer ERC-20 profile",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-evm-local-trade.mjs",
+            "assertion": "buildFundToken",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_release_paysBuyerToken",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-native-token",
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Local test tokens are not production allowlist approval.",
+        "Full browser/encrypted negotiation/journal path for each actual allowlisted token and wallet/chain configuration is still required; native flow is not its substitute."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-EVM-ERC20-REFUND",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03"
+      ],
+      "requirement": "Canonical exact-transfer ERC-20 refund, distinct from native",
+      "chain": "evm",
+      "asset": "each independently admitted exact-transfer ERC-20 profile",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-evm-local-trade.mjs",
+            "assertion": "buildFundToken",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_refund_afterDeadlineByBuyerPaysSellerToken",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-native-token",
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Local test tokens are not production allowlist approval.",
+        "Full browser/encrypted negotiation/journal path for each actual allowlisted token and wallet/chain configuration is still required; native flow is not its substitute."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-SOLANA-NATIVE",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "requirement": "Mandatory Solana native release/refund/recovery parity",
+      "chain": "solana",
+      "asset": "native",
+      "wallet": "actual selected Solana wallet/profile missing",
+      "browser": "Chromium/Firefox/WebKit plus advertised physical targets",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "actual selected Solana RPC and route policy missing",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Exact program/PDA seeds/account ownership and serialization/discriminators/IDL hash/instruction contract must be selected and independently checked.",
+        "Native/SPL token-program/mint/extension/fee/finality/history policy, local-validator escrow/adapters/journal and independent recovery are missing mandatory engineering.",
+        "Execute both release and refund, adversarial account/signer/program/token cases, then real wallet/devnet and physical combinations; mandatory parity cannot be waived unsupported."
+      ],
+      "owner": "Solana program/profile and adapter maintainer",
+      "nextAction": "Resume the existing solana-profile decision packet with a concrete independently checked local program contract, then implement/test local native and SPL parity with trading disabled."
+    },
+    {
+      "id": "G24-SOLANA-ALLOWLISTED-SPL",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "requirement": "Mandatory Solana allowlisted-spl release/refund/recovery parity",
+      "chain": "solana",
+      "asset": "allowlisted-spl",
+      "wallet": "actual selected Solana wallet/profile missing",
+      "browser": "Chromium/Firefox/WebKit plus advertised physical targets",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "actual selected Solana RPC and route policy missing",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Exact program/PDA seeds/account ownership and serialization/discriminators/IDL hash/instruction contract must be selected and independently checked.",
+        "Native/SPL token-program/mint/extension/fee/finality/history policy, local-validator escrow/adapters/journal and independent recovery are missing mandatory engineering.",
+        "Execute both release and refund, adversarial account/signer/program/token cases, then real wallet/devnet and physical combinations; mandatory parity cannot be waived unsupported."
+      ],
+      "owner": "Solana program/profile and adapter maintainer",
+      "nextAction": "Resume the existing solana-profile decision packet with a concrete independently checked local program contract, then implement/test local native and SPL parity with trading disabled."
+    },
+    {
+      "id": "G24-WRONG-NETWORK-ACCOUNT",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "requirement": "Wrong chain/account/genesis/runtime cancels or refuses",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "chain change",
+        "account change",
+        "wrong genesis/runtime"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "account or chain change cancels un-sent intents",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/wallet/test/evm-payment-preflight.test.mjs",
+            "assertion": "wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Keep pending marker for already-started send; prove stale permission/state cannot submit in the actual external wallet return combination.",
+        "Root final combined run and supported wallet versions pending."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-STALE-REVISION-QUOTE",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Stale terms revision, advertisement and quote acceptance refused",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "expired signed ad",
+        "different accepted revision",
+        "chain-time acceptance expiry"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/exchange/test/exchange.test.mjs",
+            "assertion": "acceptance of a different revision or different terms is refused",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "chain-time funding without a wallet send",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "exchange-native"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-MALICIOUS-AMOUNT-RECIPIENT",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Changed canonical amount, recipient, domain or prepared bytes refused",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "changed recipient",
+        "changed base-unit value",
+        "wrong deployment/domain"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/wallet/test/evm-terms.test.mjs",
+            "assertion": "G16 EVM terms hash binds every field",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "changed call value and repeat funding are refused",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "exchange-native"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-ALLOWANCE-MISMATCH",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Token allowance/amount mismatch cannot fund",
+      "chain": "evm",
+      "asset": "canonical ERC-20 test token; actual each allowlisted token pending",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "missing or wrong allowance"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_fundToken_rejectsMissingAllowance",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-evm-local-trade.mjs",
+            "assertion": "approveAmountFor",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry",
+        "canonical-native-token"
+      ],
+      "remainingAcceptance": [
+        "Contract/source assertion exists; this T62 inventory does not execute it.",
+        "Bind actual wallet allowance preview/exact spender/amount for every approved token; no unlimited approval or unsupported token inference."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-DUPLICATE-FUNDING",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05"
+      ],
+      "requirement": "Concurrent/restarted duplicate funding and nonce reuse refused",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "duplicate trade ID",
+        "same seller nonce",
+        "two-tab CAS race"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_fund_rejectsSellerNonceReuseAcrossOrders",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "duplicate submit: concurrent, sequential and after restart make exactly one wallet send",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-lifecycle-tabs-browser.mjs",
+            "assertion": "exactly one marker committed",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry",
+        "focused-assertions",
+        "tabs-browser"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TOKEN-TRANSFER-FAILURE",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Unsupported transfer behavior and deferred terminal payout",
+      "chain": "evm",
+      "asset": "explicit plain/ERC-20 failure fixtures only",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "fee on transfer",
+        "false return",
+        "blacklisted/reverting recipient"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Terminal settlement cannot redirect principal; deferred aggregate credit remains only for immutable beneficiary.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_fundToken_rejectsFeeOnTransfer",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_blacklistedBuyer_tokenReleaseDeferred",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_falseReturningTransfer_releaseDeferred",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry",
+        "canonical-native-token"
+      ],
+      "remainingAcceptance": [
+        "Fixtures do not qualify future issuer freeze/rebase/proxy/callback behavior.",
+        "Actual allowed assets require exact independent token policy and repeated affected native/browser rows."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-SPL-DISALLOWED-EXTENSION",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Disallowed Solana token program/mint/extension refused",
+      "chain": "solana",
+      "asset": "each selected SPL/token-program profile; currently undefined",
+      "wallet": "selected Solana wallet missing",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "No selected interoperable native program/token profile or executed extension rejection is supplied.",
+        "Specify actual token programs, ownership/extension parsing and independently supported assets before positive or negative native evidence."
+      ],
+      "owner": "Solana token-profile maintainer",
+      "nextAction": "Define local supported token profile and adversarial mint/account fixtures, then implement and execute local-validator rejection paths; do not copy EVM results."
+    },
+    {
+      "id": "G24-EXPIRY-MINUS1",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Expiry MINUS1 uses native time and fixed beneficiaries",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "deadline boundary MINUS1"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Release strictly before deadline; refund at/after deadline only to stored seller. Client display clock grants no authority.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_release_oneSecondBeforeDeadline",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+            "assertion": "testFuzz_settlementTimeGuards",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Canonical boundary assertions exist; actual chain inclusion/censorship can cross deadline after preview.",
+        "Execute applicable native/token and browser guidance boundaries at final source; independently repeat Solana boundaries once implemented."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-EXPIRY-EQUALITY",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Expiry EQUALITY uses native time and fixed beneficiaries",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "deadline boundary EQUALITY"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Release strictly before deadline; refund at/after deadline only to stored seller. Client display clock grants no authority.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_refund_atDeadlineByStrangerPaysSellerOnly",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+            "assertion": "testFuzz_settlementTimeGuards",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Canonical boundary assertions exist; actual chain inclusion/censorship can cross deadline after preview.",
+        "Execute applicable native/token and browser guidance boundaries at final source; independently repeat Solana boundaries once implemented."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-EXPIRY-PLUS1",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Expiry PLUS1 uses native time and fixed beneficiaries",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "deadline boundary PLUS1"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Release strictly before deadline; refund at/after deadline only to stored seller. Client display clock grants no authority.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "contracts/evm/test/BasicEscrow.t.sol",
+            "assertion": "test_refund_afterDeadlineByBuyerPaysSellerToken",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+            "assertion": "testFuzz_settlementTimeGuards",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "canonical-foundry"
+      ],
+      "remainingAcceptance": [
+        "Canonical boundary assertions exist; actual chain inclusion/censorship can cross deadline after preview.",
+        "Execute applicable native/token and browser guidance boundaries at final source; independently repeat Solana boundaries once implemented."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TX-DROPPED",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "Dropped after bounded reconciliation",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "dropped transaction"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "dropped with a known hash, reverted, and still-pending classifications",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-evm-reconcile-local.mjs",
+            "assertion": "pending fund removed from the pool",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation"
+      ],
+      "remainingAcceptance": [
+        "Retain actual native block/hash/nonce and authoritative escrow reconciliation; no automatic replacement/retry.",
+        "Root final affected run pending; fixture classifications are chain-specific and do not implement Solana blockhash expiry."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TX-REPLACED",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "Same nonce replacement and explicit linked successor",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "replaced transaction"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "replaced: the recorded nonce was used by a different transaction",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-evm-reconcile-local.mjs",
+            "assertion": "higher-gas same-nonce",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation"
+      ],
+      "remainingAcceptance": [
+        "Retain actual native block/hash/nonce and authoritative escrow reconciliation; no automatic replacement/retry.",
+        "Root final affected run pending; fixture classifications are chain-specific and do not implement Solana blockhash expiry."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TX-REORGED",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "Canonical receipt reorg removes finality",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "reorged transaction"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "reorg: a confirmed receipt that disappears",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation"
+      ],
+      "remainingAcceptance": [
+        "Retain actual native block/hash/nonce and authoritative escrow reconciliation; no automatic replacement/retry.",
+        "Root final affected run pending; fixture classifications are chain-specific and do not implement Solana blockhash expiry."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TX-EXPIRED",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "EVM intent expiry is not proof of failed broadcast",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "expired transaction"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "crash after send-started, before the wallet broadcast",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation"
+      ],
+      "remainingAcceptance": [
+        "Retain actual native block/hash/nonce and authoritative escrow reconciliation; no automatic replacement/retry.",
+        "Root final affected run pending; fixture classifications are chain-specific and do not implement Solana blockhash expiry."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-UNKNOWN-BROADCAST",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0027:p001:04",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "Lost response and crash after durable send marker remain unresolved until native proof",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "SIGKILL after marker/broadcast",
+        "lost transaction hash",
+        "fresh-key restore"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Stored unknown or finalized label never authorizes a resend; current canonical native proof is required.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-evm-reconcile-local.mjs",
+            "assertion": "client SIGKILLed after send-started",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "fresh-key restore reauthenticates original chat proofs",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "crash after the hash returned but before it was persisted",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION",
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "exchange-native",
+        "native-reconciliation",
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-RPC-SPLIT-VIEW",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "requirement": "Conflicting/stale RPC and changed anchors refuse guidance",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "changing block anchor",
+        "stale finalized vs latest",
+        "distinct nodes disagree"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/chain-evm/test/reader.test.mjs",
+            "assertion": "wrong chain/genesis/runtime/asset and changed anchors fail closed",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/wallet/test/evm-payment-preflight.test.mjs",
+            "assertion": "latest chain clock must be at or beyond finalized height/time",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Existing deterministic/current-read anchor checks and local wrong-node fixtures are bounded; they are not consensus verification.",
+        "Build actual distinct-node split-view/delayed-inclusion evidence for the selected deployment/profile; final source run pending."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-RELAY-DUPLICATE",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Relay duplicate/replay and durable message deduplication",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "duplicate events",
+        "replayed authenticated message"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/relay/test/nostr-crypto-wiring.test.mjs",
+            "assertion": "genuine delivered once despite the duplicate",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/messaging/test/durable-chat.test.mjs",
+            "assertion": "restart and fresh-key backup restore retain durable dedup",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "exchange-native"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-RELAY-OFFLINE",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "requirement": "Relay offline/closure cannot cause direct fallback or economic finality",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "relay socket closure",
+        "offline relay",
+        "acknowledgement missing"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/relay/test/pool-lifetime.test.mjs",
+            "assertion": "read: ${end} releases a pending connection",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "durable send does not publish automatically",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions"
+      ],
+      "remainingAcceptance": [
+        "Bounded pool/closure assertions exist; exact offline delivery/reconnect behavior is limited to current APIs.",
+        "No outbox/cursor/new reconnect protocol is invented; execute defined owned-relay fault paths and report unsupported delivery honestly."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-MESSAGE-TAMPER",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "requirement": "Wrong sender/recipient/trade and changed encrypted message refused",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "forged author",
+        "changed ciphertext/terms",
+        "conflicting messageId"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Authenticated chat is communication; no fiat receipt, terms acceptance or chain settlement from arbitrary text.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/exchange/test/exchange.test.mjs",
+            "assertion": "tampered terms bytes never reach accept",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/messaging/test/durable-chat.test.mjs",
+            "assertion": "native author, envelope author/recipient/trade and supported kind are checked",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "exchange-native"
+      ],
+      "remainingAcceptance": [
+        "Root must assess current combined source applicability, run affected existing checks and attach exact report/target identities.",
+        "External wallet/test-network and independently reviewed final artifact qualification remain separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-RESTART-CHECKPOINTS",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:05"
+      ],
+      "requirement": "Restart at each journal transition and two-tab ownership",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "restart before marker",
+        "after marker",
+        "after hash",
+        "after terminal label",
+        "concurrent CAS"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "crash after reservation (before send-started)",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "crash after the hash was recorded",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/domain/test/intent-journal.test.mjs",
+            "assertion": "terminal reservations require fresh trusted native proof after reopen",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation",
+        "tabs-browser"
+      ],
+      "remainingAcceptance": [
+        "Existing transition tests cover their named checkpoints; do not claim every consumer/storage/physical crash path.",
+        "Root must retain a checkpoint-to-test/log mapping for all actual journey transitions and final actual IndexedDB/browser run."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-CROSS-ORIGIN-RESTORE",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:04"
+      ],
+      "requirement": "Authenticated new-origin fresh-key restore retains records and pending intents",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "actual Chromium fixture; other engine/physical targets pending",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "wrong backup passphrase",
+        "tampered asset/signature/key",
+        "origin isolation"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-journey-origin-browser.mjs",
+            "assertion": "actual-signed-two-origin-profile-migration",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/storage/test/backup-service.test.mjs",
+            "assertion": "retains pending trade payload bindings verbatim",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-exchange-evm-local.mjs",
+            "assertion": "alongside unknown G12 recovery",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T34",
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "origin-browser",
+        "exchange-native"
+      ],
+      "remainingAcceptance": [
+        "Two-origin source fixture covers opaque records and fresh keys; unknown native G12 recovery is a separate composition.",
+        "Root combined origin+journal/browser evidence and actual independently trusted distribution/real device restore remain pending."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-SELLER-WARNING",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "requirement": "Before buyer payment disclose withholding and no fiat finality",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "actual Chromium private journey fixture",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Finalized funding guidance is read-only; seller receipt decision remains manual and reversible fiat risk stays visible.",
+      "expectedUi": "Show seller-withholding/refund-to-seller warning before payment; never call screenshot/chat/proof fiat finality.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-journey-browser.mjs",
+            "assertion": "finalizedPaymentGuidance",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/wallet/test/evm-payment-preflight.test.mjs",
+            "assertion": "900 seconds blocks",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "journey-browser",
+        "focused-assertions"
+      ],
+      "remainingAcceptance": [
+        "Root final real UI copy/timing check and reviewed safety locale/WCAG scope pending.",
+        "Do not infer successful fiat transfer from synthetic payment steps."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-CORE-ONLY-NO-EGRESS",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0031:p001:04",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "requirement": "Core-only emitted default has no advanced provider or automatic wallet/network action",
+      "chain": "core",
+      "asset": "none",
+      "wallet": "no permission requested at startup",
+      "browser": "actual emitted Chromium; other required engines pending",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "default connect-src none; strict unsupported refuses",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "apps/web/test/journey-private-trade.test.mjs",
+            "assertion": "never enables trading or touches native wallet/network",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-journey-origin-browser.mjs",
+            "assertion": "origin migration does not pull signing, wallet or trading composition",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T43",
+          "E-T52"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "default-build",
+        "boundaries",
+        "emitted-browser",
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Unsigned default graph/CSP/local smoke are not an authenticated enabled trade artifact.",
+        "Root must freeze combined artifact, repeat core-only regression with every advanced package absent and retain network capture; signed artifact qualification remains separate."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-STRICT-ROUTE-REFUSAL",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "requirement": "Unsupported strict route starts no direct connection",
+      "chain": "core transport",
+      "asset": "none",
+      "wallet": "external wallet routing unknown",
+      "browser": "actual bound broker/policy fixture required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "strict-private unsupported",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/transport/src/policy.ts",
+            "assertion": "this.#mode === 'strict' && evidence.coverage !== 'verified-private'",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions"
+      ],
+      "remainingAcceptance": [
+        "Use actual broker/policy invalidation and no-fallback regression at T55 final frozen source; T62 observes policy primitive only, not active broker bytes.",
+        "No browser Tor label or unknown extension path can establish protected routing."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-TIMEOUT-DELAYED-INCLUSION",
+      "requirementIds": [
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "requirement": "Timeout does not mean failed transaction; delayed inclusion reconciles",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "native Node fixture; actual browser target separately required",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [
+        "send timeout",
+        "later native inclusion"
+      ],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/domain/test/tx-lifecycle.test.mjs",
+            "assertion": "crash during the wallet call after broadcast",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-evm-reconcile-local.mjs",
+            "assertion": "confirmed -> finalized without resending",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION",
+          "E-T43"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "focused-assertions",
+        "native-reconciliation"
+      ],
+      "remainingAcceptance": [
+        "Execute actual delayed inclusion/timeout at final source; retain unknown marker while native evidence is insufficient.",
+        "Do not free physical admission or submit a duplicate when a provider ignores cancellation."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-LOSS-ORIGIN-RECOVERY",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "requirement": "Independent original-pinned recovery without frontend or current release availability",
+      "chain": "evm",
+      "asset": "native",
+      "wallet": "public local Anvil dev accounts; external-wallet target unmeasured",
+      "browser": "none;copied Node-only recovery bundle",
+      "device": "local development host; physical hardware unqualified",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-evm-recovery-local.mjs",
+            "assertion": "after its release manifest expires",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "scripts/test-evm-recovery-local.mjs",
+            "assertion": "edited archived profile, registry or ABI is rejected",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-CONTINUATION"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "original-pin-recovery"
+      ],
+      "remainingAcceptance": [
+        "Synthetic authenticated fixture proves original-pin source path only; maintained null pin cannot produce an approved executable.",
+        "Select authentic original deployment/ABI distribution and independent recovery witness; preserve funded exits despite later frontend expiry."
+      ],
+      "owner": "recovery/release maintainer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-ENGINE-CHROMIUM",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "requirement": "Complete advertised Chromium wallet/chain combination",
+      "chain": "EVM and Solana independently",
+      "asset": "native and each allowed token independently",
+      "wallet": "exact actual wallet/connector/version required",
+      "browser": "Chromium exact version required at execution",
+      "device": "record actual OS/hardware; automation is not physical",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "apps/web/test/compatibility-model.test.mjs",
+            "assertion": "every browser/version/OS/device/wallet/connector/chain/capability/source dimension",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T43",
+          "E-T52"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "journey-browser"
+      ],
+      "remainingAcceptance": [
+        "Record exact browser/OS/wallet/version/connector/chain and actual passing journey; capability detection/imported pass cannot certify support.",
+        "Chromium native local fixture evidence, when present, does not cover other engines or actual external wallet plugins; Firefox/WebKit complete combinations remain not-run."
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-ENGINE-FIREFOX",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "requirement": "Complete advertised Firefox wallet/chain combination",
+      "chain": "EVM and Solana independently",
+      "asset": "native and each allowed token independently",
+      "wallet": "exact actual wallet/connector/version required",
+      "browser": "Firefox exact version required at execution",
+      "device": "record actual OS/hardware; automation is not physical",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "apps/web/test/compatibility-model.test.mjs",
+            "assertion": "every browser/version/OS/device/wallet/connector/chain/capability/source dimension",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Record exact browser/OS/wallet/version/connector/chain and actual passing journey; capability detection/imported pass cannot certify support.",
+        "Chromium native local fixture evidence, when present, does not cover other engines or actual external wallet plugins; Firefox/WebKit complete combinations remain not-run."
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-ENGINE-WEBKIT",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "requirement": "Complete advertised WebKit wallet/chain combination",
+      "chain": "EVM and Solana independently",
+      "asset": "native and each allowed token independently",
+      "wallet": "exact actual wallet/connector/version required",
+      "browser": "WebKit exact version required at execution",
+      "device": "record actual OS/hardware; automation is not physical",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "apps/web/test/compatibility-model.test.mjs",
+            "assertion": "every browser/version/OS/device/wallet/connector/chain/capability/source dimension",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Record exact browser/OS/wallet/version/connector/chain and actual passing journey; capability detection/imported pass cannot certify support.",
+        "Chromium native local fixture evidence, when present, does not cover other engines or actual external wallet plugins; Firefox/WebKit complete combinations remain not-run."
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-PHYSICAL-ANDROID",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "requirement": "Physical Android wallet/camera/eviction/return acceptance",
+      "chain": "advertised EVM and Solana separately",
+      "asset": "advertised native/token separately",
+      "wallet": "exact physical wallet version/connector missing",
+      "browser": "actual device browser/version to record",
+      "device": "physical Android hardware/OS required",
+      "locale": "draft English",
+      "routeMode": "actual endpoint/wallet route to observe",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Actual hardware, wallet/session/deep-link profile and exact OS/browser versions are required.",
+        "Test locked-screen/app switch, session expiry, disconnect, private/storage eviction, denied camera/clipboard/share and safe manual/file fallback; retain failed/not-run outcomes."
+      ],
+      "owner": "physical-device and wallet acceptance owner",
+      "nextAction": "Use the selected mobile profile and owned physical test devices with fake funds; automation/emulation cannot fill this row."
+    },
+    {
+      "id": "G24-PHYSICAL-IPHONE",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "requirement": "Physical iPhone wallet/camera/eviction/return acceptance",
+      "chain": "advertised EVM and Solana separately",
+      "asset": "advertised native/token separately",
+      "wallet": "exact physical wallet version/connector missing",
+      "browser": "actual device browser/version to record",
+      "device": "physical iPhone hardware/OS required",
+      "locale": "draft English",
+      "routeMode": "actual endpoint/wallet route to observe",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Actual hardware, wallet/session/deep-link profile and exact OS/browser versions are required.",
+        "Test locked-screen/app switch, session expiry, disconnect, private/storage eviction, denied camera/clipboard/share and safe manual/file fallback; retain failed/not-run outcomes."
+      ],
+      "owner": "physical-device and wallet acceptance owner",
+      "nextAction": "Use the selected mobile profile and owned physical test devices with fake funds; automation/emulation cannot fill this row."
+    },
+    {
+      "id": "G24-PHYSICAL-IPAD",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "requirement": "Physical iPad wallet/camera/eviction/return acceptance",
+      "chain": "advertised EVM and Solana separately",
+      "asset": "advertised native/token separately",
+      "wallet": "exact physical wallet version/connector missing",
+      "browser": "actual device browser/version to record",
+      "device": "physical iPad hardware/OS required",
+      "locale": "draft English",
+      "routeMode": "actual endpoint/wallet route to observe",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [],
+      "remainingAcceptance": [
+        "Actual hardware, wallet/session/deep-link profile and exact OS/browser versions are required.",
+        "Test locked-screen/app switch, session expiry, disconnect, private/storage eviction, denied camera/clipboard/share and safe manual/file fallback; retain failed/not-run outcomes."
+      ],
+      "owner": "physical-device and wallet acceptance owner",
+      "nextAction": "Use the selected mobile profile and owned physical test devices with fake funds; automation/emulation cannot fill this row."
+    },
+    {
+      "id": "G24-KEYBOARD-SCREENREADER",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0031:p001:03",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "requirement": "Keyboard, VoiceOver and TalkBack acceptance",
+      "chain": "UI",
+      "asset": "none",
+      "wallet": "selected test wallet combinations",
+      "browser": "physical assistive technology/browser versions required",
+      "device": "actual keyboard plus VoiceOver/TalkBack hardware",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [],
+        "receiptIds": [
+          "E-T52"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "locale-browser"
+      ],
+      "remainingAcceptance": [
+        "Existing keyboard/focus/RTL local checks are bounded engineering evidence only.",
+        "Perform actual assistive-technology reading/order/announcements/dialog/error/target-size/contrast assessment and record WCAG2.2AA findings."
+      ],
+      "owner": "accessibility acceptance owner",
+      "nextAction": "Execute physical assistive-technology acceptance with precise versions; retain audit findings and reviewed remediation."
+    },
+    {
+      "id": "G24-320PX-400ZOOM",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "requirement": "320px, portrait/landscape and actual400percent zoom",
+      "chain": "UI",
+      "asset": "exact canonical amount/address display",
+      "wallet": "advertised wallet overlay combinations",
+      "browser": "real zoom and physical viewport required",
+      "device": "actual supported screen/touch targets",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "scripts/test-locale-layout-browser.mjs",
+            "assertion": "rtl",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T52",
+          "E-T35"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "locale-browser",
+        "portal-browser"
+      ],
+      "remainingAcceptance": [
+        "T52 320/768/1440 RTL fixture and T35 portal reflow do not prove actual400percent zoom or mobile virtual-keyboard behavior.",
+        "Record actual browser zoom, full irreversibility details, touch targets, rotation, reduced motion/high contrast and wallet overlap without clipped addresses."
+      ],
+      "owner": "responsive/accessibility maintainer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-LOCALE-SAFETY",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "requirement": "Reviewed locale eligibility versus draft display fixtures",
+      "chain": "UI",
+      "asset": "canonical machine amounts unchanged",
+      "wallet": "funds disabled",
+      "browser": "actual locale compile fixture only",
+      "device": "native browser local;physical acceptance pending",
+      "locale": "en,fr,es,pt-BR,de,it,nl,ar,hi,zh-Hans,zh-Hant,ja,ko,id,tr,ru,uk,vi,th targets; production draft English only",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "apps/web/src/ui/locale/runtime.ts",
+            "assertion": "fundsLocaleEligible",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "apps/web/src/ui/locale/en.ts",
+            "assertion": "seller",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T52"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "locale-browser"
+      ],
+      "remainingAcceptance": [
+        "No reviewed/published non-English bundle or reviewed English funds locale exists.",
+        "Complete legally/safety material human review and locale release binding, then native target/wrapping/numerals/RTL/accessibility evidence; never import reviewer/status approval."
+      ],
+      "owner": "locale and safety-copy reviewer owner",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-SECRET-LEAK-RESOURCE",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:02",
+        "S-dfc774ae:L0031:p001:01",
+        "S-dfc774ae:L0031:p001:04"
+      ],
+      "requirement": "Sanitized network/console evidence, cancellation and resource floods",
+      "chain": "core",
+      "asset": "none",
+      "wallet": "no secrets in diagnostics",
+      "browser": "actual Worker/browser fixture",
+      "device": "local measured target only",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/storage/test/backup-verification.test.mjs",
+            "assertion": "copies caller bytes and shares recovery capacity until native crypto actually drains",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": [
+          "E-T34",
+          "E-T53"
+        ]
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "native-worker-browser",
+        "emitted-browser",
+        "focused-assertions"
+      ],
+      "remainingAcceptance": [
+        "Retain exact sanitized network/console/physical-drain evidence and unresolved findings, not aggregate green counts only.",
+        "No passing source scan proves browser memory erasure or absence of all leaks; root final combined capture and independent security scope pending."
+      ],
+      "owner": "root integration coordinator",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    },
+    {
+      "id": "G24-REPORT-REVIEW-INVALIDATION",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:02",
+        "S-dfc774ae:L0019:p001:01",
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:01",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02",
+        "S-dfc774ae:L0035:p001:03",
+        "S-dfc774ae:L0037:p002:01"
+      ],
+      "requirement": "Use existing gate evaluator; exact identity, independent scope and append-only failures",
+      "chain": "evidence only",
+      "asset": "actual asset/compiler/dependency/recipe/deployment identities when available",
+      "wallet": "none",
+      "browser": "automated/emulated/physical targets kept distinct",
+      "device": "exact target kind must match",
+      "locale": "draft English",
+      "routeMode": "owned loopback direct fixture",
+      "initialState": "fresh selected test profile; no real funds",
+      "faults": [],
+      "steps": [
+        "Run the exact existing scoped fixture where identified.",
+        "Retain actual environment, per-case report and exact source/artifact hashes."
+      ],
+      "expectedAuthority": "Only independently validated native canonical state and explicit current wallet action can affect escrow; no automatic retry.",
+      "expectedUi": "Show fixed cause and safe next action; preserve unresolved state and original exits.",
+      "evidence": {
+        "assertions": [
+          {
+            "source": "packages/security/test/acceptance-gates.test.mjs",
+            "assertion": "source, spec, asset, compiler, dependency, recipe and deployment changes invalidate evidence",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/security/test/acceptance-gates.test.mjs",
+            "assertion": "physical targets reject emulator substitution",
+            "observation": "source-exists; not executed by T62"
+          },
+          {
+            "source": "packages/security/test/acceptance-gates.test.mjs",
+            "assertion": "imported passed decisions and reviewer names cannot qualify",
+            "observation": "source-exists; not executed by T62"
+          }
+        ],
+        "receiptIds": []
+      },
+      "result": "not-run",
+      "qualification": "complete-target-and-final-artifact-pending",
+      "commandKeys": [
+        "g24-existing"
+      ],
+      "remainingAcceptance": [
+        "Root final combined inventory and actual per-case reports are pending.",
+        "Construct the existing candidate/records only from real artifacts; preserve missing mandatory targets and failures; authenticate exact independent review through trusted composition, never file metadata.",
+        "Signed enabled artifact, Solana/device/localization/accessibility/host/incident/professional evidence remain missing; promotion is false even for a passing scope-only report."
+      ],
+      "owner": "root acceptance coordinator plus distinct independent reviewer",
+      "nextAction": "Reuse the named existing fixture at the frozen combined source; do not mark the broader target passed from this inventory."
+    }
+  ],
+  "finalCombinedEvidence": {
+    "status": "pending-root-owned",
+    "owner": "root integration coordinator",
+    "sourceInventory": null,
+    "artifactDigests": [],
+    "testReportDigests": [],
+    "independentReview": null,
+    "nextAction": "Root supplies exact combined source/lock/compiler/recipe/artifact receipt and performs the affected existing suites; retain unresolved mandatory external/device/Solana/release rows."
+  },
+  "totals": {
+    "g24RequirementClauses": 23,
+    "architectureTopics": 10,
+    "completionSpecs": 7,
+    "completeTargetCases": 43,
+    "qualificationPass": 0,
+    "qualificationFail": 0,
+    "qualificationUnsupported": 0,
+    "qualificationNotRun": 43
+  },
+  "remainingIndependentWork": [
+    "Implement selected local Solana native/SPL program/profile/adapters/journal/recovery without treating external review as an implementation blocker.",
+    "Resolve exact production peer acceptance carrier without importing communication as economic authority.",
+    "Execute missing actual deterministic/native split-view/checkpoint/asset/engine rows at frozen source using existing harnesses where defined.",
+    "Prepare actual scoped clean/reproducible release/deployment/rollback and G26 drill records using existing tools; no invented trust policy or publication."
+  ],
+  "externalPrerequisites": [
+    "Actual maintained signing/bootstrap/rotation and original deployment policy plus independent builder/distribution/host witnesses.",
+    "Exact selected real wallet/mobile connector and physical hardware/OS/browser/wallet matrix.",
+    "Safety translation semantic review and actual WCAG2.2AA/assistive-technology assessment.",
+    "Professional cryptographic/security scope and actual operational/legal/rail facts; no universal fee/rail/business approval."
+  ]
+}

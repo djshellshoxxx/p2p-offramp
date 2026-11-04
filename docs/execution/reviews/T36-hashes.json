@@ -1,0 +1,20 @@
+{
+  "docs/wiki-source/Architecture-and-Development.md": "dc49f3f318f5dc04d5f999f98e48be662fda848de494fb76bef182689a79ab11",
+  "docs/wiki-source/Codespaces-Test-Lab.md": "18d49e4e1b22595bb805943d3d5d897b930e53cb3d864d5fda6846b34b0a2838",
+  "docs/wiki-source/Getting-Started.md": "19aeba37a434523054f886839a1ee0ce63fea0a695cfd0bb8d7442814af0a0e7",
+  "docs/wiki-source/Home.md": "b7c8d8f0f6b39bc95f98f4be9c053d6a8c699d07e07f0a5192550f97b080ca0e",
+  "docs/wiki-source/Privacy-and-Recovery.md": "ded59d00a7c774ab14864e5b031b9b00ce1aef245df06b1237a29771e6c8909b",
+  "docs/wiki-source/README.md": "0a7cd9fd1a586648f3060fdc50e50bdf9cbf6ea81afcc58349c94e6f3eb9db41",
+  "docs/wiki-source/Security-and-Release.md": "2e4494337d2fbcc1d8bbefff2acb85caf5e76805ebd79c55e2591e6fe458c17b",
+  "docs/wiki-source/Wallet-and-QR-Safety.md": "41970624620611be49d8c207ebb8f4c97fe55714d3799e6311c76ad7a5093e9d",
+  "docs/wiki-source/claims-register.json": "1910291b9c3f69c1e57900dda19d2bfa53e648995ead46305ac2436bcce2fd91",
+  "docs/wiki-source/docs-manifest.json": "8de4fd6533c2699ac8cc273f6c2b28aa1d8b10a827d442a23aa9488c77e14c6a",
+  "packages/claims/README.md": "85f7c765947e1b80c96072226bc8fe488f01a1b5587857463fcbed8ae95412fe",
+  "packages/claims/index.ts": "fe29556ba69d6f6070399db047ce1787a32c7f81f8517be6ef56c3e4e6d5981b",
+  "packages/claims/src/claims.ts": "e8ba571ee1599c63c152f84241288812198457330ce989b1098d5d78a3e1f9fa",
+  "packages/claims/test/claims.test.mjs": "e411d3d6778c0775dc5e0d02f7ce946f0a6f04281338a80708ad57cf6730a4ae",
+  "scripts/docs/README.md": "ddf69f2f1aedb6acf6235fae249525a1e8d93aa4761f6b11e3466af4b4ededb5",
+  "scripts/docs/generate.py": "8d5a4dafe26eb34dfcd68cd48320b29e65233ce22d571276a295e0497d084eda",
+  "scripts/docs/validate.mjs": "e2731bb6f79c6f874fcf8d2279d77f67806bdd12fb8c23c3aeed19279f2a620b",
+  "scripts/docs/validate.test.mjs": "c1a1d09b182c9d41efe2ee97c09219e62f28cab92c04aa45e4b0f20121f8e4af"
+}

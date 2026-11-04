@@ -1,0 +1,154 @@
+{
+  "task": "T83",
+  "status": "READY_FOR_INDEPENDENT_ROOT_REVIEW_AND_CONSOLIDATED_EXECUTION",
+  "frozenAtUtc": "2026-11-02T15:46:58.663785+00:00",
+  "sourceHeadAtFreeze": "441499d1be261f734cb00afbab516b094c8d84eb",
+  "sharedWorkingTreeDirty": true,
+  "ownedNewFiles": [
+    {
+      "path": "apps/web/src/sharing/generic-app-link.ts",
+      "sha256": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71"
+    },
+    {
+      "path": "apps/web/src/ui/GenericAppShare.tsx",
+      "sha256": "3109bb26a38a472078a6d4f2a18001ea3697ed4d215c530cf89dc61198fea248"
+    },
+    {
+      "path": "apps/web/test/generic-app-share.test.mjs",
+      "sha256": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee"
+    },
+    {
+      "path": "scripts/test-generic-app-share-browser.mjs",
+      "sha256": "3789d9cadd10e72cdced69c737eebb1117bf6ed59a3f5475d655c2d027b7ae43"
+    }
+  ],
+  "interface": {
+    "helper": "deriveGenericAppLink(entryModuleUrl: unknown): string | null",
+    "component": "GenericAppShare({ appLink }: { readonly appLink: string | null })",
+    "trustedComposition": "Root-owned main.tsx derives once from literal import.meta.url; App passes genericAppLink to Settings, which renders GenericAppShare. No current route/location/document.baseURI/imported helper URL fallback.",
+    "copySource": "Seven approved shell.shareApp* draft English keys added by root in existing catalog."
+  },
+  "implemented": [
+    "Canonical absolute HTTPS or exact HTTP localhost/127.0.0.1/[::1] module entry; known /src/main.tsx or /assets/index-hash.js suffix; legitimate deployment subpaths retained.",
+    "Unknown/non-string/oversized inputs, credentials, query/fragment, normalization, controls, backslashes, traversal, encoded separators, invalid encoding and nested decoding are rejected with null.",
+    "Always-visible labeled readonly selectable address, explicit Copy app address action, fixed manual fallback for clipboard absence/denial/errors; no permission query or clipboard access on component startup.",
+    "One physical clipboard promise admitted at a time; result publication requires the same link owner, mounted owner and click sequence. A\u2192B\u2192A replacement and unmount suppress delayed success.",
+    "No tracking/referral identifier, rewards, fees, app network request, guessed production host, trading permission or authority added."
+  ],
+  "verification": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/generic-app-share.test.mjs",
+      "exitCode": 0,
+      "result": "7/7 unit/render cases pass, with literal expected URL vectors and hostile/malformed controls. Initial helper/component absence RED logs retained.",
+      "raw": [
+        "helper.RED.log",
+        "helper.GREEN.log",
+        "component.RED.log",
+        "component.GREEN.log"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "result": "All four configurations passed after T82 owner repaired a concurrently observed Result<T> literal-type error. Original failure is preserved. Later concurrent source changes are listed separately.",
+      "raw": [
+        "typecheck.log",
+        "typecheck-final.log",
+        "ui-typecheck-final.log"
+      ]
+    },
+    {
+      "command": "PATH=/workspace/work/foundry-1.5.1:$PATH npm test",
+      "exitCode": 0,
+      "result": "1575/1575 tests passed, zero failures/skips/cancellations; 83862.716152 ms on the shared working tree. This is a recorded shared-tree run, not an exact-head final consolidated certification.",
+      "raw": [
+        "package-suite.log"
+      ]
+    },
+    {
+      "command": "P2P_SHARE_SCREENSHOT=/workspace/work/t83-app-share/native-denied-manual-final.png node --import ./scripts/test-support/register-tsx.mjs scripts/test-generic-app-share-browser.mjs",
+      "exitCode": 0,
+      "result": "Actual integrated default App at both nested and IPFS-style subpaths; native requested main assets/index-CHCnagG9.js; private query/initial trade route excluded; exact native clipboard; CDP permission denial preserves manual field; optional absent/error, delayed owner replacement and unmount controls; 320/768/1024/1440 CSS px geometry; zero product egress/API network calls/startup clipboard writes/permission queries/page errors. Screenshot inspected. Exact tested source graph and later shared-source differences retained.",
+      "raw": [
+        "browser-first.log",
+        "native-browser-receipt.json",
+        "browser-final.log",
+        "native-browser-receipt-final.json",
+        "native-denied-manual-final.png"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "result": "Clean"
+    }
+  ],
+  "finalBrowserObserved": {
+    "task": "T83",
+    "browser": "154.0.8037.57",
+    "ReleaseEnabled": 0,
+    "approvedRelease": false,
+    "actualAppConsumers": [
+      {
+        "base": "/nested/project/",
+        "actualEntryUrl": "http://127.0.0.1:35447/nested/project/assets/index-CHCnagG9.js",
+        "privateQueryAndInitialRouteExcluded": true,
+        "startupClipboardWrites": 0,
+        "startupPermissionQueries": 0,
+        "nativeCopyExact": true,
+        "manualKeyboardSelection": true,
+        "productNetworkCalls": 0
+      },
+      {
+        "base": "/ipfs/bafy-local-share-fixture/",
+        "actualEntryUrl": "http://127.0.0.1:35447/ipfs/bafy-local-share-fixture/assets/index-CHCnagG9.js",
+        "privateQueryAndInitialRouteExcluded": true,
+        "startupClipboardWrites": 0,
+        "startupPermissionQueries": 0,
+        "nativeCopyExact": true,
+        "manualKeyboardSelection": true,
+        "productNetworkCalls": 0
+      }
+    ],
+    "nativeClipboardDeniedManualFallback": true,
+    "delayedOwnerReplacementSuppressed": true,
+    "unmountedOwnerSuppressed": true,
+    "currentOwnerCopyConfirmed": true,
+    "privateExceptionNotRendered": true,
+    "absentClipboardManualFallback": true,
+    "unsupportedEntryFallback": true,
+    "productEgress": 0,
+    "pageErrors": 0
+  },
+  "sourceAndDependencyHashes": {
+    "path": "/workspace/work/t83-app-share/source-and-dependency-hashes.json",
+    "sha256": "db4ce88171b4f1db9b034a1dc901a97757ed89b9137d460730749244dfa50081",
+    "testedCompiledSourceFiles": 75,
+    "testedEmittedAssets": 9,
+    "ownedSourceDriftAtFreeze": false,
+    "concurrentSharedSourceDriftAtFreeze": [
+      {
+        "path": "apps/web/src/ui/FavoriteSavedReviews.tsx",
+        "testedSha256": "9539ed7228496c7d99ebf53b8cec05bcb907717266c7ee6fc15fdb55ce3765ee",
+        "currentSha256": "556708259381c4a5bd5795bc233a2a4317eebfbe0be6c0ca6e715b5151bb025a"
+      },
+      {
+        "path": "apps/web/src/ui/locale/en.ts",
+        "testedSha256": "802dea2a1c924ec4c9c58554c3d2aefec436852e4aba1975c8a8a528bb68fa98",
+        "currentSha256": "17220b97188003f10f3e677b5738e36beb0cc59846a05152baa9e5e4deacc176"
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "testedSha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9",
+        "currentSha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55"
+      }
+    ]
+  },
+  "cleanup": "Native browser runner closes its owned contexts/browser, closes only its loopback server/connections and removes only its mkdtemp build/fixture tree in finally. Screenshot/evidence intentionally retained under task-owned work directory.",
+  "scope": [
+    "Only the four new owned files were created by this agent; no existing source/catalog/CI/ledger edit or commit. Root owns the actual main\u2192App\u2192Settings integration and catalog keys.",
+    "Other coordinated work changed shared dependencies after this passing native run; those differences are explicit above. Root will independently execute the maintained harness and aggregate checks against consolidated source. No T83 source repair is pending.",
+    "Browser evidence covers the desktop Chromium product context, not unrelated browser background services, deployed hosting authenticity or physical-device qualification.",
+    "T78 packet remains intact: FROZEN-SHA256SUMS.txt SHA256 7fc1aa23fa8419359da8bdbe5bd54fa7d53779b2aab2a54ef77bf7c143dc4efc. Trading stays disabled."
+  ]
+}

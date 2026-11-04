@@ -1,0 +1,495 @@
+{
+  "schema": "p2p-offramp/final-native-evidence-review/v1",
+  "status": "ELEVEN_SCOPED_COMMAND_LOGS_CONSISTENT_NO_ISSUE_FOUND",
+  "observedAtUtc": "2026-11-02T18:37:06.878715+00:00",
+  "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+  "currentSourceHeadMatches": true,
+  "workingTreeAndSubmodulesClean": true,
+  "independentReviewer": "review_intakes; read-only evidence/binding review",
+  "findings": [],
+  "runLedger": {
+    "path": "/workspace/work/t38-final-native-results.json",
+    "bytes": 3702,
+    "sha256": "e7b220fb7437e419da8a9472ecc20a69a3ad198a79cd3e77e2c3e74fdadf2588"
+  },
+  "logCount": 11,
+  "allRecordedExitsZero": true,
+  "allLogHashesIndependentlyRecomputed": true,
+  "allStdoutCommandsMatchCommittedNpmScripts": true,
+  "logs": [
+    {
+      "index": 1,
+      "command": [
+        "npm",
+        "run",
+        "test:evm:local"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 1.564136266708374,
+      "log": {
+        "path": "/workspace/work/t38-final-native-1.log",
+        "bytes": 1184,
+        "sha256": "273a4840c3e3aa3426bae35f1e6f982a7ac56cc0b2231316622746bb263ff2ed"
+      },
+      "completedScopedResults": {
+        "localChecks": 8,
+        "scope": "Own loopback Anvil canonical escrow/native/ERC20 trade, release/refund/immutable payout/deferred credit and negative authorization/replay controls."
+      }
+    },
+    {
+      "index": 2,
+      "command": [
+        "npm",
+        "run",
+        "test:exchange:evm"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-exchange-evm-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 5.840922594070435,
+      "log": {
+        "path": "/workspace/work/t38-final-native-2.log",
+        "bytes": 2298,
+        "sha256": "46b917df97435f982abaf4f1a03480156b3b451b3ec3881509af211d4f7143af"
+      },
+      "completedScopedResults": {
+        "localChecks": 12,
+        "scope": "Canonical encrypted exchange/relay/journal/escrow; 5 negotiated,2 settled orders,4 submissions/4 durable markers,4 chat messages/2 reopens/1 fresh-key recovery; actual read-only journey128reads/0send-sign.",
+        "limitations": "Controlled local carrier/chain; no external network,trading or release acceptance."
+      }
+    },
+    {
+      "index": 3,
+      "command": [
+        "npm",
+        "run",
+        "test:payment:preflight"
+      ],
+      "committedNpmCommand": "node --test scripts/tests/fixture-receipt.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-payment-preflight-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 1.3281199932098389,
+      "log": {
+        "path": "/workspace/work/t38-final-native-3.log",
+        "bytes": 2092,
+        "sha256": "7fe44fc4a3d3ea8958b9cc242332662a7519a5005e90ab7f866ffd8c2eddf93c"
+      },
+      "completedScopedResults": {
+        "nodeNamedCases": 6,
+        "localChecks": 7,
+        "scope": "Same-hash receipt budget controls then native finalized/latest preflight with 901/900 boundary, reorg/expiry/identity refusal and independent refund exit;163adapterreads/0send-sign."
+      }
+    },
+    {
+      "index": 4,
+      "command": [
+        "npm",
+        "run",
+        "test:evm:reconcile"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 4.7224225997924805,
+      "log": {
+        "path": "/workspace/work/t38-final-native-4.log",
+        "bytes": 1581,
+        "sha256": "08754773888141d9d0fd4dce59d732579ccdb1f6d7f5495e319e417e31cf2959"
+      },
+      "completedScopedResults": {
+        "localChecks": 9,
+        "scope": "Actual process-kill unknown broadcast recovery, replacement/drop/finality and terminal native retention. Still-funded/deferred-credit/missing closure protect; zero-credit copy-only CAS preserves source with no sends/reconciliation writes."
+      }
+    },
+    {
+      "index": 5,
+      "command": [
+        "npm",
+        "run",
+        "test:recovery:evm"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/evm-recovery.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-recovery-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 5.107354640960693,
+      "log": {
+        "path": "/workspace/work/t38-final-native-5.log",
+        "bytes": 2747,
+        "sha256": "ce57441886d9ed4d196fdaff2bcc3919ab71a909bddf70ea39b56c0ec53565fb"
+      },
+      "completedScopedResults": {
+        "nodeNamedCases": 12,
+        "localChecks": 6,
+        "scope": "Bounded portable recovery/path/cancel controls then copied-outside-checkout Node-alone original escrow exit after release-manifest expiry;141read-only runtime calls/0send-sign.",
+        "limitations": "Separate fixture wallet sends exits; runtime prepares unsigned bound exits only."
+      }
+    },
+    {
+      "index": 6,
+      "command": [
+        "npm",
+        "run",
+        "test:sepolia:kit"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs scripts/tests/deployment-record.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 9.066123247146606,
+      "log": {
+        "path": "/workspace/work/t38-final-native-6.log",
+        "bytes": 4017,
+        "sha256": "a2e74e4e6379153b1f146cd4e8afbced5e2f7163332384a48e3ff9e0a0f48a32"
+      },
+      "completedScopedResults": {
+        "nodeNamedCases": 18,
+        "localChecks": 11,
+        "scope": "Deployment/hygiene/native canonical inclusion/guard/compiler controls and real local Sepolia CLI kit, recorded attempts, signed test registry/rollback and path/private-diagnostic tests.",
+        "limitations": "Sepolia-specific CLIs tested on owned loopback native fixture, not external Sepolia/production."
+      }
+    },
+    {
+      "index": 7,
+      "command": [
+        "npm",
+        "run",
+        "test:sepolia:trade"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-trade-state.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-trade-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 6.858590841293335,
+      "log": {
+        "path": "/workspace/work/t38-final-native-7.log",
+        "bytes": 3171,
+        "sha256": "c52ec76d0800fc87866356cc48c53c438125119e82d1ab8e6a7c7f14cd1a973d"
+      },
+      "completedScopedResults": {
+        "nodeNamedCases": 12,
+        "localChecks": 13,
+        "scope": "Per-kind durable no-resend controls and actual signed trade CLI lifecycle. Mined late release has native status0x0/TX_REVERTED and saved hash; next run performs first distinct timeout refund. Nonce delta exactly5 is asserted: fund,failed release,fund,refund,refund.",
+        "sourceEvidence": [
+          {
+            "path": "scripts/test-sepolia-trade-local.mjs",
+            "line": 190
+          },
+          {
+            "path": "scripts/test-sepolia-trade-local.mjs",
+            "line": 207
+          },
+          {
+            "path": "scripts/test-sepolia-trade-local.mjs",
+            "line": 212
+          }
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "command": [
+        "npm",
+        "run",
+        "test:eip1271:local"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-eip1271-local.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 1.2688956260681152,
+      "log": {
+        "path": "/workspace/work/t38-final-native-8.log",
+        "bytes": 919,
+        "sha256": "b37fd27670be5fa4d8e0fcc596febf9baae0eac8b1e47ea42b7dc43e83a2cbae"
+      },
+      "completedScopedResults": {
+        "localChecks": 5,
+        "scope": "Actual contract-wallet EIP1271 ABI-magic/state/terms/reorg/revert/short-oversized/gas/EOA refusal;90adapterreads/0send-sign.",
+        "limitations": "Owned contract-wallet fixture, not arbitrary wallet acceptance."
+      }
+    },
+    {
+      "index": 9,
+      "command": [
+        "npm",
+        "run",
+        "test:journey:browser"
+      ],
+      "committedNpmCommand": "node scripts/test-journey-browser.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 42.24908423423767,
+      "log": {
+        "path": "/workspace/work/t38-final-native-9.log",
+        "bytes": 2203,
+        "sha256": "41a4c64060e96413e9febcfe29645a6f4031481d6e6b93eb74187810b830e341"
+      },
+      "completedScopedResults": {
+        "scope": "Actual UI -> selected Worker/vault -> crypto/relay/journal/native escrow; native and ERC20.",
+        "nativeSubmissions": 11,
+        "nativeSignatures": 16,
+        "explicitSigningReviews": 32,
+        "sameBrokerModes": {
+          "actualSelectorUsesSameWorkerSequence": true,
+          "sameActualBrokerForBothPools": true,
+          "actualCapturedScopesRetired": true,
+          "strictRefusesBothDirectPools": true,
+          "ordinaryRequiresFreshAcknowledgement": true,
+          "selectionStartsZeroRpcOrSockets": true,
+          "ignoredCloseCapacityRetainedAcrossModeAndProfile": true,
+          "actualCloseReleasesPhysicalTokens": true,
+          "explicitFixtureRenewalPreservesStrictAndOldRevocation": true,
+          "rpcAndWalletUnknown": true,
+          "heldWalletModeChangesRetainAdmission": true,
+          "durableUnknownMarkerSurvivesModeChanges": true
+        },
+        "sourceEvidence": [
+          {
+            "path": "scripts/test-journey-browser.mjs",
+            "line": 43
+          },
+          {
+            "path": "scripts/test-journey-browser.mjs",
+            "line": 60
+          },
+          {
+            "path": "scripts/test-journey-browser.mjs",
+            "line": 67
+          },
+          {
+            "path": "scripts/test-journey-browser.mjs",
+            "line": 128
+          }
+        ],
+        "limitations": "One actual broker/two controlled relay pools, ordinary fresh acknowledgement/strict direct denial, old capture retirement and held physical closes/unknown markers; RPC/wallet routing remains unknown, production peer carrier false."
+      }
+    },
+    {
+      "index": 10,
+      "command": [
+        "npm",
+        "run",
+        "test:retention:browser"
+      ],
+      "committedNpmCommand": "node scripts/test-retention-browser.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 11.86105489730835,
+      "log": {
+        "path": "/workspace/work/t38-final-native-10.log",
+        "bytes": 101487,
+        "sha256": "c60d3bffc67862248fec074f6435b8521bfc93d6c3076d8947ac56267168faa7"
+      },
+      "completedScopedResults": {
+        "localCases": 15,
+        "scope": "Actual Chromium/Worker encrypted IndexedDB native-asset mixed retention closure. Deferred credit/unknown credit or anchor protect; finalized zero-credit closure authenticates journal/terms/NIP17. Cancel/lock/stale second-worker revision/unknown-future-foreign-imported-large dependencies preserve complete closure; one explicit consented CAS deletes4copies retaining1identity, old backup unchanged and fresh-key restore reintroduces its5records without changing deleted source.",
+        "explicitSeedSends": 2,
+        "explicitFixtureWithdrawalPhaseCalls": 2,
+        "withdrawalPhaseMeaning": "One fixture receiver setAccept(true) transaction followed by one actual withdraw transaction; these explicit setup calls are separate from review/deletion.",
+        "reviewDeleteSends": 0,
+        "unchangedNativeSignerNonces": true,
+        "nativeReconciliationJournalPutWrites": 0,
+        "reviewRPCs": 181,
+        "deleteRPCs": 53,
+        "externalRequests": 0,
+        "reportedCleanup": {
+          "browserClosed": true,
+          "serverClosed": true,
+          "ownedAnvilPid": 185620,
+          "anvilExited": true,
+          "temporaryDirectoryRemoved": true
+        },
+        "sourceEvidence": [
+          {
+            "path": "scripts/test-retention-browser.mjs",
+            "line": 162
+          },
+          {
+            "path": "scripts/test-retention-browser.mjs",
+            "line": 193
+          },
+          {
+            "path": "scripts/test-retention-browser.mjs",
+            "line": 213
+          },
+          {
+            "path": "scripts/test-retention-browser.mjs",
+            "line": 220
+          }
+        ],
+        "limitations": [
+          "Local Chromium/Anvil native asset fixture only; no ERC20/Solana/device/production acceptance.",
+          "Clock/identity/deletion mechanics have separate unit coverage; no memory-erasure or off-device retention claim."
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "command": [
+        "npm",
+        "run",
+        "test:distribution:browser"
+      ],
+      "committedNpmCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/distribution/browser.test.mjs",
+      "stdoutMatchesCommittedCommand": true,
+      "recordedExitCode": 0,
+      "sourceHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "reportedSeconds": 4.763794898986816,
+      "log": {
+        "path": "/workspace/work/t38-final-native-11.log",
+        "bytes": 1163,
+        "sha256": "08c115f2e802ca47e19cad264e853e852d861141297f7aecc67909acf84ec581"
+      },
+      "completedScopedResults": {
+        "nodeNamedCases": 1,
+        "nestedLocalChecks": 3,
+        "scope": "Awaited actual unsigned distribution browser test: nested default client/native Worker reload, scriptless portal exact original downloads and byte-exact unpublished wiki/public dependency material;39assets,2buildpasses,0unexpectedrequests.",
+        "awaitedEvidence": "Source top-level await test(...); raw TAP includes1pass/0fail/0skip after test completion. Finally awaits browser/server close and removes owned temporary output.",
+        "sourceEvidence": [
+          {
+            "path": "scripts/distribution/browser.test.mjs",
+            "line": 15
+          },
+          {
+            "path": "scripts/distribution/browser.test.mjs",
+            "line": 59
+          }
+        ],
+        "limitations": {
+          "localHeaderFixture": true,
+          "hostHeadersVerified": false,
+          "independentDistributionWitness": false,
+          "signedRelease": false,
+          "releaseEnabled": false,
+          "published": false
+        }
+      }
+    }
+  ],
+  "sourceAndDependencyBindings": {
+    "retentionRecordedInputs": 596,
+    "allCurrentInputBytesMatchLog": true,
+    "rootTrackedInputsAgainstGitShowA2": 112,
+    "vendorInputsAgainstPinnedSubmoduleGitShow": 454,
+    "cleanRecursiveSubmodulePins": 5,
+    "installedModuleInputsAgainstCurrentBytes": 30,
+    "all128RenderedModuleSourcesIncludedInBindings": true,
+    "installedMetadataVersionsMatchCommittedLock": [
+      {
+        "name": "@noble/ciphers",
+        "version": "2.4.0",
+        "lockedIntegrity": "sha512-AnjFn0Jv92laAkvMrghlFZq4qQCIN/4DxFV/eooqtC2YTjB7kBeLMS2T9KJX4Dn+ZVXLOwK0lSgqDtx9gvxtiw==",
+        "loggedModuleFiles": 4,
+        "installedVersionMatchesCommittedLock": true
+      },
+      {
+        "name": "@noble/curves",
+        "version": "2.4.0",
+        "lockedIntegrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+        "loggedModuleFiles": 9,
+        "installedVersionMatchesCommittedLock": true
+      },
+      {
+        "name": "@noble/hashes",
+        "version": "2.4.0",
+        "lockedIntegrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+        "loggedModuleFiles": 7,
+        "installedVersionMatchesCommittedLock": true
+      },
+      {
+        "name": "react",
+        "version": "19.3.1",
+        "lockedIntegrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==",
+        "loggedModuleFiles": 4,
+        "installedVersionMatchesCommittedLock": true
+      },
+      {
+        "name": "react-dom",
+        "version": "19.3.1",
+        "lockedIntegrity": "sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==",
+        "loggedModuleFiles": 4,
+        "installedVersionMatchesCommittedLock": true
+      },
+      {
+        "name": "scheduler",
+        "version": "0.28.0",
+        "lockedIntegrity": "sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==",
+        "loggedModuleFiles": 2,
+        "installedVersionMatchesCommittedLock": true
+      }
+    ],
+    "entrypointFixtureAndLockBindingsAgainstGitShowA2": 17,
+    "sourceBindings": {
+      "path": "/workspace/work/t38-final-native-source-bindings.json",
+      "bytes": 372751,
+      "sha256": "a038eaa73b66d3204d128060e3479df9398b8c1099705fa6420ffaf62fcccd78"
+    },
+    "dependencyBindings": {
+      "path": "/workspace/work/t38-final-native-dependency-bindings.json",
+      "bytes": 169388,
+      "sha256": "2a70ffa17d2e753cd3e52c20987521c6512a510cd459534f4ecbc83ed7e0f45a"
+    },
+    "commandBindings": {
+      "path": "/workspace/work/t38-final-native-command-bindings.json",
+      "bytes": 2792,
+      "sha256": "d84d109ad17af7c95a8564caafa2817e6550e601e4cc76af77c0e688edf8029d"
+    },
+    "retentionToolchainAsReported": {
+      "forgeVersion": "1.5.1-v1.5.1",
+      "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+      "solcVersion": "0.8.30",
+      "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+    },
+    "retentionRuntimeAsReported": {
+      "node": "v24.22.1",
+      "playwright": "1.64.1",
+      "vite": "8.3.5"
+    },
+    "retainedSolcExecutable": {
+      "path": "/workspace/work/foundry-1.5.1/solc-0.8.30",
+      "bytes": 16791816,
+      "sha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+    },
+    "retainedSolcExecutableMatchesLoggedHash": true,
+    "emittedAssets": "Three temporary emitted retention asset hashes are recorded in the raw log. Output was removed by successful cleanup, so their bytes were not independently rehashed here or compared to git."
+  },
+  "earlierRootPackageReuse": {
+    "originalRunSource": "a1cda134f9f33dd3a39e07c3915b9a71331e9020",
+    "rootReportedEarlierNamedCases": 1712,
+    "capture": {
+      "path": "/workspace/work/t38-root-package-source-hashes.json",
+      "bytes": 56658,
+      "sha256": "bb7034bc09888de12a724e80bce35913cef5cc506a47fdf08293dfd4c090117d"
+    },
+    "independentGuardRows": 502,
+    "allRowsMatchOriginalA1cCurrentA2AndWorkingTree": true,
+    "comparison": {
+      "path": "/workspace/work/t38-final-native-package-reuse-bindings.json",
+      "bytes": 122697,
+      "sha256": "0f17a91888b0b077ed4ca35a306c9607c26663384b1e1746d5749bec2a3e6b14"
+    },
+    "interpretation": "Unchanged-source evidence reuse from the earlier a1cda13 run. The1712-case root package run was not rerun or represented as having occurred at a2."
+  },
+  "scopeLimits": [
+    "Exit values are the root run-ledger records; this reviewer recomputed raw log hashes, checked completed assertion/results and source/dependency identity, and did not rerun commands or independently recreate their process exit events.",
+    "Retention is native asset only; no ERC20/Solana/mobile/physical secure-erasure/off-device acceptance. Its explicit seed/withdrawal fixture calls are not counted as review/delete sends.",
+    "Native journey covers local native/ERC20 mechanics with a controlled peer/relay, selected vault/real Worker and actual Anvil calls. Production carrier/RPC/wallet privacy qualification remains absent; mode selection does not qualify external providers.",
+    "Distribution is an unsigned owned-local header/nested-path smoke. Published host headers, authenticated distribution witness, signed release, physical devices and enabled production operation remain unestablished.",
+    "Current installed dependency bytes/versions and pinned submodule commits match observed logs. No fresh install, independent SRI archive/source derivation, dependency audit or professional provider certification was performed.",
+    "Original RED/failed/UNKNOWN evidence was not changed, deleted, rerun into green or counted as current passes. Expected native TX_REVERTED remains an explicit successful negative control; historical dirty-source/fresh-lab/intake/formal limits keep their original scope.",
+    "Clean current source and finite native logs do not certify future exact-head hosting/merge, fresh-lab results, external reviews or absence of every defect. Root retains final local packet and delivery ownership."
+  ],
+  "testsRerunByReviewer": false,
+  "sourceOrLedgerEdits": false,
+  "logEdits": false,
+  "commits": false
+}
