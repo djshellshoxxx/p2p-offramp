@@ -1,0 +1,353 @@
+{
+  "format": "p2p-public-sdk-evaluation-v1",
+  "profile": "t75-waku-20261102",
+  "packageSha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314",
+  "lockSha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d",
+  "rootLockSha256AtIntake": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+  "installedTree": {
+    "entries": 410,
+    "regularFiles": 410,
+    "symlinks": 0,
+    "bytes": 1566598,
+    "sha256": "02500d8676526b725646279b3d09fa2423fd9b9c267d8aaa23bd1725eedf7c92"
+  },
+  "registryKeys": {
+    "utf8": "{\"keys\":[{\"expires\":\"2025-01-29T00:00:00.000Z\",\"keyid\":\"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1Olb3zMAFFxXKHiIkQO5cJ3Yhl5i6UPp+IhuteBJbuHcA5UogKo0EWtlWwW6KSaKoTNEYL7JlCQiVnkhBktUgg==\"},{\"expires\":null,\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY6Ya7W++7aUPzvMTrezH6Ycx3c+HOKYCcNGybJZSCJq/fd7Qa8uuAKtdIkUQtQiEKERhAmE5lMMJhP8OkDOa2g==\"}]}",
+    "sha256": "faf23d8753d5bb79df250f10391ac89b63ecf7743e48487a544a99c847f9c8df"
+  },
+  "packages": [
+    {
+      "path": "node_modules/@waku/proto",
+      "name": "@waku/proto",
+      "version": "0.0.15",
+      "integrity": "sha512-eroYnBHtMCJBvybUcjF+m5e8fdbNCV6EbRJY3bcjx8bmLHId3sXyhAfObPl62ZZfcekHRZ5lYYzw4HbKv0Ynng==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@waku/proto/-/proto-0.0.15.tgz",
+        "bytes": 54339,
+        "sha256": "7e03320e7858e8c35c4e5444b05b621efdc3fcf2ca298f39f799b39ac3253351"
+      },
+      "metadataSha256": "a0a41e339845152c0ce7112988cebd94e5168a5fe86cd72db86f519e9bba5152",
+      "gitHeadUnsigned": "101ffe8a04c7eae5155c93823c935bc5ec90941f",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIHq55FPjbDORwoMohYlYl6xxeL3E/dCslgiFtARTAkVHAiA0Z6q7PdjfbVQ8/t1ckfn16Z9TyPKaf/DVcxb6K+bYVw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT OR Apache-2.0",
+        "archiveFiles": [],
+        "upstream": [
+          {
+            "key": "waku-proto-0.0.15",
+            "repo": "logos-messaging/logos-delivery-js",
+            "commit": "101ffe8a04c7eae5155c93823c935bc5ec90941f",
+            "file": "LICENSE-MIT",
+            "url": "https://github.com/logos-messaging/logos-delivery-js/blob/101ffe8a04c7eae5155c93823c935bc5ec90941f/LICENSE-MIT",
+            "bytes": 1101,
+            "sha256": "7bc4143a4b95e5219948d6b7b0fa364a84edbf7b115ea14fc63bf8ffb0afba7d",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          },
+          {
+            "key": "waku-proto-0.0.15",
+            "file": "LICENSE-APACHE-v2",
+            "url": "https://github.com/logos-messaging/logos-delivery-js/blob/101ffe8a04c7eae5155c93823c935bc5ec90941f/LICENSE-APACHE-v2",
+            "bytes": 11365,
+            "sha256": "2aa098717c690eda021ea16ce49a05ecb651c61797845b3acabb4b63aef104a6",
+            "source": "Exact published unsigned gitHead repository snapshot; separate from archive license files."
+          }
+        ],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/multiformats",
+      "name": "multiformats",
+      "version": "13.4.2",
+      "integrity": "sha512-eh6eHCrRi1+POZ3dA+Dq1C6jhP1GNtr9CRINMb67OKzqW9I5DUuZM/3jLPlzhgpGeiNUlEGEbkCYChXMCc/8DQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/multiformats/-/multiformats-13.4.2.tgz",
+        "bytes": 90194,
+        "sha256": "5ca2baf802519df7c62709b9b5d96b4f37296bbe009464845c0552a37e7cc93a"
+      },
+      "metadataSha256": "731566a55eb08c16a8ac51d1a56fc629241a3dd1efeb470ed4650de5a26e4e93",
+      "gitHeadUnsigned": "f020212074aeb188e383e009a50e2ca416581a5b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIApJedt1IRtruK0QwPilfE9gtXgWpZYuVdsiFI8kK1Z9AiEAgzU5Nn35grpVKdMe9X150N2vn8JaR1qHBqiN9QlrJ/U=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0 OR MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 158,
+            "sha256": "9c17f5c830232d45eab60e1bdc8f5cb4df631ddf56fe29aeced3009256e544b0"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/protons-runtime",
+      "name": "protons-runtime",
+      "version": "5.6.0",
+      "integrity": "sha512-/Kde+sB9DsMFrddJT/UZWe6XqvL7SL5dbag/DBCElFKhkwDj7XKt53S+mzLyaDP5OqS0wXjV5SA572uWDaT0Hg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/protons-runtime/-/protons-runtime-5.6.0.tgz",
+        "bytes": 74681,
+        "sha256": "92381fffc881f1ee857c03fe3802a6d2b3f0983b64d06349194c353c6ac21971"
+      },
+      "metadataSha256": "6c99b9435fbcff362587c66e3c25e07a032180a2b9ec9845246d92c7f0ef4b1b",
+      "gitHeadUnsigned": "2936ab473ace9df2ae755ba12df17be4cb4f06c2",
+      "registrySignatures": [
+        {
+          "sig": "MEQCICn/+5FGdUI8WIONh+bc4SaOaZnd9MnM8D5vBcKLI9fZAiBTnF7k/onLsO1F+WBetXeeOeD68lgfhgGT2qwC/OKirg==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0 OR MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 158,
+            "sha256": "9c17f5c830232d45eab60e1bdc8f5cb4df631ddf56fe29aeced3009256e544b0"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/uint8-varint",
+      "name": "uint8-varint",
+      "version": "2.0.5",
+      "integrity": "sha512-jeFLbL/x30wBRnWjKE1qVBXeumG46r7XmYkpis955lTQ+blccGKFrOsSMHlxePwYB1pI7L8YPHz1t4jLxEs3nA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/uint8-varint/-/uint8-varint-2.0.5.tgz",
+        "bytes": 6877,
+        "sha256": "9ec4bc00fdcdfb0cbf49d6d69caddb49e850df047ff8e0f072302b931db04811"
+      },
+      "metadataSha256": "080857274529b25f9adea7479e884ce6cce049fc843cfc5ed1ba246bead64902",
+      "gitHeadUnsigned": "c1d43b6c614d72cb0e3fc29ed4f13b6608ee58fd",
+      "registrySignatures": [
+        {
+          "sig": "MEUCID3SKM/pT+CisIwfZHTEsObQz2IFCIjc+s4YIRkckb5dAiEA6b9JO8mdMIXdr+hBT0elBPoeSFla9pcQkM1w/A0Wito=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0 OR MIT",
+        "archiveFiles": [],
+        "upstream": [
+          {
+            "key": "uint8-varint-2.0.5",
+            "repo": "achingbrain/uint8-varint",
+            "commit": "c1d43b6c614d72cb0e3fc29ed4f13b6608ee58fd",
+            "file": "LICENSE-MIT",
+            "url": "https://github.com/achingbrain/uint8-varint/blob/c1d43b6c614d72cb0e3fc29ed4f13b6608ee58fd/LICENSE-MIT",
+            "bytes": 1046,
+            "sha256": "8f71659370c5268d9a1dc962a46232540e8fca63462586d8efaa95aab492a208",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          },
+          {
+            "key": "uint8-varint-2.0.5",
+            "repo": "achingbrain/uint8-varint",
+            "commit": "c1d43b6c614d72cb0e3fc29ed4f13b6608ee58fd",
+            "file": "LICENSE-APACHE",
+            "url": "https://github.com/achingbrain/uint8-varint/blob/c1d43b6c614d72cb0e3fc29ed4f13b6608ee58fd/LICENSE-APACHE",
+            "bytes": 11324,
+            "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          }
+        ],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/uint8arraylist",
+      "name": "uint8arraylist",
+      "version": "2.4.9",
+      "integrity": "sha512-KxWjyEFzchzik3aoQlK66oaoxIReoMo5bQRm1fcjBUZvE8xv/tyR3CTKhjh6K/faV8VaF6hd5pjr45CzbwuwkA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/uint8arraylist/-/uint8arraylist-2.4.9.tgz",
+        "bytes": 21138,
+        "sha256": "07451a219e2635ab1a9baea833b0117a7d559c84e1efe22d29174e61bea021c7"
+      },
+      "metadataSha256": "8b73172f01f6e5412ac9d92aff14f1a45bceff0febea2cf3a3d73b1349225eeb",
+      "gitHeadUnsigned": "b12ce3e1b6cd04fb16cd8251704208f11056616c",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIEWM3yAmGaAaYXH/l7MXCjKtgAIl1SgYCwth+HU/l1IkAiEAouelpyyyWn3KKGUYM/CnZQtPXMjiB7/crTBO6QoNxeM=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0 OR MIT",
+        "archiveFiles": [],
+        "upstream": [
+          {
+            "key": "uint8arraylist-2.4.9",
+            "repo": "achingbrain/uint8arraylist",
+            "commit": "b12ce3e1b6cd04fb16cd8251704208f11056616c",
+            "file": "LICENSE-MIT",
+            "url": "https://github.com/achingbrain/uint8arraylist/blob/b12ce3e1b6cd04fb16cd8251704208f11056616c/LICENSE-MIT",
+            "bytes": 1046,
+            "sha256": "8f71659370c5268d9a1dc962a46232540e8fca63462586d8efaa95aab492a208",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          },
+          {
+            "key": "uint8arraylist-2.4.9",
+            "repo": "achingbrain/uint8arraylist",
+            "commit": "b12ce3e1b6cd04fb16cd8251704208f11056616c",
+            "file": "LICENSE-APACHE",
+            "url": "https://github.com/achingbrain/uint8arraylist/blob/b12ce3e1b6cd04fb16cd8251704208f11056616c/LICENSE-APACHE",
+            "bytes": 11324,
+            "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          }
+        ],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/uint8arrays",
+      "name": "uint8arrays",
+      "version": "5.1.1",
+      "integrity": "sha512-9muQwa4wZG4dKi9gMAIBtnk2Pw87SRpvWTH6lOGm19V2Uqxr4uomUf2PGqPnWc+qs06sN8owUU4jfcoWOcfwVQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/uint8arrays/-/uint8arrays-5.1.1.tgz",
+        "bytes": 43956,
+        "sha256": "293f2aff65af042d33f907241f42487ce76d516306ab5507a616f952f4b3d222"
+      },
+      "metadataSha256": "2dba9dbe2d220db7a27467e4a4360c6461232575a501304ad7fe42716bfaf79b",
+      "gitHeadUnsigned": "f8983fae082a53fd073b7c03a5e3a761e6483ffb",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDZ1sZiTwtE22Bs3U3hVUP0VSE/YRfEeg87ItqwIuaHmQIhAKZDaGDNxveTxK8tnxxMEVFmOrBpcwlY4SeEOxTj7jqP",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0 OR MIT",
+        "archiveFiles": [],
+        "upstream": [
+          {
+            "key": "uint8arrays-5.1.1",
+            "repo": "achingbrain/uint8arrays",
+            "commit": "f8983fae082a53fd073b7c03a5e3a761e6483ffb",
+            "file": "LICENSE-MIT",
+            "url": "https://github.com/achingbrain/uint8arrays/blob/f8983fae082a53fd073b7c03a5e3a761e6483ffb/LICENSE-MIT",
+            "bytes": 1046,
+            "sha256": "8f71659370c5268d9a1dc962a46232540e8fca63462586d8efaa95aab492a208",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          },
+          {
+            "key": "uint8arrays-5.1.1",
+            "repo": "achingbrain/uint8arrays",
+            "commit": "f8983fae082a53fd073b7c03a5e3a761e6483ffb",
+            "file": "LICENSE-APACHE",
+            "url": "https://github.com/achingbrain/uint8arrays/blob/f8983fae082a53fd073b7c03a5e3a761e6483ffb/LICENSE-APACHE",
+            "bytes": 11324,
+            "sha256": "50e6751797c50dedd75ef1b8a0d9e42f5f8472e9fbce91f34718e9f97b0c780a",
+            "source": "Exact published unsigned gitHead repository license snapshot; separate from an archive-shipped license."
+          }
+        ],
+        "missingFullLicenseText": false
+      }
+    }
+  ],
+  "sourceBindings": [
+    {
+      "url": "https://github.com/logos-messaging/logos-delivery-js/blob/0ca94f3c8beda0fba2962c3daae17b3ec689ae49/packages/proto/src/generated/message.ts",
+      "artifactPath": "package/src/generated/message.ts",
+      "bytes": 6837,
+      "sha256": "6068677b859fbf0c5ce01c992b2d9c19edb0e898b3a9de30eca9521f291918af",
+      "exactT50SourceCommitMatch": true,
+      "installedPath": "@waku/proto/src/generated/message.ts"
+    },
+    {
+      "url": "https://github.com/logos-messaging/logos-delivery-js/blob/0ca94f3c8beda0fba2962c3daae17b3ec689ae49/packages/proto/src/generated/store_v3.ts",
+      "artifactPath": "package/src/generated/store_v3.ts",
+      "bytes": 16179,
+      "sha256": "5e04e798f80fa0235796aa2a894d59ed98bc09a001069e2a197b63bd5c14571b",
+      "exactT50SourceCommitMatch": true,
+      "installedPath": "@waku/proto/src/generated/store_v3.ts"
+    }
+  ],
+  "pinnedFiles": [
+    {
+      "path": "@waku/proto/dist/index.js",
+      "bytes": 777,
+      "sha256": "cd5617e1c612528cc262ce3582109accd800619bff7e0615ff2db20c0a756df6"
+    },
+    {
+      "path": "@waku/proto/dist/generated/message.js",
+      "bytes": 8023,
+      "sha256": "a9d77340567ccbf9013d4a1dfe3c0e6e78f65db8618592872f91e7bd1f4d0b26"
+    },
+    {
+      "path": "@waku/proto/dist/generated/store_v3.js",
+      "bytes": 19143,
+      "sha256": "9e38c3eb441e992a688663c3bbd19b31bece70d184158399682b4260f87e4bc4"
+    }
+  ],
+  "audit": {
+    "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 7,\n      \"dev\": 0,\n      \"optional\": 0,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 6\n    }\n  }\n}\n",
+    "sha256": "b966435ec31b7d61483d849d853d936f86183d654661604e532f1be934735a79",
+    "exitCode": 0,
+    "scope": "Entire resolved lock; no package omissions, overrides or scanner exclusions."
+  },
+  "limits": {
+    "cpu": 1,
+    "memoryBytes": 268435456,
+    "pids": 64,
+    "runtimeMs": 30000,
+    "outputBytes": 65536
+  },
+  "qualification": {
+    "publicFixtureOnly": true,
+    "productionProvider": false,
+    "currentSigningTrustRoot": false,
+    "applicationProtocolSelected": false,
+    "walletSessionOrCallbackAuthenticated": false,
+    "g05RoutingQualified": false,
+    "sdkLifecycleQualified": false,
+    "professionalReview": false,
+    "releaseEnabled": false
+  },
+  "notes": [
+    "Registry signatures bind name@version:integrity, not unsigned gitHead/source/license metadata or source-to-bundle equivalence. Exact source byte comparisons are separate.",
+    "Expired legacy assertions are mathematical historical evidence only, never a currently valid key, waiver or application trust policy.",
+    "WalletConnect Community License and missing uint8arrays3.1.1 full text remain explicit licensing/adoption limits; this is finite public function research, not commercial/legal approval."
+  ],
+  "observedConformance": {
+    "disposition": "UNSUPPORTED_COMPLETE_SINT64_ENCODING",
+    "tests": 14,
+    "passed": 13,
+    "failed": 1,
+    "failedInput": "-9223372036854775808",
+    "oracleField10Hex": "50ffffffffffffffffff01",
+    "actualField10Hex": "5080808080e0ffffffff01",
+    "oracleDecodeCorrect": true,
+    "sdkOwnEncodingDecoded": "9223372032559808512",
+    "expectationWeakened": false,
+    "independentOracleSha256": "c77e0f2a97a5bba096d8443d736f3ee3754a4a0e9097b639eb6f53e92362c0a0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "p2p-public-mobile-wallet-evaluation-20261102",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Isolated public SDK evaluation only; no application provider or production profile",
+  "engines": {
+    "node": "24.19.0"
+  },
+  "dependencies": {
+    "@walletconnect/utils": "2.26.0"
+  }
+}
