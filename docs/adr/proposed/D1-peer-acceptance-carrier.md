@@ -69,6 +69,21 @@ Do not invent hex values. Vectors must come from at least two independent implem
 - Positive: EOA seller and buyer on a native trade and an ERC-20 trade; the binding signature for both roles; a NIP-44 and NIP-59 round trip using the official NIP vectors; an ERC-1271 positive from the local fixture.
 - Negative: high-s twin; v not 27 or 28; wrong length; wrong role; swapped accounts; changed chain id, contract, asset, amount, deadline, revision or nonce; wrong or swapped Nostr key; expired; duplicate; a version 1 reader given version 2; oversize envelope; ERC-1271 wrong magic, revert, gas exhaustion, short return and oversize return (fixture modes 1 to 5 in `Eip1271RecoveryFixture.sol`), revoked approval (the fixture's `setApproval`) and reorg (driven by `scripts/test-eip1271-local.mjs:45` and `:48-50`, not by a fixture mode); a tombstoned `termsHash` re-offered in a new session; a bare `TradeTerms` signature without its binding; a conflicting second binding; and an offer over the per-message byte budget.
 
+## Requirements still open before Option B can be specified
+
+A comparison with the companion security research in PR #30 (`docs/research/security-2026-11-03/`, sections on escrow and wallet authority and on messaging identity) found these gaps. They are listed for the owner, not decided here:
+
+- **Exact format:** the version identifier and exact field names of `PeerAcceptance` are still deferred.
+- **Key lifecycle:** what happens to a binding when a party's messaging key changes, after an identity restore, and across reconnects and restarts.
+- **Session mapping:** the receiving client must map the authenticated peer and session to the binding before any economic preparation, not only before display.
+- **What the user sees:** the user should see the actual statement their wallet is asked to sign.
+- **EIP-7702 accounts:** a rule is still needed, not only a flag.
+- **ERC-1271 timing:** recheck before each new economic action (approval, funding, release), not only before display.
+- **Policy changes mid-trade:** what happens if the signer's contract-wallet policy changes after the off-chain payment has begun.
+- **Identity layers:** keep the relay-authenticated (NIP-42) identity, the seal author and the wallet account separate, and never let a relay publish status promote agreement state.
+- **Inbox and AUTH policy:** kind-10050 inbox discovery and the relay AUTH policy need to be decided together with the carrier.
+- **Existing messages:** confirm that existing `{revision}` acknowledgements keep their current meaning.
+
 ## What this unblocks
 
 Leaving `LOCALPROOF` for remote acceptance, a real "accepted" state in the journey, and turning the two-wallet T43 composition into a peer protocol. It does not unblock funding, a signing trust root, or the G16 versus ABI question, which remain separate decisions.
