@@ -38,7 +38,13 @@ test('a no-op run on a temp copy of the real manifest and its files is byte-iden
     // A first run settles any row made stale by uncommitted work; it may change hash strings only.
     const first = await refreshEvidenceManifest({ root });
     let expected = real;
-    for (const change of first.changed) expected = expected.replace(change.old, change.new);
+    // Anchor each expected replacement on its path: several rows can share a hash (for example of "[]").
+    const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const change of first.changed) {
+      const row = new RegExp(`("path":\\s*"${escape(change.path)}",\\s*"sha256":\\s*")${change.old}(")`, 'g');
+      assert.equal((expected.match(row) ?? []).length, 1, `exactly one row for ${change.path}`);
+      expected = expected.replace(row, (_match, head, tail) => `${head}${change.new}${tail}`);
+    }
     assert.equal(await manifestText(root), expected);
     const settled = await manifestText(root);
     const second = await refreshEvidenceManifest({ root });
