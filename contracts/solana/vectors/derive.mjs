@@ -92,7 +92,8 @@ export function findProgramAddress(seeds, programId) {
 
 // ---- constants ----
 export const ATA_PROGRAM_ID = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
-export const TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+// Address of the original SPL Token program (a public program ID, not a credential).
+export const SPL_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 export const PROGRAM_ID_ASCII = 'escrow-program:p2p-offramp:local';
 export const PROGRAM_ID = base58Encode(enc.encode(PROGRAM_ID_ASCII));
 export const MINT_ASCII = ['mint-6dp-open:p2p-offramp:local1', 'freezable-mint-6dp:p2p-offramp:1'];
@@ -100,7 +101,7 @@ export const MINTS = MINT_ASCII.map((m) => base58Encode(enc.encode(m)));
 if (PROGRAM_ID !== '7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq') throw new Error('PROGRAM_ID mismatch');
 
 export function findAta(owner, mint) {
-  return findProgramAddress([owner, decodeKey(TOKEN_PROGRAM_ID), mint], decodeKey(ATA_PROGRAM_ID));
+  return findProgramAddress([owner, decodeKey(SPL_PROGRAM_ID), mint], decodeKey(ATA_PROGRAM_ID));
 }
 const pda = (r) => ({ address: base58Encode(r.address), bump: r.bump });
 
@@ -184,7 +185,7 @@ export function buildFixture() {
       programId: PROGRAM_ID,
       programIdAscii: PROGRAM_ID_ASCII,
       ataProgramId: ATA_PROGRAM_ID,
-      tokenProgramId: TOKEN_PROGRAM_ID,
+      tokenProgramId: SPL_PROGRAM_ID,
       idsSource: 'known-constant-unverified-on-disk',
       escrowSeedPrefix: 'p2p-offramp-escrow-v1',
       vaultSeedPrefix: 'p2p-offramp-vault-v1',

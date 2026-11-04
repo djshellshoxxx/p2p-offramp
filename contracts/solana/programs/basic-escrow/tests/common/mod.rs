@@ -23,11 +23,11 @@ pub use anchor_lang::prelude::Pubkey;
 pub const PROGRAM_SO: &[u8] =
     include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), "/../../target/deploy/basic_escrow.so"));
 pub const TOKEN_ID: Pubkey = anchor_spl::token::ID;
-pub const TOKEN_2022_ID: Pubkey = anchor_lang::pubkey!("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb");
+pub const TOKEN_2022_ID: Pubkey = anchor_spl::token_2022::ID;
 pub const ATA_ID: Pubkey = anchor_lang::pubkey!("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 pub const SYSTEM_ID: Pubkey = anchor_lang::system_program::ID;
 /// SHA-256 of `spl_token-3.5.0.so` as bundled by litesvm 0.15.0 (original SPL Token build).
-pub const ORIGINAL_SPL_TOKEN_SHA256: &str = "7b44674b9704fa7640fbebfac68389f338b500b8c2bc29175c27ed66838b5a3c";
+pub const ORIGINAL_SPL_ELF_SHA256: &str = "7b44674b9704fa7640fbebfac68389f338b500b8c2bc29175c27ed66838b5a3c";
 /// Capabilities hash of a core trade (count-zero encoding), as in the G16 vectors.
 pub const CORE_CAPABILITIES_HASH: [u8; 32] = hex32("6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d");
 
@@ -84,7 +84,7 @@ impl Harness {
             .with_blockhash_check(true);
         if build == TokenBuild::Original {
             let token = svm.get_account(&TOKEN_ID).expect("token program loaded");
-            assert_eq!(sha256_hex(&token.data), ORIGINAL_SPL_TOKEN_SHA256, "original SPL Token build pin");
+            assert_eq!(sha256_hex(&token.data), ORIGINAL_SPL_ELF_SHA256, "original SPL Token build pin");
         }
         svm.add_program(basic_escrow::ID, PROGRAM_SO).expect("load escrow program");
         let payer = Keypair::new();
