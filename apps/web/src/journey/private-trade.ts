@@ -194,6 +194,12 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   try{if(!await step(done))throw Error('RELAY_TIMEOUT');return events;}finally{clearTimeout(timer);sub.close();}
  };
  const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{value(await step(from.pool.publish(message.recipientWrap)));const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);if(!found)throw Error('MISSING_WRAP');const received=value(await step(to.exchange.receive(found,to.secret)));if('own'in received)throw Error('WRONG_COUNTERPARTY');return received;};
+ // Terminal end of an undelivered negotiation. The reviewed trade stays visible; the pending messages are dropped so
+ // nothing republishes, and no state claims the peer received or did not receive them.
+ function stopDelivery():void{
+  negotiation=pendingAccept=undefined;
+  phase='delivery-stopped';
+ }
  // A retry first asks the owned peer whether it already applied the message, then republishes the identical wrap.
  async function deliverAcceptance(message:{recipientWrap:NostrEvent}):Promise<void>{
   const {binding}=trade(),[seller,buyer]=negotiating(),applied=seller.exchange.session(defined(sessionId));
@@ -443,17 +449,24 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
      phase='review';
     }else if(action==='retry-delivery'){
      if(phase!=='delivery-pending'||!negotiation&&!pendingAccept)throw Error('OUT_OF_ORDER');
-     if(deliveryRetries>=MAX_DELIVERY_RETRIES)throw Error('DELIVERY_RETRY_LIMIT');
+     if(deliveryRetries>=MAX_DELIVERY_RETRIES){stopDelivery();throw Error('DELIVERY_RETRY_LIMIT');}
      deliveryRetries++;
      await fresh();
-     await requireAcceptanceTime();
-     if(negotiation){
-      await negotiate(negotiation);
-      negotiation=undefined;
-     }else{
-      await deliverAcceptance(defined(pendingAccept));
-      pendingAccept=undefined;
-      communicationAccepted=true;
+     try{
+      await requireAcceptanceTime();
+      if(negotiation){
+       await negotiate(negotiation);
+       negotiation=undefined;
+      }else{
+       await deliverAcceptance(defined(pendingAccept));
+       pendingAccept=undefined;
+       communicationAccepted=true;
+      }
+     }catch(error){
+      // Past acceptBefore or out of attempts nothing can still complete; stop instead of leaving a dead retry.
+      const expired=error instanceof Error&&error.message==='EXPIRED';
+      if(epoch===mine&&(expired||deliveryRetries>=MAX_DELIVERY_RETRIES))stopDelivery();
+      throw error;
      }
      // Wallet acceptance still needs its own fresh signing review; delivery never signs.
      phase='review';

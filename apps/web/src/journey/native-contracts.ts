@@ -90,6 +90,7 @@ export type Phase=
  |'setup'
  |'wallet'
  |'delivery-pending'
+ |'delivery-stopped'
  |'review'
  |'accepted'
  |'fund-prepared'

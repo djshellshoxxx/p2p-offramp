@@ -147,6 +147,12 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
  exactRow(list,labels.amount,`${display(formatUnits(t.amountBaseUnits,t.decimals))} ${t.assetId} (${t.assetKind==='native'?labels.assetNative:labels.assetToken})`);exactRow(list,'Canonical base units',english('trade','baseUnits',{units:t.amountBaseUnits,decimals:t.decimals}));exactRow(list,labels.network,t.networkId);exactRow(list,labels.chainId,t.chainId);exactRow(list,labels.deployment,t.deploymentId);addressRow(list,labels.contract,t.escrowAddress);addressRow(list,labels.seller,t.seller);addressRow(list,labels.buyer,t.buyer);if(t.assetKind==='erc20')addressRow(list,labels.tokenAddress,t.asset);exactRow(list,labels.orderId,t.orderId,true);exactRow(list,labels.revision,t.revision);exactRow(list,labels.acceptBefore,deadline(t.acceptBeforeSeconds));exactRow(list,labels.escrowExpiry,deadline(t.escrowExpirySeconds));exactRow(list,labels.termsDigest,snapshot.tradeId??labels.invalid,true);exactRow(list,labels.agreementHash,t.privateAgreementHash,true);exactRow(list,labels.capabilitiesHash,t.capabilitiesHash,true);
  if(snapshot.manual){exactRow(list,labels.fiat,display(formatFiatMinor(snapshot.manual.minorUnits,snapshot.manual.scale,snapshot.manual.currency)));if(snapshot.phase==='review'||snapshot.phase==='accepted'){const checked=checkDisplayText(snapshot.manual.instructions);review.append(node('h3','Agreed instructions — review only; do not pay yet'));if(checked.ok)copyInstructions(review,labels.instructions,checked.text);else review.append(node('p',labels.instructionsHidden));if(checked.ok&&checked.mixedScript)review.append(node('p',labels.mixedScript));}}
  }
+ if(snapshot.phase==='delivery-stopped'){
+  review.append(node('h3','Delivery stopped — negotiation ended without confirmed delivery'));
+  review.append(node('p','The last signed negotiation message was not confirmed delivered and will not be retried, '
+   +'because the retry limit or the acceptance deadline was reached. The counterparty may or may not have '
+   +'received it. No wallet signature or funds were committed by this negotiation. Lock to start a new trade.'));
+ }
  // Communication state is committed before transport; only the identical signed message is ever republished.
  if(snapshot.phase==='delivery-pending'){
   review.append(node('h3','Delivery pending — the last signed negotiation message was not confirmed delivered'));

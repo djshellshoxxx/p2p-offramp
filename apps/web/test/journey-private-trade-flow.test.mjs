@@ -507,11 +507,31 @@ test('delivery retries are bounded and lock retires the pending message without 
   await assert.rejects(h.journey.act('offer'),/UNAVAILABLE/);
   for(let retry=0;retry<5;retry++)await assert.rejects(h.journey.act('retry-delivery'),/UNAVAILABLE/);
   const publishes=h.relay.publishes;
-  await assert.rejects(h.journey.act('retry-delivery'),/DELIVERY_RETRY_LIMIT/);
-  assert.equal(h.relay.publishes,publishes,'the limit stops before any further publish');
-  assert.equal(h.journey.snapshot().phase,'delivery-pending');
+  // The last allowed attempt ends delivery explicitly; the trade stays visible and nothing claims receipt.
+  const stopped=h.journey.snapshot();
+  assert.equal(stopped.phase,'delivery-stopped');
+  assert.notEqual(stopped.tradeId,null);
+  await assert.rejects(h.journey.act('retry-delivery'),/OUT_OF_ORDER/);
+  await assert.rejects(h.journey.act('offer'),/OUT_OF_ORDER/);
+  assert.equal(h.relay.publishes,publishes,'a stopped delivery never publishes again');
   value(await h.journey.runtime({operation:'lock'}));
   assert.equal(h.journey.snapshot().phase,'setup');
+  await assert.rejects(h.journey.act('retry-delivery'),/OUT_OF_ORDER/);
+  assert.equal(h.relay.publishes,publishes);
+ }finally{h.journey.dispose();}
+});
+
+test('a pending delivery past the acceptance deadline stops explicitly without another publish',async()=>{
+ const h=harness();
+ try{
+  await onboard(h.journey);
+  const {terms}=await h.journey.act('connect');
+  h.relay.failPublishAt.add(2);
+  await assert.rejects(h.journey.act('offer'),/UNAVAILABLE/);
+  const publishes=h.relay.publishes;
+  h.chain.now=Number(terms.acceptBeforeSeconds);
+  await assert.rejects(h.journey.act('retry-delivery'),/EXPIRED/);
+  assert.equal(h.journey.snapshot().phase,'delivery-stopped');
   await assert.rejects(h.journey.act('retry-delivery'),/OUT_OF_ORDER/);
   assert.equal(h.relay.publishes,publishes);
  }finally{h.journey.dispose();}
