@@ -17,7 +17,8 @@ export async function checkMaintainedGovernance(root = fileURLToPath(new URL('..
     }
   }
   if (!names.length) throw new Error('GOVERNANCE_PACKET_MISSING');
-  for (const name of names.sort()) {
+  names.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  for (const name of names) {
     const result = await checkGovernanceRecord(root, `docs/governance/${name}`);
     if (!result.ok) throw new Error('GOVERNANCE_PACKET_INVALID');
   }
