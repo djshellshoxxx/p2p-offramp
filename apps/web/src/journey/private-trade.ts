@@ -193,7 +193,20 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   const sub=value(party.pool.subscribe(filters,{onEvent:event=>events.push(event),onEose:()=>end(true)}));
   try{if(!await step(done))throw Error('RELAY_TIMEOUT');return events;}finally{clearTimeout(timer);sub.close();}
  };
- const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{value(await step(from.pool.publish(message.recipientWrap)));const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);if(!found)throw Error('MISSING_WRAP');const received=value(await step(to.exchange.receive(found,to.secret)));if('own'in received)throw Error('WRONG_COUNTERPARTY');return received;};
+ // Every negotiation publish goes through here; only these attempts count against the delivery retry budget.
+ let relayPublishes=0;
+ const publish=async(pool:NegotiatingParty['pool'],event:NostrEvent):Promise<void>=>{
+  relayPublishes++;
+  value(await step(pool.publish(event)));
+ };
+ const deliver=async(message:{recipientWrap:NostrEvent},from:NegotiatingParty,to:NegotiatingParty)=>{
+  await publish(from.pool,message.recipientWrap);
+  const found=(await pull(to)).find(event=>event.id===message.recipientWrap.id);
+  if(!found)throw Error('MISSING_WRAP');
+  const received=value(await step(to.exchange.receive(found,to.secret)));
+  if('own'in received)throw Error('WRONG_COUNTERPARTY');
+  return received;
+ };
  // Terminal end of an undelivered negotiation. The reviewed trade stays visible; the pending messages are dropped so
  // nothing republishes, and no state claims the peer received or did not receive them.
  function stopDelivery():void{
@@ -214,7 +227,7 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
  async function negotiate(pending:PendingNegotiation):Promise<void>{
   const {terms,binding}=trade(),document=definedDocument(),[seller,buyer]=negotiating();
   if(!pending.adDelivered){
-   value(await step(seller.pool.publish(pending.ad)));
+   await publish(seller.pool,pending.ad);
    const received=(await pull(buyer,AD_KIND)).find(event=>event.id===pending.ad.id);
    // Re-ingesting this exact event id is a benign duplicate; any other result refuses the ad.
    const ingested=received?buyer.book.ingest(received):'invalid';
@@ -450,9 +463,10 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
     }else if(action==='retry-delivery'){
      if(phase!=='delivery-pending'||!negotiation&&!pendingAccept)throw Error('OUT_OF_ORDER');
      if(deliveryRetries>=MAX_DELIVERY_RETRIES){stopDelivery();throw Error('DELIVERY_RETRY_LIMIT');}
-     deliveryRetries++;
-     await fresh();
+     // Only a retry that actually reaches the relay uses the budget; vault or chain-clock failures do not.
+     const publishedBefore=relayPublishes;
      try{
+      await fresh();
       await requireAcceptanceTime();
       if(negotiation){
        await negotiate(negotiation);
@@ -463,6 +477,7 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
        communicationAccepted=true;
       }
      }catch(error){
+      if(relayPublishes>publishedBefore)deliveryRetries++;
       // Past acceptBefore or out of attempts nothing can still complete; stop instead of leaving a dead retry.
       const expired=error instanceof Error&&error.message==='EXPIRED';
       if(epoch===mine&&(expired||deliveryRetries>=MAX_DELIVERY_RETRIES))stopDelivery();

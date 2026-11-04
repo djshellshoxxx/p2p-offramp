@@ -126,6 +126,11 @@ function fakeChain(){
   if(method==='eth_accounts')return[SELLER];
   if(method==='eth_chainId')return'0x7a69';
   if(method==='eth_getBlockByNumber'){
+   // `failBlockReads` models a chain RPC outage before anything reaches the relay.
+   if(chain.failBlockReads>0){
+    chain.failBlockReads--;
+    throw Error('RPC_DOWN');
+   }
    const height=['latest','finalized'].includes(params[0])?chain.head:Number(BigInt(params[0]??chain.head));
    const txs=chain.blocks.get(height)??[];
    const transactions=params[1]?txs.map(tx=>({hash:tx.hash,from:tx.from,nonce:hex(tx.nonce)})):txs.map(tx=>tx.hash);
@@ -534,6 +539,22 @@ test('a pending delivery past the acceptance deadline stops explicitly without a
   assert.equal(h.journey.snapshot().phase,'delivery-stopped');
   await assert.rejects(h.journey.act('retry-delivery'),/OUT_OF_ORDER/);
   assert.equal(h.relay.publishes,publishes);
+ }finally{h.journey.dispose();}
+});
+
+test('retries that fail before reaching the relay do not use up the delivery budget',async()=>{
+ const h=harness();
+ try{
+  await onboard(h.journey);
+  await h.journey.act('connect');
+  h.relay.failPublishAt.add(2);
+  await assert.rejects(h.journey.act('offer'),/UNAVAILABLE/);
+  const publishes=h.relay.publishes;
+  h.chain.failBlockReads=8;
+  for(let retry=0;retry<8;retry++)await assert.rejects(h.journey.act('retry-delivery'),/RPC_DOWN/);
+  assert.equal(h.relay.publishes,publishes,'none of those attempts published');
+  assert.equal(h.journey.snapshot().phase,'delivery-pending');
+  assert.equal((await h.journey.act('retry-delivery')).phase,'review');
  }finally{h.journey.dispose();}
 });
 
