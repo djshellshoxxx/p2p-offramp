@@ -77,7 +77,9 @@ async function collectSources(root) {
     } catch { unavailable(dir); continue; }
     await walk(dir);
   }
-  return { paths: output.sort(), findings: findings.sort((a, b) => a.file.localeCompare(b.file)) };
+  output.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  findings.sort((a, b) => a.file.localeCompare(b.file));
+  return { paths: output, findings };
 }
 function addFinding(findings, file, node, code, detail = '') {
   let line = 1;
