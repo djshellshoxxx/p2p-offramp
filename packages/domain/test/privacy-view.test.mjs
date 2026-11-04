@@ -164,3 +164,79 @@ test('provider inspections can occur after initial clock tick, but never after c
   observations.read = () => ({ ...snapshot(), vault: { state: 'unlocked', observedAt: 102, expiresAt: 202 } });
   assert.equal(value(createPrivacyViewReader({ observations, monotonicNow: () => time }).buildPrivacyView(null)).vault.reason, 'invalid-observation');
 });
+
+const endpointSnapshot = (overrides = {}) => ({ version: 1, generation: 3, observedAt: 100, expiresAt: 200, endpoints: [
+  { channel: 'rpc', id: 'node-a', configuredUrl: 'https://NODE.example:443/private/API-secret?token=SECRET', connectionUrl: 'https://app.example/rpc?key=SECRET' },
+  { channel: 'relay', id: 'relay-a', configuredUrl: 'wss://relay.example/socket/private', connectionUrl: 'ws://127.0.0.1:1234/private' },
+], ...overrides });
+const endpointPort = read => ({ generation: 3, read: read ?? (() => endpointSnapshot()) });
+
+test('trusted configured endpoints publish only detached normalized origins, never route authority', () => {
+  const raw = endpointSnapshot(), port = endpointPort(() => raw);
+  const view = value(createPrivacyViewReader({ endpoints: port, monotonicNow: () => 100 }).buildPrivacyView(null));
+  assert.deepEqual(view.endpointDetails.endpoints, [
+    { channel: 'rpc', id: 'node-a', configuredOrigin: 'https://node.example', connectionOrigin: 'https://app.example' },
+    { channel: 'relay', id: 'relay-a', configuredOrigin: 'wss://relay.example', connectionOrigin: 'ws://127.0.0.1:1234' },
+  ]);
+  assert.equal(view.endpointDetails.reason, 'observed');assert.equal(view.endpointDetails.generation, 3);
+  assert.ok(view.routes.every(row => row.state === 'unknown'));assert.equal(view.economicPreparationAllowed, false);
+  raw.endpoints[0].configuredUrl = 'https://changed.example/';
+  assert.equal(view.endpointDetails.endpoints[0].configuredOrigin, 'https://node.example');
+  for (const item of [view.endpointDetails, view.endpointDetails.endpoints, ...view.endpointDetails.endpoints]) assert.ok(Object.isFrozen(item));
+  assert.doesNotMatch(JSON.stringify(view), /SECRET|API-secret|\/private|\/socket|\?token/);
+});
+
+test('endpoint metadata cannot publish credentials, ambiguous URLs, unknown fields or unsupported channels', () => {
+  let getterCalls = 0;
+  const valid = endpointSnapshot().endpoints[0];
+  const hostile = [
+    { ...valid, configuredUrl: 'https://user:SECRET@node.example/' }, { ...valid, configuredUrl: 'https://@node.example/' },
+    { ...valid, configuredUrl: 'https://node.example\\@SECRET.example/' }, { ...valid, configuredUrl: 'http://public.example/' },
+    { ...valid, configuredUrl: 'ws://public.example/' }, { ...valid, configuredUrl: 'https://node.example/#SECRET' },
+    { ...valid, configuredUrl: 'https://node.example/\nSECRET' }, { ...valid, configuredUrl: 'https://node.example/' + 'x'.repeat(2048) },
+    { ...valid, channel: 'wallet' }, { ...valid, SECRET: 'SECRET' }, { ...valid, get configuredUrl() { getterCalls++; return 'https://SECRET.example/'; } },
+  ];
+  for (const entry of hostile) {
+    const view = value(createPrivacyViewReader({ endpoints: endpointPort(() => endpointSnapshot({ endpoints: [entry] })), monotonicNow: () => 100 }).buildPrivacyView(null));
+    assert.equal(view.endpointDetails.reason, 'invalid-observation');assert.deepEqual(view.endpointDetails.endpoints, []);
+    assert.doesNotMatch(JSON.stringify(view), /SECRET/);
+  }
+  assert.equal(getterCalls, 0);
+});
+
+test('endpoint snapshots enforce exact shape, bounded rows and identities, monotonic TTL and generation', () => {
+  const one = endpointSnapshot().endpoints[0];
+  const invalid = [endpointSnapshot({ version: 2 }), endpointSnapshot({ SECRET: 'SECRET' }), endpointSnapshot({ generation: 4 }),
+    endpointSnapshot({ expiresAt: 30_101 }), endpointSnapshot({ expiresAt: 100 }), endpointSnapshot({ observedAt: 101 }),
+    endpointSnapshot({ endpoints: [one, { ...one }] }), endpointSnapshot({ endpoints: Array.from({ length: 33 }, (_, i) => ({ ...one, id: 'node-' + i })) }),
+  ];
+  for (const raw of invalid) {
+    const view = value(createPrivacyViewReader({ endpoints: endpointPort(() => raw), monotonicNow: () => 100 }).buildPrivacyView(null));
+    assert.equal(view.endpointDetails.reason, 'invalid-observation');assert.deepEqual(view.endpointDetails.endpoints, []);
+  }
+  assert.equal(value(createPrivacyViewReader({ monotonicNow: () => 100 }).buildPrivacyView(null)).endpointDetails.reason, 'not-observed');
+  assert.equal(value(createPrivacyViewReader({ endpoints: endpointPort(), monotonicNow: () => 200 }).buildPrivacyView(null)).endpointDetails.reason, 'expired');
+});
+
+test('endpoint callbacks cannot publish across port, vault-scope or clock invalidation', () => {
+  const f = fixtures(), port = endpointPort();
+  port.read = () => { f.observations.generation++; return endpointSnapshot(); };
+  let view = value(createPrivacyViewReader({ observations: f.observations, endpoints: port, monotonicNow: () => 100 }).buildPrivacyView(null));
+  assert.equal(view.endpointDetails.reason, 'scope-changed');assert.deepEqual(view.endpointDetails.endpoints, []);
+  const other = endpointPort();other.read = () => { other.generation++; return endpointSnapshot(); };
+  view = value(createPrivacyViewReader({ endpoints: other, monotonicNow: () => 100 }).buildPrivacyView(null));
+  assert.equal(view.endpointDetails.reason, 'scope-changed');
+  let now = 100;const reversed = endpointPort(() => { now = 99;return endpointSnapshot(); });
+  view = value(createPrivacyViewReader({ endpoints: reversed, monotonicNow: () => now }).buildPrivacyView(null));
+  assert.equal(view.endpointDetails.reason, 'clock-reversed');
+});
+
+test('endpoint snapshots expire or revoke during later callbacks and never survive disposal', () => {
+  let now = 100, reads = 0;const port = endpointPort();
+  const reader = createPrivacyViewReader({ endpoints: port, monotonicNow() { if (++reads === 2) now = 200;return now; } });
+  assert.equal(value(reader.buildPrivacyView(null)).endpointDetails.reason, 'expired');
+  let revoked, calls = 0;revoked = createPrivacyViewReader({ endpoints: port, monotonicNow() { if (++calls === 2) port.generation++;return 100; } });
+  assert.equal(value(revoked.buildPrivacyView(null)).endpointDetails.reason, 'scope-changed');
+  let closed;closed = createPrivacyViewReader({ endpoints: endpointPort(() => { closed.dispose();return endpointSnapshot(); }), monotonicNow: () => 100 });
+  assert.equal(closed.buildPrivacyView(null).error.code, 'CANCELLED');
+});
