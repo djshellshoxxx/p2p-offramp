@@ -44,6 +44,8 @@ export interface CompatibilityView {
 }
 export type CompatibilityErrorCode = 'INVALID_INPUT' | 'LIMIT_EXCEEDED' | 'EVIDENCE_MISMATCH' | 'UNAVAILABLE';
 const errors = new WeakMap<object, CompatibilityErrorCode>();
+// Canonical, locale-independent UTF-16 code-unit order: exactly what the default sort() does for strings.
+const compareCodeUnits = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
 export class CompatibilityError extends Error {
   readonly code: CompatibilityErrorCode;
   constructor(code: CompatibilityErrorCode) { super('Compatibility evidence is unavailable.'); this.name = 'CompatibilityError'; this.code = code; errors.set(this, code); }
@@ -99,7 +101,8 @@ function choice<T extends string>(input: unknown, values: readonly T[]): T { ret
 function capabilitySet(input: unknown): readonly CompatibilityCapability[] {
   const values = list(input, COMPATIBILITY_LIMITS.capabilities).map(value => choice(value, capabilities) as CompatibilityCapability);
   if (new Set(values).size !== values.length) return stop();
-  return Object.freeze(values.sort());
+  values.sort(compareCodeUnits);
+  return Object.freeze(values);
 }
 function target(raw: Record<string, unknown>): CompatibilityTarget {
   const browser = choice(raw.browser, browsers), connector = choice(raw.connector, connectors), chain = text(raw.chain, 110);
