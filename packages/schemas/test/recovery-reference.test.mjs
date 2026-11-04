@@ -60,3 +60,23 @@ test('private export bytes preserve existing reference hints with strict bounded
   assert.deepEqual(recoveryApi.parseRecoveryReferenceExportBytes(shadowed),value);
   assert.equal(byteLengthReads,0,'genuine view length must bypass caller-owned byteLength getters');
 });
+
+test('direct recovery list reflection discards foreign diagnostics without changing nested schema error families',()=>{
+  const page=projectRecoveryReferences([record(1)],0,0);let reads=0;
+  const foreign=Error('SECRET');Object.defineProperty(foreign,'message',{get(){reads++;throw Error('SECRET getter');}});
+  const revoked=Proxy.revocable({},{});revoked.revoke();
+  for(const thrown of [foreign,revoked.proxy])for(const trap of ['getPrototypeOf','ownKeys','getOwnPropertyDescriptor']){
+    const items=new Proxy([...page.items],{[trap](){throw thrown;}});let previous;
+    for(let attempt=0;attempt<2;attempt++)assert.throws(()=>parseRecoveryReferences({...page,items}),error=>{
+      assert.equal(error.constructor,Error);assert.equal(error.message,'Invalid offline recovery reference.');
+      assert.notEqual(error,thrown);assert.notEqual(error,previous);previous=error;return true;
+    });
+  }
+  const itemTrap=new Proxy([...page.items],{getOwnPropertyDescriptor(target,key){if(key==='0')throw revoked.proxy;return Reflect.getOwnPropertyDescriptor(target,key);}});
+  assert.throws(()=>parseRecoveryReferences({...page,items:itemTrap}),error=>error.constructor===Error&&error.message==='Invalid offline recovery reference.');
+  const revokedList=Proxy.revocable([...page.items],{});revokedList.revoke();
+  assert.throws(()=>parseRecoveryReferences({...page,items:revokedList.proxy}),error=>error.constructor===Error&&error.message==='Invalid offline recovery reference.');
+  assert.throws(()=>parseRecoveryReferences({...page,items:[{...page.items[0],binding:{...binding,extra:true}}]}),error=>error.name==='CoreSchemaError'&&error.code==='INVALID_INPUT');
+  assert.throws(()=>parseRecoveryReferences({...page,items:[{...page.items[0],extra:true}]}),error=>error.name==='IntentSchemaError'&&error.code==='INVALID_INPUT');
+  assert.equal(reads,0);
+});
