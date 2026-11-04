@@ -113,13 +113,15 @@ export type EscrowLogEvent=
    readonly token:string;readonly amount:string}
  |{readonly kind:'Funded'|'Withdrawn'};
 /** Asset delivery after a terminal escrow state. 'pushed': the escrow's own push succeeded in this receipt (no
- * PayoutDeferred). 'credited': the push failed and the amount is owed via withdraw(recipient, token); it has not
- * arrived. creditOutstanding is the aggregate pendingWithdrawals at the finalized height and may include other
- * trades. */
+ * PayoutDeferred). 'credited': the push failed and the amount was credited for withdraw(recipient, token).
+ * creditOutstanding is the aggregate pendingWithdrawals at the finalized height and may include other trades.
+ * creditState compares it with this trade's credit: 'owed' (at least that much is still credited) or
+ * 'possibly-withdrawn' (less is credited, so some or all may already have been withdrawn). Neither proves arrival. */
 export type PayoutStatus=
  |{readonly status:'pushed';readonly recipient:string;readonly token:string;readonly amount:string}
  |{readonly status:'credited';readonly recipient:string;readonly token:string;readonly amount:string;
-   readonly creditOutstanding:string;readonly creditObservedAtHeight:string;readonly withdraw:EscrowCall};
+   readonly creditOutstanding:string;readonly creditObservedAtHeight:string;
+   readonly creditState:'owed'|'possibly-withdrawn';readonly withdraw:EscrowCall};
 export interface NativeFeeReceipt {
  readonly tradeId:string;
  readonly transactionHash:string;

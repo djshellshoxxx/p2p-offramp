@@ -412,11 +412,24 @@ test('a deferred payout credit is reported on the receipt with its exact withdra
   const withdraw=buildWithdraw(ESCROW,BUYER,ZERO);
   assert.deepEqual(snapshot.receipt.payout,{
    status:'credited',recipient:BUYER,token:ZERO,amount:snapshot.terms.amountBaseUnits,
-   creditOutstanding:'3000000000000000',creditObservedAtHeight:snapshot.receipt.blockNumber,
+   creditOutstanding:'3000000000000000',creditObservedAtHeight:snapshot.receipt.blockNumber,creditState:'owed',
    withdraw:{to:withdraw.to,data:withdraw.data,value:'0'},
   });
   assert.equal(h.chain.sends,2,'the withdraw route is shown, never sent');
  }finally{h.journey.dispose();}
+});
+
+test('a deferred credit with less pending than this trade credited is reported as possibly withdrawn',async()=>{
+ for(const pendingCredit of[0n,999_999_999_999_999n]){
+  const h=harness();
+  try{
+   // The finalized pendingWithdrawals read is below this trade's credit: someone may already have withdrawn it.
+   const {receipt}=await released(h,{deferred:true,pendingCredit});
+   assert.equal(receipt.payout.status,'credited');
+   assert.equal(receipt.payout.creditOutstanding,String(pendingCredit));
+   assert.equal(receipt.payout.creditState,'possibly-withdrawn');
+  }finally{h.journey.dispose();}
+ }
 });
 
 test('a direct payout is reported as pushed with zero deferred credit from this receipt',async()=>{

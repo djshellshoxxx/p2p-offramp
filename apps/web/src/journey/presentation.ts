@@ -47,7 +47,8 @@ function readPayout(raw:unknown):PayoutStatus{
  const withdraw=Object.freeze({to:string(route,'to',address),data,value:string(route,'value',/^0$/)});
  const creditOutstanding=string(raw,'creditOutstanding',dec);
  const creditObservedAtHeight=string(raw,'creditObservedAtHeight',dec);
- return Object.freeze({status,...base,creditOutstanding,creditObservedAtHeight,withdraw});
+ const creditState=choice(raw,'creditState',['owed','possibly-withdrawn']);
+ return Object.freeze({status,...base,creditOutstanding,creditObservedAtHeight,creditState,withdraw});
 }
 function readReceipt(raw:unknown):NativeFeeReceipt|null{
  if(raw===null)return null;
@@ -116,14 +117,25 @@ function payoutPresentation(parent:HTMLElement,payout:PayoutStatus):void{
   exactRow(list,'Pushed amount (base units)',payout.amount);
   return;
  }
- const credited='The direct payout failed, so the escrow credited this amount to the recipient instead. These funds '
-  +'have not arrived. Anyone may call withdraw on the escrow; it pays only the credited recipient, and the credit '
-  +'stays owed if that payment fails again.';
- parent.append(node('h3','Payout status — NOT delivered: credited for withdrawal'),node('p',credited),list);
+ // Only the finalized pendingWithdrawals read is shown; neither arrival nor a withdrawal is claimed without it.
+ const owed=payout.creditState==='owed';
+ const route='Anyone may call withdraw on the escrow; it pays only the credited recipient, and the credit stays '
+  +'owed if that payment fails again.';
+ const credited=owed
+  ?'The direct payout failed, so the escrow credited this amount to the recipient instead. At the finalized height '
+   +'below, at least this much is still credited to the recipient for this asset (the total may include other '
+   +'trades), so the payout is not shown as delivered. '+route
+  :'The direct payout failed, so the escrow credited this amount to the recipient instead. At the finalized height '
+   +'below, less than this trade\'s credit remains, so some or all of it may already have been withdrawn. This app '
+   +'has not verified whether it reached the recipient; check the chain. '+route;
+ const heading=owed?'Payout status — NOT delivered: credited for withdrawal'
+  :'Payout status — credited; some or all may already have been withdrawn';
+ parent.append(node('h3',heading),node('p',credited),list);
  addressRow(list,'Credited recipient',payout.recipient);
  addressRow(list,'Credited asset (zero address is native)',payout.token);
  exactRow(list,'Credited by this trade (base units)',payout.amount);
- exactRow(list,'Total credit owed to this recipient and asset now (all trades, base units)',payout.creditOutstanding);
+ const pendingLabel='Total credit still pending for this recipient and asset (all trades, base units)';
+ exactRow(list,pendingLabel,payout.creditOutstanding);
  exactRow(list,'Credit observed at finalized height',payout.creditObservedAtHeight);
  addressRow(list,'Withdraw route: escrow contract',payout.withdraw.to);
  exactRow(list,'Withdraw route: call withdraw(recipient, asset) with exact calldata',payout.withdraw.data,true);

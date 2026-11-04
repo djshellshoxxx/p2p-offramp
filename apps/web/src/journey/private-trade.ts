@@ -287,8 +287,10 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   current();
   const route=native.buildWithdraw(escrow,recipient,token);
   const withdraw=Object.freeze({to:route.to,data:route.data,value:route.value});
+  // Aggregate pending below this trade's credit means some or all of it may already have been withdrawn.
+  const creditState=BigInt(outstanding)>=BigInt(terms.amountBaseUnits)?'owed' as const:'possibly-withdrawn' as const;
   return Object.freeze({status:'credited',recipient,token,amount:terms.amountBaseUnits,creditOutstanding:outstanding,
-   creditObservedAtHeight:finalHeight,withdraw});
+   creditObservedAtHeight:finalHeight,creditState,withdraw});
  }
  async function validateCanonical(intent:Readonly<IntentV1>,nativeRequest:Request):Promise<CoreResult<void>>{
   const {terms,domain,binding}=trade();
