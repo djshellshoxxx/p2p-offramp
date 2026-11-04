@@ -1,0 +1,38 @@
+{
+  "format": "p2p-offramp/arbitration-reference-decisions/v1",
+  "economicAuthority": false,
+  "decisions": [
+    {
+      "id": "DRAFT-WORD-ENCODING",
+      "status": "BLOCKED_CONTRACT",
+      "source": "04_WEB3_DISPUTE_ARBITERS/feature_4.1_juror_selection/module_4.1.1_vrf_drafting/spec-juror-draft-state-machine.md#4-algorithms-and-invariants",
+      "implemented": "Bounded partial Fisher-Yates and unbiased uint256 rejection sampling through an explicit trusted deterministic word port.",
+      "missing": "Exact literal/type of domain and complete ABI profile for abi.encode(domain, seed, caseId, round, counter) are not specified. No default word hash, PRNG, VRF or seed authentication is invented.",
+      "nextAction": "Specify the versioned hash domain/types and publish independent vectors; qualify exactly one provider separately."
+    },
+    {
+      "id": "EVIDENCE-COMMITMENT-ENCODING",
+      "status": "BLOCKED_CONTRACT",
+      "source": "04_WEB3_DISPUTE_ARBITERS/feature_4.3_evidence_access/module_4.3.1_chat_key_escrow/spec-chat-evidence-commitment-format.md#4-algorithms-and-invariants",
+      "implemented": "The exact Vote encoding binds the supplied evidenceRoot; models freeze that root and refuse reveal preimages for another root.",
+      "missing": "The evidence manifest fixed type-tag literal and full entry-hash ABI schema/types/encoding are not pinned. Authenticating original messages and manifest signatures also requires an evaluated evidence profile. No evidence-root builder or verification claim is implemented.",
+      "nextAction": "Define the complete evidence byte profile and authenticate actual original NIP-17 messages with independent cross-language vectors."
+    },
+    {
+      "id": "NATIVE-CERTIFICATE-AND-CUSTODY",
+      "status": "BLOCKED_CONTRACT",
+      "source": "04_WEB3_DISPUTE_ARBITERS/feature_4.5_jury_decision/module_4.5.1_commit_reveal_voting/spec-jury-decision-certificate.md#4-algorithms-and-invariants",
+      "implemented": "Diagnostic outcome selection preserves the last conclusive closed-round result, one appeal and fixed seller fallback.",
+      "missing": "No reviewed native opt-in escrow/tribunal ABI, certificate enum/tuple byte profile, immutable deployment or authoritative case mapping exists here. Imported JSON, an event, a local model result and the Vote digest grant no custody authority.",
+      "nextAction": "Review a separate exact native custody contract and certificate ABI. Existing basic trades must acquire no tribunal rights."
+    },
+    {
+      "id": "PROVIDER-ELIGIBILITY-AND-LIVE-ACTIONS",
+      "status": "BLOCKED_PROFILE",
+      "source": "04_WEB3_DISPUTE_ARBITERS/feature_4.1_juror_selection/module_4.1.1_vrf_drafting/spec-vrf-chainlink-juror-selector.md#4-algorithms-and-invariants",
+      "implemented": "Explicit trusted snapshot, uint256-word, actor, chain-time and closed-round ports permit bounded local fixtures only.",
+      "missing": "No selected Chainlink package/ABI/coordinator/consumer/subscription profile, issuer credentials/operator-group proof, anonymous eligibility or selective-chat proof is evaluated. No live wallet, sealed-vote vault, G12 broadcast, native stake/fee/claim or reorg reconciler is wired.",
+      "nextAction": "Pin and evaluate real profiles, implement the separately reviewed native/storage/journal adapters and their qualified negative/outage evidence; do not infer professional approval from these models."
+    }
+  ]
+}

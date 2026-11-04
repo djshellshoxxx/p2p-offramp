@@ -1,0 +1,3705 @@
+{
+  "format": "local-liquidity-python-conservation-v1",
+  "authority": false,
+  "scenarios": [
+    {
+      "seed": 11,
+      "rows": [
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "58",
+            "received": "58"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "58",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "58",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "29",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "29",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "29",
+              "releasedToBuyers": "0"
+            },
+            "custody": "29",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "12"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "29",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "29",
+              "releasedToBuyers": "0"
+            },
+            "custody": "41",
+            "surplus": "12"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "21",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "8",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "50",
+              "releasedToBuyers": "0"
+            },
+            "custody": "20",
+            "surplus": "12"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "7"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "8",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "50",
+              "releasedToBuyers": "0"
+            },
+            "custody": "27",
+            "surplus": "19"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "5",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "3",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "22",
+            "surplus": "19"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "6"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "58",
+              "available": "3",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "28",
+            "surplus": "25"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "77",
+            "received": "77"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "135",
+              "available": "80",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "105",
+            "surplus": "25"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "58",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "135",
+              "available": "22",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "47",
+            "surplus": "25"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "40"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "135",
+              "available": "22",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "87",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "68",
+            "received": "68"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "203",
+              "available": "90",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "155",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "8",
+            "received": "8"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "211",
+              "available": "98",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "163",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "25",
+            "received": "25"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "236",
+              "available": "123",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "188",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "39"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "236",
+              "available": "123",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "227",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "100",
+            "received": "100"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "336",
+              "available": "223",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "113",
+              "releasedToBuyers": "0"
+            },
+            "custody": "327",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "84",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "336",
+              "available": "139",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "197",
+              "releasedToBuyers": "0"
+            },
+            "custody": "243",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "51",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "336",
+              "available": "88",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "192",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "41"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "336",
+              "available": "88",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "233",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s11-q1",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xd812384869e4bc0eb75552e51c61bc2502ee775f69771987af6e80c9d74dbf9c"
+              },
+              "termsHash": "0xd812384869e4bc0eb75552e51c61bc2502ee775f69771987af6e80c9d74dbf9c",
+              "assetId": "native",
+              "principal": "64",
+              "fee": "0",
+              "nonce": "nonce-s11-q1",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "336",
+              "available": "24",
+              "reserved": "64",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "233",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "85",
+            "received": "85"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "421",
+              "available": "109",
+              "reserved": "64",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "318",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "59",
+            "received": "59"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "480",
+              "available": "168",
+              "reserved": "64",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "377",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s11-q1"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "480",
+              "available": "232",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "248",
+              "releasedToBuyers": "0"
+            },
+            "custody": "377",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "142",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "480",
+              "available": "90",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "235",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "91",
+            "received": "91"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "571",
+              "available": "181",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "326",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s11-q2",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x8acf9c54253dfdf33db2141c3d713b68db8dfdd40b656e2608fe9afcd2dc3039"
+              },
+              "termsHash": "0x8acf9c54253dfdf33db2141c3d713b68db8dfdd40b656e2608fe9afcd2dc3039",
+              "assetId": "native",
+              "principal": "81",
+              "fee": "0",
+              "nonce": "nonce-s11-q2",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "571",
+              "available": "100",
+              "reserved": "81",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "326",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s11-q2",
+            "termsHash": "0x8acf9c54253dfdf33db2141c3d713b68db8dfdd40b656e2608fe9afcd2dc3039",
+            "amount": "81",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "571",
+              "available": "100",
+              "reserved": "0",
+              "inEscrow": "81",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "245",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "refund",
+            "quoteId": "s11-q2",
+            "returned": "81"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "571",
+              "available": "181",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "326",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "9",
+            "received": "9"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "580",
+              "available": "190",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "335",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "52",
+            "received": "52"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "632",
+              "available": "242",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "387",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "38",
+            "received": "38"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "670",
+              "available": "280",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "390",
+              "releasedToBuyers": "0"
+            },
+            "custody": "425",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "35",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "670",
+              "available": "245",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "425",
+              "releasedToBuyers": "0"
+            },
+            "custody": "390",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "88",
+            "received": "88"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "758",
+              "available": "333",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "425",
+              "releasedToBuyers": "0"
+            },
+            "custody": "478",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "28",
+            "received": "28"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "786",
+              "available": "361",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "425",
+              "releasedToBuyers": "0"
+            },
+            "custody": "506",
+            "surplus": "145"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "4"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "786",
+              "available": "361",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "425",
+              "releasedToBuyers": "0"
+            },
+            "custody": "510",
+            "surplus": "149"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "193",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "786",
+              "available": "168",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "618",
+              "releasedToBuyers": "0"
+            },
+            "custody": "317",
+            "surplus": "149"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "108",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "786",
+              "available": "60",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "726",
+              "releasedToBuyers": "0"
+            },
+            "custody": "209",
+            "surplus": "149"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "73",
+            "received": "73"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "859",
+              "available": "133",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "726",
+              "releasedToBuyers": "0"
+            },
+            "custody": "282",
+            "surplus": "149"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "50"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "859",
+              "available": "133",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "726",
+              "releasedToBuyers": "0"
+            },
+            "custody": "332",
+            "surplus": "199"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s11-q3",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xe835489098b811c42585461cdec6d9ce6b338ee671885c151698d0bc523d7685"
+              },
+              "termsHash": "0xe835489098b811c42585461cdec6d9ce6b338ee671885c151698d0bc523d7685",
+              "assetId": "native",
+              "principal": "87",
+              "fee": "0",
+              "nonce": "nonce-s11-q3",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "859",
+              "available": "46",
+              "reserved": "87",
+              "inEscrow": "0",
+              "withdrawn": "726",
+              "releasedToBuyers": "0"
+            },
+            "custody": "332",
+            "surplus": "199"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "40",
+            "received": "40"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "899",
+              "available": "86",
+              "reserved": "87",
+              "inEscrow": "0",
+              "withdrawn": "726",
+              "releasedToBuyers": "0"
+            },
+            "custody": "372",
+            "surplus": "199"
+          }
+        }
+      ]
+    },
+    {
+      "seed": 37,
+      "rows": [
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "88",
+            "received": "88"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "88",
+              "available": "88",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "88",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "80",
+            "received": "80"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "168",
+              "available": "168",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "168",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "81",
+            "received": "81"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "249",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "249",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q1",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xb9b0d45d3f8f5abdeeb3c9a5e84812f6174cdcd06a89ca19db5071318506908d"
+              },
+              "termsHash": "0xb9b0d45d3f8f5abdeeb3c9a5e84812f6174cdcd06a89ca19db5071318506908d",
+              "assetId": "native",
+              "principal": "113",
+              "fee": "0",
+              "nonce": "nonce-s37-q1",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "136",
+              "reserved": "113",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "249",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "cancel",
+            "quoteId": "s37-q1",
+            "actor": "0x1111111111111111111111111111111111111111"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "249",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "249",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "154",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "95",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "154",
+              "releasedToBuyers": "0"
+            },
+            "custody": "95",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q2",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xb0c17f02a5a2dbdef9a5fe41b6372c5831b35c571279db1dca3d04ab0af438f5"
+              },
+              "termsHash": "0xb0c17f02a5a2dbdef9a5fe41b6372c5831b35c571279db1dca3d04ab0af438f5",
+              "assetId": "native",
+              "principal": "49",
+              "fee": "0",
+              "nonce": "nonce-s37-q2",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "46",
+              "reserved": "49",
+              "inEscrow": "0",
+              "withdrawn": "154",
+              "releasedToBuyers": "0"
+            },
+            "custody": "95",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q2"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "95",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "154",
+              "releasedToBuyers": "0"
+            },
+            "custody": "95",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "19",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "249",
+              "available": "76",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "173",
+              "releasedToBuyers": "0"
+            },
+            "custody": "76",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "12",
+            "received": "12"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "261",
+              "available": "88",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "173",
+              "releasedToBuyers": "0"
+            },
+            "custody": "88",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "10",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "261",
+              "available": "78",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "78",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q3",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xff19c4c50aa584e5e2cddf6bdf71cf0cbde302a5e8664cd57322249f97450b83"
+              },
+              "termsHash": "0xff19c4c50aa584e5e2cddf6bdf71cf0cbde302a5e8664cd57322249f97450b83",
+              "assetId": "native",
+              "principal": "47",
+              "fee": "0",
+              "nonce": "nonce-s37-q3",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "261",
+              "available": "31",
+              "reserved": "47",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "78",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q3"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "261",
+              "available": "78",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "78",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q4",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x92f001c8c8966dc74f818456dc017760bac49a2ee9cd0bb4639e30d070e230a3"
+              },
+              "termsHash": "0x92f001c8c8966dc74f818456dc017760bac49a2ee9cd0bb4639e30d070e230a3",
+              "assetId": "native",
+              "principal": "74",
+              "fee": "0",
+              "nonce": "nonce-s37-q4",
+              "expiresAtSeconds": "460"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "261",
+              "available": "4",
+              "reserved": "74",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "78",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "68",
+            "received": "68"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "329",
+              "available": "72",
+              "reserved": "74",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "146",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "cancel",
+            "quoteId": "s37-q4",
+            "actor": "0x1111111111111111111111111111111111111111"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "329",
+              "available": "146",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "183",
+              "releasedToBuyers": "0"
+            },
+            "custody": "146",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "17",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "329",
+              "available": "129",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "129",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "1",
+            "received": "1"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "330",
+              "available": "130",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "130",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "340",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q5",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x678bc44c65e2a9f4759994323f88b315a91d3f50f8ab0ee35cc4f1c6558aad4a"
+              },
+              "termsHash": "0x678bc44c65e2a9f4759994323f88b315a91d3f50f8ab0ee35cc4f1c6558aad4a",
+              "assetId": "native",
+              "principal": "18",
+              "fee": "0",
+              "nonce": "nonce-s37-q5",
+              "expiresAtSeconds": "460"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "330",
+              "available": "112",
+              "reserved": "18",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "130",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "460",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q5"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "330",
+              "available": "130",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "130",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "460",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "42",
+            "received": "42"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "172",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "172",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "460",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q6",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xa4b1a6348023a579a8f7ae62c8afac4000c47d15c60c497e1f810eb922d0ae13"
+              },
+              "termsHash": "0xa4b1a6348023a579a8f7ae62c8afac4000c47d15c60c497e1f810eb922d0ae13",
+              "assetId": "native",
+              "principal": "136",
+              "fee": "0",
+              "nonce": "nonce-s37-q6",
+              "expiresAtSeconds": "580"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "36",
+              "reserved": "136",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "172",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "460",
+          "command": {
+            "kind": "donation",
+            "amount": "2"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "36",
+              "reserved": "136",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "174",
+            "surplus": "2"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q6"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "172",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "174",
+            "surplus": "2"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "donation",
+            "amount": "48"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "172",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "222",
+            "surplus": "50"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q7",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xa472779c1a992f9578478f9d80afd3cabacf8d11cb7151d3df782887b8502327"
+              },
+              "termsHash": "0xa472779c1a992f9578478f9d80afd3cabacf8d11cb7151d3df782887b8502327",
+              "assetId": "native",
+              "principal": "59",
+              "fee": "0",
+              "nonce": "nonce-s37-q7",
+              "expiresAtSeconds": "700"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "113",
+              "reserved": "59",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "222",
+            "surplus": "50"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "cancel",
+            "quoteId": "s37-q7",
+            "actor": "0x1111111111111111111111111111111111111111"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "372",
+              "available": "172",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "222",
+            "surplus": "50"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "37",
+            "received": "37"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "209",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "259",
+            "surplus": "50"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q8",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x12ad18131c1cd8c41df44511b8517fe1e8b25fb418dd1da2cde302d25a3e95c5"
+              },
+              "termsHash": "0x12ad18131c1cd8c41df44511b8517fe1e8b25fb418dd1da2cde302d25a3e95c5",
+              "assetId": "native",
+              "principal": "184",
+              "fee": "0",
+              "nonce": "nonce-s37-q8",
+              "expiresAtSeconds": "700"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "25",
+              "reserved": "184",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "259",
+            "surplus": "50"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "donation",
+            "amount": "31"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "25",
+              "reserved": "184",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "290",
+            "surplus": "81"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "donation",
+            "amount": "14"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "25",
+              "reserved": "184",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "304",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "580",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q9",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x7c80787bed65fd55761e001dc41be785e2c0994c15db9526940a263f1d8f0756"
+              },
+              "termsHash": "0x7c80787bed65fd55761e001dc41be785e2c0994c15db9526940a263f1d8f0756",
+              "assetId": "native",
+              "principal": "20",
+              "fee": "0",
+              "nonce": "nonce-s37-q9",
+              "expiresAtSeconds": "700"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "5",
+              "reserved": "204",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "304",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q8"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "189",
+              "reserved": "20",
+              "inEscrow": "0",
+              "withdrawn": "200",
+              "releasedToBuyers": "0"
+            },
+            "custody": "304",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "115",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "409",
+              "available": "74",
+              "reserved": "20",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "189",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "72",
+            "received": "72"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "481",
+              "available": "146",
+              "reserved": "20",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "261",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q9"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "481",
+              "available": "166",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "261",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q10",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x0fedc6763bb76a7321d31ab8d066b43471b34a3e6be8658bfb711a0756ddbeee"
+              },
+              "termsHash": "0x0fedc6763bb76a7321d31ab8d066b43471b34a3e6be8658bfb711a0756ddbeee",
+              "assetId": "native",
+              "principal": "62",
+              "fee": "0",
+              "nonce": "nonce-s37-q10",
+              "expiresAtSeconds": "820"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "481",
+              "available": "104",
+              "reserved": "62",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "261",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "700",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "57",
+            "received": "57"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "538",
+              "available": "161",
+              "reserved": "62",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "318",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "820",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s37-q10"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "538",
+              "available": "223",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "318",
+            "surplus": "95"
+          }
+        },
+        {
+          "at": "820",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s37-q11",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x5d673f2486f501378913262e939f65fe26a74194a10c5befaf42c0ee05f4bb6a"
+              },
+              "termsHash": "0x5d673f2486f501378913262e939f65fe26a74194a10c5befaf42c0ee05f4bb6a",
+              "assetId": "native",
+              "principal": "90",
+              "fee": "0",
+              "nonce": "nonce-s37-q11",
+              "expiresAtSeconds": "940"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "538",
+              "available": "133",
+              "reserved": "90",
+              "inEscrow": "0",
+              "withdrawn": "315",
+              "releasedToBuyers": "0"
+            },
+            "custody": "318",
+            "surplus": "95"
+          }
+        }
+      ]
+    },
+    {
+      "seed": 101,
+      "rows": [
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "75",
+            "received": "75"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "75",
+              "available": "75",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "75",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "35"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "75",
+              "available": "75",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "110",
+            "surplus": "35"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s101-q1",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x858b596a59ed9c51b734a0d2342de5cdebc5f5463652374262134d8922ddd2d4"
+              },
+              "termsHash": "0x858b596a59ed9c51b734a0d2342de5cdebc5f5463652374262134d8922ddd2d4",
+              "assetId": "native",
+              "principal": "60",
+              "fee": "0",
+              "nonce": "nonce-s101-q1",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "75",
+              "available": "15",
+              "reserved": "60",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "110",
+            "surplus": "35"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "85",
+            "received": "85"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "160",
+              "available": "100",
+              "reserved": "60",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "195",
+            "surplus": "35"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "cancel",
+            "quoteId": "s101-q1",
+            "actor": "0x1111111111111111111111111111111111111111"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "160",
+              "available": "160",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "195",
+            "surplus": "35"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "19"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "160",
+              "available": "160",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "214",
+            "surplus": "54"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "55",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "160",
+              "available": "105",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "159",
+            "surplus": "54"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s101-q2",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x62b4664be399fd9d24359830ba6fe172e3897c59f8ffceca2c40b2d224d99635"
+              },
+              "termsHash": "0x62b4664be399fd9d24359830ba6fe172e3897c59f8ffceca2c40b2d224d99635",
+              "assetId": "native",
+              "principal": "57",
+              "fee": "0",
+              "nonce": "nonce-s101-q2",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "160",
+              "available": "48",
+              "reserved": "57",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "159",
+            "surplus": "54"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "33",
+            "received": "33"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "193",
+              "available": "81",
+              "reserved": "57",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "192",
+            "surplus": "54"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "11"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "193",
+              "available": "81",
+              "reserved": "57",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "203",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "57",
+            "received": "57"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "138",
+              "reserved": "57",
+              "inEscrow": "0",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "260",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s101-q2",
+            "termsHash": "0x62b4664be399fd9d24359830ba6fe172e3897c59f8ffceca2c40b2d224d99635",
+            "amount": "57",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "138",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "203",
+            "surplus": "65"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "31"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "138",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "234",
+            "surplus": "96"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s101-q3",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x5a9e9566fbeb9dc261fe3f6c4da0578f21fb2522af4986ab5d270ae28a1b2928"
+              },
+              "termsHash": "0x5a9e9566fbeb9dc261fe3f6c4da0578f21fb2522af4986ab5d270ae28a1b2928",
+              "assetId": "native",
+              "principal": "62",
+              "fee": "0",
+              "nonce": "nonce-s101-q3",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "76",
+              "reserved": "62",
+              "inEscrow": "57",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "234",
+            "surplus": "96"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s101-q3",
+            "termsHash": "0x5a9e9566fbeb9dc261fe3f6c4da0578f21fb2522af4986ab5d270ae28a1b2928",
+            "amount": "62",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "76",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "172",
+            "surplus": "96"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "5"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "76",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "55",
+              "releasedToBuyers": "0"
+            },
+            "custody": "177",
+            "surplus": "101"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "60",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "16",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "117",
+            "surplus": "101"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s101-q4",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xd82b2e36d56b223d1a401fbf1ad1d34a8574be2934572d16b1c8d88769029aa1"
+              },
+              "termsHash": "0xd82b2e36d56b223d1a401fbf1ad1d34a8574be2934572d16b1c8d88769029aa1",
+              "assetId": "native",
+              "principal": "7",
+              "fee": "0",
+              "nonce": "nonce-s101-q4",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "9",
+              "reserved": "7",
+              "inEscrow": "119",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "117",
+            "surplus": "101"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "42"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "9",
+              "reserved": "7",
+              "inEscrow": "119",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "159",
+            "surplus": "143"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s101-q4"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "16",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "159",
+            "surplus": "143"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "13",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "3",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "128",
+              "releasedToBuyers": "0"
+            },
+            "custody": "146",
+            "surplus": "143"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "28"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "250",
+              "available": "3",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "128",
+              "releasedToBuyers": "0"
+            },
+            "custody": "174",
+            "surplus": "171"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "52",
+            "received": "52"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "302",
+              "available": "55",
+              "reserved": "0",
+              "inEscrow": "119",
+              "withdrawn": "128",
+              "releasedToBuyers": "0"
+            },
+            "custody": "226",
+            "surplus": "171"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "release",
+            "quoteId": "s101-q3"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "302",
+              "available": "55",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "128",
+              "releasedToBuyers": "62"
+            },
+            "custody": "226",
+            "surplus": "171"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "60",
+            "received": "60"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "362",
+              "available": "115",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "128",
+              "releasedToBuyers": "62"
+            },
+            "custody": "286",
+            "surplus": "171"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "35"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "362",
+              "available": "115",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "128",
+              "releasedToBuyers": "62"
+            },
+            "custody": "321",
+            "surplus": "206"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "45",
+            "received": "45"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "407",
+              "available": "160",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "128",
+              "releasedToBuyers": "62"
+            },
+            "custody": "366",
+            "surplus": "206"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "48",
+            "received": "48"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "455",
+              "available": "208",
+              "reserved": "0",
+              "inEscrow": "57",
+              "withdrawn": "128",
+              "releasedToBuyers": "62"
+            },
+            "custody": "414",
+            "surplus": "206"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "release",
+            "quoteId": "s101-q2"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "455",
+              "available": "208",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "128",
+              "releasedToBuyers": "119"
+            },
+            "custody": "414",
+            "surplus": "206"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "34",
+            "received": "34"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "242",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "128",
+              "releasedToBuyers": "119"
+            },
+            "custody": "448",
+            "surplus": "206"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "3"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "242",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "128",
+              "releasedToBuyers": "119"
+            },
+            "custody": "451",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "47",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "195",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "175",
+              "releasedToBuyers": "119"
+            },
+            "custody": "404",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s101-q5",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xe8f2ffaed6fa9402aa7f2c5f0e2e31e0d67a9c0fceee8dfeb95cd58f813e95b3"
+              },
+              "termsHash": "0xe8f2ffaed6fa9402aa7f2c5f0e2e31e0d67a9c0fceee8dfeb95cd58f813e95b3",
+              "assetId": "native",
+              "principal": "17",
+              "fee": "0",
+              "nonce": "nonce-s101-q5",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "178",
+              "reserved": "17",
+              "inEscrow": "0",
+              "withdrawn": "175",
+              "releasedToBuyers": "119"
+            },
+            "custody": "404",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s101-q5",
+            "termsHash": "0xe8f2ffaed6fa9402aa7f2c5f0e2e31e0d67a9c0fceee8dfeb95cd58f813e95b3",
+            "amount": "17",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "178",
+              "reserved": "0",
+              "inEscrow": "17",
+              "withdrawn": "175",
+              "releasedToBuyers": "119"
+            },
+            "custody": "387",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "176",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "2",
+              "reserved": "0",
+              "inEscrow": "17",
+              "withdrawn": "351",
+              "releasedToBuyers": "119"
+            },
+            "custody": "211",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "release",
+            "quoteId": "s101-q5"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "2",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "351",
+              "releasedToBuyers": "136"
+            },
+            "custody": "211",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "1",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "1",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "352",
+              "releasedToBuyers": "136"
+            },
+            "custody": "210",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "1",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "489",
+              "available": "0",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "353",
+              "releasedToBuyers": "136"
+            },
+            "custody": "209",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "89",
+            "received": "89"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "578",
+              "available": "89",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "353",
+              "releasedToBuyers": "136"
+            },
+            "custody": "298",
+            "surplus": "209"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "11",
+            "received": "11"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "589",
+              "available": "100",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "353",
+              "releasedToBuyers": "136"
+            },
+            "custody": "309",
+            "surplus": "209"
+          }
+        }
+      ]
+    },
+    {
+      "seed": 20261102,
+      "rows": [
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "73",
+            "received": "73"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "73",
+              "available": "73",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "73",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "49",
+            "received": "49"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "122",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "122",
+            "surplus": "0"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "8"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "122",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "0",
+              "releasedToBuyers": "0"
+            },
+            "custody": "130",
+            "surplus": "8"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "6",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "116",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "6",
+              "releasedToBuyers": "0"
+            },
+            "custody": "124",
+            "surplus": "8"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "50"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "116",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "6",
+              "releasedToBuyers": "0"
+            },
+            "custody": "174",
+            "surplus": "58"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "67",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "49",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "73",
+              "releasedToBuyers": "0"
+            },
+            "custody": "107",
+            "surplus": "58"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "13",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "36",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "86",
+              "releasedToBuyers": "0"
+            },
+            "custody": "94",
+            "surplus": "58"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "46"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "36",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "86",
+              "releasedToBuyers": "0"
+            },
+            "custody": "140",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "29",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "7",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "111",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q1",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xeb508660accf9dc33b445af9a9908b4384f3466aab2f12b80ef4d76e2d705d35"
+              },
+              "termsHash": "0xeb508660accf9dc33b445af9a9908b4384f3466aab2f12b80ef4d76e2d705d35",
+              "assetId": "native",
+              "principal": "7",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q1",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "0",
+              "reserved": "7",
+              "inEscrow": "0",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "111",
+            "surplus": "104"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "35"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "0",
+              "reserved": "7",
+              "inEscrow": "0",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "146",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s20261102-q1",
+            "termsHash": "0xeb508660accf9dc33b445af9a9908b4384f3466aab2f12b80ef4d76e2d705d35",
+            "amount": "7",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "122",
+              "available": "0",
+              "reserved": "0",
+              "inEscrow": "7",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "139",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "14",
+            "received": "14"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "136",
+              "available": "14",
+              "reserved": "0",
+              "inEscrow": "7",
+              "withdrawn": "115",
+              "releasedToBuyers": "0"
+            },
+            "custody": "153",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "release",
+            "quoteId": "s20261102-q1"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "136",
+              "available": "14",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "115",
+              "releasedToBuyers": "7"
+            },
+            "custody": "153",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "3",
+            "received": "3"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "139",
+              "available": "17",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "115",
+              "releasedToBuyers": "7"
+            },
+            "custody": "156",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "12",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "139",
+              "available": "5",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "127",
+              "releasedToBuyers": "7"
+            },
+            "custody": "144",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "56",
+            "received": "56"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "195",
+              "available": "61",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "127",
+              "releasedToBuyers": "7"
+            },
+            "custody": "200",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "85",
+            "received": "85"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "280",
+              "available": "146",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "127",
+              "releasedToBuyers": "7"
+            },
+            "custody": "285",
+            "surplus": "139"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "44"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "280",
+              "available": "146",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "127",
+              "releasedToBuyers": "7"
+            },
+            "custody": "329",
+            "surplus": "183"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "38",
+            "received": "38"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "184",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "127",
+              "releasedToBuyers": "7"
+            },
+            "custody": "367",
+            "surplus": "183"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "32",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "152",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "335",
+            "surplus": "183"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q2",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x705d08fb6f68bfb991ca47cf14a31e2802c0352f7319a8192ea7b578031ee6d6"
+              },
+              "termsHash": "0x705d08fb6f68bfb991ca47cf14a31e2802c0352f7319a8192ea7b578031ee6d6",
+              "assetId": "native",
+              "principal": "146",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q2",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "6",
+              "reserved": "146",
+              "inEscrow": "0",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "335",
+            "surplus": "183"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "donation",
+            "amount": "47"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "6",
+              "reserved": "146",
+              "inEscrow": "0",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "382",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q3",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x6eff96344ac0e728871b28fd2501b05ccaf777f249e9dc81694bfb21da3902fa"
+              },
+              "termsHash": "0x6eff96344ac0e728871b28fd2501b05ccaf777f249e9dc81694bfb21da3902fa",
+              "assetId": "native",
+              "principal": "3",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q3",
+              "expiresAtSeconds": "220"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "3",
+              "reserved": "149",
+              "inEscrow": "0",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "382",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s20261102-q2",
+            "termsHash": "0x705d08fb6f68bfb991ca47cf14a31e2802c0352f7319a8192ea7b578031ee6d6",
+            "amount": "146",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "3",
+              "reserved": "3",
+              "inEscrow": "146",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "236",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "refund",
+            "quoteId": "s20261102-q2",
+            "returned": "146"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "149",
+              "reserved": "3",
+              "inEscrow": "0",
+              "withdrawn": "159",
+              "releasedToBuyers": "7"
+            },
+            "custody": "382",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "100",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "42",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "107",
+              "reserved": "3",
+              "inEscrow": "0",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "340",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "expire",
+            "quoteId": "s20261102-q3"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "110",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "340",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q4",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x32ab5d58624877b7d162c7557ab92c59321d6f9eb12bf27ac3a0fdc4572cd5a2"
+              },
+              "termsHash": "0x32ab5d58624877b7d162c7557ab92c59321d6f9eb12bf27ac3a0fdc4572cd5a2",
+              "assetId": "native",
+              "principal": "68",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q4",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "42",
+              "reserved": "68",
+              "inEscrow": "0",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "340",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "consume",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quoteId": "s20261102-q4",
+            "termsHash": "0x32ab5d58624877b7d162c7557ab92c59321d6f9eb12bf27ac3a0fdc4572cd5a2",
+            "amount": "68",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "42",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "272",
+            "surplus": "230"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "26"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "318",
+              "available": "42",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "298",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "30",
+            "received": "30"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "348",
+              "available": "72",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "201",
+              "releasedToBuyers": "7"
+            },
+            "custody": "328",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "54",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "348",
+              "available": "18",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "255",
+              "releasedToBuyers": "7"
+            },
+            "custody": "274",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q5",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0x79fc3cfa1fe2bc610fd9c04a0a42ae90438bab571e6126404b6468ee4d3d356f"
+              },
+              "termsHash": "0x79fc3cfa1fe2bc610fd9c04a0a42ae90438bab571e6126404b6468ee4d3d356f",
+              "assetId": "native",
+              "principal": "9",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q5",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "348",
+              "available": "9",
+              "reserved": "9",
+              "inEscrow": "68",
+              "withdrawn": "255",
+              "releasedToBuyers": "7"
+            },
+            "custody": "274",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "deposit",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "35",
+            "received": "35"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "44",
+              "reserved": "9",
+              "inEscrow": "68",
+              "withdrawn": "255",
+              "releasedToBuyers": "7"
+            },
+            "custody": "309",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "cancel",
+            "quoteId": "s20261102-q5",
+            "actor": "0x1111111111111111111111111111111111111111"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "53",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "255",
+              "releasedToBuyers": "7"
+            },
+            "custody": "309",
+            "surplus": "256"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "donation",
+            "amount": "17"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "53",
+              "reserved": "0",
+              "inEscrow": "68",
+              "withdrawn": "255",
+              "releasedToBuyers": "7"
+            },
+            "custody": "326",
+            "surplus": "273"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "release",
+            "quoteId": "s20261102-q4"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "53",
+              "reserved": "0",
+              "inEscrow": "0",
+              "withdrawn": "255",
+              "releasedToBuyers": "75"
+            },
+            "custody": "326",
+            "surplus": "273"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "reserve",
+            "actor": "0x2222222222222222222222222222222222222222",
+            "quote": {
+              "quoteId": "s20261102-q6",
+              "maker": "0x1111111111111111111111111111111111111111",
+              "taker": "0x2222222222222222222222222222222222222222",
+              "binding": {
+                "chain": "evm",
+                "networkId": "local-evm",
+                "deploymentId": "local-basic",
+                "tradeId": "0xab08c98f84933097c63e64a52e409d134ac8ebb2f6955519aec1f2240fc55f00"
+              },
+              "termsHash": "0xab08c98f84933097c63e64a52e409d134ac8ebb2f6955519aec1f2240fc55f00",
+              "assetId": "native",
+              "principal": "30",
+              "fee": "0",
+              "nonce": "nonce-s20261102-q6",
+              "expiresAtSeconds": "340"
+            },
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "23",
+              "reserved": "30",
+              "inEscrow": "0",
+              "withdrawn": "255",
+              "releasedToBuyers": "75"
+            },
+            "custody": "326",
+            "surplus": "273"
+          }
+        },
+        {
+          "at": "220",
+          "command": {
+            "kind": "withdraw",
+            "actor": "0x1111111111111111111111111111111111111111",
+            "amount": "17",
+            "outcome": "applied"
+          },
+          "expected": {
+            "ledger": {
+              "deposited": "383",
+              "available": "6",
+              "reserved": "30",
+              "inEscrow": "0",
+              "withdrawn": "272",
+              "releasedToBuyers": "75"
+            },
+            "custody": "309",
+            "surplus": "273"
+          }
+        }
+      ]
+    }
+  ]
+}
