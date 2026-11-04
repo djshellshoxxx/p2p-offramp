@@ -65,6 +65,10 @@ export interface NativeFactories {
  readonly EvmWalletAdapter:new(provider:WalletProvider,providerId:string,registry:RegistryService)=>WalletAdapter;
  walletProvider(index:number):WalletProvider;
  selectorOf(signature:string):string;
+ /** Decodes one log emitted by the registry-bound escrow; any other emitter or malformed log throws. */
+ decodeEscrowLog(escrow:string,log:EscrowLog):EscrowLogEvent;
+ buildPendingWithdrawals(escrow:string,recipient:string,token:string):EscrowCall;
+ buildWithdraw(escrow:string,recipient:string,token:string):EscrowCall;
  evmTermsHash(domain:EvmDomain,terms:EvmTerms):string;
  escrowCallFor(action:EscrowAction):{readonly call:EscrowCall;readonly expectedEscrowState:'absent'|'funded'};
  decodeIntentPayload(payload:string):IntentV1;
@@ -97,7 +101,36 @@ export type Phase=
  |'settling'
  |'receipt'
  |'cancelled-before-send';
-export interface NativeFeeReceipt {readonly tradeId:string;readonly transactionHash:string;readonly state:'released'|'refunded';readonly blockNumber:string;readonly gasUsed:string;readonly effectiveGasPrice:string;readonly fee:string;readonly nativeAssetId:string;readonly nativeDecimals:number;}
+/** One raw receipt log, as eth_getTransactionReceipt returns it. */
+export interface EscrowLog {readonly address:string;readonly topics:readonly string[];readonly data:string;}
+/** Escrow events this journey reads from a finalized settlement receipt (BasicEscrow event fields, lowercase). */
+export type EscrowLogEvent=
+ |{readonly kind:'Released';readonly tradeId:string;readonly buyer:string;readonly token:string;readonly amount:string}
+ |{readonly kind:'Refunded';readonly tradeId:string;readonly seller:string;readonly caller:string;
+   readonly token:string;readonly amount:string}
+ |{readonly kind:'PayoutDeferred';readonly tradeId:string;readonly recipient:string;
+   readonly token:string;readonly amount:string}
+ |{readonly kind:'Funded'|'Withdrawn'};
+/** Asset delivery after a terminal escrow state. 'pushed': the escrow's own push succeeded in this receipt (no
+ * PayoutDeferred). 'credited': the push failed and the amount is owed via withdraw(recipient, token); it has not
+ * arrived. creditOutstanding is the aggregate pendingWithdrawals at the finalized height and may include other
+ * trades. */
+export type PayoutStatus=
+ |{readonly status:'pushed';readonly recipient:string;readonly token:string;readonly amount:string}
+ |{readonly status:'credited';readonly recipient:string;readonly token:string;readonly amount:string;
+   readonly creditOutstanding:string;readonly creditObservedAtHeight:string;readonly withdraw:EscrowCall};
+export interface NativeFeeReceipt {
+ readonly tradeId:string;
+ readonly transactionHash:string;
+ readonly state:'released'|'refunded';
+ readonly blockNumber:string;
+ readonly gasUsed:string;
+ readonly effectiveGasPrice:string;
+ readonly fee:string;
+ readonly nativeAssetId:string;
+ readonly nativeDecimals:number;
+ readonly payout:PayoutStatus;
+}
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
 export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}
 export interface JourneyController {snapshot():JourneySnapshot;runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>;act(action:string,options?:{readonly signingAction?:SigningAction|undefined;readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}):Promise<JourneySnapshot>;dispose():void;}

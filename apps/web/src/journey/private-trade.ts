@@ -9,7 +9,7 @@ import {createRelayEventCrypto,createTermsExchange,adBookKey} from '../../../../
 import {decodeIdentityPayload,decodeBase64url,parseStrictJsonBytes,type IntentV1,type TradeBinding,type RuntimeResponse} from '../../../../packages/schemas/index.ts';
 import {createJourneyVaultComposition} from './vault-composition.ts';
 import type {JourneyOptions,JourneyController,JourneySnapshot,Phase,EvmTerms,EvmDomain,Party,NegotiatingParty,NativeFeeReceipt,PreparedIntent,ChainReader,Journal,Lifecycle,PaymentGuidance,Authority,TradeComposition,NativeIntentObservation,ReviewedEvmTerms,PreparedRequest,JourneyRuntimeInput,EscrowCall,Request,TokenCheck,ActionFee,SigningAction,SigningReview,WalletSession,WalletProvider} from './native-contracts.ts';
-import type {PaymentGuidanceObservation} from './native-contracts.ts';
+import type {PaymentGuidanceObservation,PayoutStatus,EscrowLogEvent} from './native-contracts.ts';
 import type {JourneyVaultSelection} from './vault-composition.ts';
 const utf8=new TextEncoder(),ZERO=`0x${'0'.repeat(40)}`;
 // Comparison pin for the unchanged native EvmWalletAdapter payload; this module never signs a replacement domain.
@@ -192,6 +192,40 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
   if(intent.submission.chain!=='evm'||!intent.submission.hash)throw Error('RECEIPT_UNAVAILABLE');const hash=intent.submission.hash,raw=await rpc('eth_getTransactionReceipt',[hash]),height=quantity(field(raw,'blockNumber')),blockHash=text(raw,'blockHash',/^0x[0-9a-f]{64}$/);if(text(raw,'transactionHash',/^0x[0-9a-f]{64}$/)!==hash||field(raw,'status')!=='0x1'||value(await step(definedReader().blockHashAt(height,new AbortController().signal)))!==blockHash)throw Error('RECEIPT_UNAVAILABLE');
   const final=value(await step(definedReader().head('finalized',new AbortController().signal)));if(!final||BigInt(height)>BigInt(final.number)||value(await step(definedReader().blockHashAt(final.number,new AbortController().signal)))!==final.hash)throw Error('RECEIPT_UNAVAILABLE');
   const asset=defined(registry.network(trade().binding.networkId)?.assets.find(asset=>asset.kind==='native'));const fee=feeProduct(quantity(field(raw,'gasUsed')),quantity(field(raw,'effectiveGasPrice')));if(!fees.some(item=>item.transactionHash===hash)){if(fees.length===128)fees.shift();fees.push({action:intent.action,transactionHash:hash,fee,nativeAssetId:asset.id,nativeDecimals:asset.decimals});}
+ }
+ // Escrow disposition and asset delivery are separate facts: a failed push leaves the trade terminal and credits
+ // pendingWithdrawals instead (BasicEscrow _payout). Only this finalized receipt's own escrow logs attribute a credit
+ // to this trade; the aggregate pending balance can include other trades and is reported as such, never as arrived.
+ async function payoutStatus(state:'released'|'refunded',rawReceipt:unknown,finalHeight:string):Promise<PayoutStatus>{
+  const {terms,domain,binding}=trade(),escrow=domain.verifyingContract;
+  const recipient=state==='released'?terms.buyer:terms.seller,token=terms.assetKind==='native'?ZERO:terms.asset;
+  const logs=field(rawReceipt,'logs');
+  if(!Array.isArray(logs)||logs.length>64)throw Error('RECEIPT_UNAVAILABLE');
+  const decode=(log:unknown):EscrowLogEvent=>{
+   const topics=field(log,'topics');
+   if(!Array.isArray(topics)||topics.some(topic=>typeof topic!=='string'))throw Error('RECEIPT_UNAVAILABLE');
+   const raw={address:text(log,'address',/^0x[0-9a-fA-F]{40}$/),topics,data:text(log,'data',/^0x(?:[0-9a-fA-F]{2})*$/)};
+   try{return native.decodeEscrowLog(escrow,raw);}catch{throw Error('RECEIPT_UNAVAILABLE');}
+  };
+  const fromEscrow=logs.filter(log=>text(log,'address',/^0x[0-9a-fA-F]{40}$/).toLowerCase()===escrow);
+  const events=fromEscrow.map(decode).filter(event=>'tradeId'in event&&event.tradeId===binding.tradeId);
+  // The settlement event proves these are this trade's complete escrow logs for the exact receipt.
+  const settled=events.filter(event=>event.kind==='Released'&&state==='released'&&event.buyer===recipient||
+   event.kind==='Refunded'&&state==='refunded'&&event.seller===recipient);
+  const exact=(event:EscrowLogEvent)=>'amount'in event&&event.token===token&&event.amount===terms.amountBaseUnits;
+  if(settled.length!==1||!settled.every(exact))throw Error('RECEIPT_UNAVAILABLE');
+  const deferred=events.filter(event=>event.kind==='PayoutDeferred');
+  if(deferred.length===0)return Object.freeze({status:'pushed',recipient,token,amount:terms.amountBaseUnits});
+  const credit=deferred[0];
+  const owedHere=credit?.kind==='PayoutDeferred'&&credit.recipient===recipient&&exact(credit);
+  if(deferred.length!==1||!owedHere)throw Error('RECEIPT_UNAVAILABLE');
+  const read=native.buildPendingWithdrawals(escrow,recipient,token),tag='0x'+BigInt(finalHeight).toString(16);
+  const outstanding=decodeUintWord(await rpc('eth_call',[{to:read.to,data:read.data},tag]));
+  current();
+  const route=native.buildWithdraw(escrow,recipient,token);
+  const withdraw=Object.freeze({to:route.to,data:route.data,value:route.value});
+  return Object.freeze({status:'credited',recipient,token,amount:terms.amountBaseUnits,creditOutstanding:outstanding,
+   creditObservedAtHeight:finalHeight,withdraw});
  }
  async function validateCanonical(intent:Readonly<IntentV1>,nativeRequest:Request):Promise<CoreResult<void>>{
   const {terms,domain,binding}=trade();
@@ -376,7 +410,13 @@ export function createPrivateTradeJourney({services,native,registryBytes,registr
       // Receipt is native and bound to the original exact intent; JSON terminal labels are insufficient.
       value(await step(authority.refresh(binding)));const projected=value(await step(journey.read()));if(projected.kind!=='resolved'||projected.view.step!=='receipt')throw Error('RECEIPT_UNAVAILABLE');
       if(result.intent.submission.chain!=='evm'||!result.intent.submission.hash)throw Error('RECEIPT_UNAVAILABLE');const hash=result.intent.submission.hash,rawReceipt=await rpc('eth_getTransactionReceipt',[hash]);const raw={transactionHash:text(rawReceipt,'transactionHash',/^0x[0-9a-f]{64}$/),status:text(rawReceipt,'status',/^0x1$/),gasUsed:quantity(field(rawReceipt,'gasUsed')),effectiveGasPrice:quantity(field(rawReceipt,'effectiveGasPrice')),blockNumber:quantity(field(rawReceipt,'blockNumber')),blockHash:text(rawReceipt,'blockHash',/^0x[0-9a-f]{64}$/)};if(!raw||raw.transactionHash!==hash||raw.status!=='0x1'||value(await step(reader.blockHashAt(String(BigInt(raw.blockNumber)),new AbortController().signal)))!==raw.blockHash)throw Error('RECEIPT_UNAVAILABLE');const final=value(await step(reader.head('finalized',new AbortController().signal)));if(!final||BigInt(raw.blockNumber)>BigInt(final.number)||value(await step(reader.blockHashAt(final.number,new AbortController().signal)))!==final.hash)throw Error('RECEIPT_UNAVAILABLE');
-      const nativeAsset=defined(registry.network(binding.networkId)?.assets.find(asset=>asset.kind==='native'));receipt={nativeAssetId:nativeAsset.id,nativeDecimals:nativeAsset.decimals,tradeId:binding.tradeId,transactionHash:hash,state:result.escrowState,blockNumber:String(BigInt(raw.blockNumber)),gasUsed:String(BigInt(raw.gasUsed)),effectiveGasPrice:String(BigInt(raw.effectiveGasPrice)),fee:feeProduct(raw.gasUsed,raw.effectiveGasPrice)};phase='receipt';
+      const payout=await payoutStatus(result.escrowState,rawReceipt,final.number);
+      const nativeAsset=defined(registry.network(binding.networkId)?.assets.find(asset=>asset.kind==='native'));
+      receipt={nativeAssetId:nativeAsset.id,nativeDecimals:nativeAsset.decimals,tradeId:binding.tradeId,
+       transactionHash:hash,state:result.escrowState,blockNumber:String(BigInt(raw.blockNumber)),
+       gasUsed:String(BigInt(raw.gasUsed)),effectiveGasPrice:String(BigInt(raw.effectiveGasPrice)),
+       fee:feeProduct(raw.gasUsed,raw.effectiveGasPrice),payout};
+      phase='receipt';
      }else throw Error('STATE_MISMATCH');
     }else if(action==='release'||action==='refund'){
      if(!releasePhase()&&!(action==='refund'&&phase==='payment-guidance-unavailable'))throw Error('OUT_OF_ORDER');

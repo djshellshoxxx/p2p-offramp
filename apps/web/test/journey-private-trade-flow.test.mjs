@@ -11,6 +11,7 @@ import {MessagingIdentityService} from '../../../packages/identity/src/identity-
 import {createLocalNobleIdentityProvider} from '../../../packages/identity/index.ts';
 import {evmTermsHash} from '../../../packages/wallet/src/evm-terms.ts';
 import {escrowCallFor} from '../../../packages/wallet/src/evm-submit.ts';
+import {decodeEscrowLog,buildPendingWithdrawals,buildWithdraw,topicOf,EVENT_SIGNATURES} from '../../../packages/wallet/src/evm-escrow.ts';
 import {createLifecycleJournal} from '../../../packages/domain/src/intent-journal.ts';
 import {createEvmTxLifecycle,evmFinalityPolicy} from '../../../packages/domain/src/tx-lifecycle.ts';
 import {decodeIntentPayload} from '../../../packages/schemas/index.ts';
@@ -52,6 +53,20 @@ const hex=number=>'0x'+BigInt(number).toString(16);
 const word=number=>'0x'+BigInt(number).toString(16).padStart(64,'0');
 const blockHash=height=>'0x'+'a'+height.toString(16).padStart(63,'0');
 const selector=action=>escrowCallFor({action,escrow:ESCROW,tradeId:'0'.repeat(64)}).call.data.slice(0,10);
+const pendingSelector=buildPendingWithdrawals(ESCROW,SELLER,SELLER).data.slice(0,10);
+const ZERO='0x'+'0'.repeat(40);
+const topicWord=input=>'0x'+input.replace(/^0x/,'').padStart(64,'0');
+/** The escrow logs a release or refund receipt carries; `deferred` adds the PayoutDeferred credit of a failed push. */
+function settlementLogs(tradeId,{state,recipient,amount,deferred}){
+ const data=topicWord(ZERO)+BigInt(amount).toString(16).padStart(64,'0');
+ const settled=state==='released'
+  ?{address:ESCROW,topics:['0x'+topicOf(EVENT_SIGNATURES.Released),topicWord(tradeId),topicWord(recipient)],data}
+  :{address:ESCROW,topics:['0x'+topicOf(EVENT_SIGNATURES.Refunded),topicWord(tradeId),topicWord(recipient),
+   topicWord(recipient)],data};
+ const credit={address:ESCROW,topics:['0x'+topicOf(EVENT_SIGNATURES.PayoutDeferred),topicWord(tradeId),
+  topicWord(recipient)],data};
+ return deferred?[settled,credit]:[settled];
+}
 
 /**
  * A minimal fake EVM chain: one block per mined transaction, `finalized` equal to `latest`, a settable chain time,
@@ -114,6 +129,7 @@ function fakeChain(){
   if(method==='eth_getCode')return'0x6001';
   if(method==='eth_call'){
    const data=params[0].data.slice(0,10);
+   if(data===pendingSelector)return word(chain.pendingCredit??0);
    // decimals(), balanceOf(address), allowance(address,address); anything else is isAllowlisted(address).
    return data==='0x313ce567'?word(6):data==='0x70a08231'?word(10n**24n):data==='0xdd62ed3e'?word(0):word(1);
   }
@@ -191,6 +207,9 @@ function harness(){
   EvmWalletAdapter:FakeWallet,
   walletProvider(){return{request:chain.request};},
   selectorOf(){return'c1d2e3f4';},
+  decodeEscrowLog,
+  buildPendingWithdrawals,
+  buildWithdraw,
   evmTermsHash,
   escrowCallFor,
   decodeIntentPayload,
@@ -254,6 +273,14 @@ async function funded(h){
  assert.equal(h.chain.escrowState,'funded');
  assert.equal((await h.journey.act('reconcile')).phase,'payment-coordination');
  assert.equal(h.chain.sends,1);
+ // Later release/refund receipts carry the escrow's settlement event with a direct (non-deferred) payout.
+ const {tradeId,terms}=h.journey.snapshot();
+ h.chain.logsFor=tx=>{
+  const kind=tx.input.slice(0,10),state=kind===selector('release')?'released':kind===selector('refund')?'refunded':null;
+  if(!state)return[];
+  const recipient=state==='released'?BUYER:SELLER;
+  return settlementLogs(tradeId,{state,recipient,amount:terms.amountBaseUnits,deferred:false});
+ };
 }
 
 test('inside the payment-guidance buffer a fresh funded escrow still allows explicit seller release',async()=>{
@@ -307,5 +334,58 @@ test('at the actual deadline release is refused and only the original refund rem
   h.chain.now=Number(h.journey.snapshot().terms.escrowExpirySeconds);
   assert.equal((await signed(h.journey,'refund')).phase,'settling');
   assert.equal(h.chain.escrowState,'refunded');
+  const receipt=(await h.journey.act('reconcile')).receipt;
+  assert.equal(receipt.state,'refunded');
+  assert.deepEqual(receipt.payout,{status:'pushed',recipient:SELLER,token:ZERO,amount:'1000000000000000'});
+ }finally{h.journey.dispose();}
+});
+
+/** A funded native trade released by the seller, with the receipt logs `deferred` selects. */
+async function released(h,{deferred,pendingCredit}){
+ await funded(h);
+ const {tradeId,terms}=h.journey.snapshot();
+ h.chain.pendingCredit=pendingCredit;
+ h.chain.logsFor=tx=>tx.input.startsWith(selector('release'))
+  ?settlementLogs(tradeId,{state:'released',recipient:BUYER,amount:terms.amountBaseUnits,deferred}):[];
+ assert.equal((await signed(h.journey,'release',{attestFiatReceived:true})).phase,'settling');
+ return h.journey.act('reconcile');
+}
+
+test('a deferred payout credit is reported on the receipt with its exact withdraw route, never as arrived',async()=>{
+ const h=harness();
+ try{
+  // The aggregate credit owed to the buyer can include other trades: it is shown separately from this trade's.
+  const snapshot=await released(h,{deferred:true,pendingCredit:3_000_000_000_000_000n});
+  assert.equal(snapshot.phase,'receipt');
+  assert.equal(snapshot.receipt.state,'released');
+  const withdraw=buildWithdraw(ESCROW,BUYER,ZERO);
+  assert.deepEqual(snapshot.receipt.payout,{
+   status:'credited',recipient:BUYER,token:ZERO,amount:snapshot.terms.amountBaseUnits,
+   creditOutstanding:'3000000000000000',creditObservedAtHeight:snapshot.receipt.blockNumber,
+   withdraw:{to:withdraw.to,data:withdraw.data,value:'0'},
+  });
+  assert.equal(h.chain.sends,2,'the withdraw route is shown, never sent');
+ }finally{h.journey.dispose();}
+});
+
+test('a direct payout is reported as pushed with zero deferred credit from this receipt',async()=>{
+ const h=harness();
+ try{
+  const snapshot=await released(h,{deferred:false,pendingCredit:0n});
+  assert.equal(snapshot.phase,'receipt');
+  assert.deepEqual(snapshot.receipt.payout,{
+   status:'pushed',recipient:BUYER,token:ZERO,amount:snapshot.terms.amountBaseUnits,
+  });
+ }finally{h.journey.dispose();}
+});
+
+test('a receipt without the escrow settlement event for this trade is not accepted as a payout record',async()=>{
+ const h=harness();
+ try{
+  await funded(h);
+  h.chain.logsFor=()=>[];
+  assert.equal((await signed(h.journey,'release',{attestFiatReceived:true})).phase,'settling');
+  await assert.rejects(h.journey.act('reconcile'),/RECEIPT_UNAVAILABLE/);
+  assert.equal(h.journey.snapshot().receipt,null);
  }finally{h.journey.dispose();}
 });

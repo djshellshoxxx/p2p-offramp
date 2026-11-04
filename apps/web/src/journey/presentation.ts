@@ -3,6 +3,7 @@ import {formatUnits,formatFiatMinor,fullAddress} from '../ui/trade/trade-terms-d
 import {checkDisplayText} from '../ui/trade/display-text.ts';
 import {english,englishGroup} from '../ui/locale/en.ts';
 import type {TermsDisplay,NativeFeeReceipt,AssetChoice,TokenCheck,ActionFee,SigningReview} from './native-contracts.ts';
+import type {PayoutStatus} from './native-contracts.ts';
 import type {PrivacyView,PrivacyIndicator,PrivacyReason,PrivacyEndpointDetails} from '../../../../packages/domain/index.ts';
 const labels=englishGroup('trade');
 function field(input:unknown,key:string):unknown{if(typeof input!=='object'||input===null||Array.isArray(input))throw Error('PROTOCOL_ERROR');const d=Object.getOwnPropertyDescriptor(input,key);if(!d||!('value'in d))throw Error('PROTOCOL_ERROR');return d.value;}
@@ -34,7 +35,31 @@ function readSigningReview(raw:unknown):SigningReview|null{
  return Object.freeze({version:1,action:choice(raw,'action',['accept','accept-recovered','approve','reset-approval','fund','release','refund']),profileId:string(raw,'profileId',/^[0-9a-f]{32}$/),scopeGeneration:count(raw,'scopeGeneration',Number.MAX_SAFE_INTEGER),observedAt,expiresAt,clockOrigin:count(raw,'clockOrigin',Number.MAX_SAFE_INTEGER),networkId:string(raw,'networkId',/^[A-Za-z0-9._-]{1,64}$/),chainId:string(raw,'chainId',dec),deploymentId:string(raw,'deploymentId',/^[A-Za-z0-9._-]{1,64}$/),escrow:string(raw,'escrow',address),termsHash:string(raw,'termsHash',digest),destination:string(raw,'destination',address),spender:field(raw,'spender')===null?null:string(raw,'spender',address),value:string(raw,'value',dec),amount:string(raw,'amount',dec),wallets:Object.freeze(wallets),extensions:Object.freeze(extensions),privacy:readPrivacy(field(raw,'privacy'))});
 }
 function readTerms(raw:unknown):TermsDisplay|null{if(raw===null)return null;const assetKind=field(raw,'assetKind');if(assetKind!=='native'&&assetKind!=='erc20')throw Error('PROTOCOL_ERROR');return{orderId:string(raw,'orderId',digest),revision:string(raw,'revision',dec),networkId:string(raw,'networkId',/^[A-Za-z0-9._-]{1,64}$/),deploymentId:string(raw,'deploymentId',/^[A-Za-z0-9._-]{1,64}$/),seller:string(raw,'seller',address),buyer:string(raw,'buyer',address),assetKind,asset:string(raw,'asset',address),amountBaseUnits:string(raw,'amountBaseUnits',dec),privateAgreementHash:string(raw,'privateAgreementHash',digest),capabilitiesHash:string(raw,'capabilitiesHash',digest),sellerNonce:string(raw,'sellerNonce',digest),acceptBeforeSeconds:string(raw,'acceptBeforeSeconds',dec),escrowExpirySeconds:string(raw,'escrowExpirySeconds',dec),assetId:string(raw,'assetId',/^[A-Za-z0-9._-]{1,64}$/),decimals:count(raw,'decimals',38),chainId:string(raw,'chainId',dec),escrowAddress:string(raw,'escrowAddress',address)};}
-function readReceipt(raw:unknown):NativeFeeReceipt|null{if(raw===null)return null;const state=field(raw,'state');if(state!=='released'&&state!=='refunded')throw Error('PROTOCOL_ERROR');return{tradeId:string(raw,'tradeId',digest),transactionHash:string(raw,'transactionHash',/^0x[0-9a-f]{64}$/),state,nativeAssetId:string(raw,'nativeAssetId',/^[A-Za-z0-9._-]{1,64}$/),nativeDecimals:count(raw,'nativeDecimals',38),blockNumber:string(raw,'blockNumber',dec),gasUsed:string(raw,'gasUsed',dec),effectiveGasPrice:string(raw,'effectiveGasPrice',dec),fee:string(raw,'fee',dec)};}
+function readPayout(raw:unknown):PayoutStatus{
+ const status=choice(raw,'status',['pushed','credited']);
+ const recipient=string(raw,'recipient',address);
+ const token=string(raw,'token',address);
+ const base={recipient,token,amount:string(raw,'amount',dec)};
+ if(status==='pushed')return Object.freeze({status,...base});
+ const route=field(raw,'withdraw');
+ // withdraw(address,address): selector plus two words; it never carries value.
+ const data=string(route,'data',/^0x[0-9a-f]{136}$/);
+ const withdraw=Object.freeze({to:string(route,'to',address),data,value:string(route,'value',/^0$/)});
+ const creditOutstanding=string(raw,'creditOutstanding',dec);
+ const creditObservedAtHeight=string(raw,'creditObservedAtHeight',dec);
+ return Object.freeze({status,...base,creditOutstanding,creditObservedAtHeight,withdraw});
+}
+function readReceipt(raw:unknown):NativeFeeReceipt|null{
+ if(raw===null)return null;
+ const state=field(raw,'state');
+ if(state!=='released'&&state!=='refunded')throw Error('PROTOCOL_ERROR');
+ const payout=readPayout(field(raw,'payout'));
+ const transactionHash=string(raw,'transactionHash',/^0x[0-9a-f]{64}$/);
+ return{payout,tradeId:string(raw,'tradeId',digest),transactionHash,state,
+  nativeAssetId:string(raw,'nativeAssetId',/^[A-Za-z0-9._-]{1,64}$/),nativeDecimals:count(raw,'nativeDecimals',38),
+  blockNumber:string(raw,'blockNumber',dec),gasUsed:string(raw,'gasUsed',dec),
+  effectiveGasPrice:string(raw,'effectiveGasPrice',dec),fee:string(raw,'fee',dec)};
+}
 interface Manual {readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string;}
 export interface DisplaySnapshot {readonly phase:string;readonly terms:TermsDisplay|null;readonly receipt:NativeFeeReceipt|null;readonly manual:Manual|null;readonly guidanceAllowed:boolean;readonly tradeId:string|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly diagnostic:unknown;}
 export function readDisplay(input:unknown):DisplaySnapshot{
@@ -79,6 +104,31 @@ function signingPresentation(parent:HTMLElement,review:SigningReview):void{
  for(const endpoint of review.privacy.endpointDetails.endpoints){const detail=node('dl');section.append(node('h4',names[endpoint.channel]),detail);exactRow(detail,p.endpointId,endpoint.id);exactRow(detail,p.configuredOrigin,endpoint.configuredOrigin);exactRow(detail,p.connectionOrigin,endpoint.connectionOrigin??p.unknown);}
  section.append(node('p',p.walletUnknown),node('p',p.chainWarning),node('p',p.fiatWarning),node('p',p.authorityWarning));
 }
+// Escrow disposition is not asset delivery. A deferred credit is owed, not arrived, until a withdraw succeeds.
+function payoutPresentation(parent:HTMLElement,payout:PayoutStatus):void{
+ const list=node('dl');
+ if(payout.status==='pushed'){
+  const pushed='The escrow pushed the payout in this finalized receipt and recorded no deferred credit. '
+   +'Deferred credit from this receipt: 0.';
+  parent.append(node('h3','Payout status — direct push by the escrow'),node('p',pushed),list);
+  addressRow(list,'Payout recipient',payout.recipient);
+  addressRow(list,'Payout asset (zero address is native)',payout.token);
+  exactRow(list,'Pushed amount (base units)',payout.amount);
+  return;
+ }
+ const credited='The direct payout failed, so the escrow credited this amount to the recipient instead. These funds '
+  +'have not arrived. Anyone may call withdraw on the escrow; it pays only the credited recipient, and the credit '
+  +'stays owed if that payment fails again.';
+ parent.append(node('h3','Payout status — NOT delivered: credited for withdrawal'),node('p',credited),list);
+ addressRow(list,'Credited recipient',payout.recipient);
+ addressRow(list,'Credited asset (zero address is native)',payout.token);
+ exactRow(list,'Credited by this trade (base units)',payout.amount);
+ exactRow(list,'Total credit owed to this recipient and asset now (all trades, base units)',payout.creditOutstanding);
+ exactRow(list,'Credit observed at finalized height',payout.creditObservedAtHeight);
+ addressRow(list,'Withdraw route: escrow contract',payout.withdraw.to);
+ exactRow(list,'Withdraw route: call withdraw(recipient, asset) with exact calldata',payout.withdraw.data,true);
+ exactRow(list,'Withdraw route: value',payout.withdraw.value);
+}
 export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,receiptPanel:HTMLElement,snapshot:DisplaySnapshot):void{
  review.replaceChildren();payment.replaceChildren();receiptPanel.replaceChildren();const t=snapshot.terms;
  if(t){const list=node('dl');review.append(node('h2',labels.title),node('p','Exact agreement review only. These terms are not instructions to pay before fresh native funding guidance.'),node('p',labels.risk),node('p',labels.addressHelp),list);
@@ -97,5 +147,6 @@ export function renderTradePresentation(review:HTMLElement,payment:HTMLElement,r
   payment.append(node('h2','Payment guidance closed — escrow deadline near'));
   payment.append(node('p',closedNotice),node('p',labels.risk));
  }
- const r=snapshot.receipt;if(r){const list=node('dl');receiptPanel.append(node('h2','Native finalized escrow receipt'),node('p','This is a chain receipt. It does not verify fiat payment.'),list);exactRow(list,'Escrow outcome',r.state);exactRow(list,'Original trade digest',r.tradeId,true);exactRow(list,'Transaction hash',r.transactionHash,true);exactRow(list,'Canonical block height',r.blockNumber);exactRow(list,'Gas used',r.gasUsed);exactRow(list,'Effective gas price (native base units per gas)',r.effectiveGasPrice);exactRow(list,'Actual network fee',`${display(formatUnits(r.fee,r.nativeDecimals))} ${r.nativeAssetId} (${labels.assetNative})`);exactRow(list,'Actual network fee (native base units)',r.fee);if(t){exactRow(list,labels.network,t.networkId);addressRow(list,'Original seller / refund destination',t.seller);addressRow(list,'Original buyer / release destination',t.buyer);}}
+ const r=snapshot.receipt;if(r){const list=node('dl');receiptPanel.append(node('h2','Native finalized escrow receipt'),node('p','This is a chain receipt. It does not verify fiat payment.'),list);exactRow(list,'Escrow outcome',r.state);exactRow(list,'Original trade digest',r.tradeId,true);exactRow(list,'Transaction hash',r.transactionHash,true);exactRow(list,'Canonical block height',r.blockNumber);exactRow(list,'Gas used',r.gasUsed);exactRow(list,'Effective gas price (native base units per gas)',r.effectiveGasPrice);exactRow(list,'Actual network fee',`${display(formatUnits(r.fee,r.nativeDecimals))} ${r.nativeAssetId} (${labels.assetNative})`);exactRow(list,'Actual network fee (native base units)',r.fee);if(t){exactRow(list,labels.network,t.networkId);addressRow(list,'Original seller / refund destination',t.seller);addressRow(list,'Original buyer / release destination',t.buyer);}
+  payoutPresentation(receiptPanel,r.payout);}
 }
