@@ -58,6 +58,9 @@ const codeOf=(error:unknown):UpdateError=>{
   if(typeof error==='object'&&error!==null){const known=codes.get(error)??updateReadCode(error);if(known)return known;}
   return 'UNAVAILABLE';
 };
+/** Hostile envelope bytes are untrusted content, never a transport outage; parsing runs no foreign callbacks. */
+const envelope=(bytes:Uint8Array):unknown=>{
+  try{return parseStrictJsonBytes(bytes,UPDATE_ENVELOPE_BYTES);}catch{return stop('MANIFEST_UNSUPPORTED');}};
 const refused=(code:UpdateError):UpdateResult<never>=>Object.freeze({ok:false,error:Object.freeze({code})});
 const good=<T>(value:T):UpdateResult<T>=>Object.freeze({ok:true,value});
 const data=(input:unknown,keys:readonly string[]):Record<string,unknown>=>{
@@ -142,8 +145,9 @@ export function createAssetUpdateController(options:UpdateOptions={}):AssetUpdat
           const locatorBytes=await read(source.locator,4096),index=readUntrustedReleaseLocator(locatorBytes);if(!index.ok)return stop(index.error.code);
           const target=destination(pinned,index.value.cid,source.destination(index.value.cid));guard(job);
           const resolve=(kind:'manifest'|'manifest-envelope'|'asset',path?:string)=>{guard(job);const ref=endpoint(source.resolve(index.value.cid,kind,path));guard(job);if(new URL(ref.url).origin!==new URL(target).origin)return stop('ORIGIN_UNSUPPORTED');return ref;};
-          const locatorEnvelope=parseStrictJsonBytes(await read(source.locatorEnvelope,UPDATE_ENVELOPE_BYTES),UPDATE_ENVELOPE_BYTES);
-          const manifestBytes=await read(resolve('manifest'),RELEASE_LIMITS.manifestBytes),manifestEnvelope=parseStrictJsonBytes(await read(resolve('manifest-envelope'),UPDATE_ENVELOPE_BYTES),UPDATE_ENVELOPE_BYTES);
+          const locatorEnvelope=envelope(await read(source.locatorEnvelope,UPDATE_ENVELOPE_BYTES));
+          const manifestBytes=await read(resolve('manifest'),RELEASE_LIMITS.manifestBytes);
+          const manifestEnvelope=envelope(await read(resolve('manifest-envelope'),UPDATE_ENVELOPE_BYTES));
           const parsed=readUntrustedReleaseManifest(manifestBytes);if(!parsed.ok)return stop(parsed.error.code);const manifest=parsed.value;
           if(manifest.assets.length===0)return stop('MANIFEST_UNSUPPORTED');
           if(pinned.storageSchema<manifest.minStorageSchema||pinned.storageSchema>manifest.maxStorageSchema)return stop('SCHEMA_INCOMPATIBLE');
