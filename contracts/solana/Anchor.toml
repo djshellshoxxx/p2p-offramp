@@ -1,5 +1,5 @@
-# Build with `cargo build-sbf --features localnet` (see README.md); `anchor build` defaults to
-# platform-tools v1.57/SBPF v3, which the pinned Agave v4.1.2 toolchain does not ship.
+# Build with `cargo build-sbf --features localnet --arch v3` (see README.md); `anchor build` defaults to
+# platform-tools v1.57, which the pinned Agave v4.1.2 toolchain does not ship.
 [toolchain]
 anchor_version = "1.2.2"
 solana_version = "4.1.2"

@@ -67,9 +67,9 @@ jobs:
         run: |
           cargo fmt --check
           cargo clippy --locked --features localnet --all-targets -- -D warnings
-      - name: Build program (SBPF v0, platform-tools v1.54)
+      - name: Build program (SBPF v3, platform-tools v1.54)
         working-directory: contracts/solana
-        run: cargo build-sbf --manifest-path programs/basic-escrow/Cargo.toml --features localnet -- --locked
+        run: cargo build-sbf --manifest-path programs/basic-escrow/Cargo.toml --features localnet --arch v3 -- --locked
       - name: LiteSVM tests (original SPL Token 3.5.0 and p-token)
         working-directory: contracts/solana
         run: cargo test --locked --features localnet

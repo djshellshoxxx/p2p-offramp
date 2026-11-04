@@ -39,19 +39,21 @@ verified genesis/program/mint evidence and a deployment decision; building witho
 | Tool | Version | Source check |
 | --- | --- | --- |
 | Agave (`solana`, `cargo build-sbf`, `solana-test-validator`) | v4.1.2, commit `182084b8` | tag; release tarball SHA-256 `5991d027…f770` recorded at download |
-| Platform tools | v1.54 (Agave 4.1.2 default), SBPF v0 | installed by `cargo build-sbf` |
+| Platform tools | v1.54 (Agave 4.1.2 default), SBPF v3 (`--arch v3`) | installed by `cargo build-sbf` |
 | Anchor (`anchor-lang`, `anchor-spl`, CLI) | 1.2.2, commit `8d9d1488` | tag; CLI binary SHA-256 `e2c35a97…e741` |
 | Rust host toolchain | 1.98.1 (`rust-toolchain.toml`) | rustup channel |
 | LiteSVM | 0.15.0 (`Cargo.lock`, Anchor 1.2.2 template graph) | crates.io |
 
-`anchor build` defaults to platform-tools v1.57 / SBPF v3, which Agave 4.1.2 does not ship, so the program
-is built with `cargo build-sbf` directly. GitHub's release API is not reachable from the development
+`anchor build` defaults to platform-tools v1.57, which Agave 4.1.2 does not ship, so the program is built with
+`cargo build-sbf --arch v3` directly. SBPF v3 is required: with SIMD-0500 (`disable_sbpf_v0_v1_v2_deployment`,
+`B8JJXCy5…o83g`) active, Agave 4.1.2 refuses to deploy or finalize v0–v2 programs (reproduced on a local
+validator). LiteSVM's mainnet list (2026-07-10) shows v3 deployment and execution active, SIMD-0500 not yet. GitHub's release API is not reachable from the development
 container; the tarball/binary digests above were computed locally, not compared with publisher digests.
 
 ## Commands
 
 ```bash
-cargo build-sbf --manifest-path programs/basic-escrow/Cargo.toml --features localnet
+cargo build-sbf --manifest-path programs/basic-escrow/Cargo.toml --features localnet --arch v3
 cargo test --features localnet
 anchor idl build -p basic_escrow -o idl/basic_escrow.json -- --features localnet
 node vectors/derive.mjs --check && node --test vectors/derive.test.mjs
