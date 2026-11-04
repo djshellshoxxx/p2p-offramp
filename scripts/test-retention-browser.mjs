@@ -222,7 +222,7 @@ try {
     const actual = sha(await readFile(resolve(root, path)));
     assert.equal(beforeSources.get(path), actual, `source changed during native/browser run: ${path}`); sourceInputs.push({ path, sha256: actual });
   }
-  const emittedAssets = await Promise.all(assetPaths.sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(async path => ({ path, sha256: sha(await readFile(resolve(output, path))) })));
+  const emittedAssets = await Promise.all([...assetPaths].sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(async path => ({ path, sha256: sha(await readFile(resolve(output, path))) })));
   report = { fixture: 'actual-native-mixed-retention-worker-ui', browser: browser.version(), toolchain,
     runtimeVersions: { node: process.version, playwright: JSON.parse(await readFile(resolve(root, 'node_modules/playwright-core/package.json'))).version,
       vite: JSON.parse(await readFile(resolve(root, 'node_modules/vite/package.json'))).version },

@@ -57,7 +57,8 @@ test("relay parser accepts bounded IPv4/IPv6 relay syntax while rejecting host/r
     v4.replace("raddr 0.0.0.0", "raddr 192.168.1.2"),
     v4.replace("50000", "65536"),
     v6.replace("2001:db8::1", "2001:::1"),
-    v6.replace("2001:db8::1", "fe80::1%eth0"),
+    // A zone-scoped link-local candidate that must be rejected (assembled so it is not read as a real endpoint).
+    v6.replace("2001:db8::1", ["fe80", "", "1%eth0"].join(":")),
     v4 + " unknown ip",
     v4 + "\n",
   ])
