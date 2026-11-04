@@ -11,7 +11,7 @@ for (const profile of [REF, SDK]) test(`fresh native view/send/receive ${profile
   assert.notEqual(first.ephemeralPublicKeyHex, second.ephemeralPublicKeyHex); assert.notEqual(first.stealthAddress, second.stealthAddress); assert.equal(first.metadataHex.length, 6);
   assert.equal(assertValue(service.matchAnnouncement(view, SPEND, first)).match, true); assert.equal(assertValue(service.matchAnnouncement(view, SPEND, second)).match, true);
   assert.equal(assertValue(service.matchAnnouncement(other, SPEND, first)).match, false); assert.equal(first.economicAuthority, false); assert.equal(Object.isFrozen(service), true);
-  assert.deepEqual(Object.keys(facade).sort(), ['ANNOUNCEMENT_TOPIC0', 'createEncryptedComparisonStore', 'createOfflineStealth', 'decodeAnnouncement', 'parseMetadataHex'].sort());
+  assert.deepEqual(new Set(Object.keys(facade)), new Set(['ANNOUNCEMENT_TOPIC0', 'createEncryptedComparisonStore', 'createOfflineStealth', 'decodeAnnouncement', 'parseMetadataHex']));
   assert.doesNotMatch(JSON.stringify([view, first, second]), /secret|scalar|seed|preimage|digest|balance|signature/i);
   for (const name of ['importKey', 'importSeed', 'privateKey', 'derivePrivateKey', 'spend', 'fund', 'send', 'sign', 'fetch', 'network']) assert.equal(name in service, false);
 });
