@@ -1,0 +1,134 @@
+{
+  "task": "T88",
+  "author": "/root/audit_build_ops",
+  "status": "READY_FOR_DISTINCT_INDEPENDENT_REVIEW",
+  "frozenAtUtc": "2026-11-02T16:20:43.213304+00:00",
+  "headAtFreeze": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "files": [
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "bytes": 13327,
+      "sha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32"
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "bytes": 34004,
+      "sha256": "1b6e01384ad928fd0926276685a6b0d7783838daafaf92fa3271e5c01561a4c1"
+    },
+    {
+      "path": "scripts/tests/sepolia-hygiene.test.mjs",
+      "bytes": 15502,
+      "sha256": "63b93352548e089d042e5840d8c152b45b726caa7b060884b9c482a37fa3a5be"
+    },
+    {
+      "path": "scripts/tests/sepolia-trade-state.test.mjs",
+      "bytes": 19186,
+      "sha256": "41c0ea5b8767010864922fb7dae31839aacf6d849e373bd3b89c8fa716c570a0"
+    }
+  ],
+  "sourceEditsOrCommits": {
+    "sourceFiles": [
+      "scripts/sepolia/lib.mjs",
+      "scripts/sepolia/trade.mjs",
+      "scripts/tests/sepolia-hygiene.test.mjs",
+      "scripts/tests/sepolia-trade-state.test.mjs"
+    ],
+    "ledgerEdits": false,
+    "commits": false
+  },
+  "findings": [
+    "T38-E-01",
+    "T38-E-02"
+  ],
+  "authorization": "Root explicitly transferred the redaction pair and subsequently the trade/state-test pair. No other source scope was changed.",
+  "behavior": [
+    "Bounded RPC disclosure guard checks every nonempty repeated/short query value and literal/decoded/encoded representations. Empty values do not match all endpoints. Prior userinfo/full-query/long host/path checks remain.",
+    "Fixed action history has at most fund/release/refund, one record per kind. The marker is saved before gas estimation/Forge; failures/current absence cannot authorize repeating the same kind.",
+    "Legacy fund/settle/failedSends evidence is copied into its named fixed kind without overwriting a prior kind. Unknown legacy kinds or ambiguity fail closed; imported history can restrict, not establish native state or fiat facts.",
+    "Native proven funding retains its first distinct exit under the existing chain/actor/time checks. A prior release does not prevent the first timeout refund. Unknown prior release evidence remains alongside the refund attempt.",
+    "Successful canonical terminal observations end read-only processing without economic sends; summary enrichment cannot discard the separate attempt history.",
+    "No resend flag, generic journal, fake nonce proof, send retry, native harness weakening, production pin or scanner change."
+  ],
+  "tests": [
+    {
+      "scope": "redaction",
+      "phase": "RED",
+      "exitCode": 1,
+      "tests": 12,
+      "pass": 9,
+      "fail": 3,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/t88-redaction.RED.log",
+      "logSha256": "9bbefa08aef494dca4263eee13128f91486441ad9223357d44ce24f5b83bcd3b"
+    },
+    {
+      "scope": "redaction",
+      "phase": "GREEN",
+      "exitCode": 0,
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/t88-redaction.GREEN.log",
+      "logSha256": "d68e748e3855ac5ad70f75a8ae98d712a09c6ca21450f89c7bf8f419f28cec90"
+    },
+    {
+      "scope": "attempts",
+      "phase": "RED",
+      "exitCode": 1,
+      "tests": 12,
+      "pass": 9,
+      "fail": 3,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/t88-attempts.RED.log",
+      "logSha256": "8939f3e82b8e82b9727b75a939e853e355a2703744f690cb378dad7c6a26e2eb"
+    },
+    {
+      "scope": "attempts",
+      "phase": "GREEN",
+      "exitCode": 0,
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/t88-attempts.GREEN.log",
+      "logSha256": "0daf6bb7e0a1ba16f543730d53c00ba3f6ce3c0211e84db68b41e1a7913313be"
+    },
+    {
+      "scope": "combined",
+      "phase": "GREEN",
+      "exitCode": 0,
+      "tests": 24,
+      "pass": 24,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "managedIpcNetworkCapability": true,
+      "externalRequests": false,
+      "log": "/workspace/work/t88-focused-combined.GREEN.log",
+      "logSha256": "cc7f063d9a765f3fe792d616074d43f82e2187e4b38a0935e5d8c6dabbb46671"
+    }
+  ],
+  "intermediateDiagnosis": {
+    "path": "/workspace/work/t88-attempts.INTERMEDIATE.log",
+    "reason": "First implementation run11/12: the new test wrongly required the mutable fund summary to remain exactly unchanged, but existing canonical receipt readback legitimately adds block/blockHash. The assertion was corrected to retain every preexisting field while allowing native enrichment; immutable per-kind history retention remains exact. Original intermediate log retained."
+  },
+  "limits": [
+    "All tests use controlled public fixtures and intercepted RPC/send boundaries. No external endpoint request, real Forge send, deployment, signing or resource provisioning occurred.",
+    "Root owns full-suite and native Anvil/harness validation after integration. The source author cannot independently approve this repair.",
+    "RPC disclosure checks are conservative: a short/generic nonempty private query value can reject a keyless endpoint. There is no provider-specific credential-field schema.",
+    "Attempt records are process-resume safeguards in an editable local CLI document; no new malicious-file integrity, multi-process concurrency or filesystem power-loss qualification is claimed."
+  ]
+}

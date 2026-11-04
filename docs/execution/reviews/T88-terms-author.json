@@ -1,0 +1,66 @@
+{
+  "task": "T88-copy-bound",
+  "status": "READY_FOR_INDEPENDENT_ROOT_REVIEW",
+  "sourceHeadAtFreeze": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "frozenAtUtc": "2026-11-02T16:20:33.039092+00:00",
+  "ownedFiles": [
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "baselineSha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6",
+      "finalSha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364"
+    },
+    {
+      "path": "packages/domain/test/terms-review.test.mjs",
+      "baselineSha256": "7f0884a2ebecd9e2d4ae105ca0ece5d98f6c6bff523a641e258ee19fac916565",
+      "finalSha256": "1fca48a81a4720229b444e943ed502786c36335dfde25c0b90d80d82a4304b76"
+    }
+  ],
+  "defect": {
+    "auditId": "T38-C:C-P2-2",
+    "severity": "P2 resource boundary",
+    "path": "packages/domain/src/terms-review.ts",
+    "baselineLines": [
+      183,
+      189
+    ],
+    "description": "A shadowed caller byteLength could pass the initial size test, causing new Uint8Array(input) to allocate the full actual over-cap view before the strict parser eventually refused it. Throwing byteLength accessors also refused valid genuine offset views.",
+    "initialAuditSourceSha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6"
+  },
+  "repair": "Capture the native TypedArray byteLength getter and Uint8Array set operation using the existing RegistryService pattern. Check the actual view against unchanged 65536-byte cap before allocating a bounded owned array; copy only intrinsic offset/range and catch malformed/detached views as fixed MALFORMED. Public signatures/rejection codes remain unchanged.",
+  "verification": {
+    "redCommand": "node --test packages/domain/test/terms-review.test.mjs",
+    "redExitCode": 1,
+    "redCases": 16,
+    "redPassed": 14,
+    "redFailed": 2,
+    "redObserved": "Bounded 65537-byte view with shadowed byteLength allocated one owned view before rejection; bounded offset view with throwing accessor returned MALFORMED.",
+    "greenCommand": "node --test packages/domain/test/terms-review.test.mjs packages/domain/test/trade-terms.test.mjs packages/domain/test/registry.test.mjs",
+    "greenExitCode": 0,
+    "greenPassed": 36,
+    "greenFailed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "managedIpcCapability": true,
+    "defaultNodeTestIsolation": true,
+    "greenObserved": {
+      "oversizedViewBytes": 65537,
+      "preRejectionOwnedAllocations": 0,
+      "callerByteLengthAccessorReads": 0,
+      "digestCalls": 0,
+      "registryLookups": 0,
+      "validPoisonedOffsetView": "accepted with exact expected terms; no length/iterator/constructor accessor calls; all caller backing bytes unchanged",
+      "detachedView": "MALFORMED",
+      "exact65536And65537Boundaries": "existing cases pass unchanged"
+    },
+    "raw": [
+      "pre-copy-guard.RED.log",
+      "canonical-focused.GREEN.log"
+    ],
+    "diffCheck": "passed"
+  },
+  "scope": [
+    "Only these two root-admitted paths changed in this slice. No huge allocation, external target, RPC, wallet, spending or production activation.",
+    "The T88 wallet pair and its frozen packet/manifest are unchanged. Original29-file T38-C audit inventory hashes are retained, with the two authorized repairs recorded separately.",
+    "No whole suite or commit; root independent review remains required."
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "task": "T57",
+  "reviewer": "root, distinct from author",
+  "disposition": "Approved for local unsigned staging only",
+  "sourceReview": "All five files reviewed: schema/identity binding, exact public assets, bounds, native file reads, sanitized child builds, cleanup, CSP, native browser and documentation. Initial reviewer stopped on an automated content flag; root completed this local correctness review.",
+  "tests": {
+    "ordinaryNodeCases": 5,
+    "skipped": 0,
+    "cancelled": 0,
+    "browserGroups": 3,
+    "assets": 39,
+    "unexpectedRequests": 0,
+    "runner": "Normal --test with managed IPC capability; historical author isolation=none is not inherited.",
+    "negativeControl": "Refusing the actual vault Worker prevents expected startup controls; missing-native-evidence suspicion withdrawn."
+  },
+  "logs": {
+    "t57-root-independent-stage.log": "f794580ae0b4cd1f585662a7381a3a841190a48b604d5bd11de463bce47abb03",
+    "t57-root-independent-browser.log": "34a5c0397bf04a31abd582854e3bf5ddbaa35b2fdb1b451b6c152b8a4f212b2c",
+    "t57-negative-worker-browser.log": "b1121c6ab2f346be29b487505a16cf78babefa904d45d963580210b696667ee5"
+  },
+  "files": [
+    {
+      "path": "scripts/distribution/manifest.mjs",
+      "bytes": 10657,
+      "sha256": "8c070a6226897a3338f489b95cc393826358e3b723267ab4297384911812e938"
+    },
+    {
+      "path": "scripts/distribution/stage.mjs",
+      "bytes": 16365,
+      "sha256": "c6c9f78adbba59806bd6211f43afdfacc129492c8af3c6427ef547b772c974a7"
+    },
+    {
+      "path": "scripts/distribution/stage.test.mjs",
+      "bytes": 8729,
+      "sha256": "47a7f262e6db3041999865e80aa1382bddb560c17f75c87b4ee4372c8bad6d07"
+    },
+    {
+      "path": "scripts/distribution/browser.test.mjs",
+      "bytes": 5467,
+      "sha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec"
+    },
+    {
+      "path": "docs/distribution/README.md",
+      "bytes": 4355,
+      "sha256": "25a1110f015cfd90f8f28d25ef471d96236d2ac714bc913883fb9e1621a9a8d9"
+    }
+  ],
+  "historicalStage": {
+    "directory": "/workspace/work/p2p-t57-local-stage-7f5c8c5",
+    "assets": 39,
+    "sourceInputs": 133,
+    "manifestSha256": "0852d015351b62a8003b1679e906abab74f150449da745ce9cba7a0114937f9e",
+    "assetSetSha256": "e2b32d41631ebedde9a8d2a31c7620d93cf1239030decf2b1a04c09745f0103b",
+    "passes": 2,
+    "localBytesEqual": true,
+    "independentWitnesses": 0,
+    "approval": {
+      "signedRelease": false,
+      "releaseEnabled": false,
+      "approvedDeployment": false,
+      "hostHeadersVerified": false,
+      "independentReproducibility": false,
+      "published": false
+    }
+  },
+  "limits": "No signing/bootstrap, approved deployment/executable, independent witness, professional acceptance, publication or funds authority. Unsigned inventory cannot authenticate itself."
+}

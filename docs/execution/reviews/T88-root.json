@@ -1,0 +1,113 @@
+{
+  "task": "T88",
+  "reviewer": "/root",
+  "status": "INDEPENDENT_FOCUSED_ACCEPTANCE_FINAL_NATIVE_PENDING",
+  "files": [
+    {
+      "path": "packages/courier/src/locker.ts",
+      "sha256": "d28f1976671eaddffcfa67f82d632de6af80f04a9e974b49b329ede95cc0df65"
+    },
+    {
+      "path": "packages/courier/test/locker.test.mjs",
+      "sha256": "3fa9386445d5202126461e5714801f0f449d939522f9b3aa7a6e355cd339afbc"
+    },
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "sha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364"
+    },
+    {
+      "path": "packages/domain/test/terms-review.test.mjs",
+      "sha256": "1fca48a81a4720229b444e943ed502786c36335dfde25c0b90d80d82a4304b76"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "04bcee7a1850f8473a62a51611a1d88243b464564969648ac9513ad00d6bf5da"
+    },
+    {
+      "path": "packages/messaging/test/durable-chat.test.mjs",
+      "sha256": "a3fdfdcd42d5e7971790b75effe10bbe34cf1b547f8831009c8585b73ceb237d"
+    },
+    {
+      "path": "packages/relay/src/local-pool.ts",
+      "sha256": "974d3b462d9175955a1283c340c8d4780e75c2aca612248d41b6bef5333b48b0"
+    },
+    {
+      "path": "packages/relay/test/local-pool.test.mjs",
+      "sha256": "6e07178c842a0d4b3a1b9f891cd63f429424a42ce0051c57d4a26854e4c62bde"
+    },
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "sha256": "17280d0c12e2ac8daacf66bd1c3fd831367c80b955fafcaf8e11cb39e6936f47"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "sha256": "c5f49c00d52156110c26b951b2852aff9e3470a8c48369c1d849638b29c56d9c"
+    },
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "sha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32"
+    },
+    {
+      "path": "scripts/sepolia/trade.mjs",
+      "sha256": "1b6e01384ad928fd0926276685a6b0d7783838daafaf92fa3271e5c01561a4c1"
+    },
+    {
+      "path": "scripts/tests/sepolia-hygiene.test.mjs",
+      "sha256": "63b93352548e089d042e5840d8c152b45b726caa7b060884b9c482a37fa3a5be"
+    },
+    {
+      "path": "scripts/tests/sepolia-trade-state.test.mjs",
+      "sha256": "41c0ea5b8767010864922fb7dae31839aacf6d849e373bd3b89c8fa716c570a0"
+    },
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha256": "703ed5c8083ba97a05d8c4131e267833420d867fbafc837f3e467c6bb9f9c399"
+    },
+    {
+      "path": "packages/schemas/test/backup.test.mjs",
+      "sha256": "4cda0cb55bc5ed29a120043a7ff0b5713eb556bd48b9965e84284f0ccddbf475"
+    },
+    {
+      "path": "packages/schemas/src/recovery-reference.ts",
+      "sha256": "1135dc4d709919a69614e9dc1fad6a70f97cfb915e86df32b3fe7db5566505c7"
+    },
+    {
+      "path": "packages/schemas/test/recovery-reference.test.mjs",
+      "sha256": "22890938ca21ef787b65302825a0421b9dfdf866bbb6f7b5e634a24f11d1bf7d"
+    },
+    {
+      "path": "packages/schemas/test/runtime.test.mjs",
+      "sha256": "1a96a186b2b95095686bbcaea447d4fae0df2f24fcf055c61097bb6920083b52"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c"
+    }
+  ],
+  "semanticChecks": [
+    "Intrinsic preallocation terms bound and safe offset copy",
+    "Courier prepared command expiry rechecked at actual send-start boundary",
+    "Chat native signal setup and independent cleanup retain physical admission; local relay cohort removal skips only removed subscriber",
+    "Wallet descriptor-owned account and captured send receiver/capability, owned state after every callback, native cancellation setup before deferred work, durable marker makes uncertainty sticky and never resends",
+    "CLI each action-kind marker durable before estimate/Forge; legacy evidence restricts, first distinct refund remains possible; individual short/repeated/encoded private query values cannot enter published endpoints",
+    "Schema foreign reflection yields fresh bounded fixed errors; no versions/caps/authority changed; shared runtime guard reviewed alongside independently reviewed T80/T81/T82 feature additions"
+  ],
+  "verification": {
+    "otherFocusedCases": 142,
+    "walletCases": 23,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "defaultNodeIsolation": true,
+    "managedIpc": true,
+    "focusedLog": "/workspace/work/t88-root-independent-focused.log",
+    "focusedLogSha256": "9becb744e41482b33fa595706f7fa4485c997fe7e8982132a12ed41cec601b2f",
+    "walletResult": "23 named cases passed in root independent run",
+    "nativeCli": "Initial attempt refused DIRTY_SOURCE before deployment; clean committed source retry remains final T38 work"
+  },
+  "openOtherSubfinding": "T38-B-02 canonical local object parsing assigned separately, not accepted by this receipt",
+  "limits": [
+    "Synthetic local defensive controls; no remote JSON exploit established",
+    "Full current-tree/native verification and release qualification are separate; root source commit does not certify future hosting merge"
+  ]
+}

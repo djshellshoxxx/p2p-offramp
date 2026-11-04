@@ -1,0 +1,117 @@
+{
+  "review": "T41 independent five-axis review",
+  "decision": "APPROVED_AFTER_REPAIR",
+  "scope": [
+    "MEET01 radial blur and sticky cache",
+    "MEET02 conventional geohash/coarse region validation",
+    "MEET03 encrypted disclosure reservation/consumption budget",
+    "MEET08 freshness/plausibility labels",
+    "G31 opaque local consent lifecycle"
+  ],
+  "findings": [
+    {
+      "id": "T41-R1",
+      "priority": "P2",
+      "status": "FIXED_AND_INDEPENDENTLY_RECHECKED",
+      "summary": "Admission originally occurred after trusted lease/consent/clock callbacks, allowing two reentrant jobs and missing synchronous raw-buffer cleanup when a callback retired the vault before active assignment.",
+      "repair": "Actual job/controller/buffer ownership now installs before callbacks; retirement checked after each preflight callback and before coordinator; physical slot retained until native work drains."
+    }
+  ],
+  "fiveAxes": {
+    "authority_and_privacy": "No default app import, sensor, permission prompt, network, proof provider or settlement authority; capabilities identity-bound, current consent/owner/session checked around awaits and CAS. Local coordinator/profile binding is required and expressly not qualified by injected test ports.",
+    "correctness_and_algorithms": "Conventional longitude-first grid encoder agrees with independently regenerated1024point/4096hash exact-grid oracle; spherical area sampling, dateline/poles/coarseness limits and source/freshness labels inspected.",
+    "bounds_and_hostile_inputs": "Exact bounded fields/arrays/records;128event/128lifetime-trade caps;12day/4hour region quota and3lifetrade predicate counters; no reset through deletion/reopen/unknown sends; fixed error codes.",
+    "lifecycle_and_failures": "Pre-disclosure durable CAS; unknown reserved outputs consumed conservatively, copied reservations cannot cancel; stale generation/clock/storage conflict/denied lock/cancel/timeouts fail closed; ignored work retains physical slot; admission/retirement regressions independently confirmed.",
+    "simplicity_and_scope": "Optional package reuses actual G02 lease/CAS and native WebCrypto, with no transport/sensor/proof implementation or alternate custody schema; documented bounded local profile leaves native origin/device/provider qualification pending."
+  },
+  "checks": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/meetup/test/*.test.mjs",
+      "networkCapability": true,
+      "pass": 26,
+      "fail": 0,
+      "skipped": 0,
+      "log": "/workspace/work/t41-review-focused-final.log"
+    },
+    {
+      "command": "node /workspace/work/t41-reentrant-slot-fixed-review.mjs",
+      "result": "Nested inspection CONFLICT; original marker succeeds",
+      "log": "/workspace/work/t41-reentrant-slot-final.log"
+    },
+    {
+      "command": "node /workspace/work/t41-reentrant-close-fixed-review.mjs",
+      "result": "Actual G02 lock during clock callback immediately zeroes owned Float64Array, coordinatorcalls0, resultLOCKED",
+      "log": "/workspace/work/t41-reentrant-close-final.log"
+    },
+    {
+      "command": "python packages/meetup/test/fixtures/generate_geohash_oracle.py /workspace/work/t41-geohash-independent-regenerated.json",
+      "result": "1024points/4096hash vectors and generatorSha identical to frozen oracle",
+      "log": "/workspace/work/t41-geohash-oracle-review.log"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0,
+      "log": "/workspace/work/t41-review-types-final.log"
+    },
+    {
+      "command": "node scripts/check-import-boundaries.mjs",
+      "exitCode": 0,
+      "log": "/workspace/work/t41-review-boundaries-final.log"
+    }
+  ],
+  "frozenFiles": [
+    {
+      "path": "packages/meetup/README.md",
+      "sha256": "2c415bdfc5b785e59349ef62b63bb65d683053aab90828b7377475804a8698ae"
+    },
+    {
+      "path": "packages/meetup/index.ts",
+      "sha256": "81c434ba289d39ebb2cc953d7c795819c44fb5587af6b274462e2905c961d7f8"
+    },
+    {
+      "path": "packages/meetup/src/blur.ts",
+      "sha256": "b1285a576d5310957101c7e5c8321c5bb1d3201e7ed0b00278f39c72fec369f3"
+    },
+    {
+      "path": "packages/meetup/src/budget-record.ts",
+      "sha256": "62e7416db7da55e349e0f76d64dcce3bf183ac8fce9dd558fad67bea317269eb"
+    },
+    {
+      "path": "packages/meetup/src/consent.ts",
+      "sha256": "4d8bfe642d704e7866d4cc75fbafde16203860aefa7747035d6bc8e1352eca37"
+    },
+    {
+      "path": "packages/meetup/src/disclosure-budget.ts",
+      "sha256": "db5b3d2b1d1813409d3ae931f1fca7e6bf07b262455471bc4637c530c4419629"
+    },
+    {
+      "path": "packages/meetup/src/geohash.ts",
+      "sha256": "bf2b64b52012d8da51c95f64b1a810531f538716e419ada70c94d96c8b25723b"
+    },
+    {
+      "path": "packages/meetup/src/location-claim.ts",
+      "sha256": "50aa7ba8ffa9bcd5d8c0e9a1ae1a6d724a22fb95470a78e8b6ff5abab2e9bae6"
+    },
+    {
+      "path": "packages/meetup/src/shared.ts",
+      "sha256": "29b1464b375a30a3e7a0a3817ddbf44c6ae4c415958c1a9d72b49ed3d7a95d82"
+    },
+    {
+      "path": "packages/meetup/test/budget.test.mjs",
+      "sha256": "656e3b1bbaef85ae8c413ef238af2fae32a329ade548e282dc2957957fb8b553"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/generate_geohash_oracle.py",
+      "sha256": "79c47b1d17d0636fa50cfa7a4a7c57930180feaef04f442e31cb42eb732e2900"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/geohash-oracle.json",
+      "sha256": "eedf436f45fc651700ee6045973f458481a6bf58d2930823d5a70e242250e0c0"
+    },
+    {
+      "path": "packages/meetup/test/primitives.test.mjs",
+      "sha256": "1b5359eba3332100766c77855f251bf1627be48dfa23058aea71cdc48124fbd0"
+    }
+  ],
+  "qualification": "Local source/code review and deterministic/actualG02-memory-store tests only. Not native WebLocks/IndexedDB multi-browser origin binding, sensor/device spoofing evidence, distance proof/provider selection,100000sample release acceptance, anonymity, physical presence or funds activation."
+}

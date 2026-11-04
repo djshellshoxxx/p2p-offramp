@@ -1,0 +1,304 @@
+{
+  "review": "Independent final integration review T83/T89",
+  "reviewer": "/root/draft_contract (authored neither feature)",
+  "createdUtc": "2026-11-02T17:33:01.266732+00:00",
+  "headAtReceipt": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "scope": "Read-only source and selected-test review; no source/ledger edits, commits, full suites or duplicate native runs. Work artifacts only.",
+  "status": "T89_APPROVE_T83_REQUEST_CHANGES_INITIAL_FREEZE",
+  "taskDispositions": {
+    "T83": "REQUEST_CHANGES_T83_R1; root confirmed and owns narrow fix; independent delta review pending",
+    "T89": "APPROVE; no blocking semantic finding in controller/UI/root enrollment/final copy"
+  },
+  "findings": [
+    {
+      "id": "T83-R1",
+      "severity": "P2",
+      "status": "ROOT_CONFIRMED_FIX_IN_PROGRESS",
+      "title": "Clipboard physical admission is lost when actual Settings unmounts",
+      "paths": [
+        "apps/web/src/ui/GenericAppShare.tsx:8",
+        "apps/web/src/ui/App.tsx:132",
+        "scripts/test-generic-app-share-browser.mjs:153"
+      ],
+      "reproduction": [
+        "Hold clipboard.writeText from an explicit Settings copy click.",
+        "Navigate to Home while the write remains pending, then return to Settings.",
+        "Click Copy in the replacement Settings component; its fresh inFlight=false permits a second physical clipboard write before the first settles."
+      ],
+      "impact": "Violates the packet one-physical-promise claim and permits overlapping pending writes across ordinary route reentry. The actual composition uses the same public generic link, so this is a boundedness/lifecycle contract issue; no private URL leak was found.",
+      "remedy": "Keep physical clipboard admission for the page lifetime; preserve owner/sequence suppression and manual fallback. Add actual-App held Settings leave/return and held fixture remount-before-settlement controls.",
+      "evidence": "Per-instance refs are recreated on the App route unmount. The initial native test settles its old promise before mounting a replacement, so its passing unmount assertion covers only stale publication."
+    }
+  ],
+  "files": [
+    {
+      "path": "apps/web/src/sharing/generic-app-link.ts",
+      "reviewedSha256": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+      "authorPacketSha256": "a6a0f81b2430d4d4c2d66712c9679f722f5b3aa707364d1bbfaad057972b7f71",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Actual main import.meta.url only; canonical known entry shape; preserves hosting subpaths; rejects query/fragment/credentials/traversal/encoded separators/unknown schemes and non-loopback HTTP. No location, provider, fetch or tracking input."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/GenericAppShare.tsx",
+      "reviewedSha256": "3109bb26a38a472078a6d4f2a18001ea3697ed4d215c530cf89dc61198fea248",
+      "authorPacketSha256": "3109bb26a38a472078a6d4f2a18001ea3697ed4d215c530cf89dc61198fea248",
+      "matchesAuthorPacket": true,
+      "disposition": "REQUEST_CHANGES_T83_R1",
+      "checks": [
+        "Explicit user click only; no clipboard/permission read at startup; readonly manually selectable field remains on denial/absence/error; fixed diagnostics never render exceptions.",
+        "Owner object, mounted ref and attempt sequence suppress stale result publication, including A-to-B-to-A. The inFlight gate is mount-local and does not survive actual Settings route unmount/remount: finding T83-R1."
+      ]
+    },
+    {
+      "path": "apps/web/src/analytics/screen-counts.ts",
+      "reviewedSha256": "b12b1ecf2237754a1de9339bc377e73b20943e9ff63ba34b1149be1320039ae7",
+      "authorPacketSha256": "b12b1ecf2237754a1de9339bc377e73b20943e9ff63ba34b1149be1320039ae7",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Only five literal category counters, initially off; opt-in counts current foreground once; same-category rerenders and hidden commits do not count; visible resume counts once.",
+        "Immutable snapshots; each counter saturates65535; no imported events, payloads, clock, persistence, Worker, network, route/identity or manual increment interface.",
+        "Explicit review then exact opaque preview identity confirmation; ASCII JSON bounded1024 UTF8 bytes; count/clear/opt-out/hide/retire invalidate preview.",
+        "Fixed at-most16 subscriber cohort; mutators excluded after first synchronous mutation; no recursively growing notification batch; sticky retirement synchronously zeroes state before stable readers and listener release."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/LocalScreenAnalytics.tsx",
+      "reviewedSha256": "57990434a61aa0aec0e367b87605657d2b4b985cfb644a79041a082c5979e47c",
+      "authorPacketSha256": "57990434a61aa0aec0e367b87605657d2b4b985cfb644a79041a082c5979e47c",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Settings gets user-controller capability only. Rendering grants no consent; five labeled table rows, explicit start/stop/clear/review/download.",
+        "Download receives exact current preview; uses fixed filename and JSON MIME; confirms again after native file helpers immediately before click; object URL revoked in finally.",
+        "No copy or export on startup/review; old-controller erasure removes preview/controls; exception feedback is fixed and owner-bound with no retained export string."
+      ]
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "reviewedSha256": "91ca3e07e1671d6d7ae8321539a7785431462594e60ff3feb68f6423aebc6f7c",
+      "authorPacketSha256": "91ca3e07e1671d6d7ae8321539a7785431462594e60ff3feb68f6423aebc6f7c",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Generic address derives once from literal root import.meta.url and is forwarded explicitly. Analytics enrollment remains in App; neither path changes release/trading authority.",
+        "No App/Settings URL fallback or provider service is introduced by the reviewed enrollment."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "reviewedSha256": "f489bd5c62372570758b926cf14e60142fef254d15184ce6141b41a148a551ca",
+      "authorPacketSha256": "f489bd5c62372570758b926cf14e60142fef254d15184ce6141b41a148a551ca",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE_WITH_T83_R1",
+      "checks": [
+        "Passes only parsed route.page literal (unknown=>null) to analytics; route.localId/query/profile/amount are never forwarded.",
+        "Analytics owner=services object plus native selectionScope; service replacement, lock/unlock/profile switch retire old session through the hook. Settings receives controller only.",
+        "Settings route branch unmounts GenericAppShare, exposing mount-local physical clipboard admission gap T83-R1."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "reviewedSha256": "4bc69541063a8426f45a21fbddbb6d0efd05cd75e7548ff6c79af8be3d52b18a",
+      "authorPacketSha256": "4bc69541063a8426f45a21fbddbb6d0efd05cd75e7548ff6c79af8be3d52b18a",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE_WITH_T83_R1",
+      "checks": [
+        "Actual Settings renders both consumers; generic link only from prop, null fallback; analytics receives controller and fixed locale display labels, never observer.",
+        "Message views are spread at render, preserving current locale; no analytics event source, persistence, IPC or network plumbing added."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/use-screen-counts.ts",
+      "reviewedSha256": "c83532023e90297635a28616cbfea912f3d1048d14b443cf42488075097f41c7",
+      "authorPacketSha256": "c83532023e90297635a28616cbfea912f3d1048d14b443cf42488075097f41c7",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Layout cleanup retires before paint when owner/scope/session changes. StrictMode cleanup retires the initial owner; replay sees retired and creates a fresh off session. Render-created discarded objects have no external resource.",
+        "Visibility listener immediately revokes export while hidden; layout commit uses actual document.visibilityState. Pagehide retires regardless persisted; persisted pageshow creates a fresh off session.",
+        "Effect removes only own listeners; late old observer calls cannot revive retired owner; subscription state never crosses service/scope owner."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "reviewedSha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+      "authorPacketSha256": "1725098cff11cd549a65cb8f0fbde76f3f6fbbe3ca7eef734f0839ac05c459bb",
+      "matchesAuthorPacket": false,
+      "disposition": "APPROVE",
+      "checks": [
+        "Exact final English revision3 with status draft, null translator/reviewer, reviewRequired=true and no funds-locale approval.",
+        "Analytics help accurately states optional page-memory counts, screen views rather than trades/payments, no IDs/amounts/timestamps, clear-on-lock/leaving/reload and explicit export. Generic link warning disclaims authenticity/release verification.",
+        "Eight new privacy/draft/analytics/share safety entries are severity critical. unlockedHelp acknowledges explicitly loaded records; INVALID_SAVED_REVIEW acknowledges valid partial load with retained encrypted data."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "reviewedSha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "authorPacketSha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Live message adapter preserves locale getters; shell share texts are current source strings; no change to canonical parsing or authority."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/app.css",
+      "reviewedSha256": "2e475c8a3af6be68c82b09224777f525c0d49bf80d62eeffb9b4c0faccf3c26b",
+      "authorPacketSha256": null,
+      "matchesAuthorPacket": null,
+      "disposition": "APPROVE",
+      "checks": [
+        "Existing44px controls, full-width min-width0 readonly inputs/textarea, wrapping actions, focus styles and narrow layouts accommodate both consumers; no external assets or analytics requests. Author native geometry covers320/768/1024/1440."
+      ]
+    },
+    {
+      "path": "apps/web/test/generic-app-share.test.mjs",
+      "reviewedSha256": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+      "authorPacketSha256": "8c4e9dff4afcbc42f4e5d93a1db6fdce18069c83e58c723a773f313c5d434eee",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Seven actual cases: literal URL vectors, hostile/unknown entries and paths, no coercion/ambient route reads/startup clipboard read; manual readonly field and unsupported fallback.",
+        "Selected independent managed-IPC run passed. Browser remains responsible for event/promise lifetime; initial cases omit held unmount/remount admission."
+      ]
+    },
+    {
+      "path": "apps/web/test/screen-counts.test.mjs",
+      "reviewedSha256": "005a831503c9b12d172d29152093d78f1b9a976dbd394655c635907f8a569ab6",
+      "authorPacketSha256": "005a831503c9b12d172d29152093d78f1b9a976dbd394655c635907f8a569ab6",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Twelve meaningful controller cases: opt-in/off/clear/retire, visibility, saturation/byte bound, hostile values/getters, forbidden ambient capabilities and exact preview identity.",
+        "Three reentrant subscriber regressions exercise fixed cohort/mutator exclusion, stable final snapshots, late-member exclusion and16 bound. Selected independent managed-IPC run passed."
+      ]
+    },
+    {
+      "path": "apps/web/test/local-screen-analytics.render.test.mjs",
+      "reviewedSha256": "dc9172c0a88bb632d7e6e4ad7734c87dd520890c83c9018b8b9963d6ba3373d2",
+      "authorPacketSha256": "dc9172c0a88bb632d7e6e4ad7734c87dd520890c83c9018b8b9963d6ba3373d2",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Three static render cases: no consent while rendering, fixed five rows plus exact explicit preview, retired/absent control removal. Selected independent managed-IPC run passed."
+      ]
+    },
+    {
+      "path": "scripts/test-generic-app-share-browser.mjs",
+      "reviewedSha256": "3789d9cadd10e72cdced69c737eebb1117bf6ed59a3f5475d655c2d027b7ae43",
+      "authorPacketSha256": "3789d9cadd10e72cdced69c737eebb1117bf6ed59a3f5475d655c2d027b7ae43",
+      "matchesAuthorPacket": true,
+      "disposition": "REQUEST_CHANGES_T83_R1",
+      "checks": [
+        "Full sharing harness semantically read. Uses actual emitted default App under nested/IPFS subpaths, literal expected main-derived URL, native clipboard exact copy and CDP denial with selectable manual fallback.",
+        "Preserves explicit no startup permission/write and zero product egress/error checks, geometry, absent/error clipboard, A-to-B-to-A and unmount stale-result cases.",
+        "Initial harness resolves the held operation before remounting at153-155, so it does not prove page-wide physical drain across actual Settings leave/return: T83-R1. Author native evidence inspected; no duplicate native run."
+      ]
+    },
+    {
+      "path": "scripts/test-web-build-browser.mjs",
+      "reviewedSha256": "cd24b54bde9797d3960b81344f70248bffdfec299a482af2140522ee8143d028",
+      "authorPacketSha256": "cd24b54bde9797d3960b81344f70248bffdfec299a482af2140522ee8143d028",
+      "matchesAuthorPacket": true,
+      "disposition": "APPROVE",
+      "checks": [
+        "Selected analytics probe and fixture/instrumentation reviewed (instrument1-60, analytics127-258, fixture hosting281-299); not an unrelated full-harness review.",
+        "Actual App navigation compares full durable local/session/cache/IndexedDB bytes, no review/download Worker IPC, exact bounded downloaded file, same-category private-ID exclusion and unknown category behavior.",
+        "Retains actual profile unlock/lock erasure, controlled retirement inside file helper (created/revoked URL), real BFCache persisted hide/show same retained emitted bytes, reload fresh consent and320-1440 geometry.",
+        "Author report distinguishes headless ordinary visibility limitation from focused controller policy tests; no device, deployment or release qualification claimed. No duplicate native run."
+      ]
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "reviewedSha256": "3f9fa7202474ff2c7f8b9544e0e77c51dca29b62b1101173723e3aa3333c2af8",
+      "authorPacketSha256": null,
+      "matchesAuthorPacket": null,
+      "disposition": "APPROVE",
+      "checks": [
+        "Supporting scope path55-86 reviewed: selectionScope increments on native unlocked handle identity changes and locked null transition, rather than persisted profile label. No analytics command or payload added."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/routes.ts",
+      "reviewedSha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1",
+      "authorPacketSha256": null,
+      "matchesAuthorPacket": null,
+      "disposition": "APPROVE",
+      "checks": [
+        "Supporting route parser read: five fixed pages plus bounded private trade localId; only fixed page is consumed by analytics. No URL decoding or external action."
+      ]
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "reviewedSha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+      "authorPacketSha256": null,
+      "matchesAuthorPacket": null,
+      "disposition": "APPROVE",
+      "checks": [
+        "Supporting live source/locale adapter read: compiled complete-catalog selection only, draft source, fundsLocaleEligible always false; safety text does not authorize transaction, translation approval or publication."
+      ]
+    }
+  ],
+  "verification": {
+    "independentFocused": {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/generic-app-share.test.mjs apps/web/test/screen-counts.test.mjs apps/web/test/local-screen-analytics.render.test.mjs",
+      "capability": "with_additional_permissions network enabled for managed Node IPC; normal per-file --test isolation",
+      "exitCode": 0,
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": {
+        "path": "/workspace/work/final-review-t83-t89-focused.log",
+        "bytes": 2540,
+        "sha256": "7dcfe181778df819f544d6c5d7d72398428fe1d8803e5877e022c18800a6f717"
+      }
+    },
+    "independentCatalog": {
+      "kind": "Supporting exact metadata/string assertions (not a test-suite claim)",
+      "exitCode": 0,
+      "revision": 3,
+      "status": "draft",
+      "fundsLocaleEligible": false,
+      "criticalAddedEntries": 8,
+      "log": {
+        "path": "/workspace/work/final-review-t83-t89-catalog.log",
+        "bytes": 305,
+        "sha256": "d42ca4370b882aa51d0b4465bc67168025570229ec37a7791380a1fc34596ffc"
+      }
+    },
+    "authorNativeEvidenceReviewed": [
+      {
+        "path": "/workspace/work/t83-app-share/T83-review-packet.json",
+        "bytes": 8183,
+        "sha256": "6f44067aedaec2c4ff66793776e0d5cf792c2274f5768a87af35d4b177486e5f"
+      },
+      {
+        "path": "/workspace/work/t83-app-share/native-browser-receipt-final.json",
+        "bytes": 13820,
+        "sha256": "ae2698360ef44115b704586b1e830a6bca1a0a9f2a5a06c5ff26d2c00b67e772"
+      },
+      {
+        "path": "/workspace/work/t89-final-review-packet.json",
+        "bytes": 10890,
+        "sha256": "23444448d4ec2b33d988cf116cd61af0c72e160196c96ab7596c2f1fd50bf2a7"
+      },
+      {
+        "path": "/workspace/work/t89-native-browser-report.json",
+        "bytes": 4314,
+        "sha256": "17557ef121a111baa5b0597f66a66fbc126bf34e6443202a3a47dca09126d907"
+      }
+    ]
+  },
+  "sourceDrift": "T83 owned source and initial runner matched the author packet at review; current root enrollment has later T80/T81/T89 changes and was semantically read here. T89 owned files and root enrollment match its packet except the explicitly reviewed final English revision3 copy. Prior native reports are author evidence at their recorded source graphs; no exact-current-native or device/release claim is inherited.",
+  "limits": [
+    "Ordinary visibility and StrictMode hook enrollment are source-reviewed; controller visibility/reentry is independently unit-tested. Existing actual native BFCache and lock evidence was inspected, not rerun.",
+    "T83 initial finding is preserved separately from the pending root correction; this receipt does not approve that unreviewed delta.",
+    "Trading and maintained release acceptance remain disabled; neither feature adds wallet, provider, signature or send authority."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "task": "T71",
+  "reviewer": "root",
+  "disposition": "REVIEWED_FAILED_CHECKPOINT_RETAINED",
+  "sourceCommit": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+  "sourceTree": "f36a35dd30c4a1a36946cb830b3ed2c9db98275c",
+  "manifestSha256": "18df7720d863b29158ab1bfcfc75208ab2777278c4f0c636f8b3d7450a10b242",
+  "qualificationSha256": "ef7f92a660180027e6adfdfad18de7bdf97ddc8614a3756fffc10296d895c277",
+  "artifactCountVerified": 23,
+  "review": "Verified exact sizes/hashes of all 23 author artifacts; inspected clone/gitlink setup, fresh installation flags, bounded isolated Docker arguments, unchanged lock and tool inventory, actual failing log and counts. Git object tree equals recorded source tree.",
+  "result": "Fresh install and typecheck passed; foundation failed at 1441/1442. No full foundation pass.",
+  "failure": {
+    "test": "packages/governance/test/assurance.test.mjs:52",
+    "name": "public source packet has exact current evidence bytes and explicitly unassessed jurisdiction intake",
+    "manifest": "docs/execution/assurance/evidence-manifest.json:95",
+    "referencedSource": "scripts/tests/import-boundaries.test.mjs",
+    "expectedSha256": "166ee63fb080218791bd465a9c4ab098c4361877fdc3fbc23c856f68d619a6ec",
+    "actualSha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac",
+    "ownerRepairRequest": "Root/T64 assurance evidence reconciliation; no snapshot or shared repair made by T71."
+  },
+  "resume": "Commit corrected current assurance packet and run a separate new frozen source checkpoint. Retain this failed source/log unchanged."
+}

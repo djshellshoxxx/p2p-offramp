@@ -1,0 +1,662 @@
+{
+  "task": "T75",
+  "reviewer": "/root/review_intakes",
+  "independentFromImplementer": true,
+  "observedAtUtc": "2026-11-02T15:31:50.031520+00:00",
+  "disposition": "FROZEN_RESEARCH_RESULTS_VERIFIED_WITH_PRESERVED_FAILURES; TIMEOUT_CLEANUP_DURABILITY_EXCLUDED",
+  "scope": "EXACT15 security/intake/{relay-transport,waku,mobile-wallet}/{README.md,package.json,package-lock.json,pins.json,evaluation.test.mjs}; source and evidence read-only",
+  "inputs": {
+    "sourceManifest": {
+      "path": "/workspace/work/t75-frozen-files.sha256",
+      "sha256": "99af1c34c47ce103def670bb8dda83698ac718488324a5d6fc196830eab5a08e"
+    },
+    "freeze": {
+      "path": "/workspace/work/t75-freeze.json",
+      "sha256": "9144bca508d33fef857d09b510158e34d8bd0b905b5139340ba4f2abc8e85780"
+    },
+    "evidenceIndex": {
+      "path": "/workspace/work/t75-evidence-index.json",
+      "sha256": "e7fe2d4c9ff80b96c264edb13eae7ed8c397b8216fcc70b9499cb1a6599cefe3"
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "security/intake/relay-transport/README.md",
+      "bytes": 3673,
+      "sha256": "77124a5b7d4cbd5a4252d0066310b228ddfa23353234b8c4159c9332e6a8e889"
+    },
+    {
+      "path": "security/intake/relay-transport/package.json",
+      "bytes": 313,
+      "sha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e"
+    },
+    {
+      "path": "security/intake/relay-transport/package-lock.json",
+      "bytes": 960,
+      "sha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b"
+    },
+    {
+      "path": "security/intake/relay-transport/pins.json",
+      "bytes": 5254,
+      "sha256": "dcfa71ab1e68f6d9c8543fa36fb5fdb4d7455737aaa73d68501af313e6975837"
+    },
+    {
+      "path": "security/intake/relay-transport/evaluation.test.mjs",
+      "bytes": 12062,
+      "sha256": "a65d4e97ff5f3f4f290f0e6605f57c3539dfe5357ef9aaf84a3b8ee74ce485aa"
+    },
+    {
+      "path": "security/intake/waku/README.md",
+      "bytes": 4445,
+      "sha256": "dbabea61649e11e90ae82e317f7a66f4e3dd1a666223e0f57b13f25bc2b42263"
+    },
+    {
+      "path": "security/intake/waku/package.json",
+      "bytes": 311,
+      "sha256": "31c836c2fa4959923f83e801ed84bc3af20b4e0cd6d78b66a529ea76ab0af314"
+    },
+    {
+      "path": "security/intake/waku/package-lock.json",
+      "bytes": 2701,
+      "sha256": "5cbcb31299417a9686feda4701c413b5cc73021a45d61facdd6a73be5d60a16d"
+    },
+    {
+      "path": "security/intake/waku/pins.json",
+      "bytes": 16443,
+      "sha256": "7a76bdd0f1905bb7fcedc1007ba7de5051f3e350e92311dfcdcd12a10a547f54"
+    },
+    {
+      "path": "security/intake/waku/evaluation.test.mjs",
+      "bytes": 13617,
+      "sha256": "1d4fdb384677b050263735999374fb40cd8c71d8a10a221faa59ad8e45957a7b"
+    },
+    {
+      "path": "security/intake/mobile-wallet/README.md",
+      "bytes": 4634,
+      "sha256": "86e408199dfa67a3849560164c43309344a23cee80dd7d0f9d812c225b4febd4"
+    },
+    {
+      "path": "security/intake/mobile-wallet/package.json",
+      "bytes": 329,
+      "sha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c"
+    },
+    {
+      "path": "security/intake/mobile-wallet/package-lock.json",
+      "bytes": 31264,
+      "sha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211"
+    },
+    {
+      "path": "security/intake/mobile-wallet/pins.json",
+      "bytes": 95556,
+      "sha256": "c0c75ed85950e9d1cec0b7f9d48fe186c4da048c8b717fdb94ff5962f1999b36"
+    },
+    {
+      "path": "security/intake/mobile-wallet/evaluation.test.mjs",
+      "bytes": 11996,
+      "sha256": "468cd30584c849751cb51cd6f28dcfc23acf44e17ee4545bbc86c0321a28a55f"
+    }
+  ],
+  "all15SourceHashesStillMatch": true,
+  "original54IndexedEvidenceHashesStillMatch": true,
+  "headAtReviewStart": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+  "headAtReceipt": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+  "rootPackageSha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141",
+  "rootLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+  "rootLockUnchangedFromHead": true,
+  "sourceWrites": [],
+  "commits": [],
+  "productProviderOrCiChanges": [],
+  "skillRead": "cloud-environment-runtime SKILL.md plus references/docker.md and references/networking.md",
+  "environment": {
+    "managedObservationsCurrent": true,
+    "httpPolicy": "restricted/enforced",
+    "vpnConfigured": false,
+    "tcpGrants": [],
+    "configuredCredentialsOrIdentities": [],
+    "additionalNetworkCapability": "Used for managed local Docker IPC and official read-only npm audit requests. Public exact-commit source readbacks used GitHub connector. SDK probes had network=none.",
+    "dockerServer": "28.4.0",
+    "hostNode": "v24.19.0",
+    "hostNpm": "11.9.0"
+  },
+  "lab": {
+    "originalRunnerSha256": "72b91b3d49f238a26c41dc4597049f4619709329b009a2c195add57cded884b9",
+    "executedCommand": "node /workspace/work/t75-independent-review/run-native.mjs",
+    "executedRunnerSha256": "77c0b4f0bd3eca23d37283c5dd4188c2135e2d2223b319ec53ebe737070586ad",
+    "runnerDifference": "Only two artifact output path templates redirected to review directory. Probes/assertions/dependencies/image/helper/isolation unchanged; original raw failure evidence untouched.",
+    "aggregateExitCode": 1,
+    "image": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+    "tagReadback": "p2p-offramp-lab:local",
+    "helperSha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00",
+    "recipeSha256": "5de3340216d3ee7534ce6c48ea996fe52690b69046b9e2e7eed6a7573f64d1ff",
+    "limits": {
+      "network": "none",
+      "readOnlyRootfsAndPublicInputMounts": true,
+      "uid": 65534,
+      "cpu": 1,
+      "memoryBytes": 268435456,
+      "memorySwapBytes": 268435456,
+      "pids": 64,
+      "cpuUlimitSeconds": 20,
+      "tmpfsBytes": 67108864,
+      "tmpfsFlags": [
+        "noexec",
+        "nosuid",
+        "nodev"
+      ],
+      "dropCapabilities": "ALL",
+      "noNewPrivileges": true,
+      "nodeHeapMiB": 128,
+      "innerTestTimeoutMs": 20000,
+      "outerTimeoutMs": 30000,
+      "outputBytes": 65536
+    },
+    "results": [
+      {
+        "profile": "relay-transport",
+        "counts": {
+          "tests": 6,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "execution": {
+          "profile": "relay-transport",
+          "containerName": "p2p-t75-relay-transport-2b8a00978f8a0f3d",
+          "image": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "exitCode": 0,
+          "exitSignal": null,
+          "timedOut": false,
+          "bounded": true,
+          "logSha256": "46b11ba30be0db4f4282f1dbbcd84719f02ff8d2e8915a6dd23c188a352f3e74",
+          "cleanupConfirmed": true
+        },
+        "observation": {
+          "profile": "t75-relay-transport-20261102",
+          "completed": [
+            "fixed-public-provenance-and-container",
+            "unchanged-nip01-cap-boundary",
+            "payload-cap-refusal",
+            "fragment-budget",
+            "buffered-chunk-budget",
+            "close-incomplete-no-late-message"
+          ],
+          "policyClosures": [
+            {
+              "policy": "payload",
+              "localCode": 1006,
+              "peerCode": 1009
+            },
+            {
+              "policy": "fragment",
+              "localCode": 1006,
+              "peerCode": 1008
+            }
+          ],
+          "unchangedNip01": true,
+          "compressionEnabled": false,
+          "companionOrG05Qualified": false,
+          "browserPreassemblyBoundQualified": false,
+          "wholeProcessOrNativeBufferProof": false,
+          "productionProvider": false,
+          "releaseEnabled": false,
+          "installedTreeSha256": "94531899af0ebd7cbe6a0220b16961b425118fda3b891411b9e19c6665d829b6"
+        }
+      },
+      {
+        "profile": "waku",
+        "counts": {
+          "tests": 14,
+          "pass": 13,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "execution": {
+          "profile": "waku",
+          "containerName": "p2p-t75-waku-03537fd58197a227",
+          "image": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "exitCode": 1,
+          "exitSignal": null,
+          "timedOut": false,
+          "bounded": true,
+          "logSha256": "1e26c797ec0ec5b4df139d4a252f89f7c064c00aea4492357bb98675e415deff",
+          "cleanupConfirmed": true
+        },
+        "observation": {
+          "profile": "t75-waku-20261102",
+          "completed": [
+            "source-artifact-provenance",
+            "independent-message-wire-fields",
+            "ordinary-store-fields-and-uncapped-wire-limit",
+            "actual-store-decoder-count-limits",
+            "truncation-and-nonauthoritative-defaults",
+            "lightpush-byte-semantics-only"
+          ],
+          "attempted": {
+            "socket": 0,
+            "workerThread": 0,
+            "fetch": 0,
+            "browserWebSocket": 0,
+            "browserWorker": 0
+          },
+          "integerObservations": [
+            {
+              "field": "timestamp",
+              "input": "-9223372036854775808",
+              "encodedHex": "0a0101120a7437352f7075626c696318005080808080e0ffffffff01",
+              "oracleHex": "0a0101120a7437352f7075626c6963180050ffffffffffffffffff01",
+              "decoded": "9223372032559808512",
+              "decodedOracle": "-9223372036854775808",
+              "matches": false
+            },
+            {
+              "field": "timestamp",
+              "input": "9223372036854775807",
+              "encodedHex": "0a0101120a7437352f7075626c6963180050feffffffffffffffff01",
+              "oracleHex": "0a0101120a7437352f7075626c6963180050feffffffffffffffff01",
+              "decoded": "9223372036854775807",
+              "decodedOracle": "9223372036854775807",
+              "matches": true
+            },
+            {
+              "field": "timestamp",
+              "input": "-1700000000000000000",
+              "encodedHex": "0a0101120a7437352f7075626c6963180050ffffcfe2c6bfce972f",
+              "oracleHex": "0a0101120a7437352f7075626c6963180050ffffcfe2c6bfce972f",
+              "decoded": "-1700000000000000000",
+              "decodedOracle": "-1700000000000000000",
+              "matches": true
+            },
+            {
+              "field": "timestamp",
+              "input": "1700000000000000000",
+              "encodedHex": "0a0101120a7437352f7075626c69631800508080d0e2c6bfce972f",
+              "oracleHex": "0a0101120a7437352f7075626c69631800508080d0e2c6bfce972f",
+              "decoded": "1700000000000000000",
+              "decodedOracle": "1700000000000000000",
+              "matches": true
+            },
+            {
+              "field": "timestamp",
+              "input": "-1",
+              "encodedHex": "0a0101120a7437352f7075626c696318005001",
+              "oracleHex": "0a0101120a7437352f7075626c696318005001",
+              "decoded": "-1",
+              "decodedOracle": "-1",
+              "matches": true
+            },
+            {
+              "field": "timestamp",
+              "input": "0",
+              "encodedHex": "0a0101120a7437352f7075626c696318005000",
+              "oracleHex": "0a0101120a7437352f7075626c696318005000",
+              "decoded": "0",
+              "decodedOracle": "0",
+              "matches": true
+            },
+            {
+              "field": "timestamp",
+              "input": "1",
+              "encodedHex": "0a0101120a7437352f7075626c696318005002",
+              "oracleHex": "0a0101120a7437352f7075626c696318005002",
+              "decoded": "1",
+              "decodedOracle": "1",
+              "matches": true
+            },
+            {
+              "field": "paginationLimit",
+              "input": "18446744073709551615",
+              "decoded": "18446744073709551615",
+              "matches": true
+            }
+          ],
+          "publicFunctionsOnly": true,
+          "fullSdkClientConstructed": false,
+          "sdkCloseQualified": false,
+          "sessionOrCallbackAuthenticated": false,
+          "productionProvider": false,
+          "releaseEnabled": false,
+          "historicalRegistryAssertions": 0,
+          "installedTreeSha256": "02500d8676526b725646279b3d09fa2423fd9b9c267d8aaa23bd1725eedf7c92"
+        }
+      },
+      {
+        "profile": "mobile-wallet",
+        "counts": {
+          "tests": 5,
+          "pass": 4,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "execution": {
+          "profile": "mobile-wallet",
+          "containerName": "p2p-t75-mobile-wallet-d2ccbe69aa0523f2",
+          "image": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "exitCode": 1,
+          "exitSignal": null,
+          "timedOut": false,
+          "bounded": true,
+          "logSha256": "31620e0a0a9cc9b7061ef99f81f20c43323d43d61544b3c2e86c34079b0d90d5",
+          "cleanupConfirmed": true
+        },
+        "observation": {
+          "profile": "t75-mobile-wallet-20261102",
+          "completed": [
+            "source-license-historical-signature-provenance",
+            "actual-namespace-agreement-and-refusals",
+            "limited-predicates-never-session-authentication",
+            "native-expiry-units-and-boundaries"
+          ],
+          "attempted": {
+            "socket": 0,
+            "workerThread": 0,
+            "fetch": 0,
+            "browserWebSocket": 0,
+            "browserWorker": 0
+          },
+          "publicFunctionsOnly": true,
+          "fullSdkClientConstructed": false,
+          "sdkCloseQualified": false,
+          "sessionOrCallbackAuthenticated": false,
+          "productionProvider": false,
+          "releaseEnabled": false,
+          "historicalRegistryAssertions": 33,
+          "installedTreeSha256": "5647c360cba02de3bfb511a057504a53cdc0d4a7048094f32ea8ca6d12d02f60"
+        }
+      }
+    ],
+    "laterExactOwnedContainerAbsenceVerified": true,
+    "timeoutCleanupDurabilityVerified": false
+  },
+  "provenance": {
+    "sourceFilesVerified": 15,
+    "indexedEvidenceFilesVerified": 54,
+    "recursiveArtifactReadbacksVerified": 233,
+    "officialArchivesVerified": 76,
+    "archiveLicenseFilesVerified": 72,
+    "upstreamFullLicenseTextsVerified": 8,
+    "declarationOnlyLicenseGap": true,
+    "sourceBindingsFreshGithubReadbackVerified": 7,
+    "signedPackageAssertionsMathematicallyVerified": 76,
+    "allIndividualSignaturesVerified": 83,
+    "historicalExpiredKeyAssertions": 33,
+    "archiveFilesComparedToInstalled": 4850,
+    "rootLockUnchangedFromHead": true,
+    "integerOracleIndependentlyRecomputed": true,
+    "profiles": [
+      {
+        "profile": "relay-transport",
+        "graphPackages": 1,
+        "historicalAssertions": 0,
+        "archiveFilesComparedToInstalled": 19,
+        "tree": {
+          "entries": 20,
+          "regularFiles": 20,
+          "symlinks": 0,
+          "bytes": 152883,
+          "sha256": "94531899af0ebd7cbe6a0220b16961b425118fda3b891411b9e19c6665d829b6"
+        },
+        "freshWholeLockAuditTotal": 0,
+        "freshAuditSha256": "223cb4bff1b6386b4a938812ad2b218f08312d30785b9dc1cb6bd3a726c86e53"
+      },
+      {
+        "profile": "waku",
+        "graphPackages": 6,
+        "historicalAssertions": 0,
+        "archiveFilesComparedToInstalled": 409,
+        "tree": {
+          "entries": 410,
+          "regularFiles": 410,
+          "symlinks": 0,
+          "bytes": 1566598,
+          "sha256": "02500d8676526b725646279b3d09fa2423fd9b9c267d8aaa23bd1725eedf7c92"
+        },
+        "freshWholeLockAuditTotal": 0,
+        "freshAuditSha256": "b966435ec31b7d61483d849d853d936f86183d654661604e532f1be934735a79"
+      },
+      {
+        "profile": "mobile-wallet",
+        "graphPackages": 69,
+        "historicalAssertions": 33,
+        "archiveFilesComparedToInstalled": 4422,
+        "tree": {
+          "entries": 4424,
+          "regularFiles": 4423,
+          "symlinks": 1,
+          "bytes": 30819653,
+          "sha256": "5647c360cba02de3bfb511a057504a53cdc0d4a7048094f32ea8ca6d12d02f60"
+        },
+        "freshWholeLockAuditTotal": 0,
+        "freshAuditSha256": "5850b82600aa181725506e797c9a3c89c02c243692171337ca061ac5b84c985c"
+      }
+    ]
+  },
+  "freshAudits": {
+    "command": "NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt timeout 45s npm audit --package-lock-only --ignore-scripts --strict-ssl=true --json --no-fund --cache <separate-review-cache>",
+    "workingDirectories": "Exact public manifest/lock copies outside checkout; original/copy hashes unchanged after audit.",
+    "profiles": [
+      "relay-transport",
+      "waku",
+      "mobile-wallet"
+    ],
+    "exitCodes": [
+      0,
+      0,
+      0
+    ],
+    "wholeLockPackages": [
+      1,
+      6,
+      69
+    ],
+    "findings": [
+      0,
+      0,
+      0
+    ],
+    "overridesOmissionsOrExclusions": false,
+    "rawLogNote": "Relay audit retains ordinary npm stderr update notice after JSON. Independent parser checks JSON and permits only npm notice lines afterward."
+  },
+  "preservedResearchFailures": [
+    {
+      "id": "WAKU_SINT64_MIN",
+      "scope": "@waku/proto 0.0.15 with protons-runtime 5.6.0",
+      "classification": "Valid declared-bigint sint64 encoding conformance failure in this resolved path",
+      "input": "-9223372036854775808",
+      "oracleField10Hex": "50ffffffffffffffffff01",
+      "actualField10Hex": "5080808080e0ffffffff01",
+      "ownEncodingDecoded": "9223372032559808512",
+      "oracleDecoded": "-9223372036854775808",
+      "independentOracleRecomputed": true,
+      "graphOrExpectationChanged": false
+    },
+    {
+      "id": "WALLETCONNECT_FULL_PROTOCOL_ROUNDTRIP",
+      "scope": "@walletconnect/utils 2.26.0",
+      "classification": "Stronger application expectation unmet; not demonstrated vendor-contract bug",
+      "expectedProtocol": "wc",
+      "actualProtocol": "",
+      "allFormatterArgumentsSupplied": true,
+      "otherTestedFieldsMatch": true,
+      "normalizationOrDefaultAdded": false,
+      "realPairingMaterialUsed": false,
+      "contractEvidence": "Exact upstream uri.spec.ts omits returned protocol; pairing caller supplies full formatter inputs and consumes other parsed fields. Fresh exact-commit uri.ts bytes independently match source map."
+    }
+  ],
+  "newFindings": [
+    {
+      "id": "T75-REVIEW-R1",
+      "priority": "P2",
+      "scope": "Outside EXACT15: Docker-timeout cleanup path",
+      "observation": "A separate auxiliary node --version check used a 10-second deadline. The Docker CLI timed out; immediate rm/ps returned cleanupConfirmed=true. A later exact-name ps found the same owned container in created state, Running=false, Pid0, never started.",
+      "sourceLocations": [
+        "scripts/lab/command.mjs:10",
+        "scripts/lab/command.mjs:15",
+        "scripts/lab/command.mjs:30",
+        "/workspace/work/t75-run-native.mjs:19",
+        "/workspace/work/t75-run-native.mjs:24"
+      ],
+      "missingContract": "A terminal outcome for the in-flight daemon create/start must precede durable named-container absence. CLI group death plus immediate NotFound/empty ps is insufficient.",
+      "ownedContainer": "p2p-t75-independent-version-0247ad4d20ccfc02",
+      "initialAuxiliaryCleanupAssertionSuperseded": true,
+      "finalDisposition": "Only that exact owned late-created container was removed successfully. Its name and all three completed-probe names were absent on final exact-name checks. Reported to root for separate hardening or disposition; no helper implementation by reviewer.",
+      "verifiedClaimsExclude": "Timeout-cleanup durability and independent container Node version measurement.",
+      "limits": "The three actual probe commands had no timeout and remained absent. This observation does not establish that every 30-second timeout leaks."
+    }
+  ],
+  "licenseAndTrustLimits": {
+    "communityLicense": "WalletConnect Community License Agreement retained: 20091 bytes, SHA256 1cb6f8cfe21f54ab1105105717eaa2ba08343037a2a9c41dfd5ab09e3ce270fc. Declared SEE LICENSE IN LICENSE.md; not relabeled MIT.",
+    "declarationOnlyGap": "uint8arrays 3.1.1 declares MIT in archive and exact-source package metadata but full license text is absent from the archive and recorded exact source root. This limit remains explicit.",
+    "historicalExpiredKeyAssertions": 33,
+    "keyExpired": "2025-01-29",
+    "currentTrustWaiver": false,
+    "registrySignatureScope": "name@version:integrity only; gitHead/license/source metadata unsigned. Fresh source/source-map byte matching is separate and does not prove reproducible source-to-bundle equivalence.",
+    "auditZero": "Point-in-time advisory observation, not future advisory guarantee or vendor/legal/professional/security/release approval."
+  },
+  "limits": [
+    "Pure Waku codecs and WalletConnect public helpers only; no full SDK client, fake SDK close, authenticated session/callback or physical handoff result.",
+    "Waku network/cluster/shards/peers/topics/encryption/replay/history/retention/RLN and G05 paths remain unselected. Wallet/connector/project/relay/launch/return-origin/resume/revocation profiles remain unselected.",
+    "ws findings concern finite local receiver/message and owned socket cleanup behavior; browser preassembly, whole-process/native-buffer safety and production companion are unqualified.",
+    "Zero intercepted socket/fetch/WebSocket/Worker attempts are measured categories, not universal absence-of-side-effect certification.",
+    "Auxiliary container Node version measurement unavailable because it timed out before start. Host Node24.19.0 measured; successful probes used exact inspected image.",
+    "Original research failures and indexed evidence preserved. No provider/session/network/URI selection or integration, activation, signing/custody/funds/trading enablement, CVE/exploit or external-target work.",
+    "Semantic review within EXACT15 plus provenance; no whole-product/professional certification."
+  ],
+  "independentCheckerCorrections": [
+    "Initial JSON-only audit parser rejected retained npm stderr notice; corrected parsing preserves log and checks trailing npm notice lines.",
+    "Archive entries count includes directories for keyvaluestorage-interface. Checker now compares all tar-member count while still comparing every regular-file hash and installed byte."
+  ],
+  "artifacts": [
+    {
+      "path": "/workspace/work/t75-independent-review/run-native.mjs",
+      "bytes": 3475,
+      "sha256": "77c0b4f0bd3eca23d37283c5dd4188c2135e2d2223b319ec53ebe737070586ad"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/command.log",
+      "bytes": 1149,
+      "sha256": "101f90096f32a78aebd5793cb51ab7a43cd9f31ab31ef69948e8a319c0a2118e"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/verify-provenance.py",
+      "bytes": 12791,
+      "sha256": "0a90295d2fd46011f10dfaf5c84ce1bdb123c52a82b08d08399b164bbead82ea"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/provenance-check.json",
+      "bytes": 2075,
+      "sha256": "81fef9cadc26276396a9cad368fab48a069323ca31e4b73b43b0c6432a4a8ea7"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/provenance-check.log",
+      "bytes": 2075,
+      "sha256": "81fef9cadc26276396a9cad368fab48a069323ca31e4b73b43b0c6432a4a8ea7"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/provenance-attempt2.log",
+      "bytes": 222,
+      "sha256": "744774721da856ba1f1ae88d573b2177e79013d40d439af39bc47f9852eefef8"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/source-readbacks.json",
+      "bytes": 92071,
+      "sha256": "687e1f443b80eb9226941a87e6795fe22a4d56c195166fd81cee2b36e4ce3eae"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/audit-relay-transport.json",
+      "bytes": 566,
+      "sha256": "223cb4bff1b6386b4a938812ad2b218f08312d30785b9dc1cb6bd3a726c86e53"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/audit-waku.json",
+      "bytes": 358,
+      "sha256": "b966435ec31b7d61483d849d853d936f86183d654661604e532f1be934735a79"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/audit-mobile-wallet.json",
+      "bytes": 360,
+      "sha256": "5850b82600aa181725506e797c9a3c89c02c243692171337ca061ac5b84c985c"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/container-node-version.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/container-node-version-receipt.json",
+      "bytes": 368,
+      "sha256": "092aaadb736bdbe0a464ef447bda08d52f35d049bec7dcb7facdc54fb8bc4edb"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/docker-metadata-diagnostic.json",
+      "bytes": 805,
+      "sha256": "264bfd89d5738955666ab1107059aeed90023110d6a71aaec1a51deb8f27cb26"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/owned-cleanup-readback.json",
+      "bytes": 1763,
+      "sha256": "3833fd5038971e39f93e235045105a25ae79a1c01e9005d4921b1e4691207599"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-relay-transport-native.log",
+      "bytes": 1409,
+      "sha256": "46b11ba30be0db4f4282f1dbbcd84719f02ff8d2e8915a6dd23c188a352f3e74"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-relay-transport-native-receipt.json",
+      "bytes": 374,
+      "sha256": "52f6723a73e8fd653f5ae4afadbbb22349e48d1ee32c9ad2ffcf816a97cef34b"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-waku-native.log",
+      "bytes": 5157,
+      "sha256": "1e26c797ec0ec5b4df139d4a252f89f7c064c00aea4492357bb98675e415deff"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-waku-native-receipt.json",
+      "bytes": 352,
+      "sha256": "f413f5c9165404b3405112aa54d9620522ecc5c35e66bc743643f394843afdea"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-mobile-wallet-native.log",
+      "bytes": 2255,
+      "sha256": "31620e0a0a9cc9b7061ef99f81f20c43323d43d61544b3c2e86c34079b0d90d5"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/t75-mobile-wallet-native-receipt.json",
+      "bytes": 370,
+      "sha256": "0529287544c9b3a76b09cfc67b026765e243ef1adbb4d42e09086c0e459e45d5"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/license-review.json",
+      "bytes": 747,
+      "sha256": "601c57ab1c1b8b3a7cb3bad6752fe195de54c6ec1aa58f14944e3bcc5e76acec"
+    }
+  ],
+  "licenseEvidenceReview": {
+    "sourceRootListings": [
+      {
+        "url": "https://github.com/logos-messaging/logos-delivery-js/tree/101ffe8a04c7eae5155c93823c935bc5ec90941f",
+        "sha256": "db59845920a8d7303e17ff1da4a26175cf805197fefcd0afd583702b5ad95b55",
+        "sourceRootLicenseNames": [
+          "LICENSE-APACHE-v2",
+          "LICENSE-MIT"
+        ]
+      },
+      {
+        "url": "https://github.com/achingbrain/uint8arrays/tree/66c931a497c598bfaff46d09b6ddd061b6c91a08",
+        "sha256": "23e9618fe47b0c9282f839038284478923b53570047abc7e8b7a9307597be12d",
+        "sourceRootLicenseNames": []
+      }
+    ],
+    "uint8arrays311ExactSourceMetadataDeclares": "MIT",
+    "communityLicenseHeaderVerified": true,
+    "communityLicenseBytes": 20091,
+    "licenseFullTextIsAdoptionLimit": true
+  }
+}

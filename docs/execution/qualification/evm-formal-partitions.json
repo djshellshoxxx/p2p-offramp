@@ -1,0 +1,2185 @@
+{
+  "version": 1,
+  "scope": "LOCAL_SOURCE_BOUND_EVM_FORMAL_PARTITIONS",
+  "releaseEnabled": false,
+  "productionApproval": false,
+  "result": "BOUNDED_PARTITION_INVESTIGATION",
+  "reviewUnit": {
+    "sourceCommit": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+    "canonicalSourceSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+    "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+    "interfaceDigest": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+    "propertySetDigest": "1777ff9fff0c13c0761abcc5d98114b258c3cf2c742cd8a07150bc36d2c47c7b",
+    "compilerFlags": {
+      "optimizer": true,
+      "runs": 200,
+      "evmVersion": "cancun",
+      "viaIR": false,
+      "extCalls": "trusted"
+    },
+    "modelCommit": null,
+    "compiledBytecodeChecked": false
+  },
+  "toolchain": {
+    "forgeVersion": "1.5.1-v1.5.1",
+    "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+    "solcVersion": "0.8.30",
+    "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+  },
+  "solver": {
+    "package": "z3-solver",
+    "version": "4.12.2.0",
+    "filename": "z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl",
+    "artifactSha256": "03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e",
+    "binarySha256": "112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444",
+    "librarySha256": "5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101",
+    "metadataSha256": "eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5",
+    "reportedVersion": "Z3 version 4.12.2 - 64 bit",
+    "license": "MIT License",
+    "officialMetadata": "https://pypi.org/pypi/z3-solver/4.12.2.0/json",
+    "paths": {
+      "artifact": "/workspace/work/formal-tools/z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl",
+      "binary": "/workspace/work/formal-tools/z3-4.12.2.0/bin/z3",
+      "library": "/workspace/work/formal-tools/z3-4.12.2.0/z3/lib/libz3.so.4.12",
+      "metadata": "/workspace/work/formal-tools/z3-4.12.2.0/z3_solver-4.12.2.0.dist-info/METADATA"
+    },
+    "hashes": {
+      "artifact": "03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e",
+      "binary": "112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444",
+      "library": "5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101",
+      "metadata": "eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5"
+    },
+    "licenseEvidence": "Pinned package METADATA; license classification is not legal release approval."
+  },
+  "limits": {
+    "queryBytes": 4194304,
+    "totalQueryBytes": 33554432,
+    "queries": 64,
+    "rounds": 8,
+    "queryMs": 5000,
+    "totalMs": 120000,
+    "compilerMs": 25000,
+    "outputBytes": 33554432,
+    "solverOutputBytes": 131072
+  },
+  "budget": {
+    "queries": 5,
+    "bytes": 9913516,
+    "rounds": 6,
+    "targetAttempts": 3,
+    "maximumTargetAttempts": 3,
+    "elapsedMs": 13399.465402999998
+  },
+  "probe": {
+    "sourceSha256": "4dd5dca3b9e921368011ba8a7b129ebd65173eaa537417cb451a5291cf7cbe74",
+    "sourceInputSha256": "928d0f85744d4648fa2e5ada281c050b77e615522c74a6cdcb10f577d248f876",
+    "queries": [
+      {
+        "key": "0x70297ba6f62c77e9be9e612d8e1863699677c87327c5c04b0349df2163cd798e",
+        "querySha256": "3c95f6b1ccaa56e3705fe89edc935c6e3435cc2fe4d0588cbd9c20131b63adcd",
+        "queryBytes": 26123,
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "answer": "unsat",
+        "exitCode": 0,
+        "timedOut": false,
+        "limited": false,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "key": "0x70ed14e9d8d7ba579786893570dacf2107aa3e64d7f9093300dace0f3b06a56a",
+        "querySha256": "8e0e9b6054c5a35503730d5224e386d328da854a0cc6cf2f7ae67215fcb4b592",
+        "queryBytes": 25688,
+        "responseSha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+        "answer": "sat",
+        "exitCode": 0,
+        "timedOut": false,
+        "limited": false,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "compilerRuns": [
+      {
+        "round": 0,
+        "inputSha256": "48f29c669fbf9505911400c1bf528f5ae307517f6132326c486d7b6d18698b37",
+        "stdoutSha256": "eeae7b64695da8a99edfdc299f434068dbdbb6bbd83ba82bcd67d330db72300b",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "exitCode": 0,
+        "timedOut": false,
+        "limited": false,
+        "error": null
+      },
+      {
+        "round": 1,
+        "inputSha256": "958a7ffb3abf4945050640081410842421209a7a5ca2cb68e2fe9eed7464a67d",
+        "stdoutSha256": "e5141fbe9b8d0329e86746b73027e02dfa3143e21f6df0fddbc48154b87f3315",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "exitCode": 0,
+        "timedOut": false,
+        "limited": false,
+        "error": null
+      }
+    ],
+    "results": {
+      "safe": {
+        "result": "PROVED_UNDER_DECLARED_MODEL",
+        "toolReported": "SAFE_UNDER_COMPILER_MODEL",
+        "unsupported": []
+      },
+      "unsafe": {
+        "result": "COUNTEREXAMPLE_FOUND",
+        "toolReported": "ASSERTION_VIOLATION",
+        "unsupported": [],
+        "qualification": "Compiler-model counterexample requires native replay before calling it an implementation defect."
+      },
+      "qualification": "CHC/HORN consistency semantics: SAT can mean safety and UNSAT reachability; compiler source-bound diagnostics, never raw SAT/UNSAT polarity, determine outcomes."
+    }
+  },
+  "formal": {
+    "targets": [
+      {
+        "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+        "source": "formal/partitions/NativeConstructor.sol",
+        "contract": "NativeConstructor",
+        "method": "checkNativeAssetExcludedFromTokenAllowlist",
+        "attempted": true,
+        "binding": {
+          "target": {
+            "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+            "source": "formal/partitions/NativeConstructor.sol",
+            "contract": "NativeConstructor",
+            "method": "checkNativeAssetExcludedFromTokenAllowlist"
+          },
+          "property": {
+            "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+            "plainStatement": "Native zero-address asset is not an allowlisted ERC20 in the fresh empty-allowlist deployment.",
+            "formalStatement": "not subject.isAllowlisted(0)",
+            "implementationFunction": "BasicEscrow.constructor/isAllowlisted",
+            "assertion": "assert(!subject.isAllowlisted(address(0)));"
+          },
+          "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+          "modelSourceSha256": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20",
+          "assertion": {
+            "original": {
+              "start": 1756,
+              "end": 1798
+            },
+            "partition": {
+              "start": 339,
+              "end": 381
+            },
+            "sha256": "cf4b791bc130137faa591862780a62f457d6238f9e7797d497da1d1af6137a03"
+          },
+          "assumptions": [
+            "Pinned Solidity0.8.30, Cancun optimizer200 compilation and EVM runtime semantics",
+            "Fresh actual canonical contract with empty immutable token allowlist; no ERC20 generalization",
+            "SMT single-transaction checks with fresh native trade, uint128-positive principal and explicit distinct actor classes",
+            "SMT trusted known-contract calls; compiler abstractions/unsupported features are retained and block unqualified proof",
+            "No claim of fiat receipt, transaction inclusion, seller cooperation, wallet/browser security or external audit"
+          ],
+          "assumptionsSha256": "c7e65e3c7cebf114c570167ff403eae975c57278eaf3a7b987c327614653688e",
+          "fragments": [
+            {
+              "sha256": "302dc547ea1f5490d40e794a3299d36962e2beac11a8d227dc1fbfc4c93cab1f",
+              "original": {
+                "start": 1566,
+                "end": 1805
+              },
+              "partition": {
+                "start": 149,
+                "end": 388
+              }
+            }
+          ]
+        },
+        "dependencySourceSha256": {
+          "formal/partitions/NativeConstructor.sol": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20",
+          "src/BasicEscrow.sol": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368",
+          "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca",
+          "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol": "32fbb1c908ec1b4de85cc1bb10091aebd5816ffe80dfdd5ca5e084fbea67a462"
+        },
+        "sourceInputSha256": "3cb45682fb06ec00bb3374f59eec6290ece8967d2da5fbd4d5dfaab203214fd6",
+        "queries": [
+          {
+            "key": "0xc7677ffd1fb361e409efdea81e6960ead50598543425cd9d5aabd47fa9de655e",
+            "querySha256": "65b6e6c3fb07379e40e75bd221301dd10e5c992bd6947ee8bf8e64b5b01a3035",
+            "queryBytes": 2961370,
+            "responseSha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+            "answer": "sat",
+            "exitCode": 0,
+            "timedOut": false,
+            "limited": false,
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "compilerRuns": [
+          {
+            "round": 0,
+            "inputSha256": "e9dd5f458a5f7bb976859f199b18ed967895afc1694a73a5037172cbbbc874a5",
+            "stdoutSha256": "d9543c1cad6c0dba198ba3de0b7f32bd8a139d8e7c676868cf19a711d40b7829",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "exitCode": 0,
+            "timedOut": false,
+            "limited": false,
+            "error": null
+          },
+          {
+            "round": 1,
+            "inputSha256": "18b2a7a9eb0716083b3c31ecf5120149efbe8d31617e553de1a7bb673a418236",
+            "stdoutSha256": "697ceaf4e4bdb4f12d479b68611683e8f412b0ae5fb96e1beb6e262f8376e167",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "exitCode": 0,
+            "timedOut": false,
+            "limited": false,
+            "error": null
+          }
+        ],
+        "stopReason": null,
+        "incomplete": false,
+        "diagnostics": [
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:86:24:\n   |\n86 |                 revert SafeERC20FailedDecreaseAllowance(spender, currentAllowance, requestedDecrease);\n   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 4396,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 4318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:118:13:\n    |\n118 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 5932,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 5925
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:121:20:\n    |\n121 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6113,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6073
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:139:13:\n    |\n139 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6670,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6663
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:142:20:\n    |\n142 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6871,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6831
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:158:13:\n    |\n158 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7676,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7669
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:161:20:\n    |\n161 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7856,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7816
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:176:9:\n    |\n176 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8928,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8507
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:188:31:\n    |\n188 |         if (returnSize == 0 ? address(token).code.length == 0 : returnValue != 1) {\n    |                               ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8979,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8960
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:189:20:\n    |\n189 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9073,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9033
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:205:9:\n    |\n205 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9969,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9770
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:210:46:\n    |\n210 |         return success && (returnSize == 0 ? address(token).code.length > 0 : returnValue == 1);\n    |                                              ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10034,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 10015
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol:67:20:\n   |\n67 |             revert ReentrancyGuardReentrantCall();\n   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 2773,
+              "file": "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol",
+              "start": 2743
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:194:71:\n    |\n194 |         if (terms.assetKind != 0 || terms.asset != address(0)) revert InvalidTerms();\n    |                                                                       ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10332,
+              "file": "src/BasicEscrow.sol",
+              "start": 10318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:196:41:\n    |\n196 |         if (msg.value != amount) revert IncorrectDeposit(amount, msg.value);\n    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10457,
+              "file": "src/BasicEscrow.sol",
+              "start": 10422
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:206:42:\n    |\n206 |         if (terms.assetKind != 1) revert InvalidTerms();\n    |                                          ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11103,
+              "file": "src/BasicEscrow.sol",
+              "start": 11089
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:207:61:\n    |\n207 |         if (token == address(0) || !_allowed[token]) revert UnsupportedAsset(token);\n    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11188,
+              "file": "src/BasicEscrow.sol",
+              "start": 11165
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:216:40:\n    |\n216 |         if (received != amount) revert IncorrectDeposit(amount, received);\n    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11668,
+              "file": "src/BasicEscrow.sol",
+              "start": 11634
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:224:50:\n    |\n224 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12069,
+              "file": "src/BasicEscrow.sol",
+              "start": 12034
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:225:49:\n    |\n225 |         if (msg.sender != escrow.seller) revert Unauthorized(msg.sender);\n    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12143,
+              "file": "src/BasicEscrow.sol",
+              "start": 12119
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:226:56:\n    |\n226 |         if (block.timestamp >= escrow.deadline) revert DeadlinePassed(escrow.deadline);\n    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12231,
+              "file": "src/BasicEscrow.sol",
+              "start": 12200
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:237:50:\n    |\n237 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12785,
+              "file": "src/BasicEscrow.sol",
+              "start": 12750
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:238:55:\n    |\n238 |         if (block.timestamp < escrow.deadline) revert DeadlineNotReached(escrow.deadline);\n    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12876,
+              "file": "src/BasicEscrow.sol",
+              "start": 12841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:250:33:\n    |\n250 |         if (amount == 0) revert NothingToWithdraw();\n    |                                 ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13552,
+              "file": "src/BasicEscrow.sol",
+              "start": 13533
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:255:13:\n    |\n255 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13839,
+              "file": "src/BasicEscrow.sol",
+              "start": 13734
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:258:29:\n    |\n258 |             if (!ok) revert WithdrawalFailed();\n    |                             ^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13886,
+              "file": "src/BasicEscrow.sol",
+              "start": 13868
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:293:48:\n    |\n293 |         if (terms.seller != msg.sender) revert Unauthorized(msg.sender);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15589,
+              "file": "src/BasicEscrow.sol",
+              "start": 15565
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:295:90:\n    |\n295 |         if (buyer == address(0) || buyer == msg.sender || buyer == address(this)) revert InvalidBuyer(buyer);\n    |                                                                                          ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15736,
+              "file": "src/BasicEscrow.sol",
+              "start": 15717
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:296:41:\n    |\n296 |         if (terms.revision == 0) revert InvalidTerms();\n    |                                         ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15792,
+              "file": "src/BasicEscrow.sol",
+              "start": 15778
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:297:48:\n    |\n297 |         if (terms.amountBaseUnits == 0) revert ZeroAmount();\n    |                                                ^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15853,
+              "file": "src/BasicEscrow.sol",
+              "start": 15841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:298:66:\n    |\n298 |         if (block.timestamp >= terms.acceptBeforeSeconds) revert AcceptanceExpired(terms.acceptBeforeSeconds);\n    |                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15964,
+              "file": "src/BasicEscrow.sol",
+              "start": 15920
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:302:62:\n    |\n302 |         if (deadline < earliest || deadline > latest) revert DeadlineOutOfRange(deadline, earliest, latest);\n    |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16242,
+              "file": "src/BasicEscrow.sol",
+              "start": 16196
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:306:48:\n    |\n306 |         if (escrow.state != State.None) revert TradeIdUsed(tradeId);\n    |                                                ^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16399,
+              "file": "src/BasicEscrow.sol",
+              "start": 16379
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:307:68:\n    |\n307 |         if (sellerNonceUsed[msg.sender][terms.sellerNonce]) revert SellerNonceUsed(msg.sender, terms.sellerNonce);\n    |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16514,
+              "file": "src/BasicEscrow.sol",
+              "start": 16468
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:348:48:\n    |\n348 |         if (available < MIN_PAYOUT_GAS) revert InsufficientGas(available, MIN_PAYOUT_GAS);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18121,
+              "file": "src/BasicEscrow.sol",
+              "start": 18079
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:352:13:\n    |\n352 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18341,
+              "file": "src/BasicEscrow.sol",
+              "start": 18234
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:179:44:\n    |\n179 |         if (length > MAX_ALLOWLIST) revert AllowlistTooLarge(length);\n    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9512,
+              "file": "src/BasicEscrow.sol",
+              "start": 9487
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> src/BasicEscrow.sol:182:40:\n    |\n182 |             if (token == address(0) || token.code.length == 0 || _allowed[token]) {\n    |                                        ^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9645,
+              "file": "src/BasicEscrow.sol",
+              "start": 9635
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:183:24:\n    |\n183 |                 revert InvalidAllowlistEntry(token);\n    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9731,
+              "file": "src/BasicEscrow.sol",
+              "start": 9703
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "9576",
+            "formattedMessage": "Info: CHC: Assertion violation check is safe!\n  --> formal/partitions/NativeConstructor.sol:10:9:\n   |\n10 |         assert(!subject.isAllowlisted(address(0)));\n   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "CHC: Assertion violation check is safe!",
+            "severity": "info",
+            "sourceLocation": {
+              "end": 381,
+              "file": "formal/partitions/NativeConstructor.sol",
+              "start": 339
+            },
+            "type": "Info"
+          }
+        ],
+        "result": "PROVED_UNDER_DECLARED_MODEL",
+        "toolReported": "SAFE_UNDER_COMPILER_MODEL",
+        "unsupported": []
+      },
+      {
+        "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+        "source": "formal/partitions/UnauthorizedRelease.sol",
+        "contract": "UnauthorizedRelease",
+        "method": "checkUnauthorizedReleaseIsAtomic",
+        "attempted": true,
+        "binding": {
+          "target": {
+            "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+            "source": "formal/partitions/UnauthorizedRelease.sol",
+            "contract": "UnauthorizedRelease",
+            "method": "checkUnauthorizedReleaseIsAtomic"
+          },
+          "property": {
+            "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+            "plainStatement": "A distinct non-seller caller cannot release the fresh native trade or mutate its participants/principal/state.",
+            "formalStatement": "caller != seller implies release reverts and state'=Funded and seller'=seller and buyer'=buyer and amount'=principal",
+            "implementationFunction": "BasicEscrow.fundNative/release/getTrade",
+            "assertion": "assert(!released && observed.state == BasicEscrow.State.Funded && observed.seller == address(this)\n            && observed.buyer == buyer && observed.amount == msg.value);"
+          },
+          "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+          "modelSourceSha256": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db",
+          "assertion": {
+            "original": {
+              "start": 2532,
+              "end": 2702
+            },
+            "partition": {
+              "start": 1888,
+              "end": 2058
+            },
+            "sha256": "dcfb82628ab069b3ea68ac821a1ad564c4eaa248d84757a7095138060bf7eac2"
+          },
+          "assumptions": [
+            "Pinned Solidity0.8.30, Cancun optimizer200 compilation and EVM runtime semantics",
+            "Fresh actual canonical contract with empty immutable token allowlist; no ERC20 generalization",
+            "SMT single-transaction checks with fresh native trade, uint128-positive principal and explicit distinct actor classes",
+            "SMT trusted known-contract calls; compiler abstractions/unsupported features are retained and block unqualified proof",
+            "No claim of fiat receipt, transaction inclusion, seller cooperation, wallet/browser security or external audit"
+          ],
+          "assumptionsSha256": "c7e65e3c7cebf114c570167ff403eae975c57278eaf3a7b987c327614653688e",
+          "fragments": [
+            {
+              "sha256": "40e78a3d9726776ca5fd8eb257e20b6aee7df7d851649bf328dfdadb4fa52f18",
+              "original": {
+                "start": 307,
+                "end": 650
+              },
+              "partition": {
+                "start": 120,
+                "end": 463
+              }
+            },
+            {
+              "sha256": "51c239e8ad23242211bd10a2e4f79b2f618aae35dfde45318c263989b0a71659",
+              "original": {
+                "start": 900,
+                "end": 1565
+              },
+              "partition": {
+                "start": 496,
+                "end": 1161
+              }
+            },
+            {
+              "sha256": "de9cba6518015f6ce7dbdfd8beff598e56bc9c642114d5d78095f1681a43095b",
+              "original": {
+                "start": 1806,
+                "end": 2709
+              },
+              "partition": {
+                "start": 1162,
+                "end": 2065
+              }
+            }
+          ]
+        },
+        "dependencySourceSha256": {
+          "formal/partitions/UnauthorizedRelease.sol": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db",
+          "src/BasicEscrow.sol": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368",
+          "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca",
+          "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol": "32fbb1c908ec1b4de85cc1bb10091aebd5816ffe80dfdd5ca5e084fbea67a462"
+        },
+        "sourceInputSha256": "941edd890bc5e91a4eea9605a724118534c9d5a141e1c5bd24abcd4822195bef",
+        "queries": [
+          {
+            "key": "0xbc083b23099127b7909684d9e3cc2bae1716657f2490af14e5bab4aa29c7ff39",
+            "querySha256": "28d94e7e24c2806d33cbd640d087570ad5321869fe975e04a65768cebd22ad28",
+            "queryBytes": 3453956,
+            "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+            "answer": "unknown",
+            "exitCode": 0,
+            "timedOut": true,
+            "limited": false,
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "compilerRuns": [
+          {
+            "round": 0,
+            "inputSha256": "8d6272bec7999e15142d1b3e2c04345d9c40e1f58a222a0c310ff95c6deb7b62",
+            "stdoutSha256": "b85c76422a09396da65762f1520da94df7aa71f0d6684a15c5980c7c663bcc23",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "exitCode": 0,
+            "timedOut": false,
+            "limited": false,
+            "error": null
+          }
+        ],
+        "stopReason": "SOLVER_OR_QUERY_INCOMPLETE",
+        "incomplete": true,
+        "diagnostics": [
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:86:24:\n   |\n86 |                 revert SafeERC20FailedDecreaseAllowance(spender, currentAllowance, requestedDecrease);\n   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 4396,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 4318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:118:13:\n    |\n118 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 5932,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 5925
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:121:20:\n    |\n121 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6113,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6073
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:139:13:\n    |\n139 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6670,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6663
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:142:20:\n    |\n142 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6871,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6831
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:158:13:\n    |\n158 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7676,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7669
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:161:20:\n    |\n161 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7856,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7816
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:176:9:\n    |\n176 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8928,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8507
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:188:31:\n    |\n188 |         if (returnSize == 0 ? address(token).code.length == 0 : returnValue != 1) {\n    |                               ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8979,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8960
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:189:20:\n    |\n189 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9073,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9033
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:205:9:\n    |\n205 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9969,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9770
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:210:46:\n    |\n210 |         return success && (returnSize == 0 ? address(token).code.length > 0 : returnValue == 1);\n    |                                              ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10034,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 10015
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type type(struct BasicEscrow.TradeTerms storage pointer)\n  --> formal/partitions/UnauthorizedRelease.sol:18:13:\n   |\n18 |         t = BasicEscrow.TradeTerms({orderId: bytes32(uint256(1)), revision: 1, networkId: \"formal-local\",\n   |             ^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type type(struct BasicEscrow.TradeTerms storage pointer)",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 701,
+              "file": "formal/partitions/UnauthorizedRelease.sol",
+              "start": 679
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n  --> formal/partitions/UnauthorizedRelease.sol:18:13:\n   |\n18 |         t = BasicEscrow.TradeTerms({orderId: bytes32(uint256(1)), revision: 1, networkId: \"formal-local\",\n   |             ^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 701,
+              "file": "formal/partitions/UnauthorizedRelease.sol",
+              "start": 679
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol:67:20:\n   |\n67 |             revert ReentrancyGuardReentrantCall();\n   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 2773,
+              "file": "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol",
+              "start": 2743
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:194:71:\n    |\n194 |         if (terms.assetKind != 0 || terms.asset != address(0)) revert InvalidTerms();\n    |                                                                       ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10332,
+              "file": "src/BasicEscrow.sol",
+              "start": 10318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:196:41:\n    |\n196 |         if (msg.value != amount) revert IncorrectDeposit(amount, msg.value);\n    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10457,
+              "file": "src/BasicEscrow.sol",
+              "start": 10422
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:206:42:\n    |\n206 |         if (terms.assetKind != 1) revert InvalidTerms();\n    |                                          ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11103,
+              "file": "src/BasicEscrow.sol",
+              "start": 11089
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:207:61:\n    |\n207 |         if (token == address(0) || !_allowed[token]) revert UnsupportedAsset(token);\n    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11188,
+              "file": "src/BasicEscrow.sol",
+              "start": 11165
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:216:40:\n    |\n216 |         if (received != amount) revert IncorrectDeposit(amount, received);\n    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11668,
+              "file": "src/BasicEscrow.sol",
+              "start": 11634
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:224:50:\n    |\n224 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12069,
+              "file": "src/BasicEscrow.sol",
+              "start": 12034
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:225:49:\n    |\n225 |         if (msg.sender != escrow.seller) revert Unauthorized(msg.sender);\n    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12143,
+              "file": "src/BasicEscrow.sol",
+              "start": 12119
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:226:56:\n    |\n226 |         if (block.timestamp >= escrow.deadline) revert DeadlinePassed(escrow.deadline);\n    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12231,
+              "file": "src/BasicEscrow.sol",
+              "start": 12200
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:237:50:\n    |\n237 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12785,
+              "file": "src/BasicEscrow.sol",
+              "start": 12750
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:238:55:\n    |\n238 |         if (block.timestamp < escrow.deadline) revert DeadlineNotReached(escrow.deadline);\n    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12876,
+              "file": "src/BasicEscrow.sol",
+              "start": 12841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:250:33:\n    |\n250 |         if (amount == 0) revert NothingToWithdraw();\n    |                                 ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13552,
+              "file": "src/BasicEscrow.sol",
+              "start": 13533
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:255:13:\n    |\n255 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13839,
+              "file": "src/BasicEscrow.sol",
+              "start": 13734
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:258:29:\n    |\n258 |             if (!ok) revert WithdrawalFailed();\n    |                             ^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13886,
+              "file": "src/BasicEscrow.sol",
+              "start": 13868
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:293:48:\n    |\n293 |         if (terms.seller != msg.sender) revert Unauthorized(msg.sender);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15589,
+              "file": "src/BasicEscrow.sol",
+              "start": 15565
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:295:90:\n    |\n295 |         if (buyer == address(0) || buyer == msg.sender || buyer == address(this)) revert InvalidBuyer(buyer);\n    |                                                                                          ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15736,
+              "file": "src/BasicEscrow.sol",
+              "start": 15717
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:296:41:\n    |\n296 |         if (terms.revision == 0) revert InvalidTerms();\n    |                                         ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15792,
+              "file": "src/BasicEscrow.sol",
+              "start": 15778
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:297:48:\n    |\n297 |         if (terms.amountBaseUnits == 0) revert ZeroAmount();\n    |                                                ^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15853,
+              "file": "src/BasicEscrow.sol",
+              "start": 15841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:298:66:\n    |\n298 |         if (block.timestamp >= terms.acceptBeforeSeconds) revert AcceptanceExpired(terms.acceptBeforeSeconds);\n    |                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15964,
+              "file": "src/BasicEscrow.sol",
+              "start": 15920
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:302:62:\n    |\n302 |         if (deadline < earliest || deadline > latest) revert DeadlineOutOfRange(deadline, earliest, latest);\n    |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16242,
+              "file": "src/BasicEscrow.sol",
+              "start": 16196
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:306:48:\n    |\n306 |         if (escrow.state != State.None) revert TradeIdUsed(tradeId);\n    |                                                ^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16399,
+              "file": "src/BasicEscrow.sol",
+              "start": 16379
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:307:68:\n    |\n307 |         if (sellerNonceUsed[msg.sender][terms.sellerNonce]) revert SellerNonceUsed(msg.sender, terms.sellerNonce);\n    |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16514,
+              "file": "src/BasicEscrow.sol",
+              "start": 16468
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:348:48:\n    |\n348 |         if (available < MIN_PAYOUT_GAS) revert InsufficientGas(available, MIN_PAYOUT_GAS);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18121,
+              "file": "src/BasicEscrow.sol",
+              "start": 18079
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:352:13:\n    |\n352 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18341,
+              "file": "src/BasicEscrow.sol",
+              "start": 18234
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:179:44:\n    |\n179 |         if (length > MAX_ALLOWLIST) revert AllowlistTooLarge(length);\n    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9512,
+              "file": "src/BasicEscrow.sol",
+              "start": 9487
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> src/BasicEscrow.sol:182:40:\n    |\n182 |             if (token == address(0) || token.code.length == 0 || _allowed[token]) {\n    |                                        ^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9645,
+              "file": "src/BasicEscrow.sol",
+              "start": 9635
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:183:24:\n    |\n183 |                 revert InvalidAllowlistEntry(token);\n    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9731,
+              "file": "src/BasicEscrow.sol",
+              "start": 9703
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "6328",
+            "formattedMessage": "Warning: CHC: Assertion violation might happen here.\n  --> formal/partitions/UnauthorizedRelease.sol:35:9:\n   |\n35 |         assert(!released && observed.state == BasicEscrow.State.Funded && observed.seller == address(this)\n   |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "CHC: Assertion violation might happen here.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 2058,
+              "file": "formal/partitions/UnauthorizedRelease.sol",
+              "start": 1888
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "3996",
+            "formattedMessage": "Warning: CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.\n\n",
+            "message": "CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.",
+            "severity": "warning",
+            "type": "Warning"
+          }
+        ],
+        "result": "PROOF_UNKNOWN",
+        "toolReported": "ASSERTION_VIOLATION",
+        "unsupported": [],
+        "qualification": "Missing/zero queries, stderr, unsupported abstractions and incomplete work remain unknown; raw solver polarity is not a proof."
+      },
+      {
+        "id": "EVM-EARLY-REFUND-ATOMIC",
+        "source": "formal/partitions/EarlyRefund.sol",
+        "contract": "EarlyRefund",
+        "method": "checkRefundBeforeDeadlineIsAtomic",
+        "attempted": true,
+        "binding": {
+          "target": {
+            "id": "EVM-EARLY-REFUND-ATOMIC",
+            "source": "formal/partitions/EarlyRefund.sol",
+            "contract": "EarlyRefund",
+            "method": "checkRefundBeforeDeadlineIsAtomic"
+          },
+          "property": {
+            "id": "EVM-EARLY-REFUND-ATOMIC",
+            "plainStatement": "Refund before the funded deadline refuses and preserves the native trade.",
+            "formalStatement": "chainTime < deadline implies refund reverts and state'=Funded and buyer'=buyer and amount'=principal",
+            "implementationFunction": "BasicEscrow.fundNative/refund/getTrade",
+            "assertion": "assert(!refunded && observed.state == BasicEscrow.State.Funded && observed.buyer == buyer\n            && observed.amount == msg.value && observed.deadline > block.timestamp);"
+          },
+          "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+          "modelSourceSha256": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67",
+          "assertion": {
+            "original": {
+              "start": 3334,
+              "end": 3507
+            },
+            "partition": {
+              "start": 1778,
+              "end": 1951
+            },
+            "sha256": "407d73779b9333e779f1280615e365f6ead091b0a7933835abef9f6074f025ad"
+          },
+          "assumptions": [
+            "Pinned Solidity0.8.30, Cancun optimizer200 compilation and EVM runtime semantics",
+            "Fresh actual canonical contract with empty immutable token allowlist; no ERC20 generalization",
+            "SMT single-transaction checks with fresh native trade, uint128-positive principal and explicit distinct actor classes",
+            "SMT trusted known-contract calls; compiler abstractions/unsupported features are retained and block unqualified proof",
+            "No claim of fiat receipt, transaction inclusion, seller cooperation, wallet/browser security or external audit"
+          ],
+          "assumptionsSha256": "c7e65e3c7cebf114c570167ff403eae975c57278eaf3a7b987c327614653688e",
+          "fragments": [
+            {
+              "sha256": "40e78a3d9726776ca5fd8eb257e20b6aee7df7d851649bf328dfdadb4fa52f18",
+              "original": {
+                "start": 307,
+                "end": 650
+              },
+              "partition": {
+                "start": 120,
+                "end": 463
+              }
+            },
+            {
+              "sha256": "51c239e8ad23242211bd10a2e4f79b2f618aae35dfde45318c263989b0a71659",
+              "original": {
+                "start": 900,
+                "end": 1565
+              },
+              "partition": {
+                "start": 488,
+                "end": 1153
+              }
+            },
+            {
+              "sha256": "42dec9e26a02ea606202b6c258d42572f5db0e86f16d4826346ac110ae23933f",
+              "original": {
+                "start": 2710,
+                "end": 3514
+              },
+              "partition": {
+                "start": 1154,
+                "end": 1958
+              }
+            }
+          ]
+        },
+        "dependencySourceSha256": {
+          "formal/partitions/EarlyRefund.sol": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67",
+          "src/BasicEscrow.sol": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c",
+          "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1",
+          "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368",
+          "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca",
+          "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol": "32fbb1c908ec1b4de85cc1bb10091aebd5816ffe80dfdd5ca5e084fbea67a462"
+        },
+        "sourceInputSha256": "5af0497d90f88450307045d8f1c2b15e82eb4cfb0f5a5954a95331da14d40990",
+        "queries": [
+          {
+            "key": "0xf219064e8e69ac468776fbab25860d754551a6868c4788cd4f17d059aa7c34fc",
+            "querySha256": "51a2b10a87750e033604c34ae0f0a3dff2af90f837e268f14ba37115819b609d",
+            "queryBytes": 3446379,
+            "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+            "answer": "unknown",
+            "exitCode": 0,
+            "timedOut": true,
+            "limited": false,
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "compilerRuns": [
+          {
+            "round": 0,
+            "inputSha256": "d0fac0cdf11f894d602cef41c6696eeb86ac774ce755f2c1e9002758f6b23138",
+            "stdoutSha256": "882c2ad5e7945a00d1bf6978a2cf8063e7ee6a61bfb4134dd853c1525d74f1f4",
+            "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "exitCode": 0,
+            "timedOut": false,
+            "limited": false,
+            "error": null
+          }
+        ],
+        "stopReason": "SOLVER_OR_QUERY_INCOMPLETE",
+        "incomplete": true,
+        "diagnostics": [
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:86:24:\n   |\n86 |                 revert SafeERC20FailedDecreaseAllowance(spender, currentAllowance, requestedDecrease);\n   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 4396,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 4318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:118:13:\n    |\n118 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 5932,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 5925
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:121:20:\n    |\n121 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6113,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6073
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:139:13:\n    |\n139 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6670,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6663
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:142:20:\n    |\n142 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 6871,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 6831
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:158:13:\n    |\n158 |         if (to.code.length == 0) {\n    |             ^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7676,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7669
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:161:20:\n    |\n161 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 7856,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 7816
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:176:9:\n    |\n176 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8928,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8507
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:188:31:\n    |\n188 |         if (returnSize == 0 ? address(token).code.length == 0 : returnValue != 1) {\n    |                               ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 8979,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 8960
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:189:20:\n    |\n189 |             revert SafeERC20FailedOperation(address(token));\n    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9073,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9033
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:205:9:\n    |\n205 |         assembly (\"memory-safe\") {\n    |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9969,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 9770
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol:210:46:\n    |\n210 |         return success && (returnSize == 0 ? address(token).code.length > 0 : returnValue == 1);\n    |                                              ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10034,
+              "file": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+              "start": 10015
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type type(struct BasicEscrow.TradeTerms storage pointer)\n  --> formal/partitions/EarlyRefund.sol:18:13:\n   |\n18 |         t = BasicEscrow.TradeTerms({orderId: bytes32(uint256(1)), revision: 1, networkId: \"formal-local\",\n   |             ^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type type(struct BasicEscrow.TradeTerms storage pointer)",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 693,
+              "file": "formal/partitions/EarlyRefund.sol",
+              "start": 671
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n  --> formal/partitions/EarlyRefund.sol:18:13:\n   |\n18 |         t = BasicEscrow.TradeTerms({orderId: bytes32(uint256(1)), revision: 1, networkId: \"formal-local\",\n   |             ^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 693,
+              "file": "formal/partitions/EarlyRefund.sol",
+              "start": 671
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n  --> lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol:67:20:\n   |\n67 |             revert ReentrancyGuardReentrantCall();\n   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 2773,
+              "file": "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol",
+              "start": 2743
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:194:71:\n    |\n194 |         if (terms.assetKind != 0 || terms.asset != address(0)) revert InvalidTerms();\n    |                                                                       ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10332,
+              "file": "src/BasicEscrow.sol",
+              "start": 10318
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:196:41:\n    |\n196 |         if (msg.value != amount) revert IncorrectDeposit(amount, msg.value);\n    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 10457,
+              "file": "src/BasicEscrow.sol",
+              "start": 10422
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:206:42:\n    |\n206 |         if (terms.assetKind != 1) revert InvalidTerms();\n    |                                          ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11103,
+              "file": "src/BasicEscrow.sol",
+              "start": 11089
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:207:61:\n    |\n207 |         if (token == address(0) || !_allowed[token]) revert UnsupportedAsset(token);\n    |                                                             ^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11188,
+              "file": "src/BasicEscrow.sol",
+              "start": 11165
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:216:40:\n    |\n216 |         if (received != amount) revert IncorrectDeposit(amount, received);\n    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 11668,
+              "file": "src/BasicEscrow.sol",
+              "start": 11634
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:224:50:\n    |\n224 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12069,
+              "file": "src/BasicEscrow.sol",
+              "start": 12034
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:225:49:\n    |\n225 |         if (msg.sender != escrow.seller) revert Unauthorized(msg.sender);\n    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12143,
+              "file": "src/BasicEscrow.sol",
+              "start": 12119
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:226:56:\n    |\n226 |         if (block.timestamp >= escrow.deadline) revert DeadlinePassed(escrow.deadline);\n    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12231,
+              "file": "src/BasicEscrow.sol",
+              "start": 12200
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:237:50:\n    |\n237 |         if (escrow.state != State.Funded) revert InvalidState(tradeId, escrow.state);\n    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12785,
+              "file": "src/BasicEscrow.sol",
+              "start": 12750
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:238:55:\n    |\n238 |         if (block.timestamp < escrow.deadline) revert DeadlineNotReached(escrow.deadline);\n    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 12876,
+              "file": "src/BasicEscrow.sol",
+              "start": 12841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:250:33:\n    |\n250 |         if (amount == 0) revert NothingToWithdraw();\n    |                                 ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13552,
+              "file": "src/BasicEscrow.sol",
+              "start": 13533
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:255:13:\n    |\n255 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13839,
+              "file": "src/BasicEscrow.sol",
+              "start": 13734
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:258:29:\n    |\n258 |             if (!ok) revert WithdrawalFailed();\n    |                             ^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 13886,
+              "file": "src/BasicEscrow.sol",
+              "start": 13868
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:293:48:\n    |\n293 |         if (terms.seller != msg.sender) revert Unauthorized(msg.sender);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15589,
+              "file": "src/BasicEscrow.sol",
+              "start": 15565
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:295:90:\n    |\n295 |         if (buyer == address(0) || buyer == msg.sender || buyer == address(this)) revert InvalidBuyer(buyer);\n    |                                                                                          ^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15736,
+              "file": "src/BasicEscrow.sol",
+              "start": 15717
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:296:41:\n    |\n296 |         if (terms.revision == 0) revert InvalidTerms();\n    |                                         ^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15792,
+              "file": "src/BasicEscrow.sol",
+              "start": 15778
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:297:48:\n    |\n297 |         if (terms.amountBaseUnits == 0) revert ZeroAmount();\n    |                                                ^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15853,
+              "file": "src/BasicEscrow.sol",
+              "start": 15841
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:298:66:\n    |\n298 |         if (block.timestamp >= terms.acceptBeforeSeconds) revert AcceptanceExpired(terms.acceptBeforeSeconds);\n    |                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 15964,
+              "file": "src/BasicEscrow.sol",
+              "start": 15920
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:302:62:\n    |\n302 |         if (deadline < earliest || deadline > latest) revert DeadlineOutOfRange(deadline, earliest, latest);\n    |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16242,
+              "file": "src/BasicEscrow.sol",
+              "start": 16196
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:306:48:\n    |\n306 |         if (escrow.state != State.None) revert TradeIdUsed(tradeId);\n    |                                                ^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16399,
+              "file": "src/BasicEscrow.sol",
+              "start": 16379
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:307:68:\n    |\n307 |         if (sellerNonceUsed[msg.sender][terms.sellerNonce]) revert SellerNonceUsed(msg.sender, terms.sellerNonce);\n    |                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 16514,
+              "file": "src/BasicEscrow.sol",
+              "start": 16468
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:348:48:\n    |\n348 |         if (available < MIN_PAYOUT_GAS) revert InsufficientGas(available, MIN_PAYOUT_GAS);\n    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18121,
+              "file": "src/BasicEscrow.sol",
+              "start": 18079
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7737",
+            "formattedMessage": "Warning: Inline assembly may cause SMTChecker to produce spurious warnings (false positives).\n   --> src/BasicEscrow.sol:352:13:\n    |\n352 |             assembly (\"memory-safe\") {\n    |             ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "Inline assembly may cause SMTChecker to produce spurious warnings (false positives).",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 18341,
+              "file": "src/BasicEscrow.sol",
+              "start": 18234
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:179:44:\n    |\n179 |         if (length > MAX_ALLOWLIST) revert AllowlistTooLarge(length);\n    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9512,
+              "file": "src/BasicEscrow.sol",
+              "start": 9487
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "7650",
+            "formattedMessage": "Warning: Assertion checker does not yet support this expression.\n   --> src/BasicEscrow.sol:182:40:\n    |\n182 |             if (token == address(0) || token.code.length == 0 || _allowed[token]) {\n    |                                        ^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet support this expression.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9645,
+              "file": "src/BasicEscrow.sol",
+              "start": 9635
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "8364",
+            "formattedMessage": "Warning: Assertion checker does not yet implement type error\n   --> src/BasicEscrow.sol:183:24:\n    |\n183 |                 revert InvalidAllowlistEntry(token);\n    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n",
+            "message": "Assertion checker does not yet implement type error",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 9731,
+              "file": "src/BasicEscrow.sol",
+              "start": 9703
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "6328",
+            "formattedMessage": "Warning: CHC: Assertion violation might happen here.\n  --> formal/partitions/EarlyRefund.sol:34:9:\n   |\n34 |         assert(!refunded && observed.state == BasicEscrow.State.Funded && observed.buyer == buyer\n   |         ^ (Relevant source part starts here and spans across multiple lines).\n\n",
+            "message": "CHC: Assertion violation might happen here.",
+            "severity": "warning",
+            "sourceLocation": {
+              "end": 1951,
+              "file": "formal/partitions/EarlyRefund.sol",
+              "start": 1778
+            },
+            "type": "Warning"
+          },
+          {
+            "component": "general",
+            "errorCode": "3996",
+            "formattedMessage": "Warning: CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.\n\n",
+            "message": "CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.",
+            "severity": "warning",
+            "type": "Warning"
+          }
+        ],
+        "result": "PROOF_UNKNOWN",
+        "toolReported": "ASSERTION_VIOLATION",
+        "unsupported": [],
+        "qualification": "Missing/zero queries, stderr, unsupported abstractions and incomplete work remain unknown; raw solver polarity is not a proof."
+      }
+    ],
+    "properties": [
+      {
+        "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+        "result": "PROVED_UNDER_DECLARED_MODEL"
+      },
+      {
+        "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+        "result": "PROOF_UNKNOWN"
+      },
+      {
+        "id": "EVM-EARLY-REFUND-ATOMIC",
+        "result": "PROOF_UNKNOWN"
+      }
+    ],
+    "queries": [
+      {
+        "key": "0xc7677ffd1fb361e409efdea81e6960ead50598543425cd9d5aabd47fa9de655e",
+        "querySha256": "65b6e6c3fb07379e40e75bd221301dd10e5c992bd6947ee8bf8e64b5b01a3035",
+        "queryBytes": 2961370,
+        "responseSha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+        "answer": "sat",
+        "exitCode": 0,
+        "timedOut": false,
+        "limited": false,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "key": "0xbc083b23099127b7909684d9e3cc2bae1716657f2490af14e5bab4aa29c7ff39",
+        "querySha256": "28d94e7e24c2806d33cbd640d087570ad5321869fe975e04a65768cebd22ad28",
+        "queryBytes": 3453956,
+        "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+        "answer": "unknown",
+        "exitCode": 0,
+        "timedOut": true,
+        "limited": false,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "key": "0xf219064e8e69ac468776fbab25860d754551a6868c4788cd4f17d059aa7c34fc",
+        "querySha256": "51a2b10a87750e033604c34ae0f0a3dff2af90f837e268f14ba37115819b609d",
+        "queryBytes": 3446379,
+        "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+        "answer": "unknown",
+        "exitCode": 0,
+        "timedOut": true,
+        "limited": false,
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "retainedEvidence": {
+    "originalWholeTarget": "UNCHANGED_NOT_RERUN",
+    "guardProofs": "UNCHANGED_NOT_RERUN",
+    "nativeCreditCounterexample": "UNCHANGED_NOT_RERUN"
+  },
+  "qualifications": [
+    "These exact extractions do not replace the original whole-target UNKNOWN results, four guard-only proofs or STRICT_TERMINAL_ALREADY_PAID native counterexample.",
+    "All query/byte/round allowances are shared across the operational probe and at most three ordered target attempts; no target is rerun.",
+    "Zero or missing queries, stderr, unsupported abstraction, timeout or incomplete diagnostics remain PROOF_UNKNOWN. Compiler source-bound diagnostics, never raw SAT/UNSAT polarity, classify complete work.",
+    "No native witness, deployment, external request or economic action was run by this mode. No ERC20, interleaving, bytecode, whole-contract, production or specialist-review qualification follows."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "task": "T40",
+  "reviewer": "branch_inventory (not the implementation author)",
+  "verdict": "approve frozen local model/probe scope; no required findings",
+  "scope": [
+    {
+      "path": "apps/web/src/compatibility/model.ts",
+      "sha256": "5720fbbf12ebb3a805afd721f94ab90a91453462f959c6dc56efe502907d7d28"
+    },
+    {
+      "path": "apps/web/src/compatibility/probe.ts",
+      "sha256": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793"
+    },
+    {
+      "path": "apps/web/test/compatibility-model.test.mjs",
+      "sha256": "8324fc944a317966438602ed38ac1345c3aecbc6379e577518d245946cd229dd"
+    },
+    {
+      "path": "apps/web/test/compatibility-probe.test.mjs",
+      "sha256": "6a933d0232fa761bb016cd958b836a867b08ecb8662eeac6414ad6bbaea37d17"
+    }
+  ],
+  "axes": {
+    "correctness": "Exact tuple/version/source/capabilities lookup, future/expiry bounds, statuses and immutable snapshots checked.",
+    "readability": "Small explicit model/probe modules with precise terminology and bounded parsers.",
+    "architecture": "App-local evidence/display, no wallet/storage authority; existing runtime remains separate.",
+    "security": "Trusted maintained pins stay separate from imported report/status/reviewer; opaque catalog identity, strict JSON, hostile throws and snapshots fail closed.",
+    "performance": "64 records x64KiB and fixed capability/limitation bounds;9 synchronous local probe reads, no external I/O."
+  },
+  "verification": {
+    "ordinaryFocusedTests": {
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "log": "/workspace/work/t40-independent-review.log"
+    },
+    "additionalBoundaryChecks": {
+      "passed": 14,
+      "log": "/workspace/work/t40-adversarial-review.log"
+    },
+    "diffCheck": "pass"
+  },
+  "remainingScope": "No App startup UI wiring reviewed/implemented; no physical device, professional audit, supported wallet enrollment, funds release or deployment qualification.",
+  "startupProposal": "Capture one permission-free local probe in Bootstrap; missingrequired skips startup using existingUNSUPPORTED_ENVIRONMENT; otherwise preserve unchanged AppRuntime actual checks. Render explicituntested notice, no UA sniff/catalog enrollment, and leave storageAccessunverified until actual successful native storage operation."
+}

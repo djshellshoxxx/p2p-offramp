@@ -1,0 +1,222 @@
+{
+  "schema": "p2p-offramp/maintained-tools-audit/v1",
+  "task": "T38-H",
+  "status": "COMPLETE_BASELINE_TWO_FINDINGS_T93_ADMITTED",
+  "observedAtUtc": "2026-11-02T17:37:47.020915+00:00",
+  "headAtReview": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "scope": {
+    "exactAssignedFiles": 9,
+    "bytes": 109105,
+    "newlineLines": 1281,
+    "fullSemanticRead": true,
+    "reviewedInventorySha256": "b8a558e62f0a15b84bae740b37af98353dba5d9661460824ac5b48964d8eefe9",
+    "inventoryAlgorithm": "SHA256 of sorted path+NUL+SHA256+LF",
+    "initialInventory": {
+      "path": "/workspace/work/audit-maintained-tools-inventory-start.json",
+      "bytes": 1809,
+      "sha256": "4bc5f1b5ddb73516d33ac9c26d4a5be80abe6709a53f1ed09bf9fd14eeecfcb3"
+    },
+    "allHashesStableAtBaseline": true
+  },
+  "findings": [
+    {
+      "id": "TOOLS-001",
+      "severity": "P2",
+      "path": "scripts/check-import-boundaries.mjs",
+      "line": 63,
+      "status": "OPEN_BASELINE",
+      "title": "Directory-read errors silently omit requested production sources",
+      "sourceProof": "walk catches every readdir error and returns; unreadable/missing roots or subtrees can disappear while readable App entry leaves graphChecked true and zero findings. CLI then emits PASS for partial tree.",
+      "impact": "Incomplete boundary assurance; no current checkout omission/product compromise established.",
+      "acceptance": "Missing/unreadable expected roots/subtrees must fail and graphChecked must be false for incomplete inventory. Intentional fixture roots explicit."
+    },
+    {
+      "id": "TOOLS-002",
+      "severity": "P3",
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "line": 19,
+      "status": "OPEN_BASELINE",
+      "title": "Zero verified signatures exits successfully",
+      "sourceProof": "checked begins zero, empty vectors/no acceptance rows skip verify, unconditional final print exits successfully.",
+      "impact": "Optional primitive cross-check may report success without cryptographic work; no invalidity of current fixture established.",
+      "acceptance": "Empty signature work exits nonzero; committed signed fixtures and actual signature negative controls retained."
+    }
+  ],
+  "files": [
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "bytes": 15645,
+      "lines": 285,
+      "sha256": "34b2013a7967c6cdb1abfc13d274ab3140f3a3b110ce148bcdab368e2050a724",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "AST import/reexport/dynamic/require extraction",
+        "relative containment/private facades",
+        "core global/import restrictions",
+        "transitive optional-module graph",
+        "enumeration/errors/cleanup"
+      ],
+      "assessment": "Full 285-line semantic read. Narrow public side entries remain traversed, nonliteral/URL/private/path escape imports surface findings, missing App entry is explicit, sorted findings and API.close finally. Collection read failures are silently swallowed (TOOLS-001). Syntax checks are not data-flow, emitted bundler proof or symlink validation."
+    },
+    {
+      "path": "scripts/fuzz-evm-agreement-input.mjs",
+      "bytes": 32493,
+      "lines": 459,
+      "sha256": "4fa379e441356d7476dfae17da05802ad784fe0066bc28916c215329c7a47b5c",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "all eight deterministic families",
+        "genuine error/refusal oracle",
+        "accepted frozen/owned snapshot checks",
+        "resource intrinsic restoration",
+        "bounded private metrics",
+        "CLI output containment/exclusive creation"
+      ],
+      "assessment": "Full 459-line read. NONSECURITY SHA256 fixed-seed stream, 8..4096 cases/replay labeling, fresh graphs and descriptor-only metadata; exact genuine sanitized schema errors, compact isolated signatures/source mutation check, first-failure termination and snapshot wipe. TextEncoder/BigInt restoration finally, wx/0600 output outside real checkout. No hard parser timeout/sandbox, shrinking or coverage guidance. noSigCopy/sigSet metadata is unused, so rejection-before-signature-copy allocation is not established."
+    },
+    {
+      "path": "scripts/initialize-specifications.sh",
+      "bytes": 46789,
+      "lines": 299,
+      "sha256": "8f232f561819fcd80116fc8d368cf269e68af897169ea9dd34ddc0474b14a320",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "shell flow/quoting",
+        "all literal manifest rows",
+        "safe path components",
+        "preservation/noclobber",
+        "symlink refusal",
+        "master catalog/placeholder limits"
+      ],
+      "assessment": "Full 299-line read including entire literal manifest. Strict shell/private umask/canonical root, empty-dot-dotdot and symlink component refusal, quoted mkdir/printf, regular-file preservation and noclobber. All 162 rows have six nonempty fields/unique safe paths/current files; master separately preserved, correct three-level links. No execution; Bash4+ documented, no concurrent-filesystem race safety inferred. Placeholder status never means implementation or qualification."
+    },
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "bytes": 1080,
+      "lines": 19,
+      "sha256": "efd62a22e2fbd5c973fbc5248658216fcd4492106c6cfd63b3837c0acd154cb3",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "offline dependency boundary",
+        "synthetic key/public key",
+        "DER signature conversion",
+        "prehashed digest verification",
+        "empty workload outcome"
+      ],
+      "assessment": "Full 19-line read. Public synthetic scalars independently derive keys, encoded public key comparison, r/s DER and exact 32-byte digest verify via Prehashed size semantics without rehash. Empty workload succeeds (TOOLS-002). No app dependency/network/install; no full recovery-byte/role/account/schema proof or provider approval."
+    },
+    {
+      "path": "scripts/vectors/g16_evm_independent.mjs",
+      "bytes": 6001,
+      "lines": 72,
+      "sha256": "650483be964b74bb94980f88dd9044e09ed3fd72b43b2477e9bdd6dca63a117a",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "independence from App/Noble",
+        "offline exact versions/licenses",
+        "source/lock provenance",
+        "EIP712 order/domain layout",
+        "six synthetic boundary cases",
+        "signature verify/recovery"
+      ],
+      "assessment": "Full 72-line read. Separately transcribed type/field/domain hashing; native/ERC20/max widths/chain/text and two signed domains. Trusted existing js-sha3 0.8.0/elliptic 6.6.1 MIT versions checked, hashes recorded, public scalars1/2/canonical signatures/self verify+recovery. Stdout only. Does not authenticate operator-selected installed source against an approved digest, validate arbitrary inputs or qualify provider."
+    },
+    {
+      "path": "scripts/vectors/g16_vectors.py",
+      "bytes": 4888,
+      "lines": 100,
+      "sha256": "f8bac7350d8d681972c2217b43b3c1996ec065b424e8559d28133920f83093c1",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "private agreement canonical bytes",
+        "LP/UTF8/capability order",
+        "base58 keys",
+        "Solana endian/native/SPL layout",
+        "synthetic maximum values",
+        "check/write modes"
+      ],
+      "assessment": "Full 100-line read. Independent LP/width/domain-label encodings, deterministic synthetic SHA-derived keys, empty/nonASCII/capability and u64/u128 boundary fixtures. --check exact comparison; default fixed fixture write. Neither executed. Trusted reference builder is not production validation or Solana interoperability acceptance; assert checks assume ordinary Python mode."
+    },
+    {
+      "path": "scripts/test-support/fixture-receipt.mjs",
+      "bytes": 1634,
+      "lines": 36,
+      "sha256": "1b376fc97e2afdabfd8ecb56b6c56347c148454926fd8f3edd156856ab5f9822",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "same-hash read only",
+        "40 read/39 null wait cap",
+        "5s monotonic read deadline",
+        "post-await checks",
+        "strict result/sanitized errors"
+      ],
+      "assessment": "Full 36-line read plus complete six regression tests. One receipt hash, no submit or resend, capped reads/null waits, remaining-budget hung-read race and post-await reversal/expiry refusal. Timeout bounds logical wait only, without claiming physical RPC cancellation. Local exact-hash/status contract is not canonical chain/finality evidence; injected timing is trusted."
+    },
+    {
+      "path": "scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "lines": 2,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "local loader registration",
+        "test-only side effect"
+      ],
+      "assessment": "Full two-line read. Registers sibling local TSX hook relative to module URL; intentionally affects Node test loader, with no install/source mutation/provider enrollment."
+    },
+    {
+      "path": "scripts/test-support/tsx-hooks.mjs",
+      "bytes": 489,
+      "lines": 9,
+      "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe",
+      "semanticReview": "completed_full_file",
+      "checks": [
+        "file TSX-only interception",
+        "nonmatching delegation",
+        "Vite Oxc fixed transform",
+        "ES module short circuit"
+      ],
+      "assessment": "Full nine-line read. Local fileURLToPath/readFile and automatic JSX transform; other URL loads delegate. Test transpiler is not type checking or filesystem sandbox and uses installed Vite/Oxc; no remote fetch/activation. Query-suffixed TSX delegates under this narrow contract."
+    }
+  ],
+  "selectedTestSourceRead": [
+    {
+      "binding": {
+        "path": "/workspace/p2p-offramp/scripts/tests/import-boundaries.test.mjs",
+        "bytes": 12895,
+        "sha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac"
+      },
+      "scope": "complete"
+    },
+    {
+      "binding": {
+        "path": "/workspace/p2p-offramp/scripts/tests/fixture-receipt.test.mjs",
+        "bytes": 3274,
+        "sha256": "6d833e0e4edff5f43d9e866bf9549bf9c2de1b6857778c8e00444a3a78617f7a"
+      },
+      "scope": "complete"
+    },
+    {
+      "binding": {
+        "path": "/workspace/p2p-offramp/scripts/tests/evm-agreement-fuzz.test.mjs",
+        "bytes": 23026,
+        "sha256": "a21488516035fefa2327717771e862215fd75bed16f0d0d76b9c85c65e35dfa5"
+      },
+      "scope": "evaluation/resource/privacy/output-containment sections"
+    }
+  ],
+  "readOnlyManifestFacts": {
+    "rows": 162,
+    "uniqueSafePaths": 162,
+    "sixNonemptyFieldsEveryRow": true,
+    "currentFilesPresent": 162,
+    "method": "Parse literal heredoc; shell not sourced/executed"
+  },
+  "limits": [
+    "No script/test/fuzz/native/oracle/initializer executed during H baseline; direct source control-flow findings only.",
+    "No source/ledger edit, commit, install, network access or App re-review.",
+    "Historical repro/vendor examples remain archived evidence, not product runtime or fresh professional certification.",
+    "Static syntax is not full runtime/bundler isolation; synthetic oracle fixtures do not qualify providers/protocols/devices or prove defect absence."
+  ],
+  "followup": "Root admitted T93 narrow four-file corrections after immutable baseline, with RED/GREEN and exact source delta to be reviewed separately."
+}

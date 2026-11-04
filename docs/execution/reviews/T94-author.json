@@ -1,0 +1,647 @@
+{
+  "task": "T94",
+  "status": "READY_FOR_ROOT_INDEPENDENT_REVIEW",
+  "frozenAtUtc": "2026-11-02T17:54:40.414252+00:00",
+  "sourceHeadAtBaseline": "32c344992a12aa4751d89ea5cf360c3d69e27761",
+  "sourceHeadAtFreeze": "635efc88fa54a355ee3378af25ad04c5e4c4a55f",
+  "ownedFiles": [
+    {
+      "path": "scripts/tests/requirements-crypto.txt",
+      "sha256": "fd3fcbe314d2f7eae173805009a1b40f214fb8ed839905a98228ec4eebbed911",
+      "baselineSha256": null,
+      "new": true
+    },
+    {
+      "path": ".github/workflows/specifications.yml",
+      "sha256": "66d31387cf7572a6d968783027ab97d176ceccfcbf5a72cdbfe22803b18b31cc",
+      "baselineSha256": "d2991f96a394f4d2365344827dbb853ee0101e503d1badd824d5dab85d2ab1d0",
+      "new": false
+    },
+    {
+      "path": ".github/workflows/vault-foundation.yml",
+      "sha256": "6cd74219c7d00d1c69ca78dec308c409ada983e5e4a59c2b836dd53a97223111",
+      "baselineSha256": "0913a63825a4ea70e5140ffb6a7c056fba107b788fb0d667e69d5f5b44d3d151",
+      "new": false
+    },
+    {
+      "path": "scripts/tests/test_g16_vectors.py",
+      "sha256": "3be0db984cb68f4c977ebfb101a25083bffaa41e9f1a278940c1d15e06183782",
+      "baselineSha256": "7deff11eb90f93c8a475411a062e9977fc45c5b1bec07ee77bb95b0315e0bafb",
+      "new": false
+    }
+  ],
+  "protectedUnchangedFiles": [
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "sha256": "402b9c53ff64f056f54d443e9c7880881afacd7cd9245172e00135c5e7197504"
+    },
+    {
+      "path": "scripts/vectors/g16_vectors.py",
+      "sha256": "f8bac7350d8d681972c2217b43b3c1996ec065b424e8559d28133920f83093c1"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70"
+    },
+    {
+      "path": "package.json",
+      "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    }
+  ],
+  "problem": "The new T93 oracle regression class could silently skip in a clean Python CI environment. Host-installed cryptography masked that dependency omission.",
+  "change": "Mandatory complete development-only hashed binary closure is installed before the existing tests in both Python/spec CI lanes. Only importlib.util and the optional class skip were removed from the existing test; all four test bodies remain unchanged.",
+  "ciLanes": [
+    {
+      "workflow": ".github/workflows/specifications.yml",
+      "job": "inventory",
+      "python": "3.12",
+      "runner": "ubuntu-latest amd64"
+    },
+    {
+      "workflow": ".github/workflows/vault-foundation.yml",
+      "job": "specs",
+      "python": "3.12",
+      "runner": "ubuntu-latest amd64"
+    }
+  ],
+  "ciInstallCommand": "python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt",
+  "requirements": {
+    "packages": {
+      "cryptography": "50.0.0",
+      "cffi": "2.1.1",
+      "pycparser": "3.0"
+    },
+    "completeClosure": true,
+    "publicOfficialIndex": "https://pypi.org/simple",
+    "binaryOnly": true,
+    "requireHashes": true,
+    "allowedWheelArtifacts": 8,
+    "verifiedWheelBytes": 28695181,
+    "platformScope": "CPython3.12 Ubuntu amd64; cryptography cp311/cp39 abi3 manylinux x86_64, cffi cp312 manylinux x86_64, pycparser universal wheel. No source archives, other architectures or alternate package indexes admitted.",
+    "inactiveDependencies": [
+      {
+        "name": "typing-extensions",
+        "reason": "cryptography marker python_full_version <3.11 is false for Python3.12"
+      },
+      {
+        "name": "bcrypt",
+        "reason": "ssh extra is not requested by the EC signature oracle"
+      }
+    ]
+  },
+  "publicMetadata": [
+    {
+      "name": "cryptography",
+      "version": "50.0.0",
+      "url": "https://pypi.org/pypi/cryptography/50.0.0/json",
+      "status": 200,
+      "bytes": 45476,
+      "sha256": "4cb03a11a6a704310e9aab006acf6d4946c1543f0f8410d7188b90ec1e17f03d",
+      "fetchedAtUtc": "2026-11-02T17:45:39.356142+00:00",
+      "requiresPython": "!=3.9.0,!=3.9.1,>=3.9",
+      "requiresDist": [
+        "cffi>=2.0.0; platform_python_implementation != \"PyPy\"",
+        "typing-extensions>=4.13.2; python_full_version < \"3.11\"",
+        "bcrypt>=3.1.5; extra == \"ssh\""
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "files": 46
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "url": "https://pypi.org/pypi/cffi/2.1.1/json",
+      "status": 200,
+      "bytes": 89333,
+      "sha256": "2255e530e3f80593a354e3d84a29966924d0e10309d1e3a6d50f845ab7d8df66",
+      "fetchedAtUtc": "2026-11-02T17:45:39.344137+00:00",
+      "requiresPython": ">=3.10",
+      "requiresDist": [
+        "pycparser; implementation_name != \"PyPy\""
+      ],
+      "licenseExpression": "MIT-0",
+      "files": 100
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "url": "https://pypi.org/pypi/pycparser/3.0/json",
+      "status": 200,
+      "bytes": 10557,
+      "sha256": "13939b01403db93c94e8f9c5b0e3441c9cdccb4304e43ec6820031f7da71a793",
+      "fetchedAtUtc": "2026-11-02T17:45:39.313427+00:00",
+      "requiresPython": ">=3.10",
+      "requiresDist": null,
+      "licenseExpression": "BSD-3-Clause",
+      "files": 2
+    }
+  ],
+  "publicVerifiedWheels": [
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/d9/41/029086c34d91052fc3b88bcc8056f709a7c915c7a23b235a54eb800b1c97/cryptography-50.0.0-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "bytes": 4702130,
+      "sha256": "06a32a980526a6ab9a4b9bf8f7385800791e2bb960903cb6b530e4817509a3b7",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp311-abi3-manylinux_2_28_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/6b/72/a1116d683a6d7ece94590013882515de087edf9ef0e6292aae615a44df73/cryptography-50.0.0-cp311-abi3-manylinux_2_28_x86_64.whl",
+      "bytes": 4734609,
+      "sha256": "b42a28c1844fd9de8f3f7d540e36b66f3a9c83fceac7170ebc7a6a19edd9dcae",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/da/3a/f05e32c99d440c9bb891ea0e36c9091891e36be5a9a87ab2ee6ea20729f6/cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "bytes": 4734462,
+      "sha256": "82148ec5bddac30b51a5b3c1945075f896fa022cb93f8e4a01e9f6ee95292c5f",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/85/4f/0fa8c2f4428198f15d9ff8d63400e27afbf94ce833f6108da1eb3753f945/cryptography-50.0.0-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "bytes": 4728939,
+      "sha256": "a91296cb61e8df6f86d0c19cc4068228da256bf59bf86049fbd821084565327f",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp39-abi3-manylinux_2_28_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/46/c9/f60aed34c013f317f92817b6c171c2d22a78270fa41109bd4b08af26b194/cryptography-50.0.0-cp39-abi3-manylinux_2_28_x86_64.whl",
+      "bytes": 4762647,
+      "sha256": "105110f43a471dbd0060b9c9516cb8a6a79233631a04cc2ba16f28323ac6e025",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cryptography",
+      "version": "50.0.0",
+      "filename": "cryptography-50.0.0-cp39-abi3-manylinux_2_34_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/9c/f8/d97f9603efda3888187bfdb893f26c41be4735c10631d05d284ee6b047c4/cryptography-50.0.0-cp39-abi3-manylinux_2_34_x86_64.whl",
+      "bytes": 4762400,
+      "sha256": "37fdb0d0111f1e2ff07139dfb79f1b49531f8e213c46f1163dd7642979b58c47",
+      "metadataName": "cryptography",
+      "requiresPython": ">=3.9, !=3.9.0, !=3.9.1",
+      "requiresDist": [
+        "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+        "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+        "bcrypt>=3.1.5 ; extra == 'ssh'"
+      ],
+      "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE.APACHE",
+        "LICENSE.BSD"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cryptography-50.0.0.dist-info/METADATA",
+          "bytes": 4343,
+          "sha256": "d4e345f82cb783877d73261f00303577cdf20d13229176c2d03a0a5603cb3ab5"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bytes": 11360,
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "path": "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bytes": 1532,
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ]
+    },
+    {
+      "package": "cffi",
+      "version": "2.1.1",
+      "filename": "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "bytes": 221822,
+      "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+      "metadataName": "cffi",
+      "requiresPython": ">=3.10",
+      "requiresDist": [
+        "pycparser; implementation_name != \"PyPy\""
+      ],
+      "licenseExpression": "MIT-0",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "cffi-2.1.1.dist-info/METADATA",
+          "bytes": 2527,
+          "sha256": "558bafb9093a8e790175d9ecff9688382981d744877dad86fd6770db0f4dc918"
+        },
+        {
+          "path": "cffi-2.1.1.dist-info/licenses/LICENSE",
+          "bytes": 1123,
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+        }
+      ]
+    },
+    {
+      "package": "pycparser",
+      "version": "3.0",
+      "filename": "pycparser-3.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl",
+      "bytes": 48172,
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "metadataName": "pycparser",
+      "requiresPython": ">=3.10",
+      "requiresDist": [],
+      "licenseExpression": "BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "retainedMetadataAndLicenseFiles": [
+        {
+          "path": "pycparser-3.0.dist-info/licenses/LICENSE",
+          "bytes": 1543,
+          "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+        },
+        {
+          "path": "pycparser-3.0.dist-info/METADATA",
+          "bytes": 8229,
+          "sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93"
+        }
+      ]
+    }
+  ],
+  "licenses": [
+    {
+      "name": "cryptography",
+      "version": "50.0.0",
+      "expression": "Apache-2.0 OR BSD-3-Clause"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "expression": "MIT-0"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "expression": "BSD-3-Clause"
+    }
+  ],
+  "closurePolicyEvidence": {
+    "path": "/workspace/work/t94-python-oracle-ci.evidence/CLOSURE-AND-POLICY-CHECK.json",
+    "sha256": "a25d230413c9fcb578c1271c1daac016299b826f32be26c334e23b7e6fd5c675",
+    "allOriginalWorkflowStepsPinsScannersAndSettingsPreserved": true,
+    "allTestBodiesPreserved": true
+  },
+  "isolatedEnvironment": {
+    "before": {
+      "path": "/workspace/work/t94-python-oracle-ci.evidence/ISOLATION-BEFORE.json",
+      "sha256": "5df532295066cbc3c02d57eebca1ed48c051b410a90cfc73d6c62b3fa6e9250e"
+    },
+    "after": {
+      "path": "/workspace/work/t94-python-oracle-ci.evidence/ISOLATION-AFTER.json",
+      "sha256": "d2887a0ef075b3bbcca9a9d0ca311f5e69800d600560a2c8ee1523796595e7bd"
+    },
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "pip": "25.0.1",
+    "openssl": "OpenSSL 4.0.1 9 Jun 2026",
+    "prefix": "/workspace/work/t94-python-oracle-ci.evidence/venv",
+    "basePrefix": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python",
+    "systemSitePackages": false,
+    "actualOfficialHashedWheelInstall": [
+      {
+        "name": "cryptography",
+        "version": "50.0.0",
+        "wheel": "cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+        "officialUrl": "https://files.pythonhosted.org/packages/da/3a/f05e32c99d440c9bb891ea0e36c9091891e36be5a9a87ab2ee6ea20729f6/cryptography-50.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+        "sha256": "82148ec5bddac30b51a5b3c1945075f896fa022cb93f8e4a01e9f6ee95292c5f",
+        "licenseExpression": "Apache-2.0 OR BSD-3-Clause",
+        "installedLicenseFiles": [
+          {
+            "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE",
+            "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb",
+            "bytes": 197
+          },
+          {
+            "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+            "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+            "bytes": 11360
+          },
+          {
+            "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+            "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb",
+            "bytes": 1532
+          }
+        ]
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1",
+        "wheel": "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "officialUrl": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+        "licenseExpression": "MIT-0",
+        "installedLicenseFiles": [
+          {
+            "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/cffi-2.1.1.dist-info/licenses/LICENSE",
+            "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63",
+            "bytes": 1123
+          }
+        ]
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0",
+        "wheel": "pycparser-3.0-py3-none-any.whl",
+        "officialUrl": "https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl",
+        "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+        "licenseExpression": "BSD-3-Clause",
+        "installedLicenseFiles": [
+          {
+            "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/pycparser-3.0.dist-info/licenses/LICENSE",
+            "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1",
+            "bytes": 1543
+          }
+        ]
+      }
+    ],
+    "nativeModuleIdentities": [
+      {
+        "module": "_cffi_backend",
+        "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/_cffi_backend.cpython-312-x86_64-linux-gnu.so",
+        "bytes": 348856,
+        "sha256": "9bc1d08072255a5ec2db10fc75df1dd9e73097a75cd9150cfe875ebd6712f17c",
+        "matchesOfficialWheelMember": true
+      },
+      {
+        "module": "cryptography.hazmat.bindings._rust",
+        "path": "/workspace/work/t94-python-oracle-ci.evidence/venv/lib/python3.12/site-packages/cryptography/hazmat/bindings/_rust.abi3.so",
+        "bytes": 14357504,
+        "sha256": "613ec570594be2691ce18fe8aa51aa4716584c0e586ec97dd790c4b9757b5a83",
+        "matchesOfficialWheelMember": true
+      }
+    ],
+    "snapshot": "installed-snapshot (actual METADATA, RECORD and license bytes); mutable venv retained for independent focused rerun, excluded from immutable artifact manifest."
+  },
+  "verification": {
+    "baselineSkipControl": {
+      "exitCode": 0,
+      "tests": 4,
+      "passed": 1,
+      "skipped": 3,
+      "raw": "baseline.SKIP.log"
+    },
+    "unconditionalWithoutDependenciesRED": {
+      "exitCode": 1,
+      "tests": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "failure": "positive signature oracle reports ModuleNotFoundError cryptography",
+      "raw": "unconditional.RED.log"
+    },
+    "tamperedHashesRED": {
+      "exitCode": 1,
+      "mode": "offline dry-run, no installation",
+      "observed": "SHA256 mismatch refused",
+      "raw": "hash-tamper.RED.log"
+    },
+    "missingTransitivePinRED": {
+      "exitCode": 1,
+      "mode": "offline dry-run, no installation",
+      "observed": "--require-hashes refuses unpinned transitive pycparser",
+      "raw": "missing-transitive.RED.log"
+    },
+    "freshIsolatedInstall": {
+      "exitCode": 0,
+      "command": "/workspace/work/t94-python-oracle-ci.evidence/venv/bin/python -m pip --isolated install --disable-pip-version-check --no-cache-dir --no-input --timeout 20 --retries 1 --require-hashes --only-binary=:all: --report /workspace/work/t94-python-oracle-ci.evidence/INSTALL-REPORT.json -r scripts/tests/requirements-crypto.txt",
+      "raw": "isolated-install.GREEN.log",
+      "report": "INSTALL-REPORT.json",
+      "allThreeSelectedArtifactOriginsAndHashesMatchPublicPyPI": true
+    },
+    "focusedTestsGREEN": {
+      "exitCode": 0,
+      "command": "/workspace/work/t94-python-oracle-ci.evidence/venv/bin/python -I -m unittest discover -s scripts/tests -p test_g16_vectors.py -v",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "actualMethods": [
+        "test_committed_fixture_matches_independent_generator",
+        "test_empty_signature_work_cannot_pass",
+        "test_committed_signed_fixture_checks_all_four_signatures",
+        "test_actual_signature_digest_and_public_key_negative_controls"
+      ],
+      "raw": "unconditional.GREEN.log"
+    },
+    "pipCheck": {
+      "exitCode": 0,
+      "raw": "pip-check.GREEN.log",
+      "result": "No broken requirements found."
+    },
+    "scopeChecks": "Existing workflow bytes match baseline after removing exactly the two added step blocks; test bytes match baseline after only removing import and decorator; protected oracle/generator/fixture/npm manifests unchanged.",
+    "recordedToolingCorrection": "EXTRACTION-CORRECTION.json retains the owned ZIP-directory extraction mistake and missing network-capability retry; all final archives and licenses are verified without changing the artifact/version choices."
+  },
+  "network": {
+    "officialMetadataAndWheelHosts": [
+      "pypi.org",
+      "files.pythonhosted.org"
+    ],
+    "policyAllowed": true,
+    "tlsVerification": "Enabled through normal urllib/pip HTTPS verification; no trusted-host, insecure certificate option or TLS replacement.",
+    "proxy": "Configured process HTTP(S) proxy and CA environment left intact; no proxy bypass, VPN or host trust-store change.",
+    "pipIsolation": "--isolated ignores pip user configuration and PIP_* index/trust overrides; standard HTTP(S) proxy/CA environment is preserved."
+  },
+  "limits": [
+    "Development-only independent fixture oracle, not an app/runtime dependency or professional cryptographic/security/legal approval. Publisher wheel license declarations/text and exact artifact identities are retained; bundled native components are not independently audited here.",
+    "Fresh local proof uses CPython3.12.14/x86_64/glibc2.41/OpenSSL4.0.1. Existing CI lanes remain Python3.12 Ubuntu amd64; remote CI execution remains for root.",
+    "No host-global pip/npm install, root/runtime npm dependency, source build, general Python framework, scanner suppression, old CI setting change, product-source change, full suite, commit or production activation.",
+    "The original T93 oracle/generator/fixture code is protected and unchanged; T93 host8/8 source acceptance was not rerun or relabeled as this fresh proof."
+  ]
+}

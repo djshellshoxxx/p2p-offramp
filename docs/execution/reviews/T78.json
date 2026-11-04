@@ -1,0 +1,192 @@
+{
+  "task": "T78",
+  "status": "READY_FOR_INDEPENDENT_ROOT_EXECUTION_REVIEW",
+  "sourceHead": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+  "sharedWorkingTreeDirty": true,
+  "ownedSource": {
+    "scripts/lab/command.mjs": {
+      "sha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00",
+      "changed": false
+    },
+    "scripts/lab/recipe.test.mjs": {
+      "sha256": "47ed5e1c588f404cf333ccb83cd3f7c2da88bda96df29793d001b2b2a5235a50",
+      "baselineSha256": "f9767b8851b5ee29e36baac1c2134e63a33523bd1acfb92040b381f4aa09d457",
+      "changed": true
+    }
+  },
+  "sourceAndDependencyHashes": {
+    "path": "/workspace/work/t78-cleanup-diagnosis/source-and-dependency-hashes.json",
+    "sha256": "949c0a5832e7e2abf8cb8b2e8173371d7f3612d3bc8feceecca6abf3d4ee3a91"
+  },
+  "finding": {
+    "rootCause": "The test treated process-group SIGKILL delivery as synchronous native exit. runLabCommand already signals its solely owned detached process group in close cleanup before resolving; an immediate /proc read can still observe R while exit_code is 9, then Z after scheduling.",
+    "reproduction": "One fixed finite-load baseline run of the original 6 tests reproduced the exact descendant-exit assertion failure:5 pass / 1 fail, no skips/cancellations. Four owned CPU workers each had an 8 s finite maximum and were stopped/reaped in the diagnostic finally.",
+    "measuredSamples": {
+      "completed": 22,
+      "success": 12,
+      "timeout": 10,
+      "liveAtSyncRead": 9,
+      "liveAtFirstAsyncRead": 5,
+      "allCompletedSamplesObservedExited": true,
+      "transientAliveSamplesNativeExitCode": "9 (SIGKILL)",
+      "latestRecordedFinalReadStartMs": 26.04209999999989,
+      "timingLimit": "Raw elapsedMs is read-start time, not completion. It establishes a scheduling transient, not an exact exit latency bound. All 5 transient async-R samples were Z at the next25ms sample; no sample survived the 40 × 25 ms observation guard."
+    },
+    "separateFixtureIssue": "The same diagnostic stopped at timeout sample 10 when the original 150 ms wall timer expired before Node printed a PID. Raw failure is retained, not counted as an un-killed descendant or hidden by rerun."
+  },
+  "repair": {
+    "productionCode": "No change to runner, fixed error projection, log cap, timeout/cancellation limits or owned group signals.",
+    "exitObservation": "Native /proc polling for Z/X/ENOENT, maximum 40 real 25 ms waits, then the same required descendant-exit assertion. Descendant still uses indefinite setInterval; no finite natural exit can satisfy the negative control.",
+    "startupReadiness": "For the timeout fixture only, mock Node setTimeout (not scheduler.wait), wait for PID file written after stdout flush, then tick exactly 150 ms. Actual subprocesses, SIGTERM/SIGKILL and exit observation remain native. Existing real-wall 100 ms timeout, log-overflow and pre-abort test is unchanged.",
+    "cleanup": "A test-owned abort controller drains any pending command in finally; test after-hook kills only captured owned descendant PIDs and removes only its mkdtemp directory. Mock timer restored before sibling tests."
+  },
+  "verification": [
+    {
+      "command": "node /workspace/work/t78-cleanup-diagnosis/observe-lifecycle.mjs",
+      "exitCode": 1,
+      "expected": "Diagnostic preserved exact original RED, recorded 22 exit observations, then stopped on newly isolated 150 ms startup fixture issue.",
+      "raw": [
+        "original-tranche-tools.RED.log",
+        "baseline-under-finite-load.log",
+        "lifecycle-observations.json",
+        "lifecycle-run.log",
+        "initial-measurement-summary.json"
+      ]
+    },
+    {
+      "command": "node /workspace/work/t78-cleanup-diagnosis/run-with-finite-load.mjs",
+      "exitCode": 0,
+      "result": "6/6pass; same finite 4-worker load; all owned workers closed",
+      "raw": [
+        "focused-under-finite-load.GREEN.log",
+        "focused-under-finite-load-result.json"
+      ]
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test --test-reporter=tap /workspace/work/t78-cleanup-diagnosis/negative-control/scripts/lab/recipe.test.mjs",
+      "exitCode": 1,
+      "expected": "Exact maintained test copy against copied command module with only close-cleanup group SIGKILL removed fails the descendant-exit assertion after 1119.46 ms. Five other cases pass; no skips/cancellations; test after-hook kills the indefinitely running owned descendant.",
+      "raw": [
+        "negative-control.RED.log",
+        "negative-control-metadata.json"
+      ]
+    },
+    {
+      "command": "PATH=/workspace/work/foundry-1.5.1:$PATH npm run test:completion:tools",
+      "exitCode": 0,
+      "result": "31/31pass,0fail/skip/cancel; docs engineeringConsistency:true; governance checked 12 / economicPreparationAllowed:false",
+      "raw": [
+        "completion-tools.GREEN.log"
+      ]
+    },
+    {
+      "command": "PATH=/workspace/work/foundry-1.5.1:$PATH npm test",
+      "exitCode": 0,
+      "result": "1551/1551pass,0fail/skip/cancel;74679.54ms; shared working-tree aggregate, not a professional/release approval",
+      "raw": [
+        "package-suite.log"
+      ]
+    },
+    {
+      "command": "git diff --check -- scripts/lab/command.mjs scripts/lab/recipe.test.mjs",
+      "exitCode": 0,
+      "result": "Clean"
+    }
+  ],
+  "executionPolicy": "Node 24.19.0, default per-file Node test isolation throughout; exec additional network capability only for managed Node/child IPC; no production service or funds action.",
+  "cleanupFinalObservedPids": [
+    {
+      "pid": 121675,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121683,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121696,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121705,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121713,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121721,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121729,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121742,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121755,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121764,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121777,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121790,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121798,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121812,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121826,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121853,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121868,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121916,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121930,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121943,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121956,
+      "stateAtFinalReview": "Z"
+    },
+    {
+      "pid": 121969,
+      "stateAtFinalReview": "Z"
+    }
+  ],
+  "limits": [
+    "No runner cleanup defect was reproduced. The observed defect was test scheduling/startup assumptions.",
+    "No commits, shared task ledgers, CI configuration, trading configuration or unrelated source were edited.",
+    "Root reviewed source/readiness rationale and will independently execute recipe and inspect frozen evidence before integration."
+  ]
+}

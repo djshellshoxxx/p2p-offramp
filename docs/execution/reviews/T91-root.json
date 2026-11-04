@@ -1,0 +1,73 @@
+{
+  "reviewer": "/root",
+  "files": [
+    {
+      "path": "contracts/evm/formal/partitions/NativeConstructor.sol",
+      "sha256": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20"
+    },
+    {
+      "path": "contracts/evm/formal/partitions/UnauthorizedRelease.sol",
+      "sha256": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db"
+    },
+    {
+      "path": "contracts/evm/formal/partitions/EarlyRefund.sol",
+      "sha256": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67"
+    },
+    {
+      "path": "contracts/evm/formal/properties.json",
+      "sha256": "1777ff9fff0c13c0761abcc5d98114b258c3cf2c742cd8a07150bc36d2c47c7b"
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "89633a93f3dc47935c2cad0af7c9ecfa9ec6a273927625320bb6c9dc45c9562a"
+    },
+    {
+      "path": "scripts/formal/README.md",
+      "sha256": "053ee0f33044f366b6eb2bb91582f0281124c6bcbe5ae4523c4eefd7b0c7143b"
+    },
+    {
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "sha256": "68fdd5cb22fe0c95e4c4346d83158a08e47f59f51d6a03f281a123bb23d62e98"
+    }
+  ],
+  "protected": [
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/evm/abi/BasicEscrow.json",
+      "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/evm/formal/CanonicalRefinement.t.sol",
+      "sha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+      "unchanged": true
+    }
+  ],
+  "reportSha256": "893e168aca33ade576817f0214a49b85831b2dde0b700091769f69885582ff2c",
+  "semanticChecks": [
+    "Exact function/helper/outsider extraction bound to frozen original model SHA; canonical contract and ABI unchanged",
+    "Shared query/round/byte/time budgets preserved; single finite tranche and exclusive marker",
+    "Clean nonzero query/source-diagnostic classification; timeouts and partial diagnostics remain UNKNOWN",
+    "Original whole-target UNKNOWN, guard-only proofs and native model gap retained separately"
+  ],
+  "focusedTests": "9 formal tests passed in distinct root run alongside6 locale tests; no solver target rerun",
+  "results": [
+    {
+      "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+      "result": "PROVED_UNDER_DECLARED_MODEL"
+    },
+    {
+      "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+      "result": "PROOF_UNKNOWN"
+    },
+    {
+      "id": "EVM-EARLY-REFUND-ATOMIC",
+      "result": "PROOF_UNKNOWN"
+    }
+  ],
+  "verdict": "ACCEPT_SCOPED_LOCAL_RESEARCH_NO_RELEASE_QUALIFICATION"
+}

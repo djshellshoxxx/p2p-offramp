@@ -6,11 +6,14 @@ release. Keep `ReleaseEnabled=0` and the default empty network allowlist.
 
 ## Reproduce local evidence
 
-Use Node 24+, Python 3.12+ and an installed Chromium. From the repository root:
+Use Node 24+, Python 3.12 and an installed Chromium. Activate an owned Python
+virtual environment first. The independent oracle lock targets Ubuntu amd64;
+other tool platforms remain unqualified. From the repository root:
 
 ```sh
 npm ci --ignore-scripts
 npm ci --ignore-scripts --prefix packages/escrow-evm
+python -m pip --isolated install --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
 npm test
 npm run typecheck
 npm run check:boundaries
@@ -36,10 +39,11 @@ server and no external-chain connection. Never transfer assets to those accounts
    Preserve emitted third-party attribution and policy files.
 2. Confirm default build exclusion checks pass. Never publish `dist-demo` as a
    trading product. Local evidence files are not signed manifests or approval.
-3. An enabled release requires the missing common G15 manifest schema, selected
-   signing policy, independently reviewed cryptography/contracts, approved registry,
-   native deployments/endpoints, host-header smoke tests and supported-device
-   evidence. The local test registry is not a substitute.
+3. Local G15 asset/registry/ABI verification is implemented. An enabled release
+   still requires selected signing/bootstrap/rotation and deployment/archive
+   profiles, independently reviewed cryptography/contracts, an approved registry,
+   qualified native deployments/endpoints, host-header smoke tests and supported
+   devices. Local test keys and registries do not qualify those targets.
 4. When deployment is explicitly authorized, first retain the prior immutable
    artifact and its policy/asset digests. Deploy the exact reviewed artifact and
    check the final host, cache behavior, CSP, MIME types and framing headers.

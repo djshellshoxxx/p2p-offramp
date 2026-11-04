@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "task": "T88 canonical relay diagnostic repair",
+  "findingId": "T38-B-02",
+  "status": "FROZEN_FOR_INDEPENDENT_ROOT_REVIEW",
+  "recordedAt": "2026-11-02T17:45:41.083410+00:00",
+  "baselineHead": "fad51dac5560012d63243b2be78c303ed5656cf6",
+  "headAtFreeze": "32c344992a12aa4751d89ea5cf360c3d69e27761",
+  "baseline": {
+    "path": "/workspace/work/t88-canonical-relay-repair.baseline.json",
+    "sha256": "5c5a0430fd389f8428bfa344fce9756fe08d811bb6d4cb283fc9cf3c47be33df",
+    "bytes": 1693,
+    "lines": 42
+  },
+  "originalAuditAndFindingImmutable": [
+    {
+      "path": "/workspace/work/final-review-t82.json",
+      "sha256": "bfafe2c07b858d593825035a03a0f37cc5ce5ea04e2166067fa58bbe7c826086",
+      "bytes": 40188,
+      "lines": 685,
+      "unchanged": true
+    },
+    {
+      "path": "/workspace/work/final-review-t82.md",
+      "sha256": "6c44e41b0eaa849f867b9cf9196a61bd95c39ed5b9230fb2d90157c7da1b1d13",
+      "bytes": 3612,
+      "lines": 13,
+      "unchanged": true
+    }
+  ],
+  "files": [
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha256": "d87c17d6bfc5c7ada1c6a7f86f568df01c20446c397a72a871bbe9e82f61f5c9",
+      "bytes": 8587,
+      "lines": 134,
+      "beforeSha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7",
+      "baselineCopy": "/workspace/work/t88-canonical-relay-baseline/packages/relay/src/nip01.ts",
+      "publicExportLinesUnchanged": true,
+      "semanticChecks": [
+        "The seven exact own enumerable event data fields are captured under a guarded reflection boundary. Plain/null records only; accessors, symbols/extra fields, custom prototypes and failed meta operations return the existing null refusal without inspecting foreign errors.",
+        "Tag arrays and tag items use intrinsic own length/index descriptors, enforce original64x8x256-byte caps and reject sparse/custom/accessor entries without foreign iteration. Returned native event/tag snapshots remain detached and deeply frozen; field/time/hex/content caps and actual NIP-01 JSON serialization stay unchanged."
+      ]
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "36dc97f50fbebdd7d4f3fe15a95509c6da1391a33817587328e01ad8c85f40e9",
+      "bytes": 29597,
+      "lines": 473,
+      "beforeSha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24",
+      "baselineCopy": "/workspace/work/t88-canonical-relay-baseline/packages/relay/src/pool.ts",
+      "publicExportLinesUnchanged": true,
+      "semanticChecks": [
+        "Filter normalization runs before admission under fixed INVALID_FILTER refusal, captures only declared own fields and bounded indexed arrays, validates wall clocks without coercion and preserves all6 optional fields, explicit undefined omission, ordinary24-hour/all-1059 three-day history and null unknown-clock semantics.",
+        "Handler callbacks are captured as own data functions, optional onEose is checked without accessor execution, and wrappers preserve the original callback receiver while preventing late property replacement/getter reads. Unknown handler metadata is ignored as before; handlers are constructor callbacks, not imported protocol records.",
+        "Subscription closed/capacity checks follow all validation callbacks; rejected inputs consume no subscription ID, slot or connector work. Publication inherits safe parseEvent and rechecks closure around parser/verifier callbacks. Existing verification, destination permits, physical socket budgets, retries, dedupe, rate limits and default routes remain untouched."
+      ]
+    },
+    {
+      "path": "packages/relay/test/ad.test.mjs",
+      "sha256": "bb187285da9f887fb8100d9909f5f65aafa905455bfe300d4775e957d3aa7394",
+      "bytes": 14209,
+      "lines": 200,
+      "beforeSha256": "07c11e97f6e0a9da8fda7d007321fbac4ad6edc1b1a14e2e62780f5c0ade6ef7",
+      "baselineCopy": "/workspace/work/t88-canonical-relay-baseline/packages/relay/test/ad.test.mjs",
+      "publicExportLinesUnchanged": true,
+      "semanticChecks": [
+        "All13 original tests retained. Added local Proxy/accessor/array parser+book regressions with zero clock/verifier calls, genuine native signature/JSON compatibility, detached/frozen outputs and exact content/tag/count bounds."
+      ]
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha256": "2cef27ebe9312b054c0cc133f25d1ec8e9310a4b067490c8511afacbf2a56f60",
+      "bytes": 32169,
+      "lines": 429,
+      "beforeSha256": "61f4739b9ccdf793ffed85e8e9c826102bd7d75b9d8c588c611acbdbfbacc38b",
+      "baselineCopy": "/workspace/work/t88-canonical-relay-baseline/packages/relay/test/pool.test.mjs",
+      "publicExportLinesUnchanged": true,
+      "semanticChecks": [
+        "All22 original tests retained. Added local malformed filter/handler/clock/event cases, zero connector/verifier/slot/ID consumption, reentrant closure refusal, callback snapshot/original receiver and known optional/gift-wrap/unknown-clock compatibility assertions."
+      ]
+    }
+  ],
+  "exactDelta": {
+    "path": "/workspace/work/t88-canonical-relay-repair.patch",
+    "sha256": "545cd4eacf77517c49b47f2a94969de5a09f369d1d62b231a83053536c4aef83",
+    "bytes": 24312,
+    "lines": 302
+  },
+  "unchangedDependencies": [
+    {
+      "path": "packages/relay/src/ad.ts",
+      "sha256": "7675a2eb48b4ea977a7fa48b424a5c02f5453cf7c711c23ef62cdf0b31912581",
+      "bytes": 15670,
+      "lines": 247,
+      "matchesOriginalFindingAudit": true
+    },
+    {
+      "path": "packages/relay/index.ts",
+      "sha256": "1148cf0a82239f59a86d250a490d1a989f7eacbef8ccbec8ebe46f22c632c928",
+      "bytes": 221,
+      "lines": 4,
+      "matchesOriginalFindingAudit": true
+    },
+    {
+      "path": "packages/relay/README.md",
+      "sha256": "520d8d77a363119ff260c86008c3a9ba0f11908f2ab37623ecabee71c8e699f1",
+      "bytes": 6673,
+      "lines": 88,
+      "matchesOriginalFindingAudit": true
+    },
+    {
+      "path": "docs/execution/profiles/03-relay-allocation.md",
+      "sha256": "8ad5017e1c70d4a05c38aab5fc4e192123d650e5c0893d57fdb805b2653557d9",
+      "bytes": 3428,
+      "lines": 15,
+      "matchesOriginalFindingAudit": true
+    }
+  ],
+  "capsAndTiming": [
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "declaration": "FRAME_LIMITS",
+      "unchanged": true
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "declaration": "POOL_LIMITS",
+      "unchanged": true
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "declaration": "DEFAULT_TIMING",
+      "unchanged": true
+    }
+  ],
+  "cause": "Canonical local JavaScript object APIs previously performed unguarded property reads/reflection/array iteration, allowing caller exceptions or accessor behavior before typed refusal. subscribe also read handler and wall-clock values without a guarded pre-admission snapshot.",
+  "contracts": {
+    "eventParser": "parseEvent(unknown) -> frozen NostrEvent or null",
+    "orderBook": "OrderBook.ingest(unknown) -> existing invalid refusal via safe parseEvent; ad.ts unchanged",
+    "pool": "Malformed local filters/handlers/clock/event -> existing INVALID_FILTER; reentrant close -> CLOSED before admission. No new error code or API.",
+    "schemaStrictness": "Events/filters use declared field allowlists and own enumerable data. Optional filter fields may remain absent or explicit undefined; indexed native array values are copied then frozen."
+  },
+  "verification": {
+    "runner": "default isolated Node24 test runner with explicit managed loopback/IPC capability; no file-only substitute",
+    "red": {
+      "log": {
+        "path": "/workspace/work/t88-canonical-relay-repair.RED.log",
+        "sha256": "8c1019df31c256d2fac3d7a53ef2c16d5454407bb53672c47faffe4837587b5e",
+        "bytes": 13439,
+        "lines": 205
+      },
+      "tests": 41,
+      "pass": 35,
+      "fail": 6,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "initialGreen": {
+      "log": {
+        "path": "/workspace/work/t88-canonical-relay-repair.GREEN.log",
+        "sha256": "5e2b6035f31f78220d21ea64fbbca6cad9c0be8453c646646556d45dd794738a",
+        "bytes": 4754,
+        "lines": 49
+      },
+      "tests": 41,
+      "pass": 41,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "scope": "Initial41-test GREEN; final focused run includes added positive compatibility/reentrant-close assertions and final formatting, and is the exact final-source result."
+    },
+    "finalGreen": {
+      "log": {
+        "path": "/workspace/work/t88-canonical-relay-repair.focused.GREEN.log",
+        "sha256": "62d6751d75a7ba2722cb614be043bb2f569b95a9c547609afd791f7219e9e234",
+        "bytes": 7158,
+        "lines": 72
+      },
+      "tests": 64,
+      "pass": 64,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/relay/test/ad.test.mjs packages/relay/test/pool.test.mjs packages/relay/test/pool-lifetime.test.mjs packages/relay/test/pool-url-binding.test.mjs packages/relay/test/nostr-crypto-wiring.test.mjs packages/relay/test/bip340-vectors.test.mjs",
+      "scope": "42 updated canonical ad/pool tests plus adjacent canonical lifetime, URL binding, injected real-crypto wiring and pinned vector tests; restricted local profiles untouched."
+    },
+    "strictTypes": {
+      "command": "./node_modules/.bin/tsc --noEmit",
+      "log": {
+        "path": "/workspace/work/t88-canonical-relay-repair.final-types.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "lines": 0
+      },
+      "exitCode": 0
+    },
+    "diffCheck": {
+      "log": {
+        "path": "/workspace/work/t88-canonical-relay-repair.diff-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "lines": 0
+      },
+      "exitCode": 0
+    }
+  },
+  "limits": [
+    "New negative fixtures are bounded synthetic local JavaScript objects; remote onFrame still accepts capped strings and JSON parses to ordinary data. No remote JSON-to-Proxy/accessor path or external exploit claim is established.",
+    "Existing owned loopback unit fixtures ran; no full-repository suite, browser/native journey, external endpoint, new real relay, provider activation, wallet or funds operation was run.",
+    "No canonical/restricted profile interchange, new framework/public facade/error code, signature algorithm, default routing, transport cap/timing or scanner change.",
+    "The platform WebSocket still allocates whole messages before this parser; no preassembly memory or private-route qualification is claimed.",
+    "Root must independently review this exact delta and reconcile current whole-audit inventory hashes; the old finding/audit remains an immutable baseline."
+  ],
+  "ownership": {
+    "authorizedPaths": [
+      "packages/relay/src/nip01.ts",
+      "packages/relay/src/pool.ts",
+      "packages/relay/test/ad.test.mjs",
+      "packages/relay/test/pool.test.mjs"
+    ],
+    "frozen": true,
+    "returnedTo": "root",
+    "furtherAuthorEditsPlanned": false
+  },
+  "sourceOutsideAuthorizedPathsEdited": false,
+  "ledgersEdited": false,
+  "commitsCreated": false,
+  "professionalOrReleaseApproval": false
+}

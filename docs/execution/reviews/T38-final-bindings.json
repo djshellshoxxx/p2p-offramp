@@ -1,0 +1,228 @@
+{
+  "schema": "p2p-offramp/final-binding-consistency-review/v1",
+  "task": "T38_FINAL_METADATA_BINDINGS",
+  "status": "CONSISTENT_ROOT_FINAL_VERIFICATION_REMAINS_PENDING",
+  "observedAtUtc": "2026-11-02T18:25:59.652805+00:00",
+  "sourceCommit": "f25de72b1ddba5ada4ad0a88da5540178a6b65df",
+  "scope": "Independent read-only source/document binding and authority-state consistency; no duplicate semantic source audit or source approval transfer.",
+  "findings": [],
+  "metadataFreeze": [
+    {
+      "path": "docs/wiki-source/claims-register.json",
+      "sha256": "2ca82a3d9d11f29074a03408b34a738c3d6f8ed144fd74d2eaba684badc72226",
+      "bytes": 5397
+    },
+    {
+      "path": "docs/wiki-source/docs-manifest.json",
+      "sha256": "c5a3798b9c83c220ae3dc9ee8fc9612c8f4bd156c229b0a1bbe4a90d3879d3cb",
+      "bytes": 2473
+    },
+    {
+      "path": "docs/execution/assurance/evidence-manifest.json",
+      "sha256": "37cc1126c1371fa9bd4b078b15ab07cd7516e1ee24a675204c9dd62800bf4f3b",
+      "bytes": 9229
+    }
+  ],
+  "onlyDirtyPaths": [
+    "docs/execution/assurance/evidence-manifest.json",
+    "docs/wiki-source/claims-register.json",
+    "docs/wiki-source/docs-manifest.json"
+  ],
+  "freezeStableAcrossReview": true,
+  "metadataDelta": {
+    "claimsRegister": [
+      "sourceCommit -> f25de72",
+      "copySource.sha256 -> exact English3 bytes"
+    ],
+    "docsManifest": [
+      "sourceCommit -> f25de72",
+      "linkReportDigest -> exact fifteen local-link report"
+    ],
+    "assuranceManifest": {
+      "rows": 58,
+      "rowPathsUnchanged": true,
+      "updatedRowDigests": 7,
+      "allRowsCurrentAndCommitted": true
+    },
+    "approvalFields": "No claim/copyKeys/status/reviewedAt/reviewer/approvedRelease/page lastVerifiedRelease/capability set transferred or promoted. Claim states stay three proposed/three unsupported; reviewers empty and approvedRelease null; wiki dirtyDraft true/local-unapproved-draft."
+  },
+  "sourceBindings": {
+    "hashRowsChecked": 354,
+    "method": "For all six claim evidence rows, one copy-source row, seven wiki pages, 58 assurance rows and 282 current code rows, SHA256 independently matches both git-show f25de72:path bytes and working-tree bytes. Repeated paths are counted as separate manifest rows.",
+    "claimEvidenceRows": 6,
+    "copySourceRows": 1,
+    "wikiPages": 7,
+    "assuranceRows": 58,
+    "currentCodeRows": 282,
+    "mismatches": 0,
+    "byteEvidence": {
+      "path": "/workspace/work/t38-final-bindings-byte-checks.json",
+      "bytes": 132752,
+      "sha256": "b3a5c4346e00b13b04b2cfc3fe56ad544a9d38c08a5962258cc9374e1e7d55b0"
+    }
+  },
+  "actualCopy": {
+    "sourcePath": "apps/web/src/ui/locale/en.ts",
+    "sourceSha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+    "english": {
+      "revision": 3,
+      "direction": "ltr",
+      "status": "draft",
+      "translator": null,
+      "reviewer": null,
+      "fundsLocaleEligible": false
+    },
+    "keys": [
+      {
+        "key": "privacy.authenticated",
+        "claimId": "vault-at-rest",
+        "sourceTextSha256": "0b2eb6190e4454c6edf2d948a381fbdf2487a3eb929693de6e2052f796f49a12",
+        "actualText": "Authenticated encryption observed",
+        "matches": true
+      },
+      {
+        "key": "privacy.messaging",
+        "claimId": "message-content",
+        "sourceTextSha256": "1e3e14dc10812048e508bf3edd972a5f22e5e88b590bb65c5dc13ba7b226489e",
+        "actualText": "Message encryption",
+        "matches": true
+      },
+      {
+        "key": "privacy.privateRoute",
+        "claimId": "selected-route",
+        "sourceTextSha256": "eeef3bdbfabbd9ecbd82d2f19148e68f63aa82e4f4e2d72a6b3d82a0320cf855",
+        "actualText": "Verified private route",
+        "matches": true
+      },
+      {
+        "key": "privacy.unsupported",
+        "claimId": "stealth-local",
+        "sourceTextSha256": "54324658e2eba91c826cb01a802414559c8b8b713b28b4df68cd5075611cf1b5",
+        "actualText": "Unsupported",
+        "matches": true
+      },
+      {
+        "key": "shell.privacyHelp",
+        "claimId": "location-scope",
+        "sourceTextSha256": "1afe1b4cfbd64e2086307010231fceb47faefcd60699641216c954ac3493c47c",
+        "actualText": "RPC, relay, wallet, update discovery, and analytics connections are disabled. No service worker is installed by this client. Offline use is limited to an already loaded shell; fresh chain state is unavailable.",
+        "matches": true
+      },
+      {
+        "key": "tradePage.deleteFromProfile",
+        "claimId": "logical-removal",
+        "sourceTextSha256": "e0180afacc3a34b1aa57966f21130740fca3fd88f518b86b82986f7df6743758",
+        "actualText": "Delete from profile",
+        "matches": true
+      }
+    ],
+    "method": "Independently read each actual English source literal and canonical claim mapping, hash its UTF8 text, and compare to copyKeys; actual check:docs additionally resolves the maintained runtime source catalog. No semantic claim approval inferred."
+  },
+  "pagesAndLinks": {
+    "pageHashesMatchBothSourceCommitAndCurrent": 7,
+    "linkReportDigest": "89949ec89e24606245b26da88f95266820ee81b85b602785ad98f0526629c5a1",
+    "independentlyRecomputed": true,
+    "localLinks": 15,
+    "localTargetHashesMatchBothSourceCommitAndCurrent": true,
+    "anchorsValid": true,
+    "remoteLinks": 0,
+    "endpointAccess": false,
+    "authority": "Exact authored bytes/link integrity only; seven pages retain lastVerifiedRelease null and no publication/release approval."
+  },
+  "currentSource": {
+    "path": "docs/execution/audit-2026-11-02/CURRENT-SOURCE.json",
+    "productionFiles": 282,
+    "bytes": 2551472,
+    "newlineLines": 36220,
+    "allCurrentAndCommitHashSizeLineFactsMatch": true,
+    "sourceCheckpoint": "cf732085499dafb0273972136d3e9f7c34254694",
+    "sourceCheckpointAlsoMatchesAll282CodeBytes": true,
+    "currentReviewReferenceBindings": 353,
+    "committedReceiptDocuments": 18,
+    "allStructuredPathAndCurrentHashReferencesFound": true,
+    "notes": "Receipt formats use sha256, reviewedSha256 or currentSha256 according to explicit baseline/final delta fields. Null reviewer metadata is preserved rather than changed into approval. This pass verifies reference identity, not a new semantic read or vendor certification."
+  },
+  "currentRemainder": {
+    "path": "docs/execution/coverage/CURRENT-REMAINDER.json",
+    "canonical": 103,
+    "specs": 173,
+    "clauses": 8281,
+    "milestones": 9,
+    "clauseStatusCounts": {
+      "READY": 4790,
+      "DONE": 2496,
+      "BLOCKED": 995
+    },
+    "allCanonicalOwnerDependenciesNextAction": true,
+    "allMilestoneOwnerDependenciesNextAction": true,
+    "specMembershipBijection": true,
+    "sourceSnapshotSeparateFromRootProgress": true,
+    "canonicalClauseCountsSum": 8281,
+    "all173SpecHashesMatchImmutableInventoryCurrentAndSourceCommit": true,
+    "originalInventorySha256": "dc3d69b8e25c21ffd4d9a8eb69e842fc525689e1ce884748e674902935cb471a",
+    "historicalClauseStatusCounts": {
+      "READY": 4790,
+      "DONE": 2496,
+      "BLOCKED": 995
+    },
+    "clauseStatusesNotPromoted": true,
+    "allMilestonesRemainIncompleteAndUnqualified": true,
+    "snapshotHandling": "Original sourceCommitObserved 32c3449 and frozen rootIntegrationState remain a historical reassessment. rootProgressAtCheckpoint and task ledger separately record later admitted integrations. No finished source task is reopened by a historical snapshot label."
+  },
+  "documentationReview": {
+    "paths": [
+      "README.md",
+      "docs/DEVELOPMENT_STATUS.md",
+      "docs/LOCAL_DEVELOPMENT_AND_RELEASE_GATES.md",
+      "docs/execution/audit-2026-11-02/README.md",
+      "docs/execution/coverage/CURRENT-REMAINDER.md"
+    ],
+    "assessment": "Small committed updates accurately identify implemented local consumers, draft English3, exact remaining contracts and separate source integration from consolidated native/fresh-lab/hosted acceptance. Pinned independent oracle tooling is platform scoped; local G15 verification is distinguished from missing selected trust/deployment profiles. Trading disabled/null release pin/professional and physical-device qualification limits remain explicit. No old-head scanner failure is represented as a current-head pass."
+  },
+  "freshValidation": [
+    {
+      "command": "npm run check:docs",
+      "managedLocalIpc": true,
+      "exitCode": 0,
+      "engineeringConsistency": true,
+      "semanticApproval": false,
+      "published": false,
+      "claims": 6,
+      "documents": 7,
+      "log": {
+        "path": "/workspace/work/t38-final-bindings-check-docs.log",
+        "bytes": 7466,
+        "sha256": "6de72e141ce8db502739392c35ea1caa5175a119d939fd383e99e1de43fd9b96"
+      }
+    },
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/governance/test/assurance.test.mjs",
+      "managedLocalIpc": true,
+      "exitCode": 0,
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-bindings-governance-assurance.log",
+        "bytes": 848,
+        "sha256": "8e67c849d02a943246ce9d3dbfbf95a9d0974c38e3f2ffef4d655594b107d71f"
+      }
+    }
+  ],
+  "structureEvidence": {
+    "path": "/workspace/work/t38-final-bindings-structure-checks.json",
+    "bytes": 103228,
+    "sha256": "d8a38d4ee236fc9c197c474427ab468dabb36904315edc1c9edccc44d8b4588f"
+  },
+  "limits": [
+    "Root alone owns metadata/source writes, final completion/build/native/fresh-lab/hosted verification and commit/merge delivery. This receipt does not certify those future outcomes.",
+    "Only the two authorized maintained check commands ran. No full/native/browser/solver/fuzz suite, installation, endpoint access, source/ledger edit, status mutation, quality-gate change or commit.",
+    "Binding consistency and finite targeted tests are not semantic, professional cryptographic, legal, provider, device, publication or release approval."
+  ],
+  "sourceEdits": false,
+  "metadataEdits": false,
+  "ledgerEdits": false,
+  "commits": false
+}

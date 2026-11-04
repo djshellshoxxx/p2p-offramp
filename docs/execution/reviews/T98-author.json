@@ -1,0 +1,431 @@
+{
+  "task": "T98",
+  "requirement": "G24-TX-REORGED actual G12 receipt/journal lifecycle rollback",
+  "status": "LOCAL_NATIVE_PASS_PENDING_ROOT_REVIEW",
+  "scope": "One added ordinary functional case in the existing native private-Anvil reconciliation harness; existing nine checks and all their source bytes/cleanup preserved. Test-only fake accounts, no real funds or production claim.",
+  "producer": {
+    "path": "scripts/test-evm-reconcile-local.mjs",
+    "beforeSha256": "11c4f60533ccefe031b7b177470bf87afedecbfe47bbee5311df681f1f559f1a",
+    "afterSha256": "ff5ade6ba499d5f5c9b4ad6781bbbb196202fae5f02532edf3d724dd738ecb4c",
+    "beforeBytes": 30690,
+    "afterBytes": 40116,
+    "beforeSnapshot": "/workspace/work/t98-before-test-evm-reconcile-local.mjs",
+    "exactExecutedSnapshot": "/workspace/work/t98-run-producer.mjs",
+    "frozenSnapshot": "/workspace/work/t98-final-test-evm-reconcile-local.mjs",
+    "sourceDelta": {
+      "path": "/workspace/work/t98-native-reorg.patch",
+      "sha256": "d0ca039306936a20a1f015267ceec43b082053da65efca20f52f0cd331d6120c"
+    },
+    "baselineHead": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "headAtRunStart": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "headAtFreeze": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "gitStatusBeforeOwnerEdit": " M docs/execution/audit-2026-11-02/README.md\n M docs/execution/coverage/CURRENT-REMAINDER.json\n M docs/execution/coverage/CURRENT-REMAINDER.md\n M tasks/plan.md\n M tasks/todo.md\n?? docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json\n?? docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.md\n?? docs/execution/qualification/fresh-lab-a2b414f.json\n?? docs/execution/reviews/T38-final-native.json\n?? docs/execution/reviews/T38-final-native.md\n?? docs/execution/reviews/T38-live-policy.json\n?? docs/execution/reviews/T38-live-policy.md\n?? docs/execution/reviews/T71-final-lab.json\n?? docs/execution/reviews/T71-final-lab.md\n",
+    "gitStatusAtFreeze": " M docs/execution/audit-2026-11-02/README.md\n M docs/execution/coverage/CURRENT-REMAINDER.json\n M docs/execution/coverage/CURRENT-REMAINDER.md\n M scripts/test-evm-reconcile-local.mjs\n M tasks/plan.md\n M tasks/todo.md\n?? docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json\n?? docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.md\n?? docs/execution/qualification/fresh-lab-a2b414f.json\n?? docs/execution/reviews/T38-final-native.json\n?? docs/execution/reviews/T38-final-native.md\n?? docs/execution/reviews/T38-live-policy.json\n?? docs/execution/reviews/T38-live-policy.md\n?? docs/execution/reviews/T71-final-lab.json\n?? docs/execution/reviews/T71-final-lab.md\n",
+    "cleanSourceClaim": false,
+    "cleanSourceRefusalAdded": false
+  },
+  "execution": {
+    "command": "PATH=/workspace/work/t87-native-diagnostic/node24.22.1:/workspace/work/foundry-1.5.1:$PATH FOUNDRY_BIN=/workspace/work/foundry-1.5.1 FOUNDRY_SOLC=/workspace/work/foundry-1.5.1/solc-0.8.30 FOUNDRY_OFFLINE=true npm run test:evm:reconcile",
+    "npmAlias": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
+    "cwd": "/workspace/p2p-offramp",
+    "exitCode": 0,
+    "firstModifiedHarnessRun": true,
+    "log": "/workspace/work/t98-native-reorg-first.log",
+    "logBytes": 2765,
+    "logSha256": "016a0b5d628cfab6e743b45218d26df55249612a65c5f08ce163fc7e5e282552",
+    "completedAtUtc": "2026-11-02T18:55:03.452579+00:00",
+    "tools": {
+      "tools": [
+        {
+          "path": "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+          "sha256": "e32e2d16081cf644f88392934288086e7662529d0d43277c34f7aad2207cfafb",
+          "versionOutput": "v24.22.1"
+        },
+        {
+          "path": "/workspace/work/foundry-1.5.1/forge",
+          "sha256": "a39fc1913b53dde6a35b603756f65d799e13817ef694107ec0d3704c20435cce",
+          "versionOutput": "forge Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf"
+        },
+        {
+          "path": "/workspace/work/foundry-1.5.1/anvil",
+          "sha256": "b47362d2159aa0f2f575320e5e529bb5a91093cb62dc6bd30c0022018aa9f738",
+          "versionOutput": "anvil Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf"
+        },
+        {
+          "path": "/workspace/work/foundry-1.5.1/solc-0.8.30",
+          "sha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7",
+          "versionOutput": "solc, the solidity compiler commandline interface\nVersion: 0.8.30+commit.73712a01.Linux.g++"
+        }
+      ],
+      "npmVersion": "11.9.0",
+      "pathPrefix": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1",
+        "/workspace/work/foundry-1.5.1"
+      ],
+      "foundryBin": "/workspace/work/foundry-1.5.1",
+      "solc": "/workspace/work/foundry-1.5.1/solc-0.8.30",
+      "foundryOffline": "true"
+    },
+    "normalNodeTestIsolationUnchanged": true,
+    "modifiedPackageOrNodeOptions": false
+  },
+  "preservation": {
+    "allOldBytesOutsideHeaderAndNewCaseEqual": true,
+    "existingCheckCount": 9,
+    "existingChecks": [
+      "deployed BasicEscrow on private anvil (chain 31337, loopback); automine off; file-backed encrypted journal",
+      "retention: native finalized fund with still-funded escrow remains protected; no deletion, journal write or resend",
+      "unknown outcome: client SIGKILLed after send-started and broadcast; fresh process reconciles confirmed -> finalized without resending",
+      "replaced: higher-gas same-nonce dev-account tx replaces the pending fund; intent -> replaced; explicit successor -> confirmed",
+      "dropped: pending fund removed from the pool -> dropped after expiry; same-nonce successor -> confirmed",
+      "retention: old journal-only construction without a live payout closure refuses all deletion",
+      "retention: fresh native finalized receipt plus released escrow verifies a journal-only copy profile; explicit reviewed CAS deletes two local copies without resending or changing source",
+      "receipt path: fund -> finalized (anvil finalized tag), then release via the lifecycle -> confirmed; buyer paid",
+      "retention: actual Released deferred-credit blocks old leaf; finalized successful withdrawal mints zero-credit lease for one copy-only CAS, source preserved with no sends or reconciliation writes"
+    ],
+    "newCheckCount": 1,
+    "allObservedCheckNames": [
+      "deployed BasicEscrow on private anvil (chain 31337, loopback); automine off; file-backed encrypted journal",
+      "retention: native finalized fund with still-funded escrow remains protected; no deletion, journal write or resend",
+      "unknown outcome: client SIGKILLed after send-started and broadcast; fresh process reconciles confirmed -> finalized without resending",
+      "replaced: higher-gas same-nonce dev-account tx replaces the pending fund; intent -> replaced; explicit successor -> confirmed",
+      "dropped: pending fund removed from the pool -> dropped after expiry; same-nonce successor -> confirmed",
+      "retention: old journal-only construction without a live payout closure refuses all deletion",
+      "retention: fresh native finalized receipt plus released escrow verifies a journal-only copy profile; explicit reviewed CAS deletes two local copies without resending or changing source",
+      "receipt path: fund -> finalized (anvil finalized tag), then release via the lifecycle -> confirmed; buyer paid",
+      "retention: actual Released deferred-credit blocks old leaf; finalized successful withdrawal mints zero-credit lease for one copy-only CAS, source preserved with no sends or reconciliation writes",
+      "native rollback: one finalized funding receipt disappears on an alternate canonical chain; fresh clients persist/recover reorged with original hash, rolled-back nonce and no resend or reprepare"
+    ],
+    "allAssertionsNegativesAndLifecycleRetained": true,
+    "reconcileUntilMaximumBlocksUnchanged": 80,
+    "alternateBlocksBoundedAt80": true,
+    "nativeFinalizedTagPolicyUnchanged": true,
+    "testOnlyWalletAndNativeReaderActualImplementations": true,
+    "sourceEntryAndEncryptedFileStoreReused": true,
+    "genericOrDuplicateRunnerAdded": false,
+    "productionAbiOrPolicyEdited": false
+  },
+  "observed": {
+    "fixture": "g12-native-finalized-receipt-rollback",
+    "chainId": "31337",
+    "intentId": "NdXfT2SElW2H24cdGrawpw4AGk_g0d53Nz70fNio78c",
+    "originalHash": "0x7822d24ea9e0e622df5266d9803f4c16c3da5f449004effabe8a3f2a1fbc0067",
+    "originalReceiptBlock": "0x25",
+    "originalReceiptBlockHash": "0xd86a9d0bc4eac8e605c9c20ddc6165fbf7b52ac0ab9fceb0288ec1267f3e2538",
+    "alternateCanonicalBlockHash": "0x2f65195368a9cd26ec9fc601ffe383a0e589cc40465a374c4495b2825bf6818d",
+    "alternateBlocks": 3,
+    "nonceBefore": "13",
+    "nonceAfterRollback": "13",
+    "walletSendCalls": 1,
+    "walletCallsAfterInitialSubmit": 0,
+    "durableState": "reorged",
+    "freshClientReopens": 2,
+    "originalHashRetained": true,
+    "receiptAbsentAfterRollback": true,
+    "canonicalFundingAbsent": true,
+    "encryptedReorgTransitionWrites": 1,
+    "replacementPreparations": 0,
+    "escrowRuntimeSha256": "5e7635cb4625feb12a1b1ab4bc15c21952bd6e98d1f635b1d947caf2d3cae336",
+    "anvilPid": 195162,
+    "ownedTemporaryDirectory": "/tmp/g12-reconcile-Qg9HMO",
+    "externalNetwork": false,
+    "tradingEnabled": false,
+    "realFunds": false
+  },
+  "nativeReceiptAndJournalAssertions": {
+    "beforeSnapshotTradeAbsent": true,
+    "singleExplicitLifecycleFunding": true,
+    "actualNativeReceiptSuccessAndCanonicalHash": true,
+    "receiptAtOrBeforeActualFinalizedHead": true,
+    "fundedNativeTradeExactTermsAtFinalized": true,
+    "nonceIncrementedExactlyOneBeforeRollback": true,
+    "escrowBalanceIncrementedByExactAmount": true,
+    "ownedNativeSnapshotRevertTrue": true,
+    "snapshotHeadRestored": true,
+    "oldReceiptNullBeforeAndAfterAlternateMining": true,
+    "oldTransactionNullAfterAlternateMining": true,
+    "replacementBlockAtOriginalHeightHasDifferentHash": true,
+    "alternateFinalizedHeadReachesOriginalReceiptHeight": true,
+    "latestAndFinalizedNativeTradeAbsent": true,
+    "latestAndPendingNoncesRolledBack": true,
+    "escrowBalanceRestoredAndDeploymentCodeUnchanged": true,
+    "freshClientFindsStoredFinalizedBeforeReconcile": true,
+    "freshClientReconcileEvidenceReceiptStateReorged": true,
+    "singleEncryptedRevisionAndStoreWriteForReorg": true,
+    "originalPreparedBytesNonceAndHashRetained": true,
+    "noAdditionalJournalIntentIdsOrPreparations": true,
+    "secondFreshClientDecryptsDurableReorgedRecord": true,
+    "noWalletCallsAfterOriginalSubmit": true
+  },
+  "sourceBindings": {
+    "capture": "before affected existing native npm alias; conservative relative static-import closure plus harness/loader/package/contract inputs; not a runtime module-graph claim",
+    "files": [
+      {
+        "path": "contracts/evm/foundry.toml",
+        "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64",
+        "bytes": 1382
+      },
+      {
+        "path": "contracts/evm/src/BasicEscrow.sol",
+        "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+        "bytes": 18601
+      },
+      {
+        "path": "contracts/evm/test/mocks/Mocks.sol",
+        "sha256": "7d7bc2e6b11c0d54e5686f81d5275ce90dbb0ef2b72b9550a9aefe45507d323b",
+        "bytes": 7028
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+        "bytes": 42472
+      },
+      {
+        "path": "package.json",
+        "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e",
+        "bytes": 7084
+      },
+      {
+        "path": "packages/domain/index.ts",
+        "sha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1",
+        "bytes": 2054
+      },
+      {
+        "path": "packages/domain/src/authority.ts",
+        "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+        "bytes": 11377
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "bytes": 3150
+      },
+      {
+        "path": "packages/domain/src/intent-journal.ts",
+        "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01",
+        "bytes": 32833
+      },
+      {
+        "path": "packages/domain/src/journey-view.ts",
+        "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f",
+        "bytes": 12854
+      },
+      {
+        "path": "packages/domain/src/observation-dispatcher.ts",
+        "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2",
+        "bytes": 7013
+      },
+      {
+        "path": "packages/domain/src/privacy-view.ts",
+        "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715",
+        "bytes": 17389
+      },
+      {
+        "path": "packages/domain/src/read-retry.ts",
+        "sha256": "50001c753a7f5fd4d3a764896fba52019619511122edf3ad38f87588931e34cc",
+        "bytes": 8289
+      },
+      {
+        "path": "packages/domain/src/registry.ts",
+        "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+        "bytes": 3383
+      },
+      {
+        "path": "packages/domain/src/terms-review.ts",
+        "sha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364",
+        "bytes": 17876
+      },
+      {
+        "path": "packages/domain/src/trade-composition.ts",
+        "sha256": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+        "bytes": 3873
+      },
+      {
+        "path": "packages/domain/src/trade-draft.ts",
+        "sha256": "9376a28f27287e9c6ce17940de24012e5308c6b11dcb5a09605624da025c51f1",
+        "bytes": 6869
+      },
+      {
+        "path": "packages/domain/src/trade-terms.ts",
+        "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "bytes": 12573
+      },
+      {
+        "path": "packages/domain/src/tx-lifecycle.ts",
+        "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d",
+        "bytes": 34397
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+        "bytes": 878
+      },
+      {
+        "path": "packages/schemas/src/backup-verification.ts",
+        "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca",
+        "bytes": 2101
+      },
+      {
+        "path": "packages/schemas/src/backup.ts",
+        "sha256": "703ed5c8083ba97a05d8c4131e267833420d867fbafc837f3e467c6bb9f9c399",
+        "bytes": 6211
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26",
+        "bytes": 10432
+      },
+      {
+        "path": "packages/schemas/src/identity.ts",
+        "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e",
+        "bytes": 5109
+      },
+      {
+        "path": "packages/schemas/src/intent.ts",
+        "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+        "bytes": 7912
+      },
+      {
+        "path": "packages/schemas/src/recovery-reference.ts",
+        "sha256": "1135dc4d709919a69614e9dc1fad6a70f97cfb915e86df32b3fe7db5566505c7",
+        "bytes": 8256
+      },
+      {
+        "path": "packages/schemas/src/registry.ts",
+        "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183",
+        "bytes": 15559
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+        "bytes": 38568
+      },
+      {
+        "path": "packages/schemas/src/saved-review.ts",
+        "sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+        "bytes": 3250
+      },
+      {
+        "path": "packages/schemas/src/trade-drafts.ts",
+        "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+        "bytes": 8417
+      },
+      {
+        "path": "packages/schemas/src/transport-selection.ts",
+        "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42",
+        "bytes": 4016
+      },
+      {
+        "path": "packages/schemas/src/transport.ts",
+        "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8",
+        "bytes": 6626
+      },
+      {
+        "path": "packages/schemas/src/vault-service.ts",
+        "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+        "bytes": 1968
+      },
+      {
+        "path": "packages/schemas/src/vault.ts",
+        "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+        "bytes": 10407
+      },
+      {
+        "path": "packages/storage/src/idb-vault-store.ts",
+        "sha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69",
+        "bytes": 14152
+      },
+      {
+        "path": "packages/storage/src/recovery-slot.ts",
+        "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181",
+        "bytes": 688
+      },
+      {
+        "path": "packages/storage/src/retention-service.ts",
+        "sha256": "02b54bf87fb365ace31e8fc847657bb55db05eb2b96c54647e4813743faaa85b",
+        "bytes": 24399
+      },
+      {
+        "path": "packages/storage/src/vault-crypto.ts",
+        "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513",
+        "bytes": 10704
+      },
+      {
+        "path": "packages/storage/src/vault-service.ts",
+        "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+        "bytes": 35560
+      },
+      {
+        "path": "packages/wallet/src/evm-escrow.ts",
+        "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000",
+        "bytes": 23440
+      },
+      {
+        "path": "packages/wallet/src/evm-submit.ts",
+        "sha256": "c5d23b880e5a150a3c9ad63b724a321927046044174a7feb12cd79b52e36f92b",
+        "bytes": 9375
+      },
+      {
+        "path": "packages/wallet/src/evm-terms.ts",
+        "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+        "bytes": 10494
+      },
+      {
+        "path": "scripts/test-evm-reconcile-local.mjs",
+        "sha256": "ff5ade6ba499d5f5c9b4ad6781bbbb196202fae5f02532edf3d724dd738ecb4c",
+        "bytes": 40116
+      },
+      {
+        "path": "scripts/test-support/register-tsx.mjs",
+        "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370",
+        "bytes": 86
+      },
+      {
+        "path": "scripts/test-support/tsx-hooks.mjs",
+        "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe",
+        "bytes": 489
+      }
+    ],
+    "fileCount": 45,
+    "postRunDrift": [],
+    "gitlinks": "160000 commit 8e40513d678f392f398620b3ef2b418648b33e89\tcontracts/evm/lib/forge-std\n160000 commit c64a1edb67b6e3f4a15cca8909c9482ad33a02b0\tcontracts/evm/lib/openzeppelin-contracts\n",
+    "submoduleStatus": " 8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)\n c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)\n",
+    "compiledBasicEscrowArtifact": {
+      "path": "contracts/evm/out/BasicEscrow.sol/BasicEscrow.json",
+      "sha256": "12c147e8c6df32c274ada265731d057c346b50c1f1de8a1080ca13ed271edb37",
+      "deployedRuntimeSha256": "5e7635cb4625feb12a1b1ab4bc15c21952bd6e98d1f635b1d947caf2d3cae336",
+      "matchesActualNativeCode": true
+    }
+  },
+  "ownedCleanup": {
+    "nativeHarnessExitedZero": true,
+    "anvilPid": 195162,
+    "anvilProcessAbsentAfterExit": true,
+    "ownedTemporaryDirectory": "/tmp/g12-reconcile-Qg9HMO",
+    "temporaryDirectoryAbsentAfterExit": true,
+    "killedUnknownOutcomeClientExitAssertedAndAwaited": true,
+    "originalFinallyCleanupByteExact": true
+  },
+  "checks": {
+    "nodeSyntaxExitCode": 0,
+    "gitDiffCheckExitCode": 0,
+    "nativeCheckCount": 10
+  },
+  "initialFailuresRetained": [],
+  "failureHistory": "No native failure or RED encountered: the first modified existing harness passed all ten checks. No retry was needed.",
+  "limits": [
+    "An owned private Anvil snapshot rollback with artificial alternate canonical blocks proves this local finalized-receipt/journal path; it is not mainnet finality, production network availability, real-funds recovery, or a general proof against every chain fork.",
+    "externalNetwork:false refers to this case using the existing loopback-only chain/wallet transport and offline compiler; no whole-host egress trace or provider service qualification is claimed.",
+    "reorged is the durably observed recovery state here; no claim that future explicit reconciliation can never classify a later chain state differently.",
+    "Root documentation was already dirty. Exact conservative source pins and before/after hashes bind the actual run; no clean-tree qualification is inferred."
+  ],
+  "ownerRepositoryWrites": [
+    "scripts/test-evm-reconcile-local.mjs"
+  ],
+  "fullPackageSuiteRun": false,
+  "duplicateRunnerAdded": false,
+  "solverSdkOrProviderProbeRun": false,
+  "commitsCreated": false,
+  "rootIndependentReview": "pending",
+  "ownership": "Frozen; exclusive harness ownership returned to root."
+}

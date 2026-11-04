@@ -1,0 +1,13 @@
+{
+  "task": "T99",
+  "reviewer": "root",
+  "status": "ACCEPT_PRECISE_TOOLING_BLOCKER_NOT_BROWSER_QUALIFICATION",
+  "publishedQualification": "docs/execution/qualification/browser-tooling-policy.json",
+  "publishedQualificationSha256": "33689fcd63509aca4a58a9d7ed3a878952e0aac4aeb7e181f798ca076ebf22b1",
+  "authorPacketSha256": "09bccd87d8871040a633b507262ff2a97ac4b882eaeeec848c7fb4632fcdb4a5",
+  "artifactHashesMatched": 16,
+  "policySha256": "b40e6662f38d1272fb995562ffc812a99c8acf3a81d5c5707f4a3469ea1cc904",
+  "requestsOrNativeExecutions": 0,
+  "codeOrPolicyEdits": false,
+  "sourceScope": "Package lock/T70 record/installed Playwright metadata remain original bytes; this read-only investigation adds no native tool/provider/SDK."
+}

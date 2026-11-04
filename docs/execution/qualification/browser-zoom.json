@@ -1,0 +1,1099 @@
+{
+  "schemaVersion": 1,
+  "recordId": "T73-native-browser-zoom",
+  "observedAt": "2026-11-02T15:25:04.941986+00:00",
+  "sourceCheckpoint": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+  "status": "PASS_FINITE_LOCAL_NATIVE_ZOOM",
+  "scope": "Finite actual App synthetic-demo Home/unlock, Offers/review, Recovery and Settings qualification in headful Chromium on an owned authenticated Linux virtual display at ordinary 100%, 200% and 400% desktop zoom. Production and other browser/OS/device acceptance remain unqualified.",
+  "tooling": {
+    "chromium": "154.0.8037.57 built on Debian GNU/Linux 13 (trixie)",
+    "playwrightCore": "1.64.1",
+    "node": "v24.19.0",
+    "platform": "Linux 6.18.57 x86_64 GNU/Linux; Debian GNU/Linux 13 (trixie)"
+  },
+  "attempts": [
+    {
+      "executablePath": "/usr/bin/chromium",
+      "headless": true,
+      "freshOwnedPersistentContext": true,
+      "extension": "Owned unpacked MV3 background worker, tabs permission, owned loopback host permission",
+      "ignoreDefaultArgs": [
+        "--disable-extensions"
+      ],
+      "loadFlags": [
+        "--disable-extensions-except=<owned extension>",
+        "--load-extension=<owned extension>"
+      ],
+      "requestedViewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "workerWaitTimeoutMs": 10000,
+      "exitCode": 1,
+      "result": "No extension service worker observed; native tabs.setZoom/getZoom was never reached.",
+      "rawFailure": {
+        "path": "/workspace/work/t73-zoom-wrapper-failure.log",
+        "sha256": "0047cb76df96e7e7b70ab8660af0e17dcf5e45af95eeeeaad6df133dcbc6e731",
+        "bytes": 265,
+        "capture": "Exact failure output retained from the actual exec tool result; not a new rerun."
+      }
+    },
+    {
+      "executablePath": "/usr/lib/chromium/chromium",
+      "headless": true,
+      "freshOwnedPersistentContext": true,
+      "extension": "Owned unpacked MV3 background worker, tabs permission, owned loopback host permission",
+      "ignoreDefaultArgs": [
+        "--disable-extensions"
+      ],
+      "loadFlags": [
+        "--disable-extensions-except=<owned extension>",
+        "--load-extension=<owned extension>"
+      ],
+      "requestedViewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "workerWaitTimeoutMs": 10000,
+      "exitCode": 1,
+      "result": "No extension service worker observed; native tabs.setZoom/getZoom was never reached.",
+      "rawFailure": {
+        "path": "/workspace/work/t73-zoom-native-binary-failure.log",
+        "sha256": "0047cb76df96e7e7b70ab8660af0e17dcf5e45af95eeeeaad6df133dcbc6e731",
+        "bytes": 265,
+        "capture": "Exact failure output retained from the actual exec tool result; not a new rerun."
+      }
+    }
+  ],
+  "managedPolicy": {
+    "path": "/etc/chromium/policies/managed/extensions.json",
+    "sha256": "f9a8ef3534f52a8de2c1806298dec460b3713839a69e4d1ccbb8b16c0f2175fa",
+    "ExtensionInstallBlocklist": [
+      "*"
+    ],
+    "forcedInstallCount": 1,
+    "ExtensionInstallSources": [],
+    "changed": false,
+    "observation": "This policy blocks the unpacked-extension method, not ordinary native desktop zoom keyboard input. It was preserved."
+  },
+  "measurements": {
+    "nativeZoomApi": [],
+    "ordinaryNativeKeyboardZoom": [
+      1,
+      2,
+      4
+    ],
+    "devicePixelRatio": [
+      1,
+      2,
+      4
+    ],
+    "layoutViewportWidths": [
+      1280,
+      640,
+      320
+    ],
+    "unchangedNativeWindowWidth": 1280,
+    "visualViewportScale": [
+      1,
+      1,
+      1
+    ],
+    "applicationGeometry": [
+      {
+        "factor": 1,
+        "home": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 9
+        },
+        "unlock": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "offers": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "review": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 7
+        },
+        "recovery": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 20
+        },
+        "settings": {
+          "viewport": 1280,
+          "document": 1265,
+          "clipped": [],
+          "reachableEnabledControls": 8
+        }
+      },
+      {
+        "factor": 2,
+        "home": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 9
+        },
+        "unlock": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "offers": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "review": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 7
+        },
+        "recovery": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 20
+        },
+        "settings": {
+          "viewport": 640,
+          "document": 632,
+          "clipped": [],
+          "reachableEnabledControls": 8
+        }
+      },
+      {
+        "factor": 4,
+        "home": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 9
+        },
+        "unlock": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "offers": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 13
+        },
+        "review": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 7
+        },
+        "recovery": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 20
+        },
+        "settings": {
+          "viewport": 320,
+          "document": 316,
+          "clipped": [],
+          "reachableEnabledControls": 8
+        }
+      }
+    ]
+  },
+  "qualification": {
+    "actual200PercentZoom": true,
+    "actual400PercentZoom": true,
+    "appReviewRecoverySettingsTestedAtNativeZoom": true,
+    "viewportDeviceScaleOrPinchAcceptedAsZoom": false,
+    "networkEgressQualified": false,
+    "productionAcceptance": false,
+    "tradingEnabled": false,
+    "observedProductPageAndDedicatedWorkerTrafficLocal": true,
+    "physicalDeviceQualified": false
+  },
+  "cleanup": "Fresh complete App run closed its owned browser context, loopback server/connections, authenticated no-TCP Xvfb process group and temporary profile/cookie/build tree before emitting PASS. Independent post-run checks found the owned temporary tree and process command lines absent. Managed extension policy hash remains unchanged.",
+  "resume": "Re-run P2P_X11_TOOLS=/workspace/work/t73-x11-tools node scripts/test-browser-zoom.mjs after any measured App/UI/source/build dependency change. Physical device, assistive technology and other browser/OS coverage require separate evidence. The unpacked-extension method remains blocked by the preserved managed policy and was not retried.",
+  "details": {
+    "path": "/workspace/work/t73-zoom-launch-details.json",
+    "sha256": "cea71a58132612c01011e0058854cc9b60b5e432389a112c809a341e25da90bd"
+  },
+  "headfulMethod": {
+    "method": "xdotool XTEST normal focused-window Ctrl+plus",
+    "chromium": "154.0.8037.57",
+    "display": "Owned private-cookie Xvfb with -nolisten tcp",
+    "browser": "headless:false and viewport:null; native window1280x960",
+    "measurements": [
+      {
+        "innerWidth": 1280,
+        "innerHeight": 873,
+        "outerWidth": 1280,
+        "outerHeight": 960,
+        "devicePixelRatio": 1,
+        "visualViewport": {
+          "width": 1280,
+          "height": 873,
+          "scale": 1
+        }
+      },
+      {
+        "innerWidth": 640,
+        "innerHeight": 436,
+        "outerWidth": 1280,
+        "outerHeight": 960,
+        "devicePixelRatio": 2,
+        "visualViewport": {
+          "width": 640,
+          "height": 436.5,
+          "scale": 1
+        }
+      },
+      {
+        "innerWidth": 320,
+        "innerHeight": 218,
+        "outerWidth": 1280,
+        "outerHeight": 960,
+        "devicePixelRatio": 4,
+        "visualViewport": {
+          "width": 320,
+          "height": 218.25,
+          "scale": 1
+        }
+      }
+    ],
+    "rawLog": {
+      "path": "/workspace/work/t73-headful-probe.log",
+      "sha256": "619ce1cfd4cb95be19ff7dacff763d065658e37edd47cce8668af70616aae3c9"
+    },
+    "toolingProvenance": {
+      "path": "/workspace/work/t73-x11-tools/provenance.json",
+      "sha256": "c56f4f28c8cb5af685ce44229978fb1e52b2a977b089dc4a5261d9b821e1a94f"
+    }
+  },
+  "capabilityOnlyObservedAt": "2026-11-02T12:07:47.581136+00:00",
+  "applicationQualification": {
+    "schemaVersion": 1,
+    "task": "T73",
+    "reviewer": "review_zoom",
+    "status": "PASS_FINITE_LOCAL_NATIVE_ZOOM_INDEPENDENT_REVIEW",
+    "observedAt": "2026-11-02T15:25:04.941986+00:00",
+    "sourceCheckpoint": "79a53b573eaf40f16f05e16726cd55284d20e8e0",
+    "sourceFilesAtRun": [
+      {
+        "path": "scripts/test-browser-zoom.mjs",
+        "sha256": "64a60cb1fe13c8a6a72b4811d13b3a2be98f1a3fea66c60e001aea44a367e52a"
+      },
+      {
+        "path": "docs/execution/qualification/browser-zoom.json",
+        "sha256": "54dbbe80d2ff81749fcd5ade5cdce248b804ea171ab949b67e72cd742cb982c1"
+      }
+    ],
+    "rawLog": {
+      "path": "/workspace/work/t73-app-native-zoom-review1.log",
+      "bytes": 20153,
+      "sha256": "446c0243a9e1945c460de7ab8d4299feee53d95de7821dfb379682fa81d51287"
+    },
+    "reviewedScope": [
+      "X11 provenance",
+      "private MIT-MAGIC-COOKIE display authentication and -nolisten tcp",
+      "owned loopback fixture server and temp profile",
+      "ordinary focused-window Ctrl+0/Ctrl+plus at viewport:null",
+      "native1x/2x/4x metrics, bounded waits and cleanup",
+      "App Home/unlock, Offers/review, Recovery/Settings horizontal geometry and actionable controls",
+      "route/cancel focus and normal native Tab/Enter skip link",
+      "canonical same-session review bytes",
+      "product page and dedicated Worker observed traffic scope"
+    ],
+    "reviewFindings": [],
+    "limitations": [
+      "Finite local Linux virtual-display Chromium result only.",
+      "Control coverage uses programmatic DOM focus and trial click; only skip link uses native Tab/Enter.",
+      "No physical-device, assistive-technology or other OS/browser qualification.",
+      "No claim about managed-browser background traffic.",
+      "Qualification must recheck any later source changes affecting the measured pages."
+    ],
+    "nativeReceipt": {
+      "status": "PASS_FINITE_LOCAL_NATIVE_ZOOM",
+      "chromium": "154.0.8037.57",
+      "node": "v24.19.0",
+      "method": "Headful Chromium; ordinary focused-window XTEST Ctrl+0/Ctrl+plus; viewport:null",
+      "windowWidth": 1280,
+      "viewportDeviceScaleCssOrPinchEmulation": false,
+      "managedPolicyChanged": false,
+      "physicalDeviceQualified": false,
+      "egressScope": "Observed product page and dedicated Worker traffic only; unrelated managed-browser background traffic is outside this observation.",
+      "provenanceSha256": "c56f4f28c8cb5af685ce44229978fb1e52b2a977b089dc4a5261d9b821e1a94f",
+      "publicPackages": [
+        {
+          "package": "libxdo3",
+          "version": "1:3.20160805.1-5.1",
+          "architecture": "amd64",
+          "path": "/workspace/work/t73-apt/downloads/libxdo3_1%3a3.20160805.1-5.1_amd64.deb",
+          "bytes": 30996,
+          "sha256": "d634e25d2b50af140ee9f44bab507fcfb665f3556fd483faefdb56e85598cc12",
+          "signedAptMetadataHashMatches": true,
+          "dataArchiveTypesAndPathsValidatedBeforeExtraction": true,
+          "controlScriptsExecuted": false
+        },
+        {
+          "package": "xdotool",
+          "version": "1:3.20160805.1-5.1",
+          "architecture": "amd64",
+          "path": "/workspace/work/t73-apt/downloads/xdotool_1%3a3.20160805.1-5.1_amd64.deb",
+          "bytes": 51488,
+          "sha256": "98ac8681533b01020c7288fb2e9de403d586747dab48cfd58e04cb00d0c44fb1",
+          "signedAptMetadataHashMatches": true,
+          "dataArchiveTypesAndPathsValidatedBeforeExtraction": true,
+          "controlScriptsExecuted": false
+        },
+        {
+          "package": "xvfb",
+          "version": "2:21.1.16-1.3+deb13u4",
+          "architecture": "amd64",
+          "path": "/workspace/work/t73-apt/downloads/xvfb_2%3a21.1.16-1.3+deb13u4_amd64.deb",
+          "bytes": 3198660,
+          "sha256": "893d87bf159b6de077a929fc796a73c39f837d45310b2076e3eeebebb80552b6",
+          "signedAptMetadataHashMatches": true,
+          "dataArchiveTypesAndPathsValidatedBeforeExtraction": true,
+          "controlScriptsExecuted": false
+        }
+      ],
+      "toolFiles": [
+        {
+          "path": "usr/bin/Xvfb",
+          "bytes": 2131520,
+          "sha256": "16667b1eaafbe0b09527c2152e45f81b4b8e977012281062fc2fb2427afa66ce"
+        },
+        {
+          "path": "usr/bin/xdotool",
+          "bytes": 85376,
+          "sha256": "2fcee924be08b180f4b1bea93eddedbaa8b0ea4b0886f6cbf77a113e8b8a130f"
+        },
+        {
+          "path": "usr/lib/x86_64-linux-gnu/libxdo.so.3",
+          "bytes": 51208,
+          "sha256": "24f78cafbd38a06bb68e179df88aaeebf7b0576c1c449f98e75148575b741242"
+        }
+      ],
+      "sourceModules": [
+        {
+          "path": "apps/web/index.html",
+          "sha256": "37be441d4b6f158036495584fa0e83af0af0a941eb539574855a4c6726cecc2c"
+        },
+        {
+          "path": "apps/web/src/app-services.ts",
+          "sha256": "63c1cf3ab95f1d5688f0e84adacb9e55e0ca1a543d1613d190790f74600f7005"
+        },
+        {
+          "path": "apps/web/src/compatibility/model.ts",
+          "sha256": "5720fbbf12ebb3a805afd721f94ab90a91453462f959c6dc56efe502907d7d28"
+        },
+        {
+          "path": "apps/web/src/compatibility/probe.ts",
+          "sha256": "e393f4dfadc098fdf74afd5a2c737142720280b12e92197f5f2b2b2b902b4793"
+        },
+        {
+          "path": "apps/web/src/compatibility/startup.ts",
+          "sha256": "b258f8cecb4e5574b2bc3ec0e8d8212c32a132c55e9c8710a807693025a3907b"
+        },
+        {
+          "path": "apps/web/src/content-policy/local-policy.ts",
+          "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61"
+        },
+        {
+          "path": "apps/web/src/demo/synthetic-data.ts",
+          "sha256": "5da69478862d29c7dbb9ab91e2d58eb95764ac0350be67e00f82576e254d2ccd"
+        },
+        {
+          "path": "apps/web/src/demo/synthetic-local.ts",
+          "sha256": "155b1ddba8cced9a60389fa99df23a91c3ea2bf474061767c744bfb6339bd546"
+        },
+        {
+          "path": "apps/web/src/diagnostics.ts",
+          "sha256": "fa760d26a8928d3501164585d4afaab43c70e34b1453175c0829a05525227559"
+        },
+        {
+          "path": "apps/web/src/main.tsx",
+          "sha256": "b4d898d047fc457a93f03d035fb20015f69da96cc29baed9037dc58d0160eadb"
+        },
+        {
+          "path": "apps/web/src/runtime/app-runtime.ts",
+          "sha256": "dfe0df7259955b1138cba9f85d447061dee9ceafe5a72942be317ea5a31bad41"
+        },
+        {
+          "path": "apps/web/src/runtime/pending-metadata.ts",
+          "sha256": "514be9791b17f7a31885f5eb3f13eb74047fc42a1b64cb90019de3a813242bcf"
+        },
+        {
+          "path": "apps/web/src/runtime/worker-endpoint.ts",
+          "sha256": "ee1896a67f3014267815806b18240f3f773d10278f7786c6676e5bd6d920962f"
+        },
+        {
+          "path": "apps/web/src/trade/review-controller.ts",
+          "sha256": "196d80e3e0d3fcca1332ad27afaa55615f8ec061d6768edad5c489005e8de68f"
+        },
+        {
+          "path": "apps/web/src/ui/app.css",
+          "sha256": "bb70d1a601a8eeb41aea2ee87c79422c02afc9ca511b9287e113760b823129e0"
+        },
+        {
+          "path": "apps/web/src/ui/App.tsx",
+          "sha256": "8d29d279688eab0750340869f999c3e2f37bbc2e3edcfd7b2a700292ed8d2f3a"
+        },
+        {
+          "path": "apps/web/src/ui/BackupVerificationForm.tsx",
+          "sha256": "d72d79a5efa6af26bee4e16a16bd4fbb10aa58e5f62f30f3b8f05ce27533a4bd"
+        },
+        {
+          "path": "apps/web/src/ui/ControlHelp.tsx",
+          "sha256": "b9e0f6431935a4bd2731d2c4f8301155c90c7c451a8df59a8f7838ec010fc69c"
+        },
+        {
+          "path": "apps/web/src/ui/diagnostics-messages.ts",
+          "sha256": "8725c7b5f7abb508259f06a73a3526fa8330714766af9531ebac6f3f6c5a900f"
+        },
+        {
+          "path": "apps/web/src/ui/DiagnosticsPanel.tsx",
+          "sha256": "af0e388530656953e93453e1a3c9314b86c7217a8f07948a4f3f9c42e6ee9131"
+        },
+        {
+          "path": "apps/web/src/ui/help-registry.ts",
+          "sha256": "b4c2f82bd172887c52034a7026e83fecd873c6d1f4ef75532cc8e1a61fd775c4"
+        },
+        {
+          "path": "apps/web/src/ui/locale/bundled.ts",
+          "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0"
+        },
+        {
+          "path": "apps/web/src/ui/locale/catalog.ts",
+          "sha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61"
+        },
+        {
+          "path": "apps/web/src/ui/locale/en.ts",
+          "sha256": "39efb36163f0b2222967137ad4e3dda70d4ce47a8cc094fbfec11e117242a031"
+        },
+        {
+          "path": "apps/web/src/ui/locale/runtime.ts",
+          "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf"
+        },
+        {
+          "path": "apps/web/src/ui/messages.ts",
+          "sha256": "d9b4a53d2858330ef4254592f287ca5ac4c0ec962cbfcb65aa5d011715e4b7e3"
+        },
+        {
+          "path": "apps/web/src/ui/Pages.tsx",
+          "sha256": "e9f058883ca7f5aa43031ce57aa9263c0bd03f4258c66319f2e507e18cdb34e2"
+        },
+        {
+          "path": "apps/web/src/ui/PrivacyStatusDetails.tsx",
+          "sha256": "960acfac3ce28e597d84ca991f7591b63dd003cbf043459e1b371ee7e44272a9"
+        },
+        {
+          "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+          "sha256": "4c9638dc3c900444ffce912a0398ed7661a619d5adbcb315ab81973023566928"
+        },
+        {
+          "path": "apps/web/src/ui/recovery-reference-messages.ts",
+          "sha256": "19a55e9fe869fba8a0653f7e232856a12db0c0abc438446e6cdbb03d78660f6e"
+        },
+        {
+          "path": "apps/web/src/ui/RecoveryReferencesPanel.tsx",
+          "sha256": "4966798b98cab22fb591d507356ff9800cd12c60bb0d4b7f1b17c7bdcc2a94d6"
+        },
+        {
+          "path": "apps/web/src/ui/RetentionPanel.tsx",
+          "sha256": "1a256f271e1d4275d288debdbdf92235433fec61061de6fa40c28ca6f76675c8"
+        },
+        {
+          "path": "apps/web/src/ui/routes.ts",
+          "sha256": "2b866314571cb1c7e610b246f87d334de8fbd4cad53b06649d930ac722c4d7f1"
+        },
+        {
+          "path": "apps/web/src/ui/StartupCompatibilityNotice.tsx",
+          "sha256": "73e8f5d5c9b3cc16f19834255438dc5cbeece42688c0bb20c91829cb6c0efaf9"
+        },
+        {
+          "path": "apps/web/src/ui/trade/display-text.ts",
+          "sha256": "34bc307987270784e9c5fa68789e6eb3d699d0fb9dcff6edb1f6a1f5576bf5c3"
+        },
+        {
+          "path": "apps/web/src/ui/trade/trade-messages.ts",
+          "sha256": "1392da9d5d8a5db7ebd35969b37fdb164e2370550350492718f51b8783294eee"
+        },
+        {
+          "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+          "sha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f"
+        },
+        {
+          "path": "apps/web/src/ui/trade/TradePages.tsx",
+          "sha256": "afe5ee5b9e08d9efd889fe94ff452a4319aa0d12cba98593ba9c33983853b49b"
+        },
+        {
+          "path": "apps/web/src/ui/trade/TradeTermsReview.tsx",
+          "sha256": "bbbed968027516f9addd7f1b0d6aeabd4fdc3de61f5428be6670797b350bed46"
+        },
+        {
+          "path": "apps/web/src/ui/VaultForms.tsx",
+          "sha256": "6308584152327ccdb0bb500d223f00b0a0a9d88640945c964039bd7513338cdd"
+        },
+        {
+          "path": "apps/web/src/workers/vault.worker.ts",
+          "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e"
+        },
+        {
+          "path": "node_modules/react-dom/cjs/react-dom-client.production.js",
+          "sha256": "a319b413b7a19ee34422d9a12a8e7afd003c07846716d278ba1a0898e8cb6251"
+        },
+        {
+          "path": "node_modules/react-dom/cjs/react-dom.production.js",
+          "sha256": "7a05d7f7bb2b02aae84018a88d4815a2181eef48d2cb8172d403eaa2b131eefd"
+        },
+        {
+          "path": "node_modules/react-dom/client.js",
+          "sha256": "00e348ab3d6bc2eef908345d0bc4e008c95bcfecec060dfda5c4967953761396"
+        },
+        {
+          "path": "node_modules/react-dom/index.js",
+          "sha256": "ba1a3e33489f868371561777607e3ee5091df0f7ea3f1a10f789d6b86e4c1505"
+        },
+        {
+          "path": "node_modules/react/cjs/react-jsx-runtime.production.js",
+          "sha256": "1e46f15002696985e80c61d47aaa30dabb03c954270a690f5f7dfbbacfa9002b"
+        },
+        {
+          "path": "node_modules/react/cjs/react.production.js",
+          "sha256": "0b5529981841afa1b58c76ba85c29bb681ff5f07cd8cde6a10b967d3915b8e1c"
+        },
+        {
+          "path": "node_modules/react/index.js",
+          "sha256": "60caffdecbdc5db3bc4ec4e83df9488345ccb271d07533b9210bf5750918d97e"
+        },
+        {
+          "path": "node_modules/react/jsx-runtime.js",
+          "sha256": "b392951a77d0a2e6a6bd017e49d768481ae5b63c4109c6c31f622cf7b2433edc"
+        },
+        {
+          "path": "node_modules/scheduler/cjs/scheduler.production.js",
+          "sha256": "679adff761d31e9426604f80c0e99be44a3e6f4c6834b0218ecf0312a67c171f"
+        },
+        {
+          "path": "node_modules/scheduler/index.js",
+          "sha256": "145965504d60007bc25486ab930b0367867dcd5d579ccd343c148d69349a7cfb"
+        },
+        {
+          "path": "packages/diagnostics/index.ts",
+          "sha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e"
+        },
+        {
+          "path": "packages/diagnostics/src/diagnostics.ts",
+          "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18"
+        },
+        {
+          "path": "packages/domain/index.ts",
+          "sha256": "0281caaf258c48b8ec45d3856f8785038f2bdae7bf94d838d05932385a0e7fd3"
+        },
+        {
+          "path": "packages/domain/src/errors.ts",
+          "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5"
+        },
+        {
+          "path": "packages/domain/src/journey-view.ts",
+          "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f"
+        },
+        {
+          "path": "packages/domain/src/observation-dispatcher.ts",
+          "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2"
+        },
+        {
+          "path": "packages/domain/src/privacy-view.ts",
+          "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715"
+        },
+        {
+          "path": "packages/domain/src/registry.ts",
+          "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20"
+        },
+        {
+          "path": "packages/domain/src/terms-review.ts",
+          "sha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6"
+        },
+        {
+          "path": "packages/domain/src/trade-terms.ts",
+          "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2"
+        },
+        {
+          "path": "packages/schemas/index.ts",
+          "sha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9"
+        },
+        {
+          "path": "packages/schemas/src/backup-verification.ts",
+          "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca"
+        },
+        {
+          "path": "packages/schemas/src/backup.ts",
+          "sha256": "d59f5ae03d8b8463cb9f2f875f6ec10a914dd3c28db549987930eadf14631fc2"
+        },
+        {
+          "path": "packages/schemas/src/core.ts",
+          "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26"
+        },
+        {
+          "path": "packages/schemas/src/identity.ts",
+          "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e"
+        },
+        {
+          "path": "packages/schemas/src/intent.ts",
+          "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f"
+        },
+        {
+          "path": "packages/schemas/src/recovery-reference.ts",
+          "sha256": "56a9646c2dbbb26647398ac10e3217f8507c34773825d2d145f19d411b3bf30a"
+        },
+        {
+          "path": "packages/schemas/src/registry.ts",
+          "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+        },
+        {
+          "path": "packages/schemas/src/runtime.ts",
+          "sha256": "d7ee68ed99ca0efb7c13a97e86221d13d855296e7def6f3e9915fdf80801684c"
+        },
+        {
+          "path": "packages/schemas/src/saved-review.ts",
+          "sha256": "5d6ad0a31b5c0ff880f2e7202a602bf8aa961166f51db3dc8b821cc33dd8f9c5"
+        },
+        {
+          "path": "packages/schemas/src/transport.ts",
+          "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8"
+        },
+        {
+          "path": "packages/schemas/src/vault-service.ts",
+          "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0"
+        },
+        {
+          "path": "packages/schemas/src/vault.ts",
+          "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8"
+        },
+        {
+          "path": "packages/security/release-context.ts",
+          "sha256": "c161a996f3242c7efd3873c4f222e41ced61fe7ff8cc528dcc863da81171aae9"
+        },
+        {
+          "path": "packages/security/src/release-proof.ts",
+          "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe"
+        },
+        {
+          "path": "packages/storage/index.ts",
+          "sha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb"
+        },
+        {
+          "path": "packages/storage/src/backup-service.ts",
+          "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0"
+        },
+        {
+          "path": "packages/storage/src/idb-vault-store.ts",
+          "sha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3"
+        },
+        {
+          "path": "packages/storage/src/migration-service.ts",
+          "sha256": "40dbc711ee9e4a8d0f5ad26a5915c413e4e8312b9d48870a3ffdb75a84bc2ed0"
+        },
+        {
+          "path": "packages/storage/src/recovery-slot.ts",
+          "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181"
+        },
+        {
+          "path": "packages/storage/src/retention-service.ts",
+          "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af"
+        },
+        {
+          "path": "packages/storage/src/vault-crypto.ts",
+          "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+        },
+        {
+          "path": "packages/storage/src/vault-service.ts",
+          "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec"
+        }
+      ],
+      "buildAssets": [
+        {
+          "path": "_headers",
+          "bytes": 342,
+          "sha256": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1"
+        },
+        {
+          "path": "assets/index-BuWtQWG3.css",
+          "bytes": 6718,
+          "sha256": "135ec333ebc5477199a73bea77699686707b8c294c359866bbfa26977f41c85a"
+        },
+        {
+          "path": "assets/index-D8KgopQ5.js",
+          "bytes": 420734,
+          "sha256": "2b0a2a77c5b1f4ac984d01ebc96bc7333ef6a50d384ebf7cba420a1f3b95f5b4"
+        },
+        {
+          "path": "assets/synthetic-local-mSCEmZEA.js",
+          "bytes": 5779,
+          "sha256": "cefb43c38072009548b15b2622a71b5557db3263b5cdb27ccf79ba15c2a58615"
+        },
+        {
+          "path": "assets/vault.worker-BgOhwJtV.js",
+          "bytes": 78034,
+          "sha256": "5ee4bbae2b8b308a53047f8bdc75988a322707bc603aeb5f541c017a71854f53"
+        },
+        {
+          "path": "content-policy.json",
+          "bytes": 1009,
+          "sha256": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b"
+        },
+        {
+          "path": "core-graph-document.json",
+          "bytes": 11260,
+          "sha256": "c7d2224fa06d5a6c1cd49e84caf9d159088786845446f90d3c551f4c0f410b4c"
+        },
+        {
+          "path": "core-graph-worker.json",
+          "bytes": 3668,
+          "sha256": "e47b904acf08f2cddb5514d2834f8156478b33b5ec6a9fb3c3a5d76e6eee93ff"
+        },
+        {
+          "path": "index.html",
+          "bytes": 1261,
+          "sha256": "569728a7ddf2da7d232e590d021ccc7fcec69c41e80dcb3dcc4ec13542ecc1c7"
+        },
+        {
+          "path": "third-party-licenses.json",
+          "bytes": 3628,
+          "sha256": "7a1d1157ef70933bb70cf3fccab45daeef097216477ccf3fff6d368919d4c52a"
+        }
+      ],
+      "releaseEnabled": false,
+      "checks": [
+        "owned Xvfb display requires its private cookie and disables TCP listening",
+        "100% native desktop zoom: App/forms/Offers/review/Recovery/Settings geometry, controls, focus and exact values",
+        "200% native desktop zoom: App/forms/Offers/review/Recovery/Settings geometry, controls, focus and exact values",
+        "400% native desktop zoom: App/forms/Offers/review/Recovery/Settings geometry, controls, focus and exact values",
+        "observed product page/Worker traffic stays local and no wallet or provider prompt occurs"
+      ],
+      "observations": [
+        {
+          "factor": 1,
+          "native": {
+            "innerWidth": 1280,
+            "innerHeight": 873,
+            "outerWidth": 1280,
+            "outerHeight": 960,
+            "devicePixelRatio": 1,
+            "visualViewport": {
+              "width": 1265,
+              "height": 873,
+              "scale": 1
+            }
+          },
+          "home": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 9
+          },
+          "unlock": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "offers": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "review": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 7
+          },
+          "recovery": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 20
+          },
+          "settings": {
+            "viewport": 1280,
+            "document": 1265,
+            "clipped": [],
+            "reachableEnabledControls": 8
+          },
+          "canonical": [
+            "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+            "0x acf7 b7c8 271e 99b3 be70 c3f4 76c7 c209 63e0 6b8e",
+            "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+            "0x 3b0d 3efc ce06 2566 bd2a 28c2 f2bb a7e1 d150 4ee5",
+            "1767229200",
+            "1767315600",
+            "SYNTHETIC demo instructions.\nDo not send real money.",
+            "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+            "0x 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e",
+            "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+            "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "7e6c9c5ae8b8ed71adf0770444caf45d93ebad3a3270fb42b4c1e2da72ad8df5",
+            "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+          ],
+          "skipAndRouteFocus": true,
+          "formCancelFocusRestored": true
+        },
+        {
+          "factor": 2,
+          "native": {
+            "innerWidth": 640,
+            "innerHeight": 436,
+            "outerWidth": 1280,
+            "outerHeight": 960,
+            "devicePixelRatio": 2,
+            "visualViewport": {
+              "width": 632.5,
+              "height": 436.5,
+              "scale": 1
+            }
+          },
+          "home": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 9
+          },
+          "unlock": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "offers": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "review": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 7
+          },
+          "recovery": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 20
+          },
+          "settings": {
+            "viewport": 640,
+            "document": 632,
+            "clipped": [],
+            "reachableEnabledControls": 8
+          },
+          "canonical": [
+            "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+            "0x acf7 b7c8 271e 99b3 be70 c3f4 76c7 c209 63e0 6b8e",
+            "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+            "0x 3b0d 3efc ce06 2566 bd2a 28c2 f2bb a7e1 d150 4ee5",
+            "1767229200",
+            "1767315600",
+            "SYNTHETIC demo instructions.\nDo not send real money.",
+            "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+            "0x 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e",
+            "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+            "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "7e6c9c5ae8b8ed71adf0770444caf45d93ebad3a3270fb42b4c1e2da72ad8df5",
+            "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+          ],
+          "skipAndRouteFocus": true,
+          "formCancelFocusRestored": true
+        },
+        {
+          "factor": 4,
+          "native": {
+            "innerWidth": 320,
+            "innerHeight": 218,
+            "outerWidth": 1280,
+            "outerHeight": 960,
+            "devicePixelRatio": 4,
+            "visualViewport": {
+              "width": 316.25,
+              "height": 218.25,
+              "scale": 1
+            }
+          },
+          "home": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 9
+          },
+          "unlock": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "offers": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 13
+          },
+          "review": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 7
+          },
+          "recovery": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 20
+          },
+          "settings": {
+            "viewport": 320,
+            "document": 316,
+            "clipped": [],
+            "reachableEnabledControls": 8
+          },
+          "canonical": [
+            "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+            "0x acf7 b7c8 271e 99b3 be70 c3f4 76c7 c209 63e0 6b8e",
+            "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+            "0x 3b0d 3efc ce06 2566 bd2a 28c2 f2bb a7e1 d150 4ee5",
+            "1767229200",
+            "1767315600",
+            "SYNTHETIC demo instructions.\nDo not send real money.",
+            "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e",
+            "0x 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e 5e5e",
+            "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+            "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "7e6c9c5ae8b8ed71adf0770444caf45d93ebad3a3270fb42b4c1e2da72ad8df5",
+            "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+          ],
+          "skipAndRouteFocus": true,
+          "formCancelFocusRestored": true
+        }
+      ],
+      "product": {
+        "walletPrompts": 0,
+        "fetchCalls": 0,
+        "workers": [
+          {
+            "url": "http://127.0.0.1:34623/assets/vault.worker-BgOhwJtV.js",
+            "type": "module"
+          }
+        ]
+      },
+      "ownedBrowserDisplayServerAndProfileClosed": true
+    },
+    "additionalBuildAndHarnessDependencies": [
+      {
+        "path": "package.json",
+        "bytes": 6863,
+        "sha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141"
+      },
+      {
+        "path": "package-lock.json",
+        "bytes": 42472,
+        "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+      },
+      {
+        "path": "apps/web/scripts/build.mjs",
+        "bytes": 6576,
+        "sha256": "a9eb5cb5a566b2ffd70b26f6a82964a82a80efc236e283e8b40f154481a6edcd"
+      },
+      {
+        "path": "apps/web/vite.config.ts",
+        "bytes": 1833,
+        "sha256": "5456718bed05f18e4ac0e508909c84848907456ad24bf22e3c55fc1241fc9536"
+      },
+      {
+        "path": "apps/web/scripts/static-build-plugin.mjs",
+        "bytes": 4346,
+        "sha256": "47030c17ae0885cc3f9df8810b4b1815db47a6d608a98b99e5846b866aa98ea8"
+      },
+      {
+        "path": "apps/web/scripts/source-locale.mjs",
+        "bytes": 1143,
+        "sha256": "4f730b6d7b0ca36a8bb6b8e1aef0f60405c110de685bd4a8e252c107e65f8cf5"
+      },
+      {
+        "path": "apps/web/scripts/artifact-policy.mjs",
+        "bytes": 5063,
+        "sha256": "6535cb93ee7817eabd07e7b9cda2db90b378474f1e1e6c8a5c43a8d379a67cb7"
+      },
+      {
+        "path": "scripts/lib/chromium-path.mjs",
+        "bytes": 1123,
+        "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728"
+      },
+      {
+        "path": "node_modules/playwright-core/package.json",
+        "bytes": 876,
+        "sha256": "8aa1c9863fa8dea324e674254158cdc79440f4124ef2d84d38053013541cb7d6"
+      },
+      {
+        "path": "node_modules/playwright-core/lib/coreBundle.js",
+        "bytes": 3585406,
+        "sha256": "829521b67ed7be90c7d6d6098ff39f2241562d47e4ad7ccab13710924a56001d"
+      },
+      {
+        "path": "node_modules/vite/package.json",
+        "bytes": 5057,
+        "sha256": "c9586ac07b42763a8a7f6aac6b4a805d70f057bd8c67c43da81c0cc4e5da8293"
+      },
+      {
+        "path": "node_modules/@vitejs/plugin-react/package.json",
+        "bytes": 2218,
+        "sha256": "b40248af3bd75adf396d903d042c09ca4f585dcdd9460d51eeeeb83c01a48643"
+      }
+    ],
+    "nativeSystemDependencies": [
+      {
+        "path": "/usr/bin/xauth",
+        "sha256": "39e89b8530af1402b6b6f845309fc5a578c9ef9105412fa7198927ce92e7199d"
+      },
+      {
+        "path": "/usr/lib/chromium/chromium",
+        "sha256": "4dc9f9f9b20e9bd95bf201f43d2d643f48938f36a70ddcb6fce3dd611a178180"
+      },
+      {
+        "path": "/etc/chromium/policies/managed/extensions.json",
+        "sha256": "f9a8ef3534f52a8de2c1806298dec460b3713839a69e4d1ccbb8b16c0f2175fa"
+      }
+    ],
+    "independentProvenance": {
+      "path": "/workspace/work/t73-native-zoom-independent-provenance.json",
+      "sha256": "2a234289ba28e27fa54314b0d74fbf6add063719299d8ff1856c8650bb041765"
+    },
+    "postRunChecks": {
+      "temporaryTreeAbsent": true,
+      "ownedCommandLinesRemaining": [],
+      "managedPolicyHashUnchanged": true,
+      "compiledSourceHashesStillMatch": true
+    }
+  }
+}

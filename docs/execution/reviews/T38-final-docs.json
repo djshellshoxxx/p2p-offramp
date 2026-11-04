@@ -1,0 +1,336 @@
+{
+  "format": "p2p-offramp/t38-final-documentation-review/v1",
+  "task": "T38",
+  "reviewer": "/root/cleanup_debug",
+  "status": "APPROVE_FROZEN_LOCAL_DOCUMENTATION_LIVE_DELIVERY_PENDING",
+  "reviewedAtUtc": "2026-11-02T19:15:22.257693+00:00",
+  "sourceCheckpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+  "reviewScope": "Independent documentation, evidence attribution, remainder and final-delta consistency review. This does not repeat or replace source, native, lab or professional reviews.",
+  "reviewedDocuments": [
+    {
+      "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "sha256": "02ef082937289a4aab6e59049a1254638582df04c00990a6864f425eba8aa80e",
+      "bytes": 24046
+    },
+    {
+      "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.md",
+      "sha256": "2cf0fb81218d5b0b3a738c5677b3c3e7d412b1e6f7e6d74a42027c1792e644d3",
+      "bytes": 4226
+    },
+    {
+      "path": "docs/execution/coverage/CURRENT-REMAINDER.json",
+      "sha256": "8241dcd92bca603d52c1445deee1b34628242f60ca5370bee6d058493491c9bc",
+      "bytes": 504383
+    },
+    {
+      "path": "docs/execution/coverage/CURRENT-REMAINDER.md",
+      "sha256": "ca1a7da2e8f9679f5ea4c9cfccf23dc95d45b4aa8739e3993686b42474da41af",
+      "bytes": 4677
+    },
+    {
+      "path": "docs/execution/audit-2026-11-02/README.md",
+      "sha256": "098cfec000f0520574b82dec7b5350bbfa44ced06d6b036bec25849a0552c34a",
+      "bytes": 6938
+    },
+    {
+      "path": "docs/execution/audit-2026-11-02/CURRENT-SOURCE.json",
+      "sha256": "89e0983380d25587e959dd1fdc0424a3e36bc16081df93727a390029a7826f49",
+      "bytes": 325685
+    },
+    {
+      "path": "docs/execution/acceptance/g24-current-local.json",
+      "sha256": "d2e365ee1289c2933996b8cfe17c28fc0181167053a8fc10c660d01f9ce64860",
+      "bytes": 123367
+    },
+    {
+      "path": "docs/execution/acceptance/g24-current-local.md",
+      "sha256": "7ff53362419b322d0c8cf728560c5f893394a3bea2021dd2ca5849c553952919",
+      "bytes": 6381
+    },
+    {
+      "path": "tasks/todo.md",
+      "sha256": "5edf6fd03e4b47639b72d856270c188650eaf7753e4c8e6c3b67648e9512da8d",
+      "bytes": 29496
+    },
+    {
+      "path": "tasks/plan.md",
+      "sha256": "c4957afb382bd499754e3e6a949325bbbd7ab436780a0b5fed166390f08d44d0",
+      "bytes": 43046
+    },
+    {
+      "path": "docs/execution/ALL-REMAINING-WORK-PROMPT.md",
+      "sha256": "c83f0438cab22efdf55cde31abb08679bcf865d67bacc3893de1bd5a7e6df095",
+      "bytes": 25376
+    },
+    {
+      "path": "docs/execution/reviews/T38-final-native.json",
+      "sha256": "19e6f781c9d37833192eff7c01c2401620a0a522cdbd4c38b4f2f500ef521113",
+      "bytes": 21986
+    },
+    {
+      "path": "docs/execution/reviews/T71-final-lab.json",
+      "sha256": "362d6b47e299fb757b60eb50e8b7c20ca897fa47f91967fe9c8c08e699acfa6d",
+      "bytes": 31514
+    },
+    {
+      "path": "docs/execution/qualification/fresh-lab-a2b414f.json",
+      "sha256": "a097c4529e75b389c5cb0d1fb1f5bd41c4503527ce0b925edd75d682805d95bf",
+      "bytes": 26660
+    },
+    {
+      "path": "docs/execution/reviews/T98-final.json",
+      "sha256": "06fd05dbd0cfd7d10144b8f0be34a29d8f019df0f4ab49d621ec73cfb0df47e5",
+      "bytes": 21011
+    },
+    {
+      "path": "docs/execution/reviews/T98-root.json",
+      "sha256": "219ae144fda68dc0e1c5c6b4f3503076734a86422386db4021416abe14099fe0",
+      "bytes": 11260
+    },
+    {
+      "path": "docs/execution/reviews/T100-root.json",
+      "sha256": "fb0b779badf4cf3fb09e6c30cd9acaba57a5991b96533a51242b89e5f6d7154f",
+      "bytes": 2534
+    },
+    {
+      "path": "docs/execution/reviews/T99-root.json",
+      "sha256": "fea2ed69b4bec99c5797cc6cca254e41935e0b86d106d8072f5709d06b22344a",
+      "bytes": 738
+    },
+    {
+      "path": "docs/execution/qualification/browser-tooling-policy.json",
+      "sha256": "33689fcd63509aca4a58a9d7ed3a878952e0aac4aeb7e181f798ca076ebf22b1",
+      "bytes": 7013
+    }
+  ],
+  "retainedRootRecordsRead": [
+    {
+      "path": "/workspace/work/t38-publish-docs.log",
+      "bytes": 7258,
+      "sha256": "5cbbcc28981d239c338dc173d45042f2ae149f179109255c756b7a14444451ef"
+    },
+    {
+      "path": "/workspace/work/t38-publish-specs.log",
+      "bytes": 126,
+      "sha256": "2cf32f195ca4fb478a4387e1998b6948d74ba38dfa9770e75658bb01c6410f10"
+    },
+    {
+      "path": "/workspace/work/t38-final-package-tests.json",
+      "bytes": 661,
+      "sha256": "94a374346bf0ea5d9054a5766b0abff0d2ed8a80ac45824dd1079e99b98587ae"
+    },
+    {
+      "path": "/workspace/work/t38-final-package-tests.log",
+      "bytes": 183369,
+      "sha256": "a351514ceef043d203091532a9f603bc53226d707f5517dbe71e956a13f9fddb"
+    }
+  ],
+  "unresolvedFindings": [],
+  "immutableInventoryReview": {
+    "requirementsSha256": "dc3d69b8e25c21ffd4d9a8eb69e842fc525689e1ce884748e674902935cb471a",
+    "remainderSha256AtMembershipRead": "25b330f94fc0e7e8aaad55b892d17a9f24137ca22cfd5c0e231c41c4ae54d894",
+    "counts": {
+      "canonicalRecords": 103,
+      "specifications": 173,
+      "uniqueOriginalClauses": 8281,
+      "milestones": 9,
+      "technicalDesigns": 171
+    },
+    "originalClauseStatuses": {
+      "READY": 4790,
+      "DONE": 2496,
+      "BLOCKED": 995
+    },
+    "originalCanonicalStatuses": {
+      "DONE": 25,
+      "READY": 58,
+      "BLOCKED": 20
+    },
+    "currentScopedStates": {
+      "LOCAL_SCOPE_COMPLETE": 76,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    },
+    "membershipProjectionSha256": "c3b29fe23834f2169c6c11a77f6db02356bee5d641006b1c8445622eda1f14a3",
+    "all173SpecHashProjectionSha256": "676262422a48515544815cea4311dafc26536076dc1bd08b3d97572a048ab8d6",
+    "actualSpecHashesChecked": 173,
+    "errors": [],
+    "operation": "Read-only membership/status comparisons and direct immutable spec byte hashes; no scanner, suite, solver, SDK or source audit executed.",
+    "carriedForwardWithoutRepeatingMembershipOrSpecChecks": true,
+    "finalFreezeTreatment": "The earlier independent 103/173/8281/9 membership and all173 spec-byte comparisons passed. Final root integrity checks preserve those identities; subsequent reviewed corrections change scoped evidence/actions only, not original membership or historical statuses."
+  },
+  "finalScope": {
+    "nativeBaseline": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "nativeBaselineTree": "9de340401cf748ff6ad19fb3ec686a24e31a3dbf",
+    "currentSelectedTestCheckpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+    "currentPackageTests": 1713,
+    "freshLabPackageTests": 1712,
+    "freshLabContractTests": 82,
+    "nativeBaselineGroups": 11,
+    "g24Cases": 43,
+    "g24Requirements": 23,
+    "allG24PromotionFlagsFalse": true,
+    "currentCanonicalScopeCounts": {
+      "LOCAL_SCOPE_COMPLETE": 76,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    },
+    "liveHostingStatus": "EXACT_FINAL_HEAD_CI_REVIEW_MERGE_READBACK_PENDING",
+    "rootIntegrationStatus": "LOCAL_ENGINEERING_COMPLETE_FINAL_HOSTED_DELIVERY_PENDING",
+    "T98Review": "APPROVE_SCOPED_LOCAL_NATIVE_REORG_DELTA",
+    "T100Review": "ACCEPTED_SCOPED_NATIVE_TCP_EVIDENCE",
+    "T99Review": "ACCEPT_PRECISE_TOOLING_BLOCKER_NOT_BROWSER_QUALIFICATION",
+    "T99RequestsAndExecutions": 0
+  },
+  "evidenceAttribution": [
+    {
+      "scope": "Current package suite",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "observedCases": 1713,
+      "failures": 0,
+      "skips": 0,
+      "cancelled": 0,
+      "capturedRows": 502,
+      "disposition": "Actual current run; separate from historical1712 and fresh-lab1712. Selected test counts are not added as unique suite totals."
+    },
+    {
+      "scope": "Baseline clean native/browser",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "groups": 11,
+      "journey": {
+        "submissions": 11,
+        "signatures": 16,
+        "explicitSigningReviews": 32
+      },
+      "disposition": "Retains actual source/tool scope and distinct native review. Retention review/delete has zero sends; fixture seed/withdrawal calls remain separate. Distribution has one awaited test/three smoke checks, unsigned and unpublished."
+    },
+    {
+      "scope": "Fresh clone local lab",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "foundationGroups": 5,
+      "journeyGroups": 4,
+      "packageCases": 1712,
+      "contractCases": 82,
+      "disposition": "New clone/cache/dependencies/config with an existing immutable image; no fresh-image, paid Codespace, physical-device or production qualification claim. Install/audit use managed proxy/TLS; test phases network:none. Original failed693c66c receipt remains historical."
+    },
+    {
+      "scope": "T98 selected native reorg delta",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "checks": 10,
+      "originalChecksPreserved": 9,
+      "disposition": "Actual owned finalized receipt removed by native rollback/alternate chain; two fresh encrypted clients persist/recover reorged. One initial wallet send, zero later wallet calls or replacement preparations. No mainnet consensus theorem."
+    },
+    {
+      "scope": "T100 selected TCP missing-ACK delta",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "affectedFileCases": 28,
+      "originalCasesPreserved": 27,
+      "disposition": "One actual EVENT with suppressed OK yields unknown; no EVENT replay during the bounded timeout/observation. Existing actual refused/drop/reconnect evidence reused. No production TLS/private-route/crypto certification; initial new connection-count failure retained."
+    },
+    {
+      "scope": "T99 browser tooling investigation",
+      "requests": 0,
+      "nativeExecutions": 0,
+      "disposition": "Exact binaries absent; enforced official-CDN host-policy prerequisite. No attempted HTTP rejection, policy bypass or browser pass invented."
+    },
+    {
+      "scope": "Historical browser/zoom/formal evidence",
+      "disposition": "Original source/tool tuples and incomplete/UNKNOWN results remain explicit. Three T91 target attempts stay spent; no new solver or SDK execution is inferred."
+    }
+  ],
+  "g24Review": {
+    "cases": 43,
+    "requirements": 23,
+    "finalOverlay": "docs/execution/acceptance/g24-current-local.json",
+    "historicalMatrix": "docs/execution/acceptance/g24-coverage.json",
+    "historicalMatrixSha256": "495d492daeef543d8ab49566db39dd92cefab34caa17ce4e2a7c49d01f3329d0",
+    "allAdvertisedTargetAndReleasePromotionFlagsFalse": true,
+    "allBlanketClauseDoneFlagsFalse": true,
+    "exactCaseRequirementMembershipAndReferenceIntegrity": "Root final checks verified the unchanged43/23 IDs and every current overlay/reference binding; this review reads the scope/disposition changes and does not repeat that execution check.",
+    "acceptedChanges": [
+      "Reorg row now cites actual T98 durable native rollback instead of model-only coverage.",
+      "Relay row cites existing real socket faults plus actual T100 missing-ACK unknown/no-replay evidence.",
+      "Default core-only row now includes N11 actual a2 default Worker boot/reload/no-unexpected-request smoke; broader active-trade/authenticated-release limits remain.",
+      "Firefox/WebKit rows identify the precise T99 enforced-host-policy prerequisite without claiming an HTTP denial or browser support."
+    ]
+  },
+  "resolvedDocumentationIssues": [
+    {
+      "id": "DOC-STALE-INTAKE",
+      "status": "RESOLVED",
+      "resolution": "Completed T88/T92/T93/T71/canonical-relay states,74 former integration dependencies, limits and milestone actions now distinguish historical intake from exact-head hosted delivery."
+    },
+    {
+      "id": "DOC-CANONICAL-NEXT-ACTIONS",
+      "status": "RESOLVED",
+      "resolution": "Five stale current actions now preserve accepted evidence/live delivery. T62's committed three-document packet is no longer presented as an unintegrated READY task."
+    },
+    {
+      "id": "DOC-LOCAL-RELAY-EVIDENCE",
+      "status": "RESOLVED_BY_BINDING_AND_T100",
+      "resolution": "The independently raised owned-relay evidence candidate was resolved with existing actual TCP receipts and the single admitted missing-ACK case; no invented reconnect/outbox protocol."
+    },
+    {
+      "id": "DOC-CURRENT-DEFAULT-WORKER",
+      "status": "RESOLVED",
+      "resolution": "N11 current default Worker/artifact boot evidence is bound narrowly rather than omitted or promoted to full enabled-trade/release acceptance."
+    },
+    {
+      "id": "ROOT-G24-NATIVE-REORG",
+      "status": "RESOLVED_BY_T98",
+      "resolution": "Root's separately identified defined native gap is closed by distinctly accepted T98; model/native/finality boundaries remain explicit."
+    }
+  ],
+  "remainderAssessment": {
+    "currentScopedCounts": {
+      "LOCAL_SCOPE_COMPLETE": 76,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    },
+    "concreteSpecifiedReadyLocalTaskIdentifiedUnfinished": false,
+    "noCompletedTaskReopenedFromHistoricalLabels": true,
+    "exactContractFamilies": [
+      "Production peer wallet-signature carrier and role/account/message-key/replay/expiry bytes",
+      "Nonempty G14-to-G16 capability commitment preimage/profile",
+      "G15 trust transition/deployment/archive profiles",
+      "Native Solana/SPL program/PDA/layout/IDL/token/finality profiles",
+      "Type-specific QR and optional provider/circuit/vendor/new-custody/spending profiles"
+    ],
+    "toolingDistinctFromHumanQualification": true,
+    "externalQualification": "Actual device/assistive/safety-language/operator/production trust/distribution and artifact-specific professional evidence remain separate, not a generic blocker for already completed local engineering.",
+    "liveDelivery": "Only actual final-head CI/scanners/reviews and guarded source delivery/main readback remain root integration; PR26 is the live record, not source-certified future success."
+  },
+  "rootFinalChecksRead": "Root provided final check:docs (6 claims/7 pages/15 links, semanticApproval false), spec audit173/0 broken/0 unindexed, diff and all current source/evidence/G24 identities. These checks were read, not rerun.",
+  "professionalOrProductionApproval": false,
+  "releaseAuthority": {
+    "ReleaseEnabled": 0,
+    "approvedReleasePin": null,
+    "englishRevision": 3,
+    "englishStatus": "draft",
+    "reviewedLanguageOrFundsEligibilityEstablished": false
+  },
+  "reviewerOperations": {
+    "repoEdits": 0,
+    "sourceEdits": 0,
+    "testsOrSuitesRun": 0,
+    "solverAttempts": 0,
+    "sdkOrBrowserOrNativeRuns": 0,
+    "containersStarted": 0,
+    "networkRequests": 0,
+    "commits": 0,
+    "hostingOrMergeActions": 0,
+    "repeatedMembershipChecksAfterFinalFreeze": 0,
+    "repeatedWholeSourceAudits": 0,
+    "filesWritten": [
+      "/workspace/work/t38-final-docs-review.json",
+      "/workspace/work/t38-final-docs-review.md"
+    ]
+  },
+  "limits": [
+    "Bounded final documentation/evidence-scope review, not professional security/cryptographic certification or proof of absence of every defect.",
+    "Native/lab/source acceptance is reused from its exact distinct receipts. This reviewer did not recreate their process exits, source audits, containers, native transactions or execution results.",
+    "Root's final integrity/CLI/spec/source-hash checks are attributed to root and were not rerun here.",
+    "Future hosting/checks/bot reviews/branch rules/expected-head merge/tree equality/clean main readback must be observed live by root; this verdict cannot certify those future events."
+  ]
+}
+

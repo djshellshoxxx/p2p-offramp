@@ -1,0 +1,227 @@
+{
+  "task": "T63",
+  "reviewer": "/root/remaining_privacy",
+  "author": "/root/remaining_liquidity",
+  "status": "APPROVED",
+  "reviewedAtUtc": "2026-11-02T12:02:57.345878+00:00",
+  "approvedScope": "Seven-file, opt-in experimental public Node-only Semaphore feasibility evaluation. No application provider, root/issuer policy, monetary authority or release trust.",
+  "frozenManifest": {
+    "path": "/workspace/work/t63-frozen-files.sha256",
+    "sha256": "7bac146ddd5ae2a4cc2ac36539811d5befbde691a79207bace53cba576e1367a"
+  },
+  "files": [
+    {
+      "path": "docs/reputation/SEMAPHORE-V4-EVALUATION.md",
+      "sha256": "d1e506a7b888760129f82bd48cde5dff638088b4dd858b09ed24477d52f76a55"
+    },
+    {
+      "path": "docs/reputation/SEMAPHORE-V4-ORIGINAL-OBSERVATION.json",
+      "sha256": "d5f4f3be8c6f525360610aa5e1d689364ff00367f26573df9339e8c16b4cef35"
+    },
+    {
+      "path": "scripts/reputation/evaluation-remediated/package-lock.json",
+      "sha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3"
+    },
+    {
+      "path": "scripts/reputation/evaluation-remediated/package.json",
+      "sha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896"
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4-evaluation.mjs",
+      "sha256": "47a2a15801163438035fc947b21dad712f0d2aff3b295214fb84d19de89f645f"
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4-evaluation.test.mjs",
+      "sha256": "7a26d2aedd9563ac4508a1fb6fbf192e2948376297898410fd4785baf62f876f"
+    },
+    {
+      "path": "scripts/reputation/semaphore-v4.pins.json",
+      "sha256": "d46e94bde6478752e142e2a1bff2f1ef81c7cac7ad7bd822677b09168c45f4ec"
+    }
+  ],
+  "postVerificationFrozenHashesMatch": true,
+  "reviewerSourceEdits": false,
+  "reviewerCommits": false,
+  "findings": [],
+  "reviewAxes": {
+    "correctness": "Read all evaluation source and focused tests, explicit manifest/lock, pins, provenance packet and documentation. Actual four-public-member depth2 proof verifies; altered root/scope/message/nullifier/points/depth/key and nonmember controls refuse. Repeated proof and another unapproved root remain mathematically valid, explicitly demonstrating absent issuer/nullifier-consumer policy.",
+    "security": "Exact package/lock/artifact/tree/source hashes; bounded stable no-follow regular-file reads, bounded internal bin links and graph traversal; whole SRI before archive parsing; only exact artifact files selected. Actual container is unprivileged, no network, read-only, all capabilities dropped, no-new-privileges and CPU/memory/PID caps. Fixed diagnostics, single admission, owned process/container cleanup and retirement on uncertainty are explicit.",
+    "performance": "Actual public fixture proof passed within finite Node1GiB/1CPU/128PID limits. Observed cgroup peak is finite Node evidence only; no browser256MiB/mobile claim. No unnecessary new runner framework.",
+    "maintainability": "Reuses existing lab command helper and fixed public probe; local scripts/docs only, no root dependency or application integration. Five override names/versions and unsupported compiler/tester compatibility are explicit.",
+    "bestPracticesAndHonesty": "Current experimental audit0 is distinguished from original17 affected packages. All18 original raw packets remain passive and old manifest/lock is refused. Final10 and original7 integrity assertions mathematically verify with tamper controls; expired legacy keys remain historical rather than current trust. License/source/bundle and vendor/production limitations are stated."
+  },
+  "independentResults": {
+    "focusedTests": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "actualRepositoryEntrypoint": {
+      "command": "DOCKER_CONFIG=/workspace/work/p2p-lab-docker-config node scripts/reputation/semaphore-v4-evaluation.mjs --directory /workspace/work/t63-remediated-evaluation",
+      "exitCode": 0,
+      "checks": 24,
+      "actualDependencyVersions": {
+        "ethers": "6.17.0",
+        "snarkjs": "0.7.6",
+        "bfj": "9.1.4",
+        "ejs": "7.0.2",
+        "circom_tester": "0.0.24"
+      },
+      "proofBytes": 888,
+      "outboundAttempts": 0,
+      "resources": {
+        "memoryMax": "1073741824",
+        "memoryPeak": "214032384",
+        "cpuMax": "100000 100000",
+        "pidsMax": "128",
+        "maxRssKiB": 258304
+      },
+      "node": "v24.19.0",
+      "image": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283"
+    },
+    "actualCancellationAndContainment": {
+      "observedActualOwnedContainer": true,
+      "containerRemovedBeforeAdmissionRelease": true,
+      "overlapRefusedBeforeAndAfterAbort": true,
+      "singleAdmissionAvailableAfterPhysicalCleanup": true,
+      "fixedCancellation": "SEMAPHORE_CANCELLED",
+      "user": "65534:65534",
+      "privileged": false,
+      "network": "none",
+      "rootReadOnly": true,
+      "bindMountsReadOnly": true,
+      "memoryBytes": 1073741824,
+      "swapBytes": 1073741824,
+      "nanoCpus": 1000000000,
+      "pids": 128,
+      "droppedAllCapabilities": true,
+      "noNewPrivileges": true,
+      "unrelatedContainersRemoved": false,
+      "externalNetwork": false
+    },
+    "freshUnsuppressedAudit": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 138,
+        "dev": 0,
+        "optional": 0,
+        "peer": 1,
+        "peerOptional": 0,
+        "total": 138
+      }
+    },
+    "auditRawSuffix": "Only ordinary npm update notices follow the full JSON document; exit0 and all severity counts0. No audit fix, omissions or gate exclusions.",
+    "installedGraph": {
+      "entries": 4199,
+      "regularFiles": 4194,
+      "symlinks": 5,
+      "bytes": 84911614,
+      "sha256": "09a67fb7673d49a3f163d9e511bfc5730c364bec96ee2658b5fe77b4ecd7d45f"
+    },
+    "rootLockUnchangedFromHead": true,
+    "rootLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+    "originalRawEntriesVerified": 18,
+    "originalIntegritySignaturesWithTamperControls": 7,
+    "candidateIntegritySignaturesWithTamperControls": 10,
+    "independentlyRefetchedPrimarySourceSnapshots": 6,
+    "allSixByteEqualToInstalledSource": true,
+    "licenseFilesAndDeclaredLicensesVerified": 9,
+    "artifact": {
+      "wholeTarballSRIAndSha256Match": true,
+      "tarballBytes": 109100273,
+      "archiveFiles": 100,
+      "unpackedBytes": 170928598,
+      "safeTypesAndPaths": true,
+      "selectedExactFiles": [
+        {
+          "name": "semaphore-2.wasm",
+          "bytes": 1801079,
+          "sha256": "877a989a8881ff6651866cfa32088f60e4abcb02a26f2e995868dfabd7f9385b"
+        },
+        {
+          "name": "semaphore-2.zkey",
+          "bytes": 1653555,
+          "sha256": "110e2d9de78730aa4f5c78c75017cfe4d769b4b7ce60f58484fb14733d7b0f35"
+        }
+      ],
+      "extractionPerformedByReview": false
+    },
+    "nativeOfflineKeccakPreimagesVerified": 2
+  },
+  "remainingQualificationLimits": [
+    "Five overrides intentionally depart from vendor dependency constraints; no vendor support or broad CLI/compiler compatibility is established.",
+    "Final @zk-kit/artifacts2.0.1 historical registry signature key expired2025-01-29; mathematical verification is not current trust/adoption.",
+    "Browser CSP, browser256MiB budget, worker/mobile isolation, random identity generation, native reputation storage/recovery, issuer/root/revocation policy, score circuit, application scope mapping and global consumer/reorg rules remain unqualified.",
+    "No credentials, default provider, funds action, deployment, external publication or trading activation. No professional crypto/legal review or production release approval inferred."
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/work/t63-independent-units.log",
+      "sha256": "cb91b1047cd9b758abb6bffb8eb732f5173b4ef04d9ca126c807b2980ee1fa24",
+      "bytes": 1144
+    },
+    {
+      "path": "/workspace/work/t63-independent-proof.log",
+      "sha256": "21f538f4279d48f8dfd19a271d6c0bca88efed41e7b7240727993cdaeaf499a3",
+      "bytes": 3150
+    },
+    {
+      "path": "/workspace/work/t63-independent-cancellation.log",
+      "sha256": "a426881df70f5b0607ac684650404975761bfe85b32e69675a31f5e51089f96b",
+      "bytes": 515
+    },
+    {
+      "path": "/workspace/work/t63-independent-cancellation.json",
+      "sha256": "6f1e6094b9bfacaea0b767370fd117f1394ebcf11005d24638a854ad36d0c183",
+      "bytes": 588
+    },
+    {
+      "path": "/workspace/work/t63-independent-cancel.mjs",
+      "sha256": "9794c35e18b9bec0d68aa15b9729337d6c196e273a6c21dd3e123936ba3bb3dc",
+      "bytes": 3679
+    },
+    {
+      "path": "/workspace/work/t63-independent-audit.json",
+      "sha256": "7c136634d3f36123012978629a1e03d9d00d82cbe37f8d6f9b3df1f2d8f8c1c9",
+      "bytes": 570
+    },
+    {
+      "path": "/workspace/work/t63-independent-readbacks.json",
+      "sha256": "2001b08d7dab0775db290698fd62c5c7467aae4052fbf745771a10171654e5b8",
+      "bytes": 5170
+    },
+    {
+      "path": "/workspace/work/t63-independent-source-readbacks.json",
+      "sha256": "ace317d9e906e338c583fb77b60c4faa527ad6487e1c440e97744cabf9cc08cb",
+      "bytes": 1733
+    },
+    {
+      "path": "/workspace/work/t63-independent-original-signatures.json",
+      "sha256": "3eb980f95586cdcd14752024e4b01c956cd38ee65ec1376487202eecc57fbe27",
+      "bytes": 1833
+    },
+    {
+      "path": "/workspace/work/t63-independent-archive.json",
+      "sha256": "590216c8c971bb96c0ba5314643b38df13891a79149ac149ef99b0eb6480ea4b",
+      "bytes": 533
+    },
+    {
+      "path": "/workspace/work/t63-independent-native-preimages.json",
+      "sha256": "f6b7e4a923f4d6aef7b7dc2bca1923ab972f5823247486873f148daf95af0517",
+      "bytes": 711
+    },
+    {
+      "path": "/workspace/work/t63-independent-licenses.json",
+      "sha256": "4740f7b8c7da56666aa8c7371c229532d46af6bf65c951e386d988feb905e2be",
+      "bytes": 2433
+    }
+  ]
+}

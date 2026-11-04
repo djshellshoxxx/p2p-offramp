@@ -1,0 +1,123 @@
+{
+  "task": "T38-I",
+  "reviewer": "/root",
+  "status": "FRESH_COMPLETE_SOURCE_READ",
+  "files": [
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "5456718bed05f18e4ac0e508909c84848907456ad24bf22e3c55fc1241fc9536",
+      "lines": 25,
+      "semanticChecks": [
+        "Closed mode allowlist, no ambient client env, relative static/Worker delivery, loopback development, null trust for raw builds"
+      ]
+    },
+    {
+      "path": "contracts/evm/script/DeployBasicEscrow.s.sol",
+      "sha256": "f50d312d37be76ce1b32767baccfe6053645b67d877bb4f0c90b8e86bf6341b8",
+      "lines": 25,
+      "semanticChecks": [
+        "Sepolia chain check, empty immutable token allowlist, key only environment, wrapper owns genesis/release checks"
+      ]
+    },
+    {
+      "path": "contracts/evm/script/SendCall.s.sol",
+      "sha256": "8145ea9c5271556e10b4f3f258c043ee2813d79db92740f8093ea3298bd26c4a",
+      "lines": 31,
+      "semanticChecks": [
+        "Sepolia-only, environment-only key/call, explicit gas bound, failed simulation reverts; wrapper owns canonical call/native authority"
+      ]
+    },
+    {
+      "path": "contracts/evm/script/export-abi.sh",
+      "sha256": "6a5d9474c519a60a71458b3fb33566e0e7e65c1a2189ba5f01e96c59e2a2a710",
+      "lines": 12,
+      "semanticChecks": [
+        "Fail-fast pinned Forge caller; temporary output before ABI replacement; CI asserts unchanged bytes"
+      ]
+    },
+    {
+      "path": "scripts/recovery/build-evm.mjs",
+      "sha256": "986ccec90db4df3e98d61d69e7f30c409becd339b89fa3c8dc96a53e40391fc6",
+      "lines": 129,
+      "semanticChecks": [
+        "Opaque verified release checked before fields; registry plus exact canonical ABI authenticated; live proof rechecked before/after packaging",
+        "Fresh staging/output directory, artifact hashes baked into executable, own cleanup; pinned default null refuses without reads",
+        "Accepted-release floor regular-file/no-follow/bounds/identity checks; no public-key override or deployment"
+      ]
+    },
+    {
+      "path": "scripts/recovery/evm-cli.mjs",
+      "sha256": "67d9db1d4b627d61912a911650f4f7683fe0e39b78daa9938f904b6c38afd8cf",
+      "lines": 46,
+      "semanticChecks": [
+        "Baked artifact hashes gate sidecars, bounded input, closed inspect/prepare commands and endpoint ID",
+        "Imported references are unverified binding only; no signing, send, funding, state replay or trust override"
+      ]
+    },
+    {
+      "path": "scripts/recovery/evm-recovery.mjs",
+      "sha256": "fec5fcf398c538ad40eb0e9cb8d431204fdcdbb8be13a177379d48db407002b2",
+      "lines": 156,
+      "semanticChecks": [
+        "Fixed WeakMap errors, descriptor-only closed archived profiles and registry hash; original release expiry deliberately does not disable exits",
+        "Fresh native code/genesis/chain/finality and repeated anchor consistency;20 read cap, bounded local deadlines; canonical ABI isolated",
+        "Release actor/time, refund time, fixed credit recipient/token and unsigned zero-value exit preparation; no fund/sign/send",
+        "Injected requests are test/composition dependencies; cancelled reads may physically drain later, no physical-closure or hostile-operator trust claim"
+      ]
+    },
+    {
+      "path": "scripts/check-crypto-cache.py",
+      "sha256": "5f06213fe9bb0ba604b7e14466422ab34a21dcf1a3fc93994826516fae12696c",
+      "lines": 47,
+      "semanticChecks": [
+        "Offline full locked SRI archive correspondence; no execution/extraction; duplicate/extra/symlink/source mismatches refuse"
+      ]
+    },
+    {
+      "path": "scripts/check-npm-registry-signatures.mjs",
+      "sha256": "360db30855c444bd11af952fe6eb26c890fa6c7a33610db7b531641d2057168c",
+      "lines": 45,
+      "semanticChecks": [
+        "P256 key fingerprint, recorded-date expiry, exact locked name/version/integrity signatures and tamper controls; provenance not safety"
+      ]
+    },
+    {
+      "path": "scripts/check-upstream-source-correspondence.py",
+      "sha256": "39fe1cbb902385c3bb55263437cadbbe04c48d850f20573ac3f784b6303e5449",
+      "lines": 23,
+      "semanticChecks": [
+        "Offline Git blob/source/license correspondence; no download/execution; empty or mismatched source refuses"
+      ]
+    },
+    {
+      "path": "scripts/spec_audit.py",
+      "sha256": "1ac834262840726cc559533dab783d951f07548e8ee86c08b15cc08ae7a5a643",
+      "lines": 131,
+      "semanticChecks": [
+        "Fences excluded from structural metadata; local path targets constrained to root; numbered structure is not approval; catalog coverage required"
+      ]
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/src/chainManifest.ts",
+      "sha256": "dbe573dabe7fcb165bb46374044970297613152f8681b84e947b3731011ecc23",
+      "lines": 8,
+      "semanticChecks": [
+        "Legacy unintegrated sample contract/validation only; explicitly does not verify signatures/runtime or encrypt; not used as product authority"
+      ]
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/src/secureEnvelope.ts",
+      "sha256": "f3e2f3fae95adb26c577aedbe99ff6ee64625e3c5e9879f919343330dec23b07",
+      "lines": 9,
+      "semanticChecks": [
+        "Legacy unintegrated sample contract/validation only; explicitly does not verify signatures/runtime or encrypt; not used as product authority"
+      ]
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "Production/recovery/build helpers semantically read; selected existing tests executed in final consolidated verification, not claimed by this receipt",
+    "Legacy vendor examples are unintegrated source samples, not qualified implementation",
+    "No professional cryptographic/security or production release certification"
+  ]
+}

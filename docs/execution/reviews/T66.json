@@ -1,0 +1,259 @@
+{
+  "task": "T66",
+  "reviewer": "/root/remaining_liquidity",
+  "author": "/root/branch_inventory/completion_requirements",
+  "date": "2026-11-02T13:00:17.327259+00:00",
+  "verdict": "APPROVED_EXACT_REPAIRED_SCOPE",
+  "sourceEditsByReviewer": false,
+  "manifest": {
+    "path": "/workspace/work/t66-frozen-sha256.txt",
+    "sha256": "574ff02f8d8f7f6c58555216e8d47632a9c80e441061e6e6b83dda23a5319cb2"
+  },
+  "sources": [
+    {
+      "path": "packages/security/README-UPDATES.md",
+      "sha256": "e95d66bbcf21c7d5de819b205493b6241585cb231c4f04228aa679d7bb4c69cb"
+    },
+    {
+      "path": "packages/security/src/release-locator.ts",
+      "sha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4"
+    },
+    {
+      "path": "packages/security/src/release-manifest.ts",
+      "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969"
+    },
+    {
+      "path": "packages/security/src/release-update-http.ts",
+      "sha256": "844304fa8dd10f8b18afea1eaaef8e74af93fd282d3567b5668412d859ebe9b9"
+    },
+    {
+      "path": "packages/security/src/release-update-store.ts",
+      "sha256": "6bff50f89e24b7141e054fd66918b61a1840a380233a3137a905acb63aa575c3"
+    },
+    {
+      "path": "packages/security/src/release-update.ts",
+      "sha256": "6359bdc93ae6e24c6391353022f35a2eb5eada68788f1012b07f524d10c187e0"
+    },
+    {
+      "path": "packages/security/test/release-update.test.mjs",
+      "sha256": "168767dd7b0eba1ffdfa44a54170aa015db9c4913a680eea0420d55bb8528033"
+    },
+    {
+      "path": "scripts/fixtures/release-update-browser.ts",
+      "sha256": "c2e6f21978848e6fedea115b695c3ac2ac16bcb672992f4baf2be2e29ea2e8fb"
+    },
+    {
+      "path": "scripts/test-release-update-browser.mjs",
+      "sha256": "723f13179a7d3245f70429bc9ecc40fc54be0816ba92dd2c65b4643ffe55f44c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "packages/transport/index.ts",
+      "sha256": "79ea79c49b2d035a4b21bc2dffb2ebe69bba7de555acf2f4ef6aca4f9643750e"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6"
+    },
+    {
+      "path": "packages/transport/src/http-driver.ts",
+      "sha256": "5b279fdff6ba77574c28e94628519df386e5bab459d4bd57ad79418bba3ecb42"
+    },
+    {
+      "path": "packages/security/src/release-proof.ts",
+      "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9"
+    },
+    {
+      "path": "packages/schemas/src/transport.ts",
+      "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8"
+    },
+    {
+      "path": "packages/schemas/src/backup-verification.ts",
+      "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca"
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "0281caaf258c48b8ec45d3856f8785038f2bdae7bf94d838d05932385a0e7fd3"
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "63c1cf3ab95f1d5688f0e84adacb9e55e0ca1a543d1613d190790f74600f7005"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "dfe0df7259955b1138cba9f85d447061dee9ceafe5a72942be317ea5a31bad41"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "ee1896a67f3014267815806b18240f3f773d10278f7786c6676e5bd6d920962f"
+    },
+    {
+      "path": "apps/web/src/workers/vault.worker.ts",
+      "sha256": "005357465e3eb8c6f8bccdf5124524aa692063de6c21c146ef1a26ed4d47397e"
+    },
+    {
+      "path": "packages/storage/src/vault-service.ts",
+      "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec"
+    },
+    {
+      "path": "packages/storage/src/backup-service.ts",
+      "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0"
+    },
+    {
+      "path": "packages/storage/src/idb-vault-store.ts",
+      "sha256": "c564c25b05674e6da6d9e838f4013e98a9811429d5eb81b7a9b6d5dba81b0fb3"
+    },
+    {
+      "path": "packages/storage/src/vault-crypto.ts",
+      "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "scripts/lib/chromium-path.mjs",
+      "sha256": "c4e049e5739047ae82f800758f3085b2161f94a712c1509c28d2232d20818728"
+    }
+  ],
+  "dependencyManifestSha256": "2433e88c184b35ad79d3ba2b0a6ebd536d84f1b8f423f8f2f5c56a9fd417117e",
+  "independentEvidence": [
+    {
+      "path": "/workspace/work/t66-independent-focused.log",
+      "sha256": "4e645f4e2f6ea53f0942b0c00eaa840fb588ec66fed79e3fd2c1a5b181c0edde"
+    },
+    {
+      "path": "/workspace/work/t66-independent-native.log",
+      "sha256": "21c64c73fb203b6f6a711104217c253d72fc3a94f64eafb1c75b99ebc2d04ba6"
+    },
+    {
+      "path": "/workspace/work/t66-independent-final-focused.log",
+      "sha256": "d53de9be2376f38fcae57c212ae9a564586ea8f618dd2bad0be2a4778a3b92ca"
+    },
+    {
+      "path": "/workspace/work/t66-independent-final-native.log",
+      "sha256": "21c64c73fb203b6f6a711104217c253d72fc3a94f64eafb1c75b99ebc2d04ba6"
+    },
+    {
+      "path": "/workspace/work/t66-independent-clock-red.log",
+      "sha256": "6fcd5dbb3cfe8423edd207c55805097ab7bb6be668bfb26529cb37ba8ecdc41a"
+    },
+    {
+      "path": "/workspace/work/t66-independent-clock-green.log",
+      "sha256": "1f4830c71ed16fe3e7ec276331c5074dc87796b442642ebe22d758ced9532a2f"
+    },
+    {
+      "path": "/workspace/work/t66-independent-http-admission-red.log",
+      "sha256": "6b3b1384d67f511acd8c7ef6f63586ffaf955604eb67b116eac540959820d902"
+    },
+    {
+      "path": "/workspace/work/t66-independent-http-admission-green.log",
+      "sha256": "aa2f9e8be44b7f710bd907dd68d7c4b0f2687cb4d234f7f203f0a35c8a2287bd"
+    },
+    {
+      "path": "/workspace/work/t66-independent-root-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/work/t66-independent-fixture-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "tests": {
+    "originalControllerCases": 14,
+    "finalControllerCases": 17,
+    "finalControllerAndExistingVerifierCases": 100,
+    "nativeBrowser": {
+      "fixture": "local-supported-asset-update",
+      "browser": "154.0.8037.57",
+      "actualHTTPS": true,
+      "certificate": "ephemeral-local-SPKI-only",
+      "compiledEphemeralReleaseKey": true,
+      "actualG05": true,
+      "defaultNullNoFetch": true,
+      "strictDirectNoFetch": true,
+      "completeAssetAndLocatorVerification": true,
+      "tamperRefused": true,
+      "actualAcceptedIndexedDB": true,
+      "atomicTwoDocumentCAS": true,
+      "corruptFloorNoReset": true,
+      "foreignNamespacePreserved": true,
+      "currentBackupRequired": true,
+      "actualT34": true,
+      "heldActualAdapterProviderRefusedThroughAbort": true,
+      "acceptedFloorBeforeNavigation": true,
+      "sourceSequence": 1,
+      "candidateSequence": 2,
+      "newOriginLockedAndDisconnected": true,
+      "freshKeyExplicitRestore": true,
+      "sourceCiphertextPreserved": true,
+      "sourceFileNotDestinationBackupProof": true,
+      "externalRequests": 0,
+      "productionTrust": false,
+      "productionWalletIntegration": false,
+      "releaseEnabled": false
+    },
+    "strictRootAndFixtureTypeScript": true
+  },
+  "resolvedFindings": [
+    {
+      "id": "T66-R1",
+      "finding": "A broker mode change inside the last monotonic-clock callback occurred after route-generation validation, allowing direct navigation once under strict mode before later returning CANCELLED.",
+      "originalProbe": "/workspace/work/t66-independent-clock-probe.mjs",
+      "before": {
+        "mode": "strict",
+        "opens": 1,
+        "writes": 1,
+        "result": "CANCELLED"
+      },
+      "after": {
+        "mode": "strict",
+        "opens": 0,
+        "writes": 1,
+        "result": "CANCELLED"
+      },
+      "repair": "Callback-free owned epoch/signal/route check after clock; fresh owner and final owned predicate; final ordinary-mode/owned navigation check.",
+      "status": "INDEPENDENT_GREEN"
+    },
+    {
+      "id": "T66-R2",
+      "finding": "Reader busy/drain ownership was acquired after endpoint/guard/authorize/capture callbacks, so one guard reentry started two physical fetches on the same reader.",
+      "originalProbe": "/workspace/work/t66-independent-http-admission-probe.mjs",
+      "before": {
+        "physicalFetches": 2
+      },
+      "after": {
+        "physicalFetches": 1,
+        "nestedRefusal": "LIMIT_EXCEEDED"
+      },
+      "repair": "Busy and owned drain acquired before all endpoint reflection and callbacks; preflight cleanup and actual invocation finally retain physical admission until drain.",
+      "status": "INDEPENDENT_GREEN"
+    }
+  ],
+  "reviewAxes": {
+    "correctness": "Read all nine complete owned sources, proposal, proof/route/current-backup dependencies and final repairs. Complete exact assets and same-key live-manifest locator, channel/expiry/storage-schema/rollback floor and opaque candidate are enforced; corrupt/foreign state refuses without reset. Atomic floor precedes explicit destination navigation and remains after failure.",
+    "security": "Default null trust touches no other ports. Actual G05 exact URL capture, credential/referrer omission, redirect/body/deadline/generation constraints and physical drain are retained. Native T34/profile-lock generation and actual physical EIP1193 promise lease block transition while pending, including after abort. Both independently reproduced callback-boundary findings are closed.",
+    "architecture": "Internal opt-in controller and narrow untrusted parser wrappers remain outside default facade/App. Type-only HttpFetchPort export does not issue authority. No bootstrap, key rotation, archive, nonempty deployment, production source/route/wallet profile or secret transfer is adopted.",
+    "readability": "README accurately separates configured capabilities, signed facts, local fixtures, physical admission and missing production profiles. Fixed identity-classified errors avoid probing hostile exceptions.",
+    "performance": "Count/byte limits, per-G05 operation30s and aggregate120s are explicit; cleanup/drain remains owned through ignored native work, and assets/count bounds do not claim heap/CPU/mobile feasibility."
+  },
+  "limitations": [
+    "Owned HTTPS localhost/CID-shaped origins, ephemeral SPKI/release key, direct-consent source and synthetic provider account remain explicit fixtures.",
+    "Native controller/HTTP/IDB/vault/adapter/migration paths executed; no production trust/source/gateway/private navigation or common live-wallet App integration is qualified.",
+    "T67 old-credit repair and final whole-repo composition remain root-owned; final9/20 listed direct inputs matched before/after this review.",
+    "Read-only review and owned scratch probes; no commits, external messages, deployment or live funds."
+  ]
+}
