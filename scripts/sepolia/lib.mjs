@@ -97,15 +97,33 @@ export const forgeKey = value => /^(0x)?[0-9a-f]{64}$/i.test(value ?? '') ? `0x$
 
 /**
  * The registry's public endpoint is signed and shipped in the testnet bundle, so it must carry no credential of the
- * private RPC URLs: their userinfo, query, or any long (key-like) host label or path segment. Keyless URLs may repeat.
+ * private RPC URLs: their userinfo, query values, or any long (key-like) host label or path segment. Keyless URLs may repeat.
+ * Every nonempty query value is conservatively sensitive, including short/repeated values. Empty values are inert.
+ * Limits are local publication safeguards, not RPC wire limits; an uninspectable oversized URL refuses publication.
  */
 export function leaksPrivateRpc(publicEndpoint, privateUrls) {
   const endpoint = String(publicEndpoint ?? '');
+  if (endpoint.length > 2048) return true;
+  let decodedEndpoint = endpoint;
+  try { decodedEndpoint = decodeURIComponent(endpoint); } catch { return true; } // Uninspectable public encodings refuse publication.
+  const contains = part => {
+    if (!part) return false;
+    const variants = new Set([part, encodeURIComponent(part)]);
+    try { variants.add(decodeURIComponent(part)); } catch { /* Malformed percent text remains literal. */ }
+    return [...variants].some(value => endpoint.includes(value) || decodedEndpoint.includes(value));
+  };
   return privateUrls.some(value => {
+    if (typeof value !== 'string' || !value) return false;
+    if (value.length > 8192) return true;
     let secret; try { secret = new URL(value); } catch { return false; }
-    const credentials = [secret.username, secret.password, secret.search.slice(1)].filter(part => part.length >= 6);
+    const credentials = [secret.username, secret.password, secret.search.slice(1)].filter(part => part.length > 0);
+    let values = 0;
+    for (const part of secret.searchParams.values()) {
+      if (++values > 128) return true;
+      if (contains(part)) return true;
+    }
     const keyLike = [...secret.hostname.split('.'), ...secret.pathname.split('/')].filter(part => part.length >= 16);
-    return [...credentials, ...keyLike].some(part => endpoint.includes(part));
+    return [...credentials, ...keyLike].some(contains);
   });
 }
 
