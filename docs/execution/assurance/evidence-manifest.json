@@ -1,0 +1,238 @@
+{
+  "format": "p2p-offramp/assurance-local-evidence/v1",
+  "scope": "Exact local public source/document byte integrity; no attack execution, incident, legal/professional review or release authority inferred. Own manifest self-hash excluded.",
+  "files": [
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.11_operations/module_0.11.1_privacy_operations/spec-incident-response-and-redacted-diagnostics.md",
+      "sha256": "697348d8a1a684ecbc07d11be2126d9437ca69d9ae4c6e0a69d17a2d613d9390"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.1_threat_modeling/spec-blockchain-and-payment-processor-attack-matrix.md",
+      "sha256": "ac85f529400128c62b1cba3ee70b9fef906f3170b9b7711386cb042ae6d90fd6"
+    },
+    {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "sha256": "735382c708d3a6e52ee2cd3437a2f5c9095c6e2fab87281024db216b34c9b24a"
+    },
+    {
+      "path": "apps/web/test/locale-runtime.test.mjs",
+      "sha256": "1fb9a61b144653623d7ea86a4bf1b993df053bfb2ca811e8b86bcf54533efe7e"
+    },
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrow.t.sol",
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d"
+    },
+    {
+      "path": "docs/OPERATOR.md",
+      "sha256": "b508d662a21ed934a49986efc822064cc3baddd098c7aa228f0388e8c7069931"
+    },
+    {
+      "path": "docs/execution/assurance/README.md",
+      "sha256": "908365382437e8271f0b966fc0c002455258fc496ce5572523879a431bf9edc1"
+    },
+    {
+      "path": "docs/execution/assurance/attack-cases.json",
+      "sha256": "589c73990818c03acda9c07da3e4acd92462559592538f2acb685b8711bf0ee0"
+    },
+    {
+      "path": "docs/execution/assurance/incident-recovery-checklist.md",
+      "sha256": "3b21cbaf0dc69373c615de2c07cf762552bfe494bef9bc81300964c869251a0f"
+    },
+    {
+      "path": "docs/execution/assurance/jurisdiction-matrix.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/execution/assurance/role-facts.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "docs/execution/drills/README.md",
+      "sha256": "7d640b3833be9ec528f3b90756df020b378a7bfa82070bb02849b609d0a46f8d"
+    },
+    {
+      "path": "docs/execution/drills/local-checks.tap",
+      "sha256": "180fa1623fa8b054be357b90ff608c0e592cce91e0c7766e60b94aff85bd403d"
+    },
+    {
+      "path": "docs/execution/drills/local-drills.json",
+      "sha256": "af8c9a807b3c29cc63b8fe02dcf3aaa2f7c28e52ca0c5d9f662470d6c5bccaa1"
+    },
+    {
+      "path": "docs/execution/reviews/T49.json",
+      "sha256": "ee22dedf7af490cd3c4e3dd34c4fc0e038f3857155b8ad6217e95dd8830237a1"
+    },
+    {
+      "path": "docs/recovery/CANONICAL-EVM.md",
+      "sha256": "21298f026b6eafdf42d977a6cae3b69b67420ef4a0fc072b66f798dcd08a03f3"
+    },
+    {
+      "path": "packages/chain-evm/src/reader.ts",
+      "sha256": "c99586e244dc6bd94c850a356381b10a7a2a038a8c9fafe7e5adb9ca790863d8"
+    },
+    {
+      "path": "packages/chain-evm/test/reader.test.mjs",
+      "sha256": "5f568b77e61f81b1471b8976d9757249107c9832aa4f888341c3569c77ef2461"
+    },
+    {
+      "path": "packages/courier/test/secrets.test.mjs",
+      "sha256": "7d4c7e5ee7d1fb8251e9278b489c817a49eb09e58b4982345fd4dfa382ed5edc"
+    },
+    {
+      "path": "packages/diagnostics/index.ts",
+      "sha256": "b70bb7183fd79f184c88eb26e3b6524e362169ec07494eb3df6d4c23a2f66f6e"
+    },
+    {
+      "path": "packages/diagnostics/src/diagnostics.ts",
+      "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18"
+    },
+    {
+      "path": "packages/diagnostics/test/diagnostics.test.mjs",
+      "sha256": "b44477b78a8241e72ed6ef1456e591ab2a30f080cd5169c6795c7da6d2a5aaed"
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20"
+    },
+    {
+      "path": "packages/domain/test/registry.test.mjs",
+      "sha256": "d8de73498b7a7de11d665422a26a2529af89cb2dd8f4e5c79e6458565a00b4ed"
+    },
+    {
+      "path": "packages/governance/index.ts",
+      "sha256": "acad5a41601396a099430eefe49e11e46114c9e75414d2f19078b973657bc354"
+    },
+    {
+      "path": "packages/governance/src/assurance.ts",
+      "sha256": "c862f07ab195abc3714246257a3aa662eb4103d2b4d4d81214ea667bad65be3a"
+    },
+    {
+      "path": "packages/governance/test/assurance.test.mjs",
+      "sha256": "728a42b74a62e79087f3503826bd2f2e2b2deb5c313539e232c2d1e7fc19141a"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "04bcee7a1850f8473a62a51611a1d88243b464564969648ac9513ad00d6bf5da"
+    },
+    {
+      "path": "packages/messaging/test/durable-chat.test.mjs",
+      "sha256": "a3fdfdcd42d5e7971790b75effe10bbe34cf1b547f8831009c8585b73ceb237d"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "sha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "sha256": "c4e7d40299f8392dc8b8a9f0eb00cb8eb953b08f453fc39f98b1b2b634d27507"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip44.test.mjs",
+      "sha256": "96da3d343c6db2ca866ff033e282038620added92b1be4d2d41c88fbe801cd8d"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip59.test.mjs",
+      "sha256": "87a9ce6a2911f02b56125b95d4268249460b4d29e83a5056358e4b2735df3aef"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "32ff6d2f804bf8358988704ead532621d3e57ee394a5a85f5d9cfa2708bbb2c3"
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "sha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09"
+    },
+    {
+      "path": "packages/security/src/acceptance-gates.ts",
+      "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b"
+    },
+    {
+      "path": "packages/security/src/release-manifest.ts",
+      "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969"
+    },
+    {
+      "path": "packages/security/test/acceptance-gates.test.mjs",
+      "sha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc"
+    },
+    {
+      "path": "packages/security/test/release-manifest.test.mjs",
+      "sha256": "d998074367d9593949390d5ccfd993d19eff11a75a98611847f924b449ba5e13"
+    },
+    {
+      "path": "packages/storage/test/vault-service.test.mjs",
+      "sha256": "3aa9d5ec1e068bb3a3c384d4653d90fc73c4130503df2cbd455ac4ced3d5b005"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000"
+    },
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "sha256": "17280d0c12e2ac8daacf66bd1c3fd831367c80b955fafcaf8e11cb39e6936f47"
+    },
+    {
+      "path": "packages/wallet/src/evm-payment-preflight.ts",
+      "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "sha256": "7120b0a7e3f17129eee3578f77b6482f049bd0222c11fd868ca2b0a2aa5280df"
+    },
+    {
+      "path": "packages/wallet/test/evm-escrow.test.mjs",
+      "sha256": "e64e9146c7da7f039f78761a8a124bfebd3154b752ebe7cbf89e4ff39c161480"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "sha256": "c5f49c00d52156110c26b951b2852aff9e3470a8c48369c1d849638b29c56d9c"
+    },
+    {
+      "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "sha256": "f36c852b62b48330babd0d9929a46e6309c03c5f91ac69b893cdc23f7bf6c5d4"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088"
+    },
+    {
+      "path": "scripts/acceptance-report.mjs",
+      "sha256": "22a681c14cf3dc64f7ed3040042f4e628be3d58eef5c3f25738a8b76b34a1c8e"
+    },
+    {
+      "path": "scripts/recovery/evm-cli.mjs",
+      "sha256": "67d9db1d4b627d61912a911650f4f7683fe0e39b78daa9938f904b6c38afd8cf"
+    },
+    {
+      "path": "scripts/recovery/evm-recovery.mjs",
+      "sha256": "fec5fcf398c538ad40eb0e9cb8d431204fdcdbb8be13a177379d48db407002b2"
+    },
+    {
+      "path": "scripts/tests/evm-recovery.test.mjs",
+      "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "sha256": "58ea9f3e1b19faa0c90f94ecbf396249baa40a4b49540da63e9ecf080ff07e7b"
+    }
+  ]
+}

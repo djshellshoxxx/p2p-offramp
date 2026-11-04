@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "decisionId": "50decb591096b42eded932544a69322f",
+  "scope": "release",
+  "affectedCapability": "g15-release-policy",
+  "previousArtifactHash": null,
+  "nextArtifactHash": null,
+  "reviewers": [],
+  "evidencePaths": [
+    "docs/governance/PENDING-DECISIONS.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.3_release_distribution/spec-ipfs-origin-and-update-policy.md"
+  ],
+  "status": "proposed"
+}
