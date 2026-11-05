@@ -1,0 +1,154 @@
+✔ forgeEnv pins the canonical config/profile, drops ambient build settings and private keys (2.977543ms)
+✔ rpcClient refuses plain HTTP except to loopback (0.813787ms)
+✖ public endpoints cannot copy individual private query credentials or their URL encodings (1.113103ms)
+✖ every nonempty repeated or short private query value is considered without treating empty values as credentials (0.343491ms)
+✖ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (0.383605ms)
+✔ RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies (26.562147ms)
+✔ RPC requests capture independent ids and prohibit redirects/credentials without exposing diagnostics (1.318188ms)
+✔ control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes (4.033432ms)
+✔ deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send (31.039731ms)
+✔ unknown deployment guard clears only after finalized matching native account/nonce and canonical inclusion (13.890763ms)
+✔ effective compiler recipe rejects global or profile configuration drift (0.807696ms)
+✔ committed compiler recipe disables inferred vendor remappings (0.778121ms)
+✔ edited trade labels, duplicate labels and missing trade slots fail before generating documents or sending (123.41904ms)
+✔ valid saved labels still negotiate beside an explicitly selected operator state path (84.232149ms)
+▶ an observation whose numbered block changes or disappears is refused before funding
+  ✔ hash (64.238962ms)
+  ✔ height (51.163077ms)
+  ✔ time (79.349282ms)
+  ✔ missing (63.749272ms)
+✔ an observation whose numbered block changes or disappears is refused before funding (259.924809ms)
+✔ a stable anchored absence still reaches the explicit pre-funding hook without a send (56.720357ms)
+✖ saved funding or settlement attempts and hashes cannot permit another funding decision from current absence (97.322745ms)
+✖ each funding attempt is durable before the send boundary and resume never invokes that boundary a second time (88.211727ms)
+✖ proven funding allows the first distinct exit, preserves each kind, and never repeats a prior release or refund (84.325122ms)
+✔ native terminal observations remain read-only even with unresolved or unknown legacy attempt evidence (69.357077ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 18
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1534.075157
+
+✖ failing tests:
+
+test at scripts/tests/sepolia-hygiene.test.mjs:35:1
+✖ public endpoints cannot copy individual private query credentials or their URL encodings (1.113103ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-hygiene.test.mjs:38:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/tests/sepolia-hygiene.test.mjs:48:1
+✖ every nonempty repeated or short private query value is considered without treating empty values as credentials (0.343491ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-hygiene.test.mjs:49:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/tests/sepolia-hygiene.test.mjs:57:1
+✖ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (0.383605ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-hygiene.test.mjs:65:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/tests/sepolia-trade-state.test.mjs:168:1
+✖ saved funding or settlement attempts and hashes cannot permit another funding decision from current absence (97.322745ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  Error: Public synthetic stop.
+      at async TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-trade-state.test.mjs:185:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Error],
+    expected: [Function (anonymous)],
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at scripts/tests/sepolia-trade-state.test.mjs:198:1
+✖ each funding attempt is durable before the send boundary and resume never invokes that boundary a second time (88.211727ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'undefined'
+  - 'string'
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-trade-state.test.mjs:211:44)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'string',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts/tests/sepolia-trade-state.test.mjs:220:1
+✖ proven funding allows the first distinct exit, preserves each kind, and never repeats a prior release or refund (84.325122ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'undefined'
+  - 'string'
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-trade-state.test.mjs:242:48)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'string',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

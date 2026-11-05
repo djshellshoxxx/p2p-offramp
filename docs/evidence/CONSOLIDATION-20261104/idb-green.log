@@ -1,0 +1,24 @@
+✔ IDB failed opens retry after remediation without a cached rejection (11.350899ms)
+✔ IDB late blocked-open success closes only itself and preserves the newer cached connection (5.158801ms)
+✔ IDB synchronous add/put quota and unknown storage exceptions preserve their typed failure (12.838984ms)
+✔ IDB close is terminal, closes its connection and invalidates subscribers once (1.642974ms)
+✔ IDB invalidation isolates throwing listeners and notifies the original snapshot (5.609662ms)
+✔ IDB close rejects pending opens and closes any connection which arrives later (0.336407ms)
+✔ IDB direct close completes terminal teardown despite a throwing subscriber (1.741077ms)
+✔ service disposal closes only owned stores; injected shared storage remains usable (2.170298ms)
+✔ default service disposal closes its privately created IndexedDB store (3.64616ms)
+✔ synchronous IDB read failures are normalized and transactions are aborted (1.172878ms)
+✔ IDB stale guards and abort signals return fixed cancellation before opening storage (2.703012ms)
+✔ IDB add counts rows in the same transaction and refuses at the profile bound without writing (7.081025ms)
+✔ IDB compareAndSwap at the profile bound still updates existing rows (6.64335ms)
+✔ IDB inventory lists bounded opaque keys, flags truncation and fails closed on foreign keys (3.152219ms)
+✔ IDB addWithSource rechecks the exact source row, the profile bound and never aliases the source (33.370464ms)
+✔ IDB readwrite transactions request strict durability so completion means the write was flushed (15.381177ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 820.896621

@@ -1,0 +1,48 @@
+✔ gzip and br responses yield decoded bytes although Content-Length is the encoded size (49.297076ms)
+✔ CORS response with hidden Content-Encoding does not trust the exposed encoded length (1.761394ms)
+✔ encoded Content-Length above the cap is not a decoded-size refusal (19.516387ms)
+✔ decoded byte cap is enforced while streaming an encoded response (14.211473ms)
+✔ identity responses keep the Content-Length integrity and early-cap checks (1.998718ms)
+✔ errored encoded streams and aborts stay failures with no retry (1.044969ms)
+✔ HTTP driver bounds streamed bytes, pins destination, omits credentials and does not retry (0.715103ms)
+✔ HTTP driver rejects oversized, redirected, changed URL and broken streams with no fallback (0.909306ms)
+✔ HTTP native slots stay occupied until uncancellable work drains; disposal suppresses late results (1.452499ms)
+✔ HTTP driver caps empty-fragment work and rejects truncated content length (8.058589ms)
+✔ production default has empty authority and all channels unknown; wallet never becomes an app request (2.040355ms)
+✔ fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback (8.196306ms)
+✔ ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet (0.333752ms)
+✔ permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize (0.518317ms)
+✔ trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics (0.312493ms)
+✔ hostile thrown capability values cannot escape fixed refusal handling (0.186969ms)
+✔ inspection cannot relabel a stale registry callback result under a newer generation (0.226973ms)
+✔ projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes (0.292976ms)
+✔ expiry revokes before invocation and after awaits; queued late callbacks cannot publish (1.38356ms)
+✔ mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization (0.786146ms)
+✔ already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity (10.28443ms)
+✔ outstanding permit count is bounded and scoped use is single-shot (7.488205ms)
+✔ native callback failure is sanitized, revokes private evidence and never falls back to direct (1.456626ms)
+✔ a policy change after native settlement but before scope continuation suppresses success (0.353348ms)
+✔ owned expiry timer closes resources without polling; a failed monotonic clock fails closed (2.267218ms)
+✔ operation timeout aborts owned scope without retry or accepting a late callback (0.46594ms)
+✔ external abort during a scoped operation closes its resource immediately and discards late output (0.462222ms)
+✔ optional destination binding compares the detached canonical registration before granting a runnable scope (0.830809ms)
+✔ destination credentials, fragments, controls, malformed schemes and hostile URL options fail before operation (2.044353ms)
+✔ bounded invalidation observers see completed revocation, isolate faults and unsubscribe (1.232439ms)
+✔ inspection-only evidence expires on existing timer, without permits or expired rearm loops (0.473603ms)
+✔ reentrant modes and repeated malformed async consumer reads cannot livelock notifications (0.947907ms)
+✔ real broker feeds synchronous privacy reader; notification adds no authority (6.437265ms)
+✔ last display unsubscribe removes only inspection watches, retaining actual permit expiry (0.813537ms)
+✔ inspection-only expiry does not revoke a longer live permit or its operation (1.250863ms)
+✔ earlier stable observer sees the final state after later observers mutate or dispose (0.598846ms)
+✔ catch-up handles a full reverse-order chain of mutators within one bounded batch (4.736292ms)
+✔ later same-channel inspection cannot postpone an earlier observer deadline or revoke a longer permit (0.6167ms)
+✔ later unavailable inspection retains an earlier cached display deadline until expiry (0.981851ms)
+✔ explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure (0.453055ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1791.528528

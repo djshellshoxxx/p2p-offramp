@@ -1,0 +1,20 @@
+test_actual_signature_digest_and_public_key_negative_controls (test_g16_vectors.G16OpenSSLFixture.test_actual_signature_digest_and_public_key_negative_controls) ... ok
+test_committed_signed_fixture_checks_all_four_signatures (test_g16_vectors.G16OpenSSLFixture.test_committed_signed_fixture_checks_all_four_signatures) ... ok
+test_empty_signature_work_cannot_pass (test_g16_vectors.G16OpenSSLFixture.test_empty_signature_work_cannot_pass) ... ok
+test_committed_fixture_matches_independent_generator (test_g16_vectors.G16VectorFixture.test_committed_fixture_matches_independent_generator) ... ok
+test_catalog_coverage_detects_missing_specs (test_spec_audit.AuditTests.test_catalog_coverage_detects_missing_specs) ... ok
+test_cli_readiness_fails_even_when_links_pass (test_spec_audit.AuditTests.test_cli_readiness_fails_even_when_links_pass) ... ok
+test_design_baseline_still_requires_review (test_spec_audit.AuditTests.test_design_baseline_still_requires_review) ... ok
+test_links_cannot_escape_repository (test_spec_audit.AuditTests.test_links_cannot_escape_repository) ... ok
+test_links_ignore_remote_and_fragment_but_check_files (test_spec_audit.AuditTests.test_links_ignore_remote_and_fragment_but_check_files) ... ok
+test_missing_status_and_code_examples_do_not_claim_readiness (test_spec_audit.AuditTests.test_missing_status_and_code_examples_do_not_claim_readiness) ... ok
+test_placeholder_with_all_headings_is_not_complete (test_spec_audit.AuditTests.test_placeholder_with_all_headings_is_not_complete) ... ok
+test_plain_status_and_missing_sections (test_spec_audit.AuditTests.test_plain_status_and_missing_sections) ... ok
+test_report_is_deterministic_and_links_from_docs (test_spec_audit.AuditTests.test_report_is_deterministic_and_links_from_docs) ... ok
+test_shorter_fence_does_not_end_example (test_spec_audit.AuditTests.test_shorter_fence_does_not_end_example) ... ok
+test_table_metadata_is_read_as_pending_design (test_spec_audit.AuditTests.test_table_metadata_is_read_as_pending_design) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 3.016s
+
+OK

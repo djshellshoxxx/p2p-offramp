@@ -77,10 +77,40 @@ test('IDB close is terminal, closes its connection and invalidates subscribers o
   store.close(); store.close(); assert.equal(db.closes, 1); assert.equal(invalidations, 1);
   await failed(store.get(profileId), 'STORAGE_UNAVAILABLE'); assert.equal(fake.requests.length, 1);
 });
+test('IDB invalidation isolates throwing listeners and notifies the original snapshot', async () => {
+  const fake = factory(); const store = new IndexedDbVaultStore(fake); const seen = [];
+  let removeSecond;
+  store.subscribeInvalidation(() => { seen.push('first'); removeSecond(); throw Error('SECRET subscriber'); });
+  removeSecond = store.subscribeInvalidation(() => { seen.push('second'); });
+  const first = store.get(profileId), db = database();
+  fake.requests[0].result = db; fake.requests[0].onsuccess(); await first;
+  assert.doesNotThrow(() => db.onversionchange());
+  assert.deepEqual(seen, ['first', 'second']); assert.equal(db.closes, 1);
+  store.close(); store.close();
+  assert.equal(seen.filter(value => value === 'first').length, 2);
+  let closedCalls = 0;
+  assert.doesNotThrow(() => { const off = store.subscribeInvalidation(() => { closedCalls++; throw Error('SECRET closed subscriber'); }); off(); });
+  assert.equal(closedCalls, 1);
+  await failed(store.get(profileId), 'STORAGE_UNAVAILABLE');
+});
 test('IDB close rejects pending opens and closes any connection which arrives later', async () => {
   const fake = factory(); const store = new IndexedDbVaultStore(fake);
   const pending = store.get(profileId); store.close(); await failed(pending, 'STORAGE_UNAVAILABLE');
   const late = database(); fake.requests[0].result = late; fake.requests[0].onsuccess(); assert.equal(late.closes, 1);
+});
+test('IDB direct close completes terminal teardown despite a throwing subscriber', async () => {
+  const fake = factory(); const store = new IndexedDbVaultStore(fake); const seen = [];
+  store.subscribeInvalidation(() => { seen.push('first'); throw Error('SECRET close subscriber'); });
+  store.subscribeInvalidation(() => { seen.push('second'); store.close(); });
+  const pending = store.get(profileId), db = database();
+  fake.requests[0].result = db; fake.requests[0].onsuccess(); await pending;
+  assert.doesNotThrow(() => store.close());
+  store.close();
+  assert.deepEqual(seen, ['first', 'second']);
+  assert.equal(db.closes, 1);
+  await failed(store.get(profileId), 'STORAGE_UNAVAILABLE');
+  await failed(store.listProfileIds(), 'STORAGE_UNAVAILABLE');
+  assert.equal(fake.requests.length, 1, 'terminal storage does not reopen');
 });
 test('service disposal closes only owned stores; injected shared storage remains usable', async () => {
   const listeners = new Set(); let closes = 0;

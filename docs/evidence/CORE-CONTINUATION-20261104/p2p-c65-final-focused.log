@@ -1,0 +1,34 @@
+✔ verification authenticates the exact complete current profile without a write or private reply (463.777171ms)
+✔ public-invalid, wrong-profile and stale files fail before a KDF and cannot mutate records (736.39741ms)
+✔ wrong file passphrase cannot establish verification even though the selected profile is unlocked (534.502299ms)
+✔ verification rejects cross-tab changes during authentication and locks the stale source session (444.853279ms)
+✔ lock, cancellation and trusted selection guards reject late authentication without writes (1315.457974ms)
+✔ verification copies caller bytes and shares recovery capacity until native crypto actually drains (757.329937ms)
+✔ final persisted-row recheck refuses a cross-tab change after successful backup authentication (385.523221ms)
+✔ backup byte snapshots use intrinsic typed-array size without caller accessors (523.581736ms)
+✔ hostile store throws and code accessors produce fresh fixed diagnostics without invoking accessors (2.654511ms)
+✔ proxy signals reject with fixed diagnostics before consuming shared recovery capacity (1.970726ms)
+✔ native signals ignore shadowed accessors and listener methods, drain slots and detach actual listeners (1.066749ms)
+✔ shadowed native cancellation waits for actual store read to drain before releasing recovery capacity (0.791145ms)
+✔ hostile crypto provider errors are fixed and leave recovery capacity available (7.242226ms)
+✔ vault open, commit and verification use native signal controls and detach listeners on every exit (568.406598ms)
+✔ migration failures remain fixed typed results when a dependency rejects with malformed errors (2.514539ms)
+✔ G09 registry rejects non-adjacent, duplicate, out-of-range and unvalidated steps (0.657947ms)
+✔ G09 plans and applies contiguous steps in one CAS commit, preserving IDs, kinds and untouched records (261.226765ms)
+✔ G09 refuses future records, missing paths and any failing record without a partial write (1619.780333ms)
+✔ G09 transforms receive copies and cannot mutate the source snapshot (227.783107ms)
+✔ G09 apply recomputes and rejects a supplied plan that differs, and conflicts on concurrent revision change (856.960414ms)
+✔ G09 bounds in-place changes at 256 and honors cancellation and lock (1057.739012ms)
+✔ G09 a committed migration reports its durable revision even if readback fails afterwards (219.920901ms)
+✔ G09 no-op preflight writes nothing, needs no commit and still honors cancellation and lock (254.204017ms)
+✔ G09 stale empty plan: a persisted advance by another writer conflicts without writing or losing that work (1690.78191ms)
+✔ G09 verified means authenticated persisted readback, not the session cache (595.191609ms)
+✔ current-version invalid records reject no-op and mixed migration candidates without writes (497.95352ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13420.652883

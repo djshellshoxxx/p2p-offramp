@@ -167,8 +167,13 @@ export async function verifyCryptoInventory(inventory: unknown, lockfile: unknow
     const lock = object(lockfile, ['name', 'version', 'lockfileVersion', 'requires', 'packages'], ['lockfileVersion', 'packages']);
     if (lock.lockfileVersion !== 3) return reject('UNPINNED_VERSION');
     const packages = object(lock.packages); if (Object.keys(packages).length > INVENTORY_LIMITS.lockPackages) return reject();
-    const allowedPackageFields = ['name', 'version', 'resolved', 'integrity', 'license', 'dependencies', 'optionalDependencies', 'peerDependencies', 'peerDependenciesMeta', 'devDependencies', 'engines', 'funding', 'dev', 'optional', 'devOptional', 'cpu', 'os', 'bin', 'hasInstallScript', 'deprecated', 'inBundle', 'link'];
-    for (const [name, entry] of Object.entries(packages)) { if (name && !/^node_modules\/(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+(?:\/node_modules\/(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+)*$/.test(name)) return reject(); object(entry, allowedPackageFields, []); }
+    const allowedPackageFields = ['name', 'version', 'resolved', 'integrity', 'license', 'dependencies', 'optionalDependencies', 'peerDependencies', 'peerDependenciesMeta', 'devDependencies', 'engines', 'funding', 'dev', 'optional', 'devOptional', 'peer', 'cpu', 'os', 'bin', 'hasInstallScript', 'deprecated', 'inBundle', 'link'];
+    for (const [name, entry] of Object.entries(packages)) {
+      if (name && !/^node_modules\/(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+(?:\/node_modules\/(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+)*$/.test(name)) return reject();
+      const raw = object(entry, allowedPackageFields, []);
+      // npm records peer-only installation as metadata, not an exemption from graph or integrity checks.
+      if (Object.hasOwn(raw, 'peer') && typeof raw.peer !== 'boolean') return reject();
+    }
     const root = object(packages['']);
     const rootDependencies = root.dependencies === undefined ? Object.create(null) as Data : object(root.dependencies);
     for (const capability of capabilities) {

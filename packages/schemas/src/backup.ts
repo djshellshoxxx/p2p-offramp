@@ -92,7 +92,16 @@ export function parseBackupBytes(input: Uint8Array): BackupV1 {
     const length = Reflect.apply(getter, input, []) as number;
     if (length > MAX_BACKUP_BYTES) throw new ValidationError('LIMIT_EXCEEDED');
     owned = new Uint8Array(length); Reflect.apply(Uint8Array.prototype.set, owned, [input]);
-  } catch (error) { if (error instanceof ValidationError) throw error; throw new ValidationError(); }
+  } catch (error) {
+    let code: ValidationError['code'] = 'INVALID_INPUT';
+    try {
+      if (error instanceof ValidationError) {
+        const descriptor = Object.getOwnPropertyDescriptor(error, 'code');
+        if (descriptor && 'value' in descriptor && (descriptor.value === 'INVALID_INPUT' || descriptor.value === 'UNSUPPORTED_VERSION' || descriptor.value === 'LIMIT_EXCEEDED')) code = descriptor.value;
+      }
+    } catch { /* Foreign errors cannot replace a fixed schema refusal. */ }
+    throw new ValidationError(code);
+  }
   let parsed: unknown;
   try { parsed = new BackupJsonParser(new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(owned)).parse(); }
   catch { throw new ValidationError(); }

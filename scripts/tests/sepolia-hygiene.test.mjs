@@ -1,7 +1,7 @@
 /** Secret hygiene of the Sepolia kit that needs no Foundry or chain: Forge child environments and RPC URL transport. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkFoundryRecipe, EVM_DIR, forgeEnv, isLoopbackUrl, MAX_RPC_REVERT_BYTES, rpcClient } from '../sepolia/lib.mjs';
+import { checkFoundryRecipe, EVM_DIR, forgeEnv, isLoopbackUrl, leaksPrivateRpc, MAX_RPC_REVERT_BYTES, rpcClient } from '../sepolia/lib.mjs';
 
 const KEY = `0x${'11'.repeat(32)}`;
 const parent = {
@@ -30,6 +30,52 @@ test('rpcClient refuses plain HTTP except to loopback', () => {
   }
   assert.equal(isLoopbackUrl('not a url'), false);
   assert.throws(() => rpcClient('ftp://rpc.example'), error => error?.code === 'RPC_URL_MISSING');
+});
+
+test('public endpoints cannot copy individual private query credentials or their URL encodings', () => {
+  const marker = 'PUBLIC_SYNTHETIC_RPC_TOKEN_20261102';
+  const privateUrl = `https://private.invalid/?format=json&api-key=${marker}&other=unrelated`;
+  assert.equal(leaksPrivateRpc(`https://public.invalid/${marker}/`, [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [privateUrl]), false);
+  const encodedPrivate = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  for (const publicEndpoint of [
+    'https://public.invalid/PUBLIC/SYNTHETIC+QUERY=VALUE/',
+    'https://public.invalid/PUBLIC%2fSYNTHETIC%2bQUERY%3dVALUE/',
+    'https://public.invalid/PUBLIC%252FSYNTHETIC%252BQUERY%253DVALUE/',
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [encodedPrivate]), true);
+});
+
+test('every nonempty repeated or short private query value is considered without treating empty values as credentials', () => {
+  assert.equal(leaksPrivateRpc('https://public.invalid/q/', ['https://private.invalid/?token=q']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://private.invalid/?token=q']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/PUBLIC_SECOND_TOKEN/', [
+    'https://private.invalid/?token=&token=PUBLIC_FIRST_TOKEN&token=PUBLIC_SECOND_TOKEN',
+  ]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://private.invalid/?token=&flag']), false);
+});
+
+test('a malformed public percent escape cannot disable inspection of an encoded private query value', () => {
+  const privateUrl = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  assert.equal(leaksPrivateRpc('https://public.invalid/PUBLIC%2fSYNTHETIC%2bQUERY%3dVALUE/%ZZ', [privateUrl]), true);
+});
+
+test('short private RPC userinfo is sensitive even when it is not a key-like token', () => {
+  assert.equal(leaksPrivateRpc('https://public.invalid/uv/', ['https://uv:xy@private.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/xy/', ['https://uv:xy@private.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://uv:xy@private.invalid/']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/x%2fy/', ['https://uv:x%2Fy@private.invalid/']), true);
+});
+
+test('public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection', () => {
+  for (const [privateUrl, publicEndpoint] of [
+    ['https://PUBLIC_SYNTHETIC_USER:password@private.invalid/', 'https://public.invalid/PUBLIC_SYNTHETIC_USER/'],
+    ['https://user:PUBLIC_SYNTHETIC_PASSWORD@private.invalid/', 'https://public.invalid/PUBLIC_SYNTHETIC_PASSWORD/'],
+    ['https://private.invalid/PUBLIC_SYNTHETIC_PATH/', 'https://public.invalid/PUBLIC_SYNTHETIC_PATH/'],
+    ['https://public-synthetic-host.private.invalid/', 'https://public.invalid/public-synthetic-host/'],
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [undefined, '', 'not a URL', 'https://public.invalid/rpc/']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [`https://private.invalid/?token=${'x'.repeat(8192)}`]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [`https://private.invalid/?${'token=&'.repeat(129)}`]), true);
 });
 
 test('RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies', async () => {
