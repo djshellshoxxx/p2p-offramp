@@ -1,0 +1,46 @@
+[package]
+name = "basic-escrow"
+version = "0.1.0"
+description = "P2P Off-ramp immutable basic escrow for native SOL and allowlisted original SPL Token mints"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "basic_escrow"
+
+[features]
+default = []
+# Exactly one network profile must be selected; it fixes the genesis constant and mint allowlist.
+localnet = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = "=1.2.2"
+anchor-spl = { version = "=1.2.2", default-features = false, features = ["solana-v3", "token", "token_2022", "associated_token"] }
+solana-sha256-hasher = { version = "=3.1.0", features = ["sha2"] }
+
+[dev-dependencies]
+litesvm = "=0.15.0"
+solana-message = "4"
+solana-transaction = "4"
+solana-signer = "3"
+solana-keypair = "3"
+serde_json = "1"
+solana-account = "4"
+solana-clock = "3"
+solana-instruction = "3"
+solana-transaction-error = "3"
+solana-program-pack = "3"
+spl-token-interface = "=2.0.0"
+agave-feature-set = "4"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
