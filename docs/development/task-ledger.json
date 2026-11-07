@@ -1,0 +1,29 @@
+{
+  "schema": "p2p-offramp-task-ledger/1",
+  "updated": "2026-11-07",
+  "states": ["unassigned", "active", "review", "blocked", "integrated", "verified", "external-gate"],
+  "tasks": [
+    {"id": "C70", "status": "review", "owner": "claude/vibrant-cray-ny4gum", "priority": "P0", "depends": ["PR54"], "branch": "claude/vibrant-cray-ny4gum",
+     "scope": "PR #54 review R1-R5: Sepolia trade lock, error attribution, finality coverage, encoded-credential leak",
+     "acceptance": "RED/GREEN regressions; test:sepolia:trade and test:sepolia:kit node suites pass", "evidence": "docs/development/AUTONOMOUS-PROGRESS.md"},
+    {"id": "C71", "status": "review", "owner": "claude/vibrant-cray-ny4gum", "priority": "P0", "depends": ["PR54"], "branch": "claude/vibrant-cray-ny4gum",
+     "scope": "PR #54 review R6-R7: retention partial-conversation deletion; inherited relay handlers",
+     "acceptance": "RED/GREEN; storage/relay/messaging/exchange suites pass; tsc", "evidence": "docs/development/AUTONOMOUS-PROGRESS.md"},
+    {"id": "C72", "status": "review", "owner": "claude/vibrant-cray-ny4gum", "priority": "P1", "depends": [], "branch": "claude/vibrant-cray-ny4gum",
+     "scope": "Harden openai-agents.yml: read-only agent job, patch artifact, gated publish job, pinned CLI, wall-clock budget",
+     "acceptance": "YAML parses; no write token or persisted credentials in the agent step; protected paths refused", "evidence": "YAML parse only; workflow not dispatched (spends owner OpenAI budget)"},
+    {"id": "C73", "status": "review", "owner": "claude/vibrant-cray-ny4gum", "priority": "P1", "depends": [], "scope": "R8-R11 test/doc fixes; CURRENT-STATE inventory", "acceptance": "policy suite 30/30"},
+    {"id": "G-PR54", "status": "external-gate", "owner": "repository owner", "priority": "P0", "depends": ["C70", "C71"], "scope": "Tier C merge of PR #54 / this branch under D8", "acceptance": "owner approval; green CI; no open High/Medium"},
+    {"id": "N40", "status": "unassigned", "priority": "P0", "depends": ["G-PR54"], "scope": "Extract PR #40 remainder: signed release updates, EIP-1271 execution, local scripts", "source": "pr/40 7706859"},
+    {"id": "N-D9", "status": "unassigned", "priority": "P0", "depends": ["G-PR54"], "scope": "D9 sendMarkedAt CAS marker; then reconcile #35 and #31 F01-F06", "source": "pr/35 4c5d01c, pr/31 6e9c0c5"},
+    {"id": "N-D1", "status": "unassigned", "priority": "P1", "depends": ["N-D9"], "scope": "D1 peer acceptance v2 (EIP-712 PeerAcceptance, tombstones, no downgrade)"},
+    {"id": "N38", "status": "unassigned", "priority": "P1", "depends": ["G-PR54"], "scope": "Extract PR #38 remainder: identity history retention, privacy-view", "source": "pr/38 71a56d1"},
+    {"id": "N41-43", "status": "unassigned", "priority": "P1", "depends": ["N40"], "scope": "Locale runtime, UI wiring, native journey", "source": "pr/41..pr/43"},
+    {"id": "N37F", "status": "unassigned", "priority": "P1", "depends": [], "scope": "Formal EVM harness (Z3 4.12.2 pin)", "source": "pr/37 81a295d"},
+    {"id": "N50", "status": "unassigned", "priority": "P2", "depends": [], "scope": "Independent review of Solana D5 program; client adapter", "source": "pr/50 26bf00b"},
+    {"id": "N44-48", "status": "unassigned", "priority": "P2", "depends": ["N41-43"], "scope": "Recovery portal, intake, governance, evidence (excluding #46)"},
+    {"id": "N46", "status": "blocked", "priority": "P3", "depends": ["core leaves LOCALPROOF"], "scope": "D7-parked optional packages"},
+    {"id": "G-D2", "status": "external-gate", "owner": "repository owner", "priority": "P1", "scope": "Testnet signing key generation; funded Sepolia run"},
+    {"id": "G-AUDIT", "status": "external-gate", "owner": "repository owner", "priority": "P0", "scope": "Professional security/crypto/wallet review; release trust roots; security contact"}
+  ]
+}
