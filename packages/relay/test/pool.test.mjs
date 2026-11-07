@@ -416,6 +416,31 @@ test('canonical subscribe snapshots handler functions without invoking accessors
   } finally { pool.close(); }
 });
 
+test('canonical subscribe resolves inherited handler methods (class instances, Object.create) without invoking accessors', async () => {
+  const net = memoryNetwork(), pool = createRelayPool({ broker: makeBroker().broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }], verifier: sellerCrypto, connect: net.connector, nowSeconds: () => NOW });
+  let getters = 0; const log = [];
+  class Handler { constructor(tag) { this.tag = tag; } onEvent(event, relayId) { log.push([this.tag, event.id, relayId, this instanceof Handler]); } onEose(relayId) { log.push([this.tag, 'eose', relayId]); } }
+  const base = { onEvent(event) { log.push([this.tag, event.id, Object.getPrototypeOf(this) === base]); } }, derived = Object.assign(Object.create(base), { tag: 'derived' });
+  const protoAccessor = {}; Object.defineProperty(protoAccessor, 'onEvent', { get() { getters++; throw Error('PRIVATE inherited handler'); } });
+  const eoseAccessor = { onEvent() {} }; Object.defineProperty(eoseAccessor, 'onEose', { get() { getters++; throw Error('PRIVATE inherited eose'); } });
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const polluted = Object.create(Object.prototype); let deep = { onEvent() {} }; for (let i = 0; i < 64; i++) deep = Object.create(deep);
+  try {
+    for (const handlers of [Object.create(protoAccessor), Object.create(Object.create(eoseAccessor)), new Proxy(derived, { getPrototypeOf() { throw revoked.proxy; } }),
+      Object.create(revoked.proxy), Object.create({ onEvent: 1 }), Object.create({ onEvent() {}, onEose: 1 }), polluted, deep])
+      assert.deepEqual(pool.subscribe([filter()], handlers), { ok: false, error: 'INVALID_FILTER' });
+    assert.equal(getters, 0); assert.equal(net.attempts, 0);
+    const instance = new Handler('class');
+    assert.equal(pool.subscribe([filter()], instance).ok, true);
+    assert.equal(pool.subscribe([filter()], derived).ok, true);
+    // Later prototype mutation cannot redirect the captured callbacks.
+    Object.defineProperty(Handler.prototype, 'onEvent', { get() { getters++; throw Error('PRIVATE changed prototype'); } });
+    await until(() => stateOf(pool, 'relay-a').state === 'open'); const event = await signedAd();
+    net.sockets[0].deliver(JSON.stringify(['EVENT', 's1', event])); net.sockets[0].deliver(JSON.stringify(['EOSE', 's1'])); net.sockets[0].deliver(JSON.stringify(['EVENT', 's2', event]));
+    assert.deepEqual(log, [['class', event.id, 'relay-a', true], ['class', 'eose', 'relay-a'], ['derived', event.id, true]]); assert.equal(getters, 0);
+  } finally { pool.close(); }
+});
+
 test('canonical subscribe refuses malformed or throwing local clocks and rechecks closure after validation', () => {
   const revoked = Proxy.revocable({}, {}); revoked.revoke();
   for (const wall of [NaN, Infinity, -1, 1.5, 'PRIVATE clock', {}]) {

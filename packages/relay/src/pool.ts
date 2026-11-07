@@ -89,6 +89,16 @@ interface RelayRec {
   counts: Map<string, number>; closedSubs: Set<string>; generation: number; connecting: AbortController | null;
 }
 const refuse = (error: PoolError): PoolResult<never> => Object.freeze({ ok: false, error });
+/** Data-descriptor lookup up a bounded prototype chain (class instances, Object.create). Never invokes accessors; Object.prototype is not consulted. */
+const MAX_HANDLER_PROTO_DEPTH = 16;
+function handlerDescriptor(target: object, key: 'onEvent' | 'onEose'): PropertyDescriptor | undefined {
+  let depth = 0;
+  for (let o: object | null = target; o !== null && o !== Object.prototype; o = Reflect.getPrototypeOf(o)) {
+    if (++depth > MAX_HANDLER_PROTO_DEPTH) throw new RangeError('handler prototype chain too deep');
+    const d = Reflect.getOwnPropertyDescriptor(o, key); if (d) return d;
+  }
+  return undefined;
+}
 
 export function createRelayPool(options: PoolOptions): RelayPool {
   if (options.relays.length > POOL_LIMITS.maxCandidates) throw new RangeError('too many relays');
@@ -429,7 +439,7 @@ export function createRelayPool(options: PoolOptions): RelayPool {
       try {
         normalized = normalize(filters); if (normalized === null) return refuse('INVALID_FILTER');
         if (typeof handlers !== 'object' || handlers === null || Array.isArray(handlers)) return refuse('INVALID_FILTER');
-        const event = Object.getOwnPropertyDescriptor(handlers, 'onEvent'), eose = Object.getOwnPropertyDescriptor(handlers, 'onEose');
+        const event = handlerDescriptor(handlers, 'onEvent'), eose = handlerDescriptor(handlers, 'onEose');
         if (!event || !('value' in event) || typeof event.value !== 'function' || eose && (!('value' in eose) || eose.value !== undefined && typeof eose.value !== 'function')) return refuse('INVALID_FILTER');
         const onEvent = event.value, onEose = eose?.value;
         captured = Object.freeze({ onEvent: (event: NostrEvent, relayId: string) => { Reflect.apply(onEvent, handlers, [event, relayId]); },

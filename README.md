@@ -58,6 +58,14 @@ Optional independent fixture verification requires Python `cryptography`:
 python packages/storage/test/fixtures/verify_vault_fixture.py
 ```
 
+`npm run test:specs` also runs the independent G16 OpenSSL signature oracle (`scripts/vectors/check_g16_evm_openssl.py`), which imports `cryptography` and fails without it. CI installs the complete hash-pinned development closure; that pin set admits only CPython 3.12 on Linux x86_64 (manylinux) wheels, so use a matching virtual environment locally:
+
+```sh
+python3.12 -m venv .venv-oracle
+.venv-oracle/bin/python -m pip install --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
+.venv-oracle/bin/python -m unittest discover -s scripts/tests -v
+```
+
 See the [developer and operator guide](docs/OPERATOR.md) for build modes and the terms file format. Start with [development status](docs/DEVELOPMENT_STATUS.md), [roadmap](DEVELOPMENT_ROADMAP.md),
 [spec readiness inventory](docs/SPEC_READINESS.md) and [vault implementation plan](docs/superpowers/plans/2026-10-22-vault-foundation.md).
 

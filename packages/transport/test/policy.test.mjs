@@ -217,9 +217,9 @@ test('later unavailable inspection retains an earlier cached display deadline un
 });
 test('explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure',()=>{
  const s=setup();try{
-  const a=permit(s.broker.authorize(request())),b=permit(s.broker.authorize(request('relay')));let reentrant;
-  const live=scope(s.broker.capture(a,{onRevoked:()=>{reentrant=s.broker.invalidate();assert.equal(s.broker.authorize(request()),'POLICY_BLOCKED')}}));
-  const before=s.broker.generation;assert.equal(s.broker.invalidate(),undefined);assert.equal(s.broker.mode,'ordinary');assert.equal(s.broker.generation,before+1);assert.equal(s.broker.isCurrent(a),false);assert.equal(s.broker.isCurrent(b),false);assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);assert.equal(reentrant,'POLICY_BLOCKED');
+  const a=permit(s.broker.authorize(request())),b=permit(s.broker.authorize(request('relay')));let reentrant,reentrantAuthorization;
+  const live=scope(s.broker.capture(a,{onRevoked:()=>{reentrant=s.broker.invalidate();reentrantAuthorization=s.broker.authorize(request())}}));
+  const before=s.broker.generation;assert.equal(s.broker.invalidate(),undefined);assert.equal(s.broker.mode,'ordinary');assert.equal(s.broker.generation,before+1);assert.equal(s.broker.isCurrent(a),false);assert.equal(s.broker.isCurrent(b),false);assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);assert.equal(reentrant,'POLICY_BLOCKED');assert.equal(reentrantAuthorization,'POLICY_BLOCKED');
   permit(s.broker.authorize(request()));s.broker.dispose();const closed=s.broker.generation;assert.equal(s.broker.invalidate(),'POLICY_BLOCKED');assert.equal(s.broker.generation,closed);
  }finally{s.broker.dispose()}
 });

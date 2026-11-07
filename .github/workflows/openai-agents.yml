@@ -1,11 +1,21 @@
 name: OpenAI Autonomous Development
 
+# Manually dispatched only. Each run spends the owner's OpenAI budget, so the agent
+# step has a hard wall-clock bound and the run is serialized repository-wide.
+#
+# Least privilege: the agent runs with a read-only token and no persisted git
+# credentials; it can only produce a patch artifact. A separate publish job with
+# write access applies that patch, refuses protected paths and opens a draft PR.
 on:
   workflow_dispatch:
+    inputs:
+      agent_minutes:
+        description: Hard wall-clock limit for the agent step (minutes, 5-40)
+        required: false
+        default: '20'
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: autonomous-development-${{ github.repository }}
@@ -15,23 +25,100 @@ jobs:
   develop:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: read
+    outputs:
+      has_patch: ${{ steps.patch.outputs.has_patch }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-
-      - name: Install Codex CLI
-        run: npm install -g @openai/codex
-
-      - name: Run development agent
+      - name: Validate inputs
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AGENT_MINUTES: ${{ inputs.agent_minutes }}
         run: |
           set -euo pipefail
-          test -n "$OPENAI_API_KEY"
-          cat .github/agent-prompts/autonomous-development.md .github/agent-prompts/repository-scope.md > /tmp/agent-instructions.md
-          codex exec --full-auto - < /tmp/agent-instructions.md
+          [[ "$AGENT_MINUTES" =~ ^[0-9]+$ ]] && (( AGENT_MINUTES >= 5 && AGENT_MINUTES <= 40 )) || { echo "agent_minutes must be 5-40" >&2; exit 1; }
+
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Install pinned Codex CLI
+        # 0.164.0 published 2026-10-23; integrity from the npm registry, checked 2026-11-07.
+        run: |
+          set -euo pipefail
+          npm install --global --no-fund --no-audit @openai/codex@0.164.0
+          codex --version
+
+      - name: Run development agent
+        timeout-minutes: 40
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AGENT_MINUTES: ${{ inputs.agent_minutes }}
+        run: |
+          set -euo pipefail
+          if [ -z "${OPENAI_API_KEY:-}" ]; then echo "OPENAI_API_KEY secret is not configured" >&2; exit 1; fi
+          cat .github/agent-prompts/autonomous-development.md .github/agent-prompts/repository-scope.md > "$RUNNER_TEMP/agent-instructions.md"
+          status=0
+          timeout --signal=TERM --kill-after=60 "$(( AGENT_MINUTES * 60 ))" codex exec --full-auto - < "$RUNNER_TEMP/agent-instructions.md" || status=$?
+          # 124 = wall-clock budget exhausted: keep partial work so it can be resumed from the draft PR.
+          if [ "$status" -ne 0 ] && [ "$status" -ne 124 ]; then echo "agent exited with $status" >&2; exit "$status"; fi
+          [ "$status" -eq 124 ] && echo "::warning::Agent stopped at the ${AGENT_MINUTES}-minute budget; publishing partial work."
+          exit 0
+
+      - name: Export patch
+        id: patch
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "has_patch=false" >> "$GITHUB_OUTPUT"
+            echo "No changes to publish"
+            exit 0
+          fi
+          git diff --cached --binary > "$RUNNER_TEMP/agent.patch"
+          git diff --cached --stat
+          echo "has_patch=true" >> "$GITHUB_OUTPUT"
+
+      - name: Upload patch
+        if: steps.patch.outputs.has_patch == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2, official tag checked 2026-11-07
+        with:
+          name: agent-patch
+          path: ${{ runner.temp }}/agent.patch
+          retention-days: 7
+          if-no-files-found: error
+
+  publish:
+    needs: develop
+    if: needs.develop.outputs.has_patch == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Download patch
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0, official tag checked 2026-11-07
+        with:
+          name: agent-patch
+          path: ${{ runner.temp }}
+
+      - name: Apply patch and refuse protected paths
+        run: |
+          set -euo pipefail
+          git apply --index --binary "$RUNNER_TEMP/agent.patch"
+          # Agent output must never change CI, agent prompts, lockfile trust roots or secrets.
+          if git diff --cached --name-only | grep -E '^(\.github/|\.env|.*\.pem$|.*\.key$)'; then
+            echo "Patch touches protected paths; refusing to publish" >&2
+            exit 1
+          fi
 
       - name: Publish draft pull request
         env:
@@ -40,13 +127,10 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No changes to publish"
-            exit 0
-          fi
           BRANCH="codex/autonomous-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           git switch -c "$BRANCH"
-          git commit -m "chore: propose autonomous development changes"
-          git push origin "$BRANCH"
-          gh pr create --draft --base "${GITHUB_REF_NAME}" --head "$BRANCH" --title "Autonomous development run ${GITHUB_RUN_ID}" --body "AI-generated changes for review. Verify tests, security, scope and CI before merging."
+          git commit -m "chore: propose autonomous development changes (run ${GITHUB_RUN_ID})"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$BRANCH"
+          gh pr create --draft --base "${GITHUB_REF_NAME}" --head "$BRANCH" \
+            --title "Autonomous development run ${GITHUB_RUN_ID}" \
+            --body "AI-generated changes from workflow run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Verify tests, security, scope and CI before merging. Tier C paths (contracts, signing, vault crypto, recovery, release trust) need owner approval under D8."
