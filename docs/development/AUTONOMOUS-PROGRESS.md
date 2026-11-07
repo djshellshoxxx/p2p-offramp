@@ -41,6 +41,24 @@ Environment: Node 24.22.2 (official tarball), npm ci from the committed lockfile
 | `npm run test:sepolia:kit` (node and anvil proof) | node suites pass; anvil proof 11/11 |
 | `openai-agents.yml` | parses (PyYAML, js-yaml); **not dispatched** (it would spend the owner's OpenAI budget) |
 
+### Independent adversarial review of the Sepolia diff (workflow `wf_077ab95c-d03`, 11 agents)
+
+Three lenses reviewed the diff: duplicate-send, lock/IO and regression/leak. Each finding was then verified independently. The duplicate-send lens found **no path to a second broadcast**. Eight findings were confirmed. They were fixed in `5110511` unless noted:
+
+- Medium: a `+`/space form-encoded query credential passed the leak check. Fixed, with a regression test.
+- Low: host-label credentials were compared case-sensitively after URL lowercasing or punycode. Fixed, with a test.
+- Low (regression): a literal `%` reached by decoding a valid `%25` made an endpoint uninspectable. Fixed, with a test.
+- Low: state writes had no fsync, so a host crash could roll back the attempt record. Fixed: fsync of the file and its directory.
+- Low: the terms-review file was written non-exclusively. Fixed by using the same durable writer.
+- Low (two duplicate findings): Ctrl-C leaves a stale lock. This fails closed by design; recovery is documented in `docs/deployments/sepolia/README.md`.
+- Low: a dropped hash-bearing failed send keeps `allFinalized` false. Kept: this is intended under R4.
+
+After `5110511`: sepolia-hygiene 18/18 (the 3 new tests were RED against `0edbf36`), sepolia-trade-state 24/24, anvil trade proof 13/13, anvil kit proof 11/11, `npm test` 1,210/1,210.
+
+### Hosted CI on PR #56
+
+At `384340a`, every workflow job passes. SonarCloud's quality gate fails with "Security Rating C on New Code" from `39bd7d4` onwards. sonarcloud.io is unreachable from this environment, so the rule cannot be identified here; the owner has been asked for the rule key on the PR.
+
 ### Known limitations recorded rather than fixed
 
 - Legacy Sepolia state with no `attempts` key: a later error that does not count as possibly-sent (for example `OBSERVATION_REJECTED`) overwrites an earlier uncertain `lastError`, which removes the reconciliation block on the next run. An existing test expects this overwrite. The fix would be a sticky reconciliation flag, which needs an owner decision on the legacy-state contract.
