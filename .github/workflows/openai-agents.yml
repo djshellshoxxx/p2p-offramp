@@ -130,7 +130,9 @@ jobs:
           BRANCH="codex/autonomous-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           git switch -c "$BRANCH"
           git commit -m "chore: propose autonomous development changes (run ${GITHUB_RUN_ID})"
-          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$BRANCH"
+          # The token reaches git through gh's credential helper, never a URL or command-line argument.
+          gh auth setup-git
+          git push origin "$BRANCH"
           gh pr create --draft --base "${GITHUB_REF_NAME}" --head "$BRANCH" \
             --title "Autonomous development run ${GITHUB_RUN_ID}" \
             --body "AI-generated changes from workflow run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Verify tests, security, scope and CI before merging. Tier C paths (contracts, signing, vault crypto, recovery, release trust) need owner approval under D8."
