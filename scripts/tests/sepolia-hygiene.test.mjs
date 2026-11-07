@@ -72,6 +72,27 @@ test('percent-escape case and repeated encoding cannot hide a private query valu
   assert.equal(leaksPrivateRpc(`https://public.invalid/%${'25'.repeat(20)}41/`, ['https://private.invalid/?token=unrelated']), true, 'encoding nested past the bound is uninspectable');
 });
 
+test('form-encoded plus/space query credentials are matched in every spelling', () => {
+  const plus = 'https://priv.invalid/v1?key=k+ZZ9QsecretAAAA';
+  for (const endpoint of ['https://pub.invalid/v1/k+ZZ9QsecretAAAA', 'https://pub.invalid/v1/k%2BZZ9QsecretAAAA', 'https://pub.invalid/v1/k%20ZZ9QsecretAAAA'])
+    assert.equal(leaksPrivateRpc(endpoint, [plus]), true, endpoint);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/v1/a+bSecretTokenValue', ['https://priv.invalid/?key=a%20bSecretTokenValue']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/v1/rpc', [plus]), false, 'an unrelated endpoint stays publishable');
+});
+
+test('host-label credentials are matched regardless of case or URL canonicalization', () => {
+  assert.equal(leaksPrivateRpc('https://pub.invalid/SECRETKEY0123456789ABC', ['https://SECRETKEY0123456789ABC.provider.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/secretkey0123456789abc', ['https://SecretKey0123456789Abc.provider.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/ключ0123456789abcdef', ['https://ключ0123456789abcdef.provider.invalid/']), true, 'non-ASCII label as written');
+  assert.equal(leaksPrivateRpc('https://pub.invalid/rpc', ['https://SECRETKEY0123456789ABC.provider.invalid/']), false);
+});
+
+test('a literal percent sign reached by decoding a valid %25 does not make an endpoint uninspectable', () => {
+  assert.equal(leaksPrivateRpc('https://pub.invalid/100%25', ['https://priv.invalid/?key=unrelated']), false);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/a%2525b', ['https://priv.invalid/?key=unrelated']), false);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/100%25/sk%2525aa', ['https://priv.invalid/?key=sk%aa']), true, 'credentials are still found below the literal');
+});
+
 test('short private RPC userinfo is sensitive even when it is not a key-like token', () => {
   assert.equal(leaksPrivateRpc('https://public.invalid/uv/', ['https://uv:xy@private.invalid/']), true);
   assert.equal(leaksPrivateRpc('https://public.invalid/xy/', ['https://uv:xy@private.invalid/']), true);

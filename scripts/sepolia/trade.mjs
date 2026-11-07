@@ -22,7 +22,7 @@
  *                             registryTrust.verified: false). Every on-chain identity check still applies.
  */
 import { randomBytes } from 'node:crypto';
-import { mkdir, open, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
@@ -78,15 +78,27 @@ async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesi
   return { lookup: service, trust: { verified: false, reason: signed.error.code } };
 }
 
-async function saveState(path, state) {
-  await mkdir(resolve(path, '..'), { recursive: true });
-  // Unique per process and write, created exclusively so it never inherits an old file's mode or another writer's content.
+/**
+ * Durable atomic replacement: exclusive temp file (never inherits an old file's mode, never follows a planted symlink),
+ * fsync before rename, then fsync the directory. The pre-broadcast attempt record is the write-ahead guard against a
+ * second send, so it must survive a host crash that happens after Forge hands the transaction to the RPC.
+ */
+async function writeDurable(path, text) {
+  const directory = resolve(path, '..');
+  await mkdir(directory, { recursive: true });
   const temporary = `${path}.${process.pid}.${randomBytes(8).toString('hex')}.tmp`;
   try {
-    await writeFile(temporary, JSON.stringify(state, null, 2) + '\n', { mode: 0o600, flag: 'wx' }); // holds payment instructions and signatures
+    const handle = await open(temporary, 'wx', 0o600); // holds payment instructions and signatures
+    try { await handle.writeFile(text); await handle.sync(); } finally { await handle.close(); }
     await rename(temporary, path);
   } catch (error) { await rm(temporary, { force: true }).catch(() => undefined); throw error; }
+  let dir;
+  try { dir = await open(directory, 'r'); await dir.sync(); }
+  catch (error) { if (!['EISDIR', 'EPERM', 'EINVAL', 'EBADF'].includes(error?.code)) throw error; } // platforms without directory fsync
+  finally { await dir?.close(); }
 }
+
+const saveState = (path, state) => writeDurable(path, JSON.stringify(state, null, 2) + '\n');
 
 /**
  * Exclusive cross-process lock beside the state file, held for the whole run, so two invocations can never both pass the
@@ -328,7 +340,7 @@ async function runLockedTrades({
     Object.assign(trade, { status: 'negotiated', terms, privateAgreement: agreement, tradeId, fromBlock: head.number.toString(), acceptance: { seller: hex(sellerSig), buyer: hex(buyerSig) } });
     trade.checks.push('terms pass the app terms review against the registry', 'seller and buyer acceptances verify; not across roles, chains or deployments', 'on-chain tradeIdOf equals the off-chain termsHash');
     await mkdir(resolve(path, '..'), { recursive: true });
-    await writeFile(resolve(path, '..', `${run}.${trade.label}.terms-review.json`), JSON.stringify(document, null, 2) + '\n', { mode: 0o600 });
+    await writeDurable(resolve(path, '..', `${run}.${trade.label}.terms-review.json`), JSON.stringify(document, null, 2) + '\n');
   }
 
   async function fund(trade) {
