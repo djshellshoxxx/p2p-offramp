@@ -101,16 +101,30 @@ export const forgeKey = value => /^(0x)?[0-9a-f]{64}$/i.test(value ?? '') ? `0x$
  * Every nonempty query value is conservatively sensitive, including short/repeated values. Empty values are inert.
  * Limits are local publication safeguards, not RPC wire limits; an uninspectable oversized URL refuses publication.
  */
+const MAX_ENDPOINT_DECODE_LAYERS = 16;
+/** Percent-escape hex digits are case-insensitive (RFC 3986 section 2.1): compare them in one canonical case. */
+const upperEscapes = text => text.replace(/%[0-9a-f]{2}/gi, escape => escape.toUpperCase());
 export function leaksPrivateRpc(publicEndpoint, privateUrls) {
   const endpoint = String(publicEndpoint ?? '');
   if (endpoint.length > 2048) return true;
-  let decodedEndpoint = endpoint;
-  try { decodedEndpoint = decodeURIComponent(endpoint); } catch { return true; } // Uninspectable public encodings refuse publication.
+  // Every decoding layer down to a fixed point is inspected, so repeated encoding cannot hide a credential.
+  const layers = [endpoint];
+  for (let current = endpoint; ;) {
+    let next;
+    try { next = decodeURIComponent(current); } catch { return true; } // Uninspectable public encodings refuse publication.
+    if (next === current) break;
+    if (layers.length > MAX_ENDPOINT_DECODE_LAYERS) return true; // Nested past the bound: uninspectable.
+    layers.push(next); current = next;
+  }
+  const haystacks = layers.map(layer => [layer, upperEscapes(layer)]);
   const contains = part => {
     if (!part) return false;
     const variants = new Set([part, encodeURIComponent(part)]);
     try { variants.add(decodeURIComponent(part)); } catch { /* Malformed percent text remains literal. */ }
-    return [...variants].some(value => endpoint.includes(value) || decodedEndpoint.includes(value));
+    return [...variants].some(value => {
+      const canonical = upperEscapes(value);
+      return haystacks.some(([layer, upper]) => layer.includes(value) || upper.includes(canonical));
+    });
   };
   return privateUrls.some(value => {
     if (typeof value !== 'string' || !value) return false;

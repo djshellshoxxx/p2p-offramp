@@ -54,9 +54,22 @@ test('every nonempty repeated or short private query value is considered without
   assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://private.invalid/?token=&flag']), false);
 });
 
-test('a malformed public percent escape cannot disable inspection of an encoded private query value', () => {
+test('a public endpoint with a malformed percent escape is refused as uninspectable', () => {
   const privateUrl = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
   assert.equal(leaksPrivateRpc('https://public.invalid/PUBLIC%2fSYNTHETIC%2bQUERY%3dVALUE/%ZZ', [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/%ZZ', ['https://private.invalid/?token=unrelated']), true);
+});
+
+test('percent-escape case and repeated encoding cannot hide a private query value', () => {
+  const encodedPrivate = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  for (const publicEndpoint of [
+    'https://public.invalid/PUBLIC%252fSYNTHETIC%252bQUERY%253dVALUE/',
+    'https://public.invalid/PUBLIC%25252FSYNTHETIC%25252BQUERY%25253DVALUE/',
+    'https://public.invalid/PUBLIC%25252fSYNTHETIC%25252bQUERY%25253dVALUE/',
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [encodedPrivate]), true, publicEndpoint);
+  assert.equal(leaksPrivateRpc('https://public.invalid/x%2fy/', ['https://private.invalid/?token=x%2fy']), true, 'lowercase private escapes match too');
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc%2520v1/', [encodedPrivate]), false, 'unrelated repeated encoding stays publishable');
+  assert.equal(leaksPrivateRpc(`https://public.invalid/%${'25'.repeat(20)}41/`, ['https://private.invalid/?token=unrelated']), true, 'encoding nested past the bound is uninspectable');
 });
 
 test('short private RPC userinfo is sensitive even when it is not a key-like token', () => {

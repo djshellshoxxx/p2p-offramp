@@ -22,7 +22,7 @@
  *                             registryTrust.verified: false). Every on-chain identity check still applies.
  */
 import { randomBytes } from 'node:crypto';
-import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import { mkdir, open, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
@@ -46,6 +46,9 @@ const RELEASE_MARGIN_SECONDS = 120;
 const TERMINAL = Object.freeze({ released: 'released', refunded: 'refunded', 'refunded-after-release-deadline': 'refunded', 'expired-unfunded': 'absent' });
 const ATTEMPT_KINDS = Object.freeze(['fund', 'release', 'refund']);
 const possiblySent = code => typeof code === 'string' && /^(?:BROADCAST_|RECEIPT_TIMEOUT$|FORGE_FAILED$|TX_REVERTED$|RPC_)/.test(code);
+const TX_HASH = /^0x[0-9a-f]{64}$/i;
+/** Errors raised by the send boundary carry the action they were sending; read failures carry none. */
+const SEND_ACTION = Symbol('sendAction');
 export class TradeError extends Error { constructor(code) { super(code); this.name = 'TradeError'; this.code = code; } }
 const fail = code => { throw new TradeError(code); };
 const hex = bytes => Buffer.from(bytes).toString('hex');
@@ -77,13 +80,49 @@ async function loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesi
 
 async function saveState(path, state) {
   await mkdir(resolve(path, '..'), { recursive: true });
-  const temporary = `${path}.tmp`;
-  await rm(temporary, { force: true }); // a stale temp file would keep its old mode
-  await writeFile(temporary, JSON.stringify(state, null, 2) + '\n', { mode: 0o600 }); // holds payment instructions and signatures
-  await rename(temporary, path);
+  // Unique per process and write, created exclusively so it never inherits an old file's mode or another writer's content.
+  const temporary = `${path}.${process.pid}.${randomBytes(8).toString('hex')}.tmp`;
+  try {
+    await writeFile(temporary, JSON.stringify(state, null, 2) + '\n', { mode: 0o600, flag: 'wx' }); // holds payment instructions and signatures
+    await rename(temporary, path);
+  } catch (error) { await rm(temporary, { force: true }).catch(() => undefined); throw error; }
 }
 
-export async function runTrades({
+/**
+ * Exclusive cross-process lock beside the state file, held for the whole run, so two invocations can never both pass the
+ * attempt-history check and reach the send boundary. An existing lock is never taken over automatically: it may belong to
+ * a running process, so the run fails closed and the operator removes it only after verifying no trade process is running.
+ */
+export async function acquireStateLock(path) {
+  const lockPath = `${path}.lock`, token = randomBytes(16).toString('hex');
+  await mkdir(resolve(path, '..'), { recursive: true });
+  let handle;
+  try { handle = await open(lockPath, 'wx', 0o600); }
+  catch (error) {
+    if (error?.code !== 'EEXIST') throw error;
+    throw Object.assign(new TradeError('STATE_LOCKED'), { lockPath,
+      hint: 'Another sepolia:trade run may be using this state file. Verify that no such process is running, then remove the lock file.' });
+  }
+  try { await handle.writeFile(JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), token }) + '\n'); }
+  catch (error) { await handle.close().catch(() => undefined); await rm(lockPath, { force: true }); throw error; }
+  await handle.close();
+  return { lockPath, async release() {
+    // Remove only our own lock: one an operator replaced is left alone.
+    let held; try { held = JSON.parse(await readFile(lockPath, 'utf8')); } catch { return; }
+    if (held?.token === token) await rm(lockPath, { force: true });
+  } };
+}
+
+export async function runTrades(options) {
+  const { root = ROOT, run, statePath } = options ?? {};
+  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) fail('RUN_ID_INVALID');
+  const path = statePath ?? resolve(root, 'docs/deployments/sepolia/trades', `${run}.json`);
+  const lock = await acquireStateLock(path);
+  try { return await runLockedTrades({ ...options, statePath: path }); }
+  finally { await lock.release(); }
+}
+
+async function runLockedTrades({
   env = process.env, root = ROOT, run, statePath, amountWei = 10n ** 14n, expectGenesis = SEPOLIA.genesisHash, requireSignedRegistry = true, pinnedKeyId,
   wait = false, waitFinalized = false, maxWaitSeconds = 3600, pollSeconds = 15, advanceTime, nowSeconds, log = () => {},
   /** eth_getLogs range per request: hosted providers cap the span, so wide ranges are paged. */
@@ -144,7 +183,7 @@ export async function runTrades({
     state = { format: 'p2p-offramp/sepolia-trade-run/v1', run, network: NETWORK_ID, chainId: domain.chainId, genesisHash: identity.genesisHash, escrow,
       runtimeKeccak: deployment.runtime.keccak256, deploymentRecord: `docs/deployments/sepolia/BasicEscrow-${escrow}.json`, registryTrust: trust, seller, buyer,
       amountWei: amountWei.toString(), releaseEnabled: 0,
-      trades: [{ label: 'release', status: 'planned', checks: [] }, { label: 'refund', status: 'planned', checks: [] }] };
+      trades: [{ label: 'release', status: 'planned', checks: [], attempts: {} }, { label: 'refund', status: 'planned', checks: [], attempts: {} }] };
     await saveState(path, state);
   }
   state.registryTrust = trust;
@@ -223,8 +262,14 @@ export async function runTrades({
     }
     // Old hashless settlement errors did not name their kind. They cannot be
     // converted into permission for a new exit merely because the trade is funded.
-    const namedLegacy = Object.hasOwn(trade, 'settle') || trade.failedSends?.length > 0 || trade.fund?.requestedAt && !trade.fund.tx;
-    if (!recorded && possiblySent(trade.lastError?.code) && !namedLegacy) fail('BROADCAST_RECONCILIATION_REQUIRED');
+    // A possibly-sent legacy error only counts as accounted for when it names an action already recorded above, or is the
+    // outcome of a hash-bearing failed send. Otherwise it may belong to another action, which must not be sent again.
+    if (!recorded && possiblySent(trade.lastError?.code)) {
+      const { code, action } = trade.lastError;
+      const accounted = (ATTEMPT_KINDS.includes(action) && Object.hasOwn(attempts, action)) ||
+        (Array.isArray(trade.failedSends) && trade.failedSends.some(failed => TX_HASH.test(failed?.tx ?? '') && failed.outcome === code));
+      if (!accounted) fail('BROADCAST_RECONCILIATION_REQUIRED');
+    }
     trade.attempts = attempts;
     return attempts;
   }
@@ -245,6 +290,7 @@ export async function runTrades({
       if (kind === 'fund') trade.fund = { ...trade.fund, ...sentRecord }; else trade.settle = { kind, ...sentRecord };
       return sent;
     } catch (error) {
+      try { Object.defineProperty(error, SEND_ACTION, { value: kind }); } catch { /* a primitive throw stays unattributed (fail closed) */ }
       if (error?.hash) {
         Object.assign(attempt, { tx: error.hash, outcome: error.code, ...(error.block === undefined ? {} : { block: error.block.toString() }) });
         trade.failedSends = [...(trade.failedSends ?? []), { kind, tx: error.hash, outcome: error.code, ...(error.block === undefined ? {} : { block: error.block.toString() }) }];
@@ -275,6 +321,9 @@ export async function runTrades({
         verifyEoaAcceptance({ ...domain, verifyingContract: `0x${'11'.repeat(20)}` }, terms, 'buyer', buyerSig)) fail('ACCEPTANCE_NOT_BOUND');
     const onChainId = (await rpc('eth_call', [{ to: escrow, data: buildTradeIdOf(domain, terms).data }, 'latest'])).slice(2);
     if (onChainId !== tradeId) fail('TRADE_ID_MISMATCH');
+    // A planned trade has never reached the send boundary: its attempt history starts empty, so a failed read before
+    // any send (kept as lastError) is never mistaken for an unrecorded legacy broadcast.
+    if (!Object.hasOwn(trade, 'attempts')) trade.attempts = {};
     // No log of this fresh tradeId can predate negotiation, so observation starts here instead of at the deployment.
     Object.assign(trade, { status: 'negotiated', terms, privateAgreement: agreement, tradeId, fromBlock: head.number.toString(), acceptance: { seller: hex(sellerSig), buyer: hex(buyerSig) } });
     trade.checks.push('terms pass the app terms review against the registry', 'seller and buyer acceptances verify; not across roles, chains or deployments', 'on-chain tradeIdOf equals the off-chain termsHash');
@@ -373,7 +422,9 @@ export async function runTrades({
   }
 
   async function processTrade(trade) {
-    if (!possiblySent(trade.lastError?.code)) delete trade.lastError;
+    // Recorded attempts are the send evidence; a lastError only stands for a possible send when it came from the send
+    // boundary, or (legacy state without attempts) when its origin is unknown.
+    if (!possiblySent(trade.lastError?.code) || (Object.hasOwn(trade, 'attempts') && trade.lastError.origin !== 'send')) delete trade.lastError;
     let observed, at;
     if (Object.hasOwn(TERMINAL, trade.status)) {
       // Terminal outcomes are re-checked against the chain on every run (a reorg or a wrong earlier read is never final).
@@ -417,12 +468,16 @@ export async function runTrades({
     // Each trade is processed on its own: one trade's failure never stops the other from settling.
     for (const trade of state.trades) {
       try { await processTrade(trade); }
-      catch (error) { trade.lastError = { code: error?.code ?? 'FAILED', at: new Date().toISOString() }; failures.push(error); await saveState(path, state); }
+      catch (error) {
+        const action = error?.[SEND_ACTION];
+        trade.lastError = { code: error?.code ?? 'FAILED', at: new Date().toISOString(), ...(action ? { origin: 'send', action } : {}) };
+        failures.push(error); await saveState(path, state);
+      }
     }
 
     // Finality of every recorded transaction, re-checked against the canonical chain (Sepolia finalizes ~13-15 min after inclusion).
     const finalizedNumber = async () => { const block = await rpc('eth_getBlockByNumber', ['finalized', false]).catch(() => null); return block?.number ? BigInt(block.number) : -1n; };
-    const recorded = state.trades.flatMap(trade => [trade.fund, trade.settle]).filter(item => item?.tx);
+    const recorded = state.trades.flatMap(trade => [trade.fund, trade.settle, ...(Array.isArray(trade.failedSends) ? trade.failedSends : [])]).filter(item => item?.tx);
     const canonicalBlocks = () => Promise.all(recorded.map(async item => {
       const receipt = await rpc('eth_getTransactionReceipt', [item.tx]);
       if (!receipt) return null;
@@ -453,5 +508,9 @@ if (isMain(import.meta.url)) {
     const { state, path } = await runTrades({ run: values.run, requireSignedRegistry: !values['unsigned-registry'], ...(values['amount-wei'] ? { amountWei: BigInt(values['amount-wei']) } : {}),
       wait: Boolean(values.wait), waitFinalized: Boolean(values['wait-finalized']), log: message => console.error(message) });
     console.log(JSON.stringify({ ok: true, state: path, trades: state.trades.map(trade => ({ label: trade.label, status: trade.status, tradeId: trade.tradeId, fund: trade.fund?.tx ?? null, settle: trade.settle?.tx ?? null })), finality: state.finality }));
-  } catch (error) { console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED', ...(error?.statePath ? { state: error.statePath } : {}) })); process.exitCode = 1; }
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED', ...(error?.statePath ? { state: error.statePath } : {}),
+      ...(error?.lockPath ? { lock: error.lockPath, hint: error.hint } : {}) }));
+    process.exitCode = 1;
+  }
 }
