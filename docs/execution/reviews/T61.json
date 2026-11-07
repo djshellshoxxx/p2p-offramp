@@ -1,0 +1,136 @@
+{
+  "task": "T61",
+  "reviewer": "root (different from author chain_reader)",
+  "disposition": "APPROVED_LOCAL_EVIDENCE_PIPELINE_ONLY",
+  "files": [
+    {
+      "path": "contracts/evm/formal/CanonicalRefinement.t.sol",
+      "sha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537"
+    },
+    {
+      "path": "contracts/evm/formal/properties.json",
+      "sha256": "ef1649f0aebc7b6030cd4816b660c49ca28ad57f05c13efe6cd7ed470e2a2d15"
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c"
+    },
+    {
+      "path": "scripts/formal/README.md",
+      "sha256": "837ac662fba3af6c1b92f65dd0a51d84659c75b950f3c0bfe136e7a555b250b7"
+    },
+    {
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "sha256": "a4a3c4eee4198eab2e74e850fa63db051ab6e1f3c1980bff795f3e4bcd9c4ac2"
+    }
+  ],
+  "canonicalSourceSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+  "canonicalAbiSha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+  "review": "All five files reviewed. Revised helper independently rerun on success, timeout and overflow descendants; portable explicit tool roots and unchanged pins verified.",
+  "executed": {
+    "ordinaryCases": 7,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "unitLogSha256": "9a3541b2ce69fae1e2b79117be85d3fea2a1222c5a7886151a5ce45159ba772e",
+    "actualReportSha256": "b4f4ea4f984e8f73fb369e57caacffc4c9d98b83c5e88b51c5236dcc54dabb3e",
+    "guardProperties": [
+      {
+        "id": "GUARD-RELEASE-REFUND-DISJOINT",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xec7fef20ce59b97782136ee4600ce4c5a9a636f758ac15807b9582afedece05f",
+        "querySha256": "052f90faa11eba6bbfa5f3f61f899324dcbf8cddbdd70c13510594875d5831d4",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-UNAUTHORIZED-RELEASE-REFUSED",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0x6dd15305e87f0e29ada2ccaba1e7c70446ca2aa5a010958e96264dcc8e06af5b",
+        "querySha256": "83b8dadcda4c91d27fec16c7ef4e80d751adeb101b0cb64f2d0c963a2a689520",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-SELLER-DEADLINE-COVERAGE",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xf0ab04216e022b74f60202f39d16f931ab9c0758d89388fc484977b44a33013a",
+        "querySha256": "04eb81e8ff603bcfad30ec29f6e0d768ae2e74cc60ba0b69f3718e4d198db5a7",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-DEADLINE-EQUALITY-REFUND",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xeab4632201c97d2bb8c19b1013ef920c5c5d89c9173c22d5aa8cc8ffac449e51",
+        "querySha256": "d326115e518dcfc5d54f5b15d1ba50ba2fc2d3f773f461dc3e42d2e07349539a",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      }
+    ],
+    "toolProbe": {
+      "safe": {
+        "result": "PROVED_UNDER_DECLARED_MODEL",
+        "toolReported": "SAFE_UNDER_COMPILER_MODEL",
+        "unsupported": []
+      },
+      "unsafe": {
+        "result": "COUNTEREXAMPLE_FOUND",
+        "toolReported": "ASSERTION_VIOLATION",
+        "unsupported": [],
+        "qualification": "Compiler-model counterexample requires native replay before calling it an implementation defect."
+      },
+      "qualification": "CHC/HORN consistency semantics: SAT can mean safety and UNSAT reachability; compiler source-bound diagnostics, never raw SAT/UNSAT polarity, determine outcomes."
+    },
+    "nativeWitness": {
+      "result": "MODEL_IMPLEMENTATION_GAP",
+      "nativeRefinement": "TEST_EVIDENCE_PASSED",
+      "strictFailure": "STRICT_TERMINAL_ALREADY_PAID: 0 != 1000000000000000000",
+      "trace": {
+        "tradeId": "0x1bea7e399c666d0a73591326103e61434b12db8d299cb889350a80b6bf9aac00",
+        "principal": "1000000000000000000",
+        "surplus": "3000000000000000000",
+        "activeAfterTerminal": "0",
+        "paidAfterTerminal": "0",
+        "pendingAfterTerminal": "1000000000000000000",
+        "custodyAfterTerminal": "4000000000000000000",
+        "paidAfterWithdrawal": "1000000000000000000",
+        "pendingAfterWithdrawal": "0",
+        "custodyAfterWithdrawal": "3000000000000000000",
+        "seller": "0x42e30bf321e28c2b3cb492158da1a7013c48828b",
+        "buyer": "0x2e234dae75c793f67a35089c9d99245e1c58470b",
+        "withdrawCaller": "0x6986f7819880cd14c480409258c0c35a036dfd5b"
+      },
+      "counterexampleDigest": "f48588231cfa0074aa5879bb068f285a9bd80da04495cf1c212e84f22cbf5132",
+      "qualification": "Intended push-to-credit behavior is not theft. This is an actual canonical native witness, not an unbounded proof or a release approval."
+    },
+    "wholeCompiler": {
+      "stopReason": "COMPILER_TIMEOUT",
+      "incomplete": true,
+      "queries": 0,
+      "properties": [
+        {
+          "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+          "result": "PROOF_UNKNOWN"
+        },
+        {
+          "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+          "result": "PROOF_UNKNOWN"
+        },
+        {
+          "id": "EVM-EARLY-REFUND-ATOMIC",
+          "result": "PROOF_UNKNOWN"
+        }
+      ]
+    }
+  },
+  "limits": [
+    "No whole-contract proof or professional review obtained.",
+    "Intended deferred-credit behavior refutes strict terminal-already-paid abstraction.",
+    "Canonical source/ABI unchanged; no funds enablement or deployment."
+  ]
+}

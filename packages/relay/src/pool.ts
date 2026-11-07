@@ -89,6 +89,19 @@ interface RelayRec {
 }
 const refuse = (error: PoolError): PoolResult<never> => Object.freeze({ ok: false, error });
 
+/** Local filter snapshots only; callers guard reflection failure before any subscription admission. */
+function indexedValues(input: unknown, minimum: number, maximum: number): unknown[] | null {
+  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return null;
+  const length: unknown = Object.getOwnPropertyDescriptor(input, 'length')?.value;
+  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < minimum || length > maximum || Reflect.ownKeys(input).length !== length + 1) return null;
+  const values: unknown[] = [];
+  for (let index = 0; index < length; index++) {
+    const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
+    if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+    values.push(descriptor.value);
+  }
+  return values;
+}
 export function createRelayPool(options: PoolOptions): RelayPool {
   if (options.relays.length > POOL_LIMITS.maxCandidates) throw new RangeError('too many relays');
   const timing: PoolTiming = { ...DEFAULT_TIMING, ...options.timing };
@@ -328,22 +341,34 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     sendReq(r);
   }
   function normalize(filters: readonly RelayFilter[]): readonly RelayFilter[] | null {
-    if (!Array.isArray(filters) || filters.length < 1 || filters.length > POOL_LIMITS.maxFiltersPerSubscription) return null;
+    const captured = indexedValues(filters, 1, POOL_LIMITS.maxFiltersPerSubscription); if (captured === null) return null;
     const wall = options.nowSeconds?.() ?? null;
+    if (wall !== null && (typeof wall !== 'number' || !Number.isSafeInteger(wall) || wall < 0)) return null;
     const out: RelayFilter[] = [];
-    for (const f of filters) {
-      if (typeof f !== 'object' || f === null) return null;
-      if (!Array.isArray(f.kinds) || f.kinds.length < 1 || f.kinds.length > 8 || !f.kinds.every((k: number) => Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
-      if (!Number.isSafeInteger(f.limit) || f.limit < 1 || f.limit > POOL_LIMITS.maxFilterLimit) return null;
-      if (!Number.isSafeInteger(f.since) || f.since < 0) return null;
-      if (wall !== null && f.since < wall - (f.kinds.every((k: number) => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
-      const copy: Record<string, unknown> = { kinds: [...f.kinds], since: f.since, limit: f.limit };
-      for (const name of ['authors', '#d', '#t', '#k', '#a', '#p'] as const) {
-        const list = f[name];
-        if (list === undefined) continue;
-        if (!Array.isArray(list) || list.length < 1 || list.length > FRAME_LIMITS.maxFilterValues) return null;
-        if (!list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
-        copy[name] = [...list];
+    const optional = ['authors', '#d', '#t', '#k', '#a', '#p'] as const, allowed: readonly string[] = ['kinds', 'since', 'limit', ...optional];
+    for (const input of captured) {
+      if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
+      const proto: unknown = Object.getPrototypeOf(input); if (proto !== Object.prototype && proto !== null) return null;
+      const keys = Reflect.ownKeys(input);
+      if (keys.length > allowed.length || keys.some(key => typeof key !== 'string' || !allowed.includes(key))) return null;
+      const raw: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+      for (const key of keys as string[]) {
+        const descriptor = Object.getOwnPropertyDescriptor(input, key);
+        if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+        raw[key] = descriptor.value;
+      }
+      const kinds = indexedValues(raw.kinds, 1, 8);
+      if (kinds === null || !kinds.every(k => typeof k === 'number' && Number.isSafeInteger(k) && k >= 0 && k <= 65_535)) return null;
+      const { limit, since } = raw;
+      if (typeof limit !== 'number' || !Number.isSafeInteger(limit) || limit < 1 || limit > POOL_LIMITS.maxFilterLimit) return null;
+      if (typeof since !== 'number' || !Number.isSafeInteger(since) || since < 0) return null;
+      if (wall !== null && since < wall - (kinds.every(k => k === GIFT_WRAP_KIND) ? POOL_LIMITS.maxGiftWrapHistorySeconds : POOL_LIMITS.maxHistorySeconds)) return null;
+      const copy: Record<string, unknown> = { kinds: Object.freeze(kinds), since, limit };
+      for (const name of optional) {
+        if (raw[name] === undefined) continue;
+        const list = indexedValues(raw[name], 1, FRAME_LIMITS.maxFilterValues);
+        if (list === null || !list.every(v => typeof v === 'string' && withinBytes(v, FRAME_LIMITS.maxTagItemBytes) && ((name !== 'authors' && name !== '#p') || isHex64(v)))) return null;
+        copy[name] = Object.freeze(list);
       }
       out.push(Object.freeze(copy) as unknown as RelayFilter);
     }
@@ -399,12 +424,20 @@ export function createRelayPool(options: PoolOptions): RelayPool {
   const pool: RelayPool = {
     subscribe(filters, handlers) {
       if (closed) return refuse('CLOSED');
-      const normalized = normalize(filters);
-      if (normalized === null) return refuse('INVALID_FILTER');
-      if (typeof handlers?.onEvent !== 'function') return refuse('INVALID_FILTER');
+      let normalized: readonly RelayFilter[] | null, captured: SubscriptionHandlers;
+      try {
+        normalized = normalize(filters); if (normalized === null) return refuse('INVALID_FILTER');
+        if (typeof handlers !== 'object' || handlers === null || Array.isArray(handlers)) return refuse('INVALID_FILTER');
+        const event = Object.getOwnPropertyDescriptor(handlers, 'onEvent'), eose = Object.getOwnPropertyDescriptor(handlers, 'onEose');
+        if (!event || !('value' in event) || typeof event.value !== 'function' || eose && (!('value' in eose) || eose.value !== undefined && typeof eose.value !== 'function')) return refuse('INVALID_FILTER');
+        const onEvent = event.value, onEose = eose?.value;
+        captured = Object.freeze({ onEvent: (event: NostrEvent, relayId: string) => { Reflect.apply(onEvent, handlers, [event, relayId]); },
+          ...(onEose === undefined ? {} : { onEose: (relayId: string) => { Reflect.apply(onEose, handlers, [relayId]); } }) });
+      } catch { return refuse('INVALID_FILTER'); }
+      if (closed) return refuse('CLOSED');
       if (subs.size >= POOL_LIMITS.maxSubscriptionsPerRelay) return refuse('LIMIT_EXCEEDED');
       const id = `s${++subCounter}`;
-      subs.set(id, { id, filters: normalized, handlers });
+      subs.set(id, { id, filters: normalized, handlers: captured });
       for (const r of recs) if (r.state === 'open') { r.counts.set(id, 0); try { r.socket?.send(encodeReq(id, normalized)); } catch { fail(r, null, 'send-failed'); } }
       fill();
       return { ok: true as const, value: Object.freeze({ id, close: () => closeSub(id) }) };
@@ -412,8 +445,10 @@ export function createRelayPool(options: PoolOptions): RelayPool {
     async publish(event, signal) {
       if (closed) return refuse('CLOSED');
       const checked = parseEvent(event);
+      if (closed) return refuse('CLOSED');
       let valid = false;
       try { valid = checked !== null && options.verifier.verifyEvent(checked) === true; } catch { valid = false; }
+      if (closed) return refuse('CLOSED');
       if (checked === null || !valid || signal?.aborted) return refuse('INVALID_FILTER');
       const targets = recs.filter(r => r.state !== 'banned').slice(0, maxActive);
       if (inFlight + targets.length > POOL_LIMITS.maxPublishInFlight || sockets.size + targets.length > maxActive) return refuse('LIMIT_EXCEEDED');

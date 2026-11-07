@@ -1,0 +1,495 @@
+{
+  "task": "T92",
+  "requirement": "T84 R84-E / R77-5; existing T38/G24/operations acceptance",
+  "status": "LOCAL_NATIVE_PASS_INDEPENDENT_ROOT_ACCEPTED",
+  "scope": "Preserved signed two-origin migration plus complete owned-source503 outage and retained-file recovery at a fresh independently verified third origin",
+  "producer": {
+    "path": "scripts/test-journey-origin-browser.mjs",
+    "sha256": "302cb726bf7b99f1648d66fad9173120aac9de48fd466a5c9061266069df7b5b",
+    "command": "P2P_CHROMIUM=/workspace/work/t87-native-diagnostic/chrome156/opt/google/chrome/chrome /workspace/work/t87-native-diagnostic/node24.22.1/node scripts/test-journey-origin-browser.mjs",
+    "exitCode": 0,
+    "node": "v24.22.1",
+    "browser": "156.0.8078.79",
+    "headAtReceipt": "32c344992a12aa4751d89ea5cf360c3d69e27761",
+    "completedAtUtc": "2026-11-02T17:37:26.241494+00:00",
+    "log": "/workspace/work/t92-origin-outage-qualified.log",
+    "logSha256": "ff712e7ec02aae32498258f7ab3eec64436e6cf3804c43257265ce33bc9a5c38",
+    "frozenProducer": "/workspace/work/t92-frozen-producer.mjs",
+    "dependencyPinCount": 58,
+    "sourceCapture": "actual compilation input hashes before transforms, or before-serve hashes for producer/Node helpers/manifests; all checked unchanged at proof end",
+    "postRunSourceDrift": []
+  },
+  "historicalPartialRecord": {
+    "path": "docs/execution/drills/local-drills.json",
+    "id": "LOCAL-LOST-ORIGIN",
+    "status": "partial-local-fixture-observed",
+    "sha256": "af8c9a807b3c29cc63b8fe02dcf3aaa2f7c28e52ca0c5d9f662470d6c5bccaa1",
+    "modifiedByT92": false
+  },
+  "negativeCasesRetained": [
+    {
+      "step": "original destination asset tamper",
+      "expected": "ASSET_MISMATCH",
+      "observed": true
+    },
+    {
+      "step": "original destination wrong signature",
+      "expected": "SIGNATURE_INVALID",
+      "observed": true
+    },
+    {
+      "step": "original destination untrusted key",
+      "expected": "KEY_UNTRUSTED",
+      "observed": true
+    },
+    {
+      "step": "original migration wrong passphrase",
+      "expected": "AUTHENTICATION_FAILED",
+      "observed": true
+    },
+    {
+      "step": "outage recovery wrong passphrase",
+      "expected": "AUTHENTICATION_FAILED",
+      "observed": true
+    },
+    {
+      "step": "source file used as current destination verification",
+      "expected": "CONFLICT",
+      "observed": true
+    }
+  ],
+  "initialFailuresRetained": [
+    {
+      "stage": "development, not qualification",
+      "log": "/workspace/work/t92-origin-outage-red.log",
+      "sha256": "7f6f485920283d384fdd524000ea945d482a15b68a35e5558eee65d335a46fa9",
+      "exitCode": 1,
+      "reason": "Expected missing-outage RED: original source returned200 where503 was required."
+    },
+    {
+      "stage": "development, not qualification",
+      "log": "/workspace/work/t92-origin-outage-first.log",
+      "sha256": "588eb7c788ac2278deb7a193b4f29e03327c96f28846e63eba35c02ee60e30a5",
+      "exitCode": 1,
+      "reason": "Development helper omitted required decoder bounds; corrected to existing MAX_PAYLOAD_BYTES, without changing G02 limits."
+    }
+  ],
+  "observed": {
+    "fixture": "actual-signed-two-origin-profile-migration",
+    "browser": "156.0.8078.79",
+    "node": "v24.22.1",
+    "origins": 3,
+    "migrationOrigins": 2,
+    "manifestSha256": "433163f0d206cfca705dbada5bc3864515fc8dea173cbf62d18805c7b23503b2",
+    "signedAssets": 4,
+    "assetDigests": [
+      {
+        "path": "index.html",
+        "bytes": 150,
+        "sha256": "1411dc23080961b1667095016edfc101c826c92be62e59e7b5eea5217243dbaf"
+      },
+      {
+        "path": "journey-origin-screen.js",
+        "bytes": 166205,
+        "sha256": "f261c2a1aa9df6d52188a3159c8fbf26c58b6c7b2ac4b08ef68a9cb050e283b8"
+      },
+      {
+        "path": "journey-worker.js",
+        "bytes": 234556,
+        "sha256": "642d724a5fc3a35d2903d6d1db18294e8694fdd81a904cc53a8535f8514e8905"
+      },
+      {
+        "path": "registry.json",
+        "bytes": 791,
+        "sha256": "c04b0c661712421eb0f96c0aef48b84ff4788166ec0c44dfcc667eaa5e73d6cd"
+      }
+    ],
+    "compiledSyntheticPublicKey": true,
+    "independentAssetVerification": true,
+    "tamperedAssetRefused": true,
+    "wrongSignatureRefused": true,
+    "untrustedKeyRefused": true,
+    "sourceCurrentBackupVerified": true,
+    "wrongPassphraseRefused": true,
+    "freshDestinationProfileAndKey": true,
+    "sourceCiphertextPreserved": true,
+    "sourceBackupNotDestinationProof": true,
+    "destinationCurrentBackupReverified": true,
+    "opaqueRecordsIncluded": true,
+    "localOriginOutage": {
+      "allSourcePaths503": [
+        "/",
+        "/index.html",
+        "/journey-origin-screen.js",
+        "/journey-worker.js",
+        "/registry.json",
+        "/release.json",
+        "/release-signature.json"
+      ],
+      "actualReloadStatus": 503,
+      "oldSourceWorkerTargetDestroyed": true,
+      "noReplacementSourceWorker": true,
+      "expectedSource503Responses": 15,
+      "expectedOutageErrors": [
+        {
+          "index": 0,
+          "code": "HTTP_503",
+          "path": "/"
+        }
+      ],
+      "retainedAuthenticatedBackupSha256": "4ba304d002d414a35cf21a1045df48b0310d67463cb851a1154f41281a9f7c62",
+      "sourceCheckpointSha256": "926dbbc729e373705b21889daf20d28466ad7aaf31b8409a873a1d3171143ab6",
+      "sourceReServingDuringRecovery": false,
+      "freshIndependentlyVerifiedDestination": true,
+      "wrongPassphraseRefused": true,
+      "freshProfileKeySaltAndNonces": true,
+      "sourceCiphertextUnchanged": true,
+      "opaqueRecordsExact": true,
+      "destinationBackupReverified": true,
+      "sourceFileCannotVerifyDestination": true
+    },
+    "sourceDependencies": [
+      {
+        "path": "apps/web/src/content-policy/local-policy.ts",
+        "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/journey/presentation.ts",
+        "sha256": "bcb7d5435d7afc34681cf437c7dd781f223bc1fa7f76bb178a25d9f5e9b13523",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/journey/screen.ts",
+        "sha256": "1f1ad2c51fb77189fc5a4123c26aed5f6435c2af159fbcaf45f2b1aca220a0d2",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/journey/vault-composition.ts",
+        "sha256": "325a9f9455c5e9e5061694fd3a848e3bc1711643a9aa89212c873c7cc8730bb7",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/runtime/worker-endpoint.ts",
+        "sha256": "0d19e84ad3be12ee547a5ab97c686d537c639652bebcccfe5d2cb2e237f2437d",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/locale/bundled.ts",
+        "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/locale/catalog.ts",
+        "sha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/locale/en.ts",
+        "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/locale/runtime.ts",
+        "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/trade/display-text.ts",
+        "sha256": "34bc307987270784e9c5fa68789e6eb3d699d0fb9dcff6edb1f6a1f5576bf5c3",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+        "sha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+        "stage": "before-serve"
+      },
+      {
+        "path": "package.json",
+        "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e",
+        "stage": "before-serve"
+      },
+      {
+        "path": "packages/domain/index.ts",
+        "sha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/errors.ts",
+        "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/journey-view.ts",
+        "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/observation-dispatcher.ts",
+        "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/privacy-view.ts",
+        "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/registry.ts",
+        "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/terms-review.ts",
+        "sha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/trade-draft.ts",
+        "sha256": "9376a28f27287e9c6ce17940de24012e5308c6b11dcb5a09605624da025c51f1",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/domain/src/trade-terms.ts",
+        "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/personalization/index.ts",
+        "sha256": "dc0b78d4e739ebe40842bec0f936adc3a4c340edb7552290b6ea8eb2dad736d0",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/personalization/src/favorites.ts",
+        "sha256": "57b4681a8e871a4de685e64388e29e30e7294986159c36440a8e3824d7628e72",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/personalization/src/trade-draft-store.ts",
+        "sha256": "93294d0ed61cc081b17992a4c462decdc4aa41fcd8cee69de5c4369240d39d7a",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/backup-verification.ts",
+        "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/backup.ts",
+        "sha256": "703ed5c8083ba97a05d8c4131e267833420d867fbafc837f3e467c6bb9f9c399",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/identity.ts",
+        "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/intent.ts",
+        "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/recovery-reference.ts",
+        "sha256": "1135dc4d709919a69614e9dc1fad6a70f97cfb915e86df32b3fe7db5566505c7",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/registry.ts",
+        "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/saved-review.ts",
+        "sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/trade-drafts.ts",
+        "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/transport-selection.ts",
+        "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/transport.ts",
+        "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/vault-service.ts",
+        "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/schemas/src/vault.ts",
+        "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/index.ts",
+        "sha256": "5d10ac31c235c8ec4b6cfafa0c6b13367175dead87f5209da95aceabe83184a9",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/src/acceptance-gates.ts",
+        "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/src/release-locator.ts",
+        "sha256": "a9de13ed5853f2c58c9ea6c725346b60da47958bc180adc07a50b81c1ca6c4e4",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/src/release-manifest.ts",
+        "sha256": "d01f4becc6e88cf2ff2a3ddfa9909c83147154f86f60fead0629daa56d7a4969",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/src/release-proof.ts",
+        "sha256": "309f3660a5ce5a4d5d15f549bdcb54fde8749c18b3464a7b23a85b544c34fafe",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/security/test/lib/release-fixture.mjs",
+        "sha256": "b51b300a221c620ba4118a200247b29c4b8db4ac8588b21eab765605c387155b",
+        "stage": "before-serve"
+      },
+      {
+        "path": "packages/security/test/lib/release-registry-fixture.mjs",
+        "sha256": "97ccdc676d9d93131a0c1ef25596b28954b8d0decc6fa8b2fb3e272ddfda8dbc",
+        "stage": "before-serve"
+      },
+      {
+        "path": "packages/storage/index.ts",
+        "sha256": "de8f3161a3daaf454d42e96c8bdf0093d9787a045ce9b8041e2ad56928d3d2bb",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/backup-service.ts",
+        "sha256": "422e2b69c906fff5bd3c620a0b7be3cdaa59337ac971012d25a9d71842f422f0",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/idb-vault-store.ts",
+        "sha256": "835cca222821a3907b9172c285b2a351d97cc03440cd85ebba66a1e8b33efb69",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/migration-service.ts",
+        "sha256": "3d839994b618d2877bb266626adc941f586242f208ed9942f6e8194c60001357",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/recovery-slot.ts",
+        "sha256": "f0ffd258c6c47d5d7a42a6e69eddafdeec883e23d8acade6b02d48098f3fa181",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/retention-service.ts",
+        "sha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/vault-crypto.ts",
+        "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "packages/storage/src/vault-service.ts",
+        "sha256": "bf7f283caebc989be5b7b29b3efb97ffc1b69462e7d542fde8bd5a7eeb5c25ec",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "scripts/fixtures/journey-origin-screen.mjs",
+        "sha256": "596024023aacb0512f9fa80b55594b302e68ed614d3a7c0c3b00ff986e513952",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "scripts/fixtures/journey-origin-worker.mjs",
+        "sha256": "5acf2189606914961401f871087fea0f3955e98a58b4f5916c29614f92a0195d",
+        "stage": "actual-build-input"
+      },
+      {
+        "path": "scripts/test-journey-origin-browser.mjs",
+        "sha256": "302cb726bf7b99f1648d66fad9173120aac9de48fd466a5c9061266069df7b5b",
+        "stage": "before-serve"
+      }
+    ],
+    "walletCalls": 0,
+    "externalRequests": 0,
+    "unexpectedErrors": [],
+    "productionOriginPolicy": false,
+    "releaseEnabled": false,
+    "offDeviceRetention": false,
+    "permanentOriginLoss": false,
+    "fundsRecoveryProven": false,
+    "cleanup": {
+      "browserClosed": true,
+      "cdpDetached": true,
+      "serversClosed": 3,
+      "temporaryDirectoryRemoved": true,
+      "retainedBufferCleared": true
+    }
+  },
+  "retentionScope": {
+    "exactAuthenticatedEncryptedFileRetainedDuringOutage": true,
+    "authentication": "actual source Worker current complete-profile G03 verification; retained file SHA checked throughout recovery",
+    "sourceReServingDuringRecovery": false,
+    "oldWorkerRetirement": "CDP targetDestroyed for captured original Worker plus target absence before fresh destination bootstrap",
+    "opaqueRows": "actual G02 decrypt/list compares exact schemaVersion42 preference across source and destination current files",
+    "destinationProof": "new destination export reverified by actual Worker; source file alone refused",
+    "temporaryRetainedFileRemovedDuringCleanup": true
+  },
+  "qualificationBoundary": {
+    "localOwnedOriginsOnly": true,
+    "outageMechanism": "all owned source app/manifest/registry/Worker paths stay HTTP503 through recovery and then owned-server cleanup",
+    "recoveryFormat": "existing p2p-offramp-backup v1 unchanged",
+    "trust": "existing compiled synthetic G15 key and signed asset fixture; no new production trust/provider/policy",
+    "permanentOriginLossProven": false,
+    "offDeviceRetentionProven": false,
+    "fundsRecoveryProven": false,
+    "productionOriginPolicy": false,
+    "releaseEnabled": false,
+    "walletSendPerformed": false,
+    "publicationPerformed": false,
+    "physicalErasureClaim": false,
+    "requestScope": "intercepted owned app context plus enumerated owned source probes; expected503 errors separated from unexpected failures"
+  },
+  "modifiedRepositoryPaths": [
+    "scripts/test-journey-origin-browser.mjs",
+    "docs/execution/qualification/local-origin-outage.json"
+  ],
+  "fullPackageSuiteRun": false,
+  "commitsCreatedByT92": false,
+  "T81ArtifactsModified": false,
+  "rootIndependentReview": {
+    "receipt": "docs/execution/reviews/T92-root.json",
+    "reviewer": "/root",
+    "scope": "finite local native outage only; no release approval"
+  }
+}

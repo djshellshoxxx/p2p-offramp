@@ -2,7 +2,62 @@
 import { createMessage, formatMessage, type MessageEntry, type MessageVariables, type MessageValues } from './catalog.ts';
 
 const definitions = {
+  compatibility: {
+    readOnlyTitle: 'Read-only browser mode',
+    readOnlyHelp: 'A required browser feature is missing or blocked. Local private operations cannot start here.',
+    missingFeatures: { source: 'Missing or unavailable: {features}.', variables: { features: 'text' } },
+    secureContext: 'secure browser context', encryption: 'browser encryption', processing: 'isolated local processing',
+    storage: 'encrypted local storage', fileImport: 'file import', fileExport: 'encrypted file download',
+    recoveryTitle: 'Recovery remains available',
+    runtimeFailure: 'The browser exposes the required features, but local services could not start. Follow the operation error and recovery guidance.',
+    recoveryHelp: 'Preserve this browser’s encrypted data and any backup. Read recovery guidance before changing browser, device or origin.',
+    recoveryLink: 'Read recovery guidance',
+    qualificationWarning: 'This local feature check does not verify wallet or device support. Browser storage can still be blocked or lost.',
+  },
   privacy: {
+    policyTitle: 'Transport policy for brokered app connections',
+    policyIntro: 'Choose a policy for the app connections listed below.',
+    policyOrdinary: 'Ordinary',
+    policyStrict: 'Strict',
+    policyApply: 'Apply policy',
+    policyRelaxConsent: 'I choose Ordinary and understand that explicitly permitted direct connections may be used.',
+    policySelected: 'Selected policy',
+    policyUnavailable: 'No transport policy is available from this connection owner.',
+    policyLoading: 'Reading the current transport policy…',
+    policyBusy: 'Applying the selected transport policy…',
+    policyChanged: 'The connection owner or policy changed. Read the current policy before trying again.',
+    policyUnknownCoverage: 'Selecting Strict does not prove private routing. RPC and external wallet routing remain unknown unless separately observed.',
+    policyChannels: 'Connections controlled by this policy',
+    policyNoChannels: 'No brokered connections are configured.',
+    policyBytesSent: 'A policy change cannot retract bytes already sent. Existing connections may still be closing.',
+    policyRetry: 'Read current policy',
+    "detailsTitle": "Configured endpoint origins",
+    "detailsIntro": "Configuration identifies a destination. It does not verify private routing.",
+    "detailsUnknown": "No current trusted endpoint configuration is available.",
+    "configuredOrigin": "Configured origin",
+    "connectionOrigin": "Browser connection origin",
+    "endpointId": "Endpoint identifier",
+    "endpointSource": "Bundled connection configuration",
+    "endpointGeneration": "Configuration generation",
+    "endpointExpiry": "Configuration expiry on this session’s monotonic clock",
+    "walletUnknown": "External wallet routing is unknown and may use connections outside this app.",
+    "signingTitle": "Review the actual wallet request",
+    "signingIntro": "Confirm this current request before the app asks the wallet to sign or send. Privacy observations do not authorize spending.",
+    "signingAction": "Requested action",
+    "signingProvider": "Selected wallet provider",
+    "signingRole": "Signing role",
+    "signingDestination": "Request destination",
+    "signingValue": "Native value in canonical base units",
+    "signingSpender": "Token allowance spender",
+    "signingExtensions": "Agreed extensions",
+    "signingNoExtensions": "No optional extensions",
+    "signingProfile": "Current local profile",
+    "signingExpiry": "Review expiry on this session’s monotonic clock",
+    "signingConfirm": "Confirm the reviewed wallet request",
+    "signingDiscard": "Discard this review",
+    "signingExpired": "This wallet-request review expired. Review the current request again.",
+    "signingReview": "Review privacy and the wallet request",
+    "signingChanged": "The wallet-request review changed or was revoked. Review it again before confirming.",
     title: 'Independent privacy observations', intro: 'These local observations do not verify anonymity, encrypted messaging or payment settlement.',
     selected: 'Selected policy', observed: 'Observed state', source: 'Evidence source', reason: 'Observation reason',
     noPolicy: 'No network policy selected', none: 'No trusted observation', unknown: 'Unknown', unavailable: 'Unavailable', unsupported: 'Unsupported',
@@ -18,6 +73,105 @@ const definitions = {
     refresh: 'The local vault is inspected again when its observation expires, vault status or selection changes, or this page becomes visible again. Network, messaging and proof services are not connected in this shell.',
     noTime: 'No evidence timestamp is available.', error: 'Privacy observations are unavailable. No privacy coverage or transaction authority is established.',
   },
+  analytics: {
+    "title": "Local screen counts",
+    "help": "These optional counts stay in this page’s memory and describe screen views, not completed trades or payments. They include no route IDs, amounts or timestamps. Locking, leaving or reloading clears them. Export only if you want to keep a copy.",
+    "off": "Screen counts are off.",
+    "on": "Screen counts are on for this page session.",
+    "unavailable": "Screen counting is unavailable.",
+    "optIn": "Start local screen counts",
+    "optOut": "Stop and clear screen counts",
+    "clear": "Clear counts and stop",
+    "reviewExport": "Review counts for export",
+    "previewTitle": "Review local screen counts",
+    "download": "Download reviewed counts",
+    "exportUnavailable": "The counts changed or the page session ended. Review the current counts again before downloading.",
+    "screenColumn": "Screen category",
+    "countColumn": "Foreground entries"
+  },
+  analyticsCategories: {
+    "home": "Home",
+    "offers": "Offers",
+    "trade": "Trade review",
+    "recovery": "Recovery",
+    "settings": "Settings"
+  },
+  drafts: {
+    "title": "New local draft",
+    "help": "Reuse amounts only. Enter parties, instructions and deadlines again, then review exact current terms. Trading remains disabled.",
+    "locked": "Unlock a profile to edit a private draft or manage encrypted templates.",
+    "unavailable": "No current registry choices are available for this draft.",
+    "templatesTitle": "Encrypted templates and repeat defaults",
+    "templatesEmpty": "No templates are saved in this profile.",
+    "loadTemplates": "Load templates",
+    "newBlank": "Start blank draft",
+    "useTemplate": "Use template",
+    "useRepeatDefault": "New draft from repeat defaults",
+    "saveTemplate": "Save amounts as template",
+    "removeTemplate": "Remove template",
+    "setRepeatDefault": "Use for repeat defaults",
+    "clearRepeatDefault": "Clear repeat defaults",
+    "slotLabel": "Template slot",
+    "review": "Review fresh draft",
+    "cancel": "Cancel",
+    "previewTitle": "Review local template change",
+    "reviewChange": "I reviewed these local changes and understand backup copies are unaffected.",
+    "confirmChange": "Confirm local change",
+    "backupLimits": "Changes affect this encrypted profile only. Older backups can restore removed templates. Saved trade reviews and recovery records are retained.",
+    "savedAmountsNeedReview": "Saved amounts need checking. No current quote or counterparty acceptance is implied.",
+    "confirmAmounts": "I rechecked the exact crypto and fiat amounts for this draft.",
+    "confirmIdentities": "I checked the current chain, escrow, asset and full party addresses.",
+    "confirmEmptyInstructions": "I intentionally leave draft payment instructions empty.",
+    "busy": "Checking this local operation…",
+    "saved": "The local template change is saved.",
+    "choose": "Choose",
+    "identityTitle": "Current registry identities",
+    "invalid": "Enter complete canonical values.",
+    "oldValues": "Previous values",
+    "newValues": "New values",
+    "repeatDefaultRemoved": "Removing this template also clears repeat defaults.",
+    "operationFailed": "The draft operation did not complete. Correct entered fields or reload templates before retrying a change; a write may have committed.",
+    "templateName": {
+      "source": "Template {slot}",
+      "variables": {
+        "slot": "count"
+      }
+    },
+    "affectedTemplates": {
+      "source": "Affected local templates: {count}.",
+      "variables": {
+        "count": "count"
+      }
+    }
+  },
+  draftFields: {
+    "networkId": "Network",
+    "deploymentId": "Escrow deployment",
+    "assetId": "Asset",
+    "amountBaseUnits": "Crypto amount in base units",
+    "fiatCurrency": "Fiat currency code",
+    "fiatMinorUnits": "Fiat amount in minor units",
+    "fiatScale": "Fiat decimal scale",
+    "seller": "Full seller address",
+    "buyer": "Full buyer address",
+    "paymentInstructions": "New private draft instructions",
+    "acceptBeforeSeconds": "New acceptance deadline (Unix seconds)",
+    "escrowExpirySeconds": "New escrow expiry (Unix seconds)"
+  },
+  favorites: {
+    title: 'Favorite saved reviews',
+    help: 'Favorites stay in this encrypted profile. Opening a favorite checks its saved terms against the current registry again.',
+    locked: 'Unlock a profile to view favorites.',
+    load: 'Load favorites',
+    empty: 'No saved reviews are starred.',
+    star: 'Star saved review',
+    unstar: 'Unstar saved review',
+    open: 'Open with a fresh review',
+    unavailable: 'This saved review is no longer available for the current registry.',
+    busy: 'Updating favorites…',
+    failed: 'The favorite operation did not return a confirmed result. Reload favorites before trying again; a write may have committed.',
+    retained: 'The retention tool conservatively keeps all history while a favorites preference record is present. Existing backups keep earlier copies.',
+  },
   help: {
     profile: "A profile ID locates local encrypted data on this origin. It is not a wallet address or counterparty authentication.",
     unlock: "Unlocking exposes local plaintext to this browser session. It grants no wallet or transaction permission.",
@@ -29,6 +183,13 @@ const definitions = {
     restoreConsent: "A successful local restore is not confirmation that a referenced transaction failed or that it is safe to submit again.",
     label: "Help", show: { source: "Help for {control}", variables: { control: "text" } } },
   "shell": {
+    shareAppTitle: 'Share this app',
+    shareAppHelp: 'Share a generic app address without the current page’s query or fragment. This address does not verify the app or its release.',
+    shareAppUrl: 'App address',
+    shareAppCopy: 'Copy app address',
+    shareAppCopied: 'App address copied.',
+    shareAppCopyUnavailable: 'Copying is unavailable. Select and copy the address above.',
+    shareAppUnavailable: 'A generic app address is unavailable. Use an independently verified app address.',
     "appName": "P2P Off-ramp",
     "development": "Development shell",
     "skip": "Skip to main content",
@@ -66,7 +227,7 @@ const definitions = {
     "submitUnlock": "Unlock local vault",
     "cancel": "Cancel",
     "unlocking": "Unlocking local vault…",
-    "unlockedHelp": "The local vault session is open. This shell does not display private records or enable trading. Lock it when you finish.",
+    "unlockedHelp": "The local vault session is open. Private records appear only when you explicitly load or review them. Trading remains disabled. Lock the vault when you finish.",
     "offersTitle": "Offers",
     "offersIntro": "Offer discovery is unavailable.",
     "offersHelp": "No relay is connected and no live offers have been loaded. This page does not show example prices or counterparties.",
@@ -80,6 +241,41 @@ const definitions = {
     "recoveryIntro": "Keep an encrypted copy before changing browser, device, or origin.",
     "originTitle": "Local storage belongs to this origin",
     "originHelp": "A new domain, gateway, or CID origin can have a different IndexedDB vault. An empty browser does not establish that your keys or funds are gone. A changed path on the same origin does not isolate storage.",
+    "retentionTitle": "Review local data retention",
+    "retentionHelp": "This review covers saved terms, local transaction history and complete stored conversations. Thirty days is an offline review suggestion, never an automatic deletion deadline. Native eligibility checks are separate explicit chain reads; they never send a transaction.",
+    "retentionLimits": "Deletion removes only the reviewed encrypted records from this profile. It cannot erase browser or device remnants, remote copies, or exported backups. Preserve a usable encrypted backup first if you need this history.",
+    "retentionRestoreWarning": "Restoring an older backup can bring back records that you previously deleted. Restored recovery labels are unverified until fresh native reconciliation.",
+    "retentionConsent": "I reviewed this exact revision and understand that deletion is logical, affects this complete eligible group, and leaves backups and remote copies unchanged.",
+    "retentionPlan": "Preview local records offline",
+    "retentionReview": "Check native deletion eligibility",
+    "retentionDelete": "Delete the reviewed eligible group",
+    "retentionCancel": "Cancel retention operation",
+    "retentionBusy": "Checking the selected profile…",
+    "retentionLocked": "Unlock a local profile to review its retained records. Locking clears this preview and keeps recovery data.",
+    "retentionUnavailable": "This build has no native dependency provider. All records remain protected; offline suggestions grant no deletion permission.",
+    "retentionProtected": "Unknown, future, identity and unresolved dependencies remain protected. A transaction label or imported backup never establishes native closure.",
+    "retentionTooLarge": "This complete eligible group exceeds the 256-record atomic limit. It remains protected; the app will not split it into implicit batches.",
+    "retentionManageSaved": "Review deletion in Settings",
+    "retentionCounts": { "source": "{archive} {archive|record|records} suggested for archive review; {reviewed} {reviewed|record|records} eligible for this complete reviewed deletion; {protected} {protected|record|records} protected. Local revision {revision}.", "variables": { "archive": "count", "reviewed": "count", "protected": "count", "revision": "count" } },
+    "retentionDeleted": { "source": "Logically deleted {count} {count|record|records} from local revision {revision}. Backups and remote copies remain unchanged.", "variables": { "count": "count", "revision": "count" } },
+    "backupVerifyTitle": "Authenticate a backup file against this profile",
+    "backupVerifyHelp": "Unlock the profile to check a selected backup file and its passphrase against that exact committed revision. Exporting, downloading, unlocking or restoring another profile does not perform this check.",
+    "backupVerifyScope": "This covers every encrypted local record in one profile, including opaque records. It does not cover external-wallet spending keys, complete relay history, chain truth or file retention on another device. A result is a point-in-time check; recheck before relying on its revision.",
+    "backupVerifyFile": "Backup file to authenticate",
+    "backupVerifyPassphrase": "Passphrase for this backup file",
+    "backupVerify": "Verify this backup file",
+    "backupVerifyCheck": "Recheck verified revision",
+    "backupVerifying": "Authenticating the file and checking the committed profile…",
+    "backupVerifyChecking": "Checking the selected profile revision…",
+    "backupVerifyNone": "No authenticated backup verification is held for this profile selection.",
+    "backupVerifyLocked": "Unlock the matching local profile before verifying its backup. A restored fresh-key profile needs its own exported file and verification.",
+    "backupVerifyMismatch": "The file does not match the open profile’s committed revision, or the stored profile changed. Export the latest profile and verify its file again.",
+    "backupVerifyFileRequired": "Choose the encrypted backup file to authenticate.",
+    "backupVerifyCancelled": "Verification cancelled. No backup verification was established; profile data was not changed.",
+    "backupVerifyCancel": "Cancel verification",
+    "backupVerifyEnvelopeDigest": "Authenticated encrypted envelope SHA-256",
+    "backupVerifyFileDigest": "Verified file SHA-256",
+    "backupVerified": { source: "Backup file authenticated against profile {profileId}, revision {revision}. This result is local to this profile selection and check.", variables: { profileId: "identifier", revision: "count" } },
     "backupTitle": "Export an encrypted file",
     "backupHelp": "Export reads committed ciphertext for a known local profile. It does not include external-wallet spending keys. Keep the file private and retain its passphrase separately.",
     "unchecked": "Authentication not checked",
@@ -127,6 +323,9 @@ const definitions = {
     "framingHelp": "A CSP meta tag cannot enforce frame-ancestors. Host response headers require a separate deployment check; this shell does not claim clickjacking protection.",
     "localeTitle": "Language and compatibility",
     "localeHelp": "English source copy only. Browser capability checks are not device certification. Wallet support, physical device tests, translation review, and accessibility acceptance remain pending.",
+    "localeFallback": "The requested language is unavailable or incomplete. The complete English source is shown. Funds remain disabled.",
+    "localeUseSource": "Use English source",
+    "localeFixture": "Development language fixture. This is formatting and layout test data, not a reviewed translation. Funds remain disabled.",
     "unknownTitle": "Page unavailable",
     "unknownHelp": "This route is not supported. Return home or open recovery guidance. Link contents are not used as commands.",
     "returnHome": "Return home",
@@ -195,7 +394,8 @@ const definitions = {
     "CANCELLED": "The local operation was cancelled. No success is confirmed.",
     "BUSY": "Another local operation is running. Wait for it to finish before trying again.",
     "PROTOCOL_ERROR": "The local service could not complete this operation safely. Keep your data and open recovery guidance.",
-    "TIMEOUT": "The local operation timed out. Check local status before trying again."
+    "TIMEOUT": "The local operation timed out. Check local status before trying again.",
+    "NATIVE_PROOF_REQUIRED": "These records are protected. Review deletion in Settings; a current native dependency check and explicit consent are required."
   },
   "trade": {
     "versionPrefix": "v",
@@ -203,6 +403,7 @@ const definitions = {
     "title": "Trade terms review",
     "intro": "Read-only terms as supplied. Nothing here can be accepted, signed, funded or sent.",
     "sourceFile": "Source: a local file you selected. Its contents were checked against the loaded registry; that does not make the counterparty trustworthy.",
+    sourceDraft: 'Source: newly entered local draft. No acceptance is authenticated.',
     "sourceSynthetic": "Source: SYNTHETIC test-only sample built into this demo. Never use these addresses or amounts on a real network.",
     "sourceSaved": "Source: an encrypted review loaded from this profile and checked against the current registry.",
     "network": "Network",
@@ -281,7 +482,7 @@ const definitions = {
     "sessionEmpty": "No terms reviewed yet in this session.",
     "sessionHelp": "Up to 8 unsaved reviews are kept in memory, alongside saved reviews from the open profile. Locking or reloading clears this list. Removing an entry does not delete its encrypted saved copy.",
     "save": "Save encrypted review",
-    "persistenceHelp": "Unlock a profile to save or load reviews. Each profile can hold up to 8 saved reviews; saved copies can be deleted explicitly. Saved original terms include private payment instructions. Loading checks every document against the current registry again. If a save is interrupted by locking, cancellation or a timeout, unlock and load saved reviews to check whether it committed.",
+    "persistenceHelp": "Unlock a profile to save or load reviews. Each profile can hold up to 8 saved reviews; saved copies require dependency review and explicit deletion consent in Settings. Saved original terms include private payment instructions. Loading checks every document against the current registry again. If a save is interrupted by locking, cancellation or a timeout, unlock and load saved reviews to check whether it committed.",
     "persistenceBusy": "Working with encrypted reviews…",
     "persistenceSaved": "Review saved encrypted in this profile.",
     "persistenceLoaded": "Saved reviews loaded and checked against the current registry.",
@@ -307,7 +508,7 @@ const definitions = {
       "variables": {
         "key": "identifier",
         "sequence": "count",
-        "expires": "text"
+        "expires": "date"
       }
     },
     "testnetBanner": {
@@ -315,7 +516,7 @@ const definitions = {
       "variables": {
         "key": "identifier",
         "sequence": "count",
-        "expires": "text"
+        "expires": "date"
       }
     },
     "sessionItem": {
@@ -350,16 +551,17 @@ const definitions = {
   },
   "tradePageSavedFailed": {
     "LOCKED": "The profile is locked. Unlock it and try again.",
-    "LIMIT_EXCEEDED": "The profile already holds 8 saved reviews. Delete one first.",
+    "LIMIT_EXCEEDED": "The profile already holds 8 saved reviews. Review retention in Settings; protected records are never evicted.",
     "NOT_FOUND": "That saved review is no longer in the profile.",
     "CONFLICT": "The profile changed in another tab. Unlock again and retry.",
     "QUOTA_EXCEEDED": "Browser storage is full. Nothing was saved.",
     "REGISTRY_NOT_READY": "Saved reviews cannot be checked because no registry is loaded.",
-    "INVALID_SAVED_REVIEW": "Saved reviews could not all be checked against the current registry. No new reviews were loaded; encrypted data was retained.",
+    "INVALID_SAVED_REVIEW": "Some saved reviews could not be checked against the current registry. Valid reviews may have loaded; encrypted data was retained.",
     "UNKNOWN_OUTCOME": "The operation was interrupted and may have committed. Unlock and load saved reviews to check.",
     "BUSY": "Another profile operation is running. Try again shortly."
   },
   "tradePageRejected": {
+    "LOCAL_LIMIT_REACHED": "Another file import is still running. Wait for it to finish or cancel it.",
     "TOO_LARGE": "Refused: the file or one of its fields is larger than allowed.",
     "MALFORMED": "Refused: the file is not a valid trade-terms document.",
     "UNSUPPORTED_FORMAT": "Refused: this trade-terms format or version is not supported.",
@@ -501,7 +703,17 @@ type Group = keyof Definitions;
 type Variables<D> = D extends { readonly variables: infer V extends MessageVariables } ? V : Readonly<Record<never, never>>;
 type Entries = { readonly [G in Group]: { readonly [K in keyof Definitions[G]]: MessageEntry<Variables<Definitions[G][K]>> } };
 type StaticGroup<G extends Group> = { readonly [K in keyof Definitions[G] as Definitions[G][K] extends string ? K : never]: string };
+export type SourceGroup = Group;
+export type SourceKey<G extends SourceGroup> = keyof Definitions[G];
+export type SourceVariables<G extends SourceGroup, K extends SourceKey<G>> = Variables<Definitions[G][K]>;
+export type SourceStaticGroup<G extends SourceGroup> = StaticGroup<G>;
 const contexts: Record<Group, string> = {
+  analytics: 'Explicit optional memory-only screen aggregates and reviewed export; no routes, identities, payment or event authority',
+  analyticsCategories: 'Five fixed display labels for local foreground screen counts',
+  drafts: 'Local draft inputs and encrypted reusable amount preferences; no acceptance, signing or transaction authority',
+  draftFields: 'Canonical local draft field labels; exact money and identities are never locale parsed',
+  favorites: 'Local encrypted saved-review favorites; opening always requires a fresh current-registry review',
+  compatibility: 'Local browser feature availability and blocked startup recovery; no wallet or device qualification',
   privacy: 'Independent local privacy observations; no anonymity, settlement or economic authority',
   help: 'Local accessible control guidance; no private input or authority',
   shell: 'Local profile, recovery and offline application shell', shellErrors: 'Fixed local operation errors and recovery guidance',
@@ -514,7 +726,7 @@ const contexts: Record<Group, string> = {
   samples: 'Synthetic built-in trade-terms sample button labels',
 };
 const docsAnchor = '00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md';
-const critical = new Set(['shell.createConsent', 'shell.restoreConsent', 'shell.uncheckedHelp', 'trade.risk', 'recovery.unverified', 'recovery.private', 'diagnostics.privacy']);
+const critical = new Set(['shell.createConsent', 'shell.restoreConsent', 'shell.uncheckedHelp', 'shell.backupVerifyScope', 'shell.retentionConsent', 'shell.retentionLimits', 'shell.retentionRestoreWarning', 'trade.risk', 'recovery.unverified', 'recovery.private', 'diagnostics.privacy', 'privacy.policyRelaxConsent', 'privacy.policyUnknownCoverage', 'drafts.confirmAmounts', 'drafts.confirmIdentities', 'drafts.confirmEmptyInstructions', 'drafts.backupLimits', 'analytics.help', 'shell.shareAppHelp']);
 const groups: Record<string, Record<string, MessageEntry>> = Object.create(null), catalog: Record<string, MessageEntry> = Object.create(null);
 for (const group of Object.keys(definitions) as Group[]) {
   const entries: Record<string, MessageEntry> = Object.create(null);
@@ -528,8 +740,8 @@ for (const group of Object.keys(definitions) as Group[]) {
 }
 const entries = Object.freeze(groups) as Entries;
 export const sourceCatalog: Readonly<Record<string, MessageEntry>> = Object.freeze(catalog);
-/** No alternate locale is loaded or selected. Draft metadata is not human translation/security approval. */
-export const SOURCE_LOCALE = Object.freeze({ locale: 'en', direction: 'ltr', revision: 1, translator: null, reviewer: null, status: 'draft' } as const);
+/** Pure source metadata. Runtime display selection never changes source or grants translation/security approval. */
+export const SOURCE_LOCALE = Object.freeze({ locale: 'en', direction: 'ltr', revision: 3, translator: null, reviewer: null, status: 'draft' } as const);
 export function english<G extends Group, K extends keyof Definitions[G]>(group: G, key: K, values: MessageValues<Variables<Definitions[G][K]>>): string {
   return formatMessage(entries[group][key] as MessageEntry<Variables<Definitions[G][K]>>, values);
 }

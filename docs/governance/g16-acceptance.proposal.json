@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "g16-acceptance",
+  "kind": "escrow",
+  "priorVersion": "unqualified-current",
+  "proposedVersion": "pending-selection",
+  "affectedSpecs": [
+    "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.8_trade_coordination/module_1.8.1_trade_terms/spec-signed-trade-terms.md"
+  ],
+  "compatibleReaders": [],
+  "compatibleWriters": [],
+  "migrationId": null,
+  "recoveryArtifactHashes": [],
+  "threatImpactPath": "docs/governance/PENDING-DECISIONS.md",
+  "testEvidencePaths": [
+    "packages/governance/test/records.test.mjs"
+  ],
+  "status": "draft"
+}

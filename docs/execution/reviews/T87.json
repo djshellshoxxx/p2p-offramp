@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "task": "T87",
+  "author": "review_zoom",
+  "status": "FROZEN_FOR_INDEPENDENT_ROOT_REVIEW",
+  "recordedAt": "2026-11-02T16:10:49.194072+00:00",
+  "baseCommit": "441499d1be261f734cb00afbab516b094c8d84eb",
+  "files": [
+    {
+      "path": "packages/proof-jobs/src/supervisor.ts",
+      "bytes": 17703,
+      "sha256": "6abeead914ea1947fe06d6e219a4c962708d39d01ed68acd18efbdb10582e5eb",
+      "beforeSha256": "0a4595119c05ef477b8668348b96538d7d3db28eb66d731adb3c396c722a43f3"
+    },
+    {
+      "path": "packages/proof-jobs/test/supervisor.test.mjs",
+      "bytes": 15088,
+      "sha256": "e10a47f7c5e4744a5f8d960adb1a6ebbdefe0ef4054122cd03cb7ba39327b4e8",
+      "beforeSha256": "a5cdd7ca5754e2b229df58d6b19bdceec809507ada90d8f6ed6af09a6ef66ea3"
+    },
+    {
+      "path": "packages/proof-jobs/test/fixtures/real-app.tsx",
+      "bytes": 10100,
+      "sha256": "e19e2f68523b19ebc1a14b533466ad3aa39be7e891c9fdc5303f8b086f1584fc",
+      "beforeSha256": "b7ec649ae295bfdb11b723add0d098fd181d7ac2ab76835c98b12eec9e5f5a09"
+    },
+    {
+      "path": "packages/proof-jobs/test/browser.mjs",
+      "bytes": 16371,
+      "sha256": "49f94121da5ee6bf46c24c4deff73a8f4bdcbc3dd9fef466fab9e016aa276e5e",
+      "beforeSha256": "f6ae7855ee311a5881244ef5337604611730e41dda2e4bb2dfc74df1285a8e9e"
+    },
+    {
+      "path": "packages/proof-jobs/README.md",
+      "bytes": 10956,
+      "sha256": "dc8b0b99780078c050324c0dd94738848a4c6b89822186a5d9435157cd34b338",
+      "beforeSha256": "aecd72d6194dd4e0ff4125617107c57a5a02d7713351d62547a81a63b11d8b8c"
+    }
+  ],
+  "unchangedBoundaries": [
+    {
+      "path": "packages/proof-jobs/src/budget.ts",
+      "sha256": "02883261a2d0e7a5cfafe3f9b6cfcbe0900d9ab9315e2c7712508e41865cf373"
+    },
+    {
+      "path": "packages/proof-jobs/src/protocol.ts",
+      "sha256": "54b7440fa0e3a2b106e2874791269c7cfc7393291b90736502745ec30da72c79"
+    },
+    {
+      "path": "packages/proof-jobs/src/data.ts",
+      "sha256": "e5d8e0b06b17a79edab90ed59c048460c57887eb828ad578ad8a48f99a85b1e6"
+    },
+    {
+      "path": "packages/proof-jobs/src/provider-boundary.ts",
+      "sha256": "9860e65555dff47018cab4290a114cae9648a61723731393fb97ae14f07a683d"
+    },
+    {
+      "path": "packages/proof-jobs/worker/public-resource.worker.ts",
+      "sha256": "324fc3ac7e400c1529b7ed4bdd5db49ea28acaad9973b7cfa529567298545a99"
+    },
+    {
+      "path": "packages/proof-jobs/index.ts",
+      "sha256": "d0b3a41ecf4cc89dcc32426cedd8ce365ff8d22ef98e7b4367b19d1703513c8f"
+    }
+  ],
+  "cause": "Browser fixture returned void immediately from native Worker.terminate; Supervisor accepted it as physical completion and released shared admission during the measured2s native shutdown interval. A native competing-job RED created2 actual Workers with distinct live CDP targets.",
+  "repair": [
+    "Internal ResourceWorkerPort requires a real Promise<void>. Intrinsic Promise.then rejects void/objects/thenables; rejection or a nonvoid fulfillment never releases physical admission.",
+    "Test fixture captures one constructor-owned native-exit binding. Each Worker gets a unique public asset URL, correlated to exactly one observed native Worker and owned page CDP target; completion requires both close and target destruction. Arbitrary/unobserved URLs are refused.",
+    "Fixture completion waits for physical drain while elapsed cancellation/heartbeat/wall measurements remain logical-retirement measurements. Native competing attempt refuses during shutdown; explicit fresh work succeeds after exit.",
+    "The actual native closure assertion and100x20ms post-drain observation remain; final predicate is checked after the last wait. No claim that the unreproduced hosted end-of-loop flags explain its failure.",
+    "README and browser receipt explicitly scope the physical exit port to CDP local research; standard-browser hard CPU/physical-close deadlines remain unqualified. Empty providers/CSP/budgets/Worker/protocol remain unchanged."
+  ],
+  "redEvidence": {
+    "hosted": {
+      "path": "/workspace/work/pr26-76c-job-125372469755.log",
+      "bytes": 66993,
+      "sha256": "907cfcbfab00a8d6cb979e45ab1702369bded6afe5e724481f96066bfb664344"
+    },
+    "unit": {
+      "path": "/workspace/work/t87-termination-contract.RED.log",
+      "bytes": 925,
+      "sha256": "82acc77ed48a5e1486a593208e303c8c9015bda2934fec7eb020fe1176b3c1fb"
+    },
+    "nativeCompeting": {
+      "path": "/workspace/work/t87-native-diagnostic/chrome156-node24.22-competing-job.RED.log",
+      "bytes": 15994,
+      "sha256": "ae5e16a657ae0f1e3c7529812a8f99cd3f9ba21a45b4383cc6409c00893f7c70"
+    },
+    "diagnostic": {
+      "path": "/workspace/work/t87-diagnostic.json",
+      "bytes": 9843,
+      "sha256": "7fc1a2f51e1c39628ff9ce0e3b30ef55bc946846719e1ce2ee4200b5f6cfa542"
+    }
+  },
+  "greenEvidence": {
+    "unit": {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/proof-jobs/test/protocol.test.mjs packages/proof-jobs/test/supervisor.test.mjs",
+      "log": {
+        "path": "/workspace/work/t87-termination-contract-final.GREEN.log",
+        "bytes": 2299,
+        "sha256": "69c86c9c89b70b1ac85f72d44285f5fc5fb37f68878fed721cd3490c7a3d6e07"
+      },
+      "exitCode": 0,
+      "tests": 24,
+      "pass": 24,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "native": [
+      {
+        "log": {
+          "path": "/workspace/work/t87-browser156-node24.22.GREEN.log",
+          "bytes": 1190,
+          "sha256": "e1ed0eac9c29aa267dc2387b234f54af97a315e0cbff9aa3b738de149d058f69"
+        },
+        "exitCode": 0,
+        "receipt": {
+          "fixture": "actual-native-public-resource-and-vault",
+          "browser": "156.0.8078.79",
+          "node": "v24.22.1",
+          "nativeResourceWorkers": 14,
+          "actualNativeClosures": 14,
+          "emptyProviderBeforeCollector": true,
+          "exactInputBoundary": true,
+          "oversizedInputBeforeWorker": true,
+          "malformedResultIdentityAndMessageCaps": true,
+          "actualWorkerCrash": true,
+          "heartbeat": true,
+          "wallDeadline": true,
+          "sharedTabAdmission": true,
+          "admissionHeldThroughPhysicalExit": true,
+          "testOnlyTerminationPort": "constructor-owned-CDP-native-exit-promise",
+          "standardBrowserPhysicalDeadlineQualified": false,
+          "callbackReentry": true,
+          "ignoredCancelTerminated": true,
+          "lateReplyIgnored": true,
+          "resumeCancellation": true,
+          "actualVaultBackupAndLockResponsive": true,
+          "allInputsPublic": true,
+          "browserWasm": "unsupported-under-unchanged-CSP",
+          "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-ancestors 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+          "publicWorkerAssetBytes": 97342,
+          "providerRuntimeNetworkBytes": 0,
+          "externalRequests": 0,
+          "providerApproved": false,
+          "proofVerified": false,
+          "receiptAuthority": false,
+          "releaseEnabled": false
+        }
+      },
+      {
+        "log": {
+          "path": "/workspace/work/t87-browser154-node24.19.GREEN.log",
+          "bytes": 1190,
+          "sha256": "3b33e27fd50b844ce59645fdb83d25e60def34f85fc8ec92309c7911356ae047"
+        },
+        "exitCode": 0,
+        "receipt": {
+          "fixture": "actual-native-public-resource-and-vault",
+          "browser": "154.0.8037.57",
+          "node": "v24.19.0",
+          "nativeResourceWorkers": 14,
+          "actualNativeClosures": 14,
+          "emptyProviderBeforeCollector": true,
+          "exactInputBoundary": true,
+          "oversizedInputBeforeWorker": true,
+          "malformedResultIdentityAndMessageCaps": true,
+          "actualWorkerCrash": true,
+          "heartbeat": true,
+          "wallDeadline": true,
+          "sharedTabAdmission": true,
+          "admissionHeldThroughPhysicalExit": true,
+          "testOnlyTerminationPort": "constructor-owned-CDP-native-exit-promise",
+          "standardBrowserPhysicalDeadlineQualified": false,
+          "callbackReentry": true,
+          "ignoredCancelTerminated": true,
+          "lateReplyIgnored": true,
+          "resumeCancellation": true,
+          "actualVaultBackupAndLockResponsive": true,
+          "allInputsPublic": true,
+          "browserWasm": "unsupported-under-unchanged-CSP",
+          "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-ancestors 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'",
+          "publicWorkerAssetBytes": 97342,
+          "providerRuntimeNetworkBytes": 0,
+          "externalRequests": 0,
+          "providerApproved": false,
+          "proofVerified": false,
+          "receiptAuthority": false,
+          "releaseEnabled": false
+        }
+      }
+    ],
+    "types": [
+      {
+        "command": "./node_modules/.bin/tsc --noEmit",
+        "log": {
+          "path": "/workspace/work/t87-main-types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result": "passed with no diagnostics"
+      },
+      {
+        "command": "./node_modules/.bin/tsc --noEmit -p packages/proof-jobs/tsconfig.worker.json",
+        "log": {
+          "path": "/workspace/work/t87-worker-types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result": "passed with no diagnostics"
+      },
+      {
+        "command": "./node_modules/.bin/tsc --noEmit -p packages/proof-jobs/tsconfig.fixture.json",
+        "log": {
+          "path": "/workspace/work/t87-fixture-final-types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "result": "passed with no diagnostics"
+      }
+    ],
+    "diffCheck": "git diff --check passed"
+  },
+  "toolProvenance": [
+    {
+      "path": "/workspace/work/t87-native-diagnostic/google-chrome-provenance.json",
+      "bytes": 1111,
+      "sha256": "f71ac8e2051c01d00dbffce60aca4404faeb39f4dd47652e25e99ddda093a21f"
+    },
+    {
+      "path": "/workspace/work/t87-native-diagnostic/node24.22.1-provenance.json",
+      "bytes": 788,
+      "sha256": "13a4940b4dc6611c1f9d453cd6e2eda91e237be22faf6209d01b6b53a468ee7e"
+    }
+  ],
+  "scopeLimits": [
+    "All outputs remain unverified; no provider, receipt/economic authority or release approval.",
+    "No standard-browser physical hard deadline, universal per-Worker CPU/RSS limit, erasure or device qualification.",
+    "Original hosted closure assertion was not reproduced on exact local tool versions; no speculative off-by-one cause asserted.",
+    "Observed product page/Worker traffic only; managed-browser background egress outside scope.",
+    "Root independently reviews/executes focused checks before integration; no full repository suite duplicated in this child task."
+  ],
+  "commitsCreated": false,
+  "otherSourceEdited": false
+}

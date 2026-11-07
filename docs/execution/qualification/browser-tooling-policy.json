@@ -1,0 +1,141 @@
+{
+  "format": "p2p-offramp/bounded-browser-tooling-availability/v1",
+  "task": "T99",
+  "status": "INVESTIGATION_COMPLETE_ENGINES_BLOCKED_BY_ENFORCED_HOST_POLICY",
+  "observedAtUtc": "2026-11-02T19:00:20.776880+00:00",
+  "author": "audit_optional",
+  "independentReviewer": "root",
+  "authorPacketBinding": {
+    "path": "/workspace/work/t99-browser-tooling.json",
+    "sha256": "09bccd87d8871040a633b507262ff2a97ac4b882eaeeec848c7fb4632fcdb4a5"
+  },
+  "currentPolicy": {
+    "observationsCurrent": true,
+    "state": "enforced",
+    "mode": "restricted",
+    "host": "cdn.playwright.dev",
+    "allowed": false,
+    "staticPolicySha256": "b40e6662f38d1272fb995562ffc812a99c8acf3a81d5c5707f4a3469ea1cc904",
+    "runtimeAndStaticPolicyAgree": true
+  },
+  "engines": [
+    {
+      "engine": "firefox",
+      "pinnedBrowserVersion": "157.0",
+      "pinnedRevision": "1555",
+      "hostPlatform": "debian13-x64",
+      "platformOverride": null,
+      "revisionOverride": null,
+      "officialFirstChoiceArchiveUrl": "https://cdn.playwright.dev/dbazure/download/playwright/builds/firefox/1555/firefox-debian-13.zip",
+      "officialFirstChoiceHost": "cdn.playwright.dev",
+      "urlProvenance": "Actual installed registry metadata, independently matched to installed coreBundle.js mirror/path logic and browsers.json pin.",
+      "policyAllowed": false,
+      "policyDecision": "STOP_BEFORE_REQUEST_HOST_NOT_ALLOWED",
+      "httpRequestsAttempted": 0,
+      "requestExitCode": null,
+      "httpStatus": null,
+      "networkError": null,
+      "proxyDenialObserved": false,
+      "requestOutcome": "NOT_ATTEMPTED_POLICY_PROHIBITS_DESTINATION; no HTTP response or runtime transfer denial was observed.",
+      "archiveAcquired": false,
+      "archiveBytes": null,
+      "archiveSha256": null,
+      "archiveProvenanceVerified": false,
+      "archiveExtracted": false,
+      "expectedExecutable": "/home/agent/.cache/ms-playwright/firefox-1555/firefox/firefox",
+      "expectedExecutablePresent": false,
+      "nativeExecutionAttempted": false,
+      "nativeExitCode": null,
+      "actualNativeVersion": null,
+      "dynamicDependencyVerification": "NOT_RUN_NO_ARCHIVE_OR_EXECUTABLE",
+      "workingToolEstablished": false,
+      "fallbackRequestsAttempted": 0,
+      "qualification": "UNMEASURED_NOT_QUALIFIED"
+    },
+    {
+      "engine": "webkit",
+      "pinnedBrowserVersion": "27.2",
+      "pinnedRevision": "2370",
+      "hostPlatform": "debian13-x64",
+      "platformOverride": null,
+      "revisionOverride": null,
+      "officialFirstChoiceArchiveUrl": "https://cdn.playwright.dev/dbazure/download/playwright/builds/webkit/2370/webkit-debian-13.zip",
+      "officialFirstChoiceHost": "cdn.playwright.dev",
+      "urlProvenance": "Actual installed registry metadata, independently matched to installed coreBundle.js mirror/path logic and browsers.json pin.",
+      "policyAllowed": false,
+      "policyDecision": "STOP_BEFORE_REQUEST_HOST_NOT_ALLOWED",
+      "httpRequestsAttempted": 0,
+      "requestExitCode": null,
+      "httpStatus": null,
+      "networkError": null,
+      "proxyDenialObserved": false,
+      "requestOutcome": "NOT_ATTEMPTED_POLICY_PROHIBITS_DESTINATION; no HTTP response or runtime transfer denial was observed.",
+      "archiveAcquired": false,
+      "archiveBytes": null,
+      "archiveSha256": null,
+      "archiveProvenanceVerified": false,
+      "archiveExtracted": false,
+      "expectedExecutable": "/home/agent/.cache/ms-playwright/webkit-2370/pw_run.sh",
+      "expectedExecutablePresent": false,
+      "nativeExecutionAttempted": false,
+      "nativeExitCode": null,
+      "actualNativeVersion": null,
+      "dynamicDependencyVerification": "NOT_RUN_NO_ARCHIVE_OR_EXECUTABLE",
+      "workingToolEstablished": false,
+      "fallbackRequestsAttempted": 0,
+      "qualification": "UNMEASURED_NOT_QUALIFIED"
+    }
+  ],
+  "independentChecks": {
+    "artifactHashesAndSizesMatched": 16,
+    "defaultPinnedExecutablesAbsent": true,
+    "officialRegistryVersionsAndUrlLogicRead": true,
+    "policyHostPatternsIndependentlyChecked": true,
+    "httpRequests": 0,
+    "httpOrProxyDenialClaimed": false,
+    "nativeExecutions": 0,
+    "fallbacksOrBypass": false,
+    "repoSourceChanges": false
+  },
+  "provenanceSources": [
+    {
+      "path": "/workspace/p2p-offramp/node_modules/playwright-core/package.json",
+      "bytes": 876,
+      "sha256": "8aa1c9863fa8dea324e674254158cdc79440f4124ef2d84d38053013541cb7d6"
+    },
+    {
+      "path": "/workspace/p2p-offramp/node_modules/playwright-core/browsers.json",
+      "bytes": 1135,
+      "sha256": "2cfd419f71ac6475d81e1301fa86c34cf2a2a6bae2a0da4b5a2b18310216b6bf"
+    },
+    {
+      "path": "/workspace/p2p-offramp/node_modules/playwright-core/lib/coreBundle.js",
+      "bytes": 3585406,
+      "sha256": "829521b67ed7be90c7d6d6098ff39f2241562d47e4ad7ccab13710924a56001d"
+    },
+    {
+      "path": "/workspace/p2p-offramp/node_modules/playwright-core/lib/serverRegistry.js",
+      "bytes": 57039,
+      "sha256": "38025f08f335705b099b9f188bf45b5908a56a722825fe895b1e90f56d5595b6"
+    },
+    {
+      "path": "/workspace/p2p-offramp/package-lock.json",
+      "bytes": 42472,
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "/workspace/p2p-offramp/docs/execution/qualification/browser-engines.json",
+      "bytes": 5322,
+      "sha256": "f571549ad0ca4e4cbed76fe53599f884a56ae704c722d8ac7640ca20aaeb918c"
+    }
+  ],
+  "resumableNextActions": [
+    "A supported managed-network configuration update must permit the exact first-choice destination cdn.playwright.dev before either archive request. User authorization for local tooling does not itself change the enforced host policy.",
+    "After current enforced readiness confirms that host, use at most one ordinary HTTPS GET per exact archive URL above, preserving inherited proxy/CA/TLS, with a 30-second total timeout,256MiB archive cap, no automatic redirects/retries/mirror fallback. Record actual status/exit/bytes/hash; stop that engine on policy refusal or other failure.",
+    "If an archive is acquired, inspect its archive entries and size bounds before extracting solely beneath /workspace/work/t99-browser-tooling. Then verify actual native version and dynamic-library resolution without system package installation; missing dependencies remain explicit prerequisites.",
+    "Only after working tools are reported may root separately admit existing-harness portability and product tests. Linux WebKit tooling alone cannot establish Safari/iOS/physical-device or wallet qualification."
+  ],
+  "qualification": "No archive/native tool/product/physical-browser qualification. After supported policy readiness permits the exact official host, obtain at most one bounded official archive per engine, inspect provenance/contents and native dependencies, then separately qualify actual product harnesses. No mirror or policy bypass; T70 historical snapshot unchanged.",
+  "releaseEnabled": false,
+  "approvedReleasePin": null
+}

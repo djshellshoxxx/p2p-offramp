@@ -1,12 +1,10 @@
 # P2P Off-ramp
 
-Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
-[whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
-[remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
-[autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
-and [task ledger](tasks/todo.md). The prior [consolidation audit](docs/execution/CONSOLIDATED-AUDIT-2026-10-30.md)
-records merged compatible work; the [PR #20 report](docs/execution/AUTONOMOUS-RESULT-2026-10-31.md)
-records T1–T9. Historical local-only reports below are superseded.
+Current execution: [whole-source audit](docs/execution/audit-2026-11-02/README.md),
+[remaining requirements](docs/execution/coverage/CURRENT-REMAINDER.md),
+[execution prompt](docs/execution/ALL-REMAINING-WORK-PROMPT.md) and
+[task ledger](tasks/todo.md). Earlier reports below retain their original source
+and verification scope; they do not reopen completed work.
 
 
 Experimental **software artwork** exploring client-side, noncustodial peer-to-peer exchange. The functional descriptions, development status, risks, licensing and acceptance gates below remain applicable.
@@ -24,6 +22,13 @@ are tracked separately. Optional proof, location, courier and arbitration capabi
 
 Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Offline signed registry/release verification, test-only wallet execution, both native escrow profiles and the canonical encrypted relay-to-escrow local acceptance loop are implemented. Approved live trust/bootstrap, qualified deployments and a funds-enabled app remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
 
+Local consumers also include fresh trade drafts, eight encrypted amount templates,
+repeat defaults, encrypted saved-review favorites, generic app-address sharing and
+optional screen counts held only in page memory. Transport selection requires an
+actual constructor-owned broker; selecting Strict does not establish private
+routing. Favorites conservatively protect all history during retention. Exact
+local evidence and unresolved contracts remain in the linked audit and ledger.
+
 ## Screenshots
 
 Captured from the synthetic, test-only demo build (`npm run build:demo`); trading and funds are disabled in every build.
@@ -36,10 +41,14 @@ Captured from the synthetic, test-only demo build (`npm run build:demo`); tradin
 
 ## Local checks
 
-Requires Node 24+ and Python 3.12+ for the spec tool. Dependencies are pinned in package-lock.json; emitted runtime assets retain third-party MIT attribution. Chromium is required for local browser checks, not as an app-owned server.
+Requires Node 24+, Python 3.12 and an installed Chromium. Activate an owned Python
+virtual environment before installing the independent oracle below. Its complete
+wheel/hash lock targets Ubuntu amd64; other tool platforms remain unqualified.
+Runtime dependencies are pinned in package-lock.json; emitted assets retain attribution.
 
 ```sh
 npm ci --ignore-scripts
+python -m pip --isolated install --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
 npm run typecheck
 npm test
 npm run test:specs
@@ -52,7 +61,7 @@ npm run test:browser
 npm run test:web:browser
 ```
 
-Optional independent fixture verification requires Python `cryptography`:
+The pinned development oracle also supports the separate vault fixture check:
 
 ```sh
 python packages/storage/test/fixtures/verify_vault_fixture.py

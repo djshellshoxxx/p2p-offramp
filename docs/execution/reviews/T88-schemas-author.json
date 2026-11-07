@@ -1,0 +1,194 @@
+{
+  "task": "T88-P3-SP1",
+  "status": "FROZEN_FOR_INDEPENDENT_ROOT_REVIEW",
+  "recordedAt": "2026-11-02T17:05:01.675612+00:00",
+  "headAtFreeze": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "files": [
+    {
+      "path": "packages/schemas/src/backup.ts",
+      "sha256": "703ed5c8083ba97a05d8c4131e267833420d867fbafc837f3e467c6bb9f9c399",
+      "bytes": 6211,
+      "beforeSha256": "d59f5ae03d8b8463cb9f2f875f6ec10a914dd3c28db549987930eadf14631fc2",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/src/backup.ts",
+      "publicExportLinesUnchanged": true
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+      "bytes": 38568,
+      "beforeSha256": "6e4c85bc6657da12f9b6702982f6bbe39b684abc6acddf8f20e3a92c08c8d66c",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/src/runtime.ts",
+      "publicExportLinesUnchanged": true
+    },
+    {
+      "path": "packages/schemas/src/recovery-reference.ts",
+      "sha256": "1135dc4d709919a69614e9dc1fad6a70f97cfb915e86df32b3fe7db5566505c7",
+      "bytes": 8256,
+      "beforeSha256": "56a9646c2dbbb26647398ac10e3217f8507c34773825d2d145f19d411b3bf30a",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/src/recovery-reference.ts",
+      "publicExportLinesUnchanged": true
+    },
+    {
+      "path": "packages/schemas/test/backup.test.mjs",
+      "sha256": "4cda0cb55bc5ed29a120043a7ff0b5713eb556bd48b9965e84284f0ccddbf475",
+      "bytes": 6698,
+      "beforeSha256": "129284dc546fb9f53a900093fc43a6a3fa5a688aa1710faaa6d2fb31e584d617",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/test/backup.test.mjs",
+      "publicExportLinesUnchanged": true
+    },
+    {
+      "path": "packages/schemas/test/runtime.test.mjs",
+      "sha256": "1a96a186b2b95095686bbcaea447d4fae0df2f24fcf055c61097bb6920083b52",
+      "bytes": 13590,
+      "beforeSha256": "7b20a76b86addf1159e98f9343c795f27a4f6c54f661aa90dcc119688973f831",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/test/runtime.test.mjs",
+      "publicExportLinesUnchanged": true
+    },
+    {
+      "path": "packages/schemas/test/recovery-reference.test.mjs",
+      "sha256": "22890938ca21ef787b65302825a0421b9dfdf866bbb6f7b5e634a24f11d1bf7d",
+      "bytes": 8893,
+      "beforeSha256": "3b83755df228051da7be586feccaedebdd6584daf05148fa7415d35a552b24ec",
+      "baselineCopy": "/workspace/work/t88-parser-baseline/packages/schemas/test/recovery-reference.test.mjs",
+      "publicExportLinesUnchanged": true
+    }
+  ],
+  "deltaPatch": {
+    "path": "/workspace/work/t88-parser-fix.patch",
+    "sha256": "53ba363a690ef466433a7322b819262e80bfc05de350dd48244e2fb8a4e64b51",
+    "bytes": 15141
+  },
+  "baselineManifest": {
+    "path": "/workspace/work/t88-parser-baseline.json",
+    "sha256": "6ffc174009d45b74ce81a4f8722cea22a51cc2ef1908790f438f9b3568a36827",
+    "bytes": 1944
+  },
+  "t80Receipt": {
+    "path": "/workspace/work/t80-implementation-receipt.json",
+    "sha256": "af0ccffd06b8986461d6f2ee1b8709ef6ee828ddfde95793e37282b3f559d216",
+    "bytes": 7781
+  },
+  "t80SchemaBindings": [
+    {
+      "path": "packages/schemas/src/trade-drafts.ts",
+      "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+      "bytes": 8417,
+      "t80Sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+      "matched": true,
+      "disposition": "unchanged frozen T80 schema path"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+      "bytes": 38568,
+      "t80Sha256": "6e4c85bc6657da12f9b6702982f6bbe39b684abc6acddf8f20e3a92c08c8d66c",
+      "matched": false,
+      "disposition": "admitted T88 diagnostic guard delta only"
+    },
+    {
+      "path": "packages/schemas/src/saved-review.ts",
+      "sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+      "bytes": 3250,
+      "t80Sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+      "matched": true,
+      "disposition": "unchanged frozen T80 schema path"
+    },
+    {
+      "path": "packages/schemas/test/trade-drafts.test.mjs",
+      "sha256": "8f9d509e1dbce729b046175d4e5e9142b93566c807483588fcb310bd27d28add",
+      "bytes": 7539,
+      "t80Sha256": "8f9d509e1dbce729b046175d4e5e9142b93566c807483588fcb310bd27d28add",
+      "matched": true,
+      "disposition": "unchanged frozen T80 schema path"
+    },
+    {
+      "path": "packages/schemas/test/saved-review.test.mjs",
+      "sha256": "f7dba2e07c48b139dad7daf72ff3f0e2c476dae46f83560993ff6659a0c87e0d",
+      "bytes": 7136,
+      "t80Sha256": "f7dba2e07c48b139dad7daf72ff3f0e2c476dae46f83560993ff6659a0c87e0d",
+      "matched": true,
+      "disposition": "unchanged frozen T80 schema path"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+      "bytes": 878,
+      "t80Sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+      "matched": true,
+      "disposition": "unchanged frozen T80 schema path"
+    }
+  ],
+  "red": {
+    "log": {
+      "path": "/workspace/work/t88-parser.RED.log",
+      "sha256": "7db9ccfadd8db4a1cc49ca82651866208687c76395aaebf62e5328abd31a5993",
+      "bytes": 6156
+    },
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/schemas/test/backup.test.mjs packages/schemas/test/runtime.test.mjs packages/schemas/test/recovery-reference.test.mjs",
+    "exitCode": 1,
+    "tests": 26,
+    "pass": 23,
+    "expectedNewFailures": 3,
+    "skip": 0,
+    "cancelled": 0
+  },
+  "initialGreen": {
+    "log": {
+      "path": "/workspace/work/t88-parser.GREEN.log",
+      "sha256": "bd4a0124cb381316645bacdc2bcc1cfe3b2d87194374578a134fc93673df75d1",
+      "bytes": 3005
+    },
+    "tests": 26,
+    "pass": 26,
+    "scope": "Initial repair; superseded by exact final64-test focused evidence after cached classification and element-descriptor coverage refinement."
+  },
+  "green": {
+    "log": {
+      "path": "/workspace/work/t88-parser-focused.GREEN.log",
+      "sha256": "657c7e76c95c356c74ae1d60bf1495920dd10684f9f962868cc8860038ce01b1",
+      "bytes": 6985
+    },
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/schemas/test/backup.test.mjs packages/schemas/test/runtime.test.mjs packages/schemas/test/recovery-reference.test.mjs packages/schemas/test/saved-review.test.mjs packages/schemas/test/trade-drafts.test.mjs packages/schemas/test/transport-selection.test.mjs packages/schemas/test/backup-verification.test.mjs packages/schemas/test/retention-runtime.test.mjs apps/web/test/trade-drafts-worker.test.mjs apps/web/test/review-favorites-worker.test.mjs apps/web/test/transport-selection-runtime.test.mjs",
+    "exitCode": 0,
+    "tests": 64,
+    "pass": 64,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "managedIpc": true,
+    "defaultNodeIsolation": true
+  },
+  "typecheck": {
+    "command": "./node_modules/.bin/tsc --noEmit",
+    "log": {
+      "path": "/workspace/work/t88-parser-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "exitCode": 0
+  },
+  "diffCheck": {
+    "command": "git diff --check -- <the six owned paths>",
+    "exitCode": 0
+  },
+  "repair": [
+    "Backup and runtime caught errors yield fresh fixed errors using only recognized own data codes; exception getters/diagnostics are never read, and meta-operation classification is itself guarded.",
+    "Favorite array reflection joins existing fixed runtime error normalization; ValidationError LIMIT mapping is retained only for encrypted-export handling.",
+    "Direct recovery-reference array reflection uses fresh generic fixed refusals while nested IntentSchemaError/CoreSchemaError paths remain outside the reflection catches."
+  ],
+  "preserved": [
+    "All public export declaration lines, versions and caps unchanged; no new facade/API or parser framework.",
+    "Valid backup/structuredClone, source labels, draft/favorite/transport IPC, encrypted G02 Worker-endpoint operations and selected-profile/scoped replies pass final focused regressions.",
+    "No provider, policy, native authority, network target, release pin or trading enablement change."
+  ],
+  "limits": [
+    "Synthetic malformed JavaScript fixtures only; JSON and structuredClone cannot carry Proxies.",
+    "No source/authority/funds/persistence failure or third-party exploitability was established by the original P3 diagnostic defect.",
+    "No full suite, solver or native browser rerun; root final integration and independent repair review remain required."
+  ],
+  "otherSourceEdited": false,
+  "ledgersEdited": false,
+  "commitsCreated": false,
+  "focusedFixtureLimit": "Actual endpoint/AppServices/storage crypto code with synthetic in-memory storage and in-process EventTarget Worker ports; no native browser, Worker thread or IndexedDB test was rerun.",
+  "redFixtureNote": "The original3 added tests failed before implementation. After initial26-test GREEN, an additional item-descriptor assertion and cached classification refinement were included in final64-test GREEN; initial GREEN is not claimed as final exact-source evidence."
+}

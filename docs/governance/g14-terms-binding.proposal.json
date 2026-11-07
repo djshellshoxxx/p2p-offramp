@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "g14-terms-binding",
+  "kind": "wire",
+  "priorVersion": "unqualified-current",
+  "proposedVersion": "pending-selection",
+  "affectedSpecs": [
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.6_extension_contract/spec-optional-module-interface.md"
+  ],
+  "compatibleReaders": [],
+  "compatibleWriters": [],
+  "migrationId": null,
+  "recoveryArtifactHashes": [],
+  "threatImpactPath": "docs/governance/PENDING-DECISIONS.md",
+  "testEvidencePaths": [
+    "packages/governance/test/records.test.mjs"
+  ],
+  "status": "draft"
+}

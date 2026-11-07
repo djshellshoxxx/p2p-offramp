@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "task": "T97 bounded local linear extraction",
+  "status": "FROZEN_FOR_INDEPENDENT_ROOT_REVIEW",
+  "recordedAt": "2026-11-02T18:10:28.527069+00:00",
+  "baselineHead": "a1cda134f9f33dd3a39e07c3915b9a71331e9020",
+  "headAtFreeze": "a1cda134f9f33dd3a39e07c3915b9a71331e9020",
+  "scope": {
+    "authorizedPaths": [
+      "scripts/docs/validate.mjs",
+      "scripts/docs/validate.test.mjs",
+      "scripts/formal/evm.mjs",
+      "scripts/tests/formal-evm.test.mjs"
+    ],
+    "offlinePureHelperExports": [
+      "docLinkTargets",
+      "literalImports"
+    ],
+    "productApiChanged": false,
+    "otherT95FilesEdited": false,
+    "sourceClaimsMetadataEdited": false,
+    "commitsCreated": false
+  },
+  "baseline": {
+    "path": "/workspace/work/t97-linear-extraction.baseline.json",
+    "sha256": "059c438131db3a486ebd496f2261d9e9b18995939a7457e42babd620b82675fd",
+    "bytes": 1262,
+    "lines": 35
+  },
+  "files": [
+    {
+      "path": "scripts/docs/validate.mjs",
+      "sha256": "2fd15f64d3f28a355925a2c66606aa1f773f83f45112d8b8e3ea53b7157dc405",
+      "bytes": 9806,
+      "lines": 152,
+      "beforeSha256": "06ae3c56a2a437a484db17d80cf2c6bccd76fe8d9379c8528b816704ed5eebaa",
+      "baselineCopy": "/workspace/work/t97-linear-extraction.baseline/scripts/docs/validate.mjs",
+      "semanticChecks": [
+        "Added the offline pure docLinkTargets helper with monotonic nonoverlapping delimiter searches. Nested label openings, first closing label/target delimiters, nonempty completed targets, original authored match order and target code units are retained.",
+        "Exact UTF-8 document bound remains64KiB; completed targets>240 code units and >128 extracted targets refuse DOCS_STALE. inspectDocs keeps its separate128-total-reports guard across all7documents, original link policy/containment/anchor checks, hashing and canonical report ordering."
+      ]
+    },
+    {
+      "path": "scripts/docs/validate.test.mjs",
+      "sha256": "e19da2015b8309023c1c30639e84801161f1a69697c18892b429abdc52c6af10",
+      "bytes": 9492,
+      "lines": 139,
+      "beforeSha256": "c1a1d09b182c9d41efe2ee97c09219e62f28cab92c04aa45e4b0f20121f8e4af",
+      "baselineCopy": "/workspace/work/t97-linear-extraction.baseline/scripts/docs/validate.test.mjs",
+      "semanticChecks": [
+        "All8 existing cases retained byte-for-byte apart from a namespace import. Added4 cases covering small fixed delimiter/nested-label examples,240/241 completed-target and128/129 helper limits, and UTF-8 byte boundaries.",
+        "Actual inspectDocs fixtures rehash only synthetic copied document/manifest data and supply independently constructed expected reports:240 accepted/241 refused, exactly128 accepted/129 refused across pages,65536-byte Unicode document accepted/65537 refused. Real immutable source evidence, claims and approval checks remain active."
+      ]
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "ce09827cda4799c59b9a27c591694dc3f189195d28ea9270eb02957ad8214aa3",
+      "bytes": 38453,
+      "lines": 262,
+      "beforeSha256": "6d817faf9a95708c67669f8d68a76c241568b1ae88b8475093be99076ef25d1a",
+      "baselineCopy": "/workspace/work/t97-linear-extraction.baseline/scripts/formal/evm.mjs",
+      "semanticChecks": [
+        "Added the offline pure literalImports helper, bounded to1MiB UTF-8. One reverse cursor indexes whitespace ends, adjacent quote/semicolon suffixes and pending from clauses; a forward result pass emits nonoverlapping literal slices. No candidate rescans a suffix, and path copies occur only after selection. Temporary indices are bounded by source length.",
+        "Retains existing literal/direct/named/wildcard/from recognition and matching priority, JavaScript whitespace, case-sensitive ASCII keywords, original literal code units, semicolons inside quoted paths and match order. It is extraction only; compiler validation and source-path validation retain authority.",
+        "Only collectSources extraction seam changed. Existing source mappings/containment, raw source digests,256-file/1MiB-file/8MiB-closure bounds, source/assumption/partition pins, exact UTF-8 assertion spans, diagnostics/classifiers, compiler/solver/count/round/byte/process limits and T95 ordinal comparator are byte-for-byte unchanged."
+      ]
+    },
+    {
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "sha256": "07656e52bf3b0471bfe90a65bf70496a7c1f97ce1255d96c66399d97445a47ce",
+      "bytes": 17462,
+      "lines": 153,
+      "beforeSha256": "68fdd5cb22fe0c95e4c4346d83158a08e47f59f51d6a03f281a123bb23d62e98",
+      "baselineCopy": "/workspace/work/t97-linear-extraction.baseline/scripts/tests/formal-evm.test.mjs",
+      "semanticChecks": [
+        "All9 existing cases retained byte-for-byte apart from a namespace import. Added5 pure/read-only cases for direct/named/wildcard/multiline/single+double-quoted/mapped imports, original whitespace/delimiter behavior and later valid matches, and quoted semicolons.",
+        "Exact1MiB Unicode source accepted and one extra byte refused SOURCE_LIMIT. Synthetic Unicode/CRLF assertion offsets are checked against independent Buffer.byteLength expectations and exact diagnostic file/span binding. Actual unchanged canonical/model import lists are read directly; no compiler/solver/native/formal attempt is invoked."
+      ]
+    }
+  ],
+  "exactDelta": {
+    "path": "/workspace/work/t97-linear-extraction.patch",
+    "sha256": "41f231fc23bf38b3913b66add9ae7a512917e455a778454e62326fccc27d53a4",
+    "bytes": 13964,
+    "lines": 229
+  },
+  "mechanicalChecks": {
+    "productionSourceOutsideHelperBlocksAndExtractionSeamsExactlyMatchesT95": true,
+    "all17OriginalTestsRetained": true,
+    "t95OrdinalComparators": [
+      {
+        "path": "scripts/docs/validate.mjs",
+        "unchanged": true,
+        "exactLines": [
+          "  if(!v||typeof v!=='object'||Array.isArray(v)||Object.keys(v).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join()!==[...keys].sort((left, right) => left < right ? -1 : left > right ? 1 : 0).join())refuse();",
+          "  reports.sort((a,b) => JSON.stringify(a)<JSON.stringify(b)?-1:JSON.stringify(a)>JSON.stringify(b)?1:0);"
+        ]
+      },
+      {
+        "path": "scripts/formal/evm.mjs",
+        "unchanged": true,
+        "exactLines": [
+          "export const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?'['+value.map(canonical).join(',')+']':'{'+Object.keys(value).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';"
+        ]
+      }
+    ]
+  },
+  "verification": {
+    "runner": "Node24 default test-file isolation with explicit managed loopback/IPC capability; no file-only runner substitute",
+    "command": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/docs/validate.test.mjs scripts/tests/formal-evm.test.mjs",
+    "red": {
+      "log": {
+        "path": "/workspace/work/t97-linear-extraction.RED.log",
+        "sha256": "c04886dcb65408b7f5de6e806d8d706417f7bc3252acc94833d8cee614760a12",
+        "bytes": 7577,
+        "lines": 109
+      },
+      "tests": 26,
+      "pass": 19,
+      "fail": 7,
+      "cancelled": 0,
+      "skipped": 0,
+      "exitCode": 1,
+      "meaning": "All17 original cases plus2 new integration boundary cases passed. Seven new direct helper cases failed because the helpers did not yet exist; this is a behavior-preserving hardening task, not reproduced remote exploitation."
+    },
+    "green": {
+      "log": {
+        "path": "/workspace/work/t97-linear-extraction.GREEN.log",
+        "sha256": "d4616e5a8985ca27a4d3a698dbf915c1c73a176876a46264d70922eef04177eb",
+        "bytes": 2901,
+        "lines": 34
+      },
+      "tests": 26,
+      "pass": 26,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "meaning": "Exact final4-file source/test content;12docs cases and14formal unit cases. Existing formal process-drain unit fixture ran; safe/unsafe compiler-probe and native-witness classifiers consumed only synthetic test data."
+    },
+    "syntax": {
+      "commands": [
+        "node --check scripts/docs/validate.mjs",
+        "node --check scripts/formal/evm.mjs"
+      ],
+      "exitCode": 0,
+      "stdoutAndStderrEmpty": true
+    },
+    "diffCheck": {
+      "log": {
+        "path": "/workspace/work/t97-linear-extraction.diff-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "lines": 0
+      },
+      "exitCode": 0
+    }
+  },
+  "boundsAndAuthority": {
+    "docs": {
+      "documentBytes": 65536,
+      "globalLinks": 128,
+      "completedTargetCodeUnits": 240,
+      "approvalAndPublication": false
+    },
+    "formal": {
+      "sourceFileBytes": 1048576,
+      "sourceFiles": 256,
+      "sourceClosureBytes": 8388608,
+      "limitsDeclarationUnchanged": true,
+      "processToolAndDiagnosticCodeUnchanged": true,
+      "sourceAssumptionsAndAssertionSpansUnchanged": true,
+      "spentPartitionAttemptsNotResetOrRerun": 3
+    },
+    "remoteSonarGate": "No scanner retrieval/run/update/waiver or gate-pass assertion; original published triage remains separate."
+  },
+  "freshVsReused": {
+    "fresh": "Four-file static semantic review, baseline/delta hashes, new boundary fixtures,26 focused managed-IPC cases, two syntax checks and diff check. Actual docs positive still validates immutable source/copy evidence and null authority.",
+    "reused": "Parent T95 source/metadata freeze and prior immutable source/tool/formal evidence are governing context only; no parent/native/solver result was rerun or relabeled as fresh."
+  },
+  "limits": [
+    "Bounded synthetic local strings and copied temporary document fixtures only; no timing benchmark, attack probe, third-party target or remote exploit claim.",
+    "Source extraction is not a full Solidity parser or proof authority. Unmatched/unsupported import text retains existing recognition behavior; the unchanged compiler is still authoritative.",
+    "No original Solidity/model/property/assumption/toolchain/budget changes; no solver, compiler, tranche/target or native/browser attempt, whole suite, provider activation, funds operation or scanner refresh.",
+    "Linear complexity is a static cursor/index/path-copy argument, not measured worst-case CPU or whole-script complexity qualification. Existing separate authored-grammar checks are unchanged.",
+    "Root must independently review this exact delta; author verification is not independent approval."
+  ],
+  "ownership": {
+    "frozen": true,
+    "returnedTo": "root",
+    "furtherAuthorEditsPlanned": false
+  }
+}

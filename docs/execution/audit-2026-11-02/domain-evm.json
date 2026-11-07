@@ -1,0 +1,1326 @@
+{
+  "task": "T38-C",
+  "status": "REVIEW_COMPLETE_WITH_TWO_REPAIRS_PENDING_ROOT_ACCEPTANCE",
+  "sourceHeadAtStart": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "excluded": [
+    "packages/domain/src/trade-draft.ts (T80 active)"
+  ],
+  "snapshotRoot": "/workspace/work/audit-domain-evm-snapshot",
+  "productionFiles": [
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "lines": 363,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: seller alone funds/releases; refund is permissionless after expiry and pays the stored seller; withdraw pays only the credited recipient.",
+        "Checked exact native value, ERC20 escrow receipt delta, immutable EIP-712 terms hash, chain/contract binding, one-use trade and seller nonce, bounded constructor allowlist, acceptance/expiry boundaries and principal units.",
+        "Terminal state precedes guarded payout; bounded native push, deferred credit, checks-effects-interactions withdrawal and forced surplus have fixed destinations. Canonical profile verifies no signatures on-chain and requires qualified plain exact-transfer tokens."
+      ],
+      "reviewedSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "reviewedLines": 363,
+      "reviewedBytes": 18601
+    },
+    {
+      "path": "packages/chain-evm/src/reader.ts",
+      "sha256": "c99586e244dc6bd94c850a356381b10a7a2a038a8c9fafe7e5adb9ca790863d8",
+      "lines": 186,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: isolated escrows(bytes32) six-word ABI, registry chain/genesis/runtime identity, finalized-only anchors and repeated anchor checks; no latest fallback.",
+        "Exact expectation and receipt hash/from/to/input/value/nonce binding; receipt pending, failed, reorged and unknown remain distinct. Trusted preparation must bind expected calldata to the intended action.",
+        "Four physical jobs, bounded code/calldata/deadline and fixed errors; cancellation/disposal suppress late work while ignored-abort requests retain admission. RPC consistency is not independent chain verification."
+      ],
+      "reviewedSha256": "c99586e244dc6bd94c850a356381b10a7a2a038a8c9fafe7e5adb9ca790863d8",
+      "reviewedLines": 186,
+      "reviewedBytes": 15799
+    },
+    {
+      "path": "packages/domain/index.ts",
+      "sha256": "0281caaf258c48b8ec45d3856f8785038f2bdae7bf94d838d05932385a0e7fd3",
+      "lines": 16,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed baseline facade and current additive boundary: diagnostic errors, registry, terms, privacy, journey and hints; no journal writes or provider/send capability exported.",
+        "Concurrent T80 adds two trade-draft export lines. Their boundary is recorded; trade-draft implementation is explicitly excluded and must be covered by T80 plus root consolidated validation."
+      ],
+      "reviewedSha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1",
+      "reviewedLines": 18,
+      "reviewedBytes": 2054
+    },
+    {
+      "path": "packages/domain/src/authority.ts",
+      "sha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+      "lines": 171,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source and authority tests: exact binding/generation/latest request and native-reader capability remain separate from untrusted observation/source labels.",
+        "Contradictory native state/height/hash/finality latches reorged until an agreeing observation; freshness, four physical slots, local fiat separation and disabled economic authority remain explicit."
+      ],
+      "reviewedSha256": "410a6dfc063d2fcf0811fe3a6f6aeec04072bec9f471f4f8b1851b4724b6430f",
+      "reviewedLines": 171,
+      "reviewedBytes": 11377
+    },
+    {
+      "path": "packages/domain/src/errors.ts",
+      "sha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+      "lines": 39,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: fixed code/action/retry projections, descriptor-safe foreign error classification and no raw provider diagnostics.",
+        "A send-started failure always remains unknown; operation-ID fallback is bounded diagnostic correlation, never a transaction/security nonce."
+      ],
+      "reviewedSha256": "2a8d8bc2f199c4ae803ef3e16ba42a84d3868c66a780dbdb1d15c71320c442a5",
+      "reviewedLines": 39,
+      "reviewedBytes": 3150
+    },
+    {
+      "path": "packages/domain/src/intent-journal.ts",
+      "sha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01",
+      "lines": 401,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "1f490fb8b1980e8ce4d7c345977419180b7d16b646d3abfa8a08abf501884d01",
+      "reviewedLines": 401,
+      "reviewedBytes": 32833,
+      "semanticChecks": [
+        "Reviewed all source: captured vault session lease/epoch/revision, bounded strict scan, record-kind/schema/payload/ID uniqueness and CAS; random record IDs cannot overwrite another kind.",
+        "Trusted exact canonical validator has no permissive default. Prepared reserve and durable send marker precede any consumer send; hash is learned once, marker uncertainty is conservative, conflicting nonce/binding/account reservations block.",
+        "Native terminal authorization is ephemeral, exact-bound and reobserved after restore; explicit lifecycle transitions and same-nonce successors prevent hash rewriting/backwards state. No send surface, elapsed-time unlock or automatic resend; one physical job persists through cancellation."
+      ]
+    },
+    {
+      "path": "packages/domain/src/journey-view.ts",
+      "sha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f",
+      "lines": 176,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "c1c4827fe287846806270b0975b6728b542d1781147da2aa118a34f86e90314f",
+      "reviewedLines": 176,
+      "reviewedBytes": 12854,
+      "semanticChecks": [
+        "Reviewed all source: diagnostic projection has no actions/economic preparation; chain health and unresolved intent veto historical terminal receipts and recovery keeps the original binding.",
+        "Optional trusted native G18 guidance must match funded binding/hash/finalized anchor; composition and scope are reread after await, then latest guidance/current checks precede output. Receipt projection does not establish actual delivery of a deferred payout."
+      ]
+    },
+    {
+      "path": "packages/domain/src/observation-dispatcher.ts",
+      "sha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2",
+      "lines": 127,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "4029e90b88f14985542cdb41ec126c3a122422d089853d51e9d0ece544ba1ef2",
+      "reviewedLines": 127,
+      "reviewedBytes": 7013,
+      "semanticChecks": [
+        "Reviewed all source: constructor-issued publisher closures bind maker/order; relay/journal hints never become native or economic authority.",
+        "30-second TTL, one timer, at most 64 observers, bounded stable notification cohort and finite sequence; reentry, disconnect, disposal and clock invalidation retire owned outputs."
+      ]
+    },
+    {
+      "path": "packages/domain/src/payment-preflight.ts",
+      "sha256": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+      "lines": 94,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: fixture-only evaluator checks exact terms/binding/units/anchors/finality, freshness and 900-second margin.",
+        "Imported fixture labels cannot establish native truth; output is explicitly fixture evidence with economic preparation false."
+      ],
+      "reviewedSha256": "4daa511bdb25b6437e44047940a80cf6c3b7b087a5963dba4082d2ff1f974ce1",
+      "reviewedLines": 94,
+      "reviewedBytes": 7402
+    },
+    {
+      "path": "packages/domain/src/privacy-view.ts",
+      "sha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715",
+      "lines": 245,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "78f87e101f3b73e4bec7a19451d59063daca9c33245a65cf9dda1f89ae78e715",
+      "reviewedLines": 245,
+      "reviewedBytes": 17389,
+      "semanticChecks": [
+        "Reviewed all source: display-only observations keep route, vault, messaging, proof and configured endpoint disclosures independent; selected policy is not observed coverage.",
+        "Endpoint output contains normalized origins only, no credentials/path/query; bounded 32 rows/30-second lifetime, exact shapes, scope/generation/completion-clock checks, reversal latch, disposal and reentry prevent stale positive publication.",
+        "Strict policy blocks observed direct paths without granting spend or routing authority; transport implementations are owned by the separate reviewer."
+      ]
+    },
+    {
+      "path": "packages/domain/src/read-retry.ts",
+      "sha256": "50001c753a7f5fd4d3a764896fba52019619511122edf3ad38f87588931e34cc",
+      "lines": 147,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "50001c753a7f5fd4d3a764896fba52019619511122edf3ad38f87588931e34cc",
+      "reviewedLines": 147,
+      "reviewedBytes": 8289,
+      "semanticChecks": [
+        "Reviewed all source: authorized idempotent reads only; at most 3 attempts, 10-second attempt deadline, 35-second total budget and fixed full-jitter ceilings.",
+        "No next attempt until prior physical work settles; fixed descriptor-safe errors and checks after runtime callbacks suppress stale/aborted/reentrant output; timers/listeners clean up. This wrapper is never used for sending."
+      ]
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+      "lines": 57,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20",
+      "reviewedLines": 57,
+      "reviewedBytes": 3383,
+      "semanticChecks": [
+        "Reviewed all source: intrinsic byte-view length cap precedes owned native copy; exact expected manifest digest precedes strict parsing.",
+        "Frozen registry, pinned successful digest and concurrent-load conflict forbid silent trust-root replacement; caller supplies the authorized digest, no default production network/deployment is invented."
+      ]
+    },
+    {
+      "path": "packages/domain/src/terms-review.ts",
+      "sha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6",
+      "lines": 269,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364",
+      "reviewedLines": 272,
+      "reviewedBytes": 17876,
+      "semanticChecks": [
+        "Reviewed all baseline and T88 repaired source: strict 64 KiB UTF8/JSON container, canonical public units/IDs/times, exact private/capability encodings and hashes, order/revision and loaded registry asset/deployment checks.",
+        "Snapshot-once fields, deep-frozen exact display and explicit unsupported capabilities provide review, never signatures, acceptance or native approval. Registry/hash capabilities are trusted composition inputs.",
+        "T88 now checks native view byte length before allocation and copies only the bounded intrinsic offset/range. Existing fixed rejection codes, detached-view behavior,65536/65537 boundaries and untouched caller bytes are retained."
+      ]
+    },
+    {
+      "path": "packages/domain/src/trade-composition.ts",
+      "sha256": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+      "lines": 62,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: read-only authority/journal join uses exact binding/account/generation and rechecks wallet/current after awaited reads.",
+        "Owned supersession/cancellation handles reentry; immutable diagnostic output remains false economic preparation and exposes no writes/sends."
+      ],
+      "reviewedSha256": "294fa9c249fc56cc68e7ff317a8c90ecf5d73b41e4cea3b1967052be21b75ddd",
+      "reviewedLines": 62,
+      "reviewedBytes": 3873
+    },
+    {
+      "path": "packages/domain/src/trade-terms.ts",
+      "sha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+      "lines": 199,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "e0d3733a996981f83351884d7f00ea51fae61b8ce49b09d5af546d1152bb1bd2",
+      "reviewedLines": 199,
+      "reviewedBytes": 12573,
+      "semanticChecks": [
+        "Reviewed all source: exact records/dense arrays, intrinsic string bounds before UTF8 allocation, lone-surrogate refusal, sorted unique bounded capabilities, salted/prefixed private encodings and canonical fiat/revision units.",
+        "Funding uses strict acceptance and inclusive 1800..604800-second duration; Solana byte encoding is a documented development convention, not a native program/SPL qualification. Pure hash/encoding utilities confer no signing or chain authority."
+      ]
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d",
+      "lines": 453,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "reviewedSha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d",
+      "reviewedLines": 453,
+      "reviewedBytes": 34397,
+      "semanticChecks": [
+        "Reviewed all source: captured wallet function, explicit live prepared capability, exact context/generation, native nonce/state reads and trusted canonical journal validator; durable reserve/send marker precede one explicit send.",
+        "Cancellation after marker prevents invocation but preserves unknown recovery; hashes/receipts match native transaction input/value/nonce/from/to and anchors. Reorg revokes terminal authorization; restored labels require reobservation.",
+        "Recovery does not resend; replacement/drop requires explicit same-nonce successor.4001 is the existing EIP1193 known-rejection policy, not a guarantee for dishonest providers. Legacy per-instance queues/maps require caller admission and are outside default App activation."
+      ]
+    },
+    {
+      "path": "packages/escrow-evm/contracts/BasicEscrow.sol",
+      "sha256": "42c1020620dc987caf6c2af13139f635a3fb363016f7ab3288ecf8549a96e821",
+      "lines": 115,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: separate isolated signature-checking profile pins network/deployment IDs and token runtime hashes, checks both EOA/EIP1271 acceptances and fixed core capabilities, enforces seller funding/release and bound seller refund.",
+        "One-use trade/nonce, positive units/revision, exact deadlines, exact seller debit/escrow receipt at funding and escrow debit/recipient receipt at payout; guarded liability updates roll back atomically on failure.",
+        "Failed payout reverts to funded rather than canonical deferred credit. Runtime hash cannot prove token honesty, proxy implementation or mutable signer policy. No admin/redirection/production authority."
+      ],
+      "reviewedSha256": "42c1020620dc987caf6c2af13139f635a3fb363016f7ab3288ecf8549a96e821",
+      "reviewedLines": 115,
+      "reviewedBytes": 8433
+    },
+    {
+      "path": "packages/escrow-evm/scripts/compile.mjs",
+      "sha256": "fe2d596ee48acd133b589d839f5c2325c44fcc91a9aca38982f0600d632b50dd",
+      "lines": 26,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: explicit-call pinned solc 0.8.38 build, optimizer 200/viaIR/Shanghai and restricted OpenZeppelin imports; compile also includes declared unsafe test actors as fixtures.",
+        "Importing does not compile/deploy; source and ABI/bytecode artifacts are local templates, not evidence of deployed runtime identity."
+      ],
+      "reviewedSha256": "fe2d596ee48acd133b589d839f5c2325c44fcc91a9aca38982f0600d632b50dd",
+      "reviewedLines": 26,
+      "reviewedBytes": 2035
+    },
+    {
+      "path": "packages/escrow-evm/scripts/evidence.mjs",
+      "sha256": "1baea73ac7dc1256603b369cbf35bfbb142f39fd7d309570803e27e6fd8dff09",
+      "lines": 16,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: explicit local-only compile/version evidence, bounded 5-second/4096-byte native version subprocess, exact lock/binary/template hashes and ReleaseEnabled=0.",
+        "No external endpoint, deployment or signing action; an evidence script is not qualification of third-party native/compiler binaries."
+      ],
+      "reviewedSha256": "1baea73ac7dc1256603b369cbf35bfbb142f39fd7d309570803e27e6fd8dff09",
+      "reviewedLines": 16,
+      "reviewedBytes": 1605
+    },
+    {
+      "path": "packages/wallet/contract-acceptance.ts",
+      "sha256": "38e9aaf6320fb3a5dbffd92aa7bb7f17391221211f9837eea5d0b139a3668409",
+      "lines": 3,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: narrow read-only contract-acceptance observation/types/limits facade; no signing, funding or send exports."
+      ],
+      "reviewedSha256": "38e9aaf6320fb3a5dbffd92aa7bb7f17391221211f9837eea5d0b139a3668409",
+      "reviewedLines": 3,
+      "reviewedBytes": 353
+    },
+    {
+      "path": "packages/wallet/src/discovery.ts",
+      "sha256": "b20d7e2759af9d4c8bdf863474f53a869df6929341e55eb3ef8febc72926e729",
+      "lines": 138,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: explicit 3-second discovery with 64 announcement/16 provider bounds; descriptor-only unverified metadata/no icon loading, weak provider identities and exact-generation opaque handles.",
+        "Checks follow reflection/RNG callbacks; owned timers/listeners and disposal retire late announcements. Discovery invokes no automatic wallet method or spending capability."
+      ],
+      "reviewedSha256": "b20d7e2759af9d4c8bdf863474f53a869df6929341e55eb3ef8febc72926e729",
+      "reviewedLines": 138,
+      "reviewedBytes": 10424
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf",
+      "lines": 209,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: explicit lifecycle-owned connect/session generation; frozen terms/registry/deployment/asset/role binding and native account/chain checks before typedData v4 prompt.",
+        "Final own-descriptor account snapshot and captured request precede final current guard; offline signature recovery and late suppression preserve exact role/account. No send capability; legacy chain-quantity ceiling can fail closed above 64 bits."
+      ],
+      "reviewedSha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf",
+      "reviewedLines": 209,
+      "reviewedBytes": 14341
+    },
+    {
+      "path": "packages/wallet/src/evm-agreement.ts",
+      "sha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+      "lines": 90,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: exact private/capability/order/revision/hash consistency and two distinct role/account-bound EOA acceptances with canonical EIP712 encoding.",
+        "Owned buffer wipe and checks across asynchronous digests suppress stale/cancelled results; native context/hash capabilities are trusted. Test-only output keeps economic preparation false; wiping is no physical erasure guarantee."
+      ],
+      "reviewedSha256": "f7acb2d484db116c4cebac89d3c9d4e375af63bfe2f8aa3646e2117c19792991",
+      "reviewedLines": 90,
+      "reviewedBytes": 6796
+    },
+    {
+      "path": "packages/wallet/src/evm-contract-acceptance.ts",
+      "sha256": "16283608a97b677be3319967569474c2cf1afcd3546d89de1346fd94a03a5afe",
+      "lines": 84,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: EIP1271 local read-only observation, native signal validation, jobs 2/signature 4096/code 24576/gas 100000/timeout <=30s and exact magic-word ABI checks.",
+        "Repeated chain/genesis/deployment/latest-anchor/wallet-code/registry checks, signature wipe and physical-drain admission; no EOA fallback, durable approval or authority over mutable contract-wallet/proxy policy."
+      ],
+      "reviewedSha256": "16283608a97b677be3319967569474c2cf1afcd3546d89de1346fd94a03a5afe",
+      "reviewedLines": 84,
+      "reviewedBytes": 10324
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000",
+      "lines": 323,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: canonical selectors/events/tuple offsets/implied constants and six-word getTrade layout; frozen domain/terms, canonical decimal uint bounds, exact principal allowance and zero-reset plan.",
+        "Strict ABI/log/revert words and absent all-zero slot; pending credits/withdraw use a fixed bound destination. Raw log folding is diagnostic rather than authenticated state; raw collection utilities rely on caller input admission."
+      ],
+      "reviewedSha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000",
+      "reviewedLines": 323,
+      "reviewedBytes": 23440
+    },
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "sha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900",
+      "lines": 126,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed baseline and T88 repaired source: strict canonical prepared JSON plus exact account/chain/nonce/generation, trusted canonical validator, durable reserve/marker and one explicit invocation; errors after marker remain unknown and never resend.",
+        "T88 rejects account accessors without invocation, rechecks scope after final account reflection and captures request+receiver before final guard. Synthetic negative controls demonstrate the baseline invocation defect and repaired zero-call behavior.",
+        "Physical slot persists through ignored cancellation. Normal execution parses the bounded schema intent before its private request parser; the separately exported low-level helper is not a stand-alone arbitrary-size input boundary."
+      ],
+      "reviewedSha256": "3b875a4414fa2c62f7e7f5485a64985d489d4ab30f1b45dbd727c0372599b6a5",
+      "reviewedLines": 136,
+      "reviewedBytes": 9832
+    },
+    {
+      "path": "packages/wallet/src/evm-payment-preflight.ts",
+      "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0",
+      "lines": 217,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: exact canonical immutable terms/binding/registry/domain/asset/code/hash identity and native finalized funding proof; separately anchored latest state/time can veto or tighten, never create authority.",
+        "Repeated chain/genesis/anchor checks, 30-second monotonic freshness/900-second safety margin and one physical read through ignored-abort drain; fixed errors, bounded timeout, no retries/sends and false economic preparation."
+      ],
+      "reviewedSha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0",
+      "reviewedLines": 217,
+      "reviewedBytes": 15982
+    },
+    {
+      "path": "packages/wallet/src/evm-submit.ts",
+      "sha256": "c5d23b880e5a150a3c9ad63b724a321927046044174a7feb12cd79b52e36f92b",
+      "lines": 122,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: read-only EIP1193 canonical getTrade/transaction/receipt port, strict own fields/quantities/hashes and repeated anchors; empty return from coded deployment is corruption, not absent.",
+        "Canonical action builders/prior states expose no signing or sends. Legacy raw data() validation/provider allocations lack a stand-alone byte cap; trusted transport/lifecycle owns admission. No claim that arbitrary provider objects are resource-safe."
+      ],
+      "reviewedSha256": "c5d23b880e5a150a3c9ad63b724a321927046044174a7feb12cd79b52e36f92b",
+      "reviewedLines": 122,
+      "reviewedBytes": 9375
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+      "lines": 163,
+      "reviewStatus": "REVIEWED_SOURCE",
+      "semanticChecks": [
+        "Reviewed all source: exact own-data snapshots, canonical addresses/IDs/u64/u256 and fixed EIP712 domain/type/order; role selects the stored account.",
+        "Intrinsic65-byte signature copy,27/28 recovery ID, range/low-s and pinned Noble recovery with prehash false; no custom signing/provider/send implementation. Pin correspondence is not independent cryptographic proof."
+      ],
+      "reviewedSha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9",
+      "reviewedLines": 163,
+      "reviewedBytes": 10494
+    }
+  ],
+  "findings": [
+    {
+      "id": "C-P2-1",
+      "severity": "P2",
+      "status": "T88_REPAIRED_PENDING_ROOT_INDEPENDENT_ACCEPTANCE",
+      "path": "packages/wallet/src/evm-execution.ts",
+      "line": 94,
+      "endLine": 98,
+      "title": "Final session guard precedes foreign reflection before send-capable invocation",
+      "basis": "Exact baseline source/caller review and three synthetic in-memory negative cases; no real wallet/provider or broadcast.",
+      "repairScope": [
+        "packages/wallet/src/evm-execution.ts",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "repairReceipt": "/workspace/work/t88-execution-reflection/T88-review-packet.json",
+      "repairedSha256": "3b875a4414fa2c62f7e7f5485a64985d489d4ab30f1b45dbd727c0372599b6a5",
+      "currentLine": 100,
+      "currentEndLine": 108,
+      "impact": "Synchronous final account/request reflection could retire a session immediately before invoking its send-capable port; the existing durable marker still prevents automatic replay.",
+      "red": "Exact final tests on baseline: 11 pass/3 fail, one synthetic invocation per negative case.",
+      "green": "14/14; zero synthetic sends or account-accessor invocations in the negative cases; marker remains broadcast-unknown and explicit retry conflicts."
+    },
+    {
+      "id": "C-P2-2",
+      "severity": "P2",
+      "status": "T88_REPAIRED_PENDING_ROOT_INDEPENDENT_ACCEPTANCE",
+      "path": "packages/domain/src/terms-review.ts",
+      "line": 183,
+      "endLine": 189,
+      "title": "Intrinsic terms-byte cap applied only after an oversized owned copy",
+      "repairReceipt": "/workspace/work/t88-terms-copy-bound/T88-copy-bound-review-packet.json",
+      "baselineSha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6",
+      "repairedSha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364",
+      "basis": "Exact byte-copy source boundary and bounded 65537-byte max+1 negative case, plus valid offset-view and detached-view controls.",
+      "currentLine": 182,
+      "currentEndLine": 193,
+      "impact": "The previous shadowable length check could allocate an oversized caller view before eventual strict-parser refusal; poisoned accessors also rejected valid bounded offset views.",
+      "red": "16 tests:14 pass/2 fail; max+1 incurred one owned allocation before refusal.",
+      "green": "36/36 focused terms/registry/encoding checks; max+1 causes zero owned allocation/accessor/digest/registry work, valid intrinsic offset copy preserves caller bytes."
+    }
+  ],
+  "verification": {
+    "fresh": [
+      {
+        "kind": "semantic source inspection",
+        "files": 29,
+        "baselineLines": 4637,
+        "currentSource": "Bound by reviewedSha256 and reviewed snapshot per production file. No whole suite or contract execution."
+      },
+      {
+        "command": "node --test packages/wallet/test/evm-execution.test.mjs",
+        "task": "T88",
+        "pass": 14,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "defaultNodeIsolation": true,
+        "managedIpcCapability": true,
+        "receipt": "/workspace/work/t88-execution-reflection/T88-review-packet.json",
+        "receiptSha256": "079f1e816db03a36b4e4c373c996f4e4c52d1ae6e5f2fe9f8fa5e178f1f0dd75",
+        "rawGreen": "/workspace/work/t88-execution-reflection/final-reflection.GREEN.log",
+        "rawRed": "/workspace/work/t88-execution-reflection/final-tests.RED.log",
+        "scope": "Pure in-memory provider stubs and literal fake hashes; no economic/external action."
+      },
+      {
+        "command": "node --test packages/domain/test/terms-review.test.mjs packages/domain/test/trade-terms.test.mjs packages/domain/test/registry.test.mjs",
+        "task": "T88-copy-bound",
+        "pass": 36,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "defaultNodeIsolation": true,
+        "managedIpcCapability": true,
+        "receipt": "/workspace/work/t88-terms-copy-bound/T88-copy-bound-review-packet.json",
+        "receiptSha256": "837934dcc86120db78c8511798cd6e262ac074f8da7bfc2a32acc30bebd66c5b",
+        "rawGreen": "/workspace/work/t88-terms-copy-bound/canonical-focused.GREEN.log",
+        "rawRed": "/workspace/work/t88-terms-copy-bound/pre-copy-guard.RED.log",
+        "scope": "Bounded local65536/65537 views, encodings and registry fixtures; no huge allocation or external target."
+      },
+      {
+        "kind": "artifact consistency",
+        "checks": "Both original audit snapshots and all 29 source hashes checked; T88 manifests9/9 and8/8 verify; owned diff whitespace check passes."
+      }
+    ],
+    "reused": [],
+    "reusedNote": "No historical suite/Foundry result is promoted to fresh verification here. Existing tests and repository notes were supporting source evidence only; previous T78/T83/T86 packets remain untouched.",
+    "pendingRoot": "Independent acceptance of both frozen repairs; final consolidated current-tree typecheck/package/build/contract checks, including the coordinator-owned 82 Foundry tests. T80 facade/schema changes occurred after focused receipts and need consolidated validation."
+  },
+  "progress": {
+    "reviewedSourceFiles": 29,
+    "totalProductionFiles": 29,
+    "activeRepair": "Both T88 source/test pairs frozen for independent root acceptance; no further source edits or whole-suite reruns."
+  },
+  "sourceHeadAtReviewFreeze": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "reviewFrozenAtUtc": "2026-11-02T16:31:47.838655+00:00",
+  "reviewedSnapshotRoot": "/workspace/work/audit-domain-evm-reviewed-snapshot",
+  "scope": {
+    "productionFiles": 29,
+    "baselineLines": 4637,
+    "reviewedCurrentLines": 4652,
+    "fixtureExclusions": [
+      {
+        "path": "packages/escrow-evm/contracts/TestActors.sol",
+        "sha256": "c3dcaf61eb11f6af19498dbc36ee3320918f4c44d0f9012affc5d8b3116b811f",
+        "bytes": 3263,
+        "lines": 50,
+        "reason": "Deliberately unsafe local test actors, fully read as ancillary fixture; never production/deployment candidates."
+      }
+    ],
+    "activeImplementationExclusion": {
+      "path": "packages/domain/src/trade-draft.ts",
+      "sha256": "9376a28f27287e9c6ce17940de24012e5308c6b11dcb5a09605624da025c51f1",
+      "bytes": 6869,
+      "lines": 99,
+      "reason": "T80 implementation active and explicitly excluded; hash only, no audit coverage claimed."
+    },
+    "otherReviewers": "Transport/messaging reviewed by separate agent; crypto/storage T85 and proof-worker T87 owned elsewhere. Schemas are a separately changing dependency boundary.",
+    "constraints": "Read-only audit plus four explicitly authorized T88 source/test paths only; no commits, ledgers, deployment, RPC, wallet prompts, signing, real broadcast/economic action or production activation."
+  },
+  "drift": {
+    "knownProductionChanges": [
+      {
+        "path": "packages/domain/index.ts",
+        "initialSha256": "0281caaf258c48b8ec45d3856f8785038f2bdae7bf94d838d05932385a0e7fd3",
+        "reviewedSha256": "c9404cdbc78cc8d5989a856f9ec191ac68b797efd02df4074508d43332a4e1b1",
+        "classification": "CONCURRENT_T80_FACADE_EXPORTS"
+      },
+      {
+        "path": "packages/domain/src/terms-review.ts",
+        "initialSha256": "e7d20a723f154faf813ea59dec7a6c0b6d6e0b6802fbb48988ea7ba0bf7e02e6",
+        "reviewedSha256": "21771f29867c14a4fc6f4e3e0c3ca07313fcd504c93a5314db0afb1c81c5f364",
+        "classification": "AUTHORIZED_T88_REPAIR"
+      },
+      {
+        "path": "packages/wallet/src/evm-execution.ts",
+        "initialSha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900",
+        "reviewedSha256": "3b875a4414fa2c62f7e7f5485a64985d489d4ab30f1b45dbd727c0372599b6a5",
+        "classification": "AUTHORIZED_T88_REPAIR"
+      }
+    ],
+    "inventoryChange": {
+      "added": [],
+      "removed": []
+    },
+    "unexpected": [],
+    "headChangeOutsideScope": [
+      "docs/execution/reviews/T87-root.json",
+      "docs/execution/reviews/T87.json",
+      "packages/proof-jobs/README.md",
+      "packages/proof-jobs/src/supervisor.ts",
+      "packages/proof-jobs/test/browser.mjs",
+      "packages/proof-jobs/test/fixtures/real-app.tsx",
+      "packages/proof-jobs/test/supervisor.test.mjs"
+    ],
+    "workingTreeStatusAtFreeze": "M apps/web/src/app-services.ts\n M apps/web/src/demo/synthetic-local.ts\n M apps/web/src/journey/native-contracts.ts\n M apps/web/src/journey/private-trade.ts\n M apps/web/src/journey/vault-composition.ts\n M apps/web/src/main.tsx\n M apps/web/src/runtime/app-runtime.ts\n M apps/web/src/runtime/pending-metadata.ts\n M apps/web/src/runtime/worker-endpoint.ts\n M apps/web/src/testnet/sepolia-source.ts\n M apps/web/src/trade/review-controller.ts\n M apps/web/src/ui/App.tsx\n M apps/web/src/ui/Pages.tsx\n M apps/web/src/ui/locale/en.ts\n M apps/web/src/ui/messages.ts\n M apps/web/src/ui/trade/TradePages.tsx\n M apps/web/src/ui/trade/TradeTermsReview.tsx\n M apps/web/test/review-controller.test.mjs\n M packages/courier/src/locker.ts\n M packages/courier/test/locker.test.mjs\n M packages/domain/index.ts\n M packages/domain/src/terms-review.ts\n M packages/domain/test/terms-review.test.mjs\n M packages/messaging/src/durable-chat.ts\n M packages/messaging/test/durable-chat.test.mjs\n M packages/relay/src/local-pool.ts\n M packages/relay/test/local-pool.test.mjs\n M packages/schemas/index.ts\n M packages/schemas/src/runtime.ts\n M packages/schemas/src/saved-review.ts\n M packages/schemas/test/saved-review.test.mjs\n M packages/wallet/src/evm-execution.ts\n M packages/wallet/test/evm-execution.test.mjs\n M scripts/sepolia/lib.mjs\n M scripts/sepolia/trade.mjs\n M scripts/tests/sepolia-hygiene.test.mjs\n M scripts/tests/sepolia-trade-state.test.mjs\n?? apps/web/src/privacy/\n?? apps/web/src/sharing/\n?? apps/web/src/trade/draft-controller.ts\n?? apps/web/src/ui/FavoriteSavedReviews.tsx\n?? apps/web/src/ui/GenericAppShare.tsx\n?? apps/web/src/ui/PrivacyPolicySelector.tsx\n?? apps/web/src/ui/trade/TradeDraftEditor.tsx\n?? apps/web/test/draft-controller.test.mjs\n?? apps/web/test/generic-app-share.test.mjs\n?? apps/web/test/privacy-policy-controller.test.mjs\n?? apps/web/test/privacy-policy-selector.render.test.mjs\n?? apps/web/test/review-favorites-ui.test.mjs\n?? apps/web/test/review-favorites-worker.test.mjs\n?? apps/web/test/trade-draft-editor.test.mjs\n?? apps/web/test/transport-selection-runtime.test.mjs\n?? packages/domain/src/trade-draft.ts\n?? packages/domain/test/trade-draft.test.mjs\n?? packages/personalization/\n?? packages/schemas/src/trade-drafts.ts\n?? packages/schemas/src/transport-selection.ts\n?? packages/schemas/test/trade-drafts.test.mjs\n?? packages/schemas/test/transport-selection.test.mjs\n?? scripts/test-generic-app-share-browser.mjs\n?? scripts/test-review-favorites-browser.mjs",
+    "schemaCheckpointNote": "Current18-file schema facade/source hashes are a supporting checkpoint, not a claim they match the earlier focused test environment or a separate complete schema audit."
+  },
+  "dependencies": {
+    "reviewClaim": "Reviewed own-source use and boundary assumptions; hash/version correspondence only for upstream implementations. No new package install, upstream audit, native binary qualification or professional certification.",
+    "metadataAndDirectCryptoEntryHashes": [
+      {
+        "path": "package.json",
+        "sha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141",
+        "bytes": 6863,
+        "lines": 82
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+        "bytes": 42472,
+        "lines": 1324
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "0ab1ae078d48c175253f245321b48d1468bc6ce05039b3242950cff5c2e4bf4b",
+        "bytes": 291,
+        "lines": 6
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "sha256": "94d52fade39a1f05594df96d85a454111727366a9abe183eb20233d98db82e6c",
+        "bytes": 5725,
+        "lines": 29
+      },
+      {
+        "path": "contracts/evm/foundry.toml",
+        "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64",
+        "bytes": 1382,
+        "lines": 47
+      },
+      {
+        "path": "contracts/evm/README.md",
+        "sha256": "cf3b90ac57655e4f364622b1790c567f98f3f50b2f37125a8271f3a513d86a43",
+        "bytes": 5326,
+        "lines": 80
+      },
+      {
+        "path": "contracts/evm/SECURITY-NOTES.md",
+        "sha256": "8034fe27383f89ad3458e33ca169cd25364a182b406b125b7ba9fc824fc13126",
+        "bytes": 6452,
+        "lines": 90
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/package.json",
+        "sha256": "9623b9e2f7fec73a3b6b30fd1d843b17338be5107750e735a3dec375337af7ef",
+        "bytes": 3839,
+        "lines": 104
+      },
+      {
+        "path": "packages/escrow-evm/package.json",
+        "sha256": "bf52edc22491ebe772a065513aa27dcb4ecec3bb58fefd9b1521d8bfd2f92ec9",
+        "bytes": 385,
+        "lines": 19
+      },
+      {
+        "path": "packages/escrow-evm/package-lock.json",
+        "sha256": "1153d63e76110354be9ec1be3ec23ae547a59e47e656b488abfab791d2aec35a",
+        "bytes": 8522,
+        "lines": 253
+      },
+      {
+        "path": "packages/escrow-evm/README.md",
+        "sha256": "a8955f05c4572c15b37250948afe6125a75a49bfd8daa57b1495f1bb4775785b",
+        "bytes": 7320,
+        "lines": 44
+      },
+      {
+        "path": "packages/chain-evm/README.md",
+        "sha256": "ba817dfadc3f0515e6f4bb129a4084e4fa8e3e410a2367138f1742def756536c",
+        "bytes": 3222,
+        "lines": 22
+      },
+      {
+        "path": "node_modules/@noble/curves/package.json",
+        "sha256": "63d976a6ee72f2dcdc81e6c8bf907edff54eb20e8423218578fbfaf29cff96e6",
+        "bytes": 2722,
+        "lines": 98
+      },
+      {
+        "path": "node_modules/@noble/hashes/package.json",
+        "sha256": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf",
+        "bytes": 2583,
+        "lines": 91
+      },
+      {
+        "path": "node_modules/@noble/curves/secp256k1.js",
+        "sha256": "b4e7383e0de5064cd200d22f21890bc8730ddaf987b1e989e5e24bbfaae5cf1f",
+        "bytes": 20700,
+        "lines": 474
+      },
+      {
+        "path": "node_modules/@noble/hashes/sha3.js",
+        "sha256": "9a81e1edb24eae27b335533220167609cfb58008c5690e140ce478acdc669f32",
+        "bytes": 17469,
+        "lines": 475
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/package.json",
+        "sha256": "7e5965609fbc7c48253296f94dde1d456385f407c6879ada17240dffa43fbd71",
+        "bytes": 786,
+        "lines": 32
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/solc/package.json",
+        "sha256": "86e18361b708a0d89d95638a2012c201678e69760b3589b4f111e338b5bcf3cb",
+        "bytes": 2811,
+        "lines": 86
+      }
+    ],
+    "schemaBoundaryCheckpoint": [
+      {
+        "path": "packages/schemas/index.ts",
+        "sha256": "77cabdb421bd923b54746f61bac1e4a1ac8dc2c84bc99f79850d6646c8e7bc55",
+        "bytes": 878,
+        "lines": 19
+      },
+      {
+        "path": "packages/schemas/src/backup-verification.ts",
+        "sha256": "37341acb6b0d61c63856039af8eda24d8586621cf9c0274009a1a983b57519ca",
+        "bytes": 2101,
+        "lines": 28
+      },
+      {
+        "path": "packages/schemas/src/backup.ts",
+        "sha256": "d59f5ae03d8b8463cb9f2f875f6ec10a914dd3c28db549987930eadf14631fc2",
+        "bytes": 5777,
+        "lines": 105
+      },
+      {
+        "path": "packages/schemas/src/core.ts",
+        "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26",
+        "bytes": 10432,
+        "lines": 152
+      },
+      {
+        "path": "packages/schemas/src/evm-agreement-control.ts",
+        "sha256": "f847624e30aa27539808c57bcf30082ccc31d36c32bcaaf5283e78bd1b93e4fb",
+        "bytes": 5940,
+        "lines": 110
+      },
+      {
+        "path": "packages/schemas/src/evm-agreement-input.ts",
+        "sha256": "7b3e0a67bf70a53b1ebcc241097bd16a372197f0596f0868af448ce6e823af3d",
+        "bytes": 13966,
+        "lines": 232
+      },
+      {
+        "path": "packages/schemas/src/evm-agreement-protocol.ts",
+        "sha256": "443cbf82644994864fc4374bd087b0835e868fdc8569811471b2f3bc9ccb014e",
+        "bytes": 6455,
+        "lines": 110
+      },
+      {
+        "path": "packages/schemas/src/identity.ts",
+        "sha256": "df9a3278760f9d8d6c8062cd9202e0f0710d8bb7e8153eb3729c328fa6be5a4e",
+        "bytes": 5109,
+        "lines": 64
+      },
+      {
+        "path": "packages/schemas/src/intent.ts",
+        "sha256": "20b2c987591b741f9d6407e1d13c75952c0b4f513a2cb1bceba9eae40fb7846f",
+        "bytes": 7912,
+        "lines": 89
+      },
+      {
+        "path": "packages/schemas/src/recovery-reference.ts",
+        "sha256": "56a9646c2dbbb26647398ac10e3217f8507c34773825d2d145f19d411b3bf30a",
+        "bytes": 8084,
+        "lines": 91
+      },
+      {
+        "path": "packages/schemas/src/registry.ts",
+        "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183",
+        "bytes": 15559,
+        "lines": 248
+      },
+      {
+        "path": "packages/schemas/src/runtime.ts",
+        "sha256": "156fff4b2000e40863a848f2e3d3c7b2f58e93c7cfca593ed9c77a5af5bb0663",
+        "bytes": 32320,
+        "lines": 361
+      },
+      {
+        "path": "packages/schemas/src/saved-review.ts",
+        "sha256": "924c371c2c09f6282a99fd58009b8c171f05729fa2af59c930ff53a5820c344e",
+        "bytes": 3250,
+        "lines": 50
+      },
+      {
+        "path": "packages/schemas/src/trade-drafts.ts",
+        "sha256": "964ee6756b1ad68b2489a51147542f09c6d287c9dc5efbaa7ad3f02622d60838",
+        "bytes": 8417,
+        "lines": 119
+      },
+      {
+        "path": "packages/schemas/src/transport-selection.ts",
+        "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42",
+        "bytes": 4016,
+        "lines": 73
+      },
+      {
+        "path": "packages/schemas/src/transport.ts",
+        "sha256": "084c0b5e16975340911f7e4f70eaf5d3823799b7cb19037db5012f6d3c892dc8",
+        "bytes": 6626,
+        "lines": 76
+      },
+      {
+        "path": "packages/schemas/src/vault-service.ts",
+        "sha256": "d64f63d2223be386c89ca4537c439c58365cc0d47e776f69b1b0343820cad9d0",
+        "bytes": 1968,
+        "lines": 28
+      },
+      {
+        "path": "packages/schemas/src/vault.ts",
+        "sha256": "e9bd69ea8eeba487d8df4757d0db58dc656984b925624e009cd019cb96a0ebb8",
+        "bytes": 10407,
+        "lines": 202
+      }
+    ],
+    "rootLocked": {
+      "@noble/curves": {
+        "version": "2.4.0",
+        "integrity": "sha512-P4/62zrgfH33CneE3Dn4WhJVA22YUU0eR51wKIan4NVRvwsA0YnPTwWGpNbpuacSujmSFLvyzpyuR30+fbq2Ew==",
+        "resolved": "https://registry.npmjs.org/@noble/curves/-/curves-2.4.0.tgz"
+      },
+      "@noble/hashes": {
+        "version": "2.4.0",
+        "integrity": "sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==",
+        "resolved": "https://registry.npmjs.org/@noble/hashes/-/hashes-2.4.0.tgz"
+      }
+    },
+    "isolatedLocked": {
+      "@openzeppelin/contracts": {
+        "version": "5.0.2",
+        "integrity": "sha512-ytPc6eLGcHHnapAZ9S+5qsdomhjo6QBHTDRRBFfTxXIpsicMhVPouPgmUPebZZZGX7vt9USA+Z+0M0dSVtSUEA==",
+        "resolved": "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz"
+      },
+      "ethers": {
+        "version": "6.17.0",
+        "integrity": "sha512-BpyrpIPJ3ydEVow8zGaz1DuPS7YU8DcWxuBnY9a0UA/lvAPwrMr+EPXsfrul628SRaekPNeIM4UFh/91GWZang==",
+        "resolved": "https://registry.npmjs.org/ethers/-/ethers-6.17.0.tgz"
+      },
+      "solc": {
+        "version": "0.8.38",
+        "integrity": "sha512-DsDLa7uACQVVkE0DYNnUGC49b/yuCJ9ymWlcCEwmaJGcETPC6pTC+BXaRK9ADW8YVeMyxEKUtJsUwRAIG28jtQ==",
+        "resolved": "https://registry.npmjs.org/solc/-/solc-0.8.38.tgz"
+      },
+      "@foundry-rs/anvil-linux-amd64": {
+        "version": "1.7.1",
+        "integrity": "sha512-+XmShybEaxfCrr0OUUZwYEy2OnYZt5pHH9TzBtLv3+VrK0O/ANuNSVEahqNhKHlgX7GRJ59383ofNhxkRWIYTg==",
+        "resolved": "https://registry.npmjs.org/@foundry-rs/anvil-linux-amd64/-/anvil-linux-amd64-1.7.1.tgz"
+      },
+      "tmp": {
+        "version": "0.2.7",
+        "integrity": "sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw==",
+        "resolved": "https://registry.npmjs.org/tmp/-/tmp-0.2.7.tgz"
+      }
+    },
+    "canonicalGitlinkPins": [
+      "160000 commit 8e40513d678f392f398620b3ef2b418648b33e89\tcontracts/evm/lib/forge-std",
+      "160000 commit c64a1edb67b6e3f4a15cca8909c9482ad33a02b0\tcontracts/evm/lib/openzeppelin-contracts"
+    ],
+    "canonicalSolidityImportClosure": [
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol",
+        "sha256": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b",
+        "bytes": 4454,
+        "lines": 86
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol",
+        "sha256": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368",
+        "bytes": 193,
+        "lines": 6
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol",
+        "sha256": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1",
+        "bytes": 182,
+        "lines": 6
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
+        "sha256": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c",
+        "bytes": 2781,
+        "lines": 79
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+        "sha256": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082",
+        "bytes": 10075,
+        "lines": 212
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol",
+        "sha256": "32fbb1c908ec1b4de85cc1bb10091aebd5816ffe80dfdd5ca5e084fbea67a462",
+        "bytes": 3384,
+        "lines": 87
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
+        "sha256": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca",
+        "bytes": 871,
+        "lines": 25
+      }
+    ],
+    "isolatedSolidityImportClosure": [
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/interfaces/IERC1271.sol",
+        "sha256": "c222d6d35af16214627df99796551f94497c74662e94aa1e80ca5e211a751f61",
+        "bytes": 652,
+        "lines": 17
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/interfaces/IERC5267.sol",
+        "sha256": "efd1ebd1e04b6ef9c3b8781a097588f83da954323f438d54a71dc06508e6c7b8",
+        "bytes": 739,
+        "lines": 28
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "sha256": "6f2faae462e286e24e091d7718575179644dc60e79936ef0c92e2d1ab3ca3cee",
+        "bytes": 2779,
+        "lines": 79
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol",
+        "sha256": "912509e0e9bf74e0f8a8c92d031b5b26d2d35c6d4abf3f56251be1ea9ca946bf",
+        "bytes": 3803,
+        "lines": 90
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "sha256": "471157c89111d7b9eab456b53ebe9042bc69504a64cb5cc980d38da9103379ae",
+        "bytes": 5770,
+        "lines": 118
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/Address.sol",
+        "sha256": "b3710b1712637eb8c0df81912da3450da6ff67b0b3ed18146b033ed15b1aa3b9",
+        "bytes": 6262,
+        "lines": 159
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "sha256": "8d0bac508a25133c9ff80206f65164cef959ec084645d1e7b06050c2971ae0fc",
+        "bytes": 3240,
+        "lines": 84
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/ShortStrings.sol",
+        "sha256": "ddd52921d2996abf2e3d9c1c4f6d00194a3e3b278a164948f995862371444a55",
+        "bytes": 4309,
+        "lines": 123
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/StorageSlot.sol",
+        "sha256": "b4a5fb7ab93bfeda06509eafbd5f71fde0e0de84b6d9129553bd535a42166c15",
+        "bytes": 3931,
+        "lines": 135
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/Strings.sol",
+        "sha256": "0519199dbc635f98ce2e4537986604ee618bca665c65e9a1738702dfacf72010",
+        "bytes": 3099,
+        "lines": 94
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol",
+        "sha256": "37828cb50b47bcc51c7b770bde15d5885d871ef1e67028057a0b788c3568726e",
+        "bytes": 7731,
+        "lines": 174
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/cryptography/EIP712.sol",
+        "sha256": "27dac0732a0154f432c0a7a1d1f067ab51116105e157d0e5d68d040fd83954d5",
+        "bytes": 6611,
+        "lines": 160
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol",
+        "sha256": "2fd5c641cf452efd15f784827cb2835664970d7fbc166bf80824ed27011cc374",
+        "bytes": 3757,
+        "lines": 86
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol",
+        "sha256": "bd1ed34d265d1bc68b59727e7a9abd2b6aef171f04239a119450dbb20d3d5334",
+        "bytes": 2274,
+        "lines": 48
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/math/Math.sol",
+        "sha256": "a6ee779fc42e6bf01b5e6a963065706e882b016affbedfd8be19a71ea48e6e15",
+        "bytes": 15118,
+        "lines": 415
+      },
+      {
+        "path": "packages/escrow-evm/node_modules/@openzeppelin/contracts/utils/math/SignedMath.sol",
+        "sha256": "768c28e3a33c3312e57ae8a1caaec2893bc89ac6e386621de018f85e9a2d6e99",
+        "bytes": 1264,
+        "lines": 43
+      }
+    ]
+  },
+  "profileBoundaries": [
+    {
+      "profile": "canonical-basic-v1",
+      "contract": "contracts/evm/src/BasicEscrow.sol",
+      "abi": "getTrade(bytes32) => seller,deadline,state,buyer,token,amount",
+      "clients": [
+        "packages/wallet/src/evm-escrow.ts",
+        "packages/wallet/src/evm-submit.ts",
+        "packages/wallet/src/evm-payment-preflight.ts"
+      ],
+      "acceptance": "No signature check on-chain; role-bound acceptance belongs to trusted off-chain composition.",
+      "payout": "Terminal push then deferred recipient credit; permissionless withdraw never redirects.",
+      "compiler": "solc 0.8.30/Cancun/optimizer 200/no viaIR; vendored OpenZeppelin 5.4.0"
+    },
+    {
+      "profile": "isolated-local-signature-escrow",
+      "contract": "packages/escrow-evm/contracts/BasicEscrow.sol",
+      "abi": "escrows(bytes32) => seller,buyer,asset,amount,expiry,state",
+      "clients": [
+        "packages/chain-evm/src/reader.ts"
+      ],
+      "acceptance": "Both EOA/EIP1271 signatures at funding; fixed network/deployment identity hashes.",
+      "payout": "Exact debit/receipt required; failed payout atomically reverts to funded.",
+      "compiler": "solc-js 0.8.38/Shanghai/optimizer 200/viaIR; package OpenZeppelin 5.0.2"
+    }
+  ],
+  "supportingTestInventory": [
+    {
+      "path": "packages/domain/test/authority.test.mjs",
+      "sha256": "bb4e476adaeb3ba74959e03d28e5afb743a820f42a7426b6669d18f46757759f",
+      "bytes": 9031,
+      "lines": 94,
+      "inspection": "full test source inspected; not freshly executed for this audit"
+    },
+    {
+      "path": "packages/domain/test/errors.test.mjs",
+      "sha256": "550509ad0861a3f71d99683a597edba0191ddd8281b0b22aa641ba82696117f8",
+      "bytes": 3978,
+      "lines": 57,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/fixtures/g16-vectors.json",
+      "sha256": "c53e04a786c2d74b7aefe7e2ed03178c202f32beb6d51de0c437de508b29b5af",
+      "bytes": 6225,
+      "lines": 92,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/registry.json",
+      "sha256": "14e7ecfb5aff74253affe0d2e8560728763f01db405bcc7efdca964ef103ca6a",
+      "bytes": 1450,
+      "lines": 55,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/fixtures/local-evm-scenario/scenario.json",
+      "sha256": "b5dccbf7e57619313733555506eb24be9c1c6a709a01bf0c689e7b9e314ab274",
+      "bytes": 4682,
+      "lines": 102,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/intent-journal.test.mjs",
+      "sha256": "a3f2e03a113c12c6435cdc57e473038b7187c9f3b8492a626a008b6d0f5389cd",
+      "bytes": 25021,
+      "lines": 190,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/journey-view.test.mjs",
+      "sha256": "dfd782ca18e7146f00b5770d4373e93f8939d2903b5cd479efee180e190de1f5",
+      "bytes": 16004,
+      "lines": 178,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/local-evm-scenario.test.mjs",
+      "sha256": "6f3b429f816cdb8560c6f81a5fe89e89d6cda6266289d819ff29f13fa72bf32c",
+      "bytes": 4043,
+      "lines": 52,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/observation-dispatcher.test.mjs",
+      "sha256": "dc2b8b610c9c4af3e9e3fffbb4163d8525ef9818bb6bf837dcb3c966d8d8b3af",
+      "bytes": 4726,
+      "lines": 39,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/payment-preflight.test.mjs",
+      "sha256": "3a0f414d1d903df0e8a26d47e7b9e72f16a8ac4fb568cdf0d487aebcdfeb3ba0",
+      "bytes": 11481,
+      "lines": 162,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/privacy-view.test.mjs",
+      "sha256": "5116eac59186b2b95bc6d7a100ecf197ea9ee5b2940a08ab4ceef1e659d476e4",
+      "bytes": 17375,
+      "lines": 242,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/read-retry.test.mjs",
+      "sha256": "cc2cae75d70bb43d0be099e1b6e738f8a552cc88ac279c523fd635a1ade13804",
+      "bytes": 20174,
+      "lines": 228,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/registry.test.mjs",
+      "sha256": "d8de73498b7a7de11d665422a26a2529af89cb2dd8f4e5c79e6458565a00b4ed",
+      "bytes": 13152,
+      "lines": 152,
+      "inspection": "full source inspected; executed in fresh focused T88 validation"
+    },
+    {
+      "path": "packages/domain/test/terms-review.test.mjs",
+      "sha256": "1fca48a81a4720229b444e943ed502786c36335dfde25c0b90d80d82a4304b76",
+      "bytes": 35870,
+      "lines": 447,
+      "inspection": "full source inspected; executed in fresh focused T88 validation"
+    },
+    {
+      "path": "packages/domain/test/trade-composition.test.mjs",
+      "sha256": "0de8ef27bac37c4764ece37b0281ae02c6be0003b84c2473f6df0d69296a735c",
+      "bytes": 22712,
+      "lines": 320,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/domain/test/trade-terms.test.mjs",
+      "sha256": "7d2ed7032b2c5db3c5a6f7c390ed2c4e9524895e4f70e4133c070bb461b5e117",
+      "bytes": 10880,
+      "lines": 157,
+      "inspection": "full source inspected; executed in fresh focused T88 validation"
+    },
+    {
+      "path": "packages/domain/test/tx-lifecycle.test.mjs",
+      "sha256": "4002f137575eb76875afc283052e0f53920fb0a72824daf26645f3830dcdda10",
+      "bytes": 28571,
+      "lines": 457,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/discovery.test.mjs",
+      "sha256": "704f3a7b25cfe0d0d3234fe86450001934bbc70852e88926ab91db7b88702e75",
+      "bytes": 9813,
+      "lines": 79,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "sha256": "7120b0a7e3f17129eee3578f77b6482f049bd0222c11fd868ca2b0a2aa5280df",
+      "bytes": 17430,
+      "lines": 227,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-host.test.mjs",
+      "sha256": "2f6edd83acbf059be937c0c1b13afd0d41a0db93a68dc267b037bece0636f6b3",
+      "bytes": 39710,
+      "lines": 635,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement-port-adapter.test.mjs",
+      "sha256": "7ec883fad7cc69ff9289a2488d65570d0b1f1dfaa1c91942a112c44e75a36f87",
+      "bytes": 17148,
+      "lines": 295,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-agreement.test.mjs",
+      "sha256": "1e0ea9563eff307598816392fc12a2e351979bd1a882ae9caf39cb407e6e0f1b",
+      "bytes": 12698,
+      "lines": 172,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-contract-acceptance.test.mjs",
+      "sha256": "2fb904eeca5bffcaab03d5e82ba49453d8a04b3aeb0f3fd84cd1cb9fe10bce33",
+      "bytes": 8326,
+      "lines": 75,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-escrow.test.mjs",
+      "sha256": "e64e9146c7da7f039f78761a8a124bfebd3154b752ebe7cbf89e4ff39c161480",
+      "bytes": 21699,
+      "lines": 269,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "sha256": "66f77213feeebcf36a0e0bf33599ec853998e79ed79e4eb4eca818fb040e1db6",
+      "bytes": 13045,
+      "lines": 122,
+      "inspection": "full source inspected; executed in fresh focused T88 validation"
+    },
+    {
+      "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb",
+      "bytes": 17413,
+      "lines": 248,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-submit.test.mjs",
+      "sha256": "f36c852b62b48330babd0d9929a46e6309c03c5f91ac69b893cdc23f7bf6c5d4",
+      "bytes": 7460,
+      "lines": 101,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088",
+      "bytes": 12298,
+      "lines": 145,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/eip712-keccak-vectors.json",
+      "sha256": "88e7a0c0d7cc82c0e5a73026d1e8afff2b427b5240abc3ab2182e8a20dd9d828",
+      "bytes": 1323,
+      "lines": 31,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-evm-independent.json",
+      "sha256": "e876b2f6ee1cb8a2088d64215749038b55ecfbfe66877860eb6f27561370db70",
+      "bytes": 11316,
+      "lines": 217,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-independent-generate.mjs",
+      "sha256": "375576fec3c37e118ee0b6eae72cb524a08e90cb435dae18994e6cd2dab75a91",
+      "bytes": 2309,
+      "lines": 21,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/fixtures/g16-independent.json",
+      "sha256": "121c358fabe9a4468ff4c1dc2f28fb7fbc8a41f8eba24badf79dda3854f02ab6",
+      "bytes": 3525,
+      "lines": 65,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/g16-independent.test.mjs",
+      "sha256": "92889a65e7d7e4d6b8f98d2ccf9c20f1850d4bd78b2e6e76c4a4b25f890bf884",
+      "bytes": 1544,
+      "lines": 22,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-host.ts",
+      "sha256": "21233bf9feb82d6109c020f41e9d4a5896ad8297d8407148cf31023a57276e37",
+      "bytes": 14316,
+      "lines": 287,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/lib/evm-agreement-port-adapter.ts",
+      "sha256": "947a3d408741485852ba1a2b5ca17b4e7539c335e041b0fff3e2b77af51fd588",
+      "bytes": 4442,
+      "lines": 66,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/lib/g16-bundle-fixture.mjs",
+      "sha256": "6c3c79dfa5711e3e5d1704a427f2dda84509aef0f969c3a2b09448fa7f7727f1",
+      "bytes": 2658,
+      "lines": 36,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/wallet/test/local-evm-scenario.test.mjs",
+      "sha256": "5f7f22db65ca96ba7bb5b071e1c87a51d304dab5947355a4b5c34ad5dda4496c",
+      "bytes": 2698,
+      "lines": 31,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/chain-evm/test/reader.test.mjs",
+      "sha256": "5f568b77e61f81b1471b8976d9757249107c9832aa4f888341c3569c77ef2461",
+      "bytes": 9683,
+      "lines": 112,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/escrow-evm/test/helpers.mjs",
+      "sha256": "6bd07ceba44e08ca4582c9e2464a9d4d699969af54c4ff12cbbe2b1729ead3d0",
+      "bytes": 6558,
+      "lines": 76,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "packages/escrow-evm/test/integration/escrow.test.mjs",
+      "sha256": "d9ac7dca14cc73ee8c2621cc74fca343d73ec36dfc031681eeadc2a2d4293c9d",
+      "bytes": 12777,
+      "lines": 119,
+      "inspection": "integration assertions inspected (no invocation or economic action in this audit)"
+    },
+    {
+      "path": "contracts/evm/test/Base.t.sol",
+      "sha256": "5983a2c2f6b89aab60057ecf428157dd24dd82c70d72eb5130db7abc5a21f7e8",
+      "bytes": 4031,
+      "lines": 111,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrow.t.sol",
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd",
+      "bytes": 31251,
+      "lines": 681,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d",
+      "bytes": 5853,
+      "lines": 135,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowInvariant.t.sol",
+      "sha256": "9a7944ff1204dfd8a89e40b5b8c000eea260fd31d178cba5be979643a303fe49",
+      "bytes": 7927,
+      "lines": 204,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/TermsVector.t.sol",
+      "sha256": "3ebb25daf3c0456732f236919206352f29ee484964ef0708673e1b2433aec116",
+      "bytes": 5829,
+      "lines": 116,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/mocks/Eip1271RecoveryFixture.sol",
+      "sha256": "1c491ae40f30c7960776fa2d9195f893368a80988c6e7e742dd3b28aeb2682c3",
+      "bytes": 1057,
+      "lines": 20,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    },
+    {
+      "path": "contracts/evm/test/mocks/Mocks.sol",
+      "sha256": "7d7bc2e6b11c0d54e5686f81d5275ce90dbb0ef2b72b9550a9aefe45507d323b",
+      "bytes": 7028,
+      "lines": 224,
+      "inspection": "supporting inventory; relevant assertions selected or coverage indexed, not all test bodies reviewed"
+    }
+  ],
+  "limits": [
+    "Whole-source defensive review is not a professional security certification, formal proof, release qualification or proof of absence of defects. Production trading remains disabled.",
+    "Finality and native reads trust injected RPC/registry/composition capabilities; consistent dishonest RPC, mutable contract-wallet policies, proxy implementation changes, chain failure and token honesty remain external assumptions.",
+    "Canonical and isolated profiles are distinct; matching terms digests do not make their selectors/getters/signature/payout policies interchangeable.",
+    "No real funds, third-party target, exploit reproduction, external network operation, deployment, key use, signing or broadcast was performed. Test-only source inclusion in this audit does not activate it in the App.",
+    "Seller withholding after manual fiat payment and issuer freeze/censorship are accepted economic/liveness risks, not solved by native escrow authorization.",
+    "Legacy raw calldata/log helpers and private lifecycle admission rely partly on caller bounds. This review does not assert every arbitrary caller/provider object or upstream dependency is globally resource bounded.",
+    "T80 trade-draft implementation, transport/messaging, crypto/storage internals, all third-party code/native binaries and live deployments are outside this slice; dependency hashes are checkpoints rather than those separate reviews."
+  ]
+}

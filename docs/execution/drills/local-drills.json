@@ -1,0 +1,662 @@
+{
+  "format": "p2p-offramp/synthetic-local-drill-notes/v1",
+  "purpose": "bounded local defensive preparation only; not an IncidentRecord or operational acceptance",
+  "recordedAt": "2026-11-02T11:20:51.456679+00:00",
+  "sourceCommitAtObservation": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+  "workingTree": "observed working bytes; root final combined receipt separate",
+  "authority": {
+    "releaseEnabled": false,
+    "promotionAllowed": false,
+    "incidentDeclared": false,
+    "trustedRootSelected": false,
+    "contactChannelInvented": false,
+    "reviewers": [],
+    "approvedRelease": null,
+    "externalMessageSent": false
+  },
+  "newExecution": {
+    "commandArgv": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "--test",
+      "--test-isolation=none",
+      "--test-reporter=tap",
+      "--test-name-pattern=G15 never trusts adjacent|G15 rejects changed manifest bytes|G15 enforces expected channel|G15 compares complete asset paths|wrong chain/genesis/runtime/asset and changed anchors|latest settled or absent state vetoes guidance|wrong chain, genesis, runtime, on-chain digest|known secret strings in every candidate field|collection is unavailable without a live branded release|release revocation during local access|source, spec, asset, compiler, dependency|imported passed decisions and reviewer names|recovery uses stored latest immutable fields",
+      "packages/security/test/release-manifest.test.mjs",
+      "packages/chain-evm/test/reader.test.mjs",
+      "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "packages/diagnostics/test/diagnostics.test.mjs",
+      "packages/security/test/acceptance-gates.test.mjs",
+      "scripts/tests/evm-recovery.test.mjs"
+    ],
+    "environment": {
+      "node": "v24.19.0",
+      "os": "Linux",
+      "architecture": "x86_64",
+      "hardwareQualified": false
+    },
+    "scope": "selected existing offline callbacks/WebCrypto/Node tests only; no browser/native-chain aggregate repeated",
+    "report": {
+      "path": "docs/execution/drills/local-checks.tap",
+      "bytes": 3345,
+      "sha256": "180fa1623fa8b054be357b90ff608c0e592cce91e0c7766e60b94aff85bd403d"
+    },
+    "exitCode": 0,
+    "tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "checks": [
+      {
+        "number": 1,
+        "name": "wrong chain/genesis/runtime/asset and changed anchors fail closed",
+        "result": "pass"
+      },
+      {
+        "number": 2,
+        "name": "collection is unavailable without a live branded release; clear needs neither a proof nor vault",
+        "result": "pass"
+      },
+      {
+        "number": 3,
+        "name": "known secret strings in every candidate field are refused and getters and foreign errors stay opaque",
+        "result": "pass"
+      },
+      {
+        "number": 4,
+        "name": "release revocation during local access purges before an operation returns any usable result",
+        "result": "pass"
+      },
+      {
+        "number": 5,
+        "name": "imported passed decisions and reviewer names cannot qualify without a trusted verifier",
+        "result": "pass"
+      },
+      {
+        "number": 6,
+        "name": "source, spec, asset, compiler, dependency, recipe and deployment changes invalidate evidence",
+        "result": "pass"
+      },
+      {
+        "number": 7,
+        "name": "G15 never trusts adjacent keys or accepts another trusted key, algorithm or signature domain",
+        "result": "pass"
+      },
+      {
+        "number": 8,
+        "name": "G15 rejects changed manifest bytes, wrong digest and non-P1363 or out-of-range signatures",
+        "result": "pass"
+      },
+      {
+        "number": 9,
+        "name": "G15 enforces expected channel, expiry at the exact boundary, and source-bound monotonic sequence",
+        "result": "pass"
+      },
+      {
+        "number": 10,
+        "name": "G15 compares complete asset paths, lengths and raw hashes, including non-text files",
+        "result": "pass"
+      },
+      {
+        "number": 11,
+        "name": "latest settled or absent state vetoes guidance while finalized funding still matches",
+        "result": "pass"
+      },
+      {
+        "number": 12,
+        "name": "wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence",
+        "result": "pass"
+      },
+      {
+        "number": 13,
+        "name": "recovery uses stored latest immutable fields and creates only bound unsigned exits",
+        "result": "pass"
+      }
+    ]
+  },
+  "observedSourceInputs": [
+    {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "bytes": 7347,
+      "sha256": "735382c708d3a6e52ee2cd3437a2f5c9095c6e2fab87281024db216b34c9b24a"
+    },
+    {
+      "path": "apps/web/test/locale-runtime.test.mjs",
+      "bytes": 7886,
+      "sha256": "1fb9a61b144653623d7ea86a4bf1b993df053bfb2ca811e8b86bcf54533efe7e"
+    },
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "bytes": 18601,
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrow.t.sol",
+      "bytes": 31251,
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd"
+    },
+    {
+      "path": "contracts/evm/test/BasicEscrowFuzz.t.sol",
+      "bytes": 5853,
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 42472,
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "packages/chain-evm/src/reader.ts",
+      "bytes": 15799,
+      "sha256": "c99586e244dc6bd94c850a356381b10a7a2a038a8c9fafe7e5adb9ca790863d8"
+    },
+    {
+      "path": "packages/chain-evm/test/reader.test.mjs",
+      "bytes": 9683,
+      "sha256": "5f568b77e61f81b1471b8976d9757249107c9832aa4f888341c3569c77ef2461"
+    },
+    {
+      "path": "packages/diagnostics/src/diagnostics.ts",
+      "bytes": 13805,
+      "sha256": "4147eb32fae6cb5dfc03c07ecc6e3276a08f3c85475668725d7db8eb419c3d18"
+    },
+    {
+      "path": "packages/diagnostics/test/diagnostics.test.mjs",
+      "bytes": 13049,
+      "sha256": "b44477b78a8241e72ed6ef1456e591ab2a30f080cd5169c6795c7da6d2a5aaed"
+    },
+    {
+      "path": "packages/domain/src/registry.ts",
+      "bytes": 3383,
+      "sha256": "1e24b5f15b4d3c44d0117e4f15077a262b6315d22c49d2c2755619261ac68d20"
+    },
+    {
+      "path": "packages/domain/test/registry.test.mjs",
+      "bytes": 13152,
+      "sha256": "d8de73498b7a7de11d665422a26a2529af89cb2dd8f4e5c79e6458565a00b4ed"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "bytes": 17175,
+      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e"
+    },
+    {
+      "path": "packages/messaging/test/durable-chat.test.mjs",
+      "bytes": 21432,
+      "sha256": "188c2d8a0f83324fe24ee640902c31689d3782ed8bcc2d21bc7ca00fb4739c05"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "bytes": 7221,
+      "sha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip59.ts",
+      "bytes": 5948,
+      "sha256": "c4e7d40299f8392dc8b8a9f0eb00cb8eb953b08f453fc39f98b1b2b634d27507"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip44.test.mjs",
+      "bytes": 13609,
+      "sha256": "96da3d343c6db2ca866ff033e282038620added92b1be4d2d41c88fbe801cd8d"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip59.test.mjs",
+      "bytes": 6657,
+      "sha256": "87a9ce6a2911f02b56125b95d4268249460b4d29e83a5056358e4b2735df3aef"
+    },
+    {
+      "path": "packages/relay/src/pool.ts",
+      "bytes": 26841,
+      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24"
+    },
+    {
+      "path": "packages/relay/test/pool.test.mjs",
+      "bytes": 24805,
+      "sha256": "61f4739b9ccdf793ffed85e8e9c826102bd7d75b9d8c588c611acbdbfbacc38b"
+    },
+    {
+      "path": "packages/security/src/acceptance-gates.ts",
+      "bytes": 23177,
+      "sha256": "1377c53a6cf794c5d0af1f2b40f999f4e7409fbd70153ef3c399f6f80eed041b"
+    },
+    {
+      "path": "packages/security/src/release-manifest.ts",
+      "bytes": 23110,
+      "sha256": "6ada222cabe3ddf2026e9b97971a8bfde99e95b50e39c5818851c295a543d818"
+    },
+    {
+      "path": "packages/security/test/acceptance-gates.test.mjs",
+      "bytes": 15566,
+      "sha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc"
+    },
+    {
+      "path": "packages/security/test/lib/release-fixture.mjs",
+      "bytes": 2322,
+      "sha256": "b51b300a221c620ba4118a200247b29c4b8db4ac8588b21eab765605c387155b"
+    },
+    {
+      "path": "packages/security/test/release-manifest.test.mjs",
+      "bytes": 20132,
+      "sha256": "d998074367d9593949390d5ccfd993d19eff11a75a98611847f924b449ba5e13"
+    },
+    {
+      "path": "packages/storage/test/vault-service.test.mjs",
+      "bytes": 28257,
+      "sha256": "3aa9d5ec1e068bb3a3c384d4653d90fc73c4130503df2cbd455ac4ced3d5b005"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "bytes": 14341,
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf"
+    },
+    {
+      "path": "packages/wallet/src/evm-escrow.ts",
+      "bytes": 23440,
+      "sha256": "b52c7dc21e8ff8ba13a534b67d02c50a6628df59060e4c4475bd80789b18b000"
+    },
+    {
+      "path": "packages/wallet/src/evm-execution.ts",
+      "bytes": 9358,
+      "sha256": "5cfe77ab122ff0fdc4131ddef45103a0ee1b6d2ee7fda86689d315f9860e0900"
+    },
+    {
+      "path": "packages/wallet/src/evm-payment-preflight.ts",
+      "bytes": 15982,
+      "sha256": "7b8b6b058d81d3314a04e9c25d94aa34c446b06151bb01c53cb4bdc02944bec0"
+    },
+    {
+      "path": "packages/wallet/src/evm-terms.ts",
+      "bytes": 10494,
+      "sha256": "3fca07e32e95756421140647639214adec0b7cd83a84c8e53467f9ddfee97af9"
+    },
+    {
+      "path": "packages/wallet/test/evm-adapter.test.mjs",
+      "bytes": 17430,
+      "sha256": "7120b0a7e3f17129eee3578f77b6482f049bd0222c11fd868ca2b0a2aa5280df"
+    },
+    {
+      "path": "packages/wallet/test/evm-escrow.test.mjs",
+      "bytes": 21699,
+      "sha256": "e64e9146c7da7f039f78761a8a124bfebd3154b752ebe7cbf89e4ff39c161480"
+    },
+    {
+      "path": "packages/wallet/test/evm-execution.test.mjs",
+      "bytes": 10223,
+      "sha256": "503b5efbf8a5a9dc83a242ea40e40712d05bcf7652da7492d0b1c1374e920bc6"
+    },
+    {
+      "path": "packages/wallet/test/evm-payment-preflight.test.mjs",
+      "bytes": 17413,
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb"
+    },
+    {
+      "path": "packages/wallet/test/evm-terms.test.mjs",
+      "bytes": 12298,
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088"
+    },
+    {
+      "path": "scripts/recovery/evm-recovery.mjs",
+      "bytes": 11582,
+      "sha256": "fec5fcf398c538ad40eb0e9cb8d431204fdcdbb8be13a177379d48db407002b2"
+    },
+    {
+      "path": "scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "scripts/tests/evm-recovery.test.mjs",
+      "bytes": 16801,
+      "sha256": "2dc7769cffb7d99b3e4d0108885f2199bff153e4dd66b1b6df87a3b2f660fb38"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "bytes": 12895,
+      "sha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac"
+    }
+  ],
+  "reusedEvidence": {
+    "T49-two-origin": {
+      "receipt": {
+        "path": "docs/execution/reviews/T49.json",
+        "bytes": 10168,
+        "sha256": "ee22dedf7af490cd3c4e3dd34c4fc0e038f3857155b8ad6217e95dd8830237a1"
+      },
+      "interpretation": "Reuse actual previously recorded fixture outcome at unchanged recorded scope; no new outage or browser run claimed.",
+      "nativeResult": {
+        "fixture": "actual-signed-two-origin-profile-migration",
+        "browser": "154.0.8037.57",
+        "origins": 2,
+        "manifestSha256": "5096ae7238664b832d3a4676cae7956b60c3d8b16ae2f5854ab492f95b7ad7ef",
+        "signedAssets": 4,
+        "compiledSyntheticPublicKey": true,
+        "independentAssetVerification": true,
+        "tamperedAssetRefused": true,
+        "wrongSignatureRefused": true,
+        "untrustedKeyRefused": true,
+        "sourceCurrentBackupVerified": true,
+        "wrongPassphraseRefused": true,
+        "freshDestinationProfileAndKey": true,
+        "sourceCiphertextPreserved": true,
+        "sourceBackupNotDestinationProof": true,
+        "destinationCurrentBackupReverified": true,
+        "opaqueRecordsIncluded": true,
+        "walletCalls": 0,
+        "externalRequests": 0,
+        "productionOriginPolicy": false,
+        "releaseEnabled": false
+      },
+      "sourceComparisons": [
+        {
+          "path": "scripts/fixtures/journey-origin-screen.mjs",
+          "recordedSha256": "c9b9b5d75e84e231cd4e60e58fd760d37653544e6532ec2f2e0c1625e1f29ba3",
+          "observedSha256": "c9b9b5d75e84e231cd4e60e58fd760d37653544e6532ec2f2e0c1625e1f29ba3",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/journey-origin-worker.mjs",
+          "recordedSha256": "5acf2189606914961401f871087fea0f3955e98a58b4f5916c29614f92a0195d",
+          "observedSha256": "5acf2189606914961401f871087fea0f3955e98a58b4f5916c29614f92a0195d",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/test-journey-origin-browser.mjs",
+          "recordedSha256": "18dc2fc94fe83adff04f6d37b1deacb35691dffd8043470400be3fc281e0014d",
+          "observedSha256": "18dc2fc94fe83adff04f6d37b1deacb35691dffd8043470400be3fc281e0014d",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/content-policy/local-policy.ts",
+          "recordedSha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61",
+          "observedSha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/vault-composition.ts",
+          "recordedSha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036",
+          "observedSha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "recordedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "observedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/native-contracts.ts",
+          "recordedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "observedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/presentation.ts",
+          "recordedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "observedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "recordedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "observedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/journey/README.md",
+          "recordedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "observedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/journey-vault-composition.test.mjs",
+          "recordedSha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f",
+          "observedSha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/test/journey-private-trade.test.mjs",
+          "recordedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "observedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/journey-screen.mjs",
+          "recordedSha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e",
+          "observedSha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/fixtures/journey-worker.mjs",
+          "recordedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "observedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "bytesEqual": true
+        },
+        {
+          "path": "scripts/test-journey-browser.mjs",
+          "recordedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "observedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/catalog.ts",
+          "recordedSha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+          "observedSha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/en.ts",
+          "recordedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "observedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/bundled.ts",
+          "recordedSha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+          "observedSha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/locale/runtime.ts",
+          "recordedSha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+          "observedSha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+          "bytesEqual": true
+        },
+        {
+          "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+          "recordedSha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+          "observedSha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+          "bytesEqual": true
+        }
+      ],
+      "rawLocalEvidenceComparisons": [
+        {
+          "localScratchPath": "/workspace/work/t49-independent-native.log",
+          "sha256": "df5b1f66dca25f218963881244f198af8740f1ac389e36ca776b11f232ccecf2",
+          "bytes": 686,
+          "bytesEqual": true,
+          "portableReleaseArtifact": false
+        },
+        {
+          "localScratchPath": "/workspace/work/t49-frozen-sha256.txt",
+          "sha256": "9602cf2d09001e33526a1742915e77167c89fe62fd5c5d1580d7555629f1ead4",
+          "bytes": 324,
+          "bytesEqual": true,
+          "portableReleaseArtifact": false
+        },
+        {
+          "localScratchPath": "/workspace/work/t49-dependency-sha256.txt",
+          "sha256": "d57327f3d9fd130864da6d6120a4c30f4f620a586f103d6ebcadca0eac336b10",
+          "bytes": 1255,
+          "bytesEqual": true,
+          "portableReleaseArtifact": false
+        }
+      ],
+      "limits": [
+        "Harness-controlled compiled ephemeral public key/initial executable is assumed trusted. This does not authenticate a hostile first-page/bootstrap or select a maintained production signing root.",
+        "No production origin/update transition policy, retained cross-origin anti-rollback transfer, nonempty deployment/rotation/archive wire format, CID/gateway availability, HTTP/TLS/private-route qualification or production G15/G22 completion is established.",
+        "No wallet/trading authority, cryptography certification, memory-erasure, power-loss durability, physical-device or accessibility qualification.",
+        "T53 policy427ec5 is recorded for this native origin run. T43 original c77-dependent approval is not retroactively upgraded; root owns combined new-dependency T43 validation."
+      ],
+      "provenanceLimits": [
+        "Signed manifest sourceCommit/buildRecipeDigest/lockfileDigest/SBOM fields inherit synthetic fixture placeholders; no authentic reviewed-source release attestation is established by this fixture.",
+        "T52 display code now transitively reads the public locale preference. Browser assertions establish zero local/session entries written, zero caches/service workers, and no private business storage there; they do not establish zero Web Storage API reads.",
+        "The native source checkpoint is actual T34 current encrypted-row/complete-profile authority, not a synthetic release provenance claim."
+      ]
+    }
+  },
+  "drills": [
+    {
+      "id": "LOCAL-BAD-RELEASE",
+      "synthetic": true,
+      "scenario": "Changed signed source/assets or rollback candidate",
+      "status": "partial-local-fixture-observed",
+      "realIncident": false,
+      "incidentRecord": null,
+      "reviewer": null,
+      "advisoryDigest": null,
+      "approvedRelease": null,
+      "actualAffectedDeployment": null,
+      "actualFundImpact": "not-assessed; no real funds involved",
+      "observedCheckNumbers": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "observedOutcomes": [
+        "Existing verifier refused changed signature/domain/asset bytes and rollback/expiry mismatches; no approved release enabled."
+      ],
+      "failedSelectedChecks": [],
+      "missingOrNotRunSteps": [
+        "No authentic affected released artifact or served hostile-host incident exists in this exercise.",
+        "No maintained-key signed higher-sequence advisory, host rollout or independent distribution witness performed."
+      ],
+      "reusedEvidenceIds": [],
+      "owner": "release maintainer",
+      "nextAction": "Use actual authenticated artifact and existing G15 verifier/recovery tools in a separately approved signed release rehearsal; preserve original exits.",
+      "releaseEnabled": false,
+      "publicationPerformed": false,
+      "walletSendPerformed": false
+    },
+    {
+      "id": "LOCAL-ENDPOINT",
+      "synthetic": true,
+      "scenario": "Mismatched native identity, torn anchors and stale current state",
+      "status": "partial-local-fixture-observed",
+      "realIncident": false,
+      "incidentRecord": null,
+      "reviewer": null,
+      "advisoryDigest": null,
+      "approvedRelease": null,
+      "actualAffectedDeployment": null,
+      "actualFundImpact": "not-assessed; no real funds involved",
+      "observedCheckNumbers": [
+        1,
+        11,
+        12,
+        13
+      ],
+      "observedOutcomes": [
+        "Synthetic native callbacks with wrong chain/genesis/runtime/asset or changed anchors were refused.",
+        "Latest absent/settled state vetoed payment guidance; original unsigned recovery calls stayed bound to stored immutable parties and deadline."
+      ],
+      "failedSelectedChecks": [],
+      "missingOrNotRunSteps": [
+        "No live endpoint was compromised, removed or reconfigured.",
+        "Actual independently operated split-view providers, route capture, signed endpoint-removal advisory and real wallet handoff remain not-run."
+      ],
+      "reusedEvidenceIds": [],
+      "owner": "transport/native-reader maintainer",
+      "nextAction": "Rehearse a selected owned multi-endpoint profile and actual signed registry update only after those trust/profile inputs exist; never infer consensus or retry a payment.",
+      "releaseEnabled": false,
+      "publicationPerformed": false,
+      "walletSendPerformed": false
+    },
+    {
+      "id": "LOCAL-SIGNING-ROOT",
+      "synthetic": true,
+      "scenario": "Untrusted adjacent replacement key and imported review claims",
+      "status": "partial-local-fixture-observed",
+      "realIncident": false,
+      "incidentRecord": null,
+      "reviewer": null,
+      "advisoryDigest": null,
+      "approvedRelease": null,
+      "actualAffectedDeployment": null,
+      "actualFundImpact": "not-assessed; no real funds involved",
+      "observedCheckNumbers": [
+        5,
+        6,
+        7
+      ],
+      "observedOutcomes": [
+        "Adjacent/untrusted key and wrong domain were rejected by existing verifier.",
+        "Imported reviewer/pass claims did not qualify; changed source/spec/tool/artifact evidence invalidated local scope."
+      ],
+      "failedSelectedChecks": [],
+      "missingOrNotRunSteps": [
+        "This is not detection of a compromised already trusted key; such a key can produce cryptographically valid malicious signatures.",
+        "Actual out-of-band bootstrap/cutover/rotation/revocation policy, independent channels, operator and authenticated advisory are undefined/unexercised."
+      ],
+      "reusedEvidenceIds": [],
+      "owner": "maintainer trust-policy owner",
+      "nextAction": "Select independently authenticated actual recovery/rotation policy and exercise it separately; do not invent key rotation or trust replacement from same-origin files.",
+      "releaseEnabled": false,
+      "publicationPerformed": false,
+      "walletSendPerformed": false
+    },
+    {
+      "id": "LOCAL-LOST-ORIGIN",
+      "synthetic": true,
+      "scenario": "Fresh-key recovery/migration to a distinct authenticated-fixture origin",
+      "status": "partial-local-fixture-observed",
+      "realIncident": false,
+      "incidentRecord": null,
+      "reviewer": null,
+      "advisoryDigest": null,
+      "approvedRelease": null,
+      "actualAffectedDeployment": null,
+      "actualFundImpact": "not-assessed; no real funds involved",
+      "observedCheckNumbers": [],
+      "observedOutcomes": [
+        "Reused T49 actual two-origin native result: isolated storage, source current-file authentication, wrong-pass refusal, fresh destination key/profile and destination-current backup re-verification.",
+        "All20 recorded source/dependency pins and3retained local evidence hashes match at this observation; zero wallet/external requests in the original result."
+      ],
+      "failedSelectedChecks": [],
+      "missingOrNotRunSteps": [
+        "No actual origin was deleted or made unavailable in this task.",
+        "No maintained-root production update policy, retained antirollback transfer, independently hosted/static-IPFS recovery bundle/advisory or lost-all-backups recovery exists in this exercise.",
+        "Fresh-key local migration is not proof of independent off-device retention or guaranteed fund recovery."
+      ],
+      "reusedEvidenceIds": [
+        "T49-two-origin"
+      ],
+      "owner": "storage/recovery/release maintainer",
+      "nextAction": "Combine independently authenticated original recovery artifacts and deliberate owned origin-unavailability exercise, retaining exact target evidence and failed steps; preserve original profiles and funded exits.",
+      "releaseEnabled": false,
+      "publicationPerformed": false,
+      "walletSendPerformed": false
+    }
+  ],
+  "sharedDefensiveObservations": {
+    "checkNumbers": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "facts": [
+      "Locked/unconfigured diagnostics clear remained available without a vault proof.",
+      "Injected synthetic secret strings and foreign diagnostics did not enter export payloads; release revocation purged before usable output.",
+      "Review/identity metadata remains untrusted data, not operational closure."
+    ],
+    "limits": [
+      "No hardware memory erasure, complete redaction, real contact/intake, human ownership, professional security review or actual incident containment is established."
+    ]
+  },
+  "remainingOperationalAcceptance": "All four full G26 scenario drills and exact production/device/external prerequisites remain pending; local fixture outcomes do not close them."
+}

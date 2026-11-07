@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { english, englishGroup, sourceCatalog } from './locale/en.ts';
+import { message as english, messageGroup as englishGroup, messageText } from './locale/runtime.ts';
 import { TooltipRegistry } from './help-registry.ts';
 const labels = englishGroup('help');
 /** Help never reads its associated control: private input cannot enter a tooltip. */
@@ -28,6 +28,6 @@ export function ControlHelp({ controlId, label }: { readonly controlId: string; 
     <button ref={trigger} id={`${controlId}-help-trigger`} type="button" aria-label={english('help','show',{control:label})}
       aria-expanded={open} aria-controls={open ? `${controlId}-tooltip` : undefined} aria-describedby={open ? `${controlId}-tooltip` : undefined}
       onFocus={() => { if (!suppressed.current) setOpen(true); }} onClick={() => { if (pinned.current) { suppressed.current = true; dismiss(); } else { pinned.current = true; suppressed.current = false; setOpen(true); } }}>{labels.label}</button>
-    {open ? <span id={`${controlId}-tooltip`} role="tooltip">{sourceCatalog[entry.messageKey]!.source}</span> : null}
+    {open ? <span id={`${controlId}-tooltip`} role="tooltip">{messageText(entry.messageKey)}</span> : null}
   </span>;
 }

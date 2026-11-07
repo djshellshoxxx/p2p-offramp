@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "decisionId": "8fb7f3b3deb9b417c3574ad4b5fe4ef6",
+  "scope": "source",
+  "affectedCapability": "g14-terms-binding",
+  "previousArtifactHash": null,
+  "nextArtifactHash": null,
+  "reviewers": [],
+  "evidencePaths": [
+    "docs/governance/PENDING-DECISIONS.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.4_architecture_planning/module_0.4.6_extension_contract/spec-optional-module-interface.md"
+  ],
+  "status": "proposed"
+}

@@ -5,7 +5,7 @@ import { advertisementEventId } from '../src/advertisement.ts';
 import { RelayPool } from '../src/local-pool.ts';
 const encode=value=>new TextEncoder().encode(JSON.stringify(value)),flush=()=>new Promise(resolve=>setImmediate(resolve));
 const key=new Uint8Array(32);key[31]=2;const hex=bytes=>Buffer.from(bytes).toString('hex');
-function event(){const pubkey=hex(schnorr.getPublicKey(key));const ad={app:'p2p-offramp',v:1,orderId:'a'.repeat(64),revision:1,networkId:'local-evm',assetId:'native',amount:'1',currency:'USD',railClass:'manual',maker:pubkey,expiresAtSeconds:'2000',termsDigest:'b'.repeat(64)};const raw={pubkey,created_at:1000,kind:30078,tags:[['d',`p2p-offramp:v1:${ad.orderId}`],['expiration','2000']],content:JSON.stringify(ad)};const id=advertisementEventId(raw);return {...raw,id,sig:hex(schnorr.sign(Buffer.from(id,'hex'),key,new Uint8Array(32)))};}
+function event(revision=1){const pubkey=hex(schnorr.getPublicKey(key));const ad={app:'p2p-offramp',v:1,orderId:'a'.repeat(64),revision,networkId:'local-evm',assetId:'native',amount:'1',currency:'USD',railClass:'manual',maker:pubkey,expiresAtSeconds:'2000',termsDigest:'b'.repeat(64)};const raw={pubkey,created_at:1000,kind:30078,tags:[['d',`p2p-offramp:v1:${ad.orderId}`],['expiration','2000']],content:JSON.stringify(ad)};const id=advertisementEventId(raw);return {...raw,id,sig:hex(schnorr.sign(Buffer.from(id,'hex'),key,new Uint8Array(32)))};}
 function setup(ids=['one']){const connections=[];let now=0;const connector={connect:async(id,handlers,signal)=>{const connection={id,handlers,signal,sent:[],closed:0,send(frame){this.sent.push(JSON.parse(frame));},close(){this.closed++;}};connections.push(connection);return connection;}};const pool=new RelayPool({relayIds:ids,connector,nowSeconds:()=>1000n,nowMs:()=>now,random:()=>.5,ackTimeoutMs:100});return {pool,connections,time:value=>{now=value;}};}
 test('no implicit connections, exact subscription bounds, native events, per-relay ACK and no republish',async()=>{
  const s=setup(['one','two']);assert.equal(s.connections.length,0);let observed=0;
@@ -26,6 +26,21 @@ test('ACK loss/cancel stays unknown; 32 outstanding publications bounded; dispos
  let notifications=0;s.pool.subscribe({since:1000,limit:1},()=>notifications++);await s.pool.dispose();
  s.connections[0].handlers.message(encode(['EVENT','orders-1',signed]));assert.equal(notifications,0);assert.equal(s.pool.snapshot().length,0);
  assert.equal((await s.pool.publish(encode(signed))).code,'CANCELLED');
+});
+test('reentrant removal skips only that subscriber and same-callback reacquisition waits for the next cohort',async()=>{
+ const s=setup(),calls=[];let removeSecond,reacquired,changed=false;
+ try{
+  const second=()=>calls.push('second');
+  assert.equal(s.pool.subscribe({since:1000,limit:1},()=>{calls.push('first');if(!changed){changed=true;removeSecond();reacquired=s.pool.subscribe({since:1000,limit:1},second);}}).ok,true);
+  const old=s.pool.subscribe({since:1000,limit:1},second);assert.equal(old.ok,true);removeSecond=old.value;
+  assert.equal(s.pool.subscribe({since:1000,limit:1},()=>calls.push('third')).ok,true);await flush();
+  const c=s.connections[0],subscription=c.sent.find(frame=>frame[0]==='REQ')[1];
+  c.handlers.message(encode(['EVENT',subscription,event()]));
+  assert.deepEqual(calls,['first','third'],'a removed cohort member cannot suppress a later active subscriber');
+  assert.equal(reacquired.ok,true);assert.ok(c.sent.some(frame=>frame[0]==='CLOSE'&&frame[1]==='orders-2'));
+  c.handlers.message(encode(['EVENT',subscription,event(2)]));
+  assert.deepEqual(calls,['first','third','first','third','second'],'the replacement gets its own later cohort, not the retired callback slot');
+ }finally{await s.pool.dispose();}
 });
 test('unsubscribe/resubscribe waits for physical close; rejected close permanently blocks that slot',async()=>{
  let release;let connects=0;const handlers=[];

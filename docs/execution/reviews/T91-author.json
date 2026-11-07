@@ -1,0 +1,420 @@
+{
+  "task": "T91",
+  "status": "FINITE_INVESTIGATION_COMPLETE_READY_FOR_ROOT_REVIEW",
+  "frozenAtUtc": "2026-11-02T16:55:37.011389+00:00",
+  "headAtFreeze": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "plan": {
+    "path": "/workspace/work/t91-formal-partitions/PLAN-FROZEN.json",
+    "sha256": "72af509ed8c6e0e6cfb48dbc8a18adb0544169d30e0f35c99bdb975562f12ba1"
+  },
+  "candidate": {
+    "path": "/workspace/work/t91-formal-partitions/CANDIDATE-FROZEN.json",
+    "sha256": "f650d0a42f9c5ed61ebfbb7db774ea4d96eb3734573485b4e2845d90c37b9bf6"
+  },
+  "ownedFiles": [
+    {
+      "path": "contracts/evm/formal/partitions/NativeConstructor.sol",
+      "sha256": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20"
+    },
+    {
+      "path": "contracts/evm/formal/partitions/UnauthorizedRelease.sol",
+      "sha256": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db"
+    },
+    {
+      "path": "contracts/evm/formal/partitions/EarlyRefund.sol",
+      "sha256": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67"
+    },
+    {
+      "path": "contracts/evm/formal/properties.json",
+      "sha256": "1777ff9fff0c13c0761abcc5d98114b258c3cf2c742cd8a07150bc36d2c47c7b"
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "89633a93f3dc47935c2cad0af7c9ecfa9ec6a273927625320bb6c9dc45c9562a"
+    },
+    {
+      "path": "scripts/formal/README.md",
+      "sha256": "053ee0f33044f366b6eb2bb91582f0281124c6bcbe5ae4523c4eefd7b0c7143b"
+    },
+    {
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "sha256": "68fdd5cb22fe0c95e4c4346d83158a08e47f59f51d6a03f281a123bb23d62e98"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "contracts/evm/src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/evm/abi/BasicEscrow.json",
+      "sha256": "aef2d91866e7ec1b5a58d12770e3abe527ff5b6a8ec0ea143b183cf72a656f98",
+      "unchanged": true
+    },
+    {
+      "path": "contracts/evm/formal/CanonicalRefinement.t.sol",
+      "sha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+      "unchanged": true
+    }
+  ],
+  "originalPropertyAssumptionGuardAndNativeMetadataUnchanged": true,
+  "report": {
+    "path": "/workspace/work/t91-formal-partitions/attempts/report.json",
+    "sha256": "893e168aca33ade576817f0214a49b85831b2dde0b700091769f69885582ff2c"
+  },
+  "command": "PATH=/workspace/work/foundry-1.5.1:$PATH FORMAL_FOUNDRY_ROOT=/workspace/work/foundry-1.5.1 FOUNDRY_SOLC=/workspace/work/foundry-1.5.1/solc-0.8.30 FORMAL_Z3_ROOT=/workspace/work/formal-tools/z3-4.12.2.0 FORMAL_Z3_ARTIFACT=/workspace/work/formal-tools/z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl node scripts/formal/evm.mjs --partitions /workspace/work/t91-formal-partitions/attempts",
+  "exitCode": 0,
+  "rawCli": "tranche.log",
+  "targetAttemptsSpent": 3,
+  "targetAttemptsRemaining": 0,
+  "budget": {
+    "queries": 5,
+    "bytes": 9913516,
+    "rounds": 6,
+    "targetAttempts": 3,
+    "maximumTargetAttempts": 3,
+    "elapsedMs": 13399.465402999998
+  },
+  "limits": {
+    "queryBytes": 4194304,
+    "totalQueryBytes": 33554432,
+    "queries": 64,
+    "rounds": 8,
+    "queryMs": 5000,
+    "totalMs": 120000,
+    "compilerMs": 25000,
+    "outputBytes": 33554432,
+    "solverOutputBytes": 131072
+  },
+  "outcomes": [
+    {
+      "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+      "contract": "NativeConstructor",
+      "modelSourceSha256": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20",
+      "result": "PROVED_UNDER_DECLARED_MODEL",
+      "incomplete": false,
+      "stopReason": null,
+      "compilerRounds": 2,
+      "queries": [
+        {
+          "identity": "0xc7677ffd1fb361e409efdea81e6960ead50598543425cd9d5aabd47fa9de655e",
+          "sha256": "65b6e6c3fb07379e40e75bd221301dd10e5c992bd6947ee8bf8e64b5b01a3035",
+          "bytes": 2961370,
+          "answer": "sat",
+          "responseSha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+          "timedOut": false
+        }
+      ],
+      "sourceBoundDiagnosticCodes": [
+        "9576"
+      ],
+      "classificationLimit": "Compiler-model source diagnostic only."
+    },
+    {
+      "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+      "contract": "UnauthorizedRelease",
+      "modelSourceSha256": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db",
+      "result": "PROOF_UNKNOWN",
+      "incomplete": true,
+      "stopReason": "SOLVER_OR_QUERY_INCOMPLETE",
+      "compilerRounds": 1,
+      "queries": [
+        {
+          "identity": "0xbc083b23099127b7909684d9e3cc2bae1716657f2490af14e5bab4aa29c7ff39",
+          "sha256": "28d94e7e24c2806d33cbd640d087570ad5321869fe975e04a65768cebd22ad28",
+          "bytes": 3453956,
+          "answer": "unknown",
+          "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+          "timedOut": true
+        }
+      ],
+      "sourceBoundDiagnosticCodes": [
+        "6328"
+      ],
+      "classificationLimit": "Query timed out; pre-response partial6328 diagnostics are retained, not promoted to counterexamples."
+    },
+    {
+      "id": "EVM-EARLY-REFUND-ATOMIC",
+      "contract": "EarlyRefund",
+      "modelSourceSha256": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67",
+      "result": "PROOF_UNKNOWN",
+      "incomplete": true,
+      "stopReason": "SOLVER_OR_QUERY_INCOMPLETE",
+      "compilerRounds": 1,
+      "queries": [
+        {
+          "identity": "0xf219064e8e69ac468776fbab25860d754551a6868c4788cd4f17d059aa7c34fc",
+          "sha256": "51a2b10a87750e033604c34ae0f0a3dff2af90f837e268f14ba37115819b609d",
+          "bytes": 3446379,
+          "answer": "unknown",
+          "responseSha256": "7ed6120912d915f6ba8ef82ba3ec0b703265a0979bc0a243e0144580ad0c0b6b",
+          "timedOut": true
+        }
+      ],
+      "sourceBoundDiagnosticCodes": [
+        "6328"
+      ],
+      "classificationLimit": "Query timed out; pre-response partial6328 diagnostics are retained, not promoted to counterexamples."
+    }
+  ],
+  "operationalControls": {
+    "safe": {
+      "result": "PROVED_UNDER_DECLARED_MODEL",
+      "toolReported": "SAFE_UNDER_COMPILER_MODEL",
+      "unsupported": []
+    },
+    "unsafe": {
+      "result": "COUNTEREXAMPLE_FOUND",
+      "toolReported": "ASSERTION_VIOLATION",
+      "unsupported": [],
+      "qualification": "Compiler-model counterexample requires native replay before calling it an implementation defect."
+    },
+    "qualification": "CHC/HORN consistency semantics: SAT can mean safety and UNSAT reachability; compiler source-bound diagnostics, never raw SAT/UNSAT polarity, determine outcomes."
+  },
+  "controlsQueries": [
+    {
+      "key": "0x70297ba6f62c77e9be9e612d8e1863699677c87327c5c04b0349df2163cd798e",
+      "querySha256": "3c95f6b1ccaa56e3705fe89edc935c6e3435cc2fe4d0588cbd9c20131b63adcd",
+      "queryBytes": 26123,
+      "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+      "answer": "unsat",
+      "exitCode": 0,
+      "timedOut": false,
+      "limited": false,
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "key": "0x70ed14e9d8d7ba579786893570dacf2107aa3e64d7f9093300dace0f3b06a56a",
+      "querySha256": "8e0e9b6054c5a35503730d5224e386d328da854a0cc6cf2f7ae67215fcb4b592",
+      "queryBytes": 25688,
+      "responseSha256": "d9dbf94b05b8314af9ca7f2034e92685c33447917605a7243b1099c693a12e5e",
+      "answer": "sat",
+      "exitCode": 0,
+      "timedOut": false,
+      "limited": false,
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceDependencyBindings": [
+    {
+      "path": "formal/partitions/NativeConstructor.sol",
+      "sha256": "b32d4d85730d69c767120a3d62084acd560b2e754fcd1956866d3e783fbe0c20",
+      "matchesT61": false
+    },
+    {
+      "path": "src/BasicEscrow.sol",
+      "sha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
+      "sha256": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+      "sha256": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol",
+      "sha256": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol",
+      "sha256": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol",
+      "sha256": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
+      "sha256": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca",
+      "matchesT61": true
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol",
+      "sha256": "32fbb1c908ec1b4de85cc1bb10091aebd5816ffe80dfdd5ca5e084fbea67a462",
+      "matchesT61": true
+    },
+    {
+      "path": "formal/partitions/UnauthorizedRelease.sol",
+      "sha256": "59368d02564a3b562e20b9739a18c11d4f1def560edf14e7af94add3b615d7db",
+      "matchesT61": false
+    },
+    {
+      "path": "formal/partitions/EarlyRefund.sol",
+      "sha256": "ae0f9962d5bf2d030d5c99ab67a1d146a0bbad1d766dd9cc7afdc8b794b0bb67",
+      "matchesT61": false
+    }
+  ],
+  "runnerDependencyCheckpoint": [
+    {
+      "path": "scripts/sepolia/lib.mjs",
+      "sha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32"
+    },
+    {
+      "path": "scripts/lib/is-main.mjs",
+      "sha256": "122a4e55eb0f064ecbc3bd48e4ef21a5880267418af0fc0dc23d0a96654af3eb"
+    },
+    {
+      "path": "contracts/evm/foundry.toml",
+      "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64"
+    },
+    {
+      "path": "package.json",
+      "sha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "node_modules/@noble/hashes/package.json",
+      "sha256": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf"
+    },
+    {
+      "path": "node_modules/@noble/hashes/sha3.js",
+      "sha256": "9a81e1edb24eae27b335533220167609cfb58008c5690e140ce478acdc669f32"
+    }
+  ],
+  "dependencyDriftSincePlan": [],
+  "toolchain": {
+    "forgeVersion": "1.5.1-v1.5.1",
+    "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+    "solcVersion": "0.8.30",
+    "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+  },
+  "solver": {
+    "package": "z3-solver",
+    "version": "4.12.2.0",
+    "filename": "z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl",
+    "artifactSha256": "03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e",
+    "binarySha256": "112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444",
+    "librarySha256": "5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101",
+    "metadataSha256": "eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5",
+    "reportedVersion": "Z3 version 4.12.2 - 64 bit",
+    "license": "MIT License",
+    "officialMetadata": "https://pypi.org/pypi/z3-solver/4.12.2.0/json",
+    "paths": {
+      "artifact": "/workspace/work/formal-tools/z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl",
+      "binary": "/workspace/work/formal-tools/z3-4.12.2.0/bin/z3",
+      "library": "/workspace/work/formal-tools/z3-4.12.2.0/z3/lib/libz3.so.4.12",
+      "metadata": "/workspace/work/formal-tools/z3-4.12.2.0/z3_solver-4.12.2.0.dist-info/METADATA"
+    },
+    "hashes": {
+      "artifact": "03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e",
+      "binary": "112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444",
+      "library": "5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101",
+      "metadata": "eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5"
+    },
+    "licenseEvidence": "Pinned package METADATA; license classification is not legal release approval."
+  },
+  "focusedTests": {
+    "command": "node --test scripts/tests/formal-evm.test.mjs",
+    "managedIpcCapability": true,
+    "defaultNodeIsolation": true,
+    "red": {
+      "tests": 9,
+      "pass": 7,
+      "fail": 2,
+      "log": "focused.RED.log"
+    },
+    "green": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "log": "focused.GREEN.log"
+    },
+    "negativeControls": "Changed allowlist, amount, original time helper, appended target and foreign/missing/unsupported/incomplete/stderr/zero-query results cannot pass the new source/classification controls. No additional actual solver target attempts."
+  },
+  "retainedT61": {
+    "reportPath": "/workspace/work/t61-root-repaired-evidence/report.json",
+    "reportSha256": "b4f4ea4f984e8f73fb369e57caacffc4c9d98b83c5e88b51c5236dcc54dabb3e",
+    "originalStopReason": "COMPILER_TIMEOUT",
+    "originalQueries": 0,
+    "originalProperties": [
+      {
+        "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+        "result": "PROOF_UNKNOWN"
+      },
+      {
+        "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+        "result": "PROOF_UNKNOWN"
+      },
+      {
+        "id": "EVM-EARLY-REFUND-ATOMIC",
+        "result": "PROOF_UNKNOWN"
+      }
+    ],
+    "guardResults": [
+      {
+        "id": "GUARD-RELEASE-REFUND-DISJOINT",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xec7fef20ce59b97782136ee4600ce4c5a9a636f758ac15807b9582afedece05f",
+        "querySha256": "052f90faa11eba6bbfa5f3f61f899324dcbf8cddbdd70c13510594875d5831d4",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-UNAUTHORIZED-RELEASE-REFUSED",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0x6dd15305e87f0e29ada2ccaba1e7c70446ca2aa5a010958e96264dcc8e06af5b",
+        "querySha256": "83b8dadcda4c91d27fec16c7ef4e80d751adeb101b0cb64f2d0c963a2a689520",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-SELLER-DEADLINE-COVERAGE",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xf0ab04216e022b74f60202f39d16f931ab9c0758d89388fc484977b44a33013a",
+        "querySha256": "04eb81e8ff603bcfad30ec29f6e0d768ae2e74cc60ba0b69f3718e4d198db5a7",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      },
+      {
+        "id": "GUARD-DEADLINE-EQUALITY-REFUND",
+        "result": "PROVED_GUARD_LOGIC_ONLY",
+        "answer": "unsat",
+        "queryIdentity": "0xeab4632201c97d2bb8c19b1013ef920c5c5d89c9173c22d5aa8cc8ffac449e51",
+        "querySha256": "d326115e518dcfc5d54f5b15d1ba50ba2fc2d3f773f461dc3e42d2e07349539a",
+        "responseSha256": "5c17dfcc2a8f1f30d9e96df6a9825a5030ade046d560332c19de74d93d591a18",
+        "timedOut": false
+      }
+    ],
+    "nativeResult": "MODEL_IMPLEMENTATION_GAP",
+    "nativeRefinement": "TEST_EVIDENCE_PASSED",
+    "strictFailure": "STRICT_TERMINAL_ALREADY_PAID: 0 != 1000000000000000000",
+    "counterexampleDigest": "f48588231cfa0074aa5879bb068f285a9bd80da04495cf1c212e84f22cbf5132",
+    "policy": "Immutable retained historical evidence; no reclassification, replacement or fresh-native claim.",
+    "verbatimReportCopy": "/workspace/work/t91-formal-partitions/retained/T61-report.json"
+  },
+  "t88Packets": "Both immutable manifests reverified after the tranche; no changes.",
+  "scopeLimits": [
+    "All three admitted target attempts are spent. Stop here; no rerun, widened bound, alternate solver or substituted assertion.",
+    "One exact native constructor property proved only under the declared compiler model; the original whole-target result remains UNKNOWN.",
+    "Unauthorized release and early refund remain UNKNOWN after bounded solver timeout; their partial pre-response6328 diagnostics are not implementation counterexamples.",
+    "Existing four guard-only proofs and active/pending/paid/surplus native witness remain historical T61 evidence, not freshly reexecuted.",
+    "No new native witness/action/deployment, real funds, third-party target, external request, whole suite, contract/ABI/witness change, commit or production activation.",
+    "Source/assumption/compiler/ABI/query identities bind this investigation; no ERC20/interleaving/bytecode/whole-contract/professional security certification or gate promotion follows."
+  ],
+  "identityVerification": {
+    "path": "/workspace/work/t91-formal-partitions/IDENTITY-CHECK.json",
+    "sha256": "021706d8fce58825b2e9efb9222f68a3a7b774dacb908c4a045ce5a94e8139e7",
+    "scope": "Read-only static identities/classification reproduction; zero additional target attempts."
+  },
+  "t88ImmutableManifestHashes": {
+    "t88-execution-reflection": "2fd72eb63ae5427709a5c3d1c266aaba61ce775ece6407ee52fa0f9639a88852",
+    "t88-terms-copy-bound": "356decb77f130d7286712f5a963fda4079d6770968b5e3c759393cf2b2806d27"
+  }
+}

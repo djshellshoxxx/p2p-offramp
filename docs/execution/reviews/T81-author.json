@@ -1,0 +1,283 @@
+{
+  "task": "T81",
+  "status": "IMPLEMENTED_FROZEN_FOR_ROOT_INDEPENDENT_REVIEW",
+  "stage": "PRE_T80_TERMS_FACTORY_AND_T38F_FOLLOW_ON",
+  "sourceManifest": "/workspace/work/t81-final-frozen-tree/SOURCE-MANIFEST.json",
+  "frozenFiles": [
+    {
+      "path": "packages/schemas/src/transport-selection.ts",
+      "sha256": "23298bcc145008000acffb1632a9be35729ae3e99d7db458a3fd762caabaae42",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/packages/schemas/src/transport-selection.ts"
+    },
+    {
+      "path": "packages/schemas/test/transport-selection.test.mjs",
+      "sha256": "38d5f45bb9743a6196ecad14edfe77c88a595a6a014c48c482b81fc4d66bb2bc",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/packages/schemas/test/transport-selection.test.mjs"
+    },
+    {
+      "path": "apps/web/src/privacy/policy-controller.ts",
+      "sha256": "6dc74fdb5c83ad7c3467910038bf5948afccf53fe0345a7b6df36a6e034367ca",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/privacy/policy-controller.ts"
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyPolicySelector.tsx",
+      "sha256": "2e27c7daf0a902414232015eafdf01971dd5f41a0ca89750faccafcdfb132a26",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/ui/PrivacyPolicySelector.tsx"
+    },
+    {
+      "path": "apps/web/test/privacy-policy-controller.test.mjs",
+      "sha256": "e2e42442ecf6960b81dba12f0f28d40b4b256d0a312a06918701694ce60fc8bf",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/test/privacy-policy-controller.test.mjs"
+    },
+    {
+      "path": "apps/web/test/privacy-policy-selector.render.test.mjs",
+      "sha256": "2f4efddbb4dc935f3c15e7b7a82893475f49ee24ba7249ceb681b581660d3f83",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/test/privacy-policy-selector.render.test.mjs"
+    },
+    {
+      "path": "packages/schemas/src/runtime.ts",
+      "sha256": "f84d8a56c7c5a85ab74c0d2a92adf58ed119a649363b5b0d624be4e13e0b052c",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/packages/schemas/src/runtime.ts"
+    },
+    {
+      "path": "apps/web/src/runtime/app-runtime.ts",
+      "sha256": "77a5431fe3c0e3bc60b18d18970ff3309d842e95bbefba21f4aa291207a7c0f6",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/runtime/app-runtime.ts"
+    },
+    {
+      "path": "apps/web/src/runtime/pending-metadata.ts",
+      "sha256": "1d2bf3b83a9d3a7bad97cefecba6dddac78d90c90cd764be978bb5a67b27ae9b",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/runtime/pending-metadata.ts"
+    },
+    {
+      "path": "apps/web/src/runtime/worker-endpoint.ts",
+      "sha256": "0d19e84ad3be12ee547a5ab97c686d537c639652bebcccfe5d2cb2e237f2437d",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/runtime/worker-endpoint.ts"
+    },
+    {
+      "path": "apps/web/src/app-services.ts",
+      "sha256": "3f9fa7202474ff2c7f8b9544e0e77c51dca29b62b1101173723e3aa3333c2af8",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/app-services.ts"
+    },
+    {
+      "path": "apps/web/src/journey/native-contracts.ts",
+      "sha256": "eae22020872aad8187f16fc57693dbc621f1bec10dc4158742360311fd126a34",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/journey/native-contracts.ts"
+    },
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "325a9f9455c5e9e5061694fd3a848e3bc1711643a9aa89212c873c7cc8730bb7",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/journey/vault-composition.ts"
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "0832bc31cecd113a588348a899054828eb3ca7a8dcc7c969dded33a2a1dfa4c2",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/journey/private-trade.ts"
+    },
+    {
+      "path": "apps/web/src/journey/screen.ts",
+      "sha256": "1f1ad2c51fb77189fc5a4123c26aed5f6435c2af159fbcaf45f2b1aca220a0d2",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/src/journey/screen.ts"
+    },
+    {
+      "path": "scripts/fixtures/journey-worker.mjs",
+      "sha256": "137fa22cc7bb30ce47e2035e390de9366dace06ff53ffa4e65ee4ff8c892cf0a",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/scripts/fixtures/journey-worker.mjs"
+    },
+    {
+      "path": "scripts/fixtures/journey-screen.mjs",
+      "sha256": "5a635da466c2203e5cec3e93cbbcfd45463906a795dd647c42a16d57b6f4cf09",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/scripts/fixtures/journey-screen.mjs"
+    },
+    {
+      "path": "scripts/test-journey-browser.mjs",
+      "sha256": "75e64965f23126e8cf80b5062a3b9a6f0947bb7c223b1cc3e9ba12210567a050",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/scripts/test-journey-browser.mjs"
+    },
+    {
+      "path": "apps/web/test/transport-selection-runtime.test.mjs",
+      "sha256": "c7e82bb3f9d44bd27eebce2912fe7e086a63574e6dd1e466713b7477013b09a1",
+      "snapshot": "/workspace/work/t81-final-frozen-tree/apps/web/test/transport-selection-runtime.test.mjs"
+    }
+  ],
+  "criticalNativeProofVersions": {
+    "apps/web/src/journey/native-contracts.ts": "eae22020872aad8187f16fc57693dbc621f1bec10dc4158742360311fd126a34",
+    "apps/web/src/journey/vault-composition.ts": "325a9f9455c5e9e5061694fd3a848e3bc1711643a9aa89212c873c7cc8730bb7",
+    "apps/web/src/journey/private-trade.ts": "0832bc31cecd113a588348a899054828eb3ca7a8dcc7c969dded33a2a1dfa4c2"
+  },
+  "scope": "ordinary/strict selection for the SAME actual brokered app-route owner, session only",
+  "default": "No actual broker -> unavailable/unknown; no cosmetic/fallback broker allocation",
+  "nativeControlledChannels": [
+    "relay"
+  ],
+  "rpcAndWallet": "unknown and outside this control; actual RPC remains unbrokered",
+  "newPersistence": false,
+  "tradingEnabled": false,
+  "trustPinsChanged": false,
+  "t55Activation": false,
+  "ipc": {
+    "getTransportSelection": "RuntimeResult<RuntimeTransportSelection>",
+    "selectTransportMode": "mode + expectedBrokerGeneration + ordinaryConsent -> same parsed scalar result",
+    "snapshotFields": [
+      "version",
+      "mode",
+      "brokerGeneration",
+      "brokeredChannels"
+    ],
+    "notification": "transport-selection-invalidated generation-bound hint only",
+    "privateBinding": "actual SessionTransportPolicy + detached compiled brokeredChannels + synchronous onSelectionChanged"
+  },
+  "safetyInvariants": [
+    "fresh explicit Ordinary acknowledgement; native endpoint directConsent remains separate",
+    "real broker generation CAS before and after trusted callbacks",
+    "old captures never revive on mode/profile/fixture issuer changes",
+    "same pools retain native closing capacity through mode selection",
+    "native close alone releases physical socket tokens",
+    "held wallet admission and durable unknown markers survive policy invalidation",
+    "fixed initial notification cohort with dirty catch-up and mutator exclusion; max64 observers",
+    "selected receipt means selected policy, no physical drain receipt",
+    "no Tor/I2P/RTC/provider activation, imported evidence setter, generic I/O IPC, automatic retry or fallback"
+  ],
+  "verification": {
+    "node": "24.22.1",
+    "chrome": "156.0.8078.79",
+    "focusedCases": [
+      {
+        "kind": "schema",
+        "log": "/workspace/work/t81-final-schema.log",
+        "passed": 4,
+        "failed": 0,
+        "exitCode": 0,
+        "sha256": "72a0b0093f869189ff7023dc115dcba9fa4412c3e353475cdab61395623813d4"
+      },
+      {
+        "kind": "controller",
+        "log": "/workspace/work/t81-final-controller.log",
+        "passed": 18,
+        "failed": 0,
+        "exitCode": 0,
+        "sha256": "35409a737e78bc37b6b54d3d6d3633d9606ca1b1628b66487d4cb95b20462491"
+      },
+      {
+        "kind": "ui",
+        "log": "/workspace/work/t81-final-ui.log",
+        "passed": 3,
+        "failed": 0,
+        "exitCode": 0,
+        "sha256": "100c81585e4f9c607245012d87d46f567662b3f8e647184f7ffd00c124d3a8ac"
+      },
+      {
+        "kind": "runtime",
+        "log": "/workspace/work/t81-final-runtime.log",
+        "passed": 8,
+        "failed": 0,
+        "exitCode": 0,
+        "sha256": "db89c3bfc64f45403bde98cc48ba18e3499569b8794c04bb8d4497c4d8664afa"
+      }
+    ],
+    "focusedTotalPassed": 33,
+    "existingRegressions": {
+      "passedFiles": 5,
+      "failedFiles": 0,
+      "exitCode": 0,
+      "log": "/workspace/work/t81-final-regressions.log",
+      "files": [
+        "apps/web/test/app-runtime.test.mjs",
+        "apps/web/test/review-favorites-worker.test.mjs",
+        "apps/web/test/journey-vault-composition.test.mjs",
+        "apps/web/test/journey-private-trade.test.mjs",
+        "packages/schemas/test/runtime.test.mjs"
+      ]
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "/workspace/work/t81-final-types.log"
+    },
+    "boundaries": {
+      "command": "npm run check:boundaries",
+      "exitCode": 0,
+      "productionSources": 230,
+      "coreModules": 85,
+      "log": "/workspace/work/t81-final-boundaries.log"
+    },
+    "native": {
+      "command": "PATH=/workspace/work/foundry-1.5.1:$PATH FOUNDRY_BIN=/workspace/work/foundry-1.5.1 FOUNDRY_SOLC=/workspace/work/foundry-1.5.1/solc-0.8.30 FOUNDRY_OFFLINE=true P2P_CHROMIUM=/workspace/work/t87-native-diagnostic/chrome156/opt/google/chrome/chrome /workspace/work/t87-native-diagnostic/node24.22.1/node scripts/test-journey-browser.mjs",
+      "exitCode": 0,
+      "log": "/workspace/work/t81-native-selector-current.log",
+      "sha256": "28e4199f0e138f9509fd0230724c82ef7ba7133149b1c6d977562c509ed11752",
+      "result": {
+        "fixture": "actual-ui-private-worker-native-journey",
+        "transportPolicySelector": {
+          "actualSelectorUsesSameWorkerSequence": true,
+          "sameActualBrokerForBothPools": true,
+          "actualCapturedScopesRetired": true,
+          "strictRefusesBothDirectPools": true,
+          "ordinaryRequiresFreshAcknowledgement": true,
+          "selectionStartsZeroRpcOrSockets": true,
+          "ignoredCloseCapacityRetainedAcrossModeAndProfile": true,
+          "actualCloseReleasesPhysicalTokens": true,
+          "explicitFixtureRenewalPreservesStrictAndOldRevocation": true,
+          "rpcAndWalletUnknown": true,
+          "heldWalletModeChangesRetainAdmission": true,
+          "durableUnknownMarkerSurvivesModeChanges": true
+        },
+        "nativeSubmissions": 11,
+        "nativeSignatures": 16,
+        "explicitSigningReviews": 32,
+        "signingReviewHasNoAuthority": true,
+        "expiryAndRevocationAtActualWalletPrompt": true,
+        "reentrantInspectionCannotStartPrompt": true,
+        "pendingReviewClearedOnFreshKeyProfileSwitch": true,
+        "lastDurableMarkerReadExpiryAndRevokePreventSend": true,
+        "erc20ApprovalUnknownRecovery": true,
+        "erc20FundingUnknownFreshKeyRecovery": true,
+        "hostileTokenReadsAndApprovalTxRejected": true,
+        "explicitZeroReset": true,
+        "erc20ReleaseAndRefund": true,
+        "erc20AllowanceBalancesAndNativeFees": true,
+        "actualCrypto": true,
+        "actualSelectedVault": true,
+        "actualBackupFact": true,
+        "encryptedNegotiation": true,
+        "durableBeforeSend": true,
+        "lostResponseReconciled": true,
+        "finalizedPaymentGuidance": true,
+        "sellerRelease": true,
+        "deadlineRefund": true,
+        "unknownFreshKeyRecovery": true,
+        "failedRefreshClearsGuidance": true,
+        "walletEventRevokesGuidance": true,
+        "lockLateNativeReplyIgnored": true,
+        "startupLockRetiresPendingCreate": true,
+        "heldNativeWorkRejectsNewSelection": true,
+        "authorityRaceRetainsPhysicalAdmission": true,
+        "retiredRpcStartsZeroNewScans": true,
+        "expiredColdPreparationCancelled": true,
+        "canonicalReviewAndReceipt": true,
+        "wrongGenesisAndRuntimeRejected": true,
+        "sourceCiphertextPreserved": true,
+        "nativeReceipt": true,
+        "encryptedWatchExport": true,
+        "productionPeerCarrier": false,
+        "tradingEnabled": false,
+        "externalNetwork": false
+      }
+    },
+    "fullPackageSuiteRun": false
+  },
+  "fixtureLifecycle": "Only explicit successful create/unlock renews the fixture issuer generation. Same broker identity and Strict persist. No opens/retries or closing-token release happen during renewal. This is local fixture lifecycle, not production requalification.",
+  "rootOwnedEnrollment": "Root added actual AppServices/PrivacyPolicySelector and current privacy catalog in Pages; no T81 edits to main/App/Pages/messages/en/facades/CI/ledgers.",
+  "transferredOwners": {
+    "runtimeSchemaAppServices": "T80/root after shared freeze; runtime.ts now T38-F per root",
+    "privateTradeTermsFactory": "T80 after this frozen proof; rerun unchanged native harness on final combined source"
+  },
+  "notes": [
+    "Source snapshot contains the exact 19 T81 paths before the queued terms-factory follow-on; never attribute later T80/T38-F bytes to this proof.",
+    "Controller source subscription failure stays fail-closed until its activation lease is renewed; a scalar read retry does not silently reacquire a failed observer."
+  ],
+  "noCommitsByT81": true,
+  "noLedgerEditsByT81": true,
+  "qualification": "Owned-loopback LOCALPROOF engineering evidence; no global RPC/network privacy, private-route proof, T55 activation, production/trading qualification or independent approval claimed.",
+  "rootIndependentReview": "pending"
+}

@@ -1,0 +1,184 @@
+{
+  "task": "T43",
+  "reviewer": "/root/branch_inventory/completion_requirements",
+  "verdict": "APPROVE_LOCAL_COMPOSITION_ONLY",
+  "reviewedAt": "2026-11-02T09:22:49.959202+00:00",
+  "reviewMethod": "Independent five-axis source review, actual ordinary managed-network Node child runner, strict UI TypeScript, import boundaries, actual compiled Chromium Worker/native Anvil escrow, and separately authored adversarial native interleaving reproductions. No repository source edits by reviewer.",
+  "files": [
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036"
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400"
+    },
+    {
+      "path": "apps/web/src/journey/native-contracts.ts",
+      "sha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc"
+    },
+    {
+      "path": "apps/web/src/journey/presentation.ts",
+      "sha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d"
+    },
+    {
+      "path": "apps/web/src/journey/screen.ts",
+      "sha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e"
+    },
+    {
+      "path": "apps/web/src/journey/README.md",
+      "sha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82"
+    },
+    {
+      "path": "apps/web/test/journey-vault-composition.test.mjs",
+      "sha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f"
+    },
+    {
+      "path": "apps/web/test/journey-private-trade.test.mjs",
+      "sha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87"
+    },
+    {
+      "path": "scripts/fixtures/journey-screen.mjs",
+      "sha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e"
+    },
+    {
+      "path": "scripts/fixtures/journey-worker.mjs",
+      "sha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0"
+    },
+    {
+      "path": "scripts/test-journey-browser.mjs",
+      "sha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603"
+    }
+  ],
+  "independentlyFrozenDependency": {
+    "path": "apps/web/src/content-policy/local-policy.ts",
+    "sha256": "c77c3c14047b041126199938d13005aeac56abf6367371eef6f02347ae88b311",
+    "owner": "T53 (separate ownership/review; screen integration read here)"
+  },
+  "checks": {
+    "focused": {
+      "tests": 8,
+      "passed": 8,
+      "skipped": 0,
+      "exitCode": 0
+    },
+    "strictUiTypeScript": {
+      "exitCode": 0
+    },
+    "importBoundaries": {
+      "exitCode": 0,
+      "productionFiles": 166,
+      "coreGraph": 68
+    },
+    "nativeBrowser": {
+      "exitCode": 0,
+      "nativeSubmissions": 4,
+      "unexpectedEndpoints": 0,
+      "actualSelectedVaultAndT34": true,
+      "actualNostrCryptoAndRelay": true,
+      "nativeEoaCanonicalBundle": true,
+      "durableBeforeOneSend": true,
+      "unknownFreshKeyRecoveryNoResend": true,
+      "sourceCiphertextPreserved": true,
+      "nativeReleaseAndDeadlineRefund": true,
+      "nativeFinalizedFeeReceiptAndEncryptedWatchExport": true,
+      "startupLockRetirement": true,
+      "failedRefreshClearsGuidance": true,
+      "walletEventRevokesGuidance": true,
+      "expiredColdPreparationCancelled": true,
+      "retiredNonceRecoveryStartsNoNewScans": true,
+      "authorityCancellationRetainsPhysicalAdmission": true,
+      "tradingEnabled": false
+    },
+    "liveAnvilProcessesAfterChecks": []
+  },
+  "independentReproductionsClosed": [
+    {
+      "severity": "P2",
+      "finding": "Concurrent bootstrap allowed an earlier create request to unlock after a newer lock completed.",
+      "red": "t43-startup-lock-red.log",
+      "repair": "Shared bootstrap/init promises plus synchronous command retirement epoch.",
+      "green": "t43-startup-lock-green.log: configurationFetches1; create LOCKED; lock/status locked."
+    },
+    {
+      "severity": "P2",
+      "finding": "Unknown recovery skipped current checks when lock removed context and started new native block-scan jobs after retirement.",
+      "red": "t43-rpc-retirement-red.log: postRetirementScans7, sends1; captured exact old controller used only in local pre-transform.",
+      "repair": "Unconditional pre/post native checks, captured selected lease/epoch per native attachment.",
+      "green": "t43-rpc-retirement-green.log: postRetirementScans0, sends1; actual current source."
+    },
+    {
+      "severity": "P2",
+      "finding": "G08 early cancellation released controller admission while a physical native request remained pending; new profile creation succeeded before old request drained.",
+      "red": "t43-native-drain-red.log: Profile created while third code read held, sends1; captured old controller used only in local pre-transform.",
+      "repair": "Actual native promise set survives clearPrivate; act finally drains before busy false.",
+      "green": "t43-native-drain-green.log: BUSY while held, Create succeeds after drain, sends1; actual current source."
+    }
+  ],
+  "additionalSourceCorrectionsVerified": [
+    "Strict typed critical controller/native contracts and human-readable canonical terms/fee receipt UI.",
+    "Exact canonical prepared request serialization before journal transitions.",
+    "Cold never-sent recovery scopes journal list to exact binding/account and uses private generation-bound cancellation interval without granting new-spend permission.",
+    "Native/monotonic acceptance clock refreshed before offer/accept and around both signatures.",
+    "Known wallet invalidation retires private context, cached G18 guidance and pending UI scope.",
+    "Generated/crypto resources acquire cleanup immediately; selected and unused returned review buffers are registered and wiped across lock/error.",
+    "Failed native refresh invalidates guidance before work; cached payment instructions cannot reappear on error."
+  ],
+  "axes": {
+    "correctness": "Exact reviewed bytes and domain hash flow through real exchange/native bundle/escrow; actual T34 backup revision, durable G12 one-send journal, native unknown recovery and terminal receipts verified. All confirmed races repaired and independently rechecked.",
+    "readability": "Critical controller is strict TypeScript with explicit native/service/snapshot contracts; human-readable terms/receipts are primary and diagnostic JSON secondary. Dense orchestration is bounded to one optional private composition.",
+    "architecture": "Uses existing same-Worker endpoint, identity, relay crypto/exchange, G08/G12/G18 and canonical native ABI. Constructor-only trusted ports cannot be supplied by runtime status payloads; default App/facades/trust pins remain excluded.",
+    "security": "No raw key/session leaves Worker; known lease/wallet/lock revocation fences requests and clears owned resources. Imported statuses, missing peer-carrier capability, wrong genesis/runtime and counterfeit canonical requests fail closed. On-chain actions remain original seller/buyer bound.",
+    "performance": "Unknown scan <=65 blocks inclusive and <=128 transactions/block; request timeout, bounded file imports and serialized physical native admission. Local proof makes no whole-WebSocket/native-runtime memory allocation guarantee."
+  },
+  "unresolvedRequiredFindings": [],
+  "scopeLimits": [
+    "LOCALPROOF engineering composition only; never production trading enablement.",
+    "Constructor synthetic peer uses real native EOA signatures but defines no production peer-acceptance wire carrier.",
+    "Maintained registry/release signing trust, independent cryptographic review, physical devices/wallets, remote-provider cancellation, hardware durability, full native memory erasure and external deployment are not established.",
+    "G15 signed cross-origin production migration remains separate; this same-origin recovery is not cross-origin qualification.",
+    "Shared T53 policy module has separate owner/review; this review verifies its actual bounded-import and offer-only UX integration, not Sybil defense or persistence authority."
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/work/t43-final-independent-focused.log",
+      "sha256": "2dc12d76d5c004c2301815ff5b00dc994c0dab30e037f3e8bbb1ce2c2e4e0ebc"
+    },
+    {
+      "path": "/workspace/work/t43-final-independent-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/work/t43-final-independent-boundaries.log",
+      "sha256": "8c696bdc2aa73f64368d7e3c421c78899c3b0cee71539b3c3ba91495b3850e4d"
+    },
+    {
+      "path": "/workspace/work/t43-final-independent-native.log",
+      "sha256": "ae6422b219bff00926bdcd1025e77500e02dd674d187d77b9235a0f43421a120"
+    },
+    {
+      "path": "/workspace/work/t43-startup-lock-red.log",
+      "sha256": "e301cd965f5f3e4125f5ef90667460f92197e186db116472f0233d02600f8dec"
+    },
+    {
+      "path": "/workspace/work/t43-startup-lock-green.log",
+      "sha256": "e1c61f054df63d1510b049d546b78811ae36aec647ed7554ee780d240d7ad94f"
+    },
+    {
+      "path": "/workspace/work/t43-rpc-retirement-red.log",
+      "sha256": "540f89e3c009081b249d412a55cc1ba7e6ced48adb5f8e9338c739600b59373d"
+    },
+    {
+      "path": "/workspace/work/t43-rpc-retirement-green.log",
+      "sha256": "2731542db10fc9dddecc063f4c87a30ff8e6cc3c1c4657d5fd6963d6784be6fc"
+    },
+    {
+      "path": "/workspace/work/t43-native-drain-red.log",
+      "sha256": "35f4aba9c4c02a3569db12a6527c0061c084e895dbc3a42fe558cfe9597c968f"
+    },
+    {
+      "path": "/workspace/work/t43-native-drain-green.log",
+      "sha256": "9bb2f23d5006d76dfa1a814da133f7969f7d604e37bf813f0909ef90b328cb19"
+    }
+  ]
+}

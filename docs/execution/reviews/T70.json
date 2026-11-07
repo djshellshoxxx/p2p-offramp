@@ -1,0 +1,17 @@
+{
+  "task": "T70",
+  "reviewer": "root",
+  "disposition": "APPROVED_INERT_TOOLING_INTAKE",
+  "sourceSha256": "f571549ad0ca4e4cbed76fe53599f884a56ae704c722d8ac7640ca20aaeb918c",
+  "verified": [
+    "Exact author manifest file/length/hash.",
+    "Actual Chromium154.0.8037.57 version and installed Playwright browsers.json digest.",
+    "Pinned Firefox/WebKit executable paths absent.",
+    "No attempted CDN download, policy bypass or claimed automated rejection.",
+    "Engine availability is separate from qualification; no product/shared harness code changed."
+  ],
+  "limits": [
+    "Firefox/WebKit unmeasured; future exact official tooling and native harness evidence required.",
+    "No Safari/device/wallet/release/trading approval."
+  ]
+}

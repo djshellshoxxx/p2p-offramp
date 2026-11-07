@@ -1,0 +1,506 @@
+{
+  "format": "semaphore-v4-public-node-feasibility-pins-v1",
+  "sourceCommit": "dbab5553c486a09d5e1042e5271e3316224cc176",
+  "sdkVersion": "4.14.5",
+  "artifactVersion": "4.13.0",
+  "treeDepth": 2,
+  "fieldModulus": "21888242871839275222246405745257275088548364400416034343698204186575808495617",
+  "artifact": {
+    "package": "@zk-kit/semaphore-artifacts",
+    "version": "4.13.0",
+    "url": "https://registry.npmjs.org/@zk-kit/semaphore-artifacts/-/semaphore-artifacts-4.13.0.tgz",
+    "integrity": "sha512-UgFQkcwI63XT1Xk8fkUYMNfcuR85LiSL3Of9XLsyMLflHkiwXP9D1WC8hnpD8Tp2HoAMJ/mCv7ZMlU7TC0mvdQ==",
+    "tarballSha256": "5e427eef1995c75bb82e4ba0a455956a657a56355cb8e67bf6e6e2572360f653",
+    "tarballBytes": 109100273,
+    "archiveFileCount": 100,
+    "archiveUnpackedBytes": 170928598,
+    "selected": {
+      "semaphore-2.wasm": {
+        "bytes": 1801079,
+        "sha256": "877a989a8881ff6651866cfa32088f60e4abcb02a26f2e995868dfabd7f9385b"
+      },
+      "semaphore-2.zkey": {
+        "bytes": 1653555,
+        "sha256": "110e2d9de78730aa4f5c78c75017cfe4d769b4b7ce60f58484fb14733d7b0f35"
+      }
+    }
+  },
+  "packages": [
+    {
+      "name": "ethers",
+      "version": "6.17.0",
+      "integrity": "sha512-BpyrpIPJ3ydEVow8zGaz1DuPS7YU8DcWxuBnY9a0UA/lvAPwrMr+EPXsfrul628SRaekPNeIM4UFh/91GWZang==",
+      "tarball": "https://registry.npmjs.org/ethers/-/ethers-6.17.0.tgz",
+      "gitHeadUnsignedMetadata": "b48bfe34b11e059c4418718f9cad4e6cbe4c0680"
+    },
+    {
+      "name": "@zk-kit/semaphore-artifacts",
+      "version": "4.13.0",
+      "integrity": "sha512-UgFQkcwI63XT1Xk8fkUYMNfcuR85LiSL3Of9XLsyMLflHkiwXP9D1WC8hnpD8Tp2HoAMJ/mCv7ZMlU7TC0mvdQ==",
+      "tarball": "https://registry.npmjs.org/@zk-kit/semaphore-artifacts/-/semaphore-artifacts-4.13.0.tgz",
+      "gitHeadUnsignedMetadata": null
+    },
+    {
+      "name": "@semaphore-protocol/group",
+      "version": "4.14.5",
+      "integrity": "sha512-x8WrlF6zXc6mYOKZkGoRiZ6ghfkcjJRaTxmf0v+rXyICyoRvRnuXLaCxdY61m3DnKR1eiuvRpExWAwsCX7J9Rw==",
+      "tarball": "https://registry.npmjs.org/@semaphore-protocol/group/-/group-4.14.5.tgz",
+      "gitHeadUnsignedMetadata": "dbab5553c486a09d5e1042e5271e3316224cc176"
+    },
+    {
+      "name": "@semaphore-protocol/identity",
+      "version": "4.14.5",
+      "integrity": "sha512-WhHJ2rRdBXP27E8p+ooRmyuIEW3LA/PstHdrqm0tfaKofXFS5USE42zbRkseeY0I2kUEJSRFk4AcD3a1T0NVHw==",
+      "tarball": "https://registry.npmjs.org/@semaphore-protocol/identity/-/identity-4.14.5.tgz",
+      "gitHeadUnsignedMetadata": "dbab5553c486a09d5e1042e5271e3316224cc176"
+    },
+    {
+      "name": "@semaphore-protocol/proof",
+      "version": "4.14.5",
+      "integrity": "sha512-orwvmeq4m1xFROTZpBHsfRteW0/c0RbVA3rLeN21IeX8XW/jLJDIgBWyZVsw/D/BR8t42NgFcOPmT07AqWay1A==",
+      "tarball": "https://registry.npmjs.org/@semaphore-protocol/proof/-/proof-4.14.5.tgz",
+      "gitHeadUnsignedMetadata": "dbab5553c486a09d5e1042e5271e3316224cc176"
+    },
+    {
+      "name": "snarkjs",
+      "version": "0.7.6",
+      "integrity": "sha512-4uH1xA5JzVU5jaaWS2fXej3+RC6L5Erhr6INTJtUA27du4Elbh4VXCeeRjB4QiwL6N6y7SNKePw5prTxyEf4Zg==",
+      "tarball": "https://registry.npmjs.org/snarkjs/-/snarkjs-0.7.6.tgz",
+      "gitHeadUnsignedMetadata": "9a8f1c0083d18b9b5e18f526cfd729e7259423be"
+    },
+    {
+      "name": "@zk-kit/artifacts",
+      "version": "2.0.1",
+      "integrity": "sha512-RvEOFkU5LAKqEre/o94pRcjYMyqHxs6TpLDE6wLLsfUWgcxabaWsZ7/UqLikR/ueQjspMDGuJYi3n9FlK/K9Kg==",
+      "tarball": "https://registry.npmjs.org/@zk-kit/artifacts/-/artifacts-2.0.1.tgz",
+      "gitHeadUnsignedMetadata": null
+    },
+    {
+      "name": "bfj",
+      "version": "9.1.4",
+      "integrity": "sha512-r4qEuACygiLfYg6KDQRfaxEwScyIUsf8ETrvS1yJQMRLEMgzV4u9wEUFjdetEOIfjDYHjhcR/fsARFcfNz0hhw==",
+      "tarball": "https://registry.npmjs.org/bfj/-/bfj-9.1.4.tgz",
+      "gitHeadUnsignedMetadata": "cacc0c76e0c5d57799464d0b13f414996c83d29c"
+    },
+    {
+      "name": "ejs",
+      "version": "7.0.2",
+      "integrity": "sha512-LcDSEP6Oclb9sTiSyG0MpG0RuKvLDRxCOOt+2sIk+kdk1rMkFU8SRnT0qaNt5zvU0LOV1YXXOvIoZL/sKwabvw==",
+      "tarball": "https://registry.npmjs.org/ejs/-/ejs-7.0.2.tgz",
+      "gitHeadUnsignedMetadata": null
+    },
+    {
+      "name": "circom_tester",
+      "version": "0.0.24",
+      "integrity": "sha512-flCIfkf/HPK+kQuyVuM3DtOGEIANuFDY1wMM7oAfapyPOUneILCnvoQNnO993Haun5z+VsX9pfZ5/ZmNZIJiZQ==",
+      "tarball": "https://registry.npmjs.org/circom_tester/-/circom_tester-0.0.24.tgz",
+      "gitHeadUnsignedMetadata": "de724233bab248824c4e6214374261a3b1d804a5"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/generate-proof.ts",
+      "bytes": 5223,
+      "sha256": "6db2d11a78c225a9bfa89120e352a56faece952302b0c1f82d3baea83c6cc342",
+      "installedSourcePath": "@semaphore-protocol/proof/src/generate-proof.ts"
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/verify-proof.ts",
+      "bytes": 1742,
+      "sha256": "2f72a3610bf2fcc1867ecf5d48363ce802d459bb2d6edc58b7238ca54a2b375a",
+      "installedSourcePath": "@semaphore-protocol/proof/src/verify-proof.ts"
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/hash.ts",
+      "bytes": 473,
+      "sha256": "a00564da6f233bf7e829feb5a846f6056b9d8837c865f5088ef7d9857ef1abaf",
+      "installedSourcePath": "@semaphore-protocol/proof/src/hash.ts"
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/package.json",
+      "bytes": 1939,
+      "sha256": "f5941b835e5ddc1a6719cfdbb202eb3a8927f9ddf12775af5b83591ab12a2dfa",
+      "installedSourcePath": null
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/identity/package.json",
+      "bytes": 1354,
+      "sha256": "2b769b020c53684aa761ef7c9dc266b630b3d73be838ce20514b64efe38564aa",
+      "installedSourcePath": null
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/group/package.json",
+      "bytes": 1267,
+      "sha256": "6e786f6d08b49e3d4f8d53d3177a2a3c4d66b2f98157e445f37f9a852643c9df",
+      "installedSourcePath": null
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/verification-keys.json",
+      "bytes": 57550,
+      "sha256": "d96ec60593b6fc2334f1f04e008e07425d5536d7777f6ac21d996fc80779b3c9",
+      "installedSourcePath": "@semaphore-protocol/proof/src/verification-keys.json"
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/tests/index.test.ts",
+      "bytes": 4591,
+      "sha256": "1ba39c784c842a63cadc3cb70baec8c813645e1ba6a937fe6b9831ae950d032a",
+      "installedSourcePath": null
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/group/src/index.ts",
+      "bytes": 5138,
+      "sha256": "98fb1d1ce956ab8cc88a7a494f44a6ae8cacef8b9ff1e59acca53f8adcb627d4",
+      "installedSourcePath": "@semaphore-protocol/group/src/index.ts"
+    },
+    {
+      "url": "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/identity/src/index.ts",
+      "bytes": 6512,
+      "sha256": "910b431dd57f62ed087521b3af08a6b0389d923b4059e86641cfa92f85027d31",
+      "installedSourcePath": "@semaphore-protocol/identity/src/index.ts"
+    }
+  ],
+  "licenses": [
+    {
+      "package": "@semaphore-protocol/proof",
+      "declaredLicense": "MIT",
+      "path": "@semaphore-protocol/proof/LICENSE",
+      "sha256": "cfcf88f57e7bdeeae0a02b1ed1c2e320b88ebfe527fd25b5237b7dc829c7620c"
+    },
+    {
+      "package": "@semaphore-protocol/identity",
+      "declaredLicense": "MIT",
+      "path": "@semaphore-protocol/identity/LICENSE",
+      "sha256": "cfcf88f57e7bdeeae0a02b1ed1c2e320b88ebfe527fd25b5237b7dc829c7620c"
+    },
+    {
+      "package": "@semaphore-protocol/group",
+      "declaredLicense": "MIT",
+      "path": "@semaphore-protocol/group/LICENSE",
+      "sha256": "cfcf88f57e7bdeeae0a02b1ed1c2e320b88ebfe527fd25b5237b7dc829c7620c"
+    },
+    {
+      "package": "ffjavascript",
+      "declaredLicense": "GPL-3.0",
+      "path": "ffjavascript/COPYING",
+      "sha256": "d95c74a62d14f13ebfbc8c1783c315e2ed2389e80048b264bdeddb8114dee945"
+    },
+    {
+      "package": "snarkjs",
+      "declaredLicense": "GPL-3.0",
+      "path": "snarkjs/COPYING",
+      "sha256": "d95c74a62d14f13ebfbc8c1783c315e2ed2389e80048b264bdeddb8114dee945"
+    },
+    {
+      "package": "ethers",
+      "declaredLicense": "MIT",
+      "path": "ethers/LICENSE.md",
+      "sha256": "44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "package": "@zk-kit/artifacts",
+      "declaredLicense": "MIT",
+      "path": "@zk-kit/artifacts/LICENSE",
+      "sha256": "4c464ee9833d8723f3643cbff029f8febd1cf40e0e57e81ee0cfd298d1feee5f"
+    },
+    {
+      "package": "bfj",
+      "declaredLicense": "MIT",
+      "path": "bfj/COPYING",
+      "sha256": "d08e58b29e5fe84498a59655e8eeca362a64c8af15ac3571786b0d15741d5193"
+    },
+    {
+      "package": "ejs",
+      "declaredLicense": "Apache-2.0",
+      "path": "ejs/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    }
+  ],
+  "lockSha256": "0028b38529c2d32f31042d6af287549deab80ebe6de6eff2941a11cd5ffe3fd3",
+  "packageSha256": "e61dcebdea8200f66bf653f2622947dfc8042e5df1edbcb1be47447bd6b9a896",
+  "installedTree": {
+    "entries": 4199,
+    "regularFiles": 4194,
+    "symlinks": 5,
+    "bytes": 84911614,
+    "sha256": "09a67fb7673d49a3f163d9e511bfc5730c364bec96ee2658b5fe77b4ecd7d45f"
+  },
+  "registryEvidence": {
+    "scope": "Registry name/version/integrity assertions only, not gitHead or package safety",
+    "keyFileSha256": "faf23d8753d5bb79df250f10391ac89b63ecf7743e48487a544a99c847f9c8df",
+    "results": [
+      {
+        "name": "ethers",
+        "version": "6.17.0",
+        "integrity": "sha512-BpyrpIPJ3ydEVow8zGaz1DuPS7YU8DcWxuBnY9a0UA/lvAPwrMr+EPXsfrul628SRaekPNeIM4UFh/91GWZang==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "@zk-kit/semaphore-artifacts",
+        "version": "4.13.0",
+        "integrity": "sha512-UgFQkcwI63XT1Xk8fkUYMNfcuR85LiSL3Of9XLsyMLflHkiwXP9D1WC8hnpD8Tp2HoAMJ/mCv7ZMlU7TC0mvdQ==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "@semaphore-protocol/group",
+        "version": "4.14.5",
+        "integrity": "sha512-x8WrlF6zXc6mYOKZkGoRiZ6ghfkcjJRaTxmf0v+rXyICyoRvRnuXLaCxdY61m3DnKR1eiuvRpExWAwsCX7J9Rw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "@semaphore-protocol/identity",
+        "version": "4.14.5",
+        "integrity": "sha512-WhHJ2rRdBXP27E8p+ooRmyuIEW3LA/PstHdrqm0tfaKofXFS5USE42zbRkseeY0I2kUEJSRFk4AcD3a1T0NVHw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "@semaphore-protocol/proof",
+        "version": "4.14.5",
+        "integrity": "sha512-orwvmeq4m1xFROTZpBHsfRteW0/c0RbVA3rLeN21IeX8XW/jLJDIgBWyZVsw/D/BR8t42NgFcOPmT07AqWay1A==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "snarkjs",
+        "version": "0.7.6",
+        "integrity": "sha512-4uH1xA5JzVU5jaaWS2fXej3+RC6L5Erhr6INTJtUA27du4Elbh4VXCeeRjB4QiwL6N6y7SNKePw5prTxyEf4Zg==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "@zk-kit/artifacts",
+        "version": "2.0.1",
+        "integrity": "sha512-RvEOFkU5LAKqEre/o94pRcjYMyqHxs6TpLDE6wLLsfUWgcxabaWsZ7/UqLikR/ueQjspMDGuJYi3n9FlK/K9Kg==",
+        "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA",
+        "keyExpires": "2025-01-29T00:00:00.000Z",
+        "signatureVerified": true
+      },
+      {
+        "name": "bfj",
+        "version": "9.1.4",
+        "integrity": "sha512-r4qEuACygiLfYg6KDQRfaxEwScyIUsf8ETrvS1yJQMRLEMgzV4u9wEUFjdetEOIfjDYHjhcR/fsARFcfNz0hhw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "ejs",
+        "version": "7.0.2",
+        "integrity": "sha512-LcDSEP6Oclb9sTiSyG0MpG0RuKvLDRxCOOt+2sIk+kdk1rMkFU8SRnT0qaNt5zvU0LOV1YXXOvIoZL/sKwabvw==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      },
+      {
+        "name": "circom_tester",
+        "version": "0.0.24",
+        "integrity": "sha512-flCIfkf/HPK+kQuyVuM3DtOGEIANuFDY1wMM7oAfapyPOUneILCnvoQNnO993Haun5z+VsX9pfZ5/ZmNZIJiZQ==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "keyExpires": null,
+        "signatureVerified": true
+      }
+    ],
+    "publicKeyDocumentUtf8": "{\"keys\":[{\"expires\":\"2025-01-29T00:00:00.000Z\",\"keyid\":\"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1Olb3zMAFFxXKHiIkQO5cJ3Yhl5i6UPp+IhuteBJbuHcA5UogKo0EWtlWwW6KSaKoTNEYL7JlCQiVnkhBktUgg==\"},{\"expires\":null,\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY6Ya7W++7aUPzvMTrezH6Ycx3c+HOKYCcNGybJZSCJq/fd7Qa8uuAKtdIkUQtQiEKERhAmE5lMMJhP8OkDOa2g==\"}]}",
+    "signedMetadata": [
+      {
+        "name": "ethers",
+        "version": "6.17.0",
+        "integrity": "sha512-BpyrpIPJ3ydEVow8zGaz1DuPS7YU8DcWxuBnY9a0UA/lvAPwrMr+EPXsfrul628SRaekPNeIM4UFh/91GWZang==",
+        "signatures": [
+          {
+            "sig": "MEUCIAllaVO9SS1Tz0RRRj+xgfSyCfu1M4Egah0YVnDlD5ncAiEA6fn+trFOrbAOENO7AtlvfJVL4MqMBDaj3Co+XLeR4Dw=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "@zk-kit/semaphore-artifacts",
+        "version": "4.13.0",
+        "integrity": "sha512-UgFQkcwI63XT1Xk8fkUYMNfcuR85LiSL3Of9XLsyMLflHkiwXP9D1WC8hnpD8Tp2HoAMJ/mCv7ZMlU7TC0mvdQ==",
+        "signatures": [
+          {
+            "sig": "MEQCIB6KvzL51FlWVcd9tZZYCPQo+M3sb0vt+zXBXyQfFQ3/AiBOofDZiz5PKbtn0eRqhgxrY45SBmpyqsBi8m8c+Y/1Cw==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "@semaphore-protocol/group",
+        "version": "4.14.5",
+        "integrity": "sha512-x8WrlF6zXc6mYOKZkGoRiZ6ghfkcjJRaTxmf0v+rXyICyoRvRnuXLaCxdY61m3DnKR1eiuvRpExWAwsCX7J9Rw==",
+        "signatures": [
+          {
+            "sig": "MEYCIQDaMLZGQq63x4wlwEo/QBttjOXcZT47vyMGnh3x6f59UwIhALNmEgiAA1gPwO42cByd2YkuatEyYvpdCkA1wNU0PaS8",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEYCIQCYs0Qt2/giIzQ0TQqU8UXuUKoS1tJL7s1SGQu8srgJ/AIhAMD42cQJqZxTmNbOvx2u/q7+ElkpdDyHWDTV0n+Gf0KD",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "@semaphore-protocol/identity",
+        "version": "4.14.5",
+        "integrity": "sha512-WhHJ2rRdBXP27E8p+ooRmyuIEW3LA/PstHdrqm0tfaKofXFS5USE42zbRkseeY0I2kUEJSRFk4AcD3a1T0NVHw==",
+        "signatures": [
+          {
+            "sig": "MEQCIBgWtnpdt6avBoQz4vMi0oW7cN6HpCcpc5zj7f/kStchAiAsALG3Mu5b1gd+u+rHWPeUZIXqgDmneM20oImfPYU2MQ==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIQC4sbInZU5d9bqT+oelcCeSVgj9KkmqK2QM74ZmXrfHNgIgQKPRqzVpg2N/DtmJ6NTTVqr8zxJMUGPl36VEpPDOax8=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "@semaphore-protocol/proof",
+        "version": "4.14.5",
+        "integrity": "sha512-orwvmeq4m1xFROTZpBHsfRteW0/c0RbVA3rLeN21IeX8XW/jLJDIgBWyZVsw/D/BR8t42NgFcOPmT07AqWay1A==",
+        "signatures": [
+          {
+            "sig": "MEYCIQDwix2F8m4ydqdNIIBaNf7MCSJwwMyjOm9UoZgAqI1O5QIhAOdb7J/ygjbn/UPJrt40IbOhDb2uA2S/EDngE18yIM2c",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEYCIQCguqcchW51qppPQj+lt31zZdojtJk6gp6USIyly6/z2AIhAOshESWuYalTgfyifNhD0wrFj5BJEA2IJ/DK4wm1tDZH",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "snarkjs",
+        "version": "0.7.6",
+        "integrity": "sha512-4uH1xA5JzVU5jaaWS2fXej3+RC6L5Erhr6INTJtUA27du4Elbh4VXCeeRjB4QiwL6N6y7SNKePw5prTxyEf4Zg==",
+        "signatures": [
+          {
+            "sig": "MEUCIQDWeACtgmlb9emUXDzxQscc9Rb1EHwp3qSGC5GeX9dOCgIgQvL2jNm0jj0ApIRAvV3RC1pe9KkLEmEbTmvbNCMCZBg=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "@zk-kit/artifacts",
+        "version": "2.0.1",
+        "integrity": "sha512-RvEOFkU5LAKqEre/o94pRcjYMyqHxs6TpLDE6wLLsfUWgcxabaWsZ7/UqLikR/ueQjspMDGuJYi3n9FlK/K9Kg==",
+        "signatures": [
+          {
+            "sig": "MEUCIQD5u6ukOTU6zuEZurzuDm4jZIGuUiVOB3y3Hq+BzvYYMAIgFhqNooPwloMPAVuHsGKHeTwvn+6jTZVBxXu7OBddBh0=",
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+          }
+        ]
+      },
+      {
+        "name": "bfj",
+        "version": "9.1.4",
+        "integrity": "sha512-r4qEuACygiLfYg6KDQRfaxEwScyIUsf8ETrvS1yJQMRLEMgzV4u9wEUFjdetEOIfjDYHjhcR/fsARFcfNz0hhw==",
+        "signatures": [
+          {
+            "sig": "MEQCIArahYwIY5vZJyrVyD2Tt/Tl2bxoK8LewHB28+2nipIkAiB91kO3C5TH3bBslvhb8re+UW5IvoSHkjs9isirByx8DQ==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEQCIH8vwHOtxdSXZHnYFon3wTfvOfTQjwGRqELp98Xuu1VkAiBBiOhhgG2Hvd8A+e4AanBtjjVws/vpaN3On3U9iKtiBw==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "ejs",
+        "version": "7.0.2",
+        "integrity": "sha512-LcDSEP6Oclb9sTiSyG0MpG0RuKvLDRxCOOt+2sIk+kdk1rMkFU8SRnT0qaNt5zvU0LOV1YXXOvIoZL/sKwabvw==",
+        "signatures": [
+          {
+            "sig": "MEUCIFqVoruX4ILAvY9+elP72BLoPaAgsJ9ezwpeURJ/zUEJAiEAw/DFdyfFZcfxl6X3SmYm0QMRonqds2FGFgAQDNMU5kg=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEYCIQD0+dhfyMjhKiz3HV/Pc9lANB8qY4XaSra3iaMU5+9J7AIhALkof71Wlm1i8TN32svbTDtUMK54sg8KxeGSaW2wADaV",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      },
+      {
+        "name": "circom_tester",
+        "version": "0.0.24",
+        "integrity": "sha512-flCIfkf/HPK+kQuyVuM3DtOGEIANuFDY1wMM7oAfapyPOUneILCnvoQNnO993Haun5z+VsX9pfZ5/ZmNZIJiZQ==",
+        "signatures": [
+          {
+            "sig": "MEUCIQC63O1UcQaV95WYP5LoWr9vKYvcpAPRgaOZk/9J4yYqKQIgKRKZJfxLG5WJSqAXKiesrq7CPSCj6d44fqz98RBenw8=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ]
+      }
+    ]
+  },
+  "tools": {
+    "hostNode": "v24.19.0",
+    "hostNodeExecutableSha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+    "installNpm": "11.9.0",
+    "proofImage": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283"
+  },
+  "limits": {
+    "compressedArtifactBytes": 201326592,
+    "archiveEntries": 128,
+    "archiveUnpackedBytes": 201326592,
+    "artifactEntryBytes": 16777216,
+    "installedEntries": 8192,
+    "installedBytes": 402653184,
+    "installedEntryBytes": 67108864,
+    "cpuQuota": 1,
+    "cpuSeconds": 90,
+    "memoryBytes": 1073741824,
+    "pids": 128,
+    "runtimeMs": 120000,
+    "outputBytes": 65536
+  },
+  "qualification": {
+    "nodePublicFixtureOnly": true,
+    "browserWasmQualified": false,
+    "browserMemoryBudgetQualified": false,
+    "applicationIssuerApproved": false,
+    "scoreProofImplemented": false,
+    "globalNullifierConsumptionImplemented": false,
+    "applicationScopeMappingSelected": false,
+    "providerActivated": false,
+    "professionalReview": false,
+    "releaseEnabled": false
+  },
+  "dependencyProfile": "semaphore-4.14.5-maintained-transitives-20261102",
+  "dependencyOverrides": {
+    "ethers": "6.17.0",
+    "snarkjs": "0.7.6",
+    "bfj": "9.1.4",
+    "ejs": "7.0.2",
+    "circom_tester": "0.0.24"
+  },
+  "dependencyAudit": {
+    "reportSha256": "cc5bb3029556e8ad091f242f18531e5b1fc274a00ae1a70771db26bdf3635518",
+    "exitCode": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "scope": "Isolated experimental override graph only; no production provider approval"
+  },
+  "originalObservation": {
+    "path": "docs/reputation/SEMAPHORE-V4-ORIGINAL-OBSERVATION.json",
+    "sha256": "d5f4f3be8c6f525360610aa5e1d689364ff00367f26573df9339e8c16b4cef35",
+    "status": "BLOCKED_DEPENDENCY_FINDINGS",
+    "executableDependencyProject": false
+  }
+}
