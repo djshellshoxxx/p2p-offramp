@@ -50,6 +50,19 @@ test('complete conversation deletion preserves durable-history sequence invarian
   const s=await setup(t,[chat(1),chat(2)]);const partial=new RetentionService(s.vault,s.session,fixtureAuthority(()=>[id(1)]));bad(await partial.reviewRetention(AGE),'NATIVE_PROOF_REQUIRED');partial.dispose();
   const complete=new RetentionService(s.vault,s.session,fixtureAuthority());const plan=good(await complete.reviewRetention(AGE));assert.equal(good(await complete.deleteReviewedRecords(plan,consent(plan))).deletedCount,2);complete.dispose();
 });
+test('conversation completeness fails closed on unclassifiable sibling chat records and receivedSequence gaps/duplicates',async t=>{
+  const A='a'.repeat(64),B='b'.repeat(64);
+  const chatAt=(n,sequence,conversation=A)=>({...chat(n,0,conversation),payload:Buffer.from(JSON.stringify({format:'p2p-offramp-chat-history',version:1,conversationId:conversation,receivedSequence:sequence,receivedAt:0,wrap:{}})).toString('base64url')});
+  const malformed={...opaque(3,'chat')},future={...chat(3),schemaVersion:2},unknownFormat={...chat(3),payload:Buffer.from(JSON.stringify({format:'p2p-offramp-chat-history',version:2,conversationId:A,receivedSequence:3,receivedAt:0,wrap:{}})).toString('base64url')};
+  for(const records of [[chat(1),chat(2),malformed],[chat(1),chat(2),future],[chat(1),chat(2),unknownFormat],[chatAt(1,1),chatAt(2,3)],[chatAt(1,1),chatAt(2,1)],[chatAt(1,2),chatAt(2,3)],[chatAt(1,1),chatAt(2,2),chatAt(3,2,B)]]){
+    const s=await setup(t,[...records,saved(9)],fixtureAuthority()),writes=s.store.writes;
+    bad(await s.service.reviewRetention(AGE),'NATIVE_PROOF_REQUIRED');assert.equal(s.store.writes,writes);assert.equal(good(await s.vault.list(s.session.sessionId)).length,records.length+1);
+    // Non-chat candidates stay deletable when no conversation is selected.
+    const other=new RetentionService(s.vault,s.session,fixtureAuthority(()=>[id(9)]));const plan=good(await other.reviewRetention(AGE));assert.equal(good(await other.deleteReviewedRecords(plan,consent(plan))).deletedCount,1);other.dispose();
+  }
+  const s=await setup(t,[chatAt(1,2),chatAt(2,1),chatAt(3,3),chatAt(4,1,B),opaque(5)],fixtureAuthority());const plan=good(await s.service.reviewRetention(AGE));assert.equal(plan.reviewedDeleteCount,4);
+  assert.equal(good(await s.service.deleteReviewedRecords(plan,consent(plan))).deletedCount,4);assert.deepEqual(good(await s.vault.list(s.session.sessionId)).map(r=>r.id),[id(5)]);
+});
 test('more than 256 reviewed deletes never splits into implicit or partial batches',async t=>{
   const s=await setup(t,Array.from({length:257},(_,i)=>saved(i+1)),fixtureAuthority());const plan=good(await s.service.reviewRetention(AGE));assert.equal(plan.reviewedDeleteCount,257);const writes=s.store.writes;
   bad(await s.service.deleteReviewedRecords(plan,consent(plan)),'LIMIT_EXCEEDED');assert.equal(s.store.writes,writes);assert.equal(good(await s.vault.list(s.session.sessionId)).length,257);
