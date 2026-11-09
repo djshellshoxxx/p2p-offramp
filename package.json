@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
+    "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs scripts/tests/research-evidence.test.mjs",
     "test:specs": "python -m unittest discover -s scripts/tests -v",
     "test:evm": "cd contracts/evm && forge test",
     "test:evm:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
@@ -41,7 +41,8 @@
     "test:private:browser": "node scripts/test-g16-browser.mjs && node scripts/test-g16-adapter-browser.mjs && node scripts/test-g16-physical-browser.mjs && node scripts/test-release-browser.mjs",
     "test:escrow": "npm --prefix packages/escrow-evm test",
     "test:local-evm": "node scripts/test-local-evm.mjs",
-    "test:locale:browser": "node scripts/test-locale-layout-browser.mjs"
+    "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
+    "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
