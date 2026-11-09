@@ -128,14 +128,6 @@ function parsePreparedRequest(text: string): EvmPreparedRequest {
     !DECIMAL.test(request.nonce) || !DECIMAL.test(request.preparedAtBlock) || canonicalRequest(request) !== text) return stop('INTEGRITY_FAILURE');
   return request;
 }
-/** Only an EIP-1193 numeric code is read from a wallet error; messages and data are never copied. */
-function providerCode(error: unknown): number | undefined {
-  try {
-    if (typeof error !== 'object' || error === null) return undefined;
-    const descriptor = Object.getOwnPropertyDescriptor(error, 'code');
-    return descriptor && 'value' in descriptor && typeof descriptor.value === 'number' ? descriptor.value : undefined;
-  } catch { return undefined; }
-}
 const checked = <T>(value: T, valid: (value: T) => boolean): T => valid(value) ? value : stop('INTEGRITY_FAILURE');
 const isBlock = (block: EvmBlockRef | null): boolean => block === null || (typeof block === 'object' && DECIMAL.test(block.number) && HASH.test(block.hash));
 
@@ -302,13 +294,9 @@ class EvmLifecycle implements EvmTxLifecycle {
       try {
         result = await this.#wallet({ method: 'eth_sendTransaction', params: [{ from: request.from, to: request.to, data: request.data,
           value: `0x${BigInt(request.value).toString(16)}`, nonce: `0x${BigInt(request.nonce).toString(16)}`, chainId: `0x${BigInt(request.chainId).toString(16)}` }] });
-      } catch (error) {
-        // EIP-1193 4001: the wallet reports the user rejected the request before signing; nothing was submitted.
-        if (providerCode(error) === 4001) {
-          const failed = await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null }));
-          if (failed.ok) unwrap(await this.#serial(() => this.#journal.authorizeTerminal(intentId, { state: 'failed', hash: null })));
-          return stop(failed.ok ? 'USER_REJECTED' : 'BROADCAST_UNKNOWN');
-        }
+      } catch {
+        // Even a 4001 response cannot prove nothing was broadcast after this send-capable call began.
+        // Retain the durable marker and require native reconciliation before any fresh explicit attempt.
         return stop('BROADCAST_UNKNOWN');
       }
       if (typeof result !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(result)) return stop('BROADCAST_UNKNOWN');
@@ -317,7 +305,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       if (!recorded.ok) return stop('BROADCAST_UNKNOWN');
       return Object.freeze({ intent: recorded.value, hash });
     }, 'UNAVAILABLE').then(result => {
-      if (!result.ok && sendStarted && result.error.code !== 'USER_REJECTED' && result.error.code !== 'BROADCAST_UNKNOWN') return this.#fail('BROADCAST_UNKNOWN');
+      if (!result.ok && sendStarted && result.error.code !== 'BROADCAST_UNKNOWN') return this.#fail('BROADCAST_UNKNOWN');
       return result;
     });
   }
