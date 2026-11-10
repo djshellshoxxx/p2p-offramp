@@ -9,7 +9,10 @@ const keys = read(keyPath).keys, packages = read(metadataPath), lock = read('pac
 const part = bytes => { bytes = Buffer.from(bytes); const size = Buffer.alloc(4); size.writeUInt32BE(bytes.length); return Buffer.concat([size, bytes]); };
 const publicKey = record => {
   if (record.keytype !== 'ecdsa-sha2-nistp256' || record.scheme !== 'ecdsa-sha2-nistp256') throw new Error('Unsupported recorded key scheme');
-  if (record.expires !== null && Date.parse(record.expires) <= Date.parse('2026-10-26T00:00:00Z')) throw new Error('Recorded key expired at observation date');
+  if (record.expires !== null) {
+    if (typeof record.expires !== 'string' || !Number.isFinite(Date.parse(record.expires))) throw new Error('Invalid recorded key expiry');
+    if (Date.parse(record.expires) <= Date.parse('2026-10-26T00:00:00Z')) throw new Error('Recorded key expired at observation date');
+  }
   const key = createPublicKey({ key: Buffer.from(record.key, 'base64'), format: 'der', type: 'spki' });
   const jwk = key.export({ format: 'jwk' });
   if (jwk.crv !== 'P-256') throw new Error('Unexpected registry curve');
@@ -19,10 +22,15 @@ const publicKey = record => {
   if (id !== record.keyid) throw new Error('Registry key ID mismatch');
   return key;
 };
-const results = [];
+const expectedPackages = new Set(['@noble/hashes', '@noble/curves']);
+if (!Array.isArray(packages) || packages.length !== expectedPackages.size) throw new Error('Missing provider evidence');
+const results = [], seen = new Set();
 for (const entry of packages) {
-  if (!['@noble/hashes', '@noble/curves'].includes(entry.name) || entry.version !== '2.4.0') throw new Error('Unexpected evidence package');
-  if (lock.packages[`node_modules/${entry.name}`].integrity !== entry.integrity) throw new Error('Lock differs from signed integrity');
+  if (!expectedPackages.has(entry.name) || entry.version !== '2.4.0') throw new Error('Unexpected evidence package');
+  if (seen.has(entry.name)) throw new Error('Duplicate evidence package');
+  seen.add(entry.name);
+  const locked = lock.packages?.[`node_modules/${entry.name}`];
+  if (locked?.version !== entry.version || locked.integrity !== entry.integrity) throw new Error('Lock differs from signed package');
   if (entry.signatures.length !== 1) throw new Error('Unexpected signature set');
   const signature = entry.signatures[0], record = keys.find(key => key.keyid === signature.keyid);
   if (!record) throw new Error('No authoritative recorded key');
