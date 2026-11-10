@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -168,4 +168,32 @@ test('encoded literal question/hash filenames remain valid entries without dupli
     assert.equal(result.error, undefined); assert.equal(result.signal, null); assert.equal(result.status, 0);
     assert.equal(result.stdout, 'LITERAL-MAIN\n'); assert.equal(result.stderr, '');
   }
+});
+
+
+test('offline acceptance CLI rejects nonregular and adversarial evidence inputs with fixed JSON errors', async t => {
+  const { dir, candidatePath, recordsPath } = await fixture(t);
+  const linkedCandidate = join(dir, 'linked-candidate.json');
+  await symlink(candidatePath, linkedCandidate);
+  for (const path of [linkedCandidate, dir]) {
+    assert.deepEqual(report(run(entry, [path, recordsPath]), 2), { ok: false, error: { code: 'INVALID_INPUT' } });
+  }
+
+  const oversized = join(dir, 'oversized-candidate.json');
+  await writeFile(oversized, Buffer.alloc(4 * 1024 * 1024 + 1, 0x20));
+  assert.deepEqual(report(run(entry, [oversized, recordsPath]), 2), { ok: false, error: { code: 'LIMIT_EXCEEDED' } });
+
+  const duplicateKey = join(dir, 'duplicate-key-candidate.json');
+  const candidate = await readFile(candidatePath, 'utf8');
+  assert.ok(candidate.includes('"format":'));
+  await writeFile(duplicateKey, candidate.replace('"format":', '"format":"unexpected","format":'));
+  assert.deepEqual(report(run(entry, [duplicateKey, recordsPath]), 2), { ok: false, error: { code: 'INVALID_INPUT' } });
+
+  const deep = join(dir, 'deeply-nested-records.json');
+  await writeFile(deep, '['.repeat(17) + '0' + ']'.repeat(17));
+  assert.deepEqual(report(run(entry, [candidatePath, deep]), 2), { ok: false, error: { code: 'LIMIT_EXCEEDED' } });
+
+  const invalidUtf8 = join(dir, 'invalid-utf8-records.json');
+  await writeFile(invalidUtf8, Buffer.from([0xc3, 0x28]));
+  assert.deepEqual(report(run(entry, [candidatePath, invalidUtf8]), 2), { ok: false, error: { code: 'INVALID_INPUT' } });
 });
