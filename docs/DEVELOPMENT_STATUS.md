@@ -1,5 +1,9 @@
 # Development status and continuation contract
 
+Next milestone plan (current): [M2A EVM vertical slice orchestration prompt](execution/MILESTONE-M2A-ORCHESTRATION-PROMPT-2026-11-10.md).
+Environment baseline: Node 22 lacks the required Node >=24. Under Node 22, 1 relay failover timing test
+(`packages/relay/test/pool.test.mjs:94`) failed at baseline (1089/1091 pass, 1 skip).
+
 Current source-derived continuation: [incomplete-work inventory](execution/INCOMPLETE-WORK-2026-10-31.md),
 [execution prompt](execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and
 [task ledger](../tasks/todo.md). The historical milestone descriptions below do

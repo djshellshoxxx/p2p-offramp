@@ -1,5 +1,7 @@
 # P2P Off-ramp
 
+Next milestone plan: [M2A EVM vertical slice orchestration prompt](docs/execution/MILESTONE-M2A-ORCHESTRATION-PROMPT-2026-11-10.md).
+
 Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
 [whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
@@ -36,7 +38,7 @@ Captured from the synthetic, test-only demo build (`npm run build:demo`); tradin
 
 ## Local checks
 
-Requires Node 24+ and Python 3.12+ for the spec tool. Dependencies are pinned in package-lock.json; emitted runtime assets retain third-party MIT attribution. Chromium is required for local browser checks, not as an app-owned server.
+Requires Node 24+ and Python 3.12+ for the spec tool. Environment baseline note: Node 22 lacks the required Node >=24; under Node 22, 1 relay failover timing test (`packages/relay/test/pool.test.mjs:94`) failed at baseline (1089/1091 pass, 1 skip). Dependencies are pinned in package-lock.json; emitted runtime assets retain third-party MIT attribution. Chromium is required for local browser checks, not as an app-owned server.
 
 ```sh
 npm ci --ignore-scripts
