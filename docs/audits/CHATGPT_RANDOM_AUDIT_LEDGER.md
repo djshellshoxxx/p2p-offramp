@@ -19,10 +19,23 @@ This is a **read-only, source-inspection audit ledger**, not a security certific
 - Files modified in this lane: this ledger only; **no code changes**. Ownership of main, PR #61, and active Claude PR #65 remains undisturbed.
 - Follow-up: audit a different previously unaudited source path next run, using the current commit SHA plus this ledger's selected path/ordinal to vary the deterministic seed. Inspect caller/test boundaries again. Revalidate earlier findings on changed source heads before carrying forward any security claim.
 
+
+## Audit 002 — 2026-11-10 (second rotation)
+
+- Source main remains `300287dcde818a9d10ae301265d00bc7c0877bbb`; previous selected path from audit 001 is excluded.
+- Reproducible selection: lexically sort the 143 main-tree `packages/`, `apps/` and `scripts/` JavaScript/TypeScript source files after excluding paths containing `/test/`, `/tests/`, `.test.`, `/fixtures/`, and `scripts/test-`, plus the prior selection. FNV-1a 32-bit of `300287dcde818a9d10ae301265d00bc7c0877bbb:packages/schemas/src/evm-agreement-input.ts:audit-002` = `1091635074`; index `1091635074 % 143 = 101`, yielding **`packages/security/src/acceptance-gates.ts`**.
+- Trust boundary: imported acceptance candidates, reviewer names, evidence records and digest claims are **untrusted data**. The `evaluateGate` public facade in `packages/security/index.ts` cannot authenticate imported reviewer decisions: only injected `AcceptanceOptions.verifyReview` is trusted. A passing local scope report explicitly sets `promotionAllowed: false` and `releaseEnabled: false`.
+- Inspected source `packages/security/src/acceptance-gates.ts` (main blob `4a684142c353f8bd474ecd3c64ebca5660a697ce`), public facade `packages/security/index.ts` (blob `91a2d4818e944e51764a8a9107cac657b2041396`), and the review/signing-adjacent context `packages/security/release-context.ts`, `packages/security/src/release-locator.ts`. Reviewed primary tests `packages/security/test/acceptance-gates.test.mjs` (blob `bc390db7bceb70b637b669df2b9c6013a872423f`) and CLI entry tests `scripts/tests/acceptance-entry.test.mjs` (blob `aa9944aa287b3d0119316748931dad95f485a9f9`).
+- Checks performed by source inspection: constrained own-data input records and dense arrays; bounded text, record and test-case counts; duplicate-ID rejection; source/spec/artifact provenance matching; role and reviewer independence checks; exact target coverage and failures; trusted full-coverage supersession; cancellation during pending reviewer callbacks and monotonic clock validation. Corresponding negative tests were found for hostile getters/proxies, unsupported and failed evidence, cycles, clock rollback, and abort while a verifier is unresolved.
+- **Verified new findings: none.** No reproducer or runtime exploit evidence was established. A trusted `verifyReview` callback that never resolves can delay its evaluation if no caller-provided abort signal is used; this is a trust/availability design consideration, **not** a verified external attacker-controlled resource-exhaustion vulnerability. Such a policy would need separate approved requirements and tests.
+- Audit limits: **read-only source inspection; no runtime unit, fuzz, browser or CLI test was run** in this audit phase. Do not infer independent security approval from preexisting CI. No evidence of authorization bypass or fraudulent acceptance was established.
+- Next selection: exclude both audited paths, vary the seed with the source SHA and this entry path/ordinal, and trace the next selected module to its caller and tests. Keep D9/PR #69 primary changes on their own isolated branch.
+
 ## Coverage tracking
 
 | Entry | Source SHA | Path | Outcome | Local tests |
 | --- | --- | --- | --- | --- |
 | 001 | `300287dcde818a9d10ae301265d00bc7c0877bbb` | `packages/schemas/src/evm-agreement-input.ts` | Source-inspection only; no verified new defect | Not run |
+| 002 | `300287dcde818a9d10ae301265d00bc7c0877bbb` | `packages/security/src/acceptance-gates.ts` | Source-inspection only; no verified new defect | Not run |
 
 This is not an authorization to accept funds, deploy, release, merge, suppress CI/security gates, or disclose a newly discovered vulnerability publicly.
