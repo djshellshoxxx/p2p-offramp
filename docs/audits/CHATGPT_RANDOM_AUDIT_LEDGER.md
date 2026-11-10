@@ -31,11 +31,21 @@ This is a **read-only, source-inspection audit ledger**, not a security certific
 - Audit limits: **read-only source inspection; no runtime unit, fuzz, browser or CLI test was run** in this audit phase. Do not infer independent security approval from preexisting CI. No evidence of authorization bypass or fraudulent acceptance was established.
 - Next selection: exclude both audited paths, vary the seed with the source SHA and this entry path/ordinal, and trace the next selected module to its caller and tests. Keep D9/PR #69 primary changes on their own isolated branch.
 
+## Audit 003 — 2026-11-10 (third rotation)
+
+- Source: main `300287dcde818a9d10ae301265d00bc7c0877bbb`. Prior picks `packages/schemas/src/evm-agreement-input.ts` and `packages/security/src/acceptance-gates.ts` excluded. Deterministic FNV-1a 32-bit seed `300287dcde818a9d10ae301265d00bc7c0877bbb:packages/security/src/acceptance-gates.ts:audit-003` yields `4205859931`; among **132** lexically sorted `packages/`, `apps/` and `scripts/` JS/TS source paths (excluding tests, fixtures and prior picks), index `31` selects **`packages/diagnostics/src/diagnostics.ts`**. The candidate definition includes `.d.ts` and `.mjs` but excludes `/test/`, `/tests/`, `.test.`, `/fixtures/` and `scripts/test-`.
+- Reviewed implementation blob `d5f8e1df1f0378f8f15553dc3044c514986f3506` (188 lines), public facade `packages/diagnostics/index.ts` blob `1ff526755f351e1f0b0dc51b57fe5e4ebd3c897c`, browser caller `apps/web/src/diagnostics.ts` blob `41830dbdd71fd6602c4b22bd806c06e43d3b891a` and regression suite `packages/diagnostics/test/diagnostics.test.mjs` blob `dfd7a3c0a5db11fe62f0c4a46024d77a0fa82f27`.
+- Threat boundary: untrusted localStorage/diagnostic event objects must not allow raw secret values, release-proof bypass, network exfiltration, stale or forged export preview, or unbounded retention. The public API only writes to an injected local storage adapter; `createLocalDiagnostics` explicitly binds a fixed key in browser localStorage. It has no vault, send or network authority; caller-provided `release` must be freshly verified by `revalidateRelease`.
+- Source inspection: allowlist and event-field schemas (source lines 5–22 and 58–70); strict own-data input snapshots/allowlist (60–68); per-instance epoch/clock high-water/release revalidation (76–110); capped parsing, expiry, release/schema binding and rewrite (111–141); snapshot/preview/final-byte binding (143–180); failed erase and release revocation invalidation (80–89 and 151–186). Existing negative tests cover unknown/secret fields, getter and proxy resistance, retained-data caps and expiry, invalid stored rows, forged snapshot/preview, release revocation, failed erase and error redaction.
+- **No new reproducible security/correctness defect established.** This was read-only source inspection; no runtime execution, fuzz, browser/DOM export, malicious-extension model or test runner used. No claim that retained localStorage is physically erased after removal. Risks from a compromised browser/extension or manipulated wall clock across page restarts are outside this source-only result and are **not findings** without reproducer and threat-boundary evidence.
+- This run left diagnostics source, tests, release trust and CI workflows unchanged. The audit ledger is the only write on this isolated branch. Next rotation must exclude all three paths and use the current main head plus this last selected path and audit ordinal as the seed.
+
 ## Coverage tracking
 
 | Entry | Source SHA | Path | Outcome | Local tests |
 | --- | --- | --- | --- | --- |
 | 001 | `300287dcde818a9d10ae301265d00bc7c0877bbb` | `packages/schemas/src/evm-agreement-input.ts` | Source-inspection only; no verified new defect | Not run |
 | 002 | `300287dcde818a9d10ae301265d00bc7c0877bbb` | `packages/security/src/acceptance-gates.ts` | Source-inspection only; no verified new defect | Not run |
+| 003 | `300287dcde818a9d10ae301265d00bc7c0877bbb` | `packages/diagnostics/src/diagnostics.ts` | Source-inspection only; no verified new defect | Not run |
 
 This is not an authorization to accept funds, deploy, release, merge, suppress CI/security gates, or disclose a newly discovered vulnerability publicly.
