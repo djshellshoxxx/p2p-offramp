@@ -267,7 +267,6 @@ test('D9: fresh-key recovery of a pending known-hash transaction preserves the h
  val(await s.journal.reserve(original,0));
  val(await s.journal.markSending(original.intentId));
  val(await s.journal.recordBroadcast(original.intentId,hash));
- const pending={...original,state:'pending',submission:{chain:'evm',hash,nonce:'11'}};
  const backup=new EncryptedBackupService(s.store,crypto);
  const bytes=await backup.export(s.session.profileId);
  const receipt=await backup.restore(bytes,pass,'separately unlocked pending recovery');
