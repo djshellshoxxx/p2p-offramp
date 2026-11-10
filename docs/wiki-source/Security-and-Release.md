@@ -40,6 +40,12 @@ The merged local CLI `npm run acceptance:report -- candidate.json records.json` 
 
 Independent [draft PR #76](https://github.com/djshellshoxxx/p2p-offramp/pull/76) at `2ba1a4e18f4673f006b195e822b5f984effb48e8` is **test-only, unmerged**, but has **10/10 successful hosted checks** (including CodeQL). Its new [acceptance CLI job](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/42896935406/job/130112391986) ran 12 acceptance-entry tests successfully, covering fixed JSON refusals for nonregular/symlink paths, duplicate keys, invalid UTF-8, oversize and excessive depth. These are input-boundary regressions, not release acceptance, privacy certification or a production fix.
 
+### Library review authority is separate from imported files
+
+The `evaluateGate` library accepts an optional trusted `verifyReview` callback supplied **by the embedding caller**, never by CLI input. Only the literal boolean `true` from that callback counts as an authenticated review decision; a truthy number, non-empty string, wrapper object or self-asserted reviewer field does not. Even a genuinely authenticated passing **scope-only** G24 assessment always returns `releaseEnabled: false` and `promotionAllowed: false`. This is not merchant/escrow/fiat settlement approval or a crypto signature.
+
+An independent, **unmerged test-only** regression in [draft PR #77](https://github.com/djshellshoxxx/p2p-offramp/pull/77), commit `08a9cf1e9abc0fb703b14964062a3da2234fdbb6`, exercises ambiguous synchronous/asynchronous reviewer callback values versus an explicit synthetic boolean approval. **Exact-head CI is pending**; existing source behavior is not newly verified by this pending PR. The CLI deliberately provides no such trust hook. Developer authority boundaries are defined in `packages/security/src/acceptance-gates.ts` and its unit tests, not by imported candidate/reviewer names.
+
 ## Developer verification and release gates
 
 From the repository root on Node 24+, run the appropriate independent checks from [package.json](https://github.com/djshellshoxxx/p2p-offramp/blob/main/package.json) and the operator guide: `npm run typecheck`, `npm test`, `npm run check:boundaries`, `npm run check:specs`, `npm run test:build-policy`, `npm run test:browser`, `npm run test:local-evm` and native Foundry/escrow checks. Record the exact head SHA, job URLs, platform/toolchain, failures and skipped checks. CI cannot substitute for independent security/cryptographic review or real two-party acceptance.
