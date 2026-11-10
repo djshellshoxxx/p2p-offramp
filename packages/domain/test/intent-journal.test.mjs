@@ -285,6 +285,10 @@ test('D9: fresh-key recovery of a pending known-hash transaction preserves the h
   err(await fresh.markSending(original.intentId),'CONFLICT');
   err(await fresh.reserve(intent({binding:{...binding,tradeId:'another-pending-trade'},submission:{chain:'evm',hash:null,nonce:'11'}}),0),'CONFLICT');
   const before=s.store.writes;
+  err(await fresh.recordBroadcast(original.intentId,'0x'+'ef'.repeat(32)),'CONFLICT');
+  assert.equal(s.store.writes,before,'conflicting reported hash must not replace restored pending evidence');
+  err(await fresh.reconcileNative(original.intentId),'UNSUPPORTED_PROVIDER');
+  assert.equal(s.store.writes,before,'recovery with no bundled native reader must not invent transaction finality');
   val(await fresh.recordBroadcast(original.intentId,hash));
   assert.equal(s.store.writes,before,'same-hash observation must not rewrite or free an existing pending record');
   assert.deepEqual(val(await fresh.unresolved(binding,account)),[unresolved[0]]);
