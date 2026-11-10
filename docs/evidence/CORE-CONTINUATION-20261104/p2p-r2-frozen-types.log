@@ -1,0 +1,4 @@
+
+> p2p-offramp@0.1.0 typecheck
+> tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit
+

@@ -1,0 +1,44 @@
+✔ forgeEnv pins the canonical config/profile, drops ambient build settings and private keys (8.565515ms)
+✔ rpcClient refuses plain HTTP except to loopback (9.944035ms)
+✔ public endpoints cannot copy individual private query credentials or their URL encodings (5.798344ms)
+✔ every nonempty repeated or short private query value is considered without treating empty values as credentials (2.588647ms)
+✖ a malformed public percent escape cannot disable inspection of an encoded private query value (4.068941ms)
+✔ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (1.666919ms)
+✔ RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies (52.187404ms)
+✔ RPC requests capture independent ids and prohibit redirects/credentials without exposing diagnostics (2.116056ms)
+✔ control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes (5.182635ms)
+✔ deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send (152.794744ms)
+✔ unknown deployment guard clears only after finalized matching native account/nonce and canonical inclusion (30.401187ms)
+✔ effective compiler recipe rejects global or profile configuration drift (1.064115ms)
+✔ committed compiler recipe disables inferred vendor remappings (1.342384ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1047.071094
+
+✖ failing tests:
+
+test at scripts/tests/sepolia-hygiene.test.mjs:57:1
+✖ a malformed public percent escape cannot disable inspection of an encoded private query value (4.068941ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-hygiene.test.mjs:59:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

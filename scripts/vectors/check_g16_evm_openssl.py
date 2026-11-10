@@ -16,4 +16,6 @@ for vector in data["vectors"]:
         # Prehashed SHA256 specifies only the 32-byte digest size: OpenSSL does NOT hash again.
         public.verify(der, bytes.fromhex(vector["termsHash"]), ec.ECDSA(utils.Prehashed(hashes.SHA256())))
         checked += 1
+if checked == 0:
+    raise ValueError("No G16 fixture signatures to verify.")
 print(f"OpenSSL secp256k1: {checked} independently verified G16 fixture signatures")

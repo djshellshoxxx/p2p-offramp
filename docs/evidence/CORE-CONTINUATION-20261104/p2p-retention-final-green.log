@@ -1,0 +1,33 @@
+✔ 30-day archive threshold is read-only and never turns persisted terminal labels into deletion proof (192.023274ms)
+✔ synthetic current dependency lease permits one actual atomic known-purpose deletion while retaining unknown records (164.381853ms)
+✔ cloned plans, forged consent, getters and duplicate/nonexistent/identity proof IDs cannot delete (173.153011ms)
+✔ complete conversation deletion preserves durable-history sequence invariant; partial selection is refused (184.438669ms)
+✔ more than 256 reviewed deletes never splits into implicit or partial batches (309.212124ms)
+✔ same-tab revision change and other-tab durable change reject reviewed plans without deletion (606.480174ms)
+✔ native proof invalidation immediately before CAS cannot delete; old plan cannot bypass fresh scope (199.235574ms)
+✔ cancellation before the write retains records; cancellation/lock after durable commit returns actual success (447.566027ms)
+✔ lock while native review is pending disposes late proof and preserves encrypted data (336.075443ms)
+✔ opaque/future namespaces are never candidates and hostile provider errors/accessors do not leak (181.327607ms)
+✔ real adapter constructor needs explicit maintained scope; only terminal escrow and journal-only closure are supported (1399.097163ms)
+✔ native adapter rejects expired/backward/nonfinite clock and invalidated verification after async read (863.737345ms)
+✔ native reconcile changing a profile revision cannot authorize deletion from the previous scope (167.986606ms)
+✔ native source scope invalidated synchronously during its current check cannot grant a lease (220.316699ms)
+✔ revocation by the final native terminal/revision callback at durable CAS prevents every delete write (459.646453ms)
+✔ proof current and cleanup callbacks cannot return a successful plan after closing its owner (523.469787ms)
+✔ post-commit proof cleanup cannot reverse durable deletion success even if cleanup closes owner and throws (171.826358ms)
+✔ offline planning never calls an installed native authority (178.601542ms)
+✔ old journal-only adapter without a constructor-owned payout closure stays protected before native reconciliation (216.948946ms)
+✔ payout closure must keep the exact scope and frozen intents identities and a current live lease (523.111826ms)
+✔ imported paid JSON cannot replace a live payout capability (403.707844ms)
+✔ payout revocation at actual CAS protects all records and throwing lease cleanup cannot reverse completed deletion (203.160364ms)
+✔ a valid late payout lease is disposed once when its source retires during awaited native review (177.957181ms)
+✔ a terminal callback cannot revoke payout closure while returning true and still authorize the final CAS (268.705662ms)
+✔ retention captures a bounded own-data ID array without consulting dynamic length getters (196.173196ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9346.856453

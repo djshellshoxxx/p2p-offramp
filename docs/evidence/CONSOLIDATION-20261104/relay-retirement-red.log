@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: verification cannot deliver an event after retiring its subscription or pool
+not ok 1 - verification cannot deliver an event after retiring its subscription or pool
+  ---
+  duration_ms: 66.931973
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:91:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    subscription retirement suppresses the verified result
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:104:14)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1826.144776

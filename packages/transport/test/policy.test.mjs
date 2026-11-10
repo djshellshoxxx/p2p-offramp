@@ -192,3 +192,34 @@ test('catch-up handles a full reverse-order chain of mutators within one bounded
  s.registry.change();await Promise.resolve();assert.equal(mutations,63);assert.equal(stableMode,s.broker.mode);assert.ok(callbacks<=4096,'64 eligible callbacks, at most64 catch-up passes');
  const completed=callbacks;for(let i=0;i<10;i++)await Promise.resolve();assert.equal(callbacks,completed,'no recursive notification microtasks');s.broker.dispose();
 });
+test('later same-channel inspection cannot postpone an earlier observer deadline or revoke a longer permit',async t=>{
+ const s=setup();let firstHints=0,secondHints=0;const pending=deferred();
+ t.mock.timers.enable({apis:['setTimeout']});try{
+  const leased=scope(s.broker.capture(permit(s.broker.authorize(request()))));const generation=s.broker.generation;const running=leased.run(()=>pending.promise);
+  const first=s.broker.subscribeInvalidation(()=>{firstHints++;s.broker.inspect('relay');});
+  const second=s.broker.subscribeInvalidation(()=>{secondHints++;s.broker.inspect('relay');});
+  s.registry.expiresAt=10;assert.equal(s.broker.inspect('relay').coverage,'direct');
+  s.setTime(5);t.mock.timers.tick(5);s.registry.expiresAt=100;assert.equal(s.broker.inspect('relay').coverage,'direct');
+  s.setTime(10);t.mock.timers.tick(5);await Promise.resolve();
+  assert.equal(firstHints,1,'first observer deadline is not postponed by the renewed inspection');assert.equal(secondHints,1);
+  assert.equal(s.broker.generation,generation);assert.equal(leased.current(),true);assert.equal(leased.signal.aborted,false);
+  s.setTime(100);t.mock.timers.tick(90);await Promise.resolve();assert.equal(firstHints,2,'renewal is scheduled after the original deadline hint');assert.equal(secondHints,2);
+  t.mock.timers.tick(100);await Promise.resolve();assert.equal(firstHints,2,'expired renewed evidence cannot rearm a loop');
+  pending.resolve(9);assert.deepEqual(await running,{ok:true,value:9});first();second();
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('later unavailable inspection retains an earlier cached display deadline until expiry',async t=>{
+ const s=setup();let hints=0;const off=s.broker.subscribeInvalidation(()=>hints++);
+ t.mock.timers.enable({apis:['setTimeout']});try{
+  s.registry.expiresAt=10;s.broker.inspect('relay');s.registry.coverage='unknown';assert.equal(s.broker.inspect('relay').coverage,'unknown');
+  s.setTime(10);t.mock.timers.tick(10);await Promise.resolve();assert.equal(hints,1);off();
+ }finally{s.broker.dispose();t.mock.timers.reset();}
+});
+test('explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure',()=>{
+ const s=setup();try{
+  const a=permit(s.broker.authorize(request())),b=permit(s.broker.authorize(request('relay')));let reentrant;
+  const live=scope(s.broker.capture(a,{onRevoked:()=>{reentrant=s.broker.invalidate();assert.equal(s.broker.authorize(request()),'POLICY_BLOCKED')}}));
+  const before=s.broker.generation;assert.equal(s.broker.invalidate(),undefined);assert.equal(s.broker.mode,'ordinary');assert.equal(s.broker.generation,before+1);assert.equal(s.broker.isCurrent(a),false);assert.equal(s.broker.isCurrent(b),false);assert.equal(live.current(),false);assert.equal(live.signal.aborted,true);assert.equal(reentrant,'POLICY_BLOCKED');
+  permit(s.broker.authorize(request()));s.broker.dispose();const closed=s.broker.generation;assert.equal(s.broker.invalidate(),'POLICY_BLOCKED');assert.equal(s.broker.generation,closed);
+ }finally{s.broker.dispose()}
+});

@@ -1,0 +1,29 @@
+✖ retention captures a bounded own-data ID array without consulting dynamic length getters (216.026828ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 982.959932
+
+✖ failing tests:
+
+test at packages/storage/test/retention-service.test.mjs:176:1
+✖ retention captures a bounded own-data ID array without consulting dynamic length getters (216.026828ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"error":{"code":"UNAVAILABLE","message":"Local retention operation unavailable."}}
+  
+  false !== true
+  
+      at good (file:///workspaces/p2p-offramp/packages/storage/test/retention-service.test.mjs:9:23)
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/retention-service.test.mjs:180:14)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
