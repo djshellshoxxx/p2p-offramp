@@ -19,6 +19,19 @@ On **unmerged** [integration PR #61](https://github.com/djshellshoxxx/p2p-offram
 
 Other draft work includes [D9 fail-closed marker handling (#69)](https://github.com/djshellshoxxx/p2p-offramp/pull/69), [fresh-key broadcast-unknown restore tests (#70)](https://github.com/djshellshoxxx/p2p-offramp/pull/70), and a further historical terminal-label characterization [#71](https://github.com/djshellshoxxx/p2p-offramp/pull/71). These **do not complete** historical-record provenance migration or allow an unknown transaction to be resent.
 
+## D9 encrypted-recovery state evidence (draft-only)
+
+This matrix links the currently **unmerged, test-only** recovery characterization slices to their exact source heads. It is **not** a live-wallet acceptance result and does not create provenance or transaction-sending authority.
+
+| Restored journal condition | Draft evidence | Supported claim / remaining limitation |
+| --- | --- | --- |
+| `broadcast-unknown` with no confirmed transaction hash | [PR #70](https://github.com/djshellshoxxx/p2p-offramp/pull/70) `78af7214a1aab97eb3eb7722793bb536e7d6ff39` | A restored marker and nonce remain unresolved; automatic re-marking is refused. Historical provenance and native reconciliation remain separate. |
+| Historical `finalized` label with noncanonical/reorged native observation | [PR #71](https://github.com/djshellshoxxx/p2p-offramp/pull/71) `06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f` | Synthetic noncanonical evidence does not release an occupied nonce; the test double is not independently trusted chain evidence. |
+| Historical `prepared` entry with an assigned EVM nonce | [PR #72](https://github.com/djshellshoxxx/p2p-offramp/pull/72) `92cc054ce9a2ee21936e20d103757e374f4af296` | A fresh-key restore retains the reservation and does not promote the prepared entry on unrelated synthetic finality. A recovered prepared label alone **does not prove it was never sent**. |
+| Previously `pending` entry with known broadcast hash | [PR #73](https://github.com/djshellshoxxx/p2p-offramp/pull/73) `ff83aa84bfe05246f94185eda0b3af5c09a6c3cc` | **Proposed / CI pending:** test asserts restored hash/nonce hold, idempotent same-hash observation and refusal to re-mark; not yet qualified here. |
+
+The preceding tests are fixture-based characterization, **not approval to resume or resend historical imported transactions**. Preserve `ReleaseEnabled=0` until D9 history/provenance migration, independent native/crypto review, D1/D8 and complete two-party acceptance are independently qualified and approved.
+
 ## Developer verification and release gates
 
 From the repository root on Node 24+, run the appropriate independent checks from [package.json](https://github.com/djshellshoxxx/p2p-offramp/blob/main/package.json) and the operator guide: `npm run typecheck`, `npm test`, `npm run check:boundaries`, `npm run check:specs`, `npm run test:build-policy`, `npm run test:browser`, `npm run test:local-evm` and native Foundry/escrow checks. Record the exact head SHA, job URLs, platform/toolchain, failures and skipped checks. CI cannot substitute for independent security/cryptographic review or real two-party acceptance.
