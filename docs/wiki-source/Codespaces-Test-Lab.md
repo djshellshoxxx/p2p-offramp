@@ -2,7 +2,7 @@
 
 [Home](Home.md) · **[User Guide](User-Guide.md)** · **[Developer Guide](Developer-Guide.md)** · [Security and Release](Security-and-Release.md)
 
-**Status (merged `main@300287dcde818a9d10ae301265d00bc7c0877bbb`): executable local development/test tooling exists, but a pinned, reproducible Codespaces lab is still future-only.** There is no `.devcontainer/devcontainer.json` in the inspected main tree. Opening a Codespace does not presently prove the planned toolchain, image digest, port isolation or test results. The separate [Codespaces and GitHub Pages design spec](../../00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.6_codespaces/spec-codespaces-test-lab-and-github-pages-release.md) is a design baseline, not completed acceptance evidence.
+**Status (merged `main@300287dcde818a9d10ae301265d00bc7c0877bbb`): executable local development/test tooling exists, but a pinned, reproducible Codespaces lab is still future-only.** There is no `.devcontainer/devcontainer.json` in the inspected main tree. Opening a Codespace does not presently prove the planned toolchain, image digest, port isolation or test results. The separate [Codespaces and GitHub Pages design spec](https://github.com/djshellshoxxx/p2p-offramp/blob/main/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.6_codespaces/spec-codespaces-test-lab-and-github-pages-release.md) is a design baseline, not completed acceptance evidence.
 
 ## Existing developer commands
 
