@@ -297,3 +297,35 @@ test('D9: fresh-key recovery of a pending known-hash transaction preserves the h
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+test('D9: restored known-hash EVM hold treats account casing identically across trades',async()=>{
+ const lower='0x'+'ab'.repeat(20),upper='0x'+'AB'.repeat(20),nonce='13',hash='0x'+'bc'.repeat(32);
+ const s=await setup(),original=intent({account:lower,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent casefold recovery passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent casefold recovery passphrase'));
+ const fresh=journal(freshVault,session);
+ try{
+  const held=val(await fresh.unresolved(binding,upper));
+  assert.equal(held.length,1,'different EVM address case must find the same pending account');
+  assert.equal(held[0].intentId,original.intentId);
+  assert.equal(held[0].submission.hash,hash);
+  assert.equal(held[0].submission.nonce,nonce);
+  const before=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,tradeId:'different-trade-same-evm-account'},
+   account:upper,submission:{chain:'evm',hash:null,nonce}
+  }),0),'CONFLICT');
+  assert.equal(s.store.writes,before,'case-changed account cannot replace a recovered nonce hold');
+  assert.deepEqual(val(await fresh.unresolved(binding,lower)),held);
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'fresh-key recovery gives no wallet execution authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
