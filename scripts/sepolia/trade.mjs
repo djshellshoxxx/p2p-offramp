@@ -44,6 +44,8 @@ const MIN_DURATION = 1800; // BasicEscrow.MIN_DURATION and trade-terms MIN_ESCRO
 const RELEASE_MARGIN_SECONDS = 120;
 /** Terminal statuses and the escrow state each one stands for; every run re-checks them against the chain. */
 const TERMINAL = Object.freeze({ released: 'released', refunded: 'refunded', 'refunded-after-release-deadline': 'refunded', 'expired-unfunded': 'absent' });
+const ATTEMPT_KINDS = Object.freeze(['fund', 'release', 'refund']);
+const possiblySent = code => typeof code === 'string' && /^(?:BROADCAST_|RECEIPT_TIMEOUT$|FORGE_FAILED$|TX_REVERTED$|RPC_)/.test(code);
 export class TradeError extends Error { constructor(code) { super(code); this.name = 'TradeError'; this.code = code; } }
 const fail = code => { throw new TradeError(code); };
 const hex = bytes => Buffer.from(bytes).toString('hex');
@@ -204,15 +206,49 @@ export async function runTrades({
     trade.observations = [...(trade.observations ?? []), { state: observed, height: result.value.anchor?.height ?? null }].slice(-12);
     return { state: observed, at };
   }
+  /** At most one attempt per fixed action kind; imported history only restricts actions. */
+  function attemptHistory(trade) {
+    const recorded = Object.hasOwn(trade, 'attempts'), previous = recorded ? trade.attempts : {};
+    if (!previous || typeof previous !== 'object' || Array.isArray(previous) || Object.keys(previous).some(kind => !ATTEMPT_KINDS.includes(kind))) fail('BROADCAST_RECONCILIATION_REQUIRED');
+    const attempts = { ...previous };
+    const remember = (kind, record) => {
+      if (!ATTEMPT_KINDS.includes(kind) || !record || typeof record !== 'object' || Array.isArray(record)) fail('BROADCAST_RECONCILIATION_REQUIRED');
+      if (!Object.hasOwn(attempts, kind)) attempts[kind] = { ...record };
+    };
+    if (Object.hasOwn(trade, 'fund')) remember('fund', trade.fund);
+    if (Object.hasOwn(trade, 'settle')) remember(trade.settle?.kind, trade.settle);
+    if (Object.hasOwn(trade, 'failedSends')) {
+      if (!Array.isArray(trade.failedSends)) fail('BROADCAST_RECONCILIATION_REQUIRED');
+      for (const failed of trade.failedSends) remember(failed?.kind, failed);
+    }
+    // Old hashless settlement errors did not name their kind. They cannot be
+    // converted into permission for a new exit merely because the trade is funded.
+    const namedLegacy = Object.hasOwn(trade, 'settle') || trade.failedSends?.length > 0 || trade.fund?.requestedAt && !trade.fund.tx;
+    if (!recorded && possiblySent(trade.lastError?.code) && !namedLegacy) fail('BROADCAST_RECONCILIATION_REQUIRED');
+    trade.attempts = attempts;
+    return attempts;
+  }
   /** Sends one call as the seller and records what was actually sent, including a broadcast that failed. */
   async function sendRecorded(trade, kind, call) {
+    const attempts = attemptHistory(trade);
+    if (Object.hasOwn(attempts, kind)) fail('BROADCAST_RECONCILIATION_REQUIRED');
+    const attempt = { requestedAt: new Date().toISOString(), tx: null };
+    attempts[kind] = attempt;
+    if (kind === 'fund') trade.fund = { ...attempt }; else trade.settle = { kind, ...attempt };
+    // Persist before gas estimation/Forge. Neither a failed read nor current
+    // absence can establish that this attempt is safe to submit again.
+    await saveState(path, state);
     try {
       const sent = await sendAsSeller({ env, rpc, call, seller });
       const sentRecord = { tx: sent.hash, block: sent.block.toString(), blockHash: sent.blockHash, fee: sent.fee.toString() };
+      Object.assign(attempt, sentRecord);
       if (kind === 'fund') trade.fund = { ...trade.fund, ...sentRecord }; else trade.settle = { kind, ...sentRecord };
       return sent;
     } catch (error) {
-      if (error?.hash) trade.failedSends = [...(trade.failedSends ?? []), { kind, tx: error.hash, outcome: error.code, ...(error.block === undefined ? {} : { block: error.block.toString() }) }];
+      if (error?.hash) {
+        Object.assign(attempt, { tx: error.hash, outcome: error.code, ...(error.block === undefined ? {} : { block: error.block.toString() }) });
+        trade.failedSends = [...(trade.failedSends ?? []), { kind, tx: error.hash, outcome: error.code, ...(error.block === undefined ? {} : { block: error.block.toString() }) }];
+      }
       throw error;
     } finally { await saveState(path, state); }
   }
@@ -251,7 +287,6 @@ export async function runTrades({
     const call = buildFundNative(domain, trade.terms);
     if (call.tradeId !== trade.tradeId) fail('FUND_CALL_MISMATCH');
     await expectRevert(trade, { ...call, value: (BigInt(call.value) - 1n).toString() }, 'IncorrectDeposit', 'amount control (one wei short)');
-    trade.fund = { requestedAt: new Date().toISOString(), tx: null }; await saveState(path, state);
     await sendRecorded(trade, 'fund', call);
   }
 
@@ -338,7 +373,7 @@ export async function runTrades({
   }
 
   async function processTrade(trade) {
-    delete trade.lastError;
+    if (!possiblySent(trade.lastError?.code)) delete trade.lastError;
     let observed, at;
     if (Object.hasOwn(TERMINAL, trade.status)) {
       // Terminal outcomes are re-checked against the chain on every run (a reorg or a wrong earlier read is never final).
@@ -351,6 +386,7 @@ export async function runTrades({
       ({ state: observed, at } = await observe(trade));
     }
     if (observed === 'absent') {
+      if (Object.keys(attemptHistory(trade)).length > 0) fail('BROADCAST_RECONCILIATION_REQUIRED');
       if (beforeFund) { await beforeFund(trade); ({ state: observed, at } = await observe(trade)); }
     }
     if (observed === 'absent') {
