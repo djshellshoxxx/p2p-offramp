@@ -31,11 +31,21 @@ Inspected main README, `docs/OPERATOR.md`, `docs/DEVELOPMENT_STATUS.md`, `packag
 | EVM proof / send reconciliation | `contracts/evm/`, local proof scripts | `npm run test:evm`, `npm run test:evm:reconcile` | D9 restored-record and post-send qualification still open |
 | Actual production release acceptance | Roadmap, release/security docs | Independent reviews + acceptance evidence | Blocked; CI alone cannot approve |
 
+
+## Second maintenance pass — 2026-11-10
+
+- Source unchanged: `main@300287dcde818a9d10ae301265d00bc7c0877bbb`; reviewed main README blob `f143cc0da62712f27c533ee08285706da6acf354`, operator guide `bd3901ccb570a9f71ac002a6d9e77da1b9fd3c12`, status `c9c00cc5139cf89163c15e30464fe6761f015610`, and the existing draft User/Developer Guide.
+- Replaced planning-era `docs/wiki-source/Privacy-and-Recovery.md` with source-supported coverage of the implemented bounded encrypted local vault, eight-item encrypted saved reviews, explicit export, *separate fresh-key restore*, synthetic-only offline review, and the limits of client-side privacy; **wiki-content commit `4243d174a4b3c854f7a60613e145caa07852429f`**.
+- Documented the distinction between profile backup and the separately authenticated **unsigned historical EVM recovery package**, which has no signing/send/trading authority. No real payment, anonymity, fiat finality, or secure-erasure claims were added.
+- Static navigation check for the changed privacy page: **5 local Markdown links** (Home, User Guide, Developer Guide, Wallet/QR Safety, Security/Release), **0 missing target files**, verified against the branch tree. This is not anchor/browser rendering, external URL reachability, or live GitHub Wiki publication.
+- All **10 hosted PR #68 checks** at its previous head `d0eea7981e2211228ef6d12e98a425ba254fae29` completed successfully (CodeQL, specs, browser, schemas/crypto, local EVM, local trade, forge, inventory, Python/JS CodeQL). **New PR checks after this docs edit remain separately required**. No local Node/browser/contract tests or live wiki publishing were executed in this docs pass.
+- Next docs pass: verify `Wallet-and-QR-Safety.md` against actual current UI and design gates, expand requirement-to-test links, and investigate distant links/anchor rendering only with source-backed checks. Live wiki publication still requires an authorized maintainer.
+
 ## Open gaps / publication blocker / next actions
 
 - **The live GitHub Wiki was not modified or verified.** The connector has no wiki-write action; the six-page source update must be reviewed, then manually published to the wiki by an authorized maintainer. Home and sidebar are ready as version-controlled source; this is **not a claim of live publication**.
-- Remaining possible drift: `docs/wiki-source/Privacy-and-Recovery.md` still uses some planning-era language; audit other specialized pages, README status, changelog, TODO/spec references, security policy/CONTRIBUTING presence, release notes, broken remote links and broader documentation coverage in later runs without overlapping active owners.
+- Remaining possible drift: `docs/wiki-source/Wallet-and-QR-Safety.md` and other specialized pages may still use planning-era language; audit those pages, README status, changelog, TODO/spec references, security policy/CONTRIBUTING presence, release notes, broken remote links and broader documentation coverage in later runs without overlapping active owners.
 - Use exact merged source/test evidence to decide what can be upgraded from draft/future to implemented. Do not edit approved protocol decisions, financial policy or security guarantees as a documentation shortcut.
-- Next docs run: reconcile Privacy-and-Recovery and Wallet-and-QR-Safety with current merged source and tests; repair any verified broken links. Do not enable or publish GitHub settings/wiki without authorization.
+- Next docs run: reconcile Wallet-and-QR-Safety with current merged source and tests; repair any verified broken links. Do not enable or publish GitHub settings/wiki without authorization.
 
 No code was changed; no merge, deployment, release, public vulnerability disclosure or settings change occurred.
