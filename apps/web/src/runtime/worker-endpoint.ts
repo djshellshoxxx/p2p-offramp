@@ -24,6 +24,7 @@ interface Selection { readonly handle: RuntimeHandle; readonly lease: VaultSessi
 const locked = (): RuntimeStatus => Object.freeze({ state: 'locked', handle: null });
 /** Compatibility read only: the earlier local preview used this wrapper, without a source label.
  * Keep the encrypted record intact and return its original bytes through the canonical review API.
+ * A malformed wrapper is retained unchanged and counted as skipped; it never blocks other saved reviews.
  */
 function legacySavedReview(record: PrivateRecordV1): SavedReviewPayload | null {
   if (record.schemaVersion !== 1) return null;
@@ -31,9 +32,9 @@ function legacySavedReview(record: PrivateRecordV1): SavedReviewPayload | null {
   try { raw = parseStrictJsonBytes(decodeBase64url(record.payload, 0, 100000), 100000); } catch { return null; }
   if (typeof raw !== 'object' || raw === null || !('format' in raw) || raw.format !== 'p2p-offramp/saved-review/v1') return null;
   try {
-    if (Object.keys(raw).sort().join() !== 'bytes,format' || !('bytes' in raw)) throw new Error();
+    if (Object.keys(raw).sort().join() !== 'bytes,format' || !('bytes' in raw)) return null;
     return Object.freeze({ source: 'file', terms: decodeBase64url(raw.bytes, 1, MAX_SAVED_REVIEW_BYTES) });
-  } catch { throw new RuntimeBoundaryError('INVALID_INPUT'); }
+  } catch { return null; }
 }
 interface SavedEntry { readonly record: PrivateRecordV1; readonly saved: SavedReviewPayload; }
 function savedEntries(records: readonly PrivateRecordV1[]): { readonly entries: SavedEntry[]; readonly skipped: number } {
