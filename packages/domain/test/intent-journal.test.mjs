@@ -236,3 +236,27 @@ test('D9: restored historical terminal labels cannot free a nonce on noncanonica
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+test('D9: fresh-key restore of a historical prepared entry preserves the nonce hold without inventing native finality',async()=>{
+ const s=await setup(),historical=intent({submission:{chain:'evm',hash:null,nonce:'9'}});
+ val(await s.journal.reserve(historical,0));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'separate historical prepared passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'separate historical prepared passphrase'));
+ let reads=0;
+ const fresh=journal(freshVault,freshSession,{readNative:async stored=>{
+  reads++;return{ok:true,value:nativeObservation(stored,{state:'finalized',nonce:'9'})};
+ }});
+ try{
+  assert.notEqual(receipt.newProfileId,receipt.sourceProfileId);
+  assert.equal(receipt.revision,0);
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[historical]);
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'new-prepared-trade'},submission:{chain:'evm',hash:null,nonce:'9'}}),0),'CONFLICT');
+  assert.equal(reads,0,'historical prepared state must not be promoted using unrelated native finality');
+  assert.equal('send' in fresh,false,'restore does not furnish wallet or signing authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
