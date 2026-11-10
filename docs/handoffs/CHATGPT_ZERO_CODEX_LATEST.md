@@ -39,3 +39,32 @@ D9 persisted post-send marker migration and recovered-record provenance remain i
 2. With non-overlapping ownership, reproduce and fix a specific Sonar/security defect test-first in its own draft branch. Do **not** suppress findings, waive rating requirements, or claim issue resolution from this ledger.
 3. Once #61 is properly qualified, tackle D9 persisted send-marker and restored-record provenance with precise failing regression tests and safety-preserving reconciliation; then encrypted recovery, relay/escrow, synthetic two-party acceptance and CLI work.
 4. Update this handoff with actual new head SHA and validation artifacts after each change. No subsequent work is pre-approved for merge or release.
+
+## Continuation pass 002 — 2026-11-10 (review-only, no integration merge)
+
+### Previous-run completion and ownership recheck
+
+- Inspected proposed instructions in PR #63, this previous handoff, main/ref state, PRs #61, #65–#68, recent commits, main/integration trees and current check runs. The previous PR #66/#67/#68 jobs that had been pending are now **all completed successfully, 10/10 on each exact head**: #66 `da01dccdaef279870bb4068974c8ac38dd3bd74d`, #67 `c0dc917988e994131737b389b840605d042792c7`, #68 `d0eea7981e2211228ef6d12e98a425ba254fae29`. This qualifies only their recorded changes; no external release approval follows.
+- Main is still `300287dcde818a9d10ae301265d00bc7c0877bbb`. PR #61 remains a draft at `c87c21b915c9e175113292bb1307754ed2424166` with its prior 10/10 exact-head checks. Claude's PR #65 remains a draft at `bd26833555e13408825942e9696157ed68e9980e` and has 10/10 completed successful checks; none of its changed paths are in this run's D9 work.
+- The separate PR #56 SonarCloud Quality Gate still reports a failed **Security Rating C (A required)** on `07b1b9b043e2614d434fa6263db5ee423f20cfa6`. The Sonar issue inventory is not available via the GitHub connector and the public Sonar issue page could not be retrieved here. No claim is made about individual issue locations or resolution. PR #61 still has no visible Sonar check at its exact head.
+
+### Test-first, non-overlapping D9 safety slice — draft PR #69
+
+- Created isolated `chatgpt/zero-codex/d9-marker-failure-20261110` **from PR #61's exact head**; opened [draft PR #69](https://github.com/djshellshoxxx/p2p-offramp/pull/69) targeting `integration/p2p-consolidated-20261109` (a separate staged review, not main). No source/branch of PR #61, #65, or any other agent was modified. Only `packages/wallet/test/evm-execution.test.mjs` and `packages/wallet/src/evm-execution.ts` changed.
+- Regression-first commit `7008ef819cffdc97b5b6a9a039458cd06ff09849`: test covers journal `markSending` persisting a marker before surfacing typed `LOCKED`, `CANCELLED`, `CONFLICT`, or `UNAVAILABLE` errors. The caller must receive only `BROADCAST_UNKNOWN`, no wallet send occurs, and subsequent submission is refused.
+- **Hosted RED evidence** on the exact regression-only commit: [Vault foundation / schemas-and-crypto check](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/42826063199/job/129863556561) failed on the new test `D9: a persisted send marker followed by a typed journal error stays broadcast-unknown`, at `packages/wallet/test/evm-execution.test.mjs:94`. The other six checks completed successfully. This is an actual GitHub-hosted red regression, not a locally run test.
+- Minimal fix commit `44ca5fcf5e5d94893b5d7a0e3e15735506a76f52`: normalize *any* failed durable send-marker attempt to `BROADCAST_UNKNOWN`, never return a retry-safe pre-send error when persistence may already have succeeded. This is a conservative fail-closed caller result; it does **not** implement full durable recovery migration or authorize retries/real sends. [Green candidate checks](https://github.com/djshellshoxxx/p2p-offramp/commit/44ca5fcf5e5d94893b5d7a0e3e15735506a76f52/checks) were still running at the initial handoff inspection, and must be rechecked before qualification.
+- No independent local test commands, browser, Foundry or production transaction sends were run. GitHub-hosted checks are explicitly distinguished from local evidence.
+
+### Separate audit/docs phases (not concurrent workers)
+
+- The separate read-only audit rotated from the EVM parser to `packages/security/src/acceptance-gates.ts` on unchanged main. Audit 002 recorded at commit `a9dd83c449c4b34cff1148e638c66965a2c4e4b8` on [draft PR #67](https://github.com/djshellshoxxx/p2p-offramp/pull/67); no reproducible new defect established, no local tests. Its **10/10 exact-head CI checks passed**.
+- Documentation corrected planning-era privacy/recovery claims, with verified local vault/fresh-key recovery and explicit limits, at `4243d174a4b3c854f7a60613e145caa07852429f` on [draft PR #68](https://github.com/djshellshoxxx/p2p-offramp/pull/68). Five local wiki-page links resolved, zero absent destinations. The maintenance ledger commit is `b4667b01ab537b50aaacdb7c6410c3f67715f22f`. Its updated exact-head CI was queued at the initial inspection. The **live GitHub wiki remains unpublished**.
+- No independent second or third concurrent ChatGPT worker was available: audit and docs ran as **separate sequential phases**. No wiki publication, merge, deployment, release, security-gate waiver, financial-policy change, real-funds use or external approval occurred.
+
+### Next action, in priority order
+
+1. Qualify **PR #69** at final exact head and record green regression result or failure, before advancing another D9 slice. Qualify PR #68's new docs head and recheck PR #67.
+2. Investigate actual SonarCloud #56 issue inventory with authorized access, then fix a precisely reproduced finding in an isolated test-first PR; do **not** waive Sonar quality gates. D1, D8 Tier C and independent security review remain release holds.
+3. If ownership permits, next independent D9 slice is recovered-record provenance and persisted send-marker state after restart, with tests ensuring unknown broadcasts are not retried as unsent. Do not implement migration against another owner's active tree or presume PR #69 completes D9.
+4. Continue wiki guide alignment on the docs branch, audit an unaudited code path next run, and keep the GitHub collaboration lane opportunistic only after substantive lanes are blocked.
