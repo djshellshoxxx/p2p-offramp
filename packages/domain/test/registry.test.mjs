@@ -150,3 +150,52 @@ test('G11 offset view hashes and parses only its bounded bytes and keeps an owne
   assert.equal((await service.load(view, sha(body))).ok, true);
   assert.deepEqual(snapshot, body); assert.equal(backing[0], 0xff); assert.equal(backing.at(-1), 0xff);
 });
+
+
+test('G11 concurrent distinct authenticated registries pin the first completed load and refuse a later different digest', async () => {
+  const inputs = [encode(registry([evmNetwork()])), encode(registry([solNetwork()]))];
+  for (const completedFirst of [0, 1]) {
+    const pending = [];
+    const service = new RegistryService(bytes => new Promise(resolve => {
+      pending.push({ bytes: Uint8Array.from(bytes), resolve });
+    }));
+    const loads = inputs.map(bytes => service.load(bytes, sha(bytes)));
+    assert.equal(pending.length, 2, 'both digest calls must be in flight before either completes');
+
+    const finish = index => {
+      const digest = createHash('sha256').update(pending[index].bytes).digest();
+      pending[index].resolve(digest.buffer.slice(digest.byteOffset, digest.byteOffset + digest.byteLength));
+    };
+    finish(completedFirst);
+    const winner = await loads[completedFirst];
+    assert.equal(winner.ok, true, 'first authenticated completed registry must load');
+    assert.ok(Object.isFrozen(winner.value), 'loaded registry remains immutable');
+
+    finish(1 - completedFirst);
+    code(await loads[1 - completedFirst], 'CONFLICT');
+    assert.equal(service.network(completedFirst === 0 ? 'local-evm' : 'local-sol')?.id,
+      completedFirst === 0 ? 'local-evm' : 'local-sol');
+    assert.equal(service.network(completedFirst === 0 ? 'local-sol' : 'local-evm'), null,
+      'later completed registry cannot replace the pinned authenticated snapshot');
+  }
+});
+
+test('G11 concurrent identical authenticated registry loads return the same frozen snapshot', async () => {
+  const bytes = encode(registry([evmNetwork()]));
+  const pending = [];
+  const service = new RegistryService(copy => new Promise(resolve => {
+    pending.push({ bytes: Uint8Array.from(copy), resolve });
+  }));
+  const one = service.load(bytes, sha(bytes));
+  const two = service.load(bytes, sha(bytes));
+  assert.equal(pending.length, 2);
+  for (const entry of pending.reverse()) {
+    const digest = createHash('sha256').update(entry.bytes).digest();
+    entry.resolve(digest.buffer.slice(digest.byteOffset, digest.byteOffset + digest.byteLength));
+  }
+  const [a, b] = await Promise.all([one, two]);
+  assert.equal(a.ok, true);
+  assert.equal(b.ok, true);
+  assert.strictEqual(a.value, b.value, 'same digest resolves to one immutable registry');
+  assert.strictEqual(service.network('local-evm'), a.value.networks[0]);
+});
