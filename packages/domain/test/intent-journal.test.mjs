@@ -260,3 +260,36 @@ test('D9: fresh-key restore of a historical prepared entry preserves the nonce h
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+test('D9: fresh-key recovery of a pending known-hash transaction preserves the hold without granting resend authority',async()=>{
+ const s=await setup(),hash='0x'+'cd'.repeat(32);
+ const original=intent({submission:{chain:'evm',hash:null,nonce:'11'}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'separately unlocked pending recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'separately unlocked pending recovery'));
+ const fresh=journal(freshVault,freshSession);
+ try {
+  assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+  assert.equal(receipt.revision,0);
+  const unresolved=val(await fresh.unresolved(binding,account));
+  assert.equal(unresolved.length,1);
+  assert.equal(unresolved[0].intentId,original.intentId);
+  assert.equal(unresolved[0].state,'pending');
+  assert.equal(unresolved[0].submission.hash,hash);
+  assert.equal(unresolved[0].submission.nonce,'11');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'another-pending-trade'},submission:{chain:'evm',hash:null,nonce:'11'}}),0),'CONFLICT');
+  const before=s.store.writes;
+  val(await fresh.recordBroadcast(original.intentId,hash));
+  assert.equal(s.store.writes,before,'same-hash observation must not rewrite or free an existing pending record');
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[unresolved[0]]);
+  assert.equal('send' in fresh,false);
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
