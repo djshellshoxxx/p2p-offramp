@@ -86,3 +86,9 @@ No code was changed; no merge, deployment, release, public vulnerability disclos
 - Static filename-level link check of modified page: **8 local Markdown links, zero missing wiki-page files**; 15 external/remote links not fetched. Home and `_Sidebar.md` still prominently link separate **User Guide** and **Developer Guide** sections. No rendered-link, anchor, browser or live-wiki test. No local Node, browser, Foundry, security or cryptographic test executed in this phase.
 - **Live GitHub Wiki not published or verified**: connector cannot write it; maintainer review and publication are required. New documentation head CI must be checked by SHA. Further gaps: stale draft citations elsewhere, requirement-to-test maps, external/anchor links, approved private security reporting process and non-conflicting release notes.
 - No independent third worker spawned; this was a separate sequential documentation phase. No other owner's branch, release control, financial/security protocol, CI gate or GitHub settings changed.
+
+### CI follow-up for documentation pass 006
+
+- PR #73's named pending-known-hash recovery test is confirmed successful at `94778c3282a99110922aa260b5f4ea98dd34caf9`: **7/7 hosted jobs passed**, including Node primary suite **1,251 pass, 0 fail, 1 skipped**. Source: [schemas-and-crypto job](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/42866197284/job/130005054763).
+- Wiki matrix CI status was updated at `2434c6a1101715972b7a3d962498af8a5657c7ec` on the isolated docs draft PR #68. The preceding docs-ledger head `ba40f2e12886c8862478769abeb1f4bdf2b10eec` independently passed all three workflow families (seven jobs). The current documentation head and this new ledger commit still need exact-head CI confirmation; this update does **not** constitute a release.
+- User Guide/Developer Guide Home and Sidebar separation remains unchanged. **Live GitHub Wiki still needs authorized publication.**
