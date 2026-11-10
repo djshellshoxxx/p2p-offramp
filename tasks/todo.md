@@ -94,3 +94,37 @@ T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfour
 T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
 
 T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.
+
+## M2A continuation — 2026-11-10
+
+Baseline main `300287d` (live). Prompt: docs/execution/MILESTONE-M2A-ORCHESTRATION-PROMPT-2026-11-10.md. Branch `claude/friendly-dijkstra-nsi310`. T1–T32 reused, not redone. Open unmerged draft stack PR54/56/58–62 (base 300287d, ~13k lines: backup verification, retention, Sepolia send safety, G23 disclosures, agent-workflow hardening) is NOT on main; this tranche avoids its files and records dependencies on it rather than duplicating.
+
+Local toolchain: Node 24.22.2 (sha-verified), Foundry v1.5.1, solc 0.8.30 static (sha matches pinned recipe f3e987dc…). Baseline all green: forge 82, local trade 8, exchange 12, preflight, reconcile, recovery, sepolia kit, sepolia trade 13, unit suite 0 fail.
+
+### M2A gap table
+
+| Item | Evidence / gap | Class |
+| --- | --- | --- |
+| Two fresh clients release + refund, local | test-exchange-evm-local (separate Nostr keys, encrypted vaults, real relay/crypto) + test-evm-local-trade | done (headless); browser-driven = dependency G22 |
+| Same on Sepolia-shaped kit | test-sepolia-kit-local, test-sepolia-trade-local (chain 11155111 anvil) | done local; live Sepolia = external |
+| Release/refund race at deadline | Foundry race tests; same-block native mining missing | actionable → T35 |
+| Direct contract recovery w/o frontend/relay | scripts/recovery/*, test:recovery:evm (T17) | done-dup |
+| G25 release bundle | ReleaseManifest verifier fields exist; no aggregate producer; manifest `deployments` never[]; CID/pinning none | producer actionable (T38, no new wire format); deployments schema undefined; CID external |
+| G26 incident recovery | diagnostics ring, recovery panel, docs/recovery; no incident runbook; support owner/jurisdiction undefined | runbook actionable (T39); ownership external |
+| G22 browser journey | vault/backup UI; terms review; wallet pkg unwired in apps; no create/accept/fund/release UI; journey-view partial | wallet-discovery read-only slice actionable (T40); authenticated backup-complete fact = dependency PR61 stack; trading UI = later (release gates) |
+| G24 matrix | spec TestCase record; no instantiated rows | actionable (T37) |
+| Relay/chat (L4) | reconnect/durable history exist; outbound cursor/republish profile undefined | closed: undefined, no invention |
+| Locale/a11y (L5) | remaining = reviewed translations, physical AT/400% zoom | closed: external |
+| Solana (L6) | see docs/execution/M2B-GAP-RECORD-2026-11-10.md | undefined (M2B) |
+| CI agent workflow pin/token | audit7 MED; already fixed on unmerged PR56 | dependency PR56, not duplicated |
+
+| Task | Status | Owner / acceptance |
+| --- | --- | --- |
+| T33 | REVIEW | root; audit4 MED: malformed legacy saved-review wrapper wedged list/save/delete. RED reproduced INVALID_INPUT; GREEN retains+skips; worker/controller 40/40. Needs different reviewer |
+| T34 | REVIEW | root; audit6 LOW: unquoted/whitespace meta refresh passed artifact scan. RED 1 fail; GREEN build-policy 22/22. Needs reviewer |
+| T35 | REVIEW | root; same-block release-vs-refund race, automine off, both fee orders, deadline-1/deadline; local trade 9/9. Needs Opus custody reviewer |
+| T36 | OPEN | Phase 2 audit triage (8 auditors, seed 20261110); custody audits 1/2 required before M2A claim |
+| T37 | OPEN | G24 EVM matrix instantiation: rows per spec TestCase record with evidence pointers + checker test; no row marked passed without evidence |
+| T38 | OPEN | G25 local bundle inventory producer reusing existing ReleaseManifest/recipe/lock/ABI digests; deployments/CID recorded unset, no new signed format |
+| T39 | OPEN | G26 incident recovery runbook over existing tools; ownership/jurisdiction recorded external |
+| T40 | OPEN | G22 read-only wallet discovery lifecycle slice (EIP-6963 via packages/wallet/src/discovery.ts); no sign/send, no new reducer; contract before edits |
