@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EncryptedVaultService } from '../../storage/src/vault-service.ts';
 import { VaultStorageError } from '../../storage/src/idb-vault-store.ts';
+import { EncryptedBackupService } from '../../storage/src/backup-service.ts';
 const api=await import('../src/intent-journal.ts').catch(error=>{if(error.code==='ERR_MODULE_NOT_FOUND')return{};throw error;});
 const schema=await import('../../schemas/src/intent.ts').catch(error=>{if(error.code==='ERR_MODULE_NOT_FOUND')return{};throw error;});
 const clone=value=>structuredClone(value),pass='local journal fixture passphrase';
@@ -39,6 +40,27 @@ test('markSending is durable prepared-only CAS, and repeated or restarted calls 
  const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));assert.equal(s.store.rows.get(s.session.profileId).revision,2);
  assert.equal(val(await s.journal.unresolved(binding,account))[0].state,'broadcast-unknown');err(await s.journal.markSending(prepared.intentId),'CONFLICT');
  s.journal.dispose();s.journal=journal(s.vault,s.session);err(await s.journal.markSending(prepared.intentId),'CONFLICT');err(await s.journal.reserve(intent(),2),'CONFLICT');assert.equal(s.store.writes,3);s.journal.dispose();s.vault.dispose();
+});
+test('D9: fresh-key encrypted restore retains an unknown send marker without retry authority',async()=>{
+ const s=await setup(),prepared=intent({submission:{chain:'evm',hash:null,nonce:'7'}});
+ val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent restored passphrase');
+ assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+ assert.equal(receipt.revision,0,'restored records start with fresh revision authority');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent restored passphrase'));
+ const fresh=journal(freshVault,session);
+ try {
+  const records=val(await fresh.unresolved(binding,account));
+  assert.equal(records.length,1);assert.equal(records[0].intentId,prepared.intentId);
+  assert.equal(records[0].state,'broadcast-unknown');
+  assert.equal(records[0].submission.hash,null);assert.equal(records[0].submission.nonce,'7');
+  err(await fresh.markSending(prepared.intentId),'CONFLICT');
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'restored-other'},submission:{chain:'evm',hash:null,nonce:'7'}}),0),'CONFLICT');
+  assert.equal('send' in fresh,false,'restored journal never grants wallet execution');
+ } finally {fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);}
 });
 test('independent sessions racing reservation commit one intent and require loser reload',async()=>{
  const s=await setup(),otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
