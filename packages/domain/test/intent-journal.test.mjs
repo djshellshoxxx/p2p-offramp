@@ -210,3 +210,29 @@ test('cross-trade nonce reuse requires fresh native finality, never a restored t
   if(trusted)val(result);else err(result,'CONFLICT');s.journal.dispose();s.vault.dispose();
  }
 });
+
+test('D9: restored historical terminal labels cannot free a nonce on noncanonical native evidence',async()=>{
+ const s=await setup();
+ const historical=intent({state:'finalized',submission:{chain:'evm',hash:'0x'+'11'.repeat(32),nonce:'7'}});
+ val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ef'.repeat(16),kind:'journal',schemaVersion:1,payload:schema.encodeIntentPayload(historical)}}]));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'historical restore separate passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'historical restore separate passphrase'));
+ let reads=0;
+ const fresh=journal(freshVault,freshSession,{readNative:async stored=>{
+  reads++;
+  return{ok:true,value:nativeObservation(stored,{state:'reorged',nonce:'7',canonical:false,finalized:false})};
+ }});
+ try{
+  assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[historical]);
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'historical-retry'},submission:{chain:'evm',hash:null,nonce:'7'}}),0),'CONFLICT');
+  err(await fresh.markSending(historical.intentId),'CONFLICT');
+  assert.ok(reads>=2,'restored terminal label must be rechecked against fresh native evidence');
+  assert.equal('send' in fresh,false,'restoration never grants wallet execution');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
