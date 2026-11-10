@@ -97,3 +97,31 @@ D9 persisted post-send marker migration and recovered-record provenance remain i
 4. Next randomized audit excludes all three previously inspected source paths. Documentation next checks Security-and-Release/Codespaces pages and live-wiki manual publication after owner approval.
 
 No merge, deployment, release, security-policy waiver, crypto/financial-policy change or paid API/agent use.
+
+## Continuation pass 004 — 2026-11-10 (ChatGPT direct GitHub connector only)
+
+### Starting-state and ownership qualification
+
+- Inspected the previous automation result and this source-pinned handoff; `main@300287dcde818a9d10ae301265d00bc7c0877bbb` remains unchanged. The continuation instructions remain proposed on draft PR #63. No `AGENTS.md` exists on inspected main.
+- Starting previous-head CI was **fully complete**: handoff PR #66 `ac4f5186f098e458d6afc2fecc779ee49c459e1e` **7/7 hosted jobs passed**; audit PR #67 `dfaaa21d5e54b073e9792ec2d9887f9fa6e41085` **7/7 passed**; docs PR #68 `afd6c5a429e442676141015a7a3de97f24bae388` **7/7 passed**; primary PR #70 `78af7214a1aab97eb3eb7722793bb536e7d6ff39` **7/7 passed**. These job counts describe the three workflow families (Specification inventory, Vault foundation and EVM escrow) and do not count CodeQL/security statuses absent from the relevant stacked test heads.
+- Existing PR #61 remains an **unmerged draft** at `c87c21b915c9e175113292bb1307754ed2424166`; its prior 10/10 exact-head hosted checks do **not** resolve separate PR #56's SonarCloud Security Rating **C (required A)**. Individual Sonar issues still require authorized access; no findings invented or suppressed. Claude-owned M2A PR #65 and all other owners' branches/files left untouched.
+
+### One sequential independent D9 test slice: draft PR #71
+
+- Created [stacked draft PR #71](https://github.com/djshellshoxxx/p2p-offramp/pull/71), branch `chatgpt/zero-codex/d9-restored-terminal-20261110` from **PR #70 exact head** `78af7214a1aab97eb3eb7722793bb536e7d6ff39`; base is ChatGPT-owned PR #70 branch, **not main**. No upstream/other-owner branch modified.
+- Test-only commit **`06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f`** changes exactly `packages/domain/test/intent-journal.test.mjs`. The new D9 case restores an encrypted vault containing a historical `finalized` EVM label into a fresh-key profile, injects synthetic noncanonical/reorged native observation, checks that the historical intent remains unresolved, the same-account/network nonce cannot be reused for another trade, and the old intent cannot be re-marked to send. Its injected reader is **test fixture data**, not authenticated external proof.
+- **Exact-head GitHub CI 7/7 successful** at [commit checks](https://github.com/djshellshoxxx/p2p-offramp/commit/06305ebaccd99fa8e2ce7a9d5eccc05d9fbde28f/checks): specs, schemas-and-crypto, local-evm, browser, forge, local-trade and inventory. This was a **green characterization of existing fail-closed logic**, not a reproduced failing baseline or a production fix. No local Node/Foundry/browser tests ran. It does not complete D9 historical prepared-record provenance migration or authorize unknown-broadcast retry.
+
+### Distinct read-only randomized audit and docs/wiki phases
+
+- **Audit 004** selected previously unaudited `packages/identity/src/identity-service.ts` using unchanged main SHA + prior path FNV-1a seed, examined provider, private vault/service boundaries, restore adoption, lock/key wiping and existing negative tests; **no new reproducible defect established**. Ledger-only commit **`7f6c68d31b87239c21a43540d426fc7a75746a65`** on [audit PR #67](https://github.com/djshellshoxxx/p2p-offramp/pull/67). Its **7/7 exact-head hosted checks passed**. Source inspection only; no audit runtime tests.
+- **Documentation pass 004** expanded `docs/wiki-source/Security-and-Release.md` at commit **`d7440c8a12e31d9510505259931e12452d0e973d`** and maintenance ledger `docs/handoffs/CHATGPT_DOCS_MAINTENANCE_LATEST.md` at **`a0671fb41e62ea5b129d43fd514ed61e36250bd2`** on [docs PR #68](https://github.com/djshellshoxxx/p2p-offramp/pull/68). Verified 8 local wiki Markdown links to 7 distinct pages, **0 missing**; verified the 7 quoted `npm` scripts against main `package.json`. No local builds or rendered wiki tests. Exact-head docs CI was **still in progress** at handoff drafting (specs, inventory, forge, local-trade had succeeded; browser, schemas-and-crypto, local-evm had not yet finished). Recheck, do not preclaim green.
+- The version-controlled wiki Home and sidebar retain prominent, separate **User Guide** and **Developer Guide** links. **No live GitHub Wiki publication occurred**; the connector has no wiki-write action. Main lacks a root `SECURITY.md`; owner approval is required for a coordinated disclosure-policy change or repository setting.
+- No second or third independent concurrent worker/subagent was available. Audit and docs were **separate sequential phases by one assistant**. No opportunistic collaboration features were changed because the main/audit/docs lanes had substantive actionable work.
+
+### Exact next steps and holds
+
+1. Recheck exact-head docs PR #68 `a0671fb4` and this handoff-head CI; if still active, defer overlapping edits until the next run. Retain all original draft PRs, branches and agent ownership.
+2. Investigate real PR #56 SonarCloud issues only with authorized detailed evidence; do not suppress findings. For D9, historical recovered **prepared-record provenance/migration** requires an approved, independently tested design; do not infer safe send authority from imported records or recovery snapshots. Next unblocked feature slice should be test-first, independently owned, and strictly test-only until those semantics are reviewed.
+3. Audit a new path excluding all four prior picks; next documentation target `Codespaces-Test-Lab.md` must be reconciled with actual existing code/devcontainer before any status update. Live wiki publication and SECURITY.md require authorized maintainer action.
+4. D1 peer acceptance, D8 Tier C, independent security audit, full buyer/seller acceptance, real wallet/escrow release proofs and unknown-broadcast safety remain blocking release gates. `ReleaseEnabled=0`, no real funds. **No merges, deployments, releases, financial/cryptographic policy changes or test/security gate reductions.**
