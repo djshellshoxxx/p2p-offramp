@@ -94,6 +94,8 @@ test('emitted asset scan denies active remote resources, inlining, secrets and s
     {'index.html': '<script src="./assets/missing.js"></script>'},
     {'index.html': '<img srcset="https://a.test/image.png 1x">'},
     {'index.html': '<meta http-equiv="refresh" content="0;url=https://a.test">'},
+    {'index.html': '<meta http-equiv=refresh content="0;url=https://a.test">'},
+    {'index.html': '<meta HTTP-EQUIV = \'Refresh\' content="0">'},
     {'index.html': '<button onclick="run()">x</button>'},
     {'index.html': '<div style="color:red">x</div>'},
     {'x.css': '@import "https://a.test/a.css"'},
