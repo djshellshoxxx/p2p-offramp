@@ -224,11 +224,13 @@ test('recovery CLI refuses reference inode replacement between lstat and open', 
   const { runRecoveryCli } = await import('../recovery/evm-cli.mjs');
   const path=resolve(temporary,'reference-race.json');
   await writeFile(path,'{"format":"ORIGINAL"}');
-  const actualOpen=fsPromises.open; let swapped=false;
+  const actualOpen=fsPromises.open; let swapped=false,readReplaced=0;
   fsPromises.open=async function(file,...args) {
     if (file===path&&!swapped) {
       swapped=true;
       await rename(path,path+'.old'); await writeFile(path,'{"format":"REPLACED"}');
+      const handle=await actualOpen.call(this,file,...args);
+      return { stat:handle.stat.bind(handle),read:async (...args)=>{readReplaced++;return handle.read(...args);},close:handle.close.bind(handle) };
     }
     return actualOpen.call(this,file,...args);
   }; syncBuiltinESMExports();
@@ -237,5 +239,6 @@ test('recovery CLI refuses reference inode replacement between lstat and open', 
     await assert.rejects(runRecoveryCli(['inspect','--endpoint','loopback-fixture','--reference',path,'--item','0'],config,temporary),
       error=>error.code==='INVALID_INPUT');
     assert.equal(swapped,true,'exercise the identity check against a replacement inode');
+    assert.equal(readReplaced,0,'replacement file contents must not be read after the inode mismatch');
   } finally { fsPromises.open=actualOpen;syncBuiltinESMExports(); }
 });
