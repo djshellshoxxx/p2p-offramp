@@ -33,6 +33,18 @@ The [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs
 
 Read [`packages/schemas/index.ts`](https://github.com/djshellshoxxx/p2p-offramp/blob/main/packages/schemas/index.ts) for exported interfaces; the schema parser itself can be structural-only and **must not be treated as signature or chain authorization**. Consult [`packages/domain`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/domain) for trade/review and lifecycle contracts, and [`packages/chain-evm`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/chain-evm) for read-only chain integration. Wallet send/reconciliation functions are privileged boundaries: unknown broadcast outcomes remain unknown until proven otherwise; persistent send-marker and restoration/provenance work is not finished by passing CI. The acceptance-report CLI is read-only and cannot override owner review policy.
 
+## Reproducing D9 recovery acceptance without live funds
+
+From a Node 24+ checkout with the pinned dependencies, the **focused journal suite** is:
+
+```sh
+node --import ./scripts/test-support/register-tsx.mjs --test packages/domain/test/intent-journal.test.mjs
+```
+
+The command is directly supported by the repository's `scripts/test-support/register-tsx.mjs` and `npm test` harness. Existing merged tests cover journal persistence, fresh-key recovery, CAS, and conservative broadcast-unknown handling. The **unmerged** [draft D9 recovery tests](Security-and-Release.md#d9-encrypted-recovery-state-evidence-draft-only), including [PR #92](https://github.com/djshellshoxxx/p2p-offramp/pull/92), extend synthetic account/network nonce isolation. [Draft PR #93](https://github.com/djshellshoxxx/p2p-offramp/pull/93) further proposes two *independently unlocked sessions racing after fresh-key restore* (test-only head `e8afa6af3db9ac9575f57beaef61886e3b79683a`); **its new exact-head CI is unqualified at documentation time**. Check the PR's live Actions checks before treating that test as passing.
+
+For this test class, confirm the original pending transaction keeps its hash and nonce, a conflicting same-account/network reservation fails without overwriting evidence, only one independent concurrent reservation can win CAS, and a restored journal supplies **no signing or send method**. Record the exact code SHA, test invocation, Node environment and hosted workflow links; compare failing and corrected heads when relevant. Tests with a fixture validator or simulated storage are **not** native-chain provenance, buyer/seller acceptance, a source-of-funds audit or permission to retry an ambiguous send. No locally executed test result is claimed by this documentation addition.
+
 ## Contribution and collaboration
 
 Before changes, inspect [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md), open PRs and their exact head checks. Work on isolated branches and draft PRs; add failing tests for regressions, preserve a reproducible source SHA and verify changed-file ownership. Never rebase/overwrite another agent's branch or silently alter D1/D8/D9/financial policy. Use [continuation spec in PR #63](https://github.com/djshellshoxxx/p2p-offramp/pull/63) for the **proposed** ChatGPT-only lane until merged. See [Architecture and Development](Architecture-and-Development.md).
