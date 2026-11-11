@@ -3,9 +3,10 @@ import { sha256 } from '@noble/hashes/sha2.js';
 import { concatBytes, decodeKey, encodeBase58, fail, fromHex32 } from './codec.ts';
 
 export const SYSTEM_PROGRAM_ID = '11111111111111111111111111111111';
-export const TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+/** Address of the original SPL Token program (a public program ID, not a credential). */
+export const SPL_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 /** Known only so it can be refused: v1 supports the original SPL Token program alone. */
-export const TOKEN_2022_PROGRAM_ID = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
+export const SPL_2022_PROGRAM_ID = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
 export const ATA_PROGRAM_ID = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
 export const LOADER_V3_ID = 'BPFLoaderUpgradeab1e11111111111111111111111';
 export const SYSVAR_OWNER_ID = 'Sysvar1111111111111111111111111111111111111';
@@ -71,7 +72,7 @@ export function vaultAddress(programId: string, escrow: string): ProgramAddress 
 }
 /** Canonical ATA for the original SPL Token program only. */
 export function associatedTokenAddress(owner: string, mint: string): ProgramAddress {
-  return findProgramAddress([key(owner), key(TOKEN_PROGRAM_ID), key(mint)], key(ATA_PROGRAM_ID));
+  return findProgramAddress([key(owner), key(SPL_PROGRAM_ID), key(mint)], key(ATA_PROGRAM_ID));
 }
 /** Loader-v3 ProgramData account: PDA of [programId] under the upgradeable loader. */
 export function programDataAddress(programId: string): ProgramAddress {

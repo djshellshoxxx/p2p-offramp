@@ -5,7 +5,7 @@
 import { createCoreError, createOperationId, type SolanaTermsInput } from '../../domain/index.ts';
 import type { ChainObservation, CoreErrorCode, CoreResult, TradeBinding } from '../../schemas/index.ts';
 import {
-  CLOCK_SYSVAR_ID, LOADER_V3_ID, RENT_SYSVAR_ID, SYSTEM_PROGRAM_ID, SYSVAR_OWNER_ID, TOKEN_PROGRAM_ID,
+  CLOCK_SYSVAR_ID, LOADER_V3_ID, RENT_SYSVAR_ID, SYSTEM_PROGRAM_ID, SYSVAR_OWNER_ID, SPL_PROGRAM_ID,
 } from './address.ts';
 import {
   bindTrade, deepFreeze, resolveDeployment, type BoundSolanaTrade, type SolanaDeploymentRef, type SolanaRegistryView,
@@ -189,7 +189,7 @@ function nativeCustody(escrow: EscrowAccountV1, entry: object, minimum: bigint |
 function splCustody(
   trade: BoundSolanaTrade, classified: Classified, vaultEntry: unknown, mintEntry: unknown,
 ): SplCustody | null {
-  const mint = decodeMint(present(mintEntry, CAP.mint, TOKEN_PROGRAM_ID).data);
+  const mint = decodeMint(present(mintEntry, CAP.mint, SPL_PROGRAM_ID).data);
   if (mint.decimals !== trade.asset.decimals) return fail();
   const escrow = classified.escrow, vaultAddress = trade.vault!.address;
   if (escrow === null) {
@@ -197,7 +197,7 @@ function splCustody(
     if (vault !== null && !isSystemEmpty(vault)) return fail();
     return null;
   }
-  const vault = decodeTokenAccount(present(vaultEntry, CAP.token, TOKEN_PROGRAM_ID).data);
+  const vault = decodeTokenAccount(present(vaultEntry, CAP.token, SPL_PROGRAM_ID).data);
   const principal = escrow.paidOut ? 0n : BigInt(escrow.amountBaseUnits);
   if (vault.mint !== escrow.mint || vault.owner !== trade.escrow.address || vault.amount < principal) return fail();
   return {

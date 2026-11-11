@@ -13,7 +13,7 @@ import {
   ok,
   PROGRAM,
   SYSTEM,
-  TOKEN_2022,
+  SPL_2022_PROGRAM,
   vaultPda,
   WSOL,
 } from './support.mjs';
@@ -129,7 +129,7 @@ test(UNSUPPORTED, () => {
     },
   };
   error(bind(sol(), undefined, throwing), 'UNSUPPORTED_PROVIDER');
-  error(bind(spl({ tokenProgram: TOKEN_2022 })), 'UNSUPPORTED_PROVIDER');
+  error(bind(spl({ tokenProgram: SPL_2022_PROGRAM })), 'UNSUPPORTED_PROVIDER');
   const wsolRegistry = makeRegistry({
     network: { assets: [{ id: 'wsol', kind: 'spl', address: WSOL, decimals: 9, transferPolicy: 'exact-transfer' }] },
     deployment: { supportedAssetIds: ['wsol'] },

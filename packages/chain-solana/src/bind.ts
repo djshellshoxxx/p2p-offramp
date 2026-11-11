@@ -5,7 +5,7 @@ import {
   parseTradeBinding, type AssetV1, type CoreResult, type DeploymentV1, type NetworkV1, type TradeBinding,
 } from '../../schemas/index.ts';
 import {
-  escrowAddress, programDataAddress, SYSTEM_PROGRAM_ID, TOKEN_PROGRAM_ID, vaultAddress, WRAPPED_SOL_MINTS,
+  escrowAddress, programDataAddress, SYSTEM_PROGRAM_ID, SPL_PROGRAM_ID, vaultAddress, WRAPPED_SOL_MINTS,
   type ProgramAddress,
 } from './address.ts';
 import { canonicalKey, fail, failureCode, hex } from './codec.ts';
@@ -104,7 +104,7 @@ function selectAsset(network: NetworkV1, deployment: DeploymentV1, terms: Solana
   let asset: AssetV1 | undefined;
   if (terms.assetKind === 'native') asset = network.assets.find(entry => entry.kind === 'native');
   else {
-    if (terms.tokenProgram !== TOKEN_PROGRAM_ID || terms.mint === null || WRAPPED_SOL_MINTS.includes(terms.mint)) {
+    if (terms.tokenProgram !== SPL_PROGRAM_ID || terms.mint === null || WRAPPED_SOL_MINTS.includes(terms.mint)) {
       return fail('UNSUPPORTED_PROVIDER');
     }
     asset = network.assets.find(entry => entry.kind === 'spl' && entry.address === terms.mint);

@@ -18,8 +18,8 @@ export const PROGRAM = '7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq';
 export const COMPILED_GENESIS = ascii('genesis-hash:p2p-offramp:localv1');
 export const MINT = ascii('mint-6dp-open:p2p-offramp:local1');
 export const SYSTEM = '11111111111111111111111111111111';
-export const TOKENKEG = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
-export const TOKEN_2022 = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
+export const SPL_PROGRAM = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+export const SPL_2022_PROGRAM = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
 export const LOADER = 'BPFLoaderUpgradeab1e11111111111111111111111';
 export const SYSVAR = 'Sysvar1111111111111111111111111111111111111';
 export const CLOCK = 'SysvarC1ock11111111111111111111111111111111';
@@ -85,7 +85,7 @@ export function makeTerms(kind = 'native', changes = {}) {
     buyer: key('buyer'),
     assetKind: kind,
     mint: spl ? MINT : null,
-    tokenProgram: spl ? TOKENKEG : null,
+    tokenProgram: spl ? SPL_PROGRAM : null,
     privateAgreementHash: shaHex(enc.encode('agreement')),
     capabilitiesHash: shaHex(new Uint8Array([0])),
     sellerNonce: shaHex(enc.encode(`nonce-${kind}`)),
@@ -249,8 +249,8 @@ export function makeWorld(terms, o = {}) {
     const vault = vaultPda(pda.address);
     accounts.set(pda.address, account(escrow, PROGRAM, { lamports: RENT_MIN }));
     const vaultAmount = o.vaultAmount ?? ((o.escrow?.paid ?? 0) ? 0 : amount);
-    accounts.set(vault.address, account(tokenBytes({ owner: pda.address, amount: vaultAmount, ...o.vault }), TOKENKEG));
-    accounts.set(MINT, account(mintBytes(o.mint), TOKENKEG));
+    accounts.set(vault.address, account(tokenBytes({ owner: pda.address, amount: vaultAmount, ...o.vault }), SPL_PROGRAM));
+    accounts.set(MINT, account(mintBytes(o.mint), SPL_PROGRAM));
   }
   return {
     genesis: COMPILED_GENESIS,

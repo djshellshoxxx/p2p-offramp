@@ -4,7 +4,7 @@
  */
 import { createCoreError, createOperationId } from '../../domain/index.ts';
 import type { CoreErrorCode, CoreResult } from '../../schemas/index.ts';
-import { associatedTokenAddress, SYSTEM_PROGRAM_ID, TOKEN_PROGRAM_ID } from './address.ts';
+import { associatedTokenAddress, SYSTEM_PROGRAM_ID, SPL_PROGRAM_ID } from './address.ts';
 import { isBoundSolanaTrade, type BoundSolanaTrade } from './bind.ts';
 import { canonicalKey, concatBytes, decimalU64, decodeKey, failureCode, fail, fromHex32, u64LE } from './codec.ts';
 
@@ -64,7 +64,7 @@ export function buildFundSpl(trade: BoundSolanaTrade, sellerTokenAccount: string
     const source = canonicalKey(sellerTokenAccount, 'INVALID_INPUT');
     if (source === bound.escrow.address || source === vault || source === mint) return fail('INVALID_INPUT');
     return instruction(bound, [meta(bound.terms.seller, true, true), meta(bound.escrow.address, true),
-      meta(mint, false), meta(source, true), meta(vault, true), meta(TOKEN_PROGRAM_ID, false),
+      meta(mint, false), meta(source, true), meta(vault, true), meta(SPL_PROGRAM_ID, false),
       meta(SYSTEM_PROGRAM_ID, false)],
     concatBytes([discriminator(DISCRIMINATOR.fundSpl), fundArgs(bound)]));
   });
@@ -99,7 +99,7 @@ export function buildPayout(trade: BoundSolanaTrade, outcome: 'released' | 'refu
     }
     const mint = bound.terms.mint!;
     return instruction(bound, [meta(bound.escrow.address, true), meta(bound.vault!.address, true), meta(mint, false),
-      meta(associatedTokenAddress(recipient, mint).address, true), meta(TOKEN_PROGRAM_ID, false)],
+      meta(associatedTokenAddress(recipient, mint).address, true), meta(SPL_PROGRAM_ID, false)],
     discriminator(DISCRIMINATOR.payoutSpl));
   });
 }

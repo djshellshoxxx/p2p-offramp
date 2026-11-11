@@ -32,7 +32,7 @@ import {
   sha,
   shaHex,
   SYSVAR,
-  TOKENKEG,
+  SPL_PROGRAM,
   tokenBytes,
   tradeIdOf,
   vaultPda,
@@ -55,7 +55,7 @@ function termsOf(entry, genesisHash = COMPILED_GENESIS) {
     buyer: args.buyer,
     assetKind: spl ? 'spl' : 'native',
     mint: spl ? entry.mint : null,
-    tokenProgram: spl ? TOKENKEG : null,
+    tokenProgram: spl ? SPL_PROGRAM : null,
     privateAgreementHash: args.privateAgreementHash,
     capabilitiesHash: args.capabilitiesHash,
     sellerNonce: args.sellerNonce,
@@ -87,7 +87,7 @@ test('decodes-5-escrows', { skip }, () => {
   const spl = decoded['spl-funded'];
   assert.equal(spl.assetKind, 'spl');
   assert.equal(spl.mint, MINT);
-  assert.equal(spl.tokenProgram, TOKENKEG);
+  assert.equal(spl.tokenProgram, SPL_PROGRAM);
   // The committed SBPF v3 capture has vault bump 255 (the spec's 253 came from an older capture).
   assert.equal(spl.vaultBump, vaultPda(byLabel('spl-funded').escrowAddress).bump);
   assert.equal(spl.vaultBump, 255);
@@ -165,9 +165,9 @@ function fixtureWorld(entry) {
     const amount = decoded.paidOut ? 0 : Number(decoded.amountBaseUnits);
     accounts.set(
       entry.vaultAddress,
-      account(tokenBytes({ mint: entry.mint, owner: entry.escrowAddress, amount }), TOKENKEG),
+      account(tokenBytes({ mint: entry.mint, owner: entry.escrowAddress, amount }), SPL_PROGRAM),
     );
-    accounts.set(entry.mint, account(mintBytes(), TOKENKEG));
+    accounts.set(entry.mint, account(mintBytes(), SPL_PROGRAM));
   }
   const world = {
     genesis: COMPILED_GENESIS,

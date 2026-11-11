@@ -37,8 +37,8 @@ import {
   SLOT,
   SYSTEM,
   SYSVAR,
-  TOKEN_2022,
-  TOKENKEG,
+  SPL_2022_PROGRAM,
+  SPL_PROGRAM,
   tokenBytes,
   vaultPda,
 } from './support.mjs';
@@ -567,10 +567,10 @@ test('INTEGRITY_FAILURE: field-{buyer,amount,deadline,mint,kind,tp}', async () =
   await integrity('spl', (world, terms) => {
     replaceEscrow({ mint: key('other-mint') })(world, terms);
     const vault = tokenBytes({ mint: key('other-mint'), owner: world.escrow.address, amount: 25_000_000 });
-    setAccount(world, vaultOf(world), account(vault, TOKENKEG));
+    setAccount(world, vaultOf(world), account(vault, SPL_PROGRAM));
   });
-  await integrity('native', replaceEscrow({ kind: 2, mint: MINT, tokenProgram: TOKENKEG, vaultBump: 255 }));
-  await integrity('spl', replaceEscrow({ tokenProgram: TOKEN_2022 }));
+  await integrity('native', replaceEscrow({ kind: 2, mint: MINT, tokenProgram: SPL_PROGRAM, vaultBump: 255 }));
+  await integrity('spl', replaceEscrow({ tokenProgram: SPL_2022_PROGRAM }));
   await integrity('spl', replaceEscrow({ vaultBump: 1 }));
 });
 
@@ -585,13 +585,13 @@ test('INTEGRITY_FAILURE: native-lamports-{≤amount,unsafe}', async () => {
 
 test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,close,uninit}', async () => {
   const vault =
-    (bytes, owner = TOKENKEG) =>
+    (bytes, owner = SPL_PROGRAM) =>
     world =>
       setAccount(world, vaultOf(world), account(bytes, owner));
   const base = world => ({ owner: world.escrow.address, amount: 25_000_000 });
   await control('spl', world => vault(tokenBytes(base(world)))(world));
   await integrity('spl', world => setAccount(world, vaultOf(world), null));
-  await integrity('spl', world => vault(tokenBytes(base(world)), TOKEN_2022)(world));
+  await integrity('spl', world => vault(tokenBytes(base(world)), SPL_2022_PROGRAM)(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), mint: key('other-mint') }))(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), owner: key('someone') }))(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), amount: 24_999_999 }))(world));
@@ -599,22 +599,22 @@ test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,clos
   await integrity('spl', world => vault(tokenBytes({ ...base(world), close: 1 }))(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), state: 0 }))(world));
   await integrity('spl', world =>
-    setAccount(world, vaultOf(world), account(tokenBytes(base(world)), TOKENKEG, { executable: true })),
+    setAccount(world, vaultOf(world), account(tokenBytes(base(world)), SPL_PROGRAM, { executable: true })),
   );
 });
 
 test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
-  await control('spl', world => setAccount(world, MINT, account(mintBytes(), TOKENKEG)));
+  await control('spl', world => setAccount(world, MINT, account(mintBytes(), SPL_PROGRAM)));
   await integrity('spl', world => setAccount(world, escrowOf(world), null));
   await integrity('spl', world => {
     setAccount(world, escrowOf(world), null);
-    setAccount(world, vaultOf(world), account(new Uint8Array(0), TOKENKEG));
+    setAccount(world, vaultOf(world), account(new Uint8Array(0), SPL_PROGRAM));
   });
-  await integrity('spl', world => setAccount(world, MINT, account(mintBytes({ decimals: 9 }), TOKENKEG)));
-  await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), TOKEN_2022)));
-  await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), TOKENKEG, { executable: true })));
+  await integrity('spl', world => setAccount(world, MINT, account(mintBytes({ decimals: 9 }), SPL_PROGRAM)));
+  await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), SPL_2022_PROGRAM)));
+  await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), SPL_PROGRAM, { executable: true })));
   // 83 bytes still fits the 112-char base64 cap and `space`: only the exact length check rejects it.
-  await integrity('spl', world => setAccount(world, MINT, account(cat(mintBytes(), [0]), TOKENKEG)));
+  await integrity('spl', world => setAccount(world, MINT, account(cat(mintBytes(), [0]), SPL_PROGRAM)));
   await integrity('spl', world => setAccount(world, MINT, null));
 });
 

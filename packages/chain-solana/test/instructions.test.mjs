@@ -16,7 +16,7 @@ import {
   ok,
   PROGRAM,
   SYSTEM,
-  TOKENKEG,
+  SPL_PROGRAM,
 } from './support.mjs';
 
 const idl = JSON.parse(
@@ -44,11 +44,11 @@ function builtAll() {
 test('metas-discriminators-vs-idl', () => {
   const roles = {
     fund_native: [native.terms.seller, native.escrow.address, native.terms.buyer, SYSTEM],
-    fund_spl: [spl.terms.seller, spl.escrow.address, MINT, SELLER_TOKEN, spl.vault.address, TOKENKEG, SYSTEM],
+    fund_spl: [spl.terms.seller, spl.escrow.address, MINT, SELLER_TOKEN, spl.vault.address, SPL_PROGRAM, SYSTEM],
     release: [spl.terms.seller, spl.escrow.address],
     refund: [native.escrow.address],
     payout_native: [native.escrow.address, native.terms.buyer],
-    payout_spl: [spl.escrow.address, spl.vault.address, MINT, ata(spl.terms.buyer, MINT), TOKENKEG],
+    payout_spl: [spl.escrow.address, spl.vault.address, MINT, ata(spl.terms.buyer, MINT), SPL_PROGRAM],
   };
   for (const [name, instruction] of Object.entries(builtAll())) {
     const spec = idlOf(name);

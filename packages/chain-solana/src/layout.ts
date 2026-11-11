@@ -1,6 +1,6 @@
 /** Account byte decoders for the D5 escrow and the loader, sysvar and SPL Token accounts it depends on. */
 import { sha256 } from '@noble/hashes/sha2.js';
-import { TOKEN_PROGRAM_ID } from './address.ts';
+import { SPL_PROGRAM_ID } from './address.ts';
 import { encodeBase58, equalBytes, fail, hex, readI64, readU32, readU64 } from './codec.ts';
 
 /** PROPOSED (pending release-owner confirmation): SHA-256 of ProgramData bytes [45..end), untrimmed. */
@@ -117,11 +117,11 @@ export function decodeEscrow(bytes: Uint8Array): EscrowAccountV1 {
   const zeroAssets = equalBytes(mint, ZERO_KEY) && equalBytes(tokenProgram, ZERO_KEY);
   if (kind === 0 && (!zeroAssets || bytes[10] !== 0)) return fail();
   // Token-2022 and any other token program are refused: v1 binds the original SPL Token program only.
-  if (kind === 2 && (keyAt(bytes, 110) !== TOKEN_PROGRAM_ID || equalBytes(mint, ZERO_KEY))) return fail();
+  if (kind === 2 && (keyAt(bytes, 110) !== SPL_PROGRAM_ID || equalBytes(mint, ZERO_KEY))) return fail();
   return Object.freeze({
     escrowBump: bytes[9]!, vaultBump: bytes[10]!, state: STATES[stateIndex]!, paidOut: paid === 1,
     assetKind: kind === 0 ? 'native' as const : 'spl' as const, seller: keyAt(bytes, 14), buyer: keyAt(bytes, 46),
-    mint: kind === 0 ? null : encodeBase58(mint), tokenProgram: kind === 0 ? null : TOKEN_PROGRAM_ID,
+    mint: kind === 0 ? null : encodeBase58(mint), tokenProgram: kind === 0 ? null : SPL_PROGRAM_ID,
     amountBaseUnits: amount.toString(), deadlineSeconds: readU64(bytes, 150).toString(),
     termsHash: hex(slice32(bytes, 158)), sellerNonce: hex(slice32(bytes, 190)),
   });

@@ -25,7 +25,7 @@ import {
   programDataBytes,
   rentBytes,
   shaHex,
-  TOKEN_2022,
+  SPL_2022_PROGRAM,
   tokenBytes,
   u32,
 } from './support.mjs';
@@ -69,7 +69,7 @@ test(ESCROW_REJECTS, () => {
     'native-mint': escrowBytes(native, { mint: key('m') }),
     'native-tp': escrowBytes(native, { tokenProgram: spl.tokenProgram }),
     'native-vault-bump': flip(10, 254),
-    token2022: escrowBytes(spl, { tokenProgram: TOKEN_2022 }),
+    token2022: escrowBytes(spl, { tokenProgram: SPL_2022_PROGRAM }),
     'spl-zero-mint': escrowBytes(spl, { mint: '11111111111111111111111111111111' }),
     'zero-amount': escrowBytes(native, { amount: 0 }),
   };
