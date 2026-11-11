@@ -1,0 +1,890 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-04",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "candidate": {
+    "pull_request": 26,
+    "commit": "94554ecf9854e4604f9f56afe5bebedeee931994"
+  },
+  "comparison_main_commit": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+  "evidence_path_base": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/",
+  "priority_semantics": "Repair priority, not CVSS or a claim of deployed exploitation. Reachability and default-disabled conditions are stated per finding.",
+  "methodology": {
+    "review": "Defensive static source review, caller tracing, specification comparison and existing-test inspection.",
+    "dynamic_vulnerability_reproduction": false,
+    "live_service_or_transaction_testing": false,
+    "source_or_test_mutation": false,
+    "limitations": [
+      "Static confidence concerns source-level defects, not demonstrated exploitation.",
+      "Lower-layer passing tests do not reproduce higher-journey failures.",
+      "The local import commit is not the upstream candidate identity.",
+      "LOCALPROOF and dormant paths are not approved production integrations."
+    ]
+  },
+  "summary": {
+    "total_findings": 8,
+    "priority_counts": {
+      "P1": 1,
+      "P2": 5,
+      "P3": 2
+    }
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "title": "Payment-guidance cutoff blocks seller release before actual escrow expiry",
+      "priority": "P1",
+      "classification": "Transaction eligibility and specification-conformance defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "Signing-review, controller and screen gates require payment coordination, which blocks at 900 seconds remaining, while the canonical contract and G18 allow release before actual expiry."
+      },
+      "scope": {
+        "components": [
+          "LOCALPROOF native journey",
+          "Signing review and screen",
+          "Native payment preflight"
+        ],
+        "reachability": "Explicitly constructed LOCALPROOF journey with a funded trade inside the final 900 seconds before expiry.",
+        "default_app": "No enabled production trading path established; default trading remains disabled.",
+        "change_status": "Candidate LOCALPROOF composition defect."
+      },
+      "evidence": [
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 76,
+          "end_line": 78,
+          "observation": "reviewActionReady permits release signing review only in payment-coordination."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 343,
+          "end_line": 345,
+          "observation": "Release requires payment-coordination and a fresh allow-guidance result."
+        },
+        {
+          "path": "packages/wallet/src/evm-payment-preflight.ts",
+          "start_line": 16,
+          "end_line": 16,
+          "observation": "The payment buffer is 900 seconds."
+        },
+        {
+          "path": "packages/wallet/src/evm-payment-preflight.ts",
+          "start_line": 187,
+          "end_line": 194,
+          "observation": "Remaining time at or below the buffer produces a blocked near-expiry decision."
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "start_line": 44,
+          "end_line": 46,
+          "observation": "Release visibility and local phase depend on fresh payment coordination."
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "start_line": 62,
+          "end_line": 63,
+          "observation": "Release request and signing confirmation reject stale guidance."
+        },
+        {
+          "path": "contracts/evm/src/BasicEscrow.sol",
+          "start_line": 221,
+          "end_line": 231,
+          "observation": "Seller release remains valid strictly before the actual deadline."
+        }
+      ],
+      "caller_chain": [
+        "Screen requests release signing review.",
+        "reviewActionReady requires payment-coordination.",
+        "Confirmed release rereads the payment-guidance gate.",
+        "The 900-second payment buffer rejects otherwise valid seller release."
+      ],
+      "impact": {
+        "description": "A willing seller cannot complete release through this journey during the final 15 minutes, including after fiat has arrived.",
+        "preconditions": [
+          "Trade is funded and not expired.",
+          "Seller explicitly intends to release."
+        ],
+        "limits": [
+          "Client-side LOCALPROOF obstruction, not a contract authorization bypass.",
+          "Original contract deadline and refund destination remain intact.",
+          "Independent recovery tooling exists."
+        ]
+      },
+      "remedy": [
+        "Separate release eligibility from the gate for displaying payment instructions.",
+        "Update reviewActionReady, controller action checks, screen visibility and signing confirmation together.",
+        "Preserve seller fiat attestation, exact original binding, signing review and fresh funded-state/deployment/account/deadline checks.",
+        "Keep actionable payment instructions hidden inside the buffer; never settle automatically."
+      ],
+      "safe_regression_acceptance": [
+        "Guidance allowed at 901 seconds, hidden at 900 and 899 seconds.",
+        "Explicit seller release remains possible after independent fresh preflight strictly before expiry.",
+        "At actual expiry release is refused and original refund rules remain available.",
+        "UI, signing review and controller agree on these boundaries."
+      ],
+      "coverage": {
+        "method": "Static trace and exact-candidate G18 comparison; no browser/transaction reproduction.",
+        "existing_seam": "scripts/recovery/evm-recovery.mjs:143-147 uses the actual deadline.",
+        "gap": "Payment-buffer tests do not establish independent journey release eligibility."
+      },
+      "references": [
+        {
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.1_multichain_escrow/module_1.1.3_basic_settlement/spec-escrow-deadline-preflight.md",
+          "section": "4 and 5",
+          "support": "Guidance stops at <=900 seconds; release may continue before expiry by independent preflight, and recovery information remains accessible."
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "title": "Proven transaction-send denial leaves the journey in reconciliation without a retry state",
+      "priority": "P2",
+      "classification": "Error-handling and transaction recovery defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "The lifecycle records 4001 as a live verified no-hash failure, but the journey retains a reconciliation phase and requests native evidence for an unsent transaction."
+      },
+      "scope": {
+        "components": [
+          "LOCALPROOF approval, funding, release and refund",
+          "Transaction lifecycle integration"
+        ],
+        "reachability": "Configured provider rejects eth_sendTransaction with code 4001 and local cancellation is successfully recorded.",
+        "default_app": "No enabled default production trading path.",
+        "change_status": "Candidate integration defect; separate from active prepared/unsent approval recovery work."
+      },
+      "evidence": [
+        {
+          "path": "packages/domain/src/tx-lifecycle.ts",
+          "start_line": 306,
+          "end_line": 310,
+          "observation": "4001 records failed with no hash and live terminal verification, returning USER_REJECTED."
+        },
+        {
+          "path": "packages/domain/src/tx-lifecycle.ts",
+          "start_line": 105,
+          "end_line": 105,
+          "observation": "Failed maps to non-finalized reverted reconciliation outcome."
+        },
+        {
+          "path": "packages/domain/src/tx-lifecycle.ts",
+          "start_line": 328,
+          "end_line": 336,
+          "observation": "Lifecycle reconcile recognizes a live verified no-hash cancellation without chain transaction evidence."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 324,
+          "end_line": 330,
+          "observation": "Approval/funding retain approval-reconcile or reconcile on submission refusal."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 343,
+          "end_line": 345,
+          "observation": "Release/refund enter settling before submit and retain it on refusal."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 331,
+          "end_line": 334,
+          "observation": "Journey calls journal.reconcileNative first and leaves phase unchanged for non-finalized outcomes."
+        },
+        {
+          "path": "packages/domain/src/intent-journal.ts",
+          "start_line": 286,
+          "end_line": 294,
+          "observation": "reconcileNative always invokes native observation without a live-terminal shortcut."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 191,
+          "end_line": 198,
+          "observation": "No-hash intent triggers transaction search, failing when no transaction exists."
+        }
+      ],
+      "caller_chain": [
+        "Submission returns a proven USER_REJECTED cancellation.",
+        "Journey remains in transaction reconciliation.",
+        "Reconciliation requests native transaction discovery before consulting local cancellation proof.",
+        "No transaction is found; ordinary explicit preparation remains unavailable."
+      ],
+      "impact": {
+        "description": "Ordinary transaction-send denial prevents returning to normal explicit preparation in the current journey; release/refund denial obstructs another exit attempt from a funded trade.",
+        "preconditions": [
+          "Provider reports code 4001.",
+          "Lifecycle successfully persists and verifies local cancellation."
+        ],
+        "limits": [
+          "Applies to transaction-send denial, not every wallet prompt.",
+          "Initial terms-signing denial has a separate communicationAccepted recovery path.",
+          "No lost principal, automatic resend or permanent on-chain lock demonstrated.",
+          "A persisted failed label alone must not authorize retry after restoration."
+        ]
+      },
+      "remedy": [
+        "Introduce an explicit journey transition for cancellation established by the live lifecycle.",
+        "Return to the appropriate explicit approval/funding/exit review state with original trade and consent requirements.",
+        "Handle the non-finalized local terminal result explicitly; merely reordering reconciliation calls is insufficient because current journey logic only advances on finalized.",
+        "Keep unknown broadcasts, timeouts, response loss and restored terminal labels on conservative reconciliation paths.",
+        "Never automatically resubmit."
+      ],
+      "safe_regression_acceptance": [
+        "4001 denial for approval, funding, release and refund yields an explicit retry/review state without automatic resend.",
+        "Retry uses live cancellation proof and fresh action review.",
+        "Initial terms-signing refusal retains its separate recovery behavior.",
+        "Unknown broadcast outcomes and restored failed labels cannot take the proven-cancellation shortcut.",
+        "Lock, wallet changes and delayed results cannot revive retired submission capability."
+      ],
+      "coverage": {
+        "method": "Static end-to-end trace; no higher-journey reproduction.",
+        "existing_test": "Contracts reviewer ran the unchanged lower-layer test in packages/domain/test/tx-lifecycle.test.mjs named 'reads retry through read-retry; sends never retry; rejection and integrity failures'; it passed.",
+        "gap": "That lower-layer test does not verify journey phase recovery."
+      },
+      "references": [
+        {
+          "url": "https://eips.ethereum.org/EIPS/eip-1193#provider-errors",
+          "support": "4001 denotes user rejection; the project lifecycle supplies the local cancellation classification."
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "title": "Terminal journey receipts omit deferred payout credit and its recovery route",
+      "priority": "P2",
+      "classification": "Conditional payout-status and recovery integration gap",
+      "static_confidence": {
+        "level": "high",
+        "basis": "Canonical settlement can be terminal while recipient credit remains owed; journey receipt fields and controls contain no pending-credit observation or withdrawal recovery."
+      },
+      "scope": {
+        "components": [
+          "LOCALPROOF canonical escrow receipt",
+          "Deferred payout and withdrawal presentation"
+        ],
+        "reachability": "Conditional on a canonical push payout failing and creating pending credit. Current fixture uses development EOAs and plain MockERC20; deferred payout is not demonstrated ordinary fixture behavior.",
+        "default_app": "No enabled default production trading path.",
+        "change_status": "Candidate journey completion gap; contract withdrawal and ABI helpers already exist."
+      },
+      "evidence": [
+        {
+          "path": "contracts/evm/src/BasicEscrow.sol",
+          "start_line": 228,
+          "end_line": 243,
+          "observation": "Release/refund set terminal state and then attempt payout."
+        },
+        {
+          "path": "contracts/evm/src/BasicEscrow.sol",
+          "start_line": 346,
+          "end_line": 360,
+          "observation": "Failed push records pending recipient/asset credit and emits PayoutDeferred."
+        },
+        {
+          "path": "contracts/evm/src/BasicEscrow.sol",
+          "start_line": 246,
+          "end_line": 261,
+          "observation": "Anyone may call withdraw, which pays only the credited recipient and preserves credit if it reverts."
+        },
+        {
+          "path": "contracts/evm/SECURITY-NOTES.md",
+          "start_line": 25,
+          "end_line": 38,
+          "observation": "Clients must surface PayoutDeferred and pending balance."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 337,
+          "end_line": 341,
+          "observation": "Terminal reconciliation creates transaction/state/fee receipt without pending-credit read."
+        },
+        {
+          "path": "apps/web/src/journey/native-contracts.ts",
+          "start_line": 77,
+          "end_line": 79,
+          "observation": "Receipt/snapshot lacks deferred-credit or withdrawal-status fields."
+        },
+        {
+          "path": "apps/web/src/journey/presentation.ts",
+          "start_line": 92,
+          "end_line": 92,
+          "observation": "Presentation accurately labels Escrow outcome but omits outstanding payout status."
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "start_line": 62,
+          "end_line": 64,
+          "observation": "No withdrawal or direct payout recovery action."
+        },
+        {
+          "path": "packages/wallet/src/evm-escrow.ts",
+          "start_line": 135,
+          "end_line": 155,
+          "observation": "Pending-credit read and withdrawal builders already exist."
+        },
+        {
+          "path": "scripts/test-journey-browser.mjs",
+          "start_line": 30,
+          "end_line": 36,
+          "observation": "Fixture deploys canonical BasicEscrow with plain MockERC20 and development accounts."
+        }
+      ],
+      "caller_chain": [
+        "Canonical settlement reaches Released/Refunded.",
+        "A failed push may create pending credit.",
+        "Journey enters receipt based on terminal escrow state.",
+        "No credit status or explicit recovery route appears."
+      ],
+      "impact": {
+        "description": "An affected user is not shown that asset delivery remains outstanding or a second recovery transaction may be required.",
+        "preconditions": [
+          "Settlement succeeds but push payout fails for the bound recipient/asset.",
+          "User relies on journey receipt/recovery controls."
+        ],
+        "limits": [
+          "Escrow disposition displayed is accurate; no explicit false claim of completed delivery.",
+          "No missing contract withdrawal, redirection flaw or live payout failure claimed.",
+          "Credit is aggregate per recipient/asset, not inherently attributable to one trade.",
+          "Permanently rejecting recipients or restricted assets may still prevent withdrawal."
+        ]
+      },
+      "remedy": [
+        "Show escrow disposition separately from payout/credit status.",
+        "Read pending credit using verified canonical evidence and original recipient/asset binding.",
+        "Expose explicit recovery information or reviewed withdrawal using existing ABI/recovery support.",
+        "Explain aggregate credit semantics and retain evidence until payout closure.",
+        "Preserve fixed destination and never infer fiat verification."
+      ],
+      "safe_regression_acceptance": [
+        "Normal completed payout shows zero owed.",
+        "Existing deferred-credit fixture shows correct credited recipient, asset, amount and recovery route.",
+        "Aggregate credit is not all attributed to one trade without evidence.",
+        "Withdrawal status changes only after fresh canonical evidence.",
+        "Retention protection remains until payout closure."
+      ],
+      "coverage": {
+        "method": "Static missing-field/call/control review; no failure induced.",
+        "existing_seams": [
+          "scripts/recovery/evm-recovery.mjs:111-116,138-141",
+          "apps/web/src/retention/native-retention.ts:103-117",
+          "Existing canonical deferred-credit contract fixtures"
+        ],
+        "gap": "Contract support is not wired into journey receipt/recovery."
+      },
+      "references": [
+        {
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/contracts/evm/SECURITY-NOTES.md",
+          "section": "Payout behavior",
+          "support": "Terminal disposition can coexist with deferred credit; clients must show it."
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "title": "Pool-wide relay deduplication drops events needed by independent subscriptions",
+      "priority": "P2",
+      "classification": "Subscription delivery and discovery availability defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "One global event-ID cache suppresses later subscriber delivery; native observers have overlapping deletion filters and independent order books."
+      },
+      "scope": {
+        "components": [
+          "RelayPool",
+          "Native context observers",
+          "Historical subscriptions"
+        ],
+        "reachability": "Independent overlapping consumers share a RelayPool, or a new consumer requests history already delivered to an earlier one. Native context composition supplies a concrete caller.",
+        "default_app": "No default-app observer composition found; hints remain discovery-only.",
+        "change_status": "Inherited from main e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa; same global cache/check/one-handler pattern confirmed there."
+      },
+      "evidence": [
+        {
+          "path": "packages/relay/src/pool.ts",
+          "start_line": 112,
+          "end_line": 113,
+          "observation": "Global seenIds map is separate from subscription records."
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "start_line": 183,
+          "end_line": 185,
+          "observation": "Only event ID is remembered."
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "start_line": 208,
+          "end_line": 225,
+          "observation": "Seen events are dropped; new verified events are remembered and sent only to the frame's subscriber."
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "start_line": 377,
+          "end_line": 384,
+          "observation": "Closing one subscriber leaves shared history intact."
+        },
+        {
+          "path": "packages/relay/src/pool.ts",
+          "start_line": 425,
+          "end_line": 443,
+          "observation": "New subscriptions share suppression and receive no cached replay."
+        },
+        {
+          "path": "apps/web/src/context-adapters/observations.ts",
+          "start_line": 53,
+          "end_line": 53,
+          "observation": "Each observer has an independent OrderBook."
+        },
+        {
+          "path": "apps/web/src/context-adapters/observations.ts",
+          "start_line": 74,
+          "end_line": 82,
+          "observation": "Each order requests all deletions by its maker, then ignores another order's deletion inside its handler."
+        }
+      ],
+      "caller_chain": [
+        "Order A and B observers share pool/maker.",
+        "B's valid deletion first arrives under A's broad deletion filter.",
+        "Pool remembers ID; A discards unrelated order event.",
+        "B's subsequent matching delivery is suppressed."
+      ],
+      "impact": {
+        "description": "Independent consumers miss verified ads/deletions/history and can retain stale discovery context until expiry or become unknown.",
+        "preconditions": [
+          "Overlapping logical subscriptions or reused history request.",
+          "For the concrete deletion case, distinct order observers share a maker."
+        ],
+        "limits": [
+          "Desired same-subscription multi-relay/reconnect deduplication is a different policy.",
+          "Read-only discovery context cannot authorize funding or settlement.",
+          "No malicious payload or exploit reproduction claimed."
+        ]
+      },
+      "remedy": [
+        "Separate signature-validation caching from subscriber delivery accounting.",
+        "Track delivery per logical subscription/event, or verify once and dispatch to all matching consumers.",
+        "Allow new subscription lifetimes to retrieve requested history.",
+        "Preserve bounded memory and same-subscriber duplicate suppression."
+      ],
+      "safe_regression_acceptance": [
+        "Two ordinary overlapping consumers each receive one event copy.",
+        "Distinct orders from the same maker receive their relevant deletions.",
+        "Recreated consumer receives requested retained history.",
+        "Existing one-subscriber multi-relay/reconnect expectations remain.",
+        "All caches remain bounded."
+      ],
+      "coverage": {
+        "method": "Static source trace and main comparison.",
+        "existing_tests": [
+          "packages/relay/test/pool.test.mjs:21-30 single subscriber across relays",
+          "packages/relay/test/pool.test.mjs:69-82 overlapping filters, request-bound assertions only",
+          "packages/relay/test/pool.test.mjs:110-121 same logical subscriber reconnect"
+        ],
+        "gap": "No inspected independent overlapping-consumer delivery assertion."
+      },
+      "references": [
+        {
+          "url": "https://github.com/nostr-protocol/nips/blob/master/01.md",
+          "support": "Independent subscriptions receive matching events under their subscription identifiers until closed."
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "title": "HTTP readers compare decoded Fetch bytes with encoded Content-Length",
+      "priority": "P2",
+      "classification": "HTTP compatibility and availability defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "Both readers count decoded Fetch stream bytes and require equality with a header that can describe encoded response bytes."
+      },
+      "scope": {
+        "components": [
+          "BoundedHttpDriver",
+          "UpdateHttpReader",
+          "Configured signed-update controller"
+        ],
+        "reachability": "Fetch-compatible port returns content-encoded data with visible Content-Length different from decoded size. No shipped generic-driver consumer found; configured updater and browser fixture use the update reader.",
+        "default_app": "Generic consumer absent and default update trust unconfigured.",
+        "change_status": "Generic driver identical to main; update reader repeats same defect. Combined as one finding."
+      },
+      "evidence": [
+        {
+          "path": "packages/transport/src/http-driver.ts",
+          "start_line": 51,
+          "end_line": 74,
+          "observation": "Fetch stream bytes counted and required to equal Content-Length."
+        },
+        {
+          "path": "packages/security/src/release-update-http.ts",
+          "start_line": 43,
+          "end_line": 55,
+          "observation": "Update reader repeats declared-length versus decoded-body equality."
+        },
+        {
+          "path": "packages/security/src/release-update.ts",
+          "start_line": 98,
+          "end_line": 102,
+          "observation": "Configured controller constructs update reader."
+        },
+        {
+          "path": "packages/security/src/release-update.ts",
+          "start_line": 139,
+          "end_line": 150,
+          "observation": "Locator, manifest, envelope and artifact reads use that reader."
+        },
+        {
+          "path": "packages/security/src/release-update.ts",
+          "start_line": 92,
+          "end_line": 100,
+          "observation": "Unconfigured trust/capabilities leave update authority unavailable."
+        }
+      ],
+      "caller_chain": [
+        "Pinned HTTP request uses Fetch.",
+        "Fetch decodes Content-Encoding.",
+        "Reader totals decoded chunks.",
+        "Encoded Content-Length differs and valid response becomes ROUTE_UNAVAILABLE."
+      ],
+      "impact": {
+        "description": "Normally compressed JSON, manifests or assets can be refused despite valid authenticated decoded content.",
+        "preconditions": [
+          "Fetch port exposes decoded bytes.",
+          "Response is content-encoded and exposes differing Content-Length."
+        ],
+        "limits": [
+          "No signature bypass, vault compromise or automatic fallback established.",
+          "Custom normalized ports need their own explicit length contract.",
+          "Decoded-byte size caps must remain."
+        ]
+      },
+      "remedy": [
+        "Make actual decoded stream length the authoritative content/memory bound.",
+        "Remove unconditional Content-Length equality or apply it only with positively established identity encoding or a documented normalized port contract.",
+        "Do not treat missing exposed Content-Encoding alone as proof of identity encoding under browser/CORS semantics.",
+        "Preserve stream error handling, pinned URL, no redirects/credentials, cancellation, physical drain and downstream signature/hash checks."
+      ],
+      "safe_regression_acceptance": [
+        "Valid identity, gzip and Brotli responses yield intended decoded bytes.",
+        "Oversized decoded bodies still fail.",
+        "Errored streams remain failures.",
+        "Authenticated checks use intended decoded content.",
+        "No fallback or automatic retry introduced."
+      ],
+      "coverage": {
+        "method": "Static review plus primary Fetch standard; no compressed-response reproduction.",
+        "existing_tests": [
+          "packages/transport/test/http-driver.test.mjs:26-30 synthetic unencoded length mismatch",
+          "packages/security/test/release-update.test.mjs:89 fabricated unequal header/body size"
+        ],
+        "gap": "Inspected tests do not model native Fetch decoding semantics."
+      },
+      "references": [
+        {
+          "url": "https://fetch.spec.whatwg.org/#http-network-fetch",
+          "support": "Content encoding is handled before body exposure; the standard explicitly notes Content-Length unreliability after decoding."
+        }
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "Transient relay failure leaves LOCALPROOF negotiation without a safe resume path",
+      "priority": "P2",
+      "classification": "Communication-state and delivery recovery defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "Ad/exchange state commits before transport completion; outgoing signed events are local variables and retries repeat already-committed transitions."
+      },
+      "scope": {
+        "components": [
+          "LOCALPROOF ad publication",
+          "Take/offer/accept delivery"
+        ],
+        "reachability": "Isolated two-party journey after local preparation but before native funding, when publication or receipt fails.",
+        "default_app": "No enabled production negotiation composition.",
+        "change_status": "Candidate journey integration defect; exchange commit-after-signing contract is intentional."
+      },
+      "evidence": [
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 144,
+          "end_line": 150,
+          "observation": "Delivery can fail on publish/pull/wrap receipt without retaining a pending-send record."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 301,
+          "end_line": 306,
+          "observation": "Seller ingests ad before publish and permits only accepted ingestion; take/offer commit before delivery and phase changes after success."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 307,
+          "end_line": 316,
+          "observation": "Acceptance commits before delivery; communicationAccepted is set only after peer success."
+        },
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "start_line": 347,
+          "end_line": 347,
+          "observation": "Offer/accept errors provide no resume transition."
+        },
+        {
+          "path": "packages/exchange/src/exchange.ts",
+          "start_line": 214,
+          "end_line": 228,
+          "observation": "Live previous take rejects repetition; take commits before returning its message."
+        },
+        {
+          "path": "packages/exchange/src/exchange.ts",
+          "start_line": 249,
+          "end_line": 252,
+          "observation": "Offer state commits before returned message."
+        },
+        {
+          "path": "packages/exchange/src/exchange.ts",
+          "start_line": 255,
+          "end_line": 271,
+          "observation": "Accept requires offered state and commits accepted before returned message."
+        }
+      ],
+      "caller_chain": [
+        "Journey ingests ad or obtains signed SentMessage.",
+        "Local communication state is committed.",
+        "Subsequent delivery fails while visible phase stays wallet/review.",
+        "Retry re-ingests same/conflicting ad or repeats take/offer/accept, hitting duplicate/conflict/OUT_OF_ORDER."
+      ],
+      "impact": {
+        "description": "Ordinary transient relay failure can strand the current negotiation until controller reset, without in-place resend/resume.",
+        "preconditions": [
+          "Local ad/exchange state advanced.",
+          "Later publication/receipt failed.",
+          "User repeats the visible action."
+        ],
+        "limits": [
+          "No production funds-loss claim.",
+          "Commit before uncertain delivery is intentional; missing delivery retention/resumption is the defect.",
+          "Separate from wallet transaction-send refusal."
+        ]
+      },
+      "remedy": [
+        "Retain exact signed ad/message as owned pending delivery.",
+        "Separate communication state from transport outcome.",
+        "Provide deliberate same-event resend/resume and reconcile potentially applied peer result.",
+        "Do not silently roll back or regenerate possibly delivered signed content.",
+        "Clear pending private material on retirement."
+      ],
+      "safe_regression_acceptance": [
+        "Ordinary transport failures at send/receive boundaries yield explicit resume state.",
+        "Retry reuses original identity and advances both parties once.",
+        "Delayed successful delivery does not duplicate transitions.",
+        "Existing exact-review/signature/native funding gates remain.",
+        "Lock/dispose clears pending bytes and suppresses late completion."
+      ],
+      "coverage": {
+        "method": "Static state trace; no relay fault reproduction.",
+        "existing_tests": [
+          "packages/exchange/test/async-boundaries.test.mjs covers review/signing pending boundaries",
+          "Integrated journey uses serialized owned parties"
+        ],
+        "gap": "No inspected post-commit delivery-failure resumption coverage."
+      },
+      "references": [
+        {
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.4_order_discovery/module_1.4.1_encrypted_relay_protocol/spec-nostr-order-relay-adapter.md",
+          "support": "Explicit identical-event republish differs from automatic new-event retries; acknowledgment does not prove peer delivery."
+        }
+      ]
+    },
+    {
+      "id": "F07",
+      "title": "Failed accepted-release database opening stays cached for the store lifetime",
+      "priority": "P3",
+      "classification": "Optional local-storage retry reliability defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "The rejected native-opening promise remains assigned and every later storage operation returns it."
+      },
+      "scope": {
+        "components": [
+          "IndexedDbAcceptedReleaseStore",
+          "Configured update checking/acceptance"
+        ],
+        "reachability": "Explicitly constructed reused store suffers a native open failure, underlying condition clears, and same instance is retried.",
+        "default_app": "No default instance; actual browser fixture uses the real store.",
+        "change_status": "Confirmed in candidate; no introduction-versus-inheritance claim."
+      },
+      "evidence": [
+        {
+          "path": "packages/security/src/release-update-store.ts",
+          "start_line": 21,
+          "end_line": 27,
+          "observation": "Cached opening promise is never cleared after rejection."
+        },
+        {
+          "path": "packages/security/src/release-update-store.ts",
+          "start_line": 29,
+          "end_line": 30,
+          "observation": "Each operation awaits cached opening."
+        },
+        {
+          "path": "packages/security/src/release-update-store.ts",
+          "start_line": 39,
+          "end_line": 46,
+          "observation": "read/advance reuse store; explicit close is terminal."
+        },
+        {
+          "path": "packages/security/src/release-update.ts",
+          "start_line": 141,
+          "end_line": 141,
+          "observation": "Checking reads accepted store."
+        },
+        {
+          "path": "packages/security/src/release-update.ts",
+          "start_line": 174,
+          "end_line": 177,
+          "observation": "Acceptance rereads/advances supplied store."
+        },
+        {
+          "path": "scripts/fixtures/release-update-browser.ts",
+          "start_line": 44,
+          "end_line": 60,
+          "observation": "Browser fixture constructs real store instances."
+        },
+        {
+          "path": "scripts/fixtures/release-update-browser.ts",
+          "start_line": 71,
+          "end_line": 74,
+          "observation": "Existing fixture exercises native read/CAS and malformed stored data."
+        }
+      ],
+      "caller_chain": [
+        "Controller calls store.",
+        "Initial native open rejects and stays cached.",
+        "Later operation reuses rejected promise.",
+        "No fresh opening occurs despite recovered storage condition."
+      ],
+      "impact": {
+        "description": "A transient storage failure disables checking/acceptance for that store instance until the store is recreated.",
+        "preconditions": [
+          "Native attempt fails after promise caching.",
+          "Storage condition becomes recoverable.",
+          "Store instance is reused."
+        ],
+        "limits": [
+          "Controller recreation with the same store does not help.",
+          "No rollback-floor deletion or rollback bypass.",
+          "Early missing-factory/insecure-context refusal before caching is outside this condition.",
+          "Conditional low-priority reliability issue."
+        ]
+      },
+      "remedy": [
+        "Clear cached promise on failure only if it still identifies that attempt.",
+        "Keep late-success closure so stale requests cannot install handles.",
+        "Keep explicit close terminal.",
+        "Reuse guarded failure-reset pattern from encrypted vault store."
+      ],
+      "safe_regression_acceptance": [
+        "Initial native open failure then success permits later read on same store.",
+        "Old late completion cannot overwrite or clear newer attempt.",
+        "Explicit close remains terminal.",
+        "Rollback metadata is preserved."
+      ],
+      "coverage": {
+        "method": "Static cached-promise review; no failure reproduction.",
+        "existing_coverage": "Native IndexedDB browser fixture exists; controller unit tests inject stores.",
+        "gap": "Missing failed-open followed by retry on same store, not all native-store tests."
+      },
+      "references": []
+    },
+    {
+      "id": "F08",
+      "title": "Courier route-field authorization accepts incomplete selected-policy consent",
+      "priority": "P3",
+      "classification": "Dormant consent authorization-projection defect",
+      "static_confidence": {
+        "level": "high",
+        "basis": "Verifier admits partially signed one-sided evidence, while disclosure authorization fails to require all signers selected by its consent policy."
+      },
+      "scope": {
+        "components": [
+          "Optional courier reference model",
+          "Disclosure evidence",
+          "authorizeRouteFields"
+        ],
+        "reachability": "Dormant advisory projection; caller search found declaration/export/tests and no default-app, messaging or network executor.",
+        "default_app": "Absent; helper returns field names and no actual secret values.",
+        "change_status": "Confirmed candidate reference-model defect; no deployed exposure claim."
+      },
+      "evidence": [
+        {
+          "path": "packages/courier/src/verification.ts",
+          "start_line": 246,
+          "end_line": 264,
+          "observation": "Submitted signatures and selected required signer sets are parsed; unexpected signers refused."
+        },
+        {
+          "path": "packages/courier/src/verification.ts",
+          "start_line": 298,
+          "end_line": 310,
+          "observation": "At least one confirmed signer can yield one-sided-claim evidence when the required set is incomplete."
+        },
+        {
+          "path": "packages/courier/src/custody.ts",
+          "start_line": 498,
+          "end_line": 517,
+          "observation": "Disclosure validates context and requested fields without selected-policy signer completeness."
+        },
+        {
+          "path": "packages/courier/test/custody.test.mjs",
+          "start_line": 291,
+          "end_line": 327,
+          "observation": "Inspected test uses one required seller signer, not incomplete multi-endpoint consent."
+        }
+      ],
+      "caller_chain": [
+        "Selected verifier policy requires multiple disclosure signers.",
+        "Opaque evidence confirms a proper subset.",
+        "authorizeRouteFields accepts after other contextual checks.",
+        "Requested field names are reported allowed despite incomplete selected consent."
+      ],
+      "impact": {
+        "description": "The local model can project fields as authorized without satisfying the selected endpoint-consent policy.",
+        "preconditions": [
+          "Trusted selected policy requires multiple signers.",
+          "At least one but not all required signatures are confirmed.",
+          "Recipient/leg/purpose/revision/acceptance/expiry/field checks otherwise pass."
+        ],
+        "limits": [
+          "Only field names are returned, not coordinates, contacts, secrets or send permits.",
+          "No live location disclosure or base-escrow funds exposure established.",
+          "One-sided evidence remains useful for attributed uncertainty claims elsewhere."
+        ]
+      },
+      "remedy": [
+        "Retain signer completeness in private verified evidence and enforce it at disclosure authorization.",
+        "Keep one-sided claim evidence available where intended.",
+        "Do not replace authenticated policy checks with imported booleans.",
+        "Any future per-field policy must bind fields to exact required endpoint consent."
+      ],
+      "safe_regression_acceptance": [
+        "Complete single/multi-endpoint consent allows only matching fields.",
+        "Incomplete selected consent returns UNAUTHORIZED or consent-required.",
+        "One-sided receipt claims remain recordable as uncertainty.",
+        "Expired/revoked/wrong-verifier/context-mismatched grants remain refused.",
+        "Projection creates no network or economic authority."
+      ],
+      "coverage": {
+        "method": "Static verifier-to-authorization tracing; no payload/disclosure reproduction.",
+        "gap": "Current route tests cover contextual mismatches with one signer, not incomplete selected multi-signer consent."
+      },
+      "references": [
+        {
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/03_CASH_IN_TRANSIT_BLIND_COURIERS/feature_3.2_courier_assignment/module_3.2.1_route_segmentation/spec-route-information-access-control.md",
+          "section": "4",
+          "support": "Precise endpoint disclosure and recovery require explicit purpose-bound endpoint consent."
+        }
+      ]
+    }
+  ]
+}

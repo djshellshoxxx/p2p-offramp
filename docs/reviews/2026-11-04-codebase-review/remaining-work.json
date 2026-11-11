@@ -1,0 +1,325 @@
+{
+  "source_sha": "94554ecf9854e4604f9f56afe5bebedeee931994",
+  "source_path": "docs/execution/coverage/CURRENT-REMAINDER.json",
+  "counts": {
+    "canonicalRecords": 103,
+    "specifications": 173,
+    "originalClauses": 8281,
+    "milestones": 9,
+    "currentCanonicalScopeStates": {
+      "LOCAL_SCOPE_COMPLETE": 76,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    },
+    "notAClauseCompletionCount": true,
+    "canonicalStatesAtIntake": {
+      "LOCAL_SCOPE_COMPLETE": 74,
+      "EXACT_CONTRACT_OR_TOOLING_REMAINDER": 25,
+      "ROOT_INTEGRATION_ACTIVE": 2,
+      "EXTERNAL_OR_TOOLING_QUALIFICATION": 2
+    }
+  },
+  "records": [
+    {
+      "id": "P-G14-TERMS-PROFILE",
+      "title": "Resolve exact nonempty G14-to-G16 capability commitment profile",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "No mapping from module/protocolVersion/capabilities/schemaHashes to G16{id,version,policyHash}, canonical policyHash preimage or mixed-client negotiation profile is defined.",
+      "next": "Resume with an explicitly versioned candidate byte profile and independent vectors after exact mapping is selected.",
+      "paths": [
+        "docs/governance",
+        "packages/extensions/README.md"
+      ]
+    },
+    {
+      "id": "P-G15-PROFILE",
+      "title": "Define missing deployment, rotation/trust-transition and archive extraction profiles",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Signer predecessor/recovery trust and rotation/threshold/revocation rules, nonempty deployment/runtime/asset schema and archive codec/extraction/retention profile are not defined.",
+      "next": "Prepare/review exact bounded candidate schemas and compatibility vectors without activating an invented profile.",
+      "paths": [
+        "docs/governance",
+        "packages/security/src/release-manifest.ts",
+        "packages/security/src/release-locator.ts"
+      ]
+    },
+    {
+      "id": "P-SOLANA-PROFILE",
+      "title": "Complete exact native Solana/SPL custody/program/wallet compatibility profile",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "PDA bytes, account/discriminator/IDL mapping, mint/Token2022 extension/authority/rent rules and finality/history profile are undefined; do not emulate EVM.",
+      "next": "Freeze exact program/PDA/layout/instruction/IDL/token/finality contracts; toolchain intake is independent preparatory work, not parity.",
+      "paths": [
+        "docs/governance",
+        "packages/domain/src/trade-terms.ts"
+      ]
+    },
+    {
+      "id": "P-SOLANA-ENGINEERING",
+      "title": "Native SOL/SPL program, Wallet Standard, adapter, journal and recovery parity",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "P-SOLANA-PROFILE exact PDA/account/instruction/program/IDL and token profile is not yet defined; Native Solana validator/Cargo/Anchor profile absent from current verified workspace",
+      "next": "Reuse the T42 missing-contract decision packet. Freeze one coherent exact program/PDA/account/instruction/IDL/token/finality candidate with independent vectors, then admit its supported native toolchain/consumer work; tool availability cannot choose custody semantics.",
+      "paths": [
+        "packages/domain/src/trade-terms.ts"
+      ]
+    },
+    {
+      "id": "P-LIQUIDITY-PROFILE",
+      "title": "Exact optional vault/quote signature and atomic escrow funding deployment profile",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Quote domain/bytes, maker-contract account/EIP1271, atomic consume-to-BasicEscrow ABI/token approval, refund-return proof and native G12/reorg contract are absent.",
+      "next": "Resume only after exact separate opt-in signature/custody/atomic-funding profile is selected; reuse local conservation model.",
+      "paths": [
+        "packages/liquidity/DECISIONS.json"
+      ]
+    },
+    {
+      "id": "P-LIQUIDITY-ENGINEERING",
+      "title": "Optional segregated custody contract/adapter and native integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "P-LIQUIDITY-PROFILE separate ABI/signature/atomic funding strategy unresolved",
+      "next": "Reuse completed T60 integer conservation/reservation/vector model. First specify the separate quote/domain/signature/maker-account/atomic native funding/approval/refund/G12-reorg contract; do not implement a duplicate accounting model or enable pooled LP custody.",
+      "paths": [
+        "contracts/evm/src/BasicEscrow.sol"
+      ]
+    },
+    {
+      "id": "P-PROOF-IMPLEMENTATION",
+      "title": "Actual evaluated proof generation/verifier/rail advisory integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "P-PROOF-PROFILE exact proof/circuit/provider/witness/verification and rail profile unresolved",
+      "next": "Reuse already implemented T58/T72/T87 lifecycle/structural kernels. Obtain one exact proof/circuit/setup/verifier/witness/rail/SDK artifact profile and browser compatibility evidence before its native consumer; another generic parser/Worker wrapper is not the missing implementation.",
+      "paths": [
+        "packages/extensions/src/registry.ts"
+      ]
+    },
+    {
+      "id": "P-REPUTATION-ENGINEERING",
+      "title": "Opt-in reputation proof verification and eligibility integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "P-REPUTATION-PROFILE exact provider/circuit/identity/nullifier/score/root serialization incomplete",
+      "next": "Reuse the completed T63 concrete Node proof/verify/audit evaluation. Freeze issuer/root/revocation/score/application-tuple/durable-identity/nullifier/native-consumer semantics before application engineering; do not repeat the evaluated fixture as a new profile.",
+      "paths": [
+        "packages/extensions/src/registry.ts"
+      ]
+    },
+    {
+      "id": "P-MOBILE-HANDOFF",
+      "title": "Actual app-switch checkpoint and fresh-authority wallet resume",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Wallet/version/link/allowed-return origin/path/project/relay/G05/session checkpoint/recovery are unspecified; physical wallet switching is not emulation.",
+      "next": "Freeze the concrete connector/wallet/URI/return/project/G05/recovery contract from retained T75 findings, then admit a real bounded owner-bound handoff consumer. No dummy success adapter.",
+      "paths": [
+        "docs/execution/profiles/05-mobile.md",
+        "security/intake/mobile-wallet"
+      ]
+    },
+    {
+      "id": "P-QR-PROFILE",
+      "title": "Type-specific QR payload/signature/canonicalization/codec decision artifact",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Envelope/type/identity/expiry/replay/signature domain/canonical codec/segments/error-correction and allowed URI producer contracts are undefined.",
+      "next": "Prepare exact per-type bounded candidate fields and source/codec vectors before scanner/share/signing implementation.",
+      "paths": [
+        "docs/governance",
+        "packages/schemas/src/recovery-reference.ts"
+      ]
+    },
+    {
+      "id": "P-QR-ENGINEERING",
+      "title": "Bounded local QR generation/scan/review/import with manual/file fallbacks",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "P-QR-PROFILE exact payload/signature/codec profiles not defined",
+      "next": "Reuse T42 decision options and existing manual-file recovery. Specify exact per-type authenticated payload/signature/codec/segmentation/producer vectors before a real scanner/producer; no duplicate generic QR facade.",
+      "paths": [
+        "packages/schemas/src/recovery-reference.ts"
+      ]
+    },
+    {
+      "id": "Q-RELEASE",
+      "title": "Artifact-specific authenticated bootstrap, professional review and release/deployment witnesses",
+      "status": "EXTERNAL_OR_TOOLING_QUALIFICATION",
+      "missing": "Exact production trust-root/key-custody/rotation/archive/deployment profile, named artifact-specific independent security/crypto/provider/operational approval and signed distribution/publication witnesses are absent. Imported reviewer/status JSON is not approval.",
+      "next": "Finish current local integration/delivery checks with ReleaseEnabled0 and approvedRelease pin null. Only a separately authorized artifact-specific production process could later supply actual trust/custody/distribution and independent approval evidence.",
+      "paths": [
+        "security/crypto-inventory.json",
+        "packages/security/src/acceptance-gates.ts",
+        "apps/web/scripts/testnet-trust.mjs"
+      ]
+    },
+    {
+      "id": "Q-PHYSICAL-LOCALE",
+      "title": "Actual physical device, wallet, accessibility and translated safety-copy qualification",
+      "status": "EXTERNAL_OR_TOOLING_QUALIFICATION",
+      "missing": "Pinned Firefox/WebKit binaries/platform access are a tooling remainder, not a claimed rejected permission/download. Physical devices/wallets/assistive systems and qualified safety-language review are separate external evidence.",
+      "next": "Reuse finite T70/T73 evidence. Complete actual target/tooling and professional source/translation review when those qualifications are pursued; no viewport/pinch/emulator/imported review can replace them.",
+      "paths": [
+        "docs/execution/qualification/browser-engines.json",
+        "/workspace/work/t73-pending-source-freeze.json",
+        "docs/execution/qualification/browser-zoom.json"
+      ]
+    },
+    {
+      "id": "L-MEET-PROOF",
+      "title": "Distance proof implementation/profile",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "MEET07 explicitly leaves commitment primitive,curve,field,setup,proof format and verifier hashes unresolved; chart projection implementation also unpinned.",
+      "next": "Evaluate concrete upstream provider/circuit feasibility and publish exact versioned statement/projection/verification vectors; keep current capability unsupported without asset downloads.",
+      "paths": [
+        "packages/meetup/README-POLICIES.md"
+      ]
+    },
+    {
+      "id": "L-MEET-PROOF-BINDING",
+      "title": "Local proof challenge/replay contract",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Prose requires full TradeBinding in hashed object while DistanceChallenge DTO omits it; commitment/chart/projection/circuit/verifier/setup profiles are also absent.",
+      "next": "Resolve DTO/hash contract then add exact JCS vectors/replay consumer through existing quota/G02.",
+      "paths": [
+        "packages/meetup/src/policy-data.ts",
+        "packages/meetup/README-POLICIES.md"
+      ]
+    },
+    {
+      "id": "L-MEET-MAP-CACHE",
+      "title": "Persistent map bundles and renderer/fetch integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "MEET14 requires100MiB cache/2MiB tiles, incompatible with exact G02 v1 8MiB snapshot/256KiB record bounds; G02 excludes large maps and needs a distinct reviewed sharded format. Selected vector parser/renderer/dataset license and signed publisher/gateway profile are absent. Existing manifest validation and consent kernels are implemented prerequisites.",
+      "next": "Reuse T56 manifest/consent/digest/budget validation. Resolve a separate bounded sharded cache format and exact renderer/parser/dataset/publisher profile with independent fixtures before integration; keep manual venue text usable.",
+      "paths": [
+        "packages/meetup/src/map-manifest.ts",
+        "packages/meetup/README-POLICIES.md",
+        "packages/schemas/src/vault.ts"
+      ]
+    },
+    {
+      "id": "L-CIT-LOCKER-LIVE",
+      "title": "Concrete locker/device transport",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "CIT10 requires vendor protocol revision, identity provisioning, transport authentication, key rotation, replay persistence and response meaning; baseline adapter list empty.; Physical device, authenticated time/revocation, operator recovery identity procedure and adversarial hardware qualification absent.",
+      "next": "Define/evaluate one actual vendor profile and publish fixture protocol transcripts; keep model and empty-profile refusal implemented locally without claiming supported hardware.",
+      "paths": [
+        "packages/courier/src/locker.ts",
+        "packages/courier/README.md"
+      ]
+    },
+    {
+      "id": "L-CIT-COLLATERAL-CONTRACT",
+      "title": "Separate native courier fee/staking custody implementation",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "No separate native courier vault/ABI, exact terms-bound cooperative-signature domain/encoding or deployment profile is selected. CIT14 requires a separately audited vault. Existing T48 accounting/common models are implemented prerequisites; BasicEscrow supplies no courier authority.",
+      "next": "Write the new opt-in vault interface/domain/signature vectors from the model, review the protocol, then implement local native conservation/replay tests. Existing BasicEscrow must gain no courier authority.",
+      "paths": [
+        "packages/courier/src/accounting.ts",
+        "packages/courier/README.md"
+      ]
+    },
+    {
+      "id": "L-ARB-NATIVE",
+      "title": "Separate immutable opted-in local tribunal/escrow",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "No complete opted-in ABI/case mapping/certificate tuple and nonempty signed capability commitment exists; provider draft-word ABI/identity/stake adapters are also unselected. Professional review alone is not the implementation blocker.",
+      "next": "Define separate immutable G33/G34 terms/case/certificate/custody profile without touching funded BasicEscrow; only then implement native tests.",
+      "paths": [
+        "packages/arbitration/README.md",
+        "docs/governance"
+      ]
+    },
+    {
+      "id": "L-ARB-VRF-PROFILE",
+      "title": "Actual ChainlinkVRF2.5 provider qualification",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "ExactVRF2.5package version/integrity+ABI, coordinator/codehash/network,consumer/subscription/confirmations/fees/config not pinned; currently noChainlinkdependency.; Live funded testnet subscription/admin ownership/provideraudit requires external configuration; no live production action authorized.; L-ARB-NATIVE",
+      "next": "Read-only intake of official VRF2.5 release/ABI/vectors and bounded coordinator mocks can precede live configuration; no fake callback compatibility or arbitrary seed fallback.",
+      "paths": [
+        "packages/arbitration/src/draft.ts",
+        "packages/arbitration/README.md"
+      ]
+    },
+    {
+      "id": "L-ARB-ZK-PROFILE",
+      "title": "Selective-chat proof and anonymous eligibility provider",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "No selected circuit/provider/setup/verifier or Nostr signature/hash compatibility is specified. Anonymous eligibility uniqueness proof expressly deferred; baseline uses permissioned issuer registry.",
+      "next": "Evaluate audited candidate feasibility and direct disclosed-message verification now; keep proof-required capabilities unsupported.",
+      "paths": [
+        "packages/arbitration/README.md",
+        "docs/execution/profiles/02-reputation.md"
+      ]
+    },
+    {
+      "id": "L-PRIV-CAPABILITY-BRIDGE",
+      "title": "Nonempty G14 manifest-to-G16 policy commitment",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Actual G14 negotiated set is{id,protocolVersion,capabilities,schemaHashes}; G16 requires{id,version,policyHash}. extensions/README explicitly says the mapping is not specified. Hash algorithm/domain/canonical bytes/profile identifier selection cannot be guessed.; P-G14-TERMS-PROFILE frozen mapping and vectors",
+      "next": "Reuse completed T55 feature-policy parsing and empty-core-set behavior. Freeze one explicit canonical capability-to-G16 commitment algorithm/domain/bytes/profile plus independent cross-language vectors, then admit its nonempty consumer.",
+      "paths": [
+        "packages/extensions/README.md",
+        "packages/privacy-policy/README.md"
+      ]
+    },
+    {
+      "id": "L-PRIV-STEALTH-SPEND",
+      "title": "Stealth spending wallet and funding binding integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Exact external-wallet scheme1 key ownership/import/signing, nonempty capability commitment and funding adapter/terms binding are absent. Existing local generation/scanning math is reused, not a missing prerequisite.",
+      "next": "Reuse completed T51 pure reference generation/viewing/pages. Select and specify a concrete external-wallet scheme1 key-ownership/import/signing and terms/funding commitment profile before native spending integration.",
+      "paths": [
+        "packages/stealth/DECISIONS.json",
+        "packages/stealth/README.md"
+      ]
+    },
+    {
+      "id": "L-PRIV-OPTIONAL-PROVIDER",
+      "title": "Selected XMTP/Tor/shielded/CoinJoin provider profiles",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Published browser-sdk7.0.0 requires WASM1.10.0 and source eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc; T50 source8993ef24144532e53fdfcfd04eddf27dce8a5a53 requires separately pinned1.11.0-nightly.20260603.89c3fc3. Seven of46 SDK src files differ. Passive lock retains both snapshots for comparison, with no override making a coherent runtime. All ten XMTP contracts remain absent. Browser Tor bridge, shielded-note/proof protocol and UTXO coordinator/wallet profiles also remain unselected; EVM fixtures cannot be relabeled as these providers.",
+      "next": "Reuse the accepted passive packet. Freeze one coherent exact protocol/SDK/WASM/source/build plus the ten contracts before a separately admitted active experiment or real adapter; keep unsupported before loading or identity signing.",
+      "paths": [
+        "docs/execution/profiles/04-optional-messaging.md",
+        "docs/execution/profiles/06-tor.md",
+        "docs/execution/profiles/07-asset-privacy.md",
+        "security/intake/xmtp/README.md",
+        "security/intake/xmtp/pins.json",
+        "security/intake/xmtp/package.json",
+        "security/intake/xmtp/package-lock.json"
+      ]
+    },
+    {
+      "id": "L-PRIV-PROFILE-REMOVAL",
+      "title": "Whole-profile deletion workflow",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "PRIV-local-storage-lifecycle mentions requestProfileRemoval but MEM01§5 explicitly says G02 has no routine whole-vault deletion API and future deletion needs an independently specified migration/export/recovery workflow.",
+      "next": "Write/review deletion/export/recovery semantics and reconcile conflicting references; preserve all existing vaults. Existing record deletion and lock behavior are already implemented.",
+      "paths": [
+        "packages/privacy-controls/DECISIONS.json",
+        "packages/schemas/src/vault.ts"
+      ]
+    },
+    {
+      "id": "L-PRIV-SWEEP-EXECUTION",
+      "title": "Sequential consented native transfer journal integration",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Canonical G12 accepts trade-bound fund/release/refund/approve, not an independent wallet transfer. The standalone transfer intent/action/balance/fee/native-observation contract is absent; T59 plan/reminder is already implemented.",
+      "next": "Reuse completed T59 plan/reminder scope. Specify a separately versioned standalone wallet-transfer intent/action with recipient/balance/fee/native-reader and durable broadcast-unknown/no-resend semantics before execution. No contract-enforced timelock is specified.",
+      "paths": [
+        "packages/privacy-controls/DECISIONS.json",
+        "packages/privacy-controls/src/sweep.ts",
+        "packages/domain/src/tx-lifecycle.ts"
+      ]
+    },
+    {
+      "id": "P-MESSAGE-BODY-PROFILE",
+      "title": "Versioned non-text application-envelope body profiles",
+      "status": "EXACT_CONTRACT_OR_TOOLING_REMAINDER",
+      "missing": "Missing version/discriminator/tag/body/signature/key-role/trade/replay/expiry profiles affect wallet acceptance and optional signaling/grants/proximity messages.",
+      "next": "Prepare exact versioned carrier options and independent encoded vectors before any typed consumer integration; do not tunnel new authority through arbitrary chat text.",
+      "paths": [
+        "docs/governance",
+        "packages/messaging/src/envelope.ts",
+        "packages/meetup/README-POLICIES.md"
+      ]
+    }
+  ]
+}
