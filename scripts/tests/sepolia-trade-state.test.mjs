@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { runTrades } from '../sepolia/trade.mjs';
+import { runTrades, tradeStatePath } from '../sepolia/trade.mjs';
 import { SEPOLIA, keccakHex } from '../sepolia/lib.mjs';
 import { evmTermsHash } from '../../packages/wallet/src/evm-terms.ts';
 import { buildGetTrade } from '../../packages/wallet/src/evm-escrow.ts';
@@ -408,4 +408,12 @@ test('finality covers every recorded transaction, including hash-bearing failed 
     const result = await runTrades({ ...s, run: 'r', requireSignedRegistry: false });
     assert.equal(result.state.finality.allFinalized, false, 'an unfinalized failed send keeps the run unfinalized');
   } finally { await s.dispose(); }
+});
+
+test('the CLI state path is derived only from a valid run id and stays inside the trades directory', async () => {
+  const root = resolve(tmpdir(), 'p2p-root');
+  assert.equal(tradeStatePath(root, 'exercise-1'), resolve(root, 'docs/deployments/sepolia/trades/exercise-1.json'));
+  for (const run of ['../escape', '..', 'a/b', 'a\\b', '/abs', '.hidden', 'UPPER', '', 'x'.repeat(65), undefined, null, 7, 'a\0b', 'ok\n'])
+    assert.throws(() => tradeStatePath(root, run), { code: 'RUN_ID_INVALID' }, String(run));
+  await assert.rejects(runTrades({ root, run: '../escape' }), { code: 'RUN_ID_INVALID' }, 'refused before any lock or state file is touched');
 });
