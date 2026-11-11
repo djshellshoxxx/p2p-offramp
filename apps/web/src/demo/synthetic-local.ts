@@ -6,7 +6,7 @@
 import { RegistryService, encodeCapabilities, encodePrivateAgreement, sha256Hex } from '../../../../packages/domain/index.ts';
 import type { RegistrySource, TermsSample } from '../trade/review-controller.ts';
 import { FROZEN_ERC20_DOCUMENT, FROZEN_NATIVE_DOCUMENT, SYNTHETIC_REGISTRY_JSON, SYNTHETIC_REGISTRY_SHA256 } from './synthetic-data.ts';
-import { englishGroup } from '../ui/locale/en.ts';
+import { messageGroup as englishGroup } from '../ui/locale/runtime.ts';
 
 const utf8 = new TextEncoder();
 const sampleLabels = englishGroup('samples');
@@ -35,9 +35,9 @@ export async function freshCoreNativeDocument(nowSeconds: bigint): Promise<Uint8
 }
 
 export const SYNTHETIC_SAMPLES: readonly TermsSample[] = Object.freeze([
-  Object.freeze({ id: 'fresh-native', label: sampleLabels.freshNative, load: (now: bigint) => freshCoreNativeDocument(now) }),
-  Object.freeze({ id: 'frozen-native', label: sampleLabels.frozenNative, load: async () => utf8.encode(FROZEN_NATIVE_DOCUMENT) }),
-  Object.freeze({ id: 'frozen-erc20', label: sampleLabels.frozenErc20, load: async () => utf8.encode(FROZEN_ERC20_DOCUMENT) }),
+  Object.freeze({ id: 'fresh-native', get label() { return sampleLabels.freshNative; }, load: (now: bigint) => freshCoreNativeDocument(now) }),
+  Object.freeze({ id: 'frozen-native', get label() { return sampleLabels.frozenNative; }, load: async () => utf8.encode(FROZEN_NATIVE_DOCUMENT) }),
+  Object.freeze({ id: 'frozen-erc20', get label() { return sampleLabels.frozenErc20; }, load: async () => utf8.encode(FROZEN_ERC20_DOCUMENT) }),
 ]);
 
 /** Loads the synthetic registry through the real digest-first RegistryService. Refuses anything not `local`. */
@@ -45,5 +45,5 @@ export const syntheticDemoSource: RegistrySource = async () => {
   const registry = new RegistryService();
   const loaded = await registry.load(utf8.encode(SYNTHETIC_REGISTRY_JSON), SYNTHETIC_REGISTRY_SHA256);
   if (!loaded.ok || loaded.value.networks.some(network => network.environment !== 'local')) return { kind: 'failed' };
-  return { kind: 'ready', label: 'synthetic-demo', registry, samples: SYNTHETIC_SAMPLES };
+  return { kind: 'ready', label: 'synthetic-demo', registry, samples: SYNTHETIC_SAMPLES, draftNetworkIds: loaded.value.networks.map(network => network.id) };
 };

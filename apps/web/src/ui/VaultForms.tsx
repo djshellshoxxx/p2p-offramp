@@ -1,3 +1,4 @@
+import { localPolicyCode, runBoundedImport } from '../content-policy/local-policy.ts';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { MAX_BACKUP_BYTES, MAX_VAULT_PROFILES, type AppServices, type RuntimeInventory } from '../app-services.ts';
 import { ControlHelp } from './ControlHelp.tsx';
@@ -282,10 +283,8 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
     if (!consent.checked) { clear(); setNotice({ error: true, text: m.restoreConsentRequired }); return; }
     const controller = new AbortController(); request.current = controller; setBusy(true); setNotice(null); setReconciled(null);
     try {
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      if (controller.signal.aborted) return;
-      const result = await services.restore(bytes, source, secret, controller.signal);
-      clear(); bytes.fill(0);
+      const result = await runBoundedImport('restore-backup', file, controller.signal, bytes => services.restore(bytes, source, secret, controller.signal));
+      clear();
       if (!controller.signal.aborted) {
         if (result.ok) {
           element.reset(); setConfirmedProfileId(result.value.newProfileId);
@@ -294,8 +293,12 @@ export function RestoreForm({ services, onInventoryChanged, onOpenRestored }: { 
         else if (UNCERTAIN_RESTORE.has(result.error.code)) { setUncertain(true); setNotice(null); }
         else setNotice({ error: true, text: errorMessage(result.error.code) });
       }
-    } catch {
-      if (!controller.signal.aborted) setUncertain(true);
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        const code = localPolicyCode(error);
+        if (code === 'LOCAL_LIMIT_REACHED' || code === 'LIMIT_EXCEEDED' || code === 'INVALID_INPUT') setNotice({ error: true, text: errorMessage(code === 'LOCAL_LIMIT_REACHED' ? 'BUSY' : code) });
+        else setUncertain(true);
+      }
     } finally {
       clear();
       if (!controller.signal.aborted) setBusy(false);
