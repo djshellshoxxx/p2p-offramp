@@ -273,15 +273,27 @@ export function createRelayPool(options: PoolOptions): RelayPool {
         catch (error) { sockets.delete(token); throw error; }
         const wrapped: RelaySocketLike = { onopen: null, onmessage: null, onclose: null, onerror: null,
           send: text => native.send(text), close: () => native.close() };
-        // Internal teardown may clear public handlers; the native close handler still owns slot release.
-        native.onopen = event => { if (sockets.has(token)) wrapped.onopen?.(event); };
-        native.onmessage = event => { if (sockets.has(token)) wrapped.onmessage?.(event); };
-        native.onerror = event => { if (sockets.has(token)) wrapped.onerror?.(event); };
-        native.onclose = event => {
-          if (!sockets.delete(token)) return;
+        // Internal teardown may clear public handlers; the native close handler still owns slot release, except that an
+        // error before open is a failed connection (WHATWG "fail the WebSocket connection"): no live socket remains, and
+        // some runtimes (Node 22 undici) never emit the close that should follow. A silent hang still holds its slot.
+        let opened = false;
+        const release = (): boolean => {
+          if (!sockets.delete(token)) return false;
           native.onopen = native.onmessage = native.onerror = null;
-          wrapped.onclose?.(event);
           queueMicrotask(fill);
+          return true;
+        };
+        native.onopen = event => { if (!sockets.has(token)) return; opened = true; wrapped.onopen?.(event); };
+        native.onmessage = event => { if (sockets.has(token)) wrapped.onmessage?.(event); };
+        native.onerror = event => {
+          if (!sockets.has(token)) return;
+          const handler = wrapped.onerror;
+          if (!opened) { const onclose = wrapped.onclose; if (release()) { handler?.(event); onclose?.(event); } return; }
+          handler?.(event);
+        };
+        native.onclose = event => {
+          const handler = wrapped.onclose;
+          if (release()) handler?.(event);
         };
         socket = wrapped;
         if (done) { discard(); return; }

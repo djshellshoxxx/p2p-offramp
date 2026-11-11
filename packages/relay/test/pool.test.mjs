@@ -107,6 +107,46 @@ test('failover: a relay that never connects exhausts six reconnects, then the ne
   });
 });
 
+// Regression (PR #83 report): Node 22's WebSocket fires `error` but never `close` when the opening handshake fails.
+// The pool released a socket slot only on `close`, so with one slot the failed attempt leaked it and every later
+// attempt, including failover to the next relay, was refused with LIMIT_EXCEEDED. This connector reproduces that
+// runtime behavior deterministically on any Node version.
+test('failover: a handshake that errors and never closes releases its slot, so reconnects and the next relay proceed', async () => {
+  const urls = { 'relay-a': 'wss://relay-a.fixture.invalid/', 'relay-b': 'wss://relay-b.fixture.invalid/' };
+  const attempts = { a: 0, b: 0 }; const closesOnA = [];
+  const connect = url => {
+    const socket = { onopen: null, onmessage: null, onclose: null, onerror: null, sent: [],
+      send(text) { this.sent.push(JSON.parse(text)); }, close() { if (url === urls['relay-a']) closesOnA.push(true); /* never emits close */ } };
+    if (url === urls['relay-a']) { attempts.a++; queueMicrotask(() => socket.onerror?.({})); }
+    else { attempts.b++; queueMicrotask(() => socket.onopen?.({})); }
+    return socket;
+  };
+  const { broker } = makeBroker({ endpoints: ['relay-a', 'relay-b'], endpointURLs: urls });
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: urls['relay-a'] }, { endpointId: 'relay-b', url: urls['relay-b'] }],
+    verifier: sellerCrypto, connect, timing: FAST, nowSeconds: () => NOW, maxRelays: 1 });
+  try {
+    pool.subscribe([filter()], collect().handlers);
+    await until(() => stateOf(pool, 'relay-b').state === 'open', 2000);
+    assert.equal(stateOf(pool, 'relay-a').state, 'failed');
+    assert.equal(attempts.a, 1 + POOL_LIMITS.maxReconnects, 'initial attempt plus six reconnects');
+    assert.equal(attempts.b, 1);
+    assert.ok(closesOnA.length >= attempts.a, 'each failed handshake is explicitly closed by the pool');
+  } finally { pool.close(); }
+});
+
+test('hanging socket that never errors or closes keeps holding its slot (physical socket may still be live)', async () => {
+  let attempts = 0;
+  const connect = () => { attempts++; return { onopen: null, onmessage: null, onclose: null, onerror: null, send() {}, close() {} }; };
+  const { broker } = makeBroker();
+  const pool = createRelayPool({ broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }, { endpointId: 'relay-b', url: 'wss://fixture.example/' }],
+    verifier: sellerCrypto, connect, nowSeconds: () => NOW, maxRelays: 1, timing: { ...FAST, connectTimeoutMs: 10 } });
+  try {
+    pool.subscribe([filter()], collect().handlers);
+    await wait(150);
+    assert.equal(attempts, 1, 'a timed-out socket without error/close evidence is not counted as released');
+  } finally { pool.close(); }
+});
+
 test('reconnect: a dropped socket reconnects with backoff, replays the REQ and keeps receiving; no duplicate delivery', async () => {
   await withRelays(1, [], async (fakes, keep) => {
     const first = await signedAd({ orderId: '1'.repeat(64) }); fakes[0].events.push(first);
