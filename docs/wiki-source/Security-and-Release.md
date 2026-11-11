@@ -23,6 +23,14 @@ On **unmerged** [integration PR #61](https://github.com/djshellshoxxx/p2p-offram
 
 Other draft work includes [D9 fail-closed marker handling (#69)](https://github.com/djshellshoxxx/p2p-offramp/pull/69), [fresh-key broadcast-unknown restore tests (#70)](https://github.com/djshellshoxxx/p2p-offramp/pull/70), and a further historical terminal-label characterization [#71](https://github.com/djshellshoxxx/p2p-offramp/pull/71). These **do not complete** historical-record provenance migration or allow an unknown transaction to be resent.
 
+## G18 native payment-guidance evidence is read-only
+
+Merged `main@cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` contains a **private/test-only** native EVM payment-preflight adapter (`packages/wallet/src/evm-payment-preflight.ts`), separate from the shipped application. It verifies selected chain identity and genesis, finalized block/code and contract read, immutable trade terms and latest native-state/chain-time vetoes; it must recheck chain identity after the proof reads. Its responses cannot authorize wallet spending, fiat finality, relayer trust or production release. Registry selection and RPC provider honesty remain external trusted inputs, not guarantees supplied by the adapter.
+
+A separate, **unmerged test-only** [draft PR #85](https://github.com/djshellshoxxx/p2p-offramp/pull/85), exact head `921f067769188f53c2d379f035695a40ae978083`, characterizes an unapproved chain switch **after** earlier synthetic finalized-funding evidence: `WRONG_CHAIN`, no cached guidance, two chain-ID reads and read-only RPC calls. Its [exact-head GitHub Actions](https://github.com/djshellshoxxx/p2p-offramp/commit/921f067769188f53c2d379f035695a40ae978083/checks) passed **7/7 jobs** across EVM escrow, vault foundation and specification inventory workflows. This is test evidence for existing fail-closed behavior, **not a production bug fix or independent chain attestation**. No local Node/Anvil test was run by this ChatGPT documentation pass.
+
+Traceability: `packages/wallet/test/evm-payment-preflight.test.mjs` holds injected-provider negative assertions; `npm run test:payment:preflight` is declared in merged `package.json` and exercises receipt fixture plus the local-Anvil acceptance script `scripts/test-payment-preflight-local.mjs` (requires separately provisioned Foundry). Neither command was executed here. G3 deployment ABI-layout decision, D1/D8 owner approval, D9 provenance, Sonar A and independent escrow/security review remain release blockers.
+
 ## D9 encrypted-recovery state evidence (draft-only)
 
 This matrix links the currently **unmerged, test-only** recovery characterization slices to their exact source heads. It is **not** a live-wallet acceptance result and does not create provenance or transaction-sending authority.
