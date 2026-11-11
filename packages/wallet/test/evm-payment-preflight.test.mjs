@@ -162,6 +162,21 @@ test('different finalized recipients, principal, asset or expiry block guidance'
   }
 });
 
+test('G18 final chain identity recheck vetoes otherwise valid funded guidance after a provider switch', async () => {
+  let chainReads = 0;
+  const f = await fixture({ intercept: args => {
+    if (args.method !== 'eth_chainId') return undefined;
+    chainReads++;
+    return chainReads === 1 ? '0x7a69' : '0x1';
+  } });
+  refused(await f.reader.read(), 'WRONG_CHAIN');
+  refused(f.reader.view(), 'UNAVAILABLE');
+  assert.equal(chainReads, 2, 'chain identity must be rechecked after the anchored trade reads');
+  assert.equal(f.calls.filter(call => call.method === 'eth_chainId').length, 2);
+  assert.ok(f.calls.some(call => call.method === 'eth_getCode'), 'proof reads must have preceded the failed final identity check');
+  assert.ok(f.calls.every(call => !/send|sign|personal_/i.test(call.method)), 'payment guidance must remain read-only');
+});
+
 test('wrong chain, genesis, runtime, on-chain digest and canonical anchor refuse native evidence', async () => {
   const cases = [
     [args => args.method === 'eth_chainId' ? '0x1' : undefined, 'WRONG_CHAIN'],
