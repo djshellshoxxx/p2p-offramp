@@ -76,6 +76,8 @@ discriminators; `tests/vectors.rs` cross-checks it and the G16 Solana terms vect
 
 ## Not covered
 
-No client adapter, wallet, journal or recovery package uses this program yet. No public deployment, no
-verified-build hash method, no mainnet mint list, and no professional audit. Token-2022, freeze-authority
-policy per mint, rent reclamation and the client deadline margin remain owner decisions.
+[`packages/chain-solana`](../../packages/chain-solana/README.md) is a finalized-only, read-only adapter with
+unsigned instruction builders; the app build excludes it. No wallet, transaction journal (G12) or recovery
+package uses this program yet. No public deployment, no confirmed verified-build hash method (the adapter's
+`loader-v3-programdata-region/v1` is a proposal), no mainnet mint list, and no professional audit. Token-2022,
+freeze-authority policy per mint, rent reclamation and the client deadline margin remain owner decisions.
