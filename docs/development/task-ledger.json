@@ -118,13 +118,15 @@
     },
     {
       "id": "N41-43",
-      "status": "unassigned",
+      "status": "active",
       "priority": "P1",
       "depends": [
         "N40"
       ],
       "scope": "Locale runtime, UI wiring, native journey",
-      "source": "pr/41..pr/43"
+      "source": "pr/41..pr/43",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "evidence": "N41 extracted (8354137): 94/94 focused, npm test 1375/1375, browser suites exit 0; N42/N43 pending (#42 overlaps #65 runtime files); docs/development/2026-11-11-lanes.md"
     },
     {
       "id": "N37F",
