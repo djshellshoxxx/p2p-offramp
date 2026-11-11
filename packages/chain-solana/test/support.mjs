@@ -249,7 +249,8 @@ export function makeWorld(terms, o = {}) {
     const vault = vaultPda(pda.address);
     accounts.set(pda.address, account(escrow, PROGRAM, { lamports: RENT_MIN }));
     const vaultAmount = o.vaultAmount ?? ((o.escrow?.paid ?? 0) ? 0 : amount);
-    accounts.set(vault.address, account(tokenBytes({ owner: pda.address, amount: vaultAmount, ...o.vault }), SPL_PROGRAM));
+    const vaultBytes = tokenBytes({ owner: pda.address, amount: vaultAmount, ...o.vault });
+    accounts.set(vault.address, account(vaultBytes, SPL_PROGRAM));
     accounts.set(MINT, account(mintBytes(o.mint), SPL_PROGRAM));
   }
   return {

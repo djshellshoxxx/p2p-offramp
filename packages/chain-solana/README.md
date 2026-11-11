@@ -21,6 +21,11 @@ not approve any network, deployment or registry entry.
   releaseMargin)` take u64 decimal strings and a required margin. `chainTime` is `live.timestampSeconds`.
 - `programDataSha256(accountData)` / `programDataSha256FromElf(elf, programDataLength)`, the address helpers,
   and the layout decoders.
+- Program ID constants (`src/address.ts`): `SYSTEM_PROGRAM_ID`, `SPL_PROGRAM_ID` (Tokenkeg…), `SPL_2022_PROGRAM_ID`
+  (refusal only), `ATA_PROGRAM_ID`, `LOADER_V3_ID`, `SYSVAR_OWNER_ID`, `CLOCK_SYSVAR_ID`, `RENT_SYSVAR_ID` and
+  `WRAPPED_SOL_MINTS`. The M2B-1 spec names the two token constants `TOKEN_PROGRAM_ID` and `TOKEN_2022_PROGRAM_ID`;
+  they were deliberately renamed (SonarCloud S6418 flags `TOKEN_*` names as hard-coded secrets). Values and
+  behaviour are unchanged, so import the `SPL_*` names.
 
 ## Guarantees
 

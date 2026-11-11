@@ -59,7 +59,7 @@ const failsWith = async (code, kind, options) => {
   return s;
 };
 const integrity = (kind, mutate, extra = {}) => failsWith('INTEGRITY_FAILURE', kind, { mutate, ...extra });
-const control = async (kind, mutate) => assert.ok(ok((await readWith(kind, { mutate })).result));
+const control = async (kind, mutate, extra = {}) => assert.ok(ok((await readWith(kind, { mutate, ...extra })).result));
 const escrowOf = world => world.escrow.address;
 const vaultOf = world => vaultPda(world.escrow.address).address;
 const replaceEscrow =
@@ -251,6 +251,61 @@ test('floor-second-read', async () => {
   }
 });
 
+// Spec §5 step 5: the floor is keyed by network, so a second deployment on that network inherits it.
+test('floor-is-per-network-not-per-deployment', async () => {
+  const base = makeRegistry();
+  const other = { ...base.deployment(NETWORK_ID, DEPLOYMENT_ID), id: 'escrow-v2', address: key('program-v2') };
+  const registry = {
+    network: base.network,
+    deployment: (networkId, id) =>
+      networkId === NETWORK_ID && id === 'escrow-v2' ? other : base.deployment(networkId, id),
+  };
+  const s = setup('native', { registry });
+  try {
+    ok(await s.reader.read(s.binding, request(), s.terms));
+    // The fake world holds no accounts for program-v2, so identity fails after the request was sent.
+    error(await s.reader.validateLive(NETWORK_ID, 'escrow-v2'), 'INTEGRITY_FAILURE');
+    const sent = s.calls.at(-1);
+    assert.equal(sent.method, 'getMultipleAccounts');
+    assert.equal(sent.params[0][0], key('program-v2'));
+    assert.equal(sent.params[1].minContextSlot, SLOT);
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+// Spec §2/§7: validateLive is the source of chainTime; §5 step 2: it requests only the first three keys.
+test('validateLive-exact-anchor-frozen-and-5-call-params', async () => {
+  const s = setup('native');
+  try {
+    const live = ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+    assert.deepEqual(live, {
+      height: String(SLOT),
+      hash: s.world.block.blockhash,
+      blockHeight: String(SLOT - 10),
+      timestampSeconds: String(CHAIN_TIME),
+      programDataSha256: shaHex(programDataBytes().subarray(45)),
+    });
+    assert.ok(Object.isFrozen(live));
+    const block = [SLOT, { commitment: 'finalized', transactionDetails: 'none', rewards: false }];
+    assert.deepEqual(
+      s.calls.map(({ method, params }) => ({ method, params })),
+      [
+        { method: 'getGenesisHash', params: [] },
+        {
+          method: 'getMultipleAccounts',
+          params: [[PROGRAM, PROGRAM_DATA, CLOCK], { commitment: 'finalized', encoding: 'base64' }],
+        },
+        { method: 'getBlock', params: block },
+        { method: 'getBlock', params: block },
+        { method: 'getGenesisHash', params: [] },
+      ],
+    );
+  } finally {
+    s.reader.dispose();
+  }
+});
+
 test('rentEpoch-getter-untouched', async () => {
   let touched = 0;
   const trap = entry =>
@@ -292,7 +347,7 @@ test('rentEpoch-getter-untouched', async () => {
 const setupWorld = setup('native').world;
 
 // Spec §5: fields the reader DOES read are taken only from data descriptors; an accessor is never invoked.
-test('descriptor-only-reads-{owner,data,value[0],blockhash}', async () => {
+test('descriptor-only-reads-{owner,data,value[0],space,blockhash}', async () => {
   let touched = 0;
   const getter = (target, field, value) => {
     delete target[field];
@@ -314,6 +369,8 @@ test('descriptor-only-reads-{owner,data,value[0],blockhash}', async () => {
     ['getMultipleAccounts', value => getter(value[0], 'owner', value[0].owner)],
     ['getMultipleAccounts', value => getter(value[0], 'data', value[0].data)],
     ['getMultipleAccounts', value => getter(value, '0', value[0])],
+    // `space` goes through optionalOwn, not own(): a provider accessor must be refused, never invoked.
+    ['getMultipleAccounts', value => getter(value[2], 'space', value[2].space)],
     ['getBlock', block => getter(block, 'blockhash', block.blockhash)],
   ];
   for (const [method, trap] of traps) {
@@ -431,6 +488,12 @@ test('anchor-boundaries-{blockHeight=S,timestamp-0,slot-0}', async () => {
   };
   const zero = ok((await readWith('native', { world: { slot: 0 }, mutate: genesisSlot })).result);
   assert.equal(zero.observation.anchor.height, '0');
+  // Only S = parentSlot = 0 is allowed at slot 0; a slot-0 block claiming any other parent is refused.
+  const genesisParent = world => {
+    genesisSlot(world);
+    world.block.parentSlot = 1;
+  };
+  await integrity('native', genesisParent, { world: { slot: 0 } });
 });
 
 test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
@@ -441,9 +504,31 @@ test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
   const clock = b64(clockBytes(SLOT));
   await integrity('native', shape([clock, 'base58']));
   await integrity('native', shape([clock, 'base64', 'extra']));
-  await integrity('native', shape([`${clock.slice(0, -2)}A=`, 'base64']));
+  // Still 40 bytes (so `space` and the exact length agree) but with non-zero pad bits: only decodeBase64 rejects it.
+  const badPadBits = `${clock.slice(0, -4)}AB==`;
+  assert.ok(badPadBits.length === clock.length && Buffer.from(badPadBits, 'base64').length === 40);
+  assert.notEqual(b64(Buffer.from(badPadBits, 'base64')), badPadBits, 'the case must be non-canonical base64');
+  await integrity('native', shape([badPadBits, 'base64']));
   await integrity('native', shape(clock));
   await integrity('native', world => setAccount(world, CLOCK, { ...world.accounts.get(CLOCK), executable: 'false' }));
+});
+
+// Spec §8: base64 caps are checked before decoding. Every account also has an exact-length check after decoding,
+// so only cost tells the two apart: an uncapped reader would regex-scan, allocate and decode ~48 MB first.
+test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
+  const huge = 'A'.repeat(64 * 1024 * 1024);
+  for (const index of [2, 3]) {
+    const started = performance.now();
+    await failsWith('INTEGRITY_FAILURE', 'native', {
+      handle: input => {
+        if (input.method !== 'getMultipleAccounts') return undefined;
+        const value = input.params[0].map(address => structuredClone(setupWorld.accounts.get(address)));
+        value[index].data = [huge, 'base64'];
+        return { context: { slot: SLOT }, value };
+      },
+    });
+    assert.ok(performance.now() - started < 250, `account ${index} over-cap data must be refused before decoding`);
+  }
 });
 
 test('INTEGRITY_FAILURE: space-mismatch', async () => {
@@ -473,6 +558,9 @@ test('INTEGRITY_FAILURE: getBlock-{null,noncanonical,parent≥S}', async () => {
   // parentSlot must be a safe int too: '399' < 400 would otherwise pass by coercion.
   await integrity('native', blockWith({ parentSlot: String(SLOT - 1) }));
   await integrity('native', blockWith({ parentSlot: SLOT - 1.5 }));
+  // Negative safe ints pass `height <= S` and `parent < S`; only the non-negative check refuses them.
+  await integrity('native', blockWith({ blockHeight: -1 }));
+  await integrity('native', blockWith({ parentSlot: -1 }));
 });
 
 test('INTEGRITY_FAILURE: recheck-changed-{hash,height,parent}', async () => {
@@ -578,6 +666,9 @@ test('INTEGRITY_FAILURE: field-{buyer,amount,deadline,mint,kind,tp}', async () =
 test('INTEGRITY_FAILURE: native-lamports-{≤amount,unsafe}', async () => {
   await integrity('native', undefined, { world: { lamports: 500_000_000 } });
   await integrity('native', undefined, { world: { lamports: 2 ** 53 } });
+  // A paid escrow skips `lamports > amount`, so only the non-negative check refuses -5.
+  await control('native', undefined, { world: { escrow: { state: 1, paid: 1 } } });
+  await integrity('native', undefined, { world: { escrow: { state: 1, paid: 1 }, lamports: -5 } });
   await integrity('native', world => setAccount(world, RENT, null));
   await integrity('native', world => setAccount(world, RENT, account(rentBytes(), key('not-sysvar'))));
   await integrity('native', world => setAccount(world, RENT, account(rentBytes(), SYSVAR, { executable: true })));
@@ -616,6 +707,16 @@ test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   // 83 bytes still fits the 112-char base64 cap and `space`: only the exact length check rejects it.
   await integrity('spl', world => setAccount(world, MINT, account(cat(mintBytes(), [0]), SPL_PROGRAM)));
   await integrity('spl', world => setAccount(world, MINT, null));
+  // Spec §5: the mint is checked even when no escrow exists (the state in which the app decides to fund).
+  const absent = mint => world => {
+    setAccount(world, escrowOf(world), null);
+    setAccount(world, vaultOf(world), null);
+    setAccount(world, MINT, mint);
+  };
+  await control('spl', absent(account(mintBytes(), SPL_PROGRAM)));
+  await integrity('spl', absent(account(mintBytes({ decimals: 9 }), SPL_PROGRAM)));
+  await integrity('spl', absent(account(mintBytes(), SPL_2022_PROGRAM)));
+  await integrity('spl', absent(null));
 });
 
 test('vault-frozen', async () => {
@@ -757,6 +858,28 @@ test('dispose', async () => {
   held.forEach(resolve => resolve(s.world.block));
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(s.calls.length, count);
+});
+
+// Spec §2: timeoutMs defaults to 10_000 ms when omitted.
+test('default-timeout-10000ms', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const flush = async () => {
+    for (let index = 0; index < 5; index++) await new Promise(resolve => setImmediate(resolve));
+  };
+  const reader = new SolanaChainReader({ rpc: { request: () => new Promise(() => {}) }, registry: makeRegistry() });
+  try {
+    let settled = null;
+    reader.validateLive(NETWORK_ID, DEPLOYMENT_ID).then(result => (settled = result));
+    await flush();
+    t.mock.timers.tick(9_999);
+    await flush();
+    assert.equal(settled, null, 'still pending at 9_999 ms');
+    t.mock.timers.tick(1);
+    await flush();
+    error(settled, 'TIMEOUT');
+  } finally {
+    reader.dispose();
+  }
 });
 
 test('ctor-0/60001', () => {

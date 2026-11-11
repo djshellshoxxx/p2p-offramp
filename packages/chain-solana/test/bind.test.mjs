@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { bindSolanaTrade, isBoundSolanaTrade } from '../src/bind.ts';
+import { buildFundNative, buildRelease } from '../src/instructions.ts';
 import {
   bindingOf,
   COMPILED_GENESIS,
@@ -33,6 +34,15 @@ test('binds-branded-frozen-trade', () => {
   assert.deepEqual(trade.escrow, escrowPda(terms.seller, terms.sellerNonce));
   assert.equal(trade.vault, null);
   assert.equal(trade.programDataAddress, 'XR3M7K34KSnyYV1HtPmoRkjuLWqhwfF3m1LgC3jaTfF');
+  // Deep freeze: builders take programId from trade.deployment.address, so no nested field may be rewritable.
+  for (const part of [trade.binding, trade.network, trade.deployment, trade.deployment.runtime, trade.asset]) {
+    assert.ok(Object.isFrozen(part));
+  }
+  assert.throws(() => {
+    trade.deployment.address = key('other-program');
+  }, TypeError);
+  assert.equal(ok(buildRelease(trade)).programId, PROGRAM);
+  assert.equal(ok(buildFundNative(trade)).programId, PROGRAM);
   const token = ok(bind(spl()));
   assert.deepEqual(token.vault, vaultPda(token.escrow.address));
   assert.equal(token.asset.id, 'usd6');
@@ -85,6 +95,16 @@ test('INVALID_INPUT: terms-{extra-key,getter,proxy}', () => {
     ),
     'INVALID_INPUT',
   );
+  // A nested object value must be refused by the primitive check before structuredClone could walk its getters.
+  const nested = Object.defineProperty({}, 'x', {
+    enumerable: true,
+    get() {
+      touched++;
+      return 1;
+    },
+  });
+  error(bind({ ...terms, revision: nested }, binding), 'INVALID_INPUT');
+  error(bind({ ...terms, mint: nested }, binding), 'INVALID_INPUT');
   assert.equal(touched, 0, 'accessors and get traps are never invoked');
   const hidden = { ...terms };
   Object.defineProperty(hidden, 'revision', { value: '1', enumerable: false });

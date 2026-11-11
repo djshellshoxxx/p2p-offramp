@@ -135,6 +135,8 @@ test('rent-capture', () => {
 test('rent-1.5-null', () => {
   assert.equal(escrowRentMinimum(rentBytes(6960, '000000000000f83f')), null);
   integrity(() => escrowRentMinimum(rentBytes().subarray(0, 16)));
+  // 18 bytes still fits the 24-char base64 cap and `space`: only the exact length check rejects it.
+  integrity(() => escrowRentMinimum(cat(rentBytes(), [0])));
 });
 
 test('programdata-rejects-{tag2,some,some-zero,opt2,len45,over-cap}', () => {
@@ -170,5 +172,14 @@ test('pdh-{unpadded=sha256(elf),padding-counts=FromElf,ignores-header,≠trimmed
   assert.throws(() => programDataSha256FromElf(ELF, 45 + ELF.length - 1), { code: 'INVALID_INPUT' });
   assert.throws(() => programDataSha256FromElf(new Uint8Array(0), 100), { code: 'INVALID_INPUT' });
   assert.throws(() => programDataSha256FromElf(ELF, 46 + MAX_PROGRAM_DATA_REGION_BYTES), { code: 'INVALID_INPUT' });
+  // Spec §4: the upper bound 45 + 1 MiB is inclusive for both functions, and they agree there.
+  const limit = 45 + MAX_PROGRAM_DATA_REGION_BYTES;
+  const atLimit = programDataBytes({ length: limit });
+  assert.equal(programDataSha256(atLimit), programDataSha256FromElf(ELF, limit));
+  assert.equal(decodeProgramData(atLimit).sha256, programDataSha256(atLimit));
+  // A length that failed to parse must not silently yield an unpadded pin.
+  for (const length of [Number.NaN, 1.5 + 45 + ELF.length, undefined, '100', Infinity]) {
+    assert.throws(() => programDataSha256FromElf(ELF, length), { code: 'INVALID_INPUT' }, String(length));
+  }
   assert.equal(fromHex(programDataSha256(padded)).length, 32);
 });
