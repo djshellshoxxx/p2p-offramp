@@ -126,7 +126,7 @@
       "scope": "Locale runtime, UI wiring, native journey",
       "source": "pr/41..pr/43",
       "owner": "claude/vibrant-cray-ny4gum",
-      "evidence": "N41 extracted (8354137): 94/94 focused, npm test 1375/1375, browser suites exit 0; N42/N43 pending (#42 overlaps #65 runtime files); docs/development/2026-11-11-lanes.md"
+      "evidence": "N41 8354137 and N42 75d8846 extracted (npm test 1456/1456; browser suites exit 0; build:testnet blocked by D2 KEY_UNPINNED); N43 pending; M1 transport-selection test due with N43; docs/development/2026-11-11-lanes.md"
     },
     {
       "id": "N37F",

@@ -114,3 +114,13 @@ test('a typed wrong-profile retention preview closes the facade and preserves en
  port.transform=message=>{if(message.operation==='planRetention'&&message.result?.ok)message.result.value.profileId='ff'.repeat(16);};
  bad(await services.planRetention(),'PROTOCOL_ERROR');assert.equal(services.current.state,'locked');assert.equal(JSON.stringify(store.rows.get(created.profileId)),source);
 });
+
+test('a retention confirmation is single-use even when its first attempt is refused before any write',async t=>{
+ const s=await setup(t,{factory:syntheticFactory}),writes=s.store.writes,preview=good(await s.send('reviewRetention',{profileId:s.profileId}));
+ // First attempt is well formed but names the wrong revision: the Worker refuses it after consuming the confirmation.
+ bad(await s.send('deleteReviewedRecords',{profileId:s.profileId,...consent(preview),expectedRevision:preview.revision+1,consentRevision:preview.revision+1}),'CONFLICT');assert.equal(s.store.writes,writes);
+ // The same preview cannot be retried with corrected consent: a new review (and a new preview) is required.
+ bad(await s.send('deleteReviewedRecords',{profileId:s.profileId,...consent(preview)}),'INVALID_INPUT');assert.equal(s.store.writes,writes);
+ assert.equal(good(await s.send('listTermsReviews',{profileId:s.profileId})).items.length,1);
+ const fresh=good(await s.send('reviewRetention',{profileId:s.profileId}));assert.equal(good(await s.send('deleteReviewedRecords',{profileId:s.profileId,...consent(fresh)})).deletedCount,1);
+});
