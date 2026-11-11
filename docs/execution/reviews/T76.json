@@ -1,0 +1,105 @@
+{
+  "task": "T76",
+  "reviewer": "root",
+  "disposition": "APPROVED_LOCAL_DIAGNOSTIC_MODELS_ONLY",
+  "files": [
+    {
+      "path": "packages/arbitration/src/payment-assertions.ts",
+      "sha256": "8560e83bd4fe0014cc9b6cb4125f5c29688a744dc9f01cd3a39ab9dd454db9fe"
+    },
+    {
+      "path": "packages/arbitration/test/payment-assertions.test.mjs",
+      "sha256": "672a8243364aa01bd919ecb91ccd7f85d754f5db4854f9a1e13ebd58581ef4c2"
+    },
+    {
+      "path": "packages/arbitration/index.ts",
+      "sha256": "d7e52527974d90ef8325b345c70facf0d305d11f730fb9dd3b03cffd77bfba3f"
+    },
+    {
+      "path": "packages/arbitration/README.md",
+      "sha256": "6799f8426b754e64b4de77b5fcf30e7b764399fbd4197d69cd3784d0afa1b5d8"
+    },
+    {
+      "path": "packages/arbitration/src/shared.ts",
+      "sha256": "47820465eb4522258ddbc3fb885a889d9a70fdf3b05e940d784982f8b23dc26f"
+    },
+    {
+      "path": "packages/meetup/src/signaling-model.ts",
+      "sha256": "7feb668a99a74530b998bd636509b109b6bb14d8c0e854d30329401cfebdf1ed"
+    },
+    {
+      "path": "packages/meetup/test/signaling-model.test.mjs",
+      "sha256": "cbb9008c1b96ac9adf938bce0dc336ceab38ed9e36dc5106976c745527d1cb2d"
+    },
+    {
+      "path": "packages/meetup/index.ts",
+      "sha256": "155d9c875f65df5973d1c0b22598b4d322f9cabec2358cbfa418fff22a3eb643"
+    },
+    {
+      "path": "packages/meetup/README-POLICIES.md",
+      "sha256": "eee48bae3ea890a553db8de02fbd412eee5f41f61686137ee4935a88fc2de19a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "packages/meetup/src/policy-data.ts",
+      "sha256": "820ca54cc6acc8ca39a760f49d7d22a7dc98610d908921d2546a8d9c37a8d586"
+    },
+    {
+      "path": "packages/meetup/src/shared.ts",
+      "sha256": "29b1464b375a30a3e7a0a3817ddbf44c6ae4c415958c1a9d72b49ed3d7a95d82"
+    },
+    {
+      "path": "packages/meetup/src/rtc-policy.ts",
+      "sha256": "2d6fd9866b651aca81389f3bdd76ee2169cf8d30a17b07a959e25b38330f49aa"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "sha256": "efbc22652c68d40f56469055e9aa028b0c577b50285a316b29cc86d2423806b9"
+    },
+    {
+      "path": "packages/schemas/src/core.ts",
+      "sha256": "4b23d4a3486dde235c98eede3c618f44b5499606a59e199334dc2539c0865d26"
+    },
+    {
+      "path": "packages/schemas/src/registry.ts",
+      "sha256": "dbc1245b39c87875481b8d872c66ea5bd4db962b5669493def4099463ded1183"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "a22c2ba6653ed46db9afc70a1c8fe6185cdbe841df3f9c0f6dbbdebc2a599f89"
+    }
+  ],
+  "review": "All9 files and shared scope/owner/bytes/SDP helpers reviewed against ARB-PAY/ARB-CONFLICT/MEET05. Checked guarded callbacks, resource/lifetime bounds, exact unverified records, private duplicate-byte fingerprints, deterministic grouping, no sums/verdict and terminal close.",
+  "verification": {
+    "focusedCases": 18,
+    "failures": 0,
+    "skips": 0,
+    "cancellations": 0,
+    "strictFacades": 2,
+    "independentPermutationOracle": "{\"permutations\":120,\"groups\":4,\"partialAmountsSummed\":false,\"sourceAuthority\":false,\"stable\":true}"
+  },
+  "logs": [
+    {
+      "path": "t76-root-focused.log",
+      "sha256": "6523bedc4c3b53d81cc436bc20b35a1f7d3e781f1df39bba0e5d1ff901f2a95c"
+    },
+    {
+      "path": "t76-root-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "t76-root-permutation-oracle.log",
+      "sha256": "e86b849a5c2f369558d23e09d95a1ecdc1326c19d52221bb92140791555336b0"
+    }
+  ],
+  "limits": [
+    "No source authentication, evidence-root codec, validity adjudication, rail freshness or custody authority.",
+    "Signal wire lacks binding/consent/message-ID/restart fields; local context does not define them. No transport, restart, durable replay or presence qualification.",
+    "Synthetic local policies/vectors confer no provider/interoperability/release approval."
+  ]
+}

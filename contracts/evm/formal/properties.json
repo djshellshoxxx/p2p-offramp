@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "chain": "evm",
+  "scope": "SOURCE_BOUND_LOCAL_FORMAL_AND_NATIVE_REFINEMENT",
+  "productionApproval": false,
+  "formalContract": "CanonicalSMT",
+  "nativeContract": "CanonicalNativeWitness",
+  "source": "formal/CanonicalRefinement.t.sol",
+  "canonicalSource": "src/BasicEscrow.sol",
+  "assumptions": [
+    "Pinned Solidity0.8.30, Cancun optimizer200 compilation and EVM runtime semantics",
+    "Fresh actual canonical contract with empty immutable token allowlist; no ERC20 generalization",
+    "SMT single-transaction checks with fresh native trade, uint128-positive principal and explicit distinct actor classes",
+    "SMT trusted known-contract calls; compiler abstractions/unsupported features are retained and block unqualified proof",
+    "No claim of fiat receipt, transaction inclusion, seller cooperation, wallet/browser security or external audit"
+  ],
+  "properties": [
+    {
+      "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+      "plainStatement": "Native zero-address asset is not an allowlisted ERC20 in the fresh empty-allowlist deployment.",
+      "formalStatement": "not subject.isAllowlisted(0)",
+      "implementationFunction": "BasicEscrow.constructor/isAllowlisted",
+      "assertion": "assert(!subject.isAllowlisted(address(0)));"
+    },
+    {
+      "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+      "plainStatement": "A distinct non-seller caller cannot release the fresh native trade or mutate its participants/principal/state.",
+      "formalStatement": "caller != seller implies release reverts and state'=Funded and seller'=seller and buyer'=buyer and amount'=principal",
+      "implementationFunction": "BasicEscrow.fundNative/release/getTrade",
+      "assertion": "assert(!released && observed.state == BasicEscrow.State.Funded && observed.seller == address(this)\n            && observed.buyer == buyer && observed.amount == msg.value);"
+    },
+    {
+      "id": "EVM-EARLY-REFUND-ATOMIC",
+      "plainStatement": "Refund before the funded deadline refuses and preserves the native trade.",
+      "formalStatement": "chainTime < deadline implies refund reverts and state'=Funded and buyer'=buyer and amount'=principal",
+      "implementationFunction": "BasicEscrow.fundNative/refund/getTrade",
+      "assertion": "assert(!refunded && observed.state == BasicEscrow.State.Funded && observed.buyer == buyer\n            && observed.amount == msg.value && observed.deadline > block.timestamp);"
+    }
+  ],
+  "nativeRefinement": {
+    "id": "EVM-ACTIVE-PENDING-PAID-SURPLUS",
+    "plainStatement": "Native principal is active while Funded, then paid or owed to the fixed recipient; donation surplus is never principal.",
+    "formalStatement": "depositedPrincipal = activePrincipal + pendingPrincipal + paidPrincipal; custody = activePrincipal + pendingPrincipal + surplus; paidPrincipal <= depositedPrincipal",
+    "implementationFunction": "BasicEscrow.fundNative/release/_payout/pendingWithdrawals/withdraw",
+    "test": "test_nativeRefinementConservesPendingAndPaid",
+    "expected": "Success",
+    "assumptions": [
+      "One native trade, rejecting then accepting buyer, fixed known principal, forced surplus injected with vm.deal",
+      "Caller gas fees are outside custody-principal accounting",
+      "Receiver and native gas/runtime behavior remain assumptions beyond this replay"
+    ]
+  },
+  "strictModelCounterexample": {
+    "id": "EVM-STRICT-TERMINAL-ALREADY-PAID",
+    "plainStatement": "The strict terminal-already-paid model does not refine intended push-to-credit behavior.",
+    "formalStatement": "Released implies paidToBuyer = principal",
+    "implementationFunction": "BasicEscrow.release/_payout/pendingWithdrawals/withdraw",
+    "test": "test_counterexampleStrictTerminalAlreadyPaid",
+    "expected": "Failure",
+    "expectedReason": "STRICT_TERMINAL_ALREADY_PAID",
+    "result": "MODEL_IMPLEMENTATION_GAP",
+    "qualification": "Intended deferred credit, not a theft defect. Formal-properties baseline must explicitly account for pending liabilities; no silent model weakening or production approval."
+  },
+  "canonicalSourceSha256": "dbeca9669391701beb9167e9cd9354f6d230e6cd6f60bf575d0690d96b04569f",
+  "guardLogic": {
+    "resultLabel": "PROVED_GUARD_LOGIC_ONLY",
+    "implementationFunctions": [
+      "BasicEscrow.release",
+      "BasicEscrow.refund"
+    ],
+    "properties": [
+      "GUARD-RELEASE-REFUND-DISJOINT",
+      "GUARD-UNAUTHORIZED-RELEASE-REFUSED",
+      "GUARD-SELLER-DEADLINE-COVERAGE",
+      "GUARD-DEADLINE-EQUALITY-REFUND"
+    ],
+    "scope": "Exact compiler AST pre-payout side-effect-free revert predicates only; no modifier/storage/payout/bytecode theorem",
+    "domains": "state 0..3, address uint160, timestamp uint256, deadline uint64; actual Funded enum value1"
+  },
+  "partitionInvestigation": {
+    "originalModelSourceSha256": "7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537",
+    "scope": "At most one attempt per unchanged original property under one finite shared budget; does not replace original UNKNOWNs, guard-only proofs or native credit counterexample.",
+    "targets": [
+      {
+        "id": "EVM-NATIVE-ASSET-NOT-TOKEN",
+        "source": "formal/partitions/NativeConstructor.sol",
+        "contract": "NativeConstructor",
+        "method": "checkNativeAssetExcludedFromTokenAllowlist"
+      },
+      {
+        "id": "EVM-UNAUTHORIZED-RELEASE-ATOMIC",
+        "source": "formal/partitions/UnauthorizedRelease.sol",
+        "contract": "UnauthorizedRelease",
+        "method": "checkUnauthorizedReleaseIsAtomic"
+      },
+      {
+        "id": "EVM-EARLY-REFUND-ATOMIC",
+        "source": "formal/partitions/EarlyRefund.sol",
+        "contract": "EarlyRefund",
+        "method": "checkRefundBeforeDeadlineIsAtomic"
+      }
+    ]
+  }
+}

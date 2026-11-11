@@ -1,0 +1,127 @@
+{
+  "review": "T42 independent review",
+  "decision": "APPROVED_AFTER_REPAIR",
+  "scope": [
+    "GOV01/GOV02 pure exact record validators",
+    "diagnostic version compatibility table",
+    "bounded local checker/CLI and all12 pending decision/proposal records"
+  ],
+  "axes": {
+    "correctness_and_spec": "Exact kinds/statuses/IDs/hashes and reader/writer membership; supported labels never inferred from semver. Pending records select no wire/ABI profile.",
+    "authority_privacy": "No App import, network, reviewer authentication, signing or funds capability; all compatibility/check outputs economicPreparationAllowed:false and inert-record-only.",
+    "bounds_hostile_inputs": "Unknown keys, duplicates, sparse/accessor/proxy inputs, counts/lengths and strict JSON refuse. Descriptor-backed fixed-buffer read and actual aggregate caps repaired.",
+    "lifecycle_filesystem_cli": "Descriptor regular-file identity/name/root checks before/after reads; final/ancestor symlink timing refused before outside bytes; mutation/growth refused, handles closed. Shared entry detector preserves eval/preload/query imports as inert.",
+    "simplicity_and_recovery": "Small offline record tool reuses CoreResult/strict JSON/isMain; no alternate manifest/evaluator or mutation of canonical escrow/recovery semantics."
+  },
+  "findings": [
+    {
+      "id": "T42-R1",
+      "priority": "P2",
+      "status": "FIXED_AND_INDEPENDENTLY_RECHECKED",
+      "before": "Separate realpath/stat and readFile allowed outside symlink substitution and16MiB+1 growth after sizecheck to return ok:true.",
+      "after": "No-follow/nonblocking descriptor open, regular/dev/inode/root/name checks,64KiB bounded read/hash, actual max+1/aggregate cap and size/mtime/ctime identity recheck."
+    }
+  ],
+  "checks": [
+    {
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test packages/governance/test/records.test.mjs",
+      "networkCapability": true,
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0,
+      "log": "/workspace/work/t42-review-focused-final.log"
+    },
+    {
+      "command": "node /workspace/work/t42-governance-fix-review.mjs",
+      "tests": 3,
+      "log": "/workspace/work/t42-governance-fix-review.log",
+      "notes": "Independent final-file/ancestor-dir symlink beforeopen and growthduringread; zero outside bytes."
+    },
+    {
+      "command": "node /workspace/work/t42-governance-cli-review.mjs",
+      "tests": 28,
+      "packets": 12,
+      "log": "/workspace/work/t42-cli-review-final.log"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --noEmit",
+      "exitCode": 0,
+      "log": "/workspace/work/t42-review-types-final.log"
+    }
+  ],
+  "frozenFiles": [
+    {
+      "path": "docs/governance/PENDING-DECISIONS.md",
+      "sha256": "0afd2e8bc14f7a63d743069c2114710e423cacf7280481f8a77d566f5030c54b"
+    },
+    {
+      "path": "docs/governance/README.md",
+      "sha256": "a99232fc1f1842bcf79de72f78aa39c4cb36b409ee70d9488390bfb48e0060c5"
+    },
+    {
+      "path": "docs/governance/g14-terms-binding.decision.json",
+      "sha256": "b38a90645bd83219070cd210afc2effbb66f3ca9e6ad061f425269c0645bc85b"
+    },
+    {
+      "path": "docs/governance/g14-terms-binding.proposal.json",
+      "sha256": "587cb68da2259a1c3c9d19d697ea6bdc6c577823d2fa95ee0b281c8a225aa9a0"
+    },
+    {
+      "path": "docs/governance/g15-release-policy.decision.json",
+      "sha256": "a80118dc011a0a839e3a3f2c54f2dd67f2407b21dcc974fe2bfc299ed420d995"
+    },
+    {
+      "path": "docs/governance/g15-release-policy.proposal.json",
+      "sha256": "282c556eff092bdfd904c9becf8c80413fe71be996fb45d4c5a1bdb42fdf88f0"
+    },
+    {
+      "path": "docs/governance/g16-acceptance.decision.json",
+      "sha256": "eb327fc3dfb56b973c40ecdcef6995f4d7dc86116f72f3f274b27e4b4ef5e94a"
+    },
+    {
+      "path": "docs/governance/g16-acceptance.proposal.json",
+      "sha256": "a4f8592ebb4d9582ff23bdff04f6bd2a0cae4ba91a290dd67e22e9416a35d7d2"
+    },
+    {
+      "path": "docs/governance/peer-acceptance-carrier.decision.json",
+      "sha256": "5c0d6d0702201d7a29b5e26f49670abee10e748f030a4d54b316978ace92f225"
+    },
+    {
+      "path": "docs/governance/peer-acceptance-carrier.proposal.json",
+      "sha256": "44026bf953683097615c91f08170f09974d1a0f3a9b556cc98463cf66c49efd3"
+    },
+    {
+      "path": "docs/governance/qr-profile.decision.json",
+      "sha256": "ea630b8c1ce9624d1a2f19f64f54caa69ed83b4f5e6af2c747c984f90dbbd7b7"
+    },
+    {
+      "path": "docs/governance/qr-profile.proposal.json",
+      "sha256": "c0e401236a84179eccfd84774d155bf306965f6ff757f8929ec0d436e0239f35"
+    },
+    {
+      "path": "docs/governance/solana-profile.decision.json",
+      "sha256": "a4e92f544b53d0f8b61a38e17dfb65b719a8bf6835f6dd6cfd6fb5711f0b269e"
+    },
+    {
+      "path": "docs/governance/solana-profile.proposal.json",
+      "sha256": "7a1814046f744aeaf021537bf90c5928596e076279a5b28092d74e30e1a9c932"
+    },
+    {
+      "path": "packages/governance/index.ts",
+      "sha256": "902359ef16ad1b29a347f5f150b11e773a387933d8058341e0e164636e4c143f"
+    },
+    {
+      "path": "packages/governance/src/records.ts",
+      "sha256": "97cce80eff9979cd5b0f8711007ab01791794fda4e9b33460b63a8d550b98300"
+    },
+    {
+      "path": "packages/governance/test/records.test.mjs",
+      "sha256": "f41db574aa2439b4a54f07b0fc8e17bb056a149c030756cde018157fb7cb23ef"
+    },
+    {
+      "path": "scripts/governance/check.mjs",
+      "sha256": "12719510236b36ba798c181731095229305b4eee56a494df2ef76ff9e1eefc16"
+    }
+  ],
+  "qualification": "Agent local code review only; no professional/security/release/ABI approval or activation."
+}

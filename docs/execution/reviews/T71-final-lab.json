@@ -1,0 +1,891 @@
+{
+  "task": "T71",
+  "reviewer": "/root/privacy_selector",
+  "operatorUnderReview": "root",
+  "reviewedAtUtc": "2026-11-02T18:40:56.857067+00:00",
+  "verdict": "APPROVE_BOUNDED_LOCAL_QUALIFICATION",
+  "scope": "Distinct read-only review of the exact final T71 clone/install/audit/foundation/journey packet and retained evidence. No suites or containers run, no source edits.",
+  "reviewedPacket": {
+    "path": "/workspace/work/t71-final-lab/qualification.json",
+    "bytes": 24160,
+    "sha256": "726f4306dbe880eeaa72b63c449daafe180f3f7d0b5eee08719a3f3a32cbcaeb"
+  },
+  "expectedPacketSha256": "726f4306dbe880eeaa72b63c449daafe180f3f7d0b5eee08719a3f3a32cbcaeb",
+  "artifactCount": 29,
+  "artifactMismatches": [],
+  "verifiedArtifacts": [
+    {
+      "path": "/workspace/work/t71-final-lab/audit-receipt.json",
+      "bytes": 1939,
+      "sha256": "d87c47c23ce79a3146592819e23a5a78a695f1319b257c1aeb447a9d16802c50",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/audit-start.json",
+      "bytes": 1753,
+      "sha256": "cc269e8ecc99f19d6f51a81bfa88538e09b131ab5982f1b7ac72a310a38bfae5",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/audit.log",
+      "bytes": 361,
+      "sha256": "a5dd41190e6d8052fd71f75c9e1cbd76f9b82d64b93d0f48ee858c6ee30ac470",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/command-1.log",
+      "bytes": 191,
+      "sha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/command-2.log",
+      "bytes": 182994,
+      "sha256": "ea346186f7c075d39d8da9d80a8fa3fd85e181f9c6cdffce803e2169fa594805",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/command-3.log",
+      "bytes": 241,
+      "sha256": "257a0f43c6ddc6b1c5a77351d4650c6b77c8cc303121b45cd0f75cbfe63bb0d4",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/command-4.log",
+      "bytes": 2745,
+      "sha256": "253da03a9548bb2218151e79bea6fa2a7040d63c1d674a7c4e140c1dd46d9c2a",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/command-5.log",
+      "bytes": 1116,
+      "sha256": "4b4a14e76313b1afcb683b64d0882903e8e3dd0071af4848551ab69ac460272e",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/recipe.json",
+      "bytes": 1353,
+      "sha256": "d9a36c011564f0ed4515a0c951d07783e86473cf0a0e7cd0d72ba3ee1d38ac42",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation/run.json",
+      "bytes": 2328,
+      "sha256": "2358efc72cf04fbf9f80db005e6282e7566fda2af6a5d7c9503d6e732e9b9e0d",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation-receipt.json",
+      "bytes": 1293,
+      "sha256": "454d08b4176c84605978a0ea1bcbe2760c76402ae896efcebf581a1044e6b00d",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation-start.json",
+      "bytes": 1102,
+      "sha256": "a8f8e16833d5a814db847d5183b72a58d69a032c84939caebe392f3251cad2c3",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/foundation.log",
+      "bytes": 131,
+      "sha256": "109ebca3ac84419eb4fe1137a39f29fda13ed3208a56792b15574786f6845752",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/install-receipt.json",
+      "bytes": 1985,
+      "sha256": "e64a59e3b0447eca1f3c68502571a69ed2b031bbbf78d0aad0dcf7f0de712d5f",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/install-start.json",
+      "bytes": 1797,
+      "sha256": "51032de29a26eafd6de29d26a3447fcde49a6f52d36677a83ac83843498fc3d2",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/install.log",
+      "bytes": 234,
+      "sha256": "4060d29a029ee849b121345b4d44ae1f61451f18ba3b9bfdd50606cd5482e373",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/command-1.log",
+      "bytes": 11563,
+      "sha256": "bfd39d99a7350d5867c7769b42a5ca4ac168170dc33761a88c9b5a7bcda5d7f9",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/command-2.log",
+      "bytes": 2090,
+      "sha256": "9567b2855078a5dfb8b0f5747f371d80461da30d80f367378fe9d6e91b661b87",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/command-3.log",
+      "bytes": 1886,
+      "sha256": "fe1a58b1cd86b8a3619b3896e96eb911d1cfdbed0dfca942f58f459161d04742",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/command-4.log",
+      "bytes": 2542,
+      "sha256": "f3333b590586ae420bc99fe2de65464d74b03027d243c7d3dd5b69876eaf2811",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/recipe.json",
+      "bytes": 1353,
+      "sha256": "d9a36c011564f0ed4515a0c951d07783e86473cf0a0e7cd0d72ba3ee1d38ac42",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey/run.json",
+      "bytes": 2031,
+      "sha256": "bf3a548f5a452ef89ea3efc0f71d8eff569f4cea9b28bbf5fa9f5a5b6fd20a7d",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey-receipt.json",
+      "bytes": 1280,
+      "sha256": "ec938b897c3fa5d3ce9d9bb3a4fe52c01f5c7d30d99ce86a4fcf913e15e986ce",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey-start.json",
+      "bytes": 1093,
+      "sha256": "a5c25a97ca97311140f7174d78ae8d45fe649efac7da2d02edf90d3549923f47",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/journey.log",
+      "bytes": 131,
+      "sha256": "7e69e6c0255f1793463ba95cad488d05950317f451a031520799428734d75efe",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/results.json",
+      "bytes": 6912,
+      "sha256": "37f7c7827a132fcaa4017a7a668e96d1564213478bcc1c2b0914cf52ec2b7a60",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/run-final.mjs",
+      "bytes": 3694,
+      "sha256": "33345055a920061a656a4d8c2c069f4073d59e728d1b6d6c42af7c699f77bbcc",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source-manifest.json",
+      "bytes": 821,
+      "sha256": "cdffe746b90e33ea9cbabde8900ada726cee6db6220967d16c0dc07067e95eef",
+      "match": true
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source-preparation.json",
+      "bytes": 5330,
+      "sha256": "cb07217bb76f5f68537854307a4e5ebbcd3753d46eee4b11e7bbce8cf2fb3c53",
+      "match": true
+    }
+  ],
+  "findings": [],
+  "scopeNotes": [
+    {
+      "id": "LOCAL_SCOPE",
+      "detail": "Accepts the recorded clean a2b414f snapshot and local Linux/amd64 fake-funds EVM runs only. This review reruns no suite and qualifies no future source, production, hosted Codespace, public port, physical wallet, browser, real funds, or release."
+    },
+    {
+      "id": "IMAGE_REUSE",
+      "detail": "Existing image1729 was created at 08:07 UTC and reused by exact immutable local image ID with --pull=never. Recipe107c is the pinned upstream base manifest, not that local image object. Retained build log binds the base/checksummed Foundry and solc additions to image1729. No fresh-image build or independent image rebuild is claimed."
+    },
+    {
+      "id": "FRESHNESS_EVIDENCE",
+      "detail": "Source preparation logs/reflog show a new --no-hardlinks local clone and exact local top-level submodule clones. Empty cache before installation and absent pre-install node_modules are operator-recorded preparation facts, not states retrospectively re-observable after installation. Reviewer independently confirms empty npm configs now, distinct clone/no alternates, a real npm ci install log, and installed lock entries consistent with committed versions/resolved/integrity. No host dependency-tree copy is in the recorded commands."
+    },
+    {
+      "id": "VENDOR_NESTED_SUBMODULES",
+      "detail": "The two required top-level gitlinks are exact and clean. Three OpenZeppelin nested test-only gitlinks remain uninitialized; no recursive-submodule completeness is asserted. The pinned Foundry recipe disables auto-remappings and maps only forge-std/src and OpenZeppelin/contracts."
+    },
+    {
+      "id": "NETWORK_BOUNDARY",
+      "detail": "Install/audit intentionally use Docker bridge with the managed proxy/CA and explicit npm strict TLS/HTTPS registry. This config is not a per-domain firewall proof. Foundation/journey use --network=none with no published ports and no proxy/CA/credential mounts, while loopback fixtures remain available."
+    },
+    {
+      "id": "WRITABLE_WORKSPACE",
+      "detail": "Root filesystem is read-only; the owned source/output binds are intentionally writable for dependencies and build results. Post-run tracked source and lock remain clean. This is not a claim that ignored generated outputs never change."
+    }
+  ],
+  "sourceReview": {
+    "commit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+    "tree": "9de340401cf748ff6ad19fb3ec686a24e31a3dbf",
+    "statusPorcelain": "",
+    "topLevelSubmoduleStatus": "8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)\n c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)",
+    "recursiveSubmoduleStatus": "8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)\n c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)\n-232ff9ba8194e406967f52ecc5cb52ed764209e9 contracts/evm/lib/openzeppelin-contracts/lib/erc4626-tests\n-3b20d60d14b343ee4f908cb8079495c07f5e8981 contracts/evm/lib/openzeppelin-contracts/lib/forge-std\n-7328abe100445fc53885c21d0e713b95293cf14c contracts/evm/lib/openzeppelin-contracts/lib/halmos-cheatcodes",
+    "gitlinks": "160000 commit 8e40513d678f392f398620b3ef2b418648b33e89\tcontracts/evm/lib/forge-std\n160000 commit c64a1edb67b6e3f4a15cca8909c9482ad33a02b0\tcontracts/evm/lib/openzeppelin-contracts",
+    "cloneReflog": "refs/heads/autonomous/completion-20261102@{0} clone: from /workspace/p2p-offramp\nrefs/remotes/origin/HEAD@{0} clone: from /workspace/p2p-offramp\nHEAD@{0} checkout: moving from autonomous/completion-20261102 to a2b414f60c6ceedaa6388701eca7737dfcc7cb12\nHEAD@{1} clone: from /workspace/p2p-offramp",
+    "alternatesPresent": false,
+    "rawPackageLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+    "installedDependencyDirectoryIsSymlink": false,
+    "topLevelClones": [
+      {
+        "path": "contracts/evm/lib/forge-std",
+        "head": "8e40513d678f392f398620b3ef2b418648b33e89",
+        "status": ""
+      },
+      {
+        "path": "contracts/evm/lib/openzeppelin-contracts",
+        "head": "c64a1edb67b6e3f4a15cca8909c9482ad33a02b0",
+        "status": ""
+      }
+    ]
+  },
+  "independentDigests": {
+    "devcontainerDigest": "c66704c59af93b3d2b72e85500d24ebeea4e44215a77d48900eeaf2c459a57cc",
+    "lockfileDigest": "5001d521f56a35921b2c37530e3e7bcd6a29aa7686d3b9af718a4de5ce59a686",
+    "fixturesDigest": "294cc86f214a59b55a770654458ae1f206f4a75f10a683799348e47ad843cc2e",
+    "recipeObjectSha256": "e9bc2c41efe4bcea7d0da76c7c0a0a697acb6c69ca7080123f6cc86a0df50264",
+    "recipeFileSha256": "d9a36c011564f0ed4515a0c951d07783e86473cf0a0e7cd0d72ba3ee1d38ac42"
+  },
+  "outerPhaseReview": [
+    {
+      "phase": "install",
+      "exitCode": 0,
+      "seconds": 15.632,
+      "timeoutMs": 600000,
+      "maxBytes": 16777216,
+      "network": "--network=bridge",
+      "securityArguments": [
+        "--rm",
+        "--pull=never",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--pids-limit=256",
+        "--memory=4g",
+        "--cpus=2",
+        "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m"
+      ],
+      "mounts": [
+        "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+        "type=bind,src=/workspace/work/t71-final-lab/cache,dst=/run/p2p-npm-cache",
+        "type=bind,src=/workspace/work/t71-final-lab/npm-config,dst=/run/p2p-npm-config,readonly",
+        "type=bind,src=/usr/local/share/ca-certificates/environment-proxy-ca.crt,dst=/run/p2p-proxy-ca.pem,readonly"
+      ],
+      "environmentNames": [
+        "NPM_CONFIG_USERCONFIG",
+        "NPM_CONFIG_GLOBALCONFIG",
+        "NPM_CONFIG_CACHE",
+        "NODE_EXTRA_CA_CERTS",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "http_proxy",
+        "https_proxy"
+      ],
+      "logSha256": "4060d29a029ee849b121345b4d44ae1f61451f18ba3b9bfdd50606cd5482e373",
+      "cleanup": {
+        "checkExitCode": 0,
+        "ownedContainerAbsent": true
+      }
+    },
+    {
+      "phase": "audit",
+      "exitCode": 0,
+      "seconds": 14.705,
+      "timeoutMs": 120000,
+      "maxBytes": 16777216,
+      "network": "--network=bridge",
+      "securityArguments": [
+        "--rm",
+        "--pull=never",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--pids-limit=256",
+        "--memory=4g",
+        "--cpus=2",
+        "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m"
+      ],
+      "mounts": [
+        "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+        "type=bind,src=/workspace/work/t71-final-lab/cache,dst=/run/p2p-npm-cache",
+        "type=bind,src=/workspace/work/t71-final-lab/npm-config,dst=/run/p2p-npm-config,readonly",
+        "type=bind,src=/usr/local/share/ca-certificates/environment-proxy-ca.crt,dst=/run/p2p-proxy-ca.pem,readonly"
+      ],
+      "environmentNames": [
+        "NPM_CONFIG_USERCONFIG",
+        "NPM_CONFIG_GLOBALCONFIG",
+        "NPM_CONFIG_CACHE",
+        "NODE_EXTRA_CA_CERTS",
+        "HTTP_PROXY",
+        "HTTPS_PROXY",
+        "http_proxy",
+        "https_proxy"
+      ],
+      "logSha256": "a5dd41190e6d8052fd71f75c9e1cbd76f9b82d64b93d0f48ee858c6ee30ac470",
+      "cleanup": {
+        "checkExitCode": 0,
+        "ownedContainerAbsent": true
+      }
+    },
+    {
+      "phase": "foundation",
+      "exitCode": 0,
+      "seconds": 245.506,
+      "timeoutMs": 1800000,
+      "maxBytes": 16777216,
+      "network": "--network=none",
+      "securityArguments": [
+        "--rm",
+        "--pull=never",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--pids-limit=256",
+        "--memory=4g",
+        "--cpus=2",
+        "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m"
+      ],
+      "mounts": [
+        "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+        "type=bind,src=/workspace/work/t71-final-lab/foundation,dst=/workspaces/p2p-offramp/dist-lab"
+      ],
+      "environmentNames": [],
+      "logSha256": "109ebca3ac84419eb4fe1137a39f29fda13ed3208a56792b15574786f6845752",
+      "cleanup": {
+        "checkExitCode": 0,
+        "ownedContainerAbsent": true
+      }
+    },
+    {
+      "phase": "journey",
+      "exitCode": 0,
+      "seconds": 39.277,
+      "timeoutMs": 1800000,
+      "maxBytes": 16777216,
+      "network": "--network=none",
+      "securityArguments": [
+        "--rm",
+        "--pull=never",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--pids-limit=256",
+        "--memory=4g",
+        "--cpus=2",
+        "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m"
+      ],
+      "mounts": [
+        "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+        "type=bind,src=/workspace/work/t71-final-lab/journey,dst=/workspaces/p2p-offramp/dist-lab"
+      ],
+      "environmentNames": [],
+      "logSha256": "7e69e6c0255f1793463ba95cad488d05950317f451a031520799428734d75efe",
+      "cleanup": {
+        "checkExitCode": 0,
+        "ownedContainerAbsent": true
+      }
+    }
+  ],
+  "innerCommandReview": [
+    {
+      "mode": "foundation",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/foundation/command-1.log",
+      "sha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {},
+      "contractSummary": [],
+      "nativeRecords": []
+    },
+    {
+      "mode": "foundation",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/foundation/command-2.log",
+      "sha256": "ea346186f7c075d39d8da9d80a8fa3fd85e181f9c6cdffce803e2169fa594805",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {
+        "tests": 1712,
+        "suites": 0,
+        "pass": 1712,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "contractSummary": [],
+      "nativeRecords": []
+    },
+    {
+      "mode": "foundation",
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/foundation/command-3.log",
+      "sha256": "257a0f43c6ddc6b1c5a77351d4650c6b77c8cc303121b45cd0f75cbfe63bb0d4",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {},
+      "contractSummary": [],
+      "nativeRecords": []
+    },
+    {
+      "mode": "foundation",
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/foundation/command-4.log",
+      "sha256": "253da03a9548bb2218151e79bea6fa2a7040d63c1d674a7c4e140c1dd46d9c2a",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {
+        "tests": 26,
+        "suites": 0,
+        "pass": 26,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "contractSummary": [],
+      "nativeRecords": []
+    },
+    {
+      "mode": "foundation",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/foundation/command-5.log",
+      "sha256": "4b4a14e76313b1afcb683b64d0882903e8e3dd0071af4848551ab69ac460272e",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {},
+      "contractSummary": [],
+      "nativeRecords": [
+        {
+          "localStaticBuild": true,
+          "syntheticDemo": false,
+          "files": 9,
+          "bytes": 611540,
+          "bundledSinkTokensRequiringFrameworkReview": 18,
+          "completeXssProof": false,
+          "signedRelease": false,
+          "releaseAcceptance": false
+        }
+      ]
+    },
+    {
+      "mode": "journey",
+      "command": [
+        "npm",
+        "run",
+        "test:evm"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/journey/command-1.log",
+      "sha256": "bfd39d99a7350d5867c7769b42a5ca4ac168170dc33761a88c9b5a7bcda5d7f9",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {},
+      "contractSummary": [
+        [
+          "4",
+          "82",
+          "0",
+          "0",
+          "82"
+        ]
+      ],
+      "nativeRecords": []
+    },
+    {
+      "mode": "journey",
+      "command": [
+        "npm",
+        "run",
+        "test:exchange:evm"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/journey/command-2.log",
+      "sha256": "9567b2855078a5dfb8b0f5747f371d80461da30d80f367378fe9d6e91b661b87",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {},
+      "contractSummary": [],
+      "nativeRecords": [
+        {
+          "fixture": "canonical-exchange-native-escrow-loopback",
+          "checks": 12,
+          "negotiatedOrders": 5,
+          "settledOrders": 2,
+          "submissions": 4,
+          "durableMarkers": 4,
+          "chatMessages": 4,
+          "chatReopens": 2,
+          "chatRecoveries": 1,
+          "journeyReads": 128,
+          "journeySendOrSignCalls": 0,
+          "realNostrCrypto": true,
+          "canonicalRelay": true,
+          "canonicalLifecycle": true,
+          "canonicalEscrow": true,
+          "exactReviewedBytes": true,
+          "durableAuthenticatedChat": true,
+          "unknownFreshKeyRecovery": true,
+          "freshFundingWindow": true,
+          "freshBuilderDocuments": 2,
+          "priorDraftSignaturesRejected": true,
+          "externalNetwork": false,
+          "tradingEnabled": false,
+          "releaseAcceptance": false
+        }
+      ]
+    },
+    {
+      "mode": "journey",
+      "command": [
+        "npm",
+        "run",
+        "test:payment:preflight"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/journey/command-3.log",
+      "sha256": "fe1a58b1cd86b8a3619b3896e96eb911d1cfdbed0dfca942f58f459161d04742",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {
+        "tests": 6,
+        "suites": 0,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "contractSummary": [],
+      "nativeRecords": [
+        {
+          "fixture": "canonical-native-payment-preflight",
+          "checks": 7,
+          "adapterReads": 163,
+          "adapterSendOrSignCalls": 0,
+          "finalizedPolicy": true,
+          "latestClockWhileFinalizedLags": true,
+          "latestSettlementVetoWhileFinalizedFunded": true,
+          "nativeBoundary901And900": true,
+          "externalNetwork": false,
+          "tradingEnabled": false,
+          "releaseAcceptance": false
+        }
+      ]
+    },
+    {
+      "mode": "journey",
+      "command": [
+        "npm",
+        "run",
+        "test:recovery:evm"
+      ],
+      "exitCode": 0,
+      "log": "/workspace/work/t71-final-lab/journey/command-4.log",
+      "sha256": "f3333b590586ae420bc99fe2de65464d74b03027d243c7d3dd5b69876eaf2811",
+      "bounded": true,
+      "timedOut": false,
+      "cancelled": false,
+      "unitSummary": {
+        "tests": 12,
+        "suites": 0,
+        "pass": 12,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "contractSummary": [],
+      "nativeRecords": [
+        {
+          "fixture": "portable-canonical-evm-recovery",
+          "checks": 6,
+          "recoveryReads": 141,
+          "runtimeSendOrSignCalls": 0,
+          "separateFixtureWallet": true,
+          "copiedOutsideCheckout": true,
+          "expiredManifestStillExitsOriginalEscrow": true,
+          "fixedWithdrawalBeneficiary": true,
+          "externalNetwork": false,
+          "tradingEnabled": false,
+          "releaseAcceptance": false
+        }
+      ]
+    }
+  ],
+  "observedCounts": {
+    "foundationCommands": 5,
+    "journeyCommands": 4,
+    "packageTests": 1712,
+    "packagePass": 1712,
+    "packageFail": 0,
+    "packageCancelled": 0,
+    "packageSkipped": 0,
+    "packageTodo": 0,
+    "buildPolicyTests": 26,
+    "contractSuites": 4,
+    "contractTests": 82,
+    "contractFailures": 0,
+    "contractSkipped": 0,
+    "receiptUnitTests": 6,
+    "recoveryUnitTests": 12,
+    "exchangeNativeChecks": 12,
+    "paymentNativeChecks": 7,
+    "recoveryNativeChecks": 6
+  },
+  "auditReview": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "dependencies": {
+      "prod": 7,
+      "dev": 66,
+      "optional": 47,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 72
+    }
+  },
+  "imageReview": {
+    "Id": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+    "Created": "2026-11-02T08:07:31.991186814Z",
+    "Os": "linux",
+    "Architecture": "amd64",
+    "User": "node",
+    "WorkingDir": "",
+    "ImageEnvNames": [
+      "PATH",
+      "NODE_VERSION",
+      "YARN_VERSION",
+      "FOUNDRY_BIN",
+      "FOUNDRY_SOLC",
+      "FOUNDRY_OFFLINE"
+    ],
+    "ExpectedToolEnv": {
+      "NODE_VERSION": "24.19.0",
+      "YARN_VERSION": "1.22.22",
+      "FOUNDRY_BIN": "/opt/p2p-lab/bin",
+      "FOUNDRY_SOLC": "/opt/p2p-lab/bin/solc-0.8.30",
+      "FOUNDRY_OFFLINE": "true"
+    },
+    "RootFSLayers": [
+      "sha256:cd482426e5675a31e31f2bddad58815b83b309a587bf56b46a308586d9fd6eb5",
+      "sha256:ffc8aa3c6d1eee538ec70f1c9d749b8bebe8f016bfd4b16ee45c623c9cffa402",
+      "sha256:74a032b83597c9456f0d3bc320e33b56a52127ce0027d313a80e31a32ab99a42",
+      "sha256:3ae67b6c3bdf10cd6600d5cf69601a33d304b74372b690fd736562f67d3a5f41",
+      "sha256:0687c96078e7d2db6df67e61ad83e6722a2670c5ff9e85f24660f15240c52aa9",
+      "sha256:946b02d04382028118acd9bcfb27ca6fd3c9b36099dfe43273c76222573e5d95",
+      "sha256:e9b5edb732f0cc7495bfbd7db52b6358536a2256d0062c089d610daf34f78afc",
+      "sha256:a675bceed05471021415358e76a313aed78356aa9fdce5ca46d665bb7e79b9dc",
+      "sha256:4e39f1049998512b06291a06d5b3b8ca795df9de05d44e244daeba28f79a2ac1",
+      "sha256:ec7962b69edbce0eefbd3ac8d5f33b9cd131383945707d07ee90d715c49fec04",
+      "sha256:f0ef018416ff9a5bd1e76af544033ff1535f45c1cf118e1c7839437963f7711d"
+    ]
+  },
+  "cleanupReview": {
+    "recordedFourOwnedContainersAbsent": true,
+    "independentReadOnlyDockerPs": {
+      "readOnlyOwnedContainerQueryExit": 0,
+      "ownedNames": "",
+      "stderr": ""
+    },
+    "ownedClonesCacheOutputsRetainedForEvidence": true,
+    "physicalErasureClaimed": false
+  },
+  "credentialAndTlsReview": {
+    "explicitDaemonSocketAndIsolatedDockerConfig": true,
+    "dockerClientConfigJsonAbsent": true,
+    "imageEnvironmentNamesOnly": [
+      "PATH",
+      "NODE_VERSION",
+      "YARN_VERSION",
+      "FOUNDRY_BIN",
+      "FOUNDRY_SOLC",
+      "FOUNDRY_OFFLINE"
+    ],
+    "containerHostEnvironmentImplicitlyForwarded": false,
+    "explicitInstallAuditEnvironmentNames": [
+      "NPM_CONFIG_USERCONFIG",
+      "NPM_CONFIG_GLOBALCONFIG",
+      "NPM_CONFIG_CACHE",
+      "NODE_EXTRA_CA_CERTS",
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "http_proxy",
+      "https_proxy"
+    ],
+    "hostHomeSshAwsNpmCredentialsDockerSocketMountedInsideContainer": false,
+    "installScriptsDisabled": true,
+    "strictSslExplicitlyTrue": true,
+    "registry": "https://registry.npmjs.org",
+    "lockResolvedUrlHosts": [
+      "https://registry.npmjs.org"
+    ],
+    "managedProxy": "http://proxy:8080",
+    "proxyCa": {
+      "path": "/usr/local/share/ca-certificates/environment-proxy-ca.crt",
+      "bytes": 1309,
+      "sha256": "7fa2d7d439db8bfa7c191457e61af5e3f4eb412314eb148766ac09e93786e4c3"
+    },
+    "emptyNpmConfigPins": [
+      {
+        "path": "/workspace/work/t71-final-lab/npm-config/global.npmrc",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/npm-config/user.npmrc",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "sourceGitCredentialConfigKeysFound": false,
+    "localCloneRemoteUrlsContainCredentials": false,
+    "testChildEnvironment": "cleanLabEnvironment allowlists OS/tool path basics and sets FOUNDRY_OFFLINE=true; no provider URLs/keys/proxies/Node test override variables are passed."
+  },
+  "historicalFailure": {
+    "path": "docs/execution/qualification/fresh-lab-693c66c-failed.json",
+    "sha256": "ef7f92a660180027e6adfdfad18de7bdf97ddc8614a3756fffc10296d895c277",
+    "unchangedInFreshCloneAndMainTree": true,
+    "originalSource": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+    "originalOutcome": "foundation stopped with 1441 pass/1442 total and one stale assurance-evidence failure; no retry or rewrite of old failed receipt"
+  },
+  "readOnlyContextPins": [
+    {
+      "path": "/workspace/work/t71-final-lab/source/.devcontainer/Dockerfile",
+      "bytes": 950,
+      "sha256": "43cf053c2bc1c5ffb77bf3ad03062e52aeaacaef9ddaf7766deb669d9508bf55"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/.devcontainer/devcontainer.json",
+      "bytes": 510,
+      "sha256": "b7c45dbbf5aa32a9a3548c2b34fe24cbd55f05127faedb3efb0be4f74d77de6f"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/lab/recipe.mjs",
+      "bytes": 5841,
+      "sha256": "5a2c9ef2123a1f9c0f57771d1146b5706e45d1bb81a36ec8075b8522fc00d540"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/lab/run.mjs",
+      "bytes": 2865,
+      "sha256": "5795cec01cfe26903f888e840106780ca731bebdce17894bb5b1a6af9febd302"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/lab/command.mjs",
+      "bytes": 2023,
+      "sha256": "567048a91f17dba6be9367bfcab57fa39097dec4841c88a3cb1449419731ba00"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/test-support/register-tsx.mjs",
+      "bytes": 86,
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/test-support/tsx-hooks.mjs",
+      "bytes": 489,
+      "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/scripts/sepolia/lib.mjs",
+      "bytes": 13327,
+      "sha256": "33b66a1d7f9c24841cd7b0f1b904526673e5067fe44f404712fc41f583693c32"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/contracts/evm/foundry.toml",
+      "bytes": 1382,
+      "sha256": "5e2618cd429c82c12cfcd3c79d90c517e04009ca57c687c3f39af1dd6533fa64"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/package.json",
+      "bytes": 7084,
+      "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e"
+    },
+    {
+      "path": "/workspace/work/t71-final-lab/source/package-lock.json",
+      "bytes": 42472,
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32"
+    },
+    {
+      "path": "/workspace/work/p2p-lab-full-image-manifest.json",
+      "bytes": 1942,
+      "sha256": "a8bb8a30d6f8a8d7fab0027a178f6eb52be32194dacf846634a2bc6abd95b8f9"
+    },
+    {
+      "path": "/workspace/work/p2p-lab-docker-build.log",
+      "bytes": 11365,
+      "sha256": "6bc657b0a2628af4a9842a051f467a876c3cc16fd8239405f1aae3786487b387"
+    },
+    {
+      "path": "/workspace/work/t71-final-image-inspect.json",
+      "bytes": 1578,
+      "sha256": "7c9b9aed82f7428f3bcce53c455f911a4d18b50718b5b0b53242bc3a230106c5"
+    },
+    {
+      "path": "/workspace/work/t71-review-image-inspect.json",
+      "bytes": 1458,
+      "sha256": "9e02b33d25cc4956f3a26dc8734e74b703b95b81d423f6f11c973cc5864a3c84"
+    },
+    {
+      "path": "/workspace/work/t71-review-owned-containers.json",
+      "bytes": 79,
+      "sha256": "f49066991a21c07c5bb8bb4e7cd466dde77edcb1aa8abcb27bbf63cee1b6c5f6"
+    }
+  ],
+  "reviewOperations": {
+    "duplicateSuitesRun": false,
+    "dockerContainersStartedOrChanged": false,
+    "dockerImageBuildPullOrTag": false,
+    "readOnlyDockerOperations": [
+      "image inspect exact image1729",
+      "ps -a --filter label=p2p.task=T71 --format Names"
+    ],
+    "sourceOrLedgerEdited": false,
+    "commitsCreated": false,
+    "filesWritten": [
+      "/workspace/work/t71-final-lab-review.json",
+      "/workspace/work/t71-final-lab-review.md",
+      "/workspace/work/t71-review-image-inspect.json",
+      "/workspace/work/t71-review-owned-containers.json"
+    ]
+  }
+}

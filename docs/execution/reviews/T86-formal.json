@@ -1,0 +1,60 @@
+{
+  "task": "T86-formal-addendum",
+  "status": "APPROVED_FOR_INTEGRATION_OF_EXACT_REVIEWED_DELTA",
+  "reviewer": "/root/cleanup_debug",
+  "authorOfReviewedChange": "/root",
+  "reviewedAtUtc": "2026-11-02T15:56:51.772841+00:00",
+  "sourceHeadAtReview": "441499d1be261f734cb00afbab516b094c8d84eb",
+  "sharedWorkingTreeDirty": true,
+  "scope": {
+    "path": "scripts/tests/formal-evm.test.mjs",
+    "line": 54,
+    "delta": "if(error.code==='ENOENT') \u2192 if(error.code==='ENOENT'||error.code==='ESRCH')",
+    "exactFileEqualsSingleClauseReplacement": true,
+    "baselineSha256": "c67bf26dc8359869a3b231f66626d84563d7b76109180dbf337c7f3c60e97d7a",
+    "reviewedSha256": "dbc6a63d2232558ae6e16c8591286bbee28901fa9cf26dde62a75cf6c5cb8d17"
+  },
+  "unchangedRunner": {
+    "path": "scripts/formal/evm.mjs",
+    "sha256": "db0193f1476eb35b5f55e76447145ff6ef59543c9e5099fe219fd3eb169c029c",
+    "matchesCommittedBytes": true
+  },
+  "findings": [],
+  "reasoning": [
+    "The error is caught only around the maintained /proc/<owned-pid>/stat observation. ENOENT covers disappearance before open; ESRCH covers task disappearance after open before read, as measured by the native T86 held-descriptor probe.",
+    "Live R/S/etc. states still return false, and all errors other than ENOENT/ESRCH still throw. The clause does not suppress a live-descendant assertion or alter process termination.",
+    "Exact byte comparison proves the remaining formal test is unchanged: success/timeout/output-overflow modes; 40 observations with 25 ms waits; 300/2000 ms subprocess timeouts; 1024/8192 output caps; 12000 ms outer test limit; owned process cleanup and result assertions.",
+    "The formal runner is byte-identical to committed source. No runtime, solver/model, authority or native proof classification change is included."
+  ],
+  "nativeDiagnosisReference": {
+    "packet": {
+      "path": "/workspace/work/t86-proc-disappearance/T86-review-packet.json",
+      "sha256": "7409b118383ccc155b8a88bc0741cf5bf8fc12d303a2c07377728f645a64449a"
+    },
+    "nativeResults": {
+      "path": "/workspace/work/t86-proc-disappearance/native-proc-results.json",
+      "sha256": "f8b747cb668e50848436e05b9d4e7b42ae9080a3eb804c1af2f5ef4887693032",
+      "observed": "4/4 controlled owned child lifecycles: fresh pathname read ENOENT/open; already-open descriptor read after kill/reap ESRCH/read."
+    },
+    "frozenManifest": {
+      "path": "/workspace/work/t86-proc-disappearance/FROZEN-SHA256SUMS.txt",
+      "sha256": "92df1fd60446bf6b2f84220b00d2dd664e6f8e89f941edc68a3cc41234182a92"
+    },
+    "originalPacketUnmodified": true
+  },
+  "verification": {
+    "command": "PATH=/workspace/work/foundry-1.5.1:$PATH node --test scripts/tests/formal-evm.test.mjs",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "log": "/workspace/work/t86-formal-addendum-review.log",
+    "logSha256": "0c8dcb39852e357aecd7ba259cb9e79aad03d1e10f0eba1d390db878b6127fdb",
+    "defaultNodeTestIsolation": true,
+    "managedIpcNetworkCapability": true,
+    "runCount": 1
+  },
+  "reviewerActions": "Read exact diff, full maintained formal test and owned-process runner implementation; verify single-clause delta and unchanged runner by byte equality; run seven cases once with managed IPC; write this separate addendum. No source edit, whole suite, negative-control rerun or commit."
+}

@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { cleanLabEnvironment, createLabRecipe, LabError, sha256 } from './recipe.mjs';
+import { isMain } from '../lib/is-main.mjs';
+import { runLabCommand } from './command.mjs';
+
+export const LAB_COMMANDS = Object.freeze({
+  foundation: Object.freeze([
+    ['npm', ['run', 'typecheck']], ['npm', ['test']], ['npm', ['run', 'check:boundaries']],
+    ['npm', ['run', 'test:build-policy']], ['npm', ['run', 'build']],
+  ]),
+  journey: Object.freeze([
+    ['npm', ['run', 'test:evm']], ['npm', ['run', 'test:exchange:evm']],
+    ['npm', ['run', 'test:payment:preflight']], ['npm', ['run', 'test:recovery:evm']],
+  ]),
+});
+
+export async function runLab({ root, mode, output = resolve(root, 'dist-lab'), env = process.env, signal }) {
+  if (!Object.hasOwn(LAB_COMMANDS, mode)) throw new LabError('LAB_UNSUPPORTED');
+  const recipe = await createLabRecipe(root, env);
+  await mkdir(output, { recursive: true });
+  await writeFile(resolve(output, 'recipe.json'), JSON.stringify(recipe, null, 2) + '\n', { mode: 0o600 });
+  const results = [];
+  for (const [command, args] of LAB_COMMANDS[mode]) {
+    const result = await runLabCommand(command, args, { root, env: cleanLabEnvironment(env), signal });
+    const { log, ...record } = result;
+    const name = `command-${results.length + 1}.log`;
+    await writeFile(resolve(output, name), log, { mode: 0o600 });
+    results.push({ ...record, report: name });
+    const run = { version: 1, mode, recipeSha256: sha256(JSON.stringify(recipe)), sourceCommit: recipe.sourceCommit, sourceDirty: recipe.sourceDirty, chainIds: recipe.chainIds, fixtureDigest: recipe.fixturesDigest, toolVersions: recipe.toolVersions, results, qualification: 'local-fake-funds-only' };
+    await writeFile(resolve(output, 'run.json'), JSON.stringify(run, null, 2) + '\n', { mode: 0o600 });
+    if (result.exitCode !== 0 || !result.bounded || result.timedOut || result.cancelled) throw new LabError('LAB_COMMAND_FAILED');
+  }
+  return { passed: results.length, sourceCommit: recipe.sourceCommit, sourceDirty: recipe.sourceDirty, qualification: 'local-fake-funds-only' };
+}
+
+if (isMain(import.meta.url)) {
+  const root = fileURLToPath(new URL('../../', import.meta.url));
+  const controller = new AbortController();
+  const cancel = () => controller.abort(); process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
+  runLab({ root, mode: process.argv[2], signal: controller.signal }).then(value => process.stdout.write(JSON.stringify(value) + '\n')).catch(error => {
+    process.stderr.write((error instanceof LabError ? error.code : 'LAB_FAILED') + '\n'); process.exitCode = 1;
+  }).finally(() => { process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); });
+}

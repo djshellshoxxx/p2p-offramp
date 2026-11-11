@@ -1,0 +1,142 @@
+{
+  "task": "T80-native-token-follow-on",
+  "status": "READY_FOR_INDEPENDENT_REVIEW",
+  "headAtFreeze": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "changedProductionFiles": [
+    "apps/web/src/journey/private-trade.ts"
+  ],
+  "sourceBeforeSha256": "0832bc31cecd113a588348a899054828eb3ca7a8dcc7c969dded33a2a1dfa4c2",
+  "sourceAfterSha256": "3af0152c41c7186b0e904620069f3b90ed9e97f4b05e4bf92af790ce9ac178f9",
+  "patch": {
+    "path": "/workspace/work/t80-native-token-factory.patch",
+    "sha256": "a79b99cfe9e448e8efc5628c43e841007e2661fe274d6bbbd32e0a7fe6214b0d"
+  },
+  "harness": {
+    "path": "scripts/test-journey-browser.mjs",
+    "unchanged": true,
+    "sha256": "75e64965f23126e8cf80b5062a3b9a6f0947bb7c223b1cc3e9ba12210567a050"
+  },
+  "prior32FileReceipt": {
+    "path": "/workspace/work/t80-implementation-receipt.json",
+    "unchanged": true,
+    "sha256": "af0ccffd06b8986461d6f2ee1b8709ef6ee828ddfde95793e37282b3f559d216"
+  },
+  "tests": {
+    "focusedPrivateJourney": {
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "log": "/workspace/work/t80-native-token-focused.log",
+      "sha256": "fb084e0ada885b983282fc4a776affd73ec4bcc74f99212f8e0815afa51b2640"
+    },
+    "typecheckConfigurations": 4,
+    "typecheckPassed": true,
+    "boundariesPassed": true,
+    "nativeJourney": {
+      "log": "/workspace/work/t80-native-token-journey.log",
+      "sha256": "28e4199f0e138f9509fd0230724c82ef7ba7133149b1c6d977562c509ed11752",
+      "nativeSubmissions": 11,
+      "nativeSignatures": 16,
+      "explicitSigningReviews": 32,
+      "assetKinds": [
+        "native",
+        "erc20"
+      ],
+      "result": {
+        "fixture": "actual-ui-private-worker-native-journey",
+        "transportPolicySelector": {
+          "actualSelectorUsesSameWorkerSequence": true,
+          "sameActualBrokerForBothPools": true,
+          "actualCapturedScopesRetired": true,
+          "strictRefusesBothDirectPools": true,
+          "ordinaryRequiresFreshAcknowledgement": true,
+          "selectionStartsZeroRpcOrSockets": true,
+          "ignoredCloseCapacityRetainedAcrossModeAndProfile": true,
+          "actualCloseReleasesPhysicalTokens": true,
+          "explicitFixtureRenewalPreservesStrictAndOldRevocation": true,
+          "rpcAndWalletUnknown": true,
+          "heldWalletModeChangesRetainAdmission": true,
+          "durableUnknownMarkerSurvivesModeChanges": true
+        },
+        "nativeSubmissions": 11,
+        "nativeSignatures": 16,
+        "explicitSigningReviews": 32,
+        "signingReviewHasNoAuthority": true,
+        "expiryAndRevocationAtActualWalletPrompt": true,
+        "reentrantInspectionCannotStartPrompt": true,
+        "pendingReviewClearedOnFreshKeyProfileSwitch": true,
+        "lastDurableMarkerReadExpiryAndRevokePreventSend": true,
+        "erc20ApprovalUnknownRecovery": true,
+        "erc20FundingUnknownFreshKeyRecovery": true,
+        "hostileTokenReadsAndApprovalTxRejected": true,
+        "explicitZeroReset": true,
+        "erc20ReleaseAndRefund": true,
+        "erc20AllowanceBalancesAndNativeFees": true,
+        "actualCrypto": true,
+        "actualSelectedVault": true,
+        "actualBackupFact": true,
+        "encryptedNegotiation": true,
+        "durableBeforeSend": true,
+        "lostResponseReconciled": true,
+        "finalizedPaymentGuidance": true,
+        "sellerRelease": true,
+        "deadlineRefund": true,
+        "unknownFreshKeyRecovery": true,
+        "failedRefreshClearsGuidance": true,
+        "walletEventRevokesGuidance": true,
+        "lockLateNativeReplyIgnored": true,
+        "startupLockRetiresPendingCreate": true,
+        "heldNativeWorkRejectsNewSelection": true,
+        "authorityRaceRetainsPhysicalAdmission": true,
+        "retiredRpcStartsZeroNewScans": true,
+        "expiredColdPreparationCancelled": true,
+        "canonicalReviewAndReceipt": true,
+        "wrongGenesisAndRuntimeRejected": true,
+        "sourceCiphertextPreserved": true,
+        "nativeReceipt": true,
+        "encryptedWatchExport": true,
+        "productionPeerCarrier": false,
+        "tradingEnabled": false,
+        "externalNetwork": false
+      }
+    },
+    "boundaryProductionSourceFiles": 231,
+    "boundaryCoreModules": 88
+  },
+  "runtime": {
+    "node": "24.22.1",
+    "nodePath": "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+    "chromiumPath": "/workspace/work/t87-native-diagnostic/chrome156/opt/google/chrome/chrome",
+    "forgeBin": "/workspace/work/foundry-1.5.1",
+    "solc": "/workspace/work/foundry-1.5.1/solc-0.8.30",
+    "managedLoopback": true,
+    "chromium": "156.0.8078.79"
+  },
+  "semantics": {
+    "existingPeerCarrierGatePreserved": true,
+    "hardcodedLocalNetworkDomainPreserved": true,
+    "quoteCurrency": "USD",
+    "quoteMinorUnits": "100",
+    "quoteScale": 2,
+    "instructionTextUnchanged": true,
+    "acceptanceWindowSeconds": 600,
+    "escrowWindowSeconds": 7200,
+    "chainRequestsAdded": 0,
+    "builderClock": "existing refreshed chain time plus monotonic elapsed time",
+    "builderScopeGuard": "captured epoch plus actual selected context and wallet sessions",
+    "canonicalReview": "existing reviewTermsBytes before terms/binding construction",
+    "temporaryGeneratedBytes": "owned immediately, wiped and removed in finally",
+    "retainedDocument": "owned copy, erased by existing private-scope cleanup"
+  },
+  "guardrails": {
+    "nativeWireChanged": false,
+    "signingOrSendAuthorityAdded": false,
+    "runtimeSchemaEdited": false,
+    "otherRuntimeEdited": false,
+    "commitsCreated": false,
+    "fullSuiteRun": false,
+    "tradingEnabled": false,
+    "productionPeerInteropQualified": false
+  },
+  "ownedNativeHarnessResourcesClosed": true
+}

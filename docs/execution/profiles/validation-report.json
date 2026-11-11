@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "packets": 8,
+  "primarySourceSnapshots": 33,
+  "validInternalLinks": 13,
+  "allPacketHashesMatched": true,
+  "allSourceURLsImmutable": true,
+  "scope": "Research artifact consistency only, no semantic/cryptographic/provider acceptance",
+  "repositoryHeadAtCheck": "637327f2d6023a4696ed0d4506da4dec5dc57382",
+  "consultedLocalSourceSnapshots": [
+    {
+      "path": "packages/relay/src/pool.ts",
+      "sha256": "b94d203aa9858cc215659933ef1dc717296528882bbdd6ef639730ec79ddbb24"
+    },
+    {
+      "path": "packages/relay/src/nip01.ts",
+      "sha256": "f15611ec153dd614536e4a620183ea5830fff11d6e2b629ab9c1ffa128bb24a7"
+    },
+    {
+      "path": "packages/extensions/src/manifest.ts",
+      "sha256": "3a4fe523f3a9c2ff1932d879d2d8813a6a9694b8b739ad160ade0780f7526d79"
+    },
+    {
+      "path": "packages/extensions/src/registry.ts",
+      "sha256": "653b58de32a6f3cca66c3fde38e720e9a047e5a885b08b16c29fa315669266ec"
+    },
+    {
+      "path": "packages/messaging/src/durable-chat.ts",
+      "sha256": "bde2e8cf79930d33dfd0d548c23c17691374aee77b3e02ddcf1f3d0e6def223e"
+    },
+    {
+      "path": "packages/wallet/src/evm-adapter.ts",
+      "sha256": "2db30e1e941824aa80ec7fa67151bb87cc4b0e9d5bb9b4f0f9d87392a61e1bbf"
+    },
+    {
+      "path": "packages/domain/src/tx-lifecycle.ts",
+      "sha256": "adef2e1920465b4f8acc80d6e42857f3516a0cfdb71a65020e8925834ff2362d"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha256": "a79fe62abfc24dcae65685951fcf9996257d80b6c22027945a9c7f4219b416fa"
+    },
+    {
+      "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.2_crypto_primitives/module_0.2.2_stealth_key_derivation/spec-stealth-scheme-boundaries.md",
+      "sha256": "52cecd2c65f3ecfeac7ac0e203b43d8b66002fb211392097185ce0ecc0b69368"
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.2_financial_privacy/module_5.2.1_stealth_addresses/spec-stealth-address-generation.md",
+      "sha256": "4a2b153cfa22c4dd7a72aae4ad2c98138e2a41289e6eaee276053b41a26bee97"
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.2_financial_privacy/module_5.2.1_stealth_addresses/spec-eip5564-announcement-scanner.md",
+      "sha256": "3fe723b98071ea57abe7a48583a5ff5dd2275b8df6103df43a62470149bb9ba5"
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.2_financial_privacy/module_5.2.1_stealth_addresses/spec-stealth-payment-spending.md",
+      "sha256": "70c985e41057814a751f3e4c923e461cdf17feb40c7406c8c634ed35fe6614b7"
+    },
+    {
+      "path": "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.2_financial_privacy/module_5.2.2_stealth_trade_binding/spec-stealth-recipient-trade-binding.md",
+      "sha256": "946264951632cb6588ebfc29618d21dc3ee2e326b3dc207cc3e56383274e4527"
+    }
+  ]
+}

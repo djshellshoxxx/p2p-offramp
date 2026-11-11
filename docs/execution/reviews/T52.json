@@ -1,0 +1,179 @@
+{
+  "task": "T52",
+  "reviewer": "/root/branch_inventory/completion_requirements",
+  "reviewedAt": "2026-11-02T09:32:35.188429+00:00",
+  "verdict": "APPROVE_DRAFT_DISPLAY_ENGINEERING_ONLY",
+  "ownedFiles": [
+    {
+      "path": "apps/web/src/ui/locale/catalog.ts",
+      "sha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa"
+    },
+    {
+      "path": "apps/web/src/ui/locale/bundled.ts",
+      "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0"
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf"
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "sha256": "fee415898017f1eff1eb5bba58f8b2cd61321a530da65a58280df9b90519c27e"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "sha256": "8d29d279688eab0750340869f999c3e2f37bbc2e3edcfd7b2a700292ed8d2f3a"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "sha256": "80e88e577beed5bc1d6bfd4f233fa7475e288cf0c5432fb5d0e8d34c09e9e518"
+    },
+    {
+      "path": "apps/web/src/ui/diagnostics-messages.ts",
+      "sha256": "8725c7b5f7abb508259f06a73a3526fa8330714766af9531ebac6f3f6c5a900f"
+    },
+    {
+      "path": "apps/web/src/ui/recovery-reference-messages.ts",
+      "sha256": "19a55e9fe869fba8a0653f7e232856a12db0c0abc438446e6cdbb03d78660f6e"
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-messages.ts",
+      "sha256": "1392da9d5d8a5db7ebd35969b37fdb164e2370550350492718f51b8783294eee"
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+      "sha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f"
+    },
+    {
+      "path": "apps/web/src/ui/PrivacyStatusPanel.tsx",
+      "sha256": "137c99b085d5c94e4284c8cb87f225a5498bf954eded1ed22be3b42fdad9be10"
+    },
+    {
+      "path": "apps/web/src/ui/ControlHelp.tsx",
+      "sha256": "b9e0f6431935a4bd2731d2c4f8301155c90c7c451a8df59a8f7838ec010fc69c"
+    },
+    {
+      "path": "apps/web/src/demo/synthetic-local.ts",
+      "sha256": "155b1ddba8cced9a60389fa99df23a91c3ea2bf474061767c744bfb6339bd546"
+    },
+    {
+      "path": "apps/web/test/locale-runtime.test.mjs",
+      "sha256": "1fb9a61b144653623d7ea86a4bf1b993df053bfb2ca811e8b86bcf54533efe7e"
+    },
+    {
+      "path": "apps/web/test/locale-source.test.mjs",
+      "sha256": "a4e5c9c3bf301336b92d9ae7cb6e8059ca18e60a700b5903de85c2d46251eda3"
+    },
+    {
+      "path": "scripts/fixtures/locale-runtime-fixture.tsx",
+      "sha256": "de0446379010f93522525257f5f8459a28edd7ba1d70609efdfb2047c10c322c"
+    },
+    {
+      "path": "scripts/test-locale-layout-browser.mjs",
+      "sha256": "df451a5369959a301d3eb024c966832384f615efcc1056bb9a9e1241ce8638d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "apps/web/src/trade/review-controller.ts",
+      "sha256": "196d80e3e0d3fcca1332ad27afaa55615f8ec061d6768edad5c489005e8de68f",
+      "scope": "T53 independent owner/root review; observed unchanged before and after T52 native run"
+    },
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61",
+      "scope": "T53 independent owner/root review; observed unchanged before and after T52 native run"
+    }
+  ],
+  "unresolvedRequiredFindings": [],
+  "method": "Independent five-axis source review of all18 frozen paths against localization specification and implementation contract; actual managed-network ordinary Node child runner; one full existing7-group actual Chromium browser harness; independent114-case Intl/hostile/state probes. No source edits or new agents.",
+  "spec": "00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.3_localization/spec-natural-language-localization-tooltips-and-accessibility.md",
+  "checks": {
+    "frozenHashesBeforeAndAfter": 18,
+    "ordinaryFocused": {
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 0
+    },
+    "nativeChromium": {
+      "version": "154.0.8037.57",
+      "groupsPassed": 7,
+      "unexpectedRequests": 0,
+      "exitCode": 0,
+      "actualCompiledDraftRegistryReplacementOnly": true,
+      "realAppWorkerAndController": true,
+      "privateInputIdentityAndValuesPreserved": true,
+      "liveNavigationTitleHelp": true,
+      "wholeCatalogFallbackAndSourceReset": true,
+      "localPreferenceReload": true,
+      "canonicalReviewedBytesAndNativeClipboardExact": true,
+      "rtlReflowWidths": [
+        320,
+        768,
+        1440
+      ],
+      "translatedLocaleApproved": false,
+      "accessibilityAcceptance": false,
+      "releaseEnabled": false,
+      "actual400PercentZoomQualified": false,
+      "touchPhysicalDeviceQualified": false
+    },
+    "independentProbes": {
+      "intlCases": 114,
+      "targetLocaleTags": 19,
+      "unsafeMachineBidiControlsRejected": 12,
+      "dateBoundaryCases": 7,
+      "throwingObserverCannotSuppressOthers": true,
+      "reentrantSelectionPreferenceOrdering": true,
+      "stableImmutableSnapshot": true,
+      "sourceIdentityBoundFormatter": true,
+      "invalidCatalogAtomicFallback": true,
+      "productionRejectsFixtureId": true,
+      "fundsLocaleEligible": false
+    },
+    "ownerTypecheckEvidence": {
+      "path": "/workspace/work/p2p-t52-typecheck.log",
+      "configurations": 4,
+      "result": "PASS",
+      "independentRepeat": false,
+      "reason": "Root assigned focused/native review and owns aggregate suites."
+    }
+  },
+  "axes": {
+    "correctness": "Live getter adapters and App subscription update owned labels, symbolic notices, navigation, heading/title, help, document/shell language and direction. Whole invalid/unknown/incomplete catalog falls back to one English source and exposes explicit source reset. Actual DOM/input identity is preserved. Named plurals match Intl, dates use UTC, counts use native numerals, exact machine inputs remain unchanged.",
+    "readability": "Closed compiled registry, pure source catalog, display runtime and source-bound adapters have explicit typed contracts. Named plural grammar is bounded and intentionally narrower than full ICU. Scope and qualification limits are documented honestly.",
+    "architecture": "Production registry contains only draftEnglish and has no remote import, registration or metadata promotion API. Development browser build replaces only compiled bundle module. Source english()/catalog remain pure. T53 live sample label getter dependency is separately owned and explicitly pinned for this run.",
+    "security": "Every snapshot has literal fundsLocaleEligible:false. Imported published/reviewer fields grant no authority. Exact variables, source identity, message/control bounds and markup/bidi rejection protect display boundaries. RTL isolates are generated only in output; raw review/copy bytes are not localized. No network translation or browser-language sniffing. Preferences contain only known local bundled IDs.",
+    "performance": "Catalog/variables/source/output lengths and fixture count are bounded; constructors detach/freeze messages. Getter views update without private-form remounts. Observer exceptions are isolated; persist-before-notify preserves newer reentrant selection. Existing actual cleanup/late callback/keyboard/resume tests pass. No added dependencies."
+  },
+  "requiredIntegrationAfterCommit": [
+    "Regenerate T36 immutable source/catalog documentation binding for source revision2; preserve strict hashes. This is root-owned integration and is not waived by this review."
+  ],
+  "limits": [
+    "No reviewed/published translation, legal/safety copy approval, funds activation or translation-release policy is established.",
+    "Production English remains draft; fixtures are explicit development display engineering only.",
+    "Existing completed operation notice strings outside owned paths can retain the language at completion; full historical notice live translation is not claimed.",
+    "Actual400% browser zoom, physical touch/device/VoiceOver/TalkBack and WCAG2.2AA acceptance remain unqualified.",
+    "T52 pass at current T53 policy427ec5... does not retroactively replace T43 old c77 dependency proof; root owns any combined updated native approval."
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/work/t52-independent-focused.log",
+      "sha256": "845b98851b1de2474ae5851af31ae704e3e36274b587557145f669366356b5ec"
+    },
+    {
+      "path": "/workspace/work/t52-independent-browser.log",
+      "sha256": "e47a62d41b0c6f01f9f1ed47abbcc559cbbdac8d58327e23ed96de58065f39f6"
+    },
+    {
+      "path": "/workspace/work/t52-independent-probes.log",
+      "sha256": "26156f2fd2441eb52fb2d25fa1ecbc3258542101c9131ec49bd87c3d7362a38d"
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "intakeDate": "2026-11-02",
+  "repositoryHeadAtIntake": "637327f2d6023a4696ed0d4506da4dec5dc57382",
+  "workingTree": "draft-with-concurrent-work",
+  "method": "Finite read-only primary-source intake; no provider adoption, package installation, activation or live accounts.",
+  "decisions": [
+    {
+      "id": "proof",
+      "remainingTaskIds": [
+        "P-PROOF-PROFILE"
+      ],
+      "packet": "01-proof.md",
+      "packetSha256": "22e002bc05d7030dbfe92f0bd6d6336a5df436941e4cd1c526d84dd736bf6fd7",
+      "localEngineering": "READY_LOCAL_CONTRACT_AND_SYNTHETIC_LIFECYCLE",
+      "enabledProfileStatus": "UNSELECTED_RAIL_SOURCE_NOTARY_CRYPTO_PROFILE",
+      "sourceIds": [
+        "tlsn-readme",
+        "tlsn-wasm",
+        "tlsn-cargo"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "reputation",
+      "remainingTaskIds": [
+        "P-REPUTATION-PROFILE"
+      ],
+      "packet": "02-reputation.md",
+      "packetSha256": "ddbb4a501a8f880fb8bf91bfdb6e61c35a3caba7e569f7cc943b246aebee69e5",
+      "localEngineering": "READY_PINNED_V4_MEMBERSHIP_EVALUATION",
+      "enabledProfileStatus": "UNSELECTED_ISSUER_SCORE_ROOT_CONSUMER_POLICY",
+      "sourceIds": [
+        "semaphore-generate",
+        "semaphore-verify",
+        "semaphore-hash",
+        "semaphore-identity"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "relay-incremental",
+      "remainingTaskIds": [
+        "P-RELAY-INCREMENTAL-PROFILE"
+      ],
+      "packet": "03-relay-allocation.md",
+      "packetSha256": "8ad5017e1c70d4a05c38aab5fc4e192123d650e5c0893d57fdb805b2653557d9",
+      "localEngineering": "READY_SCOPED_NATIVE_COMPANION_EVALUATION",
+      "enabledProfileStatus": "NO_REVIEWED_DIRECT_BROWSER_PREASSEMBLY_PROFILE_IDENTIFIED",
+      "sourceIds": [
+        "nostr01",
+        "nostr11",
+        "nostr-index",
+        "websocket",
+        "ws-receiver"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "optional-messaging",
+      "remainingTaskIds": [
+        "P-WAKU-PROFILE",
+        "ADV-XMTP"
+      ],
+      "packet": "04-optional-messaging.md",
+      "packetSha256": "285dfed07540295de2adf74c7f32a3c10792f79af5955c06995a869dd2591ccc",
+      "localEngineering": "READY_OFFLINE_CODECS_AND_EGRESS_LIFECYCLE_INTAKE",
+      "enabledProfileStatus": "UNSELECTED_NETWORK_PEERS_TOPICS_IDENTITY_RECOVERY",
+      "sourceIds": [
+        "waku-package",
+        "waku-message",
+        "waku-store",
+        "xmtp-package",
+        "xmtp-client",
+        "waku-lightpush"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "mobile",
+      "remainingTaskIds": [
+        "P-MOBILE-PROFILE"
+      ],
+      "packet": "05-mobile.md",
+      "packetSha256": "9935dfa9c59dae7d3354d07bd9176b6553621aaec4702f96940ee566c19aa135",
+      "localEngineering": "READY_SYNTHETIC_SESSION_AND_RETURN_MODEL",
+      "enabledProfileStatus": "UNSELECTED_CONNECTOR_WALLETS_URI_CALLBACK_RELAY_POLICY",
+      "sourceIds": [
+        "mobile-sdk",
+        "mobile-api",
+        "sign-namespaces",
+        "sign-session"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "tor",
+      "remainingTaskIds": [
+        "ADV-TOR"
+      ],
+      "packet": "06-tor.md",
+      "packetSha256": "ecba19e9466af9dddfa96ded9e3051c67b683ab3c60e384ba9322fb6b210fcb3",
+      "localEngineering": "READY_COMPANION_BOUNDARY_AND_CAPTURE_PLAN",
+      "enabledProfileStatus": "UNSELECTED_ENFORCING_COMPONENT_AND_TARGET_MATRIX",
+      "sourceIds": [
+        "tor-socks",
+        "websocket"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "asset-privacy",
+      "remainingTaskIds": [
+        "ADV-SHIELDED",
+        "ADV-COINJOIN"
+      ],
+      "packet": "07-asset-privacy.md",
+      "packetSha256": "aa03f1ed1601bcfc9cf03c2ba07cde72c83c0b82e331a88b6be5bf08a3ea5c2a",
+      "localEngineering": "READY_MANIFEST_REFUSAL_AND_PROTOCOL_INTAKE",
+      "enabledProfileStatus": "UNSELECTED_CHAIN_ASSET_CUSTODY_COORDINATOR_PROTOCOL",
+      "sourceIds": [
+        "psbt",
+        "zcash-ua",
+        "joinmarket-status"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    },
+    {
+      "id": "stealth",
+      "remainingTaskIds": [
+        "ADV-EIP5564"
+      ],
+      "packet": "08-stealth.md",
+      "packetSha256": "de5a7345bc69ce71d92736c672e6b37e40f5b4201b006ea5428945794b2e6d4d",
+      "localEngineering": "READY_TWO_EXPLICIT_OFFLINE_COMPARISON_PROFILES",
+      "enabledProfileStatus": "BLOCKED_WIRE_ENCODING_CONFLICT_AND_NETWORK_WALLET_PROFILE",
+      "sourceIds": [
+        "erc5564",
+        "erc5564-notebook",
+        "erc5564-abi",
+        "stealth-sdk",
+        "stealth-sdk-package",
+        "stealth-sdk-tests",
+        "noble-secp2"
+      ],
+      "productionProfileApproved": false,
+      "reviewers": [],
+      "approvedRelease": null
+    }
+  ]
+}

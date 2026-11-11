@@ -1,0 +1,42 @@
+{
+  "task": "T43",
+  "review": "T43.json",
+  "integration": "Root reran actual Chromium/native journey after independently reviewed T53 helper427 and committed UI cohort36cb4d6. Earlier T43 independent dependency pin is historical; current helper was separately reviewed in T53.md.",
+  "result": {
+    "fixture": "actual-ui-private-worker-native-journey",
+    "nativeSubmissions": 4,
+    "actualCrypto": true,
+    "actualSelectedVault": true,
+    "actualBackupFact": true,
+    "encryptedNegotiation": true,
+    "durableBeforeSend": true,
+    "lostResponseReconciled": true,
+    "finalizedPaymentGuidance": true,
+    "sellerRelease": true,
+    "deadlineRefund": true,
+    "unknownFreshKeyRecovery": true,
+    "failedRefreshClearsGuidance": true,
+    "walletEventRevokesGuidance": true,
+    "lockLateNativeReplyIgnored": true,
+    "startupLockRetiresPendingCreate": true,
+    "heldNativeWorkRejectsNewSelection": true,
+    "authorityRaceRetainsPhysicalAdmission": true,
+    "retiredRpcStartsZeroNewScans": true,
+    "expiredColdPreparationCancelled": true,
+    "canonicalReviewAndReceipt": true,
+    "wrongGenesisAndRuntimeRejected": true,
+    "sourceCiphertextPreserved": true,
+    "nativeReceipt": true,
+    "encryptedWatchExport": true,
+    "productionPeerCarrier": false,
+    "tradingEnabled": false,
+    "externalNetwork": false
+  },
+  "logSha256": "ae6422b219bff00926bdcd1025e77500e02dd674d187d77b9235a0f43421a120",
+  "dependencies": [
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61"
+    }
+  ]
+}

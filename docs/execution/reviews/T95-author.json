@@ -1,0 +1,373 @@
+{
+  "format": "p2p-offramp/t95-ordinal-ordering/v1",
+  "task": "T95",
+  "status": "FROZEN_ORDERING_ONLY_DELTA_ROOT_REVIEW_ACCEPTED_INITIAL_DOCS_FAILURE_RETAINED",
+  "frozenAtUtc": "2026-11-02T18:03:56.111061+00:00",
+  "headAtFreeze": "44881319ced61ac144757c4b8f2f3423725feea8",
+  "scope": "Only9 exclusively owned source files changed, exactly18 implicit string sorts made explicit. No helper/protocol/API/field/normalization/test/scanner/CI/ledger change or commit.",
+  "comparisonContract": "At every changed site the actual domain is primitive strings. Relational string comparison uses the same UTF16 code-unit lexicographic order as default Array.sort; equal strings return0. No localeCompare or normalization was introduced.",
+  "files": [
+    {
+      "path": "scripts/docs/validate.mjs",
+      "beforeSha256": "e2731bb6f79c6f874fcf8d2279d77f67806bdd12fb8c23c3aeed19279f2a620b",
+      "afterSha256": "06ae3c56a2a437a484db17d80cf2c6bccd76fe8d9379c8528b816704ed5eebaa",
+      "implicitSortsMadeExplicit": 2,
+      "actualStringDomain": "Object.keys string names and fixed authored string key lists.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "packages/meetup/src/geohash.ts",
+      "beforeSha256": "bf2b64b52012d8da51c95f64b1a810531f538716e419ada70c94d96c8b25723b",
+      "afterSha256": "5ef16e5f74e7072b4aeb11a7f4543e901082ffab8a532b6041ad2e2f211967fc",
+      "implicitSortsMadeExplicit": 2,
+      "actualStringDomain": "Generated Set<string> geohash cells and validated string cells from the fixed alphabet; numeric longitude comparator untouched.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "packages/courier/src/shared.ts",
+      "beforeSha256": "65f5506b8261c6fec972527d9297775103d8231ed3b22391c84e902ddca25a79",
+      "afterSha256": "3cccb38f6f5b0c04ed078458cacca6a8b4cfb8202901b317f0595e393d0d0c38",
+      "implicitSortsMadeExplicit": 1,
+      "actualStringDomain": "Object.keys in detached fixed-schema canonical JSON; UTF16 key order matches the existing RFC8785 subset.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "scripts/lab/recipe.mjs",
+      "beforeSha256": "5de3340216d3ee7534ce6c48ea996fe52690b69046b9e2e7eed6a7573f64d1ff",
+      "afterSha256": "5a2c9ef2123a1f9c0f57771d1146b5706e45d1bb81a36ec8075b8522fc00d540",
+      "implicitSortsMadeExplicit": 2,
+      "actualStringDomain": "Authored source/fixture path strings and readdir-derived child path strings; path/symlink/size/freshness gates untouched.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "scripts/test-retention-browser.mjs",
+      "beforeSha256": "d1e3baa91923ef3fc5bc4f5216096d2401a6fbe435c8c6cb67509759b85bd82e",
+      "afterSha256": "1cb5e6770205c78a8fbc10f6008244a55c84ab6e8d129d8c08f3fa5ebb9997b5",
+      "implicitSortsMadeExplicit": 3,
+      "actualStringDomain": "Vite module path strings, authored source paths, readdir asset names and module-path slices in evidence metadata.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "beforeSha256": "89633a93f3dc47935c2cad0af7c9ecfa9ec6a273927625320bb6c9dc45c9562a",
+      "afterSha256": "6d817faf9a95708c67669f8d68a76c241568b1ae88b8475093be99076ef25d1a",
+      "implicitSortsMadeExplicit": 1,
+      "actualStringDomain": "Object.keys in the recursive canonical serializer; all model/compiler/query/classifier/assumption/assertion/resource code untouched.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "beforeSha256": "14061692cbbe3e7fc310d39b3611e226811304ea9aa7a89c55a480b1dd0315af",
+      "afterSha256": "02b54bf87fb365ace31e8fc847657bb55db05eb2b96c54647e4813743faaa85b",
+      "implicitSortsMadeExplicit": 2,
+      "actualStringDomain": "safeRecordIds are copied into a validated Set<string> and checked against real candidate IDs before either sort; consent/closure/current/CAS gates untouched.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "packages/meetup/src/policy-data.ts",
+      "beforeSha256": "820ca54cc6acc8ca39a760f49d7d22a7dc98610d908921d2546a8d9c37a8d586",
+      "afterSha256": "2c9cdf9c5848f924c011aa76d2a156c6119b86c11c99b6dd05f09c329d827fc8",
+      "implicitSortsMadeExplicit": 1,
+      "actualStringDomain": "Object.keys in the existing detached fixed-schema RFC8785 subset; public coordinate values are not reordered or normalized.",
+      "onlyComparatorSubstitution": true
+    },
+    {
+      "path": "scripts/portal/build.mjs",
+      "beforeSha256": "838b8f28be12873bc9c2a6adcb1a03a7055a210cc3c92213d1136c3fa25eb268",
+      "afterSha256": "3814c8fcfc8424c3d890c7b31db867cd0945571929bf11bd730f4de54a9c5abe",
+      "implicitSortsMadeExplicit": 4,
+      "actualStringDomain": "Fixed expected asset names, Object.keys(files) and validated report asset paths; existing explicit identities localeCompare(en) comparator untouched.",
+      "onlyComparatorSubstitution": true
+    }
+  ],
+  "reportedSortAnnotations": [
+    {
+      "annotationId": "98637833321",
+      "checkLevel": "failure",
+      "path": "scripts/docs/validate.mjs",
+      "startLine": 16,
+      "endLine": 16,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAWQL1FUA5dXFxk&open=AaGcMfAWQL1FUA5dXFxk&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/26/files#annotation_98637833321",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAWQL1FUA5dXFxk&open=AaGcMfAWQL1FUA5dXFxk&pullRequest=26",
+      "sonarIssueKey": "AaGcMfAWQL1FUA5dXFxk",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637834455",
+      "checkLevel": "failure",
+      "path": "packages/meetup/src/geohash.ts",
+      "startLine": 85,
+      "endLine": 85,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH1QL1FUA5dXFyQ&open=AaGcMfH1QL1FUA5dXFyQ&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/26/files#annotation_98637834455",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH1QL1FUA5dXFyQ&open=AaGcMfH1QL1FUA5dXFyQ&pullRequest=26",
+      "sonarIssueKey": "AaGcMfH1QL1FUA5dXFyQ",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637834545",
+      "checkLevel": "failure",
+      "path": "packages/courier/src/shared.ts",
+      "startLine": 189,
+      "endLine": 189,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfHYQL1FUA5dXFyK&open=AaGcMfHYQL1FUA5dXFyK&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/pull/26/files#annotation_98637834545",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfHYQL1FUA5dXFyK&open=AaGcMfHYQL1FUA5dXFyK&pullRequest=26",
+      "sonarIssueKey": "AaGcMfHYQL1FUA5dXFyK",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637835546",
+      "checkLevel": "failure",
+      "path": "scripts/lab/recipe.mjs",
+      "startLine": 98,
+      "endLine": 98,
+      "title": "Provide a compare function to avoid sorting elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAQQL1FUA5dXFxi&open=AaGcMfAQQL1FUA5dXFxi&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637835546",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAQQL1FUA5dXFxi&open=AaGcMfAQQL1FUA5dXFxi&pullRequest=26",
+      "sonarIssueKey": "AaGcMfAQQL1FUA5dXFxi",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637835824",
+      "checkLevel": "failure",
+      "path": "scripts/test-retention-browser.mjs",
+      "startLine": 234,
+      "endLine": 234,
+      "title": "Provide a compare function to avoid sorting elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGc9S-ANdy_OzKJSnHb&open=AaGc9S-ANdy_OzKJSnHb&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637835824",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGc9S-ANdy_OzKJSnHb&open=AaGc9S-ANdy_OzKJSnHb&pullRequest=26",
+      "sonarIssueKey": "AaGc9S-ANdy_OzKJSnHb",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637835889",
+      "checkLevel": "failure",
+      "path": "scripts/formal/evm.mjs",
+      "startLine": 22,
+      "endLine": 22,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfFAQL1FUA5dXFx1&open=AaGcMfFAQL1FUA5dXFx1&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637835889",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfFAQL1FUA5dXFx1&open=AaGcMfFAQL1FUA5dXFx1&pullRequest=26",
+      "sonarIssueKey": "AaGcMfFAQL1FUA5dXFx1",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637836253",
+      "checkLevel": "failure",
+      "path": "packages/storage/src/retention-service.ts",
+      "startLine": 224,
+      "endLine": 224,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH-QL1FUA5dXFyU&open=AaGcMfH-QL1FUA5dXFyU&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637836253",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH-QL1FUA5dXFyU&open=AaGcMfH-QL1FUA5dXFyU&pullRequest=26",
+      "sonarIssueKey": "AaGcMfH-QL1FUA5dXFyU",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637836517",
+      "checkLevel": "failure",
+      "path": "packages/meetup/src/policy-data.ts",
+      "startLine": 111,
+      "endLine": 111,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH6QL1FUA5dXFyS&open=AaGcMfH6QL1FUA5dXFyS&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637836517",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH6QL1FUA5dXFyS&open=AaGcMfH6QL1FUA5dXFyS&pullRequest=26",
+      "sonarIssueKey": "AaGcMfH6QL1FUA5dXFyS",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637836693",
+      "checkLevel": "failure",
+      "path": "packages/meetup/src/geohash.ts",
+      "startLine": 97,
+      "endLine": 97,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH1QL1FUA5dXFyR&open=AaGcMfH1QL1FUA5dXFyR&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637836693",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfH1QL1FUA5dXFyR&open=AaGcMfH1QL1FUA5dXFyR&pullRequest=26",
+      "sonarIssueKey": "AaGcMfH1QL1FUA5dXFyR",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    },
+    {
+      "annotationId": "98637836825",
+      "checkLevel": "failure",
+      "path": "scripts/portal/build.mjs",
+      "startLine": 117,
+      "endLine": 117,
+      "title": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
+      "message": "See more on https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAYQL1FUA5dXFxv&open=AaGcMfAYQL1FUA5dXFxv&pullRequest=26",
+      "annotationUrl": "https://github.com/djshellshoxxx/p2p-offramp/commit/76c45df0b2f39a928d92ae0af3d60f37737802c5#annotation_98637836825",
+      "sonarIssueUrl": "https://sonarcloud.io/project/issues?id=djshellshoxxx_p2p-offramp&issues=AaGcMfAYQL1FUA5dXFxv&open=AaGcMfAYQL1FUA5dXFxv&pullRequest=26",
+      "sonarIssueKey": "AaGcMfAYQL1FUA5dXFxv",
+      "sonarRule": null,
+      "sonarIssueSeverity": null
+    }
+  ],
+  "otherOrderingPreserved": "Existing numeric interval comparator, explicit docs report comparator and portal identities localeCompare(en) expression remain byte-identical.",
+  "baseline": {
+    "path": "/workspace/work/t95-ordinal-ordering.baseline.json",
+    "sha256": "bd062e915e5715cae0efd9e1810b95f63af4a8a7cd9f24736eadbaa493f597e3",
+    "bytes": 21704
+  },
+  "sourceBaselineDirectory": "/workspace/work/t95-ordinal-ordering.baseline",
+  "patch": {
+    "path": "/workspace/work/t95-ordinal-ordering.patch",
+    "sha256": "846f6ecbdf95b87380231757457543daa3bbf0d4ffe960984acc42f3e3dc7431",
+    "bytes": 11297
+  },
+  "canonicalSnapshotEvidence": {
+    "before": {
+      "path": "/workspace/work/t95-ordinal-ordering.snapshots-before.json",
+      "sha256": "3d471dd4f46aaaa4625452131bada26b578bf532a590ff10887ae2bea2bf9162",
+      "bytes": 4329
+    },
+    "after": {
+      "path": "/workspace/work/t95-ordinal-ordering.snapshots-after.json",
+      "sha256": "3d471dd4f46aaaa4625452131bada26b578bf532a590ff10887ae2bea2bf9162",
+      "bytes": 4329
+    },
+    "byteIdentical": true,
+    "captureScript": {
+      "path": "/workspace/work/t95-ordinal-ordering.snapshot.mjs",
+      "sha256": "da0828ee3e097b3c84b1cfef738c5d8c0c352cea056554a9a543823e920e654d",
+      "bytes": 2332
+    },
+    "scope": "Actual existing Python container fixture through courier/policy canonical serializers, complete formal properties and all3 exact partition binding/assumption identities, three geohash regions plus validation, digest of unchanged canonical contract/ABI/spec files. No target/prover execution or mirrored comparator test."
+  },
+  "verification": {
+    "core-focused": {
+      "commandKind": "normal Node --test per-file isolation with managed IPC network capability",
+      "counts": {
+        "tests": 100,
+        "pass": 100,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/work/t95-ordinal-ordering.core-focused.log",
+        "sha256": "453a8b89ebaf1cb95cd2160b4aec5438ee0a8b094eb5232995471978381aba71",
+        "bytes": 12655
+      },
+      "scope": "Existing4096-value geohash oracle/region ordering/rejection and policy consumers, independent Python courier commitment vectors and consumers, encrypted retention lease/consent/CAS/deletion unit fixtures."
+    },
+    "artifacts-focused": {
+      "commandKind": "normal Node --test per-file isolation with managed IPC network capability",
+      "counts": {
+        "tests": 10,
+        "pass": 9,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/work/t95-ordinal-ordering.artifacts-focused.log",
+        "sha256": "8ea227446399c4e6431ea1778f8b0a73b44503c5ae7bef6759777f3e26debc21",
+        "bytes": 1836
+      },
+      "scope": "Portal2/2 passes with actual unsigned build/rebuild/asset reports, tamper/CSP checks. Initial docs8 reports7 pass/1 DOCS_STALE positive failure at unchanged validate:74; negative docs cases can stop at that earlier stale gate and are not full downstream-branch qualification."
+    },
+    "formal-focused": {
+      "commandKind": "normal Node --test per-file isolation with managed IPC network capability",
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/work/t95-ordinal-ordering.formal-focused.log",
+        "sha256": "4e1e8093cca8097785132f2b7dc32cc699f4b2ac228d319c365a4c450a903bdd",
+        "bytes": 979
+      },
+      "scope": "Seven existing pure query/source/native-packet classifiers, AST guard translator and exact partition source/assumption/assertion binding checks. Process-group and trusted-tool-root cases not selected. No solc/Z3/Forge/tranche runner."
+    },
+    "lab-focused": {
+      "commandKind": "normal Node --test per-file isolation with managed IPC network capability",
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      },
+      "log": {
+        "path": "/workspace/work/t95-ordinal-ordering.lab-focused.log",
+        "sha256": "09600cd30bc2325162d4a52925eea04269f2199cdbb51bdefae0dea8741545fb",
+        "bytes": 296
+      },
+      "scope": "Two actual-file digest and metadata-to-symlink race tests only; no fresh-lab/foundation/process lifecycle rerun."
+    }
+  },
+  "packageTypes": {
+    "command": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "exitCode": 0,
+    "log": {
+      "path": "/workspace/work/t95-ordinal-ordering.types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "retentionHarnessSyntax": {
+    "command": "node --check scripts/test-retention-browser.mjs",
+    "exitCode": 0,
+    "log": {
+      "path": "/workspace/work/t95-ordinal-ordering.syntax.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "docsIntegrationHistory": {
+    "owner": "root T38",
+    "initialFailure": "DOCS_STALE at unchanged validate.mjs:74",
+    "cause": "Original run: register bound79a53b5 English SHA39efb36163f0b2222967137ad4e3dda70d4ce47a8cc094fbfec11e117242a031 while final revision3 English was fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed. Outside T95 ownership.",
+    "diagnosis": {
+      "path": "/workspace/work/t95-ordinal-ordering.docs-stale-diagnosis.json",
+      "sha256": "6034f55bc6fb889fafd5b6ef9df80342d36444506b13164080afae48128d8ad4",
+      "bytes": 502
+    },
+    "rootFollowOn": "Root reports existing claims/docs JSON regenerated against immutable fcae5dd with approval/status fields and page bytes preserved. Distinct root docs+portal run passed the actual-docs positive and preceding negatives; remaining cases were pending at that message. No T95 rerun requested or performed.",
+    "finalAcceptanceOwner": "root completes/records its already-running docs+portal run and final full/native/lab checks.",
+    "gateOrTestRelaxed": false,
+    "notHumanApprovalBlocker": true
+  },
+  "formalDelta": {
+    "path": "/workspace/work/t95-ordinal-ordering.formal-delta.json",
+    "sha256": "5ca8f6c4243f672b1b9ff245f4566524f4c4deb57c868cdad0fd00bd5c492027",
+    "bytes": 12112
+  },
+  "ownershipHandoff": {
+    "releasedToRootForT97": [
+      "scripts/docs/validate.mjs",
+      "scripts/formal/evm.mjs"
+    ],
+    "otherSeven": "Remain frozen for root; no further T95 writes.",
+    "meaning": "A subsequent T97 regex delta has separate source hashes/review and is not silently approved by this ordering receipt."
+  },
+  "limits": [
+    "Changed-script identity fingerprints necessarily change, including formal runner/lab recipe/portal source asset reports. This does not claim source-bearing reports have identical hashes; captured canonical payload/binding outputs are identical.",
+    "All56 protected T91 artifacts remain byte-identical; no fourth attempt, solver/compiler run, rewritten old proof or whole-contract theorem.",
+    "No full suite, browser/Anvil/native acceptance, lab install/foundation, hosted scanner or Sonar rerun. Root read the pure18-substitution source delta as acceptable; final combined checks stay root-owned.",
+    "Raw annotations include unrelated PATH/regex/path issues. T95 covers only10 implicit-sort annotation sites and related implicit string sites in its9 files; no complete Sonar/release closure is claimed."
+  ]
+}

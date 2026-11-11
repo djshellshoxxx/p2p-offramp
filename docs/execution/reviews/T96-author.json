@@ -1,0 +1,250 @@
+{
+  "task": "T96",
+  "status": "FOCUSED_STEALTH_PASS_DISTRIBUTION_NATIVE_AND_SONAR_PENDING_ROOT",
+  "baselineHead": "635efc88fa54a355ee3378af25ad04c5e4c4a55f",
+  "headAtFreeze": "fcae5dd479ccf9ae5fbfa6b0b0717bbbe68f558e",
+  "frozenAtUtc": "2026-11-02T17:59:19.322432+00:00",
+  "ownedRepositoryPaths": [
+    "packages/stealth/test/service.test.mjs",
+    "scripts/distribution/browser.test.mjs"
+  ],
+  "files": [
+    {
+      "path": "packages/stealth/test/service.test.mjs",
+      "beforeSha256": "f1cf7f6ab0b9bb9840e02ce5c60609c9053bb87e1872f9e458a1abf7eb3fed6d",
+      "beforeBytes": 7357,
+      "beforeSnapshot": "/workspace/work/t96-before-packages__stealth__test__service.test.mjs",
+      "afterSha256": "eb8654ad21307d8f50a3352489f547215f44e31ad4fa8e117d31d2f02aaa61ca",
+      "afterBytes": 7795,
+      "afterSnapshot": "/workspace/work/t96-after-packages__stealth__test__service.test.mjs"
+    },
+    {
+      "path": "scripts/distribution/browser.test.mjs",
+      "beforeSha256": "f2ec2a9407658e16e7500d106f1ff3d55cda388dc26c3ab55949181326346eec",
+      "beforeBytes": 5467,
+      "beforeSnapshot": "/workspace/work/t96-before-scripts__distribution__browser.test.mjs",
+      "afterSha256": "341640fc2b27b157f0358b98fbb1835d89d72594171dad3e74077e71f9ad2474",
+      "afterBytes": 5611,
+      "afterSnapshot": "/workspace/work/t96-after-scripts__distribution__browser.test.mjs"
+    }
+  ],
+  "sourceDelta": {
+    "path": "/workspace/work/t96-test-clarity.patch",
+    "sha256": "f17bb93c6e87d9eeec1945a72656234470f0890227242b78050e8ad484eb91a5",
+    "stealth": "Only import aliases val as assertValue and fail as assertFailure plus corresponding identifier renames; reverse normalization equals original file exactly.",
+    "distribution": "Only node:test import, one top-level awaited async test wrapper, and closing wrapper; removing those exact additions equals original file byte-for-byte.",
+    "serviceSuccessAssertionHelperCallSites": 26,
+    "serviceFailureAssertionHelperCallSites": 22,
+    "serviceDirectAssertionCallSites": 25,
+    "distributionDirectAssertionCallSites": 10,
+    "allRealAssertionsNegativesLifecyclePreserved": true,
+    "allTimingAndLimitsPreserved": true,
+    "assertTrueAdded": false,
+    "scannerSuppressionsAdded": false,
+    "genericOrDuplicateRunnerAdded": false
+  },
+  "focusedVerification": [
+    {
+      "path": "/workspace/work/t96-stealth-before.log",
+      "sha256": "f243974c1b5f2ec1393a338c698e209c2f380d204464ec727cf76581809a3337",
+      "command": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "exitCode": 0,
+      "reportedCounts": {
+        "tests": 1,
+        "suites": 0,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "interpretation": "Baseline: Node test runner reported one passing file; individual test-case counts are not inferred from that output."
+    },
+    {
+      "path": "/workspace/work/t96-stealth-after.log",
+      "sha256": "e791d6f5cd288525ea66dc24a880608cee5141597a9dcb9f64062a191d337291",
+      "command": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "exitCode": 0,
+      "reportedCounts": {
+        "tests": 1,
+        "suites": 0,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "interpretation": "After alias rename: Node test runner reported one passing file; direct run below is the ten-case evidence."
+    },
+    {
+      "path": "/workspace/work/t96-stealth-direct.log",
+      "sha256": "7a0605401a3a35fd865631ae9c46541ead8060fadfd5f93bad0e4b34b784f874",
+      "command": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "exitCode": 0,
+      "reportedCounts": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "interpretation": "Focused direct node:test execution observed all ten named cases."
+    },
+    {
+      "path": "/workspace/work/t96-stealth-node24-19.log",
+      "sha256": "a42978725c2fb01de7366c29e22ffeee61db8799650a5263bb72c5868954a82d",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "exitCode": 0,
+      "reportedCounts": {
+        "tests": 1,
+        "suites": 0,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "interpretation": "Additional default Node24.19.0 file-level runner observation; no broader package run."
+    }
+  ],
+  "syntaxChecks": [
+    {
+      "command": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+        "--check",
+        "packages/stealth/test/service.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+        "--check",
+        "scripts/distribution/browser.test.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "diffCheckExitCode": 0,
+  "outputCompatibility": {
+    "packageAlias": "test:distribution:browser",
+    "existingCommand": "node --import ./scripts/test-support/register-tsx.mjs scripts/distribution/browser.test.mjs",
+    "commandChanged": false,
+    "consumersReviewed": [
+      "package.json:57",
+      ".github/workflows/vault-foundation.yml:94",
+      "docs/distribution/README.md:9",
+      "scripts directory references to unsigned-distribution-nested-smoke and distribution/browser.test.mjs"
+    ],
+    "inRepositoryStrictJsonConsumerFound": false,
+    "actualNativeOutputClaimed": false,
+    "consoleExpressionsAndJsonPayloadPreservedByteForByte": true,
+    "stdoutChange": "Direct CLI retains its three ok lines and raw JSON line, then node:test adds its result/summary; stdout is not byte-identical. Existing package/CI consumer uses exit status and no repository parser consumes this JSON.",
+    "failureSemantics": "Async body rejection or cleanup rejection is captured by node:test and produces nonzero CLI status; original try/finally body is unchanged. Isolated reporting/failure probes confirm Node behavior only.",
+    "probes": [
+      {
+        "name": "success",
+        "command": [
+          "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+          "--input-type=module",
+          "-e",
+          "import test from \"node:test\"; await test(\"reporter-output-observation\", async () => { console.log(\"ok - output probe only\"); console.log(JSON.stringify({fixture:\"t96-output-probe-only\"})); });"
+        ],
+        "exitCode": 0,
+        "expectedExitCode": 0,
+        "log": "/workspace/work/t96-node-test-success-output.log",
+        "sha256": "193a02226f151638447e301e4916e5d508a5da208c7cd7789bb2150f61937670",
+        "scope": "node:test reporting/failure-semantics probe only; not a distribution native run"
+      },
+      {
+        "name": "failure",
+        "command": [
+          "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+          "--input-type=module",
+          "-e",
+          "import test from \"node:test\"; import assert from \"node:assert/strict\"; await test(\"failure-propagation-observation\", async () => { try { assert.equal(\"actual\", \"different\"); } finally { console.log(\"owned-cleanup-observed\"); } });"
+        ],
+        "exitCode": 1,
+        "expectedExitCode": 1,
+        "log": "/workspace/work/t96-node-test-failure-output.log",
+        "sha256": "b6758f75127c2bc8ba29dbc4074af99f4d598721e337dd21b4bfd7b32b88cce8",
+        "scope": "node:test reporting/failure-semantics probe only; not a distribution native run"
+      }
+    ],
+    "historicalNote": "docs/execution/reviews/PACKAGE-CI-ENROLLMENT.json describes the prior imperative harness. Left unchanged as historical review; root may record this narrow new wrapper separately."
+  },
+  "readOnlyContextPins": [
+    {
+      "path": "packages/stealth/test/fixtures/helpers.mjs",
+      "sha256": "c5c4b38472c7a90ea8a75aafb1ae0bcc0d0c4850b42a45f18d3cfd58ecdcb3dd",
+      "bytes": 4776,
+      "scope": "read-only context pin at packet freeze"
+    },
+    {
+      "path": "scripts/test-support/register-tsx.mjs",
+      "sha256": "ddead2643c4c755753b0cf357ffb4dad12241cb7b34ba5997f62807f37b34370",
+      "bytes": 86,
+      "scope": "read-only context pin at packet freeze"
+    },
+    {
+      "path": "scripts/test-support/tsx-hooks.mjs",
+      "sha256": "4a9d9bbbe692840bc290126b4c905f08d90c7747728db7e8731c5cc4a3679ebe",
+      "bytes": 489,
+      "scope": "read-only context pin at packet freeze"
+    },
+    {
+      "path": "package.json",
+      "sha256": "1cdbab43cb9af17625d3ad70c3f922e8d6c1f48bbfc486c57c0ec37b1040647e",
+      "bytes": 7084,
+      "scope": "read-only context pin at packet freeze"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+      "bytes": 42472,
+      "scope": "read-only context pin at packet freeze"
+    }
+  ],
+  "node": {
+    "version": "v24.22.1",
+    "path": "/workspace/work/t87-native-diagnostic/node24.22.1/node",
+    "executableSha256": "e32e2d16081cf644f88392934288086e7662529d0d43277c34f7aad2207cfafb"
+  },
+  "distributionNative": {
+    "executed": false,
+    "reason": "Root requested final docs hashes and clean source before independent native run. No metadata regeneration or native result invented.",
+    "rootRunCommand": "P2P_CHROMIUM=/workspace/work/t87-native-diagnostic/chrome156/opt/google/chrome/chrome /workspace/work/t87-native-diagnostic/node24.22.1/node --import ./scripts/test-support/register-tsx.mjs scripts/distribution/browser.test.mjs"
+  },
+  "sonarScanExecuted": false,
+  "productionSourceEdited": false,
+  "CIOrLedgerEdited": false,
+  "fullSuiteRun": false,
+  "upstreamSdkImportOrProviderRun": false,
+  "commitsCreated": false,
+  "rootIndependentReview": "pending"
+}

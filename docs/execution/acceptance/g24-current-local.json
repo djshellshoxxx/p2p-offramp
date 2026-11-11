@@ -1,0 +1,2902 @@
+{
+  "format": "p2p-offramp/current-g24-overlay/v1",
+  "task": "T38",
+  "status": "FROZEN_FOR_ROOT_REVIEW",
+  "observedAtUtc": "2026-11-02T18:49:24.862507+00:00",
+  "sourceCheckpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+  "historicalMatrix": {
+    "binding": {
+      "path": "docs/execution/acceptance/g24-coverage.json",
+      "sha256": "495d492daeef543d8ab49566db39dd92cefab34caa17ce4e2a7c49d01f3329d0"
+    },
+    "originalObservedSource": "733e0fef0f19007aab4fbb8f7abb54a32eae2bd8",
+    "sourceInventoryAndOriginalResultsUnchanged": true
+  },
+  "counts": {
+    "cases": 43,
+    "requirements": 23,
+    "localDispositions": {
+      "LOCAL_PASS": 21,
+      "EXACT_CONTRACT_UNTESTED": 3,
+      "PARTIAL_LOCAL_PASS": 8,
+      "LOCAL_NATIVE_RECEIPT_REORG_PASS": 1,
+      "LOCAL_OWNED_TCP_FAULTS_PASS": 1,
+      "LOCAL_PASS_RECORDED_OUTAGE_SOURCE": 1,
+      "BLOCKED_ENGINE_HOST_POLICY": 2,
+      "EXTERNAL_PHYSICAL_UNTESTED": 3,
+      "REAL_ZOOM_RECORDED_SOURCE_PHYSICAL_PARTIAL": 1,
+      "EXTERNAL_LOCALE_REVIEW_LOCAL_REFUSAL_PASS": 1,
+      "MODEL_CLI_PASS_NO_RELEASE_PROMOTION": 1
+    },
+    "notAReleasePassPercentage": true
+  },
+  "evidenceSummary": {
+    "nativeA2Commands": 11,
+    "nativeDistinctReview": "NATIVE_REVIEW",
+    "retentionInputs": 596,
+    "renderedSources": 128,
+    "earlierPackage": "1712 at a1c;502 unchanged files explicitly reused to a2, not relabeled execution",
+    "typeConfigurations": "Root seven: four main+three optional; four main also raw build/fresh-LAB evidence",
+    "contracts": 82,
+    "freshLab": "Accepted exact-a2 clean clone/freshcache/config/install strictTLS ignore-scripts/audit0; existing1729 USERnode/Linuxamd64; network-none foundation5/journey4 and1712 package/82 contract pass. Not paid Codespace/new-image/browser/physical/production qualification.",
+    "currentPackage": "1713/1713 at committed12bb8f1;502 source/test/config rows stable across run, zero skips/cancels/failures. Earlier1712/502 and actual fresh-a2 LAB1712 remain separate historical evidence.",
+    "nativeSupplement": "T98 current10-check native harness passed author/root, original9 retained; T100 real silent-ACK TCP28/28 plus current package. Actual root/author runs preceded12bb8f1 commit but their exact producer bytes match it.",
+    "browserTooling": "T99 current enforced policy excludes official cdn.playwright.dev; zero archive requests/executions, exact binaries absent. No HTTP denial/bypass/qualification."
+  },
+  "evidence": {
+    "N1": {
+      "command": [
+        "npm",
+        "run",
+        "test:evm:local"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-1.log",
+        "sha256": "273a4840c3e3aa3426bae35f1e6f982a7ac56cc0b2231316622746bb263ff2ed"
+      }
+    },
+    "N2": {
+      "command": [
+        "npm",
+        "run",
+        "test:exchange:evm"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-2.log",
+        "sha256": "46b917df97435f982abaf4f1a03480156b3b451b3ec3881509af211d4f7143af"
+      }
+    },
+    "N3": {
+      "command": [
+        "npm",
+        "run",
+        "test:payment:preflight"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-3.log",
+        "sha256": "7fe44fc4a3d3ea8958b9cc242332662a7519a5005e90ab7f866ffd8c2eddf93c"
+      }
+    },
+    "N4": {
+      "command": [
+        "npm",
+        "run",
+        "test:evm:reconcile"
+      ],
+      "executedHarnessSha256": "a363fa1b44184ec2cf7b65c53da9a0e8cd94af56a1893371b74b538f13f1cdbf",
+      "headAtExecution": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "committedProducerIdentity": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "exitCode": 0,
+      "checks": 10,
+      "log": {
+        "path": "/workspace/work/t98-root-native.log",
+        "sha256": "e8f53432effe47d1d017832becd234ab60c621a65fc34a1ba153d3b8274c0513"
+      },
+      "scope": "Actual pre-commit modified harness bytes exactly match committed12bb8f1; existing9 checks plus native reorg. Root docs dirty, no clean-source execution claim."
+    },
+    "N5": {
+      "command": [
+        "npm",
+        "run",
+        "test:recovery:evm"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-5.log",
+        "sha256": "ce57441886d9ed4d196fdaff2bcc3919ab71a909bddf70ea39b56c0ec53565fb"
+      }
+    },
+    "N6": {
+      "command": [
+        "npm",
+        "run",
+        "test:sepolia:kit"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-6.log",
+        "sha256": "a2e74e4e6379153b1f146cd4e8afbced5e2f7163332384a48e3ff9e0a0f48a32"
+      }
+    },
+    "N7": {
+      "command": [
+        "npm",
+        "run",
+        "test:sepolia:trade"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-7.log",
+        "sha256": "c52ec76d0800fc87866356cc48c53c438125119e82d1ab8e6a7c7f14cd1a973d"
+      }
+    },
+    "N8": {
+      "command": [
+        "npm",
+        "run",
+        "test:eip1271:local"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-8.log",
+        "sha256": "b37fd27670be5fa4d8e0fcc596febf9baae0eac8b1e47ea42b7dc43e83a2cbae"
+      }
+    },
+    "N9": {
+      "command": [
+        "npm",
+        "run",
+        "test:journey:browser"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-9.log",
+        "sha256": "41a4c64060e96413e9febcfe29645a6f4031481d6e6b93eb74187810b830e341"
+      }
+    },
+    "N10": {
+      "command": [
+        "npm",
+        "run",
+        "test:retention:browser"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-10.log",
+        "sha256": "c60d3bffc67862248fec074f6435b8521bfc93d6c3076d8947ac56267168faa7"
+      }
+    },
+    "N11": {
+      "command": [
+        "npm",
+        "run",
+        "test:distribution:browser"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-11.log",
+        "sha256": "08c115f2e802ca47e19cad264e853e852d861141297f7aecc67909acf84ec581"
+      }
+    },
+    "NATIVE_REVIEW": {
+      "path": "/workspace/work/t38-final-native-review.json",
+      "sha256": "19e6f781c9d37833192eff7c01c2401620a0a522cdbd4c38b4f2f500ef521113"
+    },
+    "NATIVE_BINDINGS": {
+      "path": "/workspace/work/t38-final-native-source-bindings.json",
+      "sha256": "a038eaa73b66d3204d128060e3479df9398b8c1099705fa6420ffaf62fcccd78"
+    },
+    "PACKAGE": {
+      "path": "/workspace/work/t38-final-package-tests.json",
+      "sha256": "94a374346bf0ea5d9054a5766b0abff0d2ed8a80ac45824dd1079e99b98587ae",
+      "sourceCommit": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "tests": 1713
+    },
+    "PACKAGE_REUSE": {
+      "path": "/workspace/work/t38-final-native-package-reuse-bindings.json",
+      "sha256": "0f17a91888b0b077ed4ca35a306c9607c26663384b1e1746d5749bec2a3e6b14"
+    },
+    "FOUNDRY": {
+      "path": "/workspace/work/t38-root-forge-results.json",
+      "sha256": "257ce09e4a6d3562f8bfb160d7dd8cfc3066b2aa062947aa7a4716b787b74c0b"
+    },
+    "FINAL": {
+      "path": "docs/execution/FINAL-LOCAL-VERIFICATION-2026-11-02.json",
+      "sha256": "02ef082937289a4aab6e59049a1254638582df04c00990a6864f425eba8aa80e"
+    },
+    "LAB": {
+      "path": "docs/execution/qualification/fresh-lab-a2b414f.json",
+      "sha256": "a097c4529e75b389c5cb0d1fb1f5bd41c4503527ce0b925edd75d682805d95bf"
+    },
+    "LAB_REVIEW": {
+      "path": "/workspace/work/t71-final-lab-review.json",
+      "sha256": "362d6b47e299fb757b60eb50e8b7c20ca897fa47f91967fe9c8c08e699acfa6d"
+    },
+    "OUTAGE": {
+      "path": "docs/execution/qualification/local-origin-outage.json",
+      "sha256": "593925af461def9e4dce69c6ec7ced1071e0c436cb473df6dc7c43589775f420"
+    },
+    "OUTAGE_REVIEW": {
+      "path": "docs/execution/reviews/T92-root.json",
+      "sha256": "26826f5c31267d975cf99b8be492d72820c2a338767c5680b366c58255d0497e"
+    },
+    "ORDINAL": {
+      "path": "docs/execution/reviews/T95-root.json",
+      "sha256": "1ab61a713e5c55267ceeac26e1dbea02b2a180fe05f5d51ebf5898b72d3aef90"
+    },
+    "FORMAL": {
+      "path": "docs/execution/qualification/evm-formal-partitions.json",
+      "sha256": "893e168aca33ade576817f0214a49b85831b2dde0b700091769f69885582ff2c"
+    },
+    "REMAINDER": {
+      "path": "/workspace/work/t38-current-remainder.json",
+      "sha256": "c4c3e933d30bcbcd9f7572ebd53175dc08c7c4a247d61d05911a44944c6f2113"
+    },
+    "T1": {
+      "command": [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-1.log",
+        "sha256": "664e81008640e00e459415fc041d05ba12ca558efa6102beaa968d95038e5f4c"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T2": {
+      "command": [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-2.log",
+        "sha256": "a28ca0bd3ba11a8e9f77eb13d52fed7843bfd42372d6a7e52cdb6c3872e501f9"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T3": {
+      "command": [
+        "npm",
+        "run",
+        "test:completion:tools"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-3.log",
+        "sha256": "967f8cc3c1b65bb2cc2e06548e8b36623e7fc0fda6c84aa5378eb58318c2fd35"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T4": {
+      "command": [
+        "npm",
+        "run",
+        "test:distribution"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-4.log",
+        "sha256": "b72482139c061b357de6c1c96d92b3efbfd117c36e284fd6b6d4357d3f8a718e"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T5": {
+      "command": [
+        "npm",
+        "run",
+        "test:diagnostics"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-5.log",
+        "sha256": "860d4533c070e39bdba07e5e7715578631ec3b7d5da2a61092bf3d7637d6a924"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T6": {
+      "command": [
+        "npm",
+        "run",
+        "test:acceptance:cli"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-6.log",
+        "sha256": "a8f1f7ce34dd2325bff51e3ccb387a04da8692590ab6a5b51c78cecd698c320e"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T7": {
+      "command": [
+        "npm",
+        "run",
+        "test:fuzz"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-7.log",
+        "sha256": "7a0a6647a97de151a747902017cb88128b4061e4860b80fbdf379a104a5a5169"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T8": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-8.log",
+        "sha256": "35e75005a948082e8e1a1f656d136808c031925c4f21ad4254afeb1c234f9285"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "T9": {
+      "command": [
+        "npm",
+        "run",
+        "build:demo"
+      ],
+      "log": {
+        "path": "/workspace/work/t38-final-tools-9.log",
+        "sha256": "722be374ccd484d97ce6420d087dd90ed65159517838f70e9cd9eb584d98e95b"
+      },
+      "relationship": "Executed f25de72 code with three declared metadata files dirty; a2 commits exact bytes per FINAL, not relabeled command start."
+    },
+    "WEB": {
+      "record": {
+        "path": "/workspace/work/t38-root-web-browser.json",
+        "sha256": "ceccd8a8382cbdd23a3d15db7465d3d7a53abe3e95a9cef7aeef0d015fbb309a"
+      },
+      "log": {
+        "path": "/workspace/work/t38-root-web-browser.log",
+        "sha256": "7f20854f33881c993f5e5deee81258aa8f7bf1a6464617957595353a170592ec"
+      },
+      "actualSource": "32c3449",
+      "notAnA2Execution": true
+    },
+    "FOUNDATION": {
+      "record": {
+        "path": "/workspace/work/t38-root-foundation-browser.json",
+        "sha256": "a6e2a387bcec8e812d5a8acd72722fbb48c8608007278287db32632d44c76f4b"
+      },
+      "log": {
+        "path": "/workspace/work/t38-root-foundation-browser.log",
+        "sha256": "d13cbab53e6140b0006185f01e27940c01a9247bb0d1b7dcbcb63a67f640af3f"
+      },
+      "actualSource": "635efc8",
+      "notAnA2Execution": true
+    },
+    "PRIVATE": {
+      "record": {
+        "path": "/workspace/work/t38-root-private-browser.json",
+        "sha256": "95c9a4f57c59cf5893e2c32599e5cb6a2d5cbfa52417efaea0cb8f91b41d1c90"
+      },
+      "log": {
+        "path": "/workspace/work/t38-root-private-browser.log",
+        "sha256": "94ffbefefc18ae52d85206d50647ccd4848469a06ce7d76f6c86c75d1e3feb03"
+      },
+      "actualSource": "635efc8",
+      "notAnA2Execution": true
+    },
+    "ZOOM": {
+      "record": {
+        "path": "/workspace/work/t38-root-native-zoom.json",
+        "sha256": "b56d5819ca98fea33afc2845368617b3a466931a645077acef52fd9a89d2d177"
+      },
+      "log": {
+        "path": "/workspace/work/t38-root-native-zoom.log",
+        "sha256": "93c3ee642d2aa49f7c222a79aa2bd3e8432fa04d8fadcba7f73345ac6cf0db9b"
+      },
+      "actualSource": "32c3449",
+      "notAnA2Execution": true
+    },
+    "PACKAGE_A2_BASELINE": {
+      "path": "/workspace/work/t38-root-package-tests.json",
+      "sha256": "5695938f3db82781a183fcbc1a1c77cef536051c36336fc06eaa570ff18d6c64"
+    },
+    "N4_BASELINE_A2": {
+      "command": [
+        "npm",
+        "run",
+        "test:evm:reconcile"
+      ],
+      "source": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "exitCode": 0,
+      "log": {
+        "path": "/workspace/work/t38-final-native-4.log",
+        "sha256": "08754773888141d9d0fd4dce59d732579ccdb1f6d7f5495e319e417e31cf2959"
+      }
+    },
+    "T98": {
+      "path": "docs/execution/reviews/T98-root.json",
+      "sha256": "219ae144fda68dc0e1c5c6b4f3503076734a86422386db4021416abe14099fe0"
+    },
+    "T100": {
+      "path": "docs/execution/reviews/T100-root.json",
+      "sha256": "fb0b779badf4cf3fb09e6c30cd9acaba57a5991b96533a51242b89e5f6d7154f"
+    },
+    "T99": {
+      "path": "docs/execution/qualification/browser-tooling-policy.json",
+      "sha256": "33689fcd63509aca4a58a9d7ed3a878952e0aac4aeb7e181f798ca076ebf22b1"
+    }
+  },
+  "sourceBindings": {
+    "scripts/test-exchange-evm-local.mjs": {
+      "sha256": "e7cf02c25fbb15400b3919d365a4bdf7a429d2d51be557f73f74947f02e9ee9a",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-journey-browser.mjs": {
+      "sha256": "75e64965f23126e8cf80b5062a3b9a6f0947bb7c223b1cc3e9ba12210567a050",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "contracts/evm/test/BasicEscrow.t.sol": {
+      "sha256": "66b031deb5b01eec225b7519b0ace7f0970f54c89fe88a806560fc20495cebdd",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-evm-local-trade.mjs": {
+      "sha256": "a84762701ccf67c38a0d62bb4bb6e3b3ec7ff9dd6971e16417ffdbbdc320d0a4",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/domain/test/tx-lifecycle.test.mjs": {
+      "sha256": "4002f137575eb76875afc283052e0f53920fb0a72824daf26645f3830dcdda10",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/wallet/test/evm-payment-preflight.test.mjs": {
+      "sha256": "4469456b3d9d49579be404d4507a40a5c806ab0cc67ad35d71ce8c0be66268bb",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/exchange/test/exchange.test.mjs": {
+      "sha256": "22de13d365f5e09fb972d798377bdc0ab33d4d0c4219fe65851969b019d91005",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/wallet/test/evm-terms.test.mjs": {
+      "sha256": "1e6d9b75a393f5698a9fc0aae0ee265546a4c4a1ce4a13ce5e55debf940a2088",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-lifecycle-tabs-browser.mjs": {
+      "sha256": "6baed78bcc6e16e89331fcef53f88ffd887c8b6626deabc5330caeadb30d5226",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "contracts/evm/test/BasicEscrowFuzz.t.sol": {
+      "sha256": "b832bca38a7b0d138ff0c338224084f1b8ff6547ec0f8698fe6cf748d981632d",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-evm-reconcile-local.mjs": {
+      "sha256": "a363fa1b44184ec2cf7b65c53da9a0e8cd94af56a1893371b74b538f13f1cdbf",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "meaning": "Current selected harness identity matches accepted T98 actual10-check runs; original9 unchanged. Earlier N4 baseline remains explicitly archived.",
+      "baselineA2Binding": {
+        "sha256": "11c4f60533ccefe031b7b177470bf87afedecbfe47bbee5311df681f1f559f1a",
+        "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+      }
+    },
+    "packages/chain-evm/test/reader.test.mjs": {
+      "sha256": "5f568b77e61f81b1471b8976d9757249107c9832aa4f888341c3569c77ef2461",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/relay/test/nostr-crypto-wiring.test.mjs": {
+      "sha256": "3cd2b328f5b44633973d2149330b1b923a470246a7d46897a320269d33bfd9a0",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/messaging/test/durable-chat.test.mjs": {
+      "sha256": "a3fdfdcd42d5e7971790b75effe10bbe34cf1b547f8831009c8585b73ceb237d",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/relay/test/pool-lifetime.test.mjs": {
+      "sha256": "f132cd79327de5d6703caade5b1e609367393082790522cade400b2512fd9390",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/domain/test/intent-journal.test.mjs": {
+      "sha256": "a3f2e03a113c12c6435cdc57e473038b7187c9f3b8492a626a008b6d0f5389cd",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-journey-origin-browser.mjs": {
+      "sha256": "302cb726bf7b99f1648d66fad9173120aac9de48fd466a5c9061266069df7b5b",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/storage/test/backup-service.test.mjs": {
+      "sha256": "626de8dbe31a26895e799249e0cbff94c2c0756229ce86176b2ba59e4a418aa7",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "apps/web/test/journey-private-trade.test.mjs": {
+      "sha256": "eb4f75cdf7a483b88e2188d5be2fa54ca591e8bbad1a3ae363c8185bd9b1cb4d",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/transport/src/policy.ts": {
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-evm-recovery-local.mjs": {
+      "sha256": "74803df60bfac1548cc72842e13eca2a4718594bd35f7d681e933f4a1803a56b",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "apps/web/test/compatibility-model.test.mjs": {
+      "sha256": "8324fc944a317966438602ed38ac1345c3aecbc6379e577518d245946cd229dd",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "scripts/test-locale-layout-browser.mjs": {
+      "sha256": "56797be499011f7b2f645a2d7792457708d6b524ab32ff10649b7747f3fdb880",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "apps/web/src/ui/locale/runtime.ts": {
+      "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "apps/web/src/ui/locale/en.ts": {
+      "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/storage/test/backup-verification.test.mjs": {
+      "sha256": "1092765cf7b87d95f6bc98c8925df5821d2b25f52c457c95c73f14fe83f58ddd",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/security/test/acceptance-gates.test.mjs": {
+      "sha256": "1f2b27c0f5c29f37461b6d964756e046a91b6a0d901e173d428a57ef8a9c33dc",
+      "checkpoint": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "meaning": "Current byte identity reference; applicability derives from cited execution/review, not new source audit."
+    },
+    "packages/relay/test/pool.test.mjs": {
+      "sha256": "74753b038c41acd3187b2f52948b974d7f59ace19ff8791aba5ca50814b50b09",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "meaning": "Current selected native TCP fixture identity; actual scope derives from T100/root package and prior real refused/drop/reconnect cases."
+    },
+    "packages/relay/test/support/harness.mjs": {
+      "sha256": "c87370deea81f9cfae6e4719db3696c9a81b2a88fc928a273ae71301f485b0c1",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "meaning": "Current selected native TCP fixture identity; actual scope derives from T100/root package and prior real refused/drop/reconnect cases."
+    },
+    "packages/relay/test/support/fake-relay.mjs": {
+      "sha256": "255704badb94595fefd4d7bdc923808fe2ac7024da2307ab3843cba795cec4a2",
+      "checkpoint": "12bb8f1650227479e744cd899273f533eb94fe53",
+      "meaning": "Current selected native TCP fixture identity; actual scope derives from T100/root package and prior real refused/drop/reconnect cases."
+    }
+  },
+  "remainingDependencies": {
+    "PEER": {
+      "kind": "exact contract",
+      "owner": "root/future peer owner",
+      "missing": "Authenticated versioned EOA/EIP1271 carrier identity/network/key-role/signature/trade/revision/expiry/replay/producer bytes and session binding absent; compiled local peer is a fixture.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "SOLANA": {
+      "kind": "exact contract/tooling",
+      "owner": "root/Solana owner",
+      "missing": "Program/PDA/account/discriminator/IDL/instruction/native/SPL/Token2022 extension-authority-rent/finality/history/recovery profile and native consumer/toolchain absent; mandatory rows not waived.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "REAL_TARGET": {
+      "kind": "exact profile/external",
+      "owner": "wallet/browser target owner",
+      "missing": "Actual maintained testnet/external-wallet/connector/version/OS/hardware tuple absent; public Anvil/mock wallets do not qualify it.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "ENGINE": {
+      "kind": "untested tooling",
+      "owner": "browser owner",
+      "missing": "Exact Firefox157/rev1555 and WebKit27.2/rev2370 binaries absent. T99 current enforced managed host policy excludes cdn.playwright.dev; zero requests/launches. This is a tooling policy prerequisite, not an HTTP/permission rejection or release-review blocker.",
+      "nextAction": "After supported policy readiness permits exact official host, one bounded archive request per engine, provenance/native dependency checks, then separately admitted product-harness qualification."
+    },
+    "PHYSICAL": {
+      "kind": "external target",
+      "owner": "physical device/wallet owner",
+      "missing": "Actual Android/iPhone/iPad camera/deep-link/return/background/eviction/rotation/keyboard evidence absent; exact mobile session/return profile unresolved and T75 stronger-session failure retained.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "ASSISTIVE": {
+      "kind": "external target",
+      "owner": "accessibility owner",
+      "missing": "Actual VoiceOver/TalkBack reading/order/announcements/dialog/error/contrast/target-size and WCAG2.2AA assessment absent.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "LOCALE": {
+      "kind": "semantic/professional",
+      "owner": "source safety-copy/locale reviewers",
+      "missing": "English3 draft/null translator/reviewer/fundsLocaleEligible=false; no reviewed source funds-safety or non-English safety bundles.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "REORG": {
+      "kind": "external consensus/provider qualification",
+      "owner": "actual chain/provider qualification owner",
+      "missing": "Defined local receipt/journal rollback is now accepted T98. Owned Anvil rollback does not establish mainnet consensus/provider honesty or every fork.",
+      "nextAction": "Reuse completed local evidence; qualify the exact selected real chain/provider tuple before broader claims."
+    },
+    "RPC": {
+      "kind": "model/provider gap",
+      "owner": "reader/provider owner",
+      "missing": "Deterministic anchor/stale/identity refusals plus local native preflight are not independently operated split-view provider proof.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "CHECKPOINT": {
+      "kind": "partial native/model",
+      "owner": "journal/lifecycle owner",
+      "missing": "Transition unit faults plus actual SIGKILL/reopen do not mean every final-browser crash point physically killed.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "OLD_BROWSER": {
+      "kind": "recorded source applicability",
+      "owner": "root",
+      "missing": "Older web/foundation/private/zoom runs retain actual checkpoints and ordinal-delta applicability. N11 separately measures actual default client/native Worker boot/reload/nested recovery at clean a2 with zero unexpected requests. This is not a complete final-browser or authenticated-release qualification.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "RELEASE": {
+      "kind": "external trust/professional",
+      "owner": "artifact-specific release/security/operator owners",
+      "missing": "Production trust/key custody/rotation/archive/deployment, signed distribution/host witnesses and actual independent security/crypto/provider/operational/legal qualification absent.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    },
+    "HOSTING": {
+      "kind": "root integration",
+      "owner": "root",
+      "missing": "Live CI/scanner/review policy, final documentation delivery and guarded push/merge are root-owned; not certified here.",
+      "nextAction": "Resolve named exact profile or actual target evidence; reuse completed local scope, never fabricate authority."
+    }
+  },
+  "cases": [
+    {
+      "id": "G24-EVM-NATIVE-RELEASE",
+      "requirement": "Complete canonical native release journey",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0027:p001:02",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Actual selected-vault/private-Worker/native canonical journey; N9 retains11 sends/16 signatures/32 reviews.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-exchange-evm-local.mjs",
+        "scripts/test-journey-browser.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EVM-NATIVE-REFUND",
+      "requirement": "Seller withholds; timeout refund only to seller",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "N2",
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "scripts/test-exchange-evm-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EVM-ERC20-RELEASE",
+      "requirement": "Canonical exact-transfer ERC-20 release, distinct from native",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "N1",
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-evm-local-trade.mjs",
+        "contracts/evm/test/BasicEscrow.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EVM-ERC20-REFUND",
+      "requirement": "Canonical exact-transfer ERC-20 refund, distinct from native",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "N1",
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-evm-local-trade.mjs",
+        "contracts/evm/test/BasicEscrow.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-SOLANA-NATIVE",
+      "requirement": "Mandatory Solana native release/refund/recovery parity",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXACT_CONTRACT_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "Solana program/profile and adapter maintainer",
+      "remainingDependencyRefs": [
+        "SOLANA",
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-SOLANA-ALLOWLISTED-SPL",
+      "requirement": "Mandatory Solana allowlisted-spl release/refund/recovery parity",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0023:p001:01",
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXACT_CONTRACT_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "Solana program/profile and adapter maintainer",
+      "remainingDependencyRefs": [
+        "SOLANA",
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-WRONG-NETWORK-ACCOUNT",
+      "requirement": "Wrong chain/account/genesis/runtime cancels or refuses",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:01",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N9",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "packages/wallet/test/evm-payment-preflight.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-STALE-REVISION-QUOTE",
+      "requirement": "Stale terms revision, advertisement and quote acceptance refused",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Core stale revision/advertisement/terms refusals measured; no production liquidity quote profile.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N2"
+      ],
+      "sourceBindingRefs": [
+        "packages/exchange/test/exchange.test.mjs",
+        "scripts/test-exchange-evm-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-MALICIOUS-AMOUNT-RECIPIENT",
+      "requirement": "Changed canonical amount, recipient, domain or prepared bytes refused",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N2",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/wallet/test/evm-terms.test.mjs",
+        "scripts/test-exchange-evm-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-ALLOWANCE-MISMATCH",
+      "requirement": "Token allowance/amount mismatch cannot fund",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB",
+        "N1"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "scripts/test-evm-local-trade.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-DUPLICATE-FUNDING",
+      "requirement": "Concurrent/restarted duplicate funding and nonce reuse refused",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB",
+        "PACKAGE",
+        "FOUNDATION"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "scripts/test-lifecycle-tabs-browser.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TOKEN-TRANSFER-FAILURE",
+      "requirement": "Unsupported transfer behavior and deferred terminal payout",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Contract fee/blacklist/false-return cases; actual deferred credit/withdrawal and N10 protected retention.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB",
+        "N1"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrow.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-SPL-DISALLOWED-EXTENSION",
+      "requirement": "Disallowed Solana token program/mint/extension refused",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:03",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXACT_CONTRACT_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "Solana token-profile maintainer",
+      "remainingDependencyRefs": [
+        "SOLANA",
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EXPIRY-MINUS1",
+      "requirement": "Expiry MINUS1 uses native time and fixed beneficiaries",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrowFuzz.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EXPIRY-EQUALITY",
+      "requirement": "Expiry EQUALITY uses native time and fixed beneficiaries",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrowFuzz.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-EXPIRY-PLUS1",
+      "requirement": "Expiry PLUS1 uses native time and fixed beneficiaries",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:02",
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrowFuzz.t.sol"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TX-DROPPED",
+      "requirement": "Dropped after bounded reconciliation",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "scripts/test-evm-reconcile-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TX-REPLACED",
+      "requirement": "Same nonce replacement and explicit linked successor",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "scripts/test-evm-reconcile-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TX-REORGED",
+      "requirement": "Canonical receipt reorg removes finality",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_NATIVE_RECEIPT_REORG_PASS",
+      "currentScope": "Actual owned Anvil finalized receipt becomes noncanonical/absent after snapshot rollback and alternate blocks; two fresh encrypted clients persist/recover reorged with original hash/prepared identity, one initial wallet send and no later wallet calls/reprepare. Not mainnet consensus qualification.",
+      "evidenceRefs": [
+        "N4",
+        "T98",
+        "PACKAGE"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-evm-reconcile-local.mjs",
+        "packages/domain/test/tx-lifecycle.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Preserve accepted native local reorg proof; only actual selected production chain/provider/wallet qualification remains before broader claims.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TX-EXPIRED",
+      "requirement": "EVM intent expiry is not proof of failed broadcast",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Expiry/unknown model plus actual send-started crash recovery; not every scheduling configuration.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-UNKNOWN-BROADCAST",
+      "requirement": "Lost response and crash after durable send marker remain unresolved until native proof",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0023:p001:05",
+        "S-dfc774ae:L0027:p001:04",
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "N2",
+        "N4",
+        "N9",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-evm-reconcile-local.mjs",
+        "scripts/test-exchange-evm-local.mjs",
+        "packages/domain/test/tx-lifecycle.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-RPC-SPLIT-VIEW",
+      "requirement": "Conflicting/stale RPC and changed anchors refuse guidance",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Reader fault injection plus actual N3 native901/900 boundary/latest-settlement veto; no independent provider divergence.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N9"
+      ],
+      "sourceBindingRefs": [
+        "packages/chain-evm/test/reader.test.mjs",
+        "packages/wallet/test/evm-payment-preflight.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RPC"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-RELAY-DUPLICATE",
+      "requirement": "Relay duplicate/replay and durable message deduplication",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N2",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/relay/test/nostr-crypto-wiring.test.mjs",
+        "packages/messaging/test/durable-chat.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-RELAY-OFFLINE",
+      "requirement": "Relay offline/closure cannot cause direct fallback or economic finality",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_OWNED_TCP_FAULTS_PASS",
+      "currentScope": "Existing actual owned refused-upgrade/failover and drop/reconnect/REQ-dedupe cases plus T100 native TCP silent-OK timeout/unknown/no-EVENT-replay case. Crypto/TLS/private-routing/production outage not qualified.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "LAB",
+        "T100"
+      ],
+      "sourceBindingRefs": [
+        "packages/relay/test/pool.test.mjs",
+        "packages/relay/test/support/harness.mjs",
+        "packages/relay/test/support/fake-relay.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse these actual owned socket fault paths; no new outbox/cursor/republication semantics. Qualify any exact selected production relay/routing tuple separately.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-MESSAGE-TAMPER",
+      "requirement": "Wrong sender/recipient/trade and changed encrypted message refused",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:04",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N2",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/exchange/test/exchange.test.mjs",
+        "packages/messaging/test/durable-chat.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-RESTART-CHECKPOINTS",
+      "requirement": "Restart at each journal transition and two-tab ownership",
+      "requirementIds": [
+        "S-dfc774ae:L0023:p001:05"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Transition models, actual SIGKILL/no-resend and older two-tab evidence distinguished.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4",
+        "FOUNDATION"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "packages/domain/test/intent-journal.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "CHECKPOINT"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-CROSS-ORIGIN-RESTORE",
+      "requirement": "Authenticated new-origin fresh-key restore retains records and pending intents",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS_RECORDED_OUTAGE_SOURCE",
+      "currentScope": "Accepted T92 actual all-path503/reload503/Worker retirement/fresh verified third-origin recovery, opaque records and destination backup recheck;57/58 inputs unchanged, one accepted ordinal retention delta. N10 separately current.",
+      "evidenceRefs": [
+        "OUTAGE",
+        "OUTAGE_REVIEW",
+        "N2",
+        "N9",
+        "N10"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-journey-origin-browser.mjs",
+        "packages/storage/test/backup-service.test.mjs",
+        "scripts/test-exchange-evm-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-SELLER-WARNING",
+      "requirement": "Before buyer payment disclose withholding and no fiat finality",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "N9",
+        "PACKAGE",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-journey-browser.mjs",
+        "packages/wallet/test/evm-payment-preflight.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "LOCALE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-CORE-ONLY-NO-EGRESS",
+      "requirement": "Core-only emitted default has no advanced provider or automatic wallet/network action",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0027:p001:03",
+        "S-dfc774ae:L0031:p001:04",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Actual N11 clean-a2 default client/native Worker boot/reload/nested recovery and zero unexpected requests; current build/policy/package plus native no-egress. Broader active-trade, exact final hosted artifact and authenticated release remain distinct.",
+      "evidenceRefs": [
+        "T8",
+        "LAB",
+        "T1",
+        "WEB",
+        "N9",
+        "N11"
+      ],
+      "sourceBindingRefs": [
+        "apps/web/test/journey-private-trade.test.mjs",
+        "scripts/test-journey-origin-browser.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "OLD_BROWSER",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-STRICT-ROUTE-REFUSAL",
+      "requirement": "Unsupported strict route starts no direct connection",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/transport/src/policy.ts"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-TIMEOUT-DELAYED-INCLUSION",
+      "requirement": "Timeout does not mean failed transaction; delayed inclusion reconciles",
+      "requirementIds": [
+        "S-dfc774ae:L0031:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "scripts/test-evm-reconcile-local.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-LOSS-ORIGIN-RECOVERY",
+      "requirement": "Independent original-pinned recovery without frontend or current release availability",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:01",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "LOCAL_PASS",
+      "currentScope": "N5 original-pin recovery outside checkout/expired release; T92 actual file outage is separate and does not claim funds recovery.",
+      "evidenceRefs": [
+        "N5",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-evm-recovery-local.mjs",
+        "scripts/test-evm-recovery-local.mjs"
+      ],
+      "owner": "recovery/release maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-ENGINE-CHROMIUM",
+      "requirement": "Complete advertised Chromium wallet/chain combination",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Actual Chromium156 local fake-wallet/Anvil, not advertised external-wallet/OS/hardware tuple.",
+      "evidenceRefs": [
+        "N9"
+      ],
+      "sourceBindingRefs": [
+        "apps/web/test/compatibility-model.test.mjs"
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-ENGINE-FIREFOX",
+      "requirement": "Complete advertised Firefox wallet/chain combination",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "BLOCKED_ENGINE_HOST_POLICY",
+      "currentScope": "Exact official pinned archive URL established, destination excluded by current enforced policy, binary absent, zero requests/native executions. No fabricated HTTP denial or browser pass.",
+      "evidenceRefs": [
+        "FINAL",
+        "T99"
+      ],
+      "sourceBindingRefs": [
+        "apps/web/test/compatibility-model.test.mjs"
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ENGINE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-ENGINE-WEBKIT",
+      "requirement": "Complete advertised WebKit wallet/chain combination",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "BLOCKED_ENGINE_HOST_POLICY",
+      "currentScope": "Exact official pinned archive URL established, destination excluded by current enforced policy, binary absent, zero requests/native executions. No fabricated HTTP denial or browser pass.",
+      "evidenceRefs": [
+        "FINAL",
+        "T99"
+      ],
+      "sourceBindingRefs": [
+        "apps/web/test/compatibility-model.test.mjs"
+      ],
+      "owner": "browser/wallet compatibility maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ENGINE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-PHYSICAL-ANDROID",
+      "requirement": "Physical Android wallet/camera/eviction/return acceptance",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXTERNAL_PHYSICAL_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "physical-device and wallet acceptance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PHYSICAL"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-PHYSICAL-IPHONE",
+      "requirement": "Physical iPhone wallet/camera/eviction/return acceptance",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXTERNAL_PHYSICAL_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "physical-device and wallet acceptance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PHYSICAL"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-PHYSICAL-IPAD",
+      "requirement": "Physical iPad wallet/camera/eviction/return acceptance",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXTERNAL_PHYSICAL_UNTESTED",
+      "currentScope": "Current bounded canonical EVM/local fixture and explicitly mapped native/model assertions; no other-chain, real-wallet or production qualification.",
+      "evidenceRefs": [
+        "FINAL"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "physical-device and wallet acceptance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PHYSICAL"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-KEYBOARD-SCREENREADER",
+      "requirement": "Keyboard, VoiceOver and TalkBack acceptance",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0031:p001:03",
+        "S-dfc774ae:L0035:p001:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Local keyboard/focus, but actual VoiceOver/TalkBack absent.",
+      "evidenceRefs": [
+        "ZOOM",
+        "PACKAGE"
+      ],
+      "sourceBindingRefs": [],
+      "owner": "accessibility acceptance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PHYSICAL",
+        "ASSISTIVE",
+        "LOCALE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-320PX-400ZOOM",
+      "requirement": "320px, portrait/landscape and actual400percent zoom",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0031:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "REAL_ZOOM_RECORDED_SOURCE_PHYSICAL_PARTIAL",
+      "currentScope": "Real XTEST keyboard1x/2x/4x, fixed1280px gives1280/640/320 at32c3449 Chromium154/Node24.19, no viewport/pinch emulation. App/CSS unchanged, sole changed captured module ordinal retention. No a2 zoom/mobile proof.",
+      "evidenceRefs": [
+        "ZOOM",
+        "PACKAGE",
+        "WEB"
+      ],
+      "sourceBindingRefs": [
+        "scripts/test-locale-layout-browser.mjs"
+      ],
+      "owner": "responsive/accessibility maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "OLD_BROWSER",
+        "PHYSICAL"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-LOCALE-SAFETY",
+      "requirement": "Reviewed locale eligibility versus draft display fixtures",
+      "requirementIds": [
+        "S-dfc774ae:L0019:p001:03",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0027:p001:03"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "EXTERNAL_LOCALE_REVIEW_LOCAL_REFUSAL_PASS",
+      "currentScope": "Eligibility/fallback/copy models implemented; English3 still draft, no reviewed safety locale.",
+      "evidenceRefs": [
+        "ZOOM",
+        "PACKAGE"
+      ],
+      "sourceBindingRefs": [
+        "apps/web/src/ui/locale/runtime.ts",
+        "apps/web/src/ui/locale/en.ts"
+      ],
+      "owner": "locale and safety-copy reviewer owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ASSISTIVE",
+        "LOCALE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-SECRET-LEAK-RESOURCE",
+      "requirement": "Sanitized network/console evidence, cancellation and resource floods",
+      "requirementIds": [
+        "S-dfc774ae:L0027:p001:02",
+        "S-dfc774ae:L0031:p001:01",
+        "S-dfc774ae:L0031:p001:04"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "PARTIAL_LOCAL_PASS",
+      "currentScope": "Current finite N9/N10 no-egress/held-admission/ciphertext/CAS and hostile diagnostic bounds; old private/browser timer scopes not all-leaks/erasure or real30second kill proof.",
+      "evidenceRefs": [
+        "FOUNDATION",
+        "WEB",
+        "PACKAGE",
+        "N9",
+        "N10",
+        "PRIVATE"
+      ],
+      "sourceBindingRefs": [
+        "packages/storage/test/backup-verification.test.mjs"
+      ],
+      "owner": "root integration coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "OLD_BROWSER",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    },
+    {
+      "id": "G24-REPORT-REVIEW-INVALIDATION",
+      "requirement": "Use existing gate evaluator; exact identity, independent scope and append-only failures",
+      "requirementIds": [
+        "S-dfc774ae:L0015:p001:02",
+        "S-dfc774ae:L0019:p001:01",
+        "S-dfc774ae:L0019:p001:02",
+        "S-dfc774ae:L0019:p001:04",
+        "S-dfc774ae:L0031:p001:01",
+        "S-dfc774ae:L0035:p001:01",
+        "S-dfc774ae:L0035:p001:02",
+        "S-dfc774ae:L0035:p001:03",
+        "S-dfc774ae:L0037:p002:01"
+      ],
+      "historicalResult": "not-run",
+      "historicalQualification": "complete-target-and-final-artifact-pending",
+      "currentLocalDisposition": "MODEL_CLI_PASS_NO_RELEASE_PROMOTION",
+      "currentScope": "Evaluator/CLI refuse changed identities/imported reviews/emulator substitution; document grants no release authority.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "sourceBindingRefs": [
+        "packages/security/test/acceptance-gates.test.mjs",
+        "packages/security/test/acceptance-gates.test.mjs",
+        "packages/security/test/acceptance-gates.test.mjs"
+      ],
+      "owner": "root acceptance coordinator plus distinct independent reviewer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse the accepted bounded scope; resolve the named exact profile or actual untested/external target before broader claims. Preserve model/old-source distinctions; root owns live delivery.",
+      "completeAdvertisedTargetQualified": false,
+      "releasePromotionAllowed": false
+    }
+  ],
+  "requirements": [
+    {
+      "id": "S-dfc774ae:L0015:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "2. Objective and scope",
+        "line": 15,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Validate a recoverable standalone basic trade on EVM and Solana, with all optional privacy/proof/map/courier/arbitration packages absent.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-LOSS-ORIGIN-RECOVERY"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "PARTIAL_EVM_SOLANA_ABSENT",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FOUNDRY",
+        "N1",
+        "FINAL",
+        "T8",
+        "T1",
+        "WEB",
+        "N5"
+      ],
+      "owner": "root core integration and Solana maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "SOLANA",
+        "OLD_BROWSER"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0015:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "2. Objective and scope",
+        "line": 15,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Tests use local/dev/test networks and fake fiat; no real payment or mainnet secrets enter automated tests.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_SYNTHETIC_PASS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "owner": "test-fixture maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "TestCase record: `{id,requirement,chain,asset,wallet,browser,device,locale,routeMode,initialState,faults,steps,expectedAuthority,expectedUi,evidence}`.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_CONTEXTS_TARGETS_PARTIAL",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "owner": "root acceptance coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Record exact wallet/browser/OS versions and device hardware at execution.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_VERSIONS_TARGETS_PARTIAL",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N9",
+        "FINAL",
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB",
+        "T99"
+      ],
+      "owner": "target acceptance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ENGINE",
+        "PHYSICAL",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Target list includes Chromium/Firefox/WebKit automation plus physical Android and iPhone/iPad wallet handoff, keyboard, VoiceOver/TalkBack and 320px/400% zoom.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-320PX-400ZOOM",
+        "G24-LOCALE-SAFETY"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "CHROMIUM_ZOOM_OTHER_TARGETS_UNTESTED",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N9",
+        "FINAL",
+        "ZOOM",
+        "PACKAGE",
+        "WEB",
+        "T99"
+      ],
+      "owner": "browser/device/accessibility owners",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ENGINE",
+        "PHYSICAL",
+        "ASSISTIVE",
+        "LOCALE",
+        "OLD_BROWSER"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0019:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "3. Architecture and data contracts",
+        "line": 19,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "A support claim requires an actual passing combination; unsupported combinations are visible and cannot sign.",
+      "caseIds": [
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT",
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-LOCALE-SAFETY",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "REFUSAL_MODEL_NO_SUPPORT_PROMOTION",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N9",
+        "FINAL",
+        "ZOOM",
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB",
+        "T99"
+      ],
+      "owner": "compatibility maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "ENGINE",
+        "PHYSICAL",
+        "ASSISTIVE",
+        "LOCALE",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Journeys: onboard \u2192 backup/restore verification \u2192 wallet connect \u2192 create/discover/accept canonical terms \u2192 seller funds \u2192 finalized funding \u2192 exchange encrypted payment instructions \u2192 simulated buyer fiat payment \u2192 seller release before chain deadline \u2192 finalized receipt/export.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_EVM_PEER_PROFILE_ABSENT",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "N1",
+        "FOUNDRY",
+        "FINAL"
+      ],
+      "owner": "journey and protocol maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "SOLANA"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Separate journey: seller withholds, deadline passes, any caller triggers refund solely to seller.",
+      "caseIds": [
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-EXPIRY-MINUS1",
+        "G24-EXPIRY-EQUALITY",
+        "G24-EXPIRY-PLUS1"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_REFUND_PASS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "FOUNDRY",
+        "LAB",
+        "N1",
+        "FINAL"
+      ],
+      "owner": "escrow and journey maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "SOLANA"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Run native and each allowlisted ERC-20/SPL configuration independently.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-EVM-ERC20-RELEASE",
+        "G24-EVM-ERC20-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-SPL-DISALLOWED-EXTENSION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "NATIVE_MOCK_TOKEN_SPL_ABSENT",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FOUNDRY",
+        "N1",
+        "FINAL"
+      ],
+      "owner": "chain/asset profile maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "SOLANA"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Adversarial rows: wrong network/account, stale revision/quote, malicious amount/recipient, allowance mismatch, duplicate funding, token transfer failure, disallowed token extension, expiry-1/equality/+1, dropped/replaced/reorged/expired transaction, RPC split view, relay duplicates/offline, encrypted message tampering and unknown broadcast.",
+      "caseIds": [
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-STALE-REVISION-QUOTE",
+        "G24-MALICIOUS-AMOUNT-RECIPIENT",
+        "G24-ALLOWANCE-MISMATCH",
+        "G24-DUPLICATE-FUNDING",
+        "G24-TOKEN-TRANSFER-FAILURE",
+        "G24-SPL-DISALLOWED-EXTENSION",
+        "G24-EXPIRY-MINUS1",
+        "G24-EXPIRY-EQUALITY",
+        "G24-EXPIRY-PLUS1",
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-RPC-SPLIT-VIEW",
+        "G24-RELAY-DUPLICATE",
+        "G24-RELAY-OFFLINE",
+        "G24-MESSAGE-TAMPER"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "PARTIAL_NATIVE_MODEL_FAULTS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N9",
+        "LAB",
+        "N2",
+        "FOUNDRY",
+        "N1",
+        "FOUNDATION",
+        "FINAL",
+        "N4",
+        "T98",
+        "T100"
+      ],
+      "owner": "chain/transport/protocol maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "SOLANA",
+        "RPC"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0023:p001:05",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "4. Algorithms and lifecycle",
+        "line": 23,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 5
+      },
+      "requirement": "Restart at every journal transition; reconcile authoritative chain state before enabling another submission.",
+      "caseIds": [
+        "G24-DUPLICATE-FUNDING",
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-RESTART-CHECKPOINTS"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "PARTIAL_NATIVE_CHECKPOINT_MODELS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "FOUNDRY",
+        "LAB",
+        "PACKAGE",
+        "FOUNDATION",
+        "N4",
+        "N2",
+        "N9",
+        "T98"
+      ],
+      "owner": "journal/runtime maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "CHECKPOINT"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Use deterministic adapter fault injection for timing and protocol errors, plus real test-network/wallet integration for actual serialization/signature/handoff.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-RPC-SPLIT-VIEW",
+        "G24-ENGINE-CHROMIUM",
+        "G24-ENGINE-FIREFOX",
+        "G24-ENGINE-WEBKIT"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_INTEGRATION_REAL_PROFILE_ABSENT",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FINAL",
+        "PACKAGE",
+        "T99"
+      ],
+      "owner": "adapter and wallet interoperability owners",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "SOLANA",
+        "RPC",
+        "ENGINE"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Capture sanitized event timeline, source/artifact hashes and chain transaction identifiers only in explicit test evidence.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-SECRET-LEAK-RESOURCE"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_FINITE_CAPTURE_PASS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FOUNDATION",
+        "WEB",
+        "PACKAGE",
+        "N10",
+        "PRIVATE"
+      ],
+      "owner": "root evidence coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "OLD_BROWSER"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Assert visible seller-withholding warning before buyer payment, no fiat-finality claim from chat/screenshot/proof, no optional-provider request in core-only build, and no direct connection when G05 strict routing is unsupported.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-WRONG-NETWORK-ACCOUNT",
+        "G24-MESSAGE-TAMPER",
+        "G24-SELLER-WARNING",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-STRICT-ROUTE-REFUSAL",
+        "G24-LOCALE-SAFETY"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "BUILD_NATIVE_OLD_BROWSER_PARTIAL",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FOUNDRY",
+        "PACKAGE",
+        "T8",
+        "T1",
+        "WEB",
+        "ZOOM"
+      ],
+      "owner": "journey/transport and safety-copy owners",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "LOCALE",
+        "OLD_BROWSER",
+        "ASSISTIVE"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0027:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "5. Interfaces and integration",
+        "line": 27,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Cross-origin restore must create fresh G03 data keys while recovering records and pending intents.",
+      "caseIds": [
+        "G24-UNKNOWN-BROADCAST",
+        "G24-CROSS-ORIGIN-RESTORE"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "RECORDED_OUTAGE_FRESH_KEY_PASS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N4",
+        "N9",
+        "LAB",
+        "OUTAGE",
+        "OUTAGE_REVIEW",
+        "N10"
+      ],
+      "owner": "storage/journal/release maintainers",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "A failed invariant, unexplained console/network secret leak, unresolved critical/high finding or untested mandatory wallet/chain is a release blocker.",
+      "caseIds": [
+        "G24-SECRET-LEAK-RESOURCE",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "MODEL_GATE_RELEASE_INELIGIBLE",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "FOUNDATION",
+        "WEB",
+        "PACKAGE",
+        "N9",
+        "N10",
+        "PRIVATE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "owner": "root release coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "OLD_BROWSER",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "TIMEOUT does not mean transaction failure; test reconciliation after delayed inclusion.",
+      "caseIds": [
+        "G24-TX-DROPPED",
+        "G24-TX-REPLACED",
+        "G24-TX-REORGED",
+        "G24-TX-EXPIRED",
+        "G24-UNKNOWN-BROADCAST",
+        "G24-TIMEOUT-DELAYED-INCLUSION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_DELAYED_INCLUSION_PASS",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "N4",
+        "LAB",
+        "N2",
+        "N9",
+        "T98"
+      ],
+      "owner": "transaction lifecycle maintainer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "Automation cannot substitute for physical camera, deep-link, background eviction or assistive technology validation.",
+      "caseIds": [
+        "G24-PHYSICAL-ANDROID",
+        "G24-PHYSICAL-IPHONE",
+        "G24-PHYSICAL-IPAD",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-320PX-400ZOOM"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "AUTOMATION_PHYSICAL_BOUNDARY",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "FINAL",
+        "ZOOM",
+        "PACKAGE",
+        "WEB"
+      ],
+      "owner": "physical-device/accessibility owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PHYSICAL",
+        "ASSISTIVE",
+        "LOCALE",
+        "OLD_BROWSER"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0031:p001:04",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "6. Errors, abuse and residual threats",
+        "line": 31,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 4
+      },
+      "requirement": "Fixtures must never teach production to bypass validation.",
+      "caseIds": [
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-SECRET-LEAK-RESOURCE"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_FIXTURE_NO_PRODUCTION_AUTHORITY",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "T8",
+        "LAB",
+        "T1",
+        "WEB",
+        "N9",
+        "FOUNDATION",
+        "PACKAGE",
+        "N10",
+        "PRIVATE"
+      ],
+      "owner": "fixture and production-boundary reviewer",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "OLD_BROWSER",
+        "RELEASE"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Evidence includes per-row results, testnet receipts, screenshots/accessibility observations, network capture showing route policy, crash checkpoints and independent reviewer signoff.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-EVM-NATIVE-REFUND",
+        "G24-SOLANA-NATIVE",
+        "G24-SOLANA-ALLOWLISTED-SPL",
+        "G24-LOSS-ORIGIN-RECOVERY",
+        "G24-KEYBOARD-SCREENREADER",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_EVIDENCE_PROFESSIONAL_PARTIAL",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "FOUNDRY",
+        "FINAL",
+        "N5",
+        "ZOOM",
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW"
+      ],
+      "owner": "root acceptance and independent-review owners",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "SOLANA",
+        "PHYSICAL",
+        "ASSISTIVE",
+        "LOCALE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:02",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 2
+      },
+      "requirement": "Repeat only affected rows after bounded changes, then complete the final core-only regression at the signed artifact.",
+      "caseIds": [
+        "G24-EVM-NATIVE-RELEASE",
+        "G24-CORE-ONLY-NO-EGRESS",
+        "G24-LOSS-ORIGIN-RECOVERY",
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "UNSIGNED_LOCAL_REGRESSION_SIGNED_ABSENT",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "N2",
+        "N9",
+        "LAB",
+        "T8",
+        "T1",
+        "WEB",
+        "N5",
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW"
+      ],
+      "owner": "root release/reproducibility owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "PEER",
+        "RELEASE",
+        "OLD_BROWSER",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0035:p001:03",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 35,
+        "unitKind": "paragraph",
+        "unitOrdinal": 1,
+        "clauseOrdinal": 3
+      },
+      "requirement": "No row is passed by this document; implementation, target execution and independent review remain pending.",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "DOCUMENT_NON_AUTHORITY",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "owner": "root acceptance coordinator",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    },
+    {
+      "id": "S-dfc774ae:L0037:p002:01",
+      "source": {
+        "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.10_quality_assurance/module_0.10.1_mvp_validation/spec-mvp-end-to-end-test-matrix.md",
+        "specRef": "S-dfc774ae",
+        "section": "7. Verification and primary references",
+        "line": 37,
+        "unitKind": "paragraph",
+        "unitOrdinal": 2,
+        "clauseOrdinal": 1
+      },
+      "requirement": "Primary references (exact implementation revisions must be pinned in the evidence record): [Playwright browsers](https://playwright.dev/docs/browsers); [WCAG 2.2](https://www.w3.org/TR/WCAG22/); [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193).",
+      "caseIds": [
+        "G24-REPORT-REVIEW-INVALIDATION"
+      ],
+      "historicalResult": "not-run",
+      "currentScopedDisposition": "LOCAL_REVISIONS_REAL_TARGETS_PARTIAL",
+      "currentScope": "Concrete current local/model/recorded-source scope is given by linked cases; no blanket full mandatory-target/release satisfaction inferred.",
+      "evidenceRefs": [
+        "PACKAGE",
+        "T6",
+        "NATIVE_REVIEW",
+        "LAB"
+      ],
+      "owner": "evidence provenance owner",
+      "remainingDependencyRefs": [
+        "REAL_TARGET",
+        "RELEASE",
+        "HOSTING"
+      ],
+      "nextAction": "Reuse accepted local rows; resolve exact named contracts/targets and retain root delivery/professional boundaries without waiver.",
+      "blanketClauseDone": false
+    }
+  ],
+  "authority": {
+    "ReleaseEnabled": 0,
+    "approvedReleasePin": null,
+    "englishRevision": 3,
+    "englishStatus": "draft",
+    "translator": null,
+    "reviewer": null,
+    "fundsLocaleEligible": false,
+    "hostingMergeOwner": "root",
+    "overlayTestsProbesSolverAttempts": 0,
+    "sourceMatrixLedgerEdits": 0,
+    "T91AttemptsRemaining": 0
+  },
+  "limits": [
+    "Older web/foundation/private retain32c3449/635efc8; document86 current bytes are not full Worker closure. Installed dependency files are lock-bound bytes, not Git source.",
+    "Real zoom32c3449/Chromium154 and accepted T92 outage58 inputs each have one accepted ordinal retention delta; neither is relabeled a2. No permanent-origin/off-device/funds-recovery trust claim.",
+    "T71 actual a2 lab and distinct acceptance now received; existing image reuse is not paid Codespace/new-image/physical qualification.",
+    "Solana/peer/mobile/provider contracts, real engines/physical/assistive/safety language/professional/production trust and root live delivery remain exact, not waived by local counts.",
+    "Only requested JSON/MD created; no duplicate source audit, test/probe/browser/native/full-suite/solver execution or source/matrix/ledger/hosting/merge action."
+  ],
+  "rootFinalDelta": {
+    "owner": "root",
+    "baselineOverlayBinding": {
+      "path": "/workspace/work/t38-current-g24-overlay.json",
+      "sha256": "674be6f7b8a35d7d9eb4de89b5235d78936227979b2a0c00f24865d061ae3446"
+    },
+    "currentSelectedTestIdentityCommit": "12bb8f1650227479e744cd899273f533eb94fe53",
+    "productionCodeUnchanged": true,
+    "scope": "T98/T100 actual native/TCP evidence closes two defined local gaps; T99 supplies precise policy prerequisite. Historical runs retain their actual source/working-state attribution."
+  }
+}

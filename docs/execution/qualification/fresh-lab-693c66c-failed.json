@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "task": "T71",
+  "recordedAt": "2026-11-02T11:39:14.333808+00:00",
+  "scope": "Fresh dependency installation and existing foundation runner at one exact reviewed checkpoint in owned private local linux-amd64 containers. Not future source or a provisioned Codespace.",
+  "sourceCommit": "693c66cc080a0421b6e8215f864ad0ce103d0f10",
+  "sourceTree": "f36a35dd30c4a1a36946cb830b3ed2c9db98275c",
+  "sourceDirtyAtStart": false,
+  "sourceDirtyAtEnd": false,
+  "gitlinks": [
+    "8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)",
+    " c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)"
+  ],
+  "imageId": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+  "imagePlatform": "linux/amd64",
+  "baseImageDigestFromRecipe": "sha256:107ceb6ad85808049dccef12414bf17b08eceb299eaf755c0339dc5fc8958d6b",
+  "toolVersions": {
+    "node": "v24.19.0",
+    "npm": "11.17.0",
+    "forgeVersion": "1.5.1-v1.5.1",
+    "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+    "solcVersion": "0.8.30",
+    "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+  },
+  "installation": {
+    "outcome": "passed",
+    "npmCiExitCode": 0,
+    "initialDependenciesCacheAndConfigEmpty": true,
+    "noCopiedOrMountedHostNodeModules": true,
+    "installedPackageCount": 30,
+    "metadataMatchesFrozenLock": true,
+    "lockfileSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+    "lockfileUnchanged": true,
+    "publicRegistryLockIntegrityValidatedByNpm": true,
+    "managedProxyAndReadonlyPublicCAPreserved": true,
+    "strictTLS": true,
+    "cacheVerification": "passed: 30 content entries, 40955071 bytes, 30 index entries",
+    "boundWrapper": "Existing reviewed runLabCommand; host copy used for pre-install Docker bounding because empty source lacked its transitive dependencies; exact matching file hashes retained."
+  },
+  "foundation": {
+    "outcome": "failed",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "scripts/lab/run.mjs",
+      "foundation"
+    ],
+    "network": "none",
+    "sourceUnmodified": true,
+    "completedCommands": [
+      {
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "exitCode": 0,
+        "exitSignal": null,
+        "logSha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "report": "command-1.log"
+      },
+      {
+        "command": [
+          "npm",
+          "test"
+        ],
+        "exitCode": 1,
+        "exitSignal": null,
+        "logSha256": "fdafb3fa39ce0ce1dc4ba685f2f999ad8d828c86fe5bd89cab64b5dfc1ab9050",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "report": "command-2.log"
+      }
+    ],
+    "unitCounts": {
+      "tests": 1442,
+      "pass": 1441,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "notRunAfterFailure": [
+      [
+        "npm",
+        "run",
+        "check:boundaries"
+      ],
+      [
+        "npm",
+        "run",
+        "test:build-policy"
+      ],
+      [
+        "npm",
+        "run",
+        "build"
+      ]
+    ],
+    "failure": {
+      "test": "packages/governance/test/assurance.test.mjs:52",
+      "name": "public source packet has exact current evidence bytes and explicitly unassessed jurisdiction intake",
+      "manifest": "docs/execution/assurance/evidence-manifest.json:95",
+      "referencedSource": "scripts/tests/import-boundaries.test.mjs",
+      "expectedSha256": "166ee63fb080218791bd465a9c4ab098c4361877fdc3fbc23c856f68d619a6ec",
+      "actualSha256": "6d6399d62aeb9fa23828d2260d2798f7db56b734b9c85cb2b3a44af4af50f5ac",
+      "ownerRepairRequest": "Root/T64 assurance evidence reconciliation; no snapshot or shared repair made by T71."
+    },
+    "timedOut": false,
+    "logOverflow": false,
+    "foundationAttempts": 1,
+    "failureRetriedAsPass": false
+  },
+  "setupFailuresPreserved": "Two host-wrapper preflight failures occurred before any Docker invocation or npm install; their causes and correction are retained in preinstall-wrapper-attempt.json.",
+  "isolation": {
+    "publishedPorts": [],
+    "hostNetworking": false,
+    "foundationNetwork": "none",
+    "hostCredentialsGlobalConfigOrDockerSocketMounted": false,
+    "cleanup": [
+      {
+        "containerName": "p2p-t71-install-693c66c",
+        "remainingBeforeCleanup": 0,
+        "remainingAfterCleanup": 0
+      },
+      {
+        "containerName": "p2p-t71-install-audit-693c66c",
+        "remainingBeforeCleanup": 0,
+        "remainingAfterCleanup": 0
+      },
+      {
+        "containerName": "p2p-t71-foundation-693c66c",
+        "remainingBeforeCleanup": 0,
+        "remainingAfterCleanup": 0
+      }
+    ],
+    "unrelatedResourcesModified": false
+  },
+  "nextAction": "Root reviews exact receipts and routes stale assurance evidence to its owner. If full fresh foundation qualification is needed after repair, admit the repaired committed source and retain it as a separate run; this checkpoint remains failed.",
+  "limits": [
+    "No fresh full-foundation pass was obtained.",
+    "Remaining foundation commands were deliberately not run after the existing runner stopped at its first failing command.",
+    "No EVM journey/full native suite was rerun for this task.",
+    "No Firefox/WebKit, Solana, physical wallet/device, deployed origin, production, signing or independent crypto acceptance.",
+    "No paid Codespace, paid deployment or trading enablement."
+  ],
+  "independentRootReview": "pending",
+  "artifacts": [
+    {
+      "path": "source-manifest.json",
+      "bytes": 2027,
+      "sha256": "931b9311944c56bdbbdfe5ae1bdce44579cbf84b7124bde96ef44cfe3b695b24"
+    },
+    {
+      "path": "source-preparation.json",
+      "bytes": 5115,
+      "sha256": "a3fb0dcc3c2e3d639a57ac46edc44ae92e0e4732dd82f4cad76b17b62728ae95"
+    },
+    {
+      "path": "preinstall-wrapper-attempt.json",
+      "bytes": 952,
+      "sha256": "b7f73e088aa9f808565b3a19481894a2229debd1077bcb424b8634358b1ba816"
+    },
+    {
+      "path": "image-inspect.json",
+      "bytes": 1187,
+      "sha256": "c01044810cb7288bd6c43dd0c23a0aaa62459e79572fbba6f771446d815692c4"
+    },
+    {
+      "path": "install.log",
+      "bytes": 234,
+      "sha256": "44058928e057f88c692ed48d6a3e81ab38cfa1fca4a177e7398ae08dfb920a4d"
+    },
+    {
+      "path": "install-receipt.json",
+      "bytes": 3281,
+      "sha256": "4abc4af91211067fcf9cc03429d992b8efc5092bdb1a1aa3658779392e2b66b4"
+    },
+    {
+      "path": "install-cleanup.json",
+      "bytes": 97,
+      "sha256": "1ef3d27d45783a096e2a125828ec398f4b7ab4240a3a3ffdd75cc83b3546d71c"
+    },
+    {
+      "path": "install-audit.log",
+      "bytes": 364,
+      "sha256": "ff3d3691cb9efbff78607038b7905a8403fbcb1a6e10df985c17b38948a2703d"
+    },
+    {
+      "path": "install-audit-receipt.json",
+      "bytes": 3120,
+      "sha256": "db3a61d1471e011fda0ba4b71f4a48a50af2913ef8c4b4ee5264c86687e73767"
+    },
+    {
+      "path": "install-audit-cleanup.json",
+      "bytes": 103,
+      "sha256": "78407372ffcb789ed21bd1cbe851367a32a8f5d737e8065acacdf95c5bb3c95f"
+    },
+    {
+      "path": "artifacts/tool-versions.json",
+      "bytes": 403,
+      "sha256": "302c130e10c69513b75058b25685fe18d42fcee485c6d53db50e04f37ffe8b2d"
+    },
+    {
+      "path": "artifacts/install-inventory.json",
+      "bytes": 8856,
+      "sha256": "a2cfdc906384ec0b2bd94081e06b83c61af2d53f47b0c3ffda9c155b79d431cc"
+    },
+    {
+      "path": "artifacts/cache-verify.log",
+      "bytes": 135,
+      "sha256": "5d6bb44967214f4780b9f614377daef26696572c2ad877c5fe28a6b8e19ddaa1"
+    },
+    {
+      "path": "artifacts/cache-verify.json",
+      "bytes": 244,
+      "sha256": "090405d1ae279137477a8271b7ba73072524bb21be573b33ac532995f656fc81"
+    },
+    {
+      "path": "foundation-start.json",
+      "bytes": 1328,
+      "sha256": "92dc96c7bc14c8131960fc8a553f5d34485457268d726022d4e514836480f552"
+    },
+    {
+      "path": "foundation.log",
+      "bytes": 19,
+      "sha256": "ca4865a4fdca6fa043042d826b8b1e1cd48e91adcba9ae57ef2dbd8f0f3979fb"
+    },
+    {
+      "path": "foundation-receipt.json",
+      "bytes": 1143,
+      "sha256": "01459d6a85968d03a0fbd9d4777754463e4af55690673c0c3cc042d9a4926b69"
+    },
+    {
+      "path": "foundation-cleanup.json",
+      "bytes": 100,
+      "sha256": "0149913b1d33ce682c5428f75fb7e97a0bdfcbb47c69ad6f8db8b09c585f62f0"
+    },
+    {
+      "path": "dist-lab/recipe.json",
+      "bytes": 1353,
+      "sha256": "81e915ce3ad237ef75d92016fba637597bf08d26de50bb75012ef0b36cb9bfa3"
+    },
+    {
+      "path": "dist-lab/run.json",
+      "bytes": 1324,
+      "sha256": "61678be31d441e65bcb9adafa69ddfe11900b22f7ec578c3cc22cbb435a5641e"
+    },
+    {
+      "path": "dist-lab/command-1.log",
+      "bytes": 191,
+      "sha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0"
+    },
+    {
+      "path": "dist-lab/command-2.log",
+      "bytes": 154840,
+      "sha256": "fdafb3fa39ce0ce1dc4ba685f2f999ad8d828c86fe5bd89cab64b5dfc1ab9050"
+    }
+  ]
+}

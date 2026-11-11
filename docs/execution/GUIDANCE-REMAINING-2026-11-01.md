@@ -1,5 +1,10 @@
 # Remaining work after T19–T29
 
+Historical 2026-11-01 handoff. Current implementation, exact remaining contracts
+and qualification are in [CURRENT-REMAINDER](coverage/CURRENT-REMAINDER.md),
+the [current audit](audit-2026-11-02/README.md) and the authoritative task ledger.
+Do not reopen completed T33–T97 scopes from the older descriptions below.
+
 Use this with the [whole-source audit](GUIDANCE-AUDIT-2026-11-01.md), [prior roadmap inventory](INCOMPLETE-WORK-2026-10-31.md) and [authoritative ledger](../../tasks/todo.md). T1–T18 and this tranche must not be reimplemented because an old intake table describes them as missing.
 
 Local engineering remains, and release approval alone is not its blocker:

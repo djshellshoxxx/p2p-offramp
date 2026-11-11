@@ -1,0 +1,41 @@
+{
+  "task": "T93",
+  "reviewer": "/root",
+  "status": "ACCEPTED_SOURCE_FIX_CI_ORACLE_ENROLLMENT_T94_ACTIVE",
+  "files": [
+    {
+      "path": "scripts/check-import-boundaries.mjs",
+      "sha256": "42edec431e7985f9fcc01a480811d8bec3b6e5d29e7c7627ee666aca8d164ecb"
+    },
+    {
+      "path": "scripts/tests/import-boundaries.test.mjs",
+      "sha256": "58ea9f3e1b19faa0c90f94ecbf396249baa40a4b49540da63e9ecf080ff07e7b"
+    },
+    {
+      "path": "scripts/vectors/check_g16_evm_openssl.py",
+      "sha256": "402b9c53ff64f056f54d443e9c7880881afacd7cd9245172e00135c5e7197504"
+    }
+  ],
+  "semanticChecks": [
+    "Collection catches produce fixed SOURCE_ENUMERATION_FAILED; any incomplete root/subtree sets graphChecked=false and graphModules=0",
+    "Real lstat directory checks refuse missing/non-directory/symlink roots and candidate source links, without following code/dependency links",
+    "Existing complete empty-root fixture explicitly creates its packages directory; all earlier boundary assertions retained",
+    "Oracle refuses zero completed signature verifications; actual native cryptography verifies committed4 signatures and rejects changed signature, digest and public key"
+  ],
+  "independentVerification": {
+    "boundaryCases": 8,
+    "pythonCases": 4,
+    "actualOpenSslSignatures": 4,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "managedIpc": true,
+    "defaultNodeIsolation": true
+  },
+  "followOn": "Root rejected optional skip on clean CI; T94 supplies exact wheel/hash-pinned development-only dependency closure and unconditional tests. Do not claim clean CI qualification yet.",
+  "limits": [
+    "No EACCES induced under root user; missing/non-directory and symlink branches exercised, same catch refuses all readdir errors",
+    "Static source inventory cannot prove runtime/bundler isolation or resistance to concurrent hostile filesystem rewrites",
+    "Independent signature equality is fixture evidence, not professional crypto review"
+  ]
+}

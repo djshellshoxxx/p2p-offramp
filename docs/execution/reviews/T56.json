@@ -1,0 +1,95 @@
+{
+  "task": "T56",
+  "disposition": "Approved after three independently reproduced repairs",
+  "reviewers": "audit_evm initial independent source/tests/probes; root completed repaired local source review after that agent stopped on an automated content flag. No claim of professional review.",
+  "freshReview": "Root read five new policy modules/helper, public boundary/README and affected native tests; checked correctness, provenance/authority, privacy, input/resource bounds, cancellation, recovery and simplicity. Existing T41 sources except facade remain unchanged.",
+  "ordinaryTests": {
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "logSha256": "19a6a791057f825f37df8d821f4039f4853a109945df390b783b817e7533ea30"
+  },
+  "repairedFindings": [
+    {
+      "finding": "Final clock/owner callback revoked actual map consent but returned gateway plan",
+      "result": "Original independent probe now returns CONSENT_REVOKED; final native lifetime check follows callbacks."
+    },
+    {
+      "finding": "24hour local replay cutoff crossed during native mutation or committed response",
+      "result": "Actual G02 beforeWrite/afterWrite regressions refuse candidate publication; committed attempts remain uncertain, no retry."
+    },
+    {
+      "finding": "Malformed constructor options captured undisposed native leases",
+      "result": "Original independent native probe now records zero captures for both rejected constructors; later failures close owners."
+    }
+  ],
+  "oracle": "Independent Python log/tan XYZ generator regenerated all92 vectors byte-identically; TypeScript asinh/tan comparison passes.",
+  "scopeLimits": "Native WebCrypto with encrypted memory-store CAS is exercised, not browser IndexedDB/physical-device qualification. Signature, moderation, geodesic and routing inputs remain explicit trusted fixture ports; default catalogs empty. No RTC construction, map fetch/cache, non-text authentication, presence/safety/economic authority. Exact MEET09/schema/signature/cache/provider gaps remain in README-POLICIES.md.",
+  "files": [
+    {
+      "path": "packages/meetup/index.ts",
+      "sha256": "30768895d716f08e5ec9b02c0f2d447f1f5ab32dad5aa6769785b842a162258c"
+    },
+    {
+      "path": "packages/meetup/README-POLICIES.md",
+      "sha256": "86353ef714d9963cd7bf8c8f4ed75a6a0cc83bd649e397fabac94700bdf4864f"
+    },
+    {
+      "path": "packages/meetup/src/rtc-policy.ts",
+      "sha256": "2d6fd9866b651aca81389f3bdd76ee2169cf8d30a17b07a959e25b38330f49aa"
+    },
+    {
+      "path": "packages/meetup/src/venue-directory.ts",
+      "sha256": "b6a0b5f9eab7ee7c55de98d491fd22c99de7d95f3c995c7e23e017afeaf44033"
+    },
+    {
+      "path": "packages/meetup/src/geofence.ts",
+      "sha256": "a6d8b9cf0c22c8fc8dbcfdb5e2791e59ae439610267904b918dec09d6fb0bcda"
+    },
+    {
+      "path": "packages/meetup/src/map-manifest.ts",
+      "sha256": "c4cad7a40d6f49aeedd16f5e54b0badd2e2ea3605abef17acb3219a5f2e8b708"
+    },
+    {
+      "path": "packages/meetup/src/policy-data.ts",
+      "sha256": "820ca54cc6acc8ca39a760f49d7d22a7dc98610d908921d2546a8d9c37a8d586"
+    },
+    {
+      "path": "packages/meetup/test/rtc-policy.test.mjs",
+      "sha256": "c61fd81555f71d786e128dfec2a242a5b7173ad2781ea57a3e7f2c1c318ea51f"
+    },
+    {
+      "path": "packages/meetup/test/geofence.test.mjs",
+      "sha256": "f1d94a86926438b77ac341584bc5da14050194dd3d03e240cfd0e57093270d88"
+    },
+    {
+      "path": "packages/meetup/test/venue-directory.test.mjs",
+      "sha256": "31f1995c5493aa754fd9e1a98a5079267d8dad94956195418db40db1041791c2"
+    },
+    {
+      "path": "packages/meetup/test/map-manifest.test.mjs",
+      "sha256": "2a33bd5bd9bf9b0ba3d0b6391ebc14f0ab7255e74b73c2ab7ff2b66abd2f4ff7"
+    },
+    {
+      "path": "packages/meetup/test/meetup-replay.test.mjs",
+      "sha256": "464eac185feb25aafa9cdc18d01657f2dd20c4e37a72b2aca0b6d8584f65c2f0"
+    },
+    {
+      "path": "packages/meetup/test/policy-data.test.mjs",
+      "sha256": "b90766e8037887ddbb679191b7be9307101ff6b7024bcded2779310f8c5b1bf4"
+    },
+    {
+      "path": "packages/meetup/test/support/policy-fixtures.mjs",
+      "sha256": "19979cdfe4ce2cd26b0b1942baded4127a413e367b456874abefcf1dbce748e8"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/xyz-python-v1.json",
+      "sha256": "2284659699db0bb37a98d93572a1fc2973563e69e96e089e07d6153793532fed"
+    },
+    {
+      "path": "packages/meetup/test/fixtures/generate_xyz_oracle.py",
+      "sha256": "0571475bc0683b5bf9de15a46f0e796c65d29b45b3d046266931efe74312284e"
+    }
+  ]
+}

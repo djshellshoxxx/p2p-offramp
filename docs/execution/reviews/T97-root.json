@@ -1,0 +1,44 @@
+{
+  "task": "T97",
+  "reviewer": "/root",
+  "status": "ACCEPTED_BOUNDED_LINEAR_EXTRACTION",
+  "files": [
+    {
+      "path": "scripts/docs/validate.mjs",
+      "sha256": "2fd15f64d3f28a355925a2c66606aa1f773f83f45112d8b8e3ea53b7157dc405"
+    },
+    {
+      "path": "scripts/docs/validate.test.mjs",
+      "sha256": "e19da2015b8309023c1c30639e84801161f1a69697c18892b429abdc52c6af10"
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "ce09827cda4799c59b9a27c591694dc3f189195d28ea9270eb02957ad8214aa3"
+    },
+    {
+      "path": "scripts/tests/formal-evm.test.mjs",
+      "sha256": "07656e52bf3b0471bfe90a65bf70496a7c1f97ce1255d96c66399d97445a47ce"
+    }
+  ],
+  "semanticChecks": [
+    "Docs delimiter searches advance monotonically, preserve nested labels/order/raw target slices and reject completed targets beyond240 code units,129 links, or documents above64KiB",
+    "Formal reverse suffix index plus forward nonoverlapping selection retains direct/from forms, whitespace/quoted-semicolon behavior and exact path slices; compiler still receives untouched sources",
+    "Existing1MiB/file,8MiB/closure,256source,diagnostic/assertion spans, tool/process/query/solver bounds and ordinal comparators remain",
+    "Only helper/extraction seams changed; original source assumptions and frozen3-attempt T91 reports remain historical and never rerun"
+  ],
+  "independentVerification": {
+    "focusedTests": 26,
+    "pass": 26,
+    "fail": 0,
+    "skip": 0,
+    "cancelled": 0,
+    "additionalNominalGrammarEquivalenceChecks": 296,
+    "sourceComparison": "Controlled short ordinary import/link cases compared to prior matching semantics; no timing/attack/compiler/solver probe",
+    "managedIpc": true,
+    "defaultNodeIsolation": true
+  },
+  "limits": [
+    "Literal extraction is an offline tool helper, not a general Markdown/Solidity semantic parser",
+    "No whole-contract proof, hosted gate or professional/release approval follows"
+  ]
+}

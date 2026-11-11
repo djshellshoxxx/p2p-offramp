@@ -1,0 +1,700 @@
+{
+  "format": "p2p-offramp/accepted-fresh-local-lab/v1",
+  "task": "T71",
+  "status": "LOCAL_QUALIFICATION_ACCEPTED",
+  "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+  "sourceTree": "9de340401cf748ff6ad19fb3ec686a24e31a3dbf",
+  "acceptedAtUtc": "2026-11-02T18:42:04.519717+00:00",
+  "operatorPacketBinding": {
+    "path": "/workspace/work/t71-final-lab/qualification.json",
+    "sha256": "726f4306dbe880eeaa72b63c449daafe180f3f7d0b5eee08719a3f3a32cbcaeb",
+    "bytes": 24160
+  },
+  "operatorPacket": {
+    "format": "p2p-offramp/fresh-local-lab-qualification/v1",
+    "task": "T71",
+    "operator": "root",
+    "observedAtUtc": "2026-11-02T18:37:38.464655+00:00",
+    "status": "LOCAL_PASS_DISTINCT_REVIEW_PENDING",
+    "source": {
+      "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+      "tree": "9de340401cf748ff6ad19fb3ec686a24e31a3dbf",
+      "submodules": "8e40513d678f392f398620b3ef2b418648b33e89 contracts/evm/lib/forge-std (v1.11.0)\n c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 contracts/evm/lib/openzeppelin-contracts (v4.8.0-952-gc64a1edb)",
+      "imageId": "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+      "imageUser": "node",
+      "os": "linux",
+      "architecture": "amd64",
+      "packageLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+      "freshDependencyTree": true,
+      "freshEmptyNpmCache": true,
+      "emptyUserAndGlobalNpmConfig": true,
+      "proxyCaSha256": "7fa2d7d439db8bfa7c191457e61af5e3f4eb412314eb148766ac09e93786e4c3",
+      "credentialsCopied": false,
+      "hostNodeModulesCopied": false
+    },
+    "results": [
+      {
+        "command": [
+          "docker",
+          "--host=unix:///var/run/docker.sock",
+          "--config=/workspace/work/p2p-lab-docker-config",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=256",
+          "--memory=4g",
+          "--cpus=2",
+          "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+          "--workdir=/workspaces/p2p-offramp",
+          "--name=p2p-t71-final-install-a2b414f",
+          "--label=p2p.task=T71",
+          "--network=bridge",
+          "--add-host=proxy:172.31.11.45",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/cache,dst=/run/p2p-npm-cache",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/npm-config,dst=/run/p2p-npm-config,readonly",
+          "--mount",
+          "type=bind,src=/usr/local/share/ca-certificates/environment-proxy-ca.crt,dst=/run/p2p-proxy-ca.pem,readonly",
+          "--env=NPM_CONFIG_USERCONFIG=/run/p2p-npm-config/user.npmrc",
+          "--env=NPM_CONFIG_GLOBALCONFIG=/run/p2p-npm-config/global.npmrc",
+          "--env=NPM_CONFIG_CACHE=/run/p2p-npm-cache",
+          "--env=NODE_EXTRA_CA_CERTS=/run/p2p-proxy-ca.pem",
+          "--env=HTTP_PROXY=http://proxy:8080",
+          "--env=HTTPS_PROXY=http://proxy:8080",
+          "--env=http_proxy=http://proxy:8080",
+          "--env=https_proxy=http://proxy:8080",
+          "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "npm",
+          "ci",
+          "--ignore-scripts",
+          "--strict-ssl=true",
+          "--registry=https://registry.npmjs.org",
+          "--no-audit",
+          "--no-fund"
+        ],
+        "exitCode": 0,
+        "exitSignal": null,
+        "logSha256": "4060d29a029ee849b121345b4d44ae1f61451f18ba3b9bfdd50606cd5482e373",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "seconds": 15.632,
+        "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "phase": "install",
+        "cleanup": {
+          "checkExitCode": 0,
+          "ownedContainerAbsent": true
+        }
+      },
+      {
+        "command": [
+          "docker",
+          "--host=unix:///var/run/docker.sock",
+          "--config=/workspace/work/p2p-lab-docker-config",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=256",
+          "--memory=4g",
+          "--cpus=2",
+          "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+          "--workdir=/workspaces/p2p-offramp",
+          "--name=p2p-t71-final-audit-a2b414f",
+          "--label=p2p.task=T71",
+          "--network=bridge",
+          "--add-host=proxy:172.31.11.45",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/cache,dst=/run/p2p-npm-cache",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/npm-config,dst=/run/p2p-npm-config,readonly",
+          "--mount",
+          "type=bind,src=/usr/local/share/ca-certificates/environment-proxy-ca.crt,dst=/run/p2p-proxy-ca.pem,readonly",
+          "--env=NPM_CONFIG_USERCONFIG=/run/p2p-npm-config/user.npmrc",
+          "--env=NPM_CONFIG_GLOBALCONFIG=/run/p2p-npm-config/global.npmrc",
+          "--env=NPM_CONFIG_CACHE=/run/p2p-npm-cache",
+          "--env=NODE_EXTRA_CA_CERTS=/run/p2p-proxy-ca.pem",
+          "--env=HTTP_PROXY=http://proxy:8080",
+          "--env=HTTPS_PROXY=http://proxy:8080",
+          "--env=http_proxy=http://proxy:8080",
+          "--env=https_proxy=http://proxy:8080",
+          "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "npm",
+          "audit",
+          "--json",
+          "--strict-ssl=true",
+          "--registry=https://registry.npmjs.org"
+        ],
+        "exitCode": 0,
+        "exitSignal": null,
+        "logSha256": "a5dd41190e6d8052fd71f75c9e1cbd76f9b82d64b93d0f48ee858c6ee30ac470",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "seconds": 14.705,
+        "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "phase": "audit",
+        "cleanup": {
+          "checkExitCode": 0,
+          "ownedContainerAbsent": true
+        }
+      },
+      {
+        "command": [
+          "docker",
+          "--host=unix:///var/run/docker.sock",
+          "--config=/workspace/work/p2p-lab-docker-config",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=256",
+          "--memory=4g",
+          "--cpus=2",
+          "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+          "--workdir=/workspaces/p2p-offramp",
+          "--name=p2p-t71-final-foundation-a2b414f",
+          "--label=p2p.task=T71",
+          "--network=none",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/foundation,dst=/workspaces/p2p-offramp/dist-lab",
+          "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "node",
+          "--import",
+          "./scripts/test-support/register-tsx.mjs",
+          "scripts/lab/run.mjs",
+          "foundation"
+        ],
+        "exitCode": 0,
+        "exitSignal": null,
+        "logSha256": "109ebca3ac84419eb4fe1137a39f29fda13ed3208a56792b15574786f6845752",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "seconds": 245.506,
+        "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "phase": "foundation",
+        "cleanup": {
+          "checkExitCode": 0,
+          "ownedContainerAbsent": true
+        }
+      },
+      {
+        "command": [
+          "docker",
+          "--host=unix:///var/run/docker.sock",
+          "--config=/workspace/work/p2p-lab-docker-config",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=256",
+          "--memory=4g",
+          "--cpus=2",
+          "--tmpfs=/tmp:rw,nosuid,nodev,mode=1777,size=512m",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/source,dst=/workspaces/p2p-offramp",
+          "--workdir=/workspaces/p2p-offramp",
+          "--name=p2p-t71-final-journey-a2b414f",
+          "--label=p2p.task=T71",
+          "--network=none",
+          "--mount",
+          "type=bind,src=/workspace/work/t71-final-lab/journey,dst=/workspaces/p2p-offramp/dist-lab",
+          "sha256:1729a8a1af2bf2312a8227ce7eb01469e44195701dad39cc1aca2a20c23e3283",
+          "node",
+          "--import",
+          "./scripts/test-support/register-tsx.mjs",
+          "scripts/lab/run.mjs",
+          "journey"
+        ],
+        "exitCode": 0,
+        "exitSignal": null,
+        "logSha256": "7e69e6c0255f1793463ba95cad488d05950317f451a031520799428734d75efe",
+        "bounded": true,
+        "timedOut": false,
+        "cancelled": false,
+        "seconds": 39.277,
+        "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+        "phase": "journey",
+        "cleanup": {
+          "checkExitCode": 0,
+          "ownedContainerAbsent": true
+        }
+      }
+    ],
+    "runs": {
+      "foundation": {
+        "run": {
+          "version": 1,
+          "mode": "foundation",
+          "recipeSha256": "e9bc2c41efe4bcea7d0da76c7c0a0a697acb6c69ca7080123f6cc86a0df50264",
+          "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+          "sourceDirty": false,
+          "chainIds": [
+            "31337"
+          ],
+          "fixtureDigest": "294cc86f214a59b55a770654458ae1f206f4a75f10a683799348e47ad843cc2e",
+          "toolVersions": {
+            "node": "v24.19.0",
+            "npm": "11.17.0",
+            "forgeVersion": "1.5.1-v1.5.1",
+            "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+            "solcVersion": "0.8.30",
+            "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+          },
+          "results": [
+            {
+              "command": [
+                "npm",
+                "run",
+                "typecheck"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-1.log"
+            },
+            {
+              "command": [
+                "npm",
+                "test"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "ea346186f7c075d39d8da9d80a8fa3fd85e181f9c6cdffce803e2169fa594805",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-2.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "check:boundaries"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "257a0f43c6ddc6b1c5a77351d4650c6b77c8cc303121b45cd0f75cbfe63bb0d4",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-3.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "test:build-policy"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "253da03a9548bb2218151e79bea6fa2a7040d63c1d674a7c4e140c1dd46d9c2a",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-4.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "build"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "4b4a14e76313b1afcb683b64d0882903e8e3dd0071af4848551ab69ac460272e",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-5.log"
+            }
+          ],
+          "qualification": "local-fake-funds-only"
+        },
+        "recipe": {
+          "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+          "sourceDirty": false,
+          "devcontainerDigest": "c66704c59af93b3d2b72e85500d24ebeea4e44215a77d48900eeaf2c459a57cc",
+          "imageDigest": "sha256:107ceb6ad85808049dccef12414bf17b08eceb299eaf755c0339dc5fc8958d6b",
+          "toolVersions": {
+            "node": "v24.19.0",
+            "npm": "11.17.0",
+            "forgeVersion": "1.5.1-v1.5.1",
+            "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+            "solcVersion": "0.8.30",
+            "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+          },
+          "lockfileDigest": "5001d521f56a35921b2c37530e3e7bcd6a29aa7686d3b9af718a4de5ce59a686",
+          "ports": [
+            {
+              "port": 3000,
+              "privateRequirement": true,
+              "actualVisibility": "unknown",
+              "hostVisibilityVerified": false,
+              "purpose": "static-preview-only"
+            }
+          ],
+          "fixturesDigest": "294cc86f214a59b55a770654458ae1f206f4a75f10a683799348e47ad843cc2e",
+          "fixtureFiles": [
+            "packages/domain/test/fixtures/local-evm-scenario/README.md",
+            "packages/domain/test/fixtures/local-evm-scenario/registry.json",
+            "packages/domain/test/fixtures/local-evm-scenario/scenario.json"
+          ],
+          "chainIds": [
+            "31337"
+          ],
+          "supportedTargets": [
+            "linux-amd64-evm-local"
+          ],
+          "unsupportedTargets": [
+            "solana-local-validator",
+            "physical-wallet",
+            "production"
+          ]
+        }
+      },
+      "journey": {
+        "run": {
+          "version": 1,
+          "mode": "journey",
+          "recipeSha256": "e9bc2c41efe4bcea7d0da76c7c0a0a697acb6c69ca7080123f6cc86a0df50264",
+          "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+          "sourceDirty": false,
+          "chainIds": [
+            "31337"
+          ],
+          "fixtureDigest": "294cc86f214a59b55a770654458ae1f206f4a75f10a683799348e47ad843cc2e",
+          "toolVersions": {
+            "node": "v24.19.0",
+            "npm": "11.17.0",
+            "forgeVersion": "1.5.1-v1.5.1",
+            "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+            "solcVersion": "0.8.30",
+            "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+          },
+          "results": [
+            {
+              "command": [
+                "npm",
+                "run",
+                "test:evm"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "bfd39d99a7350d5867c7769b42a5ca4ac168170dc33761a88c9b5a7bcda5d7f9",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-1.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "test:exchange:evm"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "9567b2855078a5dfb8b0f5747f371d80461da30d80f367378fe9d6e91b661b87",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-2.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "test:payment:preflight"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "fe1a58b1cd86b8a3619b3896e96eb911d1cfdbed0dfca942f58f459161d04742",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-3.log"
+            },
+            {
+              "command": [
+                "npm",
+                "run",
+                "test:recovery:evm"
+              ],
+              "exitCode": 0,
+              "exitSignal": null,
+              "logSha256": "f3333b590586ae420bc99fe2de65464d74b03027d243c7d3dd5b69876eaf2811",
+              "bounded": true,
+              "timedOut": false,
+              "cancelled": false,
+              "report": "command-4.log"
+            }
+          ],
+          "qualification": "local-fake-funds-only"
+        },
+        "recipe": {
+          "sourceCommit": "a2b414f60c6ceedaa6388701eca7737dfcc7cb12",
+          "sourceDirty": false,
+          "devcontainerDigest": "c66704c59af93b3d2b72e85500d24ebeea4e44215a77d48900eeaf2c459a57cc",
+          "imageDigest": "sha256:107ceb6ad85808049dccef12414bf17b08eceb299eaf755c0339dc5fc8958d6b",
+          "toolVersions": {
+            "node": "v24.19.0",
+            "npm": "11.17.0",
+            "forgeVersion": "1.5.1-v1.5.1",
+            "forgeCommit": "b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2",
+            "solcVersion": "0.8.30",
+            "solcSha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+          },
+          "lockfileDigest": "5001d521f56a35921b2c37530e3e7bcd6a29aa7686d3b9af718a4de5ce59a686",
+          "ports": [
+            {
+              "port": 3000,
+              "privateRequirement": true,
+              "actualVisibility": "unknown",
+              "hostVisibilityVerified": false,
+              "purpose": "static-preview-only"
+            }
+          ],
+          "fixturesDigest": "294cc86f214a59b55a770654458ae1f206f4a75f10a683799348e47ad843cc2e",
+          "fixtureFiles": [
+            "packages/domain/test/fixtures/local-evm-scenario/README.md",
+            "packages/domain/test/fixtures/local-evm-scenario/registry.json",
+            "packages/domain/test/fixtures/local-evm-scenario/scenario.json"
+          ],
+          "chainIds": [
+            "31337"
+          ],
+          "supportedTargets": [
+            "linux-amd64-evm-local"
+          ],
+          "unsupportedTargets": [
+            "solana-local-validator",
+            "physical-wallet",
+            "production"
+          ]
+        }
+      }
+    },
+    "npmAudit": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 7,
+        "dev": 66,
+        "optional": 47,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 72
+      }
+    },
+    "checks": {
+      "freshCloneAndExactSubmodules": true,
+      "freshEmptyCacheAndNoHostNodeModules": true,
+      "sourceCleanAfterAllPhases": true,
+      "lockUnchanged": true,
+      "installStrictTlsManagedProxy": true,
+      "installScriptsDisabled": true,
+      "foundationAndJourneyNetworkNone": true,
+      "rootfsReadOnlyCapsDroppedNoNewPrivileges": true,
+      "nonRootNodeUser": true,
+      "ownedContainersAbsent": true,
+      "defaultNodeIsolation": true,
+      "packageTests": 1712,
+      "packageFailures": 0,
+      "packageSkips": 0,
+      "contractTests": 82,
+      "noRealFunds": true
+    },
+    "historicalFailure": {
+      "path": "docs/execution/qualification/fresh-lab-693c66c-failed.json",
+      "sha256": "ef7f92a660180027e6adfdfad18de7bdf97ddc8614a3756fffc10296d895c277",
+      "preserved": true,
+      "result": "Original693c66c fresh install/types passed; foundation1441/1442 stale assurance failure remains unchanged."
+    },
+    "artifacts": [
+      {
+        "path": "/workspace/work/t71-final-lab/audit-receipt.json",
+        "bytes": 1939,
+        "sha256": "d87c47c23ce79a3146592819e23a5a78a695f1319b257c1aeb447a9d16802c50"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/audit-start.json",
+        "bytes": 1753,
+        "sha256": "cc269e8ecc99f19d6f51a81bfa88538e09b131ab5982f1b7ac72a310a38bfae5"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/audit.log",
+        "bytes": 361,
+        "sha256": "a5dd41190e6d8052fd71f75c9e1cbd76f9b82d64b93d0f48ee858c6ee30ac470"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/command-1.log",
+        "bytes": 191,
+        "sha256": "c7449a006405cf63983cfa3668d0d7561fa6abff8f47ce04413e8a560a16c6a0"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/command-2.log",
+        "bytes": 182994,
+        "sha256": "ea346186f7c075d39d8da9d80a8fa3fd85e181f9c6cdffce803e2169fa594805"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/command-3.log",
+        "bytes": 241,
+        "sha256": "257a0f43c6ddc6b1c5a77351d4650c6b77c8cc303121b45cd0f75cbfe63bb0d4"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/command-4.log",
+        "bytes": 2745,
+        "sha256": "253da03a9548bb2218151e79bea6fa2a7040d63c1d674a7c4e140c1dd46d9c2a"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/command-5.log",
+        "bytes": 1116,
+        "sha256": "4b4a14e76313b1afcb683b64d0882903e8e3dd0071af4848551ab69ac460272e"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/recipe.json",
+        "bytes": 1353,
+        "sha256": "d9a36c011564f0ed4515a0c951d07783e86473cf0a0e7cd0d72ba3ee1d38ac42"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation/run.json",
+        "bytes": 2328,
+        "sha256": "2358efc72cf04fbf9f80db005e6282e7566fda2af6a5d7c9503d6e732e9b9e0d"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation-receipt.json",
+        "bytes": 1293,
+        "sha256": "454d08b4176c84605978a0ea1bcbe2760c76402ae896efcebf581a1044e6b00d"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation-start.json",
+        "bytes": 1102,
+        "sha256": "a8f8e16833d5a814db847d5183b72a58d69a032c84939caebe392f3251cad2c3"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/foundation.log",
+        "bytes": 131,
+        "sha256": "109ebca3ac84419eb4fe1137a39f29fda13ed3208a56792b15574786f6845752"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/install-receipt.json",
+        "bytes": 1985,
+        "sha256": "e64a59e3b0447eca1f3c68502571a69ed2b031bbbf78d0aad0dcf7f0de712d5f"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/install-start.json",
+        "bytes": 1797,
+        "sha256": "51032de29a26eafd6de29d26a3447fcde49a6f52d36677a83ac83843498fc3d2"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/install.log",
+        "bytes": 234,
+        "sha256": "4060d29a029ee849b121345b4d44ae1f61451f18ba3b9bfdd50606cd5482e373"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/command-1.log",
+        "bytes": 11563,
+        "sha256": "bfd39d99a7350d5867c7769b42a5ca4ac168170dc33761a88c9b5a7bcda5d7f9"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/command-2.log",
+        "bytes": 2090,
+        "sha256": "9567b2855078a5dfb8b0f5747f371d80461da30d80f367378fe9d6e91b661b87"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/command-3.log",
+        "bytes": 1886,
+        "sha256": "fe1a58b1cd86b8a3619b3896e96eb911d1cfdbed0dfca942f58f459161d04742"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/command-4.log",
+        "bytes": 2542,
+        "sha256": "f3333b590586ae420bc99fe2de65464d74b03027d243c7d3dd5b69876eaf2811"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/recipe.json",
+        "bytes": 1353,
+        "sha256": "d9a36c011564f0ed4515a0c951d07783e86473cf0a0e7cd0d72ba3ee1d38ac42"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey/run.json",
+        "bytes": 2031,
+        "sha256": "bf3a548f5a452ef89ea3efc0f71d8eff569f4cea9b28bbf5fa9f5a5b6fd20a7d"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey-receipt.json",
+        "bytes": 1280,
+        "sha256": "ec938b897c3fa5d3ce9d9bb3a4fe52c01f5c7d30d99ce86a4fcf913e15e986ce"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey-start.json",
+        "bytes": 1093,
+        "sha256": "a5c25a97ca97311140f7174d78ae8d45fe649efac7da2d02edf90d3549923f47"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/journey.log",
+        "bytes": 131,
+        "sha256": "7e69e6c0255f1793463ba95cad488d05950317f451a031520799428734d75efe"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/results.json",
+        "bytes": 6912,
+        "sha256": "37f7c7827a132fcaa4017a7a668e96d1564213478bcc1c2b0914cf52ec2b7a60"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/run-final.mjs",
+        "bytes": 3694,
+        "sha256": "33345055a920061a656a4d8c2c069f4073d59e728d1b6d6c42af7c699f77bbcc"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/source-manifest.json",
+        "bytes": 821,
+        "sha256": "cdffe746b90e33ea9cbabde8900ada726cee6db6220967d16c0dc07067e95eef"
+      },
+      {
+        "path": "/workspace/work/t71-final-lab/source-preparation.json",
+        "bytes": 5330,
+        "sha256": "cb07217bb76f5f68537854307a4e5ebbcd3753d46eee4b11e7bbce8cf2fb3c53"
+      }
+    ],
+    "limits": [
+      "Existing pinned private image reused; all dependency/cache/config/source inputs freshly created. No claim of a new image build.",
+      "Local Linux/amd64 EVM fake-funds only; no paid Codespace, public port, deployment, physical-wallet or browser qualification.",
+      "ImageID1729 is the locally built recipe image; recipe imageDigest107c is its pinned base image, not an assertion of identical image objects.",
+      "Final source delivery CI/scanner/review/guarded merge is tracked separately."
+    ]
+  },
+  "distinctReview": {
+    "path": "docs/execution/reviews/T71-final-lab.json",
+    "sha256": "362d6b47e299fb757b60eb50e8b7c20ca897fa47f91967fe9c8c08e699acfa6d",
+    "verdict": "APPROVE_BOUNDED_LOCAL_QUALIFICATION"
+  },
+  "scope": "Existing pinned local image; new exact source/submodule clone, empty initial cache/dependencies/config and real install; foundation5/journey4 pass with normal isolation/network:none. Only local Linux/amd64 EVM fake funds. Original failed693c66c unchanged. Operator packet retains its historical review-pending checkpoint; this wrapper and distinct receipt record completed local acceptance."
+}

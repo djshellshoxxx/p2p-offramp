@@ -1,5 +1,6 @@
 /**
- * In-memory trade-terms review session for the document. Owns every asynchronous import it starts: a newer import or
+ * In-memory trade-terms review session for the document. Owns every asynchronous import it starts. Concurrent file
+ * imports are refused until physical work drains. A newer sample/import or
  * cancel() supersedes older work, and results from superseded or disposed work are discarded. Cancelling only stops
  * this local check; nothing here contacts a wallet, relay or chain, so there is no external action to retract.
  *
@@ -9,9 +10,10 @@
  * bypasses today's checks. Locking calls forgetSaved(): reviews loaded from the profile leave memory and any saved-review
  * result still in flight is discarded.
  */
-import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
+import { LocalPolicyError, localPolicyCode, runBoundedImport } from '../content-policy/local-policy.ts';
+import { MAX_TERMS_REVIEW_BYTES, reviewTermsBytes, buildTradeDraftDocument, checkFundingWindow, type RegistryLookup, type ReviewedEvmTerms, type TermsReviewRejection, type TermsReviewResult } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
-import type { RuntimeErrorCode, RuntimeResult, RuntimeSavedReviewRef, RuntimeSavedReviews } from '../../../../packages/schemas/index.ts';
+import { MAX_NETWORKS, MAX_DEPLOYMENTS, MAX_ASSETS, type RuntimeErrorCode, type RuntimeResult, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type TradeDraftInputV1 } from '../../../../packages/schemas/index.ts';
 
 export const MAX_SESSION_REVIEWS = 8;
 
@@ -28,7 +30,7 @@ export interface RegistryTrustSummary { readonly keyId: string; readonly sequenc
 export type RegistrySourceResult =
   | { readonly kind: 'unavailable' }
   | { readonly kind: 'failed' }
-  | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly registry: RegistryLookup; readonly samples: readonly TermsSample[]; readonly trust?: RegistryTrustSummary };
+  | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly registry: RegistryLookup; readonly samples: readonly TermsSample[]; readonly trust?: RegistryTrustSummary; readonly draftNetworkIds?: readonly string[] };
 /** Trusted composition input. Only the demo and testnet builds supply a ready source; the default build has no approved registry. */
 export type RegistrySource = () => Promise<RegistrySourceResult>;
 export const noApprovedRegistry: RegistrySource = async () => ({ kind: 'unavailable' });
@@ -36,14 +38,20 @@ export const noApprovedRegistry: RegistrySource = async () => ({ kind: 'unavaila
 export type RegistryState =
   | { readonly kind: 'loading' } | { readonly kind: 'unavailable' } | { readonly kind: 'failed' }
   | { readonly kind: 'ready'; readonly label: RegistryLabel; readonly samples: readonly Pick<TermsSample, 'id' | 'label'>[]; readonly trust: RegistryTrustSummary | null };
-export type ImportRejection = TermsReviewRejection | 'FILE_UNREADABLE' | 'REGISTRY_NOT_READY';
+export type ImportRejection = TermsReviewRejection | 'FILE_UNREADABLE' | 'REGISTRY_NOT_READY' | 'LOCAL_LIMIT_REACHED';
 export type ImportState =
   | { readonly kind: 'idle' }
   | { readonly kind: 'busy'; readonly step: 'reading' | 'checking' }
   | { readonly kind: 'rejected'; readonly code: ImportRejection }
   | { readonly kind: 'cancelled' }
   | { readonly kind: 'accepted'; readonly localId: string };
-export type ReviewSource = 'file' | 'synthetic-sample';
+export type ReviewSource = SavedReviewSource;
+/** Current display choices only. Neither cached choices nor caller-supplied metadata grant registry authority. */
+export interface TradeDraftChoice {
+  readonly networkId: string; readonly deploymentId: string; readonly assetId: string; readonly chainId: string;
+  readonly environment: 'local' | 'testnet' | 'mainnet'; readonly escrowAddress: string;
+  readonly assetKind: 'native' | 'erc20'; readonly assetAddress: string | null; readonly decimals: number;
+}
 export interface StoredReview {
   readonly localId: string; readonly review: ReviewedEvmTerms; readonly source: ReviewSource;
   /** The exact reviewed bytes, kept so the review can be saved without re-reading the file. */
@@ -95,6 +103,8 @@ export interface TradeReviewController {
   loadRegistry(): Promise<void>;
   importFile(file: FileLike): Promise<ImportOutcome>;
   importSample(id: string): Promise<ImportOutcome>;
+  getDraftChoices(): readonly TradeDraftChoice[];
+  reviewDraft(input: TradeDraftInputV1, signal?: AbortSignal): Promise<ImportOutcome>;
   cancel(): void;
   /** Removes from this session only; a saved copy stays in the profile. */
   remove(localId: string): void;
@@ -138,6 +148,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   const listeners = new Set<() => void>();
   let registry: RegistryLookup | null = null;
   let samples: readonly TermsSample[] = [];
+  let draftNetworkIds: readonly string[] = [];
   let snapshot: TradeReviewSnapshot = Object.freeze({ registry: Object.freeze({ kind: 'loading' }), job: Object.freeze({ kind: 'idle' }), reviews: Object.freeze([]),
     saved: IDLE_SAVED, unreviewable: Object.freeze([]), persistence: Object.freeze({unlocked:false,kind:'idle'}) });
   let generation = 0;
@@ -159,14 +170,33 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
   const wipe = (items: readonly StoredReview[]) => { for (const item of items) item.bytes.fill(0); };
   const clearSession = () => { generation++; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; wipe(snapshot.reviews); for(const bytes of transient) bytes.fill(0); transient.clear(); publish({reviews:Object.freeze([]),job:Object.freeze({kind:'idle'}),saved:IDLE_SAVED,unreviewable:Object.freeze([])}); };
   const unavailable = (action: 'save'|'load'|'delete', code: SavedErrorCode) => publish({saved:Object.freeze({kind:'failed',action,code})});
+  const draftChoices = (): readonly TradeDraftChoice[] => {
+    const choices: TradeDraftChoice[] = [];
+    if (disposed || !registry) return Object.freeze(choices);
+    try {
+      for (const id of draftNetworkIds) {
+        const network = registry.network(id);
+        if (!network || network.id !== id || network.chain !== 'evm') continue;
+        if (network.assets.length > MAX_ASSETS || network.deployments.length > MAX_DEPLOYMENTS) return Object.freeze([]);
+        for (const candidate of network.deployments) {
+          const deployment = registry.deployment(id, candidate.id); if (!deployment || deployment.id !== candidate.id) continue;
+          for (const asset of network.assets) if ((asset.kind === 'native' || asset.kind === 'erc20') && asset.transferPolicy === 'exact-transfer' && deployment.supportedAssetIds.includes(asset.id)) {
+            choices.push(Object.freeze({ networkId: id, deploymentId: deployment.id, assetId: asset.id, chainId: network.chainIdentity,
+              environment: network.environment, escrowAddress: deployment.address, assetKind: asset.kind, assetAddress: asset.address, decimals: asset.decimals }));
+          }
+        }
+      }
+    } catch { return Object.freeze([]); }
+    return Object.freeze(choices);
+  };
 
-  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>): Promise<ImportOutcome> {
+  async function run(source: ReviewSource, read: () => Promise<Uint8Array | ImportRejection>, admittedGeneration?: number, signal?: AbortSignal): Promise<ImportOutcome> {
     if (disposed) return { kind: 'stale' };
-    const mine = ++generation;
-    const current = () => mine === generation && !disposed;
+    const mine = admittedGeneration ?? ++generation;
+    const current = () => mine === generation && !disposed && !signal?.aborted;
     if (!registry) { const job = { kind: 'rejected', code: 'REGISTRY_NOT_READY' } as const; setJob(job); return job; }
     const lookup = registry;
-    setJob({ kind: 'busy', step: 'reading' });
+    if (admittedGeneration === undefined) setJob({ kind: 'busy', step: 'reading' });
     let bytes: Uint8Array | ImportRejection;
     try { bytes = await read(); } catch { bytes = 'FILE_UNREADABLE'; }
     if (!current()) { if(bytes instanceof Uint8Array)bytes.fill(0); return { kind: 'stale' }; }
@@ -179,8 +209,18 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     if (!current()) { original.fill(0); return { kind: 'stale' }; }
     if (!result.ok) { original.fill(0); const job = { kind: 'rejected', code: result.code } as const; setJob(job); return job; }
     const accepted = result.value;
+    if (source === 'local-draft') {
+      let code: ImportRejection | null = null;
+      try { checkFundingWindow(accepted.acceptBeforeSeconds, accepted.escrowExpirySeconds, now().toString()); }
+      catch { code = 'UNFUNDABLE_WINDOW'; }
+      if (!code && !draftChoices().some(value => value.networkId === accepted.network.id && value.deploymentId === accepted.deployment.id && value.assetId === accepted.asset.id &&
+        value.chainId === accepted.network.chainId && value.environment === accepted.network.environment && value.escrowAddress === accepted.deployment.address && value.assetKind === accepted.asset.kind && value.assetAddress === accepted.asset.address && value.decimals === accepted.asset.decimals)) code = 'UNAVAILABLE';
+      if (!current()) { original.fill(0); return { kind: 'stale' }; }
+      if (code) { original.fill(0); const job = { kind: 'rejected', code } as const; setJob(job); return job; }
+    }
     const existing = snapshot.reviews.find(item => item.source === source && sameReview(item.review, accepted));
     const stored: StoredReview = existing ?? Object.freeze({ localId: localIdFrom(random(16)), review: accepted, source, bytes: original, savedId: null, loaded: false });
+    if (!current()) { original.fill(0); return { kind: 'stale' }; }
     if(existing)original.fill(0);
     const reviews = existing ? snapshot.reviews : bounded([...snapshot.reviews, stored]);
     wipe(snapshot.reviews.filter(item=>!reviews.includes(item)));
@@ -198,28 +238,64 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
         try { result = await options.source(); } catch { result = { kind: 'failed' }; }
         if (disposed) return;
         if (result.kind === 'ready') {
+          const ids = result.draftNetworkIds ?? [];
+          if (!Array.isArray(ids) || ids.length > MAX_NETWORKS || new Set(ids).size !== ids.length || ids.some(id => typeof id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/.test(id) || id.includes('..'))) {
+            publish({ registry: Object.freeze({ kind: 'failed' }) }); return;
+          }
+          draftNetworkIds = Object.freeze([...ids]);
           registry = result.registry; samples = result.samples;
-          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(({ id, label }) => Object.freeze({ id, label }))),
+          publish({ registry: Object.freeze({ kind: 'ready', label: result.label, samples: Object.freeze(samples.map(sample => Object.freeze({ id: sample.id, get label() { return sample.label; } }))),
             trust: result.trust ? Object.freeze({ keyId: result.trust.keyId, sequence: result.trust.sequence, expiresAt: result.trust.expiresAt }) : null }) });
         } else publish({ registry: Object.freeze({ kind: result.kind }) });
       })();
       return loading;
     },
     importFile(file: FileLike) {
-      return run('file', async () => {
-        // Size is checked before any bytes are read.
-        if (typeof file.size !== 'number' || file.size > MAX_TERMS_REVIEW_BYTES) return 'TOO_LARGE';
-        return new Uint8Array(await file.arrayBuffer());
+      if (disposed || !registry) return run('file', async () => 'FILE_UNREADABLE');
+      let mine: number | undefined;
+      return runBoundedImport<ImportOutcome>('terms-review', file, undefined, async bytes => {
+        if (disposed || mine !== generation) return { kind: 'stale' };
+        transient.add(bytes);
+        try { return await run('file', async () => bytes, mine); }
+        finally { transient.delete(bytes); }
+      }, () => { mine = ++generation; setJob({ kind: 'busy', step: 'reading' }); if (disposed || mine !== generation) throw new LocalPolicyError('CANCELLED'); }).catch((error: unknown): ImportOutcome => {
+        if (disposed || mine !== undefined && mine !== generation) return { kind: 'stale' };
+        const code = localPolicyCode(error);
+        const rejected = { kind: 'rejected', code: code === 'LOCAL_LIMIT_REACHED' ? 'LOCAL_LIMIT_REACHED' : code === 'LIMIT_EXCEEDED' ? 'TOO_LARGE' : 'FILE_UNREADABLE' } as const;
+        // Rejected overload cannot replace the active import's display or cancel its physical work.
+        if (mine !== undefined || snapshot.job.kind !== 'busy') setJob(rejected);
+        return rejected;
       });
     },
     importSample(id: string) {
       const sample = samples.find(item => item.id === id);
       return run('synthetic-sample', async () => sample ? sample.load(now()) : 'FILE_UNREADABLE');
     },
+    getDraftChoices: draftChoices,
+    reviewDraft(input: TradeDraftInputV1, signal?: AbortSignal) {
+      let mine: number | undefined, generated: Uint8Array | undefined;
+      const abort = () => { if (mine !== undefined && mine === generation && !disposed) { generation++; for (const bytes of transient) bytes.fill(0); setJob({ kind: 'cancelled' }); } };
+      signal?.addEventListener('abort', abort, { once: true });
+      // The existing terms-review admission owns generation and review until physical work drains.
+      const localReader = { size: 0, arrayBuffer: async () => new ArrayBuffer(0) };
+      return runBoundedImport<ImportOutcome>('terms-review', localReader, signal, async () => run('local-draft', async () => {
+        if (!registry || disposed || mine !== generation) return 'REGISTRY_NOT_READY';
+        const result = await buildTradeDraftDocument(registry, input, { nowSeconds: now, randomBytes: random, isCurrent: () => !disposed && mine === generation,
+          ...(signal ? { signal } : {}) });
+        if (!result.ok) return result.code;
+        generated = result.bytes; transient.add(generated); return generated;
+      }, mine, signal), () => { mine = ++generation; setJob({ kind: 'busy', step: 'reading' }); if (disposed || mine !== generation) throw new LocalPolicyError('CANCELLED'); })
+        .catch((error: unknown): ImportOutcome => {
+          if (disposed || mine !== undefined && mine !== generation) return { kind: 'stale' };
+          const code = localPolicyCode(error), rejected = { kind: 'rejected', code: code === 'LOCAL_LIMIT_REACHED' ? 'LOCAL_LIMIT_REACHED' : 'UNAVAILABLE' } as const;
+          if (mine !== undefined || snapshot.job.kind !== 'busy') setJob(rejected); return rejected;
+        }).finally(() => { signal?.removeEventListener('abort', abort); if (generated) { generated.fill(0); transient.delete(generated); } });
+    },
     cancel() {
       if(snapshot.saved.kind === 'busy'){ const action=snapshot.saved.action; savedGeneration++; savedAbort?.abort(); savedAbort=undefined; unavailable(action,'UNKNOWN_OUTCOME'); }
       if (snapshot.job.kind !== 'busy') return;
       generation++;
+      for (const bytes of transient) bytes.fill(0);
       setJob({ kind: 'cancelled' });
     },
     remove(localId: string) {
@@ -277,7 +353,7 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
       const checked: { readonly recordId: string; readonly source: ReviewSource; readonly bytes: Uint8Array; readonly result: TermsReviewResult }[] = [];
       if(listed.value.items.length>MAX_SESSION_REVIEWS || new Set(listed.value.items.map(item=>item.recordId)).size!==listed.value.items.length)throw Error();
       for (const item of listed.value.items) {
-        if(!/^[0-9a-f]{32}$/.test(item.recordId)||!(item.bytes instanceof Uint8Array)||item.bytes.length>MAX_TERMS_REVIEW_BYTES||!['file','synthetic-sample'].includes(item.source))throw Error();
+        if(!/^[0-9a-f]{32}$/.test(item.recordId)||!(item.bytes instanceof Uint8Array)||item.bytes.length>MAX_TERMS_REVIEW_BYTES||!['file','synthetic-sample','local-draft'].includes(item.source))throw Error();
         const original=item.bytes.slice(), copy=item.bytes.slice(); own(original); own(copy);
         let result: TermsReviewResult;
         try { result = await review(lookup, copy); } catch { result = { ok: false, code: 'UNAVAILABLE' }; }
@@ -340,8 +416,8 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     forgetSaved() {
       if(port){clearSession();return;}
       savedGeneration++; savedAbort?.abort(); savedAbort=undefined; for(const bytes of transient)bytes.fill(0);transient.clear();
-      const gone = snapshot.reviews.filter(entry => entry.loaded).map(entry => entry.localId);
-      const reviews = bounded(snapshot.reviews.filter(entry => !entry.loaded).map(entry => entry.savedId === null ? entry : Object.freeze({ ...entry, savedId: null })));
+      const gone = snapshot.reviews.filter(entry => entry.loaded || entry.source === 'local-draft').map(entry => entry.localId);
+      const reviews = bounded(snapshot.reviews.filter(entry => !entry.loaded && entry.source !== 'local-draft').map(entry => entry.savedId === null ? entry : Object.freeze({ ...entry, savedId: null })));
       const job = snapshot.job.kind === 'accepted' && gone.includes(snapshot.job.localId) ? Object.freeze({ kind: 'idle' } as const) : snapshot.job;
       wipe(snapshot.reviews.filter(item=>!reviews.some(entry=>entry.bytes===item.bytes)));
       publish({ reviews, job, unreviewable: Object.freeze([]), saved: IDLE_SAVED });

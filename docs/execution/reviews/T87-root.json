@@ -1,0 +1,72 @@
+{
+  "task": "T87",
+  "reviewer": "root",
+  "status": "APPROVED_SCOPED_LOCAL_REPAIR",
+  "baseCommit": "7ff6e9faaf0ec4c1ffbc2fb28b3003396b485f4b",
+  "files": [
+    {
+      "path": "packages/proof-jobs/src/supervisor.ts",
+      "bytes": 17703,
+      "sha256": "6abeead914ea1947fe06d6e219a4c962708d39d01ed68acd18efbdb10582e5eb",
+      "beforeSha256": "0a4595119c05ef477b8668348b96538d7d3db28eb66d731adb3c396c722a43f3"
+    },
+    {
+      "path": "packages/proof-jobs/test/supervisor.test.mjs",
+      "bytes": 15088,
+      "sha256": "e10a47f7c5e4744a5f8d960adb1a6ebbdefe0ef4054122cd03cb7ba39327b4e8",
+      "beforeSha256": "a5cdd7ca5754e2b229df58d6b19bdceec809507ada90d8f6ed6af09a6ef66ea3"
+    },
+    {
+      "path": "packages/proof-jobs/test/fixtures/real-app.tsx",
+      "bytes": 10100,
+      "sha256": "e19e2f68523b19ebc1a14b533466ad3aa39be7e891c9fdc5303f8b086f1584fc",
+      "beforeSha256": "b7ec649ae295bfdb11b723add0d098fd181d7ac2ab76835c98b12eec9e5f5a09"
+    },
+    {
+      "path": "packages/proof-jobs/test/browser.mjs",
+      "bytes": 16371,
+      "sha256": "49f94121da5ee6bf46c24c4deff73a8f4bdcbc3dd9fef466fab9e016aa276e5e",
+      "beforeSha256": "f6ae7855ee311a5881244ef5337604611730e41dda2e4bb2dfc74df1285a8e9e"
+    },
+    {
+      "path": "packages/proof-jobs/README.md",
+      "bytes": 10956,
+      "sha256": "dc8b0b99780078c050324c0dd94738848a4c6b89822186a5d9435157cd34b338",
+      "beforeSha256": "aecd72d6194dd4e0ff4125617107c57a5a02d7713351d62547a81a63b11d8b8c"
+    }
+  ],
+  "independentVerification": {
+    "unitTests": 24,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "nativeBrowser": "156.0.8078.79",
+    "node": "24.22.1",
+    "nativeWorkers": 14,
+    "physicalClosures": 14,
+    "competingAdmissionHeldUntilPhysicalExit": true,
+    "logs": [
+      {
+        "path": "/workspace/work/t87-root-focused.log",
+        "bytes": 2302,
+        "sha256": "6d860c6a5b86d89c50c4dcdc8e632dec96d42092d55f092b97d4bcf5844f014a"
+      },
+      {
+        "path": "/workspace/work/t87-root-exact-native.log",
+        "bytes": 1190,
+        "sha256": "e1ed0eac9c29aa267dc2387b234f54af97a315e0cbff9aa3b738de149d058f69"
+      }
+    ]
+  },
+  "review": [
+    "Real completion Promise required; void, foreign thenable, malformed fulfillment and rejection retain sole physical admission.",
+    "Native test observer requires exact unique owned Worker URL, page parent target, Playwright close and CDP target destruction.",
+    "Logical heartbeat, wall, input, memory/message/network caps and strict CSP unchanged; default provider registry remains empty.",
+    "Original first-loop hosted timing was not independently reproduced. The distinct overlapping-Worker admission defect was reproduced and repaired."
+  ],
+  "limits": [
+    "CDP-backed research fixture only; standard browser physical hard deadlines and providers remain unqualified.",
+    "Final changed App composition and exact-head hosted checks remain T38."
+  ],
+  "professionalOrReleaseApproval": false
+}

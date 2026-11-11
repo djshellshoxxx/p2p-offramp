@@ -1,0 +1,68 @@
+{
+  "task": "T95",
+  "reviewer": "/root",
+  "status": "ACCEPTED_ORDINAL_EQUIVALENCE",
+  "files": [
+    {
+      "path": "scripts/docs/validate.mjs",
+      "sha256": "06ae3c56a2a437a484db17d80cf2c6bccd76fe8d9379c8528b816704ed5eebaa"
+    },
+    {
+      "path": "packages/meetup/src/geohash.ts",
+      "sha256": "5ef16e5f74e7072b4aeb11a7f4543e901082ffab8a532b6041ad2e2f211967fc"
+    },
+    {
+      "path": "packages/courier/src/shared.ts",
+      "sha256": "3cccb38f6f5b0c04ed078458cacca6a8b4cfb8202901b317f0595e393d0d0c38"
+    },
+    {
+      "path": "scripts/lab/recipe.mjs",
+      "sha256": "5a2c9ef2123a1f9c0f57771d1146b5706e45d1bb81a36ec8075b8522fc00d540"
+    },
+    {
+      "path": "scripts/test-retention-browser.mjs",
+      "sha256": "1cb5e6770205c78a8fbc10f6008244a55c84ab6e8d129d8c08f3fa5ebb9997b5"
+    },
+    {
+      "path": "scripts/formal/evm.mjs",
+      "sha256": "6d817faf9a95708c67669f8d68a76c241568b1ae88b8475093be99076ef25d1a"
+    },
+    {
+      "path": "packages/storage/src/retention-service.ts",
+      "sha256": "02b54bf87fb365ace31e8fc847657bb55db05eb2b96c54647e4813743faaa85b"
+    },
+    {
+      "path": "packages/meetup/src/policy-data.ts",
+      "sha256": "2c9cdf9c5848f924c011aa76d2a156c6119b86c11c99b6dd05f09c329d827fc8"
+    },
+    {
+      "path": "scripts/portal/build.mjs",
+      "sha256": "3814c8fcfc8424c3d890c7b31db867cd0945571929bf11bd730f4de54a9c5abe"
+    }
+  ],
+  "semanticChecks": [
+    "All18 substitutions are default STRING sort to explicit relational UTF16 order; actual domains are validated cells/hex record IDs/fixed object keys/source and asset paths",
+    "No localeCompare, normalization, numeric-sort mutation, authority/lease/resource/source/solver contract change",
+    "Existing before/after canonical/partition-binding/geohash/lab snapshots have identical bytes; source reverse substitution restores every other byte",
+    "Original T91 runner/report/harness/compiler/query identities remain historical; ordering-only runner delta carries no new solver proof and all3 attempts remain spent"
+  ],
+  "verification": {
+    "authorFocused": {
+      "core": 100,
+      "formalPure": 7,
+      "lab": 2,
+      "portal": 2
+    },
+    "rootIndependentDocsAndPortal": {
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skip": 0
+    },
+    "staleDocs": "Initial exact DOCS_STALE retained; root regenerated real claims/docs bindings to immutable fcae5dd before distinct10/10 acceptance"
+  },
+  "limits": [
+    "Explicit equivalent ordering is canonical clarity, not a new theorem or qualification",
+    "Final changed graph/native/aggregate/hosted checks remain T38; no new solver tranche permitted"
+  ]
+}

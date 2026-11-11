@@ -1,0 +1,264 @@
+{
+  "task": "T89",
+  "status": "FROZEN_FOR_ROOT_REVIEW_ACTUAL_APP_BROWSER_PASSED",
+  "frozenAtUtc": "2026-11-02T17:16:54.796874+00:00",
+  "head": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "ownedFiles": [
+    {
+      "path": "apps/web/src/analytics/screen-counts.ts",
+      "bytes": 5364,
+      "sha256": "b12b1ecf2237754a1de9339bc377e73b20943e9ff63ba34b1149be1320039ae7",
+      "initial12Sha256": "ef239e27b7d07b50f8593183e8f016e09208d5d3efb6585883135bf95e2a9a9c",
+      "changedAfterInitial12": true
+    },
+    {
+      "path": "apps/web/src/ui/LocalScreenAnalytics.tsx",
+      "bytes": 4359,
+      "sha256": "57990434a61aa0aec0e367b87605657d2b4b985cfb644a79041a082c5979e47c",
+      "initial12Sha256": "57990434a61aa0aec0e367b87605657d2b4b985cfb644a79041a082c5979e47c",
+      "changedAfterInitial12": false
+    },
+    {
+      "path": "apps/web/test/screen-counts.test.mjs",
+      "bytes": 10848,
+      "sha256": "005a831503c9b12d172d29152093d78f1b9a976dbd394655c635907f8a569ab6",
+      "initial12Sha256": "f0c529f2c89546625ad1f806766e06f05b5269fd1df70568614522683b21f237",
+      "changedAfterInitial12": true
+    },
+    {
+      "path": "apps/web/test/local-screen-analytics.render.test.mjs",
+      "bytes": 2981,
+      "sha256": "dc9172c0a88bb632d7e6e4ad7734c87dd520890c83c9018b8b9963d6ba3373d2",
+      "initial12Sha256": "dc9172c0a88bb632d7e6e4ad7734c87dd520890c83c9018b8b9963d6ba3373d2",
+      "changedAfterInitial12": false
+    },
+    {
+      "path": "scripts/test-web-build-browser.mjs",
+      "bytes": 66531,
+      "sha256": "cd24b54bde9797d3960b81344f70248bffdfec299a482af2140522ee8143d028",
+      "initial12Sha256": "8fe4d2eaf59dc629836b7761cc8aa080ec8564f8daf1922104cd24ba84ae5bcc",
+      "changedAfterInitial12": true
+    }
+  ],
+  "rootEnrollmentBindings": [
+    {
+      "path": "apps/web/src/main.tsx",
+      "bytes": 4928,
+      "sha256": "91ca3e07e1671d6d7ae8321539a7785431462594e60ff3feb68f6423aebc6f7c",
+      "ownership": "root; read-only hash binding"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "bytes": 9808,
+      "sha256": "f489bd5c62372570758b926cf14e60142fef254d15184ce6141b41a148a551ca",
+      "ownership": "root; read-only hash binding"
+    },
+    {
+      "path": "apps/web/src/ui/Pages.tsx",
+      "bytes": 8009,
+      "sha256": "4bc69541063a8426f45a21fbddbb6d0efd05cd75e7548ff6c79af8be3d52b18a",
+      "ownership": "root; read-only hash binding"
+    },
+    {
+      "path": "apps/web/src/ui/use-screen-counts.ts",
+      "bytes": 1603,
+      "sha256": "c83532023e90297635a28616cbfea912f3d1048d14b443cf42488075097f41c7",
+      "ownership": "root; read-only hash binding"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "bytes": 54467,
+      "sha256": "1725098cff11cd549a65cb8f0fbde76f3f6fbbe3ca7eef734f0839ac05c459bb",
+      "ownership": "root; read-only hash binding"
+    },
+    {
+      "path": "apps/web/src/ui/messages.ts",
+      "bytes": 1514,
+      "sha256": "cd5bed7de8138abf6217d4e70b47b7c4f07fd4c41eb5aec84e74c68186112ef5",
+      "ownership": "root; read-only hash binding"
+    }
+  ],
+  "retainedInitial12Freeze": {
+    "path": "/workspace/work/t89-source-freeze.json",
+    "bytes": 3513,
+    "sha256": "ad24679714421ce37145d265d3cee337b80e236f9cedfedd86dff3c5fa67271b"
+  },
+  "retainedInitial12RawSource": "/workspace/work/t89-initial12-snapshot",
+  "retainedT88Packet": {
+    "path": "/workspace/work/t88-review-packet.json",
+    "bytes": 5815,
+    "sha256": "ef8d90ea6b46ce0c6855f1a65f36a49aa1734c7ab2f7b639be5b0a2150d9d59f"
+  },
+  "fixedInterface": "createScreenCounts => {controller,observer}; Settings sees only controller. Literal five categories; no imported events/manual increments. No interface delta after initial12.",
+  "consent": "Initially off; opt-in counts current committed foreground category once. Clear/opt-out/lock/owner/pagehide/BFCache/reload clear counts+consent+preview, requiring fresh opt-in.",
+  "visibleResumePolicy": "Each hidden-to-foreground resume counts the current committed category once. Foreground same-category changes, StrictMode/rerenders and hidden commits do not count.",
+  "bounds": {
+    "categories": [
+      "home",
+      "offers",
+      "trade",
+      "recovery",
+      "settings"
+    ],
+    "saturationPerCategory": 65535,
+    "exportUtf8Bytes": 1024,
+    "subscribers": 16,
+    "format": "p2p-offramp/local-screen-counts/v1",
+    "filename": "p2p-offramp-screen-counts.json"
+  },
+  "reentrantCorrection": {
+    "red": {
+      "tests": 12,
+      "pass": 9,
+      "fail": 3,
+      "finiteAlternationsMax": 32
+    },
+    "behavior": "Synchronous fixed cohort and mutator exclusion; no growing batch, recursion or queue. Stable readers receive final snapshot. Sticky retirement erases synchronously and only then releases observers.",
+    "frozenReceipt": {
+      "path": "/workspace/work/t89-controller-correction.json",
+      "bytes": 2562,
+      "sha256": "5810c855c537371e52863841d16cfd67ccd432d1a90df1ba5ebb3226a63075a1"
+    }
+  },
+  "verification": {
+    "initialUnitRender": {
+      "tests": 12,
+      "pass": 12,
+      "fail": 0
+    },
+    "finalUnitRender": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/screen-counts.test.mjs apps/web/test/local-screen-analytics.render.test.mjs"
+    },
+    "uiTypes": {
+      "exitCode": 0,
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.ui.json --noEmit"
+    },
+    "browserSyntax": {
+      "exitCode": 0,
+      "command": "node --check scripts/test-web-build-browser.mjs"
+    },
+    "nativeMaintainedBrowser": {
+      "exitCode": 0,
+      "command": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-web-build-browser.mjs",
+      "browser": "154.0.8037.57",
+      "reportGroups": 19,
+      "report": {
+        "path": "/workspace/work/t89-native-browser-report.json",
+        "bytes": 4314,
+        "sha256": "17557ef121a111baa5b0597f66a66fbc126bf34e6443202a3a47dca09126d907"
+      },
+      "analytics": {
+        "localScreenCounts": true,
+        "foregroundCategoryNavigation": true,
+        "sameCategoryPrivateIdsNotCounted": true,
+        "noQueryOrIdentifierExport": true,
+        "explicitBoundedDownload": true,
+        "noPersistenceOrWorkerIpc": true,
+        "nativeProfileLockErasure": true,
+        "reentrantFileHelperRetirement": true,
+        "actualBfCacheErasure": true,
+        "reloadRequiresFreshConsent": true,
+        "ordinaryVisibilityPolicy": "unit-tested; headless tabs all report visible",
+        "bfcacheFixture": "same emitted meta bytes at an owned cacheable prefix; only Playwright disable-BFCache argument omitted",
+        "deviceAcceptance": false
+      },
+      "unexpectedRequests": 0,
+      "walletPrompts": 0,
+      "localRebuildByteMatch": true
+    },
+    "sourceStability": {
+      "before": {
+        "path": "/workspace/work/t89-native-source-before.json",
+        "bytes": 44052,
+        "sha256": "3f8202bc71d1868dce4ec0e7820212a4c7374e02deae1d136fcac9b84585b56d"
+      },
+      "after": {
+        "path": "/workspace/work/t89-native-source-after.json",
+        "bytes": 43905,
+        "sha256": "8782c10b33ef98414c451391fdad073704a7a43ca88b7758f96def16997800ef"
+      },
+      "boundProductionAndConfigFiles": 258,
+      "changedDuringPassedAttempt": []
+    }
+  },
+  "nativeAttemptHistory": [
+    {
+      "attempt": 1,
+      "exitCode": 1,
+      "log": "/workspace/work/t89-native-browser.attempt1.log",
+      "failure": "Recovery native listProfiles created the existing empty vault schema after the premature durable baseline. Actual App navigation and explicit export preceding that comparison passed."
+    },
+    {
+      "attempt": 2,
+      "exitCode": 0,
+      "log": "/workspace/work/t89-native-browser.attempt2.log",
+      "repair": "Before consent/baseline, navigate actual Recovery while counts are off; wait native inventoryEmpty; return Settings and assert zero. Preserve entire local/session/cache/IndexedDB byte equality for subsequent analytics navigation and export. No product change or suppressed comparison."
+    }
+  ],
+  "evidenceFiles": [
+    {
+      "path": "/workspace/work/t89-screen-counts.RED.log",
+      "bytes": 10304,
+      "sha256": "b2aa3c1b3055bcbcea20f463865d37eab98c464d655d47935c02342c902af2d5"
+    },
+    {
+      "path": "/workspace/work/t89-local-screen-analytics.RED.log",
+      "bytes": 3545,
+      "sha256": "8b639d0f98750224a8f3f6eb49cd7eba97c1b841cfe113d5400bbbdb7bcc13b8"
+    },
+    {
+      "path": "/workspace/work/t89-focused.GREEN.log",
+      "bytes": 1344,
+      "sha256": "1f8925a9148e2bdbe9626b66e7a0fc18960f137af68ca909ddbb56f9e2dbbb63"
+    },
+    {
+      "path": "/workspace/work/t89-reentrant.RED.log",
+      "bytes": 4173,
+      "sha256": "c3985a9ec47b72be90bff686e3a103c9b892487904f14820b68c744904461d76"
+    },
+    {
+      "path": "/workspace/work/t89-focused-final.GREEN.log",
+      "bytes": 1697,
+      "sha256": "b28f6e5c2808fb3686b8296d3bb683a13b98cd28d5045e8a1f8bc85ffb971027"
+    },
+    {
+      "path": "/workspace/work/t89-ui-types-final.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/work/t89-native-browser.attempt1.log",
+      "bytes": 3583,
+      "sha256": "7904ce6471b67a4046118bde839d4ab353a70a2a71eb46de0562e61588e7ff01"
+    },
+    {
+      "path": "/workspace/work/t89-native-browser.attempt2.log",
+      "bytes": 5756,
+      "sha256": "4f3907dd79c9510d685e72b3f346f4e88de90dce87f3b23f363aec85937b8d14"
+    }
+  ],
+  "patches": [
+    {
+      "path": "/workspace/work/t89-full-source.patch",
+      "bytes": 39093,
+      "sha256": "41c1d78450107a7078f65e7b7e0862d858d24c794650f6ca436476fd4c5dbceb"
+    },
+    {
+      "path": "/workspace/work/t89-after-initial12.patch",
+      "bytes": 6042,
+      "sha256": "3326aeee47cd707a52c556574b4b6fd3f03e3a1ae304e7f0d86098c611a9a44f"
+    }
+  ],
+  "limits": [
+    "Ordinary hidden/foreground-resume policy has focused controller tests; headless native tabs all report visible. No physical background-tab/device qualification is claimed.",
+    "BFCache was an actual native persisted pagehide/pageshow and retained-document return, using exact emitted meta bytes at an owned cacheable fixture prefix and omitting only Playwright disable-BFCache argument. Controlled file-helper lifecycle reentry is separately identified.",
+    "All effects were synthetic owned-origin local browser/test flows. No trading, production trust/deployment, outside messaging, SDK/dependency activation or full-suite execution occurred.",
+    "No App/main/Pages/catalog/CI/ledger edits or commits by this agent. Root enrollment and final combined source review/acceptance remain root-owned.",
+    "T38-E package/CI enrollment delta is still root-owned and must be reconciled after final source freeze."
+  ]
+}

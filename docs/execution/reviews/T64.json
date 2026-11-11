@@ -1,0 +1,174 @@
+{
+  "task": "T64",
+  "reviewer": "/root/review_delivery_docs",
+  "author": "/root/continue_chat",
+  "reviewedAt": "2026-11-02T12:03:31.688009+00:00",
+  "verdict": "APPROVE_FROZEN_TRACEABILITY_AND_PARTIAL_LOCAL_EVIDENCE_ONLY",
+  "reviewedFiles": [
+    {
+      "path": "docs/execution/assurance/README.md",
+      "bytes": 7100,
+      "sha256": "908365382437e8271f0b966fc0c002455258fc496ce5572523879a431bf9edc1"
+    },
+    {
+      "path": "docs/execution/assurance/attack-cases.json",
+      "bytes": 40932,
+      "sha256": "589c73990818c03acda9c07da3e4acd92462559592538f2acb685b8711bf0ee0"
+    },
+    {
+      "path": "docs/execution/assurance/evidence-manifest.json",
+      "bytes": 9229,
+      "sha256": "c5302835abdcef9fb37fdff6d69122eff65852066898ca2668b87a27165e2271"
+    },
+    {
+      "path": "docs/execution/drills/README.md",
+      "bytes": 3352,
+      "sha256": "7d640b3833be9ec528f3b90756df020b378a7bfa82070bb02849b609d0a46f8d"
+    },
+    {
+      "path": "docs/execution/drills/local-drills.json",
+      "bytes": 28349,
+      "sha256": "af8c9a807b3c29cc63b8fe02dcf3aaa2f7c28e52ca0c5d9f662470d6c5bccaa1"
+    },
+    {
+      "path": "docs/execution/drills/local-checks.tap",
+      "bytes": 3345,
+      "sha256": "180fa1623fa8b054be357b90ff608c0e592cce91e0c7766e60b94aff85bd403d"
+    }
+  ],
+  "method": "Read-only review of all30 exact ATTACK01 clauses/rows,94 code/assertion anchors and relevant assertion bodies,58-file bounded manifest,40 direct drill source inputs, four partial drills,13 retained offline TAP cases and historical T49 receipt/raw evidence. No shared edits or native rerun.",
+  "semanticFindings": [],
+  "confirmed": {
+    "attackRows": 30,
+    "status": "all specified",
+    "anchors": 94,
+    "referencedFiles": 33,
+    "allReferencedFilesInManifest": true,
+    "eachRowHasScopeResidualOwnerNextAction": true,
+    "legalRoleAndJurisdictionArrays": "empty/unassessed",
+    "operationalDrills": "all four partial synthetic only; no invented incident/deployment/advisory/reviewer or wallet send",
+    "selectedTAP": "13 exact numbered passing cases map to command sources and scenario/shared checks",
+    "historicalT49": "Exact native result, original20 pins and3 raw scratch hashes match original receipt. Fresh-key two-origin migration only; no actual lost-origin outage, real release provenance, maintained root or current changed-graph qualification.",
+    "authority": "No hash/status/reviewer labels confer mitigation, release, promotion or spending authority; trading disabled",
+    "localLinksAndDiffCheck": "passed"
+  },
+  "integrityObservation": {
+    "outerManifestFiles": 58,
+    "outerCurrentDrift": [],
+    "directSourceInputs": 40,
+    "directCurrentDrift": [],
+    "observation": "Zero drift independently observed twice during this review; final root stable-source check remains separate."
+  },
+  "verification": {
+    "command": [
+      "node",
+      "--import",
+      "./scripts/test-support/register-tsx.mjs",
+      "--test",
+      "--test-reporter=tap",
+      "packages/governance/test/assurance.test.mjs"
+    ],
+    "isolation": "ordinary default Node isolation",
+    "managedLocalIPCCapability": true,
+    "exitCode": 0,
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "log": "/workspace/work/t64-independent-assurance-default.tap",
+    "logSha256": "38866a0902c7d4b5130ce7dfffbf82e8db9acefe186a2741ba9fee5d24215f41",
+    "earlierAuthorStyleIsolationNoneLog": {
+      "path": "/workspace/work/t64-independent-assurance.tap",
+      "sha256": "26b50761e35dd83d56aaac76d5ed6456433f2415e73cf5bc5a7cea2f8facd15a",
+      "note": "Retained initial author-style run; ordinary default rerun is primary. No workaround inherited."
+    }
+  },
+  "anchorReceipt": {
+    "path": "/workspace/work/t64-independent-anchors.json",
+    "sha256": "e8b62d30378368e1396c203dfd7481d29dbd4a2e9098ef73fdacaa3d4a880326"
+  },
+  "pendingIntegrationVerification": [
+    {
+      "owner": "/root",
+      "scope": "T49 current dependency graph",
+      "state": "pending, not waived",
+      "recordedAt": "2026-11-02T11:59:58.614280+00:00",
+      "sourceComparisons": 20,
+      "unchanged": 11,
+      "drift": [
+        {
+          "path": "apps/web/src/journey/private-trade.ts",
+          "T49RecordedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "T64ObservedSha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400",
+          "currentSha256": "f9630ae2238a99dcebd646058ab15494a1c0583b9130e9f6f21249cdab1eac7f"
+        },
+        {
+          "path": "apps/web/src/journey/native-contracts.ts",
+          "T49RecordedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "T64ObservedSha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc",
+          "currentSha256": "4d5aed10251cddf2816ba54866332d6b7a2fdaa2d353814114f619e7a34daa4c"
+        },
+        {
+          "path": "apps/web/src/journey/presentation.ts",
+          "T49RecordedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "T64ObservedSha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d",
+          "currentSha256": "51ebee67f42f7e6fd19c1e0f482356ed85e94e6453ae906f2c3df495d0524108"
+        },
+        {
+          "path": "apps/web/src/journey/screen.ts",
+          "T49RecordedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "T64ObservedSha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e",
+          "currentSha256": "8515d1086ce98c122660e3412ba2570a7597f41e9b9cc21625b71ea05305f91e"
+        },
+        {
+          "path": "apps/web/src/journey/README.md",
+          "T49RecordedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "T64ObservedSha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82",
+          "currentSha256": "21bd3b91ac9762781f91938554a9b926069d14ce59e111654b7fedc8eca43dcc"
+        },
+        {
+          "path": "apps/web/test/journey-private-trade.test.mjs",
+          "T49RecordedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "T64ObservedSha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87",
+          "currentSha256": "1ad505d7254deb10a7e34550f1ba5b400cd7d7be3fc9b183ecd9835636433a18"
+        },
+        {
+          "path": "scripts/fixtures/journey-worker.mjs",
+          "T49RecordedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "T64ObservedSha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0",
+          "currentSha256": "5919e749a287449c7923495c29b5814a955cac6f0b64f487077fdf455d1758c9"
+        },
+        {
+          "path": "scripts/test-journey-browser.mjs",
+          "T49RecordedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "T64ObservedSha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603",
+          "currentSha256": "8412c2cc488d0f1c1d5c9f927ad45b96f0598c570f66b8086baea7296bb90e8f"
+        },
+        {
+          "path": "apps/web/src/ui/locale/en.ts",
+          "T49RecordedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "T64ObservedSha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+          "currentSha256": "47aa1b04595283bfa894ba1be114ecb99a6595b3234cfb603ecbcdba2f1996bb"
+        }
+      ],
+      "driftReceiptSha256": "84d4d19f780ef5eece299eacc8e7e817d480c439d0d11e4494db1eb236c010b7",
+      "action": "Preserve historical hashes/output. Record current changed hashes separately and review changed dependencies/appropriate target integration before reuse. A hash refresh cannot transfer historical execution. No native rerun during T67 edits."
+    },
+    {
+      "owner": "/root",
+      "scope": "final combined source and aggregate checks",
+      "state": "pending",
+      "action": "Bind stable final source and inventories; later document/manifest edits require checking their changed bytes."
+    }
+  ],
+  "T71HistoricalFailurePreserved": {
+    "qualificationSha256": "ef7f92a660180027e6adfdfad18de7bdf97ddc8614a3756fffc10296d895c277",
+    "unitLogSha256": "fdafb3fa39ce0ce1dc4ba685f2f999ad8d828c86fe5bd89cab64b5dfc1ab9050",
+    "rerun": false
+  },
+  "limits": [
+    "No whole-ATTACK mitigation/certification or complete G26 operational exercise.",
+    "No new native escrow, independent-provider consensus, anonymity, legal/crypto review, signing trust, physical device, deployed-origin or release acceptance."
+  ]
+}

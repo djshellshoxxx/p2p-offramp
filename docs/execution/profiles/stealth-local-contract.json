@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "status": "READY_OFFLINE_COMPARISON_ONLY",
+  "productionProfileApproved": false,
+  "reviewers": [],
+  "approvedRelease": null,
+  "wireInteroperability": "BLOCKED_PUBLISHED_REFERENCE_SDK_ENCODING_CONFLICT",
+  "defaultProfileId": null,
+  "autoDetection": false,
+  "fundingAuthority": false,
+  "spendingAuthority": false,
+  "networkActivation": false,
+  "curve": "secp256k1",
+  "schemeId": 1,
+  "fieldPrimeHex": "fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f",
+  "scalarOrderHex": "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+  "profiles": [
+    {
+      "id": "local-erc5564-reference-xy64-v1",
+      "hashPreimage": "SEC1-uncompressed-point-with-leading04-REMOVED: x32BE||y32BE",
+      "preimageBytes": 64
+    },
+    {
+      "id": "local-scopelift-ecdh33-comparison-v1",
+      "hashPreimage": "SEC1-compressed-point: prefix02or03||x32BE",
+      "preimageBytes": 33
+    }
+  ],
+  "common": {
+    "hash": "Keccak-256 (not FIPS SHA3-256)",
+    "hashScalar": "unsigned big-endian256-bit",
+    "hashScalarExceptionalPolicy": "Refuse0or>=n for this limited local profile; do not claim general interoperability",
+    "tag": "first digest byte",
+    "stealthPoint": "Pspend + hashScalar*G; reject infinity",
+    "address": "last20bytes(Keccak256(x32BE||y32BE of stealth point))",
+    "scalarInputBytes": 32,
+    "scalarRange": "1<=k<n",
+    "pointInputBytes": 33,
+    "pointValidation": [
+      "compressed SEC1 prefix02or03",
+      "x<p",
+      "on curve",
+      "not infinity"
+    ],
+    "senderMetaAddressBytes": [
+      33,
+      66
+    ],
+    "uriPrefix": "st:eth:0x",
+    "uriCharacterCounts": [
+      75,
+      141
+    ],
+    "recipientKeyBoundary": "view-only purpose handle + distinct spending PUBLIC point; equal/single-key recipient unsupported except public fixtures",
+    "productSpendingSecretInput": false,
+    "productStealthPrivateKeyExport": false,
+    "testEntropy": "explicit local-test-only deterministic public fixtures",
+    "normalEntropy": "fresh CSPRNG scalar; never vault/wallet-signature-derived",
+    "hexEncoding": "Strict lower-case ASCII hex; no whitespace, percent escapes or Unicode lookalikes",
+    "maxEntropyAttempts": 128
+  },
+  "announcer": {
+    "abiSourceId": "erc5564-abi",
+    "announcementTopic0": "0x5f0eab8057630ba7676c49b4f21a0231414e79474595be8e4c432fbf6bf0f4e7",
+    "topicCount": 4,
+    "topicBytes": 32,
+    "ephemeralPublicKeyBytes": 33,
+    "localMetadataBytes": {
+      "min": 1,
+      "max": 256
+    },
+    "localMaxCanonicalAbiDataBytes": 448,
+    "metadataSemantics": "first byte tag; remaining opaque, not payment proof",
+    "reportedSingleton": "0x55649E01B5Df198D18D95b5cc5051630cfD45564",
+    "selectedNetwork": null,
+    "verifiedRuntimeCodeHash": null
+  },
+  "scanner": {
+    "mode": "offline synthetic fixtures only",
+    "maxBlocksPerRequest": 2000,
+    "maxLogsPerPage": 1000,
+    "maxCandidateDerivationsPerJob": 10000,
+    "checkpointAdvancesOnlyAfterCompleteAtomicPages": true,
+    "candidateAuthority": "none",
+    "selectedReorgWindow": null,
+    "nativeBalanceOrSpendProof": false
+  },
+  "vectorFile": "stealth-comparison-vectors.json",
+  "vectorSha256": "a56fd329e6dfcce3077d7c0e9f557e3b48b5fb53591b3123deaeec6111770276",
+  "missingBeforeAnyActivation": [
+    "Resolve exact shared-secret wire encoding with independent implementations",
+    "Select network/announcer runtime identity and native anchors/reorg policy",
+    "Bind new unfunded signed terms",
+    "External-wallet spend/recovery/gas workflow without spending-secret collection",
+    "Scoped independent crypto/privacy/interoperability review"
+  ]
+}

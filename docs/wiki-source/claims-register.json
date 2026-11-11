@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "sourceCommit": "f25de72b1ddba5ada4ad0a88da5540178a6b65df",
+  "reviewers": [],
+  "approvedRelease": null,
+  "claims": [
+    {
+      "version": 1,
+      "id": "vault-at-rest",
+      "capability": "vault",
+      "exactCopy": "Selected local records use authenticated encryption at rest.",
+      "preconditions": [
+        "Matching current configuration and maintained scope review required."
+      ],
+      "exclusions": [
+        "Unlocked origin, weak passphrases, backups and OS compromise remain risks."
+      ],
+      "evidencePaths": [
+        "packages/storage/src/vault-crypto.ts",
+        "packages/storage/test/vault-crypto.test.mjs"
+      ],
+      "status": "proposed",
+      "reviewedAt": null
+    },
+    {
+      "version": 1,
+      "id": "message-content",
+      "capability": "messaging",
+      "exactCopy": "Local test messaging encrypts selected message content.",
+      "preconditions": [
+        "Matching current configuration and maintained scope review required."
+      ],
+      "exclusions": [
+        "Relay metadata and recipient copies remain visible; no forward secrecy claim."
+      ],
+      "evidencePaths": [
+        "packages/nostr-crypto/src/nip44.ts",
+        "packages/nostr-crypto/test/nip44.test.mjs"
+      ],
+      "status": "proposed",
+      "reviewedAt": null
+    },
+    {
+      "version": 1,
+      "id": "selected-route",
+      "capability": "routing",
+      "exactCopy": "Only explicitly verified selected channels may show private routing.",
+      "preconditions": [
+        "Matching current configuration and maintained scope review required."
+      ],
+      "exclusions": [
+        "Wallet routing, DNS, OS, extensions and timing correlation remain separate."
+      ],
+      "evidencePaths": [
+        "packages/transport/src/policy.ts",
+        "packages/transport/test/policy.test.mjs"
+      ],
+      "status": "proposed",
+      "reviewedAt": null
+    },
+    {
+      "version": 1,
+      "id": "stealth-local",
+      "capability": "stealth",
+      "exactCopy": "Local stealth reduces casual discovery only.",
+      "preconditions": [
+        "No approved runtime claim."
+      ],
+      "exclusions": [
+        "No protection against OS, origin or forensic inspection."
+      ],
+      "evidencePaths": [],
+      "status": "unsupported",
+      "reviewedAt": null
+    },
+    {
+      "version": 1,
+      "id": "location-scope",
+      "capability": "location",
+      "exactCopy": "Location privacy is unsupported without a separately reviewed route.",
+      "preconditions": [
+        "No approved runtime claim."
+      ],
+      "exclusions": [
+        "DNS, wallet, OS and timing correlation remain outside this scope."
+      ],
+      "evidencePaths": [],
+      "status": "unsupported",
+      "reviewedAt": null
+    },
+    {
+      "version": 1,
+      "id": "logical-removal",
+      "capability": "deletion",
+      "exactCopy": "Selected local records can be logically removed.",
+      "preconditions": [
+        "No approved runtime claim."
+      ],
+      "exclusions": [
+        "Backups, other profiles, browser remnants and physical erasure remain outside scope."
+      ],
+      "evidencePaths": [],
+      "status": "unsupported",
+      "reviewedAt": null
+    }
+  ],
+  "evidence": [
+    {
+      "path": "packages/storage/src/vault-crypto.ts",
+      "sha256": "d2247533cec879d4017d619ccdba8812b7c109157b216b8ea64c104bd3500513"
+    },
+    {
+      "path": "packages/storage/test/vault-crypto.test.mjs",
+      "sha256": "2e18a38eb8dd74ee040415c77ee84ba96b38859c206c9b1ef20c9ff738caa9c9"
+    },
+    {
+      "path": "packages/nostr-crypto/src/nip44.ts",
+      "sha256": "20cfd9cd8585ca0a5afdd97c9754418c45874fbb70cb9002fa1a4c6e9997d643"
+    },
+    {
+      "path": "packages/nostr-crypto/test/nip44.test.mjs",
+      "sha256": "96da3d343c6db2ca866ff033e282038620added92b1be4d2d41c88fbe801cd8d"
+    },
+    {
+      "path": "packages/transport/src/policy.ts",
+      "sha256": "76afd8050a7e32d9a70713c0c42ef3df8c2ea775e562cfd9ab88a11e8d429eb6"
+    },
+    {
+      "path": "packages/transport/test/policy.test.mjs",
+      "sha256": "f915d27e10a90bf01f2805607350bd66bcdaf471f87656b1a323d8053538c5a7"
+    }
+  ],
+  "copySource": {
+    "path": "apps/web/src/ui/locale/en.ts",
+    "sha256": "fca621bcb0eb8e64e9ff30df5be424980a015473745beec8e815a4f7284667ed"
+  },
+  "copyKeys": [
+    {
+      "key": "privacy.authenticated",
+      "claimId": "vault-at-rest",
+      "sourceTextSha256": "0b2eb6190e4454c6edf2d948a381fbdf2487a3eb929693de6e2052f796f49a12"
+    },
+    {
+      "key": "privacy.messaging",
+      "claimId": "message-content",
+      "sourceTextSha256": "1e3e14dc10812048e508bf3edd972a5f22e5e88b590bb65c5dc13ba7b226489e"
+    },
+    {
+      "key": "privacy.privateRoute",
+      "claimId": "selected-route",
+      "sourceTextSha256": "eeef3bdbfabbd9ecbd82d2f19148e68f63aa82e4f4e2d72a6b3d82a0320cf855"
+    },
+    {
+      "key": "privacy.unsupported",
+      "claimId": "stealth-local",
+      "sourceTextSha256": "54324658e2eba91c826cb01a802414559c8b8b713b28b4df68cd5075611cf1b5"
+    },
+    {
+      "key": "shell.privacyHelp",
+      "claimId": "location-scope",
+      "sourceTextSha256": "1afe1b4cfbd64e2086307010231fceb47faefcd60699641216c954ac3493c47c"
+    },
+    {
+      "key": "tradePage.deleteFromProfile",
+      "claimId": "logical-removal",
+      "sourceTextSha256": "e0180afacc3a34b1aa57966f21130740fca3fd88f518b86b82986f7df6743758"
+    }
+  ]
+}
