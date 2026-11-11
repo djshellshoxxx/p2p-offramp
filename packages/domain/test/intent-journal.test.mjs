@@ -329,3 +329,34 @@ test('D9: restored known-hash EVM hold treats account casing identically across 
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+test('D9: restored pending nonce holds stay scoped to the EVM network, not reused within that network',async()=>{
+ const nonce='17',hash='0x'+'ac'.repeat(32),lower='0x'+'ab'.repeat(20);
+ const s=await setup(),original=intent({account:lower,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent network scoped recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent network scoped recovery'));
+ const fresh=journal(freshVault,session);
+ try{
+  const separateNetwork={...binding,networkId:'evm:10',tradeId:'separate-network-trade'};
+  const another= intent({binding:separateNetwork,account:lower,submission:{chain:'evm',hash:null,nonce}});
+  val(await fresh.reserve(another,0));
+  assert.deepEqual(val(await fresh.unresolved(binding,lower)),[{...original,state:'pending',submission:{chain:'evm',hash,nonce},updatedAt:original.updatedAt}]);
+  assert.deepEqual(val(await fresh.unresolved(separateNetwork,lower)),[another]);
+  const writes=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,deploymentId:'another-escrow-same-network',tradeId:'different-trade'},
+   account:lower,submission:{chain:'evm',hash:null,nonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,writes,'same-network recovered pending nonce must not be displaced');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'restored journal does not provide a wallet send capability');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
