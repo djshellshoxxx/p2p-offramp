@@ -43,12 +43,10 @@ import {
 } from './support.mjs';
 
 const ALLOWED = new Set(['getGenesisHash', 'getMultipleAccounts', 'getBlock']);
-const seenMethods = new Set();
 async function readWith(kind, options = {}) {
   const s = setup(kind, options);
   try {
     const result = await s.reader.read(s.binding, request(), s.terms);
-    for (const call of s.calls) seenMethods.add(call.method);
     return { ...s, result };
   } finally {
     s.reader.dispose();
@@ -217,6 +215,19 @@ test('rent-shortfall-ok', async () => {
   assert.equal(unknown.custody.surplus, null);
   const surplus = ok((await readWith('native', { world: { lamports: 500_000_000 + RENT_MIN + 9 } })).result);
   assert.equal(surplus.custody.surplus, '9');
+  // Spec: 'rent-unknown' whenever m is null (paid or not); 'rent-shortfall' only while unpaid.
+  const paid = { escrow: { state: 1, paid: 1 } };
+  const paidUnknown = ok(
+    (
+      await readWith('native', {
+        world: paid,
+        mutate: world => setAccount(world, RENT, account(rentBytes(6960, '000000000000f83f'), SYSVAR)),
+      })
+    ).result,
+  );
+  assert.deepEqual(paidUnknown.custody.payoutBlockedBy, ['rent-unknown']);
+  const paidLow = ok((await readWith('native', { world: { ...paid, lamports: 1000 } })).result);
+  assert.deepEqual(paidLow.custody.payoutBlockedBy, []);
 });
 
 test('floor-second-read', async () => {
@@ -279,9 +290,19 @@ test('rentEpoch-getter-untouched', async () => {
 });
 const setupWorld = setup('native').world;
 
-test('methods⊆{getGenesisHash,getMultipleAccounts,getBlock}', () => {
-  assert.ok(seenMethods.size > 0);
-  for (const method of seenMethods) assert.ok(ALLOWED.has(method), method);
+test('methods⊆{getGenesisHash,getMultipleAccounts,getBlock}', async () => {
+  const seen = new Set();
+  for (const kind of ['native', 'spl']) {
+    const s = setup(kind);
+    try {
+      ok(await s.reader.read(s.binding, request(), s.terms));
+      ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+      for (const call of s.calls) seen.add(call.method);
+    } finally {
+      s.reader.dispose();
+    }
+  }
+  assert.deepEqual([...seen].sort(), [...ALLOWED].sort());
 });
 
 // ---- identity and anchor integrity ----
@@ -300,10 +321,11 @@ test('INTEGRITY_FAILURE: program-{owner,exec,pointer,tag}', async () => {
 
 test('INTEGRITY_FAILURE: programdata-{exec,some,some-zero,hash,trimmed-pin,slot>S,oversize}', async () => {
   const data =
-    (bytes, executable = false) =>
+    (bytes, executable = false, owner = LOADER) =>
     world =>
-      setAccount(world, PROGRAM_DATA, account(bytes, LOADER, { executable }));
+      setAccount(world, PROGRAM_DATA, account(bytes, owner, { executable }));
   await integrity('native', data(programDataBytes(), true));
+  await integrity('native', data(programDataBytes(), false, key('other-loader')));
   await integrity('native', data(programDataBytes({ option: 1 })));
   const someZero = programDataBytes({ option: 1 });
   someZero.fill(0, 13, 45);
@@ -330,12 +352,43 @@ test('INTEGRITY_FAILURE: value-len', async () => {
   await failsWith('INTEGRITY_FAILURE', 'native', { handle: long });
 });
 
+/** Move the whole world to slot `at` (context, Clock, block parent), so only slot rules can reject it. */
+const consistentAt = at => world => {
+  world.slot = at;
+  setAccount(world, CLOCK, account(clockBytes(at), SYSVAR));
+  world.block = { ...world.block, parentSlot: at - 1 };
+};
+
 test('INTEGRITY_FAILURE: slot-{unsafe,float,below-floor}', async () => {
-  for (const slot of [2 ** 53, 400.5, -1, '400']) {
+  for (const slot of [400.5, -1, '400']) {
     await integrity('native', world => {
       world.slot = slot;
     });
   }
+  // Clock and parent agree with 2^53, so only the safe-integer rule rejects it.
+  await integrity('native', consistentAt(2 ** 53));
+  // A self-consistent world one slot below an accepted floor: only the client-side floor rejects it.
+  const s = setup('native');
+  try {
+    ok(await s.reader.read(s.binding, request(), s.terms));
+    consistentAt(SLOT - 1)(s.world);
+    error(await s.reader.read(s.binding, request(), s.terms), 'INTEGRITY_FAILURE');
+    assert.ok(ok((await readWith('native', { mutate: consistentAt(SLOT - 1) })).result), 'fresh reader accepts');
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+test('anchor-boundaries-{blockHeight=S,timestamp-0,slot-0}', async () => {
+  assert.ok(ok((await readWith('native', { mutate: world => (world.block.blockHeight = SLOT) })).result));
+  const zeroTime = world => setAccount(world, CLOCK, account(clockBytes(SLOT, 0), SYSVAR));
+  assert.equal(ok((await readWith('native', { mutate: zeroTime })).result).live.timestampSeconds, '0');
+  const genesisSlot = world => {
+    setAccount(world, PROGRAM_DATA, account(programDataBytes({ slot: 0 }), LOADER));
+    world.block = { ...world.block, blockHeight: 0, parentSlot: 0 };
+  };
+  const zero = ok((await readWith('native', { world: { slot: 0 }, mutate: genesisSlot })).result);
+  assert.equal(zero.observation.anchor.height, '0');
 });
 
 test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
@@ -374,13 +427,13 @@ test('INTEGRITY_FAILURE: getBlock-{null,noncanonical,parent≥S}', async () => {
   await integrity('native', blockWith({ blockHeight: '390' }));
 });
 
-test('INTEGRITY_FAILURE: recheck-changed', async () => {
-  let count = 0;
-  const handle = input =>
-    input.method === 'getBlock' && ++count === 2
-      ? { blockhash: key('other'), blockHeight: SLOT - 10, parentSlot: SLOT - 1 }
-      : undefined;
-  await failsWith('INTEGRITY_FAILURE', 'native', { handle });
+test('INTEGRITY_FAILURE: recheck-changed-{hash,height,parent}', async () => {
+  const second = { blockhash: key('blockhash'), blockHeight: SLOT - 10, parentSlot: SLOT - 1 };
+  for (const changes of [{ blockhash: key('other') }, { blockHeight: SLOT - 11 }, { parentSlot: SLOT - 2 }]) {
+    let count = 0;
+    const handle = input => (input.method === 'getBlock' && ++count === 2 ? { ...second, ...changes } : undefined);
+    await failsWith('INTEGRITY_FAILURE', 'native', { handle });
+  }
 });
 
 test('INTEGRITY_FAILURE: genesis-flip', async () => {
@@ -414,10 +467,20 @@ test('INTEGRITY_FAILURE: escrow-{other-owner,system-data,exec,bump,seller,nonce}
   await control('native', (world, terms) =>
     setAccount(world, escrowOf(world), account(escrowBytes(terms), PROGRAM, { lamports: 6e8 })),
   );
-  await integrity('native', (world, terms) =>
-    setAccount(world, escrowOf(world), account(escrowBytes(terms), key('other-program'))),
-  );
-  await integrity('native', (world, terms) => setAccount(world, escrowOf(world), account(escrowBytes(terms), SYSTEM)));
+  // Funded lamports, so the owner is the only thing wrong.
+  for (const kind of ['native', 'spl']) {
+    for (const owner of [key('other-program'), SYSTEM]) {
+      await integrity(kind, (world, terms) =>
+        setAccount(world, escrowOf(world), account(escrowBytes(terms), owner, { lamports: 6e8 })),
+      );
+    }
+  }
+  // Only a System-owned empty account is a pre-init donation.
+  for (const owner of [PROGRAM, key('other-program')]) {
+    await integrity('native', world =>
+      setAccount(world, escrowOf(world), account(new Uint8Array(0), owner, { lamports: 5 })),
+    );
+  }
   await integrity('native', world => setAccount(world, escrowOf(world), account(new Uint8Array(1), SYSTEM)));
   await integrity('native', (world, terms) =>
     setAccount(world, escrowOf(world), account(escrowBytes(terms), PROGRAM, { executable: true })),
@@ -436,6 +499,11 @@ test('INTEGRITY_FAILURE: escrow-{other-owner,system-data,exec,bump,seller,nonce}
 test('CONFLICT: nonce-reused', async () => {
   const s = await failsWith('CONFLICT', 'native', { mutate: replaceEscrow({ termsHash: 'cd'.repeat(32) }) });
   assert.equal(s.calls.length, 2);
+  // Spec order: a seller, nonce or bump mismatch is INTEGRITY_FAILURE even with a foreign terms_hash.
+  const foreign = { termsHash: 'cd'.repeat(32) };
+  await integrity('native', replaceEscrow({ ...foreign, seller: key('other-seller') }));
+  await integrity('native', replaceEscrow({ ...foreign, sellerNonce: 'ab'.repeat(32) }));
+  await integrity('native', replaceEscrow({ ...foreign, escrowBump: 1 }));
 });
 
 test('INTEGRITY_FAILURE: field-{buyer,amount,deadline,mint,kind,tp}', async () => {
@@ -444,7 +512,12 @@ test('INTEGRITY_FAILURE: field-{buyer,amount,deadline,mint,kind,tp}', async () =
   await integrity('native', replaceEscrow({ buyer: key('other-buyer') }));
   await integrity('native', replaceEscrow({ amount: 500_000_001 }));
   await integrity('native', replaceEscrow({ deadline: CHAIN_TIME + 3601 }));
-  await integrity('spl', replaceEscrow({ mint: key('other-mint') }));
+  // The vault agrees with the foreign mint, so only the escrow-vs-terms mint check rejects it.
+  await integrity('spl', (world, terms) => {
+    replaceEscrow({ mint: key('other-mint') })(world, terms);
+    const vault = tokenBytes({ mint: key('other-mint'), owner: world.escrow.address, amount: 25_000_000 });
+    setAccount(world, vaultOf(world), account(vault, TOKENKEG));
+  });
   await integrity('native', replaceEscrow({ kind: 2, mint: MINT, tokenProgram: TOKENKEG, vaultBump: 255 }));
   await integrity('spl', replaceEscrow({ tokenProgram: TOKEN_2022 }));
   await integrity('spl', replaceEscrow({ vaultBump: 1 }));
@@ -478,6 +551,10 @@ test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,clos
 test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   await control('spl', world => setAccount(world, MINT, account(mintBytes(), TOKENKEG)));
   await integrity('spl', world => setAccount(world, escrowOf(world), null));
+  await integrity('spl', world => {
+    setAccount(world, escrowOf(world), null);
+    setAccount(world, vaultOf(world), account(new Uint8Array(0), TOKENKEG));
+  });
   await integrity('spl', world => setAccount(world, MINT, account(mintBytes({ decimals: 9 }), TOKENKEG)));
   await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), TOKEN_2022)));
   await integrity('spl', world => setAccount(world, MINT, null));
@@ -624,6 +701,34 @@ test('ctor-0/60001', () => {
   }
   new SolanaChainReader({ ...base, timeoutMs: 60_000 }).dispose();
   new SolanaChainReader({ ...base, timeoutMs: 1 }).dispose();
+});
+
+test('floor-max-under-concurrent-reads', async () => {
+  let release;
+  const gate = new Promise(resolve => (release = resolve));
+  let heldOnce = false;
+  // Read A anchors at SLOT and stalls in getBlock while read B completes at a later slot.
+  const handle = async input => {
+    if (input.method !== 'getBlock' || input.params[0] !== SLOT) return undefined;
+    if (!heldOnce) {
+      heldOnce = true;
+      await gate;
+    }
+    return { blockhash: key('blockhash'), blockHeight: SLOT - 10, parentSlot: SLOT - 1 };
+  };
+  const s = setup('native', { handle });
+  try {
+    const first = s.reader.read(s.binding, request(), s.terms);
+    while (!heldOnce) await new Promise(resolve => setImmediate(resolve));
+    consistentAt(SLOT + 50)(s.world);
+    ok(await s.reader.read(s.binding, request(), s.terms));
+    release();
+    ok(await first);
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+    assert.equal(s.calls.at(-4).params[1].minContextSlot, SLOT + 50, 'floor = max, never lowered by A');
+  } finally {
+    s.reader.dispose();
+  }
 });
 
 test('late-response-no-floor-raise', async () => {

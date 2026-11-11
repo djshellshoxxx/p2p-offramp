@@ -108,6 +108,9 @@ test('mint-uninitialized', () => {
   const badTag = mintBytes();
   badTag.set(u32(2), 46);
   integrity(() => decodeMint(badTag));
+  const badAuthority = mintBytes();
+  badAuthority.set(u32(2), 0);
+  integrity(() => decodeMint(badAuthority));
 });
 
 test('clock-capture', () => {

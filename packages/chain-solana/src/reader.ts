@@ -174,8 +174,8 @@ function nativeCustody(escrow: EscrowAccountV1, entry: object, minimum: bigint |
   const principal = escrow.paidOut ? 0n : BigInt(escrow.amountBaseUnits);
   if (!escrow.paidOut && lamports <= principal) return fail();
   const blockedBy: ('rent-shortfall' | 'rent-unknown')[] = [];
-  // Payout keeps the rent reserve; blockers only matter while a payout is still to happen.
-  if (!escrow.paidOut && minimum === null) blockedBy.push('rent-unknown');
+  // Spec: an unknown rent minimum is always reported; a shortfall only while a payout is still to happen.
+  if (minimum === null) blockedBy.push('rent-unknown');
   if (!escrow.paidOut && minimum !== null && lamports - principal < minimum) blockedBy.push('rent-shortfall');
   const spare = minimum === null ? null : lamports - principal - minimum;
   return {
