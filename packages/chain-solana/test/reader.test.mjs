@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTradeAuthority } from '../../domain/src/authority.ts';
+import { SolanaFailure } from '../src/codec.ts';
 import { MAX_RPC_READS, payoutRegressed, SolanaChainReader } from '../src/reader.ts';
 import {
   account,
@@ -517,22 +518,38 @@ test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
 // so only cost tells the two apart: an uncapped reader would regex-scan, allocate and decode ~48 MB first.
 test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   const huge = 'A'.repeat(64 * 1024 * 1024);
-  for (const index of [2, 3]) {
+  // Every account index the reader visits, per kind; `absent` drops the escrow so index 4 is the bare vault check.
+  const cases = [
+    ...[0, 1, 2, 3, 4].map(index => ['native', index, false]),
+    ...[3, 4, 5].map(index => ['spl', index, false]),
+    ['spl', 4, true],
+  ];
+  for (const [kind, index, absent] of cases) {
+    let world;
     const started = performance.now();
-    await failsWith('INTEGRITY_FAILURE', 'native', {
+    await failsWith('INTEGRITY_FAILURE', kind, {
+      mutate: captured => {
+        world = captured;
+        if (absent) setAccount(world, escrowOf(world), null);
+      },
       handle: input => {
         if (input.method !== 'getMultipleAccounts') return undefined;
-        const value = input.params[0].map(address => structuredClone(setupWorld.accounts.get(address)));
-        value[index].data = [huge, 'base64'];
+        const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
+        value[index] = { ...value[index], data: [huge, 'base64'] };
         return { context: { slot: SLOT }, value };
       },
     });
-    assert.ok(performance.now() - started < 250, `account ${index} over-cap data must be refused before decoding`);
+    const label = `${kind}${absent ? ' (absent escrow)' : ''} account ${index}`;
+    assert.ok(performance.now() - started < 250, `${label} over-cap data must be refused before decoding`);
   }
 });
 
 test('INTEGRITY_FAILURE: space-mismatch', async () => {
   await integrity('native', world => setAccount(world, CLOCK, { ...world.accounts.get(CLOCK), space: 41 }));
+  // A present `space` must be the number itself: no string, null, bigint or boolean stands in for it.
+  for (const space of ['40', null, 40n, true]) {
+    await integrity('native', world => setAccount(world, CLOCK, { ...world.accounts.get(CLOCK), space }));
+  }
   const { space: _, ...noSpace } = setupWorld.accounts.get(CLOCK);
   assert.ok(ok((await readWith('native', { mutate: world => setAccount(world, CLOCK, noSpace) })).result));
 });
@@ -551,6 +568,13 @@ test('INTEGRITY_FAILURE: getBlock-{null,noncanonical,parent≥S}', async () => {
     world.block = changes === null ? null : { ...world.block, ...changes };
   };
   await integrity('native', blockWith(null));
+  // The fake must answer with a real JSON-RPC null (spreading null gives `{}`), or the null branch goes untested.
+  const nullBlock = setup('native', { mutate: blockWith(null) });
+  assert.equal(await nullBlock.rpc.request({ method: 'getBlock', params: [] }), null);
+  nullBlock.reader.dispose();
+  await integrity('native', world => {
+    world.block = {};
+  });
   await integrity('native', blockWith({ blockhash: `1${key('blockhash')}` }));
   await integrity('native', blockWith({ parentSlot: SLOT }));
   await integrity('native', blockWith({ blockHeight: SLOT + 1 }));
@@ -672,6 +696,15 @@ test('INTEGRITY_FAILURE: native-lamports-{≤amount,unsafe}', async () => {
   await integrity('native', world => setAccount(world, RENT, null));
   await integrity('native', world => setAccount(world, RENT, account(rentBytes(), key('not-sysvar'))));
   await integrity('native', world => setAccount(world, RENT, account(rentBytes(), SYSVAR, { executable: true })));
+  // Spec §5: Rent is checked even when no escrow exists (the state in which the app decides to fund).
+  const absent = rent => world => {
+    setAccount(world, escrowOf(world), null);
+    setAccount(world, RENT, rent);
+  };
+  await control('native', absent(account(rentBytes(), SYSVAR)));
+  await integrity('native', absent(null));
+  await integrity('native', absent(account(rentBytes(), key('not-sysvar'))));
+  await integrity('native', absent(account(rentBytes(), SYSVAR, { executable: true })));
 });
 
 test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,close,uninit}', async () => {
@@ -830,6 +863,102 @@ test('four-held-cancel-limit-no-followups', async () => {
   holding = false;
   ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
   s.reader.dispose();
+});
+
+// Spec §5 pre-RPC step 1 and §8: validateLive honours its signal exactly like read().
+test('validateLive-signal-{pre-aborted,in-flight,four-held}', async () => {
+  const aborted = new AbortController();
+  aborted.abort();
+  const idle = setup('native');
+  error(await idle.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, aborted.signal), 'CANCELLED');
+  assert.equal(idle.calls.length, 0);
+  idle.reader.dispose();
+
+  const held = [];
+  let holding = true;
+  const s = setup('native', {
+    options: { timeoutMs: 5_000 },
+    handle: input =>
+      holding && input.method === 'getBlock' ? new Promise(resolve => held.push(resolve)) : undefined,
+  });
+  try {
+    const controllers = Array.from({ length: MAX_RPC_READS }, () => new AbortController());
+    const jobs = controllers.map(c => s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, c.signal));
+    while (held.length < MAX_RPC_READS) await new Promise(resolve => setImmediate(resolve));
+    const started = performance.now();
+    controllers.forEach(controller => controller.abort());
+    for (const job of jobs) error(await job, 'CANCELLED');
+    assert.ok(performance.now() - started < 1_000, 'in-flight abort cancels without waiting for the timeout');
+    // Slots are freed only when the physical work settles, as in chain-evm.
+    error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'LIMIT_EXCEEDED');
+    holding = false;
+    for (const resolve of held) resolve({ ...s.world.block });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(s.calls.filter(call => call.method === 'getBlock').length, MAX_RPC_READS, 'no follow-up reads');
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+// Spec §5: a response is read only through data descriptors, so even its `then` is never looked up. A provider
+// that hides a rejecting `then` behind its own promise resolution must not pick the read's error code.
+test('response-then-never-adopted', async () => {
+  const s = setup('native');
+  const base = s.rpc;
+  const reads = [];
+  const rpc = {
+    async request(input) {
+      const real = await base.request(input);
+      if (input.method !== 'getMultipleAccounts' && input.method !== 'getBlock') return real;
+      const counter = { method: input.method, count: 0 };
+      reads.push(counter);
+      const response = { ...real };
+      Object.defineProperty(response, 'then', {
+        enumerable: false,
+        get() {
+          // The first lookup is this fake's own async return; any later one is the reader adopting the object.
+          return ++counter.count === 1 ? undefined : (_, reject) => reject(new SolanaFailure('WRONG_CHAIN'));
+        },
+      });
+      return response;
+    },
+  };
+  const reader = new SolanaChainReader({ rpc, registry: s.registry, now: () => 1 });
+  try {
+    ok(await reader.read(s.binding, request(), s.terms));
+    ok(await reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+    assert.deepEqual(
+      reads.map(entry => entry.count),
+      [1, 1, 1, 1, 1, 1],
+      'the reader never looks up `then` on a response',
+    );
+  } finally {
+    reader.dispose();
+    s.reader.dispose();
+  }
+});
+
+// Spec §5 RPC step 1: the genesis must be canonical; the registry string is the only thing compared against it.
+test('UNSUPPORTED_PROVIDER: registry-noncanonical-{genesis,address}', async () => {
+  const broken = ['x', `0OIl${'1'.repeat(28)}`];
+  for (const genesis of broken) {
+    const s = setup('native', {
+      registryChanges: { network: { genesisHash: genesis, chainIdentity: genesis } },
+      mutate: world => {
+        world.genesis = genesis;
+      },
+    });
+    error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'UNSUPPORTED_PROVIDER');
+    assert.equal(s.calls.length, 0);
+    s.reader.dispose();
+  }
+  for (const address of broken) {
+    const s = setup('native', { registryChanges: { deployment: { address } } });
+    error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'UNSUPPORTED_PROVIDER');
+    assert.equal(s.calls.length, 0);
+    s.reader.dispose();
+  }
 });
 
 test('timeout-10ms', async () => {
@@ -1031,4 +1160,8 @@ test('payoutRegressed', async () => {
   assert.equal(payoutRegressed(pending, paid), false);
   assert.equal(payoutRegressed(later, paid), true, 'height decreased');
   assert.equal(payoutRegressed(paid, later), false);
+  // Escrows are never closed in v1 (state.rs), so a paid escrow that reads as absent is a regression too.
+  const absent = ok((await readWith('native', { mutate: world => setAccount(world, escrowOf(world), null) })).result);
+  assert.equal(payoutRegressed(paid, absent), true, 'paid to absent');
+  assert.equal(payoutRegressed(absent, paid), false);
 });

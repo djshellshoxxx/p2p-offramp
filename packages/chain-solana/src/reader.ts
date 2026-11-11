@@ -54,8 +54,10 @@ export interface SolanaEscrowSnapshot {
   readonly payout: 'not-applicable' | 'pending' | 'complete'; readonly custody: NativeCustody | SplCustody | null;
 }
 
+/** A provider result boxed by the reader, so no promise is ever resolved with (and no `then` read on) it. */
+interface Boxed { readonly value: unknown }
 interface Context {
-  readonly signal: AbortSignal; guard(): void; call(method: string, params: readonly unknown[]): Promise<unknown>;
+  readonly signal: AbortSignal; guard(): void; call(method: string, params: readonly unknown[]): Promise<Boxed>;
 }
 interface Account {
   readonly owner: string; readonly executable: boolean; readonly data: Uint8Array; readonly entry: object;
@@ -244,12 +246,13 @@ export class SolanaChainReader {
       signal: controller.signal, guard,
       call: async (method, params) => {
         guard();
-        let value: unknown;
-        // Transport failures and JSON-RPC errors alike become UNAVAILABLE; nothing from them is kept.
-        try { value = await this.#options.rpc.request({ method, params, signal: controller.signal }); } catch {
-          guard(); return fail('UNAVAILABLE');
-        }
-        guard(); return value;
+        let boxed: Boxed;
+        // Transport failures and JSON-RPC errors alike become UNAVAILABLE; nothing from them is kept. The value is
+        // boxed inside the try: returning it bare from this async arrow would look up and call its `then`.
+        try {
+          boxed = { value: await this.#options.rpc.request({ method, params, signal: controller.signal }) };
+        } catch { guard(); return fail('UNAVAILABLE'); }
+        guard(); return boxed;
       },
     };
     let onAbort!: () => void;
@@ -269,13 +272,13 @@ export class SolanaChainReader {
 
   /** Steps 1-2 plus identity: genesis, one finalized getMultipleAccounts at slot S >= floor. */
   async #anchor(ref: SolanaDeploymentRef, extraKeys: readonly string[], context: Context): Promise<Anchored> {
-    const genesis = await context.call('getGenesisHash', []);
+    const genesis = (await context.call('getGenesisHash', [])).value;
     if (genesis !== ref.network.genesisHash) return fail('WRONG_CHAIN');
     const floor = this.#floors.get(ref.network.id);
     const config = floor === undefined ? { commitment: 'finalized', encoding: 'base64' }
       : { commitment: 'finalized', encoding: 'base64', minContextSlot: floor };
     const keys = [ref.deployment.address, ref.programDataAddress, CLOCK_SYSVAR_ID, ...extraKeys];
-    const response = await context.call('getMultipleAccounts', [keys, config]);
+    const response = (await context.call('getMultipleAccounts', [keys, config])).value;
     const slot = safeInt(own(own(response, 'context'), 'slot'));
     if (floor !== undefined && slot < floor) return fail();
     const accounts = ownArray(own(response, 'value'), keys.length);
@@ -286,10 +289,10 @@ export class SolanaChainReader {
   /** Steps 3-5: the block at S twice, then the genesis again; only then is the floor raised. */
   async #confirm(ref: SolanaDeploymentRef, anchored: Anchored, context: Context): Promise<SolanaLiveAnchor> {
     const params = [anchored.slot, { commitment: 'finalized', transactionDetails: 'none', rewards: false }];
-    const first = block(await context.call('getBlock', params), anchored.slot);
-    const second = block(await context.call('getBlock', params), anchored.slot);
+    const first = block((await context.call('getBlock', params)).value, anchored.slot);
+    const second = block((await context.call('getBlock', params)).value, anchored.slot);
     if (first.hash !== second.hash || first.height !== second.height || first.parent !== second.parent) return fail();
-    if (await context.call('getGenesisHash', []) !== ref.network.genesisHash) return fail();
+    if ((await context.call('getGenesisHash', [])).value !== ref.network.genesisHash) return fail();
     context.guard();
     this.#floors.set(ref.network.id, Math.max(this.#floors.get(ref.network.id) ?? 0, anchored.slot));
     return { height: String(anchored.slot), hash: first.hash, blockHeight: String(first.height), ...anchored.identity };

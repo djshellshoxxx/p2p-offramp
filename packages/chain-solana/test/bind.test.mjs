@@ -17,6 +17,7 @@ import {
   SPL_2022_PROGRAM,
   vaultPda,
   WSOL,
+  WSOL_2022,
 } from './support.mjs';
 
 const registry = makeRegistry();
@@ -136,6 +137,9 @@ test(UNSUPPORTED, () => {
     'evm-runtime': { deployment: { runtime: { kind: 'evm-code', keccak256: '0'.repeat(64), upgradeable: false } } },
     protocol2: { deployment: { protocolVersion: 2 } },
     'unsupported-asset': { deployment: { supportedAssetIds: ['usd6'] } },
+    // Spec §5 RPC step 1 compares the live genesis with this string, so it must itself be canonical.
+    'genesis-noncanonical': { network: { genesisHash: 'x', chainIdentity: 'x' } },
+    'address-noncanonical': { deployment: { address: 'x' } },
   };
   for (const [name, changes] of Object.entries(registries))
     error(bind(sol(), undefined, makeRegistry(changes)), 'UNSUPPORTED_PROVIDER', name);
@@ -150,11 +154,14 @@ test(UNSUPPORTED, () => {
   };
   error(bind(sol(), undefined, throwing), 'UNSUPPORTED_PROVIDER');
   error(bind(spl({ tokenProgram: SPL_2022_PROGRAM })), 'UNSUPPORTED_PROVIDER');
-  const wsolRegistry = makeRegistry({
-    network: { assets: [{ id: 'wsol', kind: 'spl', address: WSOL, decimals: 9, transferPolicy: 'exact-transfer' }] },
-    deployment: { supportedAssetIds: ['wsol'] },
-  });
-  error(bind(spl({ mint: WSOL }), undefined, wsolRegistry), 'UNSUPPORTED_PROVIDER');
+  // Both wrapped-SOL mints (SPL Token and Token-2022) are refused by the program (network.rs), even when listed.
+  for (const mint of [WSOL, WSOL_2022]) {
+    const wsolRegistry = makeRegistry({
+      network: { assets: [{ id: 'wsol', kind: 'spl', address: mint, decimals: 9, transferPolicy: 'exact-transfer' }] },
+      deployment: { supportedAssetIds: ['wsol'] },
+    });
+    error(bind(spl({ mint }), undefined, wsolRegistry), 'UNSUPPORTED_PROVIDER');
+  }
   error(bind(spl({ tokenProgram: key('foreign-token-program') })), 'UNSUPPORTED_PROVIDER');
   error(bind(spl({ mint: key('unlisted-mint') })), 'UNSUPPORTED_PROVIDER');
   assert.equal(ok(bind(spl())).asset.address, MINT);

@@ -25,6 +25,7 @@ export const SYSVAR = 'Sysvar1111111111111111111111111111111111111';
 export const CLOCK = 'SysvarC1ock11111111111111111111111111111111';
 export const RENT = 'SysvarRent111111111111111111111111111111111';
 export const WSOL = 'So11111111111111111111111111111111111111112';
+export const WSOL_2022 = '9pan9bMn5HatX4EJdBwg9VgCa7Uz5HL8N1m5D3NdXejP';
 export const PROGRAM_DATA = base58Encode(findProgramAddress([decodeKey(PROGRAM)], decodeKey(LOADER)).address);
 export const NETWORK_ID = 'solana-localnet';
 export const DEPLOYMENT_ID = 'escrow-v1';
@@ -286,7 +287,8 @@ export function makeRpc(world, handle) {
           return { context: { apiVersion: '4.1.2', slot: world.slot }, value };
         }
         case 'getBlock':
-          return { ...world.block };
+          // A null world block is a JSON-RPC null result (spreading it would give `{}`).
+          return world.block === null ? null : { ...world.block };
         default:
           throw Error('SECRET provider diagnostics https://rpc.invalid');
       }
