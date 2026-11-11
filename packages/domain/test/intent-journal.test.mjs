@@ -399,3 +399,51 @@ test('D9: fresh-key recovery scopes EVM pending nonces to their account on the s
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+
+test('D9: two independent journals racing after fresh-key restore cannot double-reserve the same account/network nonce',async()=>{
+ const originalNonce='23',racedNonce='24',hash='0x'+'ef'.repeat(32);
+ const originalAccount='0x'+'ab'.repeat(20);
+ const s=await setup(),pending=intent({account:originalAccount,submission:{chain:'evm',hash:null,nonce:originalNonce}});
+ val(await s.journal.reserve(pending,0));
+ val(await s.journal.markSending(pending.intentId));
+ val(await s.journal.recordBroadcast(pending.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ let firstVault,secondVault,first,second,inspectorVault,inspector;
+ try{
+  const receipt=await backup.restore(bytes,pass,'independent raced recovery profile');
+  firstVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  secondVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  const firstSession=val(await firstVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  const secondSession=val(await secondVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  first=journal(firstVault,firstSession);second=journal(secondVault,secondSession);
+  const candidateA=intent({binding:{...binding,tradeId:'race-one'},account:originalAccount,submission:{chain:'evm',hash:null,nonce:racedNonce}});
+  const candidateB=intent({binding:{...binding,tradeId:'race-two'},account:originalAccount.toUpperCase().replace('0X','0x'),submission:{chain:'evm',hash:null,nonce:racedNonce}});
+  const results=await Promise.all([first.reserve(candidateA,0),second.reserve(candidateB,0)]);
+  assert.equal(results.filter(result=>result.ok).length,1,'only one independent restored session may commit the racing nonce');
+  assert.equal(results.filter(result=>!result.ok&&result.error.code==='CONFLICT').length,1,'loser must fail closed on its stale revision');
+  const winner=results[0].ok?candidateA:candidateB;
+  inspectorVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  const inspectionSession=val(await inspectorVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  inspector=journal(inspectorVault,inspectionSession);
+  assert.deepEqual(val(await inspector.unresolved(winner.binding,originalAccount)),[winner],'one winning reservation is durably discoverable');
+  const held=val(await inspector.unresolved(binding,originalAccount));
+  assert.equal(held.length,1);
+  assert.equal(held[0].intentId,pending.intentId);
+  assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);
+  assert.equal(held[0].submission.nonce,originalNonce);
+  const before=s.store.writes;
+  err(await inspector.reserve(intent({
+   binding:{...binding,tradeId:'race-third'},
+   account:originalAccount,submission:{chain:'evm',hash:null,nonce:racedNonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,before,'the losing nonce cannot be reserved again after reopening');
+  err(await inspector.markSending(pending.intentId),'CONFLICT');
+  assert.equal('send' in inspector,false,'fresh-key restoration does not give wallet signing or send authority');
+ }finally{
+  inspector?.dispose();inspectorVault?.dispose();first?.dispose();second?.dispose();
+  firstVault?.dispose();secondVault?.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
