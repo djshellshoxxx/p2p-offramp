@@ -1,0 +1,9 @@
+# Native readonly context observations
+
+`createNativeContextObservers` composes the real relay pool/order book, intent journal, G02 captured session lease and G05 broker. Its constructor is a trusted compiled composition boundary, not imported configuration. Pin the full trade binding, account, expected maker/order and exact discovery-network mapping there. A relay ad supplies no deployment identity or final G16 trade digest.
+
+Only constructor-held publisher closures can update the readonly dispatcher. Existing authority `dispatchLocal` and `ObservationEnvelope` remain unchanged: imported relay/journal labels cannot promote chain truth. Relay hints contain discovery scalars, not custody or fiat proof. Journal hints call native `unresolved` so restored terminal labels remain pending without fresh native reconciliation. An unavailable revision is null/unknown, never a fabricated empty journal.
+
+Each hint expires after at most 30 seconds and relay expiry can shorten that lifetime. Native source generation, broker generation and captured G02 lease guard every publication and refresh. Retirement is terminal, closes only the owned subscription/lease/observer, and starts no more source jobs. The pool, vault, journal, broker and verifier remain caller-owned; dispose the observer alongside its owning context. No polling or retry is created. Explicit journal refresh holds one physical slot until the native operation actually drains, including cancellation.
+
+Tests exercise the actual relay pool and Nostr event verifier with signed local fixtures, plus the actual encrypted vault and journal. Their in-memory socket and fixture transport issuer do not establish private routing, approved production profiles, native chain state, a bank-payment proof or a release qualification. This module has no default App/main activation.

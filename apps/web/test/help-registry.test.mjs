@@ -6,7 +6,7 @@ test('fixed help registry detaches its metadata and exposes no mutation capabili
   const item=entry(), registry=createTooltipRegistry([item]); item.messageKey='shell.appName'; item.interactionTests[0]='changed';
   assert.equal(registry.get('unlock-profile').messageKey,'help.profile');assert.equal(registry.get('unlock-profile').interactionTests[0],'hover');
   assert.ok(Object.isFrozen(registry));assert.ok(Object.isFrozen(registry.get('unlock-profile')));assert.equal(registry.set,undefined);
-  assert.equal(TooltipRegistry.size,9);
+  assert.equal(TooltipRegistry.size,10);
 });
 test('duplicates, unknown/dynamic copy, unsafe links and incomplete interaction evidence are refused', () => {
   for(const input of [[entry(),entry()], [{...entry(),helpLink:'https://evil.invalid/'}], [{...entry(),helpLink:'#other'}],
