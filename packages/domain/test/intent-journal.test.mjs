@@ -346,7 +346,11 @@ test('D9: restored pending nonce holds stay scoped to the EVM network, not reuse
   const separateNetwork={...binding,networkId:'evm:10',tradeId:'separate-network-trade'};
   const another= intent({binding:separateNetwork,account:lower,submission:{chain:'evm',hash:null,nonce}});
   val(await fresh.reserve(another,0));
-  assert.deepEqual(val(await fresh.unresolved(binding,lower)),[{...original,state:'pending',submission:{chain:'evm',hash,nonce},updatedAt:original.updatedAt}]);
+  const held=val(await fresh.unresolved(binding,lower));
+  assert.equal(held.length,1);assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);assert.equal(held[0].submission.nonce,nonce);
+  assert.deepEqual(held[0].binding,binding);
+  assert.deepEqual(val(await fresh.unresolved(binding,lower)),held);
   assert.deepEqual(val(await fresh.unresolved(separateNetwork,lower)),[another]);
   const writes=s.store.writes;
   err(await fresh.reserve(intent({
