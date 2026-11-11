@@ -1,0 +1,6 @@
+# Host toolchain for IDL generation and LiteSVM tests. On-chain code is compiled by the
+# platform-tools v1.54 bundled with Agave v4.1.2 `cargo build-sbf`.
+[toolchain]
+channel = "1.98.1"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

@@ -1,0 +1,273 @@
+{
+  "format": "p2p-offramp/solana-independent-vectors/v1",
+  "generator": {
+    "file": "contracts/solana/vectors/derive.mjs",
+    "nodeMajor": "24",
+    "nobleCurves": "2.4.0",
+    "nobleHashes": "2.4.0"
+  },
+  "constants": {
+    "programId": "7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq",
+    "programIdAscii": "escrow-program:p2p-offramp:local",
+    "ataProgramId": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+    "tokenProgramId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "idsSource": "known-constant-unverified-on-disk",
+    "escrowSeedPrefix": "p2p-offramp-escrow-v1",
+    "vaultSeedPrefix": "p2p-offramp-vault-v1",
+    "mints": [
+      {
+        "ascii": "mint-6dp-open:p2p-offramp:local1",
+        "address": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa"
+      },
+      {
+        "ascii": "freezable-mint-6dp:p2p-offramp:1",
+        "address": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x"
+      }
+    ]
+  },
+  "discriminators": {
+    "accounts": {
+      "EscrowV1": "1a5ac1dabcfb8bd3"
+    },
+    "instructions": {
+      "fund_native": "ecf06fea0be6652b",
+      "fund_spl": "7eaf579ec83b6a50",
+      "release": "fdf90fce1c7fc1f1",
+      "refund": "0260b7fb3fd02e2e",
+      "payout_native": "241ed8ee67326263",
+      "payout_spl": "890a23c66dc09e25"
+    },
+    "events": {
+      "Funded": "43543858c00cc9b1",
+      "Released": "e8e5ff8865bd0fdc",
+      "Refunded": "236795f6c47bdd63",
+      "PaidOut": "0689d1e1fc35f9fc"
+    }
+  },
+  "escrowCases": [
+    {
+      "index": 0,
+      "seller": "6Eq8xLSjf8bwydqjNymBRWLhLNkiawfvuwpmwrsEHN6s",
+      "sellerHex": "4dd569faffff10b5c575af10d75f1a34f95493cd1d75d76f9df47ad12a291e18",
+      "nonce": "CFyDCWFhri8NQiBPaAmQuKVvcX4ZxejPpurKTRkMc2yu",
+      "nonceHex": "a7463ea64083e5a138e34eecb1a65474b719092fe0bff22bf150805c413f6fa0",
+      "nonceLabel": "sha256",
+      "escrow": {
+        "address": "8yL2ExHA2QdMyzaLxqwycHsaXnRiBWKLP8f1kS13z9s",
+        "bump": 253
+      },
+      "vault": {
+        "address": "GXdxkrPHSC74LX2tsJpJQKaCGv112MULjNYEoUcYKnSC",
+        "bump": 255
+      },
+      "buyer": "HczF5jKfFf3UH5byEdUGGZn13ZyB8oDqDhxifXL9pcKs",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "SQnAa589M4SgZTyy7CjXfPsJbHM7LgHk8d39drgC6k1",
+            "bump": 254
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "8WaCoXxQ1CxUyoy3KZDAaQG3xS3cWjqxUN4jjok3j6h1",
+            "bump": 254
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "seller": "8AVenaysdYhm83aD5Ln9sTMvnKn6Zg6a2nfkfm2CGBSz",
+      "sellerHex": "6a706e9e1f727aaa44409276e1353bb45a1a445344065de1b5c0f0fa9999cbf3",
+      "nonce": "6izVaY1pbTMvHnwxwk2a3jQdgE1sNsenCBrrzcZAYj83",
+      "nonceHex": "550c414a297ca548bf9bfadd0d560621f53858e792275e397a2f30b8ed44aa28",
+      "nonceLabel": "sha256",
+      "escrow": {
+        "address": "CBx9CVpS2F2EuKXXqbvQJgPXBHKcnRcHhaxjuYkCw1w9",
+        "bump": 255
+      },
+      "vault": {
+        "address": "9XL7nacdYHVJj2iTeyKdrRkMz1J9mkY1HLWL3oow5UH7",
+        "bump": 253
+      },
+      "buyer": "C5oBvUz8ayqm88dqH4j6PQ5Vszysvjr6GkmuFQroQjK9",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "GKBfBr5qY6G6tR5MZgigwPn8c3MntzkErYvpJDPSoiWW",
+            "bump": 253
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "6bU24XJtHWxTmrcGePjhkAsYRw8es5bGGj6xZzAhceNK",
+            "bump": 255
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "seller": "HFYBoXBuynDpm4VMW6TodywpGE2nXjJyrMir8oVyF7oF",
+      "sellerHex": "f174627196fa9f1513af9cc0bd1391fc21a622c85a29d1c1a87f00cbbb7cbc82",
+      "nonce": "11111111111111111111111111111111",
+      "nonceHex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "nonceLabel": "all-zero",
+      "escrow": {
+        "address": "HpGNV2qA2jRwXoaMusiadmtLa4CSmjfQP7tFxcE9KGnt",
+        "bump": 255
+      },
+      "vault": {
+        "address": "DfEevTbNEwDv4QZHvR7KXMbg5jvFaUpaUeMQdftB9Acm",
+        "bump": 255
+      },
+      "buyer": "BcQySfQxbzkuLFaYwoHLQAKzXpTxyT1pPjy5g7BXoAXs",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "D3hYbV3ywMvRQM1AQjoPioTg37tFpKgy1MGFQCQtqBJo",
+            "bump": 254
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "DTCPRzh4HTBibHJfFBwMkRJyDfjPqRn62oqKkFsT9oRW",
+            "bump": 255
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "seller": "7i3QFXKUYy4zPx77y7w1nGQxZzAGGYj1jki5imb6q9L",
+      "sellerHex": "01b7e3f842e87afd44adffabb0ef21c09184fa33ff78f0cd10896be0a24ec84b",
+      "nonce": "5yMjMijk9fsb9JUdgWWq1fxSMMi2VEjakRr7WhvUcKsi",
+      "nonceHex": "49deb67c60316c959053a30d03c54e614528830cdf8e762380de973ef8a098cd",
+      "nonceLabel": "sha256",
+      "escrow": {
+        "address": "98QffGrE559sJFjuWxPCp4kMJ1iHhHJgn3KAihPv9zme",
+        "bump": 254
+      },
+      "vault": {
+        "address": "AHajrP3bFp9ZkNt4jjG87DgBMDZ4t23JA8ZA5DXrNeKf",
+        "bump": 253
+      },
+      "buyer": "5vxhtuSuR1TMag4FSpEmYnMFw2qcRyzNnY8XZdpoYCyX",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "7sMReVNUMvYQdiRq6X23UPDG4QbbVwHgSyaYC4y1Xgy4",
+            "bump": 255
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "CPHV37C8iBhH3H9dSMy75dvroXnQVctGVPM7r5PLc9qQ",
+            "bump": 255
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "seller": "9WqPEJHcsG4bEgaUhEAauyWpbfqgLEwS7VftsmXZPRKs",
+      "sellerHex": "7e820bc6f066e3de8f547f1758a04e793d355ef80e565077f9fdae5587d5a8d6",
+      "nonce": "JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG",
+      "nonceHex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "nonceLabel": "all-0xff",
+      "escrow": {
+        "address": "F37gpuAnf5FjQ1jmWak4Aw6sURzfXhnZQLJd4GzQPJFp",
+        "bump": 255
+      },
+      "vault": {
+        "address": "DqwDWN5BYyH2GZWiXaQrLsxtDgqhhbZXsNhPfrq2W4ch",
+        "bump": 255
+      },
+      "buyer": "7P61D4avky4hAzYYXP4ETBa7iJvGAk5BBi5znkvpLTC2",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "5bikPBN2Dbao4AozPbyvmSFg7ncL9UGq6iT51Xtpyhez",
+            "bump": 254
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "GnA7PEn3DDGgExZ1tzrfoGW2NTA9y4pMnL38Wmzjuv5G",
+            "bump": 254
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "seller": "3vHE123NVZbZ7kL8ai7hxA9oarNLKFqNWgtAe5oGDoTQ",
+      "sellerHex": "2b5d805dc776e10304025e046d4f008f16e8a603d04d5c541d7e361faf126b83",
+      "nonce": "GT6U9vbe6qKwf3aezViQzVuujviXUFnE7YfGXAXLD5Qz",
+      "nonceHex": "e58e967ac564401e01fcac010235466216feb3f179c8f770b01d441ba611af0f",
+      "nonceLabel": "sha256",
+      "escrow": {
+        "address": "Dai6huTBGHX1Uwnb9PcKP7e2ofTT2JbS9cFSGzTcCQB5",
+        "bump": 253
+      },
+      "vault": {
+        "address": "7VSgWPmS2iugmW668bULSgvPD9SdSi1kpBct8d8f5HEz",
+        "bump": 255
+      },
+      "buyer": "Hh3GRrogvxY7buoekuJ5YHc5BhgbZtpV1MMG6apyLZmy",
+      "buyerAtas": [
+        {
+          "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+          "ata": {
+            "address": "8KTuYZHcyKXngQREEr9CVm93N27uNA9XmoN1rJc4zcJN",
+            "bump": 254
+          }
+        },
+        {
+          "mint": "7tukwiXDuMMqG53G3jm88PuhE5ACCYpoGkZrnbRhfB6x",
+          "ata": {
+            "address": "7g4Hc35sE4B2MAJfwwJjj3As51AHzL6MFJhTtDTJscFg",
+            "bump": 255
+          }
+        }
+      ]
+    }
+  ],
+  "negativeCases": [
+    {
+      "description": "createProgramAddress with 17 one-byte seeds",
+      "expectError": true
+    },
+    {
+      "description": "createProgramAddress with one 33-byte seed",
+      "expectError": true
+    },
+    {
+      "description": "findProgramAddress with 16 user seeds (bump makes 17)",
+      "expectError": true
+    },
+    {
+      "description": "base58 decode of \"0OIl\" (excluded characters)",
+      "expectError": true
+    },
+    {
+      "description": "base58 decode of 31-byte key",
+      "expectError": true
+    },
+    {
+      "description": "base58 decode of 33-byte key",
+      "expectError": true
+    }
+  ]
+}

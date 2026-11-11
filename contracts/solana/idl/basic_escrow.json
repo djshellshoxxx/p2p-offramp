@@ -1,0 +1,993 @@
+{
+  "address": "7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq",
+  "metadata": {
+    "name": "basic_escrow",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "P2P Off-ramp immutable basic escrow for native SOL and allowlisted original SPL Token mints"
+  },
+  "instructions": [
+    {
+      "name": "fund_native",
+      "discriminator": [
+        236,
+        240,
+        111,
+        234,
+        11,
+        230,
+        101,
+        43
+      ],
+      "accounts": [
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "seller"
+              },
+              {
+                "kind": "arg",
+                "path": "args.seller_nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "buyer",
+          "docs": [
+            "payout must credit this account, so it is requested writable now: the runtime demotes reserved",
+            "keys (sysvars, builtin programs) to read-only, and an executable account cannot receive lamports.",
+            "Either would make every later payout fail and lock the principal after a release."
+          ],
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "FundArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "fund_spl",
+      "discriminator": [
+        126,
+        175,
+        87,
+        158,
+        200,
+        59,
+        106,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "seller"
+              },
+              {
+                "kind": "arg",
+                "path": "args.seller_nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "`Account<Mint>` requires ownership by the original SPL Token program."
+          ]
+        },
+        {
+          "name": "seller_token",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "docs": [
+            "Only the original SPL Token program; Token-2022 is refused in v1."
+          ],
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "FundArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "payout_native",
+      "discriminator": [
+        36,
+        30,
+        216,
+        238,
+        103,
+        50,
+        98,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller",
+                "account": "EscrowV1"
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller_nonce",
+                "account": "EscrowV1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "recipient",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "payout_spl",
+      "discriminator": [
+        137,
+        10,
+        35,
+        198,
+        109,
+        192,
+        158,
+        37
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller",
+                "account": "EscrowV1"
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller_nonce",
+                "account": "EscrowV1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "destination",
+          "docs": [
+            "Must be the recipient's canonical associated token account; checked in the handler."
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "refund",
+      "discriminator": [
+        2,
+        96,
+        183,
+        251,
+        63,
+        208,
+        46,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller",
+                "account": "EscrowV1"
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller_nonce",
+                "account": "EscrowV1"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "release",
+      "discriminator": [
+        253,
+        249,
+        15,
+        206,
+        28,
+        127,
+        193,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "seller",
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
+        },
+        {
+          "name": "escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  50,
+                  112,
+                  45,
+                  111,
+                  102,
+                  102,
+                  114,
+                  97,
+                  109,
+                  112,
+                  45,
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119,
+                  45,
+                  118,
+                  49
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller",
+                "account": "EscrowV1"
+              },
+              {
+                "kind": "account",
+                "path": "escrow.seller_nonce",
+                "account": "EscrowV1"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "EscrowV1",
+      "discriminator": [
+        26,
+        90,
+        193,
+        218,
+        188,
+        251,
+        139,
+        211
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "Funded",
+      "discriminator": [
+        67,
+        84,
+        56,
+        88,
+        192,
+        12,
+        201,
+        177
+      ]
+    },
+    {
+      "name": "PaidOut",
+      "discriminator": [
+        6,
+        137,
+        209,
+        225,
+        252,
+        53,
+        249,
+        252
+      ]
+    },
+    {
+      "name": "Refunded",
+      "discriminator": [
+        35,
+        103,
+        149,
+        246,
+        196,
+        123,
+        221,
+        99
+      ]
+    },
+    {
+      "name": "Released",
+      "discriminator": [
+        232,
+        229,
+        255,
+        136,
+        101,
+        189,
+        15,
+        220
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ZeroValue",
+      "msg": "Revision and amount must be at least 1."
+    },
+    {
+      "code": 6001,
+      "name": "InvalidBuyer",
+      "msg": "Buyer must differ from the seller, the zero key, the escrow and the vault."
+    },
+    {
+      "code": 6002,
+      "name": "ExecutableBuyer",
+      "msg": "Native escrows refuse an executable buyer account."
+    },
+    {
+      "code": 6003,
+      "name": "NegativeClock",
+      "msg": "The chain clock is negative."
+    },
+    {
+      "code": 6004,
+      "name": "AcceptanceExpired",
+      "msg": "Funding attempted at or after acceptBefore."
+    },
+    {
+      "code": 6005,
+      "name": "DeadlineOutOfRange",
+      "msg": "Deadline outside [now + 1800, now + 604800]."
+    },
+    {
+      "code": 6006,
+      "name": "MintNotAllowed",
+      "msg": "Mint is not on the compiled allowlist or its decimals differ."
+    },
+    {
+      "code": 6007,
+      "name": "SourceTokenAccountRestricted",
+      "msg": "Source token account is delegated or frozen."
+    },
+    {
+      "code": 6008,
+      "name": "VaultMismatch",
+      "msg": "Vault does not hold exactly the funded amount or has a delegate/close authority."
+    },
+    {
+      "code": 6009,
+      "name": "PrincipalMismatch",
+      "msg": "Escrow does not hold the funded principal above its rent reserve."
+    },
+    {
+      "code": 6010,
+      "name": "AssetKindMismatch",
+      "msg": "Escrow asset kind does not match this instruction."
+    },
+    {
+      "code": 6011,
+      "name": "InvalidState",
+      "msg": "Escrow is not in the state this instruction requires."
+    },
+    {
+      "code": 6012,
+      "name": "DeadlinePassed",
+      "msg": "Release attempted at or after the deadline."
+    },
+    {
+      "code": 6013,
+      "name": "DeadlineNotReached",
+      "msg": "Refund attempted before the deadline."
+    },
+    {
+      "code": 6014,
+      "name": "AlreadyPaidOut",
+      "msg": "Principal was already paid out."
+    },
+    {
+      "code": 6015,
+      "name": "WrongRecipient",
+      "msg": "Payout destination is not the stored recipient's canonical account."
+    },
+    {
+      "code": 6016,
+      "name": "DestinationFrozen",
+      "msg": "Payout destination token account is frozen."
+    }
+  ],
+  "types": [
+    {
+      "name": "EscrowState",
+      "docs": [
+        "Escrow lifecycle. `Released` and `Refunded` are terminal; principal moves only in `payout_*`."
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Released"
+          },
+          {
+            "name": "Refunded"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EscrowV1",
+      "docs": [
+        "One funded trade. The account is created once per `(seller, seller_nonce)` and never closed in v1,",
+        "so neither the nonce nor the trade id (`terms_hash`) can be funded twice."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "layout_version",
+            "type": "u8"
+          },
+          {
+            "name": "escrow_bump",
+            "docs": [
+              "Canonical escrow PDA bump, re-verified by every instruction's seeds constraint."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "vault_bump",
+            "docs": [
+              "Canonical vault PDA bump for SPL escrows; zero and unused for native escrows."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "EscrowState"
+              }
+            }
+          },
+          {
+            "name": "paid_out",
+            "type": "bool"
+          },
+          {
+            "name": "asset_kind",
+            "type": "u8"
+          },
+          {
+            "name": "seller",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "docs": [
+              "All-zero for native escrows."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "token_program",
+            "docs": [
+              "All-zero for native escrows."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "docs": [
+              "Exact principal in base units, recorded separately from rent and any donated surplus."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "deadline",
+            "docs": [
+              "Unix seconds; release requires `now < deadline`, refund requires `now >= deadline`."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "terms_hash",
+            "docs": [
+              "SHA-256 of the G16 terms bytes rebuilt on chain; the trade id."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "seller_nonce",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "FundArgs",
+      "docs": [
+        "Instruction fields that, with the seller key, asset accounts, program ID and compiled genesis,",
+        "rebuild the G16 terms message."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "order_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "private_agreement_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "capabilities_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "seller_nonce",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "revision",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "accept_before",
+            "type": "u64"
+          },
+          {
+            "name": "expiry",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Funded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "seller",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_kind",
+            "type": "u8"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "deadline",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaidOut",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Refunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Released",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "escrow",
+            "type": "pubkey"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
