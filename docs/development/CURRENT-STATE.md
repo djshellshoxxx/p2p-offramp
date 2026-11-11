@@ -1,4 +1,6 @@
-# Current state — 2026-11-07
+# Current state — refreshed 2026-11-09
+
+**Latest continuation:** [2026-11-09 source review, local checks and next actions](2026-11-09-core-review.md). Draft #57 corrects Solana payout guidance; draft #58 removes the post-send 4001 shortcut. RQ00 evidence admission is the current isolated tooling lane. Full D9 and contract-wallet execution remain unfinished. The detailed sections below retain the 2026-11-07 baseline except for explicitly corrected inventory statements.
 
 Live GitHub state was refreshed with `git fetch` of every branch and `refs/pull/*/head`, plus the GitHub API, on 2026-11-07. This file replaces older handoffs only where it cites newer, commit-pinned evidence. Machine-readable ledger: [`task-ledger.json`](task-ledger.json). Running log: [`AUTONOMOUS-PROGRESS.md`](AUTONOMOUS-PROGRESS.md).
 
@@ -39,7 +41,7 @@ For each stage, these are the files changed relative to the previous stage that 
 | #37 | 14 | Formal EVM/SMT harness (`contracts/evm/formal/*`, `scripts/formal/evm.mjs`, Z3 pin). Sepolia and boundary files are already extracted and have since diverged. |
 | #38 | 13 | Identity history retention (`identity-service.ts`), domain `privacy-view.ts`, plus facade exports. |
 | #39 | 3 | Exchange re-delivery test and pool tweaks, already covered by `edc66f6`. |
-| #40 | 17 | Signed release-update fetch/store/verify (`packages/security/src/release-update*.ts`), EIP-1271 **execution** path, and local EIP-1271/reconcile scripts. |
+| #40 | 17 | Signed release-update fetch/store/verify (`packages/security/src/release-update*.ts`), generic EVM execution hardening and native read-only EIP-1271/reconcile scripts. No contract-wallet transaction adapter is implemented by #40. |
 | #41–#48 | 40–190 each | Locale runtime, UI wiring, native journey, recovery portal, intake, optional packages (parked under D7), governance, evidence. |
 
 ## 3. Completed functionality on `main` (inherited, with tests)
@@ -55,8 +57,8 @@ Strict trade-draft, transport-selection, backup-receipt and read-only-hint schem
 | Area | State |
 | --- | --- |
 | D1 peer acceptance v2 (EIP-712 `PeerAcceptance`) | Accepted design; **not implemented**. |
-| D9 durable `sendMarkedAt` marker | Accepted; implemented only in #35 (parked). Must be reconciled before the journey fixes from #31. |
-| EIP-1271 execution path, signed release updates | In #40 only. Tier C. |
+| D9 durable `sendMarkedAt` marker | Accepted design on #29/#49; **not implemented in #35 or #56**. #58 repairs the post-send 4001 shortcut only; persisted version/migration/import provenance and browser qualification remain open. |
+| Generic EVM execution hardening and signed asset updates | Remaining in #40. Read-only EIP-1271 already extracted; contract-wallet transaction execution remains unimplemented/unqualified. Tier C. |
 | Locale/runtime/UI wiring, native journey, recovery portal | #41–#44 only. |
 | Formal EVM harness | #37 only. Needs Z3 4.12.2 and the solc pin. |
 | Solana D5 escrow | #50 (Anchor 1.2.2, LiteSVM). Not reviewed; no client adapter. |
@@ -104,7 +106,7 @@ No live agent assignment was found beyond the PR authors. Codex sessions authore
 | P | Task | Depends on | Acceptance |
 | --- | --- | --- | --- |
 | P0 | Owner review/merge of #54, then this branch (or merge this branch, which contains #54) | owner | Green CI; no open High/Medium threads |
-| P0 | Extract the #40 remainder: signed release updates and EIP-1271 execution | #54 | RED/GREEN, local EVM + EIP-1271 fixture, Tier C review |
+| P0 | Extract #40 generic execution hardening, read-only native EIP-1271 harness and signed asset updates | #54 | RED/GREEN, local EVM + EIP-1271 fixture, Tier C review |
 | P0 | Implement D9 `sendMarkedAt` CAS marker, then reconcile the #35/#31 F01–F06 journey fixes | #54 | No duplicate sends across crash/reload; browser journey |
 | P1 | Implement D1 peer acceptance v2 | D9 | Vectors; downgrade refusal; tombstones |
 | P1 | Extract the #38 remainder (identity history retention, privacy view) | #54 | Package tests, boundary check |

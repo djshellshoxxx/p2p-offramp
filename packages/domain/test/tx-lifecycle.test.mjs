@@ -385,7 +385,60 @@ test('account or chain change cancels un-sent intents and invalidates prepare re
   close(env);
 });
 
-test('reads retry through read-retry; sends never retry; rejection and integrity failures', async () => {
+test('4001 after the send marker cannot authorize a fresh attempt, including after restart', async () => {
+  for (const broadcast of [true, false]) {
+    const env = await setup();
+    try {
+      const prepared = val(await env.life.prepare(fund()));
+      env.wallet.onSend = tx => {
+        if (broadcast) env.chain.broadcast(tx);
+        throw Object.assign(new Error('SECRET wallet response https://wallet.invalid'), { code: 4001 });
+      };
+      const submitted = await env.life.submit(prepared);
+      // A wallet may broadcast and then report 4001. Its response cannot release the reservation.
+      err(await env.life.prepare(fund()), 'CONFLICT');
+      const failure = err(submitted, 'BROADCAST_UNKNOWN');
+      assert.equal(failure.action, 'reconcile'); assert.equal(failure.retryable, false);
+      assert.doesNotMatch(JSON.stringify(failure), /SECRET|https/);
+      const record = await stored(env, prepared.intentId);
+      assert.equal(record.state, 'broadcast-unknown'); assert.equal(record.submission.hash, null);
+      assert.equal(env.journal.isTerminalVerified(prepared.intentId), false);
+      assert.equal(env.wallet.sends, 1);
+
+      await start(env);
+      assert.deepEqual(val(await env.life.recover()).map(intent => intent.state), ['broadcast-unknown']);
+      err(await env.life.submit(prepared), 'CONFLICT');
+      err(await env.life.prepare(fund()), 'CONFLICT');
+      assert.equal((await outcome(env, prepared.intentId)).outcome, 'pending');
+      env.chain.mine(broadcast ? 2 : 5);
+      assert.equal((await outcome(env, prepared.intentId)).outcome, broadcast ? 'confirmed' : 'dropped');
+      assert.equal(env.wallet.sends, 1, 'recovery and native reconciliation never send again');
+      if (!broadcast) err(await env.life.prepare(fund()), 'CONFLICT', 'a dropped attempt still requires an explicit successor');
+    } finally { close(env); }
+  }
+});
+
+test('4001 during wallet preflight still cancels the unsent intent and permits fresh explicit preparation', async () => {
+  const env = await setup();
+  try {
+    env.life.dispose();
+    let reject = true;
+    env.life = createEvmTxLifecycle({ journal: env.journal, reader: env.chain.reader(), policy, retry, wallet: args => {
+      if (args.method === 'eth_accounts' && reject) { reject = false; throw Object.assign(new Error('rejected'), { code: 4001 }); }
+      return env.wallet.request(args);
+    } });
+    await env.life.walletChanged({ account: ACCOUNT, chainId: '31337', generation: 1 });
+    const prepared = val(await env.life.prepare(fund()));
+    err(await env.life.submit(prepared), 'UNAVAILABLE');
+    assert.equal(env.wallet.sends, 0);
+    assert.equal((await stored(env, prepared.intentId)).state, 'failed');
+    assert.equal(env.journal.isTerminalVerified(prepared.intentId), true);
+    val(await env.life.submit(val(await env.life.prepare(fund()))));
+    assert.equal(env.wallet.sends, 1);
+  } finally { close(env); }
+});
+
+test('reads retry through read-retry; sends never retry; integrity failures remain pending', async () => {
   const env = await setup();
   env.chain.fail.set('chainId', 2);
   const prepared = val(await env.life.prepare(fund()));
@@ -399,18 +452,14 @@ test('reads retry through read-retry; sends never retry; rejection and integrity
   assert.equal((await outcome(env, prepared.intentId)).outcome, 'confirmed');
   close(env);
 
-  const rejectEnv = await setup(), p2 = val(await rejectEnv.life.prepare(fund()));
-  rejectEnv.wallet.onSend = () => { throw Object.assign(new Error('rejected'), { code: 4001 }); };
-  err(await rejectEnv.life.submit(p2), 'USER_REJECTED');
-  assert.equal((await stored(rejectEnv, p2.intentId)).state, 'failed');
-  rejectEnv.wallet.onSend = undefined;
-  const p3 = val(await rejectEnv.life.prepare(fund()));
-  const sent = val(await rejectEnv.life.submit(p3));
-  rejectEnv.chain.txs.get(sent.hash).input = '0xbeef'; // provider reports a different body for the recorded hash
-  rejectEnv.chain.mine(2);
-  err(await rejectEnv.life.reconcile(p3.intentId), 'INTEGRITY_FAILURE');
-  assert.equal((await stored(rejectEnv, p3.intentId)).state, 'pending', 'a contradiction is not written');
-  close(rejectEnv);
+  const integrityEnv = await setup();
+  const p3 = val(await integrityEnv.life.prepare(fund()));
+  const sent = val(await integrityEnv.life.submit(p3));
+  integrityEnv.chain.txs.get(sent.hash).input = '0xbeef'; // provider reports a different body for the recorded hash
+  integrityEnv.chain.mine(2);
+  err(await integrityEnv.life.reconcile(p3.intentId), 'INTEGRITY_FAILURE');
+  assert.equal((await stored(integrityEnv, p3.intentId)).state, 'pending', 'a contradiction is not written');
+  close(integrityEnv);
 });
 
 test('lifecycle journal transitions are validated: no backwards, no hash rewrite, terminal is final', async () => {
