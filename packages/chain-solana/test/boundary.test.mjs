@@ -27,9 +27,37 @@ test('src-has-no-io-or-forbidden-apis', () => {
   }
 });
 
+/**
+ * Every static module specifier, whatever the quote style or form: `import x from`, side-effect `import '…'`,
+ * `import type`, and `export … from`. Dynamic import() and require() are banned separately.
+ */
+const importSpecifiers = text =>
+  [...text.matchAll(/(?:^|[\s;}])(?:from|import)\s*(['"`])([^'"`\n]+)\1/g)].map(match => match[2]);
+
+test('import-scan-sees-every-static-form', () => {
+  const sample = [
+    `import { a } from "../../transport/index.ts";`,
+    `import '../../storage/index.ts';`,
+    'import "./side.ts";',
+    `import type { T } from '../../relay/index.ts';`,
+    `export { b } from "../../crypto/index.ts";`,
+    `export * from './x.ts';`,
+    'import {\n  c,\n} from\n  "./multi.ts";',
+  ].join('\n');
+  assert.deepEqual(importSpecifiers(sample), [
+    '../../transport/index.ts',
+    '../../storage/index.ts',
+    './side.ts',
+    '../../relay/index.ts',
+    '../../crypto/index.ts',
+    './x.ts',
+    './multi.ts',
+  ]);
+});
+
 test('src-imports-only-allowed-modules', () => {
   for (const [name, text] of sources) {
-    for (const [, specifier] of text.matchAll(/from '([^']+)'/g)) {
+    for (const specifier of importSpecifiers(text)) {
       assert.ok(ALLOWED_IMPORTS.has(specifier) || /^\.\/[a-z]+\.ts$/.test(specifier), `${name}: ${specifier}`);
     }
     assert.doesNotMatch(text, /\bimport\(|require\(/, name);

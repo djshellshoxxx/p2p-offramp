@@ -14,6 +14,7 @@ import {
   programDataSha256FromElf,
 } from '../src/layout.ts';
 import {
+  cat,
   ELF,
   escrowBytes,
   escrowPda,
@@ -116,6 +117,14 @@ test('mint-uninitialized', () => {
 test('clock-capture', () => {
   const clock = decodeClock(decodeBase64('CAAAAAAAAACX+epqAAAAAAAAAAAAAAAAAQAAAAAAAACa+epqAAAAAA==', 56));
   assert.deepEqual({ ...clock }, { slot: 8n, unixTimestamp: 1_793_784_218n });
+});
+
+test('exact-length-{clock-39/41,mint-81/83}', () => {
+  const clock = decodeBase64('CAAAAAAAAACX+epqAAAAAAAAAAAAAAAAAQAAAAAAAACa+epqAAAAAA==', 56);
+  integrity(() => decodeClock(clock.subarray(0, 39)));
+  integrity(() => decodeClock(cat(clock, [0])));
+  integrity(() => decodeMint(mintBytes().subarray(0, 81)));
+  integrity(() => decodeMint(cat(mintBytes(), [0])));
 });
 
 test('rent-capture', () => {

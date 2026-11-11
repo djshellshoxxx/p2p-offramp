@@ -141,6 +141,13 @@ test('programdata-none-stale-key-accepted', { skip }, () => {
   assert.equal(programDataSha256(data), programDataSha256FromElf(elf, 45 + elf.length));
 });
 
+test('readme-describes-committed-fixture-hash', { skip }, () => {
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8').replace(/\s+/g, ' ');
+  // The committed capture is the current, unpadded build; the README must not call its hash stale.
+  assert.ok(readme.includes(`\`${fixture.programData.sha256OfBytesAfterHeader.slice(0, 8)}…\`, unpadded`));
+  assert.doesNotMatch(readme, /stale fixture hash/);
+});
+
 /** World from the real captures; ProgramData is the real header ‖ a synthetic ELF of the deployed length. */
 function fixtureWorld(entry) {
   const elf = new Uint8Array(fixture.programData.soLength).fill(0x5a);

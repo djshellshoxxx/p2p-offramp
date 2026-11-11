@@ -6,6 +6,7 @@ import {
   account,
   b64,
   bindingOf,
+  cat,
   CHAIN_TIME,
   CLOCK,
   clockBytes,
@@ -290,6 +291,47 @@ test('rentEpoch-getter-untouched', async () => {
 });
 const setupWorld = setup('native').world;
 
+// Spec §5: fields the reader DOES read are taken only from data descriptors; an accessor is never invoked.
+test('descriptor-only-reads-{owner,data,value[0],blockhash}', async () => {
+  let touched = 0;
+  const getter = (target, field, value) => {
+    delete target[field];
+    Object.defineProperty(target, field, {
+      enumerable: true,
+      configurable: true,
+      get() {
+        touched++;
+        return value;
+      },
+    });
+  };
+  const accounts = (input, world, trap) => {
+    const value = input.params[0].map(address => structuredClone(world.accounts.get(address)));
+    trap(value);
+    return { context: { slot: SLOT }, value };
+  };
+  const traps = [
+    ['getMultipleAccounts', value => getter(value[0], 'owner', value[0].owner)],
+    ['getMultipleAccounts', value => getter(value[0], 'data', value[0].data)],
+    ['getMultipleAccounts', value => getter(value, '0', value[0])],
+    ['getBlock', block => getter(block, 'blockhash', block.blockhash)],
+  ];
+  for (const [method, trap] of traps) {
+    await failsWith('INTEGRITY_FAILURE', 'native', {
+      handle: input => {
+        if (input.method !== method) return undefined;
+        if (method === 'getBlock') {
+          const block = { ...setupWorld.block };
+          trap(block);
+          return block;
+        }
+        return accounts(input, setupWorld, trap);
+      },
+    });
+  }
+  assert.equal(touched, 0);
+});
+
 test('methods⊆{getGenesisHash,getMultipleAccounts,getBlock}', async () => {
   const seen = new Set();
   for (const kind of ['native', 'spl']) {
@@ -414,6 +456,9 @@ test('INTEGRITY_FAILURE: clock-slot≠S', async () => {
   await integrity('native', world => setAccount(world, CLOCK, account(clockBytes(SLOT - 1), SYSVAR)));
   await integrity('native', world => setAccount(world, CLOCK, account(clockBytes(SLOT, -1), SYSVAR)));
   await integrity('native', world => setAccount(world, CLOCK, account(clockBytes(SLOT), key('not-sysvar'))));
+  await integrity('native', world => setAccount(world, CLOCK, account(clockBytes(SLOT), SYSVAR, { executable: true })));
+  // 41 bytes still fits the 56-char base64 cap and `space`: only the exact length check rejects it.
+  await integrity('native', world => setAccount(world, CLOCK, account(cat(clockBytes(SLOT), [0]), SYSVAR)));
 });
 
 test('INTEGRITY_FAILURE: getBlock-{null,noncanonical,parent≥S}', async () => {
@@ -425,6 +470,9 @@ test('INTEGRITY_FAILURE: getBlock-{null,noncanonical,parent≥S}', async () => {
   await integrity('native', blockWith({ parentSlot: SLOT }));
   await integrity('native', blockWith({ blockHeight: SLOT + 1 }));
   await integrity('native', blockWith({ blockHeight: '390' }));
+  // parentSlot must be a safe int too: '399' < 400 would otherwise pass by coercion.
+  await integrity('native', blockWith({ parentSlot: String(SLOT - 1) }));
+  await integrity('native', blockWith({ parentSlot: SLOT - 1.5 }));
 });
 
 test('INTEGRITY_FAILURE: recheck-changed-{hash,height,parent}', async () => {
@@ -482,9 +530,12 @@ test('INTEGRITY_FAILURE: escrow-{other-owner,system-data,exec,bump,seller,nonce}
     );
   }
   await integrity('native', world => setAccount(world, escrowOf(world), account(new Uint8Array(1), SYSTEM)));
-  await integrity('native', (world, terms) =>
-    setAccount(world, escrowOf(world), account(escrowBytes(terms), PROGRAM, { executable: true })),
-  );
+  // Funded lamports, so the executable flag is the only thing wrong.
+  for (const kind of ['native', 'spl']) {
+    await integrity(kind, (world, terms) =>
+      setAccount(world, escrowOf(world), account(escrowBytes(terms), PROGRAM, { executable: true, lamports: 6e8 })),
+    );
+  }
   await integrity('native', world =>
     setAccount(world, escrowOf(world), account(new Uint8Array(0), SYSTEM, { executable: true })),
   );
@@ -529,6 +580,7 @@ test('INTEGRITY_FAILURE: native-lamports-{≤amount,unsafe}', async () => {
   await integrity('native', undefined, { world: { lamports: 2 ** 53 } });
   await integrity('native', world => setAccount(world, RENT, null));
   await integrity('native', world => setAccount(world, RENT, account(rentBytes(), key('not-sysvar'))));
+  await integrity('native', world => setAccount(world, RENT, account(rentBytes(), SYSVAR, { executable: true })));
 });
 
 test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,close,uninit}', async () => {
@@ -546,6 +598,9 @@ test('INTEGRITY_FAILURE: vault-{missing,token2022,mint,owner,below,delegate,clos
   await integrity('spl', world => vault(tokenBytes({ ...base(world), delegate: 1 }))(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), close: 1 }))(world));
   await integrity('spl', world => vault(tokenBytes({ ...base(world), state: 0 }))(world));
+  await integrity('spl', world =>
+    setAccount(world, vaultOf(world), account(tokenBytes(base(world)), TOKENKEG, { executable: true })),
+  );
 });
 
 test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
@@ -557,10 +612,20 @@ test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   });
   await integrity('spl', world => setAccount(world, MINT, account(mintBytes({ decimals: 9 }), TOKENKEG)));
   await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), TOKEN_2022)));
+  await integrity('spl', world => setAccount(world, MINT, account(mintBytes(), TOKENKEG, { executable: true })));
+  // 83 bytes still fits the 112-char base64 cap and `space`: only the exact length check rejects it.
+  await integrity('spl', world => setAccount(world, MINT, account(cat(mintBytes(), [0]), TOKENKEG)));
   await integrity('spl', world => setAccount(world, MINT, null));
 });
 
 test('vault-frozen', async () => {
+  // Control: an unfrozen funded SPL vault is healthy, so only the frozen flag yields CONFLICT.
+  const healthy = setup('spl');
+  try {
+    assert.equal(ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms)).state, 'funded');
+  } finally {
+    healthy.reader.dispose();
+  }
   const frozen = { world: { vault: { state: 2 }, mint: { freeze: key('freezer') } } };
   const s = setup('spl', frozen);
   try {
@@ -780,6 +845,18 @@ function authorityFor(s) {
 
 test('authority: funded-fresh', async () => {
   const s = setup('native');
+  const authority = authorityFor(s);
+  try {
+    assert.equal(ok(await authority.refresh(s.binding)).state, 'funded');
+    assert.equal(authority.readView(123).chainHealth, 'fresh');
+  } finally {
+    authority.dispose();
+    s.reader.dispose();
+  }
+});
+
+test('authority: spl-funded-fresh', async () => {
+  const s = setup('spl');
   const authority = authorityFor(s);
   try {
     assert.equal(ok(await authority.refresh(s.binding)).state, 'funded');

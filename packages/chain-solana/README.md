@@ -42,11 +42,12 @@ not approve any network, deployment or registry entry.
 
 ## What it does NOT prove
 
-A dishonest RPC can lie consistently, because there is no light client and no corroboration. A finalized Clock
-lags the tip, so an open window is necessary but not sufficient. The registry pin must come from a verifiable build
-padded to the deployed length; the stale fixture hash is only a test vector. Transaction lifecycle (G12:
-signatures, blockhash expiry, durable nonce), Token-2022 and ATA creation are not implemented. The `@noble/hashes`
-2.4.0 inventory review is still pending.
+A dishonest RPC can lie consistently, because there is no light client and no corroboration. A finalized Clock lags
+the tip, so an open window is necessary but not sufficient. The committed fixture hash (`eed3a490…`, unpadded, L =
+45 + len(so)) belongs to a localnet capture with a synthetic program id, so it is a test vector, not a pin. A
+registry pin must still come from `programDataSha256FromElf(verifiable .so, deployed length from the runbook)`.
+Transaction lifecycle (G12: signatures, blockhash expiry, durable nonce), Token-2022 and ATA creation are not
+implemented. The `@noble/hashes` 2.4.0 inventory review is still pending.
 
 ## Acceptance
 
