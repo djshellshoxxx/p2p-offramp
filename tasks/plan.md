@@ -186,3 +186,19 @@ Final root review found T29 A→null→sameA readiness reuse after unsubscribe. 
 T31 current hosted review admission: policy owner exclusively changes policy.ts/test for display-only TTL notification without permit revocation, and finite catch-up hints so stable observers already visited see mid-pass changes. Independent storage reviewer rechecks superseding source, real permit timers and disposal/reentrancy. Root owns docs/manifest and final integration; prior scoped approvals/checks do not certify the repair.
 
 T32 hosted failure admission: final7ded PUSHlocaltrade job124847036497 failed in existing payment preflight fixture immediate receipt lookup (null), while same-head PR native jobpassed. Owner guidance_writer only new test-support/fixture-receipt.mjs, regression scripts/tests/fixture-receipt.test.mjs and send helper in test-payment-preflight-local.mjs. Bounded reads for same hash, no transaction resend, exact success/hash and immediate malformed/reverted refusal. Root owns command enrollment/docs, independent runtime reviewer. This fixes test timing without changing native adapter or gates.
+
+## Decision-implementation continuation — 2026-11-11
+
+Baseline main `cdde998`; branch `claude/compassionate-gauss-uyhfih`. Tasks T41–T47 in [todo.md](todo.md).
+
+| Task | Single writer | Owned area | Frozen interface / dependency |
+| --- | --- | --- | --- |
+| T41 | d1_wallet | `packages/wallet/src/evm-peer-acceptance.ts`, its tests, `peer-acceptance-independent.*` fixtures, `scripts/vectors/check_peer_acceptance_openssl.py` | `PeerAcceptanceVerifier = (claim, reviewed, now) => Promise<{ok:true}|{ok:false, code}>`; domain rebuilt from reviewed registry data only |
+| T42 | d1_exchange | `packages/exchange/**` | Same verifier type declared locally (exchange never imports wallet); `PeerAcceptanceStore` port; v1 unchanged |
+| T43 | d9_lifecycle | `packages/schemas/src/intent.ts`, `schemas/index.ts`, `domain/src/intent-journal.ts`, `domain/src/tx-lifecycle.ts`, their tests | Intent v2 keys = v1 + `sendMarkedAt` + journal origin; v1 records stay "may have been sent" |
+| T44 | d4_capabilities | `domain/src/trade-terms.ts`, `terms-review.ts`, `domain/index.ts`, `wallet/src/evm-agreement.ts`, extensions README, two spec checkpoints | Count-zero encoding and hash byte-identical; non-empty sets refused with `UNSUPPORTED_VERSION`/`UNSUPPORTED_PROVIDER` |
+| T45 | d6_codec | `packages/qr/{index.ts,README.md,src/base45.ts,src/jcs.ts,src/envelope.ts,src/text-codec.ts}` and tests | Re-exports `encodeQrMatrix`, `QR_EC_LEVELS`, `renderQrSvg` from T46 |
+| T46 | d6_symbol | `packages/qr/src/{qr-matrix,reed-solomon,qr-tables,qr-svg}.ts` and tests/fixtures | Export names above; no decoding |
+| T47 | root | ledger, docs, `scripts/test-exchange-evm-local.mjs` v2 run, combined checks, PR | T41+T42 frozen |
+
+Reviewers rotate: no agent reviews its own slice. Findings enter todo.md before edits.
