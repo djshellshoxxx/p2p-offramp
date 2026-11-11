@@ -2,7 +2,7 @@
  * Pure, deterministic display formatters for an already-validated trade-terms view and bundled English source.
  * No DOM, global clock or network. Formatting is not validation: nothing here accepts, signs or funds anything.
  */
-import { english, englishGroup } from '../locale/en.ts';
+import { message as english, messageGroup as englishGroup, localeStore } from '../locale/runtime.ts';
 const display = englishGroup('display');
 export type DisplayErrorCode = 'INVALID_AMOUNT' | 'INVALID_DECIMALS' | 'INVALID_CURRENCY' | 'INVALID_TIME' | 'INVALID_ADDRESS';
 export type DisplayResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly code: DisplayErrorCode };
@@ -58,9 +58,9 @@ function duration(total: bigint): string {
   let rest = total;
   for (const [size, label] of units) {
     const count = rest / size; rest %= size;
-    if (count > 0n) parts.push(`${count} ${label}`);
+    if (count > 0n) parts.push(`${localeStore.integer(count)} ${label}`);
   }
-  return parts.length === 0 ? `0 ${display.second}` : parts.join(' ');
+  return parts.length === 0 ? `${localeStore.integer(0)} ${display.second}` : parts.join(' ');
 }
 /** Expiry is inclusive: now >= target is expired. `seconds` is a decimal string so u64 values stay exact. */
 export function describeDeadline(targetSeconds: string, nowSeconds: string): DisplayResult<DeadlineDescription> {
