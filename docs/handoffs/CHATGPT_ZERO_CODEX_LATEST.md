@@ -693,3 +693,34 @@ No paid API, Codex, Codex CLI/cloud, additional chargeable agents, local tests, 
 3. Preserve security/cryptographic independent review gates, signed release evidence, empty default trust roots and `ReleaseEnabled=0`. No merge, financial/security policy, release, deployment or real-funds actions. No idle-time GitHub collaboration feature change while useful implementation, audit and docs work remains.
 
 **Actual concurrency/budget:** one assistant performed the primary test, distinct read-only audit and Wiki/docs work as **three sequential phases**; no concurrently spawned second or third worker supported. No Codex/Codex CLI/cloud, paid API, credit-consuming agent or local project test suite run. No GitHub settings change, live Wiki publication, main merge, release or deployment.
+
+## Continuation checkpoint 027 — 2026-11-11 UTC
+
+### Source, prior CI, and ownership
+- Merged main: cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e (unchanged). Reviewed lowercase agents.md, unmerged continuation contract PR #63, earlier handoff, open PRs and owner branches. No third-party owner branch touched.
+- Previous pending docs PR #68 head a84fa1887fc40c616a30d6957af1d334089ab958, handoff PR #66 f43f98e8f27c1d6affeb911fd0571107c4c2e73e, audit PR #67 2230597d198f71320f46fe808f2337fc292b3965 and development PR #91 dd5cf16da0c7e0c2f1613153ac746bd6390ec587 all have three exact-head hosted workflow families successful. #91 passed 7/7 jobs.
+- Separate integration PR #61 still requires actual SonarCloud Security Rating A (historical PR #56 Rating C), G3 escrow ABI owner decision, D1 peer acceptance, D8 Tier C, full D9 native provenance and independent review. ReleaseEnabled=0.
+
+### Primary sequential development: new draft PR #92
+- https://github.com/djshellshoxxx/p2p-offramp/pull/92 — isolated branch chatgpt/zero-codex/d9-restored-account-isolation-20261111, stacked on ChatGPT-owned draft PR #91 exact head dd5cf16da0c7e0c2f1613153ac746bd6390ec587. Changed only packages/domain/test/intent-journal.test.mjs; no production, wallet or crypto code changed.
+- New synthetic encrypted fresh-key recovery regression: a known-hash pending EVM nonce on account A may coexist with the same numeric nonce on account B on the same network, while a different trade from account A (case-varied address) cannot replace its held nonce. Original hash and absence of send authority remain.
+- Initial test-only commit 17bbc525829e51672efdb13ce68ccad6c1d01dc9 failed its Vault foundation schemas-and-crypto test on a mistaken test query: unresolved(binding, secondAccount) used the first trade binding instead of the second trade binding. Hosted Vault https://github.com/djshellshoxxx/p2p-offramp/actions/runs/43049465348 recorded 1 failed, 1253 passed, 1 skipped. This was a faulty assertion, NOT evidence of a production journal bug.
+- Corrected test-only head b19ae4637538d7c364b4e55a2624b0b908d5cb7f uses unresolved(other.binding, secondAccount). Fresh exact-head GitHub-hosted CI PASSED ALL 7/7 JOBS: Vault https://github.com/djshellshoxxx/p2p-offramp/actions/runs/43049978934 (4/4), EVM https://github.com/djshellshoxxx/p2p-offramp/actions/runs/43049978826 (2/2), inventory https://github.com/djshellshoxxx/p2p-offramp/actions/runs/43049978997 (1/1). No local Node/browser/Foundry/Anvil tests; PR #92 remains draft and unmerged. This does not prove historical native chain provenance.
+
+### Randomized read-only security audit 027, separate sequential phase
+- FNV1a32 seed: cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e:packages/schemas/src/backup.ts:audit-027:ba335d1b5c880af05e0cce72ac1e81ae9a1f67c4. Hash 1472464740; index 84/102 eligible unaudited candidates selected packages/wallet/src/evm-escrow.ts blob 54d59d3040ecfc53cd18efe7081ec4c7bfe96210.
+- Read ABI selectors, G16 snapshot/calldata encoding, bounded log/revert/getTrade decode, event folding, EVM reader and wallet/Foundry test sources. No newly reproducible bug or vulnerability established and no local audit tests run; source inspection is not independent security certification.
+- Isolated audit PR #67 https://github.com/djshellshoxxx/p2p-offramp/pull/67 ledger-only commit a14e0e4ceff4a689cd682be8cad36f922078ed8a: all 3 exact-head workflow families passed (Vault 43049690819, EVM 43049692378, inventory 43049690865).
+
+### Documentation and Wiki maintenance, separate sequential phase
+- On isolated docs PR #68 https://github.com/djshellshoxxx/p2p-offramp/pull/68 added draft-only D9 network/account nonce requirement-to-test matrix in docs/wiki-source/Security-and-Release.md. Initial content commit 34178ab76383ff0c99ba2034e40f26b582acd0ae and ledger 23218f477eae06b16491b7340f581980caad299b: all three workflow families passed (Vault 43049903271, EVM 43049902999, inventory 43049902937).
+- Corrected Wiki matrix to cite final PR #92 qualified head and exact workflows at docs content commit a7cf6e192955c4f736a4abb27e0fb8aa00647f8b; latest docs ledger commit e3f4597d921b12997122acbd222b001808c640bf. This UPDATED docs head requires fresh exact-head CI; do not infer success from earlier docs commits.
+- Inspected 10 version-controlled wiki Markdown pages, 62 local relative page links, 0 missing destinations and 116 other links not fully checked. Wiki Home and _Sidebar both link separate User Guide and Developer Guide. Live GitHub Wiki was not published or verified; direct wiki write unavailable.
+
+### Next action and preserved release gates
+1. Reconcile docs PR #68 current head e3f4597d921b12997122acbd222b001808c640bf and this new engineering-handoff PR #66 exact-head CI; defer overlapping edits while running.
+2. Keep draft PR #92 unmerged until independent review. Continue next independent, non-overlapping D9 native provenance/unknown-broadcast safety and test-only buyer/seller acceptance. Coordinate any VaultForms.tsx cleanup with PR #81 owner.
+3. Sonar Security Rating A, G3 ABI, D1, D8 Tier C, D9 historic provenance, independent security/crypto/escrow reviews, signed release and explicit authorization are still unresolved. No relayer or funds authority is conferred by synthetic tests.
+4. Continue rotated unaudited source audit and source-pinned docs; idle collaboration lane not entered because development/audit/docs work remained actionable.
+
+Execution: one assistant performed development, read-only audit, and docs sequentially, NOT three concurrent workers. No Codex, Codex CLI/cloud, paid API, credit-consuming agent, local project tests, merge, deployment, release, real funds, settings/security/financial-policy change. ReleaseEnabled=0 unchanged.
