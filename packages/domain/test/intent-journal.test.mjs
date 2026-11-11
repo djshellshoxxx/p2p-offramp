@@ -188,3 +188,19 @@ test('cross-trade nonce reuse requires fresh native finality, never a restored t
   if(trusted)val(result);else err(result,'CONFLICT');s.journal.dispose();s.vault.dispose();
  }
 });
+
+test('D9: an unresolved EVM nonce blocks another escrow deployment after journal restart',async()=>{
+ const s=await setup(),first=intent({submission:{chain:'evm',hash:null,nonce:'17'}});
+ val(await s.journal.reserve(first,0));
+ val(await s.journal.markSending(first.intentId));
+ s.journal.dispose();
+ const fresh=journal(s.vault,s.session);
+ const differentDeployment={...binding,deploymentId:'escrow-v2',tradeId:'other-trade'};
+ const reuse=intent({binding:differentDeployment,submission:{chain:'evm',hash:null,nonce:'17'}});
+ err(await fresh.reserve(reuse,2),'CONFLICT');
+ assert.deepEqual(val(await fresh.unresolved(binding,account)).map(item=>item.intentId),[first.intentId]);
+ const otherNonce=intent({binding:differentDeployment,submission:{chain:'evm',hash:null,nonce:'18'}});
+ val(await fresh.reserve(otherNonce,2));
+ assert.deepEqual(val(await fresh.unresolved(differentDeployment,account)).map(item=>item.intentId),[otherNonce.intentId]);
+ fresh.dispose();s.vault.dispose();
+});
