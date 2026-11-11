@@ -3,6 +3,9 @@ import { createObservationDispatcher, createCoreError, createOperationId, type O
 import { createOrderBook, adKey, AD_KIND, DELETION_KIND, AD_D_PREFIX, parseDeletion, type RelayPool, type RelaySubscription, type EventCrypto } from '../../../../packages/relay/index.ts';
 import type { SessionTransportPolicy } from '../../../../packages/transport/index.ts';
 import { parseTradeBinding, sameBinding, parseIntentAccount, parseIntent, type TradeBinding, type IntentV1, type CoreResult, type CoreErrorCode, type VaultSession, type VaultSessionAuthority, type VaultSessionLease, type JournalPendingHint } from '../../../../packages/schemas/index.ts';
+
+// Canonical, locale-independent UTF-16 code-unit order: exactly what the default sort() does for strings.
+const compareCodeUnits = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
 export interface NativeJournalObservationPort {
   unresolved(binding: TradeBinding, account: string, signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>>;
   currentRevision(): number | null;
@@ -121,7 +124,8 @@ export function createNativeContextObservers(options: NativeContextOptions): Nat
           if (!sameBinding(intent.binding, binding) || (binding.chain === 'evm' ? intent.account.toLowerCase() !== account.toLowerCase() : intent.account !== account) || ids.includes(intent.intentId)) throw Error();
           ids.push(intent.intentId);
         }
-        const value: JournalPendingHint = Object.freeze({ pendingIntentIds: Object.freeze(ids.sort()), revision });
+        ids.sort(compareCodeUnits);
+        const value: JournalPendingHint = Object.freeze({ pendingIntentIds: Object.freeze(ids), revision });
         if (!publishHint(value)) return failure('CANCELLED');
         return Object.freeze({ ok: true, value });
       } catch { return failure(publishHint(unknown) ? 'UNAVAILABLE' : 'CANCELLED'); }

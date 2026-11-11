@@ -9,6 +9,7 @@ import{parseClaimsBytes,safeClaimPath,projectClaimsRegister,CLAIM_CATALOG,CLAIM_
 import{parseStrictJsonBytes}from'../../packages/schemas/index.ts';
 import{sourceCatalog}from'../../apps/web/src/ui/locale/en.ts';
 import{isMain}from'../lib/is-main.mjs';
+import{resolveTool}from'../lib/tool-path.mjs';
 const ROOT=fileURLToPath(new URL('../../',import.meta.url)), sha=b=>createHash('sha256').update(b).digest('hex');
 const refuse=()=>{throw Error('DOCS_STALE');
 };
@@ -85,14 +86,14 @@ export async function inspectDocs(root=ROOT ) {
     paths.add(item.path);
     const bytes=await file(root,item.path);
     if(sha(bytes)!==item.sha256)refuse();
-    const committed=execFileSync('git',['show',`${register.sourceCommit}:${item.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']});
+    const committed=execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${item.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']});
     if(sha(committed)!==item.sha256)refuse();
   }
   for(const claim of claims)if(claim.evidencePaths.some(p=>!paths.has(p)))refuse();
   exact(register.copySource,['path','sha256']);
   if(register.copySource.path!=='apps/web/src/ui/locale/en.ts'||typeof register.copySource.sha256!=='string'||! /^[0-9a-f]{64}$/.test(register.copySource.sha256))refuse();
   const copyBytes=await file(root,register.copySource.path);
-  if(sha(copyBytes)!==register.copySource.sha256||sha(execFileSync('git',['show',`${register.sourceCommit}:${register.copySource.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']}))!==register.copySource.sha256)refuse();
+  if(sha(copyBytes)!==register.copySource.sha256||sha(execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${register.copySource.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']}))!==register.copySource.sha256)refuse();
 
   const keys=new Set();
   for(const item of register.copyKeys ) {

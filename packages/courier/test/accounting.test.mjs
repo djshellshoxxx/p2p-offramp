@@ -10,9 +10,9 @@ const val = (r) => {
     assert.equal(r.ok, true, JSON.stringify(r));
     return r.value;
   },
-  fail = (r, c) => {
-    assert.equal(r.ok, false);
-    if (c) assert.equal(r.code, c);
+  fail = (r, c, message) => {
+    assert.equal(r.ok, false, message);
+    if (c) assert.equal(r.code, c, message);
   };
 const schedule = () => ({
   shipmentId: context.shipmentId,

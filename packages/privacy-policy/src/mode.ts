@@ -42,7 +42,8 @@ export function createModeController(options: ModeControllerOptions): ModeContro
   const nextGeneration = (): boolean => { if (generation >= Number.MAX_SAFE_INTEGER - 1) { closed = true; return false; } generation++; return true; };
   const closeRegistry = (target: ExtensionRegistry | undefined): Promise<void> => {
     if (!target) return Promise.resolve();
-    try { return Promise.resolve(target.disposeAll()).then(() => undefined, () => undefined); } catch { return Promise.resolve(); }
+    const closing = attempt(() => Promise.resolve(target.disposeAll()).then(() => undefined, () => undefined));
+    return closing.ok ? closing.value : Promise.resolve();
   };
   const retire = (reason: CoreErrorCode): void => {
     if (closed || busy) return;

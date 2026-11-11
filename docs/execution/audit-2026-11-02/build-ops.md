@@ -13,7 +13,9 @@ All reputation lock139 entries passed the static exact-version/HTTPS-npm/SHA512/
 
 Historical T57/T61/T63/T79/T86 execution receipts are reused only as scoped unchanged-file evidence. No new browser/native/Docker/full-suite, deployment, signing, production trust, funds enablement, paid resource, external publication/message, ledger edit or commit is claimed. Root owns final enrollment/hash refresh and exact-head consolidated verification.
 
-[T88 frozen packet](/workspace/work/t88-review-packet.json) · [Exact inventory, per-file checks, hashes and limits](/workspace/work/audit-build-ops.json)
+[T88 frozen packet](../reviews/T88-cli-author.json) · [Exact inventory, per-file checks, hashes and limits](build-ops.json)
+
+The packet is the committed copy of workspace-local `/workspace/work/t88-review-packet.json` (5,815 bytes, SHA-256 `ef8d90ea6b46ce0c6855f1a65f36a49aa1734c7ab2f7b639be5b0a2150d9d59f`, bound in [T89](../reviews/T89-author.json)). The original `/workspace/work/audit-build-ops.json` is workspace-local, not committed.
 
 ## Production file coverage
 

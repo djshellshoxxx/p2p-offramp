@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,readFile,writeFile,mkdir,rm,copyFile,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
+import {spawnSync} from 'node:child_process';
 import{resolve,dirname}from'node:path';
 import{fileURLToPath}from'node:url';
 import{inspectDocs}from'./validate.mjs';
 import * as docs from './validate.mjs';
+import {resolveTool} from '../lib/tool-path.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 async function fixture(change ) {
   const temp=await mkdtemp(resolve(tmpdir(),'p2p-docs-'));
@@ -44,6 +46,15 @@ test('actual draft has exact immutable evidence and links but no review, approva
 test('unknown keys, duplicate claims/copy keys and unrecognized references fail closed',async()=>{for(const change of [r=>r.extra=true,r=>r.claims.push(r.claims[0]),r=>r.copyKeys.push(r.copyKeys[0]),r=>r.copyKeys[0].claimId='missing',r=>r.claims[0].evidencePaths=['../escape']])await assert.rejects(registerMutation(change));
 });
 test('self-attested reviewer, future approval and tested status do not pass local check',async()=>{for(const change of [r=>r.reviewers=['self'],r=>r.approvedRelease='future',r=>r.claims[0].status='tested-scoped',r=>r.claims[0].reviewedAt='2026-11-02'])await assert.rejects(registerMutation(change));
+});
+test('pinned sourceCommit is an ancestor of HEAD, so a clone of this branch alone can resolve it',async()=>{
+  const register=JSON.parse(await readFile(resolve(root,'docs/wiki-source/claims-register.json'),'utf8'));
+  const manifest=JSON.parse(await readFile(resolve(root,'docs/wiki-source/docs-manifest.json'),'utf8'));
+  assert.equal(manifest.sourceCommit,register.sourceCommit);
+  // Exit 1 means another branch's commit; 128 means the object is absent. Both break check:docs after a merge.
+  const args=['merge-base','--is-ancestor',register.sourceCommit,'HEAD'];
+  const git=spawnSync(resolveTool('git'),args,{cwd:root,stdio:'ignore'});
+  assert.equal(git.status,0,`sourceCommit ${register.sourceCommit} is not in this branch's history`);
 });
 test('wrong source bytes, hash, baseline and missing evidence fail',async()=>{for(const change of [r=>r.evidence[0].sha256='0'.repeat(64),r=>r.sourceCommit='0'.repeat(40),r=>r.evidence=[],r=>r.evidence[0].path='missing.ts'])await assert.rejects(registerMutation(change));
   await assert.rejects(fixture(async(temp,r)=>{await writeFile(resolve(temp,r.evidence[0].path),'changed source');

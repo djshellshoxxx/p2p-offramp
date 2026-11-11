@@ -197,7 +197,15 @@ export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
   const inspectionTime = async () => Number((await vaultObservation.innerText()).match(/Inspected at (\d+) milliseconds/)[1]);
   const firstInspection = await inspectionTime();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'one bounded local expiry timer is active');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [1, 1], 'one resume listener per event');
+  // The page-wide recorder also sees independent features that own their own resume listeners:
+  // use-screen-counts.ts (T89: visibilitychange + pageshow) and main.tsx (BFcache draft lifecycle: pageshow).
+  // Only the Settings panel's share is asserted to be exactly one per event; the others are pinned so a leak shows.
+  const otherFeatureResumeListeners = [1, 2];
+  const settingsResumeListeners = async () => {
+    const sizes = await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size));
+    return sizes.map((size, index) => size - otherFeatureResumeListeners[index]);
+  };
+  assert.deepEqual(await settingsResumeListeners(), [1, 1], 'Settings panel owns one resume listener per event');
   await privacyPage.clock.runFor(30_001);
   await privacyPage.waitForFunction(before => {
     const row = [...document.querySelectorAll('#privacy-observations-title ~ ul li')].find(node => node.querySelector('h3')?.textContent === 'Local vault');
@@ -207,6 +215,11 @@ export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
   assert.ok(renewedInspection >= firstInspection + 30_000, 'expiry renews actual monotonic inspection without vault events');
   assert.ok((await vaultObservation.innerText()).includes('Locked'), 'expiry does not manufacture an unlocked state');
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 1, 'renewed view owns only one deadline');
+  assert.deepEqual(
+    await settingsResumeListeners(),
+    [1, 1],
+    'renewal re-subscribes without duplicating Settings listeners',
+  );
   await privacyPage.clock.runFor(1000);
   await privacyPage.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await privacyPage.waitForFunction(before => {
@@ -223,7 +236,7 @@ export const bundledLocaleConfiguration={developmentFixtures:true,fixtures:[
   await privacyPage.getByRole('link', { name: 'Home', exact: true }).click();
   await privacyPage.getByRole('heading', { name: 'Your local workspace', exact: true }).waitFor();
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'leaving Settings clears its local deadline');
-  assert.deepEqual(await privacyPage.evaluate(() => Object.values(window.__privacyResumeListeners).map(set => set.size)), [0, 0], 'unmount removes both resume listeners');
+  assert.deepEqual(await settingsResumeListeners(), [0, 0], 'unmount removes both Settings resume listeners');
   await privacyPage.clock.runFor(60_001);
   assert.equal(await privacyPage.evaluate(() => window.__privacyDeadlineTimers.size), 0, 'unmounted Settings does not reschedule');
   await privacyPage.getByRole('button', { name: 'Create new profile', exact: true }).click();
