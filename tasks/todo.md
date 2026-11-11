@@ -94,3 +94,21 @@ T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfour
 T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
 
 T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.
+
+## EVM MVP integration — 2026-11-11
+
+Branch `claude/p2p-offramp-evm-escrow-vc7stk`. Details in `docs/integration/` (matrix, gap closure,
+architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/mvp-gap-closure.md`.
+
+| Task | Status | Scope / evidence |
+| --- | --- | --- |
+| I1 | DONE | Upstream matrix: viem and nostr-tools adopted as dev-only oracles; wagmi, NDK rejected; Synpress deferred; OpenZeppelin unchanged (already SafeERC20 + ReentrancyGuard) |
+| I2 | DONE | `test:evm:viem`: 9 unit + 17 Anvil differential checks |
+| I3 | DONE | nostr-tools NIP-01 differential: 6 pass, 1 skip; repo never looser |
+| I4 | DONE | PR #83 relay failover: Node 22 runtime defect; fix reverted after review; bound tests added |
+| G1 | BLOCKED | Web UI journey wiring needs owner decision (Issue #82 invariant, D8 Tier C) |
+| G2 | BLOCKED | D1 PeerAcceptance field names and vectors |
+| G3 | OPEN | `EvmChainReader.read()` does not read canonical `getTrade(bytes32)`; Tier C PR after layout decision |
+| G4 | OTHER LANE | D9 `sendMarkedAt` (#69–#75) |
+| G5 | BLOCKED by G1 | Two-wallet browser acceptance |
+| G9 | NOT ATTEMPTED | Sepolia two-party run needs owner-held RPC and accounts |
