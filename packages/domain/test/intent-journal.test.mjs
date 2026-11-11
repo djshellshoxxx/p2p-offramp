@@ -380,7 +380,7 @@ test('D9: fresh-key recovery scopes EVM pending nonces to their account on the s
  try{
   const other=intent({binding:{...binding,tradeId:'unrelated-account-trade'},account:secondAccount,submission:{chain:'evm',hash:null,nonce}});
   val(await fresh.reserve(other,0));
-  assert.deepEqual(val(await fresh.unresolved(binding,secondAccount)),[other],'another EVM account may use its own nonce');
+  assert.deepEqual(val(await fresh.unresolved(other.binding,secondAccount)),[other],'another EVM account may use its own nonce');
   const held=val(await fresh.unresolved(binding,firstAccount));
   assert.equal(held.length,1);assert.equal(held[0].state,'pending');
   assert.equal(held[0].submission.hash,hash);assert.equal(held[0].submission.nonce,nonce);
