@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs",
+    "test": "node --import ./scripts/test-support/register-tsx.mjs --test packages/*/test/*.test.mjs apps/web/test/*.test.mjs scripts/tests/research-evidence.test.mjs scripts/tests/npm-registry-signatures.test.mjs",
     "test:specs": "python -m unittest discover -s scripts/tests -v",
     "test:evm": "cd contracts/evm && forge test",
     "test:evm:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs",
@@ -33,7 +33,9 @@
     "build": "npm run typecheck && node apps/web/scripts/build.mjs",
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
     "build:testnet": "npm run typecheck && node apps/web/scripts/build.mjs testnet",
-    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs",
+    "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs && npm run test:favorites:browser && npm run test:share:browser",
+    "test:favorites:browser": "node scripts/test-review-favorites-browser.mjs",
+    "test:share:browser": "node scripts/test-generic-app-share-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
     "test:build-policy": "node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs apps/web/scripts/source-locale.test.mjs scripts/tests/import-boundaries.test.mjs",
     "test:diagnostics": "node --test scripts/tests/capture-labels.test.mjs",
@@ -41,7 +43,15 @@
     "test:private:browser": "node scripts/test-g16-browser.mjs && node scripts/test-g16-adapter-browser.mjs && node scripts/test-g16-physical-browser.mjs && node scripts/test-release-browser.mjs",
     "test:escrow": "npm --prefix packages/escrow-evm test",
     "test:local-evm": "node scripts/test-local-evm.mjs",
-    "test:locale:browser": "node scripts/test-locale-layout-browser.mjs"
+    "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
+    "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs",
+    "test:eip1271:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-eip1271-local.mjs",
+    "test:journey:browser": "node scripts/test-journey-browser.mjs",
+    "test:journey:origins": "node scripts/test-journey-origin-browser.mjs",
+    "test:retention:browser": "node scripts/test-retention-browser.mjs",
+    "test:updates:browser": "node scripts/test-release-update-browser.mjs",
+    "test:zoom:browser": "node scripts/test-browser-zoom.mjs",
+    "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",

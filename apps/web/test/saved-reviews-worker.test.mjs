@@ -44,7 +44,7 @@ async function setup({ wrapVault, now, provider = crypto } = {}) {
   return { store, session, vault, service, messages, send, last, value, error, profileId: session.profileId };
 }
 
-test('save, list and delete round-trip exact bytes in the selected encrypted profile only', async () => {
+test('save and list preserve exact bytes; old immediate delete requires retention review', async () => {
   const s = await setup();
   await s.send('unlock', { profileId: s.profileId, passphrase: pass });
   await s.send('saveTermsReview', { profileId: s.profileId, source: 'synthetic-sample', bytes: terms(1) });
@@ -54,9 +54,9 @@ test('save, list and delete round-trip exact bytes in the selected encrypted pro
   assert.deepEqual(listed.items, [{ recordId, source: 'synthetic-sample', bytes: terms(1) }]); assert.equal(listed.skipped, 0);
   assert.doesNotMatch(JSON.stringify([...s.store.rows.values()]), /synthetic-terms|saved-terms-review/, 'stored only as ciphertext');
   await s.send('deleteTermsReview', { profileId: s.profileId, recordId });
-  assert.deepEqual(s.value(), { recordId });
-  await s.send('listTermsReviews', { profileId: s.profileId }); assert.deepEqual(s.value().items, []);
-  await s.send('deleteTermsReview', { profileId: s.profileId, recordId }); assert.equal(s.error(), 'NOT_FOUND');
+  assert.equal(s.error(), 'NATIVE_PROOF_REQUIRED');
+  await s.send('listTermsReviews', { profileId: s.profileId }); assert.equal(s.value().items.length, 1);
+  await s.send('deleteTermsReview', { profileId: s.profileId, recordId }); assert.equal(s.error(), 'NATIVE_PROOF_REQUIRED');
   s.service.dispose();
 });
 
@@ -152,7 +152,7 @@ test('lock during an in-flight save suppresses the reply; a retry after unlock i
   s.service.dispose();
 });
 
-test('earlier local encrypted review wrappers remain readable and deletable without implicit rewriting', async () => {
+test('earlier local encrypted review wrappers remain readable and protected without implicit rewriting', async () => {
   const s = await setup();
   const bytes = terms(42), recordId = '4'.repeat(32);
   const source = (await s.vault.unlock(s.profileId, pass)).value;
@@ -166,8 +166,8 @@ test('earlier local encrypted review wrappers remain readable and deletable with
   assert.deepEqual(s.store.rows.get(s.profileId),original,'compatibility read never changes encrypted source');
   await s.send('saveTermsReview', {profileId:s.profileId,source:'file',bytes});
   assert.deepEqual(s.value(),{recordId});assert.deepEqual(s.store.rows.get(s.profileId),original,'idempotent save retains legacy ciphertext');
-  await s.send('deleteTermsReview', {profileId:s.profileId,recordId});assert.deepEqual(s.value(),{recordId});
-  await s.send('listTermsReviews', {profileId:s.profileId});assert.deepEqual(s.value().items,[]);
+  await s.send('deleteTermsReview', {profileId:s.profileId,recordId});assert.equal(s.error(),'NATIVE_PROOF_REQUIRED');
+  await s.send('listTermsReviews', {profileId:s.profileId});assert.equal(s.value().items.length,1);assert.deepEqual(s.store.rows.get(s.profileId),original);
 });
 
 test('listing saved reviews checks persisted freshness and refuses a stale tab before returning bytes', async () => {
@@ -217,7 +217,7 @@ test('a durable review write winning expiry stays recoverable while its reply re
   assert.deepEqual(s.value().items.map(item => item.bytes), [terms(82)]);
 });
 
-test('expiry immediately before encrypted CAS blocks save and delete without relying on a timer callback', async () => {
+test('expiry immediately before encrypted CAS blocks save; old delete cannot enter a write', async () => {
   let clock = 0;
   const s = await setup({ now: () => clock });
   await s.send('unlock', { profileId: s.profileId, passphrase: pass });
@@ -231,7 +231,7 @@ test('expiry immediately before encrypted CAS blocks save and delete without rel
   const { recordId } = s.value(), beforeDelete = s.store.writes;
   s.store.beforeWrite = () => { clock += 30_000; };
   await s.send('deleteTermsReview', { profileId: s.profileId, recordId });
-  assert.equal(s.error(), 'TIMEOUT'); assert.equal(s.store.writes, beforeDelete);
+  assert.equal(s.error(), 'NATIVE_PROOF_REQUIRED'); assert.equal(s.store.writes, beforeDelete);
   s.store.beforeWrite = undefined;
   await s.send('unlock', { profileId: s.profileId, passphrase: pass });
   await s.send('listTermsReviews', { profileId: s.profileId });

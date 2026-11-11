@@ -8,3 +8,6 @@ dist/
 .superpowers/
 dist-demo/
 dist-testnet/
+.venv*/
+.formal-evidence/
+.formal-partition-evidence/

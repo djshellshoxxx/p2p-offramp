@@ -52,3 +52,15 @@ jobs:
       - run: npm run test:recovery:evm
       - run: npm run test:sepolia:kit
       - run: npm run test:sepolia:trade
+      - run: npm run test:eip1271:local
+      - name: Install Chromium for native journey UI
+        id: chrome
+        uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce
+        with:
+          chrome-version: stable
+      - run: npm run test:journey:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:retention:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}

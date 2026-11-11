@@ -1,0 +1,248 @@
+{
+  "schema": "p2p-offramp-task-ledger/1",
+  "updated": "2026-11-11",
+  "states": [
+    "unassigned",
+    "active",
+    "review",
+    "blocked",
+    "integrated",
+    "verified",
+    "external-gate"
+  ],
+  "tasks": [
+    {
+      "id": "C70",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P0",
+      "depends": [
+        "PR54"
+      ],
+      "branch": "claude/vibrant-cray-ny4gum",
+      "scope": "PR #54 review R1-R5: Sepolia trade lock, error attribution, finality coverage, encoded-credential leak",
+      "acceptance": "RED/GREEN regressions; test:sepolia:trade and test:sepolia:kit node suites pass",
+      "evidence": "docs/development/AUTONOMOUS-PROGRESS.md"
+    },
+    {
+      "id": "C71",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P0",
+      "depends": [
+        "PR54"
+      ],
+      "branch": "claude/vibrant-cray-ny4gum",
+      "scope": "PR #54 review R6-R7: retention partial-conversation deletion; inherited relay handlers",
+      "acceptance": "RED/GREEN; storage/relay/messaging/exchange suites pass; tsc",
+      "evidence": "docs/development/AUTONOMOUS-PROGRESS.md"
+    },
+    {
+      "id": "C72",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P1",
+      "depends": [],
+      "branch": "claude/vibrant-cray-ny4gum",
+      "scope": "Harden openai-agents.yml: read-only agent job, patch artifact, gated publish job, pinned CLI, wall-clock budget",
+      "acceptance": "YAML parses; no write token or persisted credentials in the agent step; protected paths refused",
+      "evidence": "YAML parse only; workflow not dispatched (spends owner OpenAI budget)"
+    },
+    {
+      "id": "C73",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P1",
+      "depends": [],
+      "scope": "R8-R11 test/doc fixes; CURRENT-STATE inventory",
+      "acceptance": "policy suite 30/30"
+    },
+    {
+      "id": "G-PR54",
+      "status": "external-gate",
+      "owner": "repository owner",
+      "priority": "P0",
+      "depends": [
+        "C70",
+        "C71"
+      ],
+      "scope": "Tier C merge of PR #54 / this branch under D8",
+      "acceptance": "owner approval; green CI; no open High/Medium"
+    },
+    {
+      "id": "N40",
+      "status": "review",
+      "priority": "P0",
+      "depends": [
+        "G-PR54"
+      ],
+      "scope": "Extract #40 generic EVM execution hardening, native read-only EIP-1271 harness, signed asset updates and classification fix; contract-wallet execution is a separate unfinished feature",
+      "source": "pr/40 7706859",
+      "evidence": "2a26041; 140/140 focused, eip1271 5, reconcile 10, exchange 12, forge 82; one type-only HttpFetchPort reconciliation; Tier C owner approval required; docs/development/2026-11-11-lanes.md",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum"
+    },
+    {
+      "id": "N-D9",
+      "status": "blocked",
+      "priority": "P0",
+      "depends": [
+        "G-PR54"
+      ],
+      "scope": "Full D9 versioned sendMarkedAt marker and legacy/imported snapshot provenance; #58 repairs only post-send 4001 handling",
+      "source": "Decision #29 89d0a92 and #49 8fb081b; marker absent from #35 4c5d01c and #56 07b1b9b",
+      "acceptance": "Owner-selected persisted version/old-build contract; restore-safe provenance; all funded-restart boundaries, no automatic resend",
+      "evidence": "docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "N-D1",
+      "status": "blocked",
+      "priority": "P1",
+      "depends": [
+        "N-D9"
+      ],
+      "scope": "D1 peer acceptance v2 (EIP-712 PeerAcceptance, tombstones, no downgrade)",
+      "owner": "repository owner + D9/W1 schema coordinator",
+      "evidence": "Proposed plan docs/adr/proposed/D1-implementation-plan-2026-11-11.md (r2; 8 open review corrections); blocked on owner Q1 (v2 format approval) and coordinator Q2 (persisted kind/version, serialized vault writer)"
+    },
+    {
+      "id": "N38",
+      "status": "review",
+      "priority": "P1",
+      "depends": [
+        "G-PR54"
+      ],
+      "scope": "Extract PR #38 remainder: identity history retention, privacy-view",
+      "source": "pr/38 71a56d1",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "evidence": "Identity half extracted (dbad7ca, byte-identical to pr/38, identity 35/35); privacy-view half is PR #62; docs/development/2026-11-11-lanes.md"
+    },
+    {
+      "id": "N41-43",
+      "status": "review",
+      "priority": "P1",
+      "depends": [
+        "N40"
+      ],
+      "scope": "Locale runtime, UI wiring, native journey",
+      "source": "pr/41..pr/43",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "evidence": "N41 8354137, N42 75d8846, N43 7ca4a4a extracted; npm test 1493/1493; all browser suites exit 0; PR #31 F01/F03/F06 reproduce (fixes in parked #35); docs/development/2026-11-11-lanes.md"
+    },
+    {
+      "id": "N37F",
+      "status": "review",
+      "priority": "P1",
+      "depends": [],
+      "scope": "Formal EVM harness (Z3 4.12.2 pin)",
+      "source": "pr/37 81a295d",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "evidence": "faf245e byte-identical to pr/37; test:formal:unit 15/15; real Z3 4.12.2 run: 4 guards PROVED_GUARD_LOGIC_ONLY, overall MODEL_IMPLEMENTATION_GAP (documented); docs/development/2026-11-11-lanes.md"
+    },
+    {
+      "id": "N50",
+      "status": "unassigned",
+      "priority": "P2",
+      "depends": [],
+      "scope": "Complete independent native Solana custody/build qualification and client adapter; bounded source review and payout documentation correction #57 available",
+      "source": "pr/50 26bf00b",
+      "evidence": "docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "N44-48",
+      "status": "unassigned",
+      "priority": "P2",
+      "depends": [
+        "N41-43"
+      ],
+      "scope": "Recovery portal, intake, governance, evidence (excluding #46)"
+    },
+    {
+      "id": "N46",
+      "status": "blocked",
+      "priority": "P3",
+      "depends": [
+        "core leaves LOCALPROOF"
+      ],
+      "scope": "D7-parked optional packages"
+    },
+    {
+      "id": "G-D2",
+      "status": "external-gate",
+      "owner": "repository owner",
+      "priority": "P1",
+      "scope": "Testnet signing key generation; funded Sepolia run"
+    },
+    {
+      "id": "G-AUDIT",
+      "status": "external-gate",
+      "owner": "repository owner",
+      "priority": "P0",
+      "scope": "Professional security/crypto/wallet review; release trust roots; security contact"
+    },
+    {
+      "id": "RQ00",
+      "status": "review",
+      "owner": "codex/rq00-evidence-20261109",
+      "priority": "P0",
+      "depends": [],
+      "branch": "codex/rq00-evidence-20261109",
+      "scope": "Versioned offline evidence admission, independent signer policy, exact source hashes, bounded redaction and adversarial tests; no runtime/release authority",
+      "acceptance": "Wrong source, forged PASS, missing signer, detectable secret leakage and malformed receipts fail closed; ordinary npm test executes receipt regressions",
+      "evidence": "17/17 adversarial tests; unsigned baseline receipt admitted; docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "D9-4001",
+      "status": "review",
+      "owner": "codex/post-send-reconcile-20261109",
+      "priority": "P0",
+      "depends": [
+        "PR56"
+      ],
+      "branch": "codex/post-send-reconcile-20261109",
+      "scope": "Keep post-send 4001 uncertain; native reconciliation before new attempt; preserve pre-marker cancellation",
+      "acceptance": "Red/green broadcast-then-4001 regression; 71/71 focused tests; typecheck; independent review",
+      "source": "PR58 af0e1789889790c2050142ed508b5042ef5bcc85",
+      "evidence": "docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "SOLANA-PAYOUT-DOC",
+      "status": "review",
+      "owner": "codex/solana-payout-docs-20261109",
+      "priority": "P1",
+      "depends": [
+        "PR50"
+      ],
+      "branch": "codex/solana-payout-docs-20261109",
+      "scope": "Correct combined release/payout atomic rollback documentation; no program changes",
+      "acceptance": "Wording matches native/SPL tests and settle source; diff check",
+      "source": "PR57 7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
+      "evidence": "docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "SONAR-56",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P0",
+      "depends": [],
+      "branch": "claude/vibrant-cray-ny4gum",
+      "scope": "SonarCloud annotations on #56: trade.mjs state-path confinement; --ignore-scripts for Codex CLI",
+      "source": "d653a77",
+      "acceptance": "SonarCloud quality gate passes on the PR head",
+      "evidence": "Sepolia node 49/49; anvil trade 13, kit 11; codex --ignore-scripts install smoke check"
+    },
+    {
+      "id": "JOURNEY-F01-F03-F06",
+      "status": "blocked",
+      "priority": "P1",
+      "depends": [
+        "N-D9"
+      ],
+      "scope": "PR #31 journey findings F01 (release blocked before expiry), F03 (deferred payout not shown), F06 (negotiation retry BAD_AD) reproduce on extracted N43 journey; fixes in PR #35 parked pending D9",
+      "source": "pr/31 6e9c0c5, pr/35 4c5d01c",
+      "evidence": "docs/development/2026-11-11-lanes.md (N43 section)"
+    }
+  ]
+}

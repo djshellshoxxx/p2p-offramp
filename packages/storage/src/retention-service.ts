@@ -19,6 +19,8 @@ export interface RetentionCandidate {
   /** Local timestamp for a review suggestion only. Never native finality or deletion authority. */
   readonly reviewTimestamp:number|null;
   readonly conversationId:string|null;
+  /** Durable chat-history sequence (1..N per conversation); null for non-chat purposes. */
+  readonly receivedSequence:number|null;
 }
 export interface RetentionScope {
   readonly profileId:string; readonly revision:number;
@@ -98,12 +100,12 @@ function classify(record:Readonly<PrivateRecordV1>):RetentionCandidate|null {
       if(!saved)return null;
       saved.terms.fill(0);
       // Saved review v1 contains no collection timestamp. Never invent an age from its file or terms.
-      return Object.freeze({record,purpose:'saved-terms-review',reviewTimestamp:null,conversationId:null});
+      return Object.freeze({record,purpose:'saved-terms-review',reviewTimestamp:null,conversationId:null,receivedSequence:null});
     }
     if(record.kind==='journal'){
       const intent=decodeIntentPayload(record.payload);
       if(intent.state!=='finalized'&&intent.state!=='failed')return null;
-      return Object.freeze({record,purpose:'terminal-intent',reviewTimestamp:intent.updatedAt,conversationId:null});
+      return Object.freeze({record,purpose:'terminal-intent',reviewTimestamp:intent.updatedAt,conversationId:null,receivedSequence:null});
     }
     if(record.kind==='chat'){
       const bytes=decodeBase64url(record.payload,1,MAX_PAYLOAD_BYTES);
@@ -111,7 +113,7 @@ function classify(record:Readonly<PrivateRecordV1>):RetentionCandidate|null {
         const r=intentData(parseStrictJsonBytes(bytes,MAX_PAYLOAD_BYTES),['format','version','conversationId','receivedSequence','receivedAt','wrap']);
         if(r.format!=='p2p-offramp-chat-history'||r.version!==1||typeof r.conversationId!=='string'||!/^[a-f0-9]{64}$/.test(r.conversationId)||
           !integer(r.receivedSequence)||r.receivedSequence<1||!integer(r.receivedAt)||!r.wrap||typeof r.wrap!=='object')return null;
-        return Object.freeze({record,purpose:'chat-history',reviewTimestamp:r.receivedAt,conversationId:r.conversationId});
+        return Object.freeze({record,purpose:'chat-history',reviewTimestamp:r.receivedAt,conversationId:r.conversationId,receivedSequence:r.receivedSequence});
       } finally {bytes.fill(0);}
     }
   } catch {/* Unknown, damaged, future or opaque namespaces are retained. */}
@@ -173,9 +175,16 @@ export class RetentionService {
       const allowed=new Map(scope.candidates.map(c=>[c.record.id,c]));const selected=new Set<string>();
       for(const id of ids){if(typeof id!=='string'||selected.has(id)||!allowed.has(id))return fail('NATIVE_PROOF_REQUIRED');selected.add(id);}
       // Existing durable history requires sequences 1..N. No partial-conversation deletion is allowed.
-      const conversations=new Map<string,{total:number;selected:number}>();
-      for(const c of scope.candidates)if(c.conversationId!==null){const group=conversations.get(c.conversationId)??{total:0,selected:0};group.total++;if(selected.has(c.record.id))group.selected++;conversations.set(c.conversationId,group);}
-      for(const group of conversations.values())if(group.selected>0&&group.selected!==group.total)return fail('NATIVE_PROOF_REQUIRED');
+      const conversations=new Map<string,{total:number;selected:number;sequences:number[]}>();let classifiedChat=0;
+      for(const c of scope.candidates)if(c.conversationId!==null){classifiedChat++;const group=conversations.get(c.conversationId)??{total:0,selected:0,sequences:[]};group.total++;group.sequences.push(c.receivedSequence??0);if(selected.has(c.record.id))group.selected++;conversations.set(c.conversationId,group);}
+      const chosen=[...conversations.values()].filter(group=>group.selected>0);
+      // Fail closed: an unclassifiable (malformed/future/opaque) chat record cannot be excluded from any selected conversation.
+      if(chosen.length>0&&scope.records.filter(r=>r.kind==='chat').length!==classifiedChat)return fail('NATIVE_PROOF_REQUIRED');
+      for(const group of chosen){
+        if(group.selected!==group.total)return fail('NATIVE_PROOF_REQUIRED');
+        const sequences=group.sequences.sort((left,right)=>left-right);
+        if(sequences.some((sequence,index)=>sequence!==index+1))return fail('NATIVE_PROOF_REQUIRED');
+      }
       this.#guard(job);if(currentMethod.call(received)!==true)return fail('NATIVE_PROOF_REQUIRED');
       this.#guard(job);
       const current=()=>{if(disposed)return false;const value=currentMethod.call(received);this.#guard(job);return value===true&&!disposed;};

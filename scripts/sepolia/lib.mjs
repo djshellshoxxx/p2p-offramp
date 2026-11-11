@@ -101,16 +101,36 @@ export const forgeKey = value => /^(0x)?[0-9a-f]{64}$/i.test(value ?? '') ? `0x$
  * Every nonempty query value is conservatively sensitive, including short/repeated values. Empty values are inert.
  * Limits are local publication safeguards, not RPC wire limits; an uninspectable oversized URL refuses publication.
  */
+const MAX_ENDPOINT_DECODE_LAYERS = 16;
+/** Percent-escape hex digits are case-insensitive (RFC 3986 section 2.1): compare them in one canonical case. */
+const upperEscapes = text => text.replace(/%[0-9a-f]{2}/gi, escape => escape.toUpperCase());
+/** Decodes each run of well-formed %XX escapes; a run that is not valid UTF-8, and any other text, stays literal. Never throws. */
+const decodeEscapeRuns = text => text.replace(/(?:%[0-9a-f]{2})+/gi, run => { try { return decodeURIComponent(run); } catch { return run; } });
 export function leaksPrivateRpc(publicEndpoint, privateUrls) {
   const endpoint = String(publicEndpoint ?? '');
   if (endpoint.length > 2048) return true;
-  let decodedEndpoint = endpoint;
-  try { decodedEndpoint = decodeURIComponent(endpoint); } catch { return true; } // Uninspectable public encodings refuse publication.
-  const contains = part => {
+  // Every decoding layer down to a fixed point is inspected, so repeated encoding cannot hide a credential.
+  // The endpoint as given must be well formed; a malformed escape there refuses publication as uninspectable.
+  let first; try { first = decodeURIComponent(endpoint); } catch { return true; }
+  const layers = [endpoint];
+  for (let current = endpoint, next = first; next !== current;) {
+    if (layers.length > MAX_ENDPOINT_DECODE_LAYERS) return true; // Nested past the bound: uninspectable.
+    layers.push(next); current = next;
+    // Deeper layers decode only well-formed escape runs: a literal '%' produced by a valid %25 stays literal text
+    // instead of making an inspected endpoint uninspectable.
+    next = decodeEscapeRuns(current);
+  }
+  const haystacks = layers.map(layer => [layer, upperEscapes(layer), layer.toLowerCase()]);
+  const contains = (part, caseInsensitive = false) => {
     if (!part) return false;
     const variants = new Set([part, encodeURIComponent(part)]);
     try { variants.add(decodeURIComponent(part)); } catch { /* Malformed percent text remains literal. */ }
-    return [...variants].some(value => endpoint.includes(value) || decodedEndpoint.includes(value));
+    // Form encoding: '+' and space are the same character in a query value, so check both spellings.
+    for (const value of [...variants]) for (const form of [value.replaceAll(' ', '+'), value.replaceAll('+', ' '), value.replaceAll('+', '%2B')]) variants.add(form);
+    return [...variants].some(value => {
+      const canonical = upperEscapes(value), lower = value.toLowerCase();
+      return haystacks.some(([layer, upper, folded]) => layer.includes(value) || upper.includes(canonical) || (caseInsensitive && folded.includes(lower)));
+    });
   };
   return privateUrls.some(value => {
     if (typeof value !== 'string' || !value) return false;
@@ -122,8 +142,18 @@ export function leaksPrivateRpc(publicEndpoint, privateUrls) {
       if (++values > 128) return true;
       if (contains(part)) return true;
     }
-    const keyLike = [...secret.hostname.split('.'), ...secret.pathname.split('/')].filter(part => part.length >= 16);
-    return [...credentials, ...keyLike].some(contains);
+    // Raw (not form-decoded) query values, exactly as an operator would copy them.
+    for (const pair of secret.search.slice(1).split('&')) {
+      if (++values > 256) return true;
+      if (contains(pair.slice(pair.indexOf('=') + 1))) return true;
+    }
+    // DNS labels are case-insensitive and URL parsing lowercases/punycodes them: match host labels ignoring case,
+    // including the label exactly as written in the private string.
+    const rawHost = /^[a-z][a-z0-9+.-]*:\/\/(?:[^@/?#]*@)?([^/?#:]*)/i.exec(value)?.[1] ?? '';
+    const hostLabels = [...secret.hostname.split('.'), ...rawHost.split('.')].filter(part => part.length >= 16);
+    if (hostLabels.some(part => contains(part, true))) return true;
+    const keyLike = secret.pathname.split('/').filter(part => part.length >= 16);
+    return [...credentials, ...keyLike].some(part => contains(part));
   });
 }
 
