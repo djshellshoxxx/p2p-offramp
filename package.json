@@ -46,6 +46,9 @@
     "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
     "test:formal:unit": "node --test scripts/tests/formal-evm.test.mjs",
     "test:eip1271:local": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-eip1271-local.mjs",
+    "test:journey:browser": "node scripts/test-journey-browser.mjs",
+    "test:journey:origins": "node scripts/test-journey-origin-browser.mjs",
+    "test:retention:browser": "node scripts/test-retention-browser.mjs",
     "test:updates:browser": "node scripts/test-release-update-browser.mjs",
     "test:zoom:browser": "node scripts/test-browser-zoom.mjs",
     "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs"
