@@ -364,3 +364,38 @@ test('D9: restored pending nonce holds stay scoped to the EVM network, not reuse
   fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
+
+test('D9: fresh-key recovery scopes EVM pending nonces to their account on the same network',async()=>{
+ const nonce='19',hash='0x'+'bd'.repeat(32);
+ const firstAccount='0x'+'ab'.repeat(20),secondAccount='0x'+'cd'.repeat(20);
+ const s=await setup(),original=intent({account:firstAccount,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto),bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent account scoped recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent account scoped recovery'));
+ const fresh=journal(freshVault,session);
+ try{
+  const other=intent({binding:{...binding,tradeId:'unrelated-account-trade'},account:secondAccount,submission:{chain:'evm',hash:null,nonce}});
+  val(await fresh.reserve(other,0));
+  assert.deepEqual(val(await fresh.unresolved(binding,secondAccount)),[other],'another EVM account may use its own nonce');
+  const held=val(await fresh.unresolved(binding,firstAccount));
+  assert.equal(held.length,1);assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);assert.equal(held[0].submission.nonce,nonce);
+  assert.equal(held[0].account,firstAccount);
+  const writes=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,tradeId:'same-account-another-trade'},
+   account:firstAccount.toUpperCase().replace('0X','0x'),
+   submission:{chain:'evm',hash:null,nonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,writes,'case-varied original account cannot reuse the recovered nonce');
+  assert.deepEqual(val(await fresh.unresolved(binding,firstAccount)),held,'rejected reservation preserves existing pending evidence');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'fresh-key recovery conveys no spending authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
