@@ -203,3 +203,39 @@ test('portable CLI refuses a FIFO reference without waiting for a writer', async
   assert.equal(result.code,1); assert.equal(JSON.parse(result.stdout).ok,false);
   assert.doesNotMatch(result.stdout,/reference\.fifo|PRIVATE/);
 });
+
+test('recovery CLI rejects symlinked reference files without opening their targets', async () => {
+  const { runRecoveryCli } = await import('../recovery/evm-cli.mjs');
+  const target=resolve(temporary,'reference-symlink-target.json'), link=resolve(temporary,'reference-symlink.json');
+  await writeFile(target,'{"format":"PRIVATE_UNTRUSTED"}'); await symlink(target,link);
+  const actualOpen=fsPromises.open; let openedTarget=0;
+  fsPromises.open=async function(file,...args) {
+    if (file === link) openedTarget++;
+    return actualOpen.call(this,file,...args);
+  }; syncBuiltinESMExports();
+  try {
+    const config={expected:{},profile:{networkId:'local-evm',deploymentId:'escrow-fixture'}};
+    await assert.rejects(runRecoveryCli(['inspect','--endpoint','loopback-fixture','--reference',link,'--item','0'],config,temporary),
+      error=>error.code==='INVALID_INPUT');
+    assert.equal(openedTarget,0,'a symlink must be refused before opening or reading its target');
+  } finally { fsPromises.open=actualOpen;syncBuiltinESMExports(); }
+});
+test('recovery CLI refuses reference inode replacement between lstat and open', async () => {
+  const { runRecoveryCli } = await import('../recovery/evm-cli.mjs');
+  const path=resolve(temporary,'reference-race.json');
+  await writeFile(path,'{"format":"ORIGINAL"}');
+  const actualOpen=fsPromises.open; let swapped=false;
+  fsPromises.open=async function(file,...args) {
+    if (file===path&&!swapped) {
+      swapped=true;
+      await rename(path,path+'.old'); await writeFile(path,'{"format":"REPLACED"}');
+    }
+    return actualOpen.call(this,file,...args);
+  }; syncBuiltinESMExports();
+  try {
+    const config={expected:{},profile:{networkId:'local-evm',deploymentId:'escrow-fixture'}};
+    await assert.rejects(runRecoveryCli(['inspect','--endpoint','loopback-fixture','--reference',path,'--item','0'],config,temporary),
+      error=>error.code==='INVALID_INPUT');
+    assert.equal(swapped,true,'exercise the identity check against a replacement inode');
+  } finally { fsPromises.open=actualOpen;syncBuiltinESMExports(); }
+});
