@@ -192,3 +192,28 @@ test('catch-up handles a full reverse-order chain of mutators within one bounded
  s.registry.change();await Promise.resolve();assert.equal(mutations,63);assert.equal(stableMode,s.broker.mode);assert.ok(callbacks<=4096,'64 eligible callbacks, at most64 catch-up passes');
  const completed=callbacks;for(let i=0;i<10;i++)await Promise.resolve();assert.equal(callbacks,completed,'no recursive notification microtasks');s.broker.dispose();
 });
+
+test('G05 destination binding rejects same-origin path and query drift before running a scoped operation', async () => {
+  const s = setup(); let operations = 0;
+  try {
+    for (const expectedURL of [
+      'https://fixture.example/api?source=unapproved',
+      'https://fixture.example/api?',
+      'https://fixture.example/api/',
+      'https://fixture.example/api%2F',
+      'https://fixture.example/other',
+      'wss://fixture.example/api',
+    ]) {
+      const p = permit(s.broker.authorize(request()));
+      assert.equal(s.broker.capture(p, { expectedURL }), 'INVALID_ENDPOINT', expectedURL);
+      assert.equal(s.broker.isCurrent(p), false, 'a mismatched binding must consume its permit');
+      assert.equal(s.registry.issued.size, 0, 'rejected grants must be disposed');
+    }
+    const approved = scope(s.broker.capture(permit(s.broker.authorize(request())), {
+      expectedURL: 'HTTPS://FIXTURE.EXAMPLE:443/api',
+    }));
+    assert.deepEqual(await approved.run(async () => ++operations), { ok: true, value: 1 });
+    approved.dispose();
+    assert.equal(operations, 1, 'only the exact canonical destination may run');
+  } finally { s.broker.dispose(); }
+});
