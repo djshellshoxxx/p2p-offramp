@@ -18,8 +18,15 @@ recommended sub-rules on 2026-11-04. Nothing here is deployed to a public cluste
 - `payout_native` / `payout_spl` are permissionless. They pay exactly the recorded principal once to the
   party fixed by the terminal state: the buyer after release, the seller after refund. An SPL payout goes
   only to that party's canonical associated token account, whose current owner must also be that party.
-  Clients send `release` and `payout_*` in one transaction; if the payout leg fails (frozen account, empty
-  wallet below rent) the decision stands and anyone retries the payout later.
+  A client may submit `release` and `payout_*` in one transaction, but a failed payout (frozen account,
+  empty wallet below rent) rolls back the entire transaction, including `release`: the escrow remains
+  `Funded`. The seller can instead commit `release` alone, strictly before the deadline. Once that
+  separate release is finalized, payout failures leave the escrow `Released`, and anyone can retry
+  `payout_*` later. A failed combined transaction does not extend the deadline or prevent a refund while
+  the escrow remains `Funded` at or after the deadline.
+  After an uncertain transaction outcome, reconcile the transaction and re-observe finalized escrow
+  state before any retry; submission alone does not establish a release, and uncertainty must not
+  trigger an automatic second broadcast.
 - Escrow PDA `[b"p2p-offramp-escrow-v1", seller, sellerNonce]`; vault PDA `[b"p2p-offramp-vault-v1",
   escrow]`. Accounts are never closed in v1, so a nonce or trade id funds at most once. Rent and donated
   surplus stay locked; there is no sweep, owner, operator, pause or upgrade path.
