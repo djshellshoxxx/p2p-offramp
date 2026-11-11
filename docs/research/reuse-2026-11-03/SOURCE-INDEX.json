@@ -1,0 +1,1616 @@
+{
+  "schema_version": 1,
+  "title": "P2P Offramp unfinished-feature reuse research source index",
+  "research_date": "2026-11-03",
+  "research_timezone": "America/Vancouver",
+  "retrieval_date_utc": "2026-11-04",
+  "scope_note": "Automatically indexed citations from the five source-reviewed reports. Repository counts include implementation candidates, licensing evidence, already used dependencies and reference-only projects. They are not counts of adopted dependencies or completed features. A source commit is not a reproduced package/release artifact. Mutable official documentation and specifications are recorded separately.",
+  "local_repository": {
+    "repository": "djshellshoxxx/p2p-offramp",
+    "main_commit": "e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+    "unmerged_pr_26_commit": "94554ecf9854e4604f9f56afe5bebedeee931994",
+    "pr_27_commit": "2f839b12768700ac6c3b674f75a144c6ec19fa93",
+    "verified_materialized_source_test_config_blobs": 653,
+    "local_materialization_is_complete_repository": false,
+    "non_complete_records_mapped": 27
+  },
+  "counts": {
+    "reports": 5,
+    "report_words": 13628,
+    "pinned_upstream_repositories": 62,
+    "pinned_upstream_revisions": 63,
+    "unique_pinned_upstream_references": 259,
+    "other_primary_source_or_repository_context_urls": 31,
+    "project_source_context_urls": 46,
+    "total_unique_urls": 336
+  },
+  "reports": [
+    {
+      "file": "00-unfinished-feature-map.md",
+      "sha256": "b99609a1ad4ddcf98d14515894210533c911bfed5410d3a7b25b556eee10a58e",
+      "bytes": 16646,
+      "whitespace_separated_words": 1814
+    },
+    {
+      "file": "01-core-transport-wallets.md",
+      "sha256": "452137920dd79cc835f36c2378bfc1ba498f7ff1bfd9ce083aad163bb621a96f",
+      "bytes": 38499,
+      "whitespace_separated_words": 3137
+    },
+    {
+      "file": "02-proofs-and-optional-protocols.md",
+      "sha256": "8ced554d8e79ceff727d96a98e05a7d38058dbdae8285471566a130db6e6d4d0",
+      "bytes": 35132,
+      "whitespace_separated_words": 3047
+    },
+    {
+      "file": "03-product-recovery-release.md",
+      "sha256": "85952b14a681f1c4e3ad7f1df7a9db5db95a9ae39490fd6ff3ec6878a4175467",
+      "bytes": 32606,
+      "whitespace_separated_words": 2860
+    },
+    {
+      "file": "04-escrow-maps-privacy-and-peer-projects.md",
+      "sha256": "9cfa8d4312900dd7707e0fb48f7af57b44a17c13bd6f5820594ffb1e723a2816",
+      "bytes": 29404,
+      "whitespace_separated_words": 2770
+    }
+  ],
+  "pinned_upstream_repositories": [
+    {
+      "repository": "anza-xyz/kit",
+      "revisions": [
+        {
+          "commit": "4f9b869e81ccb599d9b61f22b554508185b3ef98",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/anza-xyz/kit/blob/4f9b869e81ccb599d9b61f22b554508185b3ef98/LICENSE",
+            "https://github.com/anza-xyz/kit/blob/4f9b869e81ccb599d9b61f22b554508185b3ef98/packages/addresses/src/program-derived-address.ts",
+            "https://github.com/anza-xyz/kit/blob/4f9b869e81ccb599d9b61f22b554508185b3ef98/packages/rpc/src/rpc.ts",
+            "https://github.com/anza-xyz/kit/blob/4f9b869e81ccb599d9b61f22b554508185b3ef98/packages/transaction-confirmation/src/confirmation-strategy-blockheight.ts",
+            "https://github.com/anza-xyz/kit/blob/4f9b869e81ccb599d9b61f22b554508185b3ef98/packages/transaction-confirmation/src/waiters.ts",
+            "https://github.com/anza-xyz/kit/commit/4f9b869e81ccb599d9b61f22b554508185b3ef98"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "anza-xyz/wallet-standard",
+      "revisions": [
+        {
+          "commit": "c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/anza-xyz/wallet-standard/blob/c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f/LICENSE",
+            "https://github.com/anza-xyz/wallet-standard/blob/c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f/packages/core/features/src/signAndSendTransaction.ts",
+            "https://github.com/anza-xyz/wallet-standard/blob/c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f/packages/core/features/src/signMessage.ts",
+            "https://github.com/anza-xyz/wallet-standard/blob/c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f/packages/core/features/src/signTransaction.ts",
+            "https://github.com/anza-xyz/wallet-standard/commit/c4d06f9f2668ebec3f2747c9fcf5e2382a2fc36f"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "bisq-network/bisq",
+      "revisions": [
+        {
+          "commit": "18a1bdb97398b1ac32d0d600a1409cfdccfbe645",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/bisq-network/bisq/blob/18a1bdb97398b1ac32d0d600a1409cfdccfbe645/LICENSE",
+            "https://github.com/bisq-network/bisq/blob/18a1bdb97398b1ac32d0d600a1409cfdccfbe645/core/src/main/java/bisq/core/trade/protocol/TradeProtocol.java"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "crytic/echidna",
+      "revisions": [
+        {
+          "commit": "f0b6676298d70802be635297072e51224420e08c",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/crytic/echidna/blob/f0b6676298d70802be635297072e51224420e08c/LICENSE",
+            "https://github.com/crytic/echidna/blob/f0b6676298d70802be635297072e51224420e08c/README.md",
+            "https://github.com/crytic/echidna/blob/f0b6676298d70802be635297072e51224420e08c/tests/solidity/basic/default.yaml",
+            "https://github.com/crytic/echidna/blob/f0b6676298d70802be635297072e51224420e08c/tests/solidity/foundry-basic/basic.sol"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "crytic/fuzz-utils",
+      "revisions": [
+        {
+          "commit": "6f68fcc82d106045e995106f027ef4aaafecc24e",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/crytic/fuzz-utils/blob/6f68fcc82d106045e995106f027ef4aaafecc24e/LICENSE",
+            "https://github.com/crytic/fuzz-utils/blob/6f68fcc82d106045e995106f027ef4aaafecc24e/fuzz_utils/generate/FoundryTest.py",
+            "https://github.com/crytic/fuzz-utils/blob/6f68fcc82d106045e995106f027ef4aaafecc24e/fuzz_utils/generate/fuzzers/Echidna.py"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "crytic/properties",
+      "revisions": [
+        {
+          "commit": "5ea14b813ff296e24b4257ab52a0402360f916f6",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/crytic/properties/blob/5ea14b813ff296e24b4257ab52a0402360f916f6/LICENSE",
+            "https://github.com/crytic/properties/blob/5ea14b813ff296e24b4257ab52a0402360f916f6/contracts/ERC20/external/properties/ERC20ExternalBasicProperties.sol"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "dequelabs/axe-core",
+      "revisions": [
+        {
+          "commit": "73b05b710a39693bbe8c0db57479f20ab50db486",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/dequelabs/axe-core/blob/73b05b710a39693bbe8c0db57479f20ab50db486/LICENSE",
+            "https://github.com/dequelabs/axe-core/blob/73b05b710a39693bbe8c0db57479f20ab50db486/LICENSE-3RD-PARTY.txt",
+            "https://github.com/dequelabs/axe-core/blob/73b05b710a39693bbe8c0db57479f20ab50db486/lib/core/public/run.js",
+            "https://github.com/dequelabs/axe-core/commit/73b05b710a39693bbe8c0db57479f20ab50db486"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "dexie/Dexie.js",
+      "revisions": [
+        {
+          "commit": "45aade72aa19a601e6a13aa877beb7389e15b5d2",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/dexie/Dexie.js/blob/45aade72aa19a601e6a13aa877beb7389e15b5d2/LICENSE",
+            "https://github.com/dexie/Dexie.js/blob/45aade72aa19a601e6a13aa877beb7389e15b5d2/src/classes/transaction/transaction.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "dumbmatter/fakeIndexedDB",
+      "revisions": [
+        {
+          "commit": "09e7f7684193e9c3a206054200f6f991595cb6ec",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/dumbmatter/fakeIndexedDB/blob/09e7f7684193e9c3a206054200f6f991595cb6ec/LICENSE",
+            "https://github.com/dumbmatter/fakeIndexedDB/blob/09e7f7684193e9c3a206054200f6f991595cb6ec/README.md",
+            "https://github.com/dumbmatter/fakeIndexedDB/blob/09e7f7684193e9c3a206054200f6f991595cb6ec/src/FDBFactory.ts",
+            "https://github.com/dumbmatter/fakeIndexedDB/commit/09e7f7684193e9c3a206054200f6f991595cb6ec"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "erdtman/canonicalize",
+      "revisions": [
+        {
+          "commit": "31fb117afde3ef305b2e1d99bde539bf6300bc62",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/erdtman/canonicalize/blob/31fb117afde3ef305b2e1d99bde539bf6300bc62/LICENSE",
+            "https://github.com/erdtman/canonicalize/blob/31fb117afde3ef305b2e1d99bde539bf6300bc62/lib/canonicalize.js",
+            "https://github.com/erdtman/canonicalize/blob/31fb117afde3ef305b2e1d99bde539bf6300bc62/package.json",
+            "https://github.com/erdtman/canonicalize/commit/31fb117afde3ef305b2e1d99bde539bf6300bc62"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ethereum/ERCs",
+      "revisions": [
+        {
+          "commit": "90bed817701ba554ad0ef80494497a55c50a1a3b",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/ethereum/ERCs/blob/90bed817701ba554ad0ef80494497a55c50a1a3b/ERCS/erc-5564.md",
+            "https://github.com/ethereum/ERCs/blob/90bed817701ba554ad0ef80494497a55c50a1a3b/LICENSE.md",
+            "https://github.com/ethereum/ERCs/blob/90bed817701ba554ad0ef80494497a55c50a1a3b/assets/erc-5564/contracts/ERC5564Announcer.sol",
+            "https://github.com/ethereum/ERCs/blob/90bed817701ba554ad0ef80494497a55c50a1a3b/assets/erc-5564/minimal_poc.ipynb",
+            "https://github.com/ethereum/ERCs/blob/90bed817701ba554ad0ef80494497a55c50a1a3b/assets/erc-6538/contracts/ERC6538Registry.sol",
+            "https://github.com/ethereum/ERCs/tree/90bed817701ba554ad0ef80494497a55c50a1a3b"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ethereum/tor-js",
+      "revisions": [
+        {
+          "commit": "d9d9612d10d3775ff100b70e96a291718191d856",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/LICENSE-APACHE",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/LICENSE-MIT",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/README.md",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/package.json",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/src/TorClient.ts",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/src/entryPoints/wasm-cdn/index.ts",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/src/entryPoints/wasm-file/index.ts",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/src/socketProvider.ts",
+            "https://github.com/ethereum/tor-js/blob/d9d9612d10d3775ff100b70e96a291718191d856/src/storage/indexeddb.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ethers-io/ethers.js",
+      "revisions": [
+        {
+          "commit": "3ea4c226dd0b3a074abf90748de9d11192027f4f",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/ethers-io/ethers.js/blob/3ea4c226dd0b3a074abf90748de9d11192027f4f/LICENSE.md",
+            "https://github.com/ethers-io/ethers.js/blob/3ea4c226dd0b3a074abf90748de9d11192027f4f/src.ts/hash/typed-data.ts",
+            "https://github.com/ethers-io/ethers.js/blob/3ea4c226dd0b3a074abf90748de9d11192027f4f/src.ts/providers/provider-browser.ts",
+            "https://github.com/ethers-io/ethers.js/commit/3ea4c226dd0b3a074abf90748de9d11192027f4f"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "formatjs/formatjs",
+      "revisions": [
+        {
+          "commit": "d097f4e3d5fae1bf6a99976e424b05fddd6dd5dd",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/formatjs/formatjs/blob/d097f4e3d5fae1bf6a99976e424b05fddd6dd5dd/packages/intl-messageformat/LICENSE.md",
+            "https://github.com/formatjs/formatjs/blob/d097f4e3d5fae1bf6a99976e424b05fddd6dd5dd/packages/intl-messageformat/core.ts",
+            "https://github.com/formatjs/formatjs/blob/d097f4e3d5fae1bf6a99976e424b05fddd6dd5dd/packages/intl-messageformat/tests/index.test.ts",
+            "https://github.com/formatjs/formatjs/commit/d097f4e3d5fae1bf6a99976e424b05fddd6dd5dd"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "foundry-rs/foundry",
+      "revisions": [
+        {
+          "commit": "2ed30fca48218751d77b8d0507525042ae72c268",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/foundry-rs/foundry/blob/2ed30fca48218751d77b8d0507525042ae72c268/LICENSE-APACHE",
+            "https://github.com/foundry-rs/foundry/blob/2ed30fca48218751d77b8d0507525042ae72c268/LICENSE-MIT",
+            "https://github.com/foundry-rs/foundry/blob/2ed30fca48218751d77b8d0507525042ae72c268/crates/config/src/invariant.rs"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "haveno-dex/haveno",
+      "revisions": [
+        {
+          "commit": "240a3684612ba808d1078ac2c293f59b6d9bc4d9",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/haveno-dex/haveno/blob/240a3684612ba808d1078ac2c293f59b6d9bc4d9/LICENSE",
+            "https://github.com/haveno-dex/haveno/blob/240a3684612ba808d1078ac2c293f59b6d9bc4d9/core/src/main/java/haveno/core/trade/protocol/TradeProtocol.java"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "i18next/i18next",
+      "revisions": [
+        {
+          "commit": "14faff4f7d9c86230c49018f804b30899566e4f6",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/i18next/i18next/blob/14faff4f7d9c86230c49018f804b30899566e4f6/LICENSE",
+            "https://github.com/i18next/i18next/blob/14faff4f7d9c86230c49018f804b30899566e4f6/src/Translator.js",
+            "https://github.com/i18next/i18next/blob/14faff4f7d9c86230c49018f804b30899566e4f6/src/defaults.js",
+            "https://github.com/i18next/i18next/commit/14faff4f7d9c86230c49018f804b30899566e4f6"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "iden3/snarkjs",
+      "revisions": [
+        {
+          "commit": "0e0126f427f5c2c8ec753bc0d60dfacc6afece16",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/iden3/snarkjs/blob/0e0126f427f5c2c8ec753bc0d60dfacc6afece16/COPYING",
+            "https://github.com/iden3/snarkjs/tree/0e0126f427f5c2c8ec753bc0d60dfacc6afece16"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ipfs/helia",
+      "revisions": [
+        {
+          "commit": "cba1ed69b4369924790d9eccdb8c9089435f4f20",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/ipfs/helia/blob/cba1ed69b4369924790d9eccdb8c9089435f4f20/packages/http/LICENSE-APACHE",
+            "https://github.com/ipfs/helia/blob/cba1ed69b4369924790d9eccdb8c9089435f4f20/packages/http/LICENSE-MIT",
+            "https://github.com/ipfs/helia/blob/cba1ed69b4369924790d9eccdb8c9089435f4f20/packages/http/package.json",
+            "https://github.com/ipfs/helia/blob/cba1ed69b4369924790d9eccdb8c9089435f4f20/packages/http/src/index.ts",
+            "https://github.com/ipfs/helia/commit/cba1ed69b4369924790d9eccdb8c9089435f4f20"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ipld/js-car",
+      "revisions": [
+        {
+          "commit": "ed820dddeaaf79f46f6b18a3116a47bb2a180e3a",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/LICENSE",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/LICENSE-APACHE",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/LICENSE-MIT",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/src/decoder.js",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/src/iterator.js",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/src/reader-browser.js",
+            "https://github.com/ipld/js-car/blob/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a/test/test-iterator.spec.js",
+            "https://github.com/ipld/js-car/commit/ed820dddeaaf79f46f6b18a3116a47bb2a180e3a"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "jakearchibald/idb",
+      "revisions": [
+        {
+          "commit": "654c746bef13f9fe7f5871e03ac58015cebace5a",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/jakearchibald/idb/blob/654c746bef13f9fe7f5871e03ac58015cebace5a/LICENSE",
+            "https://github.com/jakearchibald/idb/blob/654c746bef13f9fe7f5871e03ac58015cebace5a/README.md",
+            "https://github.com/jakearchibald/idb/blob/654c746bef13f9fe7f5871e03ac58015cebace5a/src/entry.ts",
+            "https://github.com/jakearchibald/idb/commit/654c746bef13f9fe7f5871e03ac58015cebace5a"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "JoinMarket-Org/joinmarket-clientserver",
+      "revisions": [
+        {
+          "commit": "23d61a8b42b50cf3f7e0c2198c12fadedc7488df",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/23d61a8b42b50cf3f7e0c2198c12fadedc7488df/LICENSE",
+            "https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/23d61a8b42b50cf3f7e0c2198c12fadedc7488df/src/jmclient/wallet.py"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "kleros/erc-792",
+      "revisions": [
+        {
+          "commit": "87bea72ec0a4c92ce7f62e596e84f24be7662dd7",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/kleros/erc-792/blob/87bea72ec0a4c92ce7f62e596e84f24be7662dd7/LICENSE",
+            "https://github.com/kleros/erc-792/blob/87bea72ec0a4c92ce7f62e596e84f24be7662dd7/contracts/IArbitrator.sol",
+            "https://github.com/kleros/erc-792/commit/87bea72ec0a4c92ce7f62e596e84f24be7662dd7"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "kleros/kleros-v2",
+      "revisions": [
+        {
+          "commit": "38d778a4dd39606528c2b0725d0fff3f090aad30",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/kleros/kleros-v2/blob/38d778a4dd39606528c2b0725d0fff3f090aad30/LICENSE",
+            "https://github.com/kleros/kleros-v2/blob/38d778a4dd39606528c2b0725d0fff3f090aad30/contracts/src/arbitration/dispute-kits/DisputeKitClassic.sol",
+            "https://github.com/kleros/kleros-v2/blob/38d778a4dd39606528c2b0725d0fff3f090aad30/contracts/src/arbitration/evidence/EvidenceModule.sol",
+            "https://github.com/kleros/kleros-v2/blob/38d778a4dd39606528c2b0725d0fff3f090aad30/contracts/src/arbitration/interfaces/IArbitratorV2.sol",
+            "https://github.com/kleros/kleros-v2/commit/38d778a4dd39606528c2b0725d0fff3f090aad30"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "maplibre/maplibre-gl-js",
+      "revisions": [
+        {
+          "commit": "2b68611a4e2d4f7f076f6c6ebf758e2d53f91471",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/maplibre/maplibre-gl-js/blob/2b68611a4e2d4f7f076f6c6ebf758e2d53f91471/LICENSE.txt",
+            "https://github.com/maplibre/maplibre-gl-js/blob/2b68611a4e2d4f7f076f6c6ebf758e2d53f91471/src/source/protocol_crud.ts",
+            "https://github.com/maplibre/maplibre-gl-js/blob/2b68611a4e2d4f7f076f6c6ebf758e2d53f91471/src/util/ajax.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "microsoft/playwright",
+      "revisions": [
+        {
+          "commit": "0ea36910324ed8aa2a5f460317cbd35881ee88d4",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/microsoft/playwright/blob/0ea36910324ed8aa2a5f460317cbd35881ee88d4/LICENSE",
+            "https://github.com/microsoft/playwright/blob/0ea36910324ed8aa2a5f460317cbd35881ee88d4/docs/src/accessibility-testing-js.md",
+            "https://github.com/microsoft/playwright/blob/0ea36910324ed8aa2a5f460317cbd35881ee88d4/docs/src/emulation.md",
+            "https://github.com/microsoft/playwright/blob/0ea36910324ed8aa2a5f460317cbd35881ee88d4/packages/playwright-core/src/client/browserType.ts",
+            "https://github.com/microsoft/playwright/commit/0ea36910324ed8aa2a5f460317cbd35881ee88d4"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "MostroP2P/mostro",
+      "revisions": [
+        {
+          "commit": "8111f5eb1297e253e64a1c5fd928cf696545f6df",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/MostroP2P/mostro/blob/8111f5eb1297e253e64a1c5fd928cf696545f6df/LICENSE",
+            "https://github.com/MostroP2P/mostro/blob/8111f5eb1297e253e64a1c5fd928cf696545f6df/LICENSE-MIT",
+            "https://github.com/MostroP2P/mostro/blob/8111f5eb1297e253e64a1c5fd928cf696545f6df/docs/TRANSPORT_V2_SPEC.md",
+            "https://github.com/MostroP2P/mostro/blob/8111f5eb1297e253e64a1c5fd928cf696545f6df/src/app/fiat_sent.rs",
+            "https://github.com/MostroP2P/mostro/blob/8111f5eb1297e253e64a1c5fd928cf696545f6df/src/app/release.rs"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "MostroP2P/mostro-core",
+      "revisions": [
+        {
+          "commit": "97a1fa84fa81d92368c852b943eabf3711564aa2",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/MostroP2P/mostro-core/blob/97a1fa84fa81d92368c852b943eabf3711564aa2/LICENSE",
+            "https://github.com/MostroP2P/mostro-core/blob/97a1fa84fa81d92368c852b943eabf3711564aa2/src/chat/wrap.rs",
+            "https://github.com/MostroP2P/mostro-core/blob/97a1fa84fa81d92368c852b943eabf3711564aa2/src/message.rs",
+            "https://github.com/MostroP2P/mostro-core/blob/97a1fa84fa81d92368c852b943eabf3711564aa2/src/transport.rs",
+            "https://github.com/MostroP2P/mostro-core/commit/97a1fa84fa81d92368c852b943eabf3711564aa2"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "mqttjs/MQTT.js",
+      "revisions": [
+        {
+          "commit": "0ceae419ff0542105fa258b3ae9760798db7b44d",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/mqttjs/MQTT.js/blob/0ceae419ff0542105fa258b3ae9760798db7b44d/LICENSE.md",
+            "https://github.com/mqttjs/MQTT.js/blob/0ceae419ff0542105fa258b3ae9760798db7b44d/src/lib/client.ts",
+            "https://github.com/mqttjs/MQTT.js/blob/0ceae419ff0542105fa258b3ae9760798db7b44d/src/lib/connect/ws.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "multiformats/js-multiformats",
+      "revisions": [
+        {
+          "commit": "0dcd129adb06743d5005245c0e39631f13b86251",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/multiformats/js-multiformats/blob/0dcd129adb06743d5005245c0e39631f13b86251/LICENSE",
+            "https://github.com/multiformats/js-multiformats/blob/0dcd129adb06743d5005245c0e39631f13b86251/LICENSE-APACHE",
+            "https://github.com/multiformats/js-multiformats/blob/0dcd129adb06743d5005245c0e39631f13b86251/LICENSE-MIT",
+            "https://github.com/multiformats/js-multiformats/blob/0dcd129adb06743d5005245c0e39631f13b86251/src/cid.ts",
+            "https://github.com/multiformats/js-multiformats/blob/0dcd129adb06743d5005245c0e39631f13b86251/src/hashes/sha2-browser.ts",
+            "https://github.com/multiformats/js-multiformats/commit/0dcd129adb06743d5005245c0e39631f13b86251"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "nbd-wtf/nostr-tools",
+      "revisions": [
+        {
+          "commit": "a59c053e820d58bfc85372612d1515b7cdd9fa5c",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/nbd-wtf/nostr-tools/blob/a59c053e820d58bfc85372612d1515b7cdd9fa5c/LICENSE",
+            "https://github.com/nbd-wtf/nostr-tools/blob/a59c053e820d58bfc85372612d1515b7cdd9fa5c/abstract-pool.ts",
+            "https://github.com/nbd-wtf/nostr-tools/blob/a59c053e820d58bfc85372612d1515b7cdd9fa5c/nip17.ts",
+            "https://github.com/nbd-wtf/nostr-tools/blob/a59c053e820d58bfc85372612d1515b7cdd9fa5c/nip44.ts",
+            "https://github.com/nbd-wtf/nostr-tools/blob/a59c053e820d58bfc85372612d1515b7cdd9fa5c/nip59.ts",
+            "https://github.com/nbd-wtf/nostr-tools/commit/a59c053e820d58bfc85372612d1515b7cdd9fa5c"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ngraveio/bc-ur",
+      "revisions": [
+        {
+          "commit": "428b039e6e658b920c7d540ba34be8a676d45409",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/ngraveio/bc-ur/blob/428b039e6e658b920c7d540ba34be8a676d45409/LICENSE",
+            "https://github.com/ngraveio/bc-ur/blob/428b039e6e658b920c7d540ba34be8a676d45409/package.json",
+            "https://github.com/ngraveio/bc-ur/blob/428b039e6e658b920c7d540ba34be8a676d45409/src/classes/FountainDecoder.ts",
+            "https://github.com/ngraveio/bc-ur/blob/428b039e6e658b920c7d540ba34be8a676d45409/src/classes/UrFountainDecoder.ts",
+            "https://github.com/ngraveio/bc-ur/commit/428b039e6e658b920c7d540ba34be8a676d45409"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "nimiq/qr-scanner",
+      "revisions": [
+        {
+          "commit": "abcfe1bce2703721408d8ce7ebde94a359998506",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/nimiq/qr-scanner/blob/abcfe1bce2703721408d8ce7ebde94a359998506/LICENSE",
+            "https://github.com/nimiq/qr-scanner/blob/abcfe1bce2703721408d8ce7ebde94a359998506/src/qr-scanner.ts",
+            "https://github.com/nimiq/qr-scanner/commit/abcfe1bce2703721408d8ce7ebde94a359998506"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "nostr-dev-kit/ndk",
+      "revisions": [
+        {
+          "commit": "4b86acd13fe3c1284fddcb81a7f0d63e491db64a",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/nostr-dev-kit/ndk/blob/4b86acd13fe3c1284fddcb81a7f0d63e491db64a/LICENSE",
+            "https://github.com/nostr-dev-kit/ndk/blob/4b86acd13fe3c1284fddcb81a7f0d63e491db64a/core/src/events/index.ts",
+            "https://github.com/nostr-dev-kit/ndk/blob/4b86acd13fe3c1284fddcb81a7f0d63e491db64a/core/src/relay/pool/index.ts",
+            "https://github.com/nostr-dev-kit/ndk/blob/4b86acd13fe3c1284fddcb81a7f0d63e491db64a/core/src/subscription/index.ts",
+            "https://github.com/nostr-dev-kit/ndk/commit/4b86acd13fe3c1284fddcb81a7f0d63e491db64a"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "OpenZeppelin/openzeppelin-contracts",
+      "revisions": [
+        {
+          "commit": "c64a1edb67b6e3f4a15cca8909c9482ad33a02b0",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/c64a1edb67b6e3f4a15cca8909c9482ad33a02b0/LICENSE",
+            "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/c64a1edb67b6e3f4a15cca8909c9482ad33a02b0/contracts/token/ERC20/utils/SafeERC20.sol",
+            "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/c64a1edb67b6e3f4a15cca8909c9482ad33a02b0/contracts/utils/cryptography/SignatureChecker.sol"
+          ]
+        },
+        {
+          "commit": "efaa6f78ab1dde05416246e801c0baaf4f900d49",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/efaa6f78ab1dde05416246e801c0baaf4f900d49/contracts/token/ERC20/extensions/ERC4626.sol"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "otter-sec/anchor",
+      "revisions": [
+        {
+          "commit": "5193a025c12476634df435c442ff0358058e003f",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/otter-sec/anchor/blob/5193a025c12476634df435c442ff0358058e003f/LICENSE",
+            "https://github.com/otter-sec/anchor/blob/5193a025c12476634df435c442ff0358058e003f/lang/src/accounts/account.rs",
+            "https://github.com/otter-sec/anchor/blob/5193a025c12476634df435c442ff0358058e003f/lang/src/accounts/signer.rs",
+            "https://github.com/otter-sec/anchor/blob/5193a025c12476634df435c442ff0358058e003f/lang/syn/src/codegen/accounts/constraints.rs",
+            "https://github.com/otter-sec/anchor/commit/5193a025c12476634df435c442ff0358058e003f"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "protomaps/PMTiles",
+      "revisions": [
+        {
+          "commit": "aec8fa1341222fdddb3318e9ffa8e18e19b312f7",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/protomaps/PMTiles/blob/aec8fa1341222fdddb3318e9ffa8e18e19b312f7/LICENSE",
+            "https://github.com/protomaps/PMTiles/blob/aec8fa1341222fdddb3318e9ffa8e18e19b312f7/js/src/adapters.ts",
+            "https://github.com/protomaps/PMTiles/blob/aec8fa1341222fdddb3318e9ffa8e18e19b312f7/js/src/index.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "Railgun-Community/engine",
+      "revisions": [
+        {
+          "commit": "6e2614d53a106dd62abad91e7ce03ee4a3956138",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/Railgun-Community/engine/blob/6e2614d53a106dd62abad91e7ce03ee4a3956138/LICENSE",
+            "https://github.com/Railgun-Community/engine/blob/6e2614d53a106dd62abad91e7ce03ee4a3956138/src/wallet/hardware-wallet.ts",
+            "https://github.com/Railgun-Community/engine/blob/6e2614d53a106dd62abad91e7ce03ee4a3956138/src/wallet/railgun-wallet.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "reclaimprotocol/.github",
+      "revisions": [
+        {
+          "commit": "49cd1902963723716901d80212502842ea0107eb",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/reclaimprotocol/.github/blob/49cd1902963723716901d80212502842ea0107eb/LICENSE"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "reclaimprotocol/attestor-core",
+      "revisions": [
+        {
+          "commit": "dd43dc882b88dcfe75d27a1c1a991315574823ab",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/reclaimprotocol/attestor-core/blob/dd43dc882b88dcfe75d27a1c1a991315574823ab/LICENSE",
+            "https://github.com/reclaimprotocol/attestor-core/blob/dd43dc882b88dcfe75d27a1c1a991315574823ab/src/server/utils/assert-valid-claim-request.ts",
+            "https://github.com/reclaimprotocol/attestor-core/commit/dd43dc882b88dcfe75d27a1c1a991315574823ab"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "reclaimprotocol/reclaim-js-sdk",
+      "revisions": [
+        {
+          "commit": "a483dda82e2a2437d93571351c2d7f608182fdd5",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/reclaimprotocol/reclaim-js-sdk/blob/a483dda82e2a2437d93571351c2d7f608182fdd5/package.json",
+            "https://github.com/reclaimprotocol/reclaim-js-sdk/blob/a483dda82e2a2437d93571351c2d7f608182fdd5/src/Reclaim.ts",
+            "https://github.com/reclaimprotocol/reclaim-js-sdk/blob/a483dda82e2a2437d93571351c2d7f608182fdd5/src/utils/proofValidationUtils.ts",
+            "https://github.com/reclaimprotocol/reclaim-js-sdk/commit/a483dda82e2a2437d93571351c2d7f608182fdd5"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "reown-com/appkit",
+      "revisions": [
+        {
+          "commit": "8f9f39f1dfe0a21bb619dd9a33b6d7500523298b",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/reown-com/appkit/blob/8f9f39f1dfe0a21bb619dd9a33b6d7500523298b/LICENSE.md",
+            "https://github.com/reown-com/appkit/blob/8f9f39f1dfe0a21bb619dd9a33b6d7500523298b/packages/adapters/wagmi/src/client.ts",
+            "https://github.com/reown-com/appkit/commit/8f9f39f1dfe0a21bb619dd9a33b6d7500523298b"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "RoboSats/robosats",
+      "revisions": [
+        {
+          "commit": "10970d712fdeea543d0ef374e58dd22df2145681",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/RoboSats/robosats/blob/10970d712fdeea543d0ef374e58dd22df2145681/LICENSE",
+            "https://github.com/RoboSats/robosats/blob/10970d712fdeea543d0ef374e58dd22df2145681/api/models/order.py",
+            "https://github.com/RoboSats/robosats/blob/10970d712fdeea543d0ef374e58dd22df2145681/frontend/src/components/TradeBox/Dialogs/ConfirmFiatReceived.tsx",
+            "https://github.com/RoboSats/robosats/blob/10970d712fdeea543d0ef374e58dd22df2145681/frontend/src/components/TradeBox/stepXofY.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "ScopeLift/stealth-address-sdk",
+      "revisions": [
+        {
+          "commit": "88bcc27c3b6163080ee18f330dfd6336dc8bd2e2",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/ScopeLift/stealth-address-sdk/blob/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2/LICENSE",
+            "https://github.com/ScopeLift/stealth-address-sdk/blob/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2/src/lib/actions/getAnnouncementsUsingSubgraph/getAnnouncementsPageUsingSubgraph.ts",
+            "https://github.com/ScopeLift/stealth-address-sdk/blob/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2/src/lib/actions/scanAnnouncementsForUserUsingSubgraph/scanAnnouncementsForUserUsingSubgraph.ts",
+            "https://github.com/ScopeLift/stealth-address-sdk/blob/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2/src/utils/crypto/checkStealthAddress.ts",
+            "https://github.com/ScopeLift/stealth-address-sdk/blob/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2/src/utils/crypto/generateStealthAddress.ts",
+            "https://github.com/ScopeLift/stealth-address-sdk/commit/88bcc27c3b6163080ee18f330dfd6336dc8bd2e2"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "semaphore-protocol/semaphore",
+      "revisions": [
+        {
+          "commit": "dbab5553c486a09d5e1042e5271e3316224cc176",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/LICENSE",
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/group/src/index.ts",
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/identity/src/index.ts",
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/package.json",
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/generate-proof.ts",
+            "https://github.com/semaphore-protocol/semaphore/blob/dbab5553c486a09d5e1042e5271e3316224cc176/packages/proof/src/verify-proof.ts",
+            "https://github.com/semaphore-protocol/semaphore/commit/dbab5553c486a09d5e1042e5271e3316224cc176"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "smartcontractkit/chainlink-evm",
+      "revisions": [
+        {
+          "commit": "982da1fb36c737664187c787fe5bfcba19d651a7",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/smartcontractkit/chainlink-evm/blob/982da1fb36c737664187c787fe5bfcba19d651a7/LICENSE",
+            "https://github.com/smartcontractkit/chainlink-evm/blob/982da1fb36c737664187c787fe5bfcba19d651a7/contracts/src/v0.8/vrf/VRFConsumerBaseV2Plus.sol",
+            "https://github.com/smartcontractkit/chainlink-evm/commit/982da1fb36c737664187c787fe5bfcba19d651a7"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "solana-program/token",
+      "revisions": [
+        {
+          "commit": "737788ff5bcc3f1f44cfb222f25483187650be76",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/solana-program/token/blob/737788ff5bcc3f1f44cfb222f25483187650be76/LICENSE",
+            "https://github.com/solana-program/token/blob/737788ff5bcc3f1f44cfb222f25483187650be76/clients/js/src/generated/instructions/transferChecked.ts",
+            "https://github.com/solana-program/token/blob/737788ff5bcc3f1f44cfb222f25483187650be76/program/src/processor.rs",
+            "https://github.com/solana-program/token/commit/737788ff5bcc3f1f44cfb222f25483187650be76"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "soldair/node-qrcode",
+      "revisions": [
+        {
+          "commit": "3848ed2c17de5bcdead487417dbf14c5dd017f8d",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/soldair/node-qrcode/blob/3848ed2c17de5bcdead487417dbf14c5dd017f8d/lib/browser.js",
+            "https://github.com/soldair/node-qrcode/blob/3848ed2c17de5bcdead487417dbf14c5dd017f8d/license",
+            "https://github.com/soldair/node-qrcode/blob/3848ed2c17de5bcdead487417dbf14c5dd017f8d/package.json",
+            "https://github.com/soldair/node-qrcode/commit/3848ed2c17de5bcdead487417dbf14c5dd017f8d"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "theupdateframework/tuf-js",
+      "revisions": [
+        {
+          "commit": "f14b2facd4389f1441c88f21b07abb2788cb8ccd",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/theupdateframework/tuf-js/blob/f14b2facd4389f1441c88f21b07abb2788cb8ccd/LICENSE",
+            "https://github.com/theupdateframework/tuf-js/blob/f14b2facd4389f1441c88f21b07abb2788cb8ccd/packages/client/src/store.ts",
+            "https://github.com/theupdateframework/tuf-js/blob/f14b2facd4389f1441c88f21b07abb2788cb8ccd/packages/client/src/updater.ts",
+            "https://github.com/theupdateframework/tuf-js/blob/f14b2facd4389f1441c88f21b07abb2788cb8ccd/packages/client/tests/updater.test.ts",
+            "https://github.com/theupdateframework/tuf-js/commit/f14b2facd4389f1441c88f21b07abb2788cb8ccd"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "tlsnotary/tlsn",
+      "revisions": [
+        {
+          "commit": "24b10ba21bf36c3fd3de709e7eccd8308bb64207",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/tlsnotary/tlsn/blob/24b10ba21bf36c3fd3de709e7eccd8308bb64207/README.md",
+            "https://github.com/tlsnotary/tlsn/blob/24b10ba21bf36c3fd3de709e7eccd8308bb64207/crates/attestation/src/presentation.rs",
+            "https://github.com/tlsnotary/tlsn/blob/24b10ba21bf36c3fd3de709e7eccd8308bb64207/crates/examples/attestation/verify.rs",
+            "https://github.com/tlsnotary/tlsn/commit/24b10ba21bf36c3fd3de709e7eccd8308bb64207"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "tlsnotary/tlsn-extension",
+      "revisions": [
+        {
+          "commit": "d44623434d04ad00d7b1f8da9712cbc10cd0e99c",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/tlsnotary/tlsn-extension/blob/d44623434d04ad00d7b1f8da9712cbc10cd0e99c/packages/extension/src/offscreen/ProveManager/index.ts",
+            "https://github.com/tlsnotary/tlsn-extension/blob/d44623434d04ad00d7b1f8da9712cbc10cd0e99c/packages/plugin-sdk/package.json",
+            "https://github.com/tlsnotary/tlsn-extension/blob/d44623434d04ad00d7b1f8da9712cbc10cd0e99c/packages/plugin-sdk/src/index.ts",
+            "https://github.com/tlsnotary/tlsn-extension/blob/d44623434d04ad00d7b1f8da9712cbc10cd0e99c/packages/plugin-sdk/src/types.ts",
+            "https://github.com/tlsnotary/tlsn-extension/commit/d44623434d04ad00d7b1f8da9712cbc10cd0e99c"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "tlsnotary/tlsn-js",
+      "revisions": [
+        {
+          "commit": "ff6b14a7777fbc28639dbbaa0f1f76d35c584db8",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/tlsnotary/tlsn-js/blob/ff6b14a7777fbc28639dbbaa0f1f76d35c584db8/package.json",
+            "https://github.com/tlsnotary/tlsn-js/blob/ff6b14a7777fbc28639dbbaa0f1f76d35c584db8/readme.md",
+            "https://github.com/tlsnotary/tlsn-js/commit/ff6b14a7777fbc28639dbbaa0f1f76d35c584db8"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "Turfjs/turf",
+      "revisions": [
+        {
+          "commit": "1b87820003ef71c23a8336bdb8b5b71c034a7ad2",
+          "reports": [
+            "04-escrow-maps-privacy-and-peer-projects.md"
+          ],
+          "references": [
+            "https://github.com/Turfjs/turf/blob/1b87820003ef71c23a8336bdb8b5b71c034a7ad2/packages/turf-boolean-point-in-polygon/LICENSE",
+            "https://github.com/Turfjs/turf/blob/1b87820003ef71c23a8336bdb8b5b71c034a7ad2/packages/turf-boolean-point-in-polygon/index.ts",
+            "https://github.com/Turfjs/turf/blob/1b87820003ef71c23a8336bdb8b5b71c034a7ad2/packages/turf-distance/LICENSE",
+            "https://github.com/Turfjs/turf/blob/1b87820003ef71c23a8336bdb8b5b71c034a7ad2/packages/turf-distance/index.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "vlayer-xyz/vlayer",
+      "revisions": [
+        {
+          "commit": "25197319a041935efbb09b8cbc57ba123702aaab",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/vlayer-xyz/vlayer/blob/25197319a041935efbb09b8cbc57ba123702aaab/LICENSE",
+            "https://github.com/vlayer-xyz/vlayer/blob/25197319a041935efbb09b8cbc57ba123702aaab/contracts/vlayer/src/WebProof.sol",
+            "https://github.com/vlayer-xyz/vlayer/commit/25197319a041935efbb09b8cbc57ba123702aaab"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "wallet-standard/wallet-standard",
+      "revisions": [
+        {
+          "commit": "c49b56d60fbac2e68e0f3536707fa33030652f9e",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/wallet-standard/wallet-standard/blob/c49b56d60fbac2e68e0f3536707fa33030652f9e/LICENSE",
+            "https://github.com/wallet-standard/wallet-standard/blob/c49b56d60fbac2e68e0f3536707fa33030652f9e/packages/core/app/src/wallets.ts",
+            "https://github.com/wallet-standard/wallet-standard/blob/c49b56d60fbac2e68e0f3536707fa33030652f9e/packages/core/features/src/connect.ts",
+            "https://github.com/wallet-standard/wallet-standard/blob/c49b56d60fbac2e68e0f3536707fa33030652f9e/packages/core/features/src/events.ts",
+            "https://github.com/wallet-standard/wallet-standard/blob/c49b56d60fbac2e68e0f3536707fa33030652f9e/packages/core/wallet/src/register.ts",
+            "https://github.com/wallet-standard/wallet-standard/commit/c49b56d60fbac2e68e0f3536707fa33030652f9e"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "WalletConnect/walletconnect-monorepo",
+      "revisions": [
+        {
+          "commit": "63094dcb6fded05dcbc2b08b8895ada75a31dcb5",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/LICENSE.md",
+            "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/sign-client/src/controllers/engine.ts",
+            "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/src/uri.ts",
+            "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/providers/ethereum-provider/LICENSE.md",
+            "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/providers/ethereum-provider/src/EthereumProvider.ts",
+            "https://github.com/WalletConnect/walletconnect-monorepo/commit/63094dcb6fded05dcbc2b08b8895ada75a31dcb5"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "web-platform-tests/wpt",
+      "revisions": [
+        {
+          "commit": "b3ab3b13babb3798490d2e6b2d6e6f84bc326f65",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/web-platform-tests/wpt/blob/b3ab3b13babb3798490d2e6b2d6e6f84bc326f65/IndexedDB/idb-explicit-commit.any.js",
+            "https://github.com/web-platform-tests/wpt/blob/b3ab3b13babb3798490d2e6b2d6e6f84bc326f65/IndexedDB/idbtransaction_abort.any.js",
+            "https://github.com/web-platform-tests/wpt/blob/b3ab3b13babb3798490d2e6b2d6e6f84bc326f65/IndexedDB/worker-termination-aborts-upgrade.window.js",
+            "https://github.com/web-platform-tests/wpt/blob/b3ab3b13babb3798490d2e6b2d6e6f84bc326f65/LICENSE.md",
+            "https://github.com/web-platform-tests/wpt/commit/b3ab3b13babb3798490d2e6b2d6e6f84bc326f65"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "websockets/ws",
+      "revisions": [
+        {
+          "commit": "335a610c216c982174e746ecec1db448c1a6ec1b",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/websockets/ws/blob/335a610c216c982174e746ecec1db448c1a6ec1b/LICENSE",
+            "https://github.com/websockets/ws/blob/335a610c216c982174e746ecec1db448c1a6ec1b/browser.js",
+            "https://github.com/websockets/ws/blob/335a610c216c982174e746ecec1db448c1a6ec1b/lib/receiver.js",
+            "https://github.com/websockets/ws/commit/335a610c216c982174e746ecec1db448c1a6ec1b"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "wevm/viem",
+      "revisions": [
+        {
+          "commit": "bf3ffc52b5633afebacf3d728d846080f1668f30",
+          "reports": [
+            "01-core-transport-wallets.md"
+          ],
+          "references": [
+            "https://github.com/wevm/viem/blob/bf3ffc52b5633afebacf3d728d846080f1668f30/LICENSE",
+            "https://github.com/wevm/viem/blob/bf3ffc52b5633afebacf3d728d846080f1668f30/src/actions/wallet/signTypedData.ts",
+            "https://github.com/wevm/viem/blob/bf3ffc52b5633afebacf3d728d846080f1668f30/src/utils/signature/hashTypedData.ts",
+            "https://github.com/wevm/viem/blob/bf3ffc52b5633afebacf3d728d846080f1668f30/src/utils/signature/verifyTypedData.ts",
+            "https://github.com/wevm/viem/commit/bf3ffc52b5633afebacf3d728d846080f1668f30"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "zkemail/zk-email-verify",
+      "revisions": [
+        {
+          "commit": "066c8742a5e60519597697e579333b703ffa6ad2",
+          "reports": [
+            "02-proofs-and-optional-protocols.md"
+          ],
+          "references": [
+            "https://github.com/zkemail/zk-email-verify/blob/066c8742a5e60519597697e579333b703ffa6ad2/LICENSE",
+            "https://github.com/zkemail/zk-email-verify/blob/066c8742a5e60519597697e579333b703ffa6ad2/packages/circuits/email-verifier.circom",
+            "https://github.com/zkemail/zk-email-verify/blob/066c8742a5e60519597697e579333b703ffa6ad2/packages/contracts/DKIMRegistry.sol",
+            "https://github.com/zkemail/zk-email-verify/blob/066c8742a5e60519597697e579333b703ffa6ad2/packages/helpers/src/input-generators.ts",
+            "https://github.com/zkemail/zk-email-verify/commit/066c8742a5e60519597697e579333b703ffa6ad2"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "zxing-js/browser",
+      "revisions": [
+        {
+          "commit": "9ad027d88d4533bd6d29f9d8d7e517e23cd361ff",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/zxing-js/browser/blob/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff/LICENSE",
+            "https://github.com/zxing-js/browser/blob/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff/package.json",
+            "https://github.com/zxing-js/browser/blob/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff/src/readers/BrowserCodeReader.ts",
+            "https://github.com/zxing-js/browser/blob/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff/src/readers/BrowserQRCodeReader.ts",
+            "https://github.com/zxing-js/browser/blob/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff/src/writers/BrowserQRCodeSvgWriter.ts",
+            "https://github.com/zxing-js/browser/commit/9ad027d88d4533bd6d29f9d8d7e517e23cd361ff"
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "zxing-js/library",
+      "revisions": [
+        {
+          "commit": "1722d0744fb5e8b47aebfbeb2b648e17c95e8595",
+          "reports": [
+            "03-product-recovery-release.md"
+          ],
+          "references": [
+            "https://github.com/zxing-js/library/blob/1722d0744fb5e8b47aebfbeb2b648e17c95e8595/LICENSE"
+          ]
+        }
+      ]
+    }
+  ],
+  "other_primary_source_and_repository_context_references": [
+    {
+      "url": "https://docs.chain.link/vrf/v2-5/security",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://docs.ipfs.tech/concepts/ipfs-gateway/",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://docs.protomaps.com/pmtiles/",
+      "reports": [
+        "04-escrow-maps-privacy-and-peer-projects.md"
+      ]
+    },
+    {
+      "url": "https://docs.semaphore.pse.dev/guides/proofs",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://eips.ethereum.org/EIPS/eip-6538",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://eips.ethereum.org/EIPS/eip-6963",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/MostroP2P/mostro-core",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/WalletConnect/walletconnect-monorepo",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/anza-xyz/kit",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/anza-xyz/wallet-standard",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/ethers-io/ethers.js",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/nbd-wtf/nostr-tools",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/nostr-dev-kit/ndk",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/nostr-protocol/nips/blob/master/17.md",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/nostr-protocol/nips/blob/master/59.md",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/otter-sec/anchor",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/reown-com/appkit",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/solana-program/token",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/wallet-standard/wallet-standard",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/websockets/ws",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/wevm/viem",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://reads.ethereum.foundation/projects/torjs/",
+      "reports": [
+        "04-escrow-maps-privacy-and-peer-projects.md"
+      ]
+    },
+    {
+      "url": "https://solana.com/developers/cookbook/transactions/confirmation",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://solana.com/docs/core/pda/pda-derivation",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://solana.com/solutions/token-extensions",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://theupdateframework.github.io/specification/latest/",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://tlsnotary.org/docs/quick_start/browser_extension/",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc8785",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/TR/2025/CRD-mediacapture-streams-20251009/",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/TR/IndexedDB/",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/WAI/WCAG21/Understanding/reflow",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    }
+  ],
+  "project_source_context_references": [
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion/module_0.12.4_qr_interchange/spec-qr-everywhere-secure-sharing-and-import-export.md",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/THIRD_PARTY_NOTICES.md",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md",
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/apps/web/src/journey/native-contracts.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/apps/web/src/journey/private-trade.ts",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/execution/ALL-REMAINING-WORK-PROMPT.md",
+      "reports": [
+        "01-core-transport-wallets.md",
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/execution/coverage/CURRENT-REMAINDER.json",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/docs/governance/PENDING-DECISIONS.md",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/arbitration/DECISIONS.json",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/arbitration/src/draft.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/arbitration/src/payment-assertions.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/domain/src/intent-journal.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/exchange/src/exchange.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/exchange/src/messages.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/liquidity/DECISIONS.json",
+      "reports": [
+        "04-escrow-maps-privacy-and-peer-projects.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/messaging/src/durable-chat.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/nostr-crypto/src/nip17.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/nostr-crypto/src/nip59.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/nostr-crypto/src/provider.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/proof-inputs/README.md",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/proof-inputs/src/boundary.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/proof-jobs/README.md",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/proof-jobs/src/provider-boundary.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/proof-jobs/src/supervisor.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/relay/src/pool.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/schemas/src/registry.ts",
+      "reports": [
+        "03-product-recovery-release.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/stealth/DECISIONS.json",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/stealth/src/math.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/stealth/src/pages.ts",
+      "reports": [
+        "02-proofs-and-optional-protocols.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/discovery.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/evm-adapter.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/evm-agreement.ts",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/evm-contract-acceptance.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/evm-execution.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/packages/wallet/src/evm-terms.ts",
+      "reports": [
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/security/intake/mobile-wallet/README.md",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/security/intake/relay-transport/README.md",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/security/intake/waku/README.md",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/94554ecf9854e4604f9f56afe5bebedeee931994/security/intake/xmtp/README.md",
+      "reports": [
+        "00-unfinished-feature-map.md",
+        "01-core-transport-wallets.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/blob/e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa/.gitmodules",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/26/checks",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/27",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/94554ecf9854e4604f9f56afe5bebedeee931994/contracts/evm/lib",
+      "reports": [
+        "04-escrow-maps-privacy-and-peer-projects.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/94554ecf9854e4604f9f56afe5bebedeee931994/packages",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    },
+    {
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/e9b9db3bfe9fd8ceb54f1eeebf481d82fd7a93aa/packages",
+      "reports": [
+        "00-unfinished-feature-map.md"
+      ]
+    }
+  ],
+  "validation_scope": [
+    "All 27 non-complete canonical records are mapped in 00-unfinished-feature-map.md.",
+    "Report-relative file links were checked against main plus the new research files.",
+    "Pinned local source links were checked against the corresponding main or PR #26 Git tree.",
+    "Targeted independent review checked source/API, license and integration claims.",
+    "No application tests, dependency installs, upstream executable runs, provider activation or new feature completion are claimed."
+  ]
+}

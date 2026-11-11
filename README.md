@@ -1,5 +1,8 @@
 # P2P Off-ramp
 
+New research: [reusable upstream code for unfinished features](docs/research/reuse-2026-11-03/README.md)
+(2026-11-03; current gaps, exact source/license evidence and intended integration points).
+
 Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
 [whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
@@ -73,3 +76,4 @@ and a real two-party loopback-chain recovery test. Run `npm ci --ignore-scripts 
 on Linux x64, then `npm run test:escrow` and `npm run test:local-evm`. These modules remain excluded from
 the shipped app. The [full code audit](docs/execution/CODE-AUDIT-2026-10-30.md) records nine resolved
 findings, verification and remaining human-input/later-integration gates.
+
