@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, link, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scanBuild, SYNTHETIC_MARKERS } from './build.mjs';
@@ -46,4 +48,38 @@ test('scanBuild: only the testnet artifact may carry the testnet trust bundle or
   }
   await assert.rejects(scanBuild(clean, { testnet: true }), /TESTNET_TRUST_DATA_MISSING/);
   assert.equal((await scanBuild(bundled, { testnet: true })).testnet, true);
+});
+
+test('a copied Pages directory must match the independently retained build evidence', async t => {
+  const source = await fixture();
+  const temporary = await mkdtemp(join(tmpdir(), 'p2p-pages-copy-'));
+  t.after(() => Promise.all([source, temporary].map(dir => rm(dir, { recursive: true, force: true }))));
+  const evidenceName = 'local-build-evidence.json';
+  const reference = join(source, evidenceName);
+  const candidate = join(temporary, 'pages');
+  const javascript = join(candidate, 'assets/index-a.js');
+  const evidence = JSON.stringify(await scanBuild(source), null, 2) + '\n';
+  await writeFile(reference, evidence);
+  await cp(source, candidate, { recursive: true });
+  const cli = fileURLToPath(new URL('../../../scripts/verify-web-artifact.mjs', import.meta.url));
+  const verify = (expected = reference) => execFileSync(process.execPath, [cli, candidate, expected], { encoding: 'utf8', stdio: 'pipe' });
+
+  assert.equal(JSON.parse(verify()).verifiedAssets, 6);
+  assert.throws(() => verify(join(candidate, evidenceName)), /INDEPENDENT_EVIDENCE_REQUIRED/);
+  const sharedCopy = join(temporary, 'shared-inode.json');
+  await link(join(candidate, evidenceName), sharedCopy);
+  assert.throws(() => verify(sharedCopy), /INDEPENDENT_EVIDENCE_REQUIRED/);
+  const original = await readFile(javascript);
+  await writeFile(javascript, original.toString().replace('1', '2'));
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(javascript);
+  assert.throws(() => verify());
+  await writeFile(javascript, original);
+  await writeFile(join(candidate, 'extra.txt'), 'unlisted');
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(join(candidate, 'extra.txt'));
+  await writeFile(join(candidate, evidenceName), evidence + '\n');
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(join(candidate, evidenceName));
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
 });
