@@ -47,7 +47,7 @@ jobs:
         # 0.164.0 published 2026-10-23; integrity from the npm registry, checked 2026-11-07.
         run: |
           set -euo pipefail
-          npm install --global --no-fund --no-audit @openai/codex@0.164.0
+          npm install --global --ignore-scripts --no-fund --no-audit @openai/codex@0.164.0
           codex --version
 
       - name: Run development agent

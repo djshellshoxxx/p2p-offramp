@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPrivacyViewReader, type PrivacyIndicator, type PrivacyReason, type PrivacyTransportPort } from '../../../../packages/domain/index.ts';
 import type { AppServices } from '../app-services.ts';
-import { english, englishGroup } from './locale/en.ts';
+import { message as english, messageGroup as englishGroup } from './locale/runtime.ts';
 
 const p = englishGroup('privacy');
 const clock = () => Math.floor(performance.now());
-const states: Readonly<Record<string, string>> = { unknown: p.unknown, unavailable: p.unavailable, unsupported: p.unsupported, direct: p.direct, 'verified-private': p.privateRoute, blocked: p.blocked, locked: p.locked, unlocked: p.unlocked, 'authenticated-encryption': p.authenticated, available: p.available };
-const reasons: Readonly<Record<PrivacyReason, string>> = { 'not-observed': p.notObserved, observed: p.observedReason, expired: p.expired, 'invalid-observation': p.invalid, 'scope-changed': p.scopeChanged, 'clock-reversed': p.clockReversed, 'policy-blocked': p.policyBlocked, unavailable: p.unavailable };
-const sources = { none: p.none, 'local-vault': p.localVault, 'transport-policy': p.transport, 'messaging-provider': p.messagingProvider, 'proof-provider': p.proofProvider };
-const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel, update: p.update, wallet: p.wallet };
 
 /** Bundled composition supplies the same real broker it uses for transport.
  * A subscription is an invalidation hint; only a fresh coherent inspection is evidence. */
@@ -18,6 +14,10 @@ export type PrivacyStatusTransport = PrivacyTransportPort & {
 export function PrivacyStatusPanel({ services = null, scope, transport = null }: {
   readonly services?: AppServices | null; readonly scope?: number; readonly transport?: PrivacyStatusTransport | null;
 }) {
+  const states: Readonly<Record<string, string>> = { unknown: p.unknown, unavailable: p.unavailable, unsupported: p.unsupported, direct: p.direct, 'verified-private': p.privateRoute, blocked: p.blocked, locked: p.locked, unlocked: p.unlocked, 'authenticated-encryption': p.authenticated, available: p.available };
+  const reasons: Readonly<Record<PrivacyReason, string>> = { 'not-observed': p.notObserved, observed: p.observedReason, expired: p.expired, 'invalid-observation': p.invalid, 'scope-changed': p.scopeChanged, 'clock-reversed': p.clockReversed, 'policy-blocked': p.policyBlocked, unavailable: p.unavailable };
+  const sources = { none: p.none, 'local-vault': p.localVault, 'transport-policy': p.transport, 'messaging-provider': p.messagingProvider, 'proof-provider': p.proofProvider };
+  const channels = { rpc: p.rpc, relay: p.relay, map: p.map, proof: p.proofChannel, update: p.update, wallet: p.wallet };
   const [, refresh] = useState(0);
   const activeSubscription = useRef<PrivacyStatusTransport | null>(null);
   const [subscription, setSubscription] = useState<{ readonly transport: PrivacyStatusTransport; readonly ready: boolean } | null>(null);

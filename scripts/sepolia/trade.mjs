@@ -23,7 +23,7 @@
  */
 import { randomBytes } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { dirname, resolve, sep } from 'node:path';
 import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { RegistryService, reviewTermsBytes, encodePrivateAgreement, encodeCapabilities, sha256Hex, checkFundingWindow, TERMS_REVIEW_FORMAT } from '../../packages/domain/index.ts';
@@ -125,10 +125,22 @@ export async function acquireStateLock(path) {
   } };
 }
 
+/**
+ * The CLI's state file is derived only from a validated run id and must stay inside the committed trades directory.
+ * A programmatic `statePath` (tests, operator tooling) is an explicit trusted choice and is used as given.
+ */
+export function tradeStatePath(root, run) {
+  if (typeof run !== 'string' || !/^[a-z0-9][a-z0-9-]{0,63}$/.test(run)) throw new TradeError('RUN_ID_INVALID');
+  const directory = resolve(root, 'docs/deployments/sepolia/trades');
+  const path = resolve(directory, `${run}.json`);
+  if (dirname(path) !== directory || !path.startsWith(directory + sep)) throw new TradeError('RUN_ID_INVALID'); // containment, independent of the pattern
+  return path;
+}
+
 export async function runTrades(options) {
   const { root = ROOT, run, statePath } = options ?? {};
-  if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) fail('RUN_ID_INVALID');
-  const path = statePath ?? resolve(root, 'docs/deployments/sepolia/trades', `${run}.json`);
+  const path = statePath ?? tradeStatePath(root, run);
+  if (statePath !== undefined && !/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) throw new TradeError('RUN_ID_INVALID');
   const lock = await acquireStateLock(path);
   try { return await runLockedTrades({ ...options, statePath: path }); }
   finally { await lock.release(); }
@@ -143,7 +155,7 @@ async function runLockedTrades({
   beforeFund, beforeSettle,
 }) {
   if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) fail('RUN_ID_INVALID');
-  const path = statePath ?? resolve(root, 'docs/deployments/sepolia/trades', `${run}.json`);
+  const path = statePath ?? tradeStatePath(root, run);
   const rpc = rpcClient(env.SEPOLIA_RPC_URL);
   const identity = await chainIdentity(rpc);
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
