@@ -34,7 +34,7 @@ export async function publishOffer(fields, relayUrl) {
   }
 }
 
-export async function discoverOrder(orderId, relayUrl) {
+export async function subscribeToOrder(orderId, relayUrl) {
   // The buyer only verifies public signatures; it never receives the seller's signing key.
   const verifier = { verifyEvent(event) { try { verifyEventSync(event); return true; } catch { return false; } } };
   const peer = openPeer(verifier, relayUrl);
@@ -48,9 +48,11 @@ export async function discoverOrder(orderId, relayUrl) {
       ], { onEvent: event => book.ingest(event), onEose: resolve });
       if (!subscription.ok) reject(Error('Subscription failed: ' + subscription.error));
     });
-    return book.list();
+    return { offers: () => book.list(), close: () => peer.close() };
+  } catch (error) {
+    peer.close();
+    throw error;
   } finally {
     clearTimeout(timer);
-    peer.close();
   }
 }
