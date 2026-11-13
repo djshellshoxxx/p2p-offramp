@@ -117,10 +117,17 @@ try {
     const ad={app:'p2p-offramp',v:1,orderId:publicTerms.orderId,revision:1,networkId:t.networkId,assetId:assetKind?'test-usd':'native',amount:publicTerms.amountBaseUnits,currency:'USD',railClass:'manual',maker:pubkey,expiresAtSeconds:(now+600n).toString(),termsDigest:tradeId};
     const event={pubkey,created_at:Number(now),kind:30078,tags:[['d',`p2p-offramp:v1:${ad.orderId}`],['expiration',ad.expiresAtSeconds]],content:JSON.stringify(ad)};
     event.id=advertisementEventId(event);event.sig=hex(schnorr.sign(Buffer.from(event.id,'hex'),key));key.fill(0);
-    const checked=val(await validateAdvertisement(new TextEncoder().encode(JSON.stringify(event)),now));
-    assert.equal(checked.ad.termsDigest,tradeId);offers++;
-    // A fresh book separately establishes bounded local ingestion; no ad ever authorizes funding.
-    const book=new AdvertisementBook();book.ingest(new TextEncoder().encode(JSON.stringify(event)),now);
+    const wireEvent = new TextEncoder().encode(JSON.stringify(event));
+    const checked = val(validateAdvertisement(wireEvent, now));
+    const book = new AdvertisementBook();
+    assert.equal(val(book.ingest(wireEvent, now)), 'accepted');
+    assert.equal(val(book.ingest(wireEvent, now)), 'duplicate');
+    const advertised = book.snapshot(now);
+    assert.equal(advertised.length, 1);
+    assert.equal(advertised[0].conflicted, false);
+    assert.deepEqual(advertised[0].value, checked);
+    assert.equal(advertised[0].value.ad.termsDigest, tradeId);
+    offers++;
     const domain={chainId:'31337',verifyingContract:address};
     const signatures=await Promise.all(adapters.map((adapter,index)=>adapter.signTerms(sessions[index],domain,publicTerms,index===0?'seller':'buyer').then(val)));
     acceptances+=2;

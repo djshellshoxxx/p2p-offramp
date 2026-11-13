@@ -6,6 +6,8 @@ import { getEventHash, finalizeEvent, getPublicKey, verifyEvent as ntVerify, val
 import { matchFilter } from 'nostr-tools/filter';
 import { sha256 } from '@noble/hashes/sha2.js';
 import { parseEvent, matchesFilters } from '../src/nip01.ts';
+import { createRelayPool } from '../src/pool.ts';
+import { FAST, makeBroker, memoryNetwork, until } from './support/harness.mjs';
 import { computeEventId, signEvent, verifyEventSync } from '../../nostr-crypto/src/event.ts';
 import { createLocalNobleNostrProvider } from '../../nostr-crypto/src/provider.ts';
 
@@ -16,7 +18,15 @@ const pub = getPublicKey(sk), pub2 = getPublicKey(sk2);
 const T = 1_700_000_000;
 const tpl = (o = {}) => ({ created_at: T, kind: 1, tags: [], content: 'hi', ...o });
 const repoVerifies = ev => { try { verifyEventSync(ev); return true; } catch { return false; } };
-const ntVerifies = ev => { try { return ntValidate(ev) && ntVerify(ev); } catch { return false; } };
+// nostr-tools caches verification on the object. Keep its cache away from the independent repo verifier.
+const ntVerifies = event => {
+  try {
+    const candidate = structuredClone(event);
+    return ntValidate(candidate) && ntVerify(candidate);
+  } catch {
+    return false;
+  }
+};
 
 const longTags = Array.from({ length: 64 }, (_, i) => ['t', `tag${i}`, '', 'x'.repeat(100)]);
 const corpus = {
@@ -76,8 +86,8 @@ test('tampering with any field is rejected by BOTH implementations', async () =>
 });
 
 // Malformed-input table. `stricter` documents each intentional case where the repo rejects but nostr-tools accepts.
-const good = finalizeEvent(tpl({ tags: [['e', 'x']] }), sk);
-const G = { ...good };
+// Relay parsers receive JSON. nostr-tools also puts a private verification symbol on its in-memory result.
+const G = JSON.parse(JSON.stringify(finalizeEvent(tpl({ tags: [['e', 'x']] }), sk)));
 const up = s => s.toUpperCase();
 const malformed = [
   ['uppercase id', { ...G, id: up(G.id) }], ['uppercase pubkey', { ...G, pubkey: up(G.pubkey) }], ['uppercase sig', { ...G, sig: up(G.sig) }],
@@ -150,4 +160,25 @@ test('filter matching agrees with nostr-tools matchFilter on the shared subset (
   for (const e of evs) assert.equal(matchesFilters(e, filters.slice(0, 3)), filters.slice(0, 3).some(f => matchFilter(f, e)));
 });
 
-test('duplicate / same-id semantics: no pure function in nip01.ts or event.ts (dedup lives in pool.ts) - skipped', { skip: 'no pure dedup function exposed' }, () => {});
+test('a nostr-tools signed event received twice is delivered once to the subscription', async () => {
+  const network = memoryNetwork();
+  const { broker } = makeBroker({ endpoints: ['relay-a'] });
+  const pool = createRelayPool({
+    broker, relays: [{ endpointId: 'relay-a', url: 'wss://fixture.example/' }],
+    connect: network.connector, verifier: { verifyEvent: repoVerifies }, nowSeconds: () => T, timing: FAST,
+  });
+  try {
+    const received = [];
+    const subscription = pool.subscribe([{ kinds: [1], since: T, limit: 10 }], {
+      onEvent: event => received.push(event.id),
+    });
+    assert.ok(subscription.ok);
+    await until(() => pool.status().some(relay => relay.state === 'open'));
+    const frame = JSON.stringify(['EVENT', subscription.value.id, G]);
+    network.sockets[0].deliver(frame);
+    network.sockets[0].deliver(frame);
+    assert.deepEqual(received, [G.id]);
+  } finally {
+    pool.close();
+  }
+});
