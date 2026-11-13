@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createMessage, formatMessage, validateLocale, localeDirection, LocaleError } from '../src/ui/locale/catalog.ts';
+import { sourceCatalog } from '../src/ui/locale/en.ts';
 
 const definition = (changes = {}) => ({ key: 'recovery.records', source: '{count} {count|record|records} for {profile}',
   context: 'Private local profile recovery status', severity: 'warning', variables: { count: 'count', profile: 'identifier' },
@@ -65,6 +66,19 @@ test('locale metadata and complete message/variable parity are required; source 
   }
   const structuralOnly = validateLocale({ ...input, status: 'published', translator: 'translator', reviewer: 'reviewer' }, catalog);
   assert.equal(structuralOnly.status, 'published', 'structural validation alone is never a selectable-locale or review-authority API');
+});
+
+test('a complete draft catalog must contain visible text for its recovery warning', () => {
+  const messages = Object.fromEntries(Object.entries(sourceCatalog).map(([key, entry]) => [key, entry.source]));
+  const draft = { locale: 'en', translator: null, reviewer: null, revision: 1, status: 'draft', messages };
+  const warning = 'recovery.unverified';
+  assert.equal(formatMessage(validateLocale(draft, sourceCatalog).messages[warning], {}), sourceCatalog[warning].source);
+
+  // A present but blank critical message gives the reader no guidance, just like an empty string.
+  for (const blank of ['', ' \t\n', '\u00a0']) {
+    assert.throws(() => validateLocale({ ...draft, messages: { ...messages, [warning]: blank } }, sourceCatalog),
+      LocaleError, `Expected blank recovery warning ${JSON.stringify(blank)} to be rejected`);
+  }
 });
 
 test('address-purpose display retains exact canonical bytes and refuses spoofing controls', () => {
