@@ -50,10 +50,14 @@ export class IndexedDbVaultStore implements VaultStore {
   private readonly factory: IDBFactory | undefined;
   constructor(factory: IDBFactory | undefined = globalThis.indexedDB) { this.factory = factory; }
   subscribeInvalidation(listener: () => void): () => void {
-    if (this.closed) { listener(); return () => undefined; }
+    if (this.closed) { try { listener(); } catch { /* Invalidation is terminal even if a subscriber fails. */ } return () => undefined; }
     this.listeners.add(listener); return () => { this.listeners.delete(listener); };
   }
-  private notifyInvalidated(): void { for (const listener of this.listeners) listener(); }
+  private notifyInvalidated(): void {
+    for (const listener of [...this.listeners]) {
+      try { listener(); } catch { /* Every original subscriber must receive invalidation. */ }
+    }
+  }
   close(): void {
     if (this.closed) return;
     this.closed = true;

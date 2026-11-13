@@ -1,0 +1,18 @@
+✔ gzip and br responses yield decoded bytes although Content-Length is the encoded size (35.496453ms)
+✔ CORS response with hidden Content-Encoding does not trust the exposed encoded length (1.924879ms)
+✔ encoded Content-Length above the cap is not a decoded-size refusal (25.413642ms)
+✔ decoded byte cap is enforced while streaming an encoded response (18.852639ms)
+✔ identity responses keep the Content-Length integrity and early-cap checks (1.446397ms)
+✔ errored encoded streams and aborts stay failures with no retry (1.160604ms)
+✔ HTTP driver bounds streamed bytes, pins destination, omits credentials and does not retry (1.07793ms)
+✔ HTTP driver rejects oversized, redirected, changed URL and broken streams with no fallback (0.624778ms)
+✔ HTTP native slots stay occupied until uncancellable work drains; disposal suppresses late results (1.884574ms)
+✔ HTTP driver caps empty-fragment work and rejects truncated content length (3.762957ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 402.919745

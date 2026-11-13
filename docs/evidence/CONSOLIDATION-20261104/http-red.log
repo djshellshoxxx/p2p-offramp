@@ -1,0 +1,70 @@
+✖ gzip and br responses yield decoded bytes although Content-Length is the encoded size (106.776883ms)
+✖ CORS response with hidden Content-Encoding does not trust the exposed encoded length (4.298307ms)
+✖ encoded Content-Length above the cap is not a decoded-size refusal (20.383153ms)
+✔ decoded byte cap is enforced while streaming an encoded response (61.788222ms)
+✔ identity responses keep the Content-Length integrity and early-cap checks (3.976136ms)
+✔ errored encoded streams and aborts stay failures with no retry (3.185951ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 3
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 816.095379
+
+✖ failing tests:
+
+test at packages/transport/test/http-driver-encoding.test.mjs:30:1
+✖ gzip and br responses yield decoded bytes although Content-Length is the encoded size (106.776883ms)
+  AssertionError [ERR_ASSERTION]: gzip: {"ok":false,"error":"ROUTE_UNAVAILABLE"}
+  
+  false !== true
+  
+      at assertBytes (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:26:10)
+      at TestContext.<anonymous> (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:35:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/transport/test/http-driver-encoding.test.mjs:39:1
+✖ CORS response with hidden Content-Encoding does not trust the exposed encoded length (4.298307ms)
+  AssertionError [ERR_ASSERTION]: cors: {"ok":false,"error":"ROUTE_UNAVAILABLE"}
+  
+  false !== true
+  
+      at assertBytes (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:26:10)
+      at TestContext.<anonymous> (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:41:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/transport/test/http-driver-encoding.test.mjs:44:1
+✖ encoded Content-Length above the cap is not a decoded-size refusal (20.383153ms)
+  AssertionError [ERR_ASSERTION]: incompressible: {"ok":false,"error":"LIMIT_EXCEEDED"}
+  
+  false !== true
+  
+      at assertBytes (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:26:10)
+      at TestContext.<anonymous> (file:///tmp/p2p-foundation-clean-verification/packages/transport/test/http-driver-encoding.test.mjs:48:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

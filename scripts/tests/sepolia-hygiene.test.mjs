@@ -1,7 +1,7 @@
 /** Secret hygiene of the Sepolia kit that needs no Foundry or chain: Forge child environments and RPC URL transport. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkFoundryRecipe, EVM_DIR, forgeEnv, isLoopbackUrl, MAX_RPC_REVERT_BYTES, rpcClient } from '../sepolia/lib.mjs';
+import { checkFoundryRecipe, EVM_DIR, forgeEnv, isLoopbackUrl, leaksPrivateRpc, MAX_RPC_REVERT_BYTES, rpcClient } from '../sepolia/lib.mjs';
 
 const KEY = `0x${'11'.repeat(32)}`;
 const parent = {
@@ -30,6 +30,86 @@ test('rpcClient refuses plain HTTP except to loopback', () => {
   }
   assert.equal(isLoopbackUrl('not a url'), false);
   assert.throws(() => rpcClient('ftp://rpc.example'), error => error?.code === 'RPC_URL_MISSING');
+});
+
+test('public endpoints cannot copy individual private query credentials or their URL encodings', () => {
+  const marker = 'PUBLIC_SYNTHETIC_RPC_TOKEN_20261102';
+  const privateUrl = `https://private.invalid/?format=json&api-key=${marker}&other=unrelated`;
+  assert.equal(leaksPrivateRpc(`https://public.invalid/${marker}/`, [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [privateUrl]), false);
+  const encodedPrivate = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  for (const publicEndpoint of [
+    'https://public.invalid/PUBLIC/SYNTHETIC+QUERY=VALUE/',
+    'https://public.invalid/PUBLIC%2fSYNTHETIC%2bQUERY%3dVALUE/',
+    'https://public.invalid/PUBLIC%252FSYNTHETIC%252BQUERY%253DVALUE/',
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [encodedPrivate]), true);
+});
+
+test('every nonempty repeated or short private query value is considered without treating empty values as credentials', () => {
+  assert.equal(leaksPrivateRpc('https://public.invalid/q/', ['https://private.invalid/?token=q']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://private.invalid/?token=q']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/PUBLIC_SECOND_TOKEN/', [
+    'https://private.invalid/?token=&token=PUBLIC_FIRST_TOKEN&token=PUBLIC_SECOND_TOKEN',
+  ]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://private.invalid/?token=&flag']), false);
+});
+
+test('a public endpoint with a malformed percent escape is refused as uninspectable', () => {
+  const privateUrl = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  assert.equal(leaksPrivateRpc('https://public.invalid/PUBLIC%2fSYNTHETIC%2bQUERY%3dVALUE/%ZZ', [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/%ZZ', ['https://private.invalid/?token=unrelated']), true);
+});
+
+test('percent-escape case and repeated encoding cannot hide a private query value', () => {
+  const encodedPrivate = 'https://private.invalid/?api-key=PUBLIC%2FSYNTHETIC%2BQUERY%3DVALUE';
+  for (const publicEndpoint of [
+    'https://public.invalid/PUBLIC%252fSYNTHETIC%252bQUERY%253dVALUE/',
+    'https://public.invalid/PUBLIC%25252FSYNTHETIC%25252BQUERY%25253DVALUE/',
+    'https://public.invalid/PUBLIC%25252fSYNTHETIC%25252bQUERY%25253dVALUE/',
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [encodedPrivate]), true, publicEndpoint);
+  assert.equal(leaksPrivateRpc('https://public.invalid/x%2fy/', ['https://private.invalid/?token=x%2fy']), true, 'lowercase private escapes match too');
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc%2520v1/', [encodedPrivate]), false, 'unrelated repeated encoding stays publishable');
+  assert.equal(leaksPrivateRpc(`https://public.invalid/%${'25'.repeat(20)}41/`, ['https://private.invalid/?token=unrelated']), true, 'encoding nested past the bound is uninspectable');
+});
+
+test('form-encoded plus/space query credentials are matched in every spelling', () => {
+  const plus = 'https://priv.invalid/v1?key=k+ZZ9QsecretAAAA';
+  for (const endpoint of ['https://pub.invalid/v1/k+ZZ9QsecretAAAA', 'https://pub.invalid/v1/k%2BZZ9QsecretAAAA', 'https://pub.invalid/v1/k%20ZZ9QsecretAAAA'])
+    assert.equal(leaksPrivateRpc(endpoint, [plus]), true, endpoint);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/v1/a+bSecretTokenValue', ['https://priv.invalid/?key=a%20bSecretTokenValue']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/v1/rpc', [plus]), false, 'an unrelated endpoint stays publishable');
+});
+
+test('host-label credentials are matched regardless of case or URL canonicalization', () => {
+  assert.equal(leaksPrivateRpc('https://pub.invalid/SECRETKEY0123456789ABC', ['https://SECRETKEY0123456789ABC.provider.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/secretkey0123456789abc', ['https://SecretKey0123456789Abc.provider.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/ключ0123456789abcdef', ['https://ключ0123456789abcdef.provider.invalid/']), true, 'non-ASCII label as written');
+  assert.equal(leaksPrivateRpc('https://pub.invalid/rpc', ['https://SECRETKEY0123456789ABC.provider.invalid/']), false);
+});
+
+test('a literal percent sign reached by decoding a valid %25 does not make an endpoint uninspectable', () => {
+  assert.equal(leaksPrivateRpc('https://pub.invalid/100%25', ['https://priv.invalid/?key=unrelated']), false);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/a%2525b', ['https://priv.invalid/?key=unrelated']), false);
+  assert.equal(leaksPrivateRpc('https://pub.invalid/100%25/sk%2525aa', ['https://priv.invalid/?key=sk%aa']), true, 'credentials are still found below the literal');
+});
+
+test('short private RPC userinfo is sensitive even when it is not a key-like token', () => {
+  assert.equal(leaksPrivateRpc('https://public.invalid/uv/', ['https://uv:xy@private.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/xy/', ['https://uv:xy@private.invalid/']), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', ['https://uv:xy@private.invalid/']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/x%2fy/', ['https://uv:x%2Fy@private.invalid/']), true);
+});
+
+test('public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection', () => {
+  for (const [privateUrl, publicEndpoint] of [
+    ['https://PUBLIC_SYNTHETIC_USER:password@private.invalid/', 'https://public.invalid/PUBLIC_SYNTHETIC_USER/'],
+    ['https://user:PUBLIC_SYNTHETIC_PASSWORD@private.invalid/', 'https://public.invalid/PUBLIC_SYNTHETIC_PASSWORD/'],
+    ['https://private.invalid/PUBLIC_SYNTHETIC_PATH/', 'https://public.invalid/PUBLIC_SYNTHETIC_PATH/'],
+    ['https://public-synthetic-host.private.invalid/', 'https://public.invalid/public-synthetic-host/'],
+  ]) assert.equal(leaksPrivateRpc(publicEndpoint, [privateUrl]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [undefined, '', 'not a URL', 'https://public.invalid/rpc/']), false);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [`https://private.invalid/?token=${'x'.repeat(8192)}`]), true);
+  assert.equal(leaksPrivateRpc('https://public.invalid/rpc/', [`https://private.invalid/?${'token=&'.repeat(129)}`]), true);
 });
 
 test('RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies', async () => {

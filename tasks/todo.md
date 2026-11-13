@@ -94,3 +94,71 @@ T28/T29 combined acceptance:1,088package/UI zero failures/skips/cancels; allfour
 T31 final combined refresh:1,091package/UI zero failures/skips/cancels, allfour types, boundaries118/59, policy22, default/demo, emittedbrowser6. Independent broker27/27 includes displayTTL/liveoperation isolation and63mutator finitecatchup; initial T29 approval superseded. Closed PR25 behavior subsumed; preserve branch/ancestry using unchanged testedtree. T30 finalhosted/merge stillpendinglivePR24.
 
 T32 verified:6deterministic receipt regressions +pinned nativepreflight7/163adapterreads/zeroadapter sends. One fixture send remains one; nullreceipt polling bounded40reads/5s and badreceipt refusal unchanged. Production source unchanged afterT31; final hosted verification on latesthead pending underT30.
+
+## 2026-11-04 constrained consolidation continuation
+
+Baseline: `77fb7c5` (foundation PR53 checkpoint); cached main `a7e3062`.
+Live fetch/PR metadata refresh BLOCKED: `.git/FETCH_HEAD` read-only and GitHub CLI network unavailable. Public web PR list disagrees with cached November 4 refs; it cannot establish exact live heads/checks. Existing four-line lockfile modification preserved. Current user prohibits protected-branch merge and production enablement.
+
+| ID | Status | Owner / acceptance |
+| --- | --- | --- |
+| C54 | READY | foundation_review: focused cached PR37 Sepolia RPC credential/publication + durable per-action send-attempt safeguards; RED/GREEN hygiene/trade-state regressions, original source commit recorded, review by different owner |
+| C55 | READY | messaging_review: cached PR39 relay subscription dedup, hostile input snapshots and durable-chat cancellation cleanup; RED/GREEN package regressions and independent review |
+| C56 | READY | root: cached PR38 bounded HTTP Fetch decoding compatibility; gzip/br/CORS decoded length regressions, decoded caps and cancellation preserved; independent review |
+| C57 | COMPLETE | solana_inventory read-only cached PR50/D5 acceptance inventory; no mainnet/deployment or parity claim |
+| C58 | PARTIAL | root: four isolated local implementation commits completed in /tmp/p2p-consolidation-release; original Git metadata remains read-only; push/draft PR and exact live checks remain BLOCKED by GitHub connectivity |
+
+C54 review admission: short nonempty RPC userinfo still evades the inherited six-character threshold; root owns RED regression and fix within frozen lib/hygiene files, with independent foundation rereview. C55 review admission: verifier-triggered inbound subscription/pool closure can still deliver; C55 writer owns regression and liveness fix, foundation reviewer rechecks.
+
+| C59 | READY | solana_inventory owns cached PR38 IDB invalidation listener isolation only: snapshot original subscribers, contain callback exceptions on versionchange/terminal store; no schema/API/dependency change; RED/GREEN + independent review |
+
+Frozen C54/C55/C56/C59 review completed by different owners. Sepolia32, offline relay/messaging50, HTTP10, storage96 (including IDB16) pass; counts overlap and are not summed. Four TypeScript projects, boundaries119/59, policy26, Python15/spec173 and default/demo builds pass. Full npm test:89 passing/6 failing **files**, with loopback/subprocess/starting-lockfile limitations retained. JS EVM66 pass/1 Foundry skip; native Foundry/Solana/browser qualification BLOCKED. Final inventory/evidence: docs/consolidation/autonomous-consolidation-2026-11-04.md.
+
+## Recovered continuation — 2026-11-04
+
+a3e9167 recovered and bundle verified in /tmp/p2p-consolidation-release; branch codex/core-continuation-20261104. Original .git still read-only; remote refresh blocked. npm ci --ignore-scripts --offline succeeded in isolated clone without changing contributor lockfile.
+
+| ID | Status | Exclusive owner / acceptance |
+| --- | --- | --- |
+| C60 | READY | schema_consolidation: remaining self-contained PR38 schemas/parsers, hostile-input regressions |
+| C61 | READY | inventory_repair: strict boolean npm peer metadata support, preserve integrity/graph checks, no lockfile modification |
+| C62 | READY | wallet_consolidation: read-only EIP1271 acceptance three-file PR40 slice, no executor changes |
+| C63 | READY | root: PR38 trade-draft builder, intrinsic byte-range review fix, constructor-held readonly observation dispatcher + tests/facade; depends C60 schemas |
+| C64 | PARTIAL | root integration: cached branch ancestry ledger, independent reviews, baseline/final suites and publication/bundle |
+
+| C65 | READY | wallet_consolidation after C62 freeze: PR38 current-profile backup verification and vault/backup/migration hostile-signal/error boundaries; four storage sources/three tests only. Root owns schema BUSY addition and shared export if needed. Native browser proof remains separate. |
+
+| C66 | READY | schema_consolidation: PR38 current-native history retention closure service + test only; root shared facade; no deletion authorized by persisted terminal labels |
+
+| C67 | READY | root: PR38 same-channel inspection renewal must retain earliest cached display deadline; explicit same-mode invalidation revokes scopes before callbacks; focused timer/reentrancy regressions, independent review |
+
+C60–C63/C65–C67 implementation frozen and independently reviewed. Implementation SHAs:5808aec,534cf7a,b551d0d,2678b4a,c4f24b1,c14a67b,ce267a3. Final full suite and delivery tracked in docs/consolidation/core-continuation-2026-11-04.md; no production gates changed. C64 remains integration/evidence/publication, not roadmap completion.
+
+Final isolated full run100pass/4failfiles104total, zero file-level skips/cancels. Product inventory failures corrected; remaining loopback/subprocess restrictions explicit. Complete storage136/transport40/schema+domain174 and scoped independent reviews pass. Native cast skip retained separately. Remote publication and owner-gated integration remain pending.
+
+## EVM MVP integration — 2026-11-11
+
+Branch `claude/p2p-offramp-evm-escrow-vc7stk`. Details in `docs/integration/` (matrix, gap closure,
+architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/mvp-gap-closure.md`.
+
+| Task | Status | Scope / evidence |
+| --- | --- | --- |
+| I1 | DONE | Upstream matrix: viem and nostr-tools adopted as dev-only oracles; wagmi, NDK rejected; Synpress deferred; OpenZeppelin unchanged (already SafeERC20 + ReentrancyGuard) |
+| I2 | DONE | `test:evm:viem`: 9 unit + 17 Anvil differential checks |
+| I3 | DONE | nostr-tools NIP-01 differential: 6 pass, 1 skip; repo never looser |
+| I4 | DONE | PR #83 relay failover: Node 22 runtime defect; fix reverted after review; bound tests added |
+| G1 | BLOCKED | Web UI journey wiring needs owner decision (Issue #82 invariant, D8 Tier C) |
+| G2 | BLOCKED | D1 PeerAcceptance field names and vectors |
+| G3 | OPEN | `EvmChainReader.read()` does not read canonical `getTrade(bytes32)`; Tier C PR after layout decision |
+| G4 | OTHER LANE | D9 `sendMarkedAt` (#69–#75) |
+| G5 | BLOCKED by G1 | Two-wallet browser acceptance |
+| G9 | NOT ATTEMPTED | Sepolia two-party run needs owner-held RPC and accounts |
+
+
+## Pages demo and synthetic EVM consolidation, November 12, 2026 Pacific
+
+| Status | Source and next action |
+|---|---|
+| Qualified locally and on hosted CI | PR #98 software at `9730000058c6aca0dd794128652c8cfad0a22285`. Reproducible Pages builds, keyboard recovery, offline argument handling, verified copies, signed offer and interrupted token payout tests. [Full handoff and component inventory](../docs/handoffs/PAGES_BETA_2026-11-12.md). |
+| P0 awaiting authenticated ABI-layout decision | G3 generic reader and canonical Foundry contract. Use the existing viem oracle, reserve registry changes with the current owner. |
+| P0/P1 active owner lanes | T41/T42 peer acceptance, T43 legacy send provenance, G1/D8 localnet browser composition. Independent review, exact-head Sonar A and real testnet acceptance remain outstanding. |

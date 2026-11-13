@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, link, mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, sep } from 'node:path';
 import { scanBuild, SYNTHETIC_MARKERS } from './build.mjs';
 
 const MIT = 'Permission is hereby granted, free of charge';
@@ -46,4 +48,56 @@ test('scanBuild: only the testnet artifact may carry the testnet trust bundle or
   }
   await assert.rejects(scanBuild(clean, { testnet: true }), /TESTNET_TRUST_DATA_MISSING/);
   assert.equal((await scanBuild(bundled, { testnet: true })).testnet, true);
+});
+
+test('scanBuild records portable paths and refuses unsupported filesystem entries', async t => {
+  const dir = await fixture();
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const filename = 'sample.txt';
+  await writeFile(join(dir, 'assets', filename), 'sample');
+  assert.ok((await scanBuild(dir)).assets.some(asset => asset.path === 'assets/sample.txt'));
+  if (sep === '/') {
+    const nonportable = join(dir, 'notes\\example.txt');
+    await writeFile(nonportable, 'sample');
+    await assert.rejects(scanBuild(dir), /ARTIFACT_PATH/);
+    await rm(nonportable);
+  }
+  const symlinkPath = join(dir, 'alias');
+  await symlink(join(dir, 'assets'), symlinkPath, 'dir');
+  await assert.rejects(scanBuild(dir), /ARTIFACT_SYMLINK/);
+});
+
+test('a copied Pages directory must match the independently retained build evidence', async t => {
+  const source = await fixture();
+  const temporary = await mkdtemp(join(tmpdir(), 'p2p-pages-copy-'));
+  t.after(() => Promise.all([source, temporary].map(dir => rm(dir, { recursive: true, force: true }))));
+  const evidenceName = 'local-build-evidence.json';
+  const reference = join(source, evidenceName);
+  const candidate = join(temporary, 'pages');
+  const javascript = join(candidate, 'assets/index-a.js');
+  const evidence = JSON.stringify(await scanBuild(source), null, 2) + '\n';
+  await writeFile(reference, evidence);
+  await cp(source, candidate, { recursive: true });
+  const cli = fileURLToPath(new URL('../../../scripts/verify-web-artifact.mjs', import.meta.url));
+  const verify = (expected = reference) => execFileSync(process.execPath, [cli, candidate, expected], { encoding: 'utf8', stdio: 'pipe' });
+
+  assert.equal(JSON.parse(verify()).verifiedAssets, 6);
+  assert.throws(() => verify(source), /INVALID_LOCAL_BUILD_EVIDENCE/);
+  assert.throws(() => verify(join(candidate, evidenceName)), /INDEPENDENT_EVIDENCE_REQUIRED/);
+  const sharedCopy = join(temporary, 'shared-inode.json');
+  await link(join(candidate, evidenceName), sharedCopy);
+  assert.throws(() => verify(sharedCopy), /INDEPENDENT_EVIDENCE_REQUIRED/);
+  const original = await readFile(javascript);
+  await writeFile(javascript, original.toString().replace('1', '2'));
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(javascript);
+  assert.throws(() => verify());
+  await writeFile(javascript, original);
+  await writeFile(join(candidate, 'extra.txt'), 'unlisted');
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(join(candidate, 'extra.txt'));
+  await writeFile(join(candidate, evidenceName), evidence + '\n');
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
+  await rm(join(candidate, evidenceName));
+  assert.throws(() => verify(), /ARTIFACT_INTEGRITY_MISMATCH/);
 });
