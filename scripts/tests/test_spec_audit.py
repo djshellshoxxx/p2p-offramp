@@ -69,6 +69,48 @@ class AuditTests(unittest.TestCase):
         catalog.write_text('Status: Navigation catalog\n[Example](spec-example.md)\n')
         self.assertEqual(audit.unindexed(self.root, audit.audit(self.root)), [])
 
+    def test_titled_catalog_link_counts_toward_coverage(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        catalog.write_text('[Example](spec-example.md#overview "Overview and requirements")\n')
+        specs = audit.audit(self.root)
+        self.assertTrue(all(not spec.broken_links for spec in specs))
+        self.assertEqual(audit.unindexed(self.root, specs), [])
+
+    def test_catalog_accepts_nested_and_multiline_link_labels(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        for label in ('Read [appendix] first', 'Read the\nappendix', r'Closing \] delimiter',
+                      'Read `]` then follow the link'):
+            with self.subTest(label=label):
+                catalog.write_text(f'[{label}](spec-example.md "Appendix") [{label}](missing.md)\n')
+                specs = audit.audit(self.root)
+                self.assertEqual(audit.unindexed(self.root, specs), [])
+                self.assertEqual(next(s.broken_links for s in specs if s.category == 'catalog'), ['missing.md'])
+
+    def test_link_lookalikes_do_not_index_specs_or_report_missing_files(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        (self.path.parent / 'elsewhere.md').touch()
+        for example in ('orphan](PATH)', r'\[escaped](PATH)', '`[example](PATH)`',
+                        '[read](elsewhere.md "example [label](PATH)")',
+                        '[earlier paragraph\n\norphan](PATH)'):
+            with self.subTest(example=example):
+                catalog.write_text(example.replace('PATH', 'spec-example.md') + '\n' +
+                                   example.replace('PATH', 'missing.md'))
+                specs = audit.audit(self.root)
+                self.assertEqual(audit.unindexed(self.root, specs), [self.path.relative_to(self.root).as_posix()])
+                self.assertTrue(all(not spec.broken_links for spec in specs))
+
+    def test_fence_with_trailing_text_does_not_expose_example_links(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        catalog.write_text('~~~~markdown\n~~~~ not a closing fence\n'
+                           '[Example](spec-example.md) [Draft](missing.md)\n~~~~\n')
+        specs = audit.audit(self.root)
+        self.assertEqual(audit.unindexed(self.root, specs), [self.path.relative_to(self.root).as_posix()])
+        self.assertTrue(all(not spec.broken_links for spec in specs))
+
     def test_cli_readiness_fails_even_when_links_pass(self):
         self.inspect('Status: Placeholder\n')
         catalog = self.path.parent / 'spec-master-specification-index.md'
