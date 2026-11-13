@@ -62,10 +62,16 @@ try {
   assert.equal(JSON.parse(text).length, 1); assert.equal(JSON.parse(text)[0].errorCode, 'TIMEOUT');
   const downloading = page.waitForEvent('download'); await page.getByRole('button', { name: 'Download the previewed diagnostics', exact: true }).click();
   const download = await downloading; assert.equal(await readFile(await download.path(), 'utf8'), text, 'download exactly matches selected preview bytes');
+  const successNotice = page.getByRole('status').filter({ hasText: 'The previewed file was prepared' });
+  await successNotice.waitFor();
   await page.evaluate(() => window.revokeDiagnosticsFixture());
-  await page.getByRole('button', { name: 'Download the previewed diagnostics', exact: true }).click();
+  const downloadButton = page.getByRole('button', { name: 'Download the previewed diagnostics', exact: true });
+  await downloadButton.focus();
+  await page.keyboard.press('Enter');
   await page.getByRole('alert').filter({ hasText: 'authenticated release context is unavailable or expired' }).waitFor();
   assert.equal(await page.getByLabel('Exact export text (UTF-8 JSON)', { exact: true }).count(), 0);
+  assert.equal(await page.getByRole('button', { name: 'Refresh diagnostics', exact: true }).evaluate(button => document.activeElement === button), true, 'refused download returns focus to the refresh action when its button disappears');
+  assert.equal(await successNotice.count(), 0, 'a failed download clears the previous success announcement');
   assert.equal(await page.evaluate(() => localStorage.getItem('fixture-diagnostics')), null, 'revoked release context purges the disposable ring before an explicit clear');
   await page.getByRole('button', { name: 'Clear local diagnostics', exact: true }).click();
   assert.equal(await page.evaluate(() => localStorage.getItem('fixture-diagnostics')), null);

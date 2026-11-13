@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import type { Diagnostics, DiagnosticCollection, DiagnosticPreview, DiagnosticErrorCode } from '../../../../packages/diagnostics/index.ts';
 import { diagnosticsMessages as m } from './diagnostics-messages.ts';
 
@@ -9,6 +9,7 @@ function download(bytes: Uint8Array) {
   finally { anchor.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
 }
 export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | null }) {
+  const refreshButton = useRef<HTMLButtonElement>(null);
   const [collection, setCollection] = useState<DiagnosticCollection | null>(null);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [preview, setPreview] = useState<DiagnosticPreview | null>(null);
@@ -31,8 +32,13 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
   }
   function savePreview() {
     if (!service || !preview) return;
+    setNotice(''); setError(null);
     const result = service.confirmExport(preview);
-    if (!result.ok) { discardPreview(); setError(result.error.code); return; }
+    if (!result.ok) {
+      discardPreview(); setError(result.error.code);
+      refreshButton.current?.focus();
+      return;
+    }
     try { download(result.value); setNotice(m.downloaded); }
     catch { setError('REDACTION_FAILED'); }
     finally { result.value.fill(0); }
@@ -45,7 +51,7 @@ export function DiagnosticsPanel({ service }: { readonly service: Diagnostics | 
   return <section className="panel" aria-labelledby="diagnostics-title">
     <h2 id="diagnostics-title">{m.title}</h2><p>{m.help}</p><p className="helper">{m.privacy}</p>
     {!collection?.configured ? <p className="warning" role="status">{m.unconfigured}</p> : <p>{m.retention}</p>}
-    <div className="actions"><button type="button" onClick={refresh}>{m.refresh}</button>
+    <div className="actions"><button type="button" ref={refreshButton} onClick={refresh}>{m.refresh}</button>
       <button type="button" disabled={!service} onClick={clear}>{m.clear}</button></div>
     {error ? <p className="notice error" role="alert">{m.errors[error]}</p> : null}
     {notice ? <p className="notice" role="status">{notice}</p> : null}
