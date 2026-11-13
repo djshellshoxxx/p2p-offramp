@@ -1,21 +1,37 @@
-# Offline client-side shell and runtime — partial G07/MEM01
+# Static web client
 
-The app now has a static React/TypeScript/Vite shell plus a native Worker runtime boundary. It remains an offline development build, not a complete trading application. `AppRuntime.start` validates the exact public configuration `{version:1,ReleaseEnabled:0,connectOrigins:[]}` before creating one same-origin dedicated module Worker. Startup remains locked. There is no network, wallet, signing, create, restore, private-record read/list or mutation command.
+The client starts with the local vault locked. The default build supports encrypted profiles, backups and fresh-key recovery on the current browser origin. Trading is disabled (`ReleaseEnabled: 0`).
 
-An explicit command can unlock a known existing G02 profile using its passphrase. The Worker retains the authenticated vault session; the document receives a purpose-bound opaque handle and public profile ID. `isCurrent(handle)` checks the exact live document handle. Status polling does not refresh idle time. Encrypted G03 export is available while locked and is always labelled `authentication: 'not-checked'`; an unlocked session does not authenticate the exact row exported by that separate read.
+## User guide
 
-Both sides validate strict bounded messages, monotonic request IDs, generations and fixed errors. One native job remains occupied until its actual work settles, including after cancellation. Document lock/pagehide synchronously revokes document handles and sends Worker lock control. Worker-owned deadlines check five minutes of idle time independently of document timers. Only the private handler of trusted pointer/keyboard events can send activity control; expired state cannot be revived by a delayed activity message. The document also checks its monotonic deadline before publishing results. Revocation across separate threads is delivered through messages; it does not promise simultaneous memory erasure.
+| Task | Where | What to do |
+|---|---|---|
+| Create a profile | Home (`#/home`) | Choose **Create new profile**, enter and confirm a passphrase, accept the notice, then choose **Create encrypted profile**. Success opens the empty profile and displays its ID. Keep the ID and passphrase for later. |
+| Open a profile | Home (`#/home`) | Choose **Unlock existing profile**. Select an ID from the local list or enter its 32 lowercase hexadecimal characters, then enter the passphrase. Choosing an ID fills the field. Unlocking requires the passphrase. |
+| Back up a profile | Recovery (`#/recovery`) | Under **Export an encrypted file**, select or enter the profile ID, acknowledge the notice and choose **Download unchecked encrypted backup**. The download works while locked. Check that the browser saved the file and keep the passphrase separately. |
+| Restore a backup | Recovery (`#/recovery`) | Under **Restore an encrypted file**, select the encrypted JSON, supply its original passphrase, enter and confirm the destination passphrase and choose **Restore as new profile** after accepting the notice. The Worker authenticates the backup and writes a separate profile with fresh keys. A successful restore reports a new, locked profile ID and the record count. |
 
-Disposal first requests managed key/cache/IDB cleanup, then terminates the owned Worker after acknowledgement or a one-second fallback deadline. Other requests have a 30-second deadline and fail closed. Native Web Crypto cannot be cancelled or rolled back; disposal/termination and buffer wiping provide no forensic erasure guarantee. A hard stop can prevent managed finalizers from running. No durable write is exposed here, so this tranche cannot create an ambiguous new-profile commit. Future create/restore bridging requires an explicit discoverable outcome contract before random destination IDs can be lost between commit and reply.
+Every backup download is labelled **Authentication not checked**, including exports made while a profile is unlocked. Export copies the stored ciphertext. To verify a backup, restore it and unlock the new profile with the destination passphrase. **Open restored profile** takes you to Home with the confirmed ID selected. If another profile is open, use **Lock vault** before unlocking the restored one.
 
-Public application imports use `packages/schemas/index.ts` and `packages/storage/index.ts`; private storage/crypto paths do not appear in application imports. The native Worker URL points to the emitted `vault.worker.js`; no blob/data Worker is created. There is no service worker. The main entry and Worker have separate strict TypeScript configurations, with `DOM` and `WebWorker` libraries respectively and `skipLibCheck: false` inherited.
+**If creation or restore is interrupted**, a profile may have been written before the page received the result. After an interrupted creation, reopen **Unlock existing profile** on the same origin and inspect its list before creating again. After an interrupted restore, choose **Check local profiles**. The form keeps retry disabled while the inventory is unavailable, busy or incomplete. A fresh list shows which IDs exist. It cannot establish which operation created an unfamiliar ID.
 
-Focused checks:
+Profiles live in this browser's IndexedDB. A different origin can show an empty list even when the source profile still exists. With a profile unlocked, the **Offline transaction recovery references** section lets you inspect and export selected journal references. Keep the full encrypted backup for profile recovery. For historical chain inspection using those references, see the [canonical EVM recovery guide](../../docs/recovery/CANONICAL-EVM.md).
+
+## Developer guide
+
+`src/app-services.ts` starts `AppRuntime` with `{ version: 1, ReleaseEnabled: 0, connectOrigins: [] }` and a same-origin dedicated module Worker. The Worker owns IndexedDB access and the authenticated vault session. The React UI uses the services interface for profile inventory, creation, unlock, encrypted export and restore. Profile IDs are public selection metadata. The UI keeps them out of route URLs.
+
+The document revokes its current handle on lock or `pagehide`. The Worker also enforces a five-minute idle deadline. Status polling does not extend it. Requests and replies carry a generation and request ID so the document can ignore a late result after cancellation or lock. That revocation can occur after a durable profile write, which is why an interrupted operation needs a fresh inventory check.
+
+Run from the repository root with Node 24 or newer. The browser fixtures use Chromium on loopback. Set `P2P_CHROMIUM` to the executable path if automatic discovery cannot find it.
 
 ```sh
-node --test packages/schemas/test/runtime.test.mjs apps/web/test/*.test.mjs
-./node_modules/.bin/tsc -p apps/web/tsconfig.runtime.json --noEmit
-./node_modules/.bin/tsc -p apps/web/tsconfig.worker.json --noEmit
+npm ci --ignore-scripts
+npm run build
+node scripts/test-runtime-browser.mjs
+node scripts/test-web-build-browser.mjs
 ```
 
-Node event/lifetime tests use controlled EventTargets, clocks and trusted-event fixtures; they are not browser/device acceptance. The integrator owns actual Chromium Worker/IndexedDB/CSP checks. G07 remains partial: framework/version review, full application composition, deployed header/meta profiles, complete accessibility/mobile/multi-browser acceptance, signed-release trust, wallet/transport adapters, private view models and independent review remain open. Hash routes, package-boundary enforcement and local header/meta build/browser fixtures are now implemented; local fixtures are not deployed-host acceptance. `ReleaseEnabled` remains zero.
+The build type-checks the project and emits the default static app in `apps/web/dist/`. The runtime fixture exercises native Worker and IndexedDB operations. The web fixture drives the emitted UI through profile creation, export, restore, explicit unlock and interrupted-restore reconciliation. Both run locally. Hosted Pages checks and the two-party trading workflow require separate qualification.
+
+[Developer guide and broader test commands](../../docs/wiki-source/Developer-Guide.md)
