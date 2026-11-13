@@ -10,6 +10,9 @@ import re
 from urllib.parse import unquote, urlsplit
 
 
+INLINE_LINK = re.compile(r'\[[^\]\n]*\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)')
+
+
 @dataclass(frozen=True)
 class Spec:
     path: str
@@ -27,7 +30,7 @@ def prose(text: str) -> str:
         if m:
             if not fence:
                 fence, marker, width = True, m.group(1)[0], len(m.group(1))
-            elif m.group(1)[0] == marker and len(m.group(1)) >= width:
+            elif m.group(1)[0] == marker and len(m.group(1)) >= width and not line[m.end():].strip():
                 fence = False
             continue
         if not fence:
@@ -56,7 +59,7 @@ def inspect(root: Path, path: Path) -> Spec:
         category = 'manual-review-needed'
     present = {int(n) for n in re.findall(r'^##\s+([1-7])\.\s+', body, re.M)}
     broken = []
-    for link in re.findall(r'\[[^\]\n]*\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)', body):
+    for link in INLINE_LINK.findall(body):
         url = urlsplit(link)
         if url.scheme or url.netloc or not url.path:
             continue
@@ -75,7 +78,7 @@ def unindexed(root: Path, specs: list[Spec]) -> list[str]:
     catalogs = [root / s.path for s in specs if s.category == 'catalog']
     targets = set()
     for catalog in catalogs:
-        for link in re.findall(r'\]\(([^\s)]+)\)', prose(catalog.read_text(encoding='utf-8'))):
+        for link in INLINE_LINK.findall(prose(catalog.read_text(encoding='utf-8'))):
             url = urlsplit(link)
             if not url.scheme and not url.netloc and url.path:
                 targets.add((catalog.parent / unquote(url.path)).resolve())
