@@ -135,3 +135,21 @@ a3e9167 recovered and bundle verified in /tmp/p2p-consolidation-release; branch 
 C60–C63/C65–C67 implementation frozen and independently reviewed. Implementation SHAs:5808aec,534cf7a,b551d0d,2678b4a,c4f24b1,c14a67b,ce267a3. Final full suite and delivery tracked in docs/consolidation/core-continuation-2026-11-04.md; no production gates changed. C64 remains integration/evidence/publication, not roadmap completion.
 
 Final isolated full run100pass/4failfiles104total, zero file-level skips/cancels. Product inventory failures corrected; remaining loopback/subprocess restrictions explicit. Complete storage136/transport40/schema+domain174 and scoped independent reviews pass. Native cast skip retained separately. Remote publication and owner-gated integration remain pending.
+
+## EVM MVP integration — 2026-11-11
+
+Branch `claude/p2p-offramp-evm-escrow-vc7stk`. Details in `docs/integration/` (matrix, gap closure,
+architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/mvp-gap-closure.md`.
+
+| Task | Status | Scope / evidence |
+| --- | --- | --- |
+| I1 | DONE | Upstream matrix: viem and nostr-tools adopted as dev-only oracles; wagmi, NDK rejected; Synpress deferred; OpenZeppelin unchanged (already SafeERC20 + ReentrancyGuard) |
+| I2 | DONE | `test:evm:viem`: 9 unit + 17 Anvil differential checks |
+| I3 | DONE | nostr-tools NIP-01 differential: 6 pass, 1 skip; repo never looser |
+| I4 | DONE | PR #83 relay failover: Node 22 runtime defect; fix reverted after review; bound tests added |
+| G1 | BLOCKED | Web UI journey wiring needs owner decision (Issue #82 invariant, D8 Tier C) |
+| G2 | BLOCKED | D1 PeerAcceptance field names and vectors |
+| G3 | OPEN | `EvmChainReader.read()` does not read canonical `getTrade(bytes32)`; Tier C PR after layout decision |
+| G4 | OTHER LANE | D9 `sendMarkedAt` (#69–#75) |
+| G5 | BLOCKED by G1 | Two-wallet browser acceptance |
+| G9 | NOT ATTEMPTED | Sepolia two-party run needs owner-held RPC and accounts |
