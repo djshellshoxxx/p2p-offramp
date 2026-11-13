@@ -18,6 +18,7 @@ export async function verifyWebArtifact(directory, referenceFile) {
   const copiedInventory = await stat(join(root, inventoryName), { throwIfNoEntry: false });
   if (!copiedInventory?.isFile()) throw new Error('ARTIFACT_INTEGRITY_MISMATCH');
   const referenceStat = await stat(referencePath);
+  if (!referenceStat.isFile()) throw new Error('INVALID_LOCAL_BUILD_EVIDENCE');
   if (referenceStat.dev === copiedInventory.dev && referenceStat.ino === copiedInventory.ino) {
     throw new Error('INDEPENDENT_EVIDENCE_REQUIRED');
   }
