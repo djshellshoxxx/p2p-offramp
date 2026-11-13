@@ -5,10 +5,14 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
 import { build } from 'vite';
-import { chromium } from 'playwright-core';
+import { chromium, firefox, webkit } from 'playwright-core';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
+const { values } = parseArgs({ options: { browser: { type: 'string', default: 'chromium' } } });
+const engine = [chromium, firefox, webkit].find(candidate => candidate.name() === values.browser);
+if (!engine) throw new Error('Expected --browser=chromium, --browser=firefox or --browser=webkit');
 const root = fileURLToPath(new URL('../', import.meta.url)), temporary = await mkdtemp(resolve(tmpdir(), 'p2p-recovery-references-'));
 let server, context;
 try {
@@ -30,8 +34,9 @@ try {
   const failures = [];
   let downloads = 0;
   async function startBrowser() {
-    context = await chromium.launchPersistentContext(directory, {
-      executablePath: resolveChromiumPath(), args: ['--no-sandbox'], acceptDownloads: true, serviceWorkers: 'block',
+    context = await engine.launchPersistentContext(directory, {
+      ...(engine === chromium ? { executablePath: resolveChromiumPath(), args: ['--no-sandbox'] } : {}),
+      acceptDownloads: true, serviceWorkers: 'block',
     });
     await context.route('**/*', route => {
       if (new URL(route.request().url()).origin === origin) return route.continue();
@@ -139,5 +144,5 @@ try {
   await page.waitForFunction(() => document.getElementById('recovery-reference-bytes') === null);
   assert.equal(downloads, before, 'a different durable revision refuses the private download');
   assert.deepEqual(failures, []);
-  console.log(JSON.stringify({ fixture: 'native-worker-offline-recovery-references', readonly: true, revisionPinnedPages: true, exactPrivatePreview: true, staleRevisionExportRefused: true, coldStartReauthenticated: true, coldStartReferencePreserved: true, reloadLocked: true, lockAndProfileIsolation: true, preservedFutureRecord: true, noRawTransaction: true, tradingEnabled: false }));
+  console.log(JSON.stringify({ fixture: 'native-worker-offline-recovery-references', browser: engine.name(), version: context.browser().version(), readonly: true, revisionPinnedPages: true, exactPrivatePreview: true, staleRevisionExportRefused: true, coldStartReauthenticated: true, coldStartReferencePreserved: true, reloadLocked: true, lockAndProfileIsolation: true, preservedFutureRecord: true, noRawTransaction: true, tradingEnabled: false }));
 } finally { await context?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); } await rm(temporary, { recursive: true, force: true }); }
