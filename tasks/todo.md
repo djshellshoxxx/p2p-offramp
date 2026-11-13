@@ -153,3 +153,12 @@ architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/
 | G4 | OTHER LANE | D9 `sendMarkedAt` (#69–#75) |
 | G5 | BLOCKED by G1 | Two-wallet browser acceptance |
 | G9 | NOT ATTEMPTED | Sepolia two-party run needs owner-held RPC and accounts |
+
+
+## Pages demo and synthetic EVM consolidation, November 12, 2026 Pacific
+
+| Status | Source and next action |
+|---|---|
+| Qualified locally and on hosted CI | PR #98 software at `9730000058c6aca0dd794128652c8cfad0a22285`. Reproducible Pages builds, keyboard recovery, offline argument handling, verified copies, signed offer and interrupted token payout tests. [Full handoff and component inventory](../docs/handoffs/PAGES_BETA_2026-11-12.md). |
+| P0 awaiting authenticated ABI-layout decision | G3 generic reader and canonical Foundry contract. Use the existing viem oracle, reserve registry changes with the current owner. |
+| P0/P1 active owner lanes | T41/T42 peer acceptance, T43 legacy send provenance, G1/D8 localnet browser composition. Independent review, exact-head Sonar A and real testnet acceptance remain outstanding. |
