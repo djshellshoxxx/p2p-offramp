@@ -31,7 +31,19 @@ export async function runRecoveryCli(argv,config,directory=dirname(fileURLToPath
     const bytes = await readBounded(resolve(directory,path),2*1024*1024);
     if (bytes.length !== expected.bytes || sha(bytes) !== expected.sha256) return refuseRecovery('ASSET_MISMATCH');
   }
-  const {values,positionals} = parseArgs({args:argv,allowPositionals:true,strict:true,options:{endpoint:{type:'string'},'trade-id':{type:'string'},reference:{type:'string'},item:{type:'string'},from:{type:'string'}}});
+  const { values, positionals, tokens } = parseArgs({
+    args: argv, allowPositionals: true, strict: true, tokens: true,
+    options: {
+      endpoint: { type: 'string' }, 'trade-id': { type: 'string' }, reference: { type: 'string' },
+      item: { type: 'string' }, from: { type: 'string' },
+    },
+  });
+  const seenOptions = new Set();
+  for (const token of tokens) {
+    if (token.kind !== 'option') continue;
+    if (seenOptions.has(token.name)) return refuseRecovery('INVALID_INPUT');
+    seenOptions.add(token.name);
+  }
   const [command] = positionals;
   if (positionals.length !== 1 || !['inspect','prepare-release','prepare-refund','prepare-withdraw'].includes(command) || !values.endpoint ||
       Boolean(values['trade-id']) === Boolean(values.reference) || values.item !== undefined && !values.reference || command === 'inspect' && values.from !== undefined) return refuseRecovery('INVALID_INPUT');
