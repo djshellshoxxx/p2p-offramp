@@ -33,6 +33,25 @@ test('imported passed decisions and reviewer names cannot qualify without a trus
   assert.equal(report.releaseEnabled, false); assert.equal(report.promotionAllowed, false); assert.equal(report.scopeOnly, true);
 });
 
+test('trusted reviewer callback requires literal true and never grants release authority', async () => {
+  const c = candidate(), r = evidence(c);
+  const ambiguous = [false, 0, 1, 'true', 'passed', null, {}, new Boolean(true), Promise.resolve('true')];
+  for (const value of ambiguous) {
+    const response = await evaluateGate([r], c, { ...options, verifyReview: () => value });
+    assert.equal(response.ok, true, 'ambiguous callback returns a pending report instead of being accepted');
+    assert.equal(response.value.decision, 'pending');
+    assert.ok(codes(response.value).includes('REVIEW_SCOPE_MISMATCH'));
+    assert.equal(response.value.releaseEnabled, false);
+    assert.equal(response.value.promotionAllowed, false);
+  }
+  const accepted = await evaluateGate([r], c, { ...options, verifyReview: async () => true });
+  assert.equal(accepted.ok, true);
+  assert.equal(accepted.value.decision, 'passed', 'only an explicit trusted boolean approval qualifies this synthetic evidence');
+  assert.equal(accepted.value.scopeOnly, true);
+  assert.equal(accepted.value.releaseEnabled, false);
+  assert.equal(accepted.value.promotionAllowed, false);
+});
+
 test('explicit synthetic trusted review qualifies matching evidence only and returns detached frozen snapshots', async () => {
   const c = candidate(), r = evidence(c);
   const report = await result([r], c, { ...options, verifyReview: (record, release) => {

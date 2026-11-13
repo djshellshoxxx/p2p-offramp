@@ -17,10 +17,11 @@
     "test:chat:browser": "node scripts/test-chat-history-browser.mjs",
     "test:diagnostics:browser": "node scripts/test-diagnostics-browser.mjs",
     "test:recovery:browser": "node scripts/test-recovery-references-browser.mjs",
-    "test:recovery:evm": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/evm-recovery.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-recovery-local.mjs",
+    "test:recovery:evm": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/evm-recovery.test.mjs scripts/tests/evm-recovery-endpoint-options.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-recovery-local.mjs",
     "acceptance:report": "node scripts/acceptance-report.mjs",
     "test:acceptance:cli": "node --test scripts/tests/acceptance-entry.test.mjs",
     "test:evm:reconcile": "node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs",
+    "test:evm:viem": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/viem-read-rpc.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-viem-oracle-local.mjs",
     "test:sepolia:kit": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs scripts/tests/deployment-record.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs",
     "test:sepolia:trade": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-trade-state.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-trade-local.mjs",
     "sepolia:deploy": "node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs",
@@ -48,8 +49,10 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "nostr-tools": "2.25.2",
     "playwright-core": "1.64.1",
     "typescript": "7.0.2",
+    "viem": "2.57.10",
     "vite": "8.3.5"
   },
   "dependencies": {

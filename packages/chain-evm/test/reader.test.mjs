@@ -110,3 +110,31 @@ test('read timeout rejects with fixed code and does not free an ignored physical
  const s=setup({options:{timeoutMs:10},handle:i=>i.method==='eth_chainId'?new Promise(()=>{}):undefined});
  try{error(await s.reader.validateLive('local','escrow'),'TIMEOUT');}finally{s.reader.dispose();}
 });
+
+test('G18 receipt evidence refuses inherited fields, accessors and descriptor-trap objects without invoking foreign code', async () => {
+ let getterCalls = 0;
+ const receiptGetter = Object.defineProperty({...nativeReceipt}, 'transactionHash', {get() { getterCalls++; throw Error('SECRET receipt getter'); }});
+ const transactionGetter = Object.defineProperty({...nativeTx}, 'input', {get() { getterCalls++; throw Error('SECRET transaction getter'); }});
+ const receiptProxy = new Proxy({...nativeReceipt}, {getOwnPropertyDescriptor() { throw Error('SECRET receipt proxy'); }});
+ const transactionProxy = new Proxy({...nativeTx}, {getOwnPropertyDescriptor() { throw Error('SECRET transaction proxy'); }});
+ const scenarios = [
+  ['eth_getTransactionReceipt', Object.create(nativeReceipt)],
+  ['eth_getTransactionReceipt', receiptGetter],
+  ['eth_getTransactionReceipt', receiptProxy],
+  ['eth_getTransactionByHash', Object.create(nativeTx)],
+  ['eth_getTransactionByHash', transactionGetter],
+  ['eth_getTransactionByHash', transactionProxy],
+ ];
+ const readOnly = new Set(['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_getTransactionReceipt','eth_getTransactionByHash']);
+ for (const [method, hostile] of scenarios) {
+  const s = setup({handle: input => input.method === method ? hostile :
+   input.method === 'eth_getTransactionReceipt' ? nativeReceipt :
+   input.method === 'eth_getTransactionByHash' ? nativeTx : undefined});
+  try {
+   error(await s.reader.receipt(binding,expectedTx),'INTEGRITY_FAILURE');
+   assert.ok(s.calls.some(call => call.method === method));
+   assert.ok(s.calls.every(call => readOnly.has(call.method)),'invalid RPC evidence cannot trigger privileged operations');
+  } finally { s.reader.dispose(); }
+ }
+ assert.equal(getterCalls,0,'receipt evidence must not execute untrusted accessors');
+});

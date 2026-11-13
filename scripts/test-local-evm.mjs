@@ -45,6 +45,7 @@ try {
   await s.finalize();
   val(await reader.validateLive('local-evm','escrow-local-v1'));
   let unknownSend=false;
+  let walletSends = 0;
   const ports=s.secrets.slice(0,2).map(key=>{const events=new EventEmitter();return{on:events.on.bind(events),removeListener:events.removeListener.bind(events),request:async({method,params=[]})=>{
     if(method==='eth_requestAccounts'||method==='eth_accounts')return[key.address.toLowerCase()];
     if(method==='eth_signTypedData_v4'){
@@ -52,6 +53,7 @@ try {
       return key.signTypedData(typed.domain,types,typed.message);
     }
     if(method==='eth_sendTransaction'){
+      walletSends++;
       const tx={...params[0]};tx.gas=await s.rpc.request({method:'eth_estimateGas',params:[tx]});
       const hash=await s.rpc.request({method,params:[tx]});
       if(unknownSend){unknownSend=false;throw new Error('Synthetic lost response after native send');}
@@ -102,7 +104,8 @@ try {
   attach();
   let offers=0,acceptances=0,submissions=0,reconciliations=0;
   const scenarios=[];
-  for(const [assetKind,terminal] of [[0,'release'],[1,'refund']]){
+  const recoveredResponses = [];
+  for(const [assetKind,terminal] of [[0,'release'],[1,'refund'],[1,'release']]){
     const t=await s.terms({assetKind,asset:assetKind?token:'0x'+'0'.repeat(40)});
     const agreement={v:1,orderId:t.orderId.slice(2),revision:'1',fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC local manual payment; no fiat was sent.',capabilities:[],agreementSalt:'45'.repeat(32)};
     t.privateAgreementHash='0x'+sha(encodePrivateAgreement(agreement));
@@ -114,10 +117,17 @@ try {
     const ad={app:'p2p-offramp',v:1,orderId:publicTerms.orderId,revision:1,networkId:t.networkId,assetId:assetKind?'test-usd':'native',amount:publicTerms.amountBaseUnits,currency:'USD',railClass:'manual',maker:pubkey,expiresAtSeconds:(now+600n).toString(),termsDigest:tradeId};
     const event={pubkey,created_at:Number(now),kind:30078,tags:[['d',`p2p-offramp:v1:${ad.orderId}`],['expiration',ad.expiresAtSeconds]],content:JSON.stringify(ad)};
     event.id=advertisementEventId(event);event.sig=hex(schnorr.sign(Buffer.from(event.id,'hex'),key));key.fill(0);
-    const checked=val(await validateAdvertisement(new TextEncoder().encode(JSON.stringify(event)),now));
-    assert.equal(checked.ad.termsDigest,tradeId);offers++;
-    // A fresh book separately establishes bounded local ingestion; no ad ever authorizes funding.
-    const book=new AdvertisementBook();book.ingest(new TextEncoder().encode(JSON.stringify(event)),now);
+    const wireEvent = new TextEncoder().encode(JSON.stringify(event));
+    const checked = val(validateAdvertisement(wireEvent, now));
+    const book = new AdvertisementBook();
+    assert.equal(val(book.ingest(wireEvent, now)), 'accepted');
+    assert.equal(val(book.ingest(wireEvent, now)), 'duplicate');
+    const advertised = book.snapshot(now);
+    assert.equal(advertised.length, 1);
+    assert.equal(advertised[0].conflicted, false);
+    assert.deepEqual(advertised[0].value, checked);
+    assert.equal(advertised[0].value.ad.termsDigest, tradeId);
+    offers++;
     const domain={chainId:'31337',verifyingContract:address};
     const signatures=await Promise.all(adapters.map((adapter,index)=>adapter.signTerms(sessions[index],domain,publicTerms,index===0?'seller':'buyer').then(val)));
     acceptances+=2;
@@ -130,7 +140,15 @@ try {
       const preparedRequest=JSON.stringify({version:1,chainId:'31337',from:publicTerms.seller,to:address,value:action==='fund'&&!assetKind?publicTerms.amountBaseUnits:'0',data,nonce});
       const intent={version:1,intentId:encodeBase64url(randomBytes(32)),binding,account:publicTerms.seller,action,state:'prepared',walletGeneration:sessions[0].generation,expectedEscrowState:action==='fund'?'absent':'funded',preparedRequest,submission:{chain:'evm',hash:null,nonce},replacementOf:null,createdAt:Date.now(),updatedAt:Date.now()};
       intents.set(intent.intentId,intent);
-      const execution=createEvmExecution({provider:ports[0],session:{account:publicTerms.seller,chainId:'31337',generation:sessions[0].generation},isCurrent:()=>adapters[0].inspect()===sessions[0],journal,validateCanonical});
+      const openExecution = () => createEvmExecution({
+        provider: ports[0],
+        session: { account: publicTerms.seller, chainId: '31337', generation: sessions[0].generation },
+        isCurrent: () => adapters[0].inspect() === sessions[0],
+        journal,
+        validateCanonical,
+      });
+      const execution = openExecution();
+      const sendsBefore = walletSends;
       unknownSend=loseResponse;
       const result=await execution.submit(intent,lease.current().revision);submissions++;
       if(loseResponse){
@@ -139,16 +157,41 @@ try {
         // Reopen the encrypted source and reconcile from native history, without resubmitting.
         const profileId=session.profileId;journal.dispose();lease.dispose();vault.dispose();
         vault=new EncryptedVaultService(store,crypto,{lifecycle:false});session=val(await vault.unlock(profileId,pass));attach();
+        const [outstanding] = val(await journal.unresolved(binding, publicTerms.seller));
+        assert.equal(outstanding.intentId, intent.intentId);
+        assert.equal(outstanding.state, 'broadcast-unknown');
+        assert.equal(outstanding.submission.hash, null);
+        const reopenedExecution = openExecution();
+        try {
+          const repeat = await reopenedExecution.submit(intent, lease.current().revision);
+          assert.equal(repeat.ok, false);
+          assert.equal(repeat.error.code, 'CONFLICT');
+        } finally {
+          reopenedExecution.dispose();
+        }
       }else val(result);
       await s.finalize();
       const reconciled=val(await journal.reconcileNative(intent.intentId));reconciliations++;
       assert.equal(reconciled.state,'finalized');assert.equal(val(await journal.unresolved(binding,publicTerms.seller)).length,0);
+      assert.equal(walletSends, sendsBefore + 1, 'each intent reaches the wallet once, including through restart');
+      if (loseResponse) recoveredResponses.push({ asset: publicTerms.assetKind, action });
       execution.dispose();
     };
     await execute('fund',assetKind===0);
     assert.equal(val(await reader.read(binding,{generation:0,requestSequence:1,signal:new AbortController().signal},termSets.get(tradeId))).escrow.state,'funded');
     if(terminal==='refund')await s.at(t.escrowExpirySeconds);
-    await execute(terminal);
+    const interruptedPayout = assetKind === 1 && terminal === 'release';
+    const buyerBalance = interruptedPayout ? await s.token.balanceOf(t.buyer) : undefined;
+    if (interruptedPayout) {
+      assert.equal(await s.token.balanceOf(address), t.amountBaseUnits);
+      assert.equal(await s.escrow.outstandingPrincipal(token), t.amountBaseUnits);
+    }
+    await execute(terminal, interruptedPayout);
+    if (interruptedPayout) {
+      assert.equal(await s.token.balanceOf(t.buyer), buyerBalance + t.amountBaseUnits);
+      assert.equal(await s.token.balanceOf(address), 0n);
+      assert.equal(await s.escrow.outstandingPrincipal(token), 0n);
+    }
     assert.equal(val(await reader.read(binding,{generation:0,requestSequence:2,signal:new AbortController().signal},termSets.get(tradeId))).escrow.state,terminal==='release'?'released':'refunded');
     scenarios.push({asset:assetKind?'erc20':'native',terminal,tradeId});
   }
@@ -166,5 +209,10 @@ try {
     conservative.dispose();
   }
   restoredJournal.dispose();backup.dispose();adapters.forEach(adapter=>adapter.dispose());
-  console.log(JSON.stringify({fixture:'two-party-loopback-local-evm',offers,acceptances,submissions,reconciliations,scenarios,unknownResponseNativeRecovery:true,encryptedFreshKeyJournalRestore:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
+  assert.equal(walletSends, submissions, 'backup restore and native reconciliation never submit through the wallet');
+  assert.deepEqual(recoveredResponses, [
+    { asset: 'native', action: 'fund' },
+    { asset: 'erc20', action: 'release' },
+  ]);
+  console.log(JSON.stringify({fixture:'two-party-loopback-local-evm',offers,acceptances,submissions,walletSends,reconciliations,scenarios,recoveredResponses,unknownResponseNativeRecovery:true,encryptedFreshKeyJournalRestore:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
 }finally{journal?.dispose();lease?.dispose();vault?.dispose();await s.cleanup();}

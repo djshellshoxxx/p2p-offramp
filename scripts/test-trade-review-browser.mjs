@@ -20,6 +20,7 @@ const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-trade-review-'));
 const scenario = JSON.parse(await readFile(resolve(root, 'packages/domain/test/fixtures/local-evm-scenario/scenario.json'), 'utf8'));
 const FORMAT = 'p2p-offramp/local-terms-review/v1';
 const SELLER = scenario.sets.native.terms.seller, BUYER = scenario.sets.native.terms.buyer;
+const pagesPath = '/p2p-offramp/';
 const FIXED_NOW = new Date('2026-01-01T00:00:00Z');
 const unexpected = [];
 let browser, server;
@@ -69,7 +70,8 @@ try {
   server = createServer((request, response) => {
     response.setHeader('Cache-Control', 'no-store'); response.setHeader('X-Content-Type-Options', 'nosniff');
     const path = new URL(request.url ?? '/', 'http://127.0.0.1').pathname;
-    const target = resolve(out, path === '/' ? 'index.html' : '.' + path);
+    if (!path.startsWith(pagesPath)) { response.writeHead(404); response.end(); return; }
+    const target = resolve(out, path.slice(pagesPath.length) || 'index.html');
     if (!target.startsWith(out + sep) || !/\.(?:html|js|css|json)$/.test(target)) { response.writeHead(404); response.end(); return; }
     void readFile(target).then(bytes => {
       response.setHeader('Content-Type', target.endsWith('.js') ? 'text/javascript' : target.endsWith('.css') ? 'text/css' : target.endsWith('.html') ? 'text/html' : 'application/json');
@@ -78,6 +80,7 @@ try {
   });
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const origin = `http://127.0.0.1:${server.address().port}`;
+  const pagesUrl = origin + pagesPath;
   browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
   const context = await browser.newContext({ serviceWorkers: 'block' });
   await context.addInitScript(instrument);
@@ -103,10 +106,12 @@ try {
   };
 
   // 1. Offers: demo is visibly distinct; empty session; missing file is refused locally.
-  await page.goto(origin + '/#/offers');
+  await page.goto(pagesUrl + '#/offers');
   await page.getByRole('heading', { level: 1, name: 'Offers', exact: true }).waitFor();
   await page.getByText('SYNTHETIC DEMO · test-only data', { exact: true }).waitFor();
   await page.getByText(/^SYNTHETIC LOCAL DEMO: test-only registry for local chain 31337/).waitFor();
+  await page.getByRole('button', { name: 'Refresh vault status', exact: true }).waitFor();
+  assert.ok(page.workers().some(worker => worker.url().startsWith(pagesUrl + 'assets/vault.worker-')));
   assert.match(await mainText(), /Offer discovery is unavailable/);
   assert.match(await mainText(), /No terms reviewed yet in this session\./);
   await page.getByRole('button', { name: 'Check terms', exact: true }).click();
@@ -159,7 +164,7 @@ try {
   assert.notEqual(page.url(), freshUrl);
 
   // 5. ERC-20 frozen scenario through a file.
-  await page.goto(origin + '/#/offers');
+  await page.goto(pagesUrl + '#/offers');
   await page.setInputFiles('#terms-file', await writeDoc('erc20.json', documentFor('erc20')));
   await page.getByRole('button', { name: 'Check terms', exact: true }).click();
   await page.waitForURL(/#\/trade\//);
@@ -171,7 +176,7 @@ try {
   assert.equal(await field('Fiat amount'), '25.00 USD');
 
   // 6. Rejections: each stays on Offers with a fixed message and stores nothing.
-  await page.goto(origin + '/#/offers');
+  await page.goto(pagesUrl + '#/offers');
   assert.equal(await sessionItems(), 2);
   const tamperedHash = documentFor('native', { privateAgreement: { fiatMinorUnits: '5001' } });
   const unknownNetwork = documentFor('native', { terms: { networkId: 'other-evm' } });
@@ -201,7 +206,7 @@ try {
   assert.equal(await page.evaluate(() => window.hostileRan === true), false);
 
   // 8. Cancel while checking: the late result is discarded and nothing is stored.
-  await page.goto(origin + '/#/offers');
+  await page.goto(pagesUrl + '#/offers');
   const before = await sessionItems();
   await page.setInputFiles('#terms-file', await writeDoc('slow.json', documentFor('erc20', { terms: { acceptBeforeSeconds: '1700000001' } })));
   await page.evaluate(() => { window.__holdDigest = true; });
@@ -292,7 +297,7 @@ try {
   // A second tab saves another review; the stale first tab must re-unlock, never overwrite it.
   const other = await context.newPage();
   other.on('pageerror', () => unexpected.push('SECOND_TAB_PAGE_ERROR'));
-  await other.goto(origin + '/#/home');
+  await other.goto(pagesUrl + '#/home');
   await unlock(createdId, reviewPass, other);
   await other.getByRole('link', { name: 'Offers', exact: true }).click();
   await other.getByRole('button', { name: 'Frozen scenario: ERC-20 (expired, has capability)', exact: true }).click();
