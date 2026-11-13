@@ -80,10 +80,27 @@ class AuditTests(unittest.TestCase):
     def test_catalog_accepts_nested_and_multiline_link_labels(self):
         self.inspect('Status: planning\n')
         catalog = self.path.parent / 'spec-master-specification-index.md'
-        for label in ('Read [appendix] first', 'Read the\nappendix', r'Closing \] delimiter'):
+        for label in ('Read [appendix] first', 'Read the\nappendix', r'Closing \] delimiter',
+                      'Read `]` then follow the link'):
             with self.subTest(label=label):
-                catalog.write_text(f'[{label}](spec-example.md "Appendix")\n')
-                self.assertEqual(audit.unindexed(self.root, audit.audit(self.root)), [])
+                catalog.write_text(f'[{label}](spec-example.md "Appendix") [{label}](missing.md)\n')
+                specs = audit.audit(self.root)
+                self.assertEqual(audit.unindexed(self.root, specs), [])
+                self.assertEqual(next(s.broken_links for s in specs if s.category == 'catalog'), ['missing.md'])
+
+    def test_link_lookalikes_do_not_index_specs_or_report_missing_files(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        (self.path.parent / 'elsewhere.md').touch()
+        for example in ('orphan](PATH)', r'\[escaped](PATH)', '`[example](PATH)`',
+                        '[read](elsewhere.md "example [label](PATH)")',
+                        '[earlier paragraph\n\norphan](PATH)'):
+            with self.subTest(example=example):
+                catalog.write_text(example.replace('PATH', 'spec-example.md') + '\n' +
+                                   example.replace('PATH', 'missing.md'))
+                specs = audit.audit(self.root)
+                self.assertEqual(audit.unindexed(self.root, specs), [self.path.relative_to(self.root).as_posix()])
+                self.assertTrue(all(not spec.broken_links for spec in specs))
 
     def test_fence_with_trailing_text_does_not_expose_example_links(self):
         self.inspect('Status: planning\n')
