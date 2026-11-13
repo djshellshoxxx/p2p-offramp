@@ -7,10 +7,13 @@ import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'vite';
 import react from '@vitejs/plugin-react';
-import { chromium } from 'playwright-core';
+import { chromium, firefox, webkit } from 'playwright-core';
 import { fixture } from '../packages/security/test/lib/release-fixture.mjs';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
+const engine = process.env.P2P_BROWSER_ENGINE ?? 'chromium';
+const engines = { chromium, firefox, webkit };
+if (!Object.hasOwn(engines, engine)) throw new Error('P2P_BROWSER_ENGINE must be chromium, firefox, or webkit');
 const root = fileURLToPath(new URL('../', import.meta.url));
 const temporary = await mkdtemp(resolve(tmpdir(), 'p2p-diagnostics-browser-'));
 let server, browser;
@@ -36,7 +39,7 @@ try {
   });
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const origin = `http://127.0.0.1:${server.address().port}`;
-  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
+  browser = await engines[engine].launch(engine === 'chromium' ? { executablePath: resolveChromiumPath(), args: ['--no-sandbox'] } : {});
   const context = await browser.newContext({ serviceWorkers: 'block', acceptDownloads: true });
   const failures = [];
   await context.route('**/*', route => { if (new URL(route.request().url()).origin === origin) return route.continue(); failures.push('EGRESS'); return route.abort(); });
@@ -77,6 +80,6 @@ try {
   assert.equal(await page.evaluate(() => localStorage.getItem('fixture-diagnostics')), null);
   for (const width of [320, 768, 1440]) { await page.setViewportSize({ width, height: 900 }); assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true); }
   assert.deepEqual(failures, []);
-  console.log(JSON.stringify({ fixture: 'diagnostics-local-browser', signedFixture: true, approvedRelease: false, defaultCollectionBlocked: true, selectedPreviewExact: true, revocationRefused: true, lockedClear: true, externalNetwork: false }));
+  console.log(JSON.stringify({ fixture: 'diagnostics-local-browser', engine, browserVersion: browser.version(), signedFixture: true, approvedRelease: false, defaultCollectionBlocked: true, selectedPreviewExact: true, revocationRefused: true, lockedClear: true, externalNetwork: false }));
   await context.close();
 } finally { await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); } await rm(temporary, { recursive: true, force: true }); }
