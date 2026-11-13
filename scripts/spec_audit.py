@@ -10,7 +10,7 @@ import re
 from urllib.parse import unquote, urlsplit
 
 
-INLINE_LINK = re.compile(r'\[[^\]\n]*\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)')
+LINK_DESTINATION = r'\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)'
 
 
 @dataclass(frozen=True)
@@ -59,7 +59,7 @@ def inspect(root: Path, path: Path) -> Spec:
         category = 'manual-review-needed'
     present = {int(n) for n in re.findall(r'^##\s+([1-7])\.\s+', body, re.M)}
     broken = []
-    for link in INLINE_LINK.findall(body):
+    for link in re.findall(r'\[[^\]\n]*' + LINK_DESTINATION, body):
         url = urlsplit(link)
         if url.scheme or url.netloc or not url.path:
             continue
@@ -78,7 +78,7 @@ def unindexed(root: Path, specs: list[Spec]) -> list[str]:
     catalogs = [root / s.path for s in specs if s.category == 'catalog']
     targets = set()
     for catalog in catalogs:
-        for link in INLINE_LINK.findall(prose(catalog.read_text(encoding='utf-8'))):
+        for link in re.findall(LINK_DESTINATION, prose(catalog.read_text(encoding='utf-8'))):
             url = urlsplit(link)
             if not url.scheme and not url.netloc and url.path:
                 targets.add((catalog.parent / unquote(url.path)).resolve())

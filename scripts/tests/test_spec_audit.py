@@ -77,6 +77,14 @@ class AuditTests(unittest.TestCase):
         self.assertTrue(all(not spec.broken_links for spec in specs))
         self.assertEqual(audit.unindexed(self.root, specs), [])
 
+    def test_catalog_accepts_nested_and_multiline_link_labels(self):
+        self.inspect('Status: planning\n')
+        catalog = self.path.parent / 'spec-master-specification-index.md'
+        for label in ('Read [appendix] first', 'Read the\nappendix', r'Closing \] delimiter'):
+            with self.subTest(label=label):
+                catalog.write_text(f'[{label}](spec-example.md "Appendix")\n')
+                self.assertEqual(audit.unindexed(self.root, audit.audit(self.root)), [])
+
     def test_fence_with_trailing_text_does_not_expose_example_links(self):
         self.inspect('Status: planning\n')
         catalog = self.path.parent / 'spec-master-specification-index.md'
