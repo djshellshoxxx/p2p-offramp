@@ -123,3 +123,33 @@ test('hostile thrown proxies from a relay or provider stay fixed typed failures'
   assert.doesNotMatch(JSON.stringify(result), /SECRET|proxy|TypeError/);
   s.buyerChat.close(); s.sellerChat.close();
 });
+
+test('G20 same parties and trade hash cannot replay encrypted chat across EVM networks or deployments', async () => {
+  const s = await setup();
+  const sent = ok(await s.sellerChat.send('private trade boundary fixture', s.seller.secret));
+  // The ciphertext is still decryptable by the same peer; the authenticated rumor
+  // must fail the app-level conversation binding before entering a different trade.
+  for (const differentBinding of [
+    { ...binding, networkId: 'eip155:11155111' },
+    { ...binding, deploymentId: 'alternate-escrow-v1' },
+  ]) {
+    const other = ok(nip17.createTradeChat({
+      binding: differentBinding,
+      participants: s.participants,
+      selfPublicKey: s.buyer.pub,
+      provider,
+      now: () => NOW,
+    }));
+    assert.notEqual(other.conversationId, s.sellerChat.conversationId);
+    err(await other.receive(sent.recipientWrap, s.buyer.secret), 'UNAUTHORIZED');
+    other.close();
+  }
+  // A rejection by another conversation must not mutate the intended recipient's
+  // deduplication state. The original peer can still accept exactly once.
+  const accepted = ok(await s.buyerChat.receive(sent.recipientWrap, s.buyer.secret));
+  assert.equal(accepted.duplicate, false);
+  assert.equal(accepted.message.content, 'private trade boundary fixture');
+  assert.equal(ok(await s.buyerChat.receive(sent.recipientWrap, s.buyer.secret)).duplicate, true);
+  s.sellerChat.close();
+  s.buyerChat.close();
+});
