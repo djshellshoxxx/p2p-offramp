@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,readFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {inspectDeployment,clearRecordedAttempt} from '../sepolia/record-deployment.mjs';
+import {inspectDeployment,clearRecordedAttempt,checkPublicEndpoint} from '../sepolia/record-deployment.mjs';
 import {SEPOLIA} from '../sepolia/lib.mjs';
 const tx='0x'+'11'.repeat(32),blockHash='0x'+'22'.repeat(32),finalHash='0x'+'33'.repeat(32),from='0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',address='0x5fbdb2315678afecb367f032d93f642f64180aa3';
 function fixture(mutate=()=>{}){
@@ -95,4 +95,24 @@ test('geth-style reverted CREATE address must equal the authenticated sender/non
    assert.deepEqual(JSON.parse(await readFile(pendingPath)),pending);
   }
  }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('G25 public registry RPC endpoint rejects credential-bearing or ambiguous URLs offline',()=>{
+ const approved=['https://rpc.example.org/','https://rpc.example.org/evm'];
+ for(const url of approved)assert.doesNotThrow(()=>checkPublicEndpoint(url),url);
+ const refused=[
+  'http://rpc.example.org/','http://localhost:8545/',
+  'https://alice:SECRET@rpc.example.org/','https://rpc.example.org/?api_key=SECRET',
+  'https://rpc.example.org/#SECRET','https://rpc.example.org/evm\\hidden',
+  'https://RPC.EXAMPLE.ORG/','https://rpc.example.org',
+  'file:///private/SECRET','not-a-url',null,undefined,
+ ];
+ for(const url of refused){
+  assert.throws(()=>checkPublicEndpoint(url),error=>{
+   assert.equal(error.code,'PUBLIC_ENDPOINT_INVALID');
+   assert.doesNotMatch(String(error.message),/SECRET|alice|api_key|private/i,'no user-supplied RPC details in error');
+   return true;
+  },String(url));
+ }
 });
