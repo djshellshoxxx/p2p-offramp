@@ -17,7 +17,20 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
   const [selected, setSelected] = useState<readonly number[]>([]), [consent, setConsent] = useState(false), [preview, setPreview] = useState<Preview | null>(null);
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [notice, setNotice] = useState('');
   const request = useRef<AbortController | null>(null), sequence = useRef(0), retainedPreview = useRef<Preview | null>(null);
+  const previewHeading = useRef<HTMLHeadingElement>(null);
+  useLayoutEffect(() => {
+    if (preview) previewHeading.current?.focus();
+  }, [preview]);
   const page = status.state === 'unlocked' && loaded?.scope === scope ? loaded.value : null;
+  const pageSummary = useRef<HTMLParagraphElement>(null);
+  const pageTrigger = useRef<HTMLButtonElement | null>(null);
+  useLayoutEffect(() => {
+    const trigger = pageTrigger.current;
+    if (page && trigger && (document.activeElement === trigger || document.activeElement === document.body)) {
+      pageSummary.current?.focus();
+    }
+    pageTrigger.current = null;
+  }, [page]);
   function discardPreview() { retainedPreview.current?.bytes.fill(0); retainedPreview.current = null; setPreview(null); }
   useLayoutEffect(() => {
     request.current?.abort(); sequence.current++; setLoaded(null); setSelected([]); setConsent(false); discardPreview(); setError(''); setNotice(''); setBusy(false);
@@ -25,9 +38,10 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
   useEffect(() => () => { request.current?.abort(); sequence.current++; retainedPreview.current?.bytes.fill(0); retainedPreview.current = null; }, [services]);
   const isCurrent = (token: number, captured: number, controller: AbortController) => !controller.signal.aborted && sequence.current === token &&
     services?.current.state === 'unlocked' && services.selectionScope() === captured;
-  async function load(offset = 0, expectedRevision: number | null = null) {
+  async function load(trigger: HTMLButtonElement, offset = 0, expectedRevision: number | null = null) {
     if (!services || services.current.state !== 'unlocked' || busy) return;
     const captured = services.selectionScope(), token = ++sequence.current, controller = new AbortController();
+    pageTrigger.current = document.activeElement === trigger ? trigger : null;
     request.current?.abort(); request.current = controller; discardPreview(); setSelected([]); setConsent(false); setNotice(''); setError(''); setBusy(true);
     try {
       const result = await services.listRecoveryReferences(offset, expectedRevision, controller.signal);
@@ -62,13 +76,13 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
   return <section className="panel" aria-labelledby="recovery-references-title">
     <h2 id="recovery-references-title">{m.title}</h2><p>{m.help}</p><p className="warning">{m.unverified}</p><p className="helper">{m.private}</p>
     {status.state !== 'unlocked' ? <p role="status">{m.locked}</p> : <div className="actions">
-      <button type="button" disabled={busy} onClick={() => { void load(); }}>{page ? m.refresh : m.load}</button>
-      {page && page.offset > 0 ? <button type="button" disabled={busy} onClick={() => { void load(page.offset - 64, page.revision); }}>{m.previous}</button> : null}
-      {page?.nextOffset !== null && page?.nextOffset !== undefined ? <button type="button" disabled={busy} onClick={() => { void load(page.nextOffset!, page.revision); }}>{m.next}</button> : null}
+      <button type="button" disabled={busy} onClick={event => { void load(event.currentTarget); }}>{page ? m.refresh : m.load}</button>
+      {page && page.offset > 0 ? <button type="button" disabled={busy} onClick={event => { void load(event.currentTarget, page.offset - 64, page.revision); }}>{m.previous}</button> : null}
+      {page?.nextOffset !== null && page?.nextOffset !== undefined ? <button type="button" disabled={busy} onClick={event => { void load(event.currentTarget, page.nextOffset!, page.revision); }}>{m.next}</button> : null}
     </div>}
     {busy ? <p role="status">{m.loading}</p> : null}{error ? <p className="notice error" role="alert">{error}</p> : null}{notice ? <p className="notice" role="status">{notice}</p> : null}
     {page ? <>
-      <p className="helper">{m.page(page.offset, page.totalJournalRecords, page.revision)}</p>
+      <p className="helper" ref={pageSummary} tabIndex={-1}>{m.page(page.offset, page.totalJournalRecords, page.revision)}</p>
       {page.unsupported ? <p className="notice">{m.unsupported(page.unsupported)}</p> : null}
       {page.items.length === 0 ? <p>{m.empty}</p> : <fieldset className="profile-choices"><legend>{m.select}</legend>
         {page.items.map((item, index) => <div key={item.recordId}>
@@ -86,7 +100,8 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
       {page.items.length > 0 ? <><label className="checkbox-label"><input type="checkbox" disabled={busy} checked={consent} onChange={event => { discardPreview(); setConsent(event.currentTarget.checked); }} /><span>{m.consent}</span></label>
         <button type="button" disabled={busy || !consent || selected.length === 0} onClick={showPreview}>{m.preview}</button></> : null}
       {preview ? <section className="plain-section" aria-labelledby="recovery-reference-preview-title">
-        <h3 id="recovery-reference-preview-title">{m.previewTitle}</h3><p>{m.previewHelp}</p>
+        <h3 id="recovery-reference-preview-title" ref={previewHeading} tabIndex={-1} aria-describedby="recovery-reference-preview-help">{m.previewTitle}</h3>
+        <p id="recovery-reference-preview-help">{m.previewHelp}</p>
         <label htmlFor="recovery-reference-bytes">{m.exact}</label><textarea id="recovery-reference-bytes" className="recovery-export" rows={12} readOnly value={preview.text} />
         <button type="button" disabled={busy} onClick={() => { void savePreview(); }}>{m.download}</button>
       </section> : null}
