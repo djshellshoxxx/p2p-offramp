@@ -86,7 +86,9 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         const reserved=await options.journal.reserve(intent,expectedRevision,signal);if(!reserved.ok)return reserved;
         const afterReserve=guard();if(afterReserve)return afterReserve;
         marking=true;
-        const marked=await options.journal.markSending(intent.intentId,signal);if(!marked.ok)return marked;
+        // The marker may have reached durable storage even if the journal reports an error.
+        // Never surface a retry-safe code after a send-capable marker attempt.
+        const marked=await options.journal.markSending(intent.intentId,signal);if(!marked.ok)return fail('BROADCAST_UNKNOWN');
         const afterMarker=guard();if(afterMarker)return fail('BROADCAST_UNKNOWN');
         // A wallet may omit change events while durable preparation waits on storage.
         const finalAccounts=await options.provider.request({method:'eth_accounts'});
