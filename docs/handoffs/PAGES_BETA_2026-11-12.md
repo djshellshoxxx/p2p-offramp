@@ -2,10 +2,13 @@
 
 ## Follow-up integration — 2026-11-14
 
-The Pages beta branch has received a small, reviewable follow-up stack. Current branch:
-`integration/pages-beta-qualification-20261112`, head after these merges
-`d6d98a60734457b60d5c1db6ba74cf30acd424da`. This is a staging/integration branch;
-it is not `main`, a production release, or authorization to enable trading.
+The Pages beta work has been consolidated into the staging line. Current
+consolidated branch: `integration/p2p-consolidated-20261109`, head after PR #114
+and the owner-decision documentation PR #49:
+`f84b5d9ffa1e5a2267ac0190003bdddf1e9fc84f`. The source branch
+`integration/pages-beta-qualification-20261112` is retained. This is an
+integration branch, not `main`, a production release, or authorization to enable
+trading.
 
 Merged into this branch:
 - #111: browser cold-restart recovery-reference test; requires fresh profile selection
@@ -26,6 +29,8 @@ Merged into this branch:
 - #62: G23 display-only endpoint-origin disclosure. It returns bounded detached
   origins from an injected trusted configuration, exposes no raw paths or
   credentials, and keeps `economicPreparationAllowed: false`.
+
+PR #49 also imports the owner-accepted design decisions D1, D4, D5, D6, D7, D8 and D9; D2 remains proposed and owner-only. Accepted design choices do not implement their protocols or authorize a release. The D1/D9 runtime work and all D8 Tier C approval gates remain separate.
 
 The original PR heads for these changes had successful hosted workflow results.
 Those results are source-head evidence, not a full combined-head qualification.
