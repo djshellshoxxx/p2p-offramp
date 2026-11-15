@@ -170,6 +170,28 @@ test('earlier local encrypted review wrappers remain readable and deletable with
   await s.send('listTermsReviews', {profileId:s.profileId});assert.deepEqual(s.value().items,[]);
 });
 
+test('a malformed earlier review wrapper is retained and skipped without wedging other saved reviews', async () => {
+  const s = await setup();
+  const bytes = terms(43), badId = '5'.repeat(32);
+  const source = (await s.vault.unlock(s.profileId, pass)).value;
+  const payload = encodeBase64url(new TextEncoder().encode(JSON.stringify({ format: 'p2p-offramp/saved-review/v1', bytes: '!!bad' })));
+  assert.equal((await s.vault.commit(source.sessionId, source.revision, [{op:'put',record:{id:badId,kind:'trade',schemaVersion:1,payload}}])).ok,true);
+  s.vault.lock(source.sessionId);
+  await s.send('unlock', {profileId:s.profileId,passphrase:pass});
+  await s.send('listTermsReviews', {profileId:s.profileId});
+  assert.deepEqual(s.value(), {items:[],skipped:1}, 'malformed wrapper is counted, never decoded');
+  await s.send('saveTermsReview', {profileId:s.profileId,source:'file',bytes});
+  const recordId = s.value().recordId; assert.match(recordId, /^[0-9a-f]{32}$/);
+  await s.send('listTermsReviews', {profileId:s.profileId});
+  assert.deepEqual(s.value(), {items:[{recordId,source:'file',bytes}],skipped:1});
+  await s.send('deleteTermsReview', {profileId:s.profileId,recordId:badId});
+  assert.equal(s.error(), 'NOT_FOUND', 'an unparseable record is not a saved review target');
+  await s.send('deleteTermsReview', {profileId:s.profileId,recordId});assert.deepEqual(s.value(),{recordId});
+  const after = (await s.vault.unlock(s.profileId, pass)).value;
+  assert.deepEqual((await s.vault.list(after.sessionId)).value.map(r => r.id), [badId], 'unknown record retained intact');
+  s.vault.lock(after.sessionId);
+});
+
 test('listing saved reviews checks persisted freshness and refuses a stale tab before returning bytes', async () => {
   const s = await setup();
   await s.send('unlock', {profileId:s.profileId,passphrase:pass});

@@ -134,7 +134,7 @@ test('review storage is session-bound, bounded, idempotent and preserves foreign
  await s.send('saveTermsReview',{profileId,source:'file',bytes:new Uint8Array([9])});assert.equal(s.messages.at(-1).result.error.code,'LIMIT_EXCEEDED');
  await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.value.items.length,8);assert.equal(s.messages.at(-1).result.value.skipped,1);assert.equal(rows.size,9);
  rows.set('c'.repeat(32),{id:'c'.repeat(32),kind:'trade',schemaVersion:1,payload:Buffer.from(JSON.stringify({format:'p2p-offramp/saved-review/v1',bytes:''})).toString('base64url')});
- await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.error.code,'INVALID_INPUT');
+ await s.send('listTermsReviews',{profileId});assert.equal(s.messages.at(-1).result.value.items.length,8,'malformed earlier wrapper never decoded');assert.equal(s.messages.at(-1).result.value.skipped,2);assert.equal(rows.size,10,'malformed earlier wrapper retained');
  await s.send('lock',{},1);await s.send('listTermsReviews',{profileId},1);assert.equal(s.messages.at(-1).result.error.code,'LOCKED');s.service.dispose();
 });
 

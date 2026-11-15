@@ -335,6 +335,45 @@ async function main() {
     assert.equal((await revertOf(A.third, buildWithdraw(escrow, receiver, ZERO))).name, 'NothingToWithdraw', 'a second withdraw finds no credit');
     pass('reverting buyer: release settles and credits the buyer; third-party withdraw reverts while rejecting, then pays after the receiver accepts');
   }
+  // ---- 7. same-block race: competing release and refund mined into ONE block, both fee orderings ----
+  {
+    /** Queues `call` without gas estimation (estimation would pre-reject a tx that reverts in the pending state). */
+    const queue = async (from, call, gasPrice) => await rpc('eth_sendTransaction', [{ from, to: call.to, data: call.data, value: qty(call.value), gas: qty(300000), gasPrice: qty(gasPrice) }]);
+    const base = big(await rpc('eth_gasPrice'));
+    for (const [boundary, refundFirst] of [['before', false], ['before', true], ['at', false], ['at', true]]) {
+      const amount = WEI / 8n;
+      const terms = clean(await makeTerms(domain, 'native', ZERO, amount)), tradeId = negotiate(domain, terms);
+      await send(A.seller, buildFundNative(domain, terms));
+      const deadline = Number(terms.escrowExpirySeconds);
+      const sellerBefore = await balance(A.seller), buyerBefore = await balance(A.buyer), escrowBefore = await balance(escrow);
+      await rpc('evm_setAutomine', [false]);
+      let releaseHash, refundHash;
+      try {
+        const high = base * 4n, low = base * 2n;
+        refundHash = await queue(A.third, buildRefund(escrow, tradeId), refundFirst ? high : low);
+        releaseHash = await queue(A.seller, buildRelease(escrow, tradeId), refundFirst ? low : high);
+        await rpc('evm_setNextBlockTimestamp', [boundary === 'before' ? deadline - 1 : deadline]);
+        await rpc('evm_mine');
+      } finally { await rpc('evm_setAutomine', [true]); }
+      const releaseReceipt = await rpc('eth_getTransactionReceipt', [releaseHash]), refundReceipt = await rpc('eth_getTransactionReceipt', [refundHash]);
+      assert.notEqual(releaseReceipt, null); assert.notEqual(refundReceipt, null);
+      assert.equal(releaseReceipt.blockNumber, refundReceipt.blockNumber, 'both settlement attempts were included in one block');
+      const releaseIndex = Number(big(releaseReceipt.transactionIndex)), refundIndex = Number(big(refundReceipt.transactionIndex));
+      assert.equal(refundIndex < releaseIndex, refundFirst, 'fee priority fixed the in-block order');
+      const block = await rpc('eth_getBlockByNumber', [releaseReceipt.blockNumber, false]);
+      assert.equal(Number(big(block.timestamp)), boundary === 'before' ? deadline - 1 : deadline, 'block time is the boundary under test');
+      const releaseWins = boundary === 'before';
+      assert.equal(releaseReceipt.status, releaseWins ? '0x1' : '0x0', `release ${releaseWins ? 'wins' : 'reverts'} ${boundary} the deadline regardless of order`);
+      assert.equal(refundReceipt.status, releaseWins ? '0x0' : '0x1', `refund ${releaseWins ? 'reverts' : 'wins'} ${boundary} the deadline regardless of order`);
+      const releaseFee = big(releaseReceipt.gasUsed) * big(releaseReceipt.effectiveGasPrice);
+      assert.equal((await trade(escrow, tradeId)).state, releaseWins ? 'released' : 'refunded');
+      assert.deepEqual(await logsOf(escrow, tradeId), ['Funded', releaseWins ? 'Released' : 'Refunded'], 'exactly one terminal event');
+      assert.equal(await balance(A.buyer), buyerBefore + (releaseWins ? amount : 0n), 'buyer paid only when release wins');
+      assert.equal(await balance(A.seller), sellerBefore - releaseFee + (releaseWins ? 0n : amount), 'seller refunded only when refund wins; pays only its own gas');
+      assert.equal(await balance(escrow), escrowBefore - amount, 'exactly one payout of the principal');
+    }
+    pass('same-block race: release and refund in one block, both fee orders; chain time decides (deadline-1 release, deadline refund); one payout');
+  }
   console.log(`\n${results.length} local trade checks passed`);
 }
 
