@@ -2,6 +2,7 @@
  * G12 lifecycle-mode journal races in two real Chromium documents sharing one encrypted IndexedDB profile.
  * Spec acceptance (spec-transaction-lifecycle-journal.md): exactly one prepared-state CAS may authorize a send,
  * conflicting observations commit at most once, and a stale document never overwrites a newer record.
+ * A fresh browser process must honor a pending nonce held by the same on-disk profile.
  * Loopback only; the canonical validator is a fixture that supplies no chain or wallet authority.
  */
 import assert from 'node:assert/strict';
@@ -18,7 +19,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const output = await mkdtemp(resolve(tmpdir(), 'p2p-lifecycle-tabs-'));
 const PASSPHRASE = 'local lifecycle browser passphrase';
 const hashOf = byte => '0x' + byte.repeat(32);
-let browser;
+const profileDir = await mkdtemp(resolve(tmpdir(), 'p2p-lifecycle-profile-'));
+let context;
 let server;
 try {
   execFileSync(resolve(root, 'node_modules/.bin/tsc'), [
@@ -39,11 +41,13 @@ try {
   const address = server.address();
   assert.ok(address && typeof address === 'object');
   const origin = `http://127.0.0.1:${address.port}`;
-  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
-  const context = await browser.newContext({ serviceWorkers: 'block' });
+  const launchProfile = () => chromium.launchPersistentContext(profileDir, {
+    executablePath: resolveChromiumPath(), args: ['--no-sandbox'], serviceWorkers: 'block',
+  });
+  context = await launchProfile();
   const unexpected = [];
   const pages = await Promise.all([context.newPage(), context.newPage()]);
-  for (const page of pages) {
+  async function setupPage(page) {
     await page.route('**/*', route => {
       if (new URL(route.request().url()).origin === origin) return route.continue();
       unexpected.push(route.request().url()); return route.abort();
@@ -101,6 +105,7 @@ try {
       };
     });
   }
+  for (const page of pages) await setupPage(page);
   async function runProfile(forced) {
     const created = await pages[0].evaluate(async passphrase => { const r = await window.vault.create(passphrase); if (!r.ok) throw new Error('create failed'); return r.value.profileId; }, PASSPHRASE);
   const reopenAll = () => Promise.all(pages.map(page => page.evaluate(({ id, pass }) => window.reopen(id, pass), { id: created, pass: PASSPHRASE })));
@@ -201,11 +206,54 @@ try {
   const racing = await runProfile(null);
   const forcedOther = await runProfile(racing.outcome === 'confirmed' ? 'replaced' : 'confirmed');
   assert.deepEqual(new Set([racing.outcome, forcedOther.outcome]), new Set(['confirmed', 'replaced']), 'both follow-up branches ran');
+  // A new browser process has only the encrypted IndexedDB profile and its passphrase.
+  // All writes are acknowledged before closing; this tests a clean restart, not an interrupted commit.
+  const pendingHash = hashOf('cc');
+  const pendingProfile = await pages[0].evaluate(async ({ passphrase, hash }) => {
+    function requireOk(result) {
+      if (!result.ok) throw new Error(result.error.code);
+      return result.value;
+    }
+    const { profileId } = requireOk(await window.vault.create(passphrase));
+    const revision = await window.reopen(profileId, passphrase);
+    const intent = window.makeIntent(40);
+    requireOk(await window.journal.reserve(intent, revision));
+    requireOk(await window.journal.markSending(intent.intentId));
+    requireOk(await window.journal.observe(intent.intentId, { state: 'pending', hash }));
+    return profileId;
+  }, { passphrase: PASSPHRASE, hash: pendingHash });
+  await context.close();
+
+  context = await launchProfile();
+  const restoredPage = context.pages()[0] ?? await context.newPage();
+  await setupPage(restoredPage);
+  const restored = await restoredPage.evaluate(async ({ profileId, passphrase }) => {
+    const revision = await window.reopen(profileId, passphrase);
+    const listed = await window.journal.list();
+    if (!listed.ok) throw new Error(listed.error.code);
+    const entries = listed.value.map(intent => ({ state: intent.state, hash: intent.submission.hash, nonce: intent.submission.nonce }));
+    const duplicateMarker = window.codeOf(await window.journal.markSending(window.makeIntent(40).intentId));
+    const reserveOther = async nonce => {
+      const intent = window.makeIntent(41);
+      const request = { ...JSON.parse(intent.preparedRequest), to: '0x' + '78'.repeat(20), nonce };
+      return window.codeOf(await window.journal.reserve({
+        ...intent, binding: { ...intent.binding, deploymentId: 'other-fixture-escrow', tradeId: 'other-fixture-trade' },
+        preparedRequest: JSON.stringify(request), submission: { ...intent.submission, nonce },
+      }, revision));
+    };
+    const sameNonce = await reserveOther('7');
+    const otherNonce = await reserveOther('8');
+    return { entries, duplicateMarker, sameNonce, otherNonce };
+  }, { profileId: pendingProfile, passphrase: PASSPHRASE });
+  assert.deepEqual(restored.entries, [{ state: 'pending', hash: pendingHash, nonce: '7' }]);
+  assert.equal(restored.duplicateMarker, 'CONFLICT', 'a fresh process cannot mark the pending intent for a second send');
+  assert.equal(restored.sameNonce, 'CONFLICT', 'another deployment on the same network and account still shares the held nonce');
+  assert.equal(restored.otherNonce, 'ok', 'the same new binding can reserve a different nonce at the original revision');
   assert.deepEqual(unexpected, []);
-  for (const page of pages) await page.evaluate(() => { window.journal.dispose(); window.vault.dispose(); });
-  console.log(JSON.stringify({ suite: 'G12-lifecycle-two-tab', racing, forcedOther, unexpectedRequests: unexpected.length }));
+  console.log(JSON.stringify({ suite: 'G12-lifecycle-two-tab', racing, forcedOther, coldPendingNonce: true, unexpectedRequests: unexpected.length }));
 } finally {
-  await browser?.close();
+  await context?.close();
+  await rm(profileDir, { recursive: true, force: true });
   await new Promise(resolveClose => server ? server.close(() => resolveClose()) : resolveClose());
   await rm(output, { recursive: true, force: true });
 }
