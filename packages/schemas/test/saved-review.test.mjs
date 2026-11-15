@@ -18,7 +18,7 @@ test('saved-review bound equals the domain terms-review bound', () => {
 });
 
 test('payload round-trips the exact bytes and source and nothing derived', () => {
-  for (const source of ['file', 'synthetic-sample']) {
+  for (const source of ['file', 'synthetic-sample', 'local-draft']) {
     const payload = encodeSavedReviewPayload(source, terms);
     const parsed = parseSavedReviewPayload(payload, SAVED_REVIEW_SCHEMA_VERSION);
     assert.deepEqual(parsed, { source, terms });

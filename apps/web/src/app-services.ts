@@ -1,7 +1,8 @@
 /** Offline document composition boundary. UI receives state and commands, never a vault handle or record. */
-import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore,
-  type RuntimeSavedReviewRef, type RuntimeSavedReviews, type SavedReviewSource, type RuntimeRecoveryReferences } from '../../../packages/schemas/index.ts';
+import { runtimeFailure, type RuntimeErrorCode, type RuntimeResult, type RuntimeExport, type RuntimeInventory, type RuntimeRestore, type RuntimeTransportSelection, type RuntimeSelectTransportMode,
+  type BackupVerificationReceipt, type RuntimeBackupVerification, type RuntimeSavedReviewRef, type RuntimeSavedReviews, type RuntimeReviewFavorites, type RuntimeReviewFavoriteReceipt, type SavedReviewSource, type RuntimeRecoveryReferences, type RuntimeRetentionPreview, type RuntimeRetentionConsent, type RuntimeRetentionDelete } from '../../../packages/schemas/index.ts';
 import { AppRuntime, type AppRuntimeOptions } from './runtime/app-runtime.ts';
+import type { RuntimeTradeDraftLibrary, RuntimeTradeDraftPreview, RuntimeTradeDraftConsent, RuntimeTradeDraftReceipt, TradeDraftChangeV1 } from '../../../packages/schemas/index.ts';
 
 export type AppResult<T> = RuntimeResult<T>;
 export interface PublicStatus { readonly state: 'locked' | 'unlocked'; }
@@ -17,6 +18,9 @@ export interface AppServices {
    */
   selectionScope(): number;
   subscribe(listener: () => void): () => void;
+  /** Selected policy of the actual Worker-owned broker only; absent composition remains unavailable. */
+  getTransportSelection(signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>>;
+  selectTransportMode(input: RuntimeSelectTransportMode, signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>>;
   unlock(profileId: string, passphrase: string, signal?: AbortSignal): Promise<AppResult<PublicStatus>>;
   create(passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>>;
   listProfiles(signal?: AbortSignal): Promise<AppResult<RuntimeInventory>>;
@@ -24,12 +28,28 @@ export interface AppServices {
   status(): Promise<AppResult<PublicStatus>>;
   lock(): Promise<AppResult<PublicStatus>>;
   exportEncrypted(profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>>;
+  /** Authenticates a supplied backup against the open profile's exact committed revision. */
+  verifyBackup(bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>>;
+  /** Rechecks the Worker-owned receipt and current persisted profile; imported metadata cannot set it. */
+  checkBackupVerification(signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>>;
   /** Saved terms reviews of the open profile only (raw terms bytes; the caller re-reviews them). */
   saveTermsReview(source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   listTermsReviews(signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>>;
+  /** Purpose-bound encrypted saved-review IDs; writes require the explicitly observed native revision. */
+  listReviewFavorites(signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavorites>>;
+  setReviewFavorite(recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavoriteReceipt>>;
+  loadTradeDraftLibrary(signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftLibrary>>;
+  planTradeDraftChange(expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftPreview>>;
+  commitTradeDraftChange(previewId: string, expectedRevision: number, consent: RuntimeTradeDraftConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftReceipt>>;
+  /** Legacy compatibility: refuses deletion; use the reviewed retention flow in Settings. */
   deleteTermsReview(recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>>;
   /** Read-only unverified scalar journal references; no calldata, native truth or resend capability. */
   listRecoveryReferences(offset?: number, expectedRevision?: number | null, signal?: AbortSignal): Promise<AppResult<RuntimeRecoveryReferences>>;
+  /** Offline counts only; never constructs or invokes a native provider. */
+  planRetention(signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>>;
+  /** Explicit native eligibility check; absent native composition protects all records. */
+  reviewRetention(signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>>;
+  deleteReviewedRecords(consent: RuntimeRetentionConsent, signal?: AbortSignal): Promise<AppResult<RuntimeRetentionDelete>>;
   dispose(): Promise<void>;
 }
 export type { RuntimeErrorCode, RuntimeInventory, RuntimeRestore, RuntimeSavedReviewRef, RuntimeSavedReviews, SavedReviewSource };
@@ -61,6 +81,12 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     get profileId() { const status = runtime.current; return status.state === 'unlocked' ? status.handle.profileId : null; },
     get current() { return snapshot(); }, getSnapshot: snapshot, selectionScope,
     subscribe: (listener: () => void) => runtime.subscribe(listener),
+    getTransportSelection: async (signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>> => {
+      try { return await runtime.getTransportSelection(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    selectTransportMode: async (input: RuntimeSelectTransportMode, signal?: AbortSignal): Promise<AppResult<RuntimeTransportSelection>> => {
+      try { return await runtime.selectTransportMode(input, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
     unlock: (profileId: string, passphrase: string, signal?: AbortSignal) => stateCommand(() => runtime.unlock(profileId, passphrase, signal)),
     create: async (passphrase: string, signal?: AbortSignal): Promise<AppResult<CreatedProfile>> => {
       try {
@@ -74,15 +100,45 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
     restore: async (bytes: Uint8Array, sourcePassphrase: string, destinationPassphrase: string, signal?: AbortSignal): Promise<AppResult<RuntimeRestore>> => {
       try { return await runtime.restore(bytes, sourcePassphrase, destinationPassphrase, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
+    planRetention: async (signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>> => {
+      try { return await runtime.planRetention(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    reviewRetention: async (signal?: AbortSignal): Promise<AppResult<RuntimeRetentionPreview>> => {
+      try { return await runtime.reviewRetention(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    deleteReviewedRecords: async (consent: RuntimeRetentionConsent,signal?: AbortSignal): Promise<AppResult<RuntimeRetentionDelete>> => {
+      try { return await runtime.deleteReviewedRecords(consent,signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
     status: () => stateCommand(() => runtime.status()), lock: () => stateCommand(() => runtime.lock()),
     exportEncrypted: async (profileId: string, signal?: AbortSignal): Promise<AppResult<RuntimeExport>> => {
       try { return await runtime.exportEncrypted(profileId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    verifyBackup: async (bytes: Uint8Array, passphrase: string, signal?: AbortSignal): Promise<AppResult<BackupVerificationReceipt>> => {
+      try { return await runtime.verifyBackup(bytes,passphrase,signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    checkBackupVerification: async (signal?: AbortSignal): Promise<AppResult<RuntimeBackupVerification>> => {
+      try { return await runtime.checkBackupVerification(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     saveTermsReview: async (source: SavedReviewSource, bytes: Uint8Array, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.saveTermsReview(source, bytes, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     listTermsReviews: async (signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviews>> => {
       try { return await runtime.listTermsReviews(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    listReviewFavorites: async (signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavorites>> => {
+      try { return await runtime.listReviewFavorites(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    loadTradeDraftLibrary: async (signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftLibrary>> => {
+      try { return await runtime.loadTradeDraftLibrary(signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    planTradeDraftChange: async (expectedRevision: number, change: TradeDraftChangeV1, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftPreview>> => {
+      try { return await runtime.planTradeDraftChange(expectedRevision, change, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    commitTradeDraftChange: async (previewId: string, expectedRevision: number, consent: RuntimeTradeDraftConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftReceipt>> => {
+      try { return await runtime.commitTradeDraftChange(previewId, expectedRevision, consent, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+    },
+    setReviewFavorite: async (recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavoriteReceipt>> => {
+      try { return await runtime.setReviewFavorite(recordId, favorite, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     deleteTermsReview: async (recordId: string, signal?: AbortSignal): Promise<AppResult<RuntimeSavedReviewRef>> => {
       try { return await runtime.deleteTermsReview(recordId, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }

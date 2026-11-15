@@ -111,3 +111,26 @@ test('runtime parsers reject discriminators that change during their bounded sna
  invalid(()=>api.parseRuntimeMessage(changing({version:1,kind:'locked',generation:0},'kind','locked','closed')));
  invalid(()=>api.parseRuntimeMessage(changing({...command('status'),kind:'response',result:{ok:true,value:{state:'locked',handle:null}}},'kind','response','closed')));
 });
+
+test('runtime list reflection failures keep fresh fixed errors and bounded own data codes',()=>{
+ const reply=(operation,value)=>({...command(operation),kind:'response',result:{ok:true,value}});let reads=0;
+ const revoked=Proxy.revocable({},{});revoked.revoke();
+ const dataCode=new api.RuntimeBoundaryError('LIMIT_EXCEEDED');
+ Object.defineProperty(dataCode,'message',{get(){reads++;throw Error('SECRET message');}});
+ const getterCode=new api.RuntimeBoundaryError();
+ Object.defineProperty(getterCode,'code',{get(){reads++;throw Error('SECRET code');}});
+ const unknownCode=new api.RuntimeBoundaryError();unknownCode.code='SECRET';
+ const hostile=new Proxy(dataCode,{getPrototypeOf(){throw Error('SECRET reflection');}});
+ const lists=[['listProfiles',profileIds=>({profileIds,truncated:false})],['listTermsReviews',items=>({items,skipped:0})],
+  ['listReviewFavorites',recordIds=>({recordIds,revision:0})]];
+ for(const[operation,value]of lists)for(const trap of ['getPrototypeOf','ownKeys'])for(const[foreign,expected]of [
+  [revoked.proxy,'INVALID_INPUT'],[dataCode,'LIMIT_EXCEEDED'],[getterCode,'INVALID_INPUT'],[unknownCode,'INVALID_INPUT'],[hostile,'INVALID_INPUT']]){
+  const list=new Proxy([],{[trap](){throw foreign;}});let previous;
+  for(let attempt=0;attempt<2;attempt++)assert.throws(()=>api.parseRuntimeMessage(reply(operation,value(list))),error=>{
+   assert.ok(error instanceof api.RuntimeBoundaryError);assert.equal(error.code,expected);
+   assert.equal(error.message,'Local runtime operation unavailable.');assert.notEqual(error,foreign);assert.notEqual(error,previous);previous=error;return true;
+  });
+ }
+ for(const[operation,value]of lists){const list=Proxy.revocable([],{});list.revoke();invalid(()=>api.parseRuntimeMessage(reply(operation,value(list.proxy))));}
+ assert.equal(reads,0);
+});

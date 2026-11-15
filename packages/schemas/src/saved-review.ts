@@ -14,13 +14,13 @@ export const SAVED_REVIEW_SCHEMA_VERSION = 1;
 export const MAX_SAVED_REVIEWS = 8;
 /** Equal to the domain MAX_TERMS_REVIEW_BYTES (asserted in tests); schemas cannot import domain. */
 export const MAX_SAVED_REVIEW_BYTES = 64 * 1024;
-export type SavedReviewSource = 'file' | 'synthetic-sample';
+export type SavedReviewSource = 'file' | 'synthetic-sample' | 'local-draft';
 export interface SavedReviewPayload { readonly source: SavedReviewSource; readonly terms: Uint8Array; }
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder('utf-8', { fatal: true });
 
-export function isSavedReviewSource(input: unknown): input is SavedReviewSource { return input === 'file' || input === 'synthetic-sample'; }
+export function isSavedReviewSource(input: unknown): input is SavedReviewSource { return input === 'file' || input === 'synthetic-sample' || input === 'local-draft'; }
 
 /** Record payload string (base64url of canonical JSON). Throws on out-of-bounds input; callers validate first. */
 export function encodeSavedReviewPayload(source: SavedReviewSource, terms: Uint8Array): string {

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {getEventListeners} from 'node:events';
 import {createEvmExecution,parsePreparedEvmRequest} from '../src/evm-execution.ts';
 const account='0x'+'12'.repeat(20),to='0x'+'34'.repeat(20),hash='0x'+'56'.repeat(32);
 const success=value=>({ok:true,value});
@@ -88,4 +89,84 @@ test('exceptions during or after a durable marker preserve an unknown attempt wi
   s.provider.request=request;
   err(await s.execution.submit(s.intent,0),'CONFLICT');
  }
+});
+test('final account accessors are rejected without invocation or a send attempt',async()=>{
+ const s=setup(),request=s.provider.request;let accesses=0;
+ s.provider.request=async args=>{
+  if(s.state()==='broadcast-unknown'&&args.method==='eth_accounts'){
+   const accounts=[];Object.defineProperty(accounts,'0',{enumerable:true,get(){accesses++;s.setCurrent(false);return account;}});return accounts;
+  }
+  return request(args);
+ };
+ err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');
+ assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0,'a rejected final account value must not invoke the send stub');
+ assert.equal(accesses,0,'foreign account accessors must not run');assert.equal(s.state(),'broadcast-unknown');
+ s.provider.request=request;s.setCurrent(true);err(await s.execution.submit(s.intent,0),'CONFLICT');assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0);
+});
+test('scope retirement during final account reflection prevents invocation and preserves the unknown marker',async()=>{
+ const s=setup(),request=s.provider.request;let reflections=0;
+ const accounts=new Proxy([account],{
+  get(target,key,receiver){if(key==='0'){reflections++;s.setCurrent(false);}return Reflect.get(target,key,receiver);},
+  getOwnPropertyDescriptor(target,key){if(key==='0'){reflections++;s.setCurrent(false);}return Reflect.getOwnPropertyDescriptor(target,key);},
+ });
+ s.provider.request=async args=>s.state()==='broadcast-unknown'&&args.method==='eth_accounts'?accounts:request(args);
+ err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');assert.ok(reflections>0);
+ assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0,'retired scope must not invoke the send stub');assert.equal(s.state(),'broadcast-unknown');
+ s.provider.request=request;s.setCurrent(true);err(await s.execution.submit(s.intent,0),'CONFLICT');assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0);
+});
+test('scope retirement while capturing the final request capability prevents its invocation',async()=>{
+ const s=setup(),request=s.provider.request;let captures=0,retired=false;
+ Object.defineProperty(s.provider,'request',{configurable:true,get(){if(++captures===5){retired=true;s.setCurrent(false);}return request;}});
+ err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');assert.equal(retired,true);
+ assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0,'capturing a capability cannot authorize invocation after scope retirement');assert.equal(s.state(),'broadcast-unknown');
+ Object.defineProperty(s.provider,'request',{configurable:true,value:request});s.setCurrent(true);err(await s.execution.submit(s.intent,0),'CONFLICT');assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0);
+});
+
+test('disposal during the last current callback prevents invocation despite a true return',async()=>{
+ let armed=false,retired=false;const s=setup({isCurrent:()=>{if(armed&&!retired){retired=true;s.execution.dispose();}return true;}}),request=s.provider.request;let captures=0;
+ Object.defineProperty(s.provider,'request',{get(){if(++captures===5)armed=true;return request;}});
+ err(await s.execution.submit(s.intent,0),'BROADCAST_UNKNOWN');assert.equal(retired,true);
+ assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,0,'owned disposal cannot be overruled by a true callback return');assert.equal(s.state(),'broadcast-unknown');
+ err(await s.execution.submit(s.intent,0),'LOCKED');assert.equal(s.events.includes('known-hash'),false);
+});
+test('disposal in the initial current callback starts no validator or provider work',async()=>{
+ let validations=0;const s=setup({isCurrent:()=>{s.execution.dispose();return true;},validateCanonical:async()=>{validations++;return success(undefined);}});
+ err(await s.execution.submit(s.intent,0),'LOCKED');assert.equal(validations,0);assert.deepEqual(s.events,[]);
+});
+test('malformed and throwing signal hooks return fixed input errors before work and do not strand admission',async()=>{
+ const revoked=Proxy.revocable({},{});revoked.revoke();let hooks=0;
+ const hostile=Object.defineProperties({},{aborted:{get(){hooks++;throw Error('SECRET aborted');}},addEventListener:{get(){hooks++;throw Error('SECRET add');}},removeEventListener:{get(){hooks++;throw Error('SECRET remove');}}});
+ const unsupported={aborted:false,addEventListener(){hooks++;throw Error('SECRET add');},removeEventListener(){hooks++;throw Error('SECRET remove');}};
+ for(const signal of [null,{},new EventTarget(),hostile,unsupported,revoked.proxy,new Proxy(new AbortController().signal,{get(){throw Error('SECRET signal proxy');}})]){
+  let validations=0;const s=setup({validateCanonical:async()=>{validations++;return success(undefined);}});
+  try{err(await s.execution.submit(s.intent,0,signal),'INVALID_INPUT');assert.equal(validations,0);assert.deepEqual(s.events,[]);val(await s.execution.submit(s.intent,0));assert.equal(validations,1);assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,1);}
+  finally{s.execution.dispose();}
+ }
+ assert.equal(hooks,0,'ordinary foreign signal property hooks must not run');
+});
+for(const property of ['aborted','addEventListener','removeEventListener'])test('native signal '+property+' overrides cannot reject, run hooks or leak listeners',async()=>{
+ const controller=new AbortController(),s=setup();let hooks=0;
+ Object.defineProperty(controller.signal,property,{get(){hooks++;throw Error('SECRET signal '+property);}});
+ const signals=[];for(const method of ['reserve','markSending','recordBroadcast']){const original=s.journal[method];s.journal[method]=async(...args)=>{signals.push(args.at(-1));return original(...args);};}
+ try{val(await s.execution.submit(s.intent,0,controller.signal));assert.equal(hooks,0);assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,1);assert.equal(signals.length,3);for(const signal of signals){assert.notEqual(signal,controller.signal);assert.equal(signal.aborted,false);}assert.equal(getEventListeners(controller.signal,'abort').length,0);err(await s.execution.submit(s.intent,0),'CONFLICT');assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,1);}
+ finally{s.execution.dispose();}
+});
+for(const stage of ['validator','provider'])test('overridden signal hooks preserve prompt '+stage+' cancellation and physical admission', {timeout:2000},async()=>{
+ const entered=deferred(),gate=deferred(),controller=new AbortController();let hooks=0;
+ Object.defineProperties(controller.signal,{addEventListener:{get(){hooks++;throw Error('SECRET add');}},removeEventListener:{get(){hooks++;throw Error('SECRET remove');}}});
+ const s=setup(stage==='validator'?{validateCanonical:async()=>{entered.resolve();await gate.promise;return success(undefined);}}:{});
+ if(stage==='provider'){const request=s.provider.request;s.provider.request=async args=>{if(args.method!=='eth_sendTransaction')return request(args);s.events.push('eth_sendTransaction');entered.resolve();return gate.promise;};}
+ const pending=s.execution.submit(s.intent,0,controller.signal).then(result=>({result}),rejected=>({rejected}));
+ try{
+  await entered.promise;controller.abort();const stopped=await pending;assert.equal(stopped.rejected,undefined,'signal setup/cleanup must never reject the public Result');err(stopped.result,stage==='validator'?'CANCELLED':'BROADCAST_UNKNOWN');
+  err(await s.execution.submit(s.intent,0),'CONFLICT');assert.equal(s.events.includes('known-hash'),false);gate.resolve(stage==='validator'?undefined:hash);await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(getEventListeners(controller.signal,'abort').length,0);assert.equal(hooks,0);
+  if(stage==='validator'){assert.deepEqual(s.events,[]);val(await s.execution.submit(s.intent,0));}else{assert.equal(s.state(),'broadcast-unknown');err(await s.execution.submit(s.intent,0),'CONFLICT');}
+  assert.equal(s.events.filter(event=>event==='eth_sendTransaction').length,1,'only an explicit eligible attempt can invoke the stub');
+ }finally{s.execution.dispose();gate.resolve(stage==='validator'?undefined:hash);await pending;await new Promise(resolve=>setImmediate(resolve));}
+});
+test('native signal reflection cannot start work after retiring its owner',async()=>{
+ let validations=0,retired=false;const s=setup({validateCanonical:async()=>{validations++;return success(undefined);}}),native=new AbortController().signal;
+ const signal=new Proxy(native,{get(target,key){if(!retired){retired=true;s.execution.dispose();}return Reflect.get(target,key,target);}});
+ const result=await s.execution.submit(s.intent,0,signal);assert.equal(result.ok,false);assert.ok(['LOCKED','INVALID_INPUT'].includes(result.error.code));assert.equal(validations,0);assert.deepEqual(s.events,[]);
 });

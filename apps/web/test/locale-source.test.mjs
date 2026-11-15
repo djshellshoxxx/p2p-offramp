@@ -14,7 +14,7 @@ import { recoveryReferenceMessages as r } from '../src/ui/recovery-reference-mes
 import { diagnosticsMessages as d } from '../src/ui/diagnostics-messages.ts';
 import { pseudoMessage, pseudoMetadata } from './locale-pseudo.mjs';
 
-const example = purpose => purpose === 'count' ? 2 : purpose === 'base-unit amount' || purpose === 'duration' ? '123456789012345678901234567890' : purpose === 'currency' ? 'EUR' : purpose === 'text' ? 'plain text' : 'canonical-id';
+const example = purpose => purpose === 'count' ? 2 : purpose === 'date' ? 1700000000000 : purpose === 'base-unit amount' || purpose === 'duration' ? '123456789012345678901234567890' : purpose === 'currency' ? 'EUR' : purpose === 'text' ? 'plain text' : 'canonical-id';
 
 test('every bundled message has frozen metadata and exact variable parity, including safety guidance', () => {
   assert.ok(Object.keys(sourceCatalog).length > 250);
@@ -24,7 +24,7 @@ test('every bundled message has frozen metadata and exact variable parity, inclu
     const values = Object.fromEntries(Object.entries(entry.variables).map(([name, purpose]) => [name, example(purpose)]));
     assert.equal(typeof formatMessage(entry, values), 'string');
   }
-  for (const key of ['trade.risk', 'shell.createConsent', 'shell.restoreConsent', 'recovery.unverified', 'diagnostics.privacy']) assert.equal(sourceCatalog[key].severity, 'critical');
+  for (const key of ['trade.risk', 'shell.createConsent', 'shell.restoreConsent', 'recovery.unverified', 'diagnostics.privacy', 'privacy.policyRelaxConsent', 'privacy.policyUnknownCoverage', 'drafts.confirmAmounts', 'drafts.confirmIdentities', 'drafts.confirmEmptyInstructions', 'drafts.backupLimits', 'analytics.help', 'shell.shareAppHelp']) assert.equal(sourceCatalog[key].severity, 'critical');
 });
 
 test('existing English compatibility copy retains plural, page, fingerprint and exact amount behavior', () => {
@@ -46,7 +46,7 @@ test('complete draft translation validates structurally; missing critical copy c
   assert.equal(Object.keys(validateLocale(draft, sourceCatalog).messages).length, Object.keys(sourceCatalog).length);
   delete messages['trade.risk'];
   assert.throws(() => validateLocale(draft, sourceCatalog), error => error.code === 'LOCALE_INCOMPLETE');
-  assert.deepEqual(SOURCE_LOCALE, { locale: 'en', direction: 'ltr', revision: 1, translator: null, reviewer: null, status: 'draft' });
+  assert.deepEqual(SOURCE_LOCALE, { locale: 'en', direction: 'ltr', revision: 3, translator: null, reviewer: null, status: 'draft' });
   assert.ok(Object.isFrozen(SOURCE_LOCALE));
 });
 

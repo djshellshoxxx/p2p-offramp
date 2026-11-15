@@ -1,6 +1,6 @@
 {
   "schema": "p2p-offramp-task-ledger/1",
-  "updated": "2026-11-09",
+  "updated": "2026-11-11",
   "states": [
     "unassigned",
     "active",
@@ -71,14 +71,16 @@
     },
     {
       "id": "N40",
-      "status": "unassigned",
+      "status": "review",
       "priority": "P0",
       "depends": [
         "G-PR54"
       ],
       "scope": "Extract #40 generic EVM execution hardening, native read-only EIP-1271 harness, signed asset updates and classification fix; contract-wallet execution is a separate unfinished feature",
       "source": "pr/40 7706859",
-      "evidence": "docs/development/2026-11-09-core-review.md"
+      "evidence": "2a26041; 140/140 focused, eip1271 5, reconcile 10, exchange 12, forge 82; one type-only HttpFetchPort reconciliation; Tier C owner approval required; docs/development/2026-11-11-lanes.md",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum"
     },
     {
       "id": "N-D9",
@@ -94,40 +96,50 @@
     },
     {
       "id": "N-D1",
-      "status": "unassigned",
+      "status": "blocked",
       "priority": "P1",
       "depends": [
         "N-D9"
       ],
-      "scope": "D1 peer acceptance v2 (EIP-712 PeerAcceptance, tombstones, no downgrade)"
+      "scope": "D1 peer acceptance v2 (EIP-712 PeerAcceptance, tombstones, no downgrade)",
+      "owner": "repository owner + D9/W1 schema coordinator",
+      "evidence": "Proposed plan docs/adr/proposed/D1-implementation-plan-2026-11-11.md (r2; 8 open review corrections); blocked on owner Q1 (v2 format approval) and coordinator Q2 (persisted kind/version, serialized vault writer)"
     },
     {
       "id": "N38",
-      "status": "unassigned",
+      "status": "review",
       "priority": "P1",
       "depends": [
         "G-PR54"
       ],
       "scope": "Extract PR #38 remainder: identity history retention, privacy-view",
-      "source": "pr/38 71a56d1"
+      "source": "pr/38 71a56d1",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "evidence": "Identity half extracted (dbad7ca, byte-identical to pr/38, identity 35/35); privacy-view half is PR #62; docs/development/2026-11-11-lanes.md"
     },
     {
       "id": "N41-43",
-      "status": "unassigned",
+      "status": "review",
       "priority": "P1",
       "depends": [
         "N40"
       ],
       "scope": "Locale runtime, UI wiring, native journey",
-      "source": "pr/41..pr/43"
+      "source": "pr/41..pr/43",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "evidence": "N41 8354137, N42 75d8846, N43 7ca4a4a extracted; npm test 1493/1493; all browser suites exit 0; PR #31 F01/F03/F06 reproduce (fixes in parked #35); docs/development/2026-11-11-lanes.md"
     },
     {
       "id": "N37F",
-      "status": "unassigned",
+      "status": "review",
       "priority": "P1",
       "depends": [],
       "scope": "Formal EVM harness (Z3 4.12.2 pin)",
-      "source": "pr/37 81a295d"
+      "source": "pr/37 81a295d",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "branch": "claude/vibrant-cray-ny4gum",
+      "evidence": "faf245e byte-identical to pr/37; test:formal:unit 15/15; real Z3 4.12.2 run: 4 guards PROVED_GUARD_LOGIC_ONLY, overall MODEL_IMPLEMENTATION_GAP (documented); docs/development/2026-11-11-lanes.md"
     },
     {
       "id": "N50",
@@ -208,6 +220,29 @@
       "acceptance": "Wording matches native/SPL tests and settle source; diff check",
       "source": "PR57 7e8d571ae350190e9ba0fdf50a7b9184a4730ad9",
       "evidence": "docs/development/2026-11-09-core-review.md"
+    },
+    {
+      "id": "SONAR-56",
+      "status": "review",
+      "owner": "claude/vibrant-cray-ny4gum",
+      "priority": "P0",
+      "depends": [],
+      "branch": "claude/vibrant-cray-ny4gum",
+      "scope": "SonarCloud annotations on #56: trade.mjs state-path confinement; --ignore-scripts for Codex CLI",
+      "source": "d653a77",
+      "acceptance": "SonarCloud quality gate passes on the PR head",
+      "evidence": "Sepolia node 49/49; anvil trade 13, kit 11; codex --ignore-scripts install smoke check"
+    },
+    {
+      "id": "JOURNEY-F01-F03-F06",
+      "status": "blocked",
+      "priority": "P1",
+      "depends": [
+        "N-D9"
+      ],
+      "scope": "PR #31 journey findings F01 (release blocked before expiry), F03 (deferred payout not shown), F06 (negotiation retry BAD_AD) reproduce on extracted N43 journey; fixes in PR #35 parked pending D9",
+      "source": "pr/31 6e9c0c5, pr/35 4c5d01c",
+      "evidence": "docs/development/2026-11-11-lanes.md (N43 section)"
     }
   ]
 }

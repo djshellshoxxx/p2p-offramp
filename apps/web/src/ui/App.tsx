@@ -1,27 +1,37 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
-import { SOURCE_LOCALE } from './locale/en.ts';
+import { localeStore } from './locale/runtime.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
+import type { StartupCapabilitySnapshot } from '../compatibility/probe.ts';
+import { StartupCompatibilityNotice } from './StartupCompatibilityNotice.tsx';
+import type { TradeDraftController } from '../trade/draft-controller.ts';
+import type { TradeDraftCopy } from './trade/TradeDraftEditor.tsx';
+import { useScreenCounts } from './use-screen-counts.ts';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
 const lockedSnapshot = () => locked;
 const noScope = () => 0;
-const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
 
 export interface AppProps {
   readonly services: AppServices | null; readonly starting?: boolean; readonly startupError?: string | undefined;
   /** Local terms review session; encrypted save/load use its injected session-bound persistence port. */
   readonly trade?: TradeReviewController | null;
   readonly diagnostics?: Diagnostics | null;
+  readonly startupCapabilities?: StartupCapabilitySnapshot;
+  readonly genericAppLink?: string | null;
+  readonly drafts?: TradeDraftController | null;
+  readonly draftCopy?: TradeDraftCopy;
 }
 
-export function App({ services, starting = false, startupError, trade = null, diagnostics = null }: AppProps) {
+export function App({ services, starting = false, startupError, startupCapabilities, trade = null, diagnostics = null, genericAppLink = null, drafts = null, draftCopy }: AppProps) {
+  const locale = useSyncExternalStore(localeStore.subscribe, localeStore.getSnapshot, localeStore.getSnapshot);
+  const links = [{ page: 'home', text: m.home }, { page: 'offers', text: m.offers }, { page: 'recovery', text: m.recovery }, { page: 'settings', text: m.settings }] as const;
   const tradeSnapshot = useTradeReview(trade);
   const syntheticDemo = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'synthetic-demo';
   const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
@@ -29,14 +39,15 @@ export function App({ services, starting = false, startupError, trade = null, di
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
-  const [pending, setPending] = useState('');
+  const [pending, setPending] = useState<'lock' | 'status' | null>(null);
   // A confirmed restore may offer an explicit handoff; never persist selection or put it in a route.
   const [restoredProfileId, setRestoredProfileId] = useState('');
   const current = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.getSnapshot ?? lockedSnapshot, lockedSnapshot);
   const scope = useSyncExternalStore(services?.subscribe ?? noSubscription, services?.selectionScope ?? noScope, noScope);
+  const screenCounts = useScreenCounts(services, scope, route.page === 'unknown' ? null : route.page);
   // Reviews loaded from a profile belong to that selection only: any lock, unlock or switch clears them.
   // Layout effect: a locked or switched profile's loaded reviews are dropped before the browser paints, not one frame later.
-  useLayoutEffect(() => { trade?.forgetSaved(); }, [trade, scope]);
+  useLayoutEffect(() => { trade?.forgetSaved(); drafts?.startBlank(); }, [trade, drafts, scope]);
   const store = services && current.state === 'unlocked' ? services : null;
   const main = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -60,7 +71,15 @@ export function App({ services, starting = false, startupError, trade = null, di
       window.removeEventListener('online', connectivity); window.removeEventListener('offline', connectivity);
     };
   }, []);
-  useEffect(() => { document.title = `${pageTitle[route.page]} · ${m.appName}`; }, [route.page]);
+  useLayoutEffect(() => {
+    const root = document.documentElement, language = root.getAttribute('lang'), direction = root.getAttribute('dir');
+    return () => {
+      if (language === null) root.removeAttribute('lang'); else root.setAttribute('lang', language);
+      if (direction === null) root.removeAttribute('dir'); else root.setAttribute('dir', direction);
+    };
+  }, []);
+  useLayoutEffect(() => { document.documentElement.lang = locale.locale; document.documentElement.dir = locale.direction; }, [locale]);
+  useEffect(() => { document.title = `${pageTitle[route.page]} · ${m.appName}`; }, [route.page, locale]);
   useEffect(() => {
     if (initialRoute.current) initialRoute.current = false;
     else title.current?.focus();
@@ -70,18 +89,18 @@ export function App({ services, starting = false, startupError, trade = null, di
     if (!services || (kind === 'status' && pending) || (kind === 'lock' && locking.current)) return;
     const sequence = ++commandSequence.current;
     if (kind === 'lock') locking.current = true;
-    setPending(kind === 'lock' ? m.locking : m.refreshing); setNotice('');
+    setPending(kind); setNotice('');
     try {
       const result = await services[kind]();
-      if (mounted.current && sequence === commandSequence.current && !result.ok) setNotice(errorMessage(result.error.code));
-    } catch { if (mounted.current && sequence === commandSequence.current) setNotice(errorMessage('PROTOCOL_ERROR')); }
+      if (mounted.current && sequence === commandSequence.current && !result.ok) setNotice(result.error.code);
+    } catch { if (mounted.current && sequence === commandSequence.current) setNotice('PROTOCOL_ERROR'); }
     finally {
       if (kind === 'lock') locking.current = false;
-      if (mounted.current && sequence === commandSequence.current) setPending('');
+      if (mounted.current && sequence === commandSequence.current) setPending(null);
     }
   }
 
-  return <div className="app-shell" lang={SOURCE_LOCALE.locale} dir={SOURCE_LOCALE.direction}>
+  return <div className="app-shell" lang={locale.locale} dir={locale.direction} data-locale-display={locale.display}>
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); main.current?.focus(); }}>{m.skip}</a>
     <aside className="sidebar">
       <a className="brand" href="#/home"><span className="brand-symbol" aria-hidden="true">↔</span><span>{m.appName}<small>{m.development}</small></span></a>
@@ -95,21 +114,23 @@ export function App({ services, starting = false, startupError, trade = null, di
           {testnetLocalProof ? <strong className="demo-badge">{m.testnetLocalProof}</strong> : null}{testnet ? <strong className="demo-badge">{m.testnet}</strong> : null}</div>
         <div className="vault-controls"><span role="status">{current.state === 'unlocked' ? m.unlocked : m.locked}</span>
           {services ? <button type="button" onClick={() => void command('status')} disabled={!!pending}>{m.refresh}</button> : null}
-          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === m.locking}>{m.lock}</button> : null}
+          {services && current.state === 'unlocked' ? <button type="button" onClick={() => void command('lock')} disabled={pending === 'lock'}>{m.lock}</button> : null}
         </div>
       </header>
       <main id="main-content" ref={main} tabIndex={-1}>
         <p className="eyebrow">{m.development}</p><h1 ref={title} tabIndex={-1}>{pageTitle[route.page]}</h1>
         <p className="network-note">{m.networkHelp}</p>
+        {locale.fallback ? <p className="warning" role="status">{m.localeFallback}{' '}<button type="button" onClick={() => localeStore.select('en')}>{m.localeUseSource}</button></p> : locale.display === 'development-fixture' ? <p className="warning" role="status">{m.localeFixture}</p> : null}
         {starting ? <p className="notice" role="status">{m.starting}</p> : !services ? <p className="notice error" role="alert">{startupError ? errorMessage(startupError) : m.unavailable}</p> : null}
-        {pending ? <p role="status">{pending}</p> : null}
-        {notice ? <p className="notice error" role="alert">{notice}</p> : null}
+        {startupCapabilities && !starting ? <StartupCompatibilityNotice snapshot={startupCapabilities} runtimeUnavailable={!services} /> : null}
+        {pending ? <p role="status">{pending === 'lock' ? m.locking : m.refreshing}</p> : null}
+        {notice ? <p className="notice error" role="alert">{errorMessage(notice)}</p> : null}
         {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
           route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
-          route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
+          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} genericAppLink={genericAppLink} screenCounts={screenCounts} /> :
+          route.page === 'offers' ? <OffersPage trade={trade} store={store} drafts={drafts} {...(draftCopy === undefined ? {} : { draftCopy })} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>
       <footer>{m.footer}</footer>

@@ -42,6 +42,6 @@ export function createTooltipRegistry(input: readonly TooltipEntry[]): Readonly<
 const mapping = [
   ['unlock-profile','help.profile'], ['unlock-passphrase','help.unlock'], ['export-profile','help.profile'],
   ['create-passphrase','help.create'], ['restore-file','help.file'], ['restore-passphrase','help.restore'],
-  ['export-consent','help.export'], ['create-consent','help.createConsent'], ['restore-consent','help.restoreConsent'],
+  ['verification-file','help.file'], ['export-consent','help.export'], ['create-consent','help.createConsent'], ['restore-consent','help.restoreConsent'],
 ] as const;
 export const TooltipRegistry = createTooltipRegistry(mapping.map(([controlId,messageKey]) => ({controlId,messageKey,severity:controlId.endsWith('-consent')?'critical':'warning',helpLink:`#${controlId}-help`,interactionTests:interactions})));

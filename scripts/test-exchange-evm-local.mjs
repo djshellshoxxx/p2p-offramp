@@ -12,7 +12,7 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { RegistryService, TERMS_REVIEW_FORMAT, checkFundingWindow, encodePrivateAgreement, encodeCapabilities, reviewTermsBytes, createJourneyProjection } from '../packages/domain/index.ts';
+import { RegistryService, TERMS_REVIEW_FORMAT, checkFundingWindow, encodePrivateAgreement, encodeCapabilities, reviewTermsBytes, createJourneyProjection, buildTradeDraftDocument } from '../packages/domain/index.ts';
 import { createTradeAuthority } from '../packages/domain/src/authority.ts';
 import { createTradeComposition } from '../packages/domain/src/trade-composition.ts';
 import { createEvmPaymentPreflight } from '../packages/wallet/src/evm-payment-preflight.ts';
@@ -239,12 +239,32 @@ try{
     {terminal:'too-short',duration:1801,acceptFor:600,deny:'INVALID_INPUT'},
     {terminal:'too-long',duration:604801,acceptFor:600,deny:'INVALID_INPUT'},
   ];
+  let previousGenerated;
   for(const [index,scenario] of cases.entries()){
     const {terminal}=scenario;
     clock=await now();
-    const orderId=sha(`canonical-exchange-order-${index}`),agreement={v:1,orderId,revision:'1',fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC private manual payment note. No fiat is sent.',capabilities:[],agreementSalt:sha(`salt-${index}`)};
-    const terms={orderId,revision:'1',networkId:'local-evm',deploymentId:'escrow-local-v1',seller:addresses[0],buyer:addresses[1],assetKind:'native',asset:ZERO,amountBaseUnits:String(amount),privateAgreementHash:sha(encodePrivateAgreement(agreement)),capabilitiesHash:sha(encodeCapabilities([])),sellerNonce:sha(`canonical-exchange-nonce-${index}`),acceptBeforeSeconds:String(clock+scenario.acceptFor),escrowExpirySeconds:String(clock+scenario.duration)};
-    const document=utf8.encode(JSON.stringify({format:TERMS_REVIEW_FORMAT,terms,privateAgreement:agreement}));
+    let orderId,agreement,terms,document;
+    if(!scenario.deny){
+      const generated=await buildTradeDraftDocument(registry,{networkId:'local-evm',deploymentId:'escrow-local-v1',assetId:'native',amountBaseUnits:String(amount),
+        fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,seller:addresses[0],buyer:addresses[1],paymentInstructions:'SYNTHETIC private manual payment note. No fiat is sent.',
+        acceptBeforeSeconds:String(clock+scenario.acceptFor),escrowExpirySeconds:String(clock+scenario.duration)},
+        {nowSeconds:()=>BigInt(clock),isCurrent:()=>true});
+      assert.equal(generated.ok,true,'fresh local draft document');
+      document=generated.bytes;const parsed=JSON.parse(new TextDecoder().decode(document));terms=parsed.terms;agreement=parsed.privateAgreement;orderId=terms.orderId;
+      assert.equal(terms.revision,'1');assert.deepEqual(agreement.capabilities,[]);
+      if(previousGenerated){
+        assert.notEqual(orderId,previousGenerated.terms.orderId);assert.notEqual(terms.sellerNonce,previousGenerated.terms.sellerNonce);
+        assert.notEqual(agreement.agreementSalt,previousGenerated.agreement.agreementSalt);
+        const previousHash=evmTermsHash(domain,previousGenerated.terms);
+        for(const[i,key]of KEYS.entries())assert.equal(verifyEoaAcceptance(domain,terms,i===0?'seller':'buyer',sign(key,previousHash)),false,'a prior draft acceptance cannot authorize newly generated terms');
+      }
+      previousGenerated={terms,agreement};
+    }else{
+      // Preserve the explicit negative funding-window fixtures, including the intentionally too-long window.
+      orderId=sha(`canonical-exchange-order-${index}`);agreement={v:1,orderId,revision:'1',fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC private manual payment note. No fiat is sent.',capabilities:[],agreementSalt:sha(`salt-${index}`)};
+      terms={orderId,revision:'1',networkId:'local-evm',deploymentId:'escrow-local-v1',seller:addresses[0],buyer:addresses[1],assetKind:'native',asset:ZERO,amountBaseUnits:String(amount),privateAgreementHash:sha(encodePrivateAgreement(agreement)),capabilitiesHash:sha(encodeCapabilities([])),sellerNonce:sha(`canonical-exchange-nonce-${index}`),acceptBeforeSeconds:String(clock+scenario.acceptFor),escrowExpirySeconds:String(clock+scenario.duration)};
+      document=utf8.encode(JSON.stringify({format:TERMS_REVIEW_FORMAT,terms,privateAgreement:agreement}));
+    }
     const reviewed=val(await reviewTermsBytes(registry,document),'independent local review'),tradeId=evmTermsHash(domain,asTerms(reviewed)),binding=bindingOf(tradeId);
     const initialFund=escrowCallFor({action:'fund',domain,terms});
     const initialInput={binding,action:'fund',expectedEscrowState:initialFund.expectedEscrowState,call:initialFund.call};
@@ -389,7 +409,7 @@ try{
   assert.equal(sends,4);assert.equal(markers,sends);
   assert.ok(journeyMethods.length>0&&journeyMethods.every(method=>['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','eth_getLogs'].includes(method)),'journey ports perform native reads only');
   pass('altered bytes, replay, pre-accept preparation, changed call value and repeat funding are refused; every send had a durable marker');
-  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,journeyReads:journeyMethods.length,journeySendOrSignCalls:0,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
+  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,journeyReads:journeyMethods.length,journeySendOrSignCalls:0,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,freshBuilderDocuments:2,priorDraftSignaturesRejected:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
 } finally {
   for(const context of [...journeyContexts])context.close();
   for(const owner of [...historyProfiles])owner.close();

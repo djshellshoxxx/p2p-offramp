@@ -1,11 +1,12 @@
-/** Plain-text source profile: {name}, and count-only {name|one text|other text}.
+/** Plain-text source profile: {name}, count-only {name|one text|other text}, or named
+ * count branches {name|zero=text|one=text|two=text|few=text|many=text|other=text}.
  * No nesting, escapes, markup, arbitrary formatter, full ICU grammar or executable translations.
  * This module formats display text only. Canonical amounts, signed bytes and stored data never enter it for parsing.
  */
 export const LOCALE_TARGETS = Object.freeze(['en', 'fr', 'es', 'pt-BR', 'de', 'it', 'nl', 'ar', 'hi', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'tr', 'ru', 'uk', 'vi', 'th'] as const);
-export type VariablePurpose = 'text' | 'identifier' | 'count' | 'base-unit amount' | 'currency' | 'chain' | 'duration' | 'address';
+export type VariablePurpose = 'text' | 'identifier' | 'count' | 'date' | 'base-unit amount' | 'currency' | 'chain' | 'duration' | 'address';
 export type MessageVariables = Readonly<Record<string, VariablePurpose>>;
-export type MessageValues<V extends MessageVariables> = { readonly [K in keyof V]: V[K] extends 'count' ? number : string };
+export type MessageValues<V extends MessageVariables> = { readonly [K in keyof V]: V[K] extends 'count' | 'date' ? number : string };
 export interface MessageEntry<V extends MessageVariables = MessageVariables> {
   readonly key: string; readonly source: string; readonly context: string; readonly severity: 'information' | 'warning' | 'critical';
   readonly variables: V; readonly reviewRequired: boolean; readonly docsAnchor: string;
@@ -24,10 +25,17 @@ export class LocaleError extends Error {
   constructor(code: LocaleError['code']) { super('The message or locale is unavailable.'); this.name = 'LocaleError'; this.code = code; }
 }
 const refuse = (code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): never => { throw new LocaleError(code); };
-const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
+const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'date', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
 const names = /^[A-Za-z][A-Za-z0-9]*$/, identifiers = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\ud800-\udfff]/u;
-type Part = string | Readonly<{ name: string; one?: string; other?: string }>;
+type PluralCategory = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
+type Part = string | Readonly<{ name: string; forms?: Readonly<Partial<Record<PluralCategory, string>>> }>;
+export interface MessageFormatOptions { readonly locale: LocaleCatalog['locale']; }
+/** Explicit numeral policy for the bundled Arabic display profile. Canonical numeric parsing never uses it. */
+export function localeFormattingTag(locale: LocaleCatalog['locale']): string {
+  if (!LOCALE_TARGETS.includes(locale)) return refuse('LOCALE_INCOMPLETE');
+  return locale === 'ar' ? 'ar-u-nu-arab' : locale;
+}
 const compiled = new WeakMap<object, readonly Part[]>();
 function data(value: unknown, keys: readonly string[], code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): Record<string, unknown> {
   if (!value || typeof value !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) return refuse(code);
@@ -43,9 +51,21 @@ function parts(source: string, variables: MessageVariables): readonly Part[] {
   for (const match of source.matchAll(/\{([^{}]*)\}/g)) {
     const literal = source.slice(from, match.index); if (/[{}]/.test(literal)) return refuse(); result.push(literal);
     const tokens = match[1]!.split('|'), name = tokens[0]!;
-    if (!names.test(name) || !Object.hasOwn(variables, name) || tokens.length !== 1 && tokens.length !== 3 ||
-        tokens.length === 3 && variables[name] !== 'count') return refuse();
-    used.add(name); result.push(Object.freeze(tokens.length === 1 ? { name } : { name, one: tokens[1]!, other: tokens[2]! }));
+    if (!names.test(name) || !Object.hasOwn(variables, name) || tokens.length > 7 || tokens.length > 1 && variables[name] !== 'count') return refuse();
+    used.add(name);
+    if (tokens.length === 1) result.push(Object.freeze({ name }));
+    else {
+      const forms: Partial<Record<PluralCategory, string>> = Object.create(null);
+      if (tokens.length === 3 && !tokens[1]!.includes('=') && !tokens[2]!.includes('=')) {
+        forms.one = tokens[1]!; forms.other = tokens[2]!;
+      } else for (const branch of tokens.slice(1)) {
+        const match = /^(zero|one|two|few|many|other)=(.+)$/s.exec(branch);
+        if (!match || Object.hasOwn(forms, match[1]!)) return refuse();
+        forms[match[1] as PluralCategory] = match[2]!;
+      }
+      if (!forms.other) return refuse();
+      result.push(Object.freeze({ name, forms: Object.freeze(forms) }));
+    }
     from = match.index + match[0].length;
   }
   const tail = source.slice(from); if (/[{}]/.test(tail) || used.size !== Object.keys(variables).length) return refuse();
@@ -70,6 +90,7 @@ export function createMessage<const V extends MessageVariables>(input: MessageEn
 }
 function displayValue(purpose: VariablePurpose, value: unknown): string {
   if (purpose === 'count') return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 ? String(value) : refuse();
+  if (purpose === 'date') return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 && value <= 8_640_000_000_000_000 ? new Date(value).toISOString() : refuse();
   if (!plain(value, 4096)) return refuse();
   if (purpose === 'base-unit amount' || purpose === 'duration') { if (!/^(0|[1-9][0-9]{0,77})$/.test(value)) return refuse(); }
   else if (purpose === 'currency') { if (!/^[A-Z]{3}$/.test(value)) return refuse(); }
@@ -78,18 +99,26 @@ function displayValue(purpose: VariablePurpose, value: unknown): string {
   else if (purpose === 'identifier' || purpose === 'chain') { if (!identifiers.test(value)) return refuse(); }
   return value;
 }
-export function formatMessage<V extends MessageVariables>(entry: MessageEntry<V>, values: MessageValues<V>): string {
+export function formatMessage<V extends MessageVariables>(entry: MessageEntry<V>, values: MessageValues<V>, options?: MessageFormatOptions): string {
   try {
     const tokens = compiled.get(entry); if (!tokens) return refuse();
     const raw = data(values, Object.keys(entry.variables)), display: Record<string, string> = Object.create(null);
-    for (const name of Object.keys(entry.variables)) display[name] = displayValue(entry.variables[name]!, raw[name]);
-    const text = tokens.map(part => typeof part === 'string' ? part : part.one === undefined ? display[part.name] : raw[part.name] === 1 ? part.one : part.other).join('');
+    const locale = options?.locale ?? 'en', tag = localeFormattingTag(locale);
+    const number = new Intl.NumberFormat(tag, { useGrouping: false, maximumFractionDigits: 0 });
+    const plural = new Intl.PluralRules(tag);
+    for (const name of Object.keys(entry.variables)) {
+      const purpose = entry.variables[name]!, checked = displayValue(purpose, raw[name]);
+      const machine = ['identifier', 'base-unit amount', 'currency', 'chain', 'duration', 'address'].includes(purpose);
+      display[name] = purpose === 'count' ? number.format(raw[name] as number) : purpose === 'date' && locale !== 'en' ?
+        new Intl.DateTimeFormat(tag, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC', timeZoneName: 'short', hourCycle: 'h23' }).format(raw[name] as number) :
+        localeDirection(locale) === 'rtl' && machine ? `\u2066${checked}\u2069` : checked;
+    }
+    const text = tokens.map(part => typeof part === 'string' ? part : part.forms === undefined ? display[part.name] :
+      part.forms[plural.select(raw[part.name] as number)] ?? part.forms.other).join('');
     if (text.length > 16384) return refuse(); return text;
   } catch { return refuse(); }
 }
-/** Structural validation only: imported reviewer names/status never grant review, selection or signing authority.
- * The running app uses its bundled English source exclusively; no API here switches the active locale.
- */
+/** Structural validation only: imported reviewer names/status never grant review, selection or signing authority. */
 export function validateLocale(input: unknown, source: Readonly<Record<string, MessageEntry>>): LocaleCatalog {
   try {
     const raw = data(input, ['locale', 'translator', 'reviewer', 'revision', 'status', 'messages'], 'LOCALE_INCOMPLETE');

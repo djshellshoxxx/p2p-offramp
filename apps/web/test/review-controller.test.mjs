@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTradeReviewController, noApprovedRegistry, MAX_SESSION_REVIEWS } from '../src/trade/review-controller.ts';
+import { syntheticDemoSource } from '../src/demo/synthetic-local.ts';
+import { reviewTermsBytes } from '../../../packages/domain/index.ts';
 
 const registry = { network: () => null, deployment: () => null };
 const ready = async () => ({ kind: 'ready', label: 'synthetic-demo', registry, samples: [{ id: 's1', label: 'Sample', load: async now => new TextEncoder().encode(String(now)) }] });
@@ -9,6 +11,52 @@ function deferred() { let resolve; const promise = new Promise(r => { resolve = 
 let counter = 0;
 const randomBytes = () => { const bytes = new Uint8Array(16); bytes[15] = ++counter; return bytes; };
 const file = (text, size) => ({ size: size ?? text.length, arrayBuffer: async () => new TextEncoder().encode(text).buffer });
+
+const draftAt = now => ({ networkId: 'local-evm', deploymentId: 'escrow-local-v1', assetId: 'native', amountBaseUnits: '123456789',
+  fiatCurrency: 'USD', fiatMinorUnits: '100', fiatScale: 2, seller: `0x${'12'.repeat(20)}`, buyer: `0x${'34'.repeat(20)}`,
+  paymentInstructions: 'New synthetic draft text', acceptBeforeSeconds: String(now + 600n), escrowExpirySeconds: String(now + 7200n) });
+
+test('draft choices come only from bounded source candidates and current guarded EVM registry', async () => {
+  let present = true; const loaded = await syntheticDemoSource();
+  const trade = createTradeReviewController({ source: async () => ({ ...loaded, registry: {
+    network: id => present ? loaded.registry.network(id) : null,
+    deployment: (n, d) => present ? loaded.registry.deployment(n, d) : null,
+  } }) });
+  await trade.loadRegistry(); const choices = trade.getDraftChoices();
+  assert.ok(choices.some(value => value.assetId === 'native')); assert.ok(Object.isFrozen(choices));
+  assert.equal(choices[0].networkId, 'local-evm'); assert.equal(choices[0].chainId, '31337');
+  present = false; assert.deepEqual(trade.getDraftChoices(), []); trade.dispose();
+  const invalid = createTradeReviewController({ source: async () => ({ ...loaded, draftNetworkIds: Array(33).fill('local-evm') }) });
+  await invalid.loadRegistry(); assert.equal(invalid.getSnapshot().registry.kind, 'failed'); invalid.dispose();
+});
+
+test('actual fresh draft review creates new canonical identity and an honest local source', async () => {
+  const now = 1700000000n, trade = createTradeReviewController({ source: syntheticDemoSource, nowSeconds: () => now });
+  await trade.loadRegistry();
+  const first = await trade.reviewDraft(draftAt(now)); assert.equal(first.kind, 'accepted');
+  const second = await trade.reviewDraft(draftAt(now)); assert.equal(second.kind, 'accepted');
+  const a = trade.find(first.localId), b = trade.find(second.localId);
+  assert.equal(a.source, 'local-draft'); assert.equal(a.review.revision, '1'); assert.notEqual(a.review.orderId, b.review.orderId);
+  assert.notEqual(a.review.sellerNonce, b.review.sellerNonce); assert.deepEqual(a.review.agreement.capabilities, []);
+  assert.notEqual(JSON.parse(new TextDecoder().decode(a.bytes)).privateAgreement.agreementSalt, JSON.parse(new TextDecoder().decode(b.bytes)).privateAgreement.agreementSalt);
+  trade.dispose();
+});
+
+test('forgetSaved clears local-draft documents and owned bytes even without an attached persistence port', async () => {
+  const now=1700000000n,trade=createTradeReviewController({source:syntheticDemoSource,nowSeconds:()=>now});await trade.loadRegistry();
+  const result=await trade.reviewDraft(draftAt(now));assert.equal(result.kind,'accepted');const owned=trade.find(result.localId).bytes;
+  trade.forgetSaved();assert.equal(trade.getSnapshot().reviews.length,0);assert.ok(owned.every(byte=>byte===0));trade.dispose();
+});
+
+test('held draft review shares physical import admission and cannot publish after elapsed deadline', async () => {
+  let now = 1700000000n; const gate = deferred(), admitted = deferred();
+  const trade = createTradeReviewController({ source: syntheticDemoSource, nowSeconds: () => now,
+    review: async (lookup, bytes) => { const result = await reviewTermsBytes(lookup, bytes); admitted.resolve(); await gate.promise; return result; } });
+  await trade.loadRegistry(); const pending = trade.reviewDraft(draftAt(now)); await admitted.promise;
+  assert.equal((await trade.reviewDraft(draftAt(now))).code, 'LOCAL_LIMIT_REACHED');
+  now += 600n; gate.resolve(); const result = await pending;
+  assert.equal(result.kind, 'rejected'); assert.equal(result.code, 'UNFUNDABLE_WINDOW'); assert.equal(trade.getSnapshot().reviews.length, 0); trade.dispose();
+});
 
 test('registry: loading → unavailable for the default build, and import is refused without a registry', async () => {
   const trade = createTradeReviewController({ source: noApprovedRegistry });
@@ -79,22 +127,18 @@ test('cancel during checking discards the late result and stores nothing', async
   assert.equal(trade.getSnapshot().job.kind, 'cancelled', 'cancel when idle is a no-op');
 });
 
-test('a newer import supersedes an older one; the stale result never overwrites the newer state', async () => {
-  const first = deferred(), second = deferred();
-  const gates = [first, second];
-  const trade = createTradeReviewController({ source: ready, randomBytes, review: () => gates.shift().promise });
+test('a concurrent file import is refused before reading and cannot replace the active physical job', async () => {
+  const first = deferred(); let extraReads = 0;
+  const trade = createTradeReviewController({ source: ready, randomBytes, review: () => first.promise });
   await trade.loadRegistry();
   const older = trade.importFile(file('{}'));
   await new Promise(r => setImmediate(r));
-  const newer = trade.importFile(file('{}'));
-  await new Promise(r => setImmediate(r));
-  second.resolve(accepted('new'));
-  const newerOutcome = await newer;
+  assert.deepEqual(await trade.importFile({size:2,arrayBuffer:async()=>{extraReads++;return new ArrayBuffer(2);}}), {kind:'rejected',code:'LOCAL_LIMIT_REACHED'});
+  assert.equal(extraReads,0); assert.equal(trade.getSnapshot().job.kind,'busy');
   first.resolve(accepted('old'));
-  assert.deepEqual(await older, { kind: 'stale' });
-  assert.equal(newerOutcome.kind, 'accepted');
-  assert.deepEqual(trade.getSnapshot().reviews.map(item => item.review.orderId), ['new']);
-  assert.equal(trade.getSnapshot().job.localId, newerOutcome.localId);
+  const outcome=await older; assert.equal(outcome.kind,'accepted');
+  assert.deepEqual(trade.getSnapshot().reviews.map(item=>item.review.orderId),['old']);
+  assert.equal(trade.getSnapshot().job.localId,outcome.localId);
 });
 
 test('re-importing identical terms reuses the existing review (duplicate submission)', async () => {
@@ -309,4 +353,27 @@ test('a subscriber locking during acceptance cannot leave private bytes behind o
   assert.deepEqual(await trade.importFile(file('private')), { kind: 'stale' });
   assert.equal(trade.getSnapshot().reviews.length, 0); port.change('unlocked');
   await trade.save('not-a-review'); assert.equal(port.saved.size, 0);
+});
+
+
+test('cancel and profile revocation wipe all owned file copies immediately while physical import admission drains',async()=>{
+ for(const action of ['cancel','lock']){
+  const gate=deferred(),input=new TextEncoder().encode('private bank instructions');let checking;
+  const {trade,port}=await persistentController(async(_registry,bytes)=>{checking=bytes;return gate.promise});
+  const pending=trade.importFile({size:input.length,arrayBuffer:async()=>input.buffer});await new Promise(r=>setImmediate(r));
+  if(action==='cancel')trade.cancel();else port.change('locked');
+  assert.ok(checking.every(x=>x===0));assert.ok(input.every(x=>x===0),'the imported file read is also an owned copy');
+  assert.deepEqual(await trade.importFile(file('next')),{kind:'rejected',code:'LOCAL_LIMIT_REACHED'});
+  gate.resolve(accepted('late'));assert.deepEqual(await pending,{kind:'stale'});assert.equal(trade.getSnapshot().reviews.length,0);trade.dispose();
+ }
+});
+test('profile revocation from the admission display callback refuses the file before allocation',async()=>{
+ const {trade,port}=await persistentController();let reads=0;
+ trade.subscribe(()=>{if(trade.getSnapshot().job.kind==='busy')port.change('locked')});
+ assert.deepEqual(await trade.importFile({size:1,arrayBuffer:async()=>{reads++;return new ArrayBuffer(1)}}),{kind:'stale'});assert.equal(reads,0);trade.dispose();
+});
+test('trusted sample presentation labels remain live without changing document bytes or registry authority',async()=>{
+ let label='English sample';const sample={id:'live',get label(){return label},load:async()=>new TextEncoder().encode('canonical sample')};
+ const trade=createTradeReviewController({source:async()=>({kind:'ready',label:'synthetic-demo',registry,samples:[sample]}),randomBytes,review:async()=>accepted('sample')});await trade.loadRegistry();
+ assert.equal(trade.getSnapshot().registry.samples[0].label,'English sample');label='Another language';assert.equal(trade.getSnapshot().registry.samples[0].label,'Another language');assert.equal((await trade.importSample('live')).kind,'accepted');trade.dispose();
 });

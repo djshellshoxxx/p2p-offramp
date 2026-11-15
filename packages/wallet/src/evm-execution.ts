@@ -28,6 +28,18 @@ const fail = (code: CoreErrorCode): CoreResult<never> => Object.freeze({ok:false
 const ADDRESS = /^0x[0-9a-f]{40}$/, HASH = /^0x[0-9a-f]{64}$/i;
 const decimal = (value: unknown, bits: number, minimum=0n): value is string => typeof value === 'string' && /^(0|[1-9][0-9]{0,77})$/.test(value) && BigInt(value)>=minimum && BigInt(value)<(1n<<BigInt(bits));
 const quantity = (value: string) => `0x${BigInt(value).toString(16)}`;
+const nativeAborted=Object.getOwnPropertyDescriptor(AbortSignal.prototype,'aborted')!.get!;
+const addSignalListener=EventTarget.prototype.addEventListener,removeSignalListener=EventTarget.prototype.removeEventListener;
+const NativeAbortController=AbortController,nativeAbort=AbortController.prototype.abort;
+const nativeControllerSignal=Object.getOwnPropertyDescriptor(AbortController.prototype,'signal')!.get!;
+const signalAborted=(signal:AbortSignal|undefined):boolean=>signal!==undefined&&Reflect.apply(nativeAborted,signal,[]) as boolean;
+function selectedAccount(input: unknown): string | null {
+  try {
+    if (!Array.isArray(input)) return null;
+    const field=Object.getOwnPropertyDescriptor(input,'0');
+    return field && 'value' in field && typeof field.value==='string' && /^0x[0-9a-fA-F]{40}$/.test(field.value) ? field.value.toLowerCase() : null;
+  } catch { return null; }
+}
 export function parsePreparedEvmRequest(input: unknown): PreparedEvmRequestV1 {
   if (typeof input !== 'string' || new TextEncoder().encode(input).length > 65536) throw Error('INVALID_INPUT');
   const raw = intentData(JSON.parse(input),['version','chainId','from','to','value','data','nonce']);
@@ -45,8 +57,7 @@ function errorCode(error: unknown): number | undefined {
 }
 /** The physical slot is held until the provider settles, even when it ignores cancellation. */
 export function createEvmExecution(options: EvmExecutionOptions) {
-  let active = false, disposed = false;
-  const lifecycle = new AbortController();
+  let active: {controller:AbortController;stop:()=>void}|undefined, disposed = false;
   const originalSession = options.session;
   let session: ExecutionSession;
   try {
@@ -56,17 +67,33 @@ export function createEvmExecution(options: EvmExecutionOptions) {
     session = Object.freeze({account:raw.account,chainId:raw.chainId,generation:raw.generation});
   } catch { throw Error('INVALID_INPUT'); }
   const current = () => {
-    try { return !disposed && options.isCurrent(originalSession); } catch { return false; }
+    if(disposed)return false;
+    try { const value=options.isCurrent(originalSession);return !disposed&&value===true; } catch { return false; }
   };
   return Object.freeze({
     async submit(input: IntentV1, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<{readonly hash:string}>> {
+      let owned:typeof active,externalListening=false,physicalOwnsCleanup=false,sent=false,marking=false,cancelled=false;
+      let stopped=():void=>undefined;
+      const onExternal=():void=>{cancelled=true;stopped();try{if(owned)Reflect.apply(nativeAbort,owned.controller,[]);}catch{/* Owned cancellation still vetoes subsequent work. */}};
+      const cleanup=():void=>{
+        try{if(externalListening)Reflect.apply(removeSignalListener,signal,['abort',onExternal]);}catch{/* Cleanup cannot replace the fixed Result or strand admission. */}
+        if(active===owned)active=undefined;
+      };
+      try{
+      const initiallyAborted=signalAborted(signal);
       if (!current()) return fail('LOCKED');
-      if (signal?.aborted) return fail('CANCELLED');
+      if (initiallyAborted) return fail('CANCELLED');
       if (active) return fail('CONFLICT');
-      active=true; let sent=false, marking=false;
-      const guard = (): CoreResult<never> | undefined => !current() ? fail('LOCKED') : signal?.aborted ? fail('CANCELLED') : undefined;
+      const controller=new NativeAbortController(),ownedSignal=Reflect.apply(nativeControllerSignal,controller,[]) as AbortSignal;
+      const cancelledResult=new Promise<CoreResult<never>>(resolve=>{stopped=()=>resolve(fail(sent||marking?'BROADCAST_UNKNOWN':disposed?'LOCKED':'CANCELLED'));});
+      owned={controller,stop:stopped};active=owned;
+      // Complete supported external-signal setup before any validator/provider/journal work starts.
+      if(signal!==undefined){Reflect.apply(addSignalListener,signal,['abort',onExternal,{once:true}]);externalListening=true;}
+      if(signalAborted(signal))onExternal();
+      const guard = (): CoreResult<never> | undefined => !current() ? fail('LOCKED') : cancelled||signalAborted(ownedSignal) ? fail('CANCELLED') : undefined;
       const work = async (): Promise<CoreResult<{readonly hash:string}>> => {
       try {
+        const before=guard();if(before)return before;
         let intent:IntentV1,request:PreparedEvmRequestV1;
         try {
           intent=parseIntent(input);request=parsePreparedEvmRequest(intent.preparedRequest);
@@ -78,49 +105,45 @@ export function createEvmExecution(options: EvmExecutionOptions) {
         const stopped=guard();if(stopped)return stopped;
         const raw=intentData(valid,['ok',Object.getOwnPropertyDescriptor(valid,'ok')?.value===true?'value':'error']);
         if(raw.ok!==true || raw.value!==undefined)return fail('INTEGRITY_FAILURE');
-        const accounts=await options.provider.request({method:'eth_accounts'});
+        const afterValidation=guard();if(afterValidation)return afterValidation;
+        const account=selectedAccount(await options.provider.request({method:'eth_accounts'}));
+        const afterAccounts=guard();if(afterAccounts)return afterAccounts;
+        if(account!==session.account)return fail('UNAUTHORIZED');
         const chain=await options.provider.request({method:'eth_chainId'});
         const changed=guard();if(changed)return changed;
-        if (!Array.isArray(accounts) || accounts.length===0 || typeof accounts[0]!=='string' || accounts[0].toLowerCase()!==session.account) return fail('UNAUTHORIZED');
         if(typeof chain!=='string' || !/^0x[0-9a-f]+$/.test(chain) || BigInt(chain).toString()!==session.chainId)return fail('WRONG_CHAIN');
-        const reserved=await options.journal.reserve(intent,expectedRevision,signal);if(!reserved.ok)return reserved;
+        const reserved=await options.journal.reserve(intent,expectedRevision,ownedSignal);if(!reserved.ok)return reserved;
         const afterReserve=guard();if(afterReserve)return afterReserve;
         marking=true;
-        const marked=await options.journal.markSending(intent.intentId,signal);if(!marked.ok)return marked;
+        const marked=await options.journal.markSending(intent.intentId,ownedSignal);if(!marked.ok)return marked;
         const afterMarker=guard();if(afterMarker)return fail('BROADCAST_UNKNOWN');
         // A wallet may omit change events while durable preparation waits on storage.
-        const finalAccounts=await options.provider.request({method:'eth_accounts'});
+        const finalAccount=selectedAccount(await options.provider.request({method:'eth_accounts'}));
+        if(guard() || finalAccount!==session.account)return fail('BROADCAST_UNKNOWN');
         const finalChain=await options.provider.request({method:'eth_chainId'});
-        if(guard() || !Array.isArray(finalAccounts) || typeof finalAccounts[0]!=='string' || finalAccounts[0].toLowerCase()!==session.account ||
-           typeof finalChain!=='string' || !/^0x[0-9a-f]+$/.test(finalChain) || BigInt(finalChain).toString()!==session.chainId)return fail('BROADCAST_UNKNOWN');
+        if(guard() || typeof finalChain!=='string' || !/^0x[0-9a-f]+$/.test(finalChain) || BigInt(finalChain).toString()!==session.chainId)return fail('BROADCAST_UNKNOWN');
+        const provider=options.provider,sendRequest=provider.request;
+        if(typeof sendRequest!=='function' || guard())return fail('BROADCAST_UNKNOWN');
         // A persisted marker consumes this explicit attempt even if the following wallet call rejects.
         sent=true;
-        const result=await options.provider.request({method:'eth_sendTransaction',params:[{from:request.from,to:request.to,value:quantity(request.value),data:request.data,nonce:quantity(request.nonce),chainId:quantity(request.chainId)}]});
+        const result=await Reflect.apply(sendRequest,provider,[{method:'eth_sendTransaction',params:[{from:request.from,to:request.to,value:quantity(request.value),data:request.data,nonce:quantity(request.nonce),chainId:quantity(request.chainId)}]}]);
         if(typeof result!=='string' || !HASH.test(result))return fail('BROADCAST_UNKNOWN');
         const late=guard();if(late)return fail('BROADCAST_UNKNOWN');
         const canonicalHash=result.toLowerCase();
-        const recorded=await options.journal.recordBroadcast(intent.intentId,canonicalHash,signal);
+        const recorded=await options.journal.recordBroadcast(intent.intentId,canonicalHash,ownedSignal);
         if(!recorded.ok || guard())return fail('BROADCAST_UNKNOWN');
         return Object.freeze({ok:true,value:Object.freeze({hash:canonicalHash})});
       } catch(error) {
         if(sent || marking)return fail('BROADCAST_UNKNOWN');
         const stopped=guard();if(stopped)return stopped;
         return fail(errorCode(error)===4001?'USER_REJECTED':'UNAVAILABLE');
-      } finally {active=false;}
+      }
       };
-      let onAbort: (() => void) | undefined;
-      const running=work();
-      const disposedResult = new Promise<CoreResult<never>>(resolve => {
-        const stop = () => resolve(fail(sent || marking ? 'BROADCAST_UNKNOWN' : 'LOCKED'));
-        lifecycle.signal.addEventListener('abort', stop, {once:true});
-        running.finally(() => lifecycle.signal.removeEventListener('abort', stop));
-        if (lifecycle.signal.aborted) stop();
-      });
-      if (!signal) return Promise.race([running, disposedResult]);
-      const cancelled=new Promise<CoreResult<never>>(resolve=>{onAbort=()=>resolve(fail(sent || marking?'BROADCAST_UNKNOWN':'CANCELLED'));signal.addEventListener('abort',onAbort,{once:true});if(signal.aborted)onAbort();});
-      try {return await Promise.race([running,cancelled,disposedResult]);}
-      finally {if(onAbort)signal.removeEventListener('abort',onAbort);}
+      const running=Promise.resolve().then(work).finally(cleanup);physicalOwnsCleanup=true;
+      return await Promise.race([running,cancelledResult]);
+      }catch{return fail(sent||marking?'BROADCAST_UNKNOWN':physicalOwnsCleanup?'UNAVAILABLE':'INVALID_INPUT');}
+      finally{if(!physicalOwnsCleanup)cleanup();}
     },
-    dispose(){disposed=true;lifecycle.abort();},
+    dispose(){disposed=true;active?.stop();try{if(active)Reflect.apply(nativeAbort,active.controller,[]);}catch{/* Owned disposal remains authoritative. */}},
   });
 }

@@ -1,17 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { CreateForm, ExportForm, RestoreForm, UnlockForm } from './VaultForms.tsx';
+import { BackupVerificationForm } from './BackupVerificationForm.tsx';
 import { messages as m } from './messages.ts';
 import type { Route } from './routes.ts';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
+import { RetentionPanel } from './RetentionPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
+import { GenericAppShare } from './GenericAppShare.tsx';
+import { PrivacyPolicySelector } from './PrivacyPolicySelector.tsx';
+import { messageGroup } from './locale/runtime.ts';
+import { LocalScreenAnalytics } from './LocalScreenAnalytics.tsx';
+import type { ScreenCountsController } from '../analytics/screen-counts.ts';
 
-export const pageTitle: Readonly<Record<Route['page'], string>> = {
-  home: m.homeTitle, offers: m.offersTitle, trade: m.tradeTitle,
-  recovery: m.recoveryTitle, settings: m.settingsTitle, unknown: m.unknownTitle,
-};
+const policyCopy = messageGroup('privacy');
+const analyticsCopy = messageGroup('analytics');
+
+export const pageTitle: Readonly<Record<Route['page'], string>> = Object.freeze({
+  get home() { return m.homeTitle; }, get offers() { return m.offersTitle; }, get trade() { return m.tradeTitle; },
+  get recovery() { return m.recoveryTitle; }, get settings() { return m.settingsTitle; }, get unknown() { return m.unknownTitle; },
+});
 
 export function Home({ services, unlocked, restoredProfileId, onSelectionConsumed }: { readonly services: AppServices | null; readonly unlocked: boolean;
   readonly restoredProfileId: string; readonly onSelectionConsumed: () => void }) {
@@ -39,6 +49,7 @@ export function Home({ services, unlocked, restoredProfileId, onSelectionConsume
       <h2 id="available-title">{m.readyTitle}</h2>
       <p>{services ? m.readyText : m.unavailable}</p>
       {restoredProfileId ? <p role="status">{m.restoredSelection(restoredProfileId)}</p> : null}
+      {restoredProfileId ? <p className="warning">{m.retentionRestoreWarning}</p> : null}
       {restoredProfileId && unlocked ? <p>{m.lockToOpenRestored}</p> : null}
       {unlocked ? <>{createdId ? <p className="notice" role="status">{m.created(createdId)}</p> : null}<p role="status">{m.unlockedHelp}</p></> :
         services ? open === 'unlock' ? <UnlockForm services={services} initialProfileId={restoredProfileId} onCancel={() => { setOpen('none'); onSelectionConsumed(); }} />
@@ -67,22 +78,31 @@ export function Recovery({ services, onOpenRestored }: { readonly services: AppS
       <div className="warning"><strong>{m.unchecked}</strong><p>{m.uncheckedHelp}</p></div>
       {services ? <ExportForm services={services} refresh={inventoryVersion} /> : <p>{m.unavailable}</p>}
     </section>
+    <section className="panel" aria-labelledby="backup-verify-title">
+      <h2 id="backup-verify-title">{m.backupVerifyTitle}</h2><p>{m.backupVerifyHelp}</p><p className="warning">{m.backupVerifyScope}</p>
+      {services ? <BackupVerificationForm services={services} /> : <p>{m.unavailable}</p>}
+    </section>
     <section className="panel" aria-labelledby="restore-title">
-      <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p>
+      <h2 id="restore-title">{m.restoreTitle}</h2><p>{m.restoreHelp}</p><p>{m.recoveryRisk}</p><p className="warning">{m.retentionRestoreWarning}</p>
       {services ? <RestoreForm services={services} onOpenRestored={onOpenRestored} onInventoryChanged={() => setInventoryVersion(v => v + 1)} /> : <p>{m.unavailable}</p>}
     </section>
     <RecoveryReferencesPanel services={services} />
   </>;
 }
 
-export function Settings({ diagnostics = null, services = null, scope }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number }) {
+export function Settings({ diagnostics = null, services = null, scope, genericAppLink = null, screenCounts = null }: { readonly diagnostics?: Diagnostics | null; readonly services?: AppServices | null; readonly scope?: number; readonly genericAppLink?: string | null; readonly screenCounts?: ScreenCountsController | null }) {
   return <><p className="lead">{m.settingsIntro}</p>
     <section className="plain-section" aria-labelledby="privacy-title"><h2 id="privacy-title">{m.privacyTitle}</h2><p>{m.privacyHelp}</p></section>
+    <RetentionPanel services={services} />
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
+    <PrivacyPolicySelector services={services} {...(scope === undefined ? {} : { scope })} messages={{ ...policyCopy,
+      channelLabels: { rpc: policyCopy.rpc, relay: policyCopy.relay, map: policyCopy.map, proof: policyCopy.proofChannel, update: policyCopy.update } }} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>
     <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p></section>
     <DiagnosticsPanel service={diagnostics} />
+    <GenericAppShare appLink={genericAppLink} />
+    <LocalScreenAnalytics controller={screenCounts} messages={{ ...analyticsCopy, categoryLabels: messageGroup('analyticsCategories') }} />
   </>;
 }
 

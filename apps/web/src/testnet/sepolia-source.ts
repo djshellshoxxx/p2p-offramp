@@ -53,13 +53,14 @@ export function sepoliaRegistrySource(bundle: unknown, nowSeconds?: () => number
       const bound = await createReleaseRegistry(verified.value, TESTNET_REGISTRY_PATH, registryBytes);
       if (!bound.ok) return { kind: 'failed' };
       // The bytes matched the verified manifest above; any network other than Sepolia refuses the whole bundle.
-      if (!isSepoliaOnly(parseRegistryBytes(registryBytes))) return { kind: 'failed' };
+      const parsed = parseRegistryBytes(registryBytes);
+      if (!isSepoliaOnly(parsed)) return { kind: 'failed' };
       const guarded = bound.value;
       const registry: RegistryLookup = Object.freeze({
         network: (id: string) => { const network = guarded.network(id); return isSepolia(network) ? network : null; },
         deployment: (networkId: string, deploymentId: string) => registry.network(networkId) ? guarded.deployment(networkId, deploymentId) : null,
       });
-      return { kind: 'ready', label: localProof ? 'sepolia-local-proof' : 'sepolia-testnet', registry, samples: [],
+      return { kind: 'ready', label: localProof ? 'sepolia-local-proof' : 'sepolia-testnet', registry, samples: [], draftNetworkIds: parsed.networks.map(network => network.id),
         trust: Object.freeze({ keyId: raw.keyId, sequence: verified.value.manifest.sequence, expiresAt: verified.value.manifest.expiresAt }) };
     } catch { return { kind: 'failed' }; }
   };
