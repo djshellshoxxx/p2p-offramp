@@ -32,6 +32,20 @@ Merged into this branch:
 
 PR #49 also imports the owner-accepted design decisions D1, D4, D5, D6, D7, D8 and D9; D2 remains proposed and owner-only. Accepted design choices do not implement their protocols or authorize a release. The D1/D9 runtime work and all D8 Tier C approval gates remain separate.
 
+A further selective M2A fix set was integrated through PR #115:
+- T33: malformed legacy saved-review wrappers are preserved and skipped instead of
+  failing the entire saved-review list operation.
+- T34: static artifact scanning rejects unquoted and whitespace-padded meta refresh
+  directives.
+- T35: local EVM test covers same-block release/refund races at deadline−1 and
+  deadline under both transaction fee orderings, asserting one terminal event and
+  one principal payout.
+
+The exact PR #115 head passed all three hosted workflow families (Vault foundation,
+EVM escrow and specification inventory) before merge. This selectively ports only
+T33–T35 from the still-incomplete PR #65; it does not claim T36–T40 complete. Those
+older task entries must be reconciled against the newer source before reuse.
+
 The original PR heads for these changes had successful hosted workflow results.
 Those results are source-head evidence, not a full combined-head qualification.
 The merged integration head still needs its own complete hosted run. Manual
