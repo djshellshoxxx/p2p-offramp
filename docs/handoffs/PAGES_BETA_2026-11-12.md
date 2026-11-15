@@ -3,9 +3,8 @@
 ## Follow-up integration — 2026-11-14
 
 The Pages beta work has been consolidated into the staging line. Current
-consolidated branch: `integration/p2p-consolidated-20261109`, head after PR #114
-and the owner-decision documentation PR #49:
-`f84b5d9ffa1e5a2267ac0190003bdddf1e9fc84f`. The source branch
+consolidated branch: `integration/p2p-consolidated-20261109`, head after PR #114, PR #49, PR #115 and the task-ledger/handoff refresh:
+`961cc6f1e3e999b6d35ad5361bc59f2906f1058c`. The source branch
 `integration/pages-beta-qualification-20261112` is retained. This is an
 integration branch, not `main`, a production release, or authorization to enable
 trading.
