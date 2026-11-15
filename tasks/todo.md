@@ -162,3 +162,13 @@ architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/
 | Qualified locally and on hosted CI | PR #98 software at `9730000058c6aca0dd794128652c8cfad0a22285`. Reproducible Pages builds, keyboard recovery, offline argument handling, verified copies, signed offer and interrupted token payout tests. [Full handoff and component inventory](../docs/handoffs/PAGES_BETA_2026-11-12.md). |
 | P0 awaiting authenticated ABI-layout decision | G3 generic reader and canonical Foundry contract. Use the existing viem oracle, reserve registry changes with the current owner. |
 | P0/P1 active owner lanes | T41/T42 peer acceptance, T43 legacy send provenance, G1/D8 localnet browser composition. Independent review, exact-head Sonar A and real testnet acceptance remain outstanding. |
+
+
+## Integration refresh — 2026-11-14
+
+- **T33 DONE on consolidated staging:** malformed legacy saved-review wrappers remain encrypted and unchanged, are counted as skipped, and no longer wedge list/save/delete. PR #115; exact head passed Vault foundation, EVM escrow and specification inventory hosted workflows.
+- **T34 DONE on consolidated staging:** artifact policy rejects quoted, unquoted and whitespace-padded meta refresh directives. PR #115; same exact-head CI.
+- **T35 DONE on consolidated staging:** same-block release/refund race regression at deadline−1 and deadline, both fee orderings, one terminal event and one principal payout. PR #115; same exact-head CI.
+- PR #65 remains a draft source record for T36–T40; its remaining audit and task status must be refreshed against the current tree before any of those are treated as active work.
+- PR #49 imports the accepted D1/D4/D5/D6/D7/D8/D9 design decisions; D2 remains proposed. Acceptance records are design decisions, not implementation or release approval.
+- The Pages beta follow-ups and G23 display-only privacy projection are consolidated through PR #114 and recorded in the current handoff.
