@@ -1,5 +1,40 @@
 # Pages beta staging handoff, November 12, 2026 Pacific
 
+## Follow-up integration — 2026-11-14
+
+The Pages beta branch has received a small, reviewable follow-up stack. Current branch:
+`integration/pages-beta-qualification-20261112`, head after these merges
+`d6d98a60734457b60d5c1db6ba74cf30acd424da`. This is a staging/integration branch;
+it is not `main`, a production release, or authorization to enable trading.
+
+Merged into this branch:
+- #111: browser cold-restart recovery-reference test; requires fresh profile selection
+  and fresh export consent after restart.
+- #112: browser cold-restart EVM nonce-reservation regression; held nonce remains
+  reserved across deployment changes.
+- #113: isolated-peer live and stored signed-offer discovery browser test. Its
+  dedicated script is now invoked by the Vault foundation browser CI job on
+  this combined integration head; the source PR's original runs predated that wiring.
+- #106: restore keyboard focus and clear stale success status after refused
+  diagnostics export.
+- #108: recovery builder standalone help and fail-closed validation of repeated
+  or incompatible output arguments.
+- #110: specification catalog parser now handles titled/nested/multiline/escaped
+  Markdown links and excludes fenced examples and code spans.
+- #109: recovery documentation for private reference export, historical EVM
+  inspection and unsigned preparation.
+- #62: G23 display-only endpoint-origin disclosure. It returns bounded detached
+  origins from an injected trusted configuration, exposes no raw paths or
+  credentials, and keeps `economicPreparationAllowed: false`.
+
+The original PR heads for these changes had successful hosted workflow results.
+Those results are source-head evidence, not a full combined-head qualification.
+The merged integration head still needs its own complete hosted run. Manual
+screen-reader/device review, independent security review, Sonar qualification,
+D1/D9, canonical ABI selection and the other owner/external gates remain open.
+No production wallet authority, trust root, release flag, network allowlist,
+deployment or real-funds setting was changed by this follow-up stack.
+
 The integrated software commit is `9730000058c6aca0dd794128652c8cfad0a22285`, tree `0cdde823931cf36bd26a624e409df1a722ef9ebc`. PR #98 targets `integration/p2p-consolidated-20261109`. At intake, staging was `c87c21b915c9e175113292bb1307754ed2424166` and main was `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e`. The documentation checkpoint after the software commit records the tested code SHA.
 
 [Staging PR and disposition](https://github.com/djshellshoxxx/p2p-offramp/pull/98) · [Software commit](https://github.com/djshellshoxxx/p2p-offramp/commit/9730000058c6aca0dd794128652c8cfad0a22285) · [Branch and PR intake](../consolidation/2026-11-12-beta-intake.json) · [Owner coordination](https://github.com/djshellshoxxx/p2p-offramp/issues/82)
