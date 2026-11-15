@@ -13,8 +13,8 @@ Merged into this branch:
 - #112: browser cold-restart EVM nonce-reservation regression; held nonce remains
   reserved across deployment changes.
 - #113: isolated-peer live and stored signed-offer discovery browser test. Its
-  dedicated script is manually runnable; the PR explicitly notes it is not yet
-  invoked by hosted CI.
+  dedicated script is now invoked by the Vault foundation browser CI job on
+  this combined integration head; the source PR's original runs predated that wiring.
 - #106: restore keyboard focus and clear stale success status after refused
   diagnostics export.
 - #108: recovery builder standalone help and fail-closed validation of repeated
