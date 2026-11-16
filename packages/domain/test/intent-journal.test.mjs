@@ -70,7 +70,7 @@ test('independent sessions racing reservation commit one intent and require lose
 test('unrelated unknown/future journal records block the entire profile instead of being skipped',async()=>{
  for(const kind of ['outer-future','inner-future','malformed']){
   const s=await setup(),stored=intent({binding:{...binding,tradeId:'other-trade'}});let payload=schema.encodeIntentPayload(stored),schemaVersion=1;
-  if(kind==='outer-future')schemaVersion=2;else if(kind==='inner-future')payload=Buffer.from(JSON.stringify({...stored,version:2})).toString('base64url');else payload='bm90LWpzb24';
+  if(kind==='outer-future')schemaVersion=2;else if(kind==='inner-future')payload=Buffer.from(JSON.stringify({...stored,version:3})).toString('base64url');else payload='bm90LWpzb24';
   val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ab'.repeat(16),kind:'journal',schemaVersion,payload}}]));
   const code=kind==='malformed'?'INTEGRITY_FAILURE':'UNSUPPORTED_VERSION';err(await s.journal.reserve(intent(),1),code);err(await s.journal.unresolved(binding,account),code);assert.equal(s.store.writes,2);s.journal.dispose();s.vault.dispose();
  }
@@ -82,15 +82,15 @@ test('imported terminal labels stay reserved and duplicate intent IDs are integr
  err(await s.journal.unresolved(binding,account),'INTEGRITY_FAILURE');s.journal.dispose();s.vault.dispose();
 });
 test('simultaneous markSending with a shared revoked session retains one marker and suppresses the losing authority',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const other=journal(s.vault,s.session);
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const other=journal(s.vault,s.session);
  const results=await Promise.all([s.journal.markSending(prepared.intentId),other.markSending(prepared.intentId)]);assert.deepEqual(results.map(result=>result.ok?'ok':result.error.code).sort(),['BROADCAST_UNKNOWN','CONFLICT']);assert.equal(s.store.writes,3);assert.equal(s.store.rows.get(s.session.profileId).revision,2);other.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('simultaneous markSending across independently unlocked sessions has exactly one successful CAS winner',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
  const results=await Promise.all([s.journal.markSending(prepared.intentId),other.markSending(prepared.intentId)]);assert.equal(results.filter(result=>result.ok).length,1);assert.equal(results.filter(result=>!result.ok&&result.error.code==='CONFLICT').length,1);assert.equal(s.store.writes,3);assert.equal(s.store.rows.get(s.session.profileId).revision,2);other.dispose();otherVault.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('snapshot revision stays bound across canonical validation while another coordinator marks the intent',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const entered=deferred(),gate=deferred();const delayed=journal(s.vault,s.session,{validateCanonical:async()=>{entered.resolve();await gate.promise;return fixtureValidator();}});
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const entered=deferred(),gate=deferred();const delayed=journal(s.vault,s.session,{validateCanonical:async()=>{entered.resolve();await gate.promise;return fixtureValidator();}});
  const pending=delayed.markSending(prepared.intentId);await entered.promise;val(await s.journal.markSending(prepared.intentId));gate.resolve();err(await pending,'CONFLICT');assert.equal(s.store.writes,3);delayed.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('cancellation and lock during validation suppress writes; immutable caller snapshots survive awaits',async()=>{
