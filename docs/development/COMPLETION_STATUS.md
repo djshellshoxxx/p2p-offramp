@@ -4,17 +4,17 @@ Updated: 2026-11-16
 
 ## Current checkpoint
 
-- D1 candidate branch: `codex/peer-acceptance-20261116` (PR #124)
-- Base branch: `claude/confident-fermi-g6wjp3` at `174308d`
-- D1 source commits: `4f0b17b` and `adc3448`
-- Validation used a local assembled tree containing the base source plus the D1
-  candidate and this run's documentation/test-runner updates.
-- Source includes latest D9/G3 continuation and D1 private candidate.
-- Release branch `main` was not changed. `ReleaseEnabled=0` remains unchanged.
-- Feature-level evidence and remaining acceptance work: see
-  [`FEATURE_COMPLETION_MATRIX.md`](FEATURE_COMPLETION_MATRIX.md).
+- Review/consolidation branch: `codex/review-consolidate-20261116`.
+- Combines PR #124 source `b3f5084`, latest development `174308d` and remaining
+  Wiki-source changes `c14cfd0` while preserving source ancestry.
+- Adds a private bounded v2 EOA carrier, offline context verification, actual
+  browser replay qualification fixture/CI step and Solidity/EVM vector checks.
+- Current verification and full branch intake:
+  [carrier review](../consolidation/2026-11-16-carrier-review.md).
+- Main is unchanged; `ReleaseEnabled=0`. D1 is still a candidate, not a completed
+  live trading protocol. See [feature matrix](FEATURE_COMPLETION_MATRIX.md).
 
-## Verification in this run
+## Previous checkpoint evidence (before carrier continuation)
 
 - `npm ci --ignore-scripts`: passed; no lockfile changes.
 - Full Node package/UI suite via `npm test`: 1,315 passed, 0 failed, 1 skipped.
@@ -31,7 +31,7 @@ Updated: 2026-11-16
 - Foundry suite, browser tests, physical-device tests, hosted CI, testnet and
   independent security review: not run or not verified in this run.
 
-## Branch intake
+## Previous checkpoint branch intake
 
 - Selected latest functional lineage from `claude/confident-fermi-g6wjp3`.
 - Preserved unique D1 work from `codex/peer-acceptance-20261116` and validated
@@ -46,7 +46,7 @@ Updated: 2026-11-16
 
 1. Independently review D1 EIP-712 field order, vectors and account classification.
 2. Resolve contract/delegated-account verification and old-backup freshness policy.
-3. Specify bounded v2 transport and authenticated receive/cancel/reject wiring.
+3. Review the bounded v2 EOA carrier and implement authenticated receive/cancel/reject wiring.
 4. Qualify the integrated buyer/seller journey in browser with real wallet prompts,
    IndexedDB races, crash/reload and malicious-peer cases.
 5. Re-run Foundry and exact-head hosted checks.
@@ -56,8 +56,8 @@ Updated: 2026-11-16
 ## Restart instructions
 
 ```sh
-git fetch origin codex/peer-acceptance-20261116
-git switch -c codex/peer-acceptance-20261116 --track origin/codex/peer-acceptance-20261116
+git fetch origin codex/review-consolidate-20261116
+git switch -c codex/review-consolidate-20261116 --track origin/codex/review-consolidate-20261116
 npm ci --ignore-scripts
 ```
 

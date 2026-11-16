@@ -43,7 +43,8 @@
     "test:escrow": "npm --prefix packages/escrow-evm test",
     "test:local-evm": "node scripts/test-local-evm.mjs",
     "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
-    "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs"
+    "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs",
+    "test:peer:browser": "node scripts/test-peer-replay-browser.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",

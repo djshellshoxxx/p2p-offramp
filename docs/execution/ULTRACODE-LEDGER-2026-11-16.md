@@ -32,8 +32,8 @@ Baseline evidence (exact `f2950cf`): typecheck PASS; `npm test` 1276/1276 pass, 
 
 | ID | Sev | Component | Finding | Owner | Status |
 |---|---|---|---|---|---|
-| L1 | P1 | domain/schemas/wallet | D9 durable `sendMarkedAt` + provenance + skip-rule (BT-03/G4) | Team A | IN PROGRESS |
-| L2 | P0 | chain-evm | Canonical `getTrade(bytes32)` reader (BT-01/G3); registry layout field = owner decision | Team C | IN PROGRESS |
+| L1 | P1 | domain/schemas/wallet | D9 durable `sendMarkedAt` + provenance + skip-rule (BT-03/G4) | upstream c398f13/88f9e40/c1f8e75 (PR #122); Team A = independent review | IMPLEMENTED upstream; REVIEW IN PROGRESS |
+| L2 | P0 | chain-evm | Canonical `getTrade(bytes32)` reader (BT-01/G3) | upstream 83ff039/120e1ea (PR #120/#123); Team C = independent review | IMPLEMENTED upstream; REVIEW IN PROGRESS |
 | L3 | P1 | wallet/exchange | D1 PeerAcceptance (BT-02/G2); exact field names = owner decision | — | BLOCKED (owner) |
 | L4 | P1 | apps/web | G1/D8 browser trading journey; owner decision on localnet composition | — | BLOCKED (owner) |
 | L5 | P2 | governance | SECURITY.md private reporting route (BT-06); GitHub PVR enablement = owner action | Lead | DONE (file) |
@@ -44,3 +44,11 @@ Baseline evidence (exact `f2950cf`): typecheck PASS; `npm test` 1276/1276 pass, 
 File ownership: Team A owns `packages/schemas/src/intent.ts`, `packages/domain/src/{intent-journal,tx-lifecycle}.ts`,
 `packages/wallet/src/evm-execution.ts` and their tests. Team C owns `packages/chain-evm/**`. Team B/D are read-only
 except their own report files and new red-team test files. Lead owns docs/tasks/ledger and shared facades.
+
+## Checkpoint 2 — upstream merge (2026-11-16 17:45 UTC)
+
+Upstream Codex workers merged PRs #119–#123 into this branch (head `46e2a7d`) while agents were rate-limited.
+Lead fast-forwarded (no rewrite). Lead-run evidence at exact `46e2a7d`: typecheck PASS; `npm test` 1298/1298
+(0 fail/skip); `forge test` 82/82; `check:boundaries` PASS (126 sources / 64 core modules).
+Solana `claude/sleepy-fermat-4s6ocx` @`e2e25cf` (not yet integrated): `cargo build-sbf --arch v3` + `cargo test --features localnet`
+= 47 LiteSVM tests PASS (Agave 4.1.2, rust 1.98.1). Fixture/LiteSVM only — no parity claim.

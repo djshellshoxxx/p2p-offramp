@@ -1,13 +1,13 @@
 # D1 EOA peer-acceptance candidate
 
-The candidate now includes encrypted, session-scoped replay and cancellation
-history as well as the cryptographic primitive. Both remain private modules;
-neither is wired into the shipped exchange or granted economic authority.
+The candidate includes encrypted, session-scoped replay and cancellation history,
+the cryptographic primitive, and a private bounded v2 EOA carrier. These remain
+private modules, disconnected from the shipped exchange and economic authority.
 
 This implements the offline EOA cryptographic portion of the accepted D1 Option B.
 It is a candidate for review, not an approved peer protocol or a completed trading
-feature. No exchange envelope, state machine, wallet prompt, release policy, escrow
-ABI or default application graph is changed. The implementation is private to
+feature. The live v1 exchange, state machine, wallet prompts, release policy,
+escrow ABI and default application graph are unchanged. The verifier is private to
 `packages/wallet/src/evm-peer-acceptance.ts` and has no public entry-point export.
 
 ## Exact candidate signing statement
@@ -67,6 +67,13 @@ verify them using the repository's existing ABI-word, domain and EOA helpers.
 This is cross-implementation encoding evidence, not an independent protocol or
 cryptographic review; the libraries share lower-level cryptographic dependencies.
 
+The continuation adds `contracts/evm/test/PeerAcceptanceVector.t.sol`: four
+additional vectors cross-check the same fixture using Solidity ABI encoding and
+the EVM's `ecrecover`, independent of those JavaScript implementations. Each checks
+both signatures and rejects role, key-direction, expiry and domain replay. The
+fixture's terms digest/account are cross-checked against the existing canonical
+scenario. This still does not replace independent protocol review.
+
 Negative cases cover role/account/key mismatches, invalid x-only points, cross-chain
 and cross-contract replay, changed terms and revisions, omitted/corrupt/high-s
 signatures, all three deadline boundaries, malformed integers, hostile getters,
@@ -122,6 +129,38 @@ keys, concurrent CAS, stale duplicates, foreign records, capacity and lock timin
 This does not claim browser IndexedDB race or process-crash qualification for
 this new service.
 
+## Private version 2 EOA carrier
+
+`evm-peer-envelope.ts` adds an exact-key `v:2` carrier for `terms-offer` and
+`terms-accept`. The outer fields match the existing exchange envelope. An offer
+body contains `{terms, acceptance}`; an accept contains `{revision, acceptance}`.
+`acceptance` contains `{binding, termsSignature, bindingSignature}`. Each signature
+is exactly 65 bytes encoded as lowercase `0x`-prefixed hex. No sender-selected
+scheme or authority field is accepted. Contract signatures and cancel/reject
+messages are unsupported by this private parser, not downgraded to v1.
+
+The aggregate UTF-8 JSON ceiling remains 24,576 bytes. Decoded offer terms have a
+separate 16,384-byte ceiling; JSON escaping counts toward the aggregate budget.
+Duplicate keys, unknown fields/versions, malformed integers, mismatched key
+directions and wrong advertisement ownership fail closed. Parsed objects are
+deeply frozen scalar data. Parsing does not authenticate the messaging channel,
+validate the opaque terms review-document contents, verify signatures, classify
+accounts or persist replay history.
+
+`verifyCandidatePeerEnvelope` additionally requires the locally authenticated
+sender, recipient and selected advertisement, locally reviewed terms, local
+registry domain and local clock. It verifies both signatures and refuses a message
+whose expiry is more than 3,600 seconds ahead. The result remains candidate-only
+with economic preparation false. The live session must still authenticate NIP-17,
+classify accounts, enforce lifecycle/current-time checks and admit durable replay
+history before any future approved integration.
+
+`npm run test:peer:browser` adds actual browser fixtures for two-tab CAS, reload,
+stale duplicates, portable tombstone restore and lock. Local Chromium startup was
+blocked by a denied socket before assertions. The fixture is wired into CI;
+browser qualification is pending. It explicitly preserves the old-backup
+limitation instead of claiming exported history is globally fresh.
+
 ## Remaining D1 integration
 
 1. Independently review the exact candidate fields and vectors before adopting a
@@ -134,9 +173,9 @@ this new service.
    and bind its admission to the actual live session before economic preparation.
    Review old-backup freshness and key restoration/rotation behavior; qualify the
    composition across browser reloads and IndexedDB races.
-4. Finish key-rotation/restore policy, inbox/AUTH policy and the bounded version 2
-   carrier, including contract-signature budgets. Signature bytes never become
-   public offer metadata.
+4. Finish key-rotation/restore policy and inbox/AUTH policy; review/adopt the
+   private EOA carrier and separately define contract-signature budgets.
+   Signature bytes never become public offer metadata.
 5. Compose the approved localnet-only browser journey, test two wallets and failure
    paths, and retain the existing release and independent-review gates.
 
