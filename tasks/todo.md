@@ -1,9 +1,10 @@
 # Autonomous task ledger — 2026-10-31
 
 November 16 D1 continuation: [candidate EOA proof contract](../docs/integration/peer-acceptance-v1-candidate.md)
-implements the offline two-signature primitive and exact proposed fields/vectors.
-Full D1 remains unfinished: native account classification, ERC-1271, durable
-session replay/tombstones, version 2 carrier and browser integration are separate.
+implements the offline two-signature primitive, exact proposed fields/vectors,
+and encrypted replay/tombstone persistence. Full D1 remains unfinished: native
+account classification, ERC-1271, authenticated session wiring, old-backup
+freshness, version 2 carrier and browser integration are separate.
 
 Current November 16 development continuation and evidence:
 [canonical qualification report](../docs/consolidation/2026-11-16-canonical-qualification.md).

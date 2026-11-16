@@ -2,7 +2,8 @@
 
 Implementation update, November 16: the private [EOA candidate and exact field
 proposal](../../integration/peer-acceptance-v1-candidate.md) now has an offline
-two-signature verifier and fixed viem differential vectors. This implements a
+two-signature verifier, fixed viem differential vectors, and an encrypted
+replay/tombstone ledger with real vault/backup tests. This implements a
 bounded part of Option B, without adopting a wire format or changing negotiation
 authority. The historical decision packet below retains the unresolved full
 protocol requirements; the candidate is not independent approval or completion.

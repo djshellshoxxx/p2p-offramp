@@ -1,5 +1,9 @@
 # D1 EOA peer-acceptance candidate
 
+The candidate now includes encrypted, session-scoped replay and cancellation
+history as well as the cryptographic primitive. Both remain private modules;
+neither is wired into the shipped exchange or granted economic authority.
+
 This implements the offline EOA cryptographic portion of the accepted D1 Option B.
 It is a candidate for review, not an approved peer protocol or a completed trading
 feature. No exchange envelope, state machine, wallet prompt, release policy, escrow
@@ -69,8 +73,52 @@ revoked proxies, exact field sets and caller-buffer preservation.
 Focused command:
 
 ```sh
-node --import ./scripts/test-support/register-tsx.mjs --test packages/wallet/test/evm-peer-acceptance.test.mjs
+node --import ./scripts/test-support/register-tsx.mjs --test packages/wallet/test/evm-peer-acceptance.test.mjs packages/wallet/test/evm-peer-replay.test.mjs
 ```
+
+## Encrypted replay and tombstone contract
+
+`CandidatePeerReplayLedger` uses the existing vault lease, encrypted record and
+compare-and-swap implementation. It stores one namespaced `preference` record
+with schema version 1; the deterministic 128-bit record ID derives from
+`p2p-offramp/peer-replay/v1`. Foreign kind, version, format or malformed content at
+that ID is rejected without overwrite. No vault schema or shared facade changes.
+No signatures, secrets, network endpoint or clock are persisted in this record.
+
+Each terms digest has at most one binding per role. The exact same binding is a
+duplicate even when its valid signature bytes differ. A change to account, keys
+or signed expiry is a conflict; renewal requires new reviewed terms/nonce rather
+than silently replacing an existing statement. Buyer/seller bindings must name
+reciprocal keys and distinct accounts. Every admission re-verifies both signatures
+and current context; persisted acceptance metadata never grants authority.
+
+A trusted authenticated cancel/reject handler may add an irreversible local
+tombstone, including before the first binding arrives. Tombstones deny every
+later admission for that terms digest and survive reopen and fresh-key restore
+of a backup containing them. There is no clear, delete, age pruning, automatic
+retry or network-send operation. The candidate bound is 64 distinct terms digests
+and 128 KiB decoded JSON bytes; reaching it refuses new entries without eviction.
+These are implementation bounds for review, not protocol constants.
+
+Writes use the captured vault revision and atomic CAS. Even an otherwise
+idempotent duplicate runs the existing empty-commit persisted-freshness check:
+returning early from cached state would miss a tombstone written by another
+session. A stale session gets `CONFLICT` and must reopen. The regression was
+mutation-checked: temporarily bypassing this check made the stale-duplicate test
+fail; restoring the check made all focused tests pass. Concurrent first bindings
+have exactly one CAS winner. Lock/disposal prevent admission; a write committed
+just before lock remains recoverable and is never reported as absent.
+
+Backups only contain history present at export. An older backup cannot reconstruct
+later tombstones or establish globally current replay state without an external
+freshness policy. Offline cross-profile rollback protection, key rotation/rebinding
+and interoperability remain protocol decisions before live integration.
+
+Tests use the real encrypted vault and backup services with an atomic in-memory
+envelope store. They cover reopen/restore, altered-valid signatures, reciprocal
+keys, concurrent CAS, stale duplicates, foreign records, capacity and lock timing.
+This does not claim browser IndexedDB race or process-crash qualification for
+this new service.
 
 ## Remaining D1 integration
 
@@ -80,10 +128,10 @@ node --import ./scripts/test-support/register-tsx.mjs --test packages/wallet/tes
 2. Derive account scheme from pinned native code. This offline EOA primitive does
    not classify accounts or support ERC-1271, EIP-7702/delegated or counterfactual
    accounts. Add separate point-in-time contract-wallet verification and rechecks.
-3. Persist replay identities by terms/role and bind the keys to the authenticated
-   session before economic preparation. Duplicate identity must ignore signature
-   byte differences; conflicting keys fail closed. Cancel/reject tombstones must
-   survive new sessions, reconnects, vault reopen and restore.
+3. Wire the encrypted replay ledger to authenticated receive/cancel/reject paths
+   and bind its admission to the actual live session before economic preparation.
+   Review old-backup freshness and key restoration/rotation behavior; qualify the
+   composition across browser reloads and IndexedDB races.
 4. Finish key-rotation/restore policy, inbox/AUTH policy and the bounded version 2
    carrier, including contract-signature budgets. Signature bytes never become
    public offer metadata.
