@@ -166,8 +166,8 @@ test('duplicate submit: concurrent, sequential and after restart make exactly on
   close(env);
 });
 
-test('crash after reservation (before send-started): restart cancels the prepared intent; nothing was sent', async () => {
-  const env = await setup(), prepared = val(await env.life.prepare(fund()));
+test('crash before approval send marker: same-profile restart cancels the provably unsent approval', async () => {
+  const env = await setup(), prepared = val(await env.life.prepare(fund({action:'approve',call:{to:ESCROW,data:NOOP,value:'0'}})));
   await start(env);
   const recovered = val(await env.life.recover());
   assert.deepEqual(recovered, []);
@@ -505,4 +505,91 @@ test('restored stable finalized intent is re-read before a new explicit action, 
     assert.equal(env.journal.isTerminalVerified(prepared.intentId), true);
     assert.equal(env.wallet.sends, 1, 'preparation never resends or spends');
   } finally { close(env); }
+});
+
+test('D9 writes a permanent v2 marker in the same durable transition before wallet entry',async()=>{
+ const env=await setup();
+ try{
+  const prepared=val(await env.life.prepare(fund()));
+  const before=await stored(env,prepared.intentId);
+  assert.equal(before.version,2);assert.equal(before.sendMarkedAt,null);assert.equal(before.originProfileId,env.session.profileId);
+  env.wallet.onSend=async tx=>{
+   const marked=await stored(env,prepared.intentId);
+   assert.equal(marked.state,'broadcast-unknown');assert.equal(typeof marked.sendMarkedAt,'number');
+   assert.equal(marked.sendMarkedAt,marked.updatedAt);return env.chain.broadcast(tx);
+  };
+  const sent=val(await env.life.submit(prepared));
+  const marker=sent.intent.sendMarkedAt;assert.equal(typeof marker,'number');
+  env.chain.mine(2);env.chain.finalized=2;
+  const finalized=await outcome(env,prepared.intentId);
+  assert.equal(finalized.intent.sendMarkedAt,marker);
+  assert.equal(finalized.intent.originProfileId,env.session.profileId);
+ }finally{close(env);}
+});
+
+test('D9 cancelled local approvals remain skippable after later funding and a restart beyond the scan window',async()=>{
+ for(const differentNonce of [false,true]){
+  const env=await setup();
+  try{
+   const approval=fund({action:'approve',call:{to:ESCROW,data:NOOP,value:'0'}});
+   const cancelled=val(await env.life.prepare(approval));
+   await start(env);assert.deepEqual(val(await env.life.recover()),[]);
+   if(differentNonce)env.chain.nonces.set(ACCOUNT,3);
+   const fresh=val(await env.life.prepare({...approval,call:{...approval.call,data:'0x01'}}));
+   val(await env.life.submit(fresh));env.chain.mine(2);env.chain.finalized=env.chain.latest().number;
+   assert.equal((await outcome(env,fresh.intentId)).outcome,'finalized');
+   const funding=val(await env.life.prepare(fund()));val(await env.life.submit(funding));
+   env.chain.mine(100);env.chain.finalized=env.chain.latest().number;
+   await start(env);
+   const recovered=val(await env.life.recover());
+   assert.equal(recovered.some(record=>record.intentId===cancelled.intentId),false);
+   const skipped=await outcome(env,cancelled.intentId);assert.equal(skipped.evidence,'none');
+   assert.equal(skipped.intent.sendMarkedAt,null);
+   assert.equal((await outcome(env,funding.intentId)).escrowState,'funded');
+   assert.equal(env.wallet.sends,2,'restart never resends either transaction');
+  }finally{close(env);}
+ }
+});
+
+test('D9 restart does not skip prepared value-moving actions on marker metadata alone',async()=>{
+ const env=await setup();
+ try{
+  const prepared=val(await env.life.prepare(fund()));await start(env);
+  assert.equal(val(await env.life.recover())[0].intentId,prepared.intentId);
+  assert.equal((await stored(env,prepared.intentId)).state,'prepared');
+  err(await env.life.prepare(fund()),'CONFLICT');assert.equal(env.wallet.sends,0);
+ }finally{close(env);}
+});
+
+test('D9 legacy and fresh-key-restored prepared approvals keep their nonce hold and cannot acquire never-sent authority',async()=>{
+ const {EncryptedBackupService}=await import('../../storage/src/backup-service.ts');
+ const {encodeIntentPayload}=await import('../../schemas/src/intent.ts');
+ for(const legacy of [false,true]){
+  const env=await setup();let backup,restoredVault;
+  try{
+   const prepared=val(await env.life.prepare(fund({action:'approve',call:{to:ESCROW,data:NOOP,value:'0'}})));
+   if(legacy){
+    const original=await stored(env,prepared.intentId);
+    const {sendMarkedAt,originProfileId,...old}=original;old.version=1;
+    const rows=val(await env.vault.list(env.session.sessionId,'journal'));
+    val(await env.vault.commit(env.session.sessionId,env.journal.currentRevision(),[{op:'put',record:{...rows[0],payload:encodeIntentPayload(old)}}]));
+    await start(env);
+   }else{
+    backup=new EncryptedBackupService(env.store,crypto);
+    const bytes=await backup.export(env.session.profileId);
+    // The original profile sends after the backup. The old snapshot is still prepared/null.
+    val(await env.life.submit(prepared));
+    const restored=await backup.restore(bytes,pass,pass);bytes.fill(0);
+    env.life.dispose();env.journal.dispose();
+    restoredVault=new EncryptedVaultService(env.store,crypto,{lifecycle:false});
+    const session=val(await restoredVault.unlock(restored.newProfileId,pass));
+    env.vault.dispose();env.vault=restoredVault;env.session=session;await start(env);
+   }
+   const recovered=val(await env.life.recover());assert.equal(recovered.length,1);
+   assert.equal(recovered[0].state,'prepared');assert.equal(env.journal.isTerminalVerified(prepared.intentId),false);
+   err(await env.journal.markSending(prepared.intentId),'BROADCAST_UNKNOWN');
+   err(await env.life.prepare(fund()),'CONFLICT');
+   assert.equal(env.wallet.sends,legacy?0:1,'no send from the restored snapshot');
+  }finally{backup?.dispose();close(env);}
+ }
 });

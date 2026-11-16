@@ -3,7 +3,7 @@
  * A durable marker precedes exactly one send. Unknown outcomes are never retried automatically.
  */
 import { createCoreError, createOperationId } from '../../domain/index.ts';
-import { intentData, parseIntent, type CoreErrorCode, type CoreResult, type IntentV1 } from '../../schemas/index.ts';
+import { intentData, parseIntent, type CoreErrorCode, type CoreResult, type Intent } from '../../schemas/index.ts';
 import type { Eip1193Provider } from './evm-adapter.ts';
 
 export interface PreparedEvmRequestV1 {
@@ -12,7 +12,7 @@ export interface PreparedEvmRequestV1 {
 }
 export interface ExecutionSession { readonly account: string; readonly chainId: string; readonly generation: number; }
 export interface ExecutionJournalPort {
-  reserve(intent: IntentV1, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<string>>;
+  reserve(intent: Intent, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<string>>;
   markSending(intentId: string, signal?: AbortSignal): Promise<CoreResult<void>>;
   recordBroadcast(intentId: string, hash: string, signal?: AbortSignal): Promise<CoreResult<void>>;
 }
@@ -22,7 +22,7 @@ export interface EvmExecutionOptions {
   readonly isCurrent: (session: ExecutionSession) => boolean;
   readonly journal: ExecutionJournalPort;
   /** Must bind the exact call target, selector/arguments, principal, nonce and registry deployment to this intent. */
-  readonly validateCanonical: (intent: IntentV1, request: PreparedEvmRequestV1) => CoreResult<void> | Promise<CoreResult<void>>;
+  readonly validateCanonical: (intent: Intent, request: PreparedEvmRequestV1) => CoreResult<void> | Promise<CoreResult<void>>;
 }
 const fail = (code: CoreErrorCode): CoreResult<never> => Object.freeze({ok:false,error:createCoreError(code,{operationId:createOperationId(),readOnly:false})});
 const ADDRESS = /^0x[0-9a-f]{40}$/, HASH = /^0x[0-9a-f]{64}$/i;
@@ -59,7 +59,7 @@ export function createEvmExecution(options: EvmExecutionOptions) {
     try { return !disposed && options.isCurrent(originalSession); } catch { return false; }
   };
   return Object.freeze({
-    async submit(input: IntentV1, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<{readonly hash:string}>> {
+    async submit(input: Intent, expectedRevision: number, signal?: AbortSignal): Promise<CoreResult<{readonly hash:string}>> {
       if (!current()) return fail('LOCKED');
       if (signal?.aborted) return fail('CANCELLED');
       if (active) return fail('CONFLICT');
@@ -67,7 +67,7 @@ export function createEvmExecution(options: EvmExecutionOptions) {
       const guard = (): CoreResult<never> | undefined => !current() ? fail('LOCKED') : signal?.aborted ? fail('CANCELLED') : undefined;
       const work = async (): Promise<CoreResult<{readonly hash:string}>> => {
       try {
-        let intent:IntentV1,request:PreparedEvmRequestV1;
+        let intent:Intent,request:PreparedEvmRequestV1;
         try {
           intent=parseIntent(input);request=parsePreparedEvmRequest(intent.preparedRequest);
           if (intent.binding.chain!=='evm' || intent.submission.chain!=='evm' || intent.state!=='prepared' || intent.submission.hash!==null ||

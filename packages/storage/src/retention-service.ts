@@ -2,7 +2,7 @@
 import {
   decodeBase64url, decodeIntentPayload, intentData, MAX_PAYLOAD_BYTES, MAX_RECORDS,
   MAX_SNAPSHOT_JSON_BYTES, parseSavedReviewPayload, parseStrictJsonBytes,
-  type PrivateRecordV1, type Result, type VaultService, type VaultSession, type IntentV1, type CoreResult,
+  type PrivateRecordV1, type Result, type VaultService, type VaultSession, type Intent, type CoreResult,
   type VaultSessionAuthority, type VaultSessionLease,
 } from '../../schemas/index.ts';
 import type { EncryptedVaultService } from './vault-service.ts';
@@ -248,13 +248,13 @@ export class RetentionService {
 
 /** Structural ports of the EXISTING G12 lifecycle journal/coordinator; this module owns no chain decoder. */
 export interface RetentionJournalPort {
-  list(signal?:AbortSignal):Promise<CoreResult<readonly IntentV1[]>>;
+  list(signal?:AbortSignal):Promise<CoreResult<readonly Intent[]>>;
   currentRevision():number|null;
   isTerminalVerified(intentId:string):boolean;
 }
 export interface RetentionReconcilerPort {
   reconcile(intentId:string,signal?:AbortSignal):Promise<CoreResult<{
-    readonly outcome:string; readonly intent:IntentV1; readonly evidence:string; readonly escrowState:string|null;
+    readonly outcome:string; readonly intent:Intent; readonly evidence:string; readonly escrowState:string|null;
   }>>;
 }
 /** Worker-private live capability minted only after actual finalized native payout/credit checks.
@@ -262,11 +262,11 @@ export interface RetentionReconcilerPort {
  * correct asset/recipient at coherent canonical anchors and revoke on scope/source/freshness changes.
  */
 export interface NativePayoutClosureLease {
-  readonly scope:RetentionScope; readonly intents:readonly IntentV1[];
+  readonly scope:RetentionScope; readonly intents:readonly Intent[];
   current():boolean; dispose():void;
 }
 export interface NativePayoutClosureAuthority {
-  reviewPayoutClosure(scope:RetentionScope,intents:readonly IntentV1[],signal:AbortSignal):Promise<NativePayoutClosureLease>;
+  reviewPayoutClosure(scope:RetentionScope,intents:readonly Intent[],signal:AbortSignal):Promise<NativePayoutClosureLease>;
 }
 export interface JournalRetentionOptions {
   readonly vault:RetentionVault; readonly session:VaultSession;
