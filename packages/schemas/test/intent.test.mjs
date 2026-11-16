@@ -62,3 +62,15 @@ test('D9 v2 refuses missing, contradictory, mutable or noncanonical provenance',
  const raw=JSON.stringify(v2()).replace('"version":2','"version":1,"version":2');
  assert.throws(()=>api.decodeIntentPayload(Buffer.from(raw).toString('base64url')),error=>error.code==='INVALID_INPUT');
 });
+test('D9 older-build rule: the frozen pre-D9 reader refuses every v2 payload and never misreads it',async()=>{
+ const old=await import('./fixtures/intent-v1-reader.ts');
+ const v2record={...intent(),version:2,sendMarkedAt:null,originProfileId:'a'.repeat(32)};
+ for(const record of [v2record,{...v2record,state:'broadcast-unknown',sendMarkedAt:0}]){
+  const payload=api.encodeIntentPayload(record);
+  // The older reader checks the exact v1 key set before the version, so it reports INVALID_INPUT
+  // (its journal then fails closed with INTEGRITY_FAILURE), not UNSUPPORTED_VERSION.
+  assert.throws(()=>old.decodeIntentPayload(payload),error=>error.code==='INVALID_INPUT');
+ }
+ const legacy=api.encodeIntentPayload(intent());
+ assert.deepEqual(old.decodeIntentPayload(legacy),api.decodeIntentPayload(legacy),'v1 stays readable by both builds');
+});
