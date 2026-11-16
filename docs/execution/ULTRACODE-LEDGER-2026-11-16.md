@@ -76,3 +76,14 @@ Transcribed from PR #65 (status refreshed against current tree still required):
 
 Completeness matrix: `docs/execution/COMPLETENESS-MATRIX-2026-11-16.md` (Team B, verified against `46e2a7d`).
 Small unblocked gaps C1 (invisible-only locale warnings), C6 (dead exports/stale comment), C7 (render tests) → Team C2.
+
+## Checkpoint 4 — G3 independent review (Team C)
+
+APPROVE, no code defects in upstream `83ff039`/`120e1ea`. 6 added reader regression tests (cherry-picked `47b7e3b`; chain-evm reader 19/19).
+Caveats: (1) owner must ratify layout-by-runtime-hash (option B) vs `DeploymentV1` field and approve production runtime hashes;
+(2) residual: `eth_call` pinned by number + recheck, not block hash (EIP-1898) — A→B→A finalized reorg undetected; single-RPC trust (BT-05);
+(3) low: wallet `decodeTrade` (preflight/recovery) looser than reader (uppercase hex, seller==buyer, deadline 0) — preflight then field-matches terms.
+Toolchain note: `scripts/sepolia/lib.mjs` pins forge `1.5.1-v1.5.1`; the `stable` tarball (same commit) reports `1.5.1-stable` → TOOLCHAIN_MISMATCH. Lead switched to the `v1.5.1` tag tarball; `test:exchange:evm` 12/12.
+
+Merged-head verification (`ba4fe4c` tree): typecheck, `npm test` 1522/1522, forge 86/86, boundaries, build-policy, spec audit, Python unittest,
+`test:peer:browser`, `test:recovery:browser`, default build PASS.
