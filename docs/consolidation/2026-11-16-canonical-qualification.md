@@ -50,13 +50,30 @@ installed with `npm ci --ignore-scripts`; no dependency/lockfile changes.
 A full package rerun overlapped several native/build processes and lost the
 diagnostics test worker without an assertion diagnostic (1,285 pass, one failed
 file). Diagnostics passes 15/15 in isolation. A complete rerun with four test-file
-workers is recorded below; no test is excluded or weakened for that rerun.
+workers then passed **1,298/1,298**, zero failures, cancellations or skips, with
+Foundry/cast available. No test was excluded or weakened for that rerun.
 
 The Chromium recovery fixture built successfully but could not start its browser:
 `process_singleton_posix.cc` reported `socket() failed: Operation not permitted`.
 No browser pass or device/accessibility qualification is claimed. Exact-head hosted
 CI and an independent reviewer remain necessary. Ordinary Git push had no HTTPS
 credentials; publication uses the connected GitHub application instead.
+
+## Publication checkpoint
+
+[PR #123](https://github.com/djshellshoxxx/p2p-offramp/pull/123) targets the newest
+cumulative development branch. Implementation tree
+`cff9d7103bf9b23244899df22de9de65fb7f198d` was published as
+`120e1ea2004c21cb06057a87d2ce8c06c83f5279`; Git fetch and a zero-diff comparison
+confirmed the remote tree matches the locally tested source. The documentation
+source `30efa0e` is its second parent. Local intermediate commits remain retained
+on `codex/continue-completion-20261116`; the publication checkout tracks the
+remote branch without force-pushing or discarding either history.
+
+At that implementation head, EVM escrow and Vault foundation hosted workflows
+were queued. They are not recorded as passing. The PR remains draft pending
+hosted qualification and independent review; neither it nor the cumulative
+development PR has been merged into main by this continuation.
 
 ## Remaining implementation and release work
 
