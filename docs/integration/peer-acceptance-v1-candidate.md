@@ -52,8 +52,10 @@ wrong-signer proofs return null. A valid result is frozen and explicitly carries
 digests and effective expiry, never signatures. It is not a funding authorization.
 The strict deadline is `now < min(terms.acceptBeforeSeconds, binding.notAfterSeconds,
 envelope.expiresAtSeconds)`. No time fallback or automatic wallet/RPC call occurs.
-Caller signature buffers remain untouched; internal copies are cleared on every
-exit. This is ordinary owned-buffer cleanup, not a physical memory-erasure claim.
+Caller signature buffers remain untouched. The verifier clears its owned signature
+copies on exit; a lower-level helper creates another temporary copy that is not
+guaranteed cleared. Signatures are public data. No physical memory-erasure claim is
+made.
 
 ## Vectors and verification
 
