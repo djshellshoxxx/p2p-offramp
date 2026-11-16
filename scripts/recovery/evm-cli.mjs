@@ -1,7 +1,7 @@
 /** Portable Node entry point. Its original profile and artifact hashes are baked in by the trusted builder. */
 import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
-import { open } from 'node:fs/promises';
+import { lstat, open } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -10,11 +10,17 @@ import { inspectEvmRecovery, prepareEvmRecovery, refuseRecovery, recoveryErrorCo
 import { isMain } from '../sepolia/lib.mjs';
 const sha = value => createHash('sha256').update(value).digest('hex');
 async function readBounded(path,max) {
-  const file = await open(path,constants.O_RDONLY|constants.O_NONBLOCK);
+  // Referenced files and the bundled sidecars must stay the same regular file from path check through read.
+  const initial = await lstat(path,{bigint:true});
+  if (!initial.isFile() || initial.isSymbolicLink()) return refuseRecovery('INVALID_INPUT');
+  if (initial.size > BigInt(max)) return refuseRecovery('LIMIT_EXCEEDED');
+  const file = await open(path,constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | constants.O_NONBLOCK);
   try {
-    const stat = await file.stat(); if (!stat.isFile() || stat.size > max) return refuseRecovery('LIMIT_EXCEEDED');
+    const sameFile = stat => stat.isFile() && stat.dev === initial.dev && stat.ino === initial.ino && stat.size === initial.size;
+    if (!sameFile(await file.stat({bigint:true}))) return refuseRecovery('INVALID_INPUT');
     const bytes = Buffer.alloc(max+1); let size=0;
     for (;;) { const {bytesRead} = await file.read(bytes,size,bytes.length-size,null); if (!bytesRead) break; size+=bytesRead; if (size > max) return refuseRecovery('LIMIT_EXCEEDED'); }
+    if (!sameFile(await file.stat({bigint:true})) || BigInt(size) !== initial.size) return refuseRecovery('INVALID_INPUT');
     return bytes.subarray(0,size);
   } finally { await file.close(); }
 }

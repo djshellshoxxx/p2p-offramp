@@ -139,3 +139,29 @@ test('a failed explicit erase invalidates live preview leases without claiming s
   assert.equal(service.confirmExport(preview).error.code,'REDACTION_FAILED');
   clearFails=false;assert.equal(service.clearDiagnostics().ok,true);assert.equal(raw,null);
 });
+
+test('G26 explicit clear invalidates previews before reentrant storage cleanup can export',async()=>{
+  const s=await setup();
+  assert.equal(s.service.record(input).ok,true);
+  const snapshot=s.service.collectDiagnostics().value;
+  const preview=s.service.previewExport(snapshot,[0]).value;
+  let observed=null,calls=0;
+  s.storage.clear=()=>{
+    calls++;
+    // Storage callbacks are synchronous but are not trusted to remain inert:
+    // they must not be able to export a preview whose clearing has begun.
+    observed={
+      confirmed:s.service.confirmExport(preview),
+      repeated:s.service.previewExport(snapshot,[0]),
+    };
+    s.setRaw(null);
+  };
+  assert.deepEqual(s.service.clearDiagnostics(),{ok:true,value:undefined});
+  assert.equal(calls,1);
+  assert.deepEqual(observed,{
+    confirmed:{ok:false,error:{code:'REDACTION_FAILED'}},
+    repeated:{ok:false,error:{code:'REDACTION_FAILED'}},
+  });
+  assert.equal(s.raw,null);
+  assert.equal(s.service.confirmExport(preview).error.code,'REDACTION_FAILED');
+});
