@@ -1,5 +1,15 @@
 # Ultracode multi-agent ledger — 2026-11-16
 
+## Continuation refresh
+
+At cumulative `7461c87`, L1 has a persisted version 2 send marker and profile-bound
+provenance implementation, and L2 has an explicit authenticated-runtime layout
+policy. Their IN PROGRESS rows below are historical intake ownership, not current
+source absence. Local contract, encrypted exchange and direct canonical-reader
+checks were rerun during continuation. L3/L4 remain unfinished and production
+qualification remains open. See the [current report](../consolidation/2026-11-16-canonical-qualification.md)
+and [D9 migration contract](../consolidation/2026-11-16-d9-migration.md).
+
 Baseline: `integration/p2p-consolidated-20261109` @ `f2950cf29a69bc56f28b04262f310c5c86a72d84`
 (contains historical checkpoint `961cc6f`; newest cumulative functional line; m2a/pages-beta/offline-recovery
 integration branches are strict ancestors). Work branch: `claude/confident-fermi-g6wjp3`.

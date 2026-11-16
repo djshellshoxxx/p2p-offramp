@@ -1,5 +1,11 @@
 # Autonomous task ledger — 2026-10-31
 
+Current November 16 development continuation and evidence:
+[canonical qualification report](../docs/consolidation/2026-11-16-canonical-qualification.md).
+G3 canonical reading and G4/D9 migration are implemented on the cumulative
+development branch; the older OPEN/OTHER LANE rows below remain historical.
+D1 peer acceptance and emitted two-wallet browser trading are still unfinished.
+
 Each task needs completed behavior, negative/lifecycle verification and an
 independent reviewer. Root updates this ledger to prevent duplicate execution.
 
