@@ -170,7 +170,7 @@ try {
         if (!opened.ok) throw new Error('second journal session failed');
         window.journalSession = opened.value;
       }
-      window.journalIntent = { version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(index + 1)),
+      window.journalIntent = { version: 2, sendMarkedAt: null, originProfileId: fixture.profileId, intentId: encodeBase64url(new Uint8Array(32).fill(index + 1)),
         binding: fixture.binding, account: fixture.account, action: 'fund', state: 'prepared', walletGeneration: 0,
         expectedEscrowState: 'absent', preparedRequest: '{"fixture":"not-a-real-transaction"}',
         submission: { chain: 'evm', hash: null, nonce: null }, replacementOf: null, createdAt: 0, updatedAt: 0 };
@@ -264,7 +264,7 @@ try {
         if (!opened.ok) throw new Error('composition peer unlock failed'); window.comp = { store, vault, session: opened.value };
       }
       const c = window.comp; c.fixture = fixture;
-      c.intent = { version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(1)), binding: fixture.binding,
+      c.intent = { version: 2, sendMarkedAt: null, originProfileId: fixture.profileId, intentId: encodeBase64url(new Uint8Array(32).fill(1)), binding: fixture.binding,
         account: fixture.account, action: 'fund', state: 'prepared', walletGeneration: 0, expectedEscrowState: 'absent',
         preparedRequest: '{"fixture":"not-a-real-transaction"}', submission: { chain: 'evm', hash: null, nonce: null },
         replacementOf: null, createdAt: 0, updatedAt: 0 };
