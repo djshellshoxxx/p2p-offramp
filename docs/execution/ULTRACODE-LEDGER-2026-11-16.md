@@ -26,7 +26,7 @@ Baseline evidence (exact `f2950cf`): typecheck PASS; `npm test` 1276/1276 pass, 
 | L2 | P0 | chain-evm | Canonical `getTrade(bytes32)` reader (BT-01/G3); registry layout field = owner decision | Team C | IN PROGRESS |
 | L3 | P1 | wallet/exchange | D1 PeerAcceptance (BT-02/G2); exact field names = owner decision | — | BLOCKED (owner) |
 | L4 | P1 | apps/web | G1/D8 browser trading journey; owner decision on localnet composition | — | BLOCKED (owner) |
-| L5 | P2 | governance | SECURITY.md private reporting route (BT-06) | Lead | IN PROGRESS |
+| L5 | P2 | governance | SECURITY.md private reporting route (BT-06); GitHub PVR enablement = owner action | Lead | DONE (file) |
 | L6 | — | all | Completeness/wiring matrix + branch intake | Team B | IN PROGRESS |
 | L7 | — | all | Red-team pass 1 on baseline | Team D | IN PROGRESS |
 | L8 | — | web | Recovery-reference stable-ID label | Lead | DONE |
