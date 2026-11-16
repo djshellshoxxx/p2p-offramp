@@ -56,8 +56,8 @@ Updated: 2026-11-16
 ## Restart instructions
 
 ```sh
-git fetch --all --prune
-git switch codex/continuation-run-20261116-latest
+git fetch origin codex/peer-acceptance-20261116
+git switch -c codex/peer-acceptance-20261116 --track origin/codex/peer-acceptance-20261116
 npm ci --ignore-scripts
 ```
 
