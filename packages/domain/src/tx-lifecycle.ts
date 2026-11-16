@@ -427,12 +427,15 @@ class EvmLifecycle implements EvmTxLifecycle {
     return this.#guarded(async () => {
       const signal = external ?? new AbortController().signal;
       const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
-      // Only locally originated, never-marked approvals may be cancelled using persisted metadata.
-      // Old/imported snapshots and value-moving actions remain visible and retain their nonce holds.
-      const prepared = records.filter(record => record.state === 'prepared' && record.action === 'approve' && this.#journal.hasLocalPreparation(record) && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId));
-      for (const record of prepared) unwrap(await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null })));
-      const cancelled = new Set(prepared.map(record => record.intentId));
-      return Object.freeze(records.filter(record => !cancelled.has(record.intentId) && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
+      // Prepare results never survive restart: a prepared intent can no longer reach its wallet call here, so it is
+      // cancelled (prepared -> failed CAS). Cancellation is not never-sent authority: the journal grants that only to
+      // live reservations and locally originated never-marked approvals. Every other cancelled record (value-moving,
+      // legacy or imported, any of which a rolled-back or older snapshot may hide a send for) keeps its nonce hold and
+      // is returned for native reconciliation, which can classify it (e.g. dropped -> explicit same-nonce successor).
+      // Leaving it `prepared` would hold the trade forever: reconcile() never classifies a prepared intent.
+      const current = records.map(record => record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId) ? null : record);
+      for (let index = 0; index < records.length; index++) if (current[index] === null) current[index] = unwrap(await this.#serial(() => this.#journal.observe(records[index].intentId, { state: 'failed', hash: null })));
+      return Object.freeze((current as Intent[]).filter(record => record.state !== 'prepared' && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
     }, 'UNAVAILABLE');
   }
   dispose(): void {

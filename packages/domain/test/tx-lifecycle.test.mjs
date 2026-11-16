@@ -556,8 +556,11 @@ test('D9 restart does not skip prepared value-moving actions on marker metadata 
  try{
   const prepared=val(await env.life.prepare(fund()));await start(env);
   assert.equal(val(await env.life.recover())[0].intentId,prepared.intentId);
-  assert.equal((await stored(env,prepared.intentId)).state,'prepared');
+  // D9 review: cancelled for reconciliation, never granted never-sent authority.
+  const record=await stored(env,prepared.intentId);assert.equal(record.state,'failed');assert.equal(record.sendMarkedAt,null);
+  assert.equal(env.journal.isTerminalVerified(prepared.intentId),false);
   err(await env.life.prepare(fund()),'CONFLICT');assert.equal(env.wallet.sends,0);
+  assert.notEqual((await outcome(env,prepared.intentId)).evidence,'none','a value-moving cancellation is re-read natively, never skipped');
  }finally{close(env);}
 });
 
@@ -586,10 +589,36 @@ test('D9 legacy and fresh-key-restored prepared approvals keep their nonce hold 
     env.vault.dispose();env.vault=restoredVault;env.session=session;await start(env);
    }
    const recovered=val(await env.life.recover());assert.equal(recovered.length,1);
-   assert.equal(recovered[0].state,'prepared');assert.equal(env.journal.isTerminalVerified(prepared.intentId),false);
-   err(await env.journal.markSending(prepared.intentId),'BROADCAST_UNKNOWN');
+   // D9 review: cancelled for native reconciliation; the cancellation grants no never-sent proof.
+   assert.equal(recovered[0].state,'failed');assert.equal(env.journal.isTerminalVerified(prepared.intentId),false);
+   err(await env.journal.markSending(prepared.intentId),'CONFLICT');
+   assert.notEqual((await outcome(env,prepared.intentId)).evidence,'none','imported/legacy cancellation is never skipped');
    err(await env.life.prepare(fund()),'CONFLICT');
    assert.equal(env.wallet.sends,legacy?0:1,'no send from the restored snapshot');
   }finally{backup?.dispose();close(env);}
  }
+});
+
+test('D9 review: a crash before a release marker on a funded escrow keeps the timeout refund reachable without resending', async () => {
+  const env = await setup();
+  try {
+    const funding = val(await env.life.prepare(fund())); val(await env.life.submit(funding));
+    env.chain.mine(2); env.chain.finalized = env.chain.latest().number;
+    assert.equal((await outcome(env, funding.intentId)).outcome, 'finalized');
+    const settle = action => ({ binding, action, expectedEscrowState: 'funded', call: { to: ESCROW, data: NOOP, value: '0' } });
+    const release = val(await env.life.prepare(settle('release')));
+    await start(env); // process dies after the reservation, before the durable marker
+    val(await env.life.recover());
+    assert.equal((await stored(env, release.intentId)).sendMarkedAt, null);
+    assert.equal(env.journal.isTerminalVerified(release.intentId), false, 'a value-moving action never gains never-sent proof from metadata');
+    err(await env.life.prepare(settle('refund')), 'CONFLICT', 'the unresolved release still holds the trade');
+    env.chain.mine(policy.dropAfterBlocks + 1);
+    let last;
+    for (let i = 0; i < 3 && last?.outcome !== 'dropped'; i++) last = await outcome(env, release.intentId);
+    assert.equal(last.outcome, 'dropped', 'native reconciliation must be able to classify the never-broadcast release');
+    const refund = val(await env.life.prepare({ ...settle('refund'), supersedes: release.intentId }));
+    assert.equal(refund.request.nonce, release.request.nonce, 'the explicit successor reuses the held nonce');
+    val(await env.life.submit(refund));
+    assert.equal(env.wallet.sends, 2, 'recovery never sent the cancelled release');
+  } finally { close(env); }
 });
