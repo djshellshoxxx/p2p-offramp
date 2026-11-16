@@ -50,11 +50,19 @@ test('signature and role bounds refuse beforeRPC; missingcontract code never inv
  const f=await fixture();for(const override of [{signature:new Uint8Array(4097)},{signature:new Uint8Array()},{role:'buyer'},{sessionGeneration:-1}])assert.equal((await f.verifier.verify({...f.input,...override})).ok,false);assert.equal(f.calls.length,0);
  f.state.code='0x';assert.equal((await f.verifier.verify(f.input)).error.code,'UNSUPPORTED_PROVIDER');assert.equal(f.calls.some(c=>c.method==='eth_call'),false);f.verifier.dispose();
 });
-test('cancel/timeout/dispose returnpromptly while ignoredphysicalRPC retains boundedslots and issuesnolaterreads',async()=>{
- const held=deferred(),f=await fixture({intercept:async m=>m==='eth_call'?held.promise:undefined,timeoutMs:10});
- const result=await f.verifier.verify(f.input);assert.equal(result.ok,false);assert.equal(result.error.code,'TIMEOUT');
- const result2=await f.verifier.verify(f.input);assert.equal(result2.ok,false);assert.equal((await f.verifier.verify(f.input)).error.code,'LIMIT_EXCEEDED');
+test('cancel/timeout/dispose returnpromptly while ignoredphysicalRPC retains boundedslots and issuesnolaterreads',async context=>{
+ const held=deferred(),f=await fixture({intercept:async m=>m==='eth_call'?held.promise:undefined,timeoutMs:10,monotonicNow:()=>0});
+ context.mock.timers.enable({apis:['setTimeout']});
+ // Expire only after the physical RPC is held; CPU contention must not turn this into a pre-RPC timeout.
+ for(let count=1;count<=2;count++){
+  const pending=f.verifier.verify(f.input);
+  while(f.calls.filter(call=>call.method==='eth_call').length<count)await new Promise(r=>setImmediate(r));
+  context.mock.timers.tick(10);
+  const result=await pending;assert.equal(result.ok,false);assert.equal(result.error.code,'TIMEOUT');
+ }
+ assert.equal((await f.verifier.verify(f.input)).error.code,'LIMIT_EXCEEDED');
  const count=f.calls.length;held.resolve(MAGIC);await new Promise(r=>setImmediate(r));assert.equal(f.calls.length,count);f.verifier.dispose();
+ context.mock.timers.reset();
  const hold=deferred(),g=await fixture({intercept:async m=>m==='eth_call'?hold.promise:undefined});const pending=g.verifier.verify(g.input);while(!g.calls.some(c=>c.method==='eth_call'))await new Promise(r=>setImmediate(r));g.verifier.dispose();assert.equal((await pending).error.code,'CANCELLED');hold.resolve(MAGIC);
 });
 

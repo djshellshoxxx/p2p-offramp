@@ -5,10 +5,11 @@
  * viem is only an oracle here; it is never imported by packages/** or apps/**.
  * Run: npm run test:evm:viem  (needs Foundry: forge + anvil on PATH or ~/.foundry/bin)
  *
- * Known finding handled explicitly: the reader's read() issues `escrows(bytes32)` (the legacy packages/escrow-evm
+ * Backwards compatibility: without an explicit runtime-layout policy, read() issues `escrows(bytes32)` (the legacy packages/escrow-evm
  * layout seller,buyer,asset,amount,expiry,state) while contracts/evm BasicEscrow exposes `getTrade(bytes32)` with
  * (seller,deadline,state,buyer,token,amount). Check B1 asserts read() fails closed on the real contract; check B2
- * compares the reader's decoder with viem over a labelled layout shim so the decode path is still differentially tested.
+ * compares the legacy decoder with viem over a labelled layout shim. The canonical policy is also exercised
+ * directly against the deployed contract, with no selector or response shim.
  */
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
@@ -105,6 +106,8 @@ async function main() {
   const readerOver = (rpcImpl, registry = makeRegistry()) => new EvmChainReader({ rpc: rpcImpl, registry, timeoutMs: 15_000 });
   const viemRpc = createViemReadRpc(client);
   const reader = readerOver(viemRpc);
+  const canonicalReader = new EvmChainReader({rpc:viemRpc,registry:makeRegistry(),timeoutMs:15_000,
+    escrowLayouts:{[runtimeKeccak]:'canonical-get-trade-v1'}});
 
   const now = Number(BigInt((await rpc('eth_getBlockByNumber', ['latest', false])).timestamp));
   const terms = { orderId: Buffer.from(keccak256(new TextEncoder().encode('viem-order'))).toString('hex'), revision: '1', networkId: 'local-evm', deploymentId: 'escrow-local-v1',
@@ -153,11 +156,13 @@ async function main() {
   // ---- B1: read() on the real contracts/evm BasicEscrow must fail closed (escrows(bytes32) does not exist there) ----
   const direct = await reader.read(binding, ctx(), wanted);
   const incompatible = direct.ok === false;
-  if (incompatible) findings.push({ id: 'READER_SELECTOR_MISMATCH', detail: 'reader.read() calls escrows(bytes32); contracts/evm BasicEscrow exposes getTrade(bytes32) with a different word order; read() returns ' + direct.error.code });
-  check('B1) reader.read() on contracts/evm BasicEscrow fails closed (known selector/layout mismatch, reported)', incompatible, J(direct));
+  check('B1) legacy-only reader on canonical BasicEscrow fails closed without probing another layout', incompatible, J(direct));
 
   // ---- a) read(): decoded escrow vs viem readContract at the same finalized block (layout shim) ----
   const viemFunded = await viemTrade(viemFinalized.number);
+  const canonicalFunded = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical funded: direct getTrade read matches viem at the finalized anchor', canonicalFunded.ok &&
+    J(canonicalFunded.value.escrow)===J(viemFunded) && canonicalFunded.value.observation.anchor.hash===viemFinalized.hash,J(canonicalFunded));
   const shimmed = await shimReader.read(binding, ctx(), wanted);
   check('a) funded: reader.read (shim) decoded escrow == viem readContract getTrade @finalized', shimmed.ok && J(shimmed.value.escrow) === J(viemFunded) && viemFunded.state === 'funded' && shimmed.value.observation.anchor.height === anchor.height,
     J({ reader: shimmed.value?.escrow ?? shimmed.error, viem: viemFunded }));
@@ -200,6 +205,8 @@ async function main() {
   const releaseNonce = BigInt((await rpc('eth_getTransactionByHash', [releaseHash])).nonce);
   const pending = await compareReceipt('h) release mined after finalized anchor reports pending (viem sees success)', releaseHash, release, seller, releaseNonce, 'pending', true);
   const stillFunded = await shimReader.read(binding, ctx(), wanted);
+  const canonicalPending = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical pending release remains funded at finalized anchor',canonicalPending.ok && canonicalPending.value.escrow.state==='funded',J(canonicalPending));
   check('h) finalized snapshot still funded while release is pending', stillFunded.ok && stillFunded.value.escrow.state === 'funded', J(stillFunded));
   assert.ok(pending);
 
@@ -207,13 +214,16 @@ async function main() {
   await finalizeThrough(releaseHash);
   const finalAnchor = await client.getBlock({ blockTag: 'finalized' });
   const viemReleased = await viemTrade(finalAnchor.number);
+  const canonicalReleased = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical released: direct getTrade read matches viem at finalized anchor',canonicalReleased.ok &&
+    J(canonicalReleased.value.escrow)===J(viemReleased) && canonicalReleased.value.observation.anchor.hash===finalAnchor.hash,J(canonicalReleased));
   const readerReleased = await shimReader.read(binding, ctx(), wanted);
   check('a) released: reader.read (shim) decoded escrow == viem getTrade @finalized, state released', readerReleased.ok && viemReleased.state === 'released' && J(readerReleased.value.escrow) === J(viemReleased) && readerReleased.value.observation.anchor.hash === finalAnchor.hash,
     J({ reader: readerReleased.value?.escrow ?? readerReleased.error, viem: viemReleased }));
   await compareReceipt('release receipt finalized: status/nonce/anchor match viem', releaseHash, release, seller, releaseNonce, 'finalized', true);
   check('release paid buyer exactly the escrowed amount (viem getBalance delta)', BigInt(await client.getBalance({ address: buyer })) === buyerBefore + BigInt(terms.amountBaseUnits), 'buyer balance delta mismatch');
   void third;
-  reader.dispose(); shimReader.dispose();
+  reader.dispose(); shimReader.dispose(); canonicalReader.dispose();
 }
 
 let anvil, failed = false;
