@@ -11,6 +11,14 @@ export interface IntentV1 {
     { readonly chain: 'solana'; readonly signature: string | null; readonly blockhash: string; readonly lastValidBlockHeight: string };
   readonly replacementOf: string | null; readonly createdAt: number; readonly updatedAt: number;
 }
+/** V2 adds write-once send provenance. Legacy V1 absence means unknown, never null. */
+export interface IntentV2 extends Omit<IntentV1, 'version'> {
+  readonly version: 2;
+  readonly sendMarkedAt: number | null;
+  readonly originProfileId: string;
+}
+export type Intent = IntentV1 | IntentV2;
+
 export class IntentSchemaError extends Error {
   readonly code: 'INVALID_INPUT' | 'UNSUPPORTED_VERSION' | 'LIMIT_EXCEEDED';
   constructor(code: IntentSchemaError['code'] = 'INVALID_INPUT') { super('Invalid private intent data.'); this.name = 'IntentSchemaError'; this.code = code; }
@@ -42,9 +50,16 @@ function preparedRequest(value: unknown): string {
   for (let index = 0; index < value.length; index++) { const code = value.charCodeAt(index); if (code >= 0xd800 && code <= 0xdbff) { const next = value.charCodeAt(++index); if (!(next >= 0xdc00 && next <= 0xdfff)) return fail(); } else if (code >= 0xdc00 && code <= 0xdfff) return fail(); }
   const bytes = new TextEncoder().encode(value); try { if (bytes.length > MAX_PREPARED_REQUEST_BYTES) return fail('LIMIT_EXCEEDED'); } finally { bytes.fill(0); } return value;
 }
-export function parseIntent(input: unknown): IntentV1 {
-  const raw = intentData(input, ['version', 'intentId', 'binding', 'account', 'action', 'state', 'walletGeneration', 'expectedEscrowState', 'preparedRequest', 'submission', 'replacementOf', 'createdAt', 'updatedAt']);
-  if (raw.version !== 1) return fail('UNSUPPORTED_VERSION');
+export function parseIntent(input: unknown): Intent {
+  let version: unknown;
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(input, 'version');
+    if (!descriptor || !('value' in descriptor)) return fail();
+    version = descriptor.value;
+  } catch { return fail(); }
+  if (version !== 1 && version !== 2) return fail('UNSUPPORTED_VERSION');
+  const keys = ['version', 'intentId', 'binding', 'account', 'action', 'state', 'walletGeneration', 'expectedEscrowState', 'preparedRequest', 'submission', 'replacementOf', 'createdAt', 'updatedAt'];
+  const raw = intentData(input, version === 1 ? keys : [...keys, 'sendMarkedAt', 'originProfileId']);
   let binding: TradeBinding;
   try { binding = parseTradeBinding(raw.binding); } catch { return fail(); }
   let chain: unknown;
@@ -59,13 +74,23 @@ export function parseIntent(input: unknown): IntentV1 {
     const value = intentData(raw.submission, ['chain', 'signature', 'blockhash', 'lastValidBlockHeight']);
     submission = Object.freeze({ chain, signature: value.signature === null ? null : base58(value.signature, 64, 88), blockhash: base58(value.blockhash, 32, 44), lastValidBlockHeight: decimal(value.lastValidBlockHeight) });
   } else return fail();
-  return Object.freeze({ version: 1, intentId: parseIntentId(raw.intentId), binding, account: parseIntentAccount(raw.account, binding.chain), action: choice(raw.action, ['approve', 'fund', 'release', 'refund']), state: choice(raw.state, ['prepared', 'broadcast-unknown', 'pending', 'confirmed', 'finalized', 'failed', 'reorged', 'expired', 'replaced']), walletGeneration: counter(raw.walletGeneration), expectedEscrowState: choice(raw.expectedEscrowState, ['absent', 'funded']), preparedRequest: preparedRequest(raw.preparedRequest), submission, replacementOf: raw.replacementOf === null ? null : parseIntentId(raw.replacementOf), createdAt: counter(raw.createdAt), updatedAt: counter(raw.updatedAt) });
+  const legacy: IntentV1 = Object.freeze({ version: 1, intentId: parseIntentId(raw.intentId), binding, account: parseIntentAccount(raw.account, binding.chain), action: choice(raw.action, ['approve', 'fund', 'release', 'refund']), state: choice(raw.state, ['prepared', 'broadcast-unknown', 'pending', 'confirmed', 'finalized', 'failed', 'reorged', 'expired', 'replaced']), walletGeneration: counter(raw.walletGeneration), expectedEscrowState: choice(raw.expectedEscrowState, ['absent', 'funded']), preparedRequest: preparedRequest(raw.preparedRequest), submission, replacementOf: raw.replacementOf === null ? null : parseIntentId(raw.replacementOf), createdAt: counter(raw.createdAt), updatedAt: counter(raw.updatedAt) });
+  if (version === 1) return legacy;
+  const sendMarkedAt = raw.sendMarkedAt === null ? null : counter(raw.sendMarkedAt);
+  if (typeof raw.originProfileId !== 'string' || !/^[0-9a-f]{32}$/.test(raw.originProfileId) || legacy.updatedAt < legacy.createdAt) return fail();
+  if (sendMarkedAt !== null && (sendMarkedAt < legacy.createdAt || sendMarkedAt > legacy.updatedAt || legacy.state === 'prepared')) return fail();
+  // Reconciliation may discover a transaction from a restored pre-send snapshot.
+  // Observation must retain the original marker, never manufacture send history.
+  if (sendMarkedAt === null && legacy.state === 'broadcast-unknown') return fail();
+  if (legacy.state === 'prepared' && (submission.chain === 'evm' ? submission.hash !== null : submission.signature !== null)) return fail();
+  return Object.freeze({ ...legacy, version: 2, sendMarkedAt, originProfileId: raw.originProfileId });
+
 }
-export function encodeIntentPayload(input: IntentV1): string {
+export function encodeIntentPayload(input: Intent): string {
   const bytes = new TextEncoder().encode(JSON.stringify(parseIntent(input)));
   try { if (bytes.length > MAX_PAYLOAD_BYTES) return fail('LIMIT_EXCEEDED'); return encodeBase64url(bytes); } finally { bytes.fill(0); }
 }
-export function decodeIntentPayload(input: unknown): IntentV1 {
+export function decodeIntentPayload(input: unknown): Intent {
   let bytes: Uint8Array | undefined;
   try {
     bytes = decodeBase64url(input, 1, MAX_PAYLOAD_BYTES);

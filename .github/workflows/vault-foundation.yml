@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:acceptance:cli
+      - run: node --test scripts/agent/*.test.mjs
       - run: npm run check:boundaries
       - run: npm run test:build-policy
       - run: npm run test:diagnostics
