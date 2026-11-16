@@ -109,7 +109,7 @@ try {
   await unlock(a);
   await panel.getByRole('button', { name: 'Inspect recovery references', exact: true }).click();
   await panel.getByRole('button', { name: 'Next reference page', exact: true }).click();
-  const item = panel.getByLabel('Reference 65', { exact: false });
+  const item = panel.getByLabel(/Reference 1.*00000000000000000000000000000041/);
   const consent = panel.getByLabel('I understand the selected file contains private recovery metadata', { exact: false });
   const preview = panel.getByRole('button', { name: 'Preview selected private references', exact: true });
   assert.equal(await panel.getByLabel('Exact private recovery export (UTF-8 JSON)', { exact: true }).count(), 0);
