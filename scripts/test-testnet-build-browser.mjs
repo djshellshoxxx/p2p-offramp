@@ -12,6 +12,7 @@ import { resolve, sep } from 'node:path';
 import { chromium } from 'playwright-core';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { buildWeb } from '../apps/web/scripts/build.mjs';
+import { englishGroup } from '../apps/web/src/ui/locale/en.ts';
 import { TESTNET_TRUST_FILES } from '../apps/web/scripts/testnet-trust.mjs';
 import { fixtureTermsDocument, FIXTURE_ESCROW, writeTestnetTrust } from './lib/testnet-fixture.mjs';
 
@@ -52,6 +53,26 @@ try {
   const origin = `http://127.0.0.1:${server.address().port}`;
   browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
 
+  const localRoute = route => {
+    if (new URL(route.request().url()).origin === origin) return route.continue();
+    unexpected.push('UNEXPECTED_NETWORK');
+    return route.abort();
+  };
+
+  // Before the app mounts, the shell distinguishes missing scripts from disabled scripting.
+  const copy = englishGroup('document');
+  for (const javaScriptEnabled of [false, true]) {
+    const page = await browser.newPage({ javaScriptEnabled });
+    await page.route('**/*', localRoute);
+    await page.route(origin + '/assets/*.js', route => route.abort());
+    await page.goto(origin);
+    const visible = await page.locator('body').innerText();
+    assert.equal(visible.includes(copy.loading), javaScriptEnabled, 'show the loading hint only when scripts can run');
+    assert.equal(visible.includes(copy.noscript), !javaScriptEnabled, 'show the no-script recovery hint when scripting is disabled');
+    assert.ok(visible.includes(copy.policyNotice), 'always show the static safety notice');
+    await page.close();
+  }
+
   const nowSeconds = Math.floor(Date.now() / 1000);
   const good = resolve(temporary, 'sepolia-terms.json'), unknown = resolve(temporary, 'unknown-deployment.json');
   await writeFile(good, JSON.stringify(await fixtureTermsDocument(nowSeconds), null, 2));
@@ -59,7 +80,7 @@ try {
 
   async function open(fixedTime) {
     const context = await browser.newContext({ serviceWorkers: 'block' });
-    await context.route('**/*', route => { if (new URL(route.request().url()).origin === origin) return route.continue(); unexpected.push('UNEXPECTED_NETWORK'); return route.abort(); });
+    await context.route('**/*', localRoute);
     const page = await context.newPage();
     page.on('pageerror', () => unexpected.push('PAGE_ERROR'));
     page.on('dialog', dialog => { unexpected.push('UNEXPECTED_DIALOG'); void dialog.dismiss(); });
@@ -109,7 +130,7 @@ try {
   }
 
   assert.deepEqual(unexpected, []);
-  console.log(JSON.stringify({ fixture: 'sepolia-testnet-build-local-chromium', browser: browser.version(), keyId, journey: ['build-refusals', 'banner', 'review', 'unknown-deployment', 'expired-fail-closed'],
+  console.log(JSON.stringify({ fixture: 'sepolia-testnet-build-local-chromium', browser: browser.version(), keyId, journey: ['build-refusals', 'static-shell-fallbacks', 'banner', 'review', 'unknown-deployment', 'expired-fail-closed'],
     unexpectedRequests: unexpected.length, tradingEnabled: false, releaseAcceptance: false }));
 } finally {
   await browser?.close(); if (server) { server.closeAllConnections(); await new Promise(done => server.close(done)); }
