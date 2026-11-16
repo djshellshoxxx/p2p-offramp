@@ -74,7 +74,7 @@ export function RecoveryReferencesPanel({ services }: { readonly services: AppSe
         {page.items.map((item, index) => <div key={item.recordId}>
           <label className="checkbox-label"><input type="checkbox" disabled={busy} checked={selected.includes(index)} onChange={event => {
             const checked = event.currentTarget.checked; discardPreview(); setNotice(''); setSelected(old => checked ? [...old, index] : old.filter(value => value !== index));
-          }} /><span>{m.reference(page.offset + index + 1)} · {item.action}</span></label>
+          }} /><span>{m.reference(index + 1)} · <code><bdi dir="ltr">{item.recordId}</bdi></code> · {item.action}</span></label>
           <dl className="terms"><dt>{m.storedLabel}</dt><dd>{item.storedState}</dd>
             <dt>{m.networkDeployment}</dt><dd><code><bdi dir="ltr">{item.binding.networkId} / {item.binding.deploymentId}</bdi></code></dd>
             <dt>{m.tradeId}</dt><dd><code><bdi dir="ltr">{item.binding.tradeId}</bdi></code></dd><dt>{m.walletAccount}</dt><dd><code><bdi dir="ltr">{item.account}</bdi></code></dd>
