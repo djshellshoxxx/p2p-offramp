@@ -433,9 +433,10 @@ class EvmLifecycle implements EvmTxLifecycle {
       // legacy or imported, any of which a rolled-back or older snapshot may hide a send for) keeps its nonce hold and
       // is returned for native reconciliation, which can classify it (e.g. dropped -> explicit same-nonce successor).
       // Leaving it `prepared` would hold the trade forever: reconcile() never classifies a prepared intent.
-      const current = records.map(record => record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId) ? null : record);
-      for (let index = 0; index < records.length; index++) if (current[index] === null) current[index] = unwrap(await this.#serial(() => this.#journal.observe(records[index].intentId, { state: 'failed', hash: null })));
-      return Object.freeze((current as Intent[]).filter(record => record.state !== 'prepared' && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
+      const current: Intent[] = [];
+      for (const record of records) current.push(record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId)
+        ? unwrap(await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null }))) : record);
+      return Object.freeze(current.filter(record => record.state !== 'prepared' && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
     }, 'UNAVAILABLE');
   }
   dispose(): void {
