@@ -27,6 +27,8 @@ const refuse = (code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): never 
 const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
 const names = /^[A-Za-z][A-Za-z0-9]*$/, identifiers = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\ud800-\udfff]/u;
+// Joiners and variation selectors can be meaningful inside translated words.
+const hasVisibleText = /[^\s\p{Default_Ignorable_Code_Point}]/u;
 type Part = string | Readonly<{ name: string; one?: string; other?: string }>;
 const compiled = new WeakMap<object, readonly Part[]>();
 function data(value: unknown, keys: readonly string[], code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): Record<string, unknown> {
@@ -56,7 +58,7 @@ export function createMessage<const V extends MessageVariables>(input: MessageEn
   try {
     const raw = data(input, ['key', 'source', 'context', 'severity', 'variables', 'reviewRequired', 'docsAnchor']);
     if (!plain(raw.key, 160) || !/^[A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9_]*)+$/.test(raw.key) ||
-        !plain(raw.source) || !raw.source.trim() || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
+        !plain(raw.source) || !hasVisibleText.test(raw.source) || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
         !['information', 'warning', 'critical'].includes(raw.severity as string) || typeof raw.reviewRequired !== 'boolean' ||
         !plain(raw.docsAnchor, 500) || !/^[A-Za-z0-9_./-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(raw.docsAnchor)) return refuse();
     if (!raw.variables || typeof raw.variables !== 'object') return refuse();

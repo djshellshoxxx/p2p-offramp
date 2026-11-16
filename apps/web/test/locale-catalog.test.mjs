@@ -75,7 +75,7 @@ test('a complete draft catalog must contain visible text for its recovery warnin
   assert.equal(formatMessage(validateLocale(draft, sourceCatalog).messages[warning], {}), sourceCatalog[warning].source);
 
   // A present but blank critical message gives the reader no guidance, just like an empty string.
-  for (const blank of ['', ' \t\n', '\u00a0']) {
+  for (const blank of ['', ' \t\n', '\u00a0', '\u200b', ' \u2060\u200d ', '\ufe0f']) {
     assert.throws(() => validateLocale({ ...draft, messages: { ...messages, [warning]: blank } }, sourceCatalog),
       LocaleError, `Expected blank recovery warning ${JSON.stringify(blank)} to be rejected`);
   }
@@ -86,7 +86,7 @@ test('blank source messages are refused at every severity without trimming valid
     for (const source of ['', ' \t\n', '\u00a0', '\u2003', '\u202f', '\u3000', '\ufeff']) {
       refuses(() => createMessage(definition({ source, variables: {}, severity })), 'MESSAGE_VARIABLE_MISMATCH');
     }
-    const source = ' \tRecovery guidance\u00a0';
+    const source = ' \tراهنمای بازیابی\u200cشده\u00a0';
     const entry = createMessage(definition({ source, variables: {}, severity }));
     assert.equal(entry.source, source);
     assert.equal(formatMessage(entry, {}), source);
