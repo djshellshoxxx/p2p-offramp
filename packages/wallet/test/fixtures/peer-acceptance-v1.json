@@ -1,0 +1,73 @@
+{
+  "notice": "SYNTHETIC candidate D1 vectors; viem 2.57.10 encoding/signing, existing public test keys. No independent protocol approval.",
+  "domain": {
+    "chainId": "31337",
+    "verifyingContract": "0x5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+  },
+  "vectors": [
+    {
+      "role": "seller",
+      "assetKind": "native",
+      "binding": {
+        "v": 1,
+        "termsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+        "role": "seller",
+        "account": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "ownMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "counterpartyMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "notAfterSeconds": "1699995000"
+      },
+      "digest": "821f6410f427914f12635640ecb3d40879d2411376ea4c9acec05699f4060f5e",
+      "termsSignature": "0x89c29b49abfbd8c4d8f36ea60838acd922a270f8e79aaf8b4419cc40afdf382a41d7f32278d3accce34b8971d6f28c6777384a939b8d935fe65901159f14d9b41c",
+      "bindingSignature": "0x368e7b1aa7381ca65a9cae9af0f456372f2f3ef9a78221a84f84f6538cc8bbef12ca9feb5160943d048a65edd33be20dabd64892474d3a6cbbb1c1120575e2361c"
+    },
+    {
+      "role": "seller",
+      "assetKind": "erc20",
+      "binding": {
+        "v": 1,
+        "termsHash": "9f5c68d4d66adafb7a96e298f82b880d4fa9bf6cb197ceea9c4bfb2a18c32524",
+        "role": "seller",
+        "account": "0xacf7b7c8271e99b3be70c3f476c7c20963e06b8e",
+        "ownMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "counterpartyMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "notAfterSeconds": "1699995000"
+      },
+      "digest": "dd139e2980003fcd2e6bef118edd4d44c1fd09b6dcb08ae3e9e3f33ad953d7ab",
+      "termsSignature": "0x3d95c251357113b50fbf840c46aaccc8852fe7ea823f5b04d9cad3180b2692e142bd8a0859a15de7c631d94ae8bc18f7c046f8bbd74f8e376f1486e4c518d1801b",
+      "bindingSignature": "0x04a035ea63b19824fac5a654cb20d5baa33727a3a582d4e7d168fcb68a4714c717662f94ce2cbac8eef59fabe093d27b1322fd5317dd2e1d3a8b0c2f10cc386f1b"
+    },
+    {
+      "role": "buyer",
+      "assetKind": "native",
+      "binding": {
+        "v": 1,
+        "termsHash": "005201bb0d2410a9bf411023a96cfc57009fb52d8c7a69e9f71b511af3ce666a",
+        "role": "buyer",
+        "account": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "ownMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "counterpartyMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "notAfterSeconds": "1699995000"
+      },
+      "digest": "51fcd197389ec0d2ac42feea381847175f7422e958caef80c80155b4319e290a",
+      "termsSignature": "0xc4dabfb7225b4eea344c6353c03dee43cc323feed894e9673ae635b662c777932326d790fa31b07237713275a0bb458ccbd9ae3e25139d3a6a81f86f2a89c8781c",
+      "bindingSignature": "0x6c34b394a34a5f2658ef6199e3014b9719f790a8b6164c90ff9ba25823e02e610b63f40587ac87c202320ad4d7dd02217138e7f9d6a86563c50874f2d3dc13a11c"
+    },
+    {
+      "role": "buyer",
+      "assetKind": "erc20",
+      "binding": {
+        "v": 1,
+        "termsHash": "9f5c68d4d66adafb7a96e298f82b880d4fa9bf6cb197ceea9c4bfb2a18c32524",
+        "role": "buyer",
+        "account": "0x3b0d3efcce062566bd2a28c2f2bba7e1d1504ee5",
+        "ownMessagingKey": "1b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f",
+        "counterpartyMessagingKey": "4d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766",
+        "notAfterSeconds": "1699995000"
+      },
+      "digest": "3148ddbd985f6cb214977dbf4a1bf72777fec6aacf96ba7a71711278aab84ef3",
+      "termsSignature": "0x41159c8debccab217d7430566f3d8f6028fd7460561df1ed04260a6e7140f43c4ba4e9b5f954b7f9144c64598fbbb05b67a0e8cf97b37124ba7133048cf91d2c1b",
+      "bindingSignature": "0x019c8519011b4b8ece670285293126d608d0f80e972bbe7bd4d141735fac1bd934d4bf15cc9e2a4da8b40c45b6346d651568aa7baa692dc65727e86f6537d55b1c"
+    }
+  ]
+}
