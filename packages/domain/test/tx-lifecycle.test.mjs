@@ -203,9 +203,10 @@ test('external cancellation after the durable send marker prevents the wallet ca
 
 test('crash after send-started, before the wallet broadcast: pending until expiry, then dropped; re-prepare needs an explicit same-nonce successor', async () => {
   const env = await setup(), prepared = val(await env.life.prepare(fund()));
-  env.wallet.onSend = never; // process dies inside the wallet call; nothing reached the chain
-  void env.life.submit(prepared);
-  await new Promise(resolve => setTimeout(resolve, 50));
+  const reachedWallet = Promise.withResolvers();
+  env.wallet.onSend = () => { reachedWallet.resolve(); return never(); }; // dies inside wallet; nothing reached chain
+  const submission = env.life.submit(prepared);
+  await Promise.race([reachedWallet.promise, submission.then(result => assert.fail(`wallet was not reached: ${JSON.stringify(result)}`))]);
   await start(env);
   const recovered = val(await env.life.recover());
   assert.deepEqual(recovered.map(intent => intent.state), ['broadcast-unknown']);
@@ -231,9 +232,10 @@ test('crash after send-started, before the wallet broadcast: pending until expir
 
 test('crash during the wallet call after broadcast (hash never returned): reconcile resolves confirmed from nonce and escrow effect', async () => {
   const env = await setup(), prepared = val(await env.life.prepare(fund()));
-  env.wallet.onSend = tx => { env.chain.broadcast(tx); return never(); };
-  void env.life.submit(prepared);
-  await new Promise(resolve => setTimeout(resolve, 50));
+  const broadcast = Promise.withResolvers();
+  env.wallet.onSend = tx => { env.chain.broadcast(tx); broadcast.resolve(); return never(); };
+  const submission = env.life.submit(prepared);
+  await Promise.race([broadcast.promise, submission.then(result => assert.fail(`broadcast was not reached: ${JSON.stringify(result)}`))]);
   await start(env);
   assert.equal((await outcome(env, prepared.intentId)).outcome, 'pending');
   env.chain.mine();

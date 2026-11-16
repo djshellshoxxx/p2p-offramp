@@ -89,3 +89,18 @@ test('exceptions during or after a durable marker preserve an unknown attempt wi
   err(await s.execution.submit(s.intent,0),'CONFLICT');
  }
 });
+
+
+test('D9: a persisted send marker followed by a typed journal error stays broadcast-unknown', async () => {
+ for (const code of ['LOCKED', 'CANCELLED', 'CONFLICT', 'UNAVAILABLE']) {
+  const s = setup(), writeMarker = s.journal.markSending;
+  s.journal.markSending = async (...args) => {
+   await writeMarker(...args); // The durable journal state changed before the failure surfaced.
+   return { ok: false, error: { code, message: 'SECRET private storage detail' } };
+  };
+  err(await s.execution.submit(s.intent, 0), 'BROADCAST_UNKNOWN');
+  assert.equal(s.state(), 'broadcast-unknown');
+  assert.equal(s.events.filter(event => event === 'eth_sendTransaction').length, 0);
+  err(await s.execution.submit(s.intent, 0), 'CONFLICT', 'no second reservation is permitted');
+ }
+});
