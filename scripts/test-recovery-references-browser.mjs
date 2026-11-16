@@ -48,10 +48,13 @@ try {
   await panel.getByText('finalized', { exact: true }).waitFor();
   assert.equal(await panel.getByRole('checkbox').count(), 64, '63 supported records plus explicit privacy consent, one unknown record retained');
   assert.ok((await panel.innerText()).includes('1 record on this page could not be interpreted'));
+  // The third display entry is journal record #4; record #3 is unsupported. Its stable ID must remain visible.
+  assert.equal(await panel.getByLabel(/Reference 3.*00000000000000000000000000000004/).count(), 1,
+    'filtered journal entries must not leave an ambiguous visible recovery-reference label');
   assert.equal((await page.locator('body').innerText()).includes('PRIVATE_CALLDATA_BANK_SECRET'), false);
   await panel.getByRole('button', { name: 'Next reference page', exact: true }).click();
   await panel.getByText('private-a-trade-65', { exact: true }).waitFor();
-  await panel.getByLabel('Reference 65', { exact: false }).check();
+  await panel.getByLabel(/Reference 1.*00000000000000000000000000000041/).check();
   await panel.getByLabel('I understand the selected file contains private recovery metadata', { exact: false }).check();
   await panel.getByRole('button', { name: 'Preview selected private references', exact: true }).click();
   const text = await panel.getByLabel('Exact private recovery export (UTF-8 JSON)', { exact: true }).inputValue(), exported = JSON.parse(text);
