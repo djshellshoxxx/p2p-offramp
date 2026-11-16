@@ -10,3 +10,9 @@ Only code copied or adapted from outside this repository is listed. npm dependen
 No other external source was copied in this change. Checked and not reused: GhostPay `tx-review` and
 `ux-*` packages (they target GhostPay invoice/payment flows, not G16 trade terms) and the GhostPay web app
 (different state model and dependencies such as viem, which this client does not bundle).
+
+## Research for future reuse
+
+The [unfinished-feature and upstream reuse review](research/upstream-reuse-2026-11-03/README.md) maps the current remaining work to inspected upstream code, exact integration targets, licenses, prerequisites and acceptance criteria. It distinguishes merged source from pending PR 26 work and covers all 27 canonical records still requiring engineering or qualification in the inspected ledger.
+
+Those research candidates are not copied code or adopted dependencies. Add entries to the reuse table and applicable notices only when an actual adaptation is made.
