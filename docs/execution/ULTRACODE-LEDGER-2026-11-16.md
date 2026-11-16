@@ -52,3 +52,27 @@ Lead fast-forwarded (no rewrite). Lead-run evidence at exact `46e2a7d`: typechec
 (0 fail/skip); `forge test` 82/82; `check:boundaries` PASS (126 sources / 64 core modules).
 Solana `claude/sleepy-fermat-4s6ocx` @`e2e25cf` (not yet integrated): `cargo build-sbf --arch v3` + `cargo test --features localnet`
 = 47 LiteSVM tests PASS (Agave 4.1.2, rust 1.98.1). Fixture/LiteSVM only — no parity claim.
+
+## Checkpoint 3 — intake integration (Team B verdicts)
+
+| Source | Action |
+|---|---|
+| `claude/sleepy-fermat-4s6ocx` @`e2e25cf` (PR #50; superset of `codex/solana-payout-docs` program commits) | MERGED into dev integration line. Merge to `main` remains D8 Tier C (owner written approval). |
+| `codex/solana-payout-docs-20261109` `7e8d571` | README atomic release/payout rollback hunk applied |
+| `claude/vibrant-cray-ny4gum` `d653a77`, `dbad7ca`, `8354137` | Cherry-picked (state-path containment + `--ignore-scripts`; N38 identity retention; N41 locale runtime/leaf modules) |
+| vibrant-cray `faf245e` (N37F formal harness, needs Z3) | DEFERRED |
+| vibrant-cray `2a26041` (N40 Tier C, evm-execution), `75d8846`/`7ca4a4a`/`a45e932` (N42/N43 journey wiring, D8) | HELD — Tier C / owner |
+| `friendly-dijkstra` (#65), `localization-blank-warning` (#100), `p2p-offramp-prompt-lqcgno` (#64), `docs-wiki-20261110` (#68) | SUPERSEDED/DUPLICATE — not merged |
+
+Transcribed from PR #65 (status refreshed against current tree still required):
+
+| ID | Status | Scope |
+|---|---|---|
+| T36 | OPEN | Phase 2 audit triage; custody audits 1/2 required before M2A claim |
+| T37 | OPEN | G24 EVM matrix instantiation: spec TestCase rows with evidence pointers + checker test |
+| T38 | OPEN | G25 local bundle inventory producer reusing existing manifest/recipe/lock/ABI digests |
+| T39 | OPEN | G26 incident recovery runbook over existing tools |
+| T40 | OPEN | G22 read-only EIP-6963 wallet discovery lifecycle slice; no sign/send |
+
+Completeness matrix: `docs/execution/COMPLETENESS-MATRIX-2026-11-16.md` (Team B, verified against `46e2a7d`).
+Small unblocked gaps C1 (invisible-only locale warnings), C6 (dead exports/stale comment), C7 (render tests) → Team C2.
