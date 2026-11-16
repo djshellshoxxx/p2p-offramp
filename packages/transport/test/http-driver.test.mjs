@@ -29,3 +29,42 @@ test('HTTP driver caps empty-fragment work and rejects truncated content length'
  const truncated=new BoundedHttpDriver(async()=>reply([new Uint8Array([1])],{headers:new Headers({'content-length':'2'})}));
  assert.deepEqual(await truncated.request(scope(),'https://example.test/data'),{ok:false,error:'ROUTE_UNAVAILABLE'});
 });
+
+test('G05 HTTP uploads copy caller bytes and wipe the dispatched buffer on success or refusal', async () => {
+  for (const redirected of [false, true]) {
+    const original = new Uint8Array([0x11, 0x22, 0x33]);
+    let dispatched;
+    let calls = 0;
+    const driver = new BoundedHttpDriver(async (_url, init) => {
+      calls++;
+      dispatched = init.body;
+      assert.ok(dispatched instanceof Uint8Array);
+      assert.notStrictEqual(dispatched, original, 'the network receives a detached copy');
+      assert.deepEqual(dispatched, new Uint8Array([0x11, 0x22, 0x33]));
+      original[0] = 0x44;
+      assert.equal(dispatched[0], 0x11, 'caller mutation cannot change the in-flight payload');
+      return reply([new Uint8Array([0x55])], { redirected });
+    });
+    const result = await driver.request(scope(), 'https://example.test/data', original);
+    assert.equal(result.ok, !redirected);
+    assert.equal(calls, 1);
+    assert.deepEqual(original, new Uint8Array([0x44, 0x22, 0x33]), 'caller owns original bytes');
+    assert.deepEqual(dispatched, new Uint8Array(3), 'driver wipes the transient outbound copy');
+    assert.equal(driver.pending, 0, 'native operation slot is released');
+  }
+
+  let invoked = false;
+  const driver = new BoundedHttpDriver(async () => {
+    invoked = true;
+    return reply([]);
+  });
+  const oversized = new Uint8Array(MAX_HTTP_BYTES + 1).fill(0x66);
+  assert.deepEqual(
+    await driver.request(scope(), 'https://example.test/data', oversized),
+    { ok: false, error: 'LIMIT_EXCEEDED' },
+  );
+  assert.equal(invoked, false, 'oversized upload must be refused before network I/O');
+  assert.equal(oversized[0], 0x66, 'caller buffer is not modified on refusal');
+  assert.equal(oversized[oversized.length - 1], 0x66);
+  assert.equal(driver.pending, 0);
+});
