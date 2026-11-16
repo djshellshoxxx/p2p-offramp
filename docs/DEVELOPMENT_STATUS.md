@@ -1,5 +1,25 @@
 # Development status and continuation contract
 
+## Development continuation — November 16, 2026
+
+The cumulative development baseline is `claude/confident-fermi-g6wjp3@7461c87`,
+which contains the recovery-label fix, canonical runtime-policy reader, and D9
+versioned intent migration through PRs #119, #120 and #122. These are development
+capabilities; `main@cdde998` and the shipped static client remain separate.
+The [current continuation report](consolidation/2026-11-16-canonical-qualification.md)
+records fresh local validation, the integrated documentation branch, and remaining
+features. The dated snapshot below describes its named main commit, not this newer
+development tree. D1 peer acceptance and browser trading are still unfinished.
+
+## Current scope snapshot — 2026-11-16 (static GitHub Pages client only)
+
+At merged `main@cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e`, the static client supports encrypted local profile creation/unlock, explicit encrypted-backup export and fresh-key restore, and read-only inspection workflows. The **Offers** page can import and validate a local EVM trade-terms file for read-only review **only when a trusted registry is available**. The default build has **no approved registry**; the explicitly labelled `npm run build:demo` synthetic build supplies local example terms/registry data. This is **not live marketplace discovery, counterparty acceptance, a wallet send or an escrow payment**. Source: [README current state](../README.md), [Offers UI](../apps/web/src/ui/trade/TradePages.tsx), [static service boundary](../apps/web/src/app-services.ts).
+
+**Current implementation scope (owner direction, November 12): static GitHub Pages client only.** Existing server, relay, CLI, native-app and contract versions/branches are retained as historical or test dependencies, **not active implementation work** in this lane. Unmerged integration [PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61), independent recovery-label [PR #117](https://github.com/djshellshoxxx/p2p-offramp/pull/117), and stacked [PRs #118](https://github.com/djshellshoxxx/p2p-offramp/pull/118), [#119](https://github.com/djshellshoxxx/p2p-offramp/pull/119) and [#120](https://github.com/djshellshoxxx/p2p-offramp/pull/120) are **not merged into main** as of this snapshot. Their checks and any proposed features are not shipped client capabilities, independent security approval or deployment authorization. SonarCloud Security Rating A and external acceptance remain unverified. `ReleaseEnabled=0`, no real funds, no publication or release without separate approval.
+
+**Historical record:** the milestones and original scoped statements below describe earlier implementation checkpoints; source/current-PR qualification takes precedence for present capability status. Do not interpret old dates, test counts or planning claims as current release qualification.
+
+
 Current source-derived continuation: [incomplete-work inventory](execution/INCOMPLETE-WORK-2026-10-31.md),
 [execution prompt](execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md) and
 [task ledger](../tasks/todo.md). The historical milestone descriptions below do
@@ -95,4 +115,4 @@ implementation inventory, browser matrix or release gates remain incomplete.
 
 The 37-test figure above describes the initial parser/crypto tranche only. The 2026-10-24 client-shell milestone has 273 passing Node tests, 11 specification-tool tests, strict TypeScript checks, 173 structurally checked specifications, three native-browser fixtures, emitted-static-app browser checks, and five artifact/import-policy tests. These are local Chromium/fixture results, not deployed-host, device or independent-audit acceptance. Existing authorized Git credentials now support source work-branch checkpoints; no deployment or signing is authorized.
 
-The current static React/Vite shell creates a local encrypted profile after explicit no-reset consent, unlocks, reports locked/unlocked state, locks, lists opaque local profile IDs (bounded at 16 per origin, enforced atomically in the IndexedDB add transaction), explicitly exports unchecked encrypted backup bytes, and restores a backup into a separate fresh-key locked profile. It does not discover offers, trade, sign or send. `ReleaseEnabled=0` and an empty network allowlist remain enforced. Client-side application logic, user-controlled keys and local private data are a normative requirement; see `adr/ADR-CLIENT-SIDE-2026-10-24.md`. The incompatible custodial branch remains excluded. Next ordered work: registry/manifest (G11/G15) and transport/discovery qualification before any trading authority is enabled; see `handoffs/SESSION_STATUS.md`.
+The current static React/Vite shell creates a local encrypted profile after explicit no-reset consent, unlocks, reports locked/unlocked state, locks, lists opaque local profile IDs (bounded at 16 per origin, enforced atomically in the IndexedDB add transaction), explicitly exports unchecked encrypted backup bytes, and restores a backup into a separate fresh-key locked profile. It does not discover **live** offers, trade, sign or send. The separate, explicitly labelled synthetic `demo` build supports local, read-only Offers trade-terms import and review but never live offers discovery or funds movement. `ReleaseEnabled=0` and an empty network allowlist remain enforced. Client-side application logic, user-controlled keys and local private data are a normative requirement; see `adr/ADR-CLIENT-SIDE-2026-10-24.md`. The incompatible custodial branch remains excluded. Next ordered work: registry/manifest (G11/G15) and transport/discovery qualification before any trading authority is enabled; see `handoffs/SESSION_STATUS.md`.

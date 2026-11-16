@@ -1,5 +1,20 @@
 # EVM MVP gap closure
 
+## Current development refresh — November 16, 2026
+
+The table below is the historical November 11 intake. Current cumulative baseline:
+`claude/confident-fermi-g6wjp3@7461c87`.
+
+| Gap | Current development state |
+|---|---|
+| G3 | Implemented with a trusted runtime-Keccak-to-layout policy. Canonical direct reads now have real Foundry/Anvil and viem differential coverage for native release, ERC-20 fund/refund, absent state, immutable mismatches, unknown policy and finalized-state lag. Production runtime approval and independent review remain outstanding. |
+| G4 | Version 2 intents persist `sendMarkedAt` and `originProfileId`; legacy and restored provenance stay conservative. Implemented through PR #122; see [migration details](../consolidation/2026-11-16-d9-migration.md). |
+| G1/G2/G5 | Unfinished. Signed peer-acceptance specification/vectors and runtime implementation, approved localnet browser composition, and two-wallet browser acceptance remain distinct work. |
+| G9 | Real Sepolia acceptance remains unperformed; no approved RPC/accounts were supplied. |
+
+Fresh evidence and current limitations: [continuation report](../consolidation/2026-11-16-canonical-qualification.md).
+These updates do not establish production qualification or change the historical evidence below.
+
 Date: 2026-11-11. Source: `main` `cdde998` plus this branch. Scope: the 12-step two-party EVM
 escrow trade (seller funds, buyer pays fiat off-app, seller releases; cancel/timeout/refund).
 
