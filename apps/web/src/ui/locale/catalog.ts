@@ -28,6 +28,8 @@ const refuse = (code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): never 
 const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'date', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
 const names = /^[A-Za-z][A-Za-z0-9]*$/, identifiers = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\ud800-\udfff]/u;
+// A message must contain at least one char that is neither whitespace nor default-ignorable (ZWSP, WJ, U+3164, U+180E, soft hyphen, CGJ...) nor braille blank.
+const visible = /[^\p{White_Space}\p{Default_Ignorable_Code_Point}\u2800]/u;
 type PluralCategory = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 type Part = string | Readonly<{ name: string; forms?: Readonly<Partial<Record<PluralCategory, string>>> }>;
 export interface MessageFormatOptions { readonly locale: LocaleCatalog['locale']; }
@@ -76,7 +78,7 @@ export function createMessage<const V extends MessageVariables>(input: MessageEn
   try {
     const raw = data(input, ['key', 'source', 'context', 'severity', 'variables', 'reviewRequired', 'docsAnchor']);
     if (!plain(raw.key, 160) || !/^[A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9_]*)+$/.test(raw.key) ||
-        !plain(raw.source) || !raw.source.trim() || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
+        !plain(raw.source) || !visible.test(raw.source) || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
         !['information', 'warning', 'critical'].includes(raw.severity as string) || typeof raw.reviewRequired !== 'boolean' ||
         !plain(raw.docsAnchor, 500) || !/^[A-Za-z0-9_./-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(raw.docsAnchor)) return refuse();
     if (!raw.variables || typeof raw.variables !== 'object') return refuse();

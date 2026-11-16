@@ -106,3 +106,23 @@ test('direction is derived from a supported locale and imported status grants no
   const locale=validateLocale({locale:'ar',translator:null,reviewer:null,revision:1,status:'draft',messages:{[entry.key]:entry.source}},source);
   assert.equal(locale.direction,'rtl');assert.equal(locale.status,'draft');
 });
+
+test('message sources with no visible character (whitespace/invisible/filler only) are refused', () => {
+  const invisible = ['​', '⁠', 'ㅤ', '᠎', '­', '͏', ' ', ' ', '⠀', '﻿', 'ᅟ'];
+  for (const ch of invisible) {
+    refuses(() => createMessage(definition({ source: ch, variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+    refuses(() => createMessage(definition({ source: ` ${ch}\t${ch} `, variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  }
+  refuses(() => createMessage(definition({ source: invisible.join(''), variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  refuses(() => createMessage(definition({ source: '', variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  assert.equal(createMessage(definition({ source: '​Warning​', variables: {} })).source, '​Warning​');
+});
+
+test('validateLocale refuses an invisible-only translation of a warning message', () => {
+  const entry = createMessage(definition({ key: 'recovery.unverified', source: 'Recovery is unverified', variables: {} }));
+  const catalog = text => ({ locale: 'fr', translator: null, reviewer: null, revision: 1, status: 'draft', messages: { 'recovery.unverified': text } });
+  assert.equal(validateLocale(catalog('Non vérifié'), { 'recovery.unverified': entry }).messages['recovery.unverified'].source, 'Non vérifié');
+  for (const text of ['​', '⁠ㅤ', ' ᠎ ', '­͏']) {
+    refuses(() => validateLocale(catalog(text), { 'recovery.unverified': entry }), 'MESSAGE_VARIABLE_MISMATCH');
+  }
+});
