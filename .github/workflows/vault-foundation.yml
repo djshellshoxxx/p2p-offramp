@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:acceptance:cli
+      - run: node --test scripts/agent/*.test.mjs
       - run: npm run check:boundaries
       - run: npm run test:build-policy
       - run: npm run test:diagnostics
@@ -75,6 +76,9 @@ jobs:
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:recovery:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:peer:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:locale:browser

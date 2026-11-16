@@ -5,10 +5,11 @@
  * viem is only an oracle here; it is never imported by packages/** or apps/**.
  * Run: npm run test:evm:viem  (needs Foundry: forge + anvil on PATH or ~/.foundry/bin)
  *
- * Known finding handled explicitly: the reader's read() issues `escrows(bytes32)` (the legacy packages/escrow-evm
+ * Backwards compatibility: without an explicit runtime-layout policy, read() issues `escrows(bytes32)` (the legacy packages/escrow-evm
  * layout seller,buyer,asset,amount,expiry,state) while contracts/evm BasicEscrow exposes `getTrade(bytes32)` with
  * (seller,deadline,state,buyer,token,amount). Check B1 asserts read() fails closed on the real contract; check B2
- * compares the reader's decoder with viem over a labelled layout shim so the decode path is still differentially tested.
+ * compares the legacy decoder with viem over a labelled layout shim. The canonical policy is also exercised
+ * directly against the deployed contract, with no selector or response shim.
  */
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
@@ -18,7 +19,7 @@ import { createServer } from 'node:net';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { createPublicClient, decodeAbiParameters, encodeAbiParameters, http, keccak256 as viemKeccak, toFunctionSelector, TransactionReceiptNotFoundError } from 'viem';
+import { createPublicClient, decodeAbiParameters, encodeAbiParameters, encodeFunctionData, http, keccak256 as viemKeccak, parseAbi, toFunctionSelector, TransactionReceiptNotFoundError } from 'viem';
 import { EvmChainReader } from '../packages/chain-evm/src/reader.ts';
 import { escrowCallFor } from '../packages/wallet/src/evm-submit.ts';
 import { evmTermsHash, keccak256 } from '../packages/wallet/src/evm-terms.ts';
@@ -37,6 +38,7 @@ const STATES = ['absent', 'funded', 'released', 'refunded'];
 const ZERO = `0x${'0'.repeat(40)}`;
 const ESCROWS_SELECTOR = toFunctionSelector('escrows(bytes32)');
 const GET_TRADE_SELECTOR = toFunctionSelector('getTrade(bytes32)');
+const TOKEN_ABI = parseAbi(['function mint(address to, uint256 amount)', 'function approve(address spender, uint256 amount) returns (bool)', 'function balanceOf(address account) view returns (uint256)']);
 
 let rpcUrl, rpcId = 0;
 async function rpc(method, params = []) {
@@ -95,16 +97,19 @@ async function main() {
   const genesis = await rpc('eth_getBlockByNumber', ['0x0', false]);
   const runtimeKeccak = Buffer.from(keccak256(Buffer.from((await rpc('eth_getCode', [escrow, 'latest'])).slice(2), 'hex'))).toString('hex');
   const makeRegistry = ({ chainIdentity = '31337', keccak = runtimeKeccak } = {}) => {
-    const network = { id: 'local-evm', chain: 'evm', chainIdentity, genesisHash: genesis.hash, finality: { kind: 'evm-finalized-tag' }, assets: [{ id: 'native', kind: 'native', address: null }] };
-    const deployment = { id: 'escrow-local-v1', address: escrow, runtime: { kind: 'evm-code', keccak256: keccak, upgradeable: false }, supportedAssetIds: ['native'] };
+    const network = { id: 'local-evm', chain: 'evm', chainIdentity, genesisHash: genesis.hash, finality: { kind: 'evm-finalized-tag' }, assets: [{ id: 'native', kind: 'native', address: null }, { id: 'token', kind: 'erc20', address: token }] };
+    const deployment = { id: 'escrow-local-v1', address: escrow, runtime: { kind: 'evm-code', keccak256: keccak, upgradeable: false }, supportedAssetIds: ['native', 'token'] };
     return { network: id => id === 'local-evm' ? network : null, deployment: (n, id) => n === 'local-evm' && id === 'escrow-local-v1' ? deployment : null };
   };
 
-  // viem client: retries/batching disabled so the reader's own bounded-read/timeout semantics are unchanged.
-  const client = createPublicClient({ transport: http(rpcUrl, { retryCount: 0, batch: false, timeout: 10_000 }) });
+  // Never compare a fresh reader observation with a cached finalized header after mining.
+  // Disable oracle caching, retries and batching so each comparison reads actual native state.
+  const client = createPublicClient({ cacheTime: 0, transport: http(rpcUrl, { retryCount: 0, batch: false, timeout: 10_000 }) });
   const readerOver = (rpcImpl, registry = makeRegistry()) => new EvmChainReader({ rpc: rpcImpl, registry, timeoutMs: 15_000 });
   const viemRpc = createViemReadRpc(client);
   const reader = readerOver(viemRpc);
+  const canonicalReader = new EvmChainReader({rpc:viemRpc,registry:makeRegistry(),timeoutMs:15_000,
+    escrowLayouts:{[runtimeKeccak]:'canonical-get-trade-v1'}});
 
   const now = Number(BigInt((await rpc('eth_getBlockByNumber', ['latest', false])).timestamp));
   const terms = { orderId: Buffer.from(keccak256(new TextEncoder().encode('viem-order'))).toString('hex'), revision: '1', networkId: 'local-evm', deploymentId: 'escrow-local-v1',
@@ -117,8 +122,8 @@ async function main() {
   const release = escrowCallFor({ action: 'release', escrow, tradeId }).call;
   const toTx = (call, from, extra = {}) => ({ from, to: call.to, data: call.data, value: hexOf(BigInt(call.value)), ...extra });
   const expectedTx = (call, hash, from, nonce) => ({ hash, from, to: call.to, data: call.data, value: call.value, nonce: String(nonce) });
-  const viemTrade = async blockNumber => {
-    const t = await client.readContract({ abi: GET_TRADE_ABI, address: escrow, functionName: 'getTrade', args: [`0x${tradeId}`], blockNumber });
+  const viemTrade = async (blockNumber, id = tradeId) => {
+    const t = await client.readContract({ abi: GET_TRADE_ABI, address: escrow, functionName: 'getTrade', args: [`0x${id}`], blockNumber });
     return { seller: t.seller.toLowerCase(), buyer: t.buyer.toLowerCase(), asset: t.token.toLowerCase(), amountBaseUnits: t.amount.toString(), expirySeconds: t.deadline.toString(), state: STATES[t.state] };
   };
   // Layout shim (labelled, B2): answer the reader's escrows(bytes32) from getTrade via viem's own ABI encoder.
@@ -153,11 +158,13 @@ async function main() {
   // ---- B1: read() on the real contracts/evm BasicEscrow must fail closed (escrows(bytes32) does not exist there) ----
   const direct = await reader.read(binding, ctx(), wanted);
   const incompatible = direct.ok === false;
-  if (incompatible) findings.push({ id: 'READER_SELECTOR_MISMATCH', detail: 'reader.read() calls escrows(bytes32); contracts/evm BasicEscrow exposes getTrade(bytes32) with a different word order; read() returns ' + direct.error.code });
-  check('B1) reader.read() on contracts/evm BasicEscrow fails closed (known selector/layout mismatch, reported)', incompatible, J(direct));
+  check('B1) legacy-only reader on canonical BasicEscrow fails closed without probing another layout', incompatible, J(direct));
 
   // ---- a) read(): decoded escrow vs viem readContract at the same finalized block (layout shim) ----
   const viemFunded = await viemTrade(viemFinalized.number);
+  const canonicalFunded = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical funded: direct getTrade read matches viem at the finalized anchor', canonicalFunded.ok &&
+    J(canonicalFunded.value.escrow)===J(viemFunded) && canonicalFunded.value.observation.anchor.hash===viemFinalized.hash,J(canonicalFunded));
   const shimmed = await shimReader.read(binding, ctx(), wanted);
   check('a) funded: reader.read (shim) decoded escrow == viem readContract getTrade @finalized', shimmed.ok && J(shimmed.value.escrow) === J(viemFunded) && viemFunded.state === 'funded' && shimmed.value.observation.anchor.height === anchor.height,
     J({ reader: shimmed.value?.escrow ?? shimmed.error, viem: viemFunded }));
@@ -200,6 +207,8 @@ async function main() {
   const releaseNonce = BigInt((await rpc('eth_getTransactionByHash', [releaseHash])).nonce);
   const pending = await compareReceipt('h) release mined after finalized anchor reports pending (viem sees success)', releaseHash, release, seller, releaseNonce, 'pending', true);
   const stillFunded = await shimReader.read(binding, ctx(), wanted);
+  const canonicalPending = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical pending release remains funded at finalized anchor',canonicalPending.ok && canonicalPending.value.escrow.state==='funded',J(canonicalPending));
   check('h) finalized snapshot still funded while release is pending', stillFunded.ok && stillFunded.value.escrow.state === 'funded', J(stillFunded));
   assert.ok(pending);
 
@@ -207,13 +216,67 @@ async function main() {
   await finalizeThrough(releaseHash);
   const finalAnchor = await client.getBlock({ blockTag: 'finalized' });
   const viemReleased = await viemTrade(finalAnchor.number);
+  const canonicalReleased = await canonicalReader.read(binding,ctx(),wanted);
+  check('canonical released: direct getTrade read matches viem at finalized anchor',canonicalReleased.ok &&
+    J(canonicalReleased.value.escrow)===J(viemReleased) && canonicalReleased.value.observation.anchor.hash===finalAnchor.hash,J(canonicalReleased));
   const readerReleased = await shimReader.read(binding, ctx(), wanted);
   check('a) released: reader.read (shim) decoded escrow == viem getTrade @finalized, state released', readerReleased.ok && viemReleased.state === 'released' && J(readerReleased.value.escrow) === J(viemReleased) && readerReleased.value.observation.anchor.hash === finalAnchor.hash,
     J({ reader: readerReleased.value?.escrow ?? readerReleased.error, viem: viemReleased }));
   await compareReceipt('release receipt finalized: status/nonce/anchor match viem', releaseHash, release, seller, releaseNonce, 'finalized', true);
   check('release paid buyer exactly the escrowed amount (viem getBalance delta)', BigInt(await client.getBalance({ address: buyer })) === buyerBefore + BigInt(terms.amountBaseUnits), 'buyer balance delta mismatch');
-  void third;
-  reader.dispose(); shimReader.dispose();
+
+  // Direct canonical token/refund qualification, without the legacy response shim.
+  const tokenTerms = { ...terms, orderId: sha('viem-token-order'), sellerNonce: sha('viem-token-nonce'),
+    assetKind: 'erc20', asset: token, amountBaseUnits: '2500000' };
+  const tokenId = evmTermsHash(domain, tokenTerms);
+  const tokenBinding = { ...binding, tradeId: tokenId };
+  const tokenWanted = { ...wanted, asset: token, amountBaseUnits: tokenTerms.amountBaseUnits };
+  const compareCanonicalToken = async (label, state) => {
+    const block = await client.getBlock({ blockTag: 'finalized' });
+    const reference = await viemTrade(block.number, tokenId);
+    const observed = await canonicalReader.read(tokenBinding, ctx(), tokenWanted);
+    check(label, observed.ok && observed.value.escrow.state === state &&
+      J(observed.value.escrow) === J(reference) && observed.value.observation.anchor.height === block.number.toString() &&
+      observed.value.observation.anchor.hash === block.hash, J({ observed, reference }));
+  };
+  await compareCanonicalToken('canonical absent: unused token trade matches viem and all-zero storage', 'absent');
+  const tokenCall = (functionName, args) => sendTx({ from: seller, to: token,
+    data: encodeFunctionData({ abi: TOKEN_ABI, functionName, args }) });
+  await finalizeThrough(await tokenCall('mint', [seller, BigInt(tokenTerms.amountBaseUnits)]));
+  await finalizeThrough(await tokenCall('approve', [escrow, BigInt(tokenTerms.amountBaseUnits)]));
+  const tokenFund = escrowCallFor({ action: 'fund', domain, terms: tokenTerms }).call;
+  await finalizeThrough(await sendTx(toTx(tokenFund, seller)));
+  await compareCanonicalToken('canonical token funded: every immutable field matches viem', 'funded');
+  for (const [field, replacement] of Object.entries({ seller: third, buyer: third, asset: ZERO,
+    amountBaseUnits: '2500001', expirySeconds: String(BigInt(tokenTerms.escrowExpirySeconds) + 1n) })) {
+    const mismatch = await canonicalReader.read(tokenBinding, ctx(), { ...tokenWanted, [field]: replacement });
+    check(`canonical token refuses mismatched ${field}`, !mismatch.ok && mismatch.error.code === 'INTEGRITY_FAILURE', J(mismatch));
+  }
+  const calls = [];
+  const unlistedReader = new EvmChainReader({ registry: makeRegistry(), escrowLayouts: {},
+    rpc: { request(input) { calls.push(input.method); return viemRpc.request(input); } } });
+  try {
+    const unlisted = await unlistedReader.read(tokenBinding, ctx(), tokenWanted);
+    check('canonical unlisted runtime refuses before eth_call on a real deployment', !unlisted.ok &&
+      unlisted.error.code === 'UNSUPPORTED_PROVIDER' && !calls.includes('eth_call'), J(unlisted));
+  } finally { unlistedReader.dispose(); }
+  await rpc('evm_setNextBlockTimestamp', [Number(tokenTerms.escrowExpirySeconds)]);
+  const refund = escrowCallFor({ action: 'refund', escrow, tradeId: tokenId }).call;
+  const refundHash = await sendTx(toTx(refund, third));
+  // A mined refund must not replace finalized funded evidence prematurely.
+  const refundReceipt = await client.getTransactionReceipt({ hash: refundHash });
+  const refundHead = await client.getBlock({ blockTag: 'latest' });
+  const refundFinalized = await client.getBlock({ blockTag: 'finalized' });
+  check('token refund is successful at latest but remains above finalized height', refundReceipt.status === 'success' &&
+    refundReceipt.blockNumber > refundFinalized.number && (await viemTrade(refundHead.number, tokenId)).state === 'refunded');
+  await compareCanonicalToken('canonical pending token refund remains funded at finalized anchor', 'funded');
+  await finalizeThrough(refundHash);
+  await compareCanonicalToken('canonical token refunded: terminal state and fields match viem', 'refunded');
+  const tokenBalance = account => client.readContract({ abi: TOKEN_ABI, address: token, functionName: 'balanceOf', args: [account] });
+  check('canonical token refund returns principal only to seller',
+    await tokenBalance(seller) === BigInt(tokenTerms.amountBaseUnits) && await tokenBalance(escrow) === 0n &&
+    await tokenBalance(buyer) === 0n && await tokenBalance(third) === 0n);
+  reader.dispose(); shimReader.dispose(); canonicalReader.dispose();
 }
 
 let anvil, failed = false;

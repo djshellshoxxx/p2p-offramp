@@ -1,5 +1,13 @@
 # D1 - Peer acceptance carrier (decision packet)
 
+Implementation update, November 16: the private [EOA candidate and exact field
+proposal](../../integration/peer-acceptance-v1-candidate.md) now has an offline
+two-signature verifier, fixed viem differential vectors, and an encrypted
+replay/tombstone ledger with real vault/backup tests. This implements a
+bounded part of Option B, without adopting a wire format or changing negotiation
+authority. The historical decision packet below retains the unresolved full
+protocol requirements; the candidate is not independent approval or completion.
+
 Status: ACCEPTED by the owner on 2026-11-04: **Option B**. The owner confirmed it in the coordinating Claude session. Nothing is implemented yet, and the version identifier, exact field names and independent review this packet requires still come first. Until that work lands, no wire format, signing rule or trust transition changes.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (94554ec).

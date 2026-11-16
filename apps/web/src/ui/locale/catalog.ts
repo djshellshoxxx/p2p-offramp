@@ -56,7 +56,7 @@ export function createMessage<const V extends MessageVariables>(input: MessageEn
   try {
     const raw = data(input, ['key', 'source', 'context', 'severity', 'variables', 'reviewRequired', 'docsAnchor']);
     if (!plain(raw.key, 160) || !/^[A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9_]*)+$/.test(raw.key) ||
-        !plain(raw.source) || !raw.source || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
+        !plain(raw.source) || !raw.source.trim() || /[<>]/.test(raw.source) || !plain(raw.context, 500) || !raw.context ||
         !['information', 'warning', 'critical'].includes(raw.severity as string) || typeof raw.reviewRequired !== 'boolean' ||
         !plain(raw.docsAnchor, 500) || !/^[A-Za-z0-9_./-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(raw.docsAnchor)) return refuse();
     if (!raw.variables || typeof raw.variables !== 'object') return refuse();

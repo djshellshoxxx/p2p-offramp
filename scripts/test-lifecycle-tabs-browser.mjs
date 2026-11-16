@@ -61,7 +61,7 @@ try {
       const { encodeBase64url } = await import('/schemas/src/vault.js');
       window.store = new IndexedDbVaultStore();
       window.vault = new EncryptedVaultService(window.store, crypto, { lifecycle: false });
-      window.makeIntent = (fill, extra = {}) => ({ version: 1, intentId: encodeBase64url(new Uint8Array(32).fill(fill)),
+      window.makeIntent = (fill, extra = {}) => ({ version: 2, sendMarkedAt: null, originProfileId: window.journal.currentProfileId(), intentId: encodeBase64url(new Uint8Array(32).fill(fill)),
         binding: { chain: 'evm', networkId: 'evm:31337', deploymentId: 'fixture-escrow', tradeId: 'fixture-lifecycle-trade' },
         account: '0x' + '34'.repeat(20), action: 'fund', state: 'prepared', walletGeneration: 0, expectedEscrowState: 'absent',
         preparedRequest: JSON.stringify({ v: 1, chainId: '31337', from: '0x' + '34'.repeat(20), to: '0x' + '56'.repeat(20),

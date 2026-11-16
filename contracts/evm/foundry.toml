@@ -23,6 +23,7 @@ remappings = [
 # Read-only access to the shared G16 scenario fixture used by test/TermsVector.t.sol.
 fs_permissions = [
   { access = "read", path = "../../packages/domain/test/fixtures/local-evm-scenario" },
+  { access = "read", path = "../../packages/wallet/test/fixtures/peer-acceptance-v1.json" },
   { access = "read", path = "./out" },
 ]
 

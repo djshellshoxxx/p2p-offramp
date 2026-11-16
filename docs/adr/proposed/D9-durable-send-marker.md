@@ -4,6 +4,8 @@ Status: ACCEPTED by the owner on 2026-11-04: **Option A**. The owner confirmed i
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (55715c9). The three `packages/` files cited below exist on main and are identical on the PR.
 
+Implementation update (2026-11-16): the versioned core migration and compatibility rules are recorded in [D9 persisted intent migration](../../consolidation/2026-11-16-d9-migration.md). The source descriptions below are historical decision context, not the current implementation.
+
 ## The question
 
 Should a transaction intent durably record that its send marker was written, so that recovery after a restart can tell an intent that was never handed to the wallet from one that may have been broadcast?

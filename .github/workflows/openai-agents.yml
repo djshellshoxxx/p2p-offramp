@@ -23,6 +23,8 @@ concurrency:
 
 jobs:
   develop:
+    # Do not expose the paid credential to a contributor-selected ref.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -50,6 +52,11 @@ jobs:
           npm install --global --no-fund --no-audit @openai/codex@0.164.0
           codex --version
 
+      - name: Preserve output policy
+        run: |
+          set -euo pipefail
+          cp scripts/agent/check-output.mjs "$RUNNER_TEMP/check-agent-output.mjs"
+
       - name: Run development agent
         timeout-minutes: 40
         env:
@@ -68,16 +75,18 @@ jobs:
 
       - name: Export patch
         id: patch
+        env:
+          AGENT_OUTPUT_SECRET: ${{ secrets.OPENAI_API_KEY }}
         run: |
           set -euo pipefail
           git add -A
+          node "$RUNNER_TEMP/check-agent-output.mjs" "$GITHUB_WORKSPACE"
           if git diff --cached --quiet; then
             echo "has_patch=false" >> "$GITHUB_OUTPUT"
             echo "No changes to publish"
             exit 0
           fi
-          git diff --cached --binary > "$RUNNER_TEMP/agent.patch"
-          git diff --cached --stat
+          git diff --cached --binary --no-ext-diff --no-textconv > "$RUNNER_TEMP/agent.patch"
           echo "has_patch=true" >> "$GITHUB_OUTPUT"
 
       - name: Upload patch
@@ -86,7 +95,7 @@ jobs:
         with:
           name: agent-patch
           path: ${{ runner.temp }}/agent.patch
-          retention-days: 7
+          retention-days: 1
           if-no-files-found: error
 
   publish:
@@ -113,12 +122,13 @@ jobs:
       - name: Apply patch and refuse protected paths
         run: |
           set -euo pipefail
-          git apply --index --binary "$RUNNER_TEMP/agent.patch"
-          # Agent output must never change CI, agent prompts, lockfile trust roots or secrets.
-          if git diff --cached --name-only | grep -E '^(\.github/|\.env|.*\.pem$|.*\.key$)'; then
-            echo "Patch touches protected paths; refusing to publish" >&2
+          # Preserve the policy from the clean checkout before applying untrusted output.
+          cp scripts/agent/check-output.mjs "$RUNNER_TEMP/check-agent-output.mjs"
+          if ! git apply --index --binary "$RUNNER_TEMP/agent.patch" 2>/dev/null; then
+            echo "AGENT_PATCH_REFUSED" >&2
             exit 1
           fi
+          node "$RUNNER_TEMP/check-agent-output.mjs" "$GITHUB_WORKSPACE"
 
       - name: Publish draft pull request
         env:

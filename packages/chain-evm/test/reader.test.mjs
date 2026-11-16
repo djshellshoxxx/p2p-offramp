@@ -138,3 +138,56 @@ test('G18 receipt evidence refuses inherited fields, accessors and descriptor-tr
  }
  assert.equal(getterCalls,0,'receipt evidence must not execute untrusted accessors');
 });
+
+test('canonical getTrade layout is selected only by an explicit runtime-hash policy and matches viem ABI encoding', async () => {
+ const {encodeFunctionResult,toFunctionSelector}=await import('viem');
+ const {readFileSync}=await import('node:fs');
+ const abi=JSON.parse(readFileSync(new URL('../../../contracts/evm/abi/BasicEscrow.json',import.meta.url),'utf8'));
+ const policy={[codehash]:'canonical-get-trade-v1'};
+ const s=setup({options:{escrowLayouts:policy}});
+ // A caller cannot switch layouts after reader construction.
+ policy[codehash]='legacy-escrows-v1';
+ try {
+  for(const [status,name] of [[1,'funded'],[2,'released'],[3,'refunded'],[0,'absent']]) {
+   for(const asset of [zero,token]) {
+    const expected={...wanted,asset};
+    const value=status===0?{seller:zero,deadline:0n,state:0,buyer:zero,token:zero,amount:0n}:
+     {seller,deadline:BigInt(wanted.expirySeconds),state:status,buyer,token:asset,amount:BigInt(wanted.amountBaseUnits)};
+    s.setEscrow(encodeFunctionResult({abi,functionName:'getTrade',result:value}));
+    const snapshot=ok(await s.reader.read(binding,request(),expected));
+    assert.equal(snapshot.escrow.state,name);
+    if(status!==0) assert.deepEqual(snapshot.escrow,{...expected,state:name});
+   }
+  }
+  const reads=s.calls.filter(call=>call.method==='eth_call');
+  assert.ok(reads.every(call=>call.params[0].data===toFunctionSelector('getTrade(bytes32)')+binding.tradeId));
+  assert.ok(reads.every(call=>call.params[1]==='0xa'));
+ } finally {s.reader.dispose();}
+});
+
+test('explicit layout policy rejects unknown runtime identities before any escrow call',async()=>{
+ const s=setup({options:{escrowLayouts:{['a'.repeat(64)]:'canonical-get-trade-v1'}}});
+ try{error(await s.reader.read(binding,request(),wanted),'UNSUPPORTED_PROVIDER');assert.equal(s.calls.some(call=>call.method==='eth_call'),false);}
+ finally{s.reader.dispose();}
+});
+
+test('layout policy rejects accessors, invalid hashes and unsupported layouts without calling foreign accessors',()=>{
+ let touched=0;
+ const accessor=Object.defineProperty({},codehash,{enumerable:true,get(){touched++;return'canonical-get-trade-v1';}});
+ for(const escrowLayouts of [accessor,{bad:'canonical-get-trade-v1'},{[codehash]:'unknown'},Object.create({[codehash]:'canonical-get-trade-v1'}),null,[]]) {
+  assert.throws(()=>setup({options:{escrowLayouts}}));
+ }
+ assert.equal(touched,0);
+});
+
+test('canonical layout refuses malformed words and never falls back to a legacy selector',async()=>{
+ const canonical=(status=1,changes={})=>{const x={...wanted,...changes};return'0x'+[word(x.seller),word(x.expirySeconds),word(status),word(x.buyer),word(x.asset),word(x.amountBaseUnits)].join('');};
+ const s=setup({options:{escrowLayouts:{[codehash]:'canonical-get-trade-v1'}}});
+ try{
+  for(const raw of [canonical(4),canonical(0),canonical(1,{seller:buyer}),canonical(1,{amountBaseUnits:'0'}),canonical(1,{expirySeconds:(1n<<64n).toString()}),canonical(1,{buyer:'0x'+'f'.repeat(64)}),canonical().slice(0,-1),canonical()+'00',state()]) {
+   const before=s.calls.filter(call=>call.method==='eth_call').length;
+   s.setEscrow(raw);error(await s.reader.read(binding,request(),wanted),'INTEGRITY_FAILURE');
+   assert.equal(s.calls.filter(call=>call.method==='eth_call').length-before,1);
+  }
+ }finally{s.reader.dispose();}
+});
