@@ -121,3 +121,32 @@ Hypotheses (not executed, OPEN for owner/pass 2): H1 D1 replay ledger 64 terms/p
 Follow-ups: make `LifecycleTransition.from` required; v2 record wrapper schemaVersion bump; owner to choose a canonical advert network-id form; wallet `decodeTrade` strictness parity with the reader.
 
 Verification after remediation (lead): typecheck PASS; `npm test` 1547/1547 (0 todo); `test:exchange:evm` 12/12; boundaries PASS.
+
+## Checkpoint 7 — Red-team pass 2 (Team D, base `c116600`) and remediation
+
+Pass-1 fixes re-attacked: D9-2 CAS PASS; D9-1 rewrite judged stricter, not a weakening; EX1 PASS; EX2 PASS for original freeze; EX3 FAIL as DoS fix; locale check PARTIAL.
+Repros `8fbd041`: `packages/domain/test/redteam-pass2-d9.test.mjs`, `packages/exchange/test/redteam-pass2-exchange.test.mjs`, `apps/web/test/redteam-p2-locale.test.mjs`.
+
+| ID | Sev | Finding | Owner | Fix | Status |
+|---|---|---|---|---|---|
+| P2-D9-3 | MED | Second tab's `recover()` cancelled another tab's live release preparation | Team A | `2a0d770`: immediate cancel only for local never-marked approvals; other non-live prepared intents cancelled by `reconcile()`/`prepare()` only after block lease `preparedAtBlock + dropAfterBlocks`, CAS from `prepared`. Lead review APPROVE (hostile RPC can only shorten lease = liveness, never send authority) | FIXED |
+| P2-LOC1 | LOW | Mark-only/format-only translations (U+0301, U+FFF9–FFFB, U+0600, U+1D167) accepted as visible warnings | Lead | `096b3a1`: require non-ignorable `\p{L}\p{N}\p{P}\p{S}` (ES2023-compatible lookahead) | FIXED |
+| P2-EX3 | MED | Sybil takes evict honest idle `taken` session before seller offers | — | Inherent free-take trade-off (evict ↔ lockout). Needs owner design: take proof-of-work/fee, buyer allowlist, per-peer scoring | BLOCKED (owner) — repro kept as `todo` |
+| P2-EX2 | LOW-MED | Dead-session replay ids count toward global cap → new openings refused ≤3600 s | — | Needs protocol change (shorter lifetime) or tombstone store design | BLOCKED (owner) — repro kept as `todo` |
+
+Residual: abandoned value-moving prepare holds trade for `dropAfterBlocks`; held nonce freed only by explicit successor (seller abandonment blocks account's other trades until an out-of-app nonce bump); H1 D1 replay ledger 64-term lockout; H4 chat cap 256.
+
+### Final exact-head verification — `2a0d770` (lead, Node 24.22.3, forge 1.5.1-v1.5.1, solc 0.8.30, Agave 4.1.2, rust 1.98.1)
+
+PASS: typecheck (4 projects); `npm test` 1552 = 1550 pass / 0 fail / 0 skip / 2 todo (P2-EX2, P2-EX3 owner-blocked repros); `forge test` 89/89;
+`check:boundaries`; `test:build-policy`; spec audit (0 broken links); Python unittest; `build`; `build:demo`; `test:exchange:evm` 12; `test:evm:local`;
+`test:evm:reconcile`; `test:recovery:evm`; `test:payment:preflight`; `test:evm:viem`; `test:sepolia:kit`; `test:sepolia:trade`; `test:acceptance:cli`;
+`test:fuzz`; `test:diagnostics`; `test:escrow`; Chromium `test:peer:browser`, `test:recovery:browser`, `test:locale:browser`, `test:chat:browser`,
+`test:diagnostics:browser`, `test:locator:browser`; Solana `cargo fmt --check` + `build-sbf --arch v3` + `clippy -D warnings` + `cargo test` (47).
+NOT RUN by lead: Firefox/WebKit; Sepolia live; exact-head hosted CI/Sonar/CodeQL (see PR #128 checks); manual a11y/device.
+
+## Remaining work (prioritized)
+
+1. OWNER: D1 PeerAcceptance exact fields/version (candidate in `docs/integration/peer-acceptance-v1-candidate.md`); ratify G3 layout-by-runtime-hash and approve runtime hashes; G1/D8 localnet journey composition; P2-EX2/EX3 anti-sybil design; canonical advert network-id form; enable GitHub private vulnerability reporting; D8 Tier C written approval before any merge to `main` (Solana, D9, exchange, reader).
+2. ENGINEERING (unblocked): make `LifecycleTransition.from` required; bump intent record wrapper `schemaVersion` for v2 payloads; wallet `decodeTrade` strictness parity with reader; D1 replay ledger eviction policy (H1); EIP-1898 block-hash pinning for reader `eth_call`; vibrant-cray N37F (`faf245e`, needs Z3); T36–T40.
+3. RELEASE GATES (unchanged): `ReleaseEnabled=0`; no deployment; no trust root; independent professional audit; Sepolia two-party run (G9, owner RPC/accounts); Firefox/WebKit/device/a11y qualification.
