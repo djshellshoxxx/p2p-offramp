@@ -134,7 +134,7 @@ const release = (over = {}) => ({ binding, action: 'release', expectedEscrowStat
 // the same profile (opening, reloading) runs recover() and cancels the first tab's LIVE release preparation. Tab A's
 // submit then CONFLICTs, and the cancelled (unverified) release holds its binding and nonce until native evidence
 // (>= dropAfterBlocks, two reconciles) plus an explicit same-nonce successor: the seller loses release time near deadline.
-test('REDTEAM-P2-D9-3 another tab\'s recover() does not cancel a live preparation', { todo: 'REDTEAM-P2-D9-3' }, async () => {
+test('REDTEAM-P2-D9-3 another tab\'s recover() does not cancel a live preparation', async () => {
   const env = await setup();
   const journalB = createLifecycleJournal({ vault: env.vault, session: env.session, validateCanonical: () => ({ ok: true, value: undefined }) });
   const lifeB = createEvmTxLifecycle({ journal: journalB, reader: env.chain.reader(), wallet: env.wallet.request, policy, retry });
