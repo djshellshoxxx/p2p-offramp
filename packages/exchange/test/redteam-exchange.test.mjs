@@ -69,9 +69,9 @@ async function toOffered(w) {
   return { id: take.sessionId, take, offer, got };
 }
 // ---------------------------------------------------------------------------------------------------------------
-// RED TEAM pass 1 (Team D). Harness above is copied verbatim from exchange.test.mjs. Each finding is a
-// { todo: 'REDTEAM-...' } test that asserts the SECURE behaviour, so it fails (reported as TODO) until fixed and the
-// npm suite stays green. Repro: node --import ./scripts/test-support/register-tsx.mjs --test <this file>
+// RED TEAM pass 1 (Team D). Harness above is copied verbatim from exchange.test.mjs. Each finding was a
+// { todo: 'REDTEAM-...' } test asserting the SECURE behaviour; EX1-EX3 are fixed (team-c) and now ordinary tests.
+// Repro: node --import ./scripts/test-support/register-tsx.mjs --test <this file>
 void toOffered; void takeBody; void world; void transition;
 
 /** Same as world(), but the advert fields and exchange options can be chosen. */
@@ -93,7 +93,7 @@ const freshNonce = () => (++nonceSeq).toString(16).padStart(64, '0');
 // REDTEAM-EX1: an offer is bound to its advert only by orderId, buyer address and amount range. The ad's signed
 // networkId, assetId and fiat currency are never compared with the reviewed terms, so the amount range is compared
 // across assets with different decimals. A bait-and-switch offer passes exchange review on both sides.
-test('REDTEAM-EX1 offer for another network/asset/currency than the advert is refused', { todo: 'REDTEAM-EX1' }, async () => {
+test('REDTEAM-EX1 offer for another network/asset/currency than the advert is refused', async () => {
   // Ad: 'test-usd' (ERC-20, 6 dp) on another network, priced in EUR; the range happens to contain 1e18 base units.
   const w = await worldAd({ networkId: 'other-net', assetId: 'test-usd', currency: 'EUR' });
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
@@ -111,7 +111,7 @@ test('REDTEAM-EX1 offer for another network/asset/currency than the advert is re
 // at their sender-chosen expiry (<= now + 3600 s); at capacity every exchange operation, including offers in honest
 // sessions that already exist, fails LIMIT_EXCEEDED. Default capacity 1024 = 512 take/cancel pairs from ONE key.
 // Shown with maxSeenMessages 16 for runtime; the code path is identical at the default.
-test('REDTEAM-EX2 one peer cannot freeze the exchange by filling the replay memory', { todo: 'REDTEAM-EX2' }, async () => {
+test('REDTEAM-EX2 one peer cannot freeze the exchange by filling the replay memory', async () => {
   const w = await worldAd({}, { maxSeenMessages: 16 });
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
   ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
@@ -131,7 +131,7 @@ test('REDTEAM-EX2 one peer cannot freeze the exchange by filling the replay memo
 
 // REDTEAM-EX3: session slots are global (default 64), with no per-peer bound and no eviction of idle 'taken'
 // sessions before ad expiry. Throwaway keys (free) lock out every new buyer of the seller for the ad lifetime.
-test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for honest buyers', { todo: 'REDTEAM-EX3' }, async () => {
+test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for honest buyers', async () => {
   const w = await worldAd({}, { maxSessions: 4 });
   for (let i = 0; i < 4; i++) {
     const sybil = await party();
@@ -140,5 +140,68 @@ test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for hone
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
   const got = await w.seller.ex.receive(take.recipientWrap, w.seller.secret);
   assert.equal(got.ok, true, `honest take refused: ${JSON.stringify(got)}`);
+});
+
+// ---- team-c fix coverage for EX1-EX3 ----
+test('EX1 each advert binding (network, asset, currency) is enforced on both sides; registry id or CAIP-2 network both bind', async () => {
+  for (const over of [{ networkId: 'eip155:1' }, { assetId: 'test-usd' }, { currency: 'EUR' }]) {
+    const w = await worldAd(over);
+    const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
+    ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+    fail(await w.seller.ex.offer(take.sessionId, termsBytes(), w.seller.secret), 'AD_MISMATCH');
+    const wrap = await craft(w.seller, w.buyer, w.address, 'terms-offer', { terms: new TextDecoder().decode(termsBytes()) }, { termsHash: set.expectedEvmTermsHash, nonce: freshNonce() });
+    fail(await w.buyer.ex.receive(wrap, w.buyer.secret), 'AD_MISMATCH');
+    assert.equal(w.buyer.ex.session(take.sessionId).state, 'taken');
+  }
+  for (const networkId of ['local-evm', 'eip155:31337']) {
+    const w = await worldAd({ networkId });
+    const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
+    ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+    const offer = ok(await w.seller.ex.offer(take.sessionId, termsBytes(), w.seller.secret));
+    assert.equal(ok(await w.buyer.ex.receive(offer.recipientWrap, w.buyer.secret)).state, 'offered');
+  }
+});
+
+test('EX2 replay memory is bounded per session: one key is capped, honest new buyers and live sessions proceed, replays stay exact', async () => {
+  const w = await worldAd({}, { maxSeenMessages: 16, maxSeenMessagesPerSession: 4 });
+  const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
+  ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+  const body = { buyerAddress: `0x${'77'.repeat(20)}`, buyerMessagingKey: w.third.pub };
+  const attack = [];
+  for (let i = 0; i < 8; i++) {
+    for (const [type, msg] of [['take-request', body], ['cancel', { reason: 'withdrawn' }]]) {
+      const wrap = await craft(w.third, w.seller, w.address, type, msg, { nonce: freshNonce(), expires: NOW + 3600 });
+      attack.push([wrap, await w.seller.ex.receive(wrap, w.seller.secret)]);
+    }
+  }
+  assert.equal(attack.filter(([, r]) => r.ok).length, 4, 'attacker capped at its own per-session memory');
+  for (const [, r] of attack.slice(4)) fail(r, 'LIMIT_EXCEEDED');
+  fail(await w.seller.ex.receive(attack[0][0], w.seller.secret), 'DUPLICATE');
+  // A different honest buyer can still open a session, and the existing session can still offer.
+  const other = await party();
+  ok(await w.seller.ex.receive(await craft(other, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: other.pub }, { nonce: freshNonce() }), w.seller.secret));
+  ok(await w.seller.ex.offer(take.sessionId, termsBytes(), w.seller.secret));
+  // Replay memory survives the session: the attacker's cancelled session cannot be revived by replaying its take.
+  w.clock.now = NOW + 1000;
+  fail(await w.seller.ex.receive(attack[0][0], w.seller.secret), 'DUPLICATE');
+  assert.throws(() => createTermsExchange({ provider, selfPublicKey: w.seller.pub, ads: w.seller.book, registry, hashTerms, now: () => NOW, maxSeenMessagesPerSession: 0 }), RangeError);
+});
+
+test('EX3 per-advert session cap evicts only idle taken sessions of that advert; offered sessions are never evicted', async () => {
+  const w = await worldAd({}, { maxSessionsPerAd: 2 });
+  const { id } = await toOffered(w);
+  const sybils = [];
+  for (let i = 0; i < 3; i++) {
+    const sybil = await party();
+    sybils.push(ok(await w.seller.ex.receive(await craft(sybil, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: sybil.pub }, { nonce: freshNonce() }), w.seller.secret)));
+  }
+  assert.equal(w.seller.ex.sessionCount, 2);
+  assert.equal(w.seller.ex.session(id).state, 'offered');
+  assert.equal(w.seller.ex.session(sybils[0].sessionId), null); assert.equal(w.seller.ex.session(sybils[1].sessionId), null);
+  assert.equal(w.seller.ex.session(sybils[2].sessionId).state, 'taken');
+  ok(await w.seller.ex.offer(sybils[2].sessionId, termsBytes(), w.seller.secret));
+  const late = await party();
+  fail(await w.seller.ex.receive(await craft(late, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: late.pub }, { nonce: freshNonce() }), w.seller.secret), 'LIMIT_EXCEEDED');
+  assert.equal(w.seller.ex.session(id).state, 'offered');
 });
 
