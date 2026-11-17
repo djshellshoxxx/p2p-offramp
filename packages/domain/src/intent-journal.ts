@@ -68,7 +68,11 @@ function preparedOnly(intent: Intent, allowReplacement = false): void {
   if (intent.replacementOf !== null && !allowReplacement) return fail('UNSUPPORTED_PROVIDER');
 }
 /** G12 lifecycle transition written only by the reconciling coordinator (tx-lifecycle.ts), never by UI status. */
-export interface LifecycleTransition { readonly state: Intent['state']; readonly hash: string | null }
+export interface LifecycleTransition {
+  readonly state: Intent['state']; readonly hash: string | null;
+  /** Compare-and-swap precondition: the stored state the caller read. A stale caller (another tab moved it) gets CONFLICT. */
+  readonly from?: Intent['state'];
+}
 export const LIFECYCLE_TRANSITIONS: Readonly<Record<Intent['state'], readonly Intent['state'][]>> = Object.freeze({
   prepared: Object.freeze(['failed'] as const),
   'broadcast-unknown': Object.freeze(['pending', 'confirmed', 'finalized', 'replaced', 'expired', 'failed'] as const),
@@ -339,9 +343,13 @@ class EncryptedIntentJournal implements IntentJournal {
   [TRANSITION](input: string, transition: LifecycleTransition, signal?: AbortSignal): Promise<CoreResult<Intent>> {
     return this.#run(signal, async job => {
       if (!this.#lifecycle) return fail('UNSUPPORTED_PROVIDER');
-      let state: unknown, hash: unknown;
-      try { const raw = intentData(transition, ['state', 'hash']); state = raw.state; hash = raw.hash; } catch { return fail('INVALID_INPUT'); }
+      let state: unknown, hash: unknown, from: unknown;
+      try {
+        const keys = Reflect.ownKeys(transition).length === 3 ? ['state', 'hash', 'from'] : ['state', 'hash'];
+        const raw = intentData(transition, keys); state = raw.state; hash = raw.hash; from = raw.from;
+      } catch { return fail('INVALID_INPUT'); }
       if (typeof state !== 'string' || !Object.hasOwn(LIFECYCLE_TRANSITIONS, state)) return fail('INVALID_INPUT');
+      if (from !== undefined && (typeof from !== 'string' || !Object.hasOwn(LIFECYCLE_TRANSITIONS, from))) return fail('INVALID_INPUT');
       if (hash !== null && (typeof hash !== 'string' || !/^0x[0-9a-f]{64}$/.test(hash))) return fail('INVALID_INPUT');
       const nextState = state as Intent['state'], nextHash = hash as string | null;
       const intentId = parseIntentId(input); const records = await this.#scan(job);
@@ -349,6 +357,8 @@ class EncryptedIntentJournal implements IntentJournal {
       if (!record) return fail('CONFLICT');
       const current = record.intent;
       if (current.submission.chain !== 'evm') return fail('UNSUPPORTED_PROVIDER');
+      // A decision taken on an older snapshot (e.g. another tab wrote the send marker since) never relabels the record.
+      if (from !== undefined && current.state !== from) return fail('CONFLICT');
       if (!LIFECYCLE_TRANSITIONS[current.state].includes(nextState)) return fail('CONFLICT');
       // A recorded hash is immutable; a missing one may be learned once. A prepared intent never carries one.
       if (current.submission.hash !== null && nextHash !== current.submission.hash) return fail('CONFLICT');

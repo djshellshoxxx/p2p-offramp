@@ -128,29 +128,39 @@ const never = () => new Promise(() => {});
 // RED TEAM pass 1 (Team D). Harness above copied verbatim from tx-lifecycle.test.mjs. Findings are
 // { todo: 'REDTEAM-...' } tests asserting the SECURE behaviour (fail = reported TODO; suite stays green).
 // Repro: node --import ./scripts/test-support/register-tsx.mjs --test packages/domain/test/redteam-d9.test.mjs
+// REDTEAM-D9-1/2 were fixed by Team A and are now ordinary regression tests.
 void never; void OTHER; void REVERTS; void outcome;
 const release = (over = {}) => ({ binding, action: 'release', expectedEscrowState: 'funded', call: { to: ESCROW, data: '0x01', value: '0' }, ...over });
 const binding2 = { ...binding, tradeId: 'cd'.repeat(32) };
 
 // REDTEAM-D9-1: crash/close between reserve and the send marker of a VALUE-MOVING intent (fund/release/refund).
-// recover() keeps it 'prepared' (by D9 design), reconcile() returns immediately for 'prepared', and supersede only
-// accepts 'expired'/'replaced'. There is no API path out: the binding is blocked forever, and while the account nonce
-// is unchanged every other trade of that account/network is blocked too (cross-binding nonce hold). For a seller's
-// release this lets the deadline pass -> anyone refunds -> buyer who already paid fiat loses the trade.
-test('REDTEAM-D9-1 a never-marked value-moving intent can be resolved after restart (no permanent lock)', { todo: 'REDTEAM-D9-1' }, async () => {
+// Original finding: the intent stayed 'prepared' with no API path out. Resolved (Team A): recover() cancels it for
+// native reconciliation; the cross-binding nonce hold is kept until chain evidence (dropped) and is then spent only by
+// the explicit same-nonce successor. Unrelated trades are unblocked once that nonce is no longer theirs to share.
+test('REDTEAM-D9-1 a never-marked value-moving intent can be resolved after restart (no permanent lock)', async () => {
   const env = await setup();
   try {
     env.chain.escrow = ['funded'];
     const stuck = val(await env.life.prepare(release()));
     await start(env);                                   // tab closed / crash before submit(): nothing was sent
     assert.equal(val(await env.life.recover())[0].intentId, stuck.intentId);
+    // Team A resolution: the nonce hold is correct and stays until native evidence. A never-marked fund/release/refund
+    // cannot be proven unsent from metadata (ADR D9: same-profile rollback), so another trade must not reuse its nonce
+    // on an unknown outcome. Without evidence the unrelated trade is refused:
+    err(await env.life.prepare(release({ binding: binding2 })), 'CONFLICT');
     env.chain.mine(50);                                 // 10x dropAfterBlocks, nonce still unused, mempool empty
-    const r = val(await env.life.reconcile(stuck.intentId));
-    const resolvable = r.intent.state !== 'prepared' || (await env.life.prepare(release({ supersedes: stuck.intentId }))).ok;
+    let r;
+    for (let i = 0; i < 3 && r?.outcome !== 'dropped'; i++) r = val(await env.life.reconcile(stuck.intentId));
+    assert.deepEqual([r.outcome, r.intent.state, r.evidence], ['dropped', 'expired', 'nonce'], 'native nonce evidence classifies the cancelled release');
+    // A dropped transaction can still reappear, so its nonce goes only to the explicit same-nonce successor.
+    err(await env.life.prepare(release({ binding: binding2 })), 'CONFLICT');
+    const successor = val(await env.life.prepare(release({ supersedes: stuck.intentId })));
+    assert.equal(successor.request.nonce, '0');
+    val(await env.life.submit(successor));             // the release proceeds; the held nonce is now spent by it
     const otherTrade = await env.life.prepare(release({ binding: binding2 }));
-    assert.equal(env.wallet.sends, 0);
-    assert.ok(resolvable, `binding permanently blocked: reconcile=${r.outcome}/${r.intent.state}, retry=${JSON.stringify((await env.life.prepare(release())).error?.code)}, otherTrade=${JSON.stringify(otherTrade.ok || otherTrade.error.code)}`);
     assert.equal(otherTrade.ok, true, `unrelated trade of the same account blocked: ${JSON.stringify(otherTrade.error?.code)}`);
+    assert.equal(otherTrade.value.request.nonce, '1', 'the unrelated trade never shares the held nonce');
+    assert.equal(env.wallet.sends, 1, 'nothing was resent; only the explicit successor was sent');
   } finally { close(env); }
 });
 
@@ -158,7 +168,7 @@ test('REDTEAM-D9-1 a never-marked value-moving intent can be resolved after rest
 // has no expected-current-state precondition. If another tab of the same profile writes the send marker between
 // this tab's list() and observe(), LIFECYCLE_TRANSITIONS allows broadcast-unknown -> failed: a SENT transaction is
 // relabelled 'failed' with hash null, the sender's hash write then CONFLICTs, and the hash is lost from the journal.
-test('REDTEAM-D9-2 cross-tab recover() never relabels a marked (sent) intent as failed', { todo: 'REDTEAM-D9-2' }, async () => {
+test('REDTEAM-D9-2 cross-tab recover() never relabels a marked (sent) intent as failed', async () => {
   const env = await setup();
   const journalB = createLifecycleJournal({ vault: env.vault, session: env.session, validateCanonical: () => ({ ok: true, value: undefined }) });
   let openGate, listed; const gate = new Promise(resolve => { openGate = resolve; }), didList = new Promise(resolve => { listed = resolve; });

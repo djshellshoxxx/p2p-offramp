@@ -184,7 +184,7 @@ class EvmLifecycle implements EvmTxLifecycle {
     for (const intentId of intentIds) {
       this.#prepared.delete(intentId);
       // Durable cancel before any send-capable call; a conflict means another step already moved it.
-      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null }));
+      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null, from: 'prepared' }));
     }
   }
   /** Synchronous invalidation first (no prepare result survives it), then durable cancellation of un-sent intents. */
@@ -303,7 +303,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       }
       if (typeof result !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(result)) return stop('BROADCAST_UNKNOWN');
       const hash = lower(result);
-      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash }));
+      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash, from: 'broadcast-unknown' }));
       if (!recorded.ok) return stop('BROADCAST_UNKNOWN');
       return Object.freeze({ intent: recorded.value, hash });
     }, 'UNAVAILABLE').then(result => {
@@ -419,7 +419,7 @@ class EvmLifecycle implements EvmTxLifecycle {
         if (!latched) return done(outcome, intent, escrowState, evidence);
         next = 'reorged'; outcome = 'reorged';
       }
-      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash })));
+      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash, from: intent.state })));
       await authorize(written); return done(outcome, written, escrowState, evidence);
     }, 'UNAVAILABLE');
   }
@@ -433,9 +433,16 @@ class EvmLifecycle implements EvmTxLifecycle {
       // legacy or imported, any of which a rolled-back or older snapshot may hide a send for) keeps its nonce hold and
       // is returned for native reconciliation, which can classify it (e.g. dropped -> explicit same-nonce successor).
       // Leaving it `prepared` would hold the trade forever: reconcile() never classifies a prepared intent.
-      const current: Intent[] = [];
-      for (const record of records) current.push(record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId)
-        ? unwrap(await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null }))) : record);
+      // The cancel is a CAS from 'prepared': if another tab wrote the send marker after this list() snapshot, the
+      // journal refuses (CONFLICT) instead of relabelling a sent intent; the fresh record is then reconciled instead.
+      let current: readonly Intent[] = records, stale = false;
+      for (const record of records) {
+        if (record.state !== 'prepared' || this.#prepared.has(record.intentId) || this.#sending.has(record.intentId)) continue;
+        const cancelled = await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null, from: 'prepared' }));
+        if (!cancelled.ok && cancelled.error.code !== 'CONFLICT') return stop(cancelled.error.code);
+        stale = true;
+      }
+      if (stale) current = unwrap(await this.#serial(() => this.#journal.list(signal)));
       return Object.freeze(current.filter(record => record.state !== 'prepared' && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
     }, 'UNAVAILABLE');
   }
