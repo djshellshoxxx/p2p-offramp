@@ -28,8 +28,10 @@ const refuse = (code: LocaleError['code'] = 'MESSAGE_VARIABLE_MISMATCH'): never 
 const purposes: readonly VariablePurpose[] = ['text', 'identifier', 'count', 'date', 'base-unit amount', 'currency', 'chain', 'duration', 'address'];
 const names = /^[A-Za-z][A-Za-z0-9]*$/, identifiers = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\ud800-\udfff]/u;
-// A message must contain at least one char that is neither whitespace nor default-ignorable (ZWSP, WJ, U+3164, U+180E, soft hyphen, CGJ...) nor braille blank.
-const visible = /[^\p{White_Space}\p{Default_Ignorable_Code_Point}\u2800]/u;
+// A message must contain at least one letter, number, punctuation or symbol that is not default-ignorable
+// (ZWSP, WJ, Hangul fillers, U+180E, soft hyphen, CGJ...) and not the braille blank. Combining marks (\p{M}) and
+// format characters (\p{Cf}, e.g. U+FFF9-FFFB, U+0600) alone never make a warning visible (REDTEAM-P2-LOC1).
+const visible = /(?![\p{Default_Ignorable_Code_Point}\u2800])[\p{L}\p{N}\p{P}\p{S}]/u;
 type PluralCategory = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 type Part = string | Readonly<{ name: string; forms?: Readonly<Partial<Record<PluralCategory, string>>> }>;
 export interface MessageFormatOptions { readonly locale: LocaleCatalog['locale']; }
