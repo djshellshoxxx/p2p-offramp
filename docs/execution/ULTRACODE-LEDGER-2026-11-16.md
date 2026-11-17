@@ -143,6 +143,7 @@ PASS: typecheck (4 projects); `npm test` 1552 = 1550 pass / 0 fail / 0 skip / 2 
 `test:evm:reconcile`; `test:recovery:evm`; `test:payment:preflight`; `test:evm:viem`; `test:sepolia:kit`; `test:sepolia:trade`; `test:acceptance:cli`;
 `test:fuzz`; `test:diagnostics`; `test:escrow`; Chromium `test:peer:browser`, `test:recovery:browser`, `test:locale:browser`, `test:chat:browser`,
 `test:diagnostics:browser`, `test:locator:browser`; Solana `cargo fmt --check` + `build-sbf --arch v3` + `clippy -D warnings` + `cargo test` (47).
+Also PASS (same tree): `test:browser`, `test:web:browser`, `test:private:browser`, `test:local-evm`.
 NOT RUN by lead: Firefox/WebKit; Sepolia live; exact-head hosted CI/Sonar/CodeQL (see PR #128 checks); manual a11y/device.
 
 ## Remaining work (prioritized)
