@@ -103,3 +103,21 @@ Residual (Team A): same-profile store rollback outside the backup service is und
 Verification at this checkpoint (lead): typecheck PASS; `npm test` 1539/1539; boundaries PASS (152 sources); `test:exchange:evm` 12, `test:evm:reconcile`,
 `test:evm:local`, `test:recovery:evm`, `test:payment:preflight`, `test:evm:viem`, `test:sepolia:kit`, `test:sepolia:trade`, `test:acceptance:cli`, `test:fuzz`,
 `test:diagnostics`, `test:escrow` 7/7 (needs `npm ci --prefix packages/escrow-evm`) all PASS.
+
+## Checkpoint 6 — Red-team pass 1 (Team D) triage and remediation
+
+Team D pass 1 (base `ba4fe4c`): 5 CONFIRMED (TS), 0 contract defects (EVM fuzz/invariant incl. third-party refund gas 25k–1.5M; Solana read-only).
+Repros `201aa78` (cherry-pick of `0462911`): `packages/domain/test/redteam-d9.test.mjs`, `packages/exchange/test/redteam-exchange.test.mjs`, `contracts/evm/test/redteam/RedTeamGas.t.sol`.
+
+| ID | Sev | Finding | Owner | Fix | Status |
+|---|---|---|---|---|---|
+| REDTEAM-D9-1 | MED-HIGH | Crash pre-marker on value-moving intent locked trade/account forever | Team A | `9be98ff` cancels non-live prepared; residual cross-binding nonce hold is correct per ADR D9 — test now drives native evidence → dropped → explicit same-nonce successor → unrelated trade proceeds | FIXED (liveness by explicit successor) |
+| REDTEAM-D9-2 | MED | Cross-tab stale `recover()` relabelled a marked/sent intent `failed`, hash lost | Team A | `b7493ca`: `LifecycleTransition.from` CAS precondition inside serialized journal write; all lifecycle writes pass it | FIXED |
+| REDTEAM-EX1 | MED | Signed ad network/asset/currency never compared with reviewed terms (bait-and-switch) | Team C | `a9e2f7a` cherry-pick: session binds ad network/asset/currency; buyer + seller `AD_MISMATCH`; network = registry id or `eip155:<registry chainId>` | FIXED |
+| REDTEAM-EX2 | MED | One key fills global replay memory → all exchange ops LIMIT_EXCEEDED ≤1h | Team C | per-session replay cap (`maxSeenMessagesPerSession`=16); global cap only gates new sessions; exact replay retained | FIXED (residual: sybil take+cancel can still block NEW sessions ≤1h) |
+| REDTEAM-EX3 | LOW-MED | Global maxSessions, no per-peer bound | Team C | `maxSessionsPerAd`=16 + evict oldest idle `taken` (never offered/accepted) | FIXED (residual: idle honest take can be evicted; must retake) |
+
+Hypotheses (not executed, OPEN for owner/pass 2): H1 D1 replay ledger 64 terms/profile never evicted (lockout); H2 same-profile vault rollback; H3 Solana sub-rent native payout / ATA owner reassignment / freezable mint (self-inflicted/issuer risk); H4 chat history cap 256 fillable by counterparty; H6 CI output guard doesn't protect `.gitmodules`/`package.json`/`.npmrc`.
+Follow-ups: make `LifecycleTransition.from` required; v2 record wrapper schemaVersion bump; owner to choose a canonical advert network-id form; wallet `decodeTrade` strictness parity with the reader.
+
+Verification after remediation (lead): typecheck PASS; `npm test` 1547/1547 (0 todo); `test:exchange:evm` 12/12; boundaries PASS.
