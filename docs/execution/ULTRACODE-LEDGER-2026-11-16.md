@@ -87,3 +87,19 @@ Toolchain note: `scripts/sepolia/lib.mjs` pins forge `1.5.1-v1.5.1`; the `stable
 
 Merged-head verification (`ba4fe4c` tree): typecheck, `npm test` 1522/1522, forge 86/86, boundaries, build-policy, spec audit, Python unittest,
 `test:peer:browser`, `test:recovery:browser`, default build PASS.
+
+## Checkpoint 5 — D9 independent review (Team A) and small gaps (Team C2)
+
+| ID | Sev | Finding | Fix | Evidence |
+|---|---|---|---|---|
+| A-D9-1 | P1 liveness | Upstream `recover()` cancelled only local approvals; a crash between reserving a fund/release/refund (or a restored/imported prepared record) and its marker left it `prepared` forever. `reconcile()` never classifies `prepared`, so a funded escrow's timeout refund became unreachable from the app. | `9be98ff`+`3f121df` (cherry-picked): cancel every non-live prepared intent (prepared→failed CAS). Never-sent authority unchanged (only live reservations + locally written never-marked approvals); others keep nonce hold → native reconcile → explicit same-nonce successor. | New RED→GREEN test `D9 review: a crash before a release marker…`; 2 upstream tests relabelled `prepared`→`failed`, journal markSending on restored snapshot `BROADCAST_UNKNOWN`→`CONFLICT` (execution layer still maps marker failure to BROADCAST_UNKNOWN); every no-send assertion kept + evidence≠none added. Lead review: APPROVE. |
+| A-D9-2 | P3 docs | D9 migration doc claimed older builds reject v2 with unsupported-version; actually INVALID_INPUT → profile INTEGRITY_FAILURE (never misreads). | `18d27c0`: frozen pre-D9 reader fixture + pinning test; doc corrected. | Follow-up OPEN: bump record wrapper schemaVersion for v2 payloads so old builds report "newer than client". |
+| C2-1 | P3 | Locale messages of only invisible/default-ignorable chars accepted as visible warnings. | `0d21b1a` | locale-catalog tests |
+| C2-6 | P4 | Dead `utf8Length`; stale registry `validateLive` comment; untested `isTerminal`. | `c1fe52c` | machine test |
+| C2-7 | — | Render tests for locked recovery panel, diagnostics panel, ControlHelp. | `762f247` | 6 tests |
+
+Residual (Team A): same-profile store rollback outside the backup service is undetected (ADR accepts for approve only); v2 retention skip unverified.
+
+Verification at this checkpoint (lead): typecheck PASS; `npm test` 1539/1539; boundaries PASS (152 sources); `test:exchange:evm` 12, `test:evm:reconcile`,
+`test:evm:local`, `test:recovery:evm`, `test:payment:preflight`, `test:evm:viem`, `test:sepolia:kit`, `test:sepolia:trade`, `test:acceptance:cli`, `test:fuzz`,
+`test:diagnostics`, `test:escrow` 7/7 (needs `npm ci --prefix packages/escrow-evm`) all PASS.
