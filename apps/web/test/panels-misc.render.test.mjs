@@ -16,7 +16,8 @@ const SECRET = /SECRET|PRIVATE|https?:|0x[0-9a-fA-F]{40}|passphrase=|<textarea|t
 const assertNamedSection = (html, id) => {
   assert.match(html, new RegExp(`<section[^>]*aria-labelledby="${id}"`));
   assert.match(html, new RegExp(`<h2 id="${id}">[^<]+</h2>`));
-  for (const button of html.matchAll(/<button\b[^>]*>([\s\S]*?)<\/button>/g)) assert.ok(button[1].replace(/<[^>]+>/g, '').trim().length > 0 || /aria-label="[^"]+"/.test(button[0]));
+  // A button is named when some text sits between its tags (checked without rewriting markup) or it has an aria-label.
+  for (const button of html.matchAll(/<button\b[^>]*>([\s\S]*?)<\/button>/g)) assert.ok(/(?:^|>)[^<]*[^<\s]/.test(button[1]) || /aria-label="[^"]+"/.test(button[0]));
 };
 
 test('recovery references panel without services is locked: heading, warnings, no actions, no data', () => {
