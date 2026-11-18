@@ -14,6 +14,7 @@ export const LIMITS=Object.freeze({queryBytes:4*1024*1024,totalQueryBytes:32*102
 const Z3_WHEEL='z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl';
 export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
 const ROOT=fileURLToPath(new URL('../../',import.meta.url)),EVM=resolve(ROOT,'contracts/evm'),HARNESS='formal/CanonicalRefinement.t.sol';
+export const PROBE_SOURCE='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30; contract ToolProbes { function safe(uint x) public pure { assert(x == x); } function unsafe(uint x) public pure { assert(x != 7); } }';
 const ORIGINAL_MODEL_SHA256='7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537';
 export const PARTITION_TARGETS=Object.freeze([
  {id:'EVM-NATIVE-ASSET-NOT-TOKEN',source:'formal/partitions/NativeConstructor.sol',contract:'NativeConstructor',method:'checkNativeAssetExcludedFromTokenAllowlist'},
@@ -32,16 +33,30 @@ const stop=code=>{throw Error(code);};
 export function queryIdentity(query){if(typeof query!=='string'||Buffer.byteLength(query)>LIMITS.queryBytes)stop('QUERY_LIMIT');return '0x'+hex(keccak_256(utf8.encode(query)));}
 export function solverAnswer(stdout){if(typeof stdout!=='string'||Buffer.byteLength(stdout)>LIMITS.solverOutputBytes)stop('SOLVER_OUTPUT_LIMIT');const text=stdout.trim();return text==='sat'||text==='unsat'?text:'unknown';}
 export function assertionSpan(source,assertion){if(typeof source!=='string'||typeof assertion!=='string'||!assertion.startsWith('assert('))stop('PROPERTY_INVALID');const at=source.indexOf(assertion);if(at<0||source.indexOf(assertion,at+1)>=0)stop('PROPERTY_BINDING_MISMATCH');return{start:Buffer.byteLength(source.slice(0,at)),end:Buffer.byteLength(source.slice(0,at+assertion.length-(assertion.endsWith(';')?1:0)))};}
-export function classifyProperty(output,file,span,incomplete=false){
- const errors=Array.isArray(output?.errors)?output.errors:[],matches=errors.filter(error=>error?.sourceLocation?.file===file&&error.sourceLocation.start===span.start&&error.sourceLocation.end===span.end);
- const violation=matches.some(error=>String(error.errorCode)==='6328'),safe=matches.some(error=>String(error.errorCode)==='9576');
- const unsupported=errors.filter(error=>/not (?:yet )?supported|unsupported|not implemented|abstraction/i.test(String(error?.message??'')));
- // solc also tags unanswered CHC targets 6328 ("might happen"): incomplete or abstracted work decides no outcome.
- const reported=violation?'ASSERTION_VIOLATION':safe?'SAFE_UNDER_COMPILER_MODEL':'UNPROVED';
+// The only diagnostics this harness interprets: solc 0.8.30's CHC assertion-target codes in their exact wording.
+// 6328 covers both an answered violation ("happens here") and an unanswered target ("might happen"); other wording is unrecognized.
+const TARGET_READINGS=Object.freeze({
+ '6328':[[/^CHC: Assertion violation happens here\./,'ASSERTION_VIOLATION'],[/^CHC: Assertion violation might happen here\./,'UNANSWERED']],
+ '9576':[[/^CHC: Assertion violation check is safe!/,'SAFE_UNDER_COMPILER_MODEL']],
+});
+/** Codes shown harmless next to a proof claim. Deliberately empty: no solc diagnostic has been shown benign, so every other one blocks. */
+export const BENIGN_DIAGNOSTIC_CODES=Object.freeze([]);
+/** Second net over message text, for diagnostics the code check lets through (sibling targets, any future allowlisted code). */
+export const ABSTRACTION_TEXT=/does not yet (?:support|implement)|not (?:yet )?(?:fully )?(?:supported|implemented)|unsupported|abstraction|spurious|false positive|not possible|no horn solver|might happen|could not be proved|error trying to invoke|timeout|time limit|resource limit/i;
+const diagnosticText=error=>String(error?.message??'');
+const targetReading=error=>error?.severity==='error'?null:TARGET_READINGS[String(error?.errorCode)]?.find(([pattern])=>pattern.test(diagnosticText(error)))?.[1]??null;
+const locatedAt=(error,file,span)=>error?.sourceLocation?.file===file&&error.sourceLocation.start===span.start&&error.sourceLocation.end===span.end;
+/** Fails closed: the one target diagnostic at the span decides, and every other diagnostic blocks unless it is the recognized
+ * result of a declared sibling assertion in the same file or an allowlisted code. Matching wording blocks in every case. */
+export function classifyProperty(output,file,span,incomplete=false,siblings=[]){
+ const errors=Array.isArray(output?.errors)?output.errors:[],matches=errors.filter(error=>locatedAt(error,file,span)),own=matches.length===1?matches[0]:null;
+ const expected=error=>BENIGN_DIAGNOSTIC_CODES.includes(String(error?.errorCode))&&error?.severity!=='error'||targetReading(error)!==null&&siblings.some(sibling=>locatedAt(error,file,sibling));
+ const unsupported=errors.filter(error=>error!==own&&!expected(error)||ABSTRACTION_TEXT.test(diagnosticText(error)));
+ const reported=matches.length>1?'CONTRADICTORY':own?targetReading(own)??'UNRECOGNIZED':'UNPROVED';
  if(incomplete||unsupported.length)return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
- if(violation)return{result:'COUNTEREXAMPLE_FOUND',toolReported:'ASSERTION_VIOLATION',unsupported,qualification:'Compiler-model counterexample requires native replay before calling it an implementation defect.'};
- if(!safe)return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
- return{result:'PROVED_UNDER_DECLARED_MODEL',toolReported:'SAFE_UNDER_COMPILER_MODEL',unsupported};
+ if(reported==='ASSERTION_VIOLATION')return{result:'COUNTEREXAMPLE_FOUND',toolReported:reported,unsupported,qualification:'Compiler-model counterexample requires native replay before calling it an implementation defect.'};
+ if(reported==='SAFE_UNDER_COMPILER_MODEL')return{result:'PROVED_UNDER_DECLARED_MODEL',toolReported:reported,unsupported};
+ return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
 }
 /** Exact extraction from the frozen original model, not a replacement or stronger precondition. */
 export function partitionBinding(id,source,original,spec){
@@ -60,12 +75,18 @@ export function partitionBinding(id,source,original,spec){
  const span=(text,part)=>{const start=text.indexOf(part);if(start<0||text.indexOf(part,start+1)>=0)stop('PARTITION_BINDING_MISMATCH');return{start:Buffer.byteLength(text.slice(0,start)),end:Buffer.byteLength(text.slice(0,start+part.length))};};
  return{target,property,originalModelSourceSha256:sha(original),modelSourceSha256:sha(source),assertion:{original:assertionSpan(original,property.assertion),partition:assertionSpan(source,property.assertion),sha256:sha(property.assertion)},assumptions:spec.assumptions,assumptionsSha256:sha(canonical(spec.assumptions)),fragments:parts.map(part=>({sha256:sha(part),original:span(original,part),partition:span(source,part)}))};
 }
-/** Partition results need actual, clean, complete query work before source diagnostics may classify them. */
-export function classifyPartition(formal,file,span){
- const classified=classifyProperty(formal.output,file,span,formal.incomplete),empty=sha('');
- const clean=Array.isArray(formal.queries)&&formal.queries.length>0&&formal.queries.every(query=>['sat','unsat'].includes(query.answer)&&query.exitCode===0&&!query.timedOut&&!query.limited&&query.stderrSha256===empty)&&Array.isArray(formal.compilerRuns)&&formal.compilerRuns.length>0&&formal.compilerRuns.every(run=>run.exitCode===0&&!run.error&&!run.timedOut&&!run.limited&&run.stderrSha256===empty);
- if(formal.incomplete||formal.stopReason||!clean||classified.unsupported.length)return{...classified,result:'PROOF_UNKNOWN',qualification:'Missing/zero queries, stderr, unsupported abstractions and incomplete work remain unknown; raw solver polarity is not a proof.'};
+/** Bridge results (probe, whole target and partitions) need actual, clean, complete query work before source diagnostics may classify them. */
+export function classifyBridge(formal,file,span,siblings=[]){
+ const classified=classifyProperty(formal?.output,file,span,formal?.incomplete,siblings),empty=sha('');
+ const clean=Array.isArray(formal?.queries)&&formal.queries.length>0&&formal.queries.every(query=>['sat','unsat'].includes(query.answer)&&query.exitCode===0&&!query.timedOut&&!query.limited&&query.stderrSha256===empty)&&Array.isArray(formal.compilerRuns)&&formal.compilerRuns.length>0&&formal.compilerRuns.every(run=>run.exitCode===0&&!run.error&&!run.timedOut&&!run.limited&&run.stderrSha256===empty);
+ if(formal?.incomplete||formal?.stopReason||!clean||classified.unsupported.length)return{...classified,result:'PROOF_UNKNOWN',qualification:'Missing/zero queries, stderr, unsupported abstractions, unrecognized diagnostics and incomplete work remain unknown; raw solver polarity is not a proof.'};
  return classified;
+}
+export const classifyPartition=classifyBridge;
+/** runFormal's classification: every declared assertion of the one target file, each with the others as its siblings. */
+export function classifyWholeTarget(formal,file,source,assertions){
+ const spans=assertions.map(assertion=>assertionSpan(source,assertion));
+ return spans.map((span,index)=>classifyBridge(formal,file,span,spans.filter((_,other)=>other!==index)));
 }
 /** Literal extraction only; the compiler still validates the untouched source. */
 export function literalImports(source){
@@ -161,9 +182,9 @@ async function verifyTools(tools){
  return{...Z3_PIN,paths,hashes,reportedVersion:version.stdout.trim(),licenseEvidence:'Pinned package METADATA; license classification is not legal release approval.'};
 }
 export function validateProbe(probe,source){
- if(probe.incomplete||probe.queries.length!==2||probe.queries.some(query=>!['sat','unsat'].includes(query.answer)))stop('TOOL_PROBE_INCOMPLETE');
- const safe=classifyProperty(probe.output,'ToolProbes.sol',assertionSpan(source,'assert(x == x);'));
- const unsafe=classifyProperty(probe.output,'ToolProbes.sol',assertionSpan(source,'assert(x != 7);'));
+ if(probe.incomplete||probe.stopReason||probe.queries.length!==2||probe.queries.some(query=>!['sat','unsat'].includes(query.answer)))stop('TOOL_PROBE_INCOMPLETE');
+ const safeSpan=assertionSpan(source,'assert(x == x);'),unsafeSpan=assertionSpan(source,'assert(x != 7);');
+ const safe=classifyBridge(probe,'ToolProbes.sol',safeSpan,[unsafeSpan]),unsafe=classifyBridge(probe,'ToolProbes.sol',unsafeSpan,[safeSpan]);
  if(safe.result!=='PROVED_UNDER_DECLARED_MODEL'||unsafe.result!=='COUNTEREXAMPLE_FOUND')stop('TOOL_PROBE_BINDING_FAILED');
  return{safe,unsafe,qualification:'CHC/HORN consistency semantics: SAT can mean safety and UNSAT reachability; compiler source-bound diagnostics, never raw SAT/UNSAT polarity, determine outcomes.'};
 }
@@ -221,13 +242,13 @@ export async function runFormal({outputDirectory=resolve(ROOT,'.formal-evidence'
  const tools=resolveTools(environment),env=tools.env;const toolchain=await checkToolchain(env),solver=await verifyTools(tools);
  const sourceClosure=await collectSources(HARNESS),source=sourceClosure.sources[HARNESS].content,specBytes=await readFile(resolve(EVM,'formal/properties.json')),spec=JSON.parse(specBytes),canonicalPath=resolve(EVM,spec.canonicalSource),canonicalBefore=await hashFile(canonicalPath),abiPath=resolve(EVM,'abi/BasicEscrow.json'),interfaceBefore=await hashFile(abiPath);
  if(canonicalBefore!==spec.canonicalSourceSha256)stop('CANONICAL_SOURCE_CHANGED');
- const probeSource='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30; contract ToolProbes { function safe(uint x) public pure { assert(x == x); } function unsafe(uint x) public pure { assert(x != 7); } }';
- const probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
+ const probeSource=PROBE_SOURCE,probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
  const probe=await bridge(probeInput,{outputDirectory,deadline,sourceLabel:'probes',tools}),probeResults=validateProbe(probe,probeSource);
  const actualInput={language:'Solidity',sources:sourceClosure.sources,settings:baseSettings(HARNESS,spec.formalContract)};
  const guards=await proveGuards(sourceClosure,{outputDirectory,deadline,tools});
  const formal=await bridge(actualInput,{outputDirectory,deadline,sourceLabel:'canonical',tools});
- const properties=spec.properties.map(property=>({...property,modelCommit:null,modelSourceSha256:sha(source),assumptions:spec.assumptions,toolVersion:Z3_PIN.reportedVersion,...classifyProperty(formal.output,HARNESS,assertionSpan(source,property.assertion),formal.incomplete),counterexampleDigest:null}));
+ const classified=classifyWholeTarget(formal,HARNESS,source,spec.properties.map(property=>property.assertion));
+ const properties=spec.properties.map((property,index)=>({...property,modelCommit:null,modelSourceSha256:sha(source),assumptions:spec.assumptions,toolVersion:Z3_PIN.reportedVersion,...classified[index],counterexampleDigest:null}));
  await verifySources(sourceClosure.digests);const native=await processBounded(tools.forge,['test','--match-contract',spec.nativeContract,'--json','-vvvv'],{cwd:EVM,env:forgeEnv(env,{FOUNDRY_TEST:'formal',FOUNDRY_OFFLINE:'true',FOUNDRY_SOLC:tools.solc,RAYON_NUM_THREADS:'1',TOKIO_WORKER_THREADS:'1'}),timeoutMs:Math.min(60000,Math.max(1,deadline-performance.now()))});
  await writeFile(resolve(outputDirectory,'native-stdout.json'),native.stdout);await writeFile(resolve(outputDirectory,'native-stderr.txt'),native.stderr);if(native.error||native.timedOut||native.limited)stop('NATIVE_TOOL_INCOMPLETE');let parsedNative;try{parsedNative=JSON.parse(native.stdout);}catch{stop('NATIVE_TOOL_OUTPUT_INVALID');}const witness=nativeWitness(parsedNative,native.code,spec);
  const artifact=JSON.parse(await readFile(resolve(EVM,'out/BasicEscrow.sol/BasicEscrow.json'),'utf8')),committedABI=JSON.parse(await readFile(abiPath,'utf8'));if(canonical(artifact.abi)!==canonical(committedABI))stop('INTERFACE_DRIFT');
@@ -247,8 +268,7 @@ export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal
   const closure=await collectSources(target.source),source=closure.sources[target.source].content,binding=partitionBinding(target.id,source,original,spec);
   targets.push({target,closure,binding});
  }
- const probeSource='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30; contract ToolProbes { function safe(uint x) public pure { assert(x == x); } function unsafe(uint x) public pure { assert(x != 7); } }';
- const probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
+ const probeSource=PROBE_SOURCE,probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
  const probe=await bridge(probeInput,{outputDirectory,deadline,sourceLabel:'probes',tools,budget}),probeResults=validateProbe(probe,probeSource);
  const results=[];for(const{target,closure,binding}of targets){
   const input={language:'Solidity',sources:closure.sources,settings:baseSettings(target.source,target.contract)};

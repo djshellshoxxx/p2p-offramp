@@ -1,9 +1,40 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,mkdtemp,rm,rmdir,symlink,chmod,access} from 'node:fs/promises';
+import {realpathSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import {queryIdentity,solverAnswer,assertionSpan,classifyProperty,validateProbe,nativeWitness,LIMITS} from '../formal/evm.mjs';
 import * as formal from '../formal/evm.mjs';
 const spec=JSON.parse(await readFile(new URL('../../contracts/evm/formal/properties.json',import.meta.url)));
+const sha256=bytes=>createHash('sha256').update(bytes).digest('hex'),EMPTY=sha256('');
+const ROOT=realpathSync(new URL('../../',import.meta.url));
+// Verbatim solc 0.8.30 diagnostics from the recorded 2026-11-18 partition run (report.json, formal.targets[].diagnostics and
+// probes-round{0,1}-stdout.json), one per error code; only the derived formattedMessage field is omitted.
+const RECORDED=Object.freeze({
+ nativeFile:'formal/partitions/NativeConstructor.sol',nativeSpan:{start:339,end:381},
+ releaseFile:'formal/partitions/UnauthorizedRelease.sol',releaseSpan:{start:1888,end:2058},
+ abstractions:[
+  {component:'general',errorCode:'8364',message:'Assertion checker does not yet implement type error',severity:'warning',sourceLocation:{end:4396,file:'lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol',start:4318},type:'Warning'},
+  {component:'general',errorCode:'7650',message:'Assertion checker does not yet support this expression.',severity:'warning',sourceLocation:{end:5932,file:'lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol',start:5925},type:'Warning'},
+  {component:'general',errorCode:'7737',message:'Inline assembly may cause SMTChecker to produce spurious warnings (false positives).',severity:'warning',sourceLocation:{end:8928,file:'lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol',start:8507},type:'Warning'},
+  {component:'general',errorCode:'3996',message:'CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.',severity:'warning',type:'Warning'},
+ ],
+ nativeSafe:{component:'general',errorCode:'9576',message:'CHC: Assertion violation check is safe!',severity:'info',sourceLocation:{end:381,file:'formal/partitions/NativeConstructor.sol',start:339},type:'Info'},
+ releaseMightHappen:{component:'general',errorCode:'6328',message:'CHC: Assertion violation might happen here.',severity:'warning',sourceLocation:{end:2058,file:'formal/partitions/UnauthorizedRelease.sol',start:1888},type:'Warning'},
+ probeRound0:[
+  {component:'general',errorCode:'6328',message:'CHC: Assertion violation might happen here.',severity:'warning',sourceLocation:{end:135,file:'ToolProbes.sol',start:121},type:'Warning'},
+  {component:'general',errorCode:'6328',message:'CHC: Assertion violation might happen here.',severity:'warning',sourceLocation:{end:191,file:'ToolProbes.sol',start:177},type:'Warning'},
+  {component:'general',errorCode:'3996',message:'CHC analysis was not possible. No Horn solver was available. None of the installed solvers was enabled.',severity:'warning',type:'Warning'},
+ ],
+ probeRound1:[
+  {component:'general',errorCode:'6328',message:'CHC: Assertion violation happens here.',severity:'warning',sourceLocation:{end:191,file:'ToolProbes.sol',start:177},type:'Warning'},
+  {component:'general',errorCode:'9576',message:'CHC: Assertion violation check is safe!',severity:'info',sourceLocation:{end:135,file:'ToolProbes.sol',start:121},type:'Info'},
+ ],
+});
+/** The shape bridge() returns for clean complete work, around the given compiler diagnostics. */
+const cleanWork=(errors,answers=['sat'])=>({incomplete:false,stopReason:null,output:{errors:structuredClone(errors)},queries:answers.map(answer=>({answer,exitCode:0,timedOut:false,limited:false,stderrSha256:EMPTY})),compilerRuns:[0,1].map(()=>({exitCode:0,error:null,timedOut:false,limited:false,stderrSha256:EMPTY}))});
 test('query binding uses Keccak and rejects oversized work; unknown or contaminated solver output stays unknown',()=>{
  assert.equal(queryIdentity(''),'0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470');
  assert.throws(()=>queryIdentity('x'.repeat(LIMITS.queryBytes+1)));
@@ -13,22 +44,72 @@ test('query binding uses Keccak and rejects oversized work; unknown or contamina
 test('source-bound compiler assertions reject missing, duplicate, foreign, unsupported and incomplete proof claims',()=>{
  const source='// unicode é\nassert(x == x);',span=assertionSpan(source,'assert(x == x);');assert.equal(span.start,Buffer.byteLength('// unicode é\n'));assert.equal(span.end,Buffer.byteLength(source)-1);
  assert.throws(()=>assertionSpan('assert(x); assert(x);','assert(x);'));assert.throws(()=>assertionSpan(source,'assert(y);'));
- const safe={errorCode:'9576',sourceLocation:{file:'A.sol',...span},message:'CHC: Assertion violation check is safe!'};
+ assert.throws(()=>assertionSpan(source,'require(x == x);'),{message:'PROPERTY_INVALID'});
+ const safe={errorCode:'9576',severity:'info',sourceLocation:{file:'A.sol',...span},message:'CHC: Assertion violation check is safe!'};
+ const happens={errorCode:'6328',severity:'warning',sourceLocation:{file:'A.sol',...span},message:'CHC: Assertion violation happens here.'};
  assert.equal(classifyProperty({errors:[safe]},'A.sol',span).result,'PROVED_UNDER_DECLARED_MODEL');
  assert.equal(classifyProperty({errors:[safe]},'B.sol',span).result,'PROOF_UNKNOWN');assert.equal(classifyProperty({errors:[safe]},'A.sol',span,true).result,'PROOF_UNKNOWN');
- assert.equal(classifyProperty({errors:[safe,{message:'Inline assembly is not supported'}]},'A.sol',span).result,'PROOF_UNKNOWN');
- assert.equal(classifyProperty({errors:[{...safe,errorCode:'6328'}]},'A.sol',span).result,'COUNTEREXAMPLE_FOUND');
- // solc tags every unanswered CHC target 6328 "might happen"; partial work must not report a counterexample.
- const partial={...safe,errorCode:'6328',message:'CHC: Assertion violation might happen here.'};
- assert.equal(classifyProperty({errors:[partial]},'A.sol',span,true).result,'PROOF_UNKNOWN');
- const abstracted={errors:[partial,{message:'Inline assembly is not supported'}]};
- assert.equal(classifyProperty(abstracted,'A.sol',span).result,'PROOF_UNKNOWN');
+ assert.equal(classifyProperty({errors:[safe]},'A.sol',{...span,end:span.end+1}).result,'PROOF_UNKNOWN');
+ assert.equal(classifyProperty({errors:[happens]},'A.sol',span).result,'COUNTEREXAMPLE_FOUND');
+ assert.equal(classifyProperty({errors:[happens]},'A.sol',span,true).result,'PROOF_UNKNOWN');
+ // A code alone decides nothing: 6328 is a counterexample only with solc's answered "happens here" wording.
+ for(const message of['CHC: Assertion violation check is safe!','',undefined])assert.deepEqual(classifyProperty({errors:[{...happens,message}]},'A.sol',span).result,'PROOF_UNKNOWN');
+ assert.equal(classifyProperty({errors:[{...safe,message:'CHC: Assertion violation happens here.'}]},'A.sol',span).toolReported,'UNRECOGNIZED');
+ // solc tags every unanswered CHC target 6328 "might happen"; it is unanswered, not a violation, even when the bridge looks complete.
+ const partial={...happens,message:'CHC: Assertion violation might happen here.'};
+ for(const incomplete of[true,false]){const result=classifyProperty({errors:[partial]},'A.sol',span,incomplete);assert.equal(result.result,'PROOF_UNKNOWN');assert.equal(result.toolReported,'UNANSWERED');}
+ // Contradictory or duplicated target diagnostics at one span decide nothing.
+ assert.deepEqual(classifyProperty({errors:[happens,safe]},'A.sol',span).toolReported,'CONTRADICTORY');assert.equal(classifyProperty({errors:[happens,safe]},'A.sol',span).result,'PROOF_UNKNOWN');
+ assert.equal(classifyProperty({errors:[safe,{...safe}]},'A.sol',span).result,'PROOF_UNKNOWN');
+ assert.equal(classifyProperty({errors:[{...safe,severity:'error'}]},'A.sol',span).result,'PROOF_UNKNOWN');
+});
+test('verbatim solc 0.8.30 abstraction diagnostics next to a safe or violated target always leave the property PROOF_UNKNOWN',()=>{
+ const {nativeFile:file,nativeSpan:span,nativeSafe:safe}=RECORDED;
+ // Positive control: the recorded safe diagnostic alone, on complete clean work, is a proof claim.
+ assert.equal(classifyProperty({errors:[safe]},file,span).result,'PROVED_UNDER_DECLARED_MODEL');assert.equal(formal.classifyPartition(cleanWork([safe]),file,span).result,'PROVED_UNDER_DECLARED_MODEL');
+ const violated={...safe,errorCode:'6328',severity:'warning',type:'Warning',message:'CHC: Assertion violation happens here.'};
+ assert.equal(formal.classifyPartition(cleanWork([violated]),file,span).result,'COUNTEREXAMPLE_FOUND');
+ for(const abstraction of RECORDED.abstractions)for(const target of[safe,violated]){
+  const property=classifyProperty({errors:[target,abstraction]},file,span),partition=formal.classifyPartition(cleanWork([target,abstraction]),file,span);
+  assert.equal(property.result,'PROOF_UNKNOWN',abstraction.errorCode);assert.equal(partition.result,'PROOF_UNKNOWN',abstraction.errorCode);
+  assert.deepEqual(property.unsupported,[abstraction]);assert.equal(property.toolReported,target===safe?'SAFE_UNDER_COMPILER_MODEL':'ASSERTION_VIOLATION');
+  // Blocking is by code first: the same code with neutral wording still blocks, and so does an unknown code.
+  assert.equal(classifyProperty({errors:[target,{...abstraction,message:'neutral'}]},file,span).result,'PROOF_UNKNOWN',abstraction.errorCode);
+ }
+ for(const other of[{errorCode:'5084',severity:'warning',message:'Type conversion is not yet fully supported and might yield false positives.'},{errorCode:'1234',severity:'warning',message:'neutral'},{severity:'info',message:'neutral'}])
+  assert.equal(formal.classifyPartition(cleanWork([safe,other]),file,span).result,'PROOF_UNKNOWN',other.errorCode);
+ // The whole recorded final diagnostic set of the native partition, as the replay of its report gives it.
+ const recorded=formal.classifyPartition(cleanWork([...RECORDED.abstractions.slice(0,3),safe]),file,span);
+ assert.equal(recorded.result,'PROOF_UNKNOWN');assert.equal(recorded.toolReported,'SAFE_UNDER_COMPILER_MODEL');assert.deepEqual(recorded.unsupported.map(error=>error.errorCode),['8364','7650','7737']);
+ // The recorded funded-partition set: unanswered 6328 plus 3996, even on work that claims to be complete, or with zero queries.
+ const funded=[...RECORDED.abstractions,RECORDED.releaseMightHappen];
+ for(const work of[cleanWork(funded),{...cleanWork(funded),queries:[]}]){const result=formal.classifyPartition(work,RECORDED.releaseFile,RECORDED.releaseSpan);assert.equal(result.result,'PROOF_UNKNOWN');assert.equal(result.toolReported,'UNANSWERED');}
+ assert.equal(classifyProperty({errors:[RECORDED.releaseMightHappen,RECORDED.abstractions[3]]},RECORDED.releaseFile,RECORDED.releaseSpan).result,'PROOF_UNKNOWN');
+ // No code is allowlisted as benign.
+ assert.deepEqual(formal.BENIGN_DIAGNOSTIC_CODES,[]);
+});
+test('whole-target classification ignores only recognized sibling targets and applies the clean-work gate to every property',()=>{
+ const source='contract T { function f(uint x) public pure { assert(x == x); assert(x >= 0); } }',assertions=['assert(x == x);','assert(x >= 0);'];
+ const [first,second]=assertions.map(assertion=>assertionSpan(source,assertion)),at=(span,errorCode,message)=>({errorCode,severity:errorCode==='9576'?'info':'warning',sourceLocation:{file:'T.sol',...span},message});
+ const safeBoth=[at(first,'9576','CHC: Assertion violation check is safe!'),at(second,'9576','CHC: Assertion violation check is safe!')];
+ assert.deepEqual(formal.classifyWholeTarget(cleanWork(safeBoth),'T.sol',source,assertions).map(result=>result.result),['PROVED_UNDER_DECLARED_MODEL','PROVED_UNDER_DECLARED_MODEL']);
+ const violated=[safeBoth[0],at(second,'6328','CHC: Assertion violation happens here.')];
+ assert.deepEqual(formal.classifyWholeTarget(cleanWork(violated),'T.sol',source,assertions).map(result=>result.result),['PROVED_UNDER_DECLARED_MODEL','COUNTEREXAMPLE_FOUND']);
+ for(const extra of[at({start:0,end:5},'9576','CHC: Assertion violation check is safe!'),at(second,'6328','CHC: Assertion violation might happen here.'),RECORDED.abstractions[0]])
+  assert.deepEqual(formal.classifyWholeTarget(cleanWork([...safeBoth,extra]),'T.sol',source,assertions).map(result=>result.result),['PROOF_UNKNOWN','PROOF_UNKNOWN']);
+ // Without siblings declared, the other target's diagnostic is unexpected and blocks.
+ assert.equal(formal.classifyPartition(cleanWork(safeBoth),'T.sol',first).result,'PROOF_UNKNOWN');
+ // The recorded zero-query whole-target shape: unanswered 6328 plus 3996 never becomes a counterexample.
+ for(const work of[{...cleanWork([at(first,'6328','CHC: Assertion violation might happen here.'),RECORDED.abstractions[3]]),queries:[]},{...cleanWork(safeBoth),queries:[]},{...cleanWork(safeBoth),stopReason:'COMPILER_TIMEOUT'}])
+  assert.deepEqual(formal.classifyWholeTarget(work,'T.sol',source,assertions).map(result=>result.result),['PROOF_UNKNOWN','PROOF_UNKNOWN']);
 });
 test('safe and unsafe operational probes must both bind actual distinct assertion spans; raw SAT polarity is insufficient',()=>{
- const source='contract T { function f(uint x) public { assert(x == x); assert(x != 7); }}';
- const output={errors:[{errorCode:'9576',sourceLocation:{file:'ToolProbes.sol',...assertionSpan(source,'assert(x == x);')}},{errorCode:'6328',sourceLocation:{file:'ToolProbes.sol',...assertionSpan(source,'assert(x != 7);')}}]};
- const probe={incomplete:false,queries:[{answer:'sat'},{answer:'unsat'}],output};assert.equal(validateProbe(probe,source).unsafe.result,'COUNTEREXAMPLE_FOUND');
- assert.throws(()=>validateProbe({...probe,incomplete:true},source));assert.throws(()=>validateProbe({...probe,output:{errors:output.errors.map(error=>({...error,errorCode:'9576'}))}},source));assert.throws(()=>validateProbe({...probe,queries:[{answer:'unknown'},{answer:'sat'}]},source));
+ const source=formal.PROBE_SOURCE,probe=cleanWork(RECORDED.probeRound1,['sat','unsat']);
+ const valid=validateProbe(probe,source);assert.equal(valid.safe.result,'PROVED_UNDER_DECLARED_MODEL');assert.equal(valid.unsafe.result,'COUNTEREXAMPLE_FOUND');
+ const reject=change=>{const bad=structuredClone(probe);change(bad);assert.throws(()=>validateProbe(bad,source));};
+ reject(p=>{p.incomplete=true;});reject(p=>{p.stopReason='SOLVER_UNKNOWN';});reject(p=>{p.queries[0].answer='unknown';});reject(p=>{p.queries.pop();});
+ reject(p=>{for(const error of p.output.errors)error.errorCode='9576';});reject(p=>{p.output.errors=structuredClone(RECORDED.probeRound0);});
+ reject(p=>{p.output.errors.push(structuredClone(RECORDED.abstractions[2]));});reject(p=>{p.compilerRuns[1].stderrSha256='nonempty';});
 });
 function packet(){const logs=['tradeId: 0x'+'1'.repeat(64),'principal: 10','surplus: 3','activeAfterTerminal: 0','paidAfterTerminal: 0','pendingAfterTerminal: 10','custodyAfterTerminal: 13','paidAfterWithdrawal: 10','pendingAfterWithdrawal: 0','custodyAfterWithdrawal: 3','seller: 0x'+'1'.repeat(40),'buyer: 0x'+'2'.repeat(40),'withdrawCaller: 0x'+'3'.repeat(40)];return{['formal/CanonicalRefinement.t.sol:'+spec.nativeContract]:{test_results:{[spec.nativeRefinement.test+'()']:{status:'Success',decoded_logs:logs},[spec.strictModelCounterexample.test+'()']:{status:'Failure',reason:'STRICT_TERMINAL_ALREADY_PAID: 0 != 10',decoded_logs:[...logs]}}}};}
 test('native model-gap classifier requires exact actual-test identities, failure reason and complete conserved trace',()=>{
@@ -103,10 +184,10 @@ test('partition results require nonzero complete clean work and exact compiler d
  const complete={incomplete:false,stopReason:null,queries:[{answer:'sat',exitCode:0,timedOut:false,limited:false,stderrSha256:empty}],compilerRuns:[{exitCode:0,error:null,timedOut:false,limited:false,stderrSha256:empty}],output:{errors:[safe]}};
  assert.equal(classifyPartition(complete,file,span).result,'PROVED_UNDER_DECLARED_MODEL');
  assert.equal(classifyPartition({...complete,queries:[{...complete.queries[0],answer:'unsat'}]},file,span).result,'PROVED_UNDER_DECLARED_MODEL');
- for(const change of [p=>{p.queries=[];},p=>{p.incomplete=true;},p=>{p.stopReason='TOTAL_DEADLINE';},p=>{p.compilerRuns=[];},p=>{p.compilerRuns[0].timedOut=true;},p=>{p.compilerRuns[0].stderrSha256='nonempty';},p=>{p.queries[0].stderrSha256='nonempty';},p=>{p.queries[0].answer='unknown';},p=>{p.output.errors.push({message:'Inline assembly abstraction is not supported'});},p=>{p.output.errors=[];},p=>{p.output.errors[0].sourceLocation.file='foreign.sol';}]){
+ for(const change of [p=>{p.queries=[];},p=>{p.incomplete=true;},p=>{p.stopReason='TOTAL_DEADLINE';},p=>{p.compilerRuns=[];},p=>{p.compilerRuns[0].timedOut=true;},p=>{p.compilerRuns[0].limited=true;},p=>{p.compilerRuns[0].exitCode=1;},p=>{p.compilerRuns[0].error='SPAWN_FAILED';},p=>{p.compilerRuns[0].stderrSha256='nonempty';},p=>{p.queries[0].stderrSha256='nonempty';},p=>{p.queries[0].answer='unknown';},p=>{p.queries[0].exitCode=1;},p=>{p.queries[0].timedOut=true;},p=>{p.queries[0].limited=true;},p=>{p.output.errors.push(structuredClone(RECORDED.abstractions[2]));},p=>{p.output.errors=[];},p=>{p.output.errors[0].sourceLocation.file='foreign.sol';},p=>{p.output.errors[0].sourceLocation.end+=1;}]){
   const bad=structuredClone(complete);change(bad);assert.equal(classifyPartition(bad,file,span).result,'PROOF_UNKNOWN');
  }
- const violation=structuredClone(complete);violation.output.errors[0].errorCode='6328';assert.equal(classifyPartition(violation,file,span).result,'COUNTEREXAMPLE_FOUND');
+ const violation=structuredClone(complete);violation.output.errors[0].errorCode='6328';violation.output.errors[0].message='CHC: Assertion violation happens here.';assert.equal(classifyPartition(violation,file,span).result,'COUNTEREXAMPLE_FOUND');
  violation.incomplete=true;assert.equal(classifyPartition(violation,file,span).result,'PROOF_UNKNOWN');
 });
 
