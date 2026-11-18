@@ -206,8 +206,14 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
 
 ## 5. Decisions needed from the owner
 
-1. **#130 CI queue** — authorize diagnosis/fix (blocks every D8 merge).
-2. **D7** — park or accept optional reference packages (gates Phase 4.1).
+1. **#130 CI queue** — APPROVED 2026-11-18. Diagnosed: 15 runs from a 3-minute
+   window on 2026-11-11 were never dispatched by GitHub and cannot be cancelled
+   (API 409). New runs start normally. The owner deletes the orphaned runs; see
+   the diagnosis comment on #130. CI no longer blocks D8 merges.
+2. **D7** — ACCEPTED 2026-11-18: optional reference packages are accepted.
+   Phase 4.1 takes the "accept" path: one package per PR, each with an
+   import-boundary check, and none wired into the default build without
+   its own gate.
 3. **Tier C approval** for Phase 2 (trunk) and Phase 3 (D9 tests).
 4. Confirm deletion of `feat/custodial-ledger-foundation` (custodial design).
 5. Confirm closing #63/#64 (agent-process docs).
