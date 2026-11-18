@@ -12,7 +12,14 @@ packets themselves are in [PR #29](https://github.com/djshellshoxxx/p2p-offramp/
 | D8 | Merge policy for `main` | **Tiered**: Tier A (CI, tests, docs) and Tier B (non-custody product code) merge after green CI and an independent review with no open High/Medium finding. Tier C (contracts, signing/EIP-712, terms binding, vault crypto, recovery, registry trust, release verification) waits for owner approval. |
 | D9 | Durable send marker | **Option A**: `sendMarkedAt` written in `markSending`'s compare-and-swap and never cleared; older records without it are treated as possibly sent. |
 
-D2, D3, D4, D6 and D7 remain proposed. D2 needs owner-run key generation, so no agent can complete it.
+| D4 | Capability-to-terms commitments | **Option C now, Option B as the named target** (recorded in the D4 packet, 2026-11-04): core trades commit only the count-zero capabilities hash and refuse any other value before signing and funding. |
+| D6 | QR payload profiles | **Option B** (recorded in the D6 packet, 2026-11-04): RFC 8785 canonical JSON envelope, RFC 9285 base45 behind a version prefix; only trade invites are signed, over a domain-separated digest; no secrets in a QR; unsigned types shown as unauthenticated. The invite signing-key profile is still open. |
+| D7 | Optional reference packages | **Option 2** on 2026-11-04 (merge personalization, governance and claims; park the nine optional packages). **Superseded on 2026-11-18** by the owner's acceptance recorded in `docs/consolidation/2026-11-18-branch-consolidation-gameplan.md` §5: the optional packages are accepted, extracted one package per PR with an import-boundary check, and none is wired into the default build without its own gate. |
+
+Canonical index (reconciled 2026-11-18): D1, D4, D5, D6, D7, D8 and D9 are accepted as above; the individual packets
+under `docs/adr/proposed/` keep the analysis and are authoritative where this table is shorter. **D2** (testnet trust
+root and Sepolia record) and **D3** (maintained recovery manifest) remain **proposed**. D2 needs owner-run key
+generation, so no agent can complete it. Older summaries that list D4, D6 or D7 as proposed are stale.
 
 ## D5 open questions, as resolved by accepting the recommendation
 
