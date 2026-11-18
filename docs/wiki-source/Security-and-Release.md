@@ -2,7 +2,7 @@
 
 [Home](Home.md) · **[User Guide](User-Guide.md)** · **[Developer Guide](Developer-Guide.md)**
 
-**Status: experimental/test-only. No real-funds trading, production deployment, or release is authorized.** The merged default branch at `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` (one added `agents.md` since the prior source-pinned baseline `300287dcde818a9d10ae301265d00bc7c0877bbb`) keeps `ReleaseEnabled=0` and an empty default network allowlist. A successful demo, local EVM test, or draft PR does not enable trading. See the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md) and [development status](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md).
+**Status: experimental/test-only. No real-funds trading, production deployment, or release is authorized.** The historical merged-main snapshot at `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` (one added `agents.md` since the prior source-pinned baseline `300287dcde818a9d10ae301265d00bc7c0877bbb`) keeps `ReleaseEnabled=0` and an empty default network allowlist. A successful demo, local EVM test, or draft PR does not enable trading. See the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md) and [development status](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md).
 
 ## Current main qualification — November 18, 2026
 
