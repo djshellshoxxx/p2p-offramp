@@ -57,3 +57,20 @@ This mode runs the existing safe/unsafe operational probe, then makes at most on
 Partition classification requires nonzero queries, complete clean compiler/solver work and exact source-bound diagnostics. Missing queries, stderr, unsupported abstractions, timeout or incomplete results stay `PROOF_UNKNOWN`, even if a partial diagnostic names a violation. Raw SAT/UNSAT polarity never determines a partition result. The report binds committed ABI, canonical/model/dependency sources, assumptions, compiler inputs, tool artifacts and query/response identities; it makes no bytecode theorem.
 
 Partition reports preserve the original whole-target UNKNOWN results, four guard-only proofs and `STRICT_TERMINAL_ALREADY_PAID` native-credit counterexample as separate evidence. This mode reruns neither the original whole target nor the native witness, deploys nothing and provides no whole-contract or production qualification. The original runner invocation above remains available for its separately scoped evidence.
+
+## Results on 2026-11-18 at eef9a80
+
+These are formal evidence with unknowns, not a verification of the contract and not release approval. Run on base `eef9a80` with the extracted harness; `releaseEnabled` is false and `productionApproval` is false.
+
+Toolchain, as recorded in `report.json`: forge `1.5.1-v1.5.1` (`b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2`); solc 0.8.30 (SHA-256 `f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7`); Z3 4.12.2 from the pinned wheel (SHA-256 `03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e`, matching the hash above), installed from a fresh Python 3.12 virtualenv download and unpacked so that `bin/z3` and the wheel's `z3/lib` and `dist-info` sit under `FORMAL_Z3_ROOT`; Node 24.22.3. Default `forge test` in `contracts/evm` runs 89 tests before and after the extraction.
+
+| Mode | Property | Result class |
+|---|---|---|
+| Native witness | strict terminal state vs push-to-credit | `MODEL_IMPLEMENTATION_GAP` (`STRICT_TERMINAL_ALREADY_PAID`), native refinement `TEST_EVIDENCE_PASSED` |
+| Whole target (CHC bridge) | all three properties | `PROOF_UNKNOWN`; compiler stopped with `COMPILER_TIMEOUT` after 0 queries |
+| Guard logic (4 QF_LIA queries) | release/refund disjoint, unauthorized release refused, seller deadline coverage, exact-deadline refund | `PROVED_GUARD_LOGIC_ONLY` for all four |
+| Partition | `EVM-NATIVE-ASSET-NOT-TOKEN` | `PROVED_UNDER_DECLARED_MODEL` |
+| Partition | `EVM-UNAUTHORIZED-RELEASE-ATOMIC` | `PROOF_UNKNOWN` (tool reported a violation but work was incomplete: `SOLVER_OR_QUERY_INCOMPLETE`) |
+| Partition | `EVM-EARLY-REFUND-ATOMIC` | `PROOF_UNKNOWN` (same: `SOLVER_OR_QUERY_INCOMPLETE`) |
+
+The partition run used 5 queries and 3 target attempts within its bounds. The overall whole-target report result is `MODEL_IMPLEMENTATION_GAP`. The model commit is null and compiled bytecode is not checked. Earlier partition evidence is recorded at `origin/claude/loving-einstein-xgzvdy-m0-s12-evidence:docs/execution/qualification/evm-formal-partitions.json`; it is linked here and not imported.
