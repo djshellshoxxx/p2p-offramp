@@ -81,3 +81,15 @@ test('actual copy reader refuses unknown keys, wrong entry IDs and accessors wit
   const catalog={};Object.defineProperty(catalog,entry.key,{get(){calls++;return entry;}});
   assert.throws(()=>claimCopyText(catalog,entry.key));assert.equal(calls,0);
 });
+test('a claim whose evidence is stale is never current even with matching trust and scope',()=>{
+  const tested={...claim,status:'tested-scoped',reviewedAt:'2026-11-01'};
+  const trust={current:()=>true,verify:()=>true};
+  assert.equal(canDisplayTestedClaim(tested,scope,trust),true);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,[]),true);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,[tested.evidencePaths[0]]),false);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,['unrelated/path.ts']),true);
+  assert.equal(canDisplayTestedClaim(tested,scope,trust,'not-a-list'),false);
+  const shown=claimFor([tested],tested.capability,scope,trust,[tested.evidencePaths[0]]);
+  assert.equal(shown.status,'proposed');assert.equal(shown.reviewedAt,null);
+  assert.equal(claimFor([tested],tested.capability,scope,trust,[]).status,'tested-scoped');
+});
