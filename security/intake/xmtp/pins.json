@@ -1,0 +1,2299 @@
+{
+  "format": "passive-xmtp-artifact-intake-v1",
+  "task": "T90",
+  "admission": "T84 R84-C",
+  "observedAt": "2026-11-02T16:52:28.565045+00:00",
+  "sourceCommit": "6f7bd07f77b2dabbc6871cdd68d7e5792121e86a",
+  "mode": "passive-public-data-only",
+  "status": "ACTIVE_EVALUATION_BLOCKED",
+  "packageSha256": "94049ba4152c4692feb0face6a76b56d23411280127717dee3a2ee503ecd35a1",
+  "lockSha256": "88592823acfef27b04fa373df1eaea9512be5b55f25f612d92dd8d04969f7bc8",
+  "readmeSha256": "a2cce9ee7c9f19e9bb0d2d9bd6c5908e86aac4c2e192142ba32955e811efd657",
+  "rootPackageSha256": "ec16616f85fb6ac9841af8b373512a91ec3324a569334c1acdd07636cc3dd141",
+  "rootLockSha256": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+  "inputProfile": {
+    "path": "/workspace/p2p-offramp/docs/execution/profiles/04-optional-messaging.md",
+    "bytes": 4954,
+    "sha256": "285dfed07540295de2adf74c7f32a3c10792f79af5955c06995a869dd2591ccc"
+  },
+  "inputSourceIndex": {
+    "path": "/workspace/p2p-offramp/docs/execution/profiles/source-index.json",
+    "bytes": 17982,
+    "sha256": "4c689a58c04cef2dc35009c049cabeabeed27f3103caa2bf6e3ecd2266e96c0b"
+  },
+  "inputSpecification": {
+    "path": "/workspace/p2p-offramp/05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.3_encrypted_messaging/module_5.3.1_message_adapters/spec-xmtp-messaging-adapter.md",
+    "bytes": 6367,
+    "sha256": "53057d21043ebab04a4c1d23e769d9b7a1d261ab037aa2c0c5d9cb43337b28af"
+  },
+  "candidate": {
+    "repository": "xmtp/xmtp-js",
+    "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+    "declaredBrowserVersion": "7.0.0",
+    "wasmVersion": "1.11.0-nightly.20260603.89c3fc3",
+    "coherentPublishedRuntime": false
+  },
+  "publishedBrowser": {
+    "version": "7.0.0",
+    "gitHeadUnsigned": "eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc",
+    "wasmDependency": "1.10.0",
+    "candidateSourceBinding": "MISMATCH",
+    "differentCandidateFiles": [
+      "src/Client.ts",
+      "src/types/actions/client.ts",
+      "src/workers/client.ts",
+      "src/utils/createClient.ts",
+      "src/index.ts",
+      "src/types/options.ts",
+      "src/WorkerClient.ts"
+    ]
+  },
+  "lockPurpose": "Compare both requested public artifacts without replacing the published browser SDK dependency. Never infer npm/bundler runtime compatibility from this lock.",
+  "lockResolution": {
+    "command": "npm install --package-lock-only --ignore-scripts --no-fund --registry=https://registry.npmjs.org --cache=/workspace/work/t90-xmtp/npm-cache",
+    "exitCode": 0,
+    "cwd": "security/intake/xmtp",
+    "installedDependencyTree": false,
+    "overrides": false,
+    "omissions": false,
+    "scannerExclusions": false,
+    "optionalPeer": "Browser SDK declares optional viem>=2; npm did not resolve it, with no omit/exclusion option."
+  },
+  "runtimeUsedForIntake": {
+    "node": "v24.19.0",
+    "npm": "11.9.0",
+    "os": "Linux 6.18.57 x86_64",
+    "sdkExecution": false
+  },
+  "registryKeys": {
+    "url": "https://registry.npmjs.org/-/npm/v1/keys",
+    "sha256": "faf23d8753d5bb79df250f10391ac89b63ecf7743e48487a544a99c847f9c8df",
+    "utf8": "{\"keys\":[{\"expires\":\"2025-01-29T00:00:00.000Z\",\"keyid\":\"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1Olb3zMAFFxXKHiIkQO5cJ3Yhl5i6UPp+IhuteBJbuHcA5UogKo0EWtlWwW6KSaKoTNEYL7JlCQiVnkhBktUgg==\"},{\"expires\":null,\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY6Ya7W++7aUPzvMTrezH6Ycx3c+HOKYCcNGybJZSCJq/fd7Qa8uuAKtdIkUQtQiEKERhAmE5lMMJhP8OkDOa2g==\"}]}",
+    "currentPackageSignatures": 5,
+    "historicalExpiredPackageSignatures": 0,
+    "unavailablePackageSignatureKeys": 0,
+    "limits": "Registry snapshot retains an unused expired 2025 key. All five observed package signatures verify with the unexpired/current key. Signatures bind name@version:integrity, not unsigned gitHead/source/build/attestation claims."
+  },
+  "packages": [
+    {
+      "path": "node_modules/@xmtp/browser-sdk",
+      "name": "@xmtp/browser-sdk",
+      "version": "7.0.0",
+      "integrity": "sha512-Xee5V/JSe3e7RcL6Zd6WbB3tC+ThdjRcXNo+Fgi0wB5x1yLLZCyFvkCnH2VV6R/K+gkywH4px7Mq8tMujdlIuA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@xmtp/browser-sdk/-/browser-sdk-7.0.0.tgz",
+        "bytes": 89898,
+        "sha256": "7ab47400434598ecf0c398f3f94d6c4afe8fbb9ed3192aeed34351ac4d81a4b5",
+        "entries": 56,
+        "unpackedBytes": 464989,
+        "files": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          },
+          {
+            "path": "dist/workers/client.js",
+            "bytes": 29054,
+            "sha256": "bf710ff2719f4b80103cdfb7a391865ac697484531e2f77cf544407b9dc50de7",
+            "gitBlobSha1": "850f2052d6546638d1fe0592fc7a0cfa8afd5f05"
+          },
+          {
+            "path": "dist/index.js",
+            "bytes": 32822,
+            "sha256": "047075599d2f3389ca2023369b3822058bab07bdcfcf84a35ea087c64d83b355",
+            "gitBlobSha1": "539ef170550e3c173647cbc1447aac788ff12d03"
+          },
+          {
+            "path": "dist/workers/opfs.js",
+            "bytes": 1561,
+            "sha256": "bd4b8777fa43e63bdd8f89002fa4d4214f5e135d160e207dad9f6a9f636c47a1",
+            "gitBlobSha1": "2006cd485d91a146ed9dde00fa35645831adbeef"
+          },
+          {
+            "path": "package.json",
+            "bytes": 2445,
+            "sha256": "d04ea758dbd520e47eb3b42b4eb2b974528810fb3dcb424bf8b7c790831a8ade",
+            "gitBlobSha1": "b16b70ba9ed4bbdeeeee1c1c7b013636b636c370"
+          },
+          {
+            "path": "dist/workers/client.js.map",
+            "bytes": 34774,
+            "sha256": "388bda28f1b3b5e1565a7f2d617b2d292a523bbea6e17ab60aa133e3ac3c1541",
+            "gitBlobSha1": "f604a7e2ef5aa08a5323ca9823b9b4afb7e41a72"
+          },
+          {
+            "path": "dist/index.js.map",
+            "bytes": 38425,
+            "sha256": "e2f9de3c09d13c5d23aa57b58469b35dd876ddd4ee501921e2383d2ed59c3619",
+            "gitBlobSha1": "4779dc80502d00872aa9afa4bc535130b256f638"
+          },
+          {
+            "path": "dist/workers/opfs.js.map",
+            "bytes": 1899,
+            "sha256": "9fc25e28b7cd6f188d0c822ff7873fb558b0efaa05dac9a547ce9f600f8d0209",
+            "gitBlobSha1": "536c685cd482211253e21c362d8a76cf9652716e"
+          },
+          {
+            "path": "README.md",
+            "bytes": 4571,
+            "sha256": "3018ef149cac266d5b188d66ff443291491fdb8ee6c53ec18cef0fbfa33395b2",
+            "gitBlobSha1": "f3c9225fb3a345fc9cf623dffffbbdd613ee69dd"
+          },
+          {
+            "path": "src/types/actions.ts",
+            "bytes": 2107,
+            "sha256": "467f999f1907028337cb2528e08612af58896673f928c1e308937163a80786f9",
+            "gitBlobSha1": "d514a46334250cf1088d9fd0246186b6381ec88f"
+          },
+          {
+            "path": "src/AsyncStream.ts",
+            "bytes": 4528,
+            "sha256": "3c60872cf898d978e5d3387f3a20a90c118d0f25a92b520970fd7ad37315aee9",
+            "gitBlobSha1": "d4eead7c105afdcd4c109f6011ee22199e7adbfd"
+          },
+          {
+            "path": "src/Client.ts",
+            "bytes": 29851,
+            "sha256": "7b1d125170c16389dfa8d1e7a2b184aa35b09c55c5f1af0f68916ea2af02a7e2",
+            "gitBlobSha1": "20047bd70ce18589113b16e32cd7ce727d1a732c"
+          },
+          {
+            "path": "src/types/actions/client.ts",
+            "bytes": 6193,
+            "sha256": "111ca64e681c7caa83120c9a00357fda49fddeba3ee343c25bef76c495b53274",
+            "gitBlobSha1": "148e7567fcf30ea81b4895079c2bf3f406573370"
+          },
+          {
+            "path": "src/workers/client.ts",
+            "bytes": 38028,
+            "sha256": "735080032df607f2a21b0bc83b5829cfe1bc36d42fd300e6001baade662c4bfd",
+            "gitBlobSha1": "e77b4a030d0eb634778f7b9b9a96cf4c86f35921"
+          },
+          {
+            "path": "src/CodecRegistry.ts",
+            "bytes": 690,
+            "sha256": "3b9bfaa3a6c11fe748350df9a7e060fd597cbd40224e90b4b68e9401b268ff34",
+            "gitBlobSha1": "901f821d48920a4c1683883ae61616fada5985a7"
+          },
+          {
+            "path": "src/constants.ts",
+            "bytes": 1338,
+            "sha256": "7e0f49cdef630544c66d0656cb66ddb572a2ee98fb4d8789961e40bf1bd83021",
+            "gitBlobSha1": "4b9a7aa9068c02610a019b867d7940c8ae6e1d31"
+          },
+          {
+            "path": "src/utils/contentTypes.ts",
+            "bytes": 3543,
+            "sha256": "bb03c6962047cbe446e6c387d93651297a74becdfa1ca210eed6e1bf3e1d1682",
+            "gitBlobSha1": "25bbb965b4ea356244107d2f347b28b17d993748"
+          },
+          {
+            "path": "src/Conversation.ts",
+            "bytes": 15140,
+            "sha256": "7e9ac08d64f0859d78bb26f72235b261b1e637662ac92744d9fa23d79e7f39fe",
+            "gitBlobSha1": "144b5d625f98014ce6a3a7974b82a350b85c3788"
+          },
+          {
+            "path": "src/types/actions/conversation.ts",
+            "bytes": 6196,
+            "sha256": "56291a57da0a294e4e3ce7ceade52edbf3854913f3c2bac9b4dd3973c3ef2f8d",
+            "gitBlobSha1": "7ce325323e0c5cf05b689373b29782b8a9c87885"
+          },
+          {
+            "path": "src/Conversations.ts",
+            "bytes": 17127,
+            "sha256": "b11a2c9df5ff87b83a3320af3aa0dfbba861cdfc986ab4849ebd6971442f3a55",
+            "gitBlobSha1": "313db6949ef884dbb374163e512a89e43979f0a9"
+          },
+          {
+            "path": "src/types/actions/conversations.ts",
+            "bytes": 3294,
+            "sha256": "07d51bb710bb66d787090fff376f2849bcea5afa42a5a079ee0389066e88eefb",
+            "gitBlobSha1": "ed16652112e2d8e44429c802b0917edaac486d7b"
+          },
+          {
+            "path": "src/utils/conversions.ts",
+            "bytes": 1204,
+            "sha256": "7f60cfa32a71937294ba72cb9e685672fe421782e63700d5ee5e71e1ea859179",
+            "gitBlobSha1": "8033bb50664422e3aa0c247848f05e5bf24fa72c"
+          },
+          {
+            "path": "src/utils/createBackend.ts",
+            "bytes": 1456,
+            "sha256": "00ba7bc444b0488b6f662f714b19dbde2695b758d4bfc34861542c78b542c16b",
+            "gitBlobSha1": "097f14ac2cef0bac4a6c4c4059ee1747f7acca27"
+          },
+          {
+            "path": "src/utils/createClient.ts",
+            "bytes": 2446,
+            "sha256": "a90e203c6c00013b68b8434b16a74bd8e98fbcbdb52e898cd3469a8a7113c143",
+            "gitBlobSha1": "8ac40a0bb1a8de11bd5e4548aea0842785a485fb"
+          },
+          {
+            "path": "src/utils/date.ts",
+            "bytes": 91,
+            "sha256": "a1d6b3bb3da2f1d42877ac0f4c44de30d0dcfa5455177a08a2575dd75c0b4893",
+            "gitBlobSha1": "b15e9987b742b91422fc08bf7ddb0da29759f1e0"
+          },
+          {
+            "path": "src/DebugInformation.ts",
+            "bytes": 808,
+            "sha256": "65818366f468b0860d9fa34c6bb64b8ef1436137e5bb69b7d09435bc4df0d50e",
+            "gitBlobSha1": "a8b54801c4159006e2287ebf95eaf6eb1b98a760"
+          },
+          {
+            "path": "src/types/actions/debugInformation.ts",
+            "bytes": 633,
+            "sha256": "8790a5c92f046f3faf53f31e2b4a43342a3c663c1e369eac777f20c83d11a552",
+            "gitBlobSha1": "fed688e0f62fa29083e358071611849fd5412164"
+          },
+          {
+            "path": "src/DecodedMessage.ts",
+            "bytes": 7854,
+            "sha256": "fd7a9648afd1286ecb2ca8ead9c55542a6ecd10187268d9a73d58e9a89aebdb6",
+            "gitBlobSha1": "75fd87f6d253420c3478b6a0578c81138051017c"
+          },
+          {
+            "path": "src/Dm.ts",
+            "bytes": 1787,
+            "sha256": "2c7a1e2206664f134f277d9592ab7fe486dd10a5e6a4a33a2103fcc0c7a97e7c",
+            "gitBlobSha1": "e87f4c79c1c5ad5fc0d1a70feb2959928ff10b81"
+          },
+          {
+            "path": "src/types/actions/dm.ts",
+            "bytes": 353,
+            "sha256": "a6e075719852084912d2034976604bc3b83629221aef9b0cce6373f487ff1ade",
+            "gitBlobSha1": "00d642b7ef8ecd5729015b88563144fe55c0e284"
+          },
+          {
+            "path": "src/utils/errors.ts",
+            "bytes": 1672,
+            "sha256": "6408169479f9ecb305437fff5f46e72a236f5ca0b57d00c1bae8ab06506154cf",
+            "gitBlobSha1": "e3ea916c2cc659f45870794a1978ed6de11583b4"
+          },
+          {
+            "path": "src/Group.ts",
+            "bytes": 8325,
+            "sha256": "d19fa8ac7823055b49de91c5a19ed68d596b09f36ff1400270960eabcd1ce119",
+            "gitBlobSha1": "c79d00d2a5f42eb43880fea072dd6a37822ee122"
+          },
+          {
+            "path": "src/types/actions/group.ts",
+            "bytes": 3434,
+            "sha256": "82b8d4182949b8b68a8f111a36b2a62b1e93e86ef38b22e8f1fa819c9d4ceb75",
+            "gitBlobSha1": "2feb5ca1d2fd2848a8d37ae1ee17db16945dac8f"
+          },
+          {
+            "path": "src/utils/inboxId.ts",
+            "bytes": 1089,
+            "sha256": "0c0a019fef05420250b2c1562626cad40c6df0f43785195260f31d5f0a2e13f0",
+            "gitBlobSha1": "fef93de7b79de063576f1a0cdf951b2c229fe25c"
+          },
+          {
+            "path": "src/utils/inboxState.ts",
+            "bytes": 542,
+            "sha256": "e6534d4b80c7e78095af844b81d526318544b93864e3c8265c353d4ce7860140",
+            "gitBlobSha1": "9c4a86ffcfe338bc21aeb342c20582d8ad091f13"
+          },
+          {
+            "path": "dist/index.d.ts",
+            "bytes": 98646,
+            "sha256": "e835c8674dd87b2c6cfcc2e9383a81cf1e3b8382338a0602cc9d28949927fee6",
+            "gitBlobSha1": "d2bfec9dbd44984315cc974cf186030515086161"
+          },
+          {
+            "path": "src/index.ts",
+            "bytes": 2198,
+            "sha256": "f91c5fb00c39960954dbf0d0b2ea608dcbbd3c580a02909a527e5e68e04471d5",
+            "gitBlobSha1": "ba27cc55e77cbd8d0e1a0d729f9a24b7da30a49d"
+          },
+          {
+            "path": "src/utils/installations.ts",
+            "bytes": 2546,
+            "sha256": "5fbf85b1a405d57dec21262a3557f5b7bd6ddb92760e0acfae0d0c4b1f2834fd",
+            "gitBlobSha1": "18eafc106207b2917a9e6bc362f400887b878687"
+          },
+          {
+            "path": "src/utils/messages.ts",
+            "bytes": 3016,
+            "sha256": "e26cb0a8d2d94cb3986cabe03ee3f349fe2964bfe5d7721230b3b944998d1a91",
+            "gitBlobSha1": "c0252e42ad457d4b6f1991875afa20540496130e"
+          },
+          {
+            "path": "src/utils/metadata.ts",
+            "bytes": 387,
+            "sha256": "4ec9d4dc0ac2bb9653e5df5fb88cd38587bfb96e208be9b8be3420d10b4e36a1",
+            "gitBlobSha1": "d20429ccdbf24ea60395e847e5ec8fe65d37487c"
+          },
+          {
+            "path": "src/Opfs.ts",
+            "bytes": 1498,
+            "sha256": "6070afeda60d14bd49f3dd1b098ec69f31386b565e9f845aa992ec46044e1c83",
+            "gitBlobSha1": "3f3d219b4fc3bf4985f9189869ffedb6174dd330"
+          },
+          {
+            "path": "src/types/actions/opfs.ts",
+            "bytes": 1150,
+            "sha256": "b67aa2393b0a235c46a88bd7892c347bac5874968262d2ddb8833f0ed8f87f36",
+            "gitBlobSha1": "6f94c306029e50ce1c9244e3faed78c7fca1cc70"
+          },
+          {
+            "path": "src/workers/opfs.ts",
+            "bytes": 3091,
+            "sha256": "263197e0418ff80b6e230408d035900170dd0fe1e5ceb703b10f5d5daa207b90",
+            "gitBlobSha1": "69656a801f0b44467bf9c249bc25dccbacda5e11"
+          },
+          {
+            "path": "src/types/options.ts",
+            "bytes": 3463,
+            "sha256": "614f2da83fcbafbd9890ada5b1c4e630fe214c4e0c9e1d2c8834d9c58727218c",
+            "gitBlobSha1": "8d275fcf19ef6b3ec5f469e1767132b62bb6b57e"
+          },
+          {
+            "path": "src/Preferences.ts",
+            "bytes": 4671,
+            "sha256": "85b5b17131bdebb7f79a6fb8a7303fd86b3cc9f25f5088613f69cae16eac0ef0",
+            "gitBlobSha1": "2ddd84efb9cfaaecc93182673f7d0525ed850d28"
+          },
+          {
+            "path": "src/types/actions/preferences.ts",
+            "bytes": 1264,
+            "sha256": "b76d444b517a00ae98916ee241a2fbf801fd8f4830e69050be202fcc103114b1",
+            "gitBlobSha1": "d0717d22561db9713c3d6a096be50206e62fb5eb"
+          },
+          {
+            "path": "src/utils/signer.ts",
+            "bytes": 2452,
+            "sha256": "f867cb5cc6cb6268a27bdbebce4a87e39da9527c8137ff0670eb65db6b94738a",
+            "gitBlobSha1": "3a65c26e6b714522c4f05cbe0429672d58ad6f5f"
+          },
+          {
+            "path": "src/types/actions/streams.ts",
+            "bytes": 1215,
+            "sha256": "f7d2b4df7c8170e39875ff8949828c5f25ff9e5e28a27b6d808d723d95501f52",
+            "gitBlobSha1": "bd2a500f9873d63cad10ea89a8de62b2caf0d1bf"
+          },
+          {
+            "path": "src/utils/streams.ts",
+            "bytes": 6151,
+            "sha256": "595ee98b193585a60eed687eff6951dcadf309e96fb6d8e475c8450fe0986b2a",
+            "gitBlobSha1": "911d0d907c0850cc2f2feb1b74b2ef3246112769"
+          },
+          {
+            "path": "src/utils/uuid.ts",
+            "bytes": 257,
+            "sha256": "90a68b14b91b96375005341023c675b5477995d400f766b6fe25500d51c863be",
+            "gitBlobSha1": "f0ef7e215fd3f9a1dfc7637b83cee95040e1ab71"
+          },
+          {
+            "path": "src/utils/WorkerBridge.ts",
+            "bytes": 4209,
+            "sha256": "996376185fc4ce13fffcba85b467846b10c2b2cae9100647dd09697f9b9d7706",
+            "gitBlobSha1": "956f8645a70dfdeefa6b1842e80b1894522371ff"
+          },
+          {
+            "path": "src/WorkerClient.ts",
+            "bytes": 6300,
+            "sha256": "56554b57630b38a12b35e7a47ec575dc6de0e063ae9aaccf0553374a17797684",
+            "gitBlobSha1": "b93331516b9cbbf136f14050f9733050390af9c2"
+          },
+          {
+            "path": "src/WorkerConversation.ts",
+            "bytes": 8171,
+            "sha256": "fd1e9ee537fb673a6c4b0a67354ba9cd635cc9bb663973bcf2e96661898174a2",
+            "gitBlobSha1": "18a1f31c84e72a3a3c7a946fcfdd6aad3eb9ed43"
+          },
+          {
+            "path": "src/WorkerConversations.ts",
+            "bytes": 5415,
+            "sha256": "1718c6126a72f333233388d3823f2cdda1a7a5a1f436aa1cfb63f35f3d5d4b84",
+            "gitBlobSha1": "d50b7ccf072afac0f5dafc238a458f1a39eaf41a"
+          },
+          {
+            "path": "src/WorkerDebugInformation.ts",
+            "bytes": 589,
+            "sha256": "cb1144c89d71549877bb7bc922fb1c519fb790b5f9daa99f58a8e68568b51446",
+            "gitBlobSha1": "5a40d86fcd56079fdb73770eb6767786a491ee6a"
+          },
+          {
+            "path": "src/WorkerPreferences.ts",
+            "bytes": 1948,
+            "sha256": "c2fe4b06b7c8042a0d3e4ccc91564633c8ff0cf5b1c1d6662ca2efbf671701f4",
+            "gitBlobSha1": "034df26afc602967d41e8d88a99195e226f259e8"
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://registry.npmjs.org/%40xmtp%2Fbrowser-sdk/7.0.0",
+        "sha256": "9b68fa71f0ca8f73c26daf3cb9f82ad01859bd5e4ff1454fec94535e96691473",
+        "utf8": "{\"bugs\":{\"url\":\"https://github.com/xmtp/xmtp-js/issues\"},\"dist\":{\"shasum\":\"81d509cfbf21aaa7ad4a27c41ef84ac179caa042\",\"tarball\":\"https://registry.npmjs.org/@xmtp/browser-sdk/-/browser-sdk-7.0.0.tgz\",\"fileCount\":56,\"integrity\":\"sha512-Xee5V/JSe3e7RcL6Zd6WbB3tC+ThdjRcXNo+Fgi0wB5x1yLLZCyFvkCnH2VV6R/K+gkywH4px7Mq8tMujdlIuA==\",\"signatures\":[{\"sig\":\"MEUCICRbMIWtcoWep04qu08J3OAGJa2YnFD2Kkm6PisQzpUdAiEA9dtDB9plW1F3Y3oDpqjHc711HrN8d6rq4Juonhr0lZk=\",\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\"}],\"attestations\":{\"url\":\"https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fbrowser-sdk@7.0.0\",\"provenance\":{\"predicateType\":\"https://slsa.dev/provenance/v1\"}},\"unpackedSize\":464989},\"main\":\"dist/index.js\",\"name\":\"@xmtp/browser-sdk\",\"type\":\"module\",\"types\":\"dist/index.d.ts\",\"author\":{\"name\":\"XMTP Labs\",\"email\":\"eng@xmtp.com\"},\"engines\":{\"node\":\">=22\"},\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"default\":\"./dist/index.js\"},\"./package.json\":\"./package.json\"},\"gitHead\":\"eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc\",\"license\":\"MIT\",\"scripts\":{\"dev\":\"yarn clean:dist && yarn rollup -c --watch\",\"test\":\"vitest run\",\"build\":\"yarn clean:dist && yarn rollup -c\",\"clean\":\"rm -rf .turbo && rm -rf node_modules && yarn clean:dist\",\"typecheck\":\"tsc\",\"clean:dist\":\"rm -rf dist\",\"test:debug\":\"vitest run --inspect-brk --no-file-parallelism\"},\"_npmUser\":{\"name\":\"GitHub Actions\",\"email\":\"npm-oidc-no-reply@github.com\",\"trustedPublisher\":{\"id\":\"github\",\"oidcConfigId\":\"oidc:6ee18abb-9506-41ed-bfbf-c20f91eb39bf\"}},\"homepage\":\"https://github.com/xmtp/xmtp-js\",\"keywords\":[\"xmtp\",\"messaging\",\"web3\",\"sdk\",\"js\",\"ts\",\"javascript\",\"typescript\"],\"repository\":{\"url\":\"git+ssh://git@github.com/xmtp/xmtp-js.git\",\"type\":\"git\",\"directory\":\"sdks/browser-sdk\"},\"_npmVersion\":\"11.11.1\",\"description\":\"XMTP client SDK for browsers written in TypeScript\",\"directories\":{},\"maintainers\":[{\"name\":\"xmtp-eng-robot\",\"email\":\"eng+robot@xmtp.com\"},{\"name\":\"galligan\",\"email\":\"matt.galligan@gmail.com\"},{\"name\":\"nick-xmtp\",\"email\":\"nicholas@xmtp.com\"}],\"sideEffects\":false,\"_nodeVersion\":\"24.11.0\",\"browserslist\":{\"production\":[\">0.2%\",\"not dead\",\"not op_mini all\"],\"development\":[\"last 3 chrome versions\",\"last 3 firefox versions\",\"last 3 safari versions\"]},\"dependencies\":{\"@xmtp/wasm-bindings\":\"1.10.0\",\"@xmtp/content-type-primitives\":\"3.0.0\"},\"publishConfig\":{\"access\":\"public\",\"registry\":\"https://registry.npmjs.org/\",\"provenance\":true},\"_hasShrinkwrap\":false,\"devDependencies\":{\"viem\":\"^2.44.4\",\"vite\":\"^7.3.1\",\"rollup\":\"^4.59.0\",\"vitest\":\"^4.0.18\",\"playwright\":\"^1.58.0\",\"typescript\":\"^5.9.3\",\"@vitest/browser\":\"^4.0.18\",\"rollup-plugin-dts\":\"^6.3.0\",\"@vitest/coverage-v8\":\"^4.0.18\",\"vite-tsconfig-paths\":\"^6.0.4\",\"@testing-library/dom\":\"^10.4.1\",\"@rollup/plugin-terser\":\"^0.4.4\",\"@web/rollup-plugin-copy\":\"^0.5.1\",\"@rollup/plugin-typescript\":\"^12.3.0\",\"@testing-library/jest-dom\":\"^6.9.1\",\"@vitest/browser-playwright\":\"^4.0.18\",\"rollup-plugin-tsconfig-paths\":\"^1.5.2\"},\"peerDependencies\":{\"viem\":\">=2\"},\"peerDependenciesMeta\":{\"viem\":{\"optional\":true}},\"_npmOperationalInternal\":{\"tmp\":\"tmp/browser-sdk_7.0.0_1773432708542_0.4257713028655181\",\"host\":\"s3://npm-registry-packages-npm-production\"},\"_id\":\"@xmtp/browser-sdk@7.0.0\",\"version\":\"7.0.0\"}"
+      },
+      "gitHeadUnsigned": "eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc",
+      "repository": {
+        "url": "git+ssh://git@github.com/xmtp/xmtp-js.git",
+        "type": "git",
+        "directory": "sdks/browser-sdk"
+      },
+      "registrySignatures": [
+        {
+          "sig": "MEUCICRbMIWtcoWep04qu08J3OAGJa2YnFD2Kkm6PisQzpUdAiEA9dtDB9plW1F3Y3oDpqjHc711HrN8d6rq4Juonhr0lZk=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signatureChecks": [
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "signature": "MEUCICRbMIWtcoWep04qu08J3OAGJa2YnFD2Kkm6PisQzpUdAiEA9dtDB9plW1F3Y3oDpqjHc711HrN8d6rq4Juonhr0lZk=",
+          "availableCurrentKey": true,
+          "mathematicallyVerified": true,
+          "historicalExpiredKeyOnly": false,
+          "tamperedMessageRejected": true,
+          "keyExpires": null,
+          "currentlyValidKeyAtObservation": true
+        }
+      ],
+      "publisherAttestationsDeclared": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fbrowser-sdk@7.0.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "publisherAttestationsVerified": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          }
+        ]
+      },
+      "installed": false,
+      "importedOrExecuted": false
+    },
+    {
+      "path": "node_modules/@xmtp/browser-sdk/node_modules/@xmtp/wasm-bindings",
+      "name": "@xmtp/wasm-bindings",
+      "version": "1.10.0",
+      "integrity": "sha512-RRZnD7XPsn9KiyLCJSSzRWJe7krO24NTQQpdS7KIoUTLY/8I2LqE07YwOMenXuUxtFqKnhBmy+3Y5NzQS6+ZLQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@xmtp/wasm-bindings/-/wasm-bindings-1.10.0.tgz",
+        "bytes": 4143683,
+        "sha256": "70522eb0d736b3c5b4e313d2635874261e1209101370d95a3fc51bd6398695a1",
+        "entries": 7,
+        "unpackedBytes": 11810381,
+        "files": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          },
+          {
+            "path": "dist/bindings_wasm.js",
+            "bytes": 154083,
+            "sha256": "dc5739f2f4a5f3e4954be22a4c75bd42381cda8abab2112a0d218142d6d97b2c",
+            "gitBlobSha1": "859e4a4a5e831c22b41ac23abb34830fc29980db"
+          },
+          {
+            "path": "package.json",
+            "bytes": 3787,
+            "sha256": "772fba3efb8d743d83436878c0c72c9c78778d005e0436e07ce8ceb64d5ea1bc",
+            "gitBlobSha1": "230ebc10bade75487ac03ad8af3d138d0f72abc5"
+          },
+          {
+            "path": "README.md",
+            "bytes": 1513,
+            "sha256": "dc4729a57ae38b0cd642c6a9bcbbb21528603ebb266d82d7ec491b043983be3d",
+            "gitBlobSha1": "a3efb027d4deaf51fa67b4d8c0fc9ce76dc8d49b"
+          },
+          {
+            "path": "dist/bindings_wasm_bg.wasm.d.ts",
+            "bytes": 21801,
+            "sha256": "664eee0d96a4daea5ce9c192cf7dfa992cdbe1c364cbd9e6d38bc1c5ef082c72",
+            "gitBlobSha1": "74ccf3d374a8bf99cd361ff49e797f9ddcc9baf2"
+          },
+          {
+            "path": "dist/bindings_wasm.d.ts",
+            "bytes": 57339,
+            "sha256": "5b21642538776a52ebf9f0eb218c5b9feae449f3d4c147ee8d11c74f706d665b",
+            "gitBlobSha1": "f7b6b35da6cab1245c330c259ef7d2a6a562cc9a"
+          },
+          {
+            "path": "dist/bindings_wasm_bg.wasm",
+            "bytes": 11570786,
+            "sha256": "3b8f9a8b0b13ca87716407b93862c6bec67f71c270dd147972c1d7b4adfcd894",
+            "gitBlobSha1": "ae96756fe2de1b0fb20278ebafb8878614aa7a7e",
+            "wasmMagicAndVersion": "0061736d01000000"
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://registry.npmjs.org/%40xmtp%2Fwasm-bindings/1.10.0",
+        "sha256": "289ae2a520c35c7b4876167f5ab550f3d5c14f3fc779216fc33827ea634f2bab",
+        "utf8": "{\"bugs\":{\"url\":\"https://github.com/xmtp/libxmtp/issues\"},\"dist\":{\"shasum\":\"13608c5afce55dc067248531ef20b72f3df64eef\",\"tarball\":\"https://registry.npmjs.org/@xmtp/wasm-bindings/-/wasm-bindings-1.10.0.tgz\",\"fileCount\":7,\"integrity\":\"sha512-RRZnD7XPsn9KiyLCJSSzRWJe7krO24NTQQpdS7KIoUTLY/8I2LqE07YwOMenXuUxtFqKnhBmy+3Y5NzQS6+ZLQ==\",\"signatures\":[{\"sig\":\"MEYCIQCgha0M6Vd+goMnfjfuaC6F08Qzi4kMah8pPxefTeRyNwIhALUknsr1LV17MGXUcbPlVovbsaV2mj5+2ocdwzW/OISA\",\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\"}],\"attestations\":{\"url\":\"https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fwasm-bindings@1.10.0\",\"provenance\":{\"predicateType\":\"https://slsa.dev/provenance/v1\"}},\"unpackedSize\":11810381},\"main\":\"dist/bindings_wasm.js\",\"name\":\"@xmtp/wasm-bindings\",\"type\":\"module\",\"types\":\"dist/bindings_wasm.d.ts\",\"engines\":{\"node\":\">=22\"},\"exports\":{\".\":{\"types\":\"./dist/bindings_wasm.d.ts\",\"default\":\"./dist/bindings_wasm.js\"}},\"gitHead\":\"013c00da7b399f99d7d507953dad7a1f1d7ef01e\",\"license\":\"MIT\",\"scripts\":{\"lint\":\"yarn lint:clippy && yarn lint:fmt\",\"test\":\"cargo test --target wasm32-unknown-unknown\",\"build\":\"yarn clean && yarn build:web && yarn clean:release\",\"check\":\"cargo check --target wasm32-unknown-unknown\",\"clean\":\"rm -rf ./dist\",\"format\":\"prettier -w .\",\"lint:fmt\":\"cargo fmt --check\",\"build:web\":\"RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --target web --out-dir ./dist --no-pack --release\",\"typecheck\":\"tsc --noEmit\",\"build:test\":\"RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --no-opt --target web --out-dir ./dist --no-pack --release -- --features test-utils\",\"lint:macos\":\"yarn lint:clippy:macos && yarn lint:fmt\",\"test:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo test --target wasm32-unknown-unknown\",\"build:macos\":\"yarn clean && yarn build:web:macos && yarn clean:release\",\"check:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo check --target wasm32-unknown-unknown\",\"lint:clippy\":\"cargo clippy --locked --all-features --target wasm32-unknown-unknown --no-deps -- -D warnings\",\"format:check\":\"prettier -c .\",\"clean:release\":\"rm ./dist/.gitignore\",\"prepublishOnly\":\"yarn build\",\"build:web:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --target web --out-dir ./dist --no-pack --release\",\"build:test:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --no-opt --target web --out-dir ./dist --no-pack --release -- --features test-utils\",\"test:integration\":\"yarn build:test && vitest run\",\"lint:clippy:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo clippy --locked --all-features --target wasm32-unknown-unknown --no-deps -- -D warnings\",\"test:integration:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang yarn build:test:macos && vitest run\"},\"_npmUser\":{\"name\":\"GitHub Actions\",\"email\":\"npm-oidc-no-reply@github.com\",\"trustedPublisher\":{\"id\":\"github\",\"oidcConfigId\":\"oidc:4603100e-ce39-430c-88ac-9f797ea09e3f\"}},\"homepage\":\"https://github.com/xmtp/libxmtp\",\"keywords\":[\"xmtp\",\"messaging\",\"web3\",\"js\",\"javascript\",\"node\",\"nodejs\",\"wasm\"],\"repository\":{\"url\":\"git+https://github.com/xmtp/libxmtp.git\",\"type\":\"git\",\"directory\":\"bindings/wasm\"},\"_npmVersion\":\"11.11.1\",\"description\":\"WASM bindings for the libXMTP rust library\",\"directories\":{},\"maintainers\":[{\"name\":\"xmtp-eng-robot\",\"email\":\"eng+robot@xmtp.com\"},{\"name\":\"galligan\",\"email\":\"matt.galligan@gmail.com\"},{\"name\":\"nick-xmtp\",\"email\":\"nicholas@xmtp.com\"}],\"_nodeVersion\":\"24.11.0\",\"publishConfig\":{\"access\":\"public\",\"registry\":\"https://registry.npmjs.org/\",\"provenance\":true},\"_hasShrinkwrap\":false,\"packageManager\":\"yarn@4.11.0\",\"devDependencies\":{\"tsx\":\"^4.20.6\",\"viem\":\"^2.31.3\",\"vitest\":\"^4.0.8\",\"binaryen\":\"^125.0.0\",\"prettier\":\"^3.7.4\",\"wasm-pack\":\"^0.14.0\",\"playwright\":\"=1.57\",\"typescript\":\"^5.9.3\",\"@vitest/browser\":\"^4.0.8\",\"@sqlite.org/sqlite-wasm\":\"^3.47.0-build1\",\"@vitest/browser-playwright\":\"^4.0.8\",\"prettier-plugin-packagejson\":\"^3.0.0\",\"@ianvs/prettier-plugin-sort-imports\":\"^4.7.0\",\"@xmtp/content-type-remote-attachment\":\"^2.0.3\"},\"_npmOperationalInternal\":{\"tmp\":\"tmp/wasm-bindings_1.10.0_1773425352569_0.7387570829367458\",\"host\":\"s3://npm-registry-packages-npm-production\"},\"_id\":\"@xmtp/wasm-bindings@1.10.0\",\"version\":\"1.10.0\"}"
+      },
+      "gitHeadUnsigned": "013c00da7b399f99d7d507953dad7a1f1d7ef01e",
+      "repository": {
+        "url": "git+https://github.com/xmtp/libxmtp.git",
+        "type": "git",
+        "directory": "bindings/wasm"
+      },
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCgha0M6Vd+goMnfjfuaC6F08Qzi4kMah8pPxefTeRyNwIhALUknsr1LV17MGXUcbPlVovbsaV2mj5+2ocdwzW/OISA",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signatureChecks": [
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "signature": "MEYCIQCgha0M6Vd+goMnfjfuaC6F08Qzi4kMah8pPxefTeRyNwIhALUknsr1LV17MGXUcbPlVovbsaV2mj5+2ocdwzW/OISA",
+          "availableCurrentKey": true,
+          "mathematicallyVerified": true,
+          "historicalExpiredKeyOnly": false,
+          "tamperedMessageRejected": true,
+          "keyExpires": null,
+          "currentlyValidKeyAtObservation": true
+        }
+      ],
+      "publisherAttestationsDeclared": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fwasm-bindings@1.10.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "publisherAttestationsVerified": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          }
+        ]
+      },
+      "installed": false,
+      "importedOrExecuted": false
+    },
+    {
+      "path": "node_modules/@xmtp/content-type-primitives",
+      "name": "@xmtp/content-type-primitives",
+      "version": "3.0.0",
+      "integrity": "sha512-gxK6+k0ywOz39LFJjrUF3fOXWXR3aAmIkF7e0rFz7c27izDimZC5E2oja9iz/CYyzDS6lf9Pm31qRcGTMSYaHg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@xmtp/content-type-primitives/-/content-type-primitives-3.0.0.tgz",
+        "bytes": 3616,
+        "sha256": "49d9d8f469081ae4b132317cee651a8eb1c742565377556bf855a196997fc8d4",
+        "entries": 9,
+        "unpackedBytes": 10333,
+        "files": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          },
+          {
+            "path": "dist/browser/index.js",
+            "bytes": 542,
+            "sha256": "6e5de3b783f6e46a0bd06b02256070b6d1f609f189e08725ed605d124c9f08eb",
+            "gitBlobSha1": "022ebf564a485759881d36407cef44765f0f4ca5"
+          },
+          {
+            "path": "dist/index.js",
+            "bytes": 1463,
+            "sha256": "f74b4de950d22898ff582062a01e6599a15c38a375f06eaf4537d9a8296a9574",
+            "gitBlobSha1": "abd106e3445210319b9830065979d77aea59c98c"
+          },
+          {
+            "path": "package.json",
+            "bytes": 2035,
+            "sha256": "25e6429617a79bb2f5e7a26c8e23a9b5897b36bb70fbc00f219e5e46f508a0fd",
+            "gitBlobSha1": "5e2773904a5d75fd05107a06ae6a276d9e1a75b9"
+          },
+          {
+            "path": "dist/browser/index.js.map",
+            "bytes": 698,
+            "sha256": "f6b532a7db333ba780f1ad4ac12941e15cf3452b48a19615c8d68e12d098b3f9",
+            "gitBlobSha1": "7ebb4f7d1691f6ab89084c5ca578f7252d74ac31"
+          },
+          {
+            "path": "dist/index.js.map",
+            "bytes": 844,
+            "sha256": "e8e662e6aa149a1e0260135da4b624e9f77d8234160f632922ced603937c09af",
+            "gitBlobSha1": "e52406fcc00bf3e136c8c453de1aac33bb18a63d"
+          },
+          {
+            "path": "README.md",
+            "bytes": 508,
+            "sha256": "5b83099579d5650e3e76f1ccb065cd1c8eb8efcc3684cfeb486b701f2de41c5c",
+            "gitBlobSha1": "6e85a9097e0a0e731c8d95a1818c41fd8fb536ad"
+          },
+          {
+            "path": "dist/index.d.ts",
+            "bytes": 1330,
+            "sha256": "81540dd7481383c28561c8d171e140e93b4a5f20c6321d13e958dbf4cd88a606",
+            "gitBlobSha1": "c1eb0a2702f95150a18333f2b1ac3e24e02e5504"
+          },
+          {
+            "path": "src/index.ts",
+            "bytes": 1841,
+            "sha256": "30a84b62565dada828bb67c0e8ad823f8d277c125b040c0ce8187cebf74341c5",
+            "gitBlobSha1": "3bc570cb678d76600f6e1abafda4a59fe0e5021d"
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://registry.npmjs.org/%40xmtp%2Fcontent-type-primitives/3.0.0",
+        "sha256": "350f5344f495bb3d7ab003d6f33450991d243f14f8496c66a8fbe1d6287363f1",
+        "utf8": "{\"bugs\":{\"url\":\"https://github.com/xmtp/xmtp-js/issues\"},\"dist\":{\"shasum\":\"c32367402da6394db29e8ab51a407b3795d2f915\",\"tarball\":\"https://registry.npmjs.org/@xmtp/content-type-primitives/-/content-type-primitives-3.0.0.tgz\",\"fileCount\":9,\"integrity\":\"sha512-gxK6+k0ywOz39LFJjrUF3fOXWXR3aAmIkF7e0rFz7c27izDimZC5E2oja9iz/CYyzDS6lf9Pm31qRcGTMSYaHg==\",\"signatures\":[{\"sig\":\"MEQCIEtbuZ6oFuxeLhxPBOx9qPLzjNYtOXpGdjiJwfsm+c7LAiAXDYy/RcZpUaeJY4TNpkoWsSl3SL6x37xtOyiP3pOOQA==\",\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\"}],\"attestations\":{\"url\":\"https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fcontent-type-primitives@3.0.0\",\"provenance\":{\"predicateType\":\"https://slsa.dev/provenance/v1\"}},\"unpackedSize\":10333},\"main\":\"dist/index.js\",\"name\":\"@xmtp/content-type-primitives\",\"type\":\"module\",\"types\":\"dist/index.d.ts\",\"author\":{\"name\":\"XMTP Labs\",\"email\":\"eng@xmtp.com\"},\"browser\":\"dist/browser/index.js\",\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"browser\":\"./dist/browser/index.js\",\"default\":\"./dist/index.js\"},\"./package.json\":\"./package.json\"},\"gitHead\":\"3e99355831858037acb5ae95cddbdaf1344443d0\",\"license\":\"MIT\",\"scripts\":{\"dev\":\"yarn clean:dist && yarn rollup -c --watch\",\"test\":\"NODE_TLS_REJECT_UNAUTHORIZED=0 vitest run --environment node\",\"build\":\"yarn clean:dist && yarn rollup -c\",\"clean\":\"yarn clean:dist && rimraf .turbo node_modules\",\"typecheck\":\"tsc\",\"clean:dist\":\"rimraf dist\"},\"_npmUser\":{\"name\":\"GitHub Actions\",\"email\":\"npm-oidc-no-reply@github.com\",\"trustedPublisher\":{\"id\":\"github\",\"oidcConfigId\":\"oidc:675bf711-2341-4f85-9737-51d9c780a495\"}},\"homepage\":\"https://github.com/xmtp/xmtp-js\",\"keywords\":[\"xmtp\",\"messaging\",\"web3\",\"js\",\"ts\",\"javascript\",\"typescript\",\"content-types\"],\"repository\":{\"url\":\"git+ssh://git@github.com/xmtp/xmtp-js.git\",\"type\":\"git\",\"directory\":\"content-types/content-type-primitives\"},\"_npmVersion\":\"11.7.0\",\"description\":\"Primitives for building custom XMTP content types\",\"directories\":{},\"maintainers\":[{\"name\":\"xmtp-eng-robot\",\"email\":\"eng+robot@xmtp.com\"},{\"name\":\"galligan\",\"email\":\"matt.galligan@gmail.com\"},{\"name\":\"nick-xmtp\",\"email\":\"nicholas@xmtp.com\"}],\"sideEffects\":false,\"_nodeVersion\":\"24.11.0\",\"browserslist\":{\"production\":[\">0.2%\",\"not dead\",\"not op_mini all\"],\"development\":[\"last 3 chrome versions\",\"last 3 firefox versions\",\"last 3 safari versions\"]},\"dependencies\":{\"@xmtp/node-bindings\":\"1.8.0\"},\"publishConfig\":{\"access\":\"public\",\"registry\":\"https://registry.npmjs.org/\",\"provenance\":true},\"_hasShrinkwrap\":false,\"devDependencies\":{\"vite\":\"^7.1.12\",\"rimraf\":\"^6.0.1\",\"rollup\":\"^4.52.5\",\"vitest\":\"^4.0.3\",\"typescript\":\"^5.9.3\",\"@types/node\":\"^24.9.1\",\"rollup-plugin-dts\":\"^6.2.3\",\"@rollup/plugin-terser\":\"^0.4.4\",\"@rollup/plugin-typescript\":\"^12.3.0\"},\"_npmOperationalInternal\":{\"tmp\":\"tmp/content-type-primitives_3.0.0_1767741340753_0.9741760290367947\",\"host\":\"s3://npm-registry-packages-npm-production\"},\"_id\":\"@xmtp/content-type-primitives@3.0.0\",\"version\":\"3.0.0\"}"
+      },
+      "gitHeadUnsigned": "3e99355831858037acb5ae95cddbdaf1344443d0",
+      "repository": {
+        "url": "git+ssh://git@github.com/xmtp/xmtp-js.git",
+        "type": "git",
+        "directory": "content-types/content-type-primitives"
+      },
+      "registrySignatures": [
+        {
+          "sig": "MEQCIEtbuZ6oFuxeLhxPBOx9qPLzjNYtOXpGdjiJwfsm+c7LAiAXDYy/RcZpUaeJY4TNpkoWsSl3SL6x37xtOyiP3pOOQA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signatureChecks": [
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "signature": "MEQCIEtbuZ6oFuxeLhxPBOx9qPLzjNYtOXpGdjiJwfsm+c7LAiAXDYy/RcZpUaeJY4TNpkoWsSl3SL6x37xtOyiP3pOOQA==",
+          "availableCurrentKey": true,
+          "mathematicallyVerified": true,
+          "historicalExpiredKeyOnly": false,
+          "tamperedMessageRejected": true,
+          "keyExpires": null,
+          "currentlyValidKeyAtObservation": true
+        }
+      ],
+      "publisherAttestationsDeclared": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fcontent-type-primitives@3.0.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "publisherAttestationsVerified": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          }
+        ]
+      },
+      "installed": false,
+      "importedOrExecuted": false
+    },
+    {
+      "path": "node_modules/@xmtp/node-bindings",
+      "name": "@xmtp/node-bindings",
+      "version": "1.8.0",
+      "integrity": "sha512-dyppg1pQNsEdGH13RfsbkbXdnUdjufak6ea1YahjCROgmaJClDpMHcMcSfMzoJzASanU58MwEdCgYUF638NKgw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@xmtp/node-bindings/-/node-bindings-1.8.0.tgz",
+        "bytes": 76603282,
+        "sha256": "12aeb8f08440531cb3e461e705a5ebf9c9b3d1b40a09f9db6b37051c906bd18b",
+        "entries": 12,
+        "unpackedBytes": 223265129,
+        "files": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          },
+          {
+            "path": "dist/index.js",
+            "bytes": 28170,
+            "sha256": "3e75a01ce683503f4e383b7d09af3315d6649eddd9959f811dcb150792af1448",
+            "gitBlobSha1": "ed172134855ea97e4152860c4c0efc673a660181"
+          },
+          {
+            "path": "package.json",
+            "bytes": 2043,
+            "sha256": "1759545f3b82de88aeee3c767571466b27d7bfc277ce4c14bfed83c41f8527e8",
+            "gitBlobSha1": "7acc86773c156406fc42db8c3316713f2b15cfe3"
+          },
+          {
+            "path": "README.md",
+            "bytes": 849,
+            "sha256": "590559a36c1c8fd8a8faae2adffebcd7b8281dac2dc280d5d05992afabd8ced1",
+            "gitBlobSha1": "77d3bb5ba055bb9a6e9695e61b15b1731c5baf94"
+          },
+          {
+            "path": "dist/bindings_node.darwin-arm64.node",
+            "bytes": 27691152,
+            "sha256": "3937b7d0386d17b0b6891c3d8d7a5bd4298c9413088e9fee8151ce50b49cba7c",
+            "gitBlobSha1": "260b92ba8b46e277e2599432819582cdabd1e175"
+          },
+          {
+            "path": "dist/bindings_node.darwin-x64.node",
+            "bytes": 30237284,
+            "sha256": "3c8ab13b68416c6d20a82d9756ca27bba16de3bdceffa880348c34ca8e821985",
+            "gitBlobSha1": "a77b9d3867ebc2058e55f2bd7d105fb1ae8cd277"
+          },
+          {
+            "path": "dist/bindings_node.linux-arm64-gnu.node",
+            "bytes": 36172288,
+            "sha256": "9ea6ebd3f210e5951f335a0ec6c0902c0fe5ee0c8a84a975ed7a5bf99484d03d",
+            "gitBlobSha1": "abeafc4303a90999f4ff6e5248b42bda66b34f0f"
+          },
+          {
+            "path": "dist/bindings_node.linux-arm64-musl.node",
+            "bytes": 36077664,
+            "sha256": "119784fe75b80cbdc7bb6b3cd463f473b925244f5d6da44289ee196f621cc213",
+            "gitBlobSha1": "6dede5fe299952e1ee4ffcc01a66fbf92a4d6426"
+          },
+          {
+            "path": "dist/bindings_node.linux-x64-gnu.node",
+            "bytes": 37103472,
+            "sha256": "18d94d47cf2433139cd494d5132443c862a57e8588ac34118e9bc3f137f018b5",
+            "gitBlobSha1": "06631da1a431dd63c1ede1dbcbc751bb995a1200"
+          },
+          {
+            "path": "dist/bindings_node.linux-x64-musl.node",
+            "bytes": 36121792,
+            "sha256": "21c0949e6aa75409a80238d4ea94330af69ba77b8781d84154181f98e48125a2",
+            "gitBlobSha1": "61da72f55f76c7a085dcf4e6b307cdb197994e95"
+          },
+          {
+            "path": "dist/bindings_node.win32-x64-msvc.node",
+            "bytes": 19803136,
+            "sha256": "c10471e7706f326d4f8491d5aedb52ac9fc9baf2ee4feb395216dea4fd8f6720",
+            "gitBlobSha1": "46a8bdce1e2dc67427bdf79c38cc9c25db08dee6"
+          },
+          {
+            "path": "dist/index.d.ts",
+            "bytes": 26207,
+            "sha256": "545a4d47ab9534a7fcb12d6bd3b4da7b7268a0e392b7eb35881b557c52216ac3",
+            "gitBlobSha1": "3afde5dc3c47239c0012860de6794db0de22649a"
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://registry.npmjs.org/%40xmtp%2Fnode-bindings/1.8.0",
+        "sha256": "89a1672ed10dd0eb6ee52b2b9122255b7ef4f53e47c7e5eccacbeb35be3dfbf1",
+        "utf8": "{\"bugs\":{\"url\":\"https://github.com/xmtp/libxmtp/issues\"},\"dist\":{\"shasum\":\"68080e847b8463b68233eec0711f790ede3bbe04\",\"tarball\":\"https://registry.npmjs.org/@xmtp/node-bindings/-/node-bindings-1.8.0.tgz\",\"fileCount\":12,\"integrity\":\"sha512-dyppg1pQNsEdGH13RfsbkbXdnUdjufak6ea1YahjCROgmaJClDpMHcMcSfMzoJzASanU58MwEdCgYUF638NKgw==\",\"signatures\":[{\"sig\":\"MEUCIQDn7PcQPohWdH2FwX/SAXk39ixf4OSBjZewL6xLUenr2QIgEI0pt9iHtxwDMfXR7/nUwTSpxTlIEVnlkRjnnZ+Xd+U=\",\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\"}],\"attestations\":{\"url\":\"https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fnode-bindings@1.8.0\",\"provenance\":{\"predicateType\":\"https://slsa.dev/provenance/v1\"}},\"unpackedSize\":223265129},\"main\":\"dist/index.js\",\"name\":\"@xmtp/node-bindings\",\"napi\":{\"binaryName\":\"bindings_node\"},\"type\":\"module\",\"types\":\"dist/index.d.ts\",\"engines\":{\"node\":\">=22\"},\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"default\":\"./dist/index.js\"}},\"gitHead\":\"e90081cf631c354c6916ab172374c0111b0819c7\",\"license\":\"MIT\",\"scripts\":{\"lint\":\"yarn lint:clippy && yarn lint:fmt\",\"test\":\"yarn build:clean && yarn build:test && yarn build:finish && vitest run\",\"build\":\"yarn build:clean && yarn build:release && yarn build:finish\",\"clean\":\"yarn build:clean && yarn test:clean\",\"format\":\"prettier -w .\",\"lint:fmt\":\"cargo fmt --check\",\"artifacts\":\"napi artifacts\",\"build:test\":\"napi build --platform --esm --features test-utils\",\"test:clean\":\"rm -rf test/*.db3*\",\"build:clean\":\"rm -rf dist\",\"build:debug\":\"napi build --platform --esm\",\"lint:clippy\":\"cargo clippy --locked --all-features --all-targets --no-deps -- -D warnings\",\"build:finish\":\"mkdir dist && mv index.js dist && mv index.d.ts dist && mv *.node dist\",\"format:check\":\"prettier -c .\",\"build:release\":\"napi build --platform --release --esm\"},\"_npmUser\":{\"name\":\"GitHub Actions\",\"email\":\"npm-oidc-no-reply@github.com\",\"trustedPublisher\":{\"id\":\"github\",\"oidcConfigId\":\"oidc:8247574b-70cb-475f-be90-402f2f5df888\"}},\"homepage\":\"https://github.com/xmtp/libxmtp#readme\",\"repository\":{\"url\":\"git+https://git@github.com/xmtp/libxmtp.git\",\"type\":\"git\",\"directory\":\"bindings_node\"},\"_npmVersion\":\"11.7.0\",\"description\":\"> [!INFO] > These bindings are not intended to be used directly, use the associated SDK instead.\",\"directories\":{},\"maintainers\":[{\"name\":\"xmtp-eng-robot\",\"email\":\"eng+robot@xmtp.com\"},{\"name\":\"galligan\",\"email\":\"matt.galligan@gmail.com\"},{\"name\":\"nick-xmtp\",\"email\":\"nicholas@xmtp.com\"}],\"_nodeVersion\":\"24.11.0\",\"publishConfig\":{\"access\":\"public\",\"registry\":\"https://registry.npmjs.org/\",\"provenance\":true},\"_hasShrinkwrap\":false,\"packageManager\":\"yarn@4.11.0\",\"devDependencies\":{\"tsx\":\"^4.21.0\",\"uuid\":\"^13.0.0\",\"viem\":\"^2.43.4\",\"vite\":\"^7.3.0\",\"vitest\":\"^4.0.8\",\"prettier\":\"^3.7.4\",\"fast-glob\":\"^3.3.3\",\"typescript\":\"^5.9.3\",\"@types/node\":\"^25.0.3\",\"@types/uuid\":\"^11.0.0\",\"@napi-rs/cli\":\"^3.5.1\",\"vite-tsconfig-paths\":\"^6.0.3\",\"prettier-plugin-packagejson\":\"^2.5.19\",\"@ianvs/prettier-plugin-sort-imports\":\"^4.7.0\",\"@xmtp/content-type-remote-attachment\":\"^2.0.3\"},\"_npmOperationalInternal\":{\"tmp\":\"tmp/node-bindings_1.8.0_1767731047063_0.7884207660682621\",\"host\":\"s3://npm-registry-packages-npm-production\"},\"_id\":\"@xmtp/node-bindings@1.8.0\",\"version\":\"1.8.0\"}"
+      },
+      "gitHeadUnsigned": "e90081cf631c354c6916ab172374c0111b0819c7",
+      "repository": {
+        "url": "git+https://git@github.com/xmtp/libxmtp.git",
+        "type": "git",
+        "directory": "bindings_node"
+      },
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQDn7PcQPohWdH2FwX/SAXk39ixf4OSBjZewL6xLUenr2QIgEI0pt9iHtxwDMfXR7/nUwTSpxTlIEVnlkRjnnZ+Xd+U=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signatureChecks": [
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "signature": "MEUCIQDn7PcQPohWdH2FwX/SAXk39ixf4OSBjZewL6xLUenr2QIgEI0pt9iHtxwDMfXR7/nUwTSpxTlIEVnlkRjnnZ+Xd+U=",
+          "availableCurrentKey": true,
+          "mathematicallyVerified": true,
+          "historicalExpiredKeyOnly": false,
+          "tamperedMessageRejected": true,
+          "keyExpires": null,
+          "currentlyValidKeyAtObservation": true
+        }
+      ],
+      "publisherAttestationsDeclared": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fnode-bindings@1.8.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "publisherAttestationsVerified": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          }
+        ]
+      },
+      "installed": false,
+      "importedOrExecuted": false
+    },
+    {
+      "path": "node_modules/@xmtp/wasm-bindings",
+      "name": "@xmtp/wasm-bindings",
+      "version": "1.11.0-nightly.20260603.89c3fc3",
+      "integrity": "sha512-YftRySSygNqqV2DP025EcVu+/1iDwEi8MiVrzkwrjOpu3voxiAiREawMBo+kLZm7QRTAcdv5HI3JR29g3ly5hg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@xmtp/wasm-bindings/-/wasm-bindings-1.11.0-nightly.20260603.89c3fc3.tgz",
+        "bytes": 4373559,
+        "sha256": "8cef35ce7728b3957aaeb09b40af6acecddc26d41d1f9908b40eb0198c503d3d",
+        "entries": 7,
+        "unpackedBytes": 12493753,
+        "files": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          },
+          {
+            "path": "dist/bindings_wasm.js",
+            "bytes": 155992,
+            "sha256": "13995542d6f7c7c160dd9e6bfdc2848136f98d8332ab21b14be5d1dca88b004b",
+            "gitBlobSha1": "47423757f52d57911dc2ba391e611b53f3d18888"
+          },
+          {
+            "path": "package.json",
+            "bytes": 3784,
+            "sha256": "547190d859d33d3234c1bd2e6831917c63dce5c36309c6ee5c9606f3439b62b9",
+            "gitBlobSha1": "1a215ff0d7a705fff03beaf2dca4662142d2deb3"
+          },
+          {
+            "path": "README.md",
+            "bytes": 1513,
+            "sha256": "dc4729a57ae38b0cd642c6a9bcbbb21528603ebb266d82d7ec491b043983be3d",
+            "gitBlobSha1": "a3efb027d4deaf51fa67b4d8c0fc9ce76dc8d49b"
+          },
+          {
+            "path": "dist/bindings_wasm_bg.wasm.d.ts",
+            "bytes": 21801,
+            "sha256": "7c74b0be18bf4563b7f65eea198df556a9cfd9560168a080ce849667fec24440",
+            "gitBlobSha1": "8f9e8d9514e2cac71d6b03d987fef18b9a4f1711"
+          },
+          {
+            "path": "dist/bindings_wasm.d.ts",
+            "bytes": 60453,
+            "sha256": "786af8b753f67d1e78b6295896b67449473176659524072e0a6c798a0a3489fa",
+            "gitBlobSha1": "56127c97fed69522b9ea8961c67f535c9ba123c2"
+          },
+          {
+            "path": "dist/bindings_wasm_bg.wasm",
+            "bytes": 12249138,
+            "sha256": "623a87afcedda1fb011bb0d4800b9d8b7d3b9221a1d8164be85ed34935252b40",
+            "gitBlobSha1": "e338e605daeb8b19e458f3e59b00033a44017270",
+            "wasmMagicAndVersion": "0061736d01000000"
+          }
+        ]
+      },
+      "metadata": {
+        "url": "https://registry.npmjs.org/%40xmtp%2Fwasm-bindings/1.11.0-nightly.20260603.89c3fc3",
+        "sha256": "473f78ab1215ce6fca3ff0b864ddced0b54a4ef2feb81fa6ae94a08f72159959",
+        "utf8": "{\"bugs\":{\"url\":\"https://github.com/xmtp/libxmtp/issues\"},\"dist\":{\"shasum\":\"01e2abdd3ece952f7eace4d03a81c40a531c2068\",\"tarball\":\"https://registry.npmjs.org/@xmtp/wasm-bindings/-/wasm-bindings-1.11.0-nightly.20260603.89c3fc3.tgz\",\"fileCount\":7,\"integrity\":\"sha512-YftRySSygNqqV2DP025EcVu+/1iDwEi8MiVrzkwrjOpu3voxiAiREawMBo+kLZm7QRTAcdv5HI3JR29g3ly5hg==\",\"signatures\":[{\"sig\":\"MEUCIGTFUHcCYyCmqETA6cr7odMUziXTUUKjZOWwyafwQVZhAiEA2EBauG0UMwYXK7dp1gyH9FTqWl8FM1223q8Tucqrc78=\",\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\"}],\"attestations\":{\"url\":\"https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fwasm-bindings@1.11.0-nightly.20260603.89c3fc3\",\"provenance\":{\"predicateType\":\"https://slsa.dev/provenance/v1\"}},\"unpackedSize\":12493753},\"main\":\"dist/bindings_wasm.js\",\"name\":\"@xmtp/wasm-bindings\",\"type\":\"module\",\"types\":\"dist/bindings_wasm.d.ts\",\"engines\":{\"node\":\">=22\"},\"exports\":{\".\":{\"types\":\"./dist/bindings_wasm.d.ts\",\"default\":\"./dist/bindings_wasm.js\"}},\"gitHead\":\"89c3fc355b1f877c5031554e79a3ffe7ac532557\",\"license\":\"MIT\",\"scripts\":{\"lint\":\"yarn lint:clippy && yarn lint:fmt\",\"test\":\"cargo test --target wasm32-unknown-unknown\",\"build\":\"yarn clean && yarn build:web && yarn clean:release\",\"check\":\"cargo check --target wasm32-unknown-unknown\",\"clean\":\"rm -rf ./dist\",\"format\":\"prettier -w .\",\"lint:fmt\":\"cargo fmt --check\",\"build:web\":\"RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --target web --out-dir ./dist --no-pack --release\",\"typecheck\":\"tsc --noEmit\",\"build:test\":\"RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --no-opt --target web --out-dir ./dist --no-pack --release -- --features test-utils\",\"lint:macos\":\"yarn lint:clippy:macos && yarn lint:fmt\",\"test:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo test --target wasm32-unknown-unknown\",\"build:macos\":\"yarn clean && yarn build:web:macos && yarn clean:release\",\"check:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo check --target wasm32-unknown-unknown\",\"lint:clippy\":\"cargo clippy --locked --all-features --target wasm32-unknown-unknown --no-deps -- -D warnings\",\"format:check\":\"prettier -c .\",\"clean:release\":\"rm ./dist/.gitignore\",\"prepublishOnly\":\"yarn build\",\"build:web:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --target web --out-dir ./dist --no-pack --release\",\"build:test:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang RUSTFLAGS=\\\"-Ctarget-feature=+bulk-memory,+mutable-globals --cfg getrandom_backend=\\\\\\\"wasm_js\\\\\\\"\\\" wasm-pack build --no-opt --target web --out-dir ./dist --no-pack --release -- --features test-utils\",\"test:integration\":\"yarn build:test && vitest run\",\"lint:clippy:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang cargo clippy --locked --all-features --target wasm32-unknown-unknown --no-deps -- -D warnings\",\"test:integration:macos\":\"CC_wasm32_unknown_unknown=/opt/homebrew/opt/llvm/bin/clang yarn build:test:macos && vitest run\"},\"_npmUser\":{\"name\":\"GitHub Actions\",\"email\":\"npm-oidc-no-reply@github.com\",\"trustedPublisher\":{\"id\":\"github\",\"oidcConfigId\":\"oidc:4603100e-ce39-430c-88ac-9f797ea09e3f\"}},\"homepage\":\"https://github.com/xmtp/libxmtp\",\"keywords\":[\"xmtp\",\"messaging\",\"web3\",\"js\",\"javascript\",\"node\",\"nodejs\",\"wasm\"],\"repository\":{\"url\":\"git+https://github.com/xmtp/libxmtp.git\",\"type\":\"git\",\"directory\":\"bindings/wasm\"},\"_npmVersion\":\"11.16.0\",\"description\":\"WASM bindings for the libXMTP rust library\",\"directories\":{},\"maintainers\":[{\"name\":\"xmtp-eng-robot\",\"email\":\"eng+robot@xmtp.com\"},{\"name\":\"galligan\",\"email\":\"matt.galligan@gmail.com\"},{\"name\":\"nick-xmtp\",\"email\":\"nicholas@xmtp.com\"}],\"_nodeVersion\":\"24.11.0\",\"publishConfig\":{\"access\":\"public\",\"registry\":\"https://registry.npmjs.org/\",\"provenance\":true},\"_hasShrinkwrap\":false,\"packageManager\":\"yarn@4.11.0\",\"readmeFilename\":\"README.md\",\"devDependencies\":{\"tsx\":\"^4.20.6\",\"viem\":\"^2.31.3\",\"vitest\":\"^4.0.8\",\"binaryen\":\"^125.0.0\",\"prettier\":\"^3.7.4\",\"playwright\":\"=1.58\",\"typescript\":\"^5.9.3\",\"@vitest/browser\":\"^4.0.8\",\"@sqlite.org/sqlite-wasm\":\"^3.47.0-build1\",\"@vitest/browser-playwright\":\"^4.0.8\",\"prettier-plugin-packagejson\":\"^3.0.0\",\"@ianvs/prettier-plugin-sort-imports\":\"^4.7.0\",\"@xmtp/content-type-remote-attachment\":\"^2.0.3\"},\"_npmOperationalInternal\":{\"tmp\":\"tmp/wasm-bindings_1.11.0-nightly.20260603.89c3fc3_1780472574148_0.6414292016644256\",\"host\":\"s3://npm-registry-packages-npm-production\"},\"_id\":\"@xmtp/wasm-bindings@1.11.0-nightly.20260603.89c3fc3\",\"version\":\"1.11.0-nightly.20260603.89c3fc3\"}"
+      },
+      "gitHeadUnsigned": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "repository": {
+        "url": "git+https://github.com/xmtp/libxmtp.git",
+        "type": "git",
+        "directory": "bindings/wasm"
+      },
+      "registrySignatures": [
+        {
+          "sig": "MEUCIGTFUHcCYyCmqETA6cr7odMUziXTUUKjZOWwyafwQVZhAiEA2EBauG0UMwYXK7dp1gyH9FTqWl8FM1223q8Tucqrc78=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signatureChecks": [
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "signature": "MEUCIGTFUHcCYyCmqETA6cr7odMUziXTUUKjZOWwyafwQVZhAiEA2EBauG0UMwYXK7dp1gyH9FTqWl8FM1223q8Tucqrc78=",
+          "availableCurrentKey": true,
+          "mathematicallyVerified": true,
+          "historicalExpiredKeyOnly": false,
+          "tamperedMessageRejected": true,
+          "keyExpires": null,
+          "currentlyValidKeyAtObservation": true
+        }
+      ],
+      "publisherAttestationsDeclared": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@xmtp%2fwasm-bindings@1.11.0-nightly.20260603.89c3fc3",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "publisherAttestationsVerified": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1072,
+            "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+            "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+          }
+        ]
+      },
+      "installed": false,
+      "importedOrExecuted": false
+    }
+  ],
+  "installedTree": null,
+  "audit": {
+    "command": "npm audit --package-lock-only --json --registry=https://registry.npmjs.org --cache=/workspace/work/t90-xmtp/npm-cache",
+    "exitCode": 0,
+    "wholeLock": true,
+    "packageEntries": 5,
+    "omissions": false,
+    "scannerExclusions": false,
+    "waiver": false,
+    "sha256": "b8ad8ccce5417e5c46c79c79e5606b44df0dac8c7e5bd604f910d3c9474c5392",
+    "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 6,\n      \"dev\": 0,\n      \"optional\": 0,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 5\n    }\n  }\n}\n",
+    "limits": "Npm advisory result at observation only; not all Rust crates/opaque WASM or native binary contents, source/build equivalence or security approval."
+  },
+  "sourceBindings": [
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/package.json",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/package.json",
+      "bytes": 2470,
+      "sha256": "0db47ccada744f5c2e0fab88d20960139a8eb7b4e8f26ac941884bb3cee12160",
+      "gitBlobSha1": "077122f8944328e8a756cec115a39ddd4ab34536"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/Client.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/Client.ts",
+      "bytes": 33040,
+      "sha256": "58d601e077814502c35941111900d72a072bdc9d2ab18570447d03f863cd1697",
+      "gitBlobSha1": "096c23d480d1ad30f28932bc80b879394a93cf68"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "path": "bindings/wasm/package.json",
+      "url": "https://github.com/xmtp/libxmtp/blob/89c3fc355b1f877c5031554e79a3ffe7ac532557/bindings/wasm/package.json",
+      "bytes": 3763,
+      "sha256": "4ab80f8c3c35661666277285155ff01b5eba79ee3d777e0a28ff032c41c35135",
+      "gitBlobSha1": "737b4872a957fc8ffebc6f1e67f0924b2babad8b"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/WorkerClient.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/WorkerClient.ts",
+      "bytes": 6845,
+      "sha256": "bc4fab5de56f7fd148e06883021d36ec895db4b7fcd4dfd1fe26f5d03f7ab1bc",
+      "gitBlobSha1": "5462ced621c82f71cf35abb25d1aff61645cf2b3"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/workers/client.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/workers/client.ts",
+      "bytes": 38485,
+      "sha256": "a10f2e2ec1078cd670e93af194ea4b899a052efbd246fd0074b951d67555d626",
+      "gitBlobSha1": "ec17307178d50471e78d3a5d94a1aaa29cda7409"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/utils/createClient.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/utils/createClient.ts",
+      "bytes": 2586,
+      "sha256": "70a1573d69bdf04f43a8e7ddb9894e05ff90e5a655091437edb20a3207866225",
+      "gitBlobSha1": "ecee8af37b7afdf5d5468a90e3a04615d5eba28d"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/types/options.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/types/options.ts",
+      "bytes": 4197,
+      "sha256": "f51f767f5d4e7c0d1cc89c1e55c1f9140a5244411e1b29a0dbadbfebfb65c8ac",
+      "gitBlobSha1": "ffc7c201442a8c0d655279a9356d44ce67989565"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/types/actions/client.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/types/actions/client.ts",
+      "bytes": 6606,
+      "sha256": "1a3dd7a4044cd49723dd695b98e817381e528924fac78d5be204866aab33bfbd",
+      "gitBlobSha1": "b8eac010a2f8f0ac7c91d87d520b98c5d0023800"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/src/index.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/src/index.ts",
+      "bytes": 2261,
+      "sha256": "9967a63bfc3b9acd18643c87f3d48a68d50d9048cfbc2d0ebfa197d1dcb430d0",
+      "gitBlobSha1": "15fbcc418e9144eaf013d0b9f673800f19990e84"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "3e99355831858037acb5ae95cddbdaf1344443d0",
+      "path": "content-types/content-type-primitives/src/index.ts",
+      "url": "https://github.com/xmtp/xmtp-js/blob/3e99355831858037acb5ae95cddbdaf1344443d0/content-types/content-type-primitives/src/index.ts",
+      "bytes": 1841,
+      "sha256": "30a84b62565dada828bb67c0e8ad823f8d277c125b040c0ce8187cebf74341c5",
+      "gitBlobSha1": "3bc570cb678d76600f6e1abafda4a59fe0e5021d"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "path": "LICENSE",
+      "url": "https://github.com/xmtp/libxmtp/blob/89c3fc355b1f877c5031554e79a3ffe7ac532557/LICENSE",
+      "bytes": 1072,
+      "sha256": "2576f3a1f14171663022b30f93b103cbd45bd8435a6922a0f823b93f4f7ab277",
+      "gitBlobSha1": "11eedfd19a23e3660fc853f4e88ccbc9b39d6c28"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "013c00da7b399f99d7d507953dad7a1f1d7ef01e",
+      "path": "bindings/wasm/package.json",
+      "url": "https://github.com/xmtp/libxmtp/blob/013c00da7b399f99d7d507953dad7a1f1d7ef01e/bindings/wasm/package.json",
+      "bytes": 3791,
+      "sha256": "d2a4ca3a21a4cedcde61ed9fc16b118e65e57d21d96696dcb9739a2077d79c50",
+      "gitBlobSha1": "d5eddcfb6e869483895b474a6210761a3e8215bd"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "e90081cf631c354c6916ab172374c0111b0819c7",
+      "path": "bindings_node/package.json",
+      "url": "https://github.com/xmtp/libxmtp/blob/e90081cf631c354c6916ab172374c0111b0819c7/bindings_node/package.json",
+      "bytes": 2043,
+      "sha256": "1759545f3b82de88aeee3c767571466b27d7bfc277ce4c14bfed83c41f8527e8",
+      "gitBlobSha1": "7acc86773c156406fc42db8c3316713f2b15cfe3"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc",
+      "path": "sdks/browser-sdk/package.json",
+      "url": "https://github.com/xmtp/xmtp-js/blob/eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc/sdks/browser-sdk/package.json",
+      "bytes": 2445,
+      "sha256": "d04ea758dbd520e47eb3b42b4eb2b974528810fb3dcb424bf8b7c790831a8ade",
+      "gitBlobSha1": "b16b70ba9ed4bbdeeeee1c1c7b013636b636c370"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/LICENSE",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "3e99355831858037acb5ae95cddbdaf1344443d0",
+      "path": "content-types/content-type-primitives/LICENSE",
+      "url": "https://github.com/xmtp/xmtp-js/blob/3e99355831858037acb5ae95cddbdaf1344443d0/content-types/content-type-primitives/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "path": "bindings/wasm/LICENSE",
+      "url": "https://github.com/xmtp/libxmtp/blob/89c3fc355b1f877c5031554e79a3ffe7ac532557/bindings/wasm/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    }
+  ],
+  "browserSourceCorrespondence": {
+    "subject": "@xmtp/browser-sdk@7.0.0",
+    "sourceDirectory": "sdks/browser-sdk",
+    "comparisons": [
+      {
+        "label": "publishedGitHead",
+        "commit": "eb362c47b6ac92ec56fbae5c54b2a8c1ea4266cc",
+        "sourceTreeFile": "github-published-tree.json",
+        "sourceTreeSha256": "253d771bb9a870e2ecba7964e04254de7d0c7d8d84d2c37c7ce69ff72f5aef39",
+        "sourceTreeTruncated": false,
+        "checkedSourceFiles": 46,
+        "matchingSourceFiles": 46,
+        "differentOrAbsent": [],
+        "files": [
+          {
+            "path": "src/types/actions.ts",
+            "packagedGitBlobSha1": "d514a46334250cf1088d9fd0246186b6381ec88f",
+            "sourceGitBlobSha1": "d514a46334250cf1088d9fd0246186b6381ec88f",
+            "match": true
+          },
+          {
+            "path": "src/AsyncStream.ts",
+            "packagedGitBlobSha1": "d4eead7c105afdcd4c109f6011ee22199e7adbfd",
+            "sourceGitBlobSha1": "d4eead7c105afdcd4c109f6011ee22199e7adbfd",
+            "match": true
+          },
+          {
+            "path": "src/Client.ts",
+            "packagedGitBlobSha1": "20047bd70ce18589113b16e32cd7ce727d1a732c",
+            "sourceGitBlobSha1": "20047bd70ce18589113b16e32cd7ce727d1a732c",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/client.ts",
+            "packagedGitBlobSha1": "148e7567fcf30ea81b4895079c2bf3f406573370",
+            "sourceGitBlobSha1": "148e7567fcf30ea81b4895079c2bf3f406573370",
+            "match": true
+          },
+          {
+            "path": "src/workers/client.ts",
+            "packagedGitBlobSha1": "e77b4a030d0eb634778f7b9b9a96cf4c86f35921",
+            "sourceGitBlobSha1": "e77b4a030d0eb634778f7b9b9a96cf4c86f35921",
+            "match": true
+          },
+          {
+            "path": "src/CodecRegistry.ts",
+            "packagedGitBlobSha1": "901f821d48920a4c1683883ae61616fada5985a7",
+            "sourceGitBlobSha1": "901f821d48920a4c1683883ae61616fada5985a7",
+            "match": true
+          },
+          {
+            "path": "src/constants.ts",
+            "packagedGitBlobSha1": "4b9a7aa9068c02610a019b867d7940c8ae6e1d31",
+            "sourceGitBlobSha1": "4b9a7aa9068c02610a019b867d7940c8ae6e1d31",
+            "match": true
+          },
+          {
+            "path": "src/utils/contentTypes.ts",
+            "packagedGitBlobSha1": "25bbb965b4ea356244107d2f347b28b17d993748",
+            "sourceGitBlobSha1": "25bbb965b4ea356244107d2f347b28b17d993748",
+            "match": true
+          },
+          {
+            "path": "src/Conversation.ts",
+            "packagedGitBlobSha1": "144b5d625f98014ce6a3a7974b82a350b85c3788",
+            "sourceGitBlobSha1": "144b5d625f98014ce6a3a7974b82a350b85c3788",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/conversation.ts",
+            "packagedGitBlobSha1": "7ce325323e0c5cf05b689373b29782b8a9c87885",
+            "sourceGitBlobSha1": "7ce325323e0c5cf05b689373b29782b8a9c87885",
+            "match": true
+          },
+          {
+            "path": "src/Conversations.ts",
+            "packagedGitBlobSha1": "313db6949ef884dbb374163e512a89e43979f0a9",
+            "sourceGitBlobSha1": "313db6949ef884dbb374163e512a89e43979f0a9",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/conversations.ts",
+            "packagedGitBlobSha1": "ed16652112e2d8e44429c802b0917edaac486d7b",
+            "sourceGitBlobSha1": "ed16652112e2d8e44429c802b0917edaac486d7b",
+            "match": true
+          },
+          {
+            "path": "src/utils/conversions.ts",
+            "packagedGitBlobSha1": "8033bb50664422e3aa0c247848f05e5bf24fa72c",
+            "sourceGitBlobSha1": "8033bb50664422e3aa0c247848f05e5bf24fa72c",
+            "match": true
+          },
+          {
+            "path": "src/utils/createBackend.ts",
+            "packagedGitBlobSha1": "097f14ac2cef0bac4a6c4c4059ee1747f7acca27",
+            "sourceGitBlobSha1": "097f14ac2cef0bac4a6c4c4059ee1747f7acca27",
+            "match": true
+          },
+          {
+            "path": "src/utils/createClient.ts",
+            "packagedGitBlobSha1": "8ac40a0bb1a8de11bd5e4548aea0842785a485fb",
+            "sourceGitBlobSha1": "8ac40a0bb1a8de11bd5e4548aea0842785a485fb",
+            "match": true
+          },
+          {
+            "path": "src/utils/date.ts",
+            "packagedGitBlobSha1": "b15e9987b742b91422fc08bf7ddb0da29759f1e0",
+            "sourceGitBlobSha1": "b15e9987b742b91422fc08bf7ddb0da29759f1e0",
+            "match": true
+          },
+          {
+            "path": "src/DebugInformation.ts",
+            "packagedGitBlobSha1": "a8b54801c4159006e2287ebf95eaf6eb1b98a760",
+            "sourceGitBlobSha1": "a8b54801c4159006e2287ebf95eaf6eb1b98a760",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/debugInformation.ts",
+            "packagedGitBlobSha1": "fed688e0f62fa29083e358071611849fd5412164",
+            "sourceGitBlobSha1": "fed688e0f62fa29083e358071611849fd5412164",
+            "match": true
+          },
+          {
+            "path": "src/DecodedMessage.ts",
+            "packagedGitBlobSha1": "75fd87f6d253420c3478b6a0578c81138051017c",
+            "sourceGitBlobSha1": "75fd87f6d253420c3478b6a0578c81138051017c",
+            "match": true
+          },
+          {
+            "path": "src/Dm.ts",
+            "packagedGitBlobSha1": "e87f4c79c1c5ad5fc0d1a70feb2959928ff10b81",
+            "sourceGitBlobSha1": "e87f4c79c1c5ad5fc0d1a70feb2959928ff10b81",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/dm.ts",
+            "packagedGitBlobSha1": "00d642b7ef8ecd5729015b88563144fe55c0e284",
+            "sourceGitBlobSha1": "00d642b7ef8ecd5729015b88563144fe55c0e284",
+            "match": true
+          },
+          {
+            "path": "src/utils/errors.ts",
+            "packagedGitBlobSha1": "e3ea916c2cc659f45870794a1978ed6de11583b4",
+            "sourceGitBlobSha1": "e3ea916c2cc659f45870794a1978ed6de11583b4",
+            "match": true
+          },
+          {
+            "path": "src/Group.ts",
+            "packagedGitBlobSha1": "c79d00d2a5f42eb43880fea072dd6a37822ee122",
+            "sourceGitBlobSha1": "c79d00d2a5f42eb43880fea072dd6a37822ee122",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/group.ts",
+            "packagedGitBlobSha1": "2feb5ca1d2fd2848a8d37ae1ee17db16945dac8f",
+            "sourceGitBlobSha1": "2feb5ca1d2fd2848a8d37ae1ee17db16945dac8f",
+            "match": true
+          },
+          {
+            "path": "src/utils/inboxId.ts",
+            "packagedGitBlobSha1": "fef93de7b79de063576f1a0cdf951b2c229fe25c",
+            "sourceGitBlobSha1": "fef93de7b79de063576f1a0cdf951b2c229fe25c",
+            "match": true
+          },
+          {
+            "path": "src/utils/inboxState.ts",
+            "packagedGitBlobSha1": "9c4a86ffcfe338bc21aeb342c20582d8ad091f13",
+            "sourceGitBlobSha1": "9c4a86ffcfe338bc21aeb342c20582d8ad091f13",
+            "match": true
+          },
+          {
+            "path": "src/index.ts",
+            "packagedGitBlobSha1": "ba27cc55e77cbd8d0e1a0d729f9a24b7da30a49d",
+            "sourceGitBlobSha1": "ba27cc55e77cbd8d0e1a0d729f9a24b7da30a49d",
+            "match": true
+          },
+          {
+            "path": "src/utils/installations.ts",
+            "packagedGitBlobSha1": "18eafc106207b2917a9e6bc362f400887b878687",
+            "sourceGitBlobSha1": "18eafc106207b2917a9e6bc362f400887b878687",
+            "match": true
+          },
+          {
+            "path": "src/utils/messages.ts",
+            "packagedGitBlobSha1": "c0252e42ad457d4b6f1991875afa20540496130e",
+            "sourceGitBlobSha1": "c0252e42ad457d4b6f1991875afa20540496130e",
+            "match": true
+          },
+          {
+            "path": "src/utils/metadata.ts",
+            "packagedGitBlobSha1": "d20429ccdbf24ea60395e847e5ec8fe65d37487c",
+            "sourceGitBlobSha1": "d20429ccdbf24ea60395e847e5ec8fe65d37487c",
+            "match": true
+          },
+          {
+            "path": "src/Opfs.ts",
+            "packagedGitBlobSha1": "3f3d219b4fc3bf4985f9189869ffedb6174dd330",
+            "sourceGitBlobSha1": "3f3d219b4fc3bf4985f9189869ffedb6174dd330",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/opfs.ts",
+            "packagedGitBlobSha1": "6f94c306029e50ce1c9244e3faed78c7fca1cc70",
+            "sourceGitBlobSha1": "6f94c306029e50ce1c9244e3faed78c7fca1cc70",
+            "match": true
+          },
+          {
+            "path": "src/workers/opfs.ts",
+            "packagedGitBlobSha1": "69656a801f0b44467bf9c249bc25dccbacda5e11",
+            "sourceGitBlobSha1": "69656a801f0b44467bf9c249bc25dccbacda5e11",
+            "match": true
+          },
+          {
+            "path": "src/types/options.ts",
+            "packagedGitBlobSha1": "8d275fcf19ef6b3ec5f469e1767132b62bb6b57e",
+            "sourceGitBlobSha1": "8d275fcf19ef6b3ec5f469e1767132b62bb6b57e",
+            "match": true
+          },
+          {
+            "path": "src/Preferences.ts",
+            "packagedGitBlobSha1": "2ddd84efb9cfaaecc93182673f7d0525ed850d28",
+            "sourceGitBlobSha1": "2ddd84efb9cfaaecc93182673f7d0525ed850d28",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/preferences.ts",
+            "packagedGitBlobSha1": "d0717d22561db9713c3d6a096be50206e62fb5eb",
+            "sourceGitBlobSha1": "d0717d22561db9713c3d6a096be50206e62fb5eb",
+            "match": true
+          },
+          {
+            "path": "src/utils/signer.ts",
+            "packagedGitBlobSha1": "3a65c26e6b714522c4f05cbe0429672d58ad6f5f",
+            "sourceGitBlobSha1": "3a65c26e6b714522c4f05cbe0429672d58ad6f5f",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/streams.ts",
+            "packagedGitBlobSha1": "bd2a500f9873d63cad10ea89a8de62b2caf0d1bf",
+            "sourceGitBlobSha1": "bd2a500f9873d63cad10ea89a8de62b2caf0d1bf",
+            "match": true
+          },
+          {
+            "path": "src/utils/streams.ts",
+            "packagedGitBlobSha1": "911d0d907c0850cc2f2feb1b74b2ef3246112769",
+            "sourceGitBlobSha1": "911d0d907c0850cc2f2feb1b74b2ef3246112769",
+            "match": true
+          },
+          {
+            "path": "src/utils/uuid.ts",
+            "packagedGitBlobSha1": "f0ef7e215fd3f9a1dfc7637b83cee95040e1ab71",
+            "sourceGitBlobSha1": "f0ef7e215fd3f9a1dfc7637b83cee95040e1ab71",
+            "match": true
+          },
+          {
+            "path": "src/utils/WorkerBridge.ts",
+            "packagedGitBlobSha1": "956f8645a70dfdeefa6b1842e80b1894522371ff",
+            "sourceGitBlobSha1": "956f8645a70dfdeefa6b1842e80b1894522371ff",
+            "match": true
+          },
+          {
+            "path": "src/WorkerClient.ts",
+            "packagedGitBlobSha1": "b93331516b9cbbf136f14050f9733050390af9c2",
+            "sourceGitBlobSha1": "b93331516b9cbbf136f14050f9733050390af9c2",
+            "match": true
+          },
+          {
+            "path": "src/WorkerConversation.ts",
+            "packagedGitBlobSha1": "18a1f31c84e72a3a3c7a946fcfdd6aad3eb9ed43",
+            "sourceGitBlobSha1": "18a1f31c84e72a3a3c7a946fcfdd6aad3eb9ed43",
+            "match": true
+          },
+          {
+            "path": "src/WorkerConversations.ts",
+            "packagedGitBlobSha1": "d50b7ccf072afac0f5dafc238a458f1a39eaf41a",
+            "sourceGitBlobSha1": "d50b7ccf072afac0f5dafc238a458f1a39eaf41a",
+            "match": true
+          },
+          {
+            "path": "src/WorkerDebugInformation.ts",
+            "packagedGitBlobSha1": "5a40d86fcd56079fdb73770eb6767786a491ee6a",
+            "sourceGitBlobSha1": "5a40d86fcd56079fdb73770eb6767786a491ee6a",
+            "match": true
+          },
+          {
+            "path": "src/WorkerPreferences.ts",
+            "packagedGitBlobSha1": "034df26afc602967d41e8d88a99195e226f259e8",
+            "sourceGitBlobSha1": "034df26afc602967d41e8d88a99195e226f259e8",
+            "match": true
+          }
+        ]
+      },
+      {
+        "label": "T50Candidate",
+        "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+        "sourceTreeFile": "github-candidate-tree.json",
+        "sourceTreeSha256": "ff07e1744057ff506ac1a457c9e70f02af60f19a5624f68b15420d576dcde053",
+        "sourceTreeTruncated": false,
+        "checkedSourceFiles": 46,
+        "matchingSourceFiles": 39,
+        "differentOrAbsent": [
+          "src/Client.ts",
+          "src/types/actions/client.ts",
+          "src/workers/client.ts",
+          "src/utils/createClient.ts",
+          "src/index.ts",
+          "src/types/options.ts",
+          "src/WorkerClient.ts"
+        ],
+        "files": [
+          {
+            "path": "src/types/actions.ts",
+            "packagedGitBlobSha1": "d514a46334250cf1088d9fd0246186b6381ec88f",
+            "sourceGitBlobSha1": "d514a46334250cf1088d9fd0246186b6381ec88f",
+            "match": true
+          },
+          {
+            "path": "src/AsyncStream.ts",
+            "packagedGitBlobSha1": "d4eead7c105afdcd4c109f6011ee22199e7adbfd",
+            "sourceGitBlobSha1": "d4eead7c105afdcd4c109f6011ee22199e7adbfd",
+            "match": true
+          },
+          {
+            "path": "src/Client.ts",
+            "packagedGitBlobSha1": "20047bd70ce18589113b16e32cd7ce727d1a732c",
+            "sourceGitBlobSha1": "096c23d480d1ad30f28932bc80b879394a93cf68",
+            "match": false
+          },
+          {
+            "path": "src/types/actions/client.ts",
+            "packagedGitBlobSha1": "148e7567fcf30ea81b4895079c2bf3f406573370",
+            "sourceGitBlobSha1": "b8eac010a2f8f0ac7c91d87d520b98c5d0023800",
+            "match": false
+          },
+          {
+            "path": "src/workers/client.ts",
+            "packagedGitBlobSha1": "e77b4a030d0eb634778f7b9b9a96cf4c86f35921",
+            "sourceGitBlobSha1": "ec17307178d50471e78d3a5d94a1aaa29cda7409",
+            "match": false
+          },
+          {
+            "path": "src/CodecRegistry.ts",
+            "packagedGitBlobSha1": "901f821d48920a4c1683883ae61616fada5985a7",
+            "sourceGitBlobSha1": "901f821d48920a4c1683883ae61616fada5985a7",
+            "match": true
+          },
+          {
+            "path": "src/constants.ts",
+            "packagedGitBlobSha1": "4b9a7aa9068c02610a019b867d7940c8ae6e1d31",
+            "sourceGitBlobSha1": "4b9a7aa9068c02610a019b867d7940c8ae6e1d31",
+            "match": true
+          },
+          {
+            "path": "src/utils/contentTypes.ts",
+            "packagedGitBlobSha1": "25bbb965b4ea356244107d2f347b28b17d993748",
+            "sourceGitBlobSha1": "25bbb965b4ea356244107d2f347b28b17d993748",
+            "match": true
+          },
+          {
+            "path": "src/Conversation.ts",
+            "packagedGitBlobSha1": "144b5d625f98014ce6a3a7974b82a350b85c3788",
+            "sourceGitBlobSha1": "144b5d625f98014ce6a3a7974b82a350b85c3788",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/conversation.ts",
+            "packagedGitBlobSha1": "7ce325323e0c5cf05b689373b29782b8a9c87885",
+            "sourceGitBlobSha1": "7ce325323e0c5cf05b689373b29782b8a9c87885",
+            "match": true
+          },
+          {
+            "path": "src/Conversations.ts",
+            "packagedGitBlobSha1": "313db6949ef884dbb374163e512a89e43979f0a9",
+            "sourceGitBlobSha1": "313db6949ef884dbb374163e512a89e43979f0a9",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/conversations.ts",
+            "packagedGitBlobSha1": "ed16652112e2d8e44429c802b0917edaac486d7b",
+            "sourceGitBlobSha1": "ed16652112e2d8e44429c802b0917edaac486d7b",
+            "match": true
+          },
+          {
+            "path": "src/utils/conversions.ts",
+            "packagedGitBlobSha1": "8033bb50664422e3aa0c247848f05e5bf24fa72c",
+            "sourceGitBlobSha1": "8033bb50664422e3aa0c247848f05e5bf24fa72c",
+            "match": true
+          },
+          {
+            "path": "src/utils/createBackend.ts",
+            "packagedGitBlobSha1": "097f14ac2cef0bac4a6c4c4059ee1747f7acca27",
+            "sourceGitBlobSha1": "097f14ac2cef0bac4a6c4c4059ee1747f7acca27",
+            "match": true
+          },
+          {
+            "path": "src/utils/createClient.ts",
+            "packagedGitBlobSha1": "8ac40a0bb1a8de11bd5e4548aea0842785a485fb",
+            "sourceGitBlobSha1": "ecee8af37b7afdf5d5468a90e3a04615d5eba28d",
+            "match": false
+          },
+          {
+            "path": "src/utils/date.ts",
+            "packagedGitBlobSha1": "b15e9987b742b91422fc08bf7ddb0da29759f1e0",
+            "sourceGitBlobSha1": "b15e9987b742b91422fc08bf7ddb0da29759f1e0",
+            "match": true
+          },
+          {
+            "path": "src/DebugInformation.ts",
+            "packagedGitBlobSha1": "a8b54801c4159006e2287ebf95eaf6eb1b98a760",
+            "sourceGitBlobSha1": "a8b54801c4159006e2287ebf95eaf6eb1b98a760",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/debugInformation.ts",
+            "packagedGitBlobSha1": "fed688e0f62fa29083e358071611849fd5412164",
+            "sourceGitBlobSha1": "fed688e0f62fa29083e358071611849fd5412164",
+            "match": true
+          },
+          {
+            "path": "src/DecodedMessage.ts",
+            "packagedGitBlobSha1": "75fd87f6d253420c3478b6a0578c81138051017c",
+            "sourceGitBlobSha1": "75fd87f6d253420c3478b6a0578c81138051017c",
+            "match": true
+          },
+          {
+            "path": "src/Dm.ts",
+            "packagedGitBlobSha1": "e87f4c79c1c5ad5fc0d1a70feb2959928ff10b81",
+            "sourceGitBlobSha1": "e87f4c79c1c5ad5fc0d1a70feb2959928ff10b81",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/dm.ts",
+            "packagedGitBlobSha1": "00d642b7ef8ecd5729015b88563144fe55c0e284",
+            "sourceGitBlobSha1": "00d642b7ef8ecd5729015b88563144fe55c0e284",
+            "match": true
+          },
+          {
+            "path": "src/utils/errors.ts",
+            "packagedGitBlobSha1": "e3ea916c2cc659f45870794a1978ed6de11583b4",
+            "sourceGitBlobSha1": "e3ea916c2cc659f45870794a1978ed6de11583b4",
+            "match": true
+          },
+          {
+            "path": "src/Group.ts",
+            "packagedGitBlobSha1": "c79d00d2a5f42eb43880fea072dd6a37822ee122",
+            "sourceGitBlobSha1": "c79d00d2a5f42eb43880fea072dd6a37822ee122",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/group.ts",
+            "packagedGitBlobSha1": "2feb5ca1d2fd2848a8d37ae1ee17db16945dac8f",
+            "sourceGitBlobSha1": "2feb5ca1d2fd2848a8d37ae1ee17db16945dac8f",
+            "match": true
+          },
+          {
+            "path": "src/utils/inboxId.ts",
+            "packagedGitBlobSha1": "fef93de7b79de063576f1a0cdf951b2c229fe25c",
+            "sourceGitBlobSha1": "fef93de7b79de063576f1a0cdf951b2c229fe25c",
+            "match": true
+          },
+          {
+            "path": "src/utils/inboxState.ts",
+            "packagedGitBlobSha1": "9c4a86ffcfe338bc21aeb342c20582d8ad091f13",
+            "sourceGitBlobSha1": "9c4a86ffcfe338bc21aeb342c20582d8ad091f13",
+            "match": true
+          },
+          {
+            "path": "src/index.ts",
+            "packagedGitBlobSha1": "ba27cc55e77cbd8d0e1a0d729f9a24b7da30a49d",
+            "sourceGitBlobSha1": "15fbcc418e9144eaf013d0b9f673800f19990e84",
+            "match": false
+          },
+          {
+            "path": "src/utils/installations.ts",
+            "packagedGitBlobSha1": "18eafc106207b2917a9e6bc362f400887b878687",
+            "sourceGitBlobSha1": "18eafc106207b2917a9e6bc362f400887b878687",
+            "match": true
+          },
+          {
+            "path": "src/utils/messages.ts",
+            "packagedGitBlobSha1": "c0252e42ad457d4b6f1991875afa20540496130e",
+            "sourceGitBlobSha1": "c0252e42ad457d4b6f1991875afa20540496130e",
+            "match": true
+          },
+          {
+            "path": "src/utils/metadata.ts",
+            "packagedGitBlobSha1": "d20429ccdbf24ea60395e847e5ec8fe65d37487c",
+            "sourceGitBlobSha1": "d20429ccdbf24ea60395e847e5ec8fe65d37487c",
+            "match": true
+          },
+          {
+            "path": "src/Opfs.ts",
+            "packagedGitBlobSha1": "3f3d219b4fc3bf4985f9189869ffedb6174dd330",
+            "sourceGitBlobSha1": "3f3d219b4fc3bf4985f9189869ffedb6174dd330",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/opfs.ts",
+            "packagedGitBlobSha1": "6f94c306029e50ce1c9244e3faed78c7fca1cc70",
+            "sourceGitBlobSha1": "6f94c306029e50ce1c9244e3faed78c7fca1cc70",
+            "match": true
+          },
+          {
+            "path": "src/workers/opfs.ts",
+            "packagedGitBlobSha1": "69656a801f0b44467bf9c249bc25dccbacda5e11",
+            "sourceGitBlobSha1": "69656a801f0b44467bf9c249bc25dccbacda5e11",
+            "match": true
+          },
+          {
+            "path": "src/types/options.ts",
+            "packagedGitBlobSha1": "8d275fcf19ef6b3ec5f469e1767132b62bb6b57e",
+            "sourceGitBlobSha1": "ffc7c201442a8c0d655279a9356d44ce67989565",
+            "match": false
+          },
+          {
+            "path": "src/Preferences.ts",
+            "packagedGitBlobSha1": "2ddd84efb9cfaaecc93182673f7d0525ed850d28",
+            "sourceGitBlobSha1": "2ddd84efb9cfaaecc93182673f7d0525ed850d28",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/preferences.ts",
+            "packagedGitBlobSha1": "d0717d22561db9713c3d6a096be50206e62fb5eb",
+            "sourceGitBlobSha1": "d0717d22561db9713c3d6a096be50206e62fb5eb",
+            "match": true
+          },
+          {
+            "path": "src/utils/signer.ts",
+            "packagedGitBlobSha1": "3a65c26e6b714522c4f05cbe0429672d58ad6f5f",
+            "sourceGitBlobSha1": "3a65c26e6b714522c4f05cbe0429672d58ad6f5f",
+            "match": true
+          },
+          {
+            "path": "src/types/actions/streams.ts",
+            "packagedGitBlobSha1": "bd2a500f9873d63cad10ea89a8de62b2caf0d1bf",
+            "sourceGitBlobSha1": "bd2a500f9873d63cad10ea89a8de62b2caf0d1bf",
+            "match": true
+          },
+          {
+            "path": "src/utils/streams.ts",
+            "packagedGitBlobSha1": "911d0d907c0850cc2f2feb1b74b2ef3246112769",
+            "sourceGitBlobSha1": "911d0d907c0850cc2f2feb1b74b2ef3246112769",
+            "match": true
+          },
+          {
+            "path": "src/utils/uuid.ts",
+            "packagedGitBlobSha1": "f0ef7e215fd3f9a1dfc7637b83cee95040e1ab71",
+            "sourceGitBlobSha1": "f0ef7e215fd3f9a1dfc7637b83cee95040e1ab71",
+            "match": true
+          },
+          {
+            "path": "src/utils/WorkerBridge.ts",
+            "packagedGitBlobSha1": "956f8645a70dfdeefa6b1842e80b1894522371ff",
+            "sourceGitBlobSha1": "956f8645a70dfdeefa6b1842e80b1894522371ff",
+            "match": true
+          },
+          {
+            "path": "src/WorkerClient.ts",
+            "packagedGitBlobSha1": "b93331516b9cbbf136f14050f9733050390af9c2",
+            "sourceGitBlobSha1": "5462ced621c82f71cf35abb25d1aff61645cf2b3",
+            "match": false
+          },
+          {
+            "path": "src/WorkerConversation.ts",
+            "packagedGitBlobSha1": "18a1f31c84e72a3a3c7a946fcfdd6aad3eb9ed43",
+            "sourceGitBlobSha1": "18a1f31c84e72a3a3c7a946fcfdd6aad3eb9ed43",
+            "match": true
+          },
+          {
+            "path": "src/WorkerConversations.ts",
+            "packagedGitBlobSha1": "d50b7ccf072afac0f5dafc238a458f1a39eaf41a",
+            "sourceGitBlobSha1": "d50b7ccf072afac0f5dafc238a458f1a39eaf41a",
+            "match": true
+          },
+          {
+            "path": "src/WorkerDebugInformation.ts",
+            "packagedGitBlobSha1": "5a40d86fcd56079fdb73770eb6767786a491ee6a",
+            "sourceGitBlobSha1": "5a40d86fcd56079fdb73770eb6767786a491ee6a",
+            "match": true
+          },
+          {
+            "path": "src/WorkerPreferences.ts",
+            "packagedGitBlobSha1": "034df26afc602967d41e8d88a99195e226f259e8",
+            "sourceGitBlobSha1": "034df26afc602967d41e8d88a99195e226f259e8",
+            "match": true
+          }
+        ]
+      }
+    ]
+  },
+  "additionalSourceCorrespondence": {
+    "comparisons": [
+      {
+        "name": "@xmtp/browser-sdk",
+        "version": "7.0.0",
+        "sourceManifestFile": "github-published-browser-package.json",
+        "sourceManifestSha256": "d04ea758dbd520e47eb3b42b4eb2b974528810fb3dcb424bf8b7c790831a8ade",
+        "sourceManifestGitBlobSha1": "b16b70ba9ed4bbdeeeee1c1c7b013636b636c370",
+        "artifactManifestSha256": "d04ea758dbd520e47eb3b42b4eb2b974528810fb3dcb424bf8b7c790831a8ade",
+        "exactBytesMatch": true,
+        "structuralDelta": {}
+      },
+      {
+        "name": "@xmtp/wasm-bindings",
+        "version": "1.10.0",
+        "sourceManifestFile": "github-libxmtp-stable-package.json",
+        "sourceManifestSha256": "d2a4ca3a21a4cedcde61ed9fc16b118e65e57d21d96696dcb9739a2077d79c50",
+        "sourceManifestGitBlobSha1": "d5eddcfb6e869483895b474a6210761a3e8215bd",
+        "artifactManifestSha256": "772fba3efb8d743d83436878c0c72c9c78778d005e0436e07ce8ceb64d5ea1bc",
+        "exactBytesMatch": false,
+        "structuralDelta": {
+          "version": {
+            "source": "1.10.0-dev",
+            "artifact": "1.10.0"
+          }
+        }
+      },
+      {
+        "name": "@xmtp/node-bindings",
+        "version": "1.8.0",
+        "sourceManifestFile": "github-libxmtp-node-package.json",
+        "sourceManifestSha256": "1759545f3b82de88aeee3c767571466b27d7bfc277ce4c14bfed83c41f8527e8",
+        "sourceManifestGitBlobSha1": "7acc86773c156406fc42db8c3316713f2b15cfe3",
+        "artifactManifestSha256": "1759545f3b82de88aeee3c767571466b27d7bfc277ce4c14bfed83c41f8527e8",
+        "exactBytesMatch": true,
+        "structuralDelta": {}
+      },
+      {
+        "name": "@xmtp/wasm-bindings",
+        "version": "1.11.0-nightly.20260603.89c3fc3",
+        "sourceManifestFile": "github-nightly-wasm-package.json",
+        "sourceManifestSha256": "4ab80f8c3c35661666277285155ff01b5eba79ee3d777e0a28ff032c41c35135",
+        "sourceManifestGitBlobSha1": "737b4872a957fc8ffebc6f1e67f0924b2babad8b",
+        "artifactManifestSha256": "547190d859d33d3234c1bd2e6831917c63dce5c36309c6ee5c9606f3439b62b9",
+        "exactBytesMatch": false,
+        "structuralDelta": {
+          "version": {
+            "source": "1.11.0-dev",
+            "artifact": "1.11.0-nightly.20260603.89c3fc3"
+          }
+        }
+      },
+      {
+        "name": "@xmtp/content-type-primitives",
+        "version": "3.0.0",
+        "sourcePath": "content-types/content-type-primitives/src/index.ts",
+        "sourceCommit": "3e99355831858037acb5ae95cddbdaf1344443d0",
+        "sourceFile": "github-primitives-index.ts",
+        "sourceSha256": "30a84b62565dada828bb67c0e8ad823f8d277c125b040c0ce8187cebf74341c5",
+        "exactSourceBytesMatch": true
+      }
+    ],
+    "limits": [
+      "Registry signatures bind the archive integrity, not unsigned metadata gitHead.",
+      "Generated JavaScript, WASM and native binaries were not rebuilt; matching source manifests do not establish generated-code/binary correspondence.",
+      "All 46 packaged SDK src files were compared separately against complete official GitHub trees."
+    ]
+  },
+  "sourceVerificationLimits": [
+    "Official GitHub trees are complete at both SDK commits; packaged source files were compared by Git blob hash.",
+    "Matching packaged SDK sources/manifests do not establish bundled JS/source equivalence.",
+    "WASM source manifests differ from published manifest only in version (dev versus release/nightly); generated JS/WASM/native outputs were not rebuilt.",
+    "No publisher attestation was fetched or verified. Unsigned metadata gitHead is a locator, not a signed source provenance assertion."
+  ],
+  "licenseTextsBySha256": {
+    "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e": {
+      "bytes": 1072,
+      "utf8": "MIT License\n\nCopyright (c) 2024 XMTP (xmtp.org)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    },
+    "2576f3a1f14171663022b30f93b103cbd45bd8435a6922a0f823b93f4f7ab277": {
+      "bytes": 1072,
+      "utf8": "MIT License\n\nCopyright (c) 2023 XMTP (xmtp.org)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+    }
+  },
+  "upstreamLicenseEvidence": [
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "path": "LICENSE",
+      "url": "https://github.com/xmtp/libxmtp/blob/89c3fc355b1f877c5031554e79a3ffe7ac532557/LICENSE",
+      "bytes": 1072,
+      "sha256": "2576f3a1f14171663022b30f93b103cbd45bd8435a6922a0f823b93f4f7ab277",
+      "gitBlobSha1": "11eedfd19a23e3660fc853f4e88ccbc9b39d6c28"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+      "path": "sdks/browser-sdk/LICENSE",
+      "url": "https://github.com/xmtp/xmtp-js/blob/8993ef24144532e53fdfcfd04eddf27dce8a5a53/sdks/browser-sdk/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    },
+    {
+      "repository": "xmtp/xmtp-js",
+      "commit": "3e99355831858037acb5ae95cddbdaf1344443d0",
+      "path": "content-types/content-type-primitives/LICENSE",
+      "url": "https://github.com/xmtp/xmtp-js/blob/3e99355831858037acb5ae95cddbdaf1344443d0/content-types/content-type-primitives/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    },
+    {
+      "repository": "xmtp/libxmtp",
+      "commit": "89c3fc355b1f877c5031554e79a3ffe7ac532557",
+      "path": "bindings/wasm/LICENSE",
+      "url": "https://github.com/xmtp/libxmtp/blob/89c3fc355b1f877c5031554e79a3ffe7ac532557/bindings/wasm/LICENSE",
+      "bytes": 1072,
+      "sha256": "cedd724867afbcc9a9f1b46e7093bbcadf296cf2c81a62c2f45e3bb2291bf80e",
+      "gitBlobSha1": "ae6695abd58b935e6b6a7b6051f253b9e5999943"
+    }
+  ],
+  "licenseLimits": "Full license text is present for every resolved npm archive; legal approval and all embedded Rust/native transitive notices remain outside this packet.",
+  "staticObservations": [
+    {
+      "id": "browser-client-constructor",
+      "fileSha256": "7b1d125170c16389dfa8d1e7a2b184aa35b09c55c5f1af0f68916ea2af02a7e2",
+      "startLine": 82,
+      "endLine": 114,
+      "statement": "Constructing Client immediately creates a module Worker from its bundled asset URL; this is already outside this passive intake.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Client.ts"
+    },
+    {
+      "id": "browser-create-build-init",
+      "fileSha256": "7b1d125170c16389dfa8d1e7a2b184aa35b09c55c5f1af0f68916ea2af02a7e2",
+      "startLine": 124,
+      "endLine": 193,
+      "statement": "create constructs Client, gets signer identifier, initializes it, then registers unless disableAutoRegister; build also constructs/initializes with registration disabled.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Client.ts"
+    },
+    {
+      "id": "browser-register-signature",
+      "fileSha256": "7b1d125170c16389dfa8d1e7a2b184aa35b09c55c5f1af0f68916ea2af02a7e2",
+      "startLine": 443,
+      "endLine": 462,
+      "statement": "register requests inbox association signature text, invokes signer.signMessage, and sends registerIdentity to the Worker; this is identity association, not spending approval.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Client.ts"
+    },
+    {
+      "id": "worker-wasm-init",
+      "fileSha256": "735080032df607f2a21b0bc83b5829cfe1bc36d42fd300e6001baade662c4bfd",
+      "startLine": 70,
+      "endLine": 105,
+      "statement": "Every Worker message awaits WASM init before its try block; client.init then calls WorkerClient.create and exposes installation/inbox IDs.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/workers/client.ts"
+    },
+    {
+      "id": "backend-network-defaults",
+      "fileSha256": "00ba7bc444b0488b6f662f714b19dbde2695b758d4bfc34861542c78b542c16b",
+      "startLine": 32,
+      "endLine": 45,
+      "statement": "createBackend awaits WASM init, defaults env to dev, and allows apiUrl/gatewayHost overrides before building Backend; none of these calls was made.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/utils/createBackend.ts"
+    },
+    {
+      "id": "database-installation-device-sync",
+      "fileSha256": "a90e203c6c00013b68b8434b16a74bd8e98fbcbdb52e898cd3469a8a7113c143",
+      "startLine": 49,
+      "endLine": 95,
+      "statement": "createClient obtains or generates inbox ID, defaults a database filename, passes optional dbEncryptionKey, enables DeviceSync unless disabled, and invokes WASM createClientWithBackend; allowOffline is undefined.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/utils/createClient.ts"
+    },
+    {
+      "id": "declared-network-history-defaults",
+      "fileSha256": "7e0f49cdef630544c66d0656cb66ddb572a2ee98fb4d8789961e40bf1bd83021",
+      "startLine": 1,
+      "endLine": 32,
+      "statement": "Source declares localhost/dev/production API constants (deprecated) and environment-specific history service URLs. These declarations are not a selected product profile or complete WASM egress inventory.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/constants.ts"
+    },
+    {
+      "id": "send-publish-trigger",
+      "fileSha256": "7e9ac08d64f0859d78bb26f72235b261b1e637662ac92744d9fa23d79e7f39fe",
+      "startLine": 137,
+      "endLine": 172,
+      "statement": "publishMessages and send post Worker actions; a returned SDK message ID does not satisfy the application envelope/authentication/delivery contracts.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Conversation.ts"
+    },
+    {
+      "id": "stream-sync-trigger",
+      "fileSha256": "b11a2c9df5ff87b83a3320af3aa0dfbba861cdfc986ab4849ebd6971442f3a55",
+      "startLine": 479,
+      "endLine": 510,
+      "statement": "streamAllMessages performs conversation sync unless disableSync and then starts a Worker stream; consentStates is an optional argument, not repository user consent.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Conversations.ts"
+    },
+    {
+      "id": "history-archive-defaults",
+      "fileSha256": "7b1d125170c16389dfa8d1e7a2b184aa35b09c55c5f1af0f68916ea2af02a7e2",
+      "startLine": 839,
+      "endLine": 894,
+      "statement": "Archive defaults include consent/messages and excludeDisappearingMessages false; sync request/archive methods choose environment history URL. No retention/deletion guarantee follows.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Client.ts"
+    },
+    {
+      "id": "opfs-constructor",
+      "fileSha256": "6070afeda60d14bd49f3dd1b098ec69f31386b565e9f845aa992ec46044e1c83",
+      "startLine": 8,
+      "endLine": 32,
+      "statement": "Opfs also immediately creates a module Worker; create invokes its init action.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/Opfs.ts"
+    },
+    {
+      "id": "opfs-wasm-init",
+      "fileSha256": "263197e0418ff80b6e230408d035900170dd0fe1e5ceb703b10f5d5daa207b90",
+      "startLine": 46,
+      "endLine": 69,
+      "statement": "OPFS Worker awaits WASM init for each message and opfs.init invokes opfsInit; delete/import/export/clear methods exist in the same retained file but were not invoked.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/workers/opfs.ts"
+    },
+    {
+      "id": "worker-action-lifecycle",
+      "fileSha256": "996376185fc4ce13fffcba85b467846b10c2b2cae9100647dd09697f9b9d7706",
+      "startLine": 30,
+      "endLine": 75,
+      "statement": "WorkerBridge stores pending action promises and posts messages; this wrapper shows no per-action timeout, AbortSignal or fixed pending-map cap.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/utils/WorkerBridge.ts"
+    },
+    {
+      "id": "worker-close-lifecycle",
+      "fileSha256": "996376185fc4ce13fffcba85b467846b10c2b2cae9100647dd09697f9b9d7706",
+      "startLine": 112,
+      "endLine": 148,
+      "statement": "Stream disposal sends endStream and removes a listener; close removes two listeners then calls standard Worker.terminate(), with no native closure completion promise or explicit rejection/clearing of pending actions in this method.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/utils/WorkerBridge.ts"
+    },
+    {
+      "id": "worker-error-log-redaction",
+      "fileSha256": "996376185fc4ce13fffcba85b467846b10c2b2cae9100647dd09697f9b9d7706",
+      "startLine": 17,
+      "endLine": 20,
+      "statement": "Worker error handler logs event.message; logging-enabled message handling also logs event data. Repository error-redaction policy is not established by this wrapper.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/utils/WorkerBridge.ts"
+    },
+    {
+      "id": "worker-error-forwarding",
+      "fileSha256": "735080032df607f2a21b0bc83b5829cfe1bc36d42fd300e6001baade662c4bfd",
+      "startLine": 1134,
+      "endLine": 1145,
+      "statement": "Worker catch forwards the caught error object via postMessageError, rather than a repository allowlisted error code.",
+      "artifactFile": "xmtp-browser-sdk-7.0.0/src/workers/client.ts"
+    },
+    {
+      "id": "nightly-wasm-host-fetch",
+      "fileSha256": "13995542d6f7c7c160dd9e6bfdc2848136f98d8332ab21b14be5d1dca88b004b",
+      "startLine": 3255,
+      "endLine": 3271,
+      "statement": "Generated WASM host-import functions invoke both receiver.fetch and global fetch. A main-window-only wrapper cannot establish all Worker/WASM routing.",
+      "artifactFile": "xmtp-wasm-bindings-1.11.0-nightly.20260603.89c3fc3/dist/bindings_wasm.js"
+    },
+    {
+      "id": "nightly-wasm-opfs",
+      "fileSha256": "13995542d6f7c7c160dd9e6bfdc2848136f98d8332ab21b14be5d1dca88b004b",
+      "startLine": 3195,
+      "endLine": 3198,
+      "statement": "Generated host imports expose createSyncAccessHandle; getDirectory/getDirectoryHandle imports also exist in this file. Availability is not a tested browser/storage contract.",
+      "artifactFile": "xmtp-wasm-bindings-1.11.0-nightly.20260603.89c3fc3/dist/bindings_wasm.js"
+    },
+    {
+      "id": "nightly-wasm-initialization",
+      "fileSha256": "13995542d6f7c7c160dd9e6bfdc2848136f98d8332ab21b14be5d1dca88b004b",
+      "startLine": 4498,
+      "endLine": 4524,
+      "statement": "WASM init defaults to adjacent bindings_wasm_bg.wasm, fetches the URL then loads/instantiates; finalization invokes __wbindgen_start. None was executed.",
+      "artifactFile": "xmtp-wasm-bindings-1.11.0-nightly.20260603.89c3fc3/dist/bindings_wasm.js"
+    },
+    {
+      "id": "candidate-static-helper-side-effects",
+      "fileSha256": "58d601e077814502c35941111900d72a072bdc9d2ab18570447d03f863cd1697",
+      "startLine": 842,
+      "endLine": 866,
+      "statement": "The T50 candidate adds static fetchLatestInboxUpdatesCount: it constructs an ephemeral identifier and low-level client (dbPath null, device sync disabled), fetches network inbox updates and frees the WASM client. Even this helper is not a passive probe.",
+      "sourceFile": {
+        "repository": "xmtp/xmtp-js",
+        "ref": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+        "path": "sdks/browser-sdk/src/Client.ts"
+      }
+    },
+    {
+      "id": "candidate-nightly-call-contract",
+      "fileSha256": "70a1573d69bdf04f43a8e7ddb9894e05ff90e5a655091437edb20a3207866225",
+      "startLine": 78,
+      "endLine": 99,
+      "statement": "The candidate inserts workerConfig into the WASM createClientWithBackend call; published 7.0.0 source has a different positional call with stable WASM 1.10.0. No override/alias joins them.",
+      "sourceFile": {
+        "repository": "xmtp/xmtp-js",
+        "ref": "8993ef24144532e53fdfcfd04eddf27dce8a5a53",
+        "path": "sdks/browser-sdk/src/utils/createClient.ts"
+      }
+    }
+  ],
+  "wasmStaticInventories": [
+    {
+      "name": "@xmtp/wasm-bindings",
+      "version": "1.10.0",
+      "file": {
+        "path": "dist/bindings_wasm_bg.wasm",
+        "bytes": 11570786,
+        "sha256": "3b8f9a8b0b13ca87716407b93862c6bec67f71c270dd147972c1d7b4adfcd894",
+        "gitBlobSha1": "ae96756fe2de1b0fb20278ebafb8878614aa7a7e",
+        "wasmMagicAndVersion": "0061736d01000000"
+      },
+      "method": "Finite Python byte parser of header/sections/import names only; no JS import, WebAssembly API, compilation or execution.",
+      "importCount": 254,
+      "importsSha256": "e2b066d2664ec02d9279ceada79fdf0d10de0839f5bdfce4ae36b52f18f1d217",
+      "relevantHostImports": [
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_d8c71ea8f97a0b46",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_53eef7df7b439a49",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_74a3e84ebd2c9a0e",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_afb6a4b6cacf876d",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_c97461e1e8f610cd",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getDirectoryHandle_87ce8ca53cf4d8dc",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getDirectory_b66ae3e79f902982",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_createSyncAccessHandle_6457c2b3542fa571",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_1c61fac11405ffdc",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_crypto_574e78ad8b13b65f",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_msCrypto_a61aeb35a24c1329",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_randomFillSync_ac0988aba3254290",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_b8f5dbd5f3995a9e",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_random_912284dbf636f269",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_2a91986308c74a93",
+          "kind": 0
+        }
+      ]
+    },
+    {
+      "name": "@xmtp/wasm-bindings",
+      "version": "1.11.0-nightly.20260603.89c3fc3",
+      "file": {
+        "path": "dist/bindings_wasm_bg.wasm",
+        "bytes": 12249138,
+        "sha256": "623a87afcedda1fb011bb0d4800b9d8b7d3b9221a1d8164be85ed34935252b40",
+        "gitBlobSha1": "e338e605daeb8b19e458f3e59b00033a44017270",
+        "wasmMagicAndVersion": "0061736d01000000"
+      },
+      "method": "Finite Python byte parser of header/sections/import names only; no JS import, WebAssembly API, compilation or execution.",
+      "importCount": 253,
+      "importsSha256": "9da272c970c16175d3e7f3452f76e88f8f349d6cf520a73019b445e1d4c7f252",
+      "relevantHostImports": [
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_5e2e4a3d60c8d1d3",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_477b66419bbb968d",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_c6486a0142348bc8",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_1a030943aa8e0c38",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_fetch_a851d393d6b4492c",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_createSyncAccessHandle_5801784c68dffe64",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getDirectory_d428efb9f123807a",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getDirectoryHandle_41607d7ab5c5d4ec",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_3f44b700395062e5",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_crypto_38df2bab126b63dc",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_msCrypto_bd5a034af96bcba6",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_randomFillSync_6c25eac9869eb53c",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_c44a50d8cfdaebeb",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_random_fc287e2ecb3e2805",
+          "kind": 0
+        },
+        {
+          "module": "./bindings_wasm_bg.js",
+          "name": "__wbg_getRandomValues_76dfc69825c9c552",
+          "kind": 0
+        }
+      ]
+    }
+  ],
+  "fullStaticObservations": {
+    "path": "/workspace/work/t90-xmtp/static-observations.json",
+    "bytes": 104774,
+    "sha256": "95dbe8c989d958bb2fda7c3a2ef9a1fe82de3e31d51244d91aff5ff553bc1ad2"
+  },
+  "missingProfileContracts": [
+    {
+      "id": "coherent-build",
+      "absent": "Selected protocol generation and coherent exact SDK/WASM/source/build profile.",
+      "evidence": "Published browser 7.0.0 uses WASM 1.10.0 and a different source tree; the T50 snapshot and separately pinned nightly are comparison inputs only."
+    },
+    {
+      "id": "network-routing",
+      "absent": "Selected environment, network IDs, API/gateway/history endpoints, server artifacts, and G05 broker enforcement for main window, Workers, WASM, asset fetches and every request/socket.",
+      "evidence": "Backend defaults dev; generated WASM host imports include fetch and source declares history URLs. No runtime routing, network/server interoperability or traffic absence was measured."
+    },
+    {
+      "id": "wallet-inbox-participants",
+      "absent": "Exact wallet-to-inbox association challenge/signature validation, signer/network binding and participant authentication.",
+      "evidence": "register calls signer.signMessage and Worker registerIdentity; this intake signs nothing and proves no external wallet support or spending consent."
+    },
+    {
+      "id": "installation-limits",
+      "absent": "Installation/key creation, count/rate limits, revocation propagation and revoked-generation behavior.",
+      "evidence": "Client initialization exposes installation IDs and source has revoke methods; no installation is created or revoked here."
+    },
+    {
+      "id": "consent-negotiation",
+      "absent": "Explicit adapter/conversation consent, G14 profile negotiation and both-party signed new unfunded terms for any protocol change.",
+      "evidence": "SDK consent states and optional stream filters do not establish repository consent; no fallback/downgrade or production provider is selected."
+    },
+    {
+      "id": "trade-envelope",
+      "absent": "Versioned application trade-envelope mapping, independent authentication, participant/trade binding, canonical values, size/rate limits, expiry and replay/dedup rules.",
+      "evidence": "SDK send/stream actions and message IDs are not application acceptance or delivery/custody evidence."
+    },
+    {
+      "id": "database-key-recovery",
+      "absent": "G02 database/encryption-key ownership and lifecycle, G03 authenticated fresh-key restore, database/OPFS leases and backup/import limits.",
+      "evidence": "Database path/key are optional inputs; default initialization and OPFS helpers have side effects. No key/database/backup is created or opened here."
+    },
+    {
+      "id": "history-retention",
+      "absent": "Authenticated bounded cursor/history semantics, retention/deletion/disappearing-message policy and recovery coverage.",
+      "evidence": "Device sync is enabled by default and default archives include disappearing messages; remote deletion/physical erasure and retained-history coverage are unqualified."
+    },
+    {
+      "id": "disposal-errors-bounds",
+      "absent": "Exact resource budgets, generation plus AbortSignal cancellation, late-receive rejection, pending-action settlement, stream/resource disposal and G13 allowlisted redacted errors.",
+      "evidence": "WorkerBridge close calls standard terminate without a completion promise; inspected wrappers show no fixed action deadline/map cap and can log/forward raw event/error data."
+    },
+    {
+      "id": "independent-qualification",
+      "absent": "Named independent interoperability, identity, privacy and retention review, exact browser/provider matrix, cancellation/reload fault evidence and core-only compatibility gate.",
+      "evidence": "No SDK import or execution was authorized. Nostr evidence, metadata, signatures, audit zero and static inventories do not qualify XMTP."
+    }
+  ],
+  "artifactReadBounds": {
+    "metadataMaxBytesPerResponse": 4194304,
+    "registryKeyMaxBytes": 65536,
+    "archiveMaxBytes": 134217728,
+    "allArchiveMaxBytes": 268435456,
+    "archiveMembersMax": 8192,
+    "memberMaxBytes": 67108864,
+    "archiveUnpackedMaxBytes": 268435456,
+    "allUnpackedMaxBytes": 536870912,
+    "textReadbackMaxBytesPerFile": 4194304,
+    "symlinksAndHardlinksAccepted": false,
+    "unsafeTarPathsAccepted": false,
+    "observedCompressedBytes": 85214038,
+    "observedUnpackedBytes": 248044585,
+    "observedRegularFiles": 91
+  },
+  "verificationAlgorithmsReused": [
+    {
+      "path": "/workspace/p2p-offramp/scripts/check-npm-registry-signatures.mjs",
+      "bytes": 3989,
+      "sha256": "360db30855c444bd11af952fe6eb26c890fa6c7a33610db7b531641d2057168c"
+    },
+    {
+      "path": "/workspace/p2p-offramp/scripts/check-upstream-source-correspondence.py",
+      "bytes": 1198,
+      "sha256": "39fe1cbb902385c3bb55263437cadbbe04c48d850f20573ac3f784b6303e5449"
+    },
+    {
+      "path": "/workspace/work/t75-independent-review/verify-provenance.py",
+      "bytes": 12791,
+      "sha256": "0a90295d2fd46011f10dfaf5c84ce1bdb123c52a82b08d08399b164bbead82ea"
+    }
+  ],
+  "qualification": {
+    "passivePublicArtifactIntake": true,
+    "rootIndependentReviewCompleted": false,
+    "coherentRuntimeProfile": false,
+    "activeSdkEvaluationAuthorized": false,
+    "sdkImportOrExecution": false,
+    "wasmOrWorkerExecution": false,
+    "identityInboxKeyOrDatabaseCreated": false,
+    "sdkNetworkTrafficMeasured": false,
+    "noEgressQualified": false,
+    "lifecycleOrPhysicalClosureQualified": false,
+    "browserProviderSupportQualified": false,
+    "interoperabilityQualified": false,
+    "productionProviderSelected": false,
+    "protocolProfileSelected": false,
+    "privacyOrCryptoApproval": false,
+    "fundingOrSpendingAuthorized": false
+  },
+  "nextGate": "A coherent verified exact artifact/source/build profile, explicit active-evaluation admission and the missing contracts are required before SDK loading or side effects. Keep unsupported with an empty product provider registry; audit zero alone does not open the gate."
+}

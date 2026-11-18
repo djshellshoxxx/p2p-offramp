@@ -1,0 +1,115 @@
+{
+  "format": "p2p-public-sdk-evaluation-v1",
+  "profile": "t75-relay-transport-20261102",
+  "packageSha256": "c2916101bf6790915d8c534661cdd2a634d28b1f51dee208f54020e0218f3e7e",
+  "lockSha256": "4f26ffe5b0ea4b0bd033c1d9ac3a5601498e52f8ccd259202bee3a6e2643294b",
+  "rootLockSha256AtIntake": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+  "installedTree": {
+    "entries": 20,
+    "regularFiles": 20,
+    "symlinks": 0,
+    "bytes": 152883,
+    "sha256": "94531899af0ebd7cbe6a0220b16961b425118fda3b891411b9e19c6665d829b6"
+  },
+  "registryKeys": {
+    "utf8": "{\"keys\":[{\"expires\":\"2025-01-29T00:00:00.000Z\",\"keyid\":\"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1Olb3zMAFFxXKHiIkQO5cJ3Yhl5i6UPp+IhuteBJbuHcA5UogKo0EWtlWwW6KSaKoTNEYL7JlCQiVnkhBktUgg==\"},{\"expires\":null,\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY6Ya7W++7aUPzvMTrezH6Ycx3c+HOKYCcNGybJZSCJq/fd7Qa8uuAKtdIkUQtQiEKERhAmE5lMMJhP8OkDOa2g==\"}]}",
+    "sha256": "faf23d8753d5bb79df250f10391ac89b63ecf7743e48487a544a99c847f9c8df"
+  },
+  "packages": [
+    {
+      "path": "node_modules/ws",
+      "name": "ws",
+      "version": "8.22.1",
+      "integrity": "sha512-oyL6OPYme/CmiFvNuGzeoxCJ4nOrZE2O1FwM9MWM1AsGri6nLXB2pg+lNA8aLeXMSav0J6eIVS1j6vUPzUtK9g==",
+      "archive": {
+        "url": "https://registry.npmjs.org/ws/-/ws-8.22.1.tgz",
+        "bytes": 35214,
+        "sha256": "a5cdb19c7090b816ffc109b6d928d352aa2bce73e38f73bd9678d484a62d2f75"
+      },
+      "metadataSha256": "e5cb76c091472ade4a2aa7da85ad197581dd2db5e397fb86091e165970b91756",
+      "gitHeadUnsigned": "c18a80a10f2769688d90d69c2f96ec7828dfbe62",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIFCTDtEpL7J9RMcTZUhs+G+8Qd1nQ1teYl+kFwEd7hl+AiATUXcziHZFQKF7IEkGryPdBPrGnJQtDDaXdLtbuuCkLA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCICjsxo3DIvFZGNvDiwi0O4SSmmuC+Zm4yAWqSbOpsQ0cAiBxwNcQ1fbHBfn2DllztrpNUieKlyCWKEusvXPfpN9Aaw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1183,
+            "sha256": "2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    }
+  ],
+  "sourceBindings": [
+    {
+      "url": "https://github.com/websockets/ws/blob/f40ccfff97bbdea2eba574ecd6c1ba88156c73c3/lib/receiver.js",
+      "bytes": 17439,
+      "sha256": "a6ada33c9a2d54eaf595824b821ea89ca2c6395f89aa06755c52142148274884",
+      "installedPath": "ws/lib/receiver.js"
+    }
+  ],
+  "pinnedFiles": [
+    {
+      "path": "ws/lib/receiver.js",
+      "bytes": 17439,
+      "sha256": "a6ada33c9a2d54eaf595824b821ea89ca2c6395f89aa06755c52142148274884"
+    },
+    {
+      "path": "ws/wrapper.mjs",
+      "bytes": 554,
+      "sha256": "fe154662301fd558f935f9c217fccbe7a7dac02ff39e648a000589403ff27c7f"
+    }
+  ],
+  "audit": {
+    "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 2,\n      \"dev\": 0,\n      \"optional\": 0,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 1\n    }\n  }\n}\n",
+    "sha256": "846fc260eb0bf70e6b21419d4cab9fcc61c224c7362324d4cbc8aebf8355f9bd",
+    "exitCode": 0,
+    "scope": "Entire resolved lock; no package omissions, overrides or scanner exclusions."
+  },
+  "limits": {
+    "cpu": 1,
+    "memoryBytes": 268435456,
+    "pids": 64,
+    "runtimeMs": 30000,
+    "outputBytes": 65536
+  },
+  "qualification": {
+    "publicFixtureOnly": true,
+    "productionProvider": false,
+    "currentSigningTrustRoot": false,
+    "applicationProtocolSelected": false,
+    "walletSessionOrCallbackAuthenticated": false,
+    "g05RoutingQualified": false,
+    "sdkLifecycleQualified": false,
+    "professionalReview": false,
+    "releaseEnabled": false
+  },
+  "notes": [
+    "Registry signatures bind name@version:integrity, not unsigned gitHead/source/license metadata or source-to-bundle equivalence. Exact source byte comparisons are separate.",
+    "Expired legacy assertions are mathematical historical evidence only, never a currently valid key, waiver or application trust policy.",
+    "WalletConnect Community License and missing uint8arrays3.1.1 full text remain explicit licensing/adoption limits; this is finite public function research, not commercial/legal approval."
+  ],
+  "observedConformance": {
+    "disposition": "FINITE_NODE_RECEIVER_SCOPE_PASS",
+    "tests": 6,
+    "passed": 6,
+    "failed": 0,
+    "localPolicyCloseCode": 1006,
+    "peerPayloadCloseCode": 1009,
+    "peerFragmentCloseCode": 1008
+  }
+}

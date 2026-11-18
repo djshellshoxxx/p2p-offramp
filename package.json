@@ -35,6 +35,7 @@
     "build:demo": "npm run typecheck && node apps/web/scripts/build.mjs demo",
     "build:testnet": "npm run typecheck && node apps/web/scripts/build.mjs testnet",
     "check:docs": "node --import ./scripts/test-support/register-tsx.mjs scripts/docs/validate.mjs",
+    "test:reputation:intake": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/reputation/semaphore-v4-evaluation.test.mjs",
     "test:tooling": "node --import ./scripts/test-support/register-tsx.mjs --test scripts/docs/validate.test.mjs scripts/lab/recipe.test.mjs",
     "test:web:browser": "node scripts/test-web-build-browser.mjs && node scripts/test-trade-review-browser.mjs && node scripts/test-saved-reviews-browser.mjs && node scripts/test-testnet-build-browser.mjs",
     "check:boundaries": "node scripts/check-import-boundaries.mjs",
