@@ -86,4 +86,3 @@ export function utf8Encode(input: string): Uint8Array { if (LONE_SURROGATE.test(
 export function utf8Decode(bytes: Uint8Array): string {
   try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); } catch { return fail(); }
 }
-export function utf8Length(input: string): number { return utf8Encode(input).byteLength; }

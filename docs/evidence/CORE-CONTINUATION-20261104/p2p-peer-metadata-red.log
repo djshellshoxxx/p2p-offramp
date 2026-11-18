@@ -1,0 +1,108 @@
+✔ test-enabled pending review is labeled pending and never grants a production badge (20.232002ms)
+✔ release-enabled requires named existing accepted review; test-only acceptance does not enable release (4.537853ms)
+✔ missing test-enabled accepted-review evidence remains explicitly pending (0.663697ms)
+✔ changing one vector byte fails its hash before any vector execution (0.866736ms)
+✔ all required fixed findings are observable and cannot leak arbitrary input text (7.451897ms)
+✔ unknown fields, duplicate IDs, path escapes, malformed hashes and accessor input fail closed (4.403519ms)
+✔ transitive runtime implementations must be declared with exact locked edges (2.564592ms)
+✔ candidate findings cannot be inherited as approval by another capability (1.841013ms)
+✔ native inventory requires matching bounded browser-profile observations rather than npm hashes (2.886352ms)
+✖ npm peer-install metadata is boolean-only and does not alter review eligibility (5.717052ms)
+✖ peer-install metadata cannot bypass exact package provenance or dependency closure (0.728438ms)
+✖ current inventory has scoped G16 review evidence while other test-only providers remain pending (5.265109ms)
+✔ input objects and fixture bytes are snapshotted before asynchronous hashes (0.802446ms)
+✔ bounded metadata rejects oversized files, aggregate bytes, graph and hostile prototypes (26.454329ms)
+✔ foreign reflection failures always resolve to a fixed blocking input finding (8.770664ms)
+✔ declared npm implementations must connect to exact root and transitive lock edges (0.665561ms)
+✔ unused candidate inventory still rejects malformed fixture and review schema (3.429346ms)
+✔ duplicate decoded browser profile keys cannot manufacture an observed runtime (0.468514ms)
+✔ absent required provenance fields use the corresponding fixed finding (1.025632ms)
+✔ browser built-ins require a versioned support profile and concrete observed browser version (0.568981ms)
+✔ unavailable native SHA256 is UNSUPPORTED_RUNTIME rather than a false fixture mismatch (0.654835ms)
+✔ npm pins reject leading-zero numeric prerelease identifiers while accepting exact valid prereleases (0.74528ms)
+✔ duplicate inventory IDs always block the metadata gate despite a candidate capability claim (0.713498ms)
+✔ unused entries still validate the closed runtime enum without inheriting approval (0.588838ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 21
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 479.233843
+
+✖ failing tests:
+
+test at packages/security/test/crypto-inventory.test.mjs:61:1
+✖ npm peer-install metadata is boolean-only and does not alter review eligibility (5.717052ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      findings: [
+        {
+  +       code: 'UNSUPPORTED_RUNTIME',
+  +       disposition: 'blocking',
+  +       path: 'input'
+  -       code: 'MISSING_REVIEW',
+  -       disposition: 'pending',
+  -       path: 'inventory/0'
+        }
+      ],
+      releaseEligible: false
+    }
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/security/test/crypto-inventory.test.mjs:65:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Object],
+    expected: [Object],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at packages/security/test/crypto-inventory.test.mjs:76:1
+✖ peer-install metadata cannot bypass exact package provenance or dependency closure (0.728438ms)
+  AssertionError [ERR_ASSERTION]: INTEGRITY_MISMATCH
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/security/test/crypto-inventory.test.mjs:84:143)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at packages/security/test/crypto-inventory.test.mjs:87:1
+✖ current inventory has scoped G16 review evidence while other test-only providers remain pending (5.265109ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'UNSUPPORTED_RUNTIME:blocking'
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending',
+  -   'MISSING_REVIEW:pending'
+    ]
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/security/test/crypto-inventory.test.mjs:98:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Array],
+    expected: [Array],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

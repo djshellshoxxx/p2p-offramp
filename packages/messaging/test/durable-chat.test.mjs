@@ -170,6 +170,57 @@ test('vault revocation during noncooperative native work suppresses late plainte
   } finally { s.dispose(); }
 });
 
+test('genuine signal surface getters cannot reject admitted history reads or expose foreign diagnostics', async () => {
+  const s = await setup(); let alice;
+  try {
+    let surfaceReads = 0, owned;
+    const measured = { ...provider, publicKey(key) { owned = key; return provider.publicKey(key); } };
+    alice = s.make(s.alice, { provider: measured }); const controller = new AbortController();
+    for (const name of ['addEventListener', 'removeEventListener']) Object.defineProperty(controller.signal, name, {
+      get() { surfaceReads++; throw new Error('SECRET signal surface diagnostic'); },
+    });
+    let result; await assert.doesNotReject(async () => { result = await alice.list(s.alice.secretKey, controller.signal); });
+    assert.equal(ok(result).messages.length, 0); assert.equal(surfaceReads, 0);
+    assert.notEqual(owned, s.alice.secretKey); assert.ok(owned.every(byte => byte === 0));
+    assert.equal(ok(await alice.list(s.alice.secretKey)).messages.length, 0, 'completed work releases admission');
+  } finally { alice?.close(); s.dispose(); }
+});
+
+test('throwing signal removal cannot reject completed history work or strand the next operation', async () => {
+  const s = await setup(); let alice;
+  try {
+    alice = s.make(); const controller = new AbortController(); let removalReads = 0;
+    Object.defineProperty(controller.signal, 'removeEventListener', { get() { removalReads++; throw new Error('SECRET removal diagnostic'); } });
+    let result; await assert.doesNotReject(async () => { result = await alice.list(s.alice.secretKey, controller.signal); });
+    assert.equal(ok(result).messages.length, 0); assert.equal(removalReads, 0);
+    assert.equal(ok(await alice.list(s.alice.secretKey)).messages.length, 0); assert.equal(s.store.writes, 0);
+  } finally { alice?.close(); s.dispose(); }
+});
+
+test('an already aborted genuine signal cannot hide native cancellation behind an own false flag', async () => {
+  const s = await setup(); let alice;
+  try {
+    let nativeCalls = 0; alice = s.make(s.alice, { provider: { ...provider, publicKey(key) { nativeCalls++; return provider.publicKey(key); } } });
+    const controller = new AbortController(); controller.abort(); Object.defineProperty(controller.signal, 'aborted', { value: false });
+    bad(await alice.list(s.alice.secretKey, controller.signal), 'CANCELLED'); assert.equal(nativeCalls, 0); assert.equal(s.store.writes, 0);
+    assert.equal(ok(await alice.list(s.alice.secretKey)).messages.length, 0);
+  } finally { alice?.close(); s.dispose(); }
+});
+
+test('cancelled native work retains admission until drain despite a throwing external cleanup surface', async () => {
+  const s = await setup(), entered = deferred(), gate = deferred(); let alice;
+  try {
+    let once = false, owned, removalReads = 0;
+    const slow = { ...provider, async publicKey(key) { const result = await provider.publicKey(key); if (!once) { once = true; owned = key; entered.resolve(); await gate.promise; } return result; } };
+    alice = s.make(s.alice, { provider: slow }); const controller = new AbortController(), pending = alice.list(s.alice.secretKey, controller.signal);
+    await entered.promise; Object.defineProperty(controller.signal, 'removeEventListener', { get() { removalReads++; throw new Error('SECRET late cleanup'); } });
+    controller.abort(); bad(await pending, 'CANCELLED'); assert.ok(owned.every(byte => byte === 0));
+    bad(await alice.list(s.alice.secretKey), 'CONFLICT'); gate.resolve(); await new Promise(done => setImmediate(done));
+    assert.equal(ok(await alice.list(s.alice.secretKey)).messages.length, 0, 'only physical completion permits replacement work');
+    assert.equal(removalReads, 0); assert.equal(s.store.writes, 0);
+  } finally { gate.resolve(); alice?.close(); s.dispose(); }
+});
+
 test('pre-CAS cancellation prevents writes; late cancellation after atomic success retains recoverable proof without publication', async () => {
   for (const stage of ['before', 'after']) {
     const s = await setup();

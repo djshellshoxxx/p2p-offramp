@@ -1,0 +1,369 @@
+TAP version 13
+# Subtest: genuine signal surface getters cannot reject admitted history reads or expose foreign diagnostics
+not ok 1 - genuine signal surface getters cannot reject admitted history reads or expose foreign diagnostics
+  ---
+  duration_ms: 673.925736
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:173:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Got unwanted rejection.
+    Actual message: "SECRET signal surface diagnostic"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual:
+  error: 'SECRET signal surface diagnostic'
+  stack: |-
+    AbortSignal.get (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:180:37)
+    run (file:///workspaces/p2p-offramp/packages/messaging/src/durable-chat.ts:98:15)
+    Object.list (file:///workspaces/p2p-offramp/packages/messaging/src/durable-chat.ts:223:37)
+    file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:182:79
+    waitForActual (node:assert:632:21)
+    strict.doesNotReject (node:assert:789:39)
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:182:30)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  operator: 'doesNotReject'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:182:17)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: throwing signal removal cannot reject completed history work or strand the next operation
+not ok 2 - throwing signal removal cannot reject completed history work or strand the next operation
+  ---
+  duration_ms: 433.375276
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:189:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Got unwanted rejection.
+    Actual message: "SECRET removal diagnostic"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual:
+  error: 'SECRET removal diagnostic'
+  stack: |-
+    AbortSignal.get (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:193:101)
+    file:///workspaces/p2p-offramp/packages/messaging/src/durable-chat.ts:109:49
+    <anonymous>
+    async file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:194:67
+    async waitForActual (node:assert:646:5)
+    async strict.doesNotReject (node:assert:789:33)
+    async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:194:17)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  operator: 'doesNotReject'
+  stack: |-
+    async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:194:17)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: an already aborted genuine signal cannot hide native cancellation behind an own false flag
+not ok 3 - an already aborted genuine signal cannot hide native cancellation behind an own false flag
+  ---
+  duration_ms: 278.110632
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:200:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    bad (file:///workspaces/p2p-offramp/packages/messaging/test/support.mjs:12:47)
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:205:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: cancelled native work retains admission until drain despite a throwing external cleanup surface
+not ok 4 - cancelled native work retains admission until drain despite a throwing external cleanup surface
+  ---
+  duration_ms: 278.830812
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:210:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    {"ok":false,"error":{"code":"CONFLICT","retryable":false,"action":"reload","correlationId":"1795b442f0834481d43632343dfc8b7f","messageKey":"core.error.conflict"}}
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    ok (file:///workspaces/p2p-offramp/packages/messaging/test/support.mjs:11:38)
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/messaging/test/durable-chat.test.mjs:219:18)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: canonical event and book boundaries discard hostile local reflection before clock or verification
+not ok 5 - canonical event and book boundaries discard hostile local reflection before clock or verification
+  ---
+  duration_ms: 10.959523
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/ad.test.mjs:172:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + {
+    +   content: '{"app":"p2p-offramp","v":1,"orderId":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","revision":1,"networkId":"eip155:8453","assetId":"erc20:usdc","amountMin":"10000000","amountMax":"500000000","currency":"EUR","railClass":"bank-transfer","expiresAtSeconds":"1800001800","maker":"5e367c98c283f77cee3d9fed0bad70718b55ec82de094b40b76c1cf9063539d3"}',
+    +   created_at: 1800000000,
+    +   id: 'cf442ac0d0b0ddc27d4340997e2dec307d383112f47467bb275bc5cc545cce38',
+    +   kind: 30078,
+    +   pubkey: '5e367c98c283f77cee3d9fed0bad70718b55ec82de094b40b76c1cf9063539d3',
+    +   sig: '40bfe32c149afbbc4dbf1bef9e2f6f962734256572b6e18d2bab86a6ac85d782b7a3ed9730da362515f8e129f0ed27d58dbe2de67258702810eacdd0a2d73717',
+    +   tags: [
+    +     [
+    +       'd',
+    +       'p2p-offramp:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    +     ],
+    +     [
+    +       't',
+    +       'p2p-offramp-ad-v1'
+    +     ],
+    +     [
+    +       'expiration',
+    +       '1800001800'
+    +     ]
+    +   ]
+    + }
+    - null
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ~
+  actual:
+    id: 'cf442ac0d0b0ddc27d4340997e2dec307d383112f47467bb275bc5cc545cce38'
+    pubkey: '5e367c98c283f77cee3d9fed0bad70718b55ec82de094b40b76c1cf9063539d3'
+    created_at: 1800000000
+    kind: 30078
+    tags:
+      0:
+        0: 'd'
+        1: 'p2p-offramp:v1:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+      1:
+        0: 't'
+        1: 'p2p-offramp-ad-v1'
+      2:
+        0: 'expiration'
+        1: '1800001800'
+    content: '{"app":"p2p-offramp","v":1,"orderId":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","revision":1,"networkId":"eip155:8453","assetId":"erc20:usdc","amountMin":"10000000","amountMax":"500000000","currency":"EUR","railClass":"bank-transfer","expiresAtSeconds":"1800001800","maker":"5e367c98c283f77cee3d9fed0bad70718b55ec82de094b40b76c1cf9063539d3"}'
+    sig: '40bfe32c149afbbc4dbf1bef9e2f6f962734256572b6e18d2bab86a6ac85d782b7a3ed9730da362515f8e129f0ed27d58dbe2de67258702810eacdd0a2d73717'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/ad.test.mjs:184:41)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: an event delivered to one subscription is still delivered once to an overlapping subscription
+not ok 6 - an event delivered to one subscription is still delivered once to an overlapping subscription
+  ---
+  duration_ms: 12.789151
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:27:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    subscription B receives the event A already received
+    + actual - expected
+    
+    + []
+    - [
+    -   '0000000000000000000000000000000000000000000000000000000000000001'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '0000000000000000000000000000000000000000000000000000000000000001'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:38:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: a recreated subscription receives requested history that an earlier subscription already saw
+not ok 7 - a recreated subscription receives requested history that an earlier subscription already saw
+  ---
+  duration_ms: 6.940524
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:47:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    retained history is replayed to the new subscription
+    + actual - expected
+    
+    + []
+    - [
+    -   '0000000000000000000000000000000000000000000000000000000000000002'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '0000000000000000000000000000000000000000000000000000000000000002'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:60:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: closing a subscription frees its dedupe entries so they cannot evict another subscription's
+not ok 8 - closing a subscription frees its dedupe entries so they cannot evict another subscription's
+  ---
+  duration_ms: 60.411193
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:65:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    B still dedupes its own earlier event
+    
+    2 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool-subscriptions.test.mjs:86:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: canonical subscribe refuses local filter reflection and indexed getters before admission
+not ok 9 - canonical subscribe refuses local filter reflection and indexed getters before admission
+  ---
+  duration_ms: 1.240253
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:387:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+    +   ok: true,
+    +   value: {
+    +     close: [Function: close],
+    +     id: 's1'
+    +   }
+    -   error: 'INVALID_FILTER',
+    -   ok: false
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    ok: false
+    error: 'INVALID_FILTER'
+  actual:
+    ok: true
+    value:
+      id: 's1'
+      close: [Function: close]
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:397:40)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+  ...
+# Subtest: canonical subscribe snapshots handler functions without invoking accessors or consuming refused capacity
+not ok 10 - canonical subscribe snapshots handler functions without invoking accessors or consuming refused capacity
+  ---
+  duration_ms: 0.65969
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:403:1'
+  failureType: 'testCodeFailure'
+  error: 'PRIVATE handler'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    Object.get (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:406:94)
+    Object.subscribe (file:///workspaces/p2p-offramp/packages/relay/src/pool.ts:404:26)
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:409:112)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: canonical subscribe refuses malformed or throwing local clocks and rechecks closure after validation
+not ok 11 - canonical subscribe refuses malformed or throwing local clocks and rechecks closure after validation
+  ---
+  duration_ms: 0.6699
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:419:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+    +   ok: true,
+    +   value: {
+    +     close: [Function: close],
+    +     id: 's1'
+    +   }
+    -   error: 'INVALID_FILTER',
+    -   ok: false
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    ok: false
+    error: 'INVALID_FILTER'
+  actual:
+    ok: true
+    value:
+      id: 's1'
+      close: [Function: close]
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:423:18)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: canonical publish maps hostile local events to fixed refusal before verifier or connector work
+not ok 12 - canonical publish maps hostile local events to fixed refusal before verifier or connector work
+  ---
+  duration_ms: 8.126335
+  type: 'test'
+  location: '/workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:431:1'
+  failureType: 'testCodeFailure'
+  error: 'PRIVATE event'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    Object.get [as content] (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:435:122)
+    parseEvent (file:///workspaces/p2p-offramp/packages/relay/src/nip01.ts:51:47)
+    Object.publish (file:///workspaces/p2p-offramp/packages/relay/src/pool.ts:414:23)
+    TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/relay/test/pool.test.mjs:437:138)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 0
+# fail 12
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3694.734859

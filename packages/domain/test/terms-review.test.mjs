@@ -357,6 +357,36 @@ test('terms review bytes: size, strict UTF-8 and bounded strict JSON', async () 
   assert.equal(await bytesCode(proxied), 'MALFORMED');
 });
 
+test('terms review bytes: the real 64KiB bound rejects a shadowed max+1 view before any owned allocation', async () => {
+  const NativeUint8Array = globalThis.Uint8Array;
+  const bytes = new NativeUint8Array(MAX_TERMS_REVIEW_BYTES + 1); let reads = 0, allocations = 0, digests = 0, lookups = 0;
+  Object.defineProperty(bytes, 'byteLength', { get() { reads++; return 0; } });
+  const lookup = { network() { lookups++; throw Error('must not look up oversized terms'); }, deployment() { lookups++; throw Error('must not look up oversized terms'); } };
+  let result;
+  try {
+    globalThis.Uint8Array = new Proxy(NativeUint8Array, { construct(target, args, newTarget) { allocations++; return Reflect.construct(target, args, newTarget); } });
+    result = await reviewTermsBytes(lookup, bytes, async () => { digests++; return new ArrayBuffer(32); });
+  } finally { globalThis.Uint8Array = NativeUint8Array; }
+  assert.deepEqual(result, { ok: false, code: 'TOO_LARGE' });
+  assert.equal(allocations, 0, 'the oversized caller view must be refused before constructing an owned copy');
+  assert.equal(reads, 0, 'only the intrinsic view length may be inspected'); assert.equal(digests, 0); assert.equal(lookups, 0);
+});
+
+test('terms review bytes: bounded offset views ignore caller length/iterator/species accessors and remain untouched', async () => {
+  const body = bytesOf(documentFor('native')), backing = new Uint8Array(body.byteLength + 32).fill(0xff);
+  const view = new Uint8Array(backing.buffer, 16, body.byteLength); view.set(body); const before = new Uint8Array(backing); let reads = 0;
+  const forbidden = () => { reads++; throw Error('caller byte-view accessor must not run'); };
+  for (const key of ['byteLength', 'length', 'constructor', Symbol.iterator]) Object.defineProperty(view, key, { get: forbidden });
+  const result = await reviewTermsBytes(registry, view, nodeSha256);
+  assert.equal(result.ok, true, JSON.stringify(result)); assert.deepEqual(result.value, expected('native'));
+  assert.equal(reads, 0); assert.deepEqual(backing, before, 'review owns its copy and never modifies any caller bytes');
+});
+
+test('terms review bytes: detached views remain a fixed MALFORMED rejection', async () => {
+  const bytes = bytesOf(documentFor('native')); structuredClone(bytes.buffer, { transfer: [bytes.buffer] });
+  assert.equal(await bytesCode(bytes), 'MALFORMED');
+});
+
 test('terms review: hostile inputs never throw and each field is read once', async () => {
   const boom = () => { throw new Error('getter'); };
   const hostileError = () => { throw new Proxy({}, { get: boom, getPrototypeOf: boom, has: boom }); };

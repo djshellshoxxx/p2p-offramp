@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { AD_KIND, adKey, adTags, createAdEvent, createDeletionEvent, createOrderBook, parseAdContent, serializeAd, validateAdEvent, DELETION_KIND, MAX_AD_LIFETIME_SECONDS } from '../src/ad.ts';
 import { adFor, makeKey, NOW, ORDER, seller, sellerCrypto, signedAd, signWith } from './support/harness.mjs';
+import { parseEvent, parseRelayFrame, FRAME_LIMITS } from '../src/nip01.ts';
 
 const book = (now = NOW, extra = {}) => { const clock = { now }; const b = createOrderBook({ nowSeconds: () => clock.now, verifier: sellerCrypto, ...extra }); return { b, clock }; };
 const KEY = adKey(seller.pubkey, ORDER);
@@ -166,4 +167,34 @@ test('ad builder snapshots the maker before signing and rejects hostile signer o
   Object.defineProperty(input, 'maker', { enumerable: true, get() { reads++; return seller.pubkey; } });
   await assert.rejects(createAdEvent(sellerCrypto, input, NOW), /^Error: INVALID_AD$/);
   assert.equal(reads, 0);
+});
+
+test('canonical event and book boundaries discard hostile local reflection before clock or verification', async () => {
+  const valid = await signedAd(); let getters = 0, clocks = 0, verifications = 0;
+  const b = createOrderBook({ nowSeconds: () => { clocks++; return NOW; }, verifier: { verifyEvent() { verifications++; return true; } } });
+  const revoked = Proxy.revocable({}, {}); revoked.revoke();
+  const hostile = ['getPrototypeOf', 'ownKeys', 'getOwnPropertyDescriptor'].map(trap => new Proxy(valid, { [trap]() { throw revoked.proxy; } }));
+  const field = { ...valid }; Object.defineProperty(field, 'content', { enumerable: true, get() { getters++; throw Error('PRIVATE local getter'); } }); hostile.push(field);
+  const item = [...valid.tags[0]]; Object.defineProperty(item, '0', { enumerable: true, get() { getters++; throw Error('PRIVATE tag getter'); } });
+  hostile.push({ ...valid, tags: [item] });
+  const indexed = [...valid.tags]; Object.defineProperty(indexed, '0', { enumerable: true, get() { getters++; throw Error('PRIVATE index getter'); } });
+  hostile.push({ ...valid, tags: indexed }, { ...valid, tags: revoked.proxy });
+  const iterator = [...valid.tags]; Object.defineProperty(iterator, Symbol.iterator, { get() { getters++; throw Error('PRIVATE iterator'); } });
+  hostile.push({ ...valid, tags: iterator });
+  for (const input of hostile) { assert.equal(parseEvent(input), null); assert.equal(b.ingest(input), 'invalid'); }
+  assert.equal(getters, 0); assert.equal(clocks, 0); assert.equal(verifications, 0); assert.equal(b.size, 0);
+});
+
+test('canonical event snapshots preserve signed JSON, limits and frozen detached indexed tags', async () => {
+  const valid = await signedAd(), input = structuredClone(valid), parsed = parseEvent(input);
+  assert.deepEqual(parsed, valid); assert.notEqual(parsed.tags, input.tags); assert.notEqual(parsed.tags[0], input.tags[0]);
+  assert.ok(Object.isFrozen(parsed) && Object.isFrozen(parsed.tags) && parsed.tags.every(Object.isFrozen));
+  input.tags[0][0] = 'changed'; assert.equal(parsed.tags[0][0], 'd'); assert.equal(sellerCrypto.verifyEvent(parsed), true);
+  assert.deepEqual(parseRelayFrame(JSON.stringify(['EVENT', 's1', valid])), { ok: true, frame: { type: 'EVENT', subId: 's1', event: valid } });
+  const maximum = { ...valid, content: 'x'.repeat(FRAME_LIMITS.maxEventBytes), tags: Array.from({ length: FRAME_LIMITS.maxTags }, () => Array(FRAME_LIMITS.maxTagItems).fill('é'.repeat(128))) };
+  assert.ok(parseEvent(maximum));
+  const sparse = new Array(1), hidden = { ...valid }; Object.defineProperty(hidden, 'kind', { value: valid.kind, enumerable: false });
+  for (const input of [{ ...valid, tags: sparse }, { ...valid, tags: Object.assign([], { extra: true }) }, { ...valid, [Symbol('extra')]: true }, hidden,
+    { ...valid, tags: Array(FRAME_LIMITS.maxTags + 1).fill(['t']) }, { ...valid, tags: [Array(FRAME_LIMITS.maxTagItems + 1).fill('t')] },
+    { ...valid, tags: [['é'.repeat(129)]] }, { ...valid, content: 'x'.repeat(FRAME_LIMITS.maxEventBytes + 1) }]) assert.equal(parseEvent(input), null);
 });

@@ -1,0 +1,12 @@
+✔ an event delivered to one subscription is still delivered once to an overlapping subscription (28.614445ms)
+✔ a recreated subscription receives requested history that an earlier subscription already saw (10.001131ms)
+✔ closing a subscription frees its dedupe entries so they cannot evict another subscription's (513.04814ms)
+✔ verification cannot deliver or penalize after retiring its subscription, transport or pool (64.384863ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1949.120046

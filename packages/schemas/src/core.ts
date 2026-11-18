@@ -1,6 +1,9 @@
 /** CTX01/CTX02/G08/G13 structural contracts. Parsing is not adapter/deployment authentication. */
 import { decodeBase64url } from './vault.ts';
 
+// Canonical, locale-independent UTF-16 code-unit order: exactly what the default sort() does for strings.
+const compareCodeUnits = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
+
 export const MAX_OBSERVATION_BYTES = 65_536;
 export type ChainFamily = 'evm' | 'solana';
 export interface TradeBinding { readonly chain: ChainFamily; readonly networkId: string; readonly deploymentId: string; readonly tradeId: string; }
@@ -105,4 +108,49 @@ export function parseObservationJson(input: unknown): ObservationEnvelope {
   let value: unknown;
   try { value = JSON.parse(input) as unknown; } catch { return fail(); }
   return parseObservationEnvelope(value);
+}
+
+/** Readonly discovery/recovery hints. These are deliberately NOT ObservationEnvelope authority events. */
+export interface RelayOrderHint {
+  readonly orderId: string; readonly maker: string;
+  readonly advertisement: { readonly eventId: string; readonly revision: number; readonly expiresAtSeconds: string } | null;
+  readonly reason: 'observed' | 'expired' | 'conflict' | 'deleted' | 'unknown' | 'clock-unknown';
+}
+export interface JournalPendingHint { readonly pendingIntentIds: readonly string[] | null; readonly revision: number | null; }
+function digestHint(input: unknown): string { if (typeof input !== 'string' || !/^[0-9a-f]{64}$/.test(input)) fail(); return input; }
+export function parseRelayOrderHint(input: unknown): RelayOrderHint {
+  const raw = exact(input, ['orderId', 'maker', 'advertisement', 'reason']);
+  const reason = choice(raw.reason, ['observed', 'expired', 'conflict', 'deleted', 'unknown', 'clock-unknown']);
+  let advertisement: RelayOrderHint['advertisement'] = null;
+  if (raw.advertisement !== null) {
+    const ad = exact(raw.advertisement, ['eventId', 'revision', 'expiresAtSeconds']);
+    const revision = integer(ad.revision);
+    if (revision < 1 || typeof ad.expiresAtSeconds !== 'string' || !/^[1-9][0-9]{0,11}$/.test(ad.expiresAtSeconds)) fail();
+    advertisement = Object.freeze({ eventId: digestHint(ad.eventId), revision, expiresAtSeconds: ad.expiresAtSeconds });
+  }
+  if ((reason === 'observed') !== (advertisement !== null)) fail();
+  return Object.freeze({ orderId: digestHint(raw.orderId), maker: digestHint(raw.maker), advertisement, reason });
+}
+export function parseJournalPendingHint(input: unknown): JournalPendingHint {
+  const raw = exact(input, ['pendingIntentIds', 'revision']);
+  if (raw.revision === null || raw.pendingIntentIds === null) {
+    if (raw.revision !== null || raw.pendingIntentIds !== null) fail();
+    return Object.freeze({ pendingIntentIds: null, revision: null });
+  }
+  if (!reflect(() => Array.isArray(raw.pendingIntentIds)) || reflect(() => Object.getPrototypeOf(raw.pendingIntentIds)) !== Array.prototype) fail();
+  const inputArray = raw.pendingIntentIds as unknown[];
+  const length = reflect(() => Object.getOwnPropertyDescriptor(inputArray, 'length'))?.value as unknown;
+  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < 0) fail();
+  if (length > 256) fail('LIMIT_EXCEEDED');
+  if (reflect(() => Reflect.ownKeys(inputArray)).length !== length + 1) fail();
+  const ids: string[] = [];
+  for (let index = 0; index < length; index++) {
+    const descriptor = reflect(() => Object.getOwnPropertyDescriptor(inputArray, String(index)));
+    if (!descriptor || !('value' in descriptor)) fail();
+    const id: unknown = descriptor.value;
+    try { decodeBase64url(id, 32, 32); } catch { fail(); }
+    if (ids.includes(id as string)) fail(); ids.push(id as string);
+  }
+  ids.sort(compareCodeUnits);
+  return Object.freeze({ pendingIntentIds: Object.freeze(ids), revision: integer(raw.revision) });
 }

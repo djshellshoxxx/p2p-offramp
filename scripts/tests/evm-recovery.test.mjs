@@ -4,7 +4,7 @@ import fsPromises, { mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } 
 import { syncBuiltinESMExports } from 'node:module';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { registryFixture } from '../../packages/security/test/lib/release-registry-fixture.mjs';
 import { sha } from '../../packages/security/test/lib/release-fixture.mjs';
@@ -91,11 +91,29 @@ test('accepted-release rollback state rejects symlinks instead of inheriting ano
 test('accepted-release FIFO is refused promptly without waiting for a writer or configured trust pin', async () => {
   const root=resolve(temporary,'accepted-fifo'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json'), run=promisify(execFile);
   await mkdir(directory,{recursive:true});await run('mkfifo',[path]);
-  const body=`import {readAcceptedEvmRecoveryRelease} from ${JSON.stringify(new URL('../recovery/build-evm.mjs',import.meta.url).href)};try{await readAcceptedEvmRecoveryRelease(process.argv[1]);console.log(JSON.stringify({ok:true}));}catch(error){console.log(JSON.stringify({ok:false,error:{code:error.code}}));process.exitCode=1;}`;
-  let result;
-  try {result=await run(process.execPath,['--input-type=module','--eval',body,root],{timeout:1000,env:{PATH:process.env.PATH??'',TZ:'UTC'}});}catch(error){result=error;}
-  assert.notEqual(result.killed,true,'rollback state cannot block opening a FIFO');
-  assert.equal(result.code,1);assert.deepEqual(JSON.parse(result.stdout),{ok:false,error:{code:'RELEASE_ROLLBACK'}});
+  // Loading the builder imports Vite and its dependency graph. That startup can
+  // exceed a second on busy CI; measure the FIFO deadline only after import.
+  const body=`import {readAcceptedEvmRecoveryRelease} from ${JSON.stringify(new URL('../recovery/build-evm.mjs',import.meta.url).href)};process.send({ready:true});try{await readAcceptedEvmRecoveryRelease(process.argv[1]);process.send({ok:true});}catch(error){process.send({ok:false,error:{code:error.code}});process.exitCode=1;}`;
+  const child=spawn(process.execPath,['--input-type=module','--eval',body,root],{
+    stdio:['ignore','ignore','ignore','ipc'],env:{PATH:process.env.PATH??'',TZ:'UTC'},
+  });
+  let ready=false, timedOut=null, reply;
+  const deadline=stage=>setTimeout(()=>{timedOut=stage;child.kill('SIGKILL');},stage==='startup'?10000:1000);
+  let timer=deadline('startup');
+  try {
+    child.on('message',message=>{
+      if(message?.ready===true&&!ready){ready=true;clearTimeout(timer);timer=deadline('FIFO read');}
+      else reply=message;
+    });
+    const result=await new Promise((resolve,reject)=>{
+      child.once('error',reject);
+      child.once('close',(code,signal)=>resolve({code,signal}));
+    });
+    assert.equal(timedOut,null,`${timedOut} deadline exceeded`);
+    assert.equal(ready,true,'the builder must load before exercising FIFO refusal');
+    assert.equal(result.signal,null);assert.equal(result.code,1);
+    assert.deepEqual(reply,{ok:false,error:{code:'RELEASE_ROLLBACK'}});
+  } finally {clearTimeout(timer);if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');}
 });
 test('oversized accepted-release file is refused before any whole-file allocation', async () => {
   const root=resolve(temporary,'accepted-oversize'), directory=resolve(root,'registry/testnet'), path=resolve(directory,'sepolia.accepted.json');

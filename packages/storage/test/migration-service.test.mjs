@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { webcrypto } from 'node:crypto';
 import { EncryptedVaultService, VaultStorageError } from '../src/vault-service.ts';
-import { MigrationRegistry, RecordMigrationService, MAX_IN_PLACE_CHANGES } from '../src/migration-service.ts';
+import { MigrationRegistry, RecordMigrationService, MigrationError, MAX_IN_PLACE_CHANGES } from '../src/migration-service.ts';
 const clone = v => structuredClone(v);
 const pass = 'migration test passphrase';
 const id = n => n.toString(16).padStart(32, '0');
@@ -28,6 +28,23 @@ const registry = (migrations = [step(1), step(2)]) =>
   new MigrationRegistry(current(), [...all(1).filter(s => s.kind !== 'trade'), tradeSchema(1), tradeSchema(2), tradeSchema(3)], migrations);
 const value = r => { assert.equal(r.ok, true, JSON.stringify(r)); return r.value; };
 const code = (r, expected) => { assert.equal(r.ok, false, 'expected failure'); assert.equal(r.error.code, expected); assert.doesNotMatch(r.error.message, /private|bad/); };
+test('migration failures remain fixed typed results when a dependency rejects with malformed errors', async () => {
+  let reads = 0;
+  const accessor = new MigrationError('INVALID_INPUT');
+  Object.defineProperty(accessor, 'code', { get() { reads++; throw Error('private diagnostic'); } });
+  const unrecognized = new MigrationError('private diagnostic');
+  const brokenPrototype = new Proxy({}, { getPrototypeOf() { throw Error('private diagnostic'); } });
+  for (const thrown of [accessor, unrecognized, brokenPrototype, null, 'private diagnostic']) {
+    const vault = { captureSession() { throw thrown; } };
+    const service = new RecordMigrationService(vault, registry());
+    for (const result of [await service.plan({}), await service.apply({}, {})]) {
+      code(result, 'STORAGE_UNAVAILABLE'); assert.equal(result.error.retryable, true);
+    }
+  }
+  assert.equal(reads, 0, 'exception accessors are never invoked');
+  const service = new RecordMigrationService({ captureSession() { throw new MigrationError('CONFLICT'); } }, registry());
+  code(await service.plan({}), 'CONFLICT');
+});
 async function seeded(records) {
   const store = new Store(), vault = new EncryptedVaultService(store, webcrypto, { lifecycle: false });
   let session = value(await vault.create(pass));

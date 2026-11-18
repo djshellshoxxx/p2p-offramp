@@ -1,4 +1,4 @@
-/** Native module runtime fixture, not a React/Vite build or physical-device acceptance. */
+/** Native module runtime fixture. Run with --browser=chromium|firefox|webkit (default chromium). */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -6,8 +6,13 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright-core';
+import { parseArgs } from 'node:util';
+import { chromium, firefox, webkit } from 'playwright-core';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
+
+const { values } = parseArgs({ options: { browser: { type: 'string', default: 'chromium' } } });
+const engine = [chromium, firefox, webkit].find(candidate => candidate.name() === values.browser);
+if (!engine) throw new Error('Expected --browser=chromium, --browser=firefox or --browser=webkit');
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = await mkdtemp(resolve(tmpdir(), 'p2p-runtime-browser-'));
@@ -43,7 +48,7 @@ try {
   await new Promise((done, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', done); });
   const address = server.address(); assert.ok(address && typeof address === 'object');
   const origin = `http://127.0.0.1:${address.port}`;
-  browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
+  browser = await engine.launch(engine === chromium ? { executablePath: resolveChromiumPath(), args: ['--no-sandbox'] } : {});
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const unexpected = [];
   let preservedProfile;
@@ -146,7 +151,7 @@ try {
     assert.equal(result.sourcePreserved, true); await page.close();
   }
   assert.deepEqual(unexpected, []); await context.close();
-  console.log('PASS: Chromium same-origin module Worker at root/nested/IPFS-style paths, locked boot, native encrypted unlock/export/create/restore/inventory, exact opaque handles, synchronous revocation, pending-unlock disposal, missing chunk/modeled denied-IDB recovery, preserved source, no private replies/localStorage/cache/URL or external egress. Native fixture only; React/Vite/device acceptance remains open.');
+  console.log(`PASS: ${engine.name()} ${browser.version()} same-origin module Worker at root/nested/IPFS-style paths, locked boot, native encrypted unlock/export/create/restore/inventory, exact opaque handles, synchronous revocation, pending-unlock disposal, missing chunk/modeled denied-IDB recovery, preserved source, no private replies/localStorage/cache/URL or external egress. Native fixture only; React/Vite/device acceptance remains open.`);
 } finally {
   await browser?.close(); if (server) await new Promise(done => server.close(done));
   await rm(output, { recursive: true, force: true });

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createMessage, formatMessage, validateLocale, localeDirection, LocaleError } from '../src/ui/locale/catalog.ts';
+import { sourceCatalog } from '../src/ui/locale/en.ts';
 
 const definition = (changes = {}) => ({ key: 'recovery.records', source: '{count} {count|record|records} for {profile}',
   context: 'Private local profile recovery status', severity: 'warning', variables: { count: 'count', profile: 'identifier' },
@@ -67,10 +68,36 @@ test('locale metadata and complete message/variable parity are required; source 
   assert.equal(structuralOnly.status, 'published', 'structural validation alone is never a selectable-locale or review-authority API');
 });
 
+test('a complete draft catalog must contain visible text for its recovery warning', () => {
+  const messages = Object.fromEntries(Object.entries(sourceCatalog).map(([key, entry]) => [key, entry.source]));
+  const draft = { locale: 'en', translator: null, reviewer: null, revision: 1, status: 'draft', messages };
+  const warning = 'recovery.unverified';
+  assert.equal(formatMessage(validateLocale(draft, sourceCatalog).messages[warning], {}), sourceCatalog[warning].source);
+
+  // A present but blank critical message gives the reader no guidance, just like an empty string.
+  for (const blank of ['', ' \t\n', '\u00a0', '\u200b', ' \u2060\u200d ', '\ufe0f']) {
+    assert.throws(() => validateLocale({ ...draft, messages: { ...messages, [warning]: blank } }, sourceCatalog),
+      LocaleError, `Expected blank recovery warning ${JSON.stringify(blank)} to be rejected`);
+  }
+});
+
+test('blank source messages are refused at every severity without trimming valid display text', () => {
+  for (const severity of ['information', 'warning', 'critical']) {
+    for (const source of ['', ' \t\n', '\u00a0', '\u2003', '\u202f', '\u3000', '\ufeff']) {
+      refuses(() => createMessage(definition({ source, variables: {}, severity })), 'MESSAGE_VARIABLE_MISMATCH');
+    }
+    const source = ' \tراهنمای بازیابی\u200cشده\u00a0';
+    const entry = createMessage(definition({ source, variables: {}, severity }));
+    assert.equal(entry.source, source);
+    assert.equal(formatMessage(entry, {}), source);
+  }
+});
+
 test('address-purpose display retains exact canonical bytes and refuses spoofing controls', () => {
-  const entry=createMessage(definition({source:'{address}',variables:{address:'address'}}));
+  // Variable-only sources are refused (no visible text of their own), so the harness carries a literal label.
+  const entry=createMessage(definition({source:'Address {address}',variables:{address:'address'}}));
   const address='0x'+'Ab'.repeat(20);
-  assert.equal(formatMessage(entry,{address}),address);
+  assert.equal(formatMessage(entry,{address}),`Address ${address}`);
   for(const value of ['0x1234',address+'\u202e','１２３４','<script>','a'.repeat(80)]) refuses(()=>formatMessage(entry,{address:value}),'MESSAGE_VARIABLE_MISMATCH');
 });
 test('direction is derived from a supported locale and imported status grants no selection authority', () => {
@@ -79,4 +106,24 @@ test('direction is derived from a supported locale and imported status grants no
   const entry=createMessage(definition()), source={[entry.key]:entry};
   const locale=validateLocale({locale:'ar',translator:null,reviewer:null,revision:1,status:'draft',messages:{[entry.key]:entry.source}},source);
   assert.equal(locale.direction,'rtl');assert.equal(locale.status,'draft');
+});
+
+test('message sources with no visible character (whitespace/invisible/filler only) are refused', () => {
+  const invisible = ['​', '⁠', 'ㅤ', '᠎', '­', '͏', ' ', ' ', '⠀', '﻿', 'ᅟ'];
+  for (const ch of invisible) {
+    refuses(() => createMessage(definition({ source: ch, variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+    refuses(() => createMessage(definition({ source: ` ${ch}\t${ch} `, variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  }
+  refuses(() => createMessage(definition({ source: invisible.join(''), variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  refuses(() => createMessage(definition({ source: '', variables: {} })), 'MESSAGE_VARIABLE_MISMATCH');
+  assert.equal(createMessage(definition({ source: '​Warning​', variables: {} })).source, '​Warning​');
+});
+
+test('validateLocale refuses an invisible-only translation of a warning message', () => {
+  const entry = createMessage(definition({ key: 'recovery.unverified', source: 'Recovery is unverified', variables: {} }));
+  const catalog = text => ({ locale: 'fr', translator: null, reviewer: null, revision: 1, status: 'draft', messages: { 'recovery.unverified': text } });
+  assert.equal(validateLocale(catalog('Non vérifié'), { 'recovery.unverified': entry }).messages['recovery.unverified'].source, 'Non vérifié');
+  for (const text of ['​', '⁠ㅤ', ' ᠎ ', '­͏']) {
+    refuses(() => validateLocale(catalog(text), { 'recovery.unverified': entry }), 'MESSAGE_VARIABLE_MISMATCH');
+  }
 });

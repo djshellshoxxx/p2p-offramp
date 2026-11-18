@@ -1,0 +1,38 @@
+✔ production default has empty authority and all channels unknown; wallet never becomes an app request (5.079894ms)
+✔ fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback (13.917887ms)
+✔ ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet (0.41826ms)
+✔ permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize (0.67541ms)
+✔ trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics (0.438097ms)
+✔ hostile thrown capability values cannot escape fixed refusal handling (0.291865ms)
+✔ inspection cannot relabel a stale registry callback result under a newer generation (0.3216ms)
+✔ projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes (0.733548ms)
+✔ expiry revokes before invocation and after awaits; queued late callbacks cannot publish (1.762707ms)
+✔ mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization (0.852139ms)
+✔ already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity (15.096244ms)
+✔ outstanding permit count is bounded and scoped use is single-shot (6.051316ms)
+✔ native callback failure is sanitized, revokes private evidence and never falls back to direct (2.792949ms)
+✔ a policy change after native settlement but before scope continuation suppresses success (1.102316ms)
+✔ owned expiry timer closes resources without polling; a failed monotonic clock fails closed (2.021049ms)
+✔ operation timeout aborts owned scope without retry or accepting a late callback (0.572077ms)
+✔ external abort during a scoped operation closes its resource immediately and discards late output (0.475046ms)
+✔ optional destination binding compares the detached canonical registration before granting a runnable scope (0.753926ms)
+✔ destination credentials, fragments, controls, malformed schemes and hostile URL options fail before operation (3.366719ms)
+✔ bounded invalidation observers see completed revocation, isolate faults and unsubscribe (1.455594ms)
+✔ inspection-only evidence expires on existing timer, without permits or expired rearm loops (0.668527ms)
+✔ reentrant modes and repeated malformed async consumer reads cannot livelock notifications (1.505758ms)
+✔ real broker feeds synchronous privacy reader; notification adds no authority (14.985286ms)
+✔ last display unsubscribe removes only inspection watches, retaining actual permit expiry (1.663422ms)
+✔ inspection-only expiry does not revoke a longer live permit or its operation (0.70291ms)
+✔ earlier stable observer sees the final state after later observers mutate or dispose (4.872838ms)
+✔ catch-up handles a full reverse-order chain of mutators within one bounded batch (5.911565ms)
+✔ later same-channel inspection cannot postpone an earlier observer deadline or revoke a longer permit (0.633932ms)
+✔ later unavailable inspection retains an earlier cached display deadline until expiry (0.259093ms)
+✔ explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure (0.401709ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1715.273674

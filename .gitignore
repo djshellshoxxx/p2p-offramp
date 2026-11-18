@@ -8,3 +8,4 @@ dist/
 .superpowers/
 dist-demo/
 dist-testnet/
+.venv*/

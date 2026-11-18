@@ -56,14 +56,20 @@ export function parseRecoveryReferences(value: unknown): RuntimeRecoveryReferenc
   if (raw.authority !== 'unverified-offline-reference') return invalid();
   const revision = parseRecoveryRevision(raw.revision), offset = parseRecoveryOffset(raw.offset), total = count(raw.totalJournalRecords, MAX_RECORDS);
   const list = raw.items;
-  if (offset > total || !Array.isArray(list) || Object.getPrototypeOf(list) !== Array.prototype) return invalid();
-  const descriptor = Object.getOwnPropertyDescriptor(list, 'length'); if (!descriptor || !('value' in descriptor)) return invalid();
-  const length = count(descriptor.value, RECOVERY_REFERENCE_PAGE_SIZE);
+  if (offset > total) return invalid();
   const scanned = Math.min(RECOVERY_REFERENCE_PAGE_SIZE, total - offset), unsupported = count(raw.unsupported, scanned);
-  if (Reflect.ownKeys(list).length !== length + 1 || length + unsupported !== scanned) return invalid();
+  let length: number;
+  try {
+    if (!Array.isArray(list) || Object.getPrototypeOf(list) !== Array.prototype) return invalid();
+    const descriptor = Object.getOwnPropertyDescriptor(list, 'length'); if (!descriptor || !('value' in descriptor)) return invalid();
+    length = count(descriptor.value, RECOVERY_REFERENCE_PAGE_SIZE);
+    if (Reflect.ownKeys(list).length !== length + 1 || length + unsupported !== scanned) return invalid();
+  } catch { return invalid(); }
   const items: RuntimeRecoveryReference[] = [];
   for (let index = 0; index < length; index++) {
-    const descriptor = Object.getOwnPropertyDescriptor(list, String(index)); if (!descriptor || !('value' in descriptor)) return invalid();
+    let descriptor: PropertyDescriptor | undefined;
+    try { descriptor = Object.getOwnPropertyDescriptor(list, String(index)); } catch { return invalid(); }
+    if (!descriptor || !('value' in descriptor)) return invalid();
     items.push(parseReference(descriptor.value));
   }
   if (new Set(items.map(item => item.recordId)).size !== items.length) return invalid();
