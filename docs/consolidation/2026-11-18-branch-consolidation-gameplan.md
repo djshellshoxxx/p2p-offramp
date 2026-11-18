@@ -255,6 +255,61 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
   #133 exact-head CI at `68b2fe1`: 8/8 green, including `forge` and the
   Solana `program` job. Next step is the owner's: merge #133 into #132's
   branch, decide on P2-EX3/EX2, then merge #132.
+- 2026-11-18 run 3, Step 0 on full history: `main@af4835b` (#132, #134 and
+  #135 merged). 149 remote branches besides `main`, 0 `archive/*` tags, 25 open
+  PRs. These include Lane A's #140 (`nodata/epic-newton-7bowm4`) and Lane B's
+  #136, #137 and #141 (`nodata/youthful-maxwell-uwy8hx*`). Phase 4 extraction
+  now runs in those lanes (see `2026-11-18-phase3-quarry.md` and
+  `LANE-B-PROMPT.md`), so this run did no Phase 4 work.
+- Run 3, Phase 0: all 15 #130 runs are still `queued`; each was read through
+  the API. Sessions cannot delete runs, so the owner runs
+  `phase0-delete-orphaned-runs.sh --apply`.
+- Run 3, Phase 1: the dry run is clean (65/65 tips unchanged). No listed branch
+  is the head or base of an open PR. Tag pushes from a session are refused
+  (HTTP 403), so the owner runs the script.
+- Run 3, Phases 2–3: 46 of the 47 pins in
+  `phase2-3-retire-contained-branches.sh` are unchanged. Every `ancestor` pin is
+  on `main`, and every line the 11 `lines` branches add (the D9 stack and the
+  Solana payout docs) is on `main`, which re-confirms Phase 3.
+  `claude/sleepy-fermat-4s6ocx` was reused for new Solana work (`419ca12`), so
+  the script's tip check skips it and it must not be deleted.
+  `codex/core-continuation-20261104` and `integration/p2p-consolidated-20261109`
+  stay until #56 and #81 close.
+- Run 3, new `phase2-5-retire-post-134.sh` (14 SHA-pinned branches; dry run
+  clean against the live remote with the `gh` check stubbed):
+  - On `main`: `nodata/affectionate-ritchie-xq4bon` and
+    `nodata/epic-goldberg-sg8n96`.
+  - Every added line on `main`: the heads of #31, #66, #67, #129 and #131,
+    and `docs/offramp-research-tools-execution-plan-20261106`.
+  - Archive only: #63 and #64 (closed as superseded); #100, whose one
+    assertion block is a strict subset of `apps/web/test/locale-catalog.test.mjs:78`;
+    #27's `claude/quirky-knuth-3s6ysy`; `claude/compassionate-gauss-uyhfih`
+    (T41–T47 already preserved in `tasks/todo.md` by `e8bb3fc`); and
+    `codex/setup-autonomous-agent-20261104`.
+    The last is weaker than `main`'s `openai-agents.yml` (write permissions,
+    unpinned actions and CLI, persisted credentials, no verify job), so nothing
+    was taken from it.
+- Run 3, Phase 5: #65's two fixes are on `main` with tests (unquoted
+  meta-refresh rule `apps/web/scripts/artifact-policy.mjs:48`, tests at lines
+  97–98; malformed saved-review wrappers are skipped in `savedEntries`). #65 and
+  #27 were closed with evidence. #65's branch stays as the T36–T40 source
+  record; #27's branch is in the archive-only list.
+  F01/F03/F06 do not reproduce on `main` as code because the journey is
+  absent. The fixes wait on #35 for the journey extraction, so no issues were
+  opened.
+- Run 3, Phase 6: `agents.md` has a Branching section. Turning on
+  "Automatically delete head branches" is a repository setting, so the owner
+  changes it.
+- Run 3, verification on `main@eef9a80` with Node 24.22.3:
+  - typecheck, `test:specs` (20 OK), `check:specs` (0 broken links),
+    `check:boundaries` (152 files, 66-module core graph), `test:build-policy`
+    (29/29) and `build` pass.
+  - `npm test`: 1,568 tests, 1,567 pass, 0 fail, 1 skip that needs Foundry's
+    `cast`.
+  - `test:browser` and `test:web:browser` pass on local Chromium.
+  - Foundry is not installed, so `test:escrow` and `test:local-evm` were not run.
+  - Re-run on this run's branch (`main@af4835b` plus this change): the same 7
+    gates pass, and `npm test` gives 1,573 tests, 1,572 pass, 0 fail, 1 skip.
 
 ## 4. Expected end state
 
