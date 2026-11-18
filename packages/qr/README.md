@@ -16,6 +16,7 @@ The package has no dependencies and holds no capabilities of its own. The caller
 | `src/envelope.ts` | Envelope v1 with exactly the fields `protocol`, `v`, `type`, `requestId` (16 random bytes as hex), `createdAt`, `expiresAt`, `chain`, `originHint` (display only), `payload` and `payloadSha256`, plus an optional `signature` on trade invites only. Each type's payload has a fixed set of keys (listed below). Unknown protocols, versions, types, fields and chains fail closed. Creation (`createQrEnvelope`) runs the same validator as import. The module also provides the invite signing digest and `attachInviteSignature`. |
 | `src/text-codec.ts` | `encodeQrText` and `decodeQrText`. The prefix and the base45 alphabet both sit in the QR alphanumeric set. The 2,048-byte decoded cap is enforced before any UTF-8 or JSON work. The result reports the 1,024-byte generation target. |
 | `src/review.ts` | The frozen import review, display grouping, and the bounded local replay ledger. |
+| `src/qr-matrix.ts` | An ISO/IEC 18004 symbol encoder. It supports alphanumeric and byte modes, versions 1 to 40, and error-correction levels L, M, Q and H (M by default, per D6). It covers Reed-Solomon over GF(256), the eight masks with penalty-based selection, and the BCH format and version information. `renderQrSvg` draws a static single-path SVG with a quiet zone of at least four modules; colors are checked and nothing is linked or scripted. |
 
 Payload schemas (`chain` is required for the first three types and must be `null` for the fingerprints):
 
@@ -72,8 +73,13 @@ The review never navigates, connects a wallet, signs, stores anything or makes a
 ## What is not implemented
 
 - **No camera or scanner UI and no QR image decoding.** There is no `getUserMedia`, no image handling and no scan lifecycle here. The UI also has to pass the scanned or pasted text through unchanged, without trimming, because space is a base45 digit.
-- **No physical scan tests.** D6 and the spec require them on iOS, Android and desktop, with printed, low-light, inverted and partial codes. The 1,024-byte generation target and error-correction level M default stay provisional until those tests are done.
-- **No QR matrix encoder or SVG renderer** (ISO/IEC 18004). The codec produces the text a reviewed encoder would carry in alphanumeric mode.
+- **No physical scan tests, and no third-party reader has decoded these symbols yet.** D6 and the spec require tests on iOS, Android and desktop, with printed, low-light, inverted and partial codes. The 1,024-byte generation target and the level M default stay provisional until those tests are done. At level M, envelope size sets the symbol size: 350 bytes need version 15 (77×77 modules), 1,024 bytes need version 27 (125×125) and 2,048 bytes need version 39 (173×173). D6 notes that dense codes are hard to scan from a screen.
+- **How the symbol encoder was checked.** It matches published known answers:
+  - the Reed-Solomon examples from ISO/IEC 18004 Annex I and the well-known "HELLO WORLD" 1-Q walkthrough;
+  - all 32 format-information words and the version-information words;
+  - the capacity figures quoted in D6 and the 2026-11-03 research note.
+
+  A separate Python reader in the oracle decodes all 21 frozen symbols, checks every Reed-Solomon block and recovers the original text. That reader was written in this change and is not an outside scanner. Penalty rule 3 uses the common "outside is light" reading, so another encoder may choose a different mask that is just as valid. A bit-for-bit comparison with an outside encoder was not done.
 - **The invite signing-key profile is open.** There is no verifier, no key binding to the advertisement and no signer.
 - **No `commitImport`.** Merging into domain state, `IMPORT_CONFLICT`, refusing to overwrite funded terms, and the G05 refetch and revalidation of signed current terms before funding all belong to the domain layer.
 - **No 64 KiB file-import path.** File import of public envelopes, and a downloadable file with a hash fingerprint for oversized content, are not built. Multi-frame codes are unsupported.
@@ -95,4 +101,7 @@ python3 -I scripts/vectors/check_qr_codec.py                                    
 python3 -m unittest scripts/tests/test_qr_codec_oracle.py
 ```
 
-`test/fixtures/vectors.json` is generated from synthetic labels. Its `meta` records the generator, the runtime and the codec parameters, plus an RFC 8785 content digest; `vectors.json.sha256` covers the whole file. `scripts/vectors/check_qr_codec.py` is a separate Python implementation, using only the standard library, of base45, RFC 8785 and the D6 envelope checks. It agrees with every vector, including every refusal code.
+`test/fixtures/vectors.json` is generated from synthetic labels. Its `meta` records the generator, the runtime and the codec parameters, plus an RFC 8785 content digest; `vectors.json.sha256` covers the whole file. `scripts/vectors/check_qr_codec.py` is a separate Python implementation, using only the standard library, of:
+
+- base45, RFC 8785 and the D6 envelope checks; it agrees with every vector, including every refusal code;
+- an ISO/IEC 18004 symbol reader for the `qrSymbol` vectors.

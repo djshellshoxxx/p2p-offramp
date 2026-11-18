@@ -1,7 +1,8 @@
 /**
  * Public boundary: D6 QR interchange codec (envelope v1, RFC 8785 canonical JSON, RFC 9285 base45 text).
  * Dependency-free and capability-free: SHA-256, randomness, the clock and any invite verifier are injected.
- * Decoding yields a review only; it never navigates, signs, stores or touches the network. No camera or scanner here.
+ * Decoding yields a review only; it never navigates, signs, stores or touches the network. Includes an ISO/IEC 18004
+ * symbol encoder and static SVG renderer; no camera, image decoder or scanner here.
  */
 export { BASE45_ALPHABET, decodeBase45, encodeBase45, maxBase45Length } from './src/base45.ts';
 export type { Base45DecodeResult, Base45ErrorCode } from './src/base45.ts';
@@ -27,3 +28,8 @@ export {
   DEFAULT_REPLAY_LEDGER_ENTRIES, MAX_REPLAY_LEDGER_ENTRIES, DEFAULT_REPLAY_RETENTION_SECONDS,
 } from './src/review.ts';
 export type { QrImportReview, QrImportReviewOf, QrWarning, QrDisplayField, ReplayLedger, ReplayLedgerOptions, ReplayAdmitResult } from './src/review.ts';
+export {
+  encodeQrMatrix, renderQrSvg, qrCapacity, dataCodewords, rawDataModules, alignmentPositions, formatInformation, versionInformation,
+  reedSolomonGenerator, reedSolomonRemainder, penaltyScore, QR_EC_LEVELS, DEFAULT_QR_EC_LEVEL, MIN_QR_VERSION, MAX_QR_VERSION, MIN_QUIET_ZONE_MODULES,
+} from './src/qr-matrix.ts';
+export type { QrEcLevel, QrSegmentMode, QrMatrix, QrMatrixResult, QrMatrixErrorCode, QrMatrixOptions, QrSvgOptions } from './src/qr-matrix.ts';

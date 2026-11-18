@@ -37,6 +37,12 @@ test('fixture covers the D6 vector requirements', () => {
     assert.ok(codes.has(required), required);
   assert.ok(vectors.rejections.some(vector => vector.name.includes('wallet-session')) && vectors.rejections.some(vector => vector.name.includes('auth-token')));
   assert.deepEqual(vectors.replays[0].expectedCodes, [null, 'REPLAYED']);
+  const symbols = vectors.qrSymbol.matrices;
+  assert.deepEqual([...new Set(symbols.map(symbol => symbol.ecLevel))].sort(), ['H', 'L', 'M', 'Q']);
+  assert.deepEqual([...new Set(symbols.map(symbol => symbol.mode))].sort(), ['alphanumeric', 'byte']);
+  assert.ok(symbols.some(symbol => symbol.version >= 7) && symbols.some(symbol => symbol.version === 40));
+  assert.ok(symbols.some(symbol => symbol.name === 'envelope-largest-permitted-envelope-2048' && symbol.ecLevel === 'M'));
+  assert.equal(vectors.qrSymbol.capacities.length, 160);
 });
 
 test('base45 and canonical JSON vectors hold against the committed values', () => {

@@ -66,6 +66,28 @@ class QrCodecOracle(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("payload hash", result.stderr)
 
+    def test_oracle_detects_a_damaged_symbol_module(self):
+        def mutate(document):
+            matrix = next(m for m in document["vectors"]["qrSymbol"]["matrices"] if m["name"] == "hello-world-Q")
+            size = matrix["size"]
+            rows = ["".join(f"{int(d, 16):04b}" for d in row)[:size] for row in matrix["rowsHex"]]
+            last = rows[-1]
+            rows[-1] = last[:-1] + ("0" if last[-1] == "1" else "1")  # bottom-right module always carries data
+            padded = [row.ljust(-(-size // 4) * 4, "0") for row in rows]
+            matrix["rowsHex"] = ["".join(f"{int(row[k:k + 4], 2):x}" for k in range(0, len(row), 4)) for row in padded]
+            matrix["rowsSha256"] = hashlib.sha256("\n".join(rows).encode()).hexdigest()
+        result = self._tampered(mutate)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("RS block", result.stderr)
+
+    def test_oracle_detects_a_wrong_capacity(self):
+        def mutate(document):
+            entry = next(c for c in document["vectors"]["qrSymbol"]["capacities"] if c["version"] == 40 and c["ecLevel"] == "M")
+            entry["byte"] -= 1
+        result = self._tampered(mutate)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("capacity 40M", result.stderr)
+
     def test_oracle_detects_a_stale_content_digest(self):
         def mutate(document):
             document["vectors"]["jcs"][0]["canonical"] += " "

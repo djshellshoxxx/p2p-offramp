@@ -15,6 +15,7 @@ import {
   INVITE_SIGNING_DOMAIN, EXPIRY_SAFETY_MARGIN_SECONDS, MAX_FUTURE_SKEW_SECONDS,
   canonicalize, canonicalBytes, parseStrictJson, encodeBase45, encodeUtf8, decodeUtf8, createQrEnvelope, encodeQrText,
   inviteSigningDigest, attachInviteSignature, decodeQrText, createReplayLedger, JcsError,
+  encodeQrMatrix, qrCapacity, formatInformation, versionInformation, reedSolomonRemainder, QR_EC_LEVELS, DEFAULT_QR_EC_LEVEL,
 } from '../../index.ts';
 import {
   NOW, CHAINS, EVM_CHAIN, OTHER_EVM_CHAIN, SOLANA_CHAIN, INPUTS, deps, sha256, hashHex, solanaKey, evmAddress,
@@ -150,6 +151,44 @@ function jcsVectors() {
   return valid;
 }
 
+/** Rows of `0`/`1` packed MSB-first into hex, each row zero-padded to a multiple of four modules. */
+const rowsHex = rows => rows.map(row => {
+  const padded = row.padEnd(Math.ceil(row.length / 4) * 4, '0');
+  let out = '';
+  for (let i = 0; i < padded.length; i += 4) out += parseInt(padded.slice(i, i + 4), 2).toString(16);
+  return out;
+});
+
+function matrixVectors(envelopes) {
+  const matrices = [];
+  const add = (name, value, options = {}) => {
+    const result = encodeQrMatrix(value, options);
+    if (!result.ok) throw new Error(`${name}: ${result.code}`);
+    const { matrix } = result;
+    matrices.push({ name, text: value, ecLevel: matrix.ecLevel, mode: matrix.mode, version: matrix.version, mask: matrix.mask, size: matrix.size,
+      rowsSha256: createHash('sha256').update(matrix.rows.join('\n')).digest('hex'), rowsHex: rowsHex(matrix.rows) });
+  };
+  for (const level of QR_EC_LEVELS) add(`hello-world-${level}`, 'HELLO WORLD', { ecLevel: level });
+  for (const envelope of envelopes.filter(vector => vector.name !== 'trade-invite-signed-no-verifier')) add(`envelope-${envelope.name}`, envelope.text);
+  for (const level of QR_EC_LEVELS) add(`byte-utf8-${level}`, 'p2p offramp é€\u{1F600}', { ecLevel: level });
+  add('alphanumeric-capacity-7M', 'A1'.repeat(qrCapacity(7, 'M', 'alphanumeric')).slice(0, qrCapacity(7, 'M', 'alphanumeric')), { minVersion: 7, maxVersion: 7 });
+  add('byte-capacity-10H-mask-5', 'b'.repeat(qrCapacity(10, 'H', 'byte')), { ecLevel: 'H', minVersion: 10, maxVersion: 10, mask: 5 });
+  add('alphanumeric-capacity-40H', 'Z9'.repeat(qrCapacity(40, 'H', 'alphanumeric')).slice(0, qrCapacity(40, 'H', 'alphanumeric')), { ecLevel: 'H' });
+  return {
+    defaultEcLevel: DEFAULT_QR_EC_LEVEL,
+    reedSolomon: [
+      { name: 'iso-18004-annex-i-1M', source: 'ISO/IEC 18004 Annex I', dataHex: hexOf(Uint8Array.of(16, 32, 12, 86, 97, 128, 236, 17, 236, 17, 236, 17, 236, 17, 236, 17)), ecc: 10 },
+      { name: 'hello-world-1Q', source: 'published HELLO WORLD walkthrough', dataHex: hexOf(Uint8Array.of(32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236)), ecc: 13 },
+    ].map(vector => ({ ...vector, eccHex: hexOf(reedSolomonRemainder(Uint8Array.from(Buffer.from(vector.dataHex, 'hex')), vector.ecc)) })),
+    formatInformation: QR_EC_LEVELS.flatMap(level => Array.from({ length: 8 }, (_, mask) => ({ ecLevel: level, mask, bits: formatInformation(level, mask) }))),
+    versionInformation: Array.from({ length: 34 }, (_, index) => ({ version: index + 7, bits: versionInformation(index + 7) })),
+    capacities: Array.from({ length: 40 }, (_, index) => index + 1).flatMap(version => QR_EC_LEVELS.map(level => ({
+      version, ecLevel: level, alphanumeric: qrCapacity(version, level, 'alphanumeric'), byte: qrCapacity(version, level, 'byte'),
+    }))),
+    matrices,
+  };
+}
+
 /** Replaces the first occurrence of `find` in the canonical bytes of `tree`. */
 function spliceText(tree, find, replacement) {
   const canonical = canonicalize(tree), at = canonical.indexOf(find);
@@ -276,10 +315,11 @@ async function build() {
     base45: base45Vectors(), base45Invalid: BASE45_INVALID,
     jcs: jcsVectors(), jcsInvalid: JCS_INVALID, utf8Invalid: UTF8_INVALID,
     envelopes, rejections, replays: replayed,
+    qrSymbol: matrixVectors(envelopes),
   };
   return {
     meta: {
-      description: 'D6 QR interchange codec vectors (envelope v1, RFC 8785 canonical JSON, RFC 9285 base45 text). Synthetic values only.',
+      description: 'D6 QR interchange codec vectors (envelope v1, RFC 8785 canonical JSON, RFC 9285 base45 text) and ISO/IEC 18004 symbol vectors. Synthetic values only.',
       generator: GENERATOR,
       independentCheck: 'scripts/vectors/check_qr_codec.py',
       generatorRuntime: `node ${process.versions.node}`,
