@@ -1,7 +1,7 @@
 {
   "format": "p2p-offramp/assurance-local-evidence/v2",
   "scope": "Exact local public source/document byte integrity; no attack execution, incident, legal/professional review or release authority inferred. Own manifest self-hash excluded. Rows owned by this packet bind the working tree; every other row binds the bytes at sourceCommit and is reported stale, never current, when the file later changes.",
-  "sourceCommit": "af4835b58146fc970af90790b635ea7c75a724af",
+  "sourceCommit": "8649b7a1994ec21fe5557179d44e861b746bcda8",
   "files": [
     {
       "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.11_operations/module_0.11.1_privacy_operations/spec-incident-response-and-redacted-diagnostics.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "docs/OPERATOR.md",
-      "sha256": "0000115232ff26beb04ae6101c18a6df459dfa6540b898bedb57f7707539b455"
+      "sha256": "dc16fbb5411ece588b7f60b98f8406d2194b23e01caf3e9bccc30c4c3c68ffa6"
     },
     {
       "path": "docs/execution/assurance/README.md",
@@ -73,7 +73,7 @@
     },
     {
       "path": "docs/recovery/CANONICAL-EVM.md",
-      "sha256": "f20a8b32b0d4223d4401ad38857b717512544bf58fd8a3edfb56ada068c749d1"
+      "sha256": "6345ddf6d45e80a368c7ffe2e43179d0b89e834a402e8cbeab427c46c75ff098"
     },
     {
       "path": "packages/chain-evm/src/reader.ts",
