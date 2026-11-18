@@ -10,12 +10,13 @@ import { build } from 'vite';
 import { createReleaseRegistry, verifyRelease } from '../../packages/security/src/release-manifest.ts';
 import { parseRegistryBytes, parseStrictJsonBytes } from '../../packages/schemas/index.ts';
 import { TESTNET_ACCEPTED_FILE, TESTNET_TRUST_FILES } from '../../apps/web/scripts/testnet-trust.mjs';
-import { isSepoliaOnly, SEPOLIA_RELEASE_KEY_ID } from '../../apps/web/src/testnet/sepolia-network.ts';
-import { isMain, ROOT } from '../sepolia/lib.mjs';
+import { isSepoliaOnly, SEPOLIA_RELEASE_CHANNEL, SEPOLIA_RELEASE_KEY_ID } from '../../apps/web/src/testnet/sepolia-network.ts';
+import { CLI_DEFAULT_DEPLOYMENT_ID, isDeploymentId, isMain, ROOT } from '../sepolia/lib.mjs';
 import { RECOVERY_FORMAT, loadArchivedRecoveryProfile, refuseRecovery, recoveryErrorCode } from './evm-recovery.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const CANONICAL_ABI_PATH = 'contracts/evm/abi/BasicEscrow.json';
+/** The release's ABI asset path; the same two-asset set (registry and ABI) as every other testnet verifier (D3 Option A). */
+const CANONICAL_ABI_PATH = TESTNET_TRUST_FILES.abi;
 const byteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype),'byteLength').get;
 function snapshot(input) {
   try {
@@ -101,9 +102,14 @@ export async function readAcceptedEvmRecoveryRelease(root=ROOT) {
   }
 }
 
-/** Maintained Sepolia build policy only; no public-key, genesis or policy override. */
-export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
+/**
+ * Maintained Sepolia build policy only; no public-key, genesis or policy override. `deploymentId` names the signed
+ * deployment the package recovers (each deployment gets its own package, archived under its release; see
+ * docs/recovery/OWNER-TESTNET-RELEASE-RUNBOOK.md). An unset key pin refuses before any input is read.
+ */
+export async function buildConfiguredEvmRecovery({outDir,root=ROOT,deploymentId}) {
   if (SEPOLIA_RELEASE_KEY_ID === null) return refuseRecovery('KEY_UNPINNED');
+  if (!isDeploymentId(deploymentId)) return refuseRecovery('INVALID_INPUT');
   try {
     const names = TESTNET_TRUST_FILES;
     const [keyBytes,registry,manifest,envelope,abi] = await Promise.all([names.key,names.registry,names.manifest,names.envelope,CANONICAL_ABI_PATH].map(path => readFile(resolve(root,path))));
@@ -111,19 +117,25 @@ export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
     if (key.keyId !== SEPOLIA_RELEASE_KEY_ID) return refuseRecovery('KEY_UNTRUSTED');
     const accepted = await readAcceptedEvmRecoveryRelease(root);
     const proof = await verifyRelease(new Uint8Array(manifest),detached,[key.publicKey],accepted === null ? 0 : accepted.sequence,
-      {channel:'sepolia-testnet',assets:[{path:names.registry,bytes:new Uint8Array(registry)},{path:CANONICAL_ABI_PATH,bytes:new Uint8Array(abi)}],
+      {channel:SEPOLIA_RELEASE_CHANNEL,assets:[{path:names.registry,bytes:new Uint8Array(registry)},{path:CANONICAL_ABI_PATH,bytes:new Uint8Array(abi)}],
         ...(accepted === null ? {} : {installedManifestSha256:accepted.manifestSha256})});
     if (!proof.ok) return refuseRecovery(proof.error.code);
     if (proof.value.keyId !== SEPOLIA_RELEASE_KEY_ID || !isSepoliaOnly(parseRegistryBytes(new Uint8Array(registry)))) return refuseRecovery('WRONG_CHAIN');
     return buildEvmRecoveryPackage({verifiedRelease:proof.value,registryPath:names.registry,registryBytes:new Uint8Array(registry),abiPath:CANONICAL_ABI_PATH,
-      abiBytes:new Uint8Array(abi),networkId:'sepolia',deploymentId:'escrow-sepolia-v1',outDir});
+      abiBytes:new Uint8Array(abi),networkId:'sepolia',deploymentId,outDir});
   } catch (error) { return refuseRecovery(recoveryErrorCode(error)); }
 }
 function parseBuildOptions(args) {
-  const options = { out: { type: 'string' }, help: { type: 'boolean', short: 'h' } };
+  const options = { out: { type: 'string' }, 'deployment-id': { type: 'string' }, help: { type: 'boolean', short: 'h' } };
   try {
     const { values, tokens } = parseArgs({ args, options, strict: true, tokens: true });
-    if (tokens.filter(token => token.kind === 'option').length === 1 && (values.help || values.out)) return values;
+    const names = tokens.filter(token => token.kind === 'option').map(token => token.name);
+    // --help alone, or a nonempty --out with at most one well-formed --deployment-id (CLI default escrow-sepolia-v1);
+    // no option may repeat.
+    const deploymentId = values['deployment-id'] ?? CLI_DEFAULT_DEPLOYMENT_ID;
+    if (new Set(names).size === names.length && (values.help ? names.length === 1 : Boolean(values.out) && isDeploymentId(deploymentId))) {
+      return { ...values, 'deployment-id': deploymentId };
+    }
   } catch {
     // Argument-parser errors are input refusals. The underlying message can contain caller input.
   }
@@ -134,11 +146,11 @@ if (isMain(import.meta.url)) {
   try {
     const values = parseBuildOptions(process.argv.slice(2));
     if (values.help) {
-      console.log('Usage: node --import ./scripts/test-support/register-tsx.mjs scripts/recovery/build-evm.mjs --out <new-directory>\n' +
-        'Package historical Sepolia recovery tools from a verified registry and ABI. The output directory must be new.\n' +
+      console.log('Usage: node --import ./scripts/test-support/register-tsx.mjs scripts/recovery/build-evm.mjs --out <new-directory> [--deployment-id escrow-sepolia-v1]\n' +
+        'Package historical Sepolia recovery tools for one signed deployment from a verified registry and ABI. The output directory must be new.\n' +
         'Use --help or -h to display this help.');
     } else {
-      const result = await buildConfiguredEvmRecovery({outDir:values.out});
+      const result = await buildConfiguredEvmRecovery({outDir:values.out,deploymentId:values['deployment-id']});
       console.log(JSON.stringify({ok:true,value:{directory:result.directory,files:result.files}}));
     }
   } catch (error) { console.log(JSON.stringify({ok:false,error:{code:recoveryErrorCode(error)}})); process.exitCode=1; }

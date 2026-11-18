@@ -33,7 +33,7 @@ async function fixture() {
     trades: [{ label: 'release', status: 'planned', checks: [] }, { label: 'refund', status: 'planned', checks: [] }] };
   const env = { SEPOLIA_RPC_URL: 'http://127.0.0.1:9/', SEPOLIA_SELLER_PRIVATE_KEY: Buffer.from(keys[0]).toString('hex'),
     SEPOLIA_BUYER_PRIVATE_KEY: Buffer.from(keys[1]).toString('hex') };
-  return { base, root, directory, statePath, state, escrow, env, async dispose() { keys.forEach(key => key.fill(0)); await rm(base, { recursive: true, force: true }); } };
+  return { base, root, directory, statePath, state, escrow, env, deploymentId: 'escrow-sepolia-v1', async dispose() { keys.forEach(key => key.fill(0)); await rm(base, { recursive: true, force: true }); } };
 }
 
 function decodeTerms(data) {
