@@ -282,8 +282,9 @@ test('a descendant that leaves the process group and holds a pipe cannot stall t
   // detached:true gives the grandchild its own session (setsid); inherited stdio keeps the runner's pipes open for 40 s,
   // longer than this test may run, so the previous close-only wait fails here rather than passing late.
   const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},40000)'],{detached:true,stdio:['ignore','inherit','inherit']});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));process.stdout.write('started');if(process.argv[2]==='timeout')setTimeout(()=>{},40000);`;
-  const started=performance.now(),result=await formal.processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?300:4000,graceMs:200});pids.push(Number(await readFile(file,'utf8')));
-  assert.ok(performance.now()-started<10000,mode+' waited for the escaped descendant');assert.equal(result.error,'PIPE_HELD_OPEN');assert.equal(result.timedOut,mode==='timeout');
+  // The timeout leaves the child time to record its grandchild even on a loaded host.
+  const timeoutMs=mode==='timeout'?3000:15000,started=performance.now(),result=await formal.processBounded(process.execPath,['-e',script,file,mode],{timeoutMs,graceMs:200});pids.push(Number(await readFile(file,'utf8')));
+  assert.ok(performance.now()-started<(mode==='timeout'?timeoutMs:0)+6000,mode+' waited for the escaped descendant');assert.equal(result.error,'PIPE_HELD_OPEN');assert.equal(result.timedOut,mode==='timeout');
  }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
 });
 const fakeTool=async(directory,name,plan,body)=>{const path=join(directory,name);await writeFile(path,`#!${process.execPath}\nconst plan=${JSON.stringify(plan)};\n${body}\n`);await chmod(path,0o755);return path;};
