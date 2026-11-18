@@ -147,3 +147,94 @@ test('REDTEAM-P2-D9-3 another tab\'s recover() does not cancel a live preparatio
     assert.equal(sent.ok, true, `live release cancelled by other tab: submit=${sent.ok || sent.error.code}, re-prepare=${again.ok || again.error.code}, stored=${(await stored(env, prepared.intentId)).state}`);
   } finally { lifeB.dispose(); journalB.dispose(); close(env); }
 });
+
+// Integration review of PR #134 (area A, Medium): a never-marked approval cancelled locally, a fresh approval mined at
+// the SAME nonce, then funding. After a backup restore (new profile id) the cancelled approval lost its never-sent proof,
+// reconciled as 'pending' (hash null, no escrow effect) and was relabelled 'reorged' forever, so every release/refund of
+// the funded trade returned CONFLICT. Native proof that the nonce was consumed by a different finalized transaction of
+// the journal now settles it as never included.
+test('restored profile: an approval whose nonce a different finalized transaction consumed cannot veto release or refund', async () => {
+  const { EncryptedBackupService } = await import('../../storage/src/backup-service.ts');
+  for (const restore of [false, true]) {
+    const env = await setup(); let backup;
+    try {
+      const approval = fund({ action: 'approve', expectedEscrowState: 'absent', call: { to: ESCROW, data: NOOP, value: '0' } });
+      const cancelled = val(await env.life.prepare(approval));
+      await start(env); val(await env.life.recover()); // locally cancelled before any marker: never-sent proof (same profile)
+      const fresh = val(await env.life.prepare({ ...approval, call: { ...approval.call, data: '0x01' } }));
+      assert.equal(JSON.parse((await stored(env, cancelled.intentId)).preparedRequest).nonce, fresh.request.nonce, 'same nonce');
+      val(await env.life.submit(fresh)); env.chain.mine(2); env.chain.finalized = env.chain.latest().number;
+      assert.equal(val(await env.life.reconcile(fresh.intentId)).outcome, 'finalized');
+      const funding = val(await env.life.prepare(fund())); val(await env.life.submit(funding));
+      env.chain.mine(10); env.chain.finalized = env.chain.latest().number;
+      assert.equal(val(await env.life.reconcile(funding.intentId)).outcome, 'finalized');
+      if (restore) {
+        backup = new EncryptedBackupService(env.store, crypto);
+        const bytes = await backup.export(env.session.profileId);
+        const restored = await backup.restore(bytes, pass, pass); bytes.fill(0);
+        env.life.dispose(); env.journal.dispose();
+        const restoredVault = new EncryptedVaultService(env.store, crypto, { lifecycle: false });
+        const session = val(await restoredVault.unlock(restored.newProfileId, pass));
+        env.vault.dispose(); env.vault = restoredVault; env.session = session;
+      }
+      await start(env);
+      const sendsBefore = env.wallet.sends;
+      const first = await env.life.prepare(release());
+      const settled = first.ok ? first : (env.chain.mine(1), await env.life.prepare(release()));
+      assert.equal(settled.ok, true, `${restore ? 'restored' : 'same profile'}: release blocked: ${JSON.stringify(first)}`);
+      const c = await stored(env, cancelled.intentId);
+      assert.equal(c.state, 'failed'); assert.equal(c.submission.hash, null);
+      assert.equal(env.wallet.sends, sendsBefore, 'preparation never sends');
+    } finally { backup?.dispose(); env.life.dispose(); env.journal.dispose(); env.vault.dispose(); }
+  }
+});
+
+test('a restored hash-null approval stays held until the transaction that consumed its nonce is finalized', async () => {
+  const { EncryptedBackupService } = await import('../../storage/src/backup-service.ts');
+  const env = await setup(); let backup;
+  try {
+    const approval = fund({ action: 'approve', expectedEscrowState: 'absent', call: { to: ESCROW, data: NOOP, value: '0' } });
+    const cancelled = val(await env.life.prepare(approval));
+    await start(env); val(await env.life.recover());
+    const fresh = val(await env.life.prepare({ ...approval, call: { ...approval.call, data: '0x01' } }));
+    val(await env.life.submit(fresh)); env.chain.mine(2); // mined and confirmed, not finalized
+    backup = new EncryptedBackupService(env.store, crypto);
+    const bytes = await backup.export(env.session.profileId);
+    const restored = await backup.restore(bytes, pass, pass); bytes.fill(0);
+    env.life.dispose(); env.journal.dispose();
+    const restoredVault = new EncryptedVaultService(env.store, crypto, { lifecycle: false });
+    const session = val(await restoredVault.unlock(restored.newProfileId, pass));
+    env.vault.dispose(); env.vault = restoredVault; env.session = session;
+    await start(env);
+    assert.notEqual(val(await env.life.reconcile(cancelled.intentId)).intent.state, 'failed', 'an unfinalized consumer is not proof');
+    env.chain.finalized = env.chain.latest().number;
+    val(await env.life.reconcile(fresh.intentId));
+    const r = val(await env.life.reconcile(cancelled.intentId));
+    assert.equal(r.intent.state, 'failed'); assert.equal(r.intent.submission.hash, null);
+  } finally { backup?.dispose(); env.life.dispose(); env.journal.dispose(); env.vault.dispose(); }
+});
+
+// Integration review of PR #134 (area A, Low): markSending refused without writing (journal busy) left the intent in
+// this instance's send set: submit could not retry, reconcile/recover ignored it and a new prepare got CONFLICT.
+test('a refused send marker returns the preparation for an explicit retry and sends nothing by itself', async () => {
+  const env = await setup();
+  try {
+    let armed = false, busy;
+    const original = env.wallet.request;
+    const wrapped = async args => { if (args.method === 'eth_chainId' && armed) { armed = false; busy = env.journal.list(); } return original(args); };
+    env.life.dispose();
+    env.life = createEvmTxLifecycle({ journal: env.journal, reader: env.chain.reader(), wallet: wrapped, policy, retry });
+    await env.life.walletChanged({ account: ACCOUNT, chainId: '31337', generation: 1 });
+    const p = val(await env.life.prepare(fund()));
+    armed = true;
+    err(await env.life.submit(p), 'CONFLICT');
+    val(await busy);
+    assert.equal(env.wallet.sends, 0);
+    const rec = await stored(env, p.intentId);
+    assert.equal(rec.state, 'prepared'); assert.equal(rec.sendMarkedAt, null);
+    assert.equal(env.wallet.sends, 0, 'no automatic resend');
+    val(await env.life.submit(p)); // explicit user retry of the same live preparation
+    assert.equal(env.wallet.sends, 1);
+    err(await env.life.submit(p), 'CONFLICT'); // and only once
+  } finally { close(env); }
+});

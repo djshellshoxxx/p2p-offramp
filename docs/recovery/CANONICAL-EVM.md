@@ -62,8 +62,9 @@ The exact `p2p-offramp/offline-recovery-references/v1` envelope contains
 `chainReference` and `nonce`. It contains no calldata or acceptance signatures.
 Only its binding locates the trade; all monetary fields, parties, state and
 deadline are reread from the escrow. Keep this private file away from public
-hosting. The G12 encrypted journal remains in its existing version-1 format;
-the recovery tool never opens its vault or resubmits a stored prepared request.
+hosting. The G12 encrypted journal keeps its version-1 record wrapper (the
+intent inside is version 2 with the D9 `sendMarkedAt` marker); the recovery tool
+never opens its vault or resubmits a stored prepared request.
 
 ### Reading the result
 
