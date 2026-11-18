@@ -39,10 +39,13 @@ test('scanBuild: only the testnet artifact may carry the testnet trust bundle or
   const { TESTNET_TRUST_FORMAT } = await import('./testnet-trust.mjs');
   const clean = await fixture();
   const bundled = await fixture({ js: `export const trust = ${JSON.stringify({ format: TESTNET_TRUST_FORMAT })};\n` });
+  // A refused legacy registry-only bundle is still trust data: it may never reach a non-testnet artifact either.
+  const legacy = await fixture({ js: `export const trust = ${JSON.stringify({ format: 'p2p-offramp/testnet-trust/v1' })};\n` });
   const graphOnly = await fixture({ graphModules: [{ path: 'apps/web/src/testnet/sepolia-source.ts', sha256: '0'.repeat(64) }] });
-  t.after(() => Promise.all([clean, bundled, graphOnly].map(dir => rm(dir, { recursive: true, force: true }))));
+  t.after(() => Promise.all([clean, bundled, legacy, graphOnly].map(dir => rm(dir, { recursive: true, force: true }))));
+  assert.equal(TESTNET_TRUST_FORMAT, 'p2p-offramp/testnet-trust/v2');
   assert.equal((await scanBuild(clean)).testnet, false);
-  for (const dir of [bundled, graphOnly]) {
+  for (const dir of [bundled, legacy, graphOnly]) {
     await assert.rejects(scanBuild(dir), /TESTNET_DATA_IN_NON_TESTNET_BUILD/);
     await assert.rejects(scanBuild(dir, { syntheticDemo: false }), /TESTNET_DATA_IN_NON_TESTNET_BUILD/);
   }
