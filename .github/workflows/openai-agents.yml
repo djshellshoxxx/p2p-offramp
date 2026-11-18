@@ -4,8 +4,11 @@ name: OpenAI Autonomous Development
 # step has a hard wall-clock bound and the run is serialized repository-wide.
 #
 # Least privilege: the agent runs with a read-only token and no persisted git
-# credentials; it can only produce a patch artifact. A separate publish job with
-# write access applies that patch, refuses protected paths and opens a draft PR.
+# credentials; it can only produce a patch artifact. The agent can tamper with
+# anything in its own job, so a separate verify job, where no agent code runs,
+# re-checks that patch on a clean checkout with the known secret. Only then does
+# the publish job (write access, no secret) apply it, refuse protected paths and
+# open a draft PR.
 on:
   workflow_dispatch:
     inputs:
@@ -98,9 +101,42 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
-  publish:
+  verify:
+    # Authoritative output check: clean runner, clean checkout, the patch is only applied and scanned, never executed.
     needs: develop
     if: needs.develop.outputs.has_patch == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Download patch
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0, official tag checked 2026-11-07
+        with:
+          name: agent-patch
+          path: ${{ runner.temp }}
+
+      - name: Apply patch and check for the known secret
+        env:
+          AGENT_OUTPUT_SECRET: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+          cp scripts/agent/check-output.mjs "$RUNNER_TEMP/check-agent-output.mjs"
+          if ! git apply --index --binary "$RUNNER_TEMP/agent.patch" 2>/dev/null; then
+            echo "AGENT_PATCH_REFUSED" >&2
+            exit 1
+          fi
+          node "$RUNNER_TEMP/check-agent-output.mjs" "$GITHUB_WORKSPACE"
+
+  publish:
+    needs: [develop, verify]
+    if: needs.develop.outputs.has_patch == 'true' && needs.verify.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

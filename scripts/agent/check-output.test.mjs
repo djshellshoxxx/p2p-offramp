@@ -57,7 +57,8 @@ test('CLI failure never leaks sentinel, filename or underlying git diagnostics',
 
 test('both workflow output boundaries gate publication and the write job never receives the API key', () => {
   const workflow = readFileSync(new URL('../../.github/workflows/openai-agents.yml', import.meta.url), 'utf8');
-  const [develop, publish] = workflow.split('\n  publish:\n');
+  const [develop, rest] = workflow.split('\n  verify:\n');
+  const [verify, publish] = rest.split('\n  publish:\n');
   assert.ok(develop.includes("if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"));
   const check = 'node "$RUNNER_TEMP/check-agent-output.mjs" "$GITHUB_WORKSPACE"';
   assert.ok(develop.indexOf(check) > develop.indexOf('git add -A'));
@@ -65,5 +66,10 @@ test('both workflow output boundaries gate publication and the write job never r
   assert.ok(publish.indexOf(check) > publish.indexOf('git apply --index'));
   assert.ok(publish.indexOf(check) < publish.indexOf('GH_TOKEN:'));
   assert.ok(!publish.includes('secrets.OPENAI_API_KEY'));
+  // The authoritative known-secret check runs where no agent code executes, and publication waits for it.
+  assert.ok(verify.indexOf(check) > verify.indexOf('git apply --index'));
+  assert.ok(verify.indexOf('AGENT_OUTPUT_SECRET: ${{ secrets.OPENAI_API_KEY }}') > verify.indexOf('name: Apply patch'));
+  assert.ok(!verify.includes('codex') && !verify.includes('npm ') && verify.includes('contents: read') && !verify.includes('contents: write'));
+  assert.ok(publish.includes('needs: [develop, verify]') && publish.includes("needs.verify.result == 'success'"));
   assert.ok(!workflow.includes('git diff --cached --stat'));
 });
