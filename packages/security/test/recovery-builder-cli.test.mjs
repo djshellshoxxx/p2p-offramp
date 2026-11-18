@@ -22,6 +22,7 @@ test('recovery package help is available offline before trust or output is requi
     const result = run([option], cwd);
     assert.equal(result.status, 0, result.stdout + result.stderr);
     assert.match(result.stdout, /--out <new-directory>/);
+    assert.match(result.stdout, /--deployment-id escrow-sepolia-v1/);
     assert.match(result.stdout, /historical/i);
   }
   assert.deepEqual(await readdir(cwd), []);
@@ -31,7 +32,10 @@ test('ambiguous and malformed packaging arguments produce a fixed input error', 
   const cwd = await mkdtemp(join(tmpdir(), 'recovery-usage-'));
   t.after(() => rm(cwd, { recursive: true, force: true }));
   for (const args of [[], ['--out'], ['--out='], ['--other'], ['extra'],
-    ['--help', '--out', 'archive'], ['--out', 'first', '--out=second']]) {
+    ['--help', '--out', 'archive'], ['--out', 'first', '--out=second'],
+    // D3 (proposed): an explicit deployment id must be well formed and given once, and never replaces --out.
+    ['--deployment-id', 'escrow-sepolia-v1'], ['--out', 'archive', '--deployment-id='], ['--out', 'archive', '--deployment-id', 'bad.id'],
+    ['--out', 'archive', '--deployment-id', 'escrow-sepolia-v1', '--deployment-id=escrow-sepolia-v2'], ['--help', '--deployment-id', 'escrow-sepolia-v1']]) {
     const result = run(args, cwd);
     assert.equal(result.status, 1, String(args));
     assert.deepEqual(JSON.parse(result.stdout), { ok: false, error: { code: 'INVALID_INPUT' } }, String(args));

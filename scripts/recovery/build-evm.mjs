@@ -130,9 +130,11 @@ function parseBuildOptions(args) {
   try {
     const { values, tokens } = parseArgs({ args, options, strict: true, tokens: true });
     const names = tokens.filter(token => token.kind === 'option').map(token => token.name);
-    // --help alone, or --out with at most one --deployment-id (CLI default escrow-sepolia-v1); no option may repeat.
-    if (new Set(names).size === names.length && (values.help ? names.length === 1 : values.out !== undefined)) {
-      return { ...values, 'deployment-id': values['deployment-id'] ?? CLI_DEFAULT_DEPLOYMENT_ID };
+    // --help alone, or a nonempty --out with at most one well-formed --deployment-id (CLI default escrow-sepolia-v1);
+    // no option may repeat.
+    const deploymentId = values['deployment-id'] ?? CLI_DEFAULT_DEPLOYMENT_ID;
+    if (new Set(names).size === names.length && (values.help ? names.length === 1 : Boolean(values.out) && isDeploymentId(deploymentId))) {
+      return { ...values, 'deployment-id': deploymentId };
     }
   } catch {
     // Argument-parser errors are input refusals. The underlying message can contain caller input.
