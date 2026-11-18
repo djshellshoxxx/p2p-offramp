@@ -156,6 +156,23 @@ test('P2-EX3 seller-side inbound expiry is capped at ttl + skew and at the adver
   ok(await w.seller.ex.receive(again.recipientWrap, w.seller.secret));
 });
 
+test('P2-EX3 a take followed by a late cancel holds a slot for at most two windows', async () => {
+  const w = await worldAd({ expiresAtSeconds: String(NOW + 3600) }, { maxSessionsPerAd: 1 });
+  const held = await sybilTake(w, { expires: HOLD }); ok(held.result);
+  w.clock.now = HOLD - 1;
+  ok(await w.seller.ex.receive(await craft(held.sybil, w.seller, w.address, 'cancel', { reason: 'withdrawn' }, { nonce: freshNonce(), expires: w.clock.now + 1020 }), w.seller.secret));
+  w.clock.now = HOLD + 1020 - 2;
+  fail((await sybilTake(w, { expires: w.clock.now + 900 })).result, 'LIMIT_EXCEEDED'); // inside the second window
+  w.clock.now = HOLD + 1020;
+  ok((await sybilTake(w, { expires: w.clock.now + 900 })).result); // both of the key's ids expired: the slot is free
+});
+
+test('P2-EX3 a seller with a shortened local TTL still admits default-TTL buyers', async () => {
+  const w = await worldAd({}, { messageTtlSeconds: 300 });
+  ok((await sybilTake(w, { expires: HOLD })).result);
+  fail((await sybilTake(w, { expires: HOLD + 1 })).result, 'MALFORMED');
+});
+
 test('P2-EX3 a selected session is never displaced, even after its take-request expired', async () => {
   const w = await worldAd({});
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));

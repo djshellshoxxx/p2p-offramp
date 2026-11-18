@@ -19,16 +19,16 @@
  *   live, a selected session, an offered/accepted session, or a buyer-side session; the newcomer is refused with
  *   LIMIT_EXCEEDED instead.
  * - The hold is short and the same for everyone: on the seller side every message from a buyer must expire within
- *   `messageTtlSeconds + MAX_FUTURE_SKEW_SECONDS` of receipt and no later than the advert. A flood therefore holds an
- *   advert for at most that window per wave (17 minutes at the defaults), after which the oldest idle intake is
- *   displaced first. Peers must use the default TTL or a lower one, as honest builds do (min(now + ttl, advert expiry)).
+ *   `max(messageTtlSeconds, default TTL) + MAX_FUTURE_SKEW_SECONDS` of receipt (17 minutes at the defaults) and no later
+ *   than the advert. A key holds a slot for at most two such windows (a take, then a cancel sent just before the take
+ *   expires); after that the oldest idle intake is displaced first. Honest builds use min(now + ttl, advert expiry).
  * - A buyer key cannot refresh its own unanswered slot by cancelling and re-taking: a re-take over an unanswered
  *   tombstone that still holds replay ids is refused (OUT_OF_ORDER) until those ids expire.
  * - Every retained replay id belongs to a session that still occupies a slot: cancelled, rejected and advert-expired
  *   sessions stay as tombstones until their last replay id expires, so no retained id outlives the capacity it was
  *   admitted under. Replay ids are bounded by maxSessions x maxSeenMessagesPerSession.
  * - Isolation: intake is capped per advert (maxIntakeSessionsPerAd, default half of maxSessionsPerAd) and in total
- *   (maxIntakeSessions, default three quarters of maxSessions). At the defaults a flood on up to six adverts cannot
+ *   (maxIntakeSessions, default three quarters of maxSessions). At the defaults a flood on up to five adverts cannot
  *   occupy another advert's intake, and the remaining quarter stays available for the user's own buyer-side takes and
  *   for selected sessions. Messages of existing sessions are never refused for shared replay memory.
  * - maxSeenMessages is a backstop on opening sessions. At the defaults (1024 = 64 x 16) it is unreachable; a smaller
@@ -471,7 +471,8 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (env.type === 'terms-offer' && from !== seller) return bad('NOT_SELLER');
       if (!iAmSeller && from !== seller) return bad('NOT_SELLER');
       // Seller side: messages from (untrusted) buyers may hold replay memory and capacity only for the honest window.
-      if (iAmSeller && expires > now + ttl + MAX_FUTURE_SKEW_SECONDS) return bad('MALFORMED');
+      // The cap uses at least the protocol default TTL so a locally shortened TTL never refuses default-TTL peers.
+      if (iAmSeller && expires > now + Math.max(ttl, EXCHANGE_LIMITS.defaultMessageTtlSeconds) + MAX_FUTURE_SKEW_SECONDS) return bad('MALFORMED');
       const buyerKey = iAmSeller ? from : self;
       const id = sessionIdFor(env.ad, buyerKey);
       const replay = replayError(id, rumor.id, now, env.type === 'take-request'); if (replay !== null) return bad(replay);
