@@ -179,8 +179,10 @@ const LONG_BASE58 = /^[1-9A-HJ-NP-Za-km-z]{50,}$/, LOWER_HEX = /^[0-9a-f]+$/;
 const URL_LIKE = [/^[A-Za-z][A-Za-z0-9+.-]*:/, /:\/\//, /^\/\//, /^www\./i];
 /** Slots with their own strict syntax where a scheme-like or `www.` value is legitimate. */
 const URL_EXEMPT_SLOTS = new Set(['chain', 'originHint']);
-/** The only slots that hold short free-form identifiers; secrets split by separators are looked for here. */
-const TEXT_SLOTS = new Set(['originHint', 'payload.channel', 'payload.releaseId']);
+/** Short free-form identifier slots; secrets split by separators are looked for here. */
+const TEXT_SLOTS = new Set(['payload.channel', 'payload.releaseId']);
+/** A bare git SHA-1 commit id is a legitimate releaseId; a 64-hex value is not (it looks exactly like a 32-byte key). */
+const GIT_SHA1 = /^[0-9a-f]{40}$/;
 const SEPARATORS = /[\s,;:|/._-]+/g;
 
 /** 12 or more alphabetic words of 3-8 letters in any case, separated by spaces, commas, hyphens, dots and similar. */
@@ -201,11 +203,25 @@ export function isSecretLikeText(value: string): boolean {
   return isSecretLike(value) || isSecretLike(compact) || /[0-9a-fA-F]{32,}/.test(compact)
     || /^[1-9A-HJ-NP-Za-km-z]{50,}$/.test(compact) || /^[02-9ac-hj-np-z]{50,}$/i.test(compact);
 }
+/**
+ * originHint check. The slot already has strict lowercase hostname syntax, so the base58 and mnemonic heuristics are
+ * skipped (they misfire on v3 .onion names and long hostnames); explicit secret forms and 16+ bytes of hex split
+ * across labels are still refused.
+ */
+export function isSecretLikeHostname(value: string): boolean {
+  return SECRET_VALUE.some(pattern => pattern.test(value)) || /[0-9a-fA-F]{32,}/.test(value.replace(SEPARATORS, ''));
+}
 export function isUrlLike(value: string): boolean { return URL_LIKE.some(pattern => pattern.test(value)); }
+
+function secretInSlot(path: string, value: string): boolean {
+  if (path === 'originHint') return isSecretLikeHostname(value);
+  if (path === 'payload.releaseId' && GIT_SHA1.test(value)) return false;
+  return TEXT_SLOTS.has(path) ? isSecretLikeText(value) : isSecretLike(value);
+}
 
 function scanTree(value: JsonValue, depth: number, path: string): void {
   if (typeof value === 'string') {
-    if (TEXT_SLOTS.has(path) ? isSecretLikeText(value) : isSecretLike(value)) refuse('SECRET_REFUSED');
+    if (secretInSlot(path, value)) refuse('SECRET_REFUSED');
     // chain and originHint are exempt: chain ids are scheme-like (`evm:1`), a hostname may start with `www.`, and both
     // slots have their own strict syntax checks.
     if (!URL_EXEMPT_SLOTS.has(path) && isUrlLike(value)) refuse('URL_REFUSED');

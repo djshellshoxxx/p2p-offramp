@@ -224,7 +224,7 @@ def is_account(chain, value):
 
 SEPARATORS = re.compile(r"[\s,;:|/._-]+")
 URL_EXEMPT_SLOTS = {"chain", "originHint"}
-TEXT_SLOTS = {"originHint", "payload.channel", "payload.releaseId"}
+TEXT_SLOTS = {"payload.channel", "payload.releaseId"}
 
 
 def mnemonic_like(value):
@@ -232,16 +232,24 @@ def mnemonic_like(value):
     return len(words) >= 12 and all(re.fullmatch(r"[A-Za-z]{3,8}", word) for word in words)
 
 
-def secret_value(value):
+def explicit_secret(value):
+    """Explicit secret encodings only (no length/shape heuristics)."""
     return any([
         re.search(r"(^|[^0-9A-Za-z])wc:", value, re.I), "symkey=" in value.lower(), re.search(r"nsec1[0-9a-z]{50}", value, re.I),
         re.search(r"[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{100}", value), "PRIVATE KEY-----" in value,
         re.search(r"eyJ[\w-]+\.[\w-]+\.", value), re.match(r"\s*bearer\s+\S", value, re.I),
         re.search(r"(token|secret|password|apikey|api_key|sessionid)\s*[=:]", value, re.I),
         re.search(r"0x[0-9a-fA-F]{64}(?![0-9a-fA-F])", value),
-        mnemonic_like(value),
-        re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{50,}", value) and not HEX.fullmatch(value),
     ])
+
+
+def secret_value(value):
+    return explicit_secret(value) or mnemonic_like(value) or bool(re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{50,}", value) and not HEX.fullmatch(value))
+
+
+def secret_hostname(value):
+    """originHint already has strict hostname syntax: only explicit secrets and 16+ hex bytes split across labels."""
+    return explicit_secret(value) or re.search(r"[0-9a-fA-F]{32}", SEPARATORS.sub("", value)) is not None
 
 
 def url_value(value):
@@ -265,7 +273,13 @@ def scan(value, path):
         for item in value:
             scan(item, path + "[]")
     elif isinstance(value, str):
-        if secret_text(value) if path in TEXT_SLOTS else secret_value(value):
+        if path == "originHint":
+            secret = secret_hostname(value)
+        elif path == "payload.releaseId" and re.fullmatch(r"[0-9a-f]{40}", value):
+            secret = False  # a git SHA-1 commit id
+        else:
+            secret = secret_text(value) if path in TEXT_SLOTS else secret_value(value)
+        if secret:
             raise Refused("SECRET_REFUSED")
         if path not in URL_EXEMPT_SLOTS and url_value(value):
             raise Refused("URL_REFUSED")

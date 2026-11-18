@@ -38,7 +38,7 @@ Every step fails closed and has no side effect. A refusal is `{ ok: false, code 
 2. The prefix. `P2POFFRAMP:<other>` returns `VERSION_UNSUPPORTED` before decoding. A `wc:` URI returns `WALLET_SESSION_REFUSED`. Bare secrets return `SECRET_REFUSED`. Any URI or URL returns `URL_REFUSED`. Anything else returns `FORMAT_UNSUPPORTED`.
 3. Strict base45 (`INVALID_ENCODING`) and the 2,048-byte decoded cap (`QR_TOO_LARGE`).
 4. Strict UTF-8 (`INVALID_UNICODE`). Then strict JSON with depth 8 and no duplicate keys (`INVALID_JSON`, or `INVALID_UNICODE` for a lone surrogate). Then the bytes must equal the canonical form (`NON_CANONICAL`).
-5. The secret and URL scan over every key and string (`SECRET_REFUSED`, `URL_REFUSED`). The text slots (`originHint`, `channel`, `releaseId`) are also checked with separators removed, so a hyphenated WIF key, bech32 key data or a hex key split into labels is refused. Mnemonics are caught in any case and with any common separator. `chain` and `originHint` skip the URL check because each has its own strict syntax, so `www.example.org` is a valid hint and `https://…` fails that syntax.
+5. The secret and URL scan over every key and string (`SECRET_REFUSED`, `URL_REFUSED`). `channel` and `releaseId` are also checked with separators removed, so a hyphenated WIF key, bech32 key data or a hex key split into labels is refused. A bare lowercase 40-hex git SHA-1 is allowed as a `releaseId`; a 64-hex one is refused, because it cannot be told apart from a raw 32-byte key. The manifest keeps the commit in `sourceCommit`, and the QR `releaseId` grammar (at most 40 characters) is narrower than the manifest's. `originHint` already has strict hostname syntax, so it skips the base58 and mnemonic heuristics (v3 `.onion` names and long hostnames work). Explicit secret forms, and hex keys split across labels, are still refused there. Elsewhere, mnemonics are caught in any case and with any common separator. `chain` and `originHint` skip the URL check because each has its own strict syntax, so `www.example.org` is a valid hint and `https://…` fails that syntax.
 6. The schema: protocol, version, type, exact keys, fields, payload, where a signature may appear, and the invite lifetime.
 7. The chain allowlist (`CHAIN_UNSUPPORTED` or `CHAIN_MISMATCH`).
 8. `payloadSha256` (`HASH_MISMATCH`).
@@ -63,8 +63,10 @@ The verifier contract is:
 
 - it declares `profile`, `publicKeyBytes` and `signatureBytes`;
 - it receives the digest, the signature and the full `binding` (`ad`, parsed `author`, `orderId`, `termsHash`, `chain`, `requestId`, timestamps, `originHint`);
-- it MUST confirm that the public key is bound to `binding.author` under the (still open) key profile, and return `{ ok: true, boundTo: binding.author }`;
-- a bare `true`, `{ ok: true }`, or a `boundTo` naming another author is refused.
+- it MUST verify the signature, then look up the key's author in its OWN key registry or profile rules. It returns `{ ok: true, publicKey, boundTo }`: the key it verified with and the author that registry names;
+- it must never copy `binding.author` or `signature.publicKey` into the result;
+- the codec refuses a bare `true`, a missing field, a `publicKey` other than the signature's, or a `boundTo` other than the advertisement author;
+- a verifier that merely echoes its input would still pass, because the codec cannot see the registry. Until the key profile is decided, the binding is the verifier's responsibility; a test documents this limit.
 
 The tests use an HMAC verifier that is test-only. It is not a proposal for the profile.
 
@@ -84,6 +86,7 @@ The review never navigates, connects a wallet, signs, stores anything or makes a
 - A **verified** invite is protected. It is kept until its signed expiry (24 hours at most) plus skew, and is never evicted.
 - An **unauthenticated** code's expiry is chosen by whoever made it, so it is kept for at most `retentionSeconds` (default and maximum 24 hours). When the ledger is full, the oldest unauthenticated entry is evicted. Far-future unsigned codes therefore cannot lock out a verified invite.
 - Only a ledger full of live verified invites refuses (`REPLAY_LEDGER_FULL`).
+- A verified invite replaces an unauthenticated entry with the same `requestId`, so an unsigned code copying a public invite's ID cannot pre-poison it. A verified entry is never replaced.
 
 Deduplication of unauthenticated codes is best-effort under memory pressure. As the spec says, this stops accidental repeat imports on one device. It is not global anti-replay security.
 

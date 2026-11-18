@@ -159,6 +159,10 @@ export interface ReplayLedger {
    * never lock out a verified invite. Only when every entry is a protected live invite does admission refuse
    * (REPLAY_LEDGER_FULL). Deduplication of unauthenticated codes is therefore best-effort under memory pressure, which
    * matches the spec: this prevents accidental repeat imports and is not anti-replay security.
+   *
+   * Pre-poisoning: if an unauthenticated code was admitted with some requestId, a verified invite with the same
+   * requestId replaces that entry instead of being refused, so copying a public invite's requestId into an unsigned code
+   * cannot block the real invite. A verified entry is never replaced.
    */
   admit(review: QrImportReview): ReplayAdmitResult;
   readonly size: number;
@@ -193,11 +197,17 @@ export function createReplayLedger(options: ReplayLedgerOptions): ReplayLedger {
       let now: number;
       try { now = clock(); } catch { return failure('UNAVAILABLE'); }
       purge(now);
-      if (entries.has(review.requestId)) return failure('REPLAYED');
-      if (review.expiresAt !== null && now + EXPIRY_SAFETY_MARGIN_SECONDS >= review.expiresAt) return failure('EXPIRED');
-      if (entries.size >= maxEntries && !evictOldestUnprotected()) return failure('REPLAY_LEDGER_FULL' satisfies QrErrorCode);
       // Only a verified signature makes expiresAt trustworthy; it is bounded by the 24 h invite lifetime.
       const protectedEntry = review.authenticated && review.expiresAt !== null;
+      const existing = entries.get(review.requestId);
+      if (existing !== undefined) {
+        // An unsigned code carrying a public invite's requestId must not pre-poison the real invite: a verified review
+        // replaces an unverified entry. A verified entry is never replaced, and any replay of it is refused.
+        if (existing.protected || !protectedEntry) return failure('REPLAYED');
+      }
+      if (review.expiresAt !== null && now + EXPIRY_SAFETY_MARGIN_SECONDS >= review.expiresAt) return failure('EXPIRED');
+      if (existing !== undefined) entries.delete(review.requestId);
+      if (entries.size >= maxEntries && !evictOldestUnprotected()) return failure('REPLAY_LEDGER_FULL' satisfies QrErrorCode);
       const until = protectedEntry ? review.expiresAt as number : Math.min(review.expiresAt ?? Number.MAX_SAFE_INTEGER, now + retention);
       // Kept past expiry by the future-skew allowance so a clock stepped back slightly still refuses the replay.
       entries.set(review.requestId, Object.freeze({ retireAt: until + MAX_FUTURE_SKEW_SECONDS, protected: protectedEntry }));

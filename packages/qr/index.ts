@@ -14,7 +14,7 @@ export {
   DEFAULT_INVITE_LIFETIME_SECONDS, MIN_INVITE_LIFETIME_SECONDS, MAX_INVITE_LIFETIME_SECONDS, EXPIRY_SAFETY_MARGIN_SECONDS,
   MAX_FUTURE_SKEW_SECONDS, MAX_TIMESTAMP_SECONDS, INVITE_SIGNING_DOMAIN, RECOVERY_FINGERPRINT_FORMATS,
   createQrEnvelope, parseQrEnvelope, attachInviteSignature, inviteSigningDigest, inviteSigningMessage, envelopeBytes,
-  payloadDigestHex, parseAdReference, isQrChain, chainFamily, isOriginHint, isSecretKeyName, isSecretLike, isSecretLikeText, isUrlLike,
+  payloadDigestHex, parseAdReference, isQrChain, chainFamily, isOriginHint, isSecretKeyName, isSecretLike, isSecretLikeText, isSecretLikeHostname, isUrlLike,
 } from './src/envelope.ts';
 export type {
   QrType, QrErrorCode, QrFailure, QrEnvelope, QrEnvelopeOf, QrPayloads, PublicAddressPayload, PaymentRequestPayload,

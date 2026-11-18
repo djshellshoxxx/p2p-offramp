@@ -55,13 +55,15 @@ export const TEST_PUBLIC_KEY = hashHex('qr-test-only-key-id');
 /** The advertisement author the test key is bound to (the author of INPUTS['trade-invite']). */
 export const TEST_BOUND_AUTHOR = hashHex('qr-seller');
 export const testSign = digest => createHmac('sha256', TEST_KEY).update(digest).digest('hex');
+/** Derives the bound author from its own key registry (never from `binding`), as the InviteVerifier contract requires. */
 export function testVerifier(calls = [], { boundAuthor = TEST_BOUND_AUTHOR } = {}) {
+  const registry = new Map([[TEST_PUBLIC_KEY, boundAuthor]]);
   return {
     profile: TEST_PROFILE, publicKeyBytes: 32, signatureBytes: 32,
     async verify({ digest, signature, binding }) {
       calls.push({ digest: Buffer.from(digest).toString('hex'), binding });
-      const valid = signature.publicKey === TEST_PUBLIC_KEY && signature.value === testSign(digest);
-      return valid && binding.author === boundAuthor ? { ok: true, boundTo: binding.author } : { ok: false };
+      const author = registry.get(signature.publicKey);
+      return author !== undefined && signature.value === testSign(digest) ? { ok: true, publicKey: TEST_PUBLIC_KEY, boundTo: author } : { ok: false };
     },
   };
 }

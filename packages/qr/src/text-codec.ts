@@ -30,8 +30,11 @@ export interface InviteBinding {
   readonly chain: string; readonly requestId: string; readonly createdAt: number; readonly expiresAt: number;
   readonly originHint: string | null;
 }
-/** A verifier must attest which advertisement author the key is bound to; `{ ok: true }` alone is not enough. */
-export type InviteVerdict = { readonly ok: true; readonly boundTo: string } | { readonly ok: false };
+/**
+ * A verifier's attestation: the public key it actually verified with and the advertisement author its OWN key registry
+ * binds that key to. `{ ok: true }` alone is not enough.
+ */
+export type InviteVerdict = { readonly ok: true; readonly publicKey: string; readonly boundTo: string } | { readonly ok: false };
 
 /**
  * Injected trade-invite verifier. The invite signing-key profile is an open owner decision: this package ships none
@@ -44,10 +47,13 @@ export interface InviteVerifier {
   readonly publicKeyBytes: number;
   readonly signatureBytes: number;
   /**
-   * MUST check that `signature` is valid for `digest` AND that `signature.publicKey` is bound to `binding.author`
-   * under the (still open) key profile, and then return `{ ok: true, boundTo: binding.author }`. Anything else,
-   * including a bare `true` or a `boundTo` naming another author, refuses the code (SIGNATURE_INVALID); a throw refuses
-   * it (UNAVAILABLE).
+   * MUST verify `signature` over `digest`, then look up the author bound to that key in the verifier's OWN key
+   * registry or profile rules, and return `{ ok: true, publicKey: <the key it verified with>, boundTo: <the author that
+   * registry names> }`. It MUST NOT copy `binding.author` (or `signature.publicKey`) into the result: the codec compares
+   * `boundTo` with the advertisement author and `publicKey` with the signature's key, and refuses any mismatch, a bare
+   * `true` or a missing field (SIGNATURE_INVALID); a throw is UNAVAILABLE. The codec cannot tell an honest result from
+   * one that merely echoes its input, so until the invite key profile is decided the key-to-author binding is the
+   * verifier's responsibility.
    */
   verify(input: { readonly digest: Uint8Array; readonly signature: InviteSignature; readonly binding: InviteBinding }): Promise<InviteVerdict>;
 }
@@ -149,8 +155,8 @@ async function signatureState(envelope: QrEnvelope, context: Context): Promise<{
   let attested: boolean;
   try {
     const verdict: unknown = await verifier.verify(Object.freeze({ digest, signature, binding }));
-    attested = typeof verdict === 'object' && verdict !== null && (verdict as { ok?: unknown }).ok === true
-      && (verdict as { boundTo?: unknown }).boundTo === ad.author;
+    const claim = typeof verdict === 'object' && verdict !== null ? verdict as { ok?: unknown; publicKey?: unknown; boundTo?: unknown } : null;
+    attested = claim !== null && claim.ok === true && claim.publicKey === signature.publicKey && claim.boundTo === ad.author;
   } catch { return refuse('UNAVAILABLE'); }
   if (!attested) return refuse('SIGNATURE_INVALID');
   return { state: 'verified', warnings: [] };

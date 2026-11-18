@@ -225,6 +225,35 @@ test('replayed invite is refused by the local ledger; memory is bounded', async 
   assert.throws(() => createReplayLedger({}));
 });
 
+test('an unsigned code reusing a public invite requestId cannot pre-poison the verified invite', async () => {
+  const now = NOW + 5;
+  const invite = await signed('pre-poison');
+  const { signature: _removed, ...unsignedCopy } = plain(invite.envelope);
+  const poison = (await decode(treeText(unsignedCopy))).review;
+  const verified = (await decode(invite.text, { inviteVerifier: testVerifier() })).review;
+  assert.equal(poison.requestId, verified.requestId); assert.equal(poison.authenticated, false); assert.equal(verified.authenticated, true);
+  const ledger = createReplayLedger({ nowSeconds: () => now });
+  assert.equal(ledger.admit(poison).ok, true);
+  assert.deepEqual(ledger.admit(verified), { ok: true }, 'the verified invite replaces the unverified entry');
+  assert.equal(ledger.size, 1);
+  assert.equal(ledger.admit((await decode(invite.text, { inviteVerifier: testVerifier() })).review).code, 'REPLAYED', 'an authenticated replay is still refused');
+  assert.equal(ledger.admit((await decode(treeText(unsignedCopy))).review).code, 'REPLAYED', 'an unsigned copy cannot displace it');
+  // Two unauthenticated codes with one requestId stay a replay, and a verified entry first blocks later copies.
+  const plainLedger = createReplayLedger({ nowSeconds: () => now });
+  assert.equal(plainLedger.admit(poison).ok, true);
+  assert.equal(plainLedger.admit((await decode(treeText(unsignedCopy))).review).code, 'REPLAYED');
+  const firstLedger = createReplayLedger({ nowSeconds: () => now });
+  assert.equal(firstLedger.admit(verified).ok, true);
+  assert.equal(firstLedger.admit(poison).code, 'REPLAYED');
+  // A verified review that has expired by commit time leaves the unverified entry in place.
+  let later = NOW + 5;
+  const expiring = createReplayLedger({ nowSeconds: () => later });
+  assert.equal(expiring.admit(poison).ok, true);
+  later = verified.expiresAt;
+  assert.equal(expiring.admit(verified).code, 'EXPIRED');
+  assert.equal(expiring.seen(poison.requestId), true);
+});
+
 test('far-future unsigned codes cannot lock a valid signed invite out of the ledger', async () => {
   let now = NOW + 5;
   const ledger = createReplayLedger({ nowSeconds: () => now, maxEntries: 2 });
@@ -319,9 +348,15 @@ test('the verifier must attest the key-to-author binding, and signature sizes ar
   const sized = verify => ({ profile: TEST_PROFILE, publicKeyBytes: 32, signatureBytes: 32, verify });
   await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => true) });
   await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true })) });
-  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true, boundTo: hashHex('someone-else') })) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true, publicKey: TEST_PUBLIC_KEY, boundTo: hashHex('someone-else') })) });
+  // The verifier must report the key it verified with; a missing or different key is refused.
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true, boundTo: TEST_BOUND_AUTHOR })) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true, publicKey: hashHex('other-key'), boundTo: TEST_BOUND_AUTHOR })) });
   await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: testVerifier([], { boundAuthor: hashHex('someone-else') }) });
-  assert.equal((await decode(invite.text, { inviteVerifier: sized(async ({ binding }) => ({ ok: true, boundTo: binding.author })) })).review.authenticated, true);
+  // UNSAFE, documented limit: a verifier that merely echoes its input passes, because the codec cannot see the
+  // verifier's key registry. Until the invite key profile is decided, the key-to-author binding is the verifier's job.
+  const echoing = sized(async ({ signature, binding }) => ({ ok: true, publicKey: signature.publicKey, boundTo: binding.author }));
+  assert.equal((await decode(invite.text, { inviteVerifier: echoing })).review.authenticated, true, 'echoing verifier is not detectable by the codec');
   // A valid MAC under the test key over an invite for another author still fails: the key is not bound to that author.
   const foreign = (await createQrEnvelope({ ...INPUTS['trade-invite'], payload: { ...INPUTS['trade-invite'].payload, ad: adAddress(hashHex('qr-other-seller'), hashHex('qr-order')) } }, deps('codec/foreign'))).envelope;
   const digest = (await inviteSigningDigest(foreign, sha256)).digest;

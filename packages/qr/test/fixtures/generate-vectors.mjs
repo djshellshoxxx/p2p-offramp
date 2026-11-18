@@ -221,6 +221,9 @@ async function build() {
   const largest = await sizedInvite(MAX_ENVELOPE_BYTES);
   await addEnvelope('largest-permitted-envelope-2048', largest, { context: baseContext, authenticated: false });
   await addEnvelope('public-address-www-origin-hint', await envelopeFor('public-address', 'www', { originHint: 'www.offramp.example' }), { context: baseContext, authenticated: false });
+  const onion = `${Array.from(Buffer.from(hashHex('onion-1') + hashHex('onion-2'), 'hex'), byte => 'abcdefghijkmnopqrstuvwxyz234567'[byte % 31]).join('').slice(0, 56)}.onion`;
+  await addEnvelope('public-address-onion-origin-hint', await envelopeFor('public-address', 'onion', { originHint: onion }), { context: baseContext, authenticated: false });
+  await addEnvelope('release-fingerprint-git-sha1-release-id', await envelopeFor('release-fingerprint', 'git-sha', { payload: { ...INPUTS['release-fingerprint'].payload, releaseId: hashHex('commit').slice(0, 40) } }), { context: baseContext, authenticated: false });
   await addEnvelope('trade-invite-unsigned-review-only', await envelopeFor('trade-invite', 'review-only'), { context: reviewOnlyContext, authenticated: false });
 
   const reject = (name, value, expectedCode, layer, context = baseContext) => rejections.push({ name, text: value, expectedCode, layer, context });
@@ -296,6 +299,7 @@ async function build() {
   const release = plain(await envelopeFor('release-fingerprint', 'reject-release-secret'));
   const rawKey = hashHex('not-a-real-release-key'), wifLike = `${solanaKey('wif-a')}${solanaKey('wif-b')}`.slice(0, 51);
   reject('secret-release-id-hex-key', treeText({ ...release, payload: { ...release.payload, releaseId: `${rawKey.slice(0, 32)}.${rawKey.slice(32)}` } }), 'SECRET_REFUSED', 'secret');
+  reject('secret-release-id-bare-64-hex', treeText({ ...release, payload: { ...release.payload, releaseId: rawKey } }), 'SECRET_REFUSED', 'secret');
   reject('secret-release-id-hyphenated-wif', treeText({ ...release, payload: { ...release.payload, releaseId: `${wifLike.slice(0, 25)}-${wifLike.slice(25)}` } }), 'SECRET_REFUSED', 'secret');
   reject('secret-uppercase-mnemonic', treeText({ ...address, payload: { address: 'ABANDON ABILITY ABLE ABOUT ABOVE ABSENT ABSORB ABSTRACT ABSURD ABUSE ACCESS ACCIDENT' } }), 'SECRET_REFUSED', 'secret');
   reject('secret-comma-mnemonic', treeText({ ...address, payload: { address: 'abandon,ability,able,about,above,absent,absorb,abstract,absurd,abuse,access,accident' } }), 'SECRET_REFUSED', 'secret');

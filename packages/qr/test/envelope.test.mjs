@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import {
   createQrEnvelope, parseQrEnvelope, attachInviteSignature, inviteSigningDigest, inviteSigningMessage, envelopeBytes, canonicalize,
-  payloadDigestHex, parseAdReference, isSecretLike, isSecretLikeText, isSecretKeyName, isUrlLike, QR_TYPES, INVITE_SIGNING_DOMAIN,
+  payloadDigestHex, parseAdReference, isSecretLike, isSecretLikeText, isSecretLikeHostname, isSecretKeyName, isUrlLike, QR_TYPES, INVITE_SIGNING_DOMAIN,
   DEFAULT_INVITE_LIFETIME_SECONDS, MAX_INVITE_LIFETIME_SECONDS, MIN_INVITE_LIFETIME_SECONDS, MAX_ENVELOPE_BYTES,
 } from '../index.ts';
 import { parseAdAddress } from '../../exchange/index.ts';
@@ -152,6 +152,29 @@ test('secrets split by separators in text slots, and mnemonics in any case or se
     assert.equal((await create({ ...INPUTS['public-address'], payload: { address: phrase } })).code, 'SECRET_REFUSED', phrase);
   }
   for (const value of ['offramp.example', 'www.offramp.example', 'v0.12.4-rc.1', 'testnet', 'a.b.c.d.example']) assert.equal(isSecretLikeText(value), false, value);
+});
+
+test('originHint keeps strict hostname syntax but skips base58/mnemonic heuristics; a git SHA-1 releaseId is allowed', async () => {
+  // A v3 onion name: 56 base32 characters. This one avoids `l`, so its compacted form is a 61-character base58 run
+  // that the generic text-slot heuristic would have refused.
+  const onion = `${Array.from(Buffer.from(hashHex('onion-1') + hashHex('onion-2'), 'hex'), byte => 'abcdefghijkmnopqrstuvwxyz234567'[byte % 31]).join('').slice(0, 56)}.onion`;
+  assert.equal(isSecretLikeText(onion), true, 'the generic text-slot heuristic misfires on this onion name');
+  const long = ['x'.repeat(60), 'y'.repeat(60), 'z'.repeat(60), 'example'].join('.');
+  const dotted = 'abandon.ability.able.about.above.absent.absorb.abstract.absurd.abuse.access.accident.example';
+  for (const originHint of [onion, long, dotted]) {
+    assert.equal(isSecretLikeHostname(originHint), false, originHint);
+    assert.equal((await create({ ...INPUTS['public-address'], originHint })).ok, true, originHint);
+  }
+  const hex = hashHex('hint-key');
+  for (const originHint of [`${hex.slice(0, 32)}.${hex.slice(32)}.example`, `nsec1${'q'.repeat(58)}.example`])
+    assert.equal((await create({ ...INPUTS['public-address'], originHint })).code, 'SECRET_REFUSED', originHint);
+  // Release ids: the manifest keeps the commit in sourceCommit, but a release may be named by its git SHA-1.
+  const release = INPUTS['release-fingerprint'];
+  const sha1 = hashHex('commit').slice(0, 40);
+  assert.equal((await create({ ...release, payload: { ...release.payload, releaseId: sha1 } })).ok, true, 'a 40-hex git SHA-1 releaseId is allowed');
+  assert.equal((await create({ ...release, payload: { ...release.payload, releaseId: `${sha1}0` } })).code, 'SECRET_REFUSED', '41 hex is not a commit id');
+  assert.equal((await create({ ...release, payload: { ...release.payload, releaseId: sha1.toUpperCase() } })).code, 'SECRET_REFUSED', 'only the lowercase form');
+  assert.equal((await create({ ...release, payload: { ...release.payload, releaseId: hashHex('commit') } })).code, 'SECRET_REFUSED', 'a 64-hex id is indistinguishable from a raw key');
 });
 
 test('URL payloads are refused, not carried', async () => {
