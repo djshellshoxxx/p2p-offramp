@@ -101,6 +101,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run test:tooling
       - run: npm run check:docs
+      - run: npm run check:governance
   specs:
     runs-on: ubuntu-latest
     steps:
