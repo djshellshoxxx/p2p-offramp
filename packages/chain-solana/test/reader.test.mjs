@@ -136,7 +136,9 @@ test('spl-surplus', async () => {
     vaultFrozen: false,
     mintDecimals: 6,
     mintFreezeAuthority: null,
+    payoutBlockedBy: [],
   });
+  assert.deepEqual(ok(s.result).mint, { address: MINT, decimals: 6, freezeAuthority: null });
   assert.deepEqual(s.calls[1].params[0], [PROGRAM, PROGRAM_DATA, CLOCK, escrowOf(s.world), vaultOf(s.world), MINT]);
 });
 
@@ -778,32 +780,49 @@ test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   await integrity('spl', absent(null));
 });
 
-test('vault-frozen', async () => {
-  // Control: an unfrozen funded SPL vault is healthy, so only the frozen flag yields CONFLICT.
-  const healthy = setup('spl');
+// Review C-L3: a frozen vault blocks only the payout. release/refund are state-only and still succeed, so the G08
+// port reports the same funded observation; the flag and the payout blocker are in the snapshot. Pre-fix code
+// returned CONFLICT from readValidated here.
+const FREEZER = key('freezer');
+const PERMIT = { freezeAuthorityPermits: [{ mint: MINT, freezeAuthority: FREEZER }] };
+test('vault-frozen-reported-funded (C-L3)', async () => {
+  const healthy = setup('spl', { world: { mint: { freeze: FREEZER } }, options: PERMIT });
+  const frozen = setup('spl', { world: { vault: { state: 2 }, mint: { freeze: FREEZER } }, options: PERMIT });
   try {
-    assert.equal(ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms)).state, 'funded');
-  } finally {
-    healthy.reader.dispose();
-  }
-  const frozen = { world: { vault: { state: 2 }, mint: { freeze: key('freezer') } } };
-  const s = setup('spl', frozen);
-  try {
-    const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+    const expected = ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms));
+    const observation = ok(await frozen.reader.readValidated(frozen.binding, request(), frozen.terms));
+    assert.equal(observation.state, 'funded');
+    assert.deepEqual(observation, expected, 'the same ChainObservation a healthy funded trade gets');
+    const snapshot = ok(await frozen.reader.read(frozen.binding, request(), frozen.terms));
     assert.equal(snapshot.custody.vaultFrozen, true);
-    assert.equal(snapshot.custody.mintFreezeAuthority, key('freezer'));
-    error(await s.reader.readValidated(s.binding, request(), s.terms), 'CONFLICT');
-  } finally {
-    s.reader.dispose();
-  }
-  const released = setup('spl', { world: { ...frozen.world, escrow: { state: 1 } } });
-  try {
-    assert.equal(
-      ok(await released.reader.readValidated(released.binding, request(), released.terms)).state,
-      'released',
+    assert.deepEqual(snapshot.custody.payoutBlockedBy, ['vault-frozen']);
+    assert.equal(snapshot.custody.mintFreezeAuthority, FREEZER);
+    assert.deepEqual(snapshot.mint, { address: MINT, decimals: 6, freezeAuthority: FREEZER });
+    assert.deepEqual(
+      ok(await healthy.reader.read(healthy.binding, request(), healthy.terms)).custody.payoutBlockedBy,
+      [],
     );
   } finally {
-    released.reader.dispose();
+    healthy.reader.dispose();
+    frozen.reader.dispose();
+  }
+  for (const [state, paid, blockedBy] of [
+    [1, 0, ['vault-frozen']],
+    [2, 0, ['vault-frozen']],
+    [1, 1, []],
+  ]) {
+    const s = setup('spl', {
+      world: { vault: { state: 2 }, mint: { freeze: FREEZER }, escrow: { state, paid } },
+      options: PERMIT,
+    });
+    try {
+      const observation = ok(await s.reader.readValidated(s.binding, request(), s.terms));
+      assert.equal(observation.state, state === 1 ? 'released' : 'refunded');
+      const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+      assert.deepEqual(snapshot.custody.payoutBlockedBy, blockedBy, `state ${state} paid ${paid}`);
+    } finally {
+      s.reader.dispose();
+    }
   }
 });
 
@@ -1159,12 +1178,12 @@ test('authority: funded-to-absent-reorged', async () => {
   }
 });
 
-test('authority: conflict-unavailable', async () => {
-  const s = setup('spl', { world: { vault: { state: 2 } } });
+test('authority: frozen-vault-funded-fresh (C-L3)', async () => {
+  const s = setup('spl', { world: { vault: { state: 2 }, mint: { freeze: FREEZER } }, options: PERMIT });
   const authority = authorityFor(s);
   try {
-    error(await authority.refresh(s.binding), 'CONFLICT');
-    assert.equal(authority.readView(123).chainHealth, 'unavailable');
+    assert.equal(ok(await authority.refresh(s.binding)).state, 'funded');
+    assert.equal(authority.readView(123).chainHealth, 'fresh');
   } finally {
     authority.dispose();
     s.reader.dispose();

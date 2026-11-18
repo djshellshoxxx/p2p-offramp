@@ -16,6 +16,8 @@ test('src-has-no-io-or-forbidden-apis', () => {
     'codec.ts',
     'instructions.ts',
     'layout.ts',
+    'payout.ts',
+    'policy.ts',
     'reader.ts',
     'window.ts',
   ]);
