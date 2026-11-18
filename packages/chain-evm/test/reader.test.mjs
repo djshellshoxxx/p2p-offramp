@@ -43,6 +43,7 @@ test('finalized escrow snapshot validates chain/genesis/code and all immutable f
  const s=setup();try{
   const live=ok(await s.reader.validateLive('local','escrow'));assert.equal(live.codeKeccak256,codehash);assert.equal(live.height,'10');
   const result=ok(await s.reader.read(binding,request(),wanted));assert.equal(result.escrow.state,'funded');assert.deepEqual(result.observation,{binding,generation:2,requestSequence:4,anchor:{height:'10',hash:finalized.hash},state:'funded',finality:'finalized',observedAt:123});
+  assert.deepEqual(result.anchor,{height:'10',hash:finalized.hash,timestampSeconds:'100',codeKeccak256:codehash});assert.equal(Object.isFrozen(result.anchor),true);
   assert.deepEqual(s.calls.find(x=>x.method==='eth_call').params.slice(1),[anchored]);assert.deepEqual(s.calls.find(x=>x.method==='eth_getCode').params,[contract,anchored]);
   for(const [n,name]of [[2,'released'],[3,'refunded']]){s.setEscrow(state(n));assert.equal(ok(await s.reader.readValidated(binding,request(),wanted)).state,name);}
   s.setEscrow('0x'+'0'.repeat(384));assert.equal(ok(await s.reader.read(binding,request(),wanted)).escrow.state,'absent');

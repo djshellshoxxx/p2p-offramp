@@ -199,6 +199,7 @@ async function localnetFixture({ relayOrigin = 'ws://127.0.0.1:7447', csp, docum
     js: js ?? `export const c = {format:${JSON.stringify(LOCALNET_CONFIG_FORMAT)},ReleaseEnabled:0}; export const b = ${JSON.stringify(LOCALNET_BANNER)};\n`,
     graphModules: graphModules ?? [{ path: 'apps/web/src/localnet/LocalnetRoot.tsx', sha256: '0'.repeat(64) }, { path: 'node_modules/@noble/hashes/sha3.js', sha256: '0'.repeat(64) }],
   });
+  await (await import('node:fs/promises')).rename(join(dir, 'assets/vault.worker-a.js'), join(dir, 'assets/localnet.worker-a.js'));
   const effective = csp ?? policy.csp;
   const metas = (documentCsps ?? [effective]).map(value => `<meta http-equiv="Content-Security-Policy" content="${value.replaceAll("'", '&#39;')}">`).join('');
   await writeFile(join(dir, 'index.html'), `<!doctype html><html><head>${metas}<script type="module" src="./assets/index-a.js"></script></head><body></body></html>`);
@@ -327,12 +328,19 @@ test('buildWeb(localnet) emits a relay-only CSP, the test-funds marker, ReleaseE
   assert.deepEqual([...html.matchAll(/<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]*)"/gi)].map(match => match[1].replaceAll('&#39;', "'")), [metaCsp]);
   assert.deepEqual([...(await readFile(join(outDir, '_headers'), 'utf8')).matchAll(/^\s*Content-Security-Policy: (.*)$/gm)].map(match => match[1]), [headerCsp]);
   const document = JSON.parse(await readFile(join(outDir, 'core-graph-document.json'), 'utf8')).modules.map(module => module.path);
+  const worker = JSON.parse(await readFile(join(outDir, 'core-graph-worker.json'), 'utf8')).modules.map(module => module.path);
   assert.ok(document.includes('apps/web/src/localnet/LocalnetRoot.tsx'));
   assert.ok(document.includes('apps/web/src/localnet/config.ts'));
-  for (const path of document) assert.doesNotMatch(path, /evm-execution|chain-solana|extensions|(?:^|\/)(?:test|tests|fixtures)\//);
+  assert.ok(worker.includes('apps/web/src/localnet/localnet.worker.ts'));
+  assert.ok(worker.includes('apps/web/src/localnet/controller.ts'));
+  assert.equal(worker.includes('apps/web/src/workers/vault.worker.ts'), false);
+  assert.equal(document.includes('apps/web/src/OfflineRoot.tsx'), false);
+  for (const path of [...document, ...worker]) assert.doesNotMatch(path, /evm-execution|chain-solana|extensions|(?:^|\/)(?:test|tests|fixtures)\//);
   const javascript = (await Promise.all((await (await import('node:fs/promises')).readdir(join(outDir, 'assets'))).filter(name => name.endsWith('.js')).map(name => readFile(join(outDir, 'assets', name), 'utf8')))).join('\n');
   assert.ok(javascript.includes('test funds only'));
   const licenses = JSON.parse(await readFile(join(outDir, 'third-party-licenses.json'), 'utf8'));
-  for (const name of new Set(document.filter(path => path.startsWith('node_modules/@noble/')).map(path => path.split('/').slice(1, 3).join('/'))))
+  const workerProviders = new Set(worker.filter(path => path.startsWith('node_modules/@noble/')).map(path => path.split('/').slice(1, 3).join('/')));
+  assert.ok(workerProviders.size >= 3, 'actual localnet worker bundles each reviewed crypto provider');
+  for (const name of new Set([...document, ...worker].filter(path => path.startsWith('node_modules/@noble/')).map(path => path.split('/').slice(1, 3).join('/'))))
     assert.ok(licenses.some(item => item.name === name && item.identifier === 'MIT'), name);
 });
