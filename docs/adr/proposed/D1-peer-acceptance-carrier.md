@@ -8,6 +8,13 @@ bounded part of Option B, without adopting a wire format or changing negotiation
 authority. The historical decision packet below retains the unresolved full
 protocol requirements; the candidate is not independent approval or completion.
 
+Implementation update, November 18: a Tier C patch for owner review composes the
+[full Option B path](../../integration/D1-peer-acceptance.md). It covers the version 2 exchange carrier behind
+injected ports, the registry-only domain, account classification from pinned code (ERC-1271 for both statements,
+refusal of EIP-7702 and counterfactual accounts), durable tombstones with quotas and deadline retirement, and
+rechecks before acceptance and funding. It is not merged, not independently reviewed and not interoperable with
+any other client.
+
 Status: ACCEPTED by the owner on 2026-11-04: **Option B**. The owner confirmed it in the coordinating Claude session. Nothing is implemented yet, and the version identifier, exact field names and independent review this packet requires still come first. Until that work lands, no wire format, signing rule or trust transition changes.
 
 Paths marked "main" exist on `main` (e9b9db3). Paths marked "PR #26 only" exist only on the PR #26 branch (94554ec).

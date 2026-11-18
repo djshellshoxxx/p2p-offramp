@@ -5,7 +5,7 @@ import { resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
-import { loadTestnetTrust, TESTNET_TRUST_FORMAT } from './testnet-trust.mjs';
+import { loadTestnetTrust, TESTNET_TRUST_FORMAT_PREFIX } from './testnet-trust.mjs';
 import { isMain } from '../../../scripts/lib/is-main.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -43,7 +43,8 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
   // The testnet registry source and its embedded trust bundle belong to the testnet build only, and must be there.
   const testnetModules = ['core-graph-document.json', 'core-graph-worker.json']
     .some(graph => JSON.parse(files[graph]).modules?.some(module => typeof module.path === 'string' && module.path.startsWith('apps/web/src/testnet/')));
-  const containsTestnet = testnetModules || Object.values(files).some(text => text.includes(TESTNET_TRUST_FORMAT));
+  // Any bundle version (the current one or a refused legacy one) counts as testnet trust data.
+  const containsTestnet = testnetModules || Object.values(files).some(text => text.includes(TESTNET_TRUST_FORMAT_PREFIX));
   if (containsTestnet !== testnet) throw new Error(testnet ? 'TESTNET_TRUST_DATA_MISSING' : 'TESTNET_DATA_IN_NON_TESTNET_BUILD');
   return { version: 1, ReleaseEnabled: 0, syntheticDemo, testnet, signedRelease: false, releaseAcceptance: false, framingAttestation: false, inspection, assets };
 }

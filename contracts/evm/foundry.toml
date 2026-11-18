@@ -24,6 +24,7 @@ remappings = [
 fs_permissions = [
   { access = "read", path = "../../packages/domain/test/fixtures/local-evm-scenario" },
   { access = "read", path = "../../packages/wallet/test/fixtures/peer-acceptance-v1.json" },
+  { access = "read", path = "../../packages/wallet/test/fixtures/peer-acceptance-v2-carrier.json" },
   { access = "read", path = "./out" },
 ]
 

@@ -2,10 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parseEnvelope } from '../../exchange/src/messages.ts';
+import { parseEnvelopeV2 } from '../../exchange/src/peer-acceptance.ts';
+import { RegistryService } from '../../domain/index.ts';
 import { parseCandidatePeerEnvelope, verifyCandidatePeerEnvelope, MAX_PEER_ENVELOPE_BYTES,
   MAX_PEER_TERMS_BYTES } from '../src/evm-peer-envelope.ts';
 
 const scenario = JSON.parse(await readFile(new URL('../../domain/test/fixtures/local-evm-scenario/scenario.json', import.meta.url)));
+const registryBytes = new Uint8Array(await readFile(new URL('../../domain/test/fixtures/local-evm-scenario/registry.json', import.meta.url)));
+const registry = new RegistryService();
+assert.equal((await registry.load(registryBytes, scenario.registrySha256)).ok, true);
 const vectors = JSON.parse(await readFile(new URL('./fixtures/peer-acceptance-v1.json', import.meta.url)));
 function fixture(role = 'seller', asset = 'native') {
   const vector = vectors.vectors.find(row => row.role === role && row.assetKind === asset);
@@ -19,7 +24,7 @@ function fixture(role = 'seller', asset = 'native') {
   return { envelope, terms, domain: scenario.domain, context: { sender, recipient, ad, nowSeconds: '1699990000' } };
 }
 const encoded = f => JSON.stringify(f.envelope);
-const verify = f => verifyCandidatePeerEnvelope(f.domain, f.terms, f.context, encoded(f));
+const verify = f => verifyCandidatePeerEnvelope(registry, f.domain, f.terms, f.context, encoded(f));
 
 test('candidate carrier verifies fixed seller/buyer native/ERC-20 vectors without granting authority', () => {
   for (const role of ['seller', 'buyer']) for (const asset of ['native', 'erc20']) {
@@ -105,4 +110,16 @@ test('unsupported negotiation types and invalid revisions remain unavailable', (
   for (const revision of ['0', '01', '18446744073709551616', 1]) {
     const f = fixture('buyer'); f.envelope.body.revision = revision; assert.equal(parseCandidatePeerEnvelope(encoded(f)), null);
   }
+});
+test('one wire format: the EOA view equals the exchange v2 parser and only narrows signature size and key points', () => {
+  for (const role of ['seller', 'buyer']) for (const asset of ['native', 'erc20']) {
+    const f = fixture(role, asset); assert.deepEqual(parseCandidatePeerEnvelope(encoded(f)), parseEnvelopeV2(encoded(f)));
+  }
+  // A contract-wallet-sized signature is valid wire data for the exchange carrier but not for this EOA-only view.
+  const f = fixture(); f.envelope.body.acceptance.termsSignature = '0x' + 'ab'.repeat(300);
+  assert.ok(parseEnvelopeV2(encoded(f))); assert.equal(parseCandidatePeerEnvelope(encoded(f)), null);
+  // Off-curve x-only keys are refused by the EOA view (the exchange binds keys to authenticated NIP-17 keys instead).
+  const g = fixture(), off = 'ff'.repeat(32);
+  g.envelope.sender = off; g.envelope.ad = `30078:${off}:p2p-offramp:v1:${g.envelope.orderId}`; g.envelope.body.acceptance.binding.ownMessagingKey = off;
+  assert.ok(parseEnvelopeV2(encoded(g))); assert.equal(parseCandidatePeerEnvelope(encoded(g)), null);
 });
