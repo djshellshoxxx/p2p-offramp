@@ -3,7 +3,8 @@
 New research: [reusable upstream code for unfinished features](docs/research/reuse-2026-11-03/README.md)
 (2026-11-03; current gaps, exact source/license evidence and intended integration points).
 
-Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
+Latest continuation: [canonical qualification report (2026-11-16)](docs/consolidation/2026-11-16-canonical-qualification.md)
+and [development status](docs/DEVELOPMENT_STATUS.md). Earlier source references: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
 [whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
 [autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)

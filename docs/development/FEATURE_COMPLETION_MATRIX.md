@@ -1,6 +1,6 @@
 # Feature completion matrix
 
-Updated: 2026-11-16
+Updated: 2026-11-18 (F11 synced to the QR codec merged in PR #140)
 
 This matrix tracks user-facing and release-critical P2P-Offramp features. A code
 implementation or passing unit suite does not establish release completion. A
@@ -19,7 +19,7 @@ evidence, security review, documentation and required release checks all pass.
 | F08 | Payment verification and settlement guidance | Payment-preflight and receipt specifications | Read-only native chain observations and payment guidance; no fiat receipt is treated as proof | Two-party browser acceptance and independent review of each enabled settlement path | Partial; acceptance-gated |
 | F09 | D1 peer acceptance and replay protection | `docs/integration/peer-acceptance-v1-candidate.md` | Private EOA verifier, bounded v2 carrier, encrypted CAS replay ledger/tombstones; 26 focused Node tests and 4 independent Solidity vector checks pass | Independent field/vector review; contract/delegated account policy; review/adopt carrier and authenticated session wiring; restore freshness; new browser fixture is locally blocked at Chromium startup | Candidate; not integrated |
 | F10 | Web application and Offers workflow | `apps/web/README.md`; static Offers review | Locked profile shell, create/restore UI and synthetic offline Offers review | Authenticated live discovery, peer acceptance, two-wallet flow and browser qualification | Partial |
-| F11 | Mobile and QR handoff | Mobile journey specifications and historical branches | No current-head physical-device acceptance evidence | Recover and review unique implementation; bind QR/deep links to authenticated session; test device restore and wallet switching | Unverified |
+| F11 | Mobile and QR handoff | Mobile journey specifications and historical branches | `packages/qr` on main (PR #140): RFC 9285 base45, RFC 8785 canonical envelope, `P2POFFRAMP:1:` text codec with a 2,048-byte decoded cap, ISO/IEC 18004 symbol encoder and static SVG renderer, with package tests. No app or script imports it yet. No current-head physical-device acceptance evidence. | Camera/scanner UI and image decoding; wire the codec into the app; bind QR/deep links to authenticated session; test device restore and wallet switching | Unverified |
 | F12 | Localization and accessibility | Locale catalogs and accessibility specifications | English catalog, locale checks and keyboard-focused recovery controls | Complete runtime locale coverage, supported-language audit, browser/assistive-technology checks | Partial |
 | F13 | Disputes, arbitration and recovery options | Dispute, arbitration and recovery specifications | No enabled arbitration or custody authority in default application | Review each optional design, define trusted adjudication and recovery limits, then implement independently | Planned / gated |
 | F14 | Payment-proof integrations | zkTLS/TLSNotary/Reclaim research and proof specifications | Research only; no production proof adapter | Select reviewed protocol, define trust and limits, implement an adapter and qualify real fixtures | Planned |

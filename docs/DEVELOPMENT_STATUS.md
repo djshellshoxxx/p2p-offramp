@@ -11,6 +11,11 @@ records fresh local validation, the integrated documentation branch, and remaini
 features. The dated snapshot below describes its named main commit, not this newer
 development tree. D1 peer acceptance and browser trading are still unfinished.
 
+Default-branch head at the 2026-11-18 documentation sweep is `8649b7a`, the merge of PR #140 (D3 release-trust
+unification and D6 QR codec; its commit message records owner-approved Tier C on 2026-11-18). `main@cdde998`
+named in the snapshots below is no longer the head. The `packages/qr` codec and symbol encoder are present on
+that head with package tests. The gate results in PR #140 are its author's report and were not re-run here.
+
 ## Current scope snapshot — 2026-11-16 (static GitHub Pages client only)
 
 At merged `main@cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e`, the static client supports encrypted local profile creation/unlock, explicit encrypted-backup export and fresh-key restore, and read-only inspection workflows. The **Offers** page can import and validate a local EVM trade-terms file for read-only review **only when a trusted registry is available**. The default build has **no approved registry**; the explicitly labelled `npm run build:demo` synthetic build supplies local example terms/registry data. This is **not live marketplace discovery, counterparty acceptance, a wallet send or an escrow payment**. Source: [README current state](../README.md), [Offers UI](../apps/web/src/ui/trade/TradePages.tsx), [static service boundary](../apps/web/src/app-services.ts).
