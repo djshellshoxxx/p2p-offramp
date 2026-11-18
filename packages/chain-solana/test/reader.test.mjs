@@ -1124,6 +1124,24 @@ test('caller-signal-listener-removed-{ok,timeout,dispose}', async () => {
   } finally {
     late.reader.dispose();
   }
+  // LIMIT_EXCEEDED and disposed refusals never attach a listener to a reused caller signal.
+  const full = setup('native', { handle: () => new Promise(() => {}) });
+  const holds = Array.from({ length: MAX_RPC_READS }, () => full.reader.read(full.binding, request(), full.terms));
+  const reused = new AbortController();
+  for (let index = 0; index < 3; index++) {
+    error(await full.reader.read(full.binding, request(reused.signal), full.terms), 'LIMIT_EXCEEDED');
+    error(await full.reader.readValidated(full.binding, request(reused.signal), full.terms), 'LIMIT_EXCEEDED');
+    error(await full.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, reused.signal), 'LIMIT_EXCEEDED');
+  }
+  assert.equal(listeners(reused.signal), 0);
+  full.reader.dispose();
+  for (let index = 0; index < 3; index++) {
+    error(await full.reader.read(full.binding, request(reused.signal), full.terms), 'CANCELLED');
+    error(await full.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, reused.signal), 'CANCELLED');
+  }
+  assert.equal(listeners(reused.signal), 0);
+  for (const hold of holds) error(await hold, 'CANCELLED');
+  assert.equal(full.calls.length, MAX_RPC_READS);
 });
 
 // ---- concurrency ----
@@ -1175,6 +1193,21 @@ test('guard-order-with-four-held-{aborted,non-signal,disposed}', async () => {
   error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'CANCELLED');
   error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal: {} }, s.terms), 'CANCELLED');
   error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, {}), 'CANCELLED');
+  // Disposed is checked first: an unreadable request is CANCELLED too, and no caller getter runs after dispose.
+  let getterCalls = 0;
+  const unreadable = () => ({
+    generation: 1,
+    requestSequence: 1,
+    get signal() {
+      getterCalls++;
+      throw Error('SECRET');
+    },
+  });
+  for (const read of [s.reader.read, s.reader.readValidated]) {
+    error(await read.call(s.reader, s.binding, null, s.terms), 'CANCELLED');
+    error(await read.call(s.reader, s.binding, unreadable(), s.terms), 'CANCELLED');
+  }
+  assert.equal(getterCalls, 0);
   for (const job of jobs) error(await job, 'CANCELLED');
   held.forEach(resolve => resolve(COMPILED_GENESIS));
   assert.equal(s.calls.length, MAX_RPC_READS);

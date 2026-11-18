@@ -15,12 +15,14 @@ not approve any network, deployment or registry entry.
   with escrow, custody and payout), `readValidated(binding, request, terms)` (only the `ChainObservation`, for G08:
   `(b, r) => reader.readValidated(b, r, terms)`), and `dispose()`. `payoutRegressed(previous, next)`.
   `isSolanaEscrowSnapshot(value)` is true only for a snapshot that `read()` returned.
-- `nextSettlementStep(snapshot, { role, chainTime, releaseMargin })` plans the one next instruction (see below).
+- `nextSettlementStep(snapshot, { role, chainTime, releaseMargin, sellerDecision? })` names the one next instruction
+  a caller may submit (see below); a seller's `release` needs the seller's explicit fiat-receipt decision.
 - `buildFundNative`, `buildFundSpl(trade, sellerTokenAccount)`, `buildRelease`, `buildRefund`,
   `buildPayout(trade, 'released' | 'refunded')` return `{ programId, accounts, data }`. They make no message,
   blockhash, fee payer or System instruction.
 - `fundingWindow(acceptBefore, expiry, chainTime, submitMargin)` and `settlementWindow(deadline, chainTime,
-  releaseMargin)` take u64 decimal strings and a required margin. `chainTime` is `live.timestampSeconds`.
+  releaseMargin)` take u64 decimal strings and a required margin: `submitMargin` 0..3600, `releaseMargin`
+  0..604800 (a larger canonical value is INVALID_INPUT). `chainTime` is `live.timestampSeconds`.
 - `programDataSha256(accountData)` / `programDataSha256FromElf(elf, programDataLength)`, the address helpers,
   and the layout decoders.
 - Program ID constants (`src/address.ts`): `SYSTEM_PROGRAM_ID`, `SPL_PROGRAM_ID` (Tokenkeg…), `SPL_2022_PROGRAM_ID`
@@ -56,10 +58,16 @@ not approve any network, deployment or registry entry.
 
 ## Settlement planner (`src/settlement.ts`)
 
-`nextSettlementStep(snapshot, { role: 'seller' | 'buyer' | 'third-party', chainTime, releaseMargin })` is pure
-(no RPC, clock or memory) and returns a frozen `{ action, reason, outcome? }` inside a `CoreResult`. `action` is
-`release`, `refund`, `payout`, `wait` or `none`; `reason` is one of the fixed `SETTLEMENT_REASONS`; `outcome`
-(`released` | `refunded`) is present only for `payout` and feeds `buildPayout` unchanged.
+`nextSettlementStep(snapshot, { role: 'seller' | 'buyer' | 'third-party', chainTime, releaseMargin, sellerDecision?
+})` is pure (no RPC, clock or memory) and returns a frozen `{ action, reason, outcome? }` inside a `CoreResult`.
+`action` is `release`, `refund`, `payout`, `wait` or `none`; `reason` is one of the fixed `SETTLEMENT_REASONS`;
+`outcome` (`released` | `refunded`) is present only for `payout` and feeds `buildPayout` unchanged. Each context
+field is read once.
+
+`release` is the seller's irreversible decision. Finalized funding alone never shows fiat receipt, so a seller
+must pass `sellerDecision: 'release'` (only after explicitly confirming fiat receipt, G18/G22) or `'hold'`; it is
+required for `seller` and must be absent for other roles. A holding seller waits like everyone else and is planned
+`refund` once refund opens. A `release` step permits that decision; it is never auto-submitted from the step.
 
 | Finalized snapshot | Step |
 | --- | --- |
@@ -68,7 +76,7 @@ not approve any network, deployment or registry entry.
 | released or refunded, unpaid, custody blocker | `wait` / `rent-shortfall`, `rent-unknown`, `vault-frozen` (below) |
 | released or refunded, unpaid, no blocker | `payout` / `payout-pending`, outcome = the state (any role) |
 | funded, `refundOpen` | `refund` / `refund-open` (any role) |
-| funded, `releaseOpen` | seller: `release` / `release-open`; others: `wait` / `awaiting-seller-release` |
+| funded, `releaseOpen` | seller with `release`: `release` / `release-open`; else `wait` / `awaiting-seller-release` |
 | funded, neither (margin gap) | `wait` / `release-margin` |
 
 - One instruction per transaction. A transaction holding `release` and `payout_*` rolls back the release when the
@@ -76,15 +84,21 @@ not approve any network, deployment or registry entry.
   from a later finalized snapshot that already shows the terminal state. Payout blockers never hold back release
   or refund.
 - It consumes only snapshots that `read()` returned (branded, finality `finalized`); copies, observations and
-  hand-built objects give INVALID_INPUT, as do an unknown role, a non-canonical `chainTime` or `releaseMargin`,
-  and a `chainTime` different from the snapshot's own `live.timestampSeconds`. Inputs are checked in every state.
+  hand-built objects give INVALID_INPUT, as do an unknown role, a non-canonical `chainTime`, a non-canonical or
+  out-of-range `releaseMargin` (0..604800), a missing or unknown seller `sellerDecision` (or one from another
+  role), a context that cannot be read, and a `chainTime` different from the snapshot's own
+  `live.timestampSeconds`. Inputs are checked in every state.
   Escrow state and time must come from one finalized slot: pairing an old snapshot with a later `validateLive`
   time could plan a refund for an escrow the seller released in between. A later time needs a fresh `read()`,
   which costs the same 5 calls as `validateLive`.
 - Waiting alone never clears a payout blocker. `rent-shortfall` clears only after anyone sends the escrow PDA at
   least `rentExemptMinimum - (lamports - principalHeld)` lamports (`contracts/solana/README.md`, Deployment
-  prerequisites); `vault-frozen` needs the mint freeze authority to thaw the vault. Only a fresh finalized
-  `read()` after that plans the payout.
+  prerequisites). `rent-unknown` depends only on the cluster's Rent sysvar threshold (not 1.0 or 2.0): no transfer
+  or authority action clears it, and it lasts until the cluster threshold changes or this adapter learns it (a code
+  or owner decision), although `payout_native` itself stays permissionless. `vault-frozen` needs the mint freeze
+  authority to thaw the vault; if `custody.mintFreezeAuthority` is null, nothing can thaw it (SPL `ThawAccount`
+  fails with `MintCannotFreeze`), so the payout is permanently blocked and needs an owner decision, not a wait.
+  Only a fresh finalized `read()` after that plans the payout.
 - A step describes one snapshot; it never says a send is safe. After any uncertain outcome (timeout, dropped or
   unknown signature), G12 (the journal) must reconcile the transaction and re-observe finalized state before any
   retry. The planner cannot tell "not sent" from "sent, not yet finalized" and must not be used as that check.
