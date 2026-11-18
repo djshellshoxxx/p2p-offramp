@@ -193,17 +193,40 @@ test('review LOW: a clock jump past the deadline then a rollback never un-tombst
   const { evidence: newer } = await statement({ nonce: 32, acceptBefore: ACCEPT_BEFORE + 3600 });
   assert.equal(val(await s.ledger.admitVerified(newer, scope(KEY_A, { acceptBefore: ACCEPT_BEFORE + 3600 }))).status, 'recorded');
 });
-test('the tombstone budget is separate and bounded; a malformed v2 record is refused without overwrite', async t => {
+test('review LOW: every live entry reserves its tombstone slot, so cancel, reject and expiry compaction never fail on capacity', async t => {
   const s = await setup(t);
-  const tombstones = Array.from({ length: MAX_PEER_REPLAY_TOMBSTONES }, (_, i) => ({ termsHash: (i + 1).toString(16).padStart(64, '0'),
+  const live = MAX_PEER_REPLAY_TERMS - 1, seeded = MAX_PEER_REPLAY_TOMBSTONES - live;
+  const tombstones = Array.from({ length: seeded }, (_, i) => ({ termsHash: (i + 1).toString(16).padStart(64, '0'),
     acceptBeforeSeconds: String(ACCEPT_BEFORE), ad: null, peer: null, closesAtSeconds: null, tombstoned: true, seller: null, buyer: null }));
   await seed(s, { format: PEER_REPLAY_FORMAT_V2, retiredThroughSeconds: '0', entries: tombstones });
-  err(await s.ledger.tombstoneScoped('ff'.repeat(32), scope(KEY_A)), 'LIMIT_EXCEEDED');
-  const { evidence } = await statement({ nonce: 33 });
-  assert.equal(val(await s.ledger.admitVerified(evidence, scope(KEY_A))).status, 'recorded', 'live budget unaffected');
-  err(await s.ledger.tombstoneScoped(evidence.termsHash, scope(KEY_A)), 'LIMIT_EXCEEDED');
+  // Fill to the bound with live entries (priority, so only the shared bound applies); the first half end soon.
+  const admitted = [];
+  for (let i = 0; i < live; i++) {
+    const peer = keyOf(100 + i), { evidence } = await statement({ nonce: 1000 + i, counterparty: peer });
+    val(await s.ledger.admitVerified(evidence, scope(peer, { ad: `bound-${i}`, priority: true, closesAt: i % 2 === 0 ? NOW + 600 : NOW + 1800 })));
+    admitted.push({ evidence, peer, i });
+  }
+  const full = (await decrypted(s)).json;
+  assert.equal(full.entries.filter(entry => entry.acceptBeforeSeconds !== null).length, MAX_PEER_REPLAY_TOMBSTONES);
+  assert.ok(full.entries.filter(entry => !entry.tombstoned).length < MAX_PEER_REPLAY_TERMS, 'refused by the tombstone reserve, not the live total');
+  // A further new live entry is refused instead of a later cancel.
+  const late = keyOf(250), { evidence: extra } = await statement({ nonce: 2000, counterparty: late });
+  err(await s.ledger.admitVerified(extra, scope(late, { ad: 'late', priority: true })), 'LIMIT_EXCEEDED');
+  // Cancel (seller side) and reject (buyer side) of existing live entries succeed at the bound.
+  val(await s.ledger.tombstoneScoped(admitted[1].evidence.termsHash, scope(admitted[1].peer, { ad: 'bound-1' })));
+  val(await s.ledger.tombstone(admitted[3].evidence.termsHash));
+  // Advert expiry compacts every ended unaccepted entry, all at the bound.
+  assert.equal(val(await s.ledger.status(admitted[0].evidence.termsHash, String(NOW + 600), String(ACCEPT_BEFORE))).tombstoned, true);
+  const after = (await decrypted(s)).json;
+  assert.equal(after.entries.filter(entry => entry.tombstoned).length, seeded + Math.ceil(live / 2) + 2);
+  assert.equal(after.entries.filter(entry => entry.acceptBeforeSeconds !== null).length, MAX_PEER_REPLAY_TOMBSTONES, 'conversions keep the sum');
+  // Still at the bound: new live entries and new tombstones without an entry stay refused until retirement.
+  err(await s.ledger.admitVerified(extra, scope(late, { ad: 'late', priority: true, now: NOW + 600 })), 'LIMIT_EXCEEDED');
+  err(await s.ledger.tombstoneScoped('ff'.repeat(32), scope(late, { now: NOW + 600 })), 'LIMIT_EXCEEDED');
+  // A record that breaks the reservation is refused without overwrite.
   const t2 = await setup(t);
   await seed(t2, { format: PEER_REPLAY_FORMAT_V2, retiredThroughSeconds: '0', entries: [{ ...tombstones[0], seller: { v: 1 } }] });
+  const { evidence } = await statement({ nonce: 33 });
   const result = await t2.ledger.admitVerified(evidence, scope(KEY_A)); assert.equal(result.ok, false);
 });
 test('legacy version 1 history migrates: its tombstones keep refusing and never retire', async t => {

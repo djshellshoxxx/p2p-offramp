@@ -160,7 +160,12 @@ export interface TermsExchange {
    * Local only: nothing is sent. Idempotent. The seller removes a pinned session by cancelling it.
    */
   select(sessionId: string): ExchangeResult<SessionView>;
-  /** Process one gift wrap delivered by the relay pool. */
+  /**
+   * Process one gift wrap delivered by the relay pool. D1 mode: a refused message is never remembered, so the relay layer
+   * must redeliver it. In particular `BUSY` (another verification for the session is running, for example a local
+   * `acceptanceStatus` recheck) and `DUPLICATE` while the same rumor is still in flight: a genuine accept refused `BUSY`
+   * succeeds on redelivery.
+   */
   receive(wrap: unknown, secret: Uint8Array): Promise<ExchangeResult<ReceivedMessage | { readonly own: true; readonly rumorId: string }>>;
   /** D1: the statement to sign. Seller: before offering `termsBytes` (reviewed here first). Buyer: for the offered bytes. */
   acceptanceStatement(sessionId: string, termsBytes: Uint8Array, notAfterSeconds: string): Promise<ExchangeResult<PeerAcceptanceStatement>>;

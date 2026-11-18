@@ -10,8 +10,10 @@
  *   only ever rises to the deadline of an entry actually retired, never to the clock itself.
  * - A statement that was never accepted (no buyer binding) can no longer progress once its session ended (advert
  *   expiry). It is then compacted into a tombstone and stops counting against the live quotas.
- * - cancel/reject tombstones are compact (no bindings) and use their own budget (MAX_PEER_REPLAY_TOMBSTONES); they stay
- *   until their deadline passes the high-water mark. They never count against per-peer, per-advert or live quotas.
+ * - cancel/reject tombstones are compact (no bindings); they stay until their deadline passes the high-water mark and never
+ *   count against per-peer, per-advert or live quotas. Every entry with a deadline, live or tombstoned, counts against
+ *   MAX_PEER_REPLAY_TOMBSTONES: a live entry is admitted only while it can reserve its own tombstone slot, so a cancel,
+ *   a reject or an advert-expiry compaction of an existing entry can never fail on capacity (only new entries are refused).
  * - New live entries are refused (LIMIT_EXCEEDED, never evicted) beyond MAX_PEER_REPLAY_TERMS in total. Non-priority
  *   entries (an unselected seller-side session) are also bounded per counterparty and per advertisement and cannot use the
  *   last PEER_REPLAY_PRIORITY_RESERVE live slots, which stay available for selected and buyer-side sessions.
@@ -34,7 +36,8 @@ export const MAX_PEER_REPLAY_TERMS_PER_PEER = 8;
 export const MAX_PEER_REPLAY_TERMS_PER_AD = 16;
 /** Live slots only priority (selected or buyer-side) sessions may use. */
 export const PEER_REPLAY_PRIORITY_RESERVE = 16;
-/** Compact scoped tombstones, separately from live entries (live + tombstones stay within the strict parser's 256-item array bound). */
+/** Entries with a deadline (live statements plus compact tombstones). Each live one reserves its tombstone slot. With the
+ * deadline-less legacy entries inside the live total, all entries stay within the strict parser's 256-item array bound. */
 export const MAX_PEER_REPLAY_TOMBSTONES = 192;
 /** Local clock skew tolerated after a terms deadline before its entries retire. */
 export const PEER_REPLAY_RETIRE_SKEW_SECONDS = 300;
@@ -97,7 +100,8 @@ const adKey = (ad: unknown): string => {
 };
 /** Live budget: recorded statements, and legacy entries without a deadline (which never retire). */
 const isLive = (entry: Entry): boolean => !entry.tombstoned || entry.acceptBeforeSeconds === null;
-const isScopedTombstone = (entry: Entry): boolean => entry.tombstoned && entry.acceptBeforeSeconds !== null;
+/** Counts against MAX_PEER_REPLAY_TOMBSTONES: a scoped tombstone, or a live entry holding the slot it would become. */
+const isScoped = (entry: Entry): boolean => entry.acceptBeforeSeconds !== null;
 /** Tombstone in place: bindings and scope are irrelevant once every later statement is refused. */
 function compact(entry: Entry): void {
   entry.tombstoned = true;
@@ -145,7 +149,7 @@ function decode(record: PrivateRecordV1 | null): State {
       if (seen.has(entry.termsHash)) return fail('INTEGRITY_FAILURE');
       seen.add(entry.termsHash); return entry;
     });
-    if (entries.filter(isLive).length > MAX_PEER_REPLAY_TERMS || entries.filter(isScopedTombstone).length > MAX_PEER_REPLAY_TOMBSTONES) return fail('INTEGRITY_FAILURE');
+    if (entries.filter(isLive).length > MAX_PEER_REPLAY_TERMS || entries.filter(isScoped).length > MAX_PEER_REPLAY_TOMBSTONES) return fail('INTEGRITY_FAILURE');
     return { retiredThroughSeconds: version === 1 ? 0n : decimal(raw.retiredThroughSeconds), entries };
   } catch (error) { return fail(failures.get(error as object) ?? 'INTEGRITY_FAILURE'); }
   finally { bytes?.fill(0); }
@@ -173,8 +177,8 @@ function retire(state: State, now: bigint | null): boolean {
   if (now === null) return false;
   let changed = false;
   for (const entry of state.entries) {
-    if (!entry.tombstoned && entry.buyer === null && entry.closesAtSeconds !== null && BigInt(entry.closesAtSeconds) <= now &&
-        state.entries.filter(isScopedTombstone).length < MAX_PEER_REPLAY_TOMBSTONES) { compact(entry); changed = true; }
+    // Never capacity-bound: the entry already holds its tombstone slot.
+    if (!entry.tombstoned && entry.buyer === null && entry.closesAtSeconds !== null && BigInt(entry.closesAtSeconds) <= now) { compact(entry); changed = true; }
   }
   const kept = state.entries.filter(entry => entry.acceptBeforeSeconds === null || BigInt(entry.acceptBeforeSeconds) + BigInt(PEER_REPLAY_RETIRE_SKEW_SECONDS) > now);
   if (kept.length === state.entries.length) return changed;
@@ -200,6 +204,8 @@ function record(state: State, binding: Readonly<PeerAcceptanceV1>, acceptBefore:
     const live = state.entries.filter(isLive);
     const limit = scope === null || scope.priority ? MAX_PEER_REPLAY_TERMS : MAX_PEER_REPLAY_TERMS - PEER_REPLAY_PRIORITY_RESERVE;
     if (live.length >= limit) return fail('LIMIT_EXCEEDED');
+    // Reserve the tombstone slot this entry may later become; refuse the new entry rather than a future cancel.
+    if (state.entries.filter(isScoped).length >= MAX_PEER_REPLAY_TOMBSTONES) return fail('LIMIT_EXCEEDED');
     if (scope !== null && !scope.priority && (live.filter(row => row.peer === scope.peer).length >= MAX_PEER_REPLAY_TERMS_PER_PEER ||
         live.filter(row => row.ad === scope.ad).length >= MAX_PEER_REPLAY_TERMS_PER_AD)) return fail('LIMIT_EXCEEDED');
     entry = { termsHash: binding.termsHash, acceptBeforeSeconds: acceptBefore, ad: scope?.ad ?? null, peer: scope?.peer ?? null,
@@ -218,15 +224,14 @@ function bury(state: State, hash: string, acceptBefore: string | null): { result
   if (acceptBefore !== null && BigInt(acceptBefore) <= state.retiredThroughSeconds) return { changed: false, result: undefined };
   const entry = state.entries.find(row => row.termsHash === hash);
   if (entry?.tombstoned) return { changed: false, result: undefined };
-  const scopedTombstones = state.entries.filter(isScopedTombstone).length;
   if (entry) {
-    if (entry.acceptBeforeSeconds !== null && scopedTombstones >= MAX_PEER_REPLAY_TOMBSTONES) return fail('LIMIT_EXCEEDED');
+    // An existing entry converts in place into the slot it reserved: never refused on capacity.
     compact(entry);
   } else if (acceptBefore === null) {
     if (state.entries.filter(isLive).length >= MAX_PEER_REPLAY_TERMS) return fail('LIMIT_EXCEEDED');
     state.entries.push({ termsHash: hash, acceptBeforeSeconds: null, ad: null, peer: null, closesAtSeconds: null, tombstoned: true, seller: null, buyer: null });
   } else {
-    if (scopedTombstones >= MAX_PEER_REPLAY_TOMBSTONES) return fail('LIMIT_EXCEEDED');
+    if (state.entries.filter(isScoped).length >= MAX_PEER_REPLAY_TOMBSTONES) return fail('LIMIT_EXCEEDED');
     state.entries.push({ termsHash: hash, acceptBeforeSeconds: acceptBefore, ad: null, peer: null, closesAtSeconds: null, tombstoned: true, seller: null, buyer: null });
   }
   return { changed: true, result: undefined };

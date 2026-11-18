@@ -112,8 +112,10 @@ exchange slots recycle in about 17 minutes, so 16 ghosted offers could block an 
   The mark only rises to the deadline of an entry actually retired, never to the clock.
 - A statement that was never accepted (no buyer binding) is compacted into a tombstone once its session ended
   (advert expiry), because it can no longer progress. It then stops counting against live quotas.
-- `cancel`/`terms-reject` tombstones are compact (no bindings, no scope). They use their own budget of 192 and
-  never count against live quotas.
+- `cancel`/`terms-reject` tombstones are compact (no bindings, no scope) and never count against live quotas. Every
+  entry with a deadline, live or tombstoned, counts against a budget of 192. A live entry is admitted only while it can
+  reserve its own tombstone slot, so a cancel, a reject or an advert-expiry compaction of an existing entry never fails
+  on capacity; at the bound, a new offer or acceptance is refused instead.
 - New live entries are refused (never evicted) beyond 64 in total. Non-priority entries (an unselected seller-side
   session) are also bounded at 8 per counterparty and 16 per advertisement, and cannot use the last 16 live slots.
   Those stay for priority sessions: selected seller-side sessions and buyer-side sessions.
@@ -123,10 +125,13 @@ exchange slots recycle in about 17 minutes, so 16 ghosted offers could block an 
 A full ledger still refuses the statement being sent or received (`LIMIT_EXCEEDED`), including for a selected
 session. It never displaces another session.
 
-Verifier capacity. The exchange runs at most one verification per session (another one is refused `BUSY`, not
-remembered, so it can be redelivered). Copies of a rumor already being processed are `DUPLICATE`. A tombstone read
-and the binding and deadline checks run before any chain read. The verifier itself allows 16 concurrent
-verifications.
+Verifier capacity. The exchange runs at most one verification per session. Another one, including a genuine
+peer accept that arrives during a local display recheck, is refused `BUSY`. Copies of a rumor already being
+processed are `DUPLICATE`. Neither result is remembered, so the caller or relay layer must redeliver the wrap, and it
+then succeeds. A tombstone read and the binding and deadline checks run before any chain read. Residual, bounded:
+the verifier allows 16 concurrent verifications in total, so 16 sessions each holding a slow verification could
+delay others. Each such slot needs a session in which the local seller already sent an offer (or the local buyer
+took the advert), so an anonymous flood cannot claim them.
 
 Cancellation races. If the tombstone lands first, the acceptance is refused before any chain read. If a local
 cancel or reject starts while an acceptance is being verified, the cancel wins: the acceptance is refused
