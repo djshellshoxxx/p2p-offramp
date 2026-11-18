@@ -9,8 +9,8 @@ const sources = readdirSync(dir)
   .map(name => [name, readFileSync(new URL(name, dir), 'utf8')]);
 const ALLOWED_IMPORTS = new Set(['../../domain/index.ts', '../../schemas/index.ts', '@noble/hashes/sha2.js']);
 /** Lifecycle (B1b) modules. Only wallet.ts verifies Ed25519 and only submit.ts may name the one send method. */
-const LIFECYCLE = ['auxiliary.ts', 'compose.ts', 'intent.ts', 'journal.ts', 'message.ts', 'plan.ts', 'submit.ts',
-  'wallet.ts'];
+const LIFECYCLE = ['adapter.ts', 'auxiliary.ts', 'compose.ts', 'intent.ts', 'journal.ts', 'message.ts', 'plan.ts',
+  'submit.ts', 'wallet.ts'];
 const LIFECYCLE_EXCEPTIONS = { 'wallet.ts': '@noble/curves', 'submit.ts': 'sendTransaction' };
 
 test('src-has-no-io-or-forbidden-apis', () => {
