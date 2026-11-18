@@ -148,7 +148,7 @@ test('owned process groups drain on success, timeout and output overflow includi
   if(mode==='success'){assert.equal(result.code,0);assert.equal(result.stdout,'done');assert.equal(result.stderr,'separate');}if(mode==='timeout')assert.equal(result.timedOut,true);if(mode==='overflow')assert.equal(result.limited,true);
  }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
 });
-test('trusted tool roots are explicit and preserve existing Foundry compiler resolution and pin checks',async()=>{
+test('trusted tool roots are explicit and preserve existing Foundry compiler resolution',async()=>{
  const {resolveTools}=await import('../formal/evm.mjs');assert.throws(()=>resolveTools({}));
  const tools=resolveTools({FORMAL_Z3_ROOT:'/tmp/public-z3',FORMAL_Z3_ARTIFACT:'/tmp/public.whl',FORMAL_FOUNDRY_ROOT:'/tmp/foundry',FOUNDRY_SOLC:'/tmp/compiler',PATH:'/usr/bin',HOME:'/tmp/local-home'});
  assert.equal(tools.z3,'/tmp/public-z3/bin/z3');assert.equal(tools.artifact,'/tmp/public.whl');assert.equal(tools.forge,'/tmp/foundry/forge');assert.equal(tools.solc,'/tmp/compiler');assert.equal(tools.env.PATH,'/tmp/foundry:/usr/bin');
@@ -243,4 +243,76 @@ test('the CLI evidence directory must resolve inside the checkout, so arguments 
  assert.equal(formal.evidenceDirectory(root+'/.formal-evidence/run-1'),root+'/.formal-evidence/run-1');
  for(const outside of['/tmp/formal-evidence',root,root+'-sibling/evidence',root+'/../outside','/'])
   assert.throws(()=>formal.evidenceDirectory(outside),/FORMAL_OUTPUT_OUTSIDE_REPOSITORY/,outside);
+});
+const fakeTool=async(directory,name,plan,body)=>{const path=join(directory,name);await writeFile(path,`#!${process.execPath}\nconst plan=${JSON.stringify(plan)};\n${body}\n`);await chmod(path,0o755);return path;};
+// Fake solc: answers round n (n = number of responses supplied) from the plan; it never reads the environment or the network.
+const FAKE_SOLC=`let input='';process.stdin.on('data',chunk=>input+=chunk).on('end',()=>{const responses=JSON.parse(input).auxiliaryInput?.smtlib2responses??{};const step=plan.rounds[Math.min(Object.keys(responses).length,plan.rounds.length-1)];
+ setTimeout(()=>{if(step.raw!==undefined)process.stdout.write(step.raw);else process.stdout.write(JSON.stringify({errors:step.errors,...(step.queries?{auxiliaryInputRequested:{smtlib2queries:step.queries}}:{})}));if(step.stderr)process.stderr.write(step.stderr);process.exitCode=step.exit??0;},step.sleepMs??0);});`;
+const FAKE_Z3=`if(process.argv[2]==='--version'){process.stdout.write(plan.version+'\\n');}else{let input='';process.stdin.on('data',chunk=>input+=chunk).on('end',()=>setTimeout(()=>{process.stdout.write(plan.stdout??'');if(plan.stderr)process.stderr.write(plan.stderr);process.exitCode=plan.exit??0;},plan.sleepMs??0));}`;
+test('bridge incompleteness bookkeeping ends PROOF_UNKNOWN through the whole-target classification, with fake solc and z3',{timeout:60000},async()=>{
+ const source='contract T { function f(uint x) public pure { assert(x == x); assert(x >= 0); } }',assertions=['assert(x == x);','assert(x >= 0);'];
+ const spans=assertions.map(assertion=>assertionSpan(source,assertion)),at=(span,errorCode,message)=>({errorCode,severity:errorCode==='9576'?'info':'warning',sourceLocation:{file:'T.sol',...span},message});
+ const SAFE=spans.map(span=>at(span,'9576','CHC: Assertion violation check is safe!')),MIGHT=[...spans.map(span=>at(span,'6328','CHC: Assertion violation might happen here.')),RECORDED.abstractions[3]];
+ const query=index=>`(set-logic HORN)\n; fake query ${index}\n(check-sat)\n`,key=index=>queryIdentity(query(index)),request=index=>({[key(index)]:query(index)});
+ // Failure scenarios report "safe" at both spans in every compiler round, so only the bookkeeping can make them unknown.
+ const safeRounds=(second={})=>[{errors:SAFE,queries:request(0)},{errors:SAFE,...second}];
+ const scenarios=[
+  {name:'clean control',rounds:[{errors:MIGHT,queries:request(0)},{errors:SAFE}],z3:{stdout:'sat\n'},expect:{stopReason:null,results:['PROVED_UNDER_DECLARED_MODEL','PROVED_UNDER_DECLARED_MODEL']}},
+  {name:'recorded abstraction on clean work',rounds:[{errors:MIGHT,queries:request(0)},{errors:[...SAFE,RECORDED.abstractions[0]]}],z3:{stdout:'sat\n'},expect:{stopReason:null}},
+  {name:'z3 unknown',rounds:safeRounds(),z3:{stdout:'unknown\n'},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
+  {name:'z3 timeout',rounds:safeRounds(),z3:{stdout:'sat\n',sleepMs:20000},deadlineMs:1500,expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown',timedOut:true}},
+  {name:'z3 stderr',rounds:safeRounds(),z3:{stdout:'sat\n',stderr:'WARNING: resource limit\n'},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
+  {name:'z3 non-zero exit',rounds:safeRounds(),z3:{stdout:'sat\n',exit:1},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
+  {name:'compiler stderr',rounds:safeRounds({stderr:'Warning: unexpected\n'}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_STDERR'}},
+  {name:'compiler timeout',rounds:safeRounds({sleepMs:20000}),z3:{stdout:'sat\n'},deadlineMs:1500,expect:{stopReason:'COMPILER_TIMEOUT'}},
+  {name:'compiler non-zero exit',rounds:safeRounds({exit:2}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_FAILURE'}},
+  {name:'compiler invalid output',rounds:safeRounds({raw:'{not json'}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_OUTPUT_INVALID'}},
+  {name:'compiler error diagnostic',rounds:safeRounds({errors:[...SAFE,{errorCode:'2314',severity:'error',message:'Expected token'}]}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_ERROR'}},
+  {name:'query-key mismatch',rounds:[{errors:SAFE,queries:{[key(1)]:query(0)}},{errors:SAFE}],z3:{stdout:'sat\n'},expect:{stopReason:'QUERY_KEY_MISMATCH',queries:0}},
+  {name:'duplicate key',rounds:safeRounds({queries:request(0)}),z3:{stdout:'sat\n'},expect:{stopReason:'QUERY_REPEATED',queries:1}},
+  {name:'round exhaustion',rounds:Array.from({length:LIMITS.rounds+1},(_,index)=>({errors:SAFE,queries:request(index)})),z3:{stdout:'sat\n'},expect:{stopReason:'ROUND_EXHAUSTED',queries:LIMITS.rounds}},
+  {name:'shared round budget',rounds:safeRounds(),z3:{stdout:'sat\n'},budget:{queries:0,bytes:0,rounds:LIMITS.rounds},expect:{stopReason:'ROUND_LIMIT',queries:0}},
+ ];
+ const directory=await mkdtemp(join(tmpdir(),'formal-bridge-'));
+ try{for(const[index,scenario]of scenarios.entries()){
+  const work=join(directory,String(index));await mkdir(work);
+  const tools={solc:await fakeTool(work,'solc',{rounds:scenario.rounds},FAKE_SOLC),z3:await fakeTool(work,'z3',scenario.z3,FAKE_Z3)};
+  const out=await formal.bridge({language:'Solidity',sources:{'T.sol':{content:source}},settings:{}},{outputDirectory:work,deadline:performance.now()+(scenario.deadlineMs??30000),sourceLabel:'fake',tools,...(scenario.budget?{budget:scenario.budget}:{})});
+  const results=formal.classifyWholeTarget(out,'T.sol',source,assertions).map(result=>result.result);
+  assert.equal(out.stopReason,scenario.expect.stopReason,scenario.name);assert.equal(out.incomplete,scenario.expect.stopReason!==null,scenario.name);
+  assert.deepEqual(results,scenario.expect.results??['PROOF_UNKNOWN','PROOF_UNKNOWN'],scenario.name);
+  if(scenario.expect.answer)assert.equal(out.queries[0].answer,scenario.expect.answer,scenario.name);
+  if(scenario.expect.timedOut)assert.equal(out.queries[0].timedOut,true,scenario.name);
+  if(scenario.expect.queries!==undefined)assert.equal(out.queries.length,scenario.expect.queries,scenario.name);
+ }}finally{await rm(directory,{recursive:true,force:true});}
+});
+test('Z3 pinning fails closed on a wrong digest, a missing file, a wrong version or license, and drift between checks',{timeout:20000},async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'formal-pins-'));
+ try{
+  const z3Root=join(directory,'z3root'),pin={...formal.Z3_PIN};await mkdir(join(z3Root,'bin'),{recursive:true});await mkdir(join(z3Root,'z3/lib'),{recursive:true});await mkdir(join(z3Root,'z3_solver-4.12.2.0.dist-info'),{recursive:true});
+  const files={artifact:join(directory,'pinned.whl'),library:join(z3Root,pin.libraryPath),metadata:join(z3Root,pin.metadataPath),solc:join(directory,'solc')};
+  await writeFile(files.artifact,'wheel bytes');await writeFile(files.library,'library bytes');await writeFile(files.metadata,'Name: z3-solver\nLicense: MIT License\n');await writeFile(files.solc,'compiler bytes');
+  const binary=await fakeTool(join(z3Root,'bin'),'z3',{version:pin.reportedVersion},FAKE_Z3);
+  const tools={artifact:files.artifact,z3:binary,z3Root,solc:files.solc};
+  const hashOf=async path=>sha256(await readFile(path));
+  Object.assign(pin,{artifactSha256:await hashOf(files.artifact),binarySha256:await hashOf(binary),librarySha256:await hashOf(files.library),metadataSha256:await hashOf(files.metadata)});
+  const before=await formal.verifyTools(tools,pin);assert.equal(before.reportedVersion,pin.reportedVersion);assert.equal(before.hashes.library,pin.librarySha256);
+  const solcSha256=await hashOf(files.solc);assert.equal((await formal.recheckTools(tools,before,{pin,solcSha256})).solcSha256,solcSha256);
+  // Production defaults: the real pins never match these files.
+  await assert.rejects(formal.verifyTools(tools),{message:'TOOL_ARTIFACT_DRIFT'});
+  for(const name of['artifactSha256','binarySha256','librarySha256','metadataSha256'])await assert.rejects(formal.verifyTools(tools,{...pin,[name]:'0'.repeat(64)}),{message:'TOOL_ARTIFACT_DRIFT'},name);
+  await assert.rejects(formal.verifyTools({...tools,artifact:join(directory,'missing.whl')},pin),{message:'TOOL_ARTIFACT_MISSING'});
+  await assert.rejects(formal.verifyTools({...tools,z3Root:join(directory,'missing-root')},pin),{message:'TOOL_ARTIFACT_MISSING'});
+  await assert.rejects(formal.verifyTools(tools,{...pin,reportedVersion:'Z3 version 4.12.3 - 64 bit'}),{message:'TOOL_VERSION_MISMATCH'});
+  const wrongVersion=await fakeTool(directory,'z3-other',{version:'Z3 version 4.13.0 - 64 bit'},FAKE_Z3);
+  await assert.rejects(formal.verifyTools({...tools,z3:wrongVersion},{...pin,binarySha256:await hashOf(wrongVersion)}),{message:'TOOL_VERSION_MISMATCH'});
+  await assert.rejects(formal.verifyTools(tools,{...pin,license:'Apache License'}),{message:'TOOL_LICENSE_MISMATCH'});
+  // Drift between the checks: the files change and still match a (different) pin, but the hashes taken before do not.
+  await writeFile(files.library,'replaced library bytes');const moved={...pin,librarySha256:await hashOf(files.library)};
+  await assert.rejects(formal.recheckTools(tools,before,{pin,solcSha256}),{message:'TOOL_ARTIFACT_DRIFT'});
+  await assert.rejects(formal.recheckTools(tools,before,{pin:moved,solcSha256}),{message:'TOOL_ARTIFACT_DRIFT'});
+  await writeFile(files.library,'library bytes');await formal.recheckTools(tools,before,{pin,solcSha256});
+  await writeFile(files.solc,'replaced compiler');await assert.rejects(formal.recheckTools(tools,before,{pin,solcSha256}),{message:'TOOL_ARTIFACT_DRIFT'});
+  await rm(files.solc);await assert.rejects(formal.recheckTools(tools,before,{pin,solcSha256}),{message:'TOOL_ARTIFACT_MISSING'});
+ }finally{await rm(directory,{recursive:true,force:true});}
 });

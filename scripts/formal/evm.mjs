@@ -12,8 +12,10 @@ import {isMain} from '../lib/is-main.mjs';
 export const LIMITS=Object.freeze({queryBytes:4*1024*1024,totalQueryBytes:32*1024*1024,queries:64,rounds:8,queryMs:5000,totalMs:120000,compilerMs:25000,outputBytes:32*1024*1024,solverOutputBytes:131072});
 // The version is taken from the pinned wheel name, so the two can never drift apart.
 const Z3_WHEEL='z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl';
-export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json'});
+export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json',libraryPath:'z3/lib/libz3.so.4.12',metadataPath:'z3_solver-4.12.2.0.dist-info/METADATA'});
 const ROOT=fileURLToPath(new URL('../../',import.meta.url)),EVM=resolve(ROOT,'contracts/evm'),HARNESS='formal/CanonicalRefinement.t.sol';
+// solc and z3 read nothing from the environment; a fixed minimal one keeps LD_PRELOAD and similar ambient settings out.
+const TOOL_ENV=Object.freeze({LC_ALL:'C'});
 export const PROBE_SOURCE='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30; contract ToolProbes { function safe(uint x) public pure { assert(x == x); } function unsafe(uint x) public pure { assert(x != 7); } }';
 const ORIGINAL_MODEL_SHA256='7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537';
 export const PARTITION_TARGETS=Object.freeze([
@@ -146,40 +148,56 @@ export async function processBounded(command,args,{input='',cwd=ROOT,env=process
  });
 }
 function baseSettings(contractFile,contract){return{optimizer:{enabled:true,runs:200},evmVersion:'cancun',viaIR:false,remappings:['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],modelChecker:{engine:'chc',solvers:['smtlib2'],targets:['assert'],showProvedSafe:true,showUnproved:true,showUnsupported:true,extCalls:'trusted',contracts:{[contractFile]:[contract]}},outputSelection:{'*':{'*':['metadata']}}};}
-async function bridge(input,{outputDirectory,deadline,sourceLabel,tools,budget={queries:0,bytes:0,rounds:0}}){
- const responses={},queries=[],known=new Set(),compilerRuns=[];let totalBytes=0,incomplete=false,stopReason=null,output;
+/** The compiler/solver loop. Only a round that requests no further query returns stopReason null; every other exit names its reason
+ * and is incomplete. A shared budget caps rounds, queries and query bytes across several bridges. */
+export async function bridge(input,{outputDirectory,deadline,sourceLabel,tools,budget={queries:0,bytes:0,rounds:0}}){
+ const responses={},queries=[],known=new Set(),compilerRuns=[];let totalBytes=0,stopReason=null,output;
+ const result=reason=>({output:output??{},queries,incomplete:reason!==null,stopReason:reason,compilerRuns,sourceInputSha256:sha(canonical(input))});
  for(let round=0;round<LIMITS.rounds;round++){
-  if(performance.now()>=deadline){incomplete=true;stopReason='TOTAL_DEADLINE';break;}
-  if(budget.rounds>=LIMITS.rounds){incomplete=true;stopReason='ROUND_LIMIT';break;}budget.rounds++;
-  const supplied={...input,...(Object.keys(responses).length?{auxiliaryInput:{smtlib2responses:responses}}:{})},inputText=JSON.stringify(supplied);if(Buffer.byteLength(inputText)>LIMITS.outputBytes){incomplete=true;stopReason='INPUT_LIMIT';break;}
-  const raw=await processBounded(tools.solc,['--base-path',EVM,'--standard-json'],{input:inputText,timeoutMs:Math.min(LIMITS.compilerMs,deadline-performance.now())});
+  if(performance.now()>=deadline)return result('TOTAL_DEADLINE');
+  if(budget.rounds>=LIMITS.rounds)return result('ROUND_LIMIT');budget.rounds++;
+  const supplied={...input,...(Object.keys(responses).length?{auxiliaryInput:{smtlib2responses:responses}}:{})},inputText=JSON.stringify(supplied);if(Buffer.byteLength(inputText)>LIMITS.outputBytes)return result('INPUT_LIMIT');
+  const raw=await processBounded(tools.solc,['--base-path',EVM,'--standard-json'],{input:inputText,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.compilerMs,deadline-performance.now())});
   compilerRuns.push({round,inputSha256:sha(inputText),stdoutSha256:sha(raw.stdout),stderrSha256:sha(raw.stderr),exitCode:raw.code,timedOut:raw.timedOut,limited:raw.limited,error:raw.error});await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-input.json`),inputText);await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-stdout.json`),raw.stdout);await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-stderr.txt`),raw.stderr);
-  if(raw.timedOut||raw.limited||raw.error||raw.code!==0||raw.stderr.trim()!==''){incomplete=true;stopReason=raw.timedOut?'COMPILER_TIMEOUT':raw.limited?'COMPILER_OUTPUT_LIMIT':raw.stderr.trim()!==''?'COMPILER_STDERR':'COMPILER_FAILURE';break;}
-  try{output=JSON.parse(raw.stdout);}catch{incomplete=true;stopReason='COMPILER_OUTPUT_INVALID';break;}
-  if((output.errors??[]).some(error=>error.severity==='error')){incomplete=true;stopReason='COMPILER_ERROR';break;}
-  const requested=output.auxiliaryInputRequested?.smtlib2queries??{};if(typeof requested!=='object'||Array.isArray(requested)){incomplete=true;break;}
-  const entries=Object.entries(requested);if(entries.length===0)return{output,queries,incomplete,stopReason,compilerRuns,sourceInputSha256:sha(canonical(input))};
+  if(raw.timedOut||raw.limited||raw.error||raw.code!==0||raw.stderr.trim()!=='')return result(raw.timedOut?'COMPILER_TIMEOUT':raw.limited?'COMPILER_OUTPUT_LIMIT':raw.stderr.trim()!==''?'COMPILER_STDERR':'COMPILER_FAILURE');
+  let parsed;try{parsed=JSON.parse(raw.stdout);}catch{return result('COMPILER_OUTPUT_INVALID');}output=parsed;
+  if(!Array.isArray(output?.errors??[])||(output.errors??[]).some(error=>error?.severity==='error'))return result('COMPILER_ERROR');
+  const requested=output.auxiliaryInputRequested?.smtlib2queries??{};if(typeof requested!=='object'||Array.isArray(requested))return result('QUERY_REQUEST_INVALID');
+  const entries=Object.entries(requested);if(entries.length===0)return result(null);
   for(const[key,query]of entries){
-   if(known.has(key)||queries.length>=LIMITS.queries||budget.queries>=LIMITS.queries||typeof query!=='string'||queryIdentity(query)!==key){incomplete=true;break;}
-   totalBytes+=Buffer.byteLength(query);budget.bytes+=Buffer.byteLength(query);if(totalBytes>LIMITS.totalQueryBytes||budget.bytes>LIMITS.totalQueryBytes||performance.now()>=deadline){incomplete=true;break;}
+   if(known.has(key))return result('QUERY_REPEATED');
+   if(queries.length>=LIMITS.queries||budget.queries>=LIMITS.queries)return result('QUERY_LIMIT');
+   if(typeof query!=='string'||Buffer.byteLength(query)>LIMITS.queryBytes)return result('QUERY_INVALID');
+   if(queryIdentity(query)!==key)return result('QUERY_KEY_MISMATCH');
+   totalBytes+=Buffer.byteLength(query);budget.bytes+=Buffer.byteLength(query);if(totalBytes>LIMITS.totalQueryBytes||budget.bytes>LIMITS.totalQueryBytes)return result('QUERY_BYTES_LIMIT');
+   if(performance.now()>=deadline)return result('TOTAL_DEADLINE');
    known.add(key);budget.queries++;const remaining=Math.min(LIMITS.queryMs,deadline-performance.now());
-   const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,timeoutMs:remaining,maxOutput:LIMITS.solverOutputBytes});
-   const answer=solved.error||solved.code!==0||solved.timedOut||solved.limited||solved.stderr.trim()!==''?'unknown':solverAnswer(solved.stdout);if(answer==='unknown')incomplete=true;
+   const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,env:TOOL_ENV,timeoutMs:remaining,maxOutput:LIMITS.solverOutputBytes});
+   const answer=solved.error||solved.code!==0||solved.timedOut||solved.limited||solved.stderr.trim()!==''?'unknown':solverAnswer(solved.stdout);
    const name=`${sourceLabel}-${key.slice(2)}`;await writeFile(resolve(outputDirectory,name+'.smt2'),query);await writeFile(resolve(outputDirectory,name+'.stdout'),solved.stdout);await writeFile(resolve(outputDirectory,name+'.stderr'),solved.stderr);
    queries.push({key,querySha256:sha(query),queryBytes:Buffer.byteLength(query),responseSha256:sha(solved.stdout),answer,exitCode:solved.code,timedOut:solved.timedOut,limited:solved.limited,stderrSha256:sha(solved.stderr)});
    responses[key]=answer+'\n';
+   // The remaining queries of this round are still solved and retained, but no further compiler round runs.
+   if(answer==='unknown')stopReason='SOLVER_UNKNOWN';
   }
-  if(incomplete)break;
+  if(stopReason)return result(stopReason);
  }
- return{output:output??{},queries,incomplete:true,stopReason:stopReason??'SOLVER_OR_QUERY_INCOMPLETE',compilerRuns,sourceInputSha256:sha(canonical(input))};
+ return result('ROUND_EXHAUSTED');
 }
-async function verifyTools(tools){
- const paths={artifact:tools.artifact,binary:tools.z3,library:resolve(tools.z3Root,'z3/lib/libz3.so.4.12'),metadata:resolve(tools.z3Root,'z3_solver-4.12.2.0.dist-info/METADATA')};
- const expected={artifact:Z3_PIN.artifactSha256,binary:Z3_PIN.binarySha256,library:Z3_PIN.librarySha256,metadata:Z3_PIN.metadataSha256},hashes={};
- for(const[name,path]of Object.entries(paths)){hashes[name]=await hashFile(path);if(hashes[name]!==expected[name])stop('TOOL_ARTIFACT_DRIFT');}
- const version=await processBounded(tools.z3,['--version'],{timeoutMs:5000,maxOutput:8192});if(version.code!==0||version.stdout.trim()!==Z3_PIN.reportedVersion)stop('TOOL_VERSION_MISMATCH');
- const metadata=await readFile(paths.metadata,'utf8');if(!metadata.includes('License: MIT License'))stop('TOOL_LICENSE_MISMATCH');
- return{...Z3_PIN,paths,hashes,reportedVersion:version.stdout.trim(),licenseEvidence:'Pinned package METADATA; license classification is not legal release approval.'};
+/** Hashes the pinned wheel, binary, runtime library and METADATA and checks the reported version and license. Any miss stops. */
+export async function verifyTools(tools,pin=Z3_PIN){
+ const paths={artifact:tools.artifact,binary:tools.z3,library:resolve(tools.z3Root,pin.libraryPath),metadata:resolve(tools.z3Root,pin.metadataPath)};
+ const expected={artifact:pin.artifactSha256,binary:pin.binarySha256,library:pin.librarySha256,metadata:pin.metadataSha256},hashes={},contents={};
+ for(const[name,path]of Object.entries(paths)){try{contents[name]=await readFile(path);}catch{stop('TOOL_ARTIFACT_MISSING');}hashes[name]=sha(contents[name]);if(hashes[name]!==expected[name])stop('TOOL_ARTIFACT_DRIFT');}
+ const version=await processBounded(tools.z3,['--version'],{env:TOOL_ENV,timeoutMs:5000,maxOutput:8192});if(version.error||version.timedOut||version.limited||version.code!==0||version.stdout.trim()!==pin.reportedVersion)stop('TOOL_VERSION_MISMATCH');
+ if(!contents.metadata.toString('utf8').includes('License: '+pin.license))stop('TOOL_LICENSE_MISMATCH');
+ return{...pin,paths,hashes,reportedVersion:version.stdout.trim(),licenseEvidence:'Pinned package METADATA; license classification is not legal release approval.'};
+}
+/** After analysis: the Z3 pins must still hold, every hash must equal the one taken before, and solc must still match its pin. */
+export async function recheckTools(tools,before,{pin=Z3_PIN,solcSha256=TOOLCHAIN.solcSha256}={}){
+ const after=await verifyTools(tools,pin);if(canonical(after.hashes)!==canonical(before?.hashes))stop('TOOL_ARTIFACT_DRIFT');
+ let compiler;try{compiler=await readFile(tools.solc);}catch{stop('TOOL_ARTIFACT_MISSING');}if(sha(compiler)!==solcSha256)stop('TOOL_ARTIFACT_DRIFT');
+ return{...after,solcSha256:sha(compiler)};
 }
 export function validateProbe(probe,source){
  if(probe.incomplete||probe.stopReason||probe.queries.length!==2||probe.queries.some(query=>!['sat','unsat'].includes(query.answer)))stop('TOOL_PROBE_INCOMPLETE');
@@ -252,7 +270,7 @@ export async function runFormal({outputDirectory=resolve(ROOT,'.formal-evidence'
  await verifySources(sourceClosure.digests);const native=await processBounded(tools.forge,['test','--match-contract',spec.nativeContract,'--json','-vvvv'],{cwd:EVM,env:forgeEnv(env,{FOUNDRY_TEST:'formal',FOUNDRY_OFFLINE:'true',FOUNDRY_SOLC:tools.solc,RAYON_NUM_THREADS:'1',TOKIO_WORKER_THREADS:'1'}),timeoutMs:Math.min(60000,Math.max(1,deadline-performance.now()))});
  await writeFile(resolve(outputDirectory,'native-stdout.json'),native.stdout);await writeFile(resolve(outputDirectory,'native-stderr.txt'),native.stderr);if(native.error||native.timedOut||native.limited)stop('NATIVE_TOOL_INCOMPLETE');let parsedNative;try{parsedNative=JSON.parse(native.stdout);}catch{stop('NATIVE_TOOL_OUTPUT_INVALID');}const witness=nativeWitness(parsedNative,native.code,spec);
  const artifact=JSON.parse(await readFile(resolve(EVM,'out/BasicEscrow.sol/BasicEscrow.json'),'utf8')),committedABI=JSON.parse(await readFile(abiPath,'utf8'));if(canonical(artifact.abi)!==canonical(committedABI))stop('INTERFACE_DRIFT');
- await verifySources(sourceClosure.digests);if(await hashFile(canonicalPath)!==canonicalBefore||await hashFile(abiPath)!==interfaceBefore)stop('ARTIFACT_DRIFT');const solverAfter=await verifyTools(tools);if(canonical(solverAfter.hashes)!==canonical(solver.hashes))stop('TOOL_ARTIFACT_DRIFT');
+ await verifySources(sourceClosure.digests);if(await hashFile(canonicalPath)!==canonicalBefore||await hashFile(abiPath)!==interfaceBefore)stop('ARTIFACT_DRIFT');await recheckTools(tools,solver);
  const commit=await processBounded('git',['rev-parse','HEAD'],{maxOutput:1024,timeoutMs:5000});if(commit.code!==0||!/^[0-9a-f]{40}\n?$/.test(commit.stdout))stop('SOURCE_COMMIT_UNAVAILABLE');
  const report={version:1,scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_REFINEMENT',releaseEnabled:false,productionApproval:false,result:witness.result,reviewUnit:{chain:'evm',sourceCommit:commit.stdout.trim(),canonicalSourceSha256:canonicalBefore,modelCommit:null,modelSourceSha256:sha(source),compilerVersion:toolchain.solcVersion,compilerFlags:{optimizer:true,runs:200,evmVersion:'cancun',viaIR:false},dependencyLockDigest:sha(canonical({npmLock:await hashFile(resolve(ROOT,'package-lock.json')),soliditySources:sourceClosure.digests})),dependencySourceSha256:sourceClosure.digests,artifactDigest:sha(Buffer.from(artifact.deployedBytecode.object.replace(/^0x/,''),'hex')),interfaceDigest:interfaceBefore,threatModelDigest:await hashFile(resolve(EVM,'SECURITY-NOTES.md')),propertySetDigest:sha(specBytes),deploymentParameters:{allowlist:[],context:'local test VM only'},reviewReports:[],findings:[{id:spec.strictModelCounterexample.id,result:'MODEL_IMPLEMENTATION_GAP',counterexampleDigest:witness.counterexampleDigest}]},toolchain,solver,guards,probe:{sourceSha256:sha(probeSource),sourceInputSha256:probe.sourceInputSha256,queries:probe.queries,results:probeResults},formal:{sourceInputSha256:formal.sourceInputSha256,queries:formal.queries,compilerRuns:formal.compilerRuns,stopReason:formal.stopReason,incomplete:formal.incomplete,diagnostics:formal.output.errors??[],properties},native:witness,qualifications:['SMT compiler-model checks and native trace evidence are separate from fuzzing and external review.','Unsupported compiler abstractions, timeouts and missing results stay PROOF_UNKNOWN.','The strict terminal-paid model gap blocks promotion until explicitly reviewed; deferred credit is intended, not theft.','No ERC20/Solana/native deployment, wallet/browser, fiat or network-liveness approval.','The candidate model is uncommitted until integration; modelCommit is null and exact model/source hashes bind local evidence.']};
  await writeFile(resolve(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');return report;
@@ -279,7 +297,7 @@ export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal
  }
  for(const{closure}of targets)await verifySources(closure.digests);
  if(await hashFile(resolve(EVM,HARNESS))!==ORIGINAL_MODEL_SHA256||await hashFile(canonicalPath)!==canonicalBefore||await hashFile(abiPath)!==interfaceBefore||await hashFile(resolve(EVM,'formal/properties.json'))!==sha(specBytes))stop('ARTIFACT_DRIFT');
- const solverAfter=await verifyTools(tools);if(canonical(solverAfter.hashes)!==canonical(solver.hashes))stop('TOOL_ARTIFACT_DRIFT');
+ await recheckTools(tools,solver);
  const commit=await processBounded('git',['rev-parse','HEAD'],{maxOutput:1024,timeoutMs:5000});if(commit.code!==0||!/^[0-9a-f]{40}\n?$/.test(commit.stdout))stop('SOURCE_COMMIT_UNAVAILABLE');
  const report={version:1,scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_PARTITIONS',releaseEnabled:false,productionApproval:false,result:'BOUNDED_PARTITION_INVESTIGATION',reviewUnit:{sourceCommit:commit.stdout.trim(),canonicalSourceSha256:canonicalBefore,originalModelSourceSha256:ORIGINAL_MODEL_SHA256,interfaceDigest:interfaceBefore,propertySetDigest:sha(specBytes),compilerFlags:{optimizer:true,runs:200,evmVersion:'cancun',viaIR:false,extCalls:'trusted'},modelCommit:null,compiledBytecodeChecked:false},toolchain,solver,limits:LIMITS,budget:{...budget,targetAttempts:results.filter(result=>result.attempted).length,maximumTargetAttempts:3,elapsedMs:performance.now()-started},probe:{sourceSha256:sha(probeSource),sourceInputSha256:probe.sourceInputSha256,queries:probe.queries,compilerRuns:probe.compilerRuns,results:probeResults},formal:{targets:results,properties:results.map(result=>({id:result.id,result:result.result})),queries:results.flatMap(result=>result.queries)},retainedEvidence:{originalWholeTarget:'UNCHANGED_NOT_RERUN',guardProofs:'UNCHANGED_NOT_RERUN',nativeCreditCounterexample:'UNCHANGED_NOT_RERUN'},qualifications:['These exact extractions do not replace the original whole-target UNKNOWN results, four guard-only proofs or STRICT_TERMINAL_ALREADY_PAID native counterexample.','All query/byte/round allowances are shared across the operational probe and at most three ordered target attempts; no target is rerun.','Zero or missing queries, stderr, unsupported abstraction, timeout or incomplete diagnostics remain PROOF_UNKNOWN. Compiler source-bound diagnostics, never raw SAT/UNSAT polarity, classify complete work.','No native witness, deployment, external request or economic action was run by this mode. No ERC20, interleaving, bytecode, whole-contract, production or specialist-review qualification follows.']};
  await writeFile(resolve(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');return report;
