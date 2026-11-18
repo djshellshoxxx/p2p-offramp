@@ -196,6 +196,24 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
    contained in `main`.
 4. One living ledger (`docs/consolidation/`), not a new dated file per run.
 
+## 3a. Progress log
+
+- 2026-11-18 Phase 0: #130 diagnosed (orphaned runs, owner deletes them).
+- 2026-11-18 Phase 1: #78, #79 and #80 closed as already on `main`. Branch
+  archiving and deletion is scripted in
+  `scripts/consolidation/phase1-archive-and-prune.sh` (65 SHA-pinned branches,
+  dry run clean). The owner runs it, because this session can push only its
+  own branch. `chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111`
+  is kept for now, because it is the base of open PR #102.
+- 2026-11-18 Phase 2: trunk merged on this branch (PR #132). Two conflicts were
+  adjacent insertions, so both sides were kept. Results on Node 24.22.3:
+  1,323/1,324 pass (1 skip needs Foundry's `cast`), and typecheck, build
+  policy 28/28, specs, boundaries and build all pass.
+- 2026-11-18 Phase 3: no separate work needed. All 264 test lines added by the
+  D9 stack (`d9-restored-race-20261111`) are already in the trunk, and all 9
+  D9 regression tests pass on the merged head. #69–#75 and #91–#93 can close
+  when PR #132 merges.
+
 ## 4. Expected end state
 
 | | Now | After Phase 5 |
