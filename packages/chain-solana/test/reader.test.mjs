@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createTradeAuthority } from '../../domain/src/authority.ts';
-import { SolanaFailure } from '../src/codec.ts';
+import { decodeBase64, SolanaFailure } from '../src/codec.ts';
 import { MAX_RPC_READS, payoutRegressed, SolanaChainReader } from '../src/reader.ts';
 import {
   account,
@@ -516,8 +516,32 @@ test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
 
 // Spec §8: base64 caps are checked before decoding. Every account also has an exact-length check after decoding,
 // so only cost tells the two apart: an uncapped reader would regex-scan, allocate and decode ~48 MB first.
+/**
+ * Observes every regular-expression scan (RegExp.prototype.test and replace go through `exec`), so the test can
+ * prove that an over-cap string is refused by its length alone: decodeBase64 scans with a regex before it
+ * allocates, so no scan of the huge string also means no decode and no allocation. The earlier version asserted a
+ * wall-clock bound (< 250 ms per case, setup included), which failed under CPU contention (--test-concurrency=4,
+ * reproduced 4/4 with busy loops beside it) although the reader behaved correctly.
+ */
+async function withRegexScans(work) {
+  const scanned = [], exec = RegExp.prototype.exec;
+  RegExp.prototype.exec = function spy(input) {
+    scanned.push(String(input).length);
+    return exec.call(this, input);
+  };
+  try {
+    await work();
+  } finally {
+    RegExp.prototype.exec = exec;
+  }
+  return scanned;
+}
+
 test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   const huge = 'A'.repeat(64 * 1024 * 1024);
+  // Control: the spy does see the decoder's scan of an in-cap string of the same shape.
+  const probe = 'A'.repeat(1_398_164);
+  assert.ok((await withRegexScans(async () => decodeBase64(probe, probe.length))).includes(probe.length));
   // Every account index the reader visits, per kind; `absent` drops the escrow so index 4 is the bare vault check.
   const cases = [
     ...[0, 1, 2, 3, 4].map(index => ['native', index, false]),
@@ -526,21 +550,23 @@ test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   ];
   for (const [kind, index, absent] of cases) {
     let world;
-    const started = performance.now();
-    await failsWith('INTEGRITY_FAILURE', kind, {
-      mutate: captured => {
-        world = captured;
-        if (absent) setAccount(world, escrowOf(world), null);
-      },
-      handle: input => {
-        if (input.method !== 'getMultipleAccounts') return undefined;
-        const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
-        value[index] = { ...value[index], data: [huge, 'base64'] };
-        return { context: { slot: SLOT }, value };
-      },
-    });
+    const scanned = await withRegexScans(() =>
+      failsWith('INTEGRITY_FAILURE', kind, {
+        mutate: captured => {
+          world = captured;
+          if (absent) setAccount(world, escrowOf(world), null);
+        },
+        handle: input => {
+          if (input.method !== 'getMultipleAccounts') return undefined;
+          const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
+          value[index] = { ...value[index], data: [huge, 'base64'] };
+          return { context: { slot: SLOT }, value };
+        },
+      }),
+    );
     const label = `${kind}${absent ? ' (absent escrow)' : ''} account ${index}`;
-    assert.ok(performance.now() - started < 250, `${label} over-cap data must be refused before decoding`);
+    assert.ok(scanned.length > 0, `${label}: the spy observed the read`);
+    assert.ok(scanned.every(length => length < huge.length), `${label} over-cap data must be refused before decoding`);
   }
 });
 
