@@ -25,6 +25,9 @@ import { createLocalNobleNostrProvider } from '../packages/nostr-crypto/index.ts
 import { createRelayPool, createAdEvent, createOrderBook, AD_KIND } from '../packages/relay/index.ts';
 import { matchesFilters } from '../packages/relay/src/nip01.ts';
 import { createRelayEventCrypto, createTermsExchange, adBookKey } from '../packages/exchange/index.ts';
+import { CandidatePeerReplayLedger } from '../packages/wallet/src/evm-peer-replay.ts';
+import { createEvmPeerAcceptancePort, parseCandidatePeerEnvelope } from '../packages/wallet/src/evm-peer-envelope.ts';
+import { unwrapGiftWrap } from '../packages/nostr-crypto/index.ts';
 import { createDurableTradeChat, encodeMessage } from '../packages/messaging/index.ts';
 import { EncryptedVaultService, EncryptedBackupService } from '../packages/storage/index.ts';
 import { VaultStorageError } from '../packages/storage/src/idb-vault-store.ts';
@@ -60,6 +63,16 @@ const store = {
 };
 const allowed = new Map(), parties = [], pools = [], brokers = [], clients = new Set(), historyProfiles = new Set(), journeyContexts = new Set(), journeyMethods = [], results=[];
 let anvil, relay, rpc, escrow, clock=0, sends=0, markers=0, chatMessages=0, chatReopens=0, chatRecoveries=0;
+const peerLedgers=[];let peerSignatures=0;
+/** Protocol v2 funding gate: both wallet bindings verified for exactly this trade, reciprocal keys, expected accounts. */
+function bothVerifiedAcceptances(exchange,sessionId,tradeId){
+  const view=exchange.acceptances(sessionId);
+  if(view===null||!view.bothVerified||view.state!=='accepted'||view.termsHash!==tradeId)return null;
+  const {seller,buyer}=view;
+  if(seller.termsHash!==tradeId||buyer.termsHash!==tradeId||seller.account!==addresses[0]||buyer.account!==addresses[1])return null;
+  if(seller.ownMessagingKey!==buyer.counterpartyMessagingKey||buyer.ownMessagingKey!==seller.counterpartyMessagingKey)return null;
+  return view;
+}
 const pass = name => { results.push(name); console.log(`ok - ${name}`); };
 const freePort = () => new Promise((done,reject)=>{const server=createServer();server.once('error',reject);server.listen(0,'127.0.0.1',()=>{const port=server.address().port;server.close(error=>error?reject(error):done(port));});});
 const mine = (count=1) => rpc('anvil_mine',[`0x${count.toString(16)}`]);
@@ -389,12 +402,111 @@ try{
   assert.equal(sends,4);assert.equal(markers,sends);
   assert.ok(journeyMethods.length>0&&journeyMethods.every(method=>['eth_chainId','eth_getBlockByNumber','eth_getCode','eth_call','eth_getLogs'].includes(method)),'journey ports perform native reads only');
   pass('altered bytes, replay, pre-accept preparation, changed call value and repeat funding are refused; every send had a durable marker');
-  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,journeyReads:journeyMethods.length,journeySendOrSignCalls:0,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
+
+  // ---- Protocol v2 (D1 Option B, opt-in): two wallet-signed acceptances; funding is gated on both being verified. ----
+  // Only the seller wallet sends transactions (fund/release); the buyer wallet only signs EIP-712 digests.
+  const v1Sends=sends,v2=[];
+  for(const [i,role] of ['seller','buyer'].entries()){
+    const key=await provider.generate(),eventCrypto=await createRelayEventCrypto(provider,key.secretKey);
+    const book=createOrderBook({nowSeconds:()=>clock,verifier:eventCrypto});
+    const vault=new EncryptedVaultService(store,crypto,{lifecycle:false}),vaultSession=val(await vault.create(PASS),'create replay ledger vault');
+    const holder={vault,ledger:new CandidatePeerReplayLedger(vault,vaultSession)};peerLedgers.push(holder);
+    const signer={async sign(request){assert.equal(request.account,addresses[i],`${role} wallet signs only for its own account`);peerSignatures++;return sign(KEYS[i],request.digest);}};
+    const peerAcceptance=createEvmPeerAcceptancePort({domain,replayLedger:holder.ledger,signer});
+    const exchange=createTermsExchange({provider,selfPublicKey:key.publicKey,ads:book,registry,hashTerms:reviewed=>evmTermsHash(domain,asTerms(reviewed)),now:()=>clock,protocolVersion:2,peerAcceptance});
+    const broker=makeBroker({coverage:'direct',mode:'ordinary',endpointURLs:relayFixture.endpointURLs}).broker;brokers.push(broker);
+    const pool=createRelayPool({broker,relays:relayFixture.relays,connect:relayFixture.connect,verifier:eventCrypto,timing:FAST,nowSeconds:()=>clock});pools.push(pool);
+    const party={secret:key.secretKey,pub:key.publicKey,eventCrypto,book,exchange,pool,role};parties.push(party);v2.push(party);
+  }
+  const [v2Seller,v2Buyer]=v2;
+  pass('protocol v2 parties use injected EOA peer-acceptance ports over encrypted replay ledgers on the same loopback relay');
+  const v2Order=async(index,acceptFor=600,duration=7200)=>{
+    clock=await now();
+    const orderId=sha(`canonical-exchange-v2-order-${index}`),agreement={v:1,orderId,revision:'1',fiatCurrency:'USD',fiatMinorUnits:'100',fiatScale:2,paymentInstructions:'SYNTHETIC private manual payment note. No fiat is sent.',capabilities:[],agreementSalt:sha(`v2-salt-${index}`)};
+    const terms={orderId,revision:'1',networkId:'local-evm',deploymentId:'escrow-local-v1',seller:addresses[0],buyer:addresses[1],assetKind:'native',asset:ZERO,amountBaseUnits:String(amount),privateAgreementHash:sha(encodePrivateAgreement(agreement)),capabilitiesHash:sha(encodeCapabilities([])),sellerNonce:sha(`canonical-exchange-v2-nonce-${index}`),acceptBeforeSeconds:String(clock+acceptFor),escrowExpirySeconds:String(clock+duration)};
+    const document=utf8.encode(JSON.stringify({format:TERMS_REVIEW_FORMAT,terms,privateAgreement:agreement}));
+    const tradeId=evmTermsHash(domain,asTerms(val(await reviewTermsBytes(registry,document),'v2 independent review'))),binding=bindingOf(tradeId);
+    const ad=await createAdEvent(v2Seller.eventCrypto,{app:'p2p-offramp',v:1,orderId,revision:1,networkId:'eip155:31337',assetId:'native',amountMin:String(amount),amountMax:String(amount),currency:'USD',railClass:'bank-transfer',expiresAtSeconds:String(clock+1800),maker:v2Seller.pub},clock);
+    assert.equal(v2Seller.book.ingest(ad),'accepted');val(await v2Seller.pool.publish(ad),'publish v2 advertisement');
+    assert.equal(v2Buyer.book.ingest((await pull(v2Buyer.pool,v2Buyer,AD_KIND)).find(event=>event.id===ad.id)),'accepted');
+    const take=val(await v2Buyer.exchange.take(adBookKey(v2Seller.pub,orderId),addresses[1],v2Buyer.secret),'v2 take');
+    assert.equal((await deliver(take,v2Buyer.pool,v2Seller,v2Seller.pool)).state,'taken');
+    return {orderId,terms,document,tradeId,binding,take};
+  };
+  { // v2 release: seller-first, both proofs verified on both sides, then and only then the canonical fund gate opens.
+    const order=await v2Order(0),{take,tradeId,binding,document}=order;
+    fail(await v2Buyer.exchange.accept(take.sessionId,document,v2Buyer.secret),'SELLER_FIRST');
+    const offered=val(await v2Seller.exchange.offer(take.sessionId,document,v2Seller.secret),'v2 offer');
+    const rumor=(await unwrapGiftWrap(offered.recipientWrap,v2Buyer.secret,provider,{now:clock})).rumor;
+    const carrier=parseCandidatePeerEnvelope(rumor.content);assert.equal(carrier?.v,2);assert.equal(carrier.body.acceptance.binding.role,'seller');
+    const got=await deliver(offered,v2Seller.pool,v2Buyer,v2Buyer.pool);assert.equal(got.state,'offered');assert.equal(got.termsHash,tradeId);
+    const half=v2Buyer.exchange.acceptances(take.sessionId);assert.equal(half.seller.account,addresses[0]);assert.equal(half.buyer,null);assert.equal(half.bothVerified,false);
+    assert.equal(bothVerifiedAcceptances(v2Seller.exchange,take.sessionId,tradeId),null,'seller binding alone never opens the funding gate');
+    const acceptedBytes=v2Buyer.exchange.session(take.sessionId).terms.bytes;assert.deepEqual(acceptedBytes,document);
+    const accepted=val(await v2Buyer.exchange.accept(take.sessionId,acceptedBytes,v2Buyer.secret),'v2 accept');
+    assert.equal((await deliver(accepted,v2Buyer.pool,v2Seller,v2Seller.pool)).state,'accepted');
+    fail(await v2Seller.exchange.receive(accepted.recipientWrap,v2Seller.secret),'DUPLICATE');
+    const gate=bothVerifiedAcceptances(v2Seller.exchange,take.sessionId,tradeId);assert.ok(gate,'both verified acceptances on the seller');
+    const buyerGate=bothVerifiedAcceptances(v2Buyer.exchange,take.sessionId,tradeId);assert.ok(buyerGate,'both verified acceptances on the buyer');
+    assert.equal(buyerGate.seller.bindingHash,gate.seller.bindingHash);assert.equal(buyerGate.buyer.bindingHash,gate.buyer.bindingHash);
+    assert.equal((await trade(tradeId)).state,'absent','two verified acceptances alone never fund escrow');
+    // Canonical gate: populated only from the seller exchange's exact accepted bytes AND both verified bindings.
+    const detached=val(await reviewTermsBytes(registry,v2Seller.exchange.session(take.sessionId).terms.bytes),'v2 accepted bytes re-review');
+    const acceptedTerms=asTerms(detached),acceptedDomain={chainId:detached.network.chainId,verifyingContract:detached.deployment.address};
+    assert.equal(evmTermsHash(acceptedDomain,acceptedTerms),tradeId);
+    const fund=escrowCallFor({action:'fund',domain:acceptedDomain,terms:acceptedTerms});
+    const input={binding,action:'fund',expectedEscrowState:fund.expectedEscrowState,call:fund.call};
+    assert.equal((await self.life.prepare(input)).ok,false,'no fund preparation before the gate is populated');
+    allowed.set(callKey(binding,'fund'),{call:fund.call,state:'absent',account:addresses[0],terms:acceptedTerms});
+    pass('v2 seller-first offer and buyer accept carry verified, durably admitted wallet bindings; the fund gate requires both');
+    const before=sends,prepared=val(await self.life.prepare(input),'prepare v2 fund');val(await self.life.submit(prepared),'send v2 fund');
+    assert.equal(sends,before+1);await mine(5);
+    assert.equal((await reconcileFinal(self,prepared.intentId)).escrowState,'funded');assert.equal(tradeMatchesTerms(await trade(tradeId),acceptedTerms),true);
+    const buyerBefore=BigInt(await rpc('eth_getBalance',[addresses[1],'latest']));
+    const release=escrowCallFor({action:'release',escrow,tradeId});allowed.set(callKey(binding,'release'),{call:release.call,state:'funded',account:addresses[0]});
+    const releasePrepared=val(await self.life.prepare({binding,action:'release',expectedEscrowState:'funded',call:release.call}),'prepare v2 release');
+    val(await self.life.submit(releasePrepared),'send v2 release');
+    assert.equal((await reconcileFinal(self,releasePrepared.intentId)).escrowState,'released');
+    assert.equal(BigInt(await rpc('eth_getBalance',[addresses[1],'latest'])),buyerBefore+amount,'release pays the buyer who signed the verified binding');
+    assert.equal(BigInt(await rpc('eth_getBalance',[escrow,'latest'])),0n);
+    assert.equal((await self.life.prepare(input)).ok,false,'settled v2 trade cannot fund twice');
+    // Cancel after acceptance stays impossible (no state-machine exit from accepted).
+    fail(await v2Seller.exchange.cancel(take.sessionId,'withdrawn',v2Seller.secret),'OUT_OF_ORDER');
+    acceptedBytes.fill(0);
+    pass('v2 both-verified gate -> canonical G12 fund -> native release by the seller wallet only');
+  }
+  { // v2 reject: the termsHash is durably tombstoned on both ledgers; no gate, no send, and no re-offer in a new session.
+    const before=sends,order=await v2Order(1),{take,tradeId,binding,document}=order;
+    const offered=val(await v2Seller.exchange.offer(take.sessionId,document,v2Seller.secret),'v2 offer to reject');
+    assert.equal((await deliver(offered,v2Seller.pool,v2Buyer,v2Buyer.pool)).state,'offered');
+    const rejected=val(await v2Buyer.exchange.reject(take.sessionId,'declined',v2Buyer.secret),'v2 reject');
+    assert.equal((await deliver(rejected,v2Buyer.pool,v2Seller,v2Seller.pool)).state,'rejected');
+    assert.equal(bothVerifiedAcceptances(v2Seller.exchange,take.sessionId,tradeId),null);
+    const fund=escrowCallFor({action:'fund',domain,terms:order.terms});
+    assert.equal((await self.life.prepare({binding,action:'fund',expectedEscrowState:fund.expectedEscrowState,call:fund.call})).ok,false,'rejected v2 terms never reach preparation');
+    const retake=val(await v2Buyer.exchange.take(adBookKey(v2Seller.pub,order.orderId),addresses[1],v2Buyer.secret),'v2 re-take after reject');
+    assert.equal((await deliver(retake,v2Buyer.pool,v2Seller,v2Seller.pool)).state,'taken');
+    const promptsBefore=peerSignatures;
+    fail(await v2Seller.exchange.offer(retake.sessionId,document,v2Seller.secret),'REPLAY_REFUSED');
+    assert.equal(peerSignatures,promptsBefore,'a tombstoned re-offer is refused before the seller wallet is asked to sign');
+    // Seller-first: with the re-offer refused there is no verified seller binding, so the buyer cannot accept.
+    fail(await v2Buyer.exchange.accept(retake.sessionId,document,v2Buyer.secret),'SELLER_FIRST');
+    assert.equal(sends,before,'tombstoned v2 terms never call the wallet send method');
+    assert.equal((await trade(tradeId)).state,'absent');
+    document.fill(0);
+    pass('v2 reject durably tombstones the termsHash: re-offer in a new session is refused and nothing is prepared or sent');
+  }
+  const v2Wire=JSON.stringify(relay.events);
+  for(const privateText of ['termsSignature','bindingSignature','PeerAcceptance','ownMessagingKey',addresses[0],addresses[1],'SYNTHETIC private manual payment note'])assert.equal(v2Wire.includes(privateText),false,'relay sees no v2 proof plaintext');
+  assert.equal(sends,v1Sends+2);assert.equal(markers,sends);assert.equal(peerSignatures,6,'3 sent v2 proofs (offer, accept, offer) x (TradeTerms + PeerAcceptance); the refused re-offer signs nothing');
+  pass('v2 wallet proofs travel only inside NIP-17 ciphertext; only the two seller transactions were sent');
+  console.log(JSON.stringify({fixture:'canonical-exchange-native-escrow-loopback',checks:results.length,negotiatedOrders:cases.length,settledOrders:2,submissions:sends,durableMarkers:markers,chatMessages,chatReopens,chatRecoveries,journeyReads:journeyMethods.length,journeySendOrSignCalls:0,realNostrCrypto:true,canonicalRelay:true,canonicalLifecycle:true,canonicalEscrow:true,exactReviewedBytes:true,durableAuthenticatedChat:true,unknownFreshKeyRecovery:true,freshFundingWindow:true,v2NegotiatedOrders:2,v2SettledOrders:1,v2PeerSignatures:peerSignatures,v2BothVerifiedFundingGate:true,v2DurableTombstone:true,externalNetwork:false,tradingEnabled:false,releaseAcceptance:false}));
 } finally {
   for(const context of [...journeyContexts])context.close();
   for(const owner of [...historyProfiles])owner.close();
   for(const self of [...clients])self.close();
   for(const party of parties){party.exchange.close();party.eventCrypto.dispose();party.secret.fill(0);}
+  for(const holder of peerLedgers){holder.ledger.dispose();holder.vault.dispose();}
   pools.forEach(pool=>pool.close());brokers.forEach(broker=>broker.dispose());
   try { await relay?.stop(); }
   finally {

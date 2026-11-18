@@ -123,3 +123,12 @@ test('proof and trusted-context accessors or revoked proxies never escape the fi
     assert.throws(()=>verifyEoaPeerAcceptance(f.domain,f.terms,{...f.expected,nowSeconds},f.proof),error=>error.code==='INVALID_INPUT');
   assert.equal(touched,0);
 });
+test('frozen D1 PeerAcceptance v1 vectors match the README sha256 and the standalone viem generator byte-for-byte',async()=>{
+  const { createHash } = await import('node:crypto');
+  const raw=await readFile(new URL('./fixtures/peer-acceptance-v1.json',import.meta.url));
+  const readme=await readFile(new URL('./fixtures/peer-acceptance-v1-README.md',import.meta.url),'utf8');
+  const recorded=/Frozen JSON SHA-256: `([0-9a-f]{64})`/.exec(readme)?.[1];
+  assert.equal(createHash('sha256').update(raw).digest('hex'),recorded);
+  const { generatePeerAcceptanceV1 }=await import('./fixtures/peer-acceptance-v1-generate.mjs');
+  assert.equal(await generatePeerAcceptanceV1(),raw.toString('utf8'));
+});

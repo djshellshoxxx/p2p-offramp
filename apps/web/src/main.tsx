@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { startAppServices, type AppServices } from './app-services.ts';
 import { App } from './ui/App.tsx';
@@ -64,4 +64,11 @@ function Bootstrap() {
 
 const host = document.getElementById('root');
 if (!host) throw new Error('The local application shell could not start.');
-createRoot(host).render(<Bootstrap />);
+/**
+ * `__P2P_LOCALNET__` is true only in the library-only localnet build (apps/web/scripts/build.mjs with an explicit localnet
+ * option). Everywhere else the bundler removes this branch and the build policy refuses apps/web/src/localnet/**.
+ */
+if (__P2P_LOCALNET__) {
+  const LocalnetRoot = lazy(async () => ({ default: (await import('./localnet/LocalnetRoot.tsx')).LocalnetRoot }));
+  createRoot(host).render(<Suspense fallback={null}><LocalnetRoot /></Suspense>);
+} else createRoot(host).render(<Bootstrap />);

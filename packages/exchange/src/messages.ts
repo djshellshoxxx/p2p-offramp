@@ -48,12 +48,12 @@ export function parseAdAddress(value: unknown): { readonly author: string; reado
 export function adBookKey(author: string, orderId: string): string { return `${author}:${AD_D_PREFIX}${orderId}`; }
 
 /** Exact rumor tags for an envelope, in order. The receiver requires exactly these. */
-export function envelopeTags(envelope: ExchangeEnvelopeV1): string[][] {
+export function envelopeTags(envelope: ExchangeEnvelopeV1 | ExchangeEnvelopeV2): string[][] {
   const tags = [['p', envelope.recipient], ['a', envelope.ad], ['t', EXCHANGE_TOPIC]];
   if (envelope.termsHash !== null) tags.push(['trade', envelope.termsHash]);
   return tags;
 }
-export function encodeEnvelope(envelope: ExchangeEnvelopeV1): string {
+export function encodeEnvelope(envelope: ExchangeEnvelopeV1 | ExchangeEnvelopeV2): string {
   const { v, type, ad, orderId, sender, recipient, nonce, expiresAtSeconds, termsHash, body } = envelope;
   return JSON.stringify({ v, type, ad, orderId, sender, recipient, nonce, expiresAtSeconds, termsHash, body });
 }
@@ -93,4 +93,72 @@ export function parseEnvelope(text: string): ExchangeEnvelopeV1 | null {
       break;
   }
   return Object.freeze({ v: 1, type: kind, ad: ad as string, orderId: orderId as string, sender, recipient, nonce, expiresAtSeconds, termsHash: termsHash as string | null, body: Object.freeze({ ...body }) });
+}
+
+/**
+ * Protocol version 2 (D1 Option B, opt-in). Only `terms-offer` and `terms-accept` change: each carries the sender's
+ * wallet proof `{binding, termsSignature, bindingSignature}` (PeerAcceptance binding plus the TradeTerms and binding
+ * signatures). take-request, terms-reject and cancel keep the exact v1 envelope in a v2 session. The acceptance is
+ * shape-checked here only; its contents are verified by the injected PeerAcceptancePort, never trusted from the wire.
+ */
+export const PROTOCOL_V2_TYPES = Object.freeze(['terms-offer', 'terms-accept'] as const);
+export type MessageTypeV2 = typeof PROTOCOL_V2_TYPES[number];
+/** Explicit per-message v2 byte budget (whole envelope JSON, UTF-8). Equal to the v1 cap; JSON escaping counts. */
+export const MAX_ENVELOPE_V2_BYTES = 24_576;
+export interface PeerAcceptanceWire {
+  /** Exact PeerAcceptance binding fields; validated by the injected verifier, not here. */
+  readonly binding: object;
+  /** Lowercase 0x-prefixed hex signatures. */
+  readonly termsSignature: string; readonly bindingSignature: string;
+}
+export interface ExchangeEnvelopeV2 {
+  readonly v: 2; readonly type: MessageTypeV2;
+  readonly ad: string; readonly orderId: string; readonly sender: string; readonly recipient: string;
+  readonly nonce: string; readonly expiresAtSeconds: string;
+  /** Always present: both v2 messages are about reviewed terms. */
+  readonly termsHash: string;
+  /** terms-offer {terms, acceptance}; terms-accept {revision, acceptance}. */
+  readonly body: Readonly<Record<string, unknown>>;
+}
+export type ExchangeEnvelope = ExchangeEnvelopeV1 | ExchangeEnvelopeV2;
+const SIGNATURE_HEX = /^0x(?:[0-9a-f]{2})+$/;
+const isPlainObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
+
+/** Strict parse of a v2 envelope. Returns null for any deviation, for v1 content and for anything over the v2 cap. */
+export function parseEnvelopeV2(text: string): ExchangeEnvelopeV2 | null {
+  let raw: unknown;
+  try { raw = parseEventJson(text, MAX_ENVELOPE_V2_BYTES, 4); } catch { return null; }
+  if (!exactKeys(raw, ENVELOPE_KEYS)) return null;
+  const { v, type, ad, orderId, sender, recipient, nonce, expiresAtSeconds, termsHash, body } = raw;
+  if (v !== 2 || !PROTOCOL_V2_TYPES.includes(type as MessageTypeV2)) return null;
+  const address = parseAdAddress(ad);
+  if (address === null || orderId !== address.orderId || !isHex64(sender) || !isHex64(recipient) || sender === recipient || !isHex64(nonce)) return null;
+  if (typeof expiresAtSeconds !== 'string' || !SECONDS.test(expiresAtSeconds) || !isHex64(termsHash)) return null;
+  const kind = type as MessageTypeV2;
+  // The advert author is the seller: it sends the offer and receives the accept.
+  if (address.author !== (kind === 'terms-offer' ? sender : recipient)) return null;
+  if (kind === 'terms-offer') {
+    if (!exactKeys(body, ['terms', 'acceptance']) || typeof body.terms !== 'string' || body.terms.length === 0) return null;
+  } else if (!exactKeys(body, ['revision', 'acceptance']) || typeof body.revision !== 'string' || !REVISION.test(body.revision)) return null;
+  const acceptance = body.acceptance;
+  if (!exactKeys(acceptance, ['binding', 'termsSignature', 'bindingSignature']) || !isPlainObject(acceptance.binding) ||
+    typeof acceptance.termsSignature !== 'string' || !SIGNATURE_HEX.test(acceptance.termsSignature) ||
+    typeof acceptance.bindingSignature !== 'string' || !SIGNATURE_HEX.test(acceptance.bindingSignature)) return null;
+  const wire: PeerAcceptanceWire = Object.freeze({ binding: Object.freeze({ ...acceptance.binding }),
+    termsSignature: acceptance.termsSignature, bindingSignature: acceptance.bindingSignature });
+  const stableBody = kind === 'terms-offer' ? { terms: body.terms, acceptance: wire } : { revision: body.revision, acceptance: wire };
+  return Object.freeze({ v: 2, type: kind, ad: ad as string, orderId: orderId as string, sender, recipient, nonce, expiresAtSeconds,
+    termsHash, body: Object.freeze(stableBody) });
+}
+/**
+ * Version dispatch for a protocol-v2 session: v1 content goes through the unchanged v1 parser, v2 content through the
+ * v2 parser; anything else is null. A v1 session keeps calling parseEnvelope only, so it never admits v2.
+ */
+export function parseVersionedEnvelope(text: string): ExchangeEnvelope | null {
+  let raw: unknown;
+  try { raw = parseEventJson(text, MAX_ENVELOPE_V2_BYTES, 4); } catch { return null; }
+  if (!isPlainObject(raw) || !Object.hasOwn(raw, 'v')) return null;
+  if (raw.v === 1) return parseEnvelope(text);
+  if (raw.v === 2) return parseEnvelopeV2(text);
+  return null;
 }

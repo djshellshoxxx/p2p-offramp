@@ -9,6 +9,8 @@
  */
 import { createCoreError, createOperationId, type CoreErrorCode, type CoreResult, type RegistryService } from '../../domain/index.ts';
 import { evmTermsHash, snapshotEvmDomain, snapshotEvmTerms, verifyEoaSignature, type EvmDomainInput, type EvmTermsInput } from './evm-terms.ts';
+import { intentData } from '../../schemas/index.ts';
+import { peerAcceptanceHash, peerAcceptanceTypedData, snapshotPeerAcceptance, type PeerAcceptanceV1 } from './evm-peer-acceptance.ts';
 
 export interface Eip1193Provider {
   request(args: { readonly method: string; readonly params?: readonly unknown[] }): Promise<unknown>;
@@ -45,6 +47,23 @@ const TERMS_FIELDS = [['v', 'uint8'], ['orderId', 'bytes32'], ['revision', 'uint
   ['seller', 'address'], ['buyer', 'address'], ['assetKind', 'uint8'], ['asset', 'address'], ['amountBaseUnits', 'uint256'],
   ['privateAgreementHash', 'bytes32'], ['capabilitiesHash', 'bytes32'], ['sellerNonce', 'bytes32'], ['acceptBeforeSeconds', 'uint64'],
   ['escrowExpirySeconds', 'uint64'], ['mode', 'uint8']] as const;
+
+/** Local inputs for a D1 Option B binding. Domain, termsHash and account are never caller-supplied: they are
+ * derived from the adapter's registry, the terms and the session. nowSeconds is the caller's trusted clock. */
+export interface PeerAcceptanceSigningRequest {
+  readonly role: 'seller' | 'buyer'; readonly ownMessagingKey: string; readonly counterpartyMessagingKey: string;
+  readonly notAfterSeconds: string; readonly nowSeconds: string;
+}
+/** With the same role's signTerms signature this is exactly the CandidateEoaPeerProof
+ * { binding, termsSignature, bindingSignature } that verifyEoaPeerAcceptance(domain, terms, ...) accepts. */
+export interface SignedPeerAcceptance {
+  readonly domain: Readonly<EvmDomainInput>; readonly termsHash: string; readonly binding: Readonly<PeerAcceptanceV1>;
+  readonly bindingHash: string; readonly bindingSignature: Uint8Array;
+}
+const PEER_REQUEST_FIELDS = ['role', 'ownMessagingKey', 'counterpartyMessagingKey', 'notAfterSeconds', 'nowSeconds'] as const;
+const U64 = (1n << 64n) - 1n;
+const seconds = (value: unknown): bigint | null =>
+  typeof value === 'string' && /^(?:0|[1-9][0-9]{0,19})$/.test(value) && BigInt(value) <= U64 ? BigInt(value) : null;
 
 export class EvmWalletAdapter {
   readonly #provider: Eip1193Provider;
@@ -191,6 +210,81 @@ export class EvmWalletAdapter {
     try { if (!verifyEoaSignature(digest, signature, session.account)) return failure('INTEGRITY_FAILURE'); }
     catch { return failure('INTEGRITY_FAILURE'); }
     return Object.freeze({ ok: true, value: signature });
+  }
+  /**
+   * D1 Option B candidate PeerAcceptance binding for `role`, modelled on signTerms. The EIP-712 domain is rebuilt
+   * from this adapter's registry deployment for terms.networkId/deploymentId (never from caller fields); termsHash
+   * is computed here; account must be terms[role] and the session account. Refuses equal or invalid messaging keys
+   * and an effective deadline min(notAfterSeconds, acceptBeforeSeconds) at or before nowSeconds. Re-checks
+   * account/chain/generation before and after the single eth_signTypedData_v4 prompt, and verifies the returned
+   * signature offline (65 bytes, v 27/28, low-s, recovers to the account) before returning it.
+   */
+  async signPeerAcceptance(session: WalletSession, terms: EvmTermsInput, request: PeerAcceptanceSigningRequest,
+    signal?: AbortSignal): Promise<CoreResult<Readonly<SignedPeerAcceptance>>> {
+    if (!this.#current(session)) return failure('LOCKED');
+    if (signal?.aborted) return failure('CANCELLED');
+    let stableTerms: Readonly<EvmTermsInput>, raw: Record<string, unknown>;
+    try {
+      // Snapshot caller-owned data before the first await; no foreign getters are invoked.
+      stableTerms = snapshotEvmTerms(terms);
+      raw = intentData(request, PEER_REQUEST_FIELDS);
+    } catch { return failure('INVALID_INPUT'); }
+    const role = raw.role, now = seconds(raw.nowSeconds);
+    if ((role !== 'seller' && role !== 'buyer') || now === null) return failure('INVALID_INPUT');
+    const network = this.#registry.network(stableTerms.networkId);
+    const deployment = this.#registry.deployment(stableTerms.networkId, stableTerms.deploymentId);
+    if (!network || !deployment || network.id !== session.networkId || network.chain !== 'evm') return failure('UNSUPPORTED_PROVIDER');
+    const asset = stableTerms.assetKind === 'native' ? network.assets.find(value => value.kind === 'native')
+      : network.assets.find(value => value.kind === 'erc20' && value.address === stableTerms.asset);
+    if (!asset || !deployment.supportedAssetIds.includes(asset.id)) return failure('UNSUPPORTED_PROVIDER');
+    let domain: Readonly<EvmDomainInput>, termsHash: string, binding: Readonly<PeerAcceptanceV1>, bindingHash: string, typedData: string;
+    try {
+      domain = snapshotEvmDomain({ chainId: network.chainIdentity, verifyingContract: deployment.address });
+      termsHash = evmTermsHash(domain, stableTerms);
+      binding = snapshotPeerAcceptance({ v: 1, termsHash, role, account: stableTerms[role], ownMessagingKey: raw.ownMessagingKey,
+        counterpartyMessagingKey: raw.counterpartyMessagingKey, notAfterSeconds: raw.notAfterSeconds });
+      bindingHash = peerAcceptanceHash(domain, binding);
+      typedData = peerAcceptanceTypedData(domain, binding);
+    } catch { return failure('INVALID_INPUT'); }
+    if (binding.account !== session.account) return failure('UNAUTHORIZED');
+    const acceptBefore = BigInt(stableTerms.acceptBeforeSeconds), notAfter = BigInt(binding.notAfterSeconds);
+    if (now >= (notAfter < acceptBefore ? notAfter : acceptBefore)) return failure('EXPIRED');
+    const generation = session.generation;
+    try {
+      // Re-query immediately before the prompt: a changed account/chain must never reach the wallet.
+      const accounts = await this.#provider.request({ method: 'eth_accounts' });
+      if (signal?.aborted) return failure('CANCELLED');
+      if (!this.#current(session)) return failure('LOCKED');
+      const selected = selectedAccount(accounts);
+      if (signal?.aborted) return failure('CANCELLED');
+      if (!this.#current(session)) return failure('LOCKED');
+      if (selected !== session.account) { this.#invalidate('accounts-changed'); return failure('LOCKED'); }
+      const chainId = await this.#chainId();
+      if (!this.#current(session) || generation !== this.#generation) return failure('LOCKED');
+      if (chainId !== network.chainIdentity) { this.#invalidate('chain-changed'); return failure('WRONG_CHAIN'); }
+    } catch { return failure('UNAVAILABLE'); }
+    if (signal?.aborted) return failure('CANCELLED');
+    let reply: unknown;
+    try {
+      const send = this.#provider.request;
+      if (signal?.aborted) return failure('CANCELLED');
+      if (!this.#current(session)) return failure('LOCKED');
+      reply = await send.call(this.#provider, { method: 'eth_signTypedData_v4', params: [session.account, typedData] });
+    }
+    catch (error) {
+      if (signal?.aborted || !this.#current(session)) return failure(signal?.aborted ? 'CANCELLED' : 'LOCKED');
+      const code = providerCode(error);
+      // No downgrade: an unsupported typed-data method fails closed rather than trying another signing method.
+      return failure(code === 4001 ? 'USER_REJECTED' : code === 4200 ? 'UNSUPPORTED_PROVIDER' : code === 4100 ? 'UNAUTHORIZED' : 'UNAVAILABLE');
+    }
+    // Late results after cancellation or a generation change are discarded, never published.
+    if (signal?.aborted) return failure('CANCELLED');
+    if (!this.#current(session) || generation !== this.#generation) return failure('LOCKED');
+    if (typeof reply !== 'string' || !/^0x[0-9a-f]{130}$/i.test(reply)) return failure('INTEGRITY_FAILURE');
+    const bindingSignature = Uint8Array.from(reply.slice(2).match(/../g)!, pair => parseInt(pair, 16));
+    try { if (!verifyEoaSignature(bindingHash, bindingSignature, session.account)) return failure('INTEGRITY_FAILURE'); }
+    catch { return failure('INTEGRITY_FAILURE'); }
+    return Object.freeze({ ok: true, value: Object.freeze({ domain, termsHash, binding, bindingHash, bindingSignature }) });
   }
   subscribe(listener: (event: WalletEvent) => void): () => void {
     if (typeof listener !== 'function' || this.#disposed) return () => undefined;
