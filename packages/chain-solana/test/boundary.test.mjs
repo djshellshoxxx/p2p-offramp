@@ -17,6 +17,7 @@ test('src-has-no-io-or-forbidden-apis', () => {
     'instructions.ts',
     'layout.ts',
     'reader.ts',
+    'settlement.ts',
     'window.ts',
   ]);
   for (const [name, text] of sources) {

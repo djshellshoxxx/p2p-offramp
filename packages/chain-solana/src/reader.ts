@@ -43,10 +43,11 @@ export type NativeCustody = {
   readonly rentExemptMinimum: string | null;
   readonly surplus: string | null; readonly payoutBlockedBy: readonly ('rent-shortfall' | 'rent-unknown')[];
 };
+/** A frozen vault blocks only the payout: release and refund change escrow state and never touch the vault. */
 export type SplCustody = {
   readonly kind: 'spl'; readonly vault: string; readonly vaultAmount: string; readonly principalHeld: string;
   readonly surplus: string; readonly vaultFrozen: boolean; readonly mintDecimals: number;
-  readonly mintFreezeAuthority: string | null;
+  readonly mintFreezeAuthority: string | null; readonly payoutBlockedBy: readonly 'vault-frozen'[];
 };
 export interface SolanaEscrowSnapshot {
   readonly observation: ChainObservation; readonly live: SolanaLiveAnchor; readonly escrowAddress: string;
@@ -202,10 +203,12 @@ function splCustody(
   const vault = decodeTokenAccount(present(vaultEntry, CAP.token, SPL_PROGRAM_ID).data);
   const principal = escrow.paidOut ? 0n : BigInt(escrow.amountBaseUnits);
   if (vault.mint !== escrow.mint || vault.owner !== trade.escrow.address || vault.amount < principal) return fail();
+  // Like a rent shortfall, a frozen vault is a blocker only while a payout is still to happen.
+  const blockedBy: 'vault-frozen'[] = vault.frozen && !escrow.paidOut ? ['vault-frozen'] : [];
   return {
     kind: 'spl', vault: vaultAddress, vaultAmount: vault.amount.toString(), principalHeld: principal.toString(),
     surplus: (vault.amount - principal).toString(), vaultFrozen: vault.frozen, mintDecimals: mint.decimals,
-    mintFreezeAuthority: mint.freezeAuthority,
+    mintFreezeAuthority: mint.freezeAuthority, payoutBlockedBy: blockedBy,
   };
 }
 
@@ -214,6 +217,11 @@ function payoutOf(escrow: EscrowAccountV1 | null): SolanaEscrowSnapshot['payout'
   return escrow.paidOut ? 'complete' : 'pending';
 }
 function counter(value: unknown): number { return safeInt(value, 'INVALID_INPUT'); }
+
+/** Only snapshots produced by `read()` carry the brand; the settlement planner refuses copies. */
+const SNAPSHOTS = new WeakSet<object>();
+export const isSolanaEscrowSnapshot = (value: unknown): value is SolanaEscrowSnapshot =>
+  typeof value === 'object' && value !== null && SNAPSHOTS.has(value);
 
 export class SolanaChainReader {
   readonly #options: SolanaReaderOptions;
@@ -235,11 +243,23 @@ export class SolanaChainReader {
     const operationId = createOperationId();
     const failure = (code: CoreErrorCode): CoreResult<never> =>
       ({ ok: false, error: createCoreError(code, { operationId, readOnly: true }) });
-    if (this.#disposed || external?.aborted) return Promise.resolve(failure('CANCELLED'));
+    if (this.#disposed) return Promise.resolve(failure('CANCELLED'));
+    // The caller's signal is checked, and its listener attached, before a job slot is reserved: a value that is
+    // not an AbortSignal (or one whose methods throw) is INVALID_INPUT and can never leak a slot.
+    const invalid = () => Promise.resolve(failure('INVALID_INPUT'));
+    let aborted: boolean;
+    try {
+      if (external !== undefined && !(external instanceof AbortSignal)) return invalid();
+      aborted = external?.aborted === true;
+    } catch { return invalid(); }
+    if (aborted) return Promise.resolve(failure('CANCELLED'));
     if (this.#jobs.size >= MAX_RPC_READS) return Promise.resolve(failure('LIMIT_EXCEEDED'));
-    const controller = new AbortController(); this.#jobs.add(controller);
+    const controller = new AbortController();
+    const onExternal = () => controller.abort();
+    try { external?.addEventListener('abort', onExternal, { once: true }); } catch { return invalid(); }
+    const detach = () => { try { external?.removeEventListener('abort', onExternal); } catch { /* caller-owned */ } };
+    this.#jobs.add(controller);
     let abortCode: CoreErrorCode = 'CANCELLED';
-    const onExternal = () => controller.abort(); external?.addEventListener('abort', onExternal, { once: true });
     const timer = setTimeout(() => { abortCode = 'TIMEOUT'; controller.abort(); }, this.#timeoutMs);
     const guard = () => { if (this.#disposed || controller.signal.aborted) fail(abortCode); };
     const context: Context = {
@@ -256,17 +276,17 @@ export class SolanaChainReader {
       },
     };
     let onAbort!: () => void;
-    const aborted = new Promise<CoreResult<T>>(resolve => {
+    const cancelled = new Promise<CoreResult<T>>(resolve => {
       onAbort = () => resolve(failure(abortCode)); controller.signal.addEventListener('abort', onAbort, { once: true });
     });
     const physical = Promise.resolve().then(() => { guard(); return work(context); })
       .then(value => { guard(); return { ok: true as const, value }; })
       .catch((error: unknown) => failure(failureCode(error, 'UNAVAILABLE')))
       .finally(() => {
-        this.#jobs.delete(controller); clearTimeout(timer); external?.removeEventListener('abort', onExternal);
+        this.#jobs.delete(controller); clearTimeout(timer); detach();
       });
-    return Promise.race([physical, aborted]).finally(() => {
-      controller.signal.removeEventListener('abort', onAbort); external?.removeEventListener('abort', onExternal);
+    return Promise.race([physical, cancelled]).finally(() => {
+      controller.signal.removeEventListener('abort', onAbort); detach();
     });
   }
 
@@ -327,24 +347,24 @@ export class SolanaChainReader {
         binding: trade.binding, generation, requestSequence, anchor: { height: live.height, hash: live.hash },
         state: classified.escrow?.state ?? 'absent', finality: 'finalized', observedAt,
       };
-      return deepFreeze({
+      const snapshot: SolanaEscrowSnapshot = deepFreeze({
         observation, live, escrowAddress: trade.escrow.address, occupant: classified.occupant,
         escrow: classified.escrow, payout: payoutOf(classified.escrow), custody,
       });
+      SNAPSHOTS.add(snapshot);
+      return snapshot;
     });
   }
 
-  /** G08 port. A funded trade whose vault is frozen cannot settle normally: CONFLICT, not a reorg. */
+  /**
+   * G08 port: the finalized observation only. A frozen vault is not a CONFLICT: chain state is reported as it is
+   * (release and refund stay possible), and the payout block is visible in `read()` as `payoutBlockedBy`.
+   */
   async readValidated(
     binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput,
   ): Promise<CoreResult<ChainObservation>> {
     const result = await this.read(binding, request, terms);
-    if (!result.ok) return result;
-    const { custody, observation } = result.value;
-    if (custody?.kind === 'spl' && custody.vaultFrozen && observation.state === 'funded') {
-      return { ok: false, error: createCoreError('CONFLICT', { operationId: createOperationId(), readOnly: true }) };
-    }
-    return { ok: true, value: observation };
+    return result.ok ? { ok: true, value: result.value.observation } : result;
   }
 
   dispose(): void {

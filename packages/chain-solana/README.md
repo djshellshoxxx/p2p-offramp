@@ -14,6 +14,8 @@ not approve any network, deployment or registry entry.
 - `SolanaChainReader`: `validateLive(networkId, deploymentId, signal?)`, `read(binding, request, terms)` (a snapshot
   with escrow, custody and payout), `readValidated(binding, request, terms)` (only the `ChainObservation`, for G08:
   `(b, r) => reader.readValidated(b, r, terms)`), and `dispose()`. `payoutRegressed(previous, next)`.
+  `isSolanaEscrowSnapshot(value)` is true only for a snapshot that `read()` returned.
+- `nextSettlementStep(snapshot, { role, chainTime, releaseMargin })` plans the one next instruction (see below).
 - `buildFundNative`, `buildFundSpl(trade, sellerTokenAccount)`, `buildRelease`, `buildRefund`,
   `buildPayout(trade, 'released' | 'refunded')` return `{ programId, accounts, data }`. They make no message,
   blockhash, fee payer or System instruction.
@@ -39,11 +41,44 @@ not approve any network, deployment or registry entry.
 - The escrow at the PDA must be absent, a System pre-init donation, or a 222-byte EscrowV1 that matches every term.
   A foreign `terms_hash` gives CONFLICT. Native custody is rent-aware, and a threshold other than 1.0 or 2.0 gives
   `rent-unknown`. The SPL vault must have no delegate and no close authority, must not be native, and must hold at
-  least the principal. `readValidated` returns CONFLICT for a funded trade whose vault is frozen.
+  least the principal. A frozen vault is not a CONFLICT: the chain state is reported as it is, because release and
+  refund change state only and stay possible. Only the payout is blocked, shown as `SplCustody.payoutBlockedBy:
+  ['vault-frozen']` while a payout is still to happen (`vaultFrozen` stays as the raw flag).
 - Responses are read only through own data descriptors, and base64 is capped before decoding. Provider
   rejections give UNAVAILABLE, and no provider detail is kept. At most 4 jobs run at once. The timeout is 1..60,000
-  ms (default 10,000). Abort, timeout and dispose free a slot only when the physical request settles.
+  ms (default 10,000). Abort, timeout and dispose free a slot only when the physical request settles. A caller
+  signal that is not a usable `AbortSignal` gives INVALID_INPUT before a slot is reserved, so it cannot leak one.
 - Native amounts above 2^53-1 give LIMIT_EXCEEDED. Network ids must not contain `:`.
+
+## Settlement planner (`src/settlement.ts`)
+
+`nextSettlementStep(snapshot, { role: 'seller' | 'buyer' | 'third-party', chainTime, releaseMargin })` is pure
+(no RPC, clock or memory) and returns a frozen `{ action, reason, outcome? }` inside a `CoreResult`. `action` is
+`release`, `refund`, `payout`, `wait` or `none`; `reason` is one of the fixed `SETTLEMENT_REASONS`; `outcome`
+(`released` | `refunded`) is present only for `payout` and feeds `buildPayout` unchanged.
+
+| Finalized snapshot | Step |
+| --- | --- |
+| absent (incl. a System pre-init donation) | `none` / `escrow-absent` |
+| payout complete | `none` / `payout-complete` |
+| released or refunded, unpaid, custody blocker | `wait` / `rent-shortfall`, `rent-unknown` or `vault-frozen` |
+| released or refunded, unpaid, no blocker | `payout` / `payout-pending`, outcome = the state (any role) |
+| funded, `refundOpen` | `refund` / `refund-open` (any role) |
+| funded, `releaseOpen` | seller: `release` / `release-open`; others: `wait` / `awaiting-seller-release` |
+| funded, neither (margin gap) | `wait` / `release-margin` |
+
+- One instruction per transaction. A transaction holding `release` and `payout_*` rolls back the release when the
+  payout fails (`contracts/solana/README.md`, Rules), so the planner never bundles them: payout is planned only
+  from a later finalized snapshot that already shows the terminal state. Payout blockers never hold back release
+  or refund.
+- It consumes only snapshots that `read()` returned (branded, finality `finalized`); copies, observations and
+  hand-built objects give INVALID_INPUT, as do an unknown role, a non-canonical `chainTime` or `releaseMargin`,
+  and a `chainTime` older than the snapshot's own `live.timestampSeconds`. Inputs are checked in every state.
+- A step describes one snapshot; it never says a send is safe. After any uncertain outcome (timeout, dropped or
+  unknown signature), G12 (the journal) must reconcile the transaction and re-observe finalized state before any
+  retry. The planner cannot tell "not sent" from "sent, not yet finalized" and must not be used as that check.
+- The destination token account is not read, so a missing or frozen recipient ATA (program error
+  `DestinationFrozen`) shows up only as a failed payout, which leaves the escrow terminal and retryable.
 
 ## What it does NOT prove
 

@@ -136,6 +136,7 @@ test('spl-surplus', async () => {
     vaultFrozen: false,
     mintDecimals: 6,
     mintFreezeAuthority: null,
+    payoutBlockedBy: [],
   });
   assert.deepEqual(s.calls[1].params[0], [PROGRAM, PROGRAM_DATA, CLOCK, escrowOf(s.world), vaultOf(s.world), MINT]);
 });
@@ -160,7 +161,36 @@ test('paid-complete', async () => {
   const spl = ok((await readWith('spl', { world: { escrow: { state: 2, paid: 1 } } })).result);
   assert.equal(spl.observation.state, 'refunded');
   assert.equal(spl.payout, 'complete');
-  assert.equal(spl.custody.principalHeld, '0');
+  const splCustody = (vaultAmount, surplus) => ({
+    kind: 'spl',
+    vault: vaultPda(spl.escrowAddress).address,
+    vaultAmount,
+    principalHeld: '0',
+    surplus,
+    vaultFrozen: false,
+    mintDecimals: 6,
+    mintFreezeAuthority: null,
+    payoutBlockedBy: [],
+  });
+  assert.deepEqual(spl.custody, splCustody('0', '0'));
+  // A donated surplus left after the payout is surplus, never a negative principal difference.
+  const donated = ok((await readWith('spl', { world: { escrow: { state: 1, paid: 1 }, vaultAmount: 7 } })).result);
+  assert.deepEqual(donated.custody, splCustody('7', '7'));
+});
+
+// u64 fields above 2^32 need their upper four bytes (5 SOL, and an SPL amount past 2^40).
+test('wide-amounts-≥2^32-round-trip', async () => {
+  for (const [kind, amountBaseUnits] of [
+    ['native', '5000000000'],
+    ['spl', String(2 ** 40 + 3)],
+  ]) {
+    const snapshot = ok((await readWith(kind, { termsChanges: { amountBaseUnits } })).result);
+    assert.equal(snapshot.escrow.amountBaseUnits, amountBaseUnits, kind);
+    assert.equal(snapshot.custody.principalHeld, amountBaseUnits, kind);
+    assert.equal(snapshot.observation.state, 'funded', kind);
+  }
+  const native = ok((await readWith('native', { termsChanges: { amountBaseUnits: '5000000000' } })).result);
+  assert.equal(native.custody.lamports, String(5_000_000_000 + RENT_MIN));
 });
 
 test('absent-{null,prefunded,spl-prefunded-vault}', async () => {
@@ -544,6 +574,33 @@ test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   }
 });
 
+// ownArray's length cap is checked before Reflect.ownKeys and the per-index walk, like the base64 cap.
+test('INTEGRITY_FAILURE: arrays-capped-before-walking-{value,data}', async () => {
+  const huge = new Array(5_000_000).fill(null);
+  const cases = [
+    ['value', () => ({ context: { slot: SLOT }, value: huge })],
+    [
+      'data',
+      (input, world) => {
+        const value = input.params[0].map(address => structuredClone(world.accounts.get(address) ?? null));
+        value[0] = { ...value[0], data: huge };
+        return { context: { slot: SLOT }, value };
+      },
+    ],
+  ];
+  for (const [label, respond] of cases) {
+    let world;
+    const started = performance.now();
+    await failsWith('INTEGRITY_FAILURE', 'native', {
+      mutate: captured => {
+        world = captured;
+      },
+      handle: input => (input.method === 'getMultipleAccounts' ? respond(input, world) : undefined),
+    });
+    assert.ok(performance.now() - started < 250, `${label}: an over-long array must be refused before it is walked`);
+  }
+});
+
 test('INTEGRITY_FAILURE: space-mismatch', async () => {
   await integrity('native', world => setAccount(world, CLOCK, { ...world.accounts.get(CLOCK), space: 41 }));
   // A present `space` must be the number itself: no string, null, bigint or boolean stands in for it.
@@ -603,6 +660,39 @@ test('INTEGRITY_FAILURE: genesis-flip', async () => {
   assert.equal(s.calls.length, 5);
 });
 
+// Spec §5 RPC step 1: only the canonical string itself matches; a look-alike is never coerced (no provider code).
+test('genesis-must-be-a-string-{object,String-wrapper}', async () => {
+  let coerced = 0;
+  const lookalikes = () => {
+    const wrapper = new String(COMPILED_GENESIS);
+    wrapper.valueOf = wrapper.toString = () => {
+      coerced++;
+      return COMPILED_GENESIS;
+    };
+    const object = {
+      toString() {
+        coerced++;
+        return COMPILED_GENESIS;
+      },
+    };
+    return [object, wrapper];
+  };
+  for (const [index, lookalike] of lookalikes().entries()) {
+    const first = await failsWith('WRONG_CHAIN', 'native', {
+      handle: input => (input.method === 'getGenesisHash' ? lookalike : undefined),
+    });
+    assert.equal(first.calls.length, 1, `first genesis ${index}`);
+  }
+  for (const [index, lookalike] of lookalikes().entries()) {
+    let count = 0;
+    const second = await failsWith('INTEGRITY_FAILURE', 'native', {
+      handle: input => (input.method === 'getGenesisHash' && ++count === 2 ? lookalike : undefined),
+    });
+    assert.equal(second.calls.length, 5, `second genesis ${index}`);
+  }
+  assert.equal(coerced, 0, 'toString/valueOf of a provider result are never invoked');
+});
+
 test('WRONG_CHAIN: genesis-mismatch (1 call)', async () => {
   const s = await failsWith('WRONG_CHAIN', 'native', {
     mutate: world => {
@@ -651,6 +741,21 @@ test('INTEGRITY_FAILURE: escrow-{other-owner,system-data,exec,bump,seller,nonce}
   await integrity('native', world =>
     setAccount(world, escrowOf(world), account(new Uint8Array(0), SYSTEM, { executable: true })),
   );
+  // `executable` must be a boolean: a falsy stand-in is malformed, not a non-executable escrow or empty vault.
+  for (const executable of [null, 0, '', 'false']) {
+    for (const kind of ['native', 'spl']) {
+      await integrity(kind, world =>
+        setAccount(world, escrowOf(world), { ...world.accounts.get(escrowOf(world)), executable }),
+      );
+    }
+    await integrity('native', world =>
+      setAccount(world, escrowOf(world), { ...account(new Uint8Array(0), SYSTEM), executable }),
+    );
+    await integrity('spl', world => {
+      setAccount(world, escrowOf(world), null);
+      setAccount(world, vaultOf(world), { ...account(new Uint8Array(0), SYSTEM), executable });
+    });
+  }
   await integrity('native', replaceEscrow({ escrowBump: 254 }));
   await integrity('native', replaceEscrow({ seller: key('other-seller') }));
   await integrity('native', replaceEscrow({ sellerNonce: 'ab'.repeat(32) }));
@@ -752,32 +857,32 @@ test('INTEGRITY_FAILURE: vault-while-absent, mint-decimals', async () => {
   await integrity('spl', absent(null));
 });
 
-test('vault-frozen', async () => {
-  // Control: an unfrozen funded SPL vault is healthy, so only the frozen flag yields CONFLICT.
-  const healthy = setup('spl');
-  try {
-    assert.equal(ok(await healthy.reader.readValidated(healthy.binding, request(), healthy.terms)).state, 'funded');
-  } finally {
-    healthy.reader.dispose();
-  }
-  const frozen = { world: { vault: { state: 2 }, mint: { freeze: key('freezer') } } };
-  const s = setup('spl', frozen);
-  try {
-    const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
-    assert.equal(snapshot.custody.vaultFrozen, true);
-    assert.equal(snapshot.custody.mintFreezeAuthority, key('freezer'));
-    error(await s.reader.readValidated(s.binding, request(), s.terms), 'CONFLICT');
-  } finally {
-    s.reader.dispose();
-  }
-  const released = setup('spl', { world: { ...frozen.world, escrow: { state: 1 } } });
-  try {
-    assert.equal(
-      ok(await released.reader.readValidated(released.binding, request(), released.terms)).state,
-      'released',
-    );
-  } finally {
-    released.reader.dispose();
+// C-L3 (owner direction): a frozen vault blocks only the payout. Chain state is truthfully reported, release and
+// refund stay possible (they change state only), and readValidated returns the normal finalized observation.
+test('vault-frozen-blocks-payout-only', async () => {
+  const frozen = { vault: { state: 2 }, mint: { freeze: key('freezer') } };
+  const cases = [
+    [{}, {}, 'funded', 'not-applicable', true, ['vault-frozen']],
+    [{ state: 1 }, {}, 'released', 'pending', true, ['vault-frozen']],
+    [{ state: 2 }, {}, 'refunded', 'pending', true, ['vault-frozen']],
+    // Paid out: nothing is left to block, even though the vault (holding a donated surplus) stays frozen.
+    [{ state: 1, paid: 1 }, { vaultAmount: 7 }, 'released', 'complete', true, []],
+    [{}, { vault: {} }, 'funded', 'not-applicable', false, []],
+  ];
+  for (const [escrow, world, state, payout, vaultFrozen, blockedBy] of cases) {
+    const s = setup('spl', { world: { ...frozen, escrow, ...world } });
+    try {
+      const snapshot = ok(await s.reader.read(s.binding, request(), s.terms));
+      assert.equal(snapshot.observation.state, state);
+      assert.equal(snapshot.payout, payout);
+      assert.equal(snapshot.custody.vaultFrozen, vaultFrozen, state);
+      assert.equal(snapshot.custody.mintFreezeAuthority, key('freezer'));
+      assert.deepEqual(snapshot.custody.payoutBlockedBy, blockedBy, `${state}/${payout}`);
+      assert.ok(Object.isFrozen(snapshot.custody.payoutBlockedBy));
+      assert.deepEqual(ok(await s.reader.readValidated(s.binding, request(), s.terms)), snapshot.observation);
+    } finally {
+      s.reader.dispose();
+    }
   }
 });
 
@@ -832,7 +937,47 @@ test('pre-RPC negatives make no calls', async () => {
     error(await s.reader.read(s.binding, request(aborted.signal), s.terms), 'CANCELLED');
     error(await s.reader.validateLive('solana:localnet', DEPLOYMENT_ID), 'INVALID_INPUT');
     error(await s.reader.validateLive(NETWORK_ID, 'missing'), 'UNSUPPORTED_PROVIDER');
+    // Two faults at once: the earlier pre-RPC step decides the code (run guard, counters, terms, registry).
+    const missing = { ...s.binding, deploymentId: 'missing' };
+    error(await s.reader.read(s.binding, { ...request(aborted.signal), generation: -1 }, s.terms), 'CANCELLED');
+    error(await s.reader.read(missing, { ...request(), generation: -1 }, s.terms), 'INVALID_INPUT');
+    error(await s.reader.read(missing, request(), { ...s.terms, extra: '1' }), 'INVALID_INPUT');
+    error(await s.reader.read({ ...missing, tradeId: 'ab'.repeat(32) }, request(), s.terms), 'INVALID_INPUT');
     assert.equal(s.calls.length, 0);
+  } finally {
+    s.reader.dispose();
+  }
+});
+
+// A caller signal that is not an AbortSignal is refused before a job slot is reserved, so it cannot leak one.
+test('non-signal-refused-without-leaking-a-slot', async () => {
+  const s = setup('native');
+  try {
+    const hostile = new Proxy(
+      {},
+      {
+        getPrototypeOf() {
+          throw Error('SECRET');
+        },
+      },
+    );
+    const throwingAdd = new AbortController().signal;
+    throwingAdd.addEventListener = () => {
+      throw Error('SECRET');
+    };
+    const throwingAborted = Object.defineProperty(new AbortController().signal, 'aborted', {
+      get() {
+        throw Error('SECRET');
+      },
+    });
+    const bad = [{}, { aborted: false }, null, new EventTarget(), hostile, throwingAdd, throwingAborted];
+    for (const signal of bad) {
+      error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal }, s.terms), 'INVALID_INPUT');
+      error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal), 'INVALID_INPUT');
+    }
+    assert.equal(s.calls.length, 0);
+    ok(await s.reader.read(s.binding, request(), s.terms));
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
   } finally {
     s.reader.dispose();
   }
@@ -1133,8 +1278,20 @@ test('authority: funded-to-absent-reorged', async () => {
   }
 });
 
-test('authority: conflict-unavailable', async () => {
+test('authority: frozen-vault-funded-fresh (C-L3)', async () => {
   const s = setup('spl', { world: { vault: { state: 2 } } });
+  const authority = authorityFor(s);
+  try {
+    assert.equal(ok(await authority.refresh(s.binding)).state, 'funded');
+    assert.equal(authority.readView(123).chainHealth, 'fresh');
+  } finally {
+    authority.dispose();
+    s.reader.dispose();
+  }
+});
+
+test('authority: nonce-reused-conflict-unavailable', async () => {
+  const s = setup('native', { mutate: replaceEscrow({ termsHash: 'cd'.repeat(32) }) });
   const authority = authorityFor(s);
   try {
     error(await authority.refresh(s.binding), 'CONFLICT');
@@ -1164,4 +1321,14 @@ test('payoutRegressed', async () => {
   const absent = ok((await readWith('native', { mutate: world => setAccount(world, escrowOf(world), null) })).result);
   assert.equal(payoutRegressed(paid, absent), true, 'paid to absent');
   assert.equal(payoutRegressed(absent, paid), false);
+  // Heights are decimal slot strings: the comparison must be numeric across a power of ten.
+  const at = async slot => ok((await readWith('native', { world: { slot, escrow: { state: 1, paid: 1 } } })).result);
+  for (const [low, high] of [
+    [99, 100],
+    [999, 1000],
+  ]) {
+    const [before, after] = [await at(low), await at(high)];
+    assert.equal(payoutRegressed(after, before), true, `${high} -> ${low} is a decrease`);
+    assert.equal(payoutRegressed(before, after), false, `${low} -> ${high} is an increase`);
+  }
 });

@@ -93,6 +93,25 @@ test('fundargs-200B', () => {
     [terms.revision, terms.amountBaseUnits, terms.acceptBeforeSeconds, terms.escrowExpirySeconds],
   );
   assert.deepEqual(ok(buildFundSpl(spl, SELLER_TOKEN)).data.length, 200);
+  // Every u64 above 2^32, so the upper four bytes of each LE field are pinned too (spec §3 FundArgs @168..200).
+  const max = String((1n << 64n) - 1n);
+  const wide = [
+    ['native', { revision: String(2 ** 32 + 3), amountBaseUnits: String(2 ** 53 - 1) }, buildFundNative],
+    ['spl', { revision: max, amountBaseUnits: max, acceptBeforeSeconds: String(2n ** 63n + 5n) }, buildFundSpl],
+  ];
+  for (const [kind, changes, build] of wide) {
+    const big = makeTerms(kind, { acceptBeforeSeconds: String(2 ** 40 + 1), escrowExpirySeconds: max, ...changes });
+    const bytes = ok(build(ok(bindSolanaTrade(makeRegistry(), bindingOf(big), big)), SELLER_TOKEN)).data;
+    const wideView = new DataView(bytes.buffer, bytes.byteOffset);
+    assert.deepEqual(
+      [168, 176, 184, 192].map(offset => wideView.getBigUint64(offset, true).toString()),
+      [big.revision, big.amountBaseUnits, big.acceptBeforeSeconds, big.escrowExpirySeconds],
+      kind,
+    );
+  }
+  const fiveSol = makeTerms('native', { amountBaseUnits: '5000000000' });
+  const fiveSolData = ok(buildFundNative(ok(bindSolanaTrade(makeRegistry(), bindingOf(fiveSol), fiveSol)))).data;
+  assert.equal(new DataView(fiveSolData.buffer, fiveSolData.byteOffset).getBigUint64(176, true), 5_000_000_000n);
 });
 
 test('recipient-by-outcome', () => {
