@@ -50,8 +50,18 @@ What it does not establish:
 
 - That `H` is really finalized or canonical on the actual chain, or that the returned bytes are the state at `H`. The reader checks no state proof (`eth_getProof` against the header's `stateRoot`) and runs no light client. A dishonest RPC, or a non-compliant node that ignores the object and answers from another block, can still lie consistently.
 - Liveness. Behind a load balancer with lagging or forked backends, more reads fail closed than before. A caller may retry the whole read later; each job takes a new anchor.
+- Receipt finality below the anchor. `receipt()` compares the receipt's block with the header at the receipt's own
+  height. At the anchored height `N` that header must equal `H`, otherwise the read fails with `INTEGRITY_FAILURE`.
+  Below `N` the header is still matched by height only, so a backend on a short fork can answer the receipt, the
+  transaction and the header at that height consistently with each other but not with `H`'s chain. Binding older
+  receipts to `H` needs a parent-hash walk or a state proof, and is not implemented.
+- Other readers. The wallet's payment preflight, submit and contract-acceptance reads and the recovery tool still pin
+  state by block number (tracked as a Lane A follow-up). This section covers `packages/chain-evm` only.
 
-Local check: Anvil 1.5.1 (CI Foundry) and 1.7.1 (the escrow harness) accept the object form for both methods, and answer -32001 for an unknown hash or one dropped by `evm_revert`. Public RPC providers have not been tested.
+Evidence for the node behaviour: the success path with the object form runs against real Anvil in CI through
+`npm run test:evm:viem` (Anvil 1.5.1) and `npm run test:evm:local` (Anvil 1.7.1). The refusal codes (-32001 for an
+unknown hash or one dropped by `evm_revert`, -32602 for a malformed object) were checked by hand on 2026-11-18 against
+both versions and are not reproduced by a committed test. Public RPC providers have not been tested.
 
 The reader has at most four physically outstanding jobs, each with a 10-second default deadline (configurable up to 60 seconds). Abort, timeout and dispose reject promptly, but an RPC which ignores abort retains its slot until the actual request settles. Late responses cannot issue another RPC or publish observations. Runtime code is capped at EIP-170's 24,576 bytes; ABI output must be exactly six words. Fixed error metadata excludes provider exception details.
 

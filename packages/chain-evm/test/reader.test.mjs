@@ -118,6 +118,17 @@ test('read timeout rejects with fixed code and does not free an ignored physical
  try{error(await s.reader.validateLive('local','escrow'),'TIMEOUT');}finally{s.reader.dispose();}
 });
 
+test('a receipt at the anchored height cannot be finalized by another backend\'s header for that height',async()=>{
+ // A forked backend answers the receipt, the transaction and the header at 0xa from its own block 0xa (hash e..e);
+ // the anchor and the recheck come from the majority (hash b..b). The header at N must equal the anchor H.
+ // The anchor comes from the 'finalized' tag, so the first request for '0xa' is the receipt's header lookup.
+ let forkedHeaderServed=false;
+ const fork={receipt:{blockHash:hx('e')},tx:{blockHash:hx('e')},handle:i=>{
+  if(i.method==='eth_getBlockByNumber'&&i.params[0]==='0xa'&&!forkedHeaderServed){forkedHeaderServed=true;return{...finalized,hash:hx('e')};}
+ }};
+ const s=receiptSetup(fork);
+ try{error(await s.reader.receipt(binding,expectedTx),'INTEGRITY_FAILURE');assert.equal(forkedHeaderServed,true);}finally{s.reader.dispose();}
+});
 test('G18 receipt evidence refuses inherited fields, accessors and descriptor-trap objects without invoking foreign code', async () => {
  let getterCalls = 0;
  const receiptGetter = Object.defineProperty({...nativeReceipt}, 'transactionHash', {get() { getterCalls++; throw Error('SECRET receipt getter'); }});
@@ -343,7 +354,8 @@ function honestNode({canonical,known=[]}) {
  return {view,async request({method,params=[]}){
   switch(method){
    case'eth_chainId':return'0x7a69';
-   case'eth_getBlockByNumber':return params[0]==='finalized'?view.canonical.at(-1):byNumber(params[0]);
+   // Real nodes answer an unknown block number with a null result, not an error.
+   case'eth_getBlockByNumber':return params[0]==='finalized'?view.canonical.at(-1):view.canonical.find(b=>b.number===params[0])??null;
    case'eth_getCode':resolve(params[1]);return code;
    case'eth_call':return STATE_AT.get(resolve(params[1]).hash);
    default:throw rpcError(-32601,'method not found');

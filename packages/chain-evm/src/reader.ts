@@ -218,6 +218,9 @@ export class EvmChainReader {
       if (nonceExpected !== undefined && nonce !== nonceExpected) return fail();
       const canonical = header(await context.call('eth_getBlockByNumber',[`0x${height.toString(16)}`,false]));
       if (canonical.height !== height) return fail();
+      // At the anchored height the validated anchor is the reference: a header for N from another backend that
+      // disagrees with H is refused, as the recheck would. Below N the header is still matched by height only.
+      if (height === BigInt(live.anchor.height) && canonical.hash !== live.anchor.hash) return fail();
       await this.#recheck(live,context);
       return Object.freeze({kind:canonical.hash !== blockHash ? 'reorged' as const : height <= BigInt(live.anchor.height) ? 'finalized' as const : 'pending' as const,transactionHash,anchor:Object.freeze({height:height.toString(),hash:blockHash}),succeeded:canonical.hash === blockHash ? status === 1n : null,nonce});
     });
