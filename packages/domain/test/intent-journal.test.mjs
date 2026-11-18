@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EncryptedVaultService } from '../../storage/src/vault-service.ts';
 import { VaultStorageError } from '../../storage/src/idb-vault-store.ts';
+import { EncryptedBackupService } from '../../storage/src/backup-service.ts';
 const api=await import('../src/intent-journal.ts').catch(error=>{if(error.code==='ERR_MODULE_NOT_FOUND')return{};throw error;});
 const schema=await import('../../schemas/src/intent.ts').catch(error=>{if(error.code==='ERR_MODULE_NOT_FOUND')return{};throw error;});
 const clone=value=>structuredClone(value),pass='local journal fixture passphrase';
@@ -40,6 +41,27 @@ test('markSending is durable prepared-only CAS, and repeated or restarted calls 
  assert.equal(val(await s.journal.unresolved(binding,account))[0].state,'broadcast-unknown');err(await s.journal.markSending(prepared.intentId),'CONFLICT');
  s.journal.dispose();s.journal=journal(s.vault,s.session);err(await s.journal.markSending(prepared.intentId),'CONFLICT');err(await s.journal.reserve(intent(),2),'CONFLICT');assert.equal(s.store.writes,3);s.journal.dispose();s.vault.dispose();
 });
+test('D9: fresh-key encrypted restore retains an unknown send marker without retry authority',async()=>{
+ const s=await setup(),prepared=intent({submission:{chain:'evm',hash:null,nonce:'7'}});
+ val(await s.journal.reserve(prepared,0));val(await s.journal.markSending(prepared.intentId));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent restored passphrase');
+ assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+ assert.equal(receipt.revision,0,'restored records start with fresh revision authority');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent restored passphrase'));
+ const fresh=journal(freshVault,session);
+ try {
+  const records=val(await fresh.unresolved(binding,account));
+  assert.equal(records.length,1);assert.equal(records[0].intentId,prepared.intentId);
+  assert.equal(records[0].state,'broadcast-unknown');
+  assert.equal(records[0].submission.hash,null);assert.equal(records[0].submission.nonce,'7');
+  err(await fresh.markSending(prepared.intentId),'CONFLICT');
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'restored-other'},submission:{chain:'evm',hash:null,nonce:'7'}}),0),'CONFLICT');
+  assert.equal('send' in fresh,false,'restored journal never grants wallet execution');
+ } finally {fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);}
+});
 test('independent sessions racing reservation commit one intent and require loser reload',async()=>{
  const s=await setup(),otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
  const results=await Promise.all([s.journal.reserve(intent(),0),other.reserve(intent(),0)]);assert.equal(results.filter(result=>result.ok).length,1);assert.ok(results.some(result=>!result.ok&&result.error.code==='CONFLICT'));assert.equal(s.store.rows.get(s.session.profileId).revision,1);
@@ -48,7 +70,7 @@ test('independent sessions racing reservation commit one intent and require lose
 test('unrelated unknown/future journal records block the entire profile instead of being skipped',async()=>{
  for(const kind of ['outer-future','inner-future','malformed']){
   const s=await setup(),stored=intent({binding:{...binding,tradeId:'other-trade'}});let payload=schema.encodeIntentPayload(stored),schemaVersion=1;
-  if(kind==='outer-future')schemaVersion=2;else if(kind==='inner-future')payload=Buffer.from(JSON.stringify({...stored,version:2})).toString('base64url');else payload='bm90LWpzb24';
+  if(kind==='outer-future')schemaVersion=2;else if(kind==='inner-future')payload=Buffer.from(JSON.stringify({...stored,version:3})).toString('base64url');else payload='bm90LWpzb24';
   val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ab'.repeat(16),kind:'journal',schemaVersion,payload}}]));
   const code=kind==='malformed'?'INTEGRITY_FAILURE':'UNSUPPORTED_VERSION';err(await s.journal.reserve(intent(),1),code);err(await s.journal.unresolved(binding,account),code);assert.equal(s.store.writes,2);s.journal.dispose();s.vault.dispose();
  }
@@ -60,15 +82,15 @@ test('imported terminal labels stay reserved and duplicate intent IDs are integr
  err(await s.journal.unresolved(binding,account),'INTEGRITY_FAILURE');s.journal.dispose();s.vault.dispose();
 });
 test('simultaneous markSending with a shared revoked session retains one marker and suppresses the losing authority',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const other=journal(s.vault,s.session);
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const other=journal(s.vault,s.session);
  const results=await Promise.all([s.journal.markSending(prepared.intentId),other.markSending(prepared.intentId)]);assert.deepEqual(results.map(result=>result.ok?'ok':result.error.code).sort(),['BROADCAST_UNKNOWN','CONFLICT']);assert.equal(s.store.writes,3);assert.equal(s.store.rows.get(s.session.profileId).revision,2);other.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('simultaneous markSending across independently unlocked sessions has exactly one successful CAS winner',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const otherVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false}),otherSession=val(await otherVault.unlock(s.session.profileId,pass)),other=journal(otherVault,otherSession);
  const results=await Promise.all([s.journal.markSending(prepared.intentId),other.markSending(prepared.intentId)]);assert.equal(results.filter(result=>result.ok).length,1);assert.equal(results.filter(result=>!result.ok&&result.error.code==='CONFLICT').length,1);assert.equal(s.store.writes,3);assert.equal(s.store.rows.get(s.session.profileId).revision,2);other.dispose();otherVault.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('snapshot revision stays bound across canonical validation while another coordinator marks the intent',async()=>{
- const s=await setup(),prepared=intent();val(await s.journal.reserve(prepared,0));const entered=deferred(),gate=deferred();const delayed=journal(s.vault,s.session,{validateCanonical:async()=>{entered.resolve();await gate.promise;return fixtureValidator();}});
+ const s=await setup(),prepared=intent({version:2,sendMarkedAt:null,originProfileId:s.session.profileId});val(await s.journal.reserve(prepared,0));const entered=deferred(),gate=deferred();const delayed=journal(s.vault,s.session,{validateCanonical:async()=>{entered.resolve();await gate.promise;return fixtureValidator();}});
  const pending=delayed.markSending(prepared.intentId);await entered.promise;val(await s.journal.markSending(prepared.intentId));gate.resolve();err(await pending,'CONFLICT');assert.equal(s.store.writes,3);delayed.dispose();s.journal.dispose();s.vault.dispose();
 });
 test('cancellation and lock during validation suppress writes; immutable caller snapshots survive awaits',async()=>{
@@ -186,6 +208,243 @@ test('cross-trade nonce reuse requires fresh native finality, never a restored t
   val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ac'.repeat(16),kind:'journal',schemaVersion:1,payload:schema.encodeIntentPayload(prepared)}}]));
   const result=await s.journal.reserve(intent({binding:{...binding,tradeId:'new-trade'},submission:{chain:'evm',hash:null,nonce:'7'}}),1);
   if(trusted)val(result);else err(result,'CONFLICT');s.journal.dispose();s.vault.dispose();
+ }
+});
+
+test('D9: restored historical terminal labels cannot free a nonce on noncanonical native evidence',async()=>{
+ const s=await setup();
+ const historical=intent({state:'finalized',submission:{chain:'evm',hash:'0x'+'11'.repeat(32),nonce:'7'}});
+ val(await s.vault.commit(s.session.sessionId,0,[{op:'put',record:{id:'ef'.repeat(16),kind:'journal',schemaVersion:1,payload:schema.encodeIntentPayload(historical)}}]));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'historical restore separate passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'historical restore separate passphrase'));
+ let reads=0;
+ const fresh=journal(freshVault,freshSession,{readNative:async stored=>{
+  reads++;
+  return{ok:true,value:nativeObservation(stored,{state:'reorged',nonce:'7',canonical:false,finalized:false})};
+ }});
+ try{
+  assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[historical]);
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'historical-retry'},submission:{chain:'evm',hash:null,nonce:'7'}}),0),'CONFLICT');
+  err(await fresh.markSending(historical.intentId),'CONFLICT');
+  assert.ok(reads>=2,'restored terminal label must be rechecked against fresh native evidence');
+  assert.equal('send' in fresh,false,'restoration never grants wallet execution');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+test('D9: fresh-key restore of a historical prepared entry preserves the nonce hold without inventing native finality',async()=>{
+ const s=await setup(),historical=intent({submission:{chain:'evm',hash:null,nonce:'9'}});
+ val(await s.journal.reserve(historical,0));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'separate historical prepared passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'separate historical prepared passphrase'));
+ let reads=0;
+ const fresh=journal(freshVault,freshSession,{readNative:async stored=>{
+  reads++;return{ok:true,value:nativeObservation(stored,{state:'finalized',nonce:'9'})};
+ }});
+ try{
+  assert.notEqual(receipt.newProfileId,receipt.sourceProfileId);
+  assert.equal(receipt.revision,0);
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[historical]);
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'new-prepared-trade'},submission:{chain:'evm',hash:null,nonce:'9'}}),0),'CONFLICT');
+  assert.equal(reads,0,'historical prepared state must not be promoted using unrelated native finality');
+  assert.equal('send' in fresh,false,'restore does not furnish wallet or signing authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+test('D9: fresh-key recovery of a pending known-hash transaction preserves the hold without granting resend authority',async()=>{
+ const s=await setup(),hash='0x'+'cd'.repeat(32);
+ const original=intent({submission:{chain:'evm',hash:null,nonce:'11'}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'separately unlocked pending recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const freshSession=val(await freshVault.unlock(receipt.newProfileId,'separately unlocked pending recovery'));
+ const fresh=journal(freshVault,freshSession);
+ try {
+  assert.notEqual(receipt.sourceProfileId,receipt.newProfileId);
+  assert.equal(receipt.revision,0);
+  const unresolved=val(await fresh.unresolved(binding,account));
+  assert.equal(unresolved.length,1);
+  assert.equal(unresolved[0].intentId,original.intentId);
+  assert.equal(unresolved[0].state,'pending');
+  assert.equal(unresolved[0].submission.hash,hash);
+  assert.equal(unresolved[0].submission.nonce,'11');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  err(await fresh.reserve(intent({binding:{...binding,tradeId:'another-pending-trade'},submission:{chain:'evm',hash:null,nonce:'11'}}),0),'CONFLICT');
+  const before=s.store.writes;
+  err(await fresh.recordBroadcast(original.intentId,'0x'+'ef'.repeat(32)),'CONFLICT');
+  assert.equal(s.store.writes,before,'conflicting reported hash must not replace restored pending evidence');
+  err(await fresh.reconcileNative(original.intentId),'UNSUPPORTED_PROVIDER');
+  assert.equal(s.store.writes,before,'recovery with no bundled native reader must not invent transaction finality');
+  val(await fresh.recordBroadcast(original.intentId,hash));
+  assert.equal(s.store.writes,before,'same-hash observation must not rewrite or free an existing pending record');
+  assert.deepEqual(val(await fresh.unresolved(binding,account)),[unresolved[0]]);
+  assert.equal('send' in fresh,false);
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+test('D9: restored known-hash EVM hold treats account casing identically across trades',async()=>{
+ const lower='0x'+'ab'.repeat(20),upper='0x'+'AB'.repeat(20),nonce='13',hash='0x'+'bc'.repeat(32);
+ const s=await setup(),original=intent({account:lower,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent casefold recovery passphrase');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent casefold recovery passphrase'));
+ const fresh=journal(freshVault,session);
+ try{
+  const held=val(await fresh.unresolved(binding,upper));
+  assert.equal(held.length,1,'different EVM address case must find the same pending account');
+  assert.equal(held[0].intentId,original.intentId);
+  assert.equal(held[0].submission.hash,hash);
+  assert.equal(held[0].submission.nonce,nonce);
+  const before=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,tradeId:'different-trade-same-evm-account'},
+   account:upper,submission:{chain:'evm',hash:null,nonce}
+  }),0),'CONFLICT');
+  assert.equal(s.store.writes,before,'case-changed account cannot replace a recovered nonce hold');
+  assert.deepEqual(val(await fresh.unresolved(binding,lower)),held);
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'fresh-key recovery gives no wallet execution authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+test('D9: restored pending nonce holds stay scoped to the EVM network, not reused within that network',async()=>{
+ const nonce='17',hash='0x'+'ac'.repeat(32),lower='0x'+'ab'.repeat(20);
+ const s=await setup(),original=intent({account:lower,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent network scoped recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent network scoped recovery'));
+ const fresh=journal(freshVault,session);
+ try{
+  const separateNetwork={...binding,networkId:'evm:10',tradeId:'separate-network-trade'};
+  const another= intent({binding:separateNetwork,account:lower,submission:{chain:'evm',hash:null,nonce}});
+  val(await fresh.reserve(another,0));
+  const held=val(await fresh.unresolved(binding,lower));
+  assert.equal(held.length,1);assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);assert.equal(held[0].submission.nonce,nonce);
+  assert.deepEqual(held[0].binding,binding);
+  assert.deepEqual(val(await fresh.unresolved(binding,lower)),held);
+  assert.deepEqual(val(await fresh.unresolved(separateNetwork,lower)),[another]);
+  const writes=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,deploymentId:'another-escrow-same-network',tradeId:'different-trade'},
+   account:lower,submission:{chain:'evm',hash:null,nonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,writes,'same-network recovered pending nonce must not be displaced');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'restored journal does not provide a wallet send capability');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+test('D9: fresh-key recovery scopes EVM pending nonces to their account on the same network',async()=>{
+ const nonce='19',hash='0x'+'bd'.repeat(32);
+ const firstAccount='0x'+'ab'.repeat(20),secondAccount='0x'+'cd'.repeat(20);
+ const s=await setup(),original=intent({account:firstAccount,submission:{chain:'evm',hash:null,nonce}});
+ val(await s.journal.reserve(original,0));
+ val(await s.journal.markSending(original.intentId));
+ val(await s.journal.recordBroadcast(original.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto),bytes=await backup.export(s.session.profileId);
+ const receipt=await backup.restore(bytes,pass,'independent account scoped recovery');
+ const freshVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+ const session=val(await freshVault.unlock(receipt.newProfileId,'independent account scoped recovery'));
+ const fresh=journal(freshVault,session);
+ try{
+  const other=intent({binding:{...binding,tradeId:'unrelated-account-trade'},account:secondAccount,submission:{chain:'evm',hash:null,nonce}});
+  val(await fresh.reserve(other,0));
+  assert.deepEqual(val(await fresh.unresolved(other.binding,secondAccount)),[other],'another EVM account may use its own nonce');
+  const held=val(await fresh.unresolved(binding,firstAccount));
+  assert.equal(held.length,1);assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);assert.equal(held[0].submission.nonce,nonce);
+  assert.equal(held[0].account,firstAccount);
+  const writes=s.store.writes;
+  err(await fresh.reserve(intent({
+   binding:{...binding,tradeId:'same-account-another-trade'},
+   account:firstAccount.toUpperCase().replace('0X','0x'),
+   submission:{chain:'evm',hash:null,nonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,writes,'case-varied original account cannot reuse the recovered nonce');
+  assert.deepEqual(val(await fresh.unresolved(binding,firstAccount)),held,'rejected reservation preserves existing pending evidence');
+  err(await fresh.markSending(original.intentId),'CONFLICT');
+  assert.equal('send' in fresh,false,'fresh-key recovery conveys no spending authority');
+ }finally{
+  fresh.dispose();freshVault.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
+ }
+});
+
+
+test('D9: two independent journals racing after fresh-key restore cannot double-reserve the same account/network nonce',async()=>{
+ const originalNonce='23',racedNonce='24',hash='0x'+'ef'.repeat(32);
+ const originalAccount='0x'+'ab'.repeat(20);
+ const s=await setup(),pending=intent({account:originalAccount,submission:{chain:'evm',hash:null,nonce:originalNonce}});
+ val(await s.journal.reserve(pending,0));
+ val(await s.journal.markSending(pending.intentId));
+ val(await s.journal.recordBroadcast(pending.intentId,hash));
+ const backup=new EncryptedBackupService(s.store,crypto);
+ const bytes=await backup.export(s.session.profileId);
+ let firstVault,secondVault,first,second,inspectorVault,inspector;
+ try{
+  const receipt=await backup.restore(bytes,pass,'independent raced recovery profile');
+  firstVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  secondVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  const firstSession=val(await firstVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  const secondSession=val(await secondVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  first=journal(firstVault,firstSession);second=journal(secondVault,secondSession);
+  const candidateA=intent({binding:{...binding,tradeId:'race-one'},account:originalAccount,submission:{chain:'evm',hash:null,nonce:racedNonce}});
+  const candidateB=intent({binding:{...binding,tradeId:'race-two'},account:originalAccount.toUpperCase().replace('0X','0x'),submission:{chain:'evm',hash:null,nonce:racedNonce}});
+  const results=await Promise.all([first.reserve(candidateA,0),second.reserve(candidateB,0)]);
+  assert.equal(results.filter(result=>result.ok).length,1,'only one independent restored session may commit the racing nonce');
+  assert.equal(results.filter(result=>!result.ok&&result.error.code==='CONFLICT').length,1,'loser must fail closed on its stale revision');
+  const winner=results[0].ok?candidateA:candidateB;
+  inspectorVault=new EncryptedVaultService(s.store,crypto,{lifecycle:false});
+  const inspectionSession=val(await inspectorVault.unlock(receipt.newProfileId,'independent raced recovery profile'));
+  inspector=journal(inspectorVault,inspectionSession);
+  assert.deepEqual(val(await inspector.unresolved(winner.binding,originalAccount)),[winner],'one winning reservation is durably discoverable');
+  const held=val(await inspector.unresolved(binding,originalAccount));
+  assert.equal(held.length,1);
+  assert.equal(held[0].intentId,pending.intentId);
+  assert.equal(held[0].state,'pending');
+  assert.equal(held[0].submission.hash,hash);
+  assert.equal(held[0].submission.nonce,originalNonce);
+  const before=s.store.writes;
+  err(await inspector.reserve(intent({
+   binding:{...binding,tradeId:'race-third'},
+   account:originalAccount,submission:{chain:'evm',hash:null,nonce:racedNonce}
+  }),1),'CONFLICT');
+  assert.equal(s.store.writes,before,'the losing nonce cannot be reserved again after reopening');
+  err(await inspector.markSending(pending.intentId),'CONFLICT');
+  assert.equal('send' in inspector,false,'fresh-key restoration does not give wallet signing or send authority');
+ }finally{
+  inspector?.dispose();inspectorVault?.dispose();first?.dispose();second?.dispose();
+  firstVault?.dispose();secondVault?.dispose();backup.dispose();s.journal.dispose();s.vault.dispose();bytes.fill(0);
  }
 });
 

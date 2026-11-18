@@ -135,7 +135,8 @@ export class RelayPool {
       if(!result.ok||result.value==='duplicate'||result.value==='stale')return;
       const snapshot=this.#book.snapshot(this.#options.nowSeconds());
       for(const subscription of [...this.#subscriptions.values()]){
-        if(this.#disposed||!this.#subscriptions.has(subscription.id))break;
+        if(this.#disposed)break;
+        if(!this.#subscriptions.has(subscription.id))continue;
         try{subscription.listener(Object.freeze(snapshot.filter(item=>item.value.event.created_at>=subscription.filter.since).slice(-subscription.filter.limit)));}catch{/* observers cannot disrupt other subscriptions */}
       }
     }catch{/* fixed rejection; never forward frame contents or parser exceptions */}

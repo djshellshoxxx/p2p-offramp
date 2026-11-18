@@ -127,6 +127,16 @@ It runs two native trades against the deployment named in the signed registry:
 
 **Gas.** `BasicEscrow` only pays out when `gasleft() >= MIN_PAYOUT_GAS` (120k). Forge's default gas estimate is too low for release and refund, so those transactions revert on chain. The trade tool therefore takes the limit from the node's `eth_estimateGas` plus 20% and 10k gas. Wallets that estimate the same way are unaffected.
 
+### State lock and interrupted runs
+
+Each run holds an exclusive lock file, `<state>.json.lock`, so two invocations of the same run can never both send a transaction. The lock is released when the run finishes or fails normally. Interrupting the process with Ctrl-C or SIGTERM, for example during `--wait` or `--wait-finalized`, leaves the lock in place, and the next run stops with `STATE_LOCKED`. The tool never takes a lock over by itself. To recover:
+
+1. Confirm that no `sepolia:trade` process for that run is still running (`ps`, other terminals, CI).
+2. Delete the lock file named in the error.
+3. Rerun the same command. Every attempt is recorded before its broadcast, and a possibly-sent action requires reconciliation, so the rerun never sends that action a second time.
+
+State and terms-review files are written to an exclusive temporary file, fsynced, renamed into place and followed by a directory fsync, so a host crash cannot roll back the record of an attempt.
+
 ## Local proof
 
 `npm run test:sepolia:kit` runs the whole kit against a private anvil started with chain id 11155111. `npm run test:sepolia:trade` does the same for the two-party trade tool. It covers:

@@ -36,8 +36,20 @@ const messages: Partial<Record<VaultErrorCode, string>> = {
   LIMIT_EXCEEDED: 'The migration exceeds the in-place limit. Export before retrying.',
   CONFLICT: 'The vault changed. Unlock again and replan the migration.',
 };
+const errorCodes: ReadonlySet<string> = new Set<VaultErrorCode>([
+  'UNSUPPORTED_ENVIRONMENT', 'UNSUPPORTED_VERSION', 'INVALID_INPUT', 'NOT_FOUND',
+  'ALREADY_EXISTS', 'AUTHENTICATION_FAILED', 'LOCKED', 'CONFLICT', 'LIMIT_EXCEEDED',
+  'REKEY_REQUIRED', 'QUOTA_EXCEEDED', 'STORAGE_UNAVAILABLE', 'CANCELLED', 'BUSY',
+]);
 function failed(error: unknown): { ok: false; error: { code: VaultErrorCode; retryable: boolean; message: string } } {
-  const code: VaultErrorCode = error instanceof MigrationError || error instanceof ValidationError ? error.code : 'STORAGE_UNAVAILABLE';
+  let code: VaultErrorCode = 'STORAGE_UNAVAILABLE';
+  try {
+    if (error instanceof MigrationError || error instanceof ValidationError) {
+      const property = Object.getOwnPropertyDescriptor(error, 'code');
+      const candidate: unknown = property && 'value' in property ? property.value : undefined;
+      if (typeof candidate === 'string' && errorCodes.has(candidate)) code = candidate as VaultErrorCode;
+    }
+  } catch { /* Foreign exceptions cannot replace this fixed result or invoke a code accessor. */ }
   return { ok: false, error: { code, retryable: code === 'STORAGE_UNAVAILABLE', message: messages[code] ?? 'Record migration failed.' } };
 }
 const version = (value: unknown): number => {

@@ -1,0 +1,85 @@
+✔ production default has empty authority and all channels unknown; wallet never becomes an app request (4.737745ms)
+✔ fixture-only full mode/coverage/channel matrix refuses every unverified strict path before callback (14.172631ms)
+✔ ordinary direct requires independently issued consent and cannot inherit private relay coverage for wallet (0.406899ms)
+✔ permits bind broker identity and exact frozen request; malformed or rebound grant projections cannot authorize (0.700907ms)
+✔ trusted owner capability, currentness and reflection faults fail with fixed codes and no secret diagnostics (0.367786ms)
+✔ hostile thrown capability values cannot escape fixed refusal handling (0.282176ms)
+✔ inspection cannot relabel a stale registry callback result under a newer generation (0.287526ms)
+✔ projection metadata is copied before issuing permits and registry changes synchronously revoke all scopes (0.342378ms)
+✔ expiry revokes before invocation and after awaits; queued late callbacks cannot publish (0.960211ms)
+✔ mode/revoke/dispose close resources despite throwing observers and prevent reentrant authorization (1.043777ms)
+✔ already-aborted and in-flight cancellation suppress outputs without freeing unsettled capacity (14.725763ms)
+✔ outstanding permit count is bounded and scoped use is single-shot (5.030151ms)
+✔ native callback failure is sanitized, revokes private evidence and never falls back to direct (0.574791ms)
+✔ a policy change after native settlement but before scope continuation suppresses success (0.448657ms)
+✔ owned expiry timer closes resources without polling; a failed monotonic clock fails closed (2.453526ms)
+✔ operation timeout aborts owned scope without retry or accepting a late callback (1.501189ms)
+✔ external abort during a scoped operation closes its resource immediately and discards late output (0.461471ms)
+✔ optional destination binding compares the detached canonical registration before granting a runnable scope (0.720203ms)
+✔ destination credentials, fragments, controls, malformed schemes and hostile URL options fail before operation (1.535984ms)
+✔ bounded invalidation observers see completed revocation, isolate faults and unsubscribe (1.202553ms)
+✔ inspection-only evidence expires on existing timer, without permits or expired rearm loops (0.479695ms)
+✔ reentrant modes and repeated malformed async consumer reads cannot livelock notifications (1.500819ms)
+✔ real broker feeds synchronous privacy reader; notification adds no authority (6.303242ms)
+✔ last display unsubscribe removes only inspection watches, retaining actual permit expiry (0.396299ms)
+✔ inspection-only expiry does not revoke a longer live permit or its operation (1.145306ms)
+✔ earlier stable observer sees the final state after later observers mutate or dispose (0.371543ms)
+✔ catch-up handles a full reverse-order chain of mutators within one bounded batch (2.140112ms)
+✖ later same-channel inspection cannot postpone an earlier observer deadline or revoke a longer permit (1.897759ms)
+✖ later unavailable inspection retains an earlier cached display deadline until expiry (0.467161ms)
+✖ explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure (0.533285ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 27
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1630.71696
+
+✖ failing tests:
+
+test at packages/transport/test/policy.test.mjs:195:1
+✖ later same-channel inspection cannot postpone an earlier observer deadline or revoke a longer permit (1.897759ms)
+  AssertionError [ERR_ASSERTION]: first observer deadline is not postponed by the renewed inspection
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/transport/test/policy.test.mjs:204:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/transport/test/policy.test.mjs:211:1
+✖ later unavailable inspection retains an earlier cached display deadline until expiry (0.467161ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/transport/test/policy.test.mjs:215:71)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/transport/test/policy.test.mjs:218:1
+✖ explicit same-mode invalidation revokes every permit before reentrant callbacks and refuses after closure (0.533285ms)
+  TypeError: s.broker.invalidate is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/transport/test/policy.test.mjs:222:58)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

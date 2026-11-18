@@ -1,6 +1,45 @@
 # P2P Offramp restart — one EVM trade
 
-**Current restart contract (2026-10-31):** use the
+**Current restart contract (2026-11-04):** M-0 (land PR #26) is split, fixed and waiting on the owner.
+Start from this section; the 2026-10-31 contract and everything below it are historical provenance.
+
+- **`main`:** `e9b9db3`, unchanged by the 2026-11-04 run. Nothing was merged: the merge policy (D8) is
+  undecided, and Tier C stages always need owner approval.
+- **Repair lane:** [PR #28](https://github.com/djshellshoxxx/p2p-offramp/pull/28) (`claude/loving-einstein-xgzvdy`,
+  head `830b7d2`) is PR #26 with the browser-test, Qodo 2, F04, F05 and Sonar fixes. Qodo 1 stays open
+  pending D9.
+- **Split stack (M-0):** [#36](https://github.com/djshellshoxxx/p2p-offramp/pull/36) to
+  [#48](https://github.com/djshellshoxxx/p2p-offramp/pull/48), stages s00 to s12. Each one is a draft whose
+  base is the previous stage. The top (s12, `cfe4287`) is tree-equal to PR #28's head plus the s00 trigger
+  change. Review and merge in order. Once s12 lands, close
+  [PR #26](https://github.com/djshellshoxxx/p2p-offramp/pull/26) as superseded.
+- **Decisions:** [PR #29](https://github.com/djshellshoxxx/p2p-offramp/pull/29) holds packets D1 to D9 under
+  `docs/adr/proposed/`. D8 (merge policy) and D9 (durable send marker) unblock the most work.
+- **Parked:** [PR #35](https://github.com/djshellshoxxx/p2p-offramp/pull/35) (journey F01, F03 and F06) waits
+  on D9. D7 recommends parking the optional packages in stage s10.
+- **Blocked:**
+  - The Sonar issue list: `sonarcloud.io` is unreachable from agent containers. To unblock, allow the host or
+    export the issues for the stack PRs. The local stand-in is eslint-plugin-sonarjs plus jscpd, run on the
+    lines each stage adds.
+  - `build:testnet`: needs the D2 testnet key.
+  - The Sepolia drill: no secrets are configured.
+  - `test:zoom:browser`: needs trusted X11 tools.
+- **Environment notes:**
+  - Prefix every command with `PATH=/opt/node24/bin:$PATH`.
+  - Install solc 0.8.30 as the verified static binary under `~/.svm`.
+  - Use the Python 3.12 venv for the hash-pinned oracle.
+  - Run a real `npm ci` in each worktree.
+  - `scripts/docs/validate.test.mjs` fails only inside git worktrees.
+  - All agents share one 14 GB memory limit, so run one heavy gate at a time.
+  - Fetch `f25de72` before running the docs tests.
+- **Next tasks:**
+  1. Read the Sonar re-runs on #36 to #48. Fix what remains on the PR that owns it, then merge forward with
+     the per-stage pattern: merge the previous stage, then commit the stage's own files.
+  2. After the D8 decision, the owner reviews and merges #36 to #48 in order, then closes PR #26.
+  3. After the D9 decision, implement the durable send marker (Qodo 1, PR #31 F02), then un-park PR #35.
+     M-1 hygiene (formatter, CI speed, `CLAUDE.md`) follows M-0.
+
+**Previous restart contract (2026-10-31, historical):** use the
 [source-derived inventory](../execution/INCOMPLETE-WORK-2026-10-31.md) and
 [coordinated prompt](../execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md).
 Compatible work was merged through `eaa1fe5`; the discriminator, provider-error,

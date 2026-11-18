@@ -1,0 +1,5 @@
+
+> p2p-offramp@0.1.0 test:evm
+> cd contracts/evm && forge test
+
+sh: 1: forge: not found

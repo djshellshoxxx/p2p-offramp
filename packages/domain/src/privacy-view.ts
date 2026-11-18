@@ -11,6 +11,28 @@ export interface PrivacyTransportPort {
   readonly generation: number;
   inspect(channel: TransportChannel): Readonly<RouteEvidence>;
 }
+/** Display-only configuration from the same bundled composition that uses these connections.
+ * Neither an imported object nor this port establishes routing coverage or permission. */
+export interface PrivacyEndpointConfiguration {
+  readonly channel: Exclude<TransportChannel, 'wallet'>;
+  readonly id: string;
+  readonly configuredUrl: string;
+  readonly connectionUrl: string | null;
+}
+export interface PrivacyEndpointSnapshot {
+  readonly version: 1; readonly generation: number;
+  readonly observedAt: number; readonly expiresAt: number;
+  readonly endpoints: readonly PrivacyEndpointConfiguration[];
+}
+export interface PrivacyEndpointPort { readonly generation: number; read(): PrivacyEndpointSnapshot; }
+export interface PrivacyEndpointOrigin {
+  readonly channel: Exclude<TransportChannel, 'wallet'>; readonly id: string;
+  readonly configuredOrigin: string; readonly connectionOrigin: string | null;
+}
+export interface PrivacyEndpointDetails {
+  readonly generation: number | null; readonly observedAt: number | null; readonly expiresAt: number | null;
+  readonly reason: PrivacyReason; readonly endpoints: readonly PrivacyEndpointOrigin[];
+}
 export type VaultPrivacyState = 'locked' | 'unlocked' | 'unavailable';
 export type MessagingPrivacyState = 'authenticated-encryption' | 'unavailable' | 'unsupported';
 export type ProofPrivacyState = 'available' | 'unavailable' | 'unsupported';
@@ -58,6 +80,7 @@ export interface PrivacyView {
   readonly vault: PrivacyIndicator<VaultPrivacyState>;
   readonly messaging: PrivacyIndicator<MessagingPrivacyState>;
   readonly proof: PrivacyIndicator<ProofPrivacyState>;
+  readonly endpointDetails: PrivacyEndpointDetails;
   readonly publicChain: 'public-metadata-visible';
   readonly manualFiat: 'seller-attestation-not-payment-proof';
   readonly economicPreparationAllowed: false;
@@ -70,6 +93,32 @@ export interface PrivacyViewReader {
 const clockValue = (value: unknown): value is number => typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
 function unknown<State extends string>(reason: PrivacyReason = 'not-observed'): PrivacyIndicator<State> {
   return Object.freeze({ state: 'unknown', source: 'none', observedAt: null, expiresAt: null, reason });
+}
+const unknownEndpoints = (reason: PrivacyReason = 'not-observed'): PrivacyEndpointDetails => Object.freeze({ generation: null, observedAt: null, expiresAt: null, reason, endpoints: Object.freeze([]) });
+function origin(input: unknown): string {
+  if (typeof input !== 'string' || input.length > 2048 || !/^(?:https|wss|http|ws):\/\//i.test(input) || /[\u0000-\u0020\u007f\\#]/.test(input)) throw new Error();
+  const authority = input.slice(input.indexOf('://') + 3).split(/[/?]/, 1)[0];
+  const url = new URL(input);
+  if (url.username || url.password || authority?.includes('@')) throw new Error();
+  const loopback = ['127.0.0.1', '[::1]', 'localhost'].includes(url.hostname);
+  if (url.protocol !== 'https:' && url.protocol !== 'wss:' && !((url.protocol === 'http:' || url.protocol === 'ws:') && loopback)) throw new Error();
+  return url.origin;
+}
+function endpointRows(input: unknown): readonly PrivacyEndpointOrigin[] {
+  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) throw new Error();
+  const count: unknown = Object.getOwnPropertyDescriptor(input, 'length')?.value;
+  if (typeof count !== 'number' || count > 32 || count < 0 || Reflect.ownKeys(input).length !== count + 1) throw new Error();
+  const ids = new Set<string>(), output: PrivacyEndpointOrigin[] = [];
+  for (let index = 0; index < count; index++) {
+    const item = Object.getOwnPropertyDescriptor(input, String(index));
+    if (!item || !('value' in item)) throw new Error();
+    const raw = intentData(item.value, ['channel', 'id', 'configuredUrl', 'connectionUrl']);
+    if (typeof raw.channel !== 'string' || raw.channel === 'wallet' || !(TRANSPORT_CHANNELS as readonly string[]).includes(raw.channel)) throw new Error();
+    const channel = raw.channel as PrivacyEndpointOrigin['channel'], id = transportId(raw.id), key = channel + ':' + id;
+    if (ids.has(key)) throw new Error(); ids.add(key);
+    output.push(Object.freeze({ channel, id, configuredOrigin: origin(raw.configuredUrl), connectionOrigin: raw.connectionUrl === null ? null : origin(raw.connectionUrl) }));
+  }
+  return Object.freeze(output);
 }
 function capability<State extends string>(input: unknown, allowed: readonly State[], source: PrivacyIndicator<State>['source'], now: number): PrivacyIndicator<State> {
   if (input === null) return unknown();
@@ -84,9 +133,10 @@ function capability<State extends string>(input: unknown, allowed: readonly Stat
 export function createPrivacyViewReader(options: {
   readonly transport?: PrivacyTransportPort;
   readonly observations?: PrivacyObservationPort;
+  readonly endpoints?: PrivacyEndpointPort;
   readonly monotonicNow?: () => number;
 } = {}): PrivacyViewReader {
-  const { transport, observations } = options;
+  const { transport, observations, endpoints } = options;
   const now = options.monotonicNow ?? (() => Math.floor(performance.now()));
   let disposed = false, lastTime = -1, clockReversed = false;
   const error = (code: 'INVALID_INPUT' | 'UNSUPPORTED_VERSION' | 'CANCELLED' | 'UNAVAILABLE') => Object.freeze({ ok: false as const, error: createCoreError(code, { operationId: createOperationId(), readOnly: true }) });
@@ -139,6 +189,21 @@ export function createPrivacyViewReader(options: {
           if (transport.generation !== generation || transport.mode !== mode) routes = TRANSPORT_CHANNELS.map(channel => unavailableRoute(channel, 'scope-changed'));
         } catch { routes = TRANSPORT_CHANNELS.map(channel => unavailableRoute(channel, 'unavailable')); }
       }
+      let endpointDetails = unknownEndpoints(), endpointGeneration: number | null = null;
+      if (endpoints && !clockReversed && !scopeChanged) {
+        try {
+          const before = endpoints.generation;
+          const raw = intentData(endpoints.read(), ['version', 'generation', 'observedAt', 'expiresAt', 'endpoints']);
+          const after = endpoints.generation;
+          if (!clockValue(before) || !clockValue(after) || raw.version !== 1 || raw.generation !== before ||
+              !clockValue(raw.observedAt) || !clockValue(raw.expiresAt) || raw.expiresAt <= raw.observedAt || raw.expiresAt - raw.observedAt > 30_000) throw new Error();
+          if (before !== after) endpointDetails = unknownEndpoints('scope-changed');
+          else {
+            endpointGeneration = before;
+            endpointDetails = Object.freeze({ generation: before, observedAt: raw.observedAt, expiresAt: raw.expiresAt, reason: 'observed', endpoints: endpointRows(raw.endpoints) });
+          }
+        } catch { endpointDetails = unknownEndpoints('invalid-observation'); }
+      }
       // A trusted synchronous callback can invalidate another port while it is being read.
       try { if (scopeGeneration !== null && observations?.generation !== scopeGeneration) scopeChanged = true; } catch { scopeChanged = true; }
       if (disposed) return error('CANCELLED');
@@ -153,6 +218,8 @@ export function createPrivacyViewReader(options: {
       try {
         if (routeGeneration !== null && (transport?.generation !== routeGeneration || transport.mode !== routeMode)) routes = TRANSPORT_CHANNELS.map(channel => unavailableRoute(channel, 'scope-changed'));
       } catch { routes = TRANSPORT_CHANNELS.map(channel => unavailableRoute(channel, 'unavailable')); }
+      try { if (endpointGeneration !== null && endpoints?.generation !== endpointGeneration) endpointDetails = unknownEndpoints('scope-changed'); }
+      catch { endpointDetails = unknownEndpoints('unavailable'); }
       if (disposed) return error('CANCELLED');
       // Providers may inspect after the initial reader timestamp. Compare their issue time with
       // completion, never falsely reject a legitimate inspection one clock tick into this read.
@@ -162,12 +229,15 @@ export function createPrivacyViewReader(options: {
       if (vault.expiresAt !== null && completedAt >= vault.expiresAt) vault = unknown('expired');
       if (messaging.expiresAt !== null && completedAt >= messaging.expiresAt) messaging = unknown('expired');
       if (proof.expiresAt !== null && completedAt >= proof.expiresAt) proof = unknown('expired');
+      if (endpointDetails.observedAt !== null && endpointDetails.observedAt > completedAt) endpointDetails = unknownEndpoints('invalid-observation');
+      if (endpointDetails.expiresAt !== null && completedAt >= endpointDetails.expiresAt) endpointDetails = unknownEndpoints('expired');
       if (clockReversed || scopeChanged) {
         const reason = clockReversed ? 'clock-reversed' : 'scope-changed';
         vault = unknown(reason); messaging = unknown(reason); proof = unknown(reason); scopeGeneration = null;
         routes = TRANSPORT_CHANNELS.map(channel => unavailableRoute(channel, reason));
+        endpointDetails = unknownEndpoints(reason);
       }
-      const value: PrivacyView = Object.freeze({ version: 1, selectedPolicy: requestedPolicy, inspectedAt: time, scopeGeneration, routes: Object.freeze(routes), vault, messaging, proof, publicChain: 'public-metadata-visible', manualFiat: 'seller-attestation-not-payment-proof', economicPreparationAllowed: false });
+      const value: PrivacyView = Object.freeze({ version: 1, selectedPolicy: requestedPolicy, inspectedAt: time, scopeGeneration, routes: Object.freeze(routes), vault, messaging, proof, endpointDetails, publicChain: 'public-metadata-visible', manualFiat: 'seller-attestation-not-payment-proof', economicPreparationAllowed: false });
       return Object.freeze({ ok: true, value });
     },
     dispose(): void { disposed = true; },

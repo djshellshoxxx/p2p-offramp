@@ -1,10 +1,11 @@
 import {
   decodeBase64url, encodeBase64url, encodePassphrase, MAX_REVISION, parsePrivateSnapshot, parseVaultEnvelope,
-  ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
+  canonicalEnvelopeBytes, parseBackupBytes, MAX_BACKUP_BYTES, type BackupVerificationReceipt, ValidationError, type PrivateRecordV1, type PrivateSnapshotV1, type RecordKind, type VaultEnvelopeV1,
 } from '../../schemas/index.ts';
 import type { Mutation, Result, VaultErrorCode, VaultService, VaultSession, VaultSessionLease } from '../../schemas/index.ts';
 import { createEnvelope, openEnvelope, encryptRevision, decryptRevision, disposeMaterial, VaultCryptoError,
   type CryptoProvider, type UnlockedMaterial } from './vault-crypto.ts';
+import { claimRecoverySlot } from './recovery-slot.ts';
 import { IndexedDbVaultStore, VaultStorageError, sameEnvelope, type ProfileInventory, type VaultStore, type StoreWriteOptions } from './idb-vault-store.ts';
 export { VaultStorageError } from './idb-vault-store.ts';
 export type { ProfileInventory, VaultStore } from './idb-vault-store.ts';
@@ -20,20 +21,48 @@ const messages: Record<VaultErrorCode, string> = {
   AUTHENTICATION_FAILED: 'Vault authentication failed.', LOCKED: 'The vault session is locked.',
   CONFLICT: 'The vault changed. Unlock it again before writing.', LIMIT_EXCEEDED: 'The vault safety limit was reached.',
   REKEY_REQUIRED: 'Fresh-key migration is required before further writes.', QUOTA_EXCEEDED: 'Encrypted storage quota was exceeded.',
+  BUSY: 'Another backup or recovery operation is still running.',
   STORAGE_UNAVAILABLE: 'Encrypted storage is unavailable. Unlock and reconcile before retrying.', CANCELLED: 'The vault operation was cancelled.',
 };
+/** Error objects are untrusted, including their prototype and code accessors. */
+function isError(error: unknown, type: typeof Failure | typeof ValidationError | typeof VaultCryptoError | typeof VaultStorageError): boolean {
+  try { return error instanceof type; } catch { return false; }
+}
+function errorCode(error: unknown): VaultErrorCode | undefined {
+  try {
+    if (!(isError(error, Failure) || isError(error, ValidationError) || isError(error, VaultCryptoError) || isError(error, VaultStorageError))) return undefined;
+    const property = Object.getOwnPropertyDescriptor(error, 'code');
+    const code: unknown = property && 'value' in property ? property.value : undefined;
+    return typeof code === 'string' && Object.hasOwn(messages, code) ? code as VaultErrorCode : undefined;
+  } catch { return undefined; }
+}
 function failed(error: unknown): Result<never> {
-  const code: VaultErrorCode = error instanceof Failure || error instanceof ValidationError || error instanceof VaultCryptoError || error instanceof VaultStorageError
-    ? error.code : 'STORAGE_UNAVAILABLE';
+  const code = errorCode(error) ?? 'STORAGE_UNAVAILABLE';
   return { ok: false, error: { code, retryable: code === 'STORAGE_UNAVAILABLE' || code === 'QUOTA_EXCEEDED', message: messages[code] } };
 }
 function requireId(value: unknown): string {
   if (typeof value !== 'string' || !/^[0-9a-f]{32}$/.test(value)) throw new ValidationError();
   return value;
 }
+function copyBackupBytes(input: Uint8Array): Uint8Array<ArrayBuffer> {
+  try {
+    const getter = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype) as object, 'byteLength')!.get!;
+    const length: unknown = Reflect.apply(getter, input, []);
+    if (!(input instanceof Uint8Array) || typeof length !== 'number') throw new ValidationError();
+    if (length > MAX_BACKUP_BYTES) throw new ValidationError('LIMIT_EXCEEDED');
+    const copy = new Uint8Array(length); Reflect.apply(Uint8Array.prototype.set, copy, [input]); return copy;
+  } catch (error) { const code = errorCode(error); throw new ValidationError(code === 'LIMIT_EXCEEDED' || code === 'UNSUPPORTED_VERSION' ? code : 'INVALID_INPUT'); }
+}
 function requireToken(value: unknown): string { decodeBase64url(value, 32, 32); return value as string; }
 /** Checked before a session tail is swapped: a non-signal would otherwise throw while holding it. */
-function requireSignal(signal: unknown): void { if (signal !== undefined && !(signal instanceof AbortSignal)) throw new ValidationError(); }
+const signalAborted = Object.getOwnPropertyDescriptor(AbortSignal.prototype, 'aborted')!.get!;
+const addSignalListener = EventTarget.prototype.addEventListener;
+const removeSignalListener = EventTarget.prototype.removeEventListener;
+function aborted(signal: unknown): boolean {
+  if (signal === undefined) return false;
+  try { return Reflect.apply(signalAborted, signal, []) as boolean; } catch { throw new ValidationError(); }
+}
+function requireSignal(signal: unknown): void { aborted(signal); }
 function kind(value: unknown): RecordKind {
   if (value !== 'identity' && value !== 'preference' && value !== 'trade' && value !== 'chat' && value !== 'journal') throw new ValidationError();
   return value;
@@ -79,7 +108,7 @@ function mutationCopies(input: readonly Mutation[], snapshot: PrivateSnapshotV1)
       ids.add(id); mutations.push(mutation);
     }
     return mutations;
-  } catch (error) { if (error instanceof ValidationError) throw error; throw new ValidationError(); }
+  } catch (error) { const code = errorCode(error); throw new ValidationError(code === 'LIMIT_EXCEEDED' || code === 'UNSUPPORTED_VERSION' ? code : 'INVALID_INPUT'); }
 }
 interface SessionState {
   token: string; generation: number; revoked: boolean; material: UnlockedMaterial;
@@ -195,13 +224,18 @@ export class EncryptedVaultService implements VaultService {
   #guard(state: SessionState, generation: number, signal?: AbortSignal): void {
     if (!this.#idleCurrent()) throw new Failure('LOCKED');
     if (state.revoked || state.generation !== generation || this.#sessions.get(state.token) !== state) throw new Failure('LOCKED');
-    if (signal?.aborted) throw new Failure('CANCELLED');
+    if (aborted(signal)) throw new Failure('CANCELLED');
   }
   #control(signal?: AbortSignal): { controller: AbortController; remove: () => void } {
     const controller = new AbortController();
     const abort = (): void => { controller.abort(); };
-    signal?.addEventListener('abort', abort, { once: true }); if (signal?.aborted) abort();
-    return { controller, remove: () => { signal?.removeEventListener('abort', abort); } };
+    requireSignal(signal);
+    const remove = (): void => { try { if (signal !== undefined) Reflect.apply(removeSignalListener, signal, ['abort', abort]); } catch { /* Cleanup cannot replace the fixed operation result. */ } };
+    try {
+      if (signal !== undefined) Reflect.apply(addSignalListener, signal, ['abort', abort, { once: true }]);
+      if (aborted(signal)) abort();
+      return { controller, remove };
+    } catch { remove(); throw new ValidationError(); }
   }
   #register(snapshot: PrivateSnapshotV1, envelope: VaultEnvelopeV1, material: UnlockedMaterial, token: string): VaultSession {
     this.#sessions.set(token, { token, generation: 0, revoked: false, material, snapshot, envelope,
@@ -217,7 +251,7 @@ export class EncryptedVaultService implements VaultService {
       if (control.controller.signal.aborted) throw new Failure('CANCELLED');
     };
     try { await previous; guard(); return await operation(guard, control.controller); }
-    catch (error) { if (error instanceof VaultStorageError && error.code === 'CANCELLED') guard(); throw error; }
+    catch (error) { if (isError(error, VaultStorageError) && errorCode(error) === 'CANCELLED') guard(); throw error; }
     finally { release(); this.#pending.delete(control.controller); control.remove(); }
   }
   create(passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<VaultSession>> {
@@ -248,9 +282,9 @@ export class EncryptedVaultService implements VaultService {
   listProfiles(signal?: AbortSignal): Promise<Result<ProfileInventory>> {
     return this.#result(async () => {
       requireSignal(signal);
-      if (signal?.aborted) throw new Failure('CANCELLED');
+      if (aborted(signal)) throw new Failure('CANCELLED');
       const inventory = await this.#store.listProfileIds();
-      if (signal?.aborted) throw new Failure('CANCELLED');
+      if (aborted(signal)) throw new Failure('CANCELLED');
       return inventory;
     });
   }
@@ -319,8 +353,9 @@ export class EncryptedVaultService implements VaultService {
       if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION) throw new ValidationError();
       const captured = mutationCopies(mutations, state.snapshot!);
+      const control = this.#control(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
-      const control = this.#control(signal); state.operations.add(control.controller);
+      state.operations.add(control.controller);
       const guard = (): void => {
         this.#guard(state, generation, signal);
         // The callback is a local composition capability, never stored input. Do not expose its exception.
@@ -347,10 +382,10 @@ export class EncryptedVaultService implements VaultService {
         if (!state.revoked && state.generation === generation) { state.snapshot = candidate; state.envelope = next; }
         return next.revision;
       } catch (error) {
-        if (error instanceof VaultStorageError && error.code === 'CANCELLED') { guard(); throw new Failure('CANCELLED'); }
-        if ((error instanceof VaultStorageError && (error.code === 'CONFLICT' || error.code === 'STORAGE_UNAVAILABLE')) ||
-          (error instanceof Failure && error.code === 'CONFLICT') ||
-          !(error instanceof Failure || error instanceof VaultStorageError || error instanceof VaultCryptoError || error instanceof ValidationError)) this.lock(sessionId);
+        if (isError(error, VaultStorageError) && errorCode(error) === 'CANCELLED') { guard(); throw new Failure('CANCELLED'); }
+        if ((isError(error, VaultStorageError) && (errorCode(error) === 'CONFLICT' || errorCode(error) === 'STORAGE_UNAVAILABLE')) ||
+          (isError(error, Failure) && errorCode(error) === 'CONFLICT') ||
+          errorCode(error) === undefined) this.lock(sessionId);
         throw error;
       } finally { release(); state.operations.delete(control.controller); control.remove(); }
     });
@@ -372,6 +407,47 @@ export class EncryptedVaultService implements VaultService {
         const snapshot = await decryptRevision(state.material, latest); this.#guard(state, generation, signal);
         return snapshot.records.map(record => ({ ...record }));
       } finally { release(); }
+    });
+  }
+  /** Authenticate the supplied complete file against this exact live committed profile. Never restores or writes. */
+  verifyBackup(sessionId: string, bytes: Uint8Array, passphrase: string, signal?: AbortSignal, assertCurrent?: () => void): Promise<Result<BackupVerificationReceipt>> {
+    return this.#result(async () => {
+      requireSignal(signal);
+      if (assertCurrent !== undefined && typeof assertCurrent !== 'function') throw new ValidationError();
+      const password = encodePassphrase(passphrase); password.fill(0);
+      const state = this.#session(sessionId), generation = state.generation;
+      const releaseRecovery = claimRecoverySlot();
+      if (!releaseRecovery) throw new Failure('BUSY');
+      let backupBytes: Uint8Array<ArrayBuffer>;
+      try { backupBytes = copyBackupBytes(bytes); } catch (error) { releaseRecovery(); throw error; }
+      let control: { controller: AbortController; remove: () => void };
+      try { control = this.#control(signal); } catch (error) { backupBytes.fill(0); releaseRecovery(); throw error; }
+      const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
+      state.operations.add(control.controller);
+      const guard = (): void => {
+        this.#guard(state, generation, control.controller.signal);
+        try { assertCurrent?.(); } catch { throw new Failure('CANCELLED'); }
+        this.#guard(state, generation, control.controller.signal);
+      };
+      let snapshot: PrivateSnapshotV1 | undefined;
+      try {
+        await previous; guard();
+        const backup = parseBackupBytes(backupBytes), expected = state.envelope!;
+        const canonical = canonicalEnvelopeBytes(backup.envelope);
+        const checksum = Array.from(new Uint8Array(await this.#provider.subtle.digest('SHA-256', canonical)), value => value.toString(16).padStart(2, '0')).join(''); guard();
+        if (checksum !== backup.checksum) throw new ValidationError();
+        if (!sameEnvelope(backup.envelope, expected)) throw new Failure('CONFLICT');
+        const current = await this.#store.get(expected.profileId); guard();
+        if (!current || !sameEnvelope(parseVaultEnvelope(current), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        const opened = await openEnvelope(backup.envelope, passphrase, this.#provider);
+        try { guard(); snapshot = opened.snapshot; }
+        finally { disposeMaterial(opened.material); }
+        if (JSON.stringify(snapshot) !== JSON.stringify(state.snapshot)) throw new Failure('AUTHENTICATION_FAILED');
+        const backupSha256 = Array.from(new Uint8Array(await this.#provider.subtle.digest('SHA-256', backupBytes)), value => value.toString(16).padStart(2, '0')).join(''); guard();
+        const latest = await this.#store.get(expected.profileId); guard();
+        if (!latest || !sameEnvelope(parseVaultEnvelope(latest), expected)) { this.lock(sessionId); throw new Failure('CONFLICT'); }
+        return Object.freeze({profileId:expected.profileId,revision:expected.revision,scope:'complete-profile-v1' as const,envelopeSha256:checksum,backupSha256});
+      } finally { snapshot = undefined; backupBytes.fill(0); release(); state.operations.delete(control.controller); control.remove(); releaseRecovery(); }
     });
   }
   /**
@@ -406,8 +482,9 @@ export class EncryptedVaultService implements VaultService {
       requireId(expectedKeyId);
       if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0 || expectedRevision > MAX_REVISION || typeof transform !== 'function') throw new ValidationError();
       const password = encodePassphrase(destinationPassphrase); password.fill(0);
+      const control = this.#control(signal);
       const previous = state.tail; let release!: () => void; state.tail = new Promise(resolve => { release = resolve; });
-      const control = this.#control(signal); state.operations.add(control.controller);
+      state.operations.add(control.controller);
       const guard = (): void => { this.#guard(state, generation, control.controller.signal); };
       let candidate: PrivateSnapshotV1 | undefined;
       try {
@@ -420,7 +497,11 @@ export class EncryptedVaultService implements VaultService {
         try { output = transform(snapshot.records.map(record => ({ ...record }))); }
         catch (error) {
           // Only fixed schema outcomes cross this boundary; transform-supplied messages never do.
-          const code: unknown = (error as { code?: unknown } | null)?.code;
+          let code: unknown;
+          try {
+            const property = Object.getOwnPropertyDescriptor(error, 'code');
+            if (property && 'value' in property) code = property.value;
+          } catch { /* Hostile transforms receive the same fixed input failure. */ }
           throw new Failure(code === 'UNSUPPORTED_VERSION' || code === 'LIMIT_EXCEEDED' ? code : 'INVALID_INPUT');
         }
         if (!Array.isArray(output) || output.length !== snapshot.records.length) throw new ValidationError();
@@ -446,7 +527,7 @@ export class EncryptedVaultService implements VaultService {
         // A completed add is durable even if the source session is locked or cancelled afterwards.
         return receipt;
       } catch (error) {
-        if (error instanceof VaultStorageError && error.code === 'CANCELLED') { guard(); throw new Failure('CANCELLED'); }
+        if (isError(error, VaultStorageError) && errorCode(error) === 'CANCELLED') { guard(); throw new Failure('CANCELLED'); }
         throw error;
       } finally { candidate = undefined; release(); state.operations.delete(control.controller); control.remove(); }
     });

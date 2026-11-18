@@ -1,0 +1,41 @@
+✔ deployment proof binds receipt/CREATE/address/canonical inclusion and pins code/allowlist reads (9.720409ms)
+✔ wrong receipt, transaction, derived address, orphan and changed anchors never record finality (5.444945ms)
+✔ both pending branches require fresh proof; uncertainty and substituted owner preserve guard (32.881793ms)
+✔ canonical early known attempts may clear; hashless attempts wait for native finality (10.366593ms)
+✔ reverted status is actionable only after native CREATE inclusion and empty-code proof (5.34094ms)
+✔ geth-style reverted CREATE address must equal the authenticated sender/nonce derivation (22.870723ms)
+✔ forgeEnv pins the canonical config/profile, drops ambient build settings and private keys (2.803118ms)
+✔ rpcClient refuses plain HTTP except to loopback (2.938129ms)
+✔ public endpoints cannot copy individual private query credentials or their URL encodings (0.76666ms)
+✔ every nonempty repeated or short private query value is considered without treating empty values as credentials (0.417348ms)
+✔ a malformed public percent escape cannot disable inspection of an encoded private query value (0.151673ms)
+✔ short private RPC userinfo is sensitive even when it is not a key-like token (4.288418ms)
+✔ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (0.447104ms)
+✔ RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies (70.805188ms)
+✔ RPC requests capture independent ids and prohibit redirects/credentials without exposing diagnostics (2.099386ms)
+✔ control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes (7.918668ms)
+✔ deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send (42.62831ms)
+✔ unknown deployment guard clears only after finalized matching native account/nonce and canonical inclusion (45.859414ms)
+✔ effective compiler recipe rejects global or profile configuration drift (3.571952ms)
+✔ committed compiler recipe disables inferred vendor remappings (3.49576ms)
+✔ edited trade labels, duplicate labels and missing trade slots fail before generating documents or sending (269.676915ms)
+✔ valid saved labels still negotiate beside an explicitly selected operator state path (309.065442ms)
+▶ an observation whose numbered block changes or disappears is refused before funding
+  ✔ hash (178.926379ms)
+  ✔ height (378.981111ms)
+  ✔ time (180.617973ms)
+  ✔ missing (234.848679ms)
+✔ an observation whose numbered block changes or disappears is refused before funding (975.101332ms)
+✔ a stable anchored absence still reaches the explicit pre-funding hook without a send (244.180965ms)
+✔ saved funding or settlement attempts and hashes cannot permit another funding decision from current absence (2511.249152ms)
+✔ each funding attempt is durable before the send boundary and resume never invokes that boundary a second time (510.75516ms)
+✔ proven funding allows the first distinct exit, preserves each kind, and never repeats a prior release or refund (474.007299ms)
+✔ native terminal observations remain read-only even with unresolved or unknown legacy attempt evidence (217.064504ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7074.14421

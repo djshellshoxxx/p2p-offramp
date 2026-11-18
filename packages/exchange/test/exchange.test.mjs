@@ -77,10 +77,16 @@ test('two-party exchange over the fake relay with real crypto: ad -> take -> off
     const fixture = loopbackRelayFixture([fake]);
     const mkPool = who => { const p = createRelayPool({ broker: makeBroker({ endpointURLs: fixture.endpointURLs }).broker, relays: fixture.relays, connect: fixture.connect, verifier: who.crypto, timing: FAST, nowSeconds: () => NOW }); pools.push(p); return p; };
     const sellerPool = mkPool(w.seller), buyerPool = mkPool(w.buyer);
-    /** Subscribe for events addressed to `who`, return everything not yet delivered once the relay says EOSE, then close. */
+    /** Each fresh subscription replays relay history: only return not-yet-delivered wraps. */
+    const delivered = new Map();
     const pull = async (pool, who) => {
       const got = []; let eose = false;
-      const sub = pool.subscribe([{ kinds: [1059], '#p': [who.pub], since: NOW - 250_000, limit: 50 }], { onEvent: e => got.push(e), onEose: () => { eose = true; } });
+      if (!delivered.has(who.pub)) delivered.set(who.pub, new Set());
+      const seen = delivered.get(who.pub);
+      const sub = pool.subscribe([{ kinds: [1059], '#p': [who.pub], since: NOW - 250_000, limit: 50 }], {
+        onEvent: e => { if (!seen.has(e.id)) { seen.add(e.id); got.push(e); } },
+        onEose: () => { eose = true; }
+      });
       assert.equal(sub.ok, true); await until(() => eose); sub.value.close(); return got;
     };
     // Discovery: the buyer finds the seller's advert through the pool; it goes through the real verifier into a fresh book.

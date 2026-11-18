@@ -1,7 +1,7 @@
 /** Local development artifact, never a signed release or deployment attestation. */
 import { build } from 'vite';
 import { readdir, readFile, lstat, writeFile } from 'node:fs/promises';
-import { resolve, relative } from 'node:path';
+import { resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
@@ -17,13 +17,14 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
     for (const item of await readdir(path, { withFileTypes: true })) {
       const target = resolve(path, item.name), stat = await lstat(target);
       if (stat.isSymbolicLink()) throw new Error('ARTIFACT_SYMLINK');
+      const artifactPath = safeArtifactPath(relative(directory, target).split(sep).join('/'));
       if (stat.isDirectory()) await walk(target);
       else if (stat.isFile()) {
-        const path = safeArtifactPath(relative(directory, target).replaceAll('\\', '/'));
+        if (Object.hasOwn(identities, artifactPath)) throw new Error('ARTIFACT_POLICY: paths');
         const bytes = await readFile(target);
         // Identity binds the file on disk, independently of its text-policy decoding.
-        identities[path] = { path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
-        files[path] = bytes.toString('utf8');
+        identities[artifactPath] = { path: artifactPath, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+        files[artifactPath] = bytes.toString('utf8');
       }
       else throw new Error('ARTIFACT_TYPE');
     }

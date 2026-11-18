@@ -1,0 +1,183 @@
+✖ verification authenticates the exact complete current profile without a write or private reply (187.407074ms)
+✖ public-invalid, wrong-profile and stale files fail before a KDF and cannot mutate records (188.012444ms)
+✖ wrong file passphrase cannot establish verification even though the selected profile is unlocked (196.84753ms)
+✖ verification rejects cross-tab changes during authentication and locks the stale source session (194.929203ms)
+✖ lock, cancellation and trusted selection guards reject late authentication without writes (254.150397ms)
+✖ verification copies caller bytes and shares recovery capacity until native crypto actually drains (313.395206ms)
+✖ hostile store throws and code accessors produce fresh fixed diagnostics without invoking accessors (0.784964ms)
+✖ proxy signals reject with fixed diagnostics before consuming shared recovery capacity (0.907993ms)
+✖ native signals ignore shadowed accessors and listener methods, drain slots and detach actual listeners (2.199482ms)
+✖ shadowed native cancellation waits for actual store read to drain before releasing recovery capacity (1.323348ms)
+✔ hostile crypto provider errors are fixed and leave recovery capacity available (7.780119ms)
+✖ vault open, commit and verification use native signal controls and detach listeners on every exit (1.368623ms)
+✖ migration failures remain fixed typed results when a dependency rejects with malformed errors (1.341803ms)
+✔ G09 registry rejects non-adjacent, duplicate, out-of-range and unvalidated steps (0.935625ms)
+✔ G09 plans and applies contiguous steps in one CAS commit, preserving IDs, kinds and untouched records (290.001565ms)
+✔ G09 refuses future records, missing paths and any failing record without a partial write (1181.399251ms)
+✔ G09 transforms receive copies and cannot mutate the source snapshot (154.596936ms)
+✔ G09 apply recomputes and rejects a supplied plan that differs, and conflicts on concurrent revision change (949.333515ms)
+✔ G09 bounds in-place changes at 256 and honors cancellation and lock (474.668442ms)
+✔ G09 a committed migration reports its durable revision even if readback fails afterwards (180.956073ms)
+✔ G09 no-op preflight writes nothing, needs no commit and still honors cancellation and lock (184.663531ms)
+✔ G09 stale empty plan: a persisted advance by another writer conflicts without writing or losing that work (1193.884293ms)
+✔ G09 verified means authenticated persisted readback, not the session cache (711.94085ms)
+✔ current-version invalid records reject no-op and mixed migration candidates without writes (513.783329ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 12
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7494.185758
+
+✖ failing tests:
+
+test at packages/storage/test/backup-verification.test.mjs:25:1
+✖ verification authenticates the exact complete current profile without a write or private reply (187.407074ms)
+  AssertionError [ERR_ASSERTION]: missing substantive current-backup verification
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:27:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/storage/test/backup-verification.test.mjs:37:1
+✖ public-invalid, wrong-profile and stale files fail before a KDF and cannot mutate records (188.012444ms)
+  TypeError: s.vault.verifyBackup is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:41:313)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/backup-verification.test.mjs:50:1
+✖ wrong file passphrase cannot establish verification even though the selected profile is unlocked (196.84753ms)
+  TypeError: s.vault.verifyBackup is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:51:48)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/backup-verification.test.mjs:54:1
+✖ verification rejects cross-tab changes during authentication and locks the stale source session (194.929203ms)
+  TypeError: s.vault.verifyBackup is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:56:37)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/backup-verification.test.mjs:59:1
+✖ lock, cancellation and trusted selection guards reject late authentication without writes (254.150397ms)
+  TypeError: s.vault.verifyBackup is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:63:38)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/backup-verification.test.mjs:67:1
+✖ verification copies caller bytes and shares recovery capacity until native crypto actually drains (313.395206ms)
+  TypeError: s.vault.verifyBackup is not a function
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/backup-verification.test.mjs:72:25)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/hostile-boundary.test.mjs:15:1
+✖ hostile store throws and code accessors produce fresh fixed diagnostics without invoking accessors (0.784964ms)
+  Error: PRIVATE_PROVIDER_DETAIL
+      at Object.getPrototypeOf (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:9:55)
+      at [Symbol.hasInstance] (<anonymous>)
+      at failed (file:///workspaces/p2p-offramp/packages/storage/src/vault-service.ts:26:38)
+      at #result (file:///workspaces/p2p-offramp/packages/storage/src/vault-service.ts:177:103)
+      at async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:22:13)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/storage/test/hostile-boundary.test.mjs:31:1
+✖ proxy signals reject with fixed diagnostics before consuming shared recovery capacity (0.907993ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'STORAGE_UNAVAILABLE'
+  - 'INVALID_INPUT'
+  
+      at fixed (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:11:88)
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:36:4)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'STORAGE_UNAVAILABLE',
+    expected: 'INVALID_INPUT',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/storage/test/hostile-boundary.test.mjs:42:1
+✖ native signals ignore shadowed accessors and listener methods, drain slots and detach actual listeners (2.199482ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'NOT_FOUND'
+  
+      at Object.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:12:133)
+      at expectedException (node:assert:578:17)
+      at expectsError (node:assert:703:21)
+      at strict.rejects (node:assert:769:3)
+      at async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:47:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'NOT_FOUND',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/storage/test/hostile-boundary.test.mjs:54:1
+✖ shadowed native cancellation waits for actual store read to drain before releasing recovery capacity (1.323348ms)
+  Error: PRIVATE_PROVIDER_DETAIL
+      at AbortSignal.get (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:13:187)
+      at #job (file:///workspaces/p2p-offramp/packages/storage/src/backup-service.ts:63:15)
+      at EncryptedBackupService.exportWithStatus (file:///workspaces/p2p-offramp/packages/storage/src/backup-service.ts:98:21)
+      at EncryptedBackupService.export (file:///workspaces/p2p-offramp/packages/storage/src/backup-service.ts:95:24)
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:60:30)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+
+test at packages/storage/test/hostile-boundary.test.mjs:76:1
+✖ vault open, commit and verification use native signal controls and detach listeners on every exit (1.368623ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/hostile-boundary.test.mjs:83:107)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/storage/test/migration-service.test.mjs:31:1
+✖ migration failures remain fixed typed results when a dependency rejects with malformed errors (1.341803ms)
+  Error: private diagnostic
+      at MigrationError.get [as code] (file:///workspaces/p2p-offramp/packages/storage/test/migration-service.test.mjs:34:68)
+      at failed (file:///workspaces/p2p-offramp/packages/storage/src/migration-service.ts:40:108)
+      at RecordMigrationService.plan (file:///workspaces/p2p-offramp/packages/storage/src/migration-service.ts:132:103)
+      at async TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/storage/test/migration-service.test.mjs:40:27)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

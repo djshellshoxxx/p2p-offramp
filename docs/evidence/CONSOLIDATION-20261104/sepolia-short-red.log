@@ -1,0 +1,45 @@
+✔ forgeEnv pins the canonical config/profile, drops ambient build settings and private keys (10.891703ms)
+✔ rpcClient refuses plain HTTP except to loopback (2.077484ms)
+✔ public endpoints cannot copy individual private query credentials or their URL encodings (1.872672ms)
+✔ every nonempty repeated or short private query value is considered without treating empty values as credentials (2.525269ms)
+✔ a malformed public percent escape cannot disable inspection of an encoded private query value (0.201876ms)
+✖ short private RPC userinfo is sensitive even when it is not a key-like token (2.403222ms)
+✔ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (0.465448ms)
+✔ RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies (82.686727ms)
+✔ RPC requests capture independent ids and prohibit redirects/credentials without exposing diagnostics (3.083761ms)
+✔ control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes (9.585938ms)
+✔ deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send (290.09361ms)
+✔ unknown deployment guard clears only after finalized matching native account/nonce and canonical inclusion (100.368171ms)
+✔ effective compiler recipe rejects global or profile configuration drift (1.134145ms)
+✔ committed compiler recipe disables inferred vendor remappings (18.9548ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 13
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1573.543505
+
+✖ failing tests:
+
+test at scripts/tests/sepolia-hygiene.test.mjs:62:1
+✖ short private RPC userinfo is sensitive even when it is not a key-like token (2.403222ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/scripts/tests/sepolia-hygiene.test.mjs:63:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

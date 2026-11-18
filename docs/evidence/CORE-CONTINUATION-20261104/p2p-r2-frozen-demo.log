@@ -1,0 +1,25 @@
+
+> p2p-offramp@0.1.0 build:demo
+> npm run typecheck && node apps/web/scripts/build.mjs demo
+
+
+> p2p-offramp@0.1.0 typecheck
+> tsc --noEmit && tsc -p apps/web/tsconfig.runtime.json --noEmit && tsc -p apps/web/tsconfig.worker.json --noEmit && tsc -p apps/web/tsconfig.ui.json --noEmit
+
+vite v8.3.5 building client environment for demo...
+transforming...
+✓ 69 modules transformed.
+rendering chunks...
+apps/web/dist-demo/_headers                              0.34 kB
+apps/web/dist-demo/content-policy.json                   1.00 kB
+apps/web/dist-demo/index.html                            1.26 kB
+apps/web/dist-demo/third-party-licenses.json             3.62 kB
+apps/web/dist-demo/core-graph-worker.json                3.97 kB
+apps/web/dist-demo/core-graph-document.json             10.19 kB
+apps/web/dist-demo/assets/vault.worker-CVTEvq6i.js      63.88 kB
+apps/web/dist-demo/assets/index-BuWtQWG3.css             6.71 kB
+apps/web/dist-demo/assets/synthetic-local-C1ImVpBG.js    5.73 kB
+apps/web/dist-demo/assets/index-M6tAbLFs.js            381.74 kB
+
+✓ built in 1.24s
+{"localStaticBuild":true,"syntheticDemo":true,"files":10,"bytes":478494,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}

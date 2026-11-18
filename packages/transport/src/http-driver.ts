@@ -11,8 +11,25 @@ export interface HttpResponsePort {
   readonly url: string;
   readonly headers: Pick<Headers, 'get'>;
   readonly body: ReadableStream<Uint8Array> | null;
+  /** Fetch Response.type. A port that omits it promises an unfiltered header list. */
+  readonly type?: string;
 }
 export type HttpFetchPort = (url: string, init: RequestInit) => Promise<HttpResponsePort>;
+/** True only when Content-Length positively describes the bytes the body stream yields.
+ * Fetch removes content codings before exposing the body, while Content-Length keeps the encoded size.
+ * A CORS-filtered response hides Content-Encoding but exposes Content-Length, so absence proves nothing there.
+ */
+function declaresBodyLength(response: Pick<HttpResponsePort, 'headers' | 'type'>): boolean {
+  const coding = response.headers.get('content-encoding');
+  if (coding !== null && typeof coding !== 'string') return false;
+  // An empty coding list means no coding was applied, exactly like a missing header.
+  const visible = coding === null ? '' : coding.trim().toLowerCase();
+  // A visible coding is authoritative: only an explicit identity coding leaves the length unchanged.
+  if (visible !== '') return visible === 'identity';
+  // A missing coding proves identity only on an unfiltered header list.
+  const type = response.type;
+  return type === undefined || type === 'basic' || type === 'default';
+}
 const fail = (error: 'INVALID_ENDPOINT' | 'POLICY_BLOCKED' | 'CANCELLED' | 'LIMIT_EXCEEDED' | 'ROUTE_UNAVAILABLE'): TransportResult<never> => ({ ok: false, error });
 
 /** Construct only with a reviewed fetch implementation. The caller binds URL to its trusted registry grant.
@@ -58,7 +75,12 @@ export class BoundedHttpDriver {
           if (signal.aborted || !scope.current()) return fail('CANCELLED');
           if (!response.ok || response.redirected || response.url !== url.href) return fail('ROUTE_UNAVAILABLE');
           const length = response.headers.get('content-length');
-          if (length !== null && (!/^(0|[1-9][0-9]*)$/.test(length) || length.length > 6 || Number(length) > MAX_HTTP_BYTES)) return fail('LIMIT_EXCEEDED');
+          const wellFormed = length === null || (/^(0|[1-9][0-9]*)$/.test(length) && length.length <= 6);
+          if (!wellFormed) return fail('LIMIT_EXCEEDED');
+          // Invariant: only an identity length may refuse early or be compared with the decoded total.
+          // Otherwise the streamed decoded-byte cap below is the sole size bound.
+          const declared = length !== null && declaresBodyLength(response) ? Number(length) : null;
+          if (declared !== null && declared > MAX_HTTP_BYTES) return fail('LIMIT_EXCEEDED');
           if (!reader) return fail('ROUTE_UNAVAILABLE');
           let total = 0, reads = 0;
           for (;;) {
@@ -71,7 +93,7 @@ export class BoundedHttpDriver {
             if (total > MAX_HTTP_BYTES) return fail('LIMIT_EXCEEDED');
             chunks.push(next.value.slice());
           }
-          if (length !== null && total !== Number(length)) return fail('ROUTE_UNAVAILABLE');
+          if (declared !== null && total !== declared) return fail('ROUTE_UNAVAILABLE');
           const bytes = new Uint8Array(total); let offset = 0;
           for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
           return { ok: true as const, value: bytes };

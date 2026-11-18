@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** Static source-boundary checks. This does not prove runtime isolation or inspect arbitrary bundler transforms. */
-import { readdir, realpath } from 'node:fs/promises';
+import { lstat, readdir, realpath } from 'node:fs/promises';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { isMain } from './lib/is-main.mjs';
 import { API } from 'typescript/unstable/sync';
@@ -36,7 +36,8 @@ const NODE_BUILTINS = new Set([
 ]);
 const ADVANCED_PACKAGES = new Set([
   'advanced', 'extensions', 'proof', 'proofs', 'zk', 'zktls', 'stealth', 'reputation',
-  'maps', 'map', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
+  'maps', 'map', 'meetup', 'courier', 'couriers', 'tribunal', 'arbitration', 'arbitrator',
+  'privacy-policy', 'privacy-controls', 'proof-jobs', 'liquidity',
 ]);
 
 function posix(value) { return value.split(sep).join('/'); }
@@ -56,18 +57,29 @@ function sourceKind(path) {
   return undefined;
 }
 async function collectSources(root) {
-  const output = [];
+  const output = [], findings = [];
+  const unavailable = path => findings.push({ file: path, line: 1, code: 'SOURCE_ENUMERATION_FAILED', detail: 'production directory or source link cannot be verified' });
   async function walk(dir) {
     let entries;
-    try { entries = await readdir(dir, { withFileTypes: true }); } catch { return; }
+    try { entries = await readdir(dir, { withFileTypes: true }); } catch { unavailable(dir); return; }
     for (const entry of entries) {
       const path = resolve(dir, entry.name);
-      if (entry.isDirectory()) await walk(path);
+      if (entry.isSymbolicLink()) {
+        const rel = posix(relative(root, path));
+        if (sourceKind(rel) || /^packages\/[^/]+$/.test(rel)) unavailable(path);
+      } else if (entry.isDirectory()) await walk(path);
       else if (entry.isFile() && SOURCE_EXTENSIONS.includes(extname(entry.name)) && sourceKind(relative(root, path))) output.push(path);
     }
   }
-  for (const dir of [resolve(root, 'packages'), resolve(root, 'apps/web/src')]) await walk(dir);
-  return output.sort();
+  for (const dir of [resolve(root, 'packages'), resolve(root, 'apps/web/src')]) {
+    try {
+      if (!(await lstat(dir)).isDirectory()) { unavailable(dir); continue; }
+    } catch { unavailable(dir); continue; }
+    await walk(dir);
+  }
+  output.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  findings.sort((a, b) => a.file.localeCompare(b.file));
+  return { paths: output, findings };
 }
 function addFinding(findings, file, node, code, detail = '') {
   let line = 1;
@@ -128,7 +140,9 @@ function isAppSource(root, path) {
 function isAdvancedOrServerPath(root, path) {
   const rel = posix(relative(root, path));
   const parts = rel.toLowerCase().split('/').flatMap(part => part.split(/[-_]/));
-  return parts.some(part => part === 'server' || part === 'servers' || ADVANCED_PACKAGES.has(part));
+  const packageName = packageForPath(root, path)?.toLowerCase();
+  return (packageName !== undefined && ADVANCED_PACKAGES.has(packageName))
+    || parts.some(part => part === 'server' || part === 'servers' || ADVANCED_PACKAGES.has(part));
 }
 function checkGlobalReferences(root, file, source, findings) {
   const kind = sourceKind(relative(root, file.fileName));
@@ -169,7 +183,8 @@ function checkGlobalReferences(root, file, source, findings) {
  */
 export async function inspectImportBoundaries(rootDir = process.cwd()) {
   const root = await realpath(resolve(rootDir));
-  const paths = await collectSources(root);
+  const collected = await collectSources(root), paths = collected.paths;
+  if (collected.findings.length) return { findings: collected.findings, sourceCount: paths.length, graphChecked: false, graphModules: 0 };
   const findings = [];
   if (paths.length === 0) return { findings: [{ file: root, line: 1, code: 'NO_PRODUCTION_SOURCES', detail: '' }], sourceCount: 0, graphChecked: false };
   const sourceSet = new Set(paths);

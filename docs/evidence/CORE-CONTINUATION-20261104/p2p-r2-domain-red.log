@@ -1,0 +1,60 @@
+✔ terms review: both synthetic sets are accepted with exact registry/input values, deep-frozen and uncoupled from the input (35.047615ms)
+✔ terms review: a core trade with no capabilities lists none as unsupported (3.600034ms)
+✔ terms review: container shape and format (2.419572ms)
+✔ terms review: every public-terms field rejects noncanonical encodings as INVALID_TERMS (24.588696ms)
+✔ terms review: valid-but-different public field values reach the right later check (or are accepted verbatim) (8.154537ms)
+✔ terms review: private agreement validation maps encoder errors (4.653379ms)
+✔ terms review: agreement binding, hashes, registry and asset checks (16.730401ms)
+✔ terms review: first failing check wins (5.080515ms)
+✔ terms review: funding window boundaries (no device clock) (9.686265ms)
+✔ terms review: SHA-256 provider failures are UNAVAILABLE and the provider gets a fresh copy (6.525981ms)
+✔ terms review bytes: size, strict UTF-8 and bounded strict JSON (15.278524ms)
+✖ terms review bytes: the real 64KiB bound rejects a shadowed max+1 view before any owned allocation (1.61934ms)
+✖ terms review bytes: bounded offset views ignore caller length/iterator/species accessors and remain untouched (0.601081ms)
+✔ terms review bytes: detached views remain a fixed MALFORMED rejection (0.254585ms)
+✔ terms review: hostile inputs never throw and each field is read once (29.613638ms)
+✔ terms review: agreement-level codes follow the documented step order (after INVALID_TERMS, encoder field order) (1.011557ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 14
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 887.366004
+
+✖ failing tests:
+
+test at packages/domain/test/terms-review.test.mjs:360:1
+✖ terms review bytes: the real 64KiB bound rejects a shadowed max+1 view before any owned allocation (1.61934ms)
+  AssertionError [ERR_ASSERTION]: the oversized caller view must be refused before constructing an owned copy
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/domain/test/terms-review.test.mjs:371:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/domain/test/terms-review.test.mjs:375:1
+✖ terms review bytes: bounded offset views ignore caller length/iterator/species accessors and remain untouched (0.601081ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"code":"MALFORMED"}
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspaces/p2p-offramp/packages/domain/test/terms-review.test.mjs:381:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
