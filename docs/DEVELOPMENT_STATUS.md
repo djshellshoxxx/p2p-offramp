@@ -1,5 +1,15 @@
 # Development status and continuation contract
 
+## Current consolidation checkpoint — November 18, 2026 (static client only)
+
+At merged `main@eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9`, [consolidation PR #134](https://github.com/djshellshoxxx/p2p-offramp/pull/134) landed the integration trunk; [PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61), [PR #132](https://github.com/djshellshoxxx/p2p-offramp/pull/132) and [Wiki-source PR #68](https://github.com/djshellshoxxx/p2p-offramp/pull/68) now report merged. Earlier ChatGPT handoff/audit PRs #66/#67 are closed and their *final file contents* were carried through #134, rather than every intermediate status-only commit. This is a repository integration event, **not** a public static-site publication, release, owner approval or real-funds readiness.
+
+At the exact pre-merge #134 head `7be1dbef7fe38204db441ffb9c29e6f06acfaecd`, four GitHub Actions workflow families (Vault foundation, EVM escrow, Solana escrow, Specification inventory) returned successful conclusions; the separate Snyk status was successful. The author additionally [reported local checks](https://github.com/djshellshoxxx/p2p-offramp/pull/134#issuecomment-6971473083), which are author-reported evidence, not independently rerun here. The GitHub connector returned **no pull-request-triggered workflow runs** for the new merge commit itself. SonarCloud Security Rating **A is not independently verified** by these results; D1 buyer/seller peer acceptance, D8 release approval, D9 historic record provenance, independently qualified client trust/bootstrap, and all real-funds/release restrictions remain separate gates.
+
+Active [draft PR #135](https://github.com/djshellshoxxx/p2p-offramp/pull/135) (locale selection) and [draft PR #136](https://github.com/djshellshoxxx/p2p-offramp/pull/136) (Lane B handoff) are **not included in this main snapshot**. This ChatGPT lane is restricted by the November 12 owner direction to the static GitHub Pages client; no server, native, CLI, relayer or contract development is authorized here. `ReleaseEnabled=0`; no deployments/publication or real-funds use.
+
+The dated November 16 sections below are historical snapshots of their explicitly named source commits and must not be read as the current PR merge state.
+
 ## Development continuation — November 16, 2026
 
 The cumulative development baseline is `claude/confident-fermi-g6wjp3@7461c87`,
