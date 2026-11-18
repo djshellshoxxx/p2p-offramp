@@ -45,7 +45,7 @@ export function inspectArtifactFiles(files) {
     if (total > 256 * 1024 * 1024 || path.endsWith('.map') || /sourceMappingURL|-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----/.test(text)) fail();
     if (/\.(?:html|css|js)$/.test(path) && /\b(?:eval\s*\(|new\s+Function\s*\(|serviceWorker\s*\.\s*register\s*\()/.test(text)) fail();
     if (path.endsWith('.html')) {
-      if (/\s(?:on[a-z]+|style|srcset|poster|action)\s*=/i.test(text) || /http-equiv\s*=\s*["']refresh["']/i.test(text) || /<(?:style|iframe|object|embed|base)\b/i.test(text)) fail();
+      if (/\s(?:on[a-z]+|style|srcset|poster|action)\s*=/i.test(text) || /http-equiv\s*=\s*["']?\s*refresh\b/i.test(text) || /<(?:style|iframe|object|embed|base)\b/i.test(text)) fail();
       for (const script of text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) if (script[2].trim() || !/\bsrc\s*=/.test(script[1])) fail();
       for (const match of text.matchAll(/\b(?:src|href)\s*=\s*["']([^"']*)["']/gi)) {
         if (!localResource(match[1]) && !/^#\/[a-z/]*$/.test(match[1])) fail();

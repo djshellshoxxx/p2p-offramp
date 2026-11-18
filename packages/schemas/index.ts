@@ -14,3 +14,6 @@ export * from './src/identity.ts';
 export * from './src/intent.ts';
 export * from './src/registry.ts';
 export * from './src/saved-review.ts';
+export * from './src/backup-verification.ts';
+export * from './src/trade-drafts.ts';
+export * from './src/transport-selection.ts';

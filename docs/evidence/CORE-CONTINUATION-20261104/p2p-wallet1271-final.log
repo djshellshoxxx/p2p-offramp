@@ -1,0 +1,20 @@
+✔ explicit1271 acceptance binds exact digest/account/domain and arbitrary bounded signature withoutEOAfallback (14.405916ms)
+✔ wrongmagic,short/oversized return,revert,nocode,currentchain/code and canonical reorg failures reject (20.249765ms)
+✔ everyverification rereads mutable wallet validity; inputs snapshot beforeawait and generation changes suppress results (11.797882ms)
+✔ signature and role bounds refuse beforeRPC; missingcontract code never invokesEOArecovery (6.970052ms)
+✔ cancel/timeout/dispose returnpromptly while ignoredphysicalRPC retains boundedslots and issuesnolaterreads (24.150179ms)
+✔ malformed signals cannot leak slots or expose private diagnostics (1.352169ms)
+✔ clock callbacks cannot revoke the final scope and still publish acceptance (1.11498ms)
+✔ input reentry cannot exceed the physical verification budget (1.522639ms)
+✔ unknown deployment protocol versions never reach native verification (0.823816ms)
+✔ calldata encodes the exact dynamic signature bytes and zero padding at the anchored block (1.745278ms)
+✔ wrong domain, role account and native deployment identity never establish acceptance (4.637899ms)
+✔ malformed header fields and wallet-code changes refuse with fixed errors (2.63805ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 344.218072

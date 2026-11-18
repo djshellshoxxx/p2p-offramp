@@ -3,6 +3,7 @@
  * Nothing here performs cryptography: event id and signature checking is the injected EventCrypto
  * (packages/nostr-crypto). Structure and size limits are enforced BEFORE any signature work.
  */
+import { indexedValues } from './snapshot.ts';
 export interface NostrEvent {
   readonly id: string; readonly pubkey: string; readonly created_at: number; readonly kind: number;
   readonly tags: readonly (readonly string[])[]; readonly content: string; readonly sig: string;
@@ -45,26 +46,35 @@ const isSubId = (value: unknown): value is string => typeof value === 'string' &
 const isMessage = (value: unknown): value is string => typeof value === 'string' && value.length <= FRAME_LIMITS.maxMessageLength;
 
 export function parseEvent(input: unknown): NostrEvent | null {
-  if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
-  const keys = Object.keys(input);
-  if (keys.length !== 7 || !['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig'].every(key => keys.includes(key))) return null;
-  const { id, pubkey, created_at, kind, tags, content, sig } = input as Record<string, unknown>;
-  if (!isHex64(id) || !isHex64(pubkey) || typeof sig !== 'string' || !HEX128.test(sig)) return null;
-  if (typeof created_at !== 'number' || !Number.isSafeInteger(created_at) || created_at < 0 || created_at > 0xffffffff) return null;
-  if (typeof kind !== 'number' || !Number.isSafeInteger(kind) || kind < 0 || kind > 65_535) return null;
-  if (typeof content !== 'string' || !withinBytes(content, FRAME_LIMITS.maxEventBytes)) return null;
-  if (!Array.isArray(tags) || tags.length > FRAME_LIMITS.maxTags) return null;
-  const outTags: string[][] = [];
-  for (const tag of tags as unknown[]) {
-    if (!Array.isArray(tag) || tag.length < 1 || tag.length > FRAME_LIMITS.maxTagItems) return null;
-    const items: string[] = [];
-    for (const item of tag as unknown[]) {
-      if (typeof item !== 'string' || !withinBytes(item, FRAME_LIMITS.maxTagItemBytes)) return null;
-      items.push(item);
+  try {
+    if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
+    const proto: unknown = Object.getPrototypeOf(input); if (proto !== Object.prototype && proto !== null) return null;
+    const expected = ['id', 'pubkey', 'created_at', 'kind', 'tags', 'content', 'sig'], keys = Reflect.ownKeys(input);
+    if (keys.length !== expected.length || keys.some(key => typeof key !== 'string' || !expected.includes(key))) return null;
+    const raw: Record<string, unknown> = Object.create(null) as Record<string, unknown>;
+    for (const key of expected) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, key);
+      if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
+      raw[key] = descriptor.value;
     }
-    outTags.push(items);
-  }
-  return Object.freeze({ id, pubkey, created_at, kind, tags: Object.freeze(outTags.map(tag => Object.freeze(tag))), content, sig });
+    const { id, pubkey, created_at, kind, tags, content, sig } = raw;
+    if (!isHex64(id) || !isHex64(pubkey) || typeof sig !== 'string' || !HEX128.test(sig)) return null;
+    if (typeof created_at !== 'number' || !Number.isSafeInteger(created_at) || created_at < 0 || created_at > 0xffffffff) return null;
+    if (typeof kind !== 'number' || !Number.isSafeInteger(kind) || kind < 0 || kind > 65_535) return null;
+    if (typeof content !== 'string' || !withinBytes(content, FRAME_LIMITS.maxEventBytes)) return null;
+    const captured = indexedValues(tags, 0, FRAME_LIMITS.maxTags); if (captured === null) return null;
+    const outTags: string[][] = [];
+    for (const tag of captured) {
+      const capturedItems = indexedValues(tag, 1, FRAME_LIMITS.maxTagItems); if (capturedItems === null) return null;
+      const items: string[] = [];
+      for (const item of capturedItems) {
+        if (typeof item !== 'string' || !withinBytes(item, FRAME_LIMITS.maxTagItemBytes)) return null;
+        items.push(item);
+      }
+      outTags.push(items);
+    }
+    return Object.freeze({ id, pubkey, created_at, kind, tags: Object.freeze(outTags.map(tag => Object.freeze(tag))), content, sig });
+  } catch { return null; }
 }
 
 export function parseRelayFrame(text: unknown): FrameParse {

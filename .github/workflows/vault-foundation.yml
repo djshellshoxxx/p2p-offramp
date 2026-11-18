@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:acceptance:cli
+      - run: node --test scripts/agent/*.test.mjs
       - run: npm run check:boundaries
       - run: npm run test:build-policy
       - run: npm run test:diagnostics
@@ -77,7 +78,14 @@ jobs:
       - run: npm run test:recovery:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:peer:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:locale:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify isolated-peer live and stored signed-offer discovery
+        run: node scripts/test-peer-offer-browser.mjs
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
   specs:
@@ -87,5 +95,8 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5, official ref checked 2026-10-24
         with:
           python-version: '3.12'
+      - name: Install pinned independent crypto oracle
+        run: |
+          python -m pip --isolated install --disable-pip-version-check --no-cache-dir --require-hashes --only-binary=:all: -r scripts/tests/requirements-crypto.txt
       - run: npm run test:specs
       - run: npm run check:specs

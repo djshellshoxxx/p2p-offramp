@@ -11,7 +11,7 @@ export interface VaultSessionAuthority {
 }
 export type VaultErrorCode = 'UNSUPPORTED_ENVIRONMENT' | 'UNSUPPORTED_VERSION' | 'INVALID_INPUT' | 'NOT_FOUND' |
   'ALREADY_EXISTS' | 'AUTHENTICATION_FAILED' | 'LOCKED' | 'CONFLICT' | 'LIMIT_EXCEEDED' | 'REKEY_REQUIRED' |
-  'QUOTA_EXCEEDED' | 'STORAGE_UNAVAILABLE' | 'CANCELLED';
+  'QUOTA_EXCEEDED' | 'STORAGE_UNAVAILABLE' | 'CANCELLED' | 'BUSY';
 export interface VaultError { code: VaultErrorCode; retryable: boolean; message: string; }
 export type Result<T> = { ok: true; value: T } | { ok: false; error: VaultError };
 export interface VaultService {

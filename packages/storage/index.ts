@@ -7,3 +7,6 @@ export { MigrationRegistry, RecordMigrationService, InternalMigrationResealer, M
 export type { ResealResult } from './src/migration-service.ts';
 export type { RecordMigration, RecordSchema, MigrationPlan, MigrationChange, MigrationResult, MigrationResealRequest } from './src/migration-service.ts';
 export type { ResealReceipt } from './src/vault-service.ts';
+
+export { RetentionService, JournalNativeRetentionAuthority, RETENTION_REVIEW_AGE_MS, MAX_RETENTION_DELETES } from './src/retention-service.ts';
+export type { RetentionPurpose, RetentionErrorCode, RetentionResult, RetentionCandidate, RetentionScope, NativeRetentionLease, NativeRetentionAuthority, RetentionPlan, RetentionConsent, RetentionDeleteReceipt, RetentionJournalPort, RetentionReconcilerPort, NativePayoutClosureLease, NativePayoutClosureAuthority, JournalRetentionOptions } from './src/retention-service.ts';

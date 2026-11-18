@@ -7,7 +7,14 @@ export const MAX_RPC_READS = 4;
 export const MAX_RUNTIME_CODE_BYTES = 24_576;
 export interface EvmReadRpc { request(input: { readonly method: string; readonly params?: readonly unknown[]; readonly signal?: AbortSignal }): Promise<unknown>; }
 export interface EvmRegistryView { network(id: string): NetworkV1 | null; deployment(networkId: string, deploymentId: string): DeploymentV1 | null; }
-export interface EvmReaderOptions { readonly rpc: EvmReadRpc; readonly registry: EvmRegistryView; readonly now?: () => number; readonly timeoutMs?: number; }
+export type EscrowLayout = 'legacy-escrows-v1' | 'canonical-get-trade-v1';
+export interface EvmReaderOptions {
+  readonly rpc: EvmReadRpc; readonly registry: EvmRegistryView; readonly now?: () => number; readonly timeoutMs?: number;
+  /** Trusted bundled policy keyed by registry-authenticated runtime Keccak (64 lowercase hex, no 0x).
+   * If supplied, every read requires an explicit mapping. Never accept this policy from UI/RPC input.
+   * Omission preserves the existing legacy-only reader; it never probes or guesses a layout. */
+  readonly escrowLayouts?: Readonly<Record<string, EscrowLayout>>;
+}
 export interface LiveAnchor { readonly height: string; readonly hash: string; readonly timestampSeconds: string; readonly codeKeccak256: string; }
 export interface EscrowExpectation { readonly seller: string; readonly buyer: string; readonly asset: string; readonly amountBaseUnits: string; readonly expirySeconds: string; }
 export interface DecodedEscrow extends EscrowExpectation { readonly state: ChainObservation['state']; }
@@ -25,7 +32,12 @@ class ReadFailure extends Error { readonly code: CoreErrorCode; constructor(code
 const fail = (code: CoreErrorCode = 'INTEGRITY_FAILURE'): never => { throw new ReadFailure(code); };
 const hex = (bytes: Uint8Array) => Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
 const fromHex = (value: string) => Uint8Array.from(value.match(/../g) ?? [], byte => parseInt(byte, 16));
-const SELECTOR = hex(keccak_256(new TextEncoder().encode('escrows(bytes32)'))).slice(0, 8);
+const LAYOUTS = Object.freeze({
+  'legacy-escrows-v1': Object.freeze({ signature: 'escrows(bytes32)', seller: 0, buyer: 1, asset: 2, amount: 3, expiry: 4, state: 5 }),
+  'canonical-get-trade-v1': Object.freeze({ signature: 'getTrade(bytes32)', seller: 0, buyer: 3, asset: 4, amount: 5, expiry: 1, state: 2 }),
+});
+const SELECTORS = Object.freeze(Object.fromEntries(Object.entries(LAYOUTS).map(([name, layout]) =>
+  [name, hex(keccak_256(new TextEncoder().encode(layout.signature))).slice(0, 8)])));
 const ZERO = `0x${'0'.repeat(40)}`;
 const STATES = ['absent', 'funded', 'released', 'refunded'] as const;
 function own(input: unknown, key: string): unknown {
@@ -67,13 +79,14 @@ function expectation(input: EscrowExpectation): EscrowExpectation {
   if (seller === buyer) return fail('INVALID_INPUT');
   return Object.freeze({seller, buyer, asset: address(own(input, 'asset'), true), amountBaseUnits: decimal(own(input, 'amountBaseUnits'), 256, true), expirySeconds: decimal(own(input, 'expirySeconds'), 64, true)});
 }
-function decodeEscrow(input: unknown): DecodedEscrow {
+function decodeEscrow(input: unknown, layout: EscrowLayout): DecodedEscrow {
   if (typeof input !== 'string' || !/^0x[0-9a-f]{384}$/.test(input)) return fail();
   const words = input.slice(2).match(/.{64}/g)!;
   const addr = (index: number) => { const word = words[index]!; if (!/^0{24}/.test(word)) return fail(); return `0x${word.slice(24)}`; };
-  const state = BigInt(`0x${words[5]!}`), expiry = BigInt(`0x${words[4]!}`);
+  const fields = LAYOUTS[layout];
+  const state = BigInt(`0x${words[fields.state]!}`), expiry = BigInt(`0x${words[fields.expiry]!}`);
   if (state > 3n || expiry >= 1n << 64n) return fail();
-  const result = Object.freeze({ seller: addr(0), buyer: addr(1), asset: addr(2), amountBaseUnits: BigInt(`0x${words[3]!}`).toString(), expirySeconds: expiry.toString(), state: STATES[Number(state)]! });
+  const result = Object.freeze({ seller: addr(fields.seller), buyer: addr(fields.buyer), asset: addr(fields.asset), amountBaseUnits: BigInt(`0x${words[fields.amount]!}`).toString(), expirySeconds: expiry.toString(), state: STATES[Number(state)]! });
   if (state === 0n) { if (words.some(word => /[1-9a-f]/.test(word))) return fail(); }
   else if (result.seller === ZERO || result.buyer === ZERO || result.seller === result.buyer || result.amountBaseUnits === '0' || expiry === 0n) return fail();
   return result;
@@ -81,13 +94,32 @@ function decodeEscrow(input: unknown): DecodedEscrow {
 interface Context { readonly signal: AbortSignal; guard(): void; call(method: string, params?: readonly unknown[]): Promise<unknown>; }
 interface Live { readonly network: NetworkV1; readonly deployment: DeploymentV1; readonly anchor: LiveAnchor; readonly blockTag: string; }
 
+function snapshotLayouts(input: unknown): Readonly<Record<string, EscrowLayout>> | undefined {
+  if (input === undefined) return undefined;
+  try {
+    if (!input || typeof input !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(input))) return fail('INVALID_INPUT');
+    const keys = Reflect.ownKeys(input);
+    if (keys.length > 128) return fail('INVALID_INPUT');
+    const result: Record<string, EscrowLayout> = Object.create(null);
+    for (const key of keys) {
+      if (typeof key !== 'string' || !/^[0-9a-f]{64}$/.test(key)) return fail('INVALID_INPUT');
+      const value = own(input, key);
+      if (value !== 'legacy-escrows-v1' && value !== 'canonical-get-trade-v1') return fail('INVALID_INPUT');
+      result[key] = value;
+    }
+    return Object.freeze(result);
+  } catch { throw new Error('Invalid EVM escrow layout policy.'); }
+}
+
 export class EvmChainReader {
   readonly #options: EvmReaderOptions;
   readonly #timeoutMs: number;
+  readonly #layouts: Readonly<Record<string, EscrowLayout>> | undefined;
   #disposed = false;
   readonly #jobs = new Set<AbortController>();
   constructor(options: EvmReaderOptions) {
     this.#options = options;
+    this.#layouts = snapshotLayouts(optionalOwn(options, 'escrowLayouts'));
     this.#timeoutMs = options.timeoutMs ?? 10_000;
     if (!Number.isSafeInteger(this.#timeoutMs) || this.#timeoutMs < 1 || this.#timeoutMs > 60_000) throw new Error('Invalid EVM reader timeout.');
   }
@@ -144,7 +176,9 @@ export class EvmChainReader {
       const live = await this.#live(binding.networkId,binding.deploymentId,context);
       const asset = live.network.assets.find(value => wanted.asset === ZERO ? value.kind === 'native' : value.kind === 'erc20' && value.address === wanted.asset);
       if (!asset || !live.deployment.supportedAssetIds.includes(asset.id)) return fail('UNSUPPORTED_PROVIDER');
-      const escrow = decodeEscrow(await context.call('eth_call',[{to:live.deployment.address,data:`0x${SELECTOR}${binding.tradeId}`},live.blockTag]));
+      const layout = this.#layouts === undefined ? 'legacy-escrows-v1' : this.#layouts[live.anchor.codeKeccak256];
+      if (layout === undefined) return fail('UNSUPPORTED_PROVIDER');
+      const escrow = decodeEscrow(await context.call('eth_call',[{to:live.deployment.address,data:`0x${SELECTORS[layout]}${binding.tradeId}`},live.blockTag]), layout);
       if (escrow.state !== 'absent' && (escrow.seller !== wanted.seller || escrow.buyer !== wanted.buyer || escrow.asset !== wanted.asset || escrow.amountBaseUnits !== wanted.amountBaseUnits || escrow.expirySeconds !== wanted.expirySeconds)) return fail();
       await this.#recheck(live,context);
       const observedAt = counter((this.#options.now ?? Date.now)());

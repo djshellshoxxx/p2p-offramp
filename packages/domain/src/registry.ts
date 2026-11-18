@@ -1,8 +1,8 @@
 /**
  * G11 RegistryService (load/lookup only). The expected SHA-256 MUST come from the separately trusted G15
  * signed manifest; that trust root is an unresolved owner decision, so nothing here chooses a signer or
- * trusts the registry bytes on their own. Live RPC/deployment validation (validateLive) is not implemented:
- * network access stays disabled (connectOrigins: []).
+ * trusts the registry bytes on their own. This service performs no network access and no live RPC/deployment validation;
+ * live validation (validateLive) lives in the chain readers (chain-evm, chain-solana), not here.
  */
 import { parseRegistryBytes, ValidationError, MAX_REGISTRY_BYTES, type CoreResult, type DeploymentV1, type NetworkV1, type RegistryV1 } from '../../schemas/index.ts';
 import { createCoreError, createOperationId } from './errors.ts';

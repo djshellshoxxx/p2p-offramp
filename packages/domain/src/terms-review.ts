@@ -83,6 +83,8 @@ export type TermsReviewResult =
 
 const reject = (code: TermsReviewRejection): TermsReviewResult => Object.freeze({ ok: false, code });
 const defaultSha256: Sha256 = bytes => globalThis.crypto.subtle.digest('SHA-256', bytes);
+const viewByteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype), 'byteLength')!.get!;
+const copyBytes = Uint8Array.prototype.set;
 
 const CONTAINER_KEYS = ['format', 'terms', 'privateAgreement'] as const;
 const TERMS_KEYS = ['orderId', 'revision', 'networkId', 'deploymentId', 'seller', 'buyer', 'assetKind', 'asset', 'amountBaseUnits',
@@ -181,9 +183,10 @@ export async function reviewTermsBytes(registry: RegistryLookup, bytes: Uint8Arr
   let copy: Uint8Array;
   try {
     if (!(bytes instanceof Uint8Array)) return reject('MALFORMED');
-    if (bytes.byteLength > MAX_TERMS_REVIEW_BYTES) return reject('TOO_LARGE');
-    // Copies by the real internal length, so a subclass misreporting byteLength is still bounded by the parser below.
-    copy = new Uint8Array(bytes);
+    const length = viewByteLength.call(bytes) as number;
+    if (length > MAX_TERMS_REVIEW_BYTES) return reject('TOO_LARGE');
+    // Bound the intrinsic view before allocating; copy only its actual offset/range.
+    copy = new Uint8Array(length); copyBytes.call(copy, bytes);
   } catch { return reject('MALFORMED'); }
   let parsed: unknown;
   try { parsed = parseStrictJsonBytes(copy, MAX_TERMS_REVIEW_BYTES); }

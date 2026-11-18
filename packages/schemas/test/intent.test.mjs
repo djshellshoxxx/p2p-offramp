@@ -18,7 +18,7 @@ test('G12 schema rejects unknown fields, accessors, hostile prototypes, duplicat
 });
 test('G12 retains all specified states and rejects unknown versions and states',()=>{
  for(const state of ['prepared','broadcast-unknown','pending','confirmed','finalized','failed','reorged','expired','replaced'])assert.equal(parse({...intent(),state}).state,state);
- bad({...intent(),version:2},'UNSUPPORTED_VERSION');bad({...intent(),state:'dropped'});bad({...intent(),action:'delete'});bad({...intent(),expectedEscrowState:'released'});
+ bad({...intent(),version:3},'UNSUPPORTED_VERSION');bad({...intent(),state:'dropped'});bad({...intent(),action:'delete'});bad({...intent(),expectedEscrowState:'released'});
 });
 test('G12 request UTF8 bound is 64 KiB and containing G02 payload cap still applies',()=>{
  assert.equal(parse({...intent(),preparedRequest:'x'.repeat(65536)}).preparedRequest.length,65536);
@@ -40,4 +40,37 @@ test('G12 decoding sanitizes a hostile thrown value while classifying errors',()
  const payload=api.encodeIntentPayload(intent()),original=TextDecoder.prototype.decode,revoked=Proxy.revocable({},{});revoked.revoke();
  try{TextDecoder.prototype.decode=function(){throw revoked.proxy;};assert.throws(()=>api.decodeIntentPayload(payload),error=>error.code==='INVALID_INPUT'&&error.message==='Invalid private intent data.');}
  finally{TextDecoder.prototype.decode=original;}
+});
+
+const v2 = (changes={}) => ({...intent(),version:2,sendMarkedAt:null,originProfileId:'ab'.repeat(16),...changes});
+test('D9 v1 bytes round-trip unchanged while v2 retains exact permanent marker and profile origin',()=>{
+ const old=intent(),oldBytes=Buffer.from(JSON.stringify(old)).toString('base64url');
+ assert.equal(api.encodeIntentPayload(api.decodeIntentPayload(oldBytes)),oldBytes);
+ assert.equal(Object.hasOwn(parse(old),'sendMarkedAt'),false,'missing legacy marker is not fabricated as null');
+ for(const source of [v2(),v2({state:'failed'}),v2({state:'expired'}),v2({state:'confirmed',submission:{chain:'evm',hash:'0x'+'11'.repeat(32),nonce:'1'}}),v2({state:'broadcast-unknown',sendMarkedAt:5,updatedAt:5}),v2({state:'failed',sendMarkedAt:5,updatedAt:7})]) {
+  const parsed=parse(source);assert.deepEqual(parsed,source);assert.ok(Object.isFrozen(parsed));
+  assert.deepEqual(api.decodeIntentPayload(api.encodeIntentPayload(parsed)),parsed);
+ }
+});
+test('D9 v2 refuses missing, contradictory, mutable or noncanonical provenance',()=>{
+ for(const changes of [{sendMarkedAt:undefined},{originProfileId:undefined},{originProfileId:'AB'.repeat(16)},
+  {sendMarkedAt:-1},{sendMarkedAt:1},{createdAt:2,updatedAt:1},{state:'broadcast-unknown'},
+  {state:'prepared',submission:{chain:'evm',hash:'0x'+'11'.repeat(32),nonce:'1'}},
+  {state:'failed',createdAt:2,sendMarkedAt:1,updatedAt:3}])bad(v2(changes));
+ let calls=0;const hostile=v2();Object.defineProperty(hostile,'sendMarkedAt',{get(){calls++;return null;}});bad(hostile);assert.equal(calls,0);
+ bad({...intent(),sendMarkedAt:null,originProfileId:'ab'.repeat(16)});
+ const raw=JSON.stringify(v2()).replace('"version":2','"version":1,"version":2');
+ assert.throws(()=>api.decodeIntentPayload(Buffer.from(raw).toString('base64url')),error=>error.code==='INVALID_INPUT');
+});
+test('D9 older-build rule: the frozen pre-D9 reader refuses every v2 payload and never misreads it',async()=>{
+ const old=await import('./fixtures/intent-v1-reader.ts');
+ const v2record={...intent(),version:2,sendMarkedAt:null,originProfileId:'a'.repeat(32)};
+ for(const record of [v2record,{...v2record,state:'broadcast-unknown',sendMarkedAt:0}]){
+  const payload=api.encodeIntentPayload(record);
+  // The older reader checks the exact v1 key set before the version, so it reports INVALID_INPUT
+  // (its journal then fails closed with INTEGRITY_FAILURE), not UNSUPPORTED_VERSION.
+  assert.throws(()=>old.decodeIntentPayload(payload),error=>error.code==='INVALID_INPUT');
+ }
+ const legacy=api.encodeIntentPayload(intent());
+ assert.deepEqual(old.decodeIntentPayload(legacy),api.decodeIntentPayload(legacy),'v1 stays readable by both builds');
 });

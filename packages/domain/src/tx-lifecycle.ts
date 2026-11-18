@@ -10,7 +10,7 @@
  * value), the account nonce compared with the recorded nonce, and the escrow trade state read through the G08
  * authority reducer (authority.ts), whose contradiction detection is the reorg signal.
  */
-import type { ChainObservation, CoreErrorCode, CoreResult, IntentV1, NetworkV1, TradeBinding } from '../../schemas/index.ts';
+import type { ChainObservation, CoreErrorCode, CoreResult, Intent, NetworkV1, TradeBinding } from '../../schemas/index.ts';
 import { encodeBase64url, parseTradeBinding } from '../../schemas/index.ts';
 import { createTradeAuthority, type ReconcileRequest, type TradeAuthority } from './authority.ts';
 import { createCoreError, createOperationId } from './errors.ts';
@@ -62,7 +62,7 @@ export interface EvmPreparedRequest {
   readonly nonce: string; readonly preparedAtBlock: string;
 }
 export interface EvmPrepareInput {
-  readonly binding: TradeBinding; readonly action: IntentV1['action']; readonly expectedEscrowState: 'absent' | 'funded'; readonly call: EvmCall;
+  readonly binding: TradeBinding; readonly action: Intent['action']; readonly expectedEscrowState: 'absent' | 'funded'; readonly call: EvmCall;
   /** Explicit user action only: the dropped (expired) or replaced intent this one supersedes. A dropped intent is superseded at its own nonce. */
   readonly supersedes?: string;
 }
@@ -70,10 +70,10 @@ export interface EvmPrepareInput {
 export interface PreparedEvmIntent { readonly intentId: string; readonly request: EvmPreparedRequest; readonly generation: number }
 export type EvmOutcome = 'prepared' | 'pending' | 'confirmed' | 'finalized' | 'replaced' | 'dropped' | 'reverted' | 'reorged';
 export interface EvmReconciliation {
-  readonly outcome: EvmOutcome; readonly intent: IntentV1; readonly escrowState: EscrowState | null;
+  readonly outcome: EvmOutcome; readonly intent: Intent; readonly escrowState: EscrowState | null;
   readonly evidence: 'none' | 'receipt' | 'nonce' | 'escrow-effect' | 'authority-conflict';
 }
-export interface EvmSubmission { readonly intent: IntentV1; readonly hash: string }
+export interface EvmSubmission { readonly intent: Intent; readonly hash: string }
 type Retrier = <T>(operation: (signal: AbortSignal) => Promise<CoreResult<T>>, options: ReadRetryOptions) => Promise<CoreResult<T>>;
 export interface EvmTxLifecycleOptions {
   readonly journal: LifecycleJournal;
@@ -92,17 +92,17 @@ export interface EvmTxLifecycle {
   submit(prepared: PreparedEvmIntent, signal?: AbortSignal): Promise<CoreResult<EvmSubmission>>;
   reconcile(intentId: string, signal?: AbortSignal): Promise<CoreResult<EvmReconciliation>>;
   /** Session restart: cancels prepared (never sent) intents and returns those that still need reconciliation. */
-  recover(signal?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>>;
+  recover(signal?: AbortSignal): Promise<CoreResult<readonly Intent[]>>;
   dispose(): void;
 }
 
 const HASH = /^0x[0-9a-f]{64}$/, ADDRESS = /^0x[0-9a-f]{40}$/, DECIMAL = /^(0|[1-9][0-9]{0,77})$/, DATA = /^0x(?:[0-9a-f]{2})*$/;
-const EFFECTS: Readonly<Record<IntentV1['action'], readonly EscrowState[] | null>> = Object.freeze({
+const EFFECTS: Readonly<Record<Intent['action'], readonly EscrowState[] | null>> = Object.freeze({
   fund: Object.freeze(['funded', 'released', 'refunded'] as const), release: Object.freeze(['released'] as const), refund: Object.freeze(['refunded'] as const), approve: null,
 });
-const LATCHED: readonly IntentV1['state'][] = ['confirmed', 'finalized'];
-const TERMINAL: readonly IntentV1['state'][] = ['failed', 'expired', 'replaced'];
-const OUTCOME_OF: Readonly<Partial<Record<IntentV1['state'], EvmOutcome>>> = Object.freeze({ failed: 'reverted', expired: 'dropped', replaced: 'replaced', prepared: 'prepared' });
+const LATCHED: readonly Intent['state'][] = ['confirmed', 'finalized'];
+const TERMINAL: readonly Intent['state'][] = ['failed', 'expired', 'replaced'];
+const OUTCOME_OF: Readonly<Partial<Record<Intent['state'], EvmOutcome>>> = Object.freeze({ failed: 'reverted', expired: 'dropped', replaced: 'replaced', prepared: 'prepared' });
 
 class LifecycleFailure extends Error {
   readonly code: CoreErrorCode;
@@ -128,14 +128,6 @@ function parsePreparedRequest(text: string): EvmPreparedRequest {
     !DECIMAL.test(request.nonce) || !DECIMAL.test(request.preparedAtBlock) || canonicalRequest(request) !== text) return stop('INTEGRITY_FAILURE');
   return request;
 }
-/** Only an EIP-1193 numeric code is read from a wallet error; messages and data are never copied. */
-function providerCode(error: unknown): number | undefined {
-  try {
-    if (typeof error !== 'object' || error === null) return undefined;
-    const descriptor = Object.getOwnPropertyDescriptor(error, 'code');
-    return descriptor && 'value' in descriptor && typeof descriptor.value === 'number' ? descriptor.value : undefined;
-  } catch { return undefined; }
-}
 const checked = <T>(value: T, valid: (value: T) => boolean): T => valid(value) ? value : stop('INTEGRITY_FAILURE');
 const isBlock = (block: EvmBlockRef | null): boolean => block === null || (typeof block === 'object' && DECIMAL.test(block.number) && HASH.test(block.hash));
 
@@ -147,7 +139,7 @@ class EvmLifecycle implements EvmTxLifecycle {
   readonly #now: () => number;
   readonly #retry: Retrier;
   readonly #authorities = new Map<string, TradeAuthority>();
-  readonly #prepared = new Map<string, { readonly generation: number; readonly intent: IntentV1 }>();
+  readonly #prepared = new Map<string, { readonly generation: number; readonly intent: Intent }>();
   readonly #sending = new Set<string>();
   #context: EvmWalletContext | null = null;
   #generation = 0;
@@ -192,7 +184,7 @@ class EvmLifecycle implements EvmTxLifecycle {
     for (const intentId of intentIds) {
       this.#prepared.delete(intentId);
       // Durable cancel before any send-capable call; a conflict means another step already moved it.
-      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null }));
+      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null, from: 'prepared' }));
     }
   }
   /** Synchronous invalidation first (no prepare result survives it), then durable cancellation of un-sent intents. */
@@ -243,9 +235,9 @@ class EvmLifecycle implements EvmTxLifecycle {
       const previousRecords = unwrap(await this.#serial(() => this.#journal.list(signal)));
       for (const previous of previousRecords) {
         if (previous.binding.chain !== 'evm' || previous.binding.networkId !== binding.networkId || lower(previous.account) !== context.account ||
-            !['finalized', ...TERMINAL].includes(previous.state) ||
+            !(['finalized', ...TERMINAL].includes(previous.state) || this.#abandonedCandidate(previous)) ||
             !(previous.binding.deploymentId === binding.deploymentId && previous.binding.tradeId === binding.tradeId || previous.submission.chain === 'evm' && previous.submission.nonce === nonce)) continue;
-        // Only a live prepared cancellation has local never-sent proof. Everything restored must be re-read.
+        // Live cancellations and profile-bound never-marked approvals have proof. Imported records must be re-read.
         if (previous.state === 'failed' && previous.submission.chain === 'evm' && previous.submission.hash === null && this.#journal.isTerminalVerified(previous.intentId)) continue;
         unwrap(await this.reconcile(previous.intentId, signal));
       }
@@ -256,7 +248,9 @@ class EvmLifecycle implements EvmTxLifecycle {
       try { intentId = encodeBase64url(random); } finally { random.fill(0); }
       const now = this.#now();
       if (!Number.isSafeInteger(now) || now < 0) return stop('INVALID_INPUT');
-      const intent: IntentV1 = { version: 1, intentId, binding, account: context.account, action: input.action, state: 'prepared', walletGeneration: context.generation,
+      const originProfileId = this.#journal.currentProfileId();
+      if (originProfileId === null) return stop('LOCKED');
+      const intent: Intent = { version: 2, sendMarkedAt: null, originProfileId, intentId, binding, account: context.account, action: input.action, state: 'prepared', walletGeneration: context.generation,
         expectedEscrowState: input.expectedEscrowState, preparedRequest: canonicalRequest(request), submission: { chain: 'evm', hash: null, nonce },
         replacementOf: input.supersedes ?? null, createdAt: now, updatedAt: now };
       const reserved = await this.#serial(() => {
@@ -293,7 +287,19 @@ class EvmLifecycle implements EvmTxLifecycle {
       }
       if (external?.aborted) { await this.#cancelPrepared([intentId]); return stop('CANCELLED'); }
       // Durable send-started marker (prepared -> broadcast-unknown CAS). Its failure means the wallet is never called.
-      unwrap(await this.#serial(() => this.#journal.markSending(intentId)));
+      const marked = await this.#serial(() => this.#journal.markSending(intentId));
+      if (!marked.ok) {
+        // Nothing was sent. Release the in-memory send slot so the record is not wedged in this instance. Any code but
+        // BROADCAST_UNKNOWN means no marker was written: the preparation is still this instance's and may be submitted
+        // again by an explicit user action (nothing is resent automatically); if the wallet generation moved, it is
+        // cancelled instead. After BROADCAST_UNKNOWN a marker may exist, so the record is left to reconcile().
+        this.#sending.delete(intentId);
+        if (marked.error.code !== 'BROADCAST_UNKNOWN') {
+          if (this.#generation === generation && !this.#disposed) this.#prepared.set(intentId, entry);
+          else await this.#cancelPrepared([intentId]);
+        }
+        return stop(marked.error.code);
+      }
       // The marker is conservative: cancellation or a changed wallet during its durable write must
       // stop before the send-capable call and leave reconciliation to classify the recorded marker.
       if (external?.aborted || this.#generation !== generation || this.#disposed) return stop('BROADCAST_UNKNOWN');
@@ -302,26 +308,22 @@ class EvmLifecycle implements EvmTxLifecycle {
       try {
         result = await this.#wallet({ method: 'eth_sendTransaction', params: [{ from: request.from, to: request.to, data: request.data,
           value: `0x${BigInt(request.value).toString(16)}`, nonce: `0x${BigInt(request.nonce).toString(16)}`, chainId: `0x${BigInt(request.chainId).toString(16)}` }] });
-      } catch (error) {
-        // EIP-1193 4001: the wallet reports the user rejected the request before signing; nothing was submitted.
-        if (providerCode(error) === 4001) {
-          const failed = await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null }));
-          if (failed.ok) unwrap(await this.#serial(() => this.#journal.authorizeTerminal(intentId, { state: 'failed', hash: null })));
-          return stop(failed.ok ? 'USER_REJECTED' : 'BROADCAST_UNKNOWN');
-        }
+      } catch {
+        // Even a 4001 response cannot prove nothing was broadcast after this send-capable call began.
+        // Retain the durable marker and require native reconciliation before any fresh explicit attempt.
         return stop('BROADCAST_UNKNOWN');
       }
       if (typeof result !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(result)) return stop('BROADCAST_UNKNOWN');
       const hash = lower(result);
-      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash }));
+      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash, from: 'broadcast-unknown' }));
       if (!recorded.ok) return stop('BROADCAST_UNKNOWN');
       return Object.freeze({ intent: recorded.value, hash });
     }, 'UNAVAILABLE').then(result => {
-      if (!result.ok && sendStarted && result.error.code !== 'USER_REJECTED' && result.error.code !== 'BROADCAST_UNKNOWN') return this.#fail('BROADCAST_UNKNOWN');
+      if (!result.ok && sendStarted && result.error.code !== 'BROADCAST_UNKNOWN') return this.#fail('BROADCAST_UNKNOWN');
       return result;
     });
   }
-  async #find(intentId: string, signal: AbortSignal): Promise<IntentV1> {
+  async #find(intentId: string, signal: AbortSignal): Promise<Intent> {
     const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
     return records.find(record => record.intentId === intentId) ?? stop('CONFLICT');
   }
@@ -329,8 +331,9 @@ class EvmLifecycle implements EvmTxLifecycle {
     return this.#guarded(async () => {
       if (typeof intentId !== 'string') return stop('INVALID_INPUT');
       const signal = external ?? new AbortController().signal;
-      const intent = await this.#find(intentId, signal);
-      const done = (outcome: EvmOutcome, value: IntentV1, escrowState: EscrowState | null, evidence: EvmReconciliation['evidence']): EvmReconciliation =>
+      let intent = await this.#find(intentId, signal);
+      if (this.#abandonedCandidate(intent)) intent = await this.#expirePrepared(intent, signal) ?? intent;
+      const done = (outcome: EvmOutcome, value: Intent, escrowState: EscrowState | null, evidence: EvmReconciliation['evidence']): EvmReconciliation =>
         Object.freeze({ outcome, intent: value, escrowState, evidence });
       const settledOutcome = OUTCOME_OF[intent.state];
       if (intent.state === 'prepared' || intent.state === 'failed' && intent.submission.chain === 'evm' && intent.submission.hash === null && this.#journal.isTerminalVerified(intentId)) return done(settledOutcome!, intent, null, 'none');
@@ -350,6 +353,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       const effects = EFFECTS[intent.action];
       const latched = LATCHED.includes(intent.state);
       let outcome: EvmOutcome, evidence: EvmReconciliation['evidence'];
+      let nonceTakenElsewhere = false;
       const hash = intent.submission.hash;
 
       let receipt: EvmReceiptView | null = null;
@@ -388,7 +392,12 @@ class EvmLifecycle implements EvmTxLifecycle {
         if (latestCount > nonce) {
           evidence = 'nonce';
           if (hash !== null) outcome = 'replaced';
-          else if (effects === null) outcome = 'pending';
+          else if (effects === null) {
+            // An approval without a recorded hash has no escrow effect to observe. It is settled as never included only
+            // when native data shows its nonce was consumed by a different, finalized transaction of this journal.
+            nonceTakenElsewhere = await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
+            outcome = nonceTakenElsewhere && !conflict ? 'replaced' : 'pending';
+          }
           else if (escrowState !== null && effects.includes(escrowState)) {
             // Unknown hash: the nonce was consumed and the escrow shows this intent's effect. Depth is measured on the escrow itself.
             evidence = 'escrow-effect';
@@ -411,11 +420,13 @@ class EvmLifecycle implements EvmTxLifecycle {
       }
       if (conflict && (outcome === 'confirmed' || outcome === 'finalized' || latched)) { outcome = 'reorged'; evidence = 'authority-conflict'; }
 
-      let target: IntentV1['state'] | null = outcome === 'pending' ? (hash !== null ? 'pending' : null) : outcome === 'confirmed' ? 'confirmed' : outcome === 'finalized' ? 'finalized' :
+      let target: Intent['state'] | null = outcome === 'pending' ? (hash !== null ? 'pending' : null) : outcome === 'confirmed' ? 'confirmed' : outcome === 'finalized' ? 'finalized' :
         outcome === 'replaced' ? 'replaced' : outcome === 'dropped' ? 'expired' : outcome === 'reverted' ? 'failed' : outcome === 'reorged' ? 'reorged' : null;
+      // Proven never included and never able to be: a settled, released state rather than a successor-awaiting one.
+      if (nonceTakenElsewhere && !conflict) target = 'failed';
       // The recorded terminal label is not proof after restoration (or a later native contradiction).
       if (TERMINAL.includes(intent.state) && target !== intent.state) { target = 'reorged'; outcome = 'reorged'; }
-      const authorize = async (value: IntentV1): Promise<void> => {
+      const authorize = async (value: Intent): Promise<void> => {
         const finalizedReceipt = receipt !== null && BigInt(receipt.blockNumber) <= finalizedNumber;
         if (outcome === 'finalized' || outcome === 'reverted' && finalizedReceipt || outcome === 'replaced' || outcome === 'dropped')
           unwrap(await this.#serial(() => this.#journal.authorizeTerminal(intentId, { state: value.state, hash }, signal)));
@@ -429,18 +440,74 @@ class EvmLifecycle implements EvmTxLifecycle {
         if (!latched) return done(outcome, intent, escrowState, evidence);
         next = 'reorged'; outcome = 'reorged';
       }
-      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash })));
+      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash, from: intent.state })));
       await authorize(written); return done(outcome, written, escrowState, evidence);
     }, 'UNAVAILABLE');
   }
-  recover(external?: AbortSignal): Promise<CoreResult<readonly IntentV1[]>> {
+  /**
+   * True when another journal intent of the same account and chain recorded a hash at `nonce` whose transaction is
+   * canonical and at or below the finalized head. One nonce is one transaction, so `intent` can never be included.
+   * Restored records lose never-sent proof (new profile ID); this native check keeps them from vetoing later exits.
+   */
+  async #nonceFinalizedElsewhere(intent: Intent, account: string, nonce: bigint, chainId: string, finalizedNumber: bigint,
+    read: <T>(work: (signal: AbortSignal) => Promise<CoreResult<T>>) => Promise<T>, signal: AbortSignal): Promise<boolean> {
+    if (finalizedNumber < 0n) return false;
+    const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
+    for (const other of records) {
+      if (other.intentId === intent.intentId || other.submission.chain !== 'evm' || other.submission.hash === null ||
+        other.submission.nonce === null || BigInt(other.submission.nonce) !== nonce) continue;
+      let otherRequest: EvmPreparedRequest;
+      try { otherRequest = parsePreparedRequest(other.preparedRequest); } catch { continue; }
+      if (otherRequest.chainId !== chainId || lower(otherRequest.from) !== account) continue;
+      const otherHash = other.submission.hash;
+      const receipt = await read(s => this.#reader.receipt(otherHash, s));
+      if (receipt === null || receipt.transactionHash !== otherHash || !DECIMAL.test(receipt.blockNumber) || !HASH.test(receipt.blockHash) ||
+        BigInt(receipt.blockNumber) > finalizedNumber) continue;
+      const receiptBlock = receipt.blockNumber;
+      if (await read(s => this.#reader.blockHashAt(receiptBlock, s)) !== receipt.blockHash) continue;
+      const tx = await read(s => this.#reader.transaction(otherHash, s));
+      if (tx === null || tx.hash !== otherHash || lower(tx.from) !== account || !DECIMAL.test(tx.nonce) || BigInt(tx.nonce) !== nonce) continue;
+      return true;
+    }
+    return false;
+  }
+  /** Prepared in the journal but not a live prepare result or send of this instance (it may be another tab's). */
+  #abandonedCandidate(record: Intent): boolean {
+    return record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId);
+  }
+  /**
+   * Block lease for a non-live prepared intent: within dropAfterBlocks of its preparedAtBlock it may still be live in
+   * another tab and is left alone. After that it is cancelled (prepared -> failed CAS). Cancellation is not never-sent
+   * authority: value-moving, legacy and imported records keep their nonce hold and are classified natively.
+   */
+  async #expirePrepared(intent: Intent, signal: AbortSignal): Promise<Intent | null> {
+    const request = parsePreparedRequest(intent.preparedRequest);
+    if (await this.#read(signal, s => this.#reader.chainId(s)) !== request.chainId) return stop('WRONG_CHAIN');
+    const latest = checked(await this.#read(signal, s => this.#reader.head('latest', s)), isBlock) ?? stop('UNAVAILABLE');
+    if (BigInt(latest.number) < BigInt(request.preparedAtBlock) + BigInt(this.#policy.dropAfterBlocks)) return null;
+    const cancelled = await this.#serial(() => this.#journal.observe(intent.intentId, { state: 'failed', hash: null, from: 'prepared' }));
+    if (!cancelled.ok && cancelled.error.code !== 'CONFLICT') return stop(cancelled.error.code);
+    return this.#find(intent.intentId, signal);
+  }
+  recover(external?: AbortSignal): Promise<CoreResult<readonly Intent[]>> {
     return this.#guarded(async () => {
       const signal = external ?? new AbortController().signal;
       const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
-      // Prepare results never survive restart: a prepared (never marked) intent is cancelled before anything else.
-      const prepared = records.filter(record => record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId));
-      for (const record of prepared) unwrap(await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null })));
-      return Object.freeze(records.filter(record => record.state !== 'prepared' && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
+      // A prepared intent not live in THIS instance may still be live in another tab of the same profile, so only
+      // locally originated never-marked approvals (durable never-sent proof once failed) are cancelled at once.
+      // Every other non-live preparation (value-moving, legacy or imported) is returned for reconcile(), which
+      // cancels it only after its block lease (preparedAtBlock + dropAfterBlocks) has passed; see #expirePrepared.
+      // Cancels are a CAS from 'prepared': a send marker written by another tab after this list() wins (CONFLICT).
+      let current: readonly Intent[] = records, stale = false;
+      for (const record of records) {
+        if (!this.#abandonedCandidate(record) || record.action !== 'approve' || !this.#journal.hasLocalPreparation(record)) continue;
+        const cancelled = await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null, from: 'prepared' }));
+        if (!cancelled.ok && cancelled.error.code !== 'CONFLICT') return stop(cancelled.error.code);
+        stale = true;
+      }
+      if (stale) current = unwrap(await this.#serial(() => this.#journal.list(signal)));
+      return Object.freeze(current.filter(record => record.state === 'prepared' ? this.#abandonedCandidate(record) :
+        !['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId)));
     }, 'UNAVAILABLE');
   }
   dispose(): void {

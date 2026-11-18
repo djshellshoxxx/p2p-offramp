@@ -1,0 +1,37 @@
+✔ hint parsers reject authority promotion, hostile fields and false empty/unknown combinations (6.01109ms)
+✔ only constructor-held publishers update pinned readonly hints, TTL clears and disposal revokes publishers (1.729105ms)
+✔ reentrant subscribers converge on terminal state and cannot create an unbounded delivery loop (6.259444ms)
+✔ a reentrant native clock retirement cannot return a live publisher or invoke later clocks (0.489733ms)
+✔ retirement from the scheduling clock refuses publication without starting a new timer (0.82079ms)
+✔ a retired subscriber cannot recursively reacquire closed notifications (0.403753ms)
+✔ terms review: both synthetic sets are accepted with exact registry/input values, deep-frozen and uncoupled from the input (10.060673ms)
+✔ terms review: a core trade with no capabilities lists none as unsupported (3.162798ms)
+✔ terms review: container shape and format (1.758289ms)
+✔ terms review: every public-terms field rejects noncanonical encodings as INVALID_TERMS (16.004148ms)
+✔ terms review: valid-but-different public field values reach the right later check (or are accepted verbatim) (5.305003ms)
+✔ terms review: private agreement validation maps encoder errors (2.774143ms)
+✔ terms review: agreement binding, hashes, registry and asset checks (10.821481ms)
+✔ terms review: first failing check wins (2.883538ms)
+✔ terms review: funding window boundaries (no device clock) (16.049362ms)
+✔ terms review: SHA-256 provider failures are UNAVAILABLE and the provider gets a fresh copy (3.634488ms)
+✔ terms review bytes: size, strict UTF-8 and bounded strict JSON (6.869432ms)
+✔ terms review bytes: the real 64KiB bound rejects a shadowed max+1 view before any owned allocation (0.32745ms)
+✔ terms review bytes: bounded offset views ignore caller length/iterator/species accessors and remain untouched (1.248549ms)
+✔ terms review bytes: detached views remain a fixed MALFORMED rejection (0.311301ms)
+✔ terms review: hostile inputs never throw and each field is read once (10.255135ms)
+✔ terms review: agreement-level codes follow the documented step order (after INVALID_TERMS, encoder field order) (0.578278ms)
+✔ fresh native and ERC20 draft documents pass the actual canonical terms review (4.596783ms)
+✔ two reviews of equal defaults generate independent order, nonce and private salt (1.278544ms)
+✔ invalid, unavailable and unsupported current selectors produce no draft bytes (0.818076ms)
+✔ fresh device window refuses stale/too-short/too-long and non-uint64 clocks (1.396485ms)
+✔ clock, randomness and hash provider failures return fixed refusals and no partial document (0.777289ms)
+✔ an uninspectable foreign dependency rejection still returns a fixed refusal (0.293307ms)
+✔ scope retirement, cancellation, registry expiry and elapsed deadlines after a hash discard output (1.741327ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 636.90223

@@ -10,7 +10,7 @@ Current implementation work and remaining gates are tracked in the
 ## Requirements
 
 - Node 24+ (the package `engines` contract; CI and current local verification use Node 24).
-- Python 3.11+ for the spec tools (3.12 in CI).
+- Python 3.12+ for the spec tools (the documented supported baseline and CI version).
 - Chromium for browser checks. `scripts/lib/chromium-path.mjs` uses `P2P_CHROMIUM`, then `/usr/bin/chromium`,
   then the newest `/opt/pw-browsers/chromium-*`. Chromium is a test tool, not an app server.
 
@@ -30,8 +30,16 @@ npm run test:web:browser     # emitted shell journeys + synthetic trade-review j
 npm run test:specs && npm run check:specs
 ```
 
-Both builds write `local-build-evidence.json` (asset SHA-256 list, `syntheticDemo` flag). It is local evidence, not
-a signed manifest.
+Each successful build writes `local-build-evidence.json` with the asset lengths, SHA-256 digests and build profile.
+Keep a copy from the trusted build outside the directory you intend to host. To check a copied Pages demo before upload, run
+
+```sh
+node scripts/verify-web-artifact.mjs ./pages-candidate ./retained/demo/local-build-evidence.json
+```
+
+The command checks the copied inventory and every payload file, including the native Worker, against that reference.
+A missing, changed or unexpected file fails verification. This comparison establishes local build integrity. Release
+signing and authorization require their own evidence.
 
 The ordinary testnet build currently refuses `KEY_UNPINNED`: no owner-approved
 `SEPOLIA_RELEASE_KEY_ID` is configured. CLI signed verification/`--accept` and

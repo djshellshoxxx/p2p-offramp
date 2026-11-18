@@ -305,7 +305,7 @@ test('a peer reservation during held preflight or cached empty snapshot cannot p
 });
 
 test('a peer sending marker during held snapshot revokes the stale reader without erasing the reservation', async t => {
-  const s = await setup(t); value(await s.journal.reserve(prepared(), 0));
+  const s = await setup(t); value(await s.journal.reserve({ ...prepared(), version: 2, sendMarkedAt: null, originProfileId: s.session.profileId }, 0));
   const peer = await peerJournal(t, s), held = holdDiagnosticRead(t, s, 'after-snapshot');
   await held.entered; value(await peer.markSending(intentId));
   const committedEnvelope = structuredClone(s.store.rows), writesBefore = s.store.writes;

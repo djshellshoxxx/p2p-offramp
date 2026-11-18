@@ -119,11 +119,27 @@ export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
       abiBytes:new Uint8Array(abi),networkId:'sepolia',deploymentId:'escrow-sepolia-v1',outDir});
   } catch (error) { return refuseRecovery(recoveryErrorCode(error)); }
 }
+function parseBuildOptions(args) {
+  const options = { out: { type: 'string' }, help: { type: 'boolean', short: 'h' } };
+  try {
+    const { values, tokens } = parseArgs({ args, options, strict: true, tokens: true });
+    if (tokens.filter(token => token.kind === 'option').length === 1 && (values.help || values.out)) return values;
+  } catch {
+    // Argument-parser errors are input refusals. The underlying message can contain caller input.
+  }
+  return refuseRecovery('INVALID_INPUT');
+}
+
 if (isMain(import.meta.url)) {
   try {
-    const {values} = parseArgs({options:{out:{type:'string'}},strict:true});
-    if (!values.out) refuseRecovery('INVALID_INPUT');
-    const result = await buildConfiguredEvmRecovery({outDir:values.out});
-    console.log(JSON.stringify({ok:true,value:{directory:result.directory,files:result.files}}));
+    const values = parseBuildOptions(process.argv.slice(2));
+    if (values.help) {
+      console.log('Usage: node --import ./scripts/test-support/register-tsx.mjs scripts/recovery/build-evm.mjs --out <new-directory>\n' +
+        'Package historical Sepolia recovery tools from a verified registry and ABI. The output directory must be new.\n' +
+        'Use --help or -h to display this help.');
+    } else {
+      const result = await buildConfiguredEvmRecovery({outDir:values.out});
+      console.log(JSON.stringify({ok:true,value:{directory:result.directory,files:result.files}}));
+    }
   } catch (error) { console.log(JSON.stringify({ok:false,error:{code:recoveryErrorCode(error)}})); process.exitCode=1; }
 }

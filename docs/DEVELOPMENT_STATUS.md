@@ -1,5 +1,16 @@
 # Development status and continuation contract
 
+## Development continuation — November 16, 2026
+
+The cumulative development baseline is `claude/confident-fermi-g6wjp3@7461c87`,
+which contains the recovery-label fix, canonical runtime-policy reader, and D9
+versioned intent migration through PRs #119, #120 and #122. These are development
+capabilities; `main@cdde998` and the shipped static client remain separate.
+The [current continuation report](consolidation/2026-11-16-canonical-qualification.md)
+records fresh local validation, the integrated documentation branch, and remaining
+features. The dated snapshot below describes its named main commit, not this newer
+development tree. D1 peer acceptance and browser trading are still unfinished.
+
 ## Current scope snapshot — 2026-11-16 (static GitHub Pages client only)
 
 At merged `main@cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e`, the static client supports encrypted local profile creation/unlock, explicit encrypted-backup export and fresh-key restore, and read-only inspection workflows. The **Offers** page can import and validate a local EVM trade-terms file for read-only review **only when a trusted registry is available**. The default build has **no approved registry**; the explicitly labelled `npm run build:demo` synthetic build supplies local example terms/registry data. This is **not live marketplace discovery, counterparty acceptance, a wallet send or an escrow payment**. Source: [README current state](../README.md), [Offers UI](../apps/web/src/ui/trade/TradePages.tsx), [static service boundary](../apps/web/src/app-services.ts).
