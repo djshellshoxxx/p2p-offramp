@@ -1,5 +1,6 @@
 /** Structural contracts for trusted private constructors; no production/private package facade is widened. */
 import type {CoreResult,RegistryService,PrivateAgreementV1,ReviewedEvmTerms,createJourneyProjection,PrivacyView,PrivacyTransportPort,PrivacyEndpointPort} from '../../../../packages/domain/index.ts';
+import type {JourneyPaymentGuidanceObservation} from '../../../../packages/domain/index.ts';
 import type {EncryptedVaultService,EncryptedBackupService} from '../../../../packages/storage/index.ts';
 import type {MessagingIdentityProvider} from '../../../../packages/identity/index.ts';
 import type {CreatedIdentity,IdentityHandle,IdentityResult,VaultSession,IntentV1,TradeBinding,ChainObservation,TradeView,RuntimeResponse} from '../../../../packages/schemas/index.ts';
@@ -48,7 +49,15 @@ export interface Journal {reserve(intent:IntentV1,revision:number,signal?:AbortS
 export interface Lifecycle {walletChanged(next:{account:string;chainId:string;generation:number}|null):Promise<void>;prepare(input:PrepareInput,signal?:AbortSignal):Promise<CoreResult<PreparedIntent>>;submit(prepared:PreparedIntent,signal?:AbortSignal):Promise<CoreResult<{intent:IntentV1;hash:string}>>;reconcile(id:string,signal?:AbortSignal):Promise<CoreResult<Reconciliation>>;recover(signal?:AbortSignal):Promise<CoreResult<readonly IntentV1[]>>;dispose():void;}
 export interface Authority {readonly currentGeneration:number;readView(now:number):Readonly<TradeView>;refresh(binding:TradeBinding,signal?:AbortSignal):Promise<CoreResult<ChainObservation>>;dispose():void;}
 export type TradeComposition=Parameters<typeof createJourneyProjection>[0]['composition']&{dispose():void};
-export type PaymentGuidance=NonNullable<Parameters<typeof createJourneyProjection>[0]['paymentGuidance']>&{invalidate():void;dispose():void};
+/** Native G18 result as this journey reads it. remainingSeconds is the actual escrow deadline minus the latest
+ * anchored chain time and may be zero or negative. The 900-second guidance buffer is not a release deadline. */
+export type PaymentGuidanceObservation=JourneyPaymentGuidanceObservation&{readonly remainingSeconds:string};
+export interface PaymentGuidance {
+ read(signal?:AbortSignal):Promise<CoreResult<PaymentGuidanceObservation>>;
+ view():CoreResult<PaymentGuidanceObservation>;
+ invalidate():void;
+ dispose():void;
+}
 export interface ReadObservationInput {readonly registry:RegistryService;readonly binding:TradeBinding;readonly terms:EvmTerms;readonly domain:EvmDomain;readonly request:Request;readonly generation:number;readonly requestSequence:number;readonly signal?:AbortSignal;}
 export interface NativeFactories {
  readonly MessagingIdentityService:new(vault:EncryptedVaultService,options:{provider:MessagingIdentityProvider;lifecycle:false})=>IdentityService;
@@ -56,6 +65,10 @@ export interface NativeFactories {
  readonly EvmWalletAdapter:new(provider:WalletProvider,providerId:string,registry:RegistryService)=>WalletAdapter;
  walletProvider(index:number):WalletProvider;
  selectorOf(signature:string):string;
+ /** Decodes one log emitted by the registry-bound escrow; any other emitter or malformed log throws. */
+ decodeEscrowLog(escrow:string,log:EscrowLog):EscrowLogEvent;
+ buildPendingWithdrawals(escrow:string,recipient:string,token:string):EscrowCall;
+ buildWithdraw(escrow:string,recipient:string,token:string):EscrowCall;
  evmTermsHash(domain:EvmDomain,terms:EvmTerms):string;
  escrowCallFor(action:EscrowAction):{readonly call:EscrowCall;readonly expectedEscrowState:'absent'|'funded'};
  decodeIntentPayload(payload:string):IntentV1;
@@ -73,9 +86,64 @@ export interface JourneyOptions {readonly onInvalidated?:((snapshot:JourneySnaps
 export interface WatchParty {readonly kind:'watch';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;}
 export interface NegotiatingParty {readonly kind:'negotiation';readonly wallet:WalletAdapter;readonly walletSession:WalletSession;readonly pub:string;readonly secret:Uint8Array;readonly eventCrypto:Awaited<ReturnType<typeof createRelayEventCrypto>>;readonly book:ReturnType<typeof createOrderBook>;readonly exchange:ReturnType<typeof createTermsExchange>;readonly pool:RelayPool;}
 export type Party=WatchParty|NegotiatingParty;
-export type Phase='setup'|'wallet'|'review'|'accepted'|'fund-prepared'|'approval-reconcile'|'recovered-acceptance-required'|'reconcile'|'payment-coordination'|'payment-guidance-unavailable'|'settling'|'receipt'|'cancelled-before-send';
-export interface NativeFeeReceipt {readonly tradeId:string;readonly transactionHash:string;readonly state:'released'|'refunded';readonly blockNumber:string;readonly gasUsed:string;readonly effectiveGasPrice:string;readonly fee:string;readonly nativeAssetId:string;readonly nativeDecimals:number;}
+export type Phase=
+ |'setup'
+ |'wallet'
+ |'delivery-pending'
+ |'delivery-stopped'
+ |'review'
+ |'accepted'
+ |'fund-prepared'
+ |'approval-reconcile'
+ |'recovered-acceptance-required'
+ |'reconcile'
+ |'payment-coordination'
+ |'payment-guidance-closed'
+ |'payment-guidance-unavailable'
+ |'settling'
+ |'external-recovery-required'
+ |'receipt'
+ |'cancelled-before-send';
+/** One raw receipt log, as eth_getTransactionReceipt returns it. */
+export interface EscrowLog {readonly address:string;readonly topics:readonly string[];readonly data:string;}
+/** Escrow events this journey reads from a finalized settlement receipt (BasicEscrow event fields, lowercase). */
+export type EscrowLogEvent=
+ |{readonly kind:'Released';readonly tradeId:string;readonly buyer:string;readonly token:string;readonly amount:string}
+ |{readonly kind:'Refunded';readonly tradeId:string;readonly seller:string;readonly caller:string;
+   readonly token:string;readonly amount:string}
+ |{readonly kind:'PayoutDeferred';readonly tradeId:string;readonly recipient:string;
+   readonly token:string;readonly amount:string}
+ |{readonly kind:'Funded'|'Withdrawn'};
+/** Asset delivery after a terminal escrow state. 'pushed': the escrow's own push succeeded in this receipt (no
+ * PayoutDeferred). 'credited': the push failed and the amount was credited for withdraw(recipient, token).
+ * creditOutstanding is the aggregate pendingWithdrawals at the finalized height and may include other trades.
+ * creditState compares it with this trade's credit: 'owed' (at least that much is still credited) or
+ * 'possibly-withdrawn' (less is credited, so some or all may already have been withdrawn). Neither proves arrival. */
+export type PayoutStatus=
+ |{readonly status:'pushed';readonly recipient:string;readonly token:string;readonly amount:string}
+ |{readonly status:'credited';readonly recipient:string;readonly token:string;readonly amount:string;
+   readonly creditOutstanding:string;readonly creditObservedAtHeight:string;
+   readonly creditState:'owed'|'possibly-withdrawn';readonly withdraw:EscrowCall};
+export interface NativeFeeReceipt {
+ readonly tradeId:string;
+ readonly transactionHash:string;
+ readonly state:'released'|'refunded';
+ readonly blockNumber:string;
+ readonly gasUsed:string;
+ readonly effectiveGasPrice:string;
+ readonly fee:string;
+ readonly nativeAssetId:string;
+ readonly nativeDecimals:number;
+ readonly payout:PayoutStatus;
+ /** 'another-account': found from the escrow's own settlement event; that account paid the network fee. */
+ readonly settledBy:'this-wallet'|'another-account';
+}
 export interface TermsDisplay extends EvmTerms {readonly assetId:string;readonly decimals:number;readonly chainId:string;readonly escrowAddress:string;}
-export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;}
+/** A fresh finalized escrow-state read, shown where the app offers no settlement action of its own. */
+export interface ChainStateView {
+ readonly state:'absent'|'funded'|'released'|'refunded';
+ readonly observedAtHeight:string;
+}
+export interface JourneySnapshot {readonly label:'LOCALPROOF';readonly tradingEnabled:false;readonly productionBlocker:string;readonly phase:Phase;readonly profileId:string|null;readonly backupRevision:number|null;readonly account:string|null;readonly terms:TermsDisplay|null;readonly manualPayment:{readonly currency:string;readonly minorUnits:string;readonly scale:number;readonly instructions:string}|null;readonly tradeId:string|null;readonly intentId:string|null;readonly receipt:NativeFeeReceipt|null;readonly assets:readonly AssetChoice[];readonly tokenCheck:TokenCheck|null;readonly fees:readonly ActionFee[];readonly signingReview:SigningReview|null;readonly paymentGuidance:ReturnType<PaymentGuidance['view']>|null;readonly submissionsThisWorker:number;readonly chainState:ChainStateView|null;}
 export interface JourneyController {snapshot():JourneySnapshot;runtime(input:JourneyRuntimeInput):Promise<RuntimeResponse>;act(action:string,options?:{readonly signingAction?:SigningAction|undefined;readonly assetId?:string|undefined;readonly amountBaseUnits?:string|undefined;readonly recordId?:string|undefined;readonly attestFiatReceived?:boolean|undefined;readonly reviewRiskAccepted?:boolean|undefined}):Promise<JourneySnapshot>;dispose():void;}
 export type {ReviewedEvmTerms};
