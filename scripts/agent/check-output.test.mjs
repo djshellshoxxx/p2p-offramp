@@ -37,7 +37,7 @@ test('removed secret remains blocked in patch context', () => fixture((cwd, git)
   assert.throws(() => checkIndex(cwd, [sentinel]), /AGENT_OUTPUT_REFUSED/);
 }));
 test('protected nested paths, newline paths, symlinks and binary files are refused', () => {
-  for (const path of ['.github/workflows/test.yml', 'nested/.env.local', 'nested/package-lock.json', 'scripts/agent/check-output.mjs', 'secret.key', 'bad\nname', 'link', 'binary']) fixture((cwd, git) => {
+  for (const path of ['.github/workflows/test.yml', 'nested/.env.local', 'nested/package-lock.json', 'package.json', 'packages/x/package.json', '.npmrc', '.gitattributes', '.gitmodules', '.husky/pre-commit', 'contracts/solana/Cargo.lock', 'scripts/agent/check-output.mjs', 'secret.key', 'bad\nname', 'link', 'binary']) fixture((cwd, git) => {
     const full = join(cwd, path); mkdirSync(join(full, '..'), { recursive: true });
     if (path === 'link') symlinkSync('source.txt', full);
     else writeFileSync(full, path === 'binary' ? Buffer.from([1, 0, 2]) : 'innocent');
