@@ -1,0 +1,67 @@
+{
+  "format": "p2p-offramp-local-privacy-controls-decisions-v1",
+  "task": "T59",
+  "status": "local-engineering-only",
+  "productionProfileApproved": false,
+  "reviewers": [],
+  "approvedRelease": null,
+  "defaultAppEnabled": false,
+  "economicAuthority": false,
+  "sources": [
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.6_duress_response/module_5.6.1_duress_pin/spec-duress-authentication-state-machine.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.6_duress_response/module_5.6.1_duress_pin/spec-duress-action-policy.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-decoy-profile-data-model.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-encrypted-storage-compartments.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.7_local_data_isolation/module_5.7.1_decoy_storage/spec-local-storage-lifecycle.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-authorization.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-timelock.md",
+    "05_ADVANCED_PRIVACY_INFRASTRUCTURE/feature_5.8_emergency_recovery/module_5.8.1_timelocked_sweep/spec-emergency-sweep-execution.md"
+  ],
+  "localChoices": [
+    "Versioned internal encrypted preference namespaces, never an external interoperability format or a new G02 record kind.",
+    "Explicit decoy-purpose credential route and normal G02 passphrase authentication; no hidden credential detector or PIN profile.",
+    "Only independently created branded decoy descriptors enroll; actual decoy view refuses every non-marker record.",
+    "One physical operation per controller, one current sweep reminder per profile, sixteen sweep assets and sixteen bounded per-vault profile counters.",
+    "Local EVM data profile only; strict uint256 decimal caps, canonical lowercase nonzero addresses and fresh native random nonce.",
+    "SHA-256 canonical internal plan digest binds encrypted reminder data only and never substitutes for a wallet signature or transfer intent.",
+    "Wall/monotonic delta discrepancy over1000ms requires fresh local review. No chain timelock or background execution exists."
+  ],
+  "missingContracts": [
+    {
+      "id": "DURESS-CREDENTIAL-BOOTSTRAP",
+      "missing": "Unified normal-versus-duress credential routing, verifier format and authenticated bootstrap for discovering an encrypted enrollment before normal authentication.",
+      "affectedScope": "Hidden credential mode or automatic duress routing after reload, not independent native profile creation or explicit local switching.",
+      "nextAction": "Freeze the exact credential, storage, expiry, offline-attack and recovery contract before any such mode. Current module requires normal G02 unlock/load and a separately supplied decoy passphrase."
+    },
+    {
+      "id": "SWEEP-STANDALONE-INTENT",
+      "missing": "Versioned standalone transfer intent, exact native transaction/asset/fee admission, durable journal reservation and unknown/finalized/reorg reconciliation bindings.",
+      "affectedScope": "Wallet authorization, batch execution, submitted/unknown/finalized states and recovery of transfers.",
+      "nextAction": "Define a separate monetary contract and vectors; never reuse escrow fund/release/refund/approve or manufacture TradeBinding. Local plans/reminders and cancellation remain independent."
+    },
+    {
+      "id": "PROFILE-REMOVAL",
+      "missing": "A separately specified authenticated export/migration/recovery-aware whole-profile deletion API. G02 v1 exposes no such operation.",
+      "affectedScope": "Whole-profile removal only; no deletion capability is supplied to duress actions.",
+      "nextAction": "Resolve the existing lifecycle/MEM01 conflict, design backup warnings and durable cancellation/recovery, and review before implementation. Logical deletion must never promise physical erasure."
+    },
+    {
+      "id": "DURESS-UI-COMPOSITION",
+      "missing": "Release-selected product composition, lifecycle owner and notification presentation for this optional module.",
+      "affectedScope": "Default UI behavior and enabled duress capability, not the actual native G02 module proof.",
+      "nextAction": "Review explicit opt-in composition and target acceptance with no core dependency, preserving basic recovery and independent-wallet exits. A metadata flag alone does not hide an existing UI notification."
+    },
+    {
+      "id": "SWEEP-NATIVE-QUALIFICATION",
+      "missing": "Current native spendable-balance/asset behavior evidence, external wallet consent, selected network and separately reviewed transfer/recovery profile; Solana/SPL profile remains separately undefined.",
+      "affectedScope": "Actual transfers, supported assets and non-EVM plans.",
+      "nextAction": "Evaluate native profiles and independent vectors after the standalone intent exists. Current local EVM locator/cap validation is not chain truth, token admission or custody approval."
+    }
+  ],
+  "qualification": [
+    "Independent specialist review and exact enabled-artifact policy remain required.",
+    "No coercion resistance, plausible deniability, browser forensic indistinguishability or physical erasure is claimed.",
+    "Actual native browser proof is local module/storage evidence only; it does not qualify default UI, Worker isolation, real wallets or physical devices.",
+    "Another-tab writes require explicit native freshness CAS. There is no instantaneous write broadcast in current G02."
+  ]
+}
