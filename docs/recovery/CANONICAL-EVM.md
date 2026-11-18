@@ -137,8 +137,16 @@ Maintainers build with the exported `buildEvmRecoveryPackage` API using the exac
 live result of existing G15 `verifyRelease` over both registry and committed
 canonical ABI assets. Copied approval JSON is rejected. The ordinary maintained
 Sepolia builder is `node --import ./scripts/test-support/register-tsx.mjs
-scripts/recovery/build-evm.mjs --out <new-directory>` from the checkout. It uses
+scripts/recovery/build-evm.mjs --out <new-directory> --deployment-id <id>` from
+the checkout (`--deployment-id` defaults to `escrow-sepolia-v1`). It uses
 the existing pinned release key and accepted-sequence policy without overrides;
 an unset key pin returns `KEY_UNPINNED`, and a registry-only manifest cannot prove
 the required ABI asset. Packaging requires a current proof; runtime recovery uses
 only its original historical pins. This package implements no Solana recovery.
+
+Proposed (D3 Option A, pending owner approval): the Sepolia testnet release is one
+manifest over both the registry and the canonical ABI, so the same signed release
+serves the testnet build, the app and this builder. Each signed deployment id is
+packaged separately. Build and archive every release's packages before that
+release's `expiresAt`, under its `manifestSha256`; never rebuild or replace an
+archived package. The owner steps are in `OWNER-TESTNET-RELEASE-RUNBOOK.md`.
