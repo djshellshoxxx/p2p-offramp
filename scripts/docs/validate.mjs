@@ -81,28 +81,39 @@ export async function inspectDocs(root=ROOT ) {
   if(claims.some(c=>c.reviewedAt!==null||!['proposed','unsupported'].includes(c.status)))refuse();
   if(!Array.isArray(register.evidence)||register.evidence.length>128||!Array.isArray(register.copyKeys)||register.copyKeys.length>128)refuse();
   if(register.evidence.length!==CLAIM_CATALOG.reduce((n,c)=>n+c.evidencePaths.length,0)||register.copyKeys.length!==claims.length)refuse();
-  const paths=new Set();
+  const paths=new Set(),stale=new Set();
+  // Evidence rows bind the bytes at the immutable sourceCommit (strict). Current bytes that drifted since
+  // then, for example a later edit by another owner, are reported stale and never presented as current.
+  const committedHash=(path)=>sha(execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']}));
+  const currentHash=async(path)=>{try{return sha(await file(root,path));}catch{return null;}};
   for(const item of register.evidence ) {
     exact(item,['path','sha256']);
     if(paths.has(item.path)||! /^[0-9a-f]{64}$/.test(item.sha256))refuse();
     paths.add(item.path);
-    const bytes=await file(root,item.path);
-    if(sha(bytes)!==item.sha256)refuse();
-    const committed=execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${item.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']});
-    if(sha(committed)!==item.sha256)refuse();
+    safeClaimPath(item.path);
+    if(committedHash(item.path)!==item.sha256)refuse();
+    if(await currentHash(item.path)!==item.sha256)stale.add(item.path);
   }
   for(const claim of claims)if(claim.evidencePaths.some(p=>!paths.has(p)))refuse();
   exact(register.copySource,['path','sha256']);
   if(register.copySource.path!=='apps/web/src/ui/locale/en.ts'||typeof register.copySource.sha256!=='string'||! /^[0-9a-f]{64}$/.test(register.copySource.sha256))refuse();
-  const copyBytes=await file(root,register.copySource.path);
-  if(sha(copyBytes)!==register.copySource.sha256||sha(execFileSync(resolveTool('git'),['show',`${register.sourceCommit}:${register.copySource.path}`],{cwd:root,maxBuffer:1048576,stdio:['ignore','pipe','pipe']}))!==register.copySource.sha256)refuse();
+  if(committedHash(register.copySource.path)!==register.copySource.sha256)refuse();
+  const copyStale=await currentHash(register.copySource.path)!==register.copySource.sha256;
+  if(copyStale)stale.add(register.copySource.path);
 
-  const keys=new Set();
+  const keys=new Set(),staleClaimIds=new Set();
   for(const item of register.copyKeys ) {
     exact(item,['key','claimId','sourceTextSha256']);
-    if(typeof item.key!=='string'||! /^[A-Za-z0-9._-]{1,64}$/.test(item.key)||keys.has(item.key)||!ids.has(item.claimId)||CLAIM_COPY_BINDINGS[item.key]!==item.claimId||typeof item.sourceTextSha256!=='string'||sha(claimCopyText(sourceCatalog,item.key))!==item.sourceTextSha256)refuse();
+    if(typeof item.key!=='string'||! /^[A-Za-z0-9._-]{1,64}$/.test(item.key)||keys.has(item.key)||!ids.has(item.claimId)||CLAIM_COPY_BINDINGS[item.key]!==item.claimId||typeof item.sourceTextSha256!=='string'||! /^[0-9a-f]{64}$/.test(item.sourceTextSha256))refuse();
     keys.add(item.key);
+    let textHash=null;
+    try{textHash=sha(claimCopyText(sourceCatalog,item.key));}catch{}
+    // A copy text that no longer matches is only tolerable when the source file itself is reported stale.
+    if(textHash!==item.sourceTextSha256&&!copyStale)refuse();
+    // Every claim bound to a copy source that drifted from its recorded bytes is not current.
+    if(copyStale)staleClaimIds.add(item.claimId);
   }
+  for(const claim of claims)if(claim.evidencePaths.some(p=>stale.has(p)))staleClaimIds.add(claim.id);
   const manifest=exact(parseStrictJsonBytes(new Uint8Array(await file(root,'docs/wiki-source/docs-manifest.json',65536)),65536),['version','releaseId','sourceCommit','dirtyDraft','reviewers','approvedRelease','documents','linkReportDigest']);
   if(manifest.version!==1||manifest.releaseId!=='local-unapproved-draft'||manifest.sourceCommit!==register.sourceCommit||manifest.dirtyDraft!==true||!Array.isArray(manifest.reviewers)||manifest.reviewers.length||manifest.approvedRelease!==null||!Array.isArray(manifest.documents)||manifest.documents.length!==7)refuse();
   const reports=[],seen=new Set(),topics=new Set();
@@ -140,7 +151,8 @@ export async function inspectDocs(root=ROOT ) {
   return {
     engineeringConsistency:true, semanticApproval:false, published:false, approvedRelease:null,
     claims:claims.length, copySource:register.copySource, copyKeys:register.copyKeys, sourceEvidence:register.evidence,
-    claimsRegister:claims.map(c => projectClaimsRegister(c,sha(JSON.stringify(register.evidence.filter(e => c.evidencePaths.includes(e.path)))))),
+    claimsRegister:claims.map(c => ({...projectClaimsRegister(c,sha(JSON.stringify(register.evidence.filter(e => c.evidencePaths.includes(e.path))))),evidenceCurrent:!staleClaimIds.has(c.id)})),
+    stale:[...stale].sort(), staleClaims:[...staleClaimIds].sort(),
     sourceCommit:register.sourceCommit, dirtyDraft:true,
     excludedAuthority:['semantic-review','professional-crypto-review','wiki-publication','release-approval'],
     documents:seen.size, linkReportDigest:digest, links:reports,

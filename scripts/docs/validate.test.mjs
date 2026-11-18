@@ -51,18 +51,21 @@ test('unknown keys, duplicate claims/copy keys and unrecognized references fail 
 test('self-attested reviewer, future approval and tested status do not pass local check',async()=>{for(const change of [r=>r.reviewers=['self'],r=>r.approvedRelease='future',r=>r.claims[0].status='tested-scoped',r=>r.claims[0].reviewedAt='2026-11-02'])await assert.rejects(registerMutation(change));
 });
 test('wrong source bytes, hash, baseline and missing evidence fail',async()=>{for(const change of [r=>r.evidence[0].sha256='0'.repeat(64),r=>r.sourceCommit='0'.repeat(40),r=>r.evidence=[],r=>r.evidence[0].path='missing.ts'])await assert.rejects(registerMutation(change));
-  await assert.rejects(fixture(async(temp,r)=>{await writeFile(resolve(temp,r.evidence[0].path),'changed source');
-  }));
+  // Drifted current bytes are stale, not a failure: the recorded hash still matches the immutable sourceCommit bytes.
+  const drifted=await fixture(async(temp,r)=>{await writeFile(resolve(temp,r.evidence[0].path),'changed source');
+  });
+  assert.equal(drifted.stale.length,1);assert.ok(drifted.staleClaims.length>=1);
 });
 test('document hashes, capabilities, duplicate pages/topics and link report digest are checked',async()=>{for(const change of [m=>m.documents[0].sha256='0'.repeat(64),m=>m.documents[0].implementedCapabilities=['imaginary'],m=>m.documents[1]=m.documents[0],m=>m.documents[1].topic=m.documents[0].topic,m=>m.linkReportDigest='0'.repeat(64)])await assert.rejects(manifestMutation(change));
 });
 test('changed linked target, symlink and oversized manifest are rejected',async()=>{await assert.rejects(fixture(async temp=>{await writeFile(resolve(temp,'docs/wiki-source/User-Guide.md'),'changed target');
   }));
-  await assert.rejects(fixture(async(temp,r)=>{
+  const linked=await fixture(async(temp,r)=>{
     const path=resolve(temp,r.evidence[0].path);
     await rm(path);
     await symlink(resolve(root,r.evidence[0].path),path);
-  }));
+  });
+  assert.equal(linked.stale.length,1,'a symlinked evidence file is never read as current');
   await assert.rejects(fixture(async temp=>{await writeFile(resolve(temp,'docs/wiki-source/docs-manifest.json'),' '.repeat(65537));
   }));
 });
@@ -77,11 +80,17 @@ test('authored link grammar rejects broken anchors, traversal, nonchecked HTML a
 });
 test('real UI copy key, canonical mapping, value hash and immutable catalog bytes are bound',async()=>{
   for(const change of [r=>r.copyKeys[0].key='privacy.invented',r=>r.copyKeys[0].claimId='message-content',r=>r.copyKeys[0].sourceTextSha256='0'.repeat(64),r=>r.copySource.path='apps/web/src/ui/locale/catalog.ts'])await assert.rejects(registerMutation(change));
-  for(const updateDeclaredHash of [false,true])await assert.rejects(fixture(async(temp,r)=>{
+  const edit=async(updateDeclaredHash)=>fixture(async(temp,r)=>{
     const path=resolve(temp,r.copySource.path);const original=await readFile(path,'utf8');assert.ok(original.includes('Authenticated encryption observed'));
     const changed=original.replace('Authenticated encryption observed','Everything is anonymous');await writeFile(path,changed);
     if(updateDeclaredHash){const{createHash}=await import('node:crypto');r.copySource.sha256=createHash('sha256').update(changed).digest('hex');await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(r));}
-  }));
+  });
+  // Edited current bytes with the recorded hash intact: reported stale, and the bound claim is not current.
+  const drift=await edit(false);
+  assert.deepEqual(drift.stale,['apps/web/src/ui/locale/en.ts']);assert.ok(drift.staleClaims.includes('vault-at-rest'));
+  assert.equal(drift.claimsRegister.find(c=>c.claimId==='vault-at-rest').evidenceCurrent,false);
+  // Rewriting the recorded hash to match the edit no longer matches the immutable sourceCommit bytes: refused.
+  await assert.rejects(edit(true),{message:'DOCS_STALE'});
 });
 
 test('inline link extraction preserves nested labels, delimiters and authored order',()=>{
@@ -143,4 +152,50 @@ test('actual document reads retain the 64 KiB UTF-8 byte limit',async()=>{
   const baseline=await fixture(async()=>{}),text='é'.repeat(32768);
   assert.equal((await changedDocument(baseline,text,[])).engineeringConsistency,true);
   await assert.rejects(changedDocument(baseline,text+'a',[]),{message:'DOCS_STALE'});
+});
+
+const git=(cwd,...args)=>execFileSync(resolveTool('git'),['-c','user.name=fixture','-c','user.email=fixture@example.invalid','-c','commit.gpgsign=false',...args],{cwd,encoding:'utf8'}).trim();
+/** Own temp git repository: bound sources are committed first, then the register and manifest bind that commit. */
+async function gitFixture() {
+  const {createHash}=await import('node:crypto'),sha=b=>createHash('sha256').update(b).digest('hex');
+  const temp=await mkdtemp(resolve(tmpdir(),'p2p-docs-git-'));
+  const register=JSON.parse(await readFile(resolve(root,'docs/wiki-source/claims-register.json'),'utf8'));
+  const manifest=JSON.parse(await readFile(resolve(root,'docs/wiki-source/docs-manifest.json'),'utf8'));
+  const sources=[register.copySource.path,...register.evidence.map(e=>e.path)];
+  git(temp,'init','-q');
+  for(const path of sources){await mkdir(dirname(resolve(temp,path)),{recursive:true});await writeFile(resolve(temp,path),`bound source ${path}\n`);}
+  git(temp,'add','-A');git(temp,'commit','-q','-m','sources');
+  const commit=git(temp,'rev-parse','HEAD');
+  register.sourceCommit=commit;manifest.sourceCommit=commit;
+  for(const row of register.evidence)row.sha256=sha(Buffer.from(`bound source ${row.path}\n`));
+  register.copySource.sha256=sha(Buffer.from(`bound source ${register.copySource.path}\n`));
+  await mkdir(resolve(temp,'docs/wiki-source'),{recursive:true});
+  for(const name of ['User-Guide.md','Developer-Guide.md',...manifest.documents.map(d=>d.sourcePath.split('/').pop())])await copyFile(resolve(root,'docs/wiki-source',name),resolve(temp,'docs/wiki-source',name));
+  await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
+  await writeFile(resolve(temp,'docs/wiki-source/docs-manifest.json'),JSON.stringify(manifest));
+  return {temp,register,commit};
+}
+test('a later edit to a bound non-owned file is stale and not current, but tampered recorded bytes at sourceCommit fail',async()=>{
+  const {temp,register}=await gitFixture();
+  try {
+    const clean=await inspectDocs(temp);
+    assert.deepEqual(clean.stale,[]);assert.deepEqual(clean.staleClaims,[]);assert.ok(clean.claimsRegister.every(c=>c.evidenceCurrent));
+    const victim=register.evidence[0].path;
+    await writeFile(resolve(temp,victim),'edited later by another owner\n');git(temp,'add','-A');git(temp,'commit','-q','-m','later edit');
+    const drifted=await inspectDocs(temp);
+    assert.equal(drifted.engineeringConsistency,true);assert.deepEqual(drifted.stale,[victim]);
+    const stale=register.claims.filter(c=>c.evidencePaths.includes(victim)).map(c=>c.id);
+    assert.deepEqual(drifted.staleClaims,stale);
+    assert.ok(drifted.claimsRegister.filter(c=>stale.includes(c.claimId)).every(c=>c.evidenceCurrent===false));
+    assert.ok(drifted.claimsRegister.filter(c=>!stale.includes(c.claimId)).every(c=>c.evidenceCurrent===true));
+    // The recorded hash must match the bytes at sourceCommit: a wrong record fails even though the working tree is unchanged.
+    register.evidence[0].sha256='0'.repeat(64);
+    await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
+    await assert.rejects(inspectDocs(temp),{message:'DOCS_STALE'});
+    // Owned wiki bytes are still strict against the working tree.
+    register.evidence[0].sha256=(await import('node:crypto')).createHash('sha256').update(Buffer.from(`bound source ${victim}\n`)).digest('hex');
+    await writeFile(resolve(temp,'docs/wiki-source/claims-register.json'),JSON.stringify(register));
+    await writeFile(resolve(temp,'docs/wiki-source/Home.md'),'changed owned page\n');
+    await assert.rejects(inspectDocs(temp),{message:'DOCS_STALE'});
+  } finally {await rm(temp,{recursive:true,force:true});}
 });
