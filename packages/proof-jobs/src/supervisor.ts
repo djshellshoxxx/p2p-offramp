@@ -69,6 +69,8 @@ function parsedScope(input:unknown):Readonly<ResourceScope>{
   return Object.freeze({binding:parseTradeBinding(raw.binding),termsHash:digest(raw.termsHash),policyHash:digest(raw.policyHash),generation:counter(raw.generation)});
 }
 const safe=(callback:(()=>void)|undefined):void=>{try{callback?.();}catch{/* Continue every remaining cleanup. */}};
+/** Calls work and reports a synchronous throw as failure; any returned promise is left to the caller. */
+const capture=<T>(work:()=>T):{readonly ok:true;readonly value:T}|{readonly ok:false}=>{try{return{ok:true,value:work()};}catch{return{ok:false};}};
 
 export function createPublicResourceRunner(options:ResourceOptions):CoreResult<ResourceRunner>{
   return checked(()=>{
@@ -102,18 +104,19 @@ export function createPublicResourceRunner(options:ResourceOptions):CoreResult<R
       if(!job.worker||job.terminationStarted)return;
       job.terminationStarted=true;job.terminationDone=false;
       if(cooperative){try{job.worker.postMessage({v:1,kind:'cancel',jobId:job.consent.jobId,generation:job.consent.scope.generation},[]);}catch{/* Native termination still follows. */}}
-      let ending:unknown;
-      try{ending=job.worker.terminate();}catch{
-        // Unknown physical fate cannot release this tab's admission. Native terminate is parameterless.
-        return;
-      }
-      try{
-        // Require a real completion Promise, not void or a thenable claiming the request succeeded.
+      const worker=job.worker;
+      // Unknown physical fate cannot release this tab's admission. Native terminate is parameterless.
+      const started=capture(():unknown=>worker.terminate());
+      if(!started.ok)return;
+      const ending=started.value;
+      // Require a real completion Promise, not void or a thenable claiming the request succeeded.
+      // Unknown or malformed completion (the native then throws) cannot release physical admission.
+      safe(()=>{
         Reflect.apply(nativeThen,ending,[(completion:unknown)=>{
           if(completion!==undefined)return;
           job.terminationDone=true;release(job);
         },()=>{/* Rejected termination stays unavailable until document teardown. */}]);
-      }catch{/* Unknown or malformed completion cannot release physical admission. */}
+      });
     };
     const clearTimers=(job:Job):void=>{
       const wall=job.wallTimer,heartbeat=job.heartbeatTimer;job.wallTimer=job.heartbeatTimer=undefined;

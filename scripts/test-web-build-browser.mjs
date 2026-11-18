@@ -157,7 +157,7 @@ async function probeLocalScreenCounts(origin) {
         const db = await new Promise((done, fail) => { const request = indexedDB.open(info.name); request.onsuccess = () => done(request.result); request.onerror = fail; });
         try {
           const stores = [];
-          for (const name of [...db.objectStoreNames].sort()) {
+          for (const name of [...db.objectStoreNames].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))) {
             const rows = await new Promise((done, fail) => { const tx = db.transaction(name), request = tx.objectStore(name).getAll(); request.onsuccess = () => done(request.result); request.onerror = fail; });
             stores.push({ name, rows });
           }

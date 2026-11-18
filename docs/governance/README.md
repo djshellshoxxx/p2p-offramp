@@ -41,7 +41,13 @@ installation, shell evaluation, on-chain action or imported code execution occur
 
 The decision packets below are preparation only: reviewers are empty and status is
 proposed. Their paired proposals are drafts, with no compatible readers/writers or
-recovery artifacts asserted. Human/security decisions remain pending. Names in a
-future file cannot substitute for the existing signed review and release process.
+recovery artifacts asserted. The maintained pairs are `g14-terms-binding`,
+`g15-release-policy`, `g16-acceptance`, `peer-acceptance-carrier`, `qr-profile` and
+`solana-profile`. `npm run check:governance` requires exactly these
+`<name>.decision.json`/`<name>.proposal.json` pairs: a missing member or pair fails, and
+so does an unlisted packet. Adding or retiring a packet means updating
+`MAINTAINED_PACKETS` in `scripts/governance/check-all.mjs`. Human/security decisions
+remain pending. Names in a future file cannot substitute for the existing signed
+review and release process.
 See [pending decisions](PENDING-DECISIONS.md) for concrete questions and preserved
 recovery constraints.

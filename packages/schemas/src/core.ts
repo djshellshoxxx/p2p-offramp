@@ -1,6 +1,9 @@
 /** CTX01/CTX02/G08/G13 structural contracts. Parsing is not adapter/deployment authentication. */
 import { decodeBase64url } from './vault.ts';
 
+// Canonical, locale-independent UTF-16 code-unit order: exactly what the default sort() does for strings.
+const compareCodeUnits = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
+
 export const MAX_OBSERVATION_BYTES = 65_536;
 export type ChainFamily = 'evm' | 'solana';
 export interface TradeBinding { readonly chain: ChainFamily; readonly networkId: string; readonly deploymentId: string; readonly tradeId: string; }
@@ -148,5 +151,6 @@ export function parseJournalPendingHint(input: unknown): JournalPendingHint {
     try { decodeBase64url(id, 32, 32); } catch { fail(); }
     if (ids.includes(id as string)) fail(); ids.push(id as string);
   }
-  return Object.freeze({ pendingIntentIds: Object.freeze(ids.sort()), revision: integer(raw.revision) });
+  ids.sort(compareCodeUnits);
+  return Object.freeze({ pendingIntentIds: Object.freeze(ids), revision: integer(raw.revision) });
 }

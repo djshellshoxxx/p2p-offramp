@@ -5,6 +5,7 @@ import { VaultStorageError } from '../../storage/src/idb-vault-store.ts';
 import { createEncryptedComparisonStore, createOfflineStealth } from '../index.ts';
 import { scopeHashOf, cursorIdOf, candidateIdOf, CANDIDATE_FORMAT, CURSOR_FORMAT } from '../src/records.ts';
 import { REF, SDK, CONTEXT, SPEND, HASH, ANNOUNCER, setup, val, fail, eventFor, requestFor, pageFor, deferred, tick, nativeFill } from './fixtures/helpers.mjs';
+const compareCodeUnits = (left, right) => (left < right ? -1 : left > right ? 1 : 0);
 const decode = payload => JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
 const foreign = { id: 'f1'.repeat(16), kind: 'preference', schemaVersion: 8, payload: Buffer.from('unrelated future preference').toString('base64url') };
 async function records(s) { return val(await s.vault.list(s.session.sessionId, 'preference')); }
@@ -15,7 +16,7 @@ test('actual G02 encryption: complete comparison atomically adds candidate+curso
   const report = val(await s.run()); assert.equal(report.added, 1); assert.equal(report.tracked, 1); assert.equal(report.compared, 1); assert.equal(report.economicAuthority, false);
   assert.deepEqual(report.cursor, { blockNumber: 1n, blockHash: HASH }); assert.equal(s.storage.writes, before + 1);
   const saved = await records(s); assert.equal(saved.length, 3); assert.deepEqual(saved.find(r => r.id === foreign.id), foreign);
-  assert.deepEqual(saved.filter(r => r.id !== foreign.id).map(r => decode(r.payload).format).sort(), [CANDIDATE_FORMAT, CURSOR_FORMAT].sort());
+  assert.deepEqual(saved.filter(r => r.id !== foreign.id).map(r => decode(r.payload).format).sort(compareCodeUnits), [CANDIDATE_FORMAT, CURSOR_FORMAT].sort(compareCodeUnits));
   const serialized = JSON.stringify([...s.storage.rows.values()]); assert.doesNotMatch(serialized, /stealth-cursor|stealth-candidate|ephemeralPublicKey|viewingPublicKey|offline-fixture/);
   const next = requestFor({ fromBlock: 2n, toBlock: 2n, expectedCursor: report.cursor });
   const repeat = val(await s.run(next, { async readOfflinePage(q) { return pageFor(q, []); } }));

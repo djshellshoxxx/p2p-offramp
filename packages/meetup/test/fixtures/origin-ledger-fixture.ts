@@ -1,9 +1,13 @@
 /** Compiled LOCAL fixture ports only. No production origin binding or sensor/gesture qualification. */
 import { EncryptedVaultService } from '../../../storage/src/vault-service.ts';
 import { IndexedDbVaultStore } from '../../../storage/src/idb-vault-store.ts';
-import { createDisclosureBudget, createLocationConsentController, BUDGET_LOCK_NAME,
-  type DisclosureBudget, type LocationConsent, type LocationConsentController, type OriginBudgetCoordinator,
-  type ExclusiveBudgetLock, type MeetupResult } from '../../index.ts';
+// Import the specific modules, not ../../index.ts: the index re-exports signaling-model.ts, whose bare
+// '@noble/hashes' specifier cannot resolve in this tsc-only (unbundled) browser fixture.
+import { createLocationConsentController } from '../../src/consent.ts';
+import type { LocationConsent, LocationConsentController } from '../../src/consent.ts';
+import { createDisclosureBudget, BUDGET_LOCK_NAME } from '../../src/disclosure-budget.ts';
+import type { DisclosureBudget, OriginBudgetCoordinator, ExclusiveBudgetLock } from '../../src/disclosure-budget.ts';
+import type { MeetupResult } from '../../src/shared.ts';
 const PASS = 'T69 public native origin-ledger fixture passphrase';
 const BASE_WALL_MS = 1_700_000_000_000;
 export function value<T>(result: MeetupResult<T>): T { if (!result.ok) throw Error('FIXTURE_' + result.error.code); return result.value; }

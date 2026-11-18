@@ -53,7 +53,7 @@ try {
   const sticky = await a.evaluate(async () => {
     const { value } = window.fixtureModule, f = window.f, firstCap = f.consent(1000), first = value(await f.budget.marker(firstCap, f.claim(firstCap)));
     for (let i = 0; i < 100; i++) { const cap = f.consent(2000 + i), marker = value(await f.budget.marker(cap, f.claim(cap))); if (JSON.stringify(marker) !== JSON.stringify(first)) throw Error('FIXTURE_FRESH_NOISE'); }
-    const { LEDGER_RECORD_ID } = await import('/meetup/index.js'), { decodeBase64url } = await import('/schemas/index.js');
+    const { LEDGER_RECORD_ID } = await import('/meetup/src/disclosure-budget.js'), { decodeBase64url } = await import('/schemas/index.js');
     const row = await f.vault.read(f.session.sessionId, LEDGER_RECORD_ID); if (!row.ok || !row.value) throw Error('FIXTURE_LEDGER');
     const ledger = new TextDecoder().decode(decodeBase64url(row.value.payload, 1, 65_536)), encrypted = JSON.stringify(await f.store.get(f.ledgerProfileId));
     return { counts: value(await f.budget.inspect()), stickyRequests: 100, nativeLockCallbacks: f.nativeLockCallbacks, ledgerHasRaw: /latE6|lonE6|accuracy|recipient|42\.6|-5\.6/.test(ledger),
@@ -108,13 +108,13 @@ try {
   for (const check of regionCaps.checks) refused(check.refused, 'EXHAUSTED');
   refused(regionCaps.dayRefused, 'EXHAUSTED'); assert.equal(val(regionCaps.dayCounts).regionsHour, 0); assert.equal(val(regionCaps.dayCounts).regionsDay, 12);
   await a.evaluate(async () => {
-    const { BUDGET_LOCK_NAME } = await import('/meetup/index.js'); window.nativeLockHeld = false;
+    const { BUDGET_LOCK_NAME } = await import('/meetup/src/disclosure-budget.js'); window.nativeLockHeld = false;
     const release = new Promise(done => { window.releaseNativeLock = done; });
     window.nativeHolder = navigator.locks.request(BUDGET_LOCK_NAME, { mode: 'exclusive' }, async () => { window.nativeLockHeld = true; try { await release; } finally { window.nativeLockHeld = false; } });
   });
   await a.waitForFunction(() => window.nativeLockHeld === true);
   const cancelledLock = await b.evaluate(async () => {
-    const { BUDGET_LOCK_NAME } = await import('/meetup/index.js'), f = window.f, before = JSON.stringify(await f.store.get(f.ledgerProfileId)), abort = new AbortController();
+    const { BUDGET_LOCK_NAME } = await import('/meetup/src/disclosure-budget.js'), f = window.f, before = JSON.stringify(await f.store.get(f.ledgerProfileId)), abort = new AbortController();
     const pending = f.budget.inspect(abort.signal); let observedQueued = false;
     for (let i = 0; i < 32; i++) { const locks = await navigator.locks.query(); if (locks.pending.some(lock => lock.name === BUDGET_LOCK_NAME)) { observedQueued = true; break; } await new Promise(done => setTimeout(done, 0)); }
     abort.abort(); const result = await pending;
@@ -129,7 +129,7 @@ try {
   }, 3 * HOUR + DAY + 1);
   assert.equal(val(retained.counts).distanceDay, 0); assert.equal(val(retained.counts).regionsDay, 0); assert.equal(val(retained.counts).trackedTrades, 4); refused(retained.oldTrade, 'EXHAUSTED');
   const noReset = await b.evaluate(async () => {
-    const f = window.f, { LEDGER_RECORD_ID } = await import('/meetup/index.js'), { encodeBase64url } = await import('/schemas/index.js');
+    const f = window.f, { LEDGER_RECORD_ID } = await import('/meetup/src/disclosure-budget.js'), { encodeBase64url } = await import('/schemas/index.js');
     const row = await f.store.get(f.ledgerProfileId), corrupted = await f.vault.commit(f.session.sessionId, row.revision, [{ op: 'put', record: { id: LEDGER_RECORD_ID, kind: 'preference', schemaVersion: 1, payload: encodeBase64url(new TextEncoder().encode('{"invalid":"controlled-local-fixture"}')) } }]);
     if (!corrupted.ok) throw Error('FIXTURE_CORRUPTION'); const before = JSON.stringify(await f.store.get(f.ledgerProfileId));
     const inspect = await f.budget.inspect(), provision = await f.budget.provisionFreshLedger(), rows = await f.vault.list(f.session.sessionId);

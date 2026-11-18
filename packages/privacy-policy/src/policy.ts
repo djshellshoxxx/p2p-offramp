@@ -1,6 +1,8 @@
 /** Inert local policy proposals. No provider loading, network endpoints, custody or release flags. */
 import { parseStrictJsonBytes, type CoreErrorCode, type CoreResult } from '../../schemas/index.ts';
 import { createCoreError, createOperationId } from '../../domain/index.ts';
+// Canonical, locale-independent UTF-16 code-unit order: exactly what the default sort() does for strings.
+const compareCodeUnits = (left: string, right: string): number => (left < right ? -1 : left > right ? 1 : 0);
 export const POLICY_LIMITS = Object.freeze({ bytes: 32_768, entries: 32, profiles: 32, nodes: 64 });
 export interface CapabilityReference { readonly name: string; readonly protocolVersion: number; readonly schemaHash: string; }
 export interface FeaturePolicy {
@@ -37,7 +39,7 @@ export function name(input: unknown): string { return typeof input === 'string' 
 export function identifier(input: unknown): string { return typeof input === 'string' && /^[a-z0-9][a-z0-9._-]{0,63}$/.test(input) ? input : invalid(); }
 export function counter(input: unknown): number { return typeof input === 'number' && Number.isSafeInteger(input) && input >= 0 ? input : invalid(); }
 export function strings(input: unknown, maximum: number, parse: (input: unknown) => string = name): readonly string[] {
-  const values = array(input, maximum).map(parse); if (new Set(values).size !== values.length) invalid('CONFLICT'); return Object.freeze(values.sort());
+  const values = array(input, maximum).map(parse); if (new Set(values).size !== values.length) invalid('CONFLICT'); values.sort(compareCodeUnits); return Object.freeze(values);
 }
 export function reference(input: unknown): CapabilityReference {
   const raw = record(input, ['name', 'protocolVersion', 'schemaHash']), version = counter(raw.protocolVersion);
@@ -63,6 +65,6 @@ export function diffPolicy(previous: FeaturePolicy, next: FeaturePolicy): CoreRe
   return attempt(() => {
     const a = snapshotPolicy(previous), b = snapshotPolicy(next);
     const roles = (p: FeaturePolicy) => new Map(['required', 'optional', 'disabled'].flatMap(role => p[role as 'required' | 'optional' | 'disabled'].map(item => [item.name, `${role}:${item.protocolVersion}:${item.schemaHash}`] as const)));
-    const left = roles(a), right = roles(b); return Object.freeze({ modeChanged: a.mode !== b.mode, profilesChanged: a.profileIds.join() !== b.profileIds.join(), changedCapabilities: Object.freeze([...new Set([...left.keys(), ...right.keys()])].filter(key => left.get(key) !== right.get(key)).sort()) });
+    const left = roles(a), right = roles(b); return Object.freeze({ modeChanged: a.mode !== b.mode, profilesChanged: a.profileIds.join() !== b.profileIds.join(), changedCapabilities: Object.freeze([...new Set([...left.keys(), ...right.keys()])].filter(key => left.get(key) !== right.get(key)).sort(compareCodeUnits)) });
   });
 }

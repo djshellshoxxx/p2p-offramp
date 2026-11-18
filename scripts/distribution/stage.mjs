@@ -49,7 +49,8 @@ async function inventory(directory,prefix='',allowed=()=>true){
  async function walk(path,base){
   const names=[];
   for await(const entry of await opendir(path)){if(names.length>=MAX_FILES+directories.size)fail('DISTRIBUTION_LIMIT');names.push(entry.name);}
-  for(const name of names.sort(compare)){
+  names.sort(compare);
+  for(const name of names){
    const relativePath=safeArtifactPath(base+name),target=resolve(path,name),stat=await lstat(target);
    if(stat.isSymbolicLink())fail('DISTRIBUTION_ARTIFACT_SYMLINK');
    if(stat.isDirectory()){if(!directories.has(prefix+relativePath))fail('DISTRIBUTION_ASSET_SET');await walk(target,relativePath+'/');}

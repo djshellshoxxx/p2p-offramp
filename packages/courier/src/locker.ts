@@ -143,7 +143,7 @@ export function createLockerModel(options: {
           busy = false;
         }
       });
-    const expect = (n: number) => {
+    const expectRevision = (n: number) => {
       if (integer(n) !== revision) return stop("STALE_REVISION");
     };
     const now = () => {
@@ -157,7 +157,7 @@ export function createLockerModel(options: {
       inspect: () => run(view),
       prepare: (expectedRevision: number, input: unknown) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (phase !== "idle") return stop("UNKNOWN_OUTCOME");
           const parsed = parseCourierRecord(
             "locker-command",
@@ -183,7 +183,7 @@ export function createLockerModel(options: {
         }),
       markSendStarted: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (phase !== "prepared") return stop("CONFLICT");
           const at = now();
           if (at >= commandExpiresAt) return stop("EXPIRED");
@@ -194,7 +194,7 @@ export function createLockerModel(options: {
         }),
       requestStatusRead: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (phase !== "unknown") return stop("CONFLICT");
           const at = now();
           if (reads >= 3 || at - started >= 60) {
@@ -208,7 +208,7 @@ export function createLockerModel(options: {
         }),
       observe: (expectedRevision: number, evidence: CourierEvidence) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (!["unknown", "quarantined", "manualRecovery"].includes(phase))
             return stop("CONFLICT");
           const p = evidenceOf(evidence, verifier, "locker-observation"),
@@ -236,7 +236,7 @@ export function createLockerModel(options: {
         }),
       tick: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (phase === "unknown" && now() - started >= 60)
             phase = "manualRecovery";
           revision = increment(revision);

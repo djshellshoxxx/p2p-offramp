@@ -55,6 +55,6 @@ test('Announcer refuses altered offsets, length, padding, topic/address/scheme, 
 test('decoder exact-data parser refuses accessors, sparse arrays and unrelated profiles without invoking getters', () => {
   let called = 0; const log = { ...logFor(claim) }; Object.defineProperty(log, 'data', { enumerable: true, get() { called++; throw Error('secret error'); } });
   fail(decode(log)); assert.equal(called, 0);
-  const sparse = [...logFor(claim).topics]; delete sparse[1]; fail(decode({ ...logFor(claim), topics: sparse }));
+  const sparse = [...logFor(claim).topics]; Reflect.deleteProperty(sparse, 1); // deliberate array hole fail(decode({ ...logFor(claim), topics: sparse }));
   fail(decodeAnnouncement({ profileId: undefined, context: CONTEXT, expectedAnnouncer: ANNOUNCER, log: logFor(claim) }), 'UNSUPPORTED_PROFILE');
 });

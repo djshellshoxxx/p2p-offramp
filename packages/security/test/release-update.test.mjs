@@ -62,6 +62,21 @@ test('altered asset, signature, locator binding and retained rollback conflict c
   }
 });
 
+test('malformed detached envelope bytes are untrusted content, not an outage',async()=>{
+  const flip=bytes=>{const copy=new Uint8Array(bytes);copy[copy.length-2]^=1;return copy;};
+  const resign=bytes=>{const envelope=JSON.parse(new TextDecoder().decode(bytes)),sig=envelope.signature;
+    envelope.signature=sig[0]+(sig[1]==='A'?'B':'A')+sig.slice(2);return encode(JSON.stringify(envelope));};
+  const cases=[['flip',flip,'MANIFEST_UNSUPPORTED'],['text',()=>encode('not json'),'MANIFEST_UNSUPPORTED'],
+    ['resign',resign,'SIGNATURE_INVALID']];
+  for(const suffix of ['release-signature.json','/locator-signature'])for(const [name,corrupt,reason] of cases){
+    const s=world(({state})=>{state.mutate=(url,bytes)=>url.endsWith(suffix)?corrupt(bytes):bytes;});
+    try{
+      assert.deepEqual(await s.controller.checkForUpdate(),{kind:'untrusted',reason},suffix+' '+name);
+      assert.equal(s.metrics.writes,0);assert.equal(s.metrics.opens,0);
+    }finally{await s.close();}
+  }
+});
+
 test('acceptance refuses missing/stale backup, physical wallet work and absent actual gesture without storage/navigation',async()=>{
   for(const field of ['backup','selected','pending','gesture']){
     const s=world();try{const checked=await s.controller.checkForUpdate();assert.equal(checked.kind,'candidate');s.state[field]=field==='pending';const result=await s.controller.acceptUpdate(checked.candidate);assert.equal(result.ok,false,field);assert.equal(s.metrics.writes,0);assert.equal(s.metrics.opens,0);}finally{await s.close();}

@@ -18,10 +18,14 @@ node --import ./scripts/test-support/register-tsx.mjs scripts/lab/run.mjs founda
 node --import ./scripts/test-support/register-tsx.mjs scripts/lab/run.mjs journey
 ```
 
-`dist-lab/recipe.json` binds the source commit/dirty state, actual runtime/compiler
-versions, recipe, lockfile and synthetic fixture hashes. `run.json` records every
-command outcome and the hash of its local log. A failed check stops the run and
-keeps the evidence. Reports are local development evidence, not release approval.
+Each invocation writes to a new, exclusively created
+`dist-lab/<mode>-<UTC timestamp>-<random>/` directory, printed as `output` on
+success. Its `recipe.json` binds the source commit/dirty state, actual
+runtime/compiler versions, recipe, lockfile and synthetic fixture hashes. Its
+`run.json` records every command outcome and the hash of its local
+`command-N.log`. A failed check stops the run and keeps the evidence. Earlier
+runs, including failed ones, are never overwritten; the newest run of a mode
+sorts last. Reports are local development evidence, not release approval.
 The chain harnesses start their own ephemeral loopback chains, conspicuously
 synthetic identities and fake funds, then stop only their owned processes.
 

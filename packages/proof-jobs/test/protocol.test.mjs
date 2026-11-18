@@ -14,7 +14,7 @@ test('default provider boundary is empty and refuses before inspecting sensitive
   let touched=0;const hostile=new Proxy({}, {get(){touched++;throw Error('PRIVATE');},ownKeys(){touched++;throw Error('PRIVATE');}});
   const jobs=createProofJobs();assert.ok(Object.isFrozen(jobs)&&Object.isFrozen(jobs.providers));assert.deepEqual(jobs.providers,[]);
   bad(await jobs.request(hostile,hostile,()=>{touched++;throw Error('PRIVATE');},hostile),'UNSUPPORTED_PROVIDER');
-  assert.equal(touched,0);assert.deepEqual(Object.keys(jobs).sort(),['providers','request']);
+  assert.equal(touched,0);assert.deepEqual(new Set(Object.keys(jobs)),new Set(['providers','request']));
 });
 
 test('worker command/reply schema is exact, detached and never upgrades resource output to proof',()=>{

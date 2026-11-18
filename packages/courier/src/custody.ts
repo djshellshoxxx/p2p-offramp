@@ -144,7 +144,7 @@ export function createCustodyModel(options: {
           busy = false;
         }
       });
-    const expect = (n: number) => {
+    const expectRevision = (n: number) => {
       if (integer(n) !== revision) return stop("STALE_REVISION");
     };
     const now = () => {
@@ -168,7 +168,7 @@ export function createCustodyModel(options: {
       inspect: () => run(view, true),
       accept: (expectedRevision: number, evidence: CourierEvidence) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (state !== "proposed") return stop("CONFLICT");
           const p = evidenceOf(evidence, verifier, "handshake");
           if (
@@ -183,7 +183,7 @@ export function createCustodyModel(options: {
         }),
       beginPickup: (expectedRevision: number, evidence: CourierEvidence) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (state !== "accepted") return stop("CONFLICT");
           const p = evidenceOf(evidence, verifier, "capability"),
             c = p.body;
@@ -216,7 +216,7 @@ export function createCustodyModel(options: {
         challenge: CourierEvidence,
       ) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (
             ![
               "pickupPending",
@@ -305,7 +305,7 @@ export function createCustodyModel(options: {
         }),
       cancel: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const actor = text(verifier.profile.parseKey(actorPort()), 512);
           guard();
           if (![seller, buyer, courier].includes(actor))
@@ -322,13 +322,13 @@ export function createCustodyModel(options: {
         }),
       revokeCapabilities: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           generation = increment(generation);
           return bump();
         }),
       tick: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const at = now();
           if (
             at >= Number(proposal.deliveryBy) &&
@@ -419,7 +419,7 @@ export function createRecoveryModel(options: {
           busy = false;
         }
       });
-    const expect = (n: number) => {
+    const expectRevision = (n: number) => {
       if (integer(n) !== revision) return stop("STALE_REVISION");
     };
     const time = () => {
@@ -438,7 +438,7 @@ export function createRecoveryModel(options: {
       inspect: () => run(view),
       remind: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           if (reminders >= 3 || time() >= end) return stop("LIMIT_EXCEEDED");
           reminders++;
           revision = increment(revision);
@@ -446,7 +446,7 @@ export function createRecoveryModel(options: {
         }),
       tick: (expectedRevision: number) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const at = time();
           if (at >= end) {
             phase = "timed-out";
@@ -457,7 +457,7 @@ export function createRecoveryModel(options: {
         }),
       agree: (expectedRevision: number, evidence: CourierEvidence) =>
         run(() => {
-          expect(expectedRevision);
+          expectRevision(expectedRevision);
           const p = evidenceOf(evidence, verifier, "recovery"),
             r = p.body;
           if (

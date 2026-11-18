@@ -135,7 +135,7 @@ export async function startAppServices(options: AppRuntimeOptions = {}): Promise
       try { return await runtime.planTradeDraftChange(expectedRevision, change, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     commitTradeDraftChange: async (previewId: string, expectedRevision: number, consent: RuntimeTradeDraftConsent, signal?: AbortSignal): Promise<AppResult<RuntimeTradeDraftReceipt>> => {
-      try { return await runtime.commitTradeDraftChange(previewId, expectedRevision, consent); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
+      try { return await runtime.commitTradeDraftChange(previewId, expectedRevision, consent, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }
     },
     setReviewFavorite: async (recordId: string, favorite: boolean, expectedRevision: number, signal?: AbortSignal): Promise<AppResult<RuntimeReviewFavoriteReceipt>> => {
       try { return await runtime.setReviewFavorite(recordId, favorite, expectedRevision, signal); } catch { return runtimeFailure('PROTOCOL_ERROR'); }

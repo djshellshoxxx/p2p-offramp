@@ -59,7 +59,7 @@ class NativeMixedRetentionAuthority implements NativeRetentionAuthority {
    }catch{return false;}
   };
   const guard=()=>{if(!current())return protect();};
-  const cleanup=()=>{if(disposed)return;disposed=true;controller.abort();if(listening){try{Reflect.apply(signalUnlisten,external,['abort',abort]);}catch{/* Continue resource disposal. */}}for(const resource of resources.reverse()){try{resource.dispose();}catch{/* Local revocation cannot depend on foreign cleanup. */}}if(this.#active===controller)this.#active=undefined;};
+  const cleanup=()=>{if(disposed)return;disposed=true;controller.abort();if(listening){try{Reflect.apply(signalUnlisten,external,['abort',abort]);}catch{/* Continue resource disposal. */}}for(const resource of [...resources].reverse()){try{resource.dispose();}catch{/* Local revocation cannot depend on foreign cleanup. */}}if(this.#active===controller)this.#active=undefined;};
   const empty=():NativeRetentionLease=>Object.freeze({scope,safeRecordIds:Object.freeze([]),current,dispose:cleanup});
   try{
    Reflect.apply(signalListen,external,['abort',abort,{once:true}]);listening=true;if(Reflect.apply(signalAborted,external,[]))abort();

@@ -18,6 +18,11 @@ test('source-bound compiler assertions reject missing, duplicate, foreign, unsup
  assert.equal(classifyProperty({errors:[safe]},'B.sol',span).result,'PROOF_UNKNOWN');assert.equal(classifyProperty({errors:[safe]},'A.sol',span,true).result,'PROOF_UNKNOWN');
  assert.equal(classifyProperty({errors:[safe,{message:'Inline assembly is not supported'}]},'A.sol',span).result,'PROOF_UNKNOWN');
  assert.equal(classifyProperty({errors:[{...safe,errorCode:'6328'}]},'A.sol',span).result,'COUNTEREXAMPLE_FOUND');
+ // solc tags every unanswered CHC target 6328 "might happen"; partial work must not report a counterexample.
+ const partial={...safe,errorCode:'6328',message:'CHC: Assertion violation might happen here.'};
+ assert.equal(classifyProperty({errors:[partial]},'A.sol',span,true).result,'PROOF_UNKNOWN');
+ const abstracted={errors:[partial,{message:'Inline assembly is not supported'}]};
+ assert.equal(classifyProperty(abstracted,'A.sol',span).result,'PROOF_UNKNOWN');
 });
 test('safe and unsafe operational probes must both bind actual distinct assertion spans; raw SAT polarity is insufficient',()=>{
  const source='contract T { function f(uint x) public { assert(x == x); assert(x != 7); }}';
@@ -150,4 +155,11 @@ test('actual canonical and model import literals retain their pinned dependency 
  const model=await readFile(new URL('../../contracts/evm/formal/CanonicalRefinement.t.sol',import.meta.url),'utf8');
  assert.deepEqual(formal.literalImports(canonical),['@openzeppelin/contracts/token/ERC20/IERC20.sol','@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol','@openzeppelin/contracts/utils/ReentrancyGuard.sol']);
  assert.deepEqual(formal.literalImports(model),['../src/BasicEscrow.sol','../test/mocks/Mocks.sol','forge-std/Test.sol']);
+});
+test('the CLI evidence directory must resolve inside the checkout, so arguments cannot direct writes elsewhere',()=>{
+ const root=new URL('../../',import.meta.url).pathname.replace(/\/$/,'');
+ assert.equal(formal.evidenceDirectory(undefined,'.formal-evidence'),root+'/.formal-evidence');
+ assert.equal(formal.evidenceDirectory(root+'/.formal-evidence/run-1'),root+'/.formal-evidence/run-1');
+ for(const outside of['/tmp/formal-evidence',root,root+'-sibling/evidence',root+'/../outside','/'])
+  assert.throws(()=>formal.evidenceDirectory(outside),/FORMAL_OUTPUT_OUTSIDE_REPOSITORY/,outside);
 });

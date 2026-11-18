@@ -3,6 +3,7 @@
  * Nothing here performs cryptography: event id and signature checking is the injected EventCrypto
  * (packages/nostr-crypto). Structure and size limits are enforced BEFORE any signature work.
  */
+import { indexedValues } from './snapshot.ts';
 export interface NostrEvent {
   readonly id: string; readonly pubkey: string; readonly created_at: number; readonly kind: number;
   readonly tags: readonly (readonly string[])[]; readonly content: string; readonly sig: string;
@@ -44,19 +45,6 @@ export function withinBytes(value: string, max: number): boolean {
 const isSubId = (value: unknown): value is string => typeof value === 'string' && /^[\x21-\x7e]{1,64}$/.test(value);
 const isMessage = (value: unknown): value is string => typeof value === 'string' && value.length <= FRAME_LIMITS.maxMessageLength;
 
-/** Called only inside the guarded event boundary; no foreign iterator or indexed getter is used. */
-function indexedValues(input: unknown, minimum: number, maximum: number): unknown[] | null {
-  if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) return null;
-  const length: unknown = Object.getOwnPropertyDescriptor(input, 'length')?.value;
-  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < minimum || length > maximum || Reflect.ownKeys(input).length !== length + 1) return null;
-  const values: unknown[] = [];
-  for (let index = 0; index < length; index++) {
-    const descriptor = Object.getOwnPropertyDescriptor(input, String(index));
-    if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) return null;
-    values.push(descriptor.value);
-  }
-  return values;
-}
 export function parseEvent(input: unknown): NostrEvent | null {
   try {
     if (typeof input !== 'object' || input === null || Array.isArray(input)) return null;
