@@ -35,3 +35,16 @@ from absolute, non-world-writable `PATH` entries (`tool-path.mjs`). Ports 18899 
   `deviations`).
 - No adversarial coverage (wrong signer, wrong recipient, frozen mint, Token-2022): see the LiteSVM tests.
 - Single local validator: no forks, no real stake-weighted clock, no fee market.
+
+## Client flow (`client-run.mjs`)
+
+    node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs   # ~36 min
+
+Drives the `packages/chain-solana` client against the same pinned validator (ports offset 400 by default): fund,
+release alone, payout; a manually bundled `[release, payout_spl]` to a frozen ATA that rolls the release back,
+next to the client's sequenced flow that keeps it; a crash after the durable send marker (no resend, dropped after
+finalized expiry, explicit rebuild); a vault restore with the marker; and a real refund after the deadline. Every
+escrow transaction is built by the client's serializer and signed through its Wallet Standard port by a runtime
+keypair; one signed transaction is cross-checked with `solana decode-transaction`. Localnet-only shim: its RPC
+adapter answers `getGenesisHash` with the program's compiled synthetic genesis constant, which no real validator
+can have. Writes `client-summary.json` in the work dir; `SOLANA_CLIENT_SKIP_REFUND=1` skips the wait (and fails).
