@@ -1,0 +1,2429 @@
+{
+  "format": "p2p-public-sdk-evaluation-v1",
+  "profile": "t75-mobile-wallet-20261102",
+  "packageSha256": "5fe94ce234f4d18c6578cf9b4ecc5161cc125954c96e20217a64d5bfe98ff40c",
+  "lockSha256": "093bef8fdc0f536d8f36a261b899f465279f481c330d6dbb36ae6c88fec81211",
+  "rootLockSha256AtIntake": "3fb4f73075d4a6162352212dfa5b924d209e50561242d24b26127f39dd1f7f32",
+  "installedTree": {
+    "entries": 4424,
+    "regularFiles": 4423,
+    "symlinks": 1,
+    "bytes": 30819653,
+    "sha256": "5647c360cba02de3bfb511a057504a53cdc0d4a7048094f32ea8ca6d12d02f60"
+  },
+  "registryKeys": {
+    "utf8": "{\"keys\":[{\"expires\":\"2025-01-29T00:00:00.000Z\",\"keyid\":\"SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1Olb3zMAFFxXKHiIkQO5cJ3Yhl5i6UPp+IhuteBJbuHcA5UogKo0EWtlWwW6KSaKoTNEYL7JlCQiVnkhBktUgg==\"},{\"expires\":null,\"keyid\":\"SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U\",\"keytype\":\"ecdsa-sha2-nistp256\",\"scheme\":\"ecdsa-sha2-nistp256\",\"key\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEY6Ya7W++7aUPzvMTrezH6Ycx3c+HOKYCcNGybJZSCJq/fd7Qa8uuAKtdIkUQtQiEKERhAmE5lMMJhP8OkDOa2g==\"}]}",
+    "sha256": "faf23d8753d5bb79df250f10391ac89b63ecf7743e48487a544a99c847f9c8df"
+  },
+  "packages": [
+    {
+      "path": "node_modules/@adraffy/ens-normalize",
+      "name": "@adraffy/ens-normalize",
+      "version": "1.11.1",
+      "integrity": "sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.11.1.tgz",
+        "bytes": 228910,
+        "sha256": "7578f2dbf456f0f602e18c478886a579ed657d246f51417df1033b894fbab389"
+      },
+      "metadataSha256": "e8cef2edaa87fd7fc42645030315250a491a2c7de4eefe7b7d91ca64a2dbcf62",
+      "gitHeadUnsigned": "19daa8507f95d9432fcf1e59c9ac76131630c6da",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDYI1PtKPrb7tSU6mNqRPxqWNauH2FKOvzWZ94aJltTeQIhANr6OIhFGxasaQoWNzx37+iRRpV5mBIjIMmSTCKaxQHK",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1077,
+            "sha256": "3b458813ab3316b16bf004c4201d4a0583cf615514422dabf4d7c025988d613d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@msgpack/msgpack",
+      "name": "@msgpack/msgpack",
+      "version": "3.1.3",
+      "integrity": "sha512-47XIizs9XZXvuJgoaJUIE2lFoID8ugvc0jzSHP+Ptfk8nTbnR8g788wv48N03Kx0UkAv559HWRQ3yzOgzlRNUA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@msgpack/msgpack/-/msgpack-3.1.3.tgz",
+        "bytes": 120141,
+        "sha256": "1fef5cd691fbe3ea2695ca12c8c01a5c2c50e7014486d32037e0242c1c24bd36"
+      },
+      "metadataSha256": "a144d7da4b16b672c067502dbb3990d2f44b1ee94eb19350f6522e3a85e05b5b",
+      "gitHeadUnsigned": "77ed8ac348d14ed9aba3f8b8f1add3213a921e37",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIB5/f8ZqUWP4sUZuwmsBRggW2sY4GVXexgR32IWij/JXAiEAvyR4Qb+6TNLksVGWXAzdlzmJ/cr1H3yiXX8T2Z5aRpU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "ISC",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 740,
+            "sha256": "d95a411bcdadac85d678a99367ff51719e53539fa5ee9994943cd760c4ae64e4"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@noble/ciphers",
+      "name": "@noble/ciphers",
+      "version": "1.3.0",
+      "integrity": "sha512-2I0gnIVPtfnMw9ee9h1dJG7tp81+8Ob3OJb3Mv37rx5L40/b0i7djjCVvGOVqc9AEIQyvyu1i6ypKdFw8R8gQw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/ciphers/-/ciphers-1.3.0.tgz",
+        "bytes": 121164,
+        "sha256": "e02e7c03c26b8dd88ab0bd5e46f2996689e33f252bacb551a1cf504bc912501f"
+      },
+      "metadataSha256": "23a478ce49776c19d64e378d357d505b378bc0d90e45de982d31a6784465d082",
+      "gitHeadUnsigned": "953f9aabb4dd91f02bb64a8df424dd1912ddd62a",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQD015at2Dtj9ZQilQphW/nOxB9ntgBrbQDHqUO8GuCdIgIhAIlBE0bv/aD94JFRLcGlEY8oCc3e2dHQELZ9rMkNijZ1",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1161,
+            "sha256": "f36671a5487c9c5050efacb58011c37c24c55a889803cb036cf9d9a6347c1e2d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@noble/curves",
+      "name": "@noble/curves",
+      "version": "1.9.7",
+      "integrity": "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/curves/-/curves-1.9.7.tgz",
+        "bytes": 362302,
+        "sha256": "c4c5545645b8d58a080d2faf84982f6fe5dc3a0516e11de8dc571b38cab565e9"
+      },
+      "metadataSha256": "76d27d123fe1f55cdf5eb2490ce835c8707d46585c7409218e9cf00ee30a45e4",
+      "gitHeadUnsigned": "a0ac59846ee76c52f7c18886f4963e1211345d48",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIEpRdYGl7ChAEWbxHQWJcP6RL7UkU6XU9LK328zQNxYtAiEA8rKl27SvfY0MtFzcZxDpPjV4pqk2NAetkNNxSX0jAm8=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1109,
+            "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@noble/hashes",
+      "name": "@noble/hashes",
+      "version": "1.8.0",
+      "integrity": "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/hashes/-/hashes-1.8.0.tgz",
+        "bytes": 155326,
+        "sha256": "e8a765d92c04faaccba8776411c5038cb195f812ee629fce07e1d2e6aec80ea0"
+      },
+      "metadataSha256": "ea94c5e8d305a914a1136b69712a0a45261e9124c209a142c6dbcba9092cd7f5",
+      "gitHeadUnsigned": "32f700f38ec49d7e6b2ab687904d6b2d7d60d80a",
+      "registrySignatures": [
+        {
+          "sig": "MEQCID8lQUmAx5TfCSeorp3w14AhfRGIwS1xYXLsWxk9hs9ZAiA7CboxrJT9SLLXE2yDJ+QJ8bu51bRL7+HHpgST8E2HOg==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1109,
+            "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@scure/base",
+      "name": "@scure/base",
+      "version": "1.2.6",
+      "integrity": "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@scure/base/-/base-1.2.6.tgz",
+        "bytes": 26735,
+        "sha256": "09c1bdef467fd38e0d6a96dd56511c0b8d8d5cff6d4c6bd387dae6b31048e82c"
+      },
+      "metadataSha256": "420808ecb090df4c4a4063efbc6ad47db8448c5072886835e015c90a7652cd9b",
+      "gitHeadUnsigned": "ffaad85318b400399965e8d73e1f936d78989308",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIBdkpUVBWQNl7z6NfnpG17+ujrB3liybBa8iY6SL31LzAiEA5XschBVDMRwiszJkJt5mTOrbgNG+Uy6zQ3DBopICOXk=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1110,
+            "sha256": "3239e134eb6e6d64538ca76498c7fcb08a395249dd9d4af9927bf6d0169ee429"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@scure/bip32",
+      "name": "@scure/bip32",
+      "version": "1.7.0",
+      "integrity": "sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@scure/bip32/-/bip32-1.7.0.tgz",
+        "bytes": 13578,
+        "sha256": "0a459440b75c384be436e9d2b128510e1fd4ed0cb4abe7a31eafcb114c966ca4"
+      },
+      "metadataSha256": "709a10f7971782df28aa951fc128c2a341a9c56d15cc7f0677c3bf1afd3292e9",
+      "gitHeadUnsigned": "12b521c72ccf7e700902590d462941de4fa4da53",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIA+9ph7wPFR7ZbhZfUZm6rMVnG3blJDQG4WvsgY0WYRRAiEA9lQ7EGHha3Z3XPv4HJUrPEIfRFiBjuh/NdixeHBtFqQ=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1122,
+            "sha256": "1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@scure/bip39",
+      "name": "@scure/bip39",
+      "version": "1.6.0",
+      "integrity": "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@scure/bip39/-/bip39-1.6.0.tgz",
+        "bytes": 94686,
+        "sha256": "a55b9327570f4558494e3fc75227861a3bdcf1f401cdd9adc98dca617cba020e"
+      },
+      "metadataSha256": "44f87612df14da6ce5cbb88d6413404343a5dafb08d2174cc26e530646b33620",
+      "gitHeadUnsigned": "35e05022ef1d3784514dd6af862278a60dd12032",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDDoeBKJKzbURBXj5x75/BIdz3kMMviIdUGA4iilD3glgIhANSpmyh2CZypK2bJ0C9RQT0bixd/NqA1+b33BZRP8tHM",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1122,
+            "sha256": "1565efd0ec4580bfaa96c7eeaaa9af3791baa1cc562c3bde62d0a055910b9ec7"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/environment",
+      "name": "@walletconnect/environment",
+      "version": "1.0.1",
+      "integrity": "sha512-T426LLZtHj8e8rYnKfzsw1aG6+M0BT1ZxayMdv/p8yM0MU+eJDISqNY3/bccxRr4LrF9csq02Rhqt08Ibl0VRg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/environment/-/environment-1.0.1.tgz",
+        "bytes": 27505,
+        "sha256": "562680016d5a24b032405b49150124d8cac2846e60feba5c052b91c0119f4c1f"
+      },
+      "metadataSha256": "93a6fbb46fcea2c772b2ad5c06445ba78fd13e5614bd29b83b6463b844e66133",
+      "gitHeadUnsigned": "81bc9b0859b6875d35697177ec21e2d01457403b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIATs4mU3OA5sCW419FHuppmPfGm8DYj/ib/PmGXx4VBKAiEA9SPevyB4K0lXo8LOeG7uuPyEqUUckrAb7ysQGA1U9x4=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/events",
+      "name": "@walletconnect/events",
+      "version": "1.0.1",
+      "integrity": "sha512-NPTqaoi0oPBVNuLv7qPaJazmGHs5JGyO8eEAk5VGKmJzDR7AHzD4k6ilox5kxk1iwiOnFopBOOMLs86Oa76HpQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/events/-/events-1.0.1.tgz",
+        "bytes": 25654,
+        "sha256": "f359fe58f20a79a37d54963f928bc543ec406ee9e0633274798480e3c6d693ac"
+      },
+      "metadataSha256": "2fdffa4bc3d4413f795bee0bea688ffaf31ac1d0f817e3afa5ea0171a916cb9e",
+      "gitHeadUnsigned": "81bc9b0859b6875d35697177ec21e2d01457403b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIGaIgtctAYVQve/zeMiZWMorO6KkSOu2OHUaqaggrIPdAiEAyachm0V8ROGx5tU9p9n7JXgwUauMbA2QOt4XdGhraBE=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/heartbeat",
+      "name": "@walletconnect/heartbeat",
+      "version": "1.2.2",
+      "integrity": "sha512-uASiRmC5MwhuRuf05vq4AT48Pq8RMi876zV8rr8cV969uTOzWdB/k+Lj5yI2PBtB1bGQisGen7MM1GcZlQTBXw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/heartbeat/-/heartbeat-1.2.2.tgz",
+        "bytes": 25988,
+        "sha256": "b91ba99397a6d084bc8f6770ffa3d704386d7556298f837a09f0c7772f056f54"
+      },
+      "metadataSha256": "e8fb8e9de24b933865a75a48966cd30ec024502f3a8864eaa9a31e47264fa893",
+      "gitHeadUnsigned": "37cbfc1e8a3ae0a8547a287771de7d7c1cf2c71f",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIFyBHXN1/Z9sddgr/VMsWX2vR7+muDcyeNYU+Y9BuRdnAiEAmWUdXA8vMeGvKZT1/rRCW2jLVyBo4pPe0ykAcZBm+zQ=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/jsonrpc-types",
+      "name": "@walletconnect/jsonrpc-types",
+      "version": "1.0.4",
+      "integrity": "sha512-P6679fG/M+wuWg9TY8mh6xFSdYnFyFjwFelxyISxMDrlbXokorEVXYOxiqEbrU3x1BmBoCAJJ+vtEaEoMlpCBQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/jsonrpc-types/-/jsonrpc-types-1.0.4.tgz",
+        "bytes": 15488,
+        "sha256": "c487d38687af5dc45dd39799a34abac0f5ba84afe8d683619efd92989ea8a8bc"
+      },
+      "metadataSha256": "20eedbab9031af52fdbd93e6c48b9fd825294120acddd9e8a52714f90461e791",
+      "gitHeadUnsigned": "37cbfc1e8a3ae0a8547a287771de7d7c1cf2c71f",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIHcnr2ZkKF0LRuAPozyv6bz+T/v+Tlw+n4mTvNJB0MsYAiEAmOWF+YJfwlMmDepjdJzqJpZUUeHiaTsaftnbafZ20Is=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/jsonrpc-utils",
+      "name": "@walletconnect/jsonrpc-utils",
+      "version": "1.0.8",
+      "integrity": "sha512-vdeb03bD8VzJUL6ZtzRYsFMq1eZQcM3EAzT0a3st59dyLfJ0wq+tKMpmGH7HlB7waD858UWgfIcudbPFsbzVdw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/jsonrpc-utils/-/jsonrpc-utils-1.0.8.tgz",
+        "bytes": 24529,
+        "sha256": "19a1c59fdf3a9ed07e94d7b9a0a9a74ecf9c6cb2bd45e562f69fecf89f227550"
+      },
+      "metadataSha256": "81251a310395104678303450668d7f82f51c63c964f92268c2c3bb8e2fc0fb5c",
+      "gitHeadUnsigned": "705f0a894606ca3fb0a750a38dff7bfacf3592b4",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIEn6lvHdw9KzdzJw0e3qfXIG1WrbYR6Vz50R6OeOV5/HAiEArA4TTFYp05mSGcoOltlWDbCNCQuZZ/gznlUcXDxX8Zs=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/keyvaluestorage",
+      "name": "@walletconnect/keyvaluestorage",
+      "version": "1.1.1",
+      "integrity": "sha512-V7ZQq2+mSxAq7MrRqDxanTzu2RcElfK1PfNYiaVnJgJ7Q7G7hTVwF8voIBx92qsRyGHZihrwNPHuZd1aKkd0rA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/keyvaluestorage/-/keyvaluestorage-1.1.1.tgz",
+        "bytes": 19617,
+        "sha256": "e22b3b5d0898d53d55b6f9b069318159c87cdec09fc4d688e0e6cce823c85614"
+      },
+      "metadataSha256": "cf87a944a16f834622800366524b9de1a96ad814fa48a5afab5525b47daa65f2",
+      "gitHeadUnsigned": "7f79dc52148562684bb45cc9d519c8b4efbed423",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIFpmwo9oPSRZuJXFAn5btJ1Ji8lW63j379mkeeSABMRdAiEAyOOYcXHvSI2Eje6esN7sIhLojxi8ty+0Un7qU9w7Tn4=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1070,
+            "sha256": "2c05fcbb457ba28b653884f9c64a4bf97c53f436251dbebb8974b04e72984eb9"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/logger",
+      "name": "@walletconnect/logger",
+      "version": "3.0.2",
+      "integrity": "sha512-7wR3wAwJTOmX4gbcUZcFMov8fjftY05+5cO/d4cpDD8wDzJ+cIlKdYOXaXfxHLSYeDazMXIsxMYjHYVDfkx+nA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/logger/-/logger-3.0.2.tgz",
+        "bytes": 61103,
+        "sha256": "0e012635f35280c1b0e1e31812f4d535be70c3ce2cd0e7b898b00d81924cae44"
+      },
+      "metadataSha256": "f8eb1cd68aa8a7f946151291601343cf2445bd2b2dd967862b67cb6ace9d662c",
+      "gitHeadUnsigned": "48a79efd8c6929fc3421bcb327ae906a197a9837",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDRRumpwMITH+cvCzCaoDEB85tiGdMs4xMjZymnhgjL0wIhAKHhCmbC+aa5hFKIBBlXSW+9Mgx+EciGk2mhWkBQoB3O",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/relay-api",
+      "name": "@walletconnect/relay-api",
+      "version": "1.0.11",
+      "integrity": "sha512-tLPErkze/HmC9aCmdZOhtVmYZq1wKfWTJtygQHoWtgg722Jd4homo54Cs4ak2RUFUZIGO2RsOpIcWipaua5D5Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/relay-api/-/relay-api-1.0.11.tgz",
+        "bytes": 20135,
+        "sha256": "698b798e3f00f6a513b2ef73efc209bddacfe8de5969d5c200a61c9ef60d7976"
+      },
+      "metadataSha256": "aa500919d4df729189a99e1beff3c7b9eb432b453d12157103a3f7f7d6b00c9b",
+      "gitHeadUnsigned": "a0a4487b7fe0ca952e80e265ce28e3f30a9dd863",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCcIaVyMbXUpN5F/gZQNVMzXs5K3NdWhgse1bP1WtbICAIhAPbIfvIsrqWy2fnss23A0T+Ila+VSpSDesD6vYXc/I1y",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/relay-auth",
+      "name": "@walletconnect/relay-auth",
+      "version": "1.1.0",
+      "integrity": "sha512-qFw+a9uRz26jRCDgL7Q5TA9qYIgcNY8jpJzI1zAWNZ8i7mQjaijRnWFKsCHAU9CyGjvt6RKrRXyFtFOpWTVmCQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/relay-auth/-/relay-auth-1.1.0.tgz",
+        "bytes": 238978,
+        "sha256": "67493b2cfb7a36393f6c77b2ebfa5f47f38899f08ca3fc3e80c6d36dd1a2a342"
+      },
+      "metadataSha256": "b0b0943018a233ec6cb45652a00af0c81c6444dc5b66eccc820e49abb52537e9",
+      "gitHeadUnsigned": "2c41c4eacd61df73c8c0e2c4ecd9c0bc6165dff4",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCCPpW7FHg4mDXtOEoJvj6D0tlbIvxEfb5AWskkfMlHJAIhANvMI30LOikQWFdEMEoZ5dJ+BYyoBxJksHfZ/ESJGRvJ",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/relay-auth/node_modules/@noble/curves",
+      "name": "@noble/curves",
+      "version": "1.8.0",
+      "integrity": "sha512-j84kjAbzEnQHaSIhRPUmB3/eVXu2k3dKPl2LOrR8fSOIL+89U+7lV117EWHtq/GHM3ReGHM46iRBdZfpc4HRUQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/curves/-/curves-1.8.0.tgz",
+        "bytes": 295471,
+        "sha256": "6c86cb82b1d947943090f58f722e0b59a7d792ed98e79cc318bdaf08256b5461"
+      },
+      "metadataSha256": "51ce2a81e9bbf2f1a6a96b549c6e8ec64e98b534df0d9213f34502d53d650a38",
+      "gitHeadUnsigned": "615dd182dac2febcf1e148a3fc7f40190395d1c9",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQDB0W3E43kiyUi6zsm7HMo5amX0VDW5ThsNIgYM1sT4kgIgLAwaYF4YZhSRxG/jaxxjus2Xdvn12a9x1sN8AonZRGw=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1109,
+            "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/relay-auth/node_modules/@noble/hashes",
+      "name": "@noble/hashes",
+      "version": "1.7.0",
+      "integrity": "sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/hashes/-/hashes-1.7.0.tgz",
+        "bytes": 133040,
+        "sha256": "b681c9f17306ea447723b8dfad003a4cb7e74a5b5d6f9c36ceb739a78f99c3a3"
+      },
+      "metadataSha256": "cc0e4cfa7d555e6638a7131540a304e4f3ce53f1a9d16baa600a770b4f01656f",
+      "gitHeadUnsigned": "4a16f7cf966e03a6fce237e43c87d0dd516d30bc",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIAi3f8HYMKiqg6K2MnEi6X9e8MLqlqPhPr4f/Z5GHxopAiBKN2R3OrZ3bAXCTFEiacUTOvSvsIBhvIrquxG27O7vwg==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1109,
+            "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/safe-json",
+      "name": "@walletconnect/safe-json",
+      "version": "1.0.2",
+      "integrity": "sha512-Ogb7I27kZ3LPC3ibn8ldyUr5544t3/STow9+lzz7Sfo808YD7SBWk7SAsdBFlYgP2zDRy2hS3sKRcuSRM0OTmA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/safe-json/-/safe-json-1.0.2.tgz",
+        "bytes": 23467,
+        "sha256": "d37bfef198fa55a79942167c6bbf9038733a78aedea15a28f3a6cc59ad23d5c2"
+      },
+      "metadataSha256": "05ddfee4db966f11f1216dbc8723641e5f9d509bba643aef76f0a5ab7b24abb2",
+      "gitHeadUnsigned": "7a1749f55c7eeaf730a2ca0dec4ddafafa300d14",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIE0Z6vPcapsvliva8W0jlON0xuQDVNzjFaHf4NtWbw35AiAHPHsElVwtTfGN9lm2m75LfFDNuGhE9QlDMNHchn8WdA==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/time",
+      "name": "@walletconnect/time",
+      "version": "1.0.2",
+      "integrity": "sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/time/-/time-1.0.2.tgz",
+        "bytes": 31930,
+        "sha256": "8302064d02a3de23dc61332bcc675445b2eb50519dc5a19b17dc34bade15a259"
+      },
+      "metadataSha256": "806255fcbec5356d5a20c60d8603ed1c96eb3b74b5222b02d4374e6a5695e741",
+      "gitHeadUnsigned": "81bc9b0859b6875d35697177ec21e2d01457403b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIC2KvznXBK68v8HjaOmygGvGb9grphZKAKOG06C+0tdJAiEAwmoFLv+IGBKUJJprchAxIAGFmx7ix9MhC4obIRTUbGQ=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/types",
+      "name": "@walletconnect/types",
+      "version": "2.26.0",
+      "integrity": "sha512-XmM6ZFeIvL0oJ+cK8xq8FKk6G9qVXGhXIsWl0lyTZ921Tjvn5eYOd3qIZW34E+8V2alP6uv8c7Fy5GWgz/j7aw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/types/-/types-2.26.0.tgz",
+        "bytes": 77001,
+        "sha256": "90613dbb2fb411fbaa4b5efc574e6b7415d53ebaa4c3dfdcfde0ba01f16a2567"
+      },
+      "metadataSha256": "db00a1502fb5959654c09d7d6e2236042f2ed4ce2c20e72befddac9df5684b75",
+      "gitHeadUnsigned": "63094dcb6fded05dcbc2b08b8895ada75a31dcb5",
+      "registrySignatures": [
+        {
+          "sig": "MEQCICStofyOUeqbc9JeUwLN0VI+TbfQl8qIRak0X0Y8Z/bCAiBxSUdzgX4fqhyds5LKCIbgMv+EnLWyEs7tCZxDXebcqg==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIBP2xzmGSa9wVxvOP4mN7SjylslMPatsqF4iFCScnwedAiA8TSUhnZ3KrZcgzSGGDX2qGAkRuN3A46FP0Ns66Vf+EA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "SEE LICENSE IN LICENSE.md",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.md",
+            "bytes": 20091,
+            "sha256": "1cb6f8cfe21f54ab1105105717eaa2ba08343037a2a9c41dfd5ab09e3ce270fc"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/utils",
+      "name": "@walletconnect/utils",
+      "version": "2.26.0",
+      "integrity": "sha512-zCpuG8vVvL+vHiX2wE+pChr123prvlQE37lJoHNcRiD2+3RxXFPoHnjJ/zAhN+ivdjK743FHsrP2DRXXqno1fg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/utils/-/utils-2.26.0.tgz",
+        "bytes": 586488,
+        "sha256": "056ad6c09c3ec84a0a3b91fc75eccfb3c726c12b2c698bd8325a13acafa7eeea"
+      },
+      "metadataSha256": "2ae9bef7dbf7ee6609c3f75b59a36e60de8650dd041d280d73eae92be4d55722",
+      "gitHeadUnsigned": "63094dcb6fded05dcbc2b08b8895ada75a31dcb5",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQC/WOZvAGD/ijA0lJJpItB0Gu9mRGyKU4vvaNgNdoiyxwIhAOHrQfpGGiwYoGTW4ltWuLcTpUpftKlhtPo5NWxpWhjk",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIAvPxCiWjtbRHfC3g+vbQAaBoOrgRWGKhCRKdvF0M+xiAiAUsGi/xNn8qf/kFXSGHV1XWNSEdfr5eNVDLoUywgrsng==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "SEE LICENSE IN LICENSE.md",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.md",
+            "bytes": 20091,
+            "sha256": "1cb6f8cfe21f54ab1105105717eaa2ba08343037a2a9c41dfd5ab09e3ce270fc"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/window-getters",
+      "name": "@walletconnect/window-getters",
+      "version": "1.0.1",
+      "integrity": "sha512-vHp+HqzGxORPAN8gY03qnbTMnhqIwjeRJNOMOAzePRg4xVEEE2WvYsI9G2NMjOknA8hnuYbU3/hwLcKbjhc8+Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/window-getters/-/window-getters-1.0.1.tgz",
+        "bytes": 23377,
+        "sha256": "c21ecde0bc57c29292f44059c4da0120d9749d998f227b0ca23e3aedf18627c2"
+      },
+      "metadataSha256": "329882e646a6e8dd972d9be19f67eb2dd75d85fec9b4b70c358507114c3f46f6",
+      "gitHeadUnsigned": "81bc9b0859b6875d35697177ec21e2d01457403b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIE6Ow9w68/0Eep3MhwYD1PD7rECHHbnCNhgid3gf3YSWAiEAmrfBcm3qgQCynxfRwxMqopz7w3CSKd6lkpIBJQP6aBM=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1075,
+            "sha256": "dce86f5486175b06b249b62ab47c95ab9704331fb0e93f2327078ceba74e0c30"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/@walletconnect/window-metadata",
+      "name": "@walletconnect/window-metadata",
+      "version": "1.0.1",
+      "integrity": "sha512-9koTqyGrM2cqFRW517BPY/iEtUDx2r1+Pwwu5m7sJ7ka79wi3EyqhqcICk/yDmv6jAS1rjKgTKXlEhanYjijcA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@walletconnect/window-metadata/-/window-metadata-1.0.1.tgz",
+        "bytes": 25017,
+        "sha256": "bf84c7e288a170c214346981cd2f2e558e2948a7a70a79282bb161772ad85229"
+      },
+      "metadataSha256": "332370d677eb4afbb8b6542ab2666243c9ca3a560e0b5e2d708ba4e2b3255e36",
+      "gitHeadUnsigned": "81bc9b0859b6875d35697177ec21e2d01457403b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQC5zwGPDyOIdHNrjJgD0xfYWW2rAlSL85NAiwxQPRWfkQIgKiFA1ss4sLtki1vtXyy6RWTM1VvkuysckHPEMeuRNgY=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1076,
+            "sha256": "36e1fb03e439ac4f5ff0afa7ec5aa03c55ed0271a82c2fcdb1218ee34b91a664"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/abitype",
+      "name": "abitype",
+      "version": "1.3.0",
+      "integrity": "sha512-fk6Te+bojIFrMvMZrnOO+SxCB+RUksTGOzq/60ZRvs1L+BVzvi2bqt9L3W/17ZLdZsyM1FuYf65P5nlmoiH1Bg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/abitype/-/abitype-1.3.0.tgz",
+        "bytes": 158653,
+        "sha256": "4211859eb54c6d3230de0b4c0b2c704a268568e738310190024277ba6e447b18"
+      },
+      "metadataSha256": "497732ff0d556303500dafef9252daf3e585ab5531e22c0b93208722333ce31b",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEQCIEJ/R0F+LQ1VCkbYQ6a+NwptSbMn7mQANo7pxAgDgv6lAiA4sKrNA914PPX2xuJzfJTcbs0aUtR6PjKdrddtPXA6yw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1074,
+            "sha256": "e7f5360a60628940fee8653802d7221d2b9575e26268be2a3a2fdbc04aa84321"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/anymatch",
+      "name": "anymatch",
+      "version": "3.1.3",
+      "integrity": "sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz",
+        "bytes": 3652,
+        "sha256": "bb629d6c832b73a127f1623867a2bf2f161fa0bb185dbecb632a878621b8f78f"
+      },
+      "metadataSha256": "c1f745bc5842ebb40182de54b3e116ad14af9f1595b88b243cea2ffd83fb8a84",
+      "gitHeadUnsigned": "cbd278e43710eaf325d2061fa11aefd127c509be",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCb/AbEWxEB0qqOSnPkeWgpv5RGNzN2jbYAbN6bT4n6BAIgJDTSn9WVoppKMohO7pEEOa1eCduipQ3FOe8OsWJPa1M=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "ISC",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 784,
+            "sha256": "5a3b0007c4203f10fe11b3fe8747253eb994f135e10b73e1f88ada941af09c6e"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/atomic-sleep",
+      "name": "atomic-sleep",
+      "version": "1.0.0",
+      "integrity": "sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/atomic-sleep/-/atomic-sleep-1.0.0.tgz",
+        "bytes": 2822,
+        "sha256": "44749ee4b82d2b5fa66323af77c5b836c08368667015a9c8a966033801a56964"
+      },
+      "metadataSha256": "4295013f5f2fd526d5d33be6070ed7fdfc1a75fc87298fd510384f3efed13aa0",
+      "gitHeadUnsigned": "b8149d3ca276c84a54fa8fa1478f9cc79aabc15a",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIDIAWDsJ/viqpY3InPbGAVn9/N2Xh4eLurTIQCm3i1d8AiBR5pFuCtc7JZg8OddJaTWDJ0tMHTIiQtg/UtxOlkkSAw==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1087,
+            "sha256": "8d58741278b289a7f4b6dde2d6273fca7711b9849452c477933d1cccd03db1e7"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/blakejs",
+      "name": "blakejs",
+      "version": "1.2.1",
+      "integrity": "sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/blakejs/-/blakejs-1.2.1.tgz",
+        "bytes": 81843,
+        "sha256": "3f5010267c1a3c5234fc6eb11820ea8ad63a1c65f447c7135c2cfaf3bba01ede"
+      },
+      "metadataSha256": "efd6586881c5df0bbad5546c8d63a9cf3ddfa7b651fc55ef8d94df4af277af57",
+      "gitHeadUnsigned": "f47fffb1e7f1a2562cff572d065d500106119fdd",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQDovRxZQlGQSl2iz9jdWg1CLOAtEwDVssDyRk6cElQ/iQIgX9gSWUrmebqESCr2lkWbIoPzeRDfU6B05uL7b4mytTw=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1079,
+            "sha256": "4d5ba2de4c4d5c98942f603e7c0eddf290e50fc01665e74f3249755f77be781d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/chokidar",
+      "name": "chokidar",
+      "version": "5.0.0",
+      "integrity": "sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/chokidar/-/chokidar-5.0.0.tgz",
+        "bytes": 23399,
+        "sha256": "45d07ea7d57ee482c733ab3c547cc49edc1423bc231507e41ff99d2711f7f5e3"
+      },
+      "metadataSha256": "b99c988264274e68e8de1feec3cc532043d25c7481e050346442de03ba0a4b2a",
+      "gitHeadUnsigned": "c0c8d20e49d337491891078d1081bf91bd178de6",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIH74rOiiziclwrLX6s65GCA0niBGM+7WTT4411bAISnOAiBka4apBLoKCiLn5IiGF20Efss/F11aLMaC5NHBfByR5w==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1124,
+            "sha256": "bdfd5e0edb6089e6586c8f15e6a86fab83ffbeeda3b3b7b33734ccb8c5906965"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/cookie-es",
+      "name": "cookie-es",
+      "version": "1.2.3",
+      "integrity": "sha512-lXVyvUvrNXblMqzIRrxHb57UUVmqsSWlxqt3XIjCkUP0wDAf6uicO6KMbEgYrMNtEvWgWHwe42CKxPu9MYAnWw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/cookie-es/-/cookie-es-1.2.3.tgz",
+        "bytes": 6966,
+        "sha256": "11433fb5d87d0e1dc572cb91873a853b9bb8ae1101b3693d5e75b53ccbfd4352"
+      },
+      "metadataSha256": "8921b01434c58f7607b8f660c5d1b919744e3bda7b23c1fb0fe3b03f06eb5f62",
+      "gitHeadUnsigned": "715e598960f8ebd81d9f7278971365820068edfe",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCgqIMEkkK8EciBJr8+98pTnJiDO6xrRztbYQa8OmKUEQIgPztofX4S4h0/IXgSCJdn8MuXNBegG7v/D57GqqT3lug=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1431,
+            "sha256": "f57270b85c3922414c061e36b93f7c74420b8facf5ccf729202d5ff5b7cd7608"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/crossws",
+      "name": "crossws",
+      "version": "0.3.5",
+      "integrity": "sha512-ojKiDvcmByhwa8YYqbQI/hg7MEU0NC03+pSdEq4ZUnZR9xXpwk7E43SMNGkn+JxJGPFtNvQ48+vV2p+P1ml5PA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/crossws/-/crossws-0.3.5.tgz",
+        "bytes": 57816,
+        "sha256": "fb9c11b94aab427e3757604a08de9bfda4091b219fe419fd42dea3cadc8e3346"
+      },
+      "metadataSha256": "7d89eb406f4864e6a73ca8ba8305de70add7129e37eddfefee7cd95a9cef596a",
+      "gitHeadUnsigned": "e98e409579b9767bbfc8cf49d75337ca00436224",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCz6VApnXjhFbqxlWbZP/82E7IkikbnatEcJCpP9MQEcgIgcWkFSqmfAC5fWzcfI0G+QFrWjwKe7LC7tG6essiZdYs=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 2314,
+            "sha256": "7aef9ff475a591e063e81e3bfc8c6968bb53d072e7eef57115f5a96c6678a359"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/defu",
+      "name": "defu",
+      "version": "6.1.7",
+      "integrity": "sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==",
+      "archive": {
+        "url": "https://registry.npmjs.org/defu/-/defu-6.1.7.tgz",
+        "bytes": 4897,
+        "sha256": "c9a6777f6837633e4eba91ed78dbd0be2d27ab0d9c53948dac6b927c819fbcd3"
+      },
+      "metadataSha256": "99722899373641b9e068ccddb2e96bfd79457c8205daa7967044cabf97ac0735",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQD3+EO3FdyyPTanH2GXr7UbCBQmf1wJMX/dwL28TB29eQIgL/nr7Rn9SaFYXnlpRJUPKQinTJISlMFRDpeGQkfagaA=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/destr",
+      "name": "destr",
+      "version": "2.0.5",
+      "integrity": "sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/destr/-/destr-2.0.5.tgz",
+        "bytes": 3807,
+        "sha256": "74e712f47d901d65965728643865cd47c85a59908f48de042deb96823bd20a64"
+      },
+      "metadataSha256": "ce33330c8e05e881d4df7353547566a722e1e0e465bdc6987c88bdf9d55cddd7",
+      "gitHeadUnsigned": "7bb3c39ef5f8c84219be08ebc11b3c4f4a4c828f",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCX5nr+4vbgOrt/v6HT4vStp4JczJMxGDLdlpaNeygYVQIhAKsqHlk4WNpX/33w1QOF5m1dyyewmCHiCZPkwil5SDPn",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/detect-browser",
+      "name": "detect-browser",
+      "version": "5.3.0",
+      "integrity": "sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w==",
+      "archive": {
+        "url": "https://registry.npmjs.org/detect-browser/-/detect-browser-5.3.0.tgz",
+        "bytes": 6512,
+        "sha256": "c096358008cddb3b2d0348f42d98034c1e7ca12804b38952fb2469bd772042bb"
+      },
+      "metadataSha256": "d03ee55447a030e1167e126c3b6d758af1f3a75d398cadac0f388d92ad83ccbf",
+      "gitHeadUnsigned": "546e6f1348375d8a486f21da07b20717267f6c49",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCQ/ewt+rHR4UcNtOFXybJtC+rx72pcq1M2rWSavejWCwIgQkGf0DkMirRkAmgzisc/+sYMygdaMCSbWRz9ighy99c=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1106,
+            "sha256": "865e4172abe65f4ad1fe3d73fb21d7b9a16588c68597753470b2078bedf3b54a"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/eventemitter3",
+      "name": "eventemitter3",
+      "version": "5.0.1",
+      "integrity": "sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz",
+        "bytes": 12095,
+        "sha256": "3188d3a05772c99cf0ccf44f6cd8530bcbaf02ce0addcc47c33f26daff0f952c"
+      },
+      "metadataSha256": "4aa2be942894062017756a5604aa0a96e427c9fee7ca96bcb507e50f173c51ba",
+      "gitHeadUnsigned": "a650549176ded0d0dcc52e27b03ae5669d7dcd7c",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIGSc0AXdD26F0MJWlqrR1gxSF7rcpwA0Grsz9Nf5ioZ5AiAjKjpvBI/KhNk2EvoZkR5Vn1eYPKhR1fjQ3Sn9LJ3Blw==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1082,
+            "sha256": "3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/events",
+      "name": "events",
+      "version": "3.3.0",
+      "integrity": "sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/events/-/events-3.3.0.tgz",
+        "bytes": 16574,
+        "sha256": "2c30dd630b58299bdfaac8688f763c6f312d29779c500b1e3701a1d4fb3b534b"
+      },
+      "metadataSha256": "8b1930e75fe65d6811f2d9c7bbb420242f8db20a411613d2e00c4c1b4d962061",
+      "gitHeadUnsigned": "aed9f91fee236bdedab8d593f7aa418ae6ed2718",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIEfBtPK+QWhB17aV0uH8TywMl5kV559Xm7I5Wac9Q65wAiEA19ANgAoR9YWDq5oj+NK/ybmZ/zhzvwuYfxAOwqWd6dc=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1081,
+            "sha256": "631987b7616a325a5b97566c232418481ddf7dbb5ecadefb991e791876cc2599"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/h3",
+      "name": "h3",
+      "version": "1.15.11",
+      "integrity": "sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/h3/-/h3-1.15.11.tgz",
+        "bytes": 121856,
+        "sha256": "0a975bdfefa3daeac4c009c3e0f2fc1da8bebdb4a2e08d4aed561f44f27e90f4"
+      },
+      "metadataSha256": "95639099886f3d87e00ef7b0064ca73ea2c122adc01299f9b4b91009a46b4bfb",
+      "gitHeadUnsigned": "7b9f41fda6038d26a367c2a26a07ed83ee1dbaac",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIA6/DUF5iYvfc5Gw318BAn2iAxIcX6arYMfg0Izv4mhfAiEA0hz88CqlrYVUYJQFTvMILUAc8QEGPIPjTGPV0JBqbtc=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/idb-keyval",
+      "name": "idb-keyval",
+      "version": "6.3.0",
+      "integrity": "sha512-um+2dgAWmYsu615EXpWVwSmapJhON0G43t3Ka/EVaohzPQXSMqKEqeDK/oIW3Ow+BXaF2PvSc+oBTFp793A5Ow==",
+      "archive": {
+        "url": "https://registry.npmjs.org/idb-keyval/-/idb-keyval-6.3.0.tgz",
+        "bytes": 8152,
+        "sha256": "ad954ae198923389ec250e730ba776d4eccc4d4c9acf6fd5a7114c0c80c43112"
+      },
+      "metadataSha256": "1d0fb7326effacc9a3d8633d6ccbb8d539e72dacb00ab633a5f5ca9e903fc745",
+      "gitHeadUnsigned": "17a69a1165bef486d88950cb47d3913744f038ac",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDA8APjdJpsRLCgo1ugmR6zxhLKOJiyQwKZ2bEUJtQyjgIhAOrXz7irnQG0iu+waUCa8saBM88KAXEm3Pndrd3TPEXv",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "Apache-2.0",
+        "archiveFiles": [
+          {
+            "path": "LICENCE",
+            "bytes": 555,
+            "sha256": "20c27d6339619eeb3113cb865d4e98a3f559e52964fc75caea9cb5fa72674565"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/iron-webcrypto",
+      "name": "iron-webcrypto",
+      "version": "1.2.1",
+      "integrity": "sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/iron-webcrypto/-/iron-webcrypto-1.2.1.tgz",
+        "bytes": 11342,
+        "sha256": "8ef2ee4739cc6679e5b888aeed512a958400b1ad8e8a4fe5f0f6c91d0a1c27fd"
+      },
+      "metadataSha256": "b3322c423c3a544a1f82282e366f20ed80badc8c9f74b3144498a8f8841009ab",
+      "gitHeadUnsigned": "c0db5ce4ed61250e9fac2897065e95256511b7a0",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDSMFcXVetnXNJdm4QkdCaFamgtERHVj1vIdaIydBy75wIhAIO8vm2wTpGgSZGSmTmq4tSn21EQr+NC1QrJGjsOuGK4",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.md",
+            "bytes": 1071,
+            "sha256": "1b191ca798543815703c249f6ff4b59881d928a229b4eb72c0f684cb63b1acce"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/keyvaluestorage-interface",
+      "name": "keyvaluestorage-interface",
+      "version": "1.0.0",
+      "integrity": "sha512-8t6Q3TclQ4uZynJY9IGr2+SsIGwK9JHcO6ootkHCGA0CrQCRy+VkouYNO2xicET6b9al7QKzpebNow+gkpCL8g==",
+      "archive": {
+        "url": "https://registry.npmjs.org/keyvaluestorage-interface/-/keyvaluestorage-interface-1.0.0.tgz",
+        "bytes": 13023,
+        "sha256": "89e5b541956ad04ae5ec816b48803c1cc599e54bafc2b5f075fe314c502d2c92"
+      },
+      "metadataSha256": "6634ab16f1b773f40a8810f0bd4d1a5ab2c71e50983ffe633ae214afcc78d783",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQC72ybzRPzT7zBtcx03tcOppvf64xB3RurCnnJ79WAE9AIhAKO8oFUf1y2CTG/ySXLj7/wkdhJyYgMcgZ8e5tVh2sTu",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1067,
+            "sha256": "1e714d34201c0bc738da567fdb752e77c4c36d0c9af7d902c96aae7c6759f98f"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/lru-cache",
+      "name": "lru-cache",
+      "version": "11.5.3",
+      "integrity": "sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-11.5.3.tgz",
+        "bytes": 697866,
+        "sha256": "d18739bbd7d0091d30d2cca58e120c8b70ac09a5a21aa4b2b3e9afb2dc4084d8"
+      },
+      "metadataSha256": "bb5dc2a3778a8f0aa5da88d7bb130ed1a3ceb7f0f7294835705be1e5ab383323",
+      "gitHeadUnsigned": "7e71a1f3babdc68dfbadde91f28eaeea919dad9b",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCp+iaRiyYDLhYT4k0c1Qxh3kY3/d803Vi2uai7xyUBcwIhAPMVbE7SUGDCh8hfrgiOQj3CiTH+9C+4uVhlae0FFiob",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEYCIQC8P0AfFB/tVIBZ5QqArzIXWUbM/Jm0H9Nl19RwzTAJywIhAOILcho0B1LrCR2al7CvMlL0NjOWI4riahMl7sTzsWfi",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "BlueOak-1.0.0",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.md",
+            "bytes": 1552,
+            "sha256": "8a1af140fdfbf5afd3df27f7e662f989c5b963a300020dfafce42033cae9e004"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/multiformats",
+      "name": "multiformats",
+      "version": "9.9.0",
+      "integrity": "sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/multiformats/-/multiformats-9.9.0.tgz",
+        "bytes": 72580,
+        "sha256": "77f04be03f629ee023d16d33d2e0065c7574735de4f64a216c370ddb3e6516d4"
+      },
+      "metadataSha256": "5fe31d3e8c47cc4ab14a3f7340d719690f3cb28749b64a65d71f0b6aad982ace",
+      "gitHeadUnsigned": "5c486316c1b60eb0103dae6c7a5e8d900bfe3b72",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIB3v5TiiyuzVSpqlLNhWRMMlB5PnSiHI74FLGhmolHGRAiBuHIii7VVVQU8EG/XVEShNAlSh/nKo5N4VYNmnjgaxYQ==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "(Apache-2.0 AND MIT)",
+        "archiveFiles": [
+          {
+            "path": "LICENSE-APACHE",
+            "bytes": 554,
+            "sha256": "b41dcb3b39cb28279a67949b10d522356ca5c58260eb1983f7aad8b61e928b42"
+          },
+          {
+            "path": "LICENSE-MIT",
+            "bytes": 1053,
+            "sha256": "4b3beb461923c080edc76faa2bd79c61295f3d354cd79ee205f427ce52dc6d66"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/node-fetch-native",
+      "name": "node-fetch-native",
+      "version": "1.6.7",
+      "integrity": "sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/node-fetch-native/-/node-fetch-native-1.6.7.tgz",
+        "bytes": 224182,
+        "sha256": "f60116b7c99ef401e3c46ec7d3ad97d66f5ccf1fd45eee9a2d95136c981314a7"
+      },
+      "metadataSha256": "34fae03c7de6ae225bb2c604a9b22565127879e64494c6bad415730df7fbef30",
+      "gitHeadUnsigned": "c27b7f9ca6df11c523376b295b61e5b644c76209",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCaRKjudk5Cf4uQFqS3z6VZZ8i1ABTnlRIoHLIM0DAxAgIhAOpCZVyFmelrvwNv6x1W61dDt5VszkzUqFG8O9/DQCKJ",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 5623,
+            "sha256": "22a1b925621a4fb60cb9df9914612f12482e275c9f545035599fc528b4979da9"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/node-mock-http",
+      "name": "node-mock-http",
+      "version": "1.0.5",
+      "integrity": "sha512-KQyt/wLjG3TAc7DOUhpqWzgd4ERxR80JOlTK5VE5R1S12IaPVN5qkj4klBce9HPG1Njuup4Sb5bljaT34lIyjw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/node-mock-http/-/node-mock-http-1.0.5.tgz",
+        "bytes": 38568,
+        "sha256": "167bd074d5015e1cb343de6281f063bbd05a23ea2e1fce1faaaf265fe688f40d"
+      },
+      "metadataSha256": "f3cdc2a2010bafab7707a35910973f9a0777cd0759a0ecd180848ff5ce31ec5f",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCV4zaEqp9A5uHOGtul8L71iVi3v3LhzpUA1Tc94jcXRAIgW1L4cWcSLN8hyu5z3thFNwj9jukGo+C/PoMPjoVRcGo=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEUCIQCCnUksy8q3NBl7kS1iiLjnpidDQX36P3VfP0scxpsFhAIgQ8aNZx2yGTA4dGWhg8wmzZEnZ3kqlTVrxeoEu0Z5iOU=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1051,
+            "sha256": "a12c3d66c90212bd599fb4c7c2e771d79440c84b3a229f9164cf20f59411c140"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/normalize-path",
+      "name": "normalize-path",
+      "version": "3.0.0",
+      "integrity": "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz",
+        "bytes": 3566,
+        "sha256": "0b983cca55c555cdc0e919ed5ecd0e4648f6e303f9dffeb449f1ad760d4f84fe"
+      },
+      "metadataSha256": "f232829c52ddbb8edc67e4b59c61f7c495f578c6bc77e7934dcc162773b2306c",
+      "gitHeadUnsigned": "0979eb807a1725d83d5a996347d41067cf773d1f",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCpKkm7u38oNeP9cx8lnDmHp4lkV2PN0yfcOPaqC8sONgIgJZDQUn6SYFBPTnbCbg+7pBqHeN8xGJLmNwMn7HtwX/E=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1088,
+            "sha256": "e70ff771504ba41f2be55de812a017ff46433d7a250c862e38fc419159e44500"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/ofetch",
+      "name": "ofetch",
+      "version": "1.5.1",
+      "integrity": "sha512-2W4oUZlVaqAPAil6FUg/difl6YhqhUR7x2eZY4bQCko22UXg3hptq9KLQdqFClV+Wu85UX7hNtdGTngi/1BxcA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/ofetch/-/ofetch-1.5.1.tgz",
+        "bytes": 16809,
+        "sha256": "0483ce6fbfce9f9d67eda8d2544bb8677737729b6a1b2fec7c3b8f290b4a51fa"
+      },
+      "metadataSha256": "5b6e6a1625f4c753ad53f49d225f7c0a300c3ebde7fdf6045932fc73a5569a02",
+      "gitHeadUnsigned": "cd3ed5ab1d50da02a5680645a5633e33d52b0333",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCtptTIaJJ3McQ4GO1U1E8icdoZ4Y5an49OyUgoJt9YqQIhAPzZxadOmKtVf2bj9iTKTqSzi1mutMMbcDiGxWkaqLlk",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/on-exit-leak-free",
+      "name": "on-exit-leak-free",
+      "version": "2.1.2",
+      "integrity": "sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/on-exit-leak-free/-/on-exit-leak-free-2.1.2.tgz",
+        "bytes": 3658,
+        "sha256": "1ed10cfc6a8a8807b1c7b7eae520dbd15a104d5d0256202f8b08e1ec56cda1a8"
+      },
+      "metadataSha256": "57c7352c6e0443a3839dd66d844fbc08b63ca2d7542bdc663a5775d79f558f0d",
+      "gitHeadUnsigned": "54e85eb597d8ae9104324070ad767c120d975f2c",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIFuycuWANeHj93G7XlZJpaCdPY7TD7P/wxwytsvmz8cnAiEAhsm+OY77cQhnTj/r1F/maetBq1hsYsqnFs3nv8/6ZA8=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1071,
+            "sha256": "47404ffc18f1267832bc0623857871de5a3a93ebb19693f5e1b963af91fab54b"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/ox",
+      "name": "ox",
+      "version": "0.9.3",
+      "integrity": "sha512-KzyJP+fPV4uhuuqrTZyok4DC7vFzi7HLUFiUNEmpbyh59htKWkOC98IONC1zgXJPbHAhQgqs6B0Z6StCGhmQvg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/ox/-/ox-0.9.3.tgz",
+        "bytes": 1218921,
+        "sha256": "0c77e177c8ee86386781886997d5623bf5098546a9b29acd5c034e37cd8010ab"
+      },
+      "metadataSha256": "fc315ad06b4b63d3832a8b9accb3bcd54343986dbdd1ed6a43500807e9864135",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDTqV3QHMCNSEp4rzKTc/z4jl6spxWeHnyNYo8DH3vSCwIhAOGDG8uzTiM+m5uao7VyS3Rg1yMrghdAkt3HV70xyRfZ",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1068,
+            "sha256": "84ecb61c470de66e88a79c7d0ee8ce068e743693a4c249017545b4c8d4f9984d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/ox/node_modules/@noble/curves",
+      "name": "@noble/curves",
+      "version": "1.9.1",
+      "integrity": "sha512-k11yZxZg+t+gWvBbIswW0yoJlu8cHOC7dhunwOzoWH/mXGBiYyR4YY6hAEK/3EUs4UpB8la1RfdRpeGsFHkWsA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/@noble/curves/-/curves-1.9.1.tgz",
+        "bytes": 324978,
+        "sha256": "182bea65005197c699c41f78ae2ebfbfad47e8bc31aea9f83818de080e262d00"
+      },
+      "metadataSha256": "859b68adf89cf43bc7f191f4b1114bbca63e72e0e165b0f10bb654aae24d7eaa",
+      "gitHeadUnsigned": "ede19f4a6bbdd8d4df7933695fb5bed6e24a4930",
+      "registrySignatures": [
+        {
+          "sig": "MEUCICKgdXkHXx0Nk5+geG/HSu9J1X5T32H4QiCCmRFQI9ZKAiEAr20+rE5ywohDSKG4wuKVft19bcpaQc/HJmZkTF+V2gA=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1109,
+            "sha256": "4f221aee6e072336700c408c68ab3b96a3fc09f6aebe6f48f1bd99e5ef13faec"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/picomatch",
+      "name": "picomatch",
+      "version": "2.3.2",
+      "integrity": "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz",
+        "bytes": 23492,
+        "sha256": "4c843ba015bec815ac52116162559ab7b4b4efbd3b86f7fcf38f3d770decace6"
+      },
+      "metadataSha256": "8d83c43aeb80b7f3db41e2ecb037189ab2a640d290f7e40f33f706471a43192d",
+      "gitHeadUnsigned": "81cba8d4b767cab3cb29d26eb4f691eed75b73b2",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIBFWj7Jh+5dHF/ZPaw1Y/AWB081mr/yRsxvf3bq57OaYAiEA5VblUjaEQVOvSYavgqEQ5cdh67JFkHhliKH0X2cZsv8=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1091,
+            "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/pino",
+      "name": "pino",
+      "version": "10.0.0",
+      "integrity": "sha512-eI9pKwWEix40kfvSzqEP6ldqOoBIN7dwD/o91TY5z8vQI12sAffpR/pOqAD1IVVwIVHDpHjkq0joBPdJD0rafA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/pino/-/pino-10.0.0.tgz",
+        "bytes": 245869,
+        "sha256": "3a13cd18dd694ed0c84fbb49c938ed62b1ab5efacbc43d012385ae9db2d88582"
+      },
+      "metadataSha256": "05a33bfd1b7e580b7fe9d54028c763c1ac4f06a84db5889749afe78ca2611d3d",
+      "gitHeadUnsigned": "d15cdd6aa45ebc446ec96fdf4010af9423e35b0e",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCkxW6MKjeVOmPZARjl0hrJQOfIZAPWS0xn7/OxFAEhFwIgOvqKfoqUCjLR+Uyl1FqPBRBOVMjX0MAdBMMD8RVQ1eo=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1209,
+            "sha256": "d4eb00c3ef2fa54cdf05d167b15e994bc67226a7998e090e22a0bc8b16223a6c"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/pino-abstract-transport",
+      "name": "pino-abstract-transport",
+      "version": "2.0.0",
+      "integrity": "sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/pino-abstract-transport/-/pino-abstract-transport-2.0.0.tgz",
+        "bytes": 8459,
+        "sha256": "eded21b859cbee8e21988d1a32f95a00cb4f15a528a3708aac654d0cd647149c"
+      },
+      "metadataSha256": "b796697fa0e2faeec4375a23a68cafec7b9d63db367eff259157abce63d488de",
+      "gitHeadUnsigned": "e7861ecbbfdcc52f7b3be5ca41722c62b410f271",
+      "registrySignatures": [
+        {
+          "sig": "MEQCIELbSINbDlu1Pxj8ruq9pDSYeXmPoMKkOhHYlMmvuGdnAiAOu1ndL2z8Dba7P6FzSyaaC1CpfcV0H+yogoVMkWeq1g==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1061,
+            "sha256": "31f005ecff86a12a1351f4c2cb1133267c0b152546b08cd6fa4bdeb1943e00cd"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/pino-std-serializers",
+      "name": "pino-std-serializers",
+      "version": "7.1.0",
+      "integrity": "sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/pino-std-serializers/-/pino-std-serializers-7.1.0.tgz",
+        "bytes": 10180,
+        "sha256": "c8ee1578a9fd84a929924515d7572eaeb4a3944d38953eaf8eb3dbd165020763"
+      },
+      "metadataSha256": "24800e0a0255daad940d20c1423d79e4583735dbc77f9a1438cafd3d1ee69577",
+      "gitHeadUnsigned": "d32587d2006fd7697f04fe91dcb07830807719fe",
+      "registrySignatures": [
+        {
+          "sig": "MEQCICHle9yUInVjgcJC2uwwBZ9yErWFNyJJiwpWyhBgEc8xAiBmf2y3YztD4wIsKiFuVmVbMdCOoc9NjomDy+vydZ2hMQ==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1084,
+            "sha256": "6206673d24786f09656f7a480b7c50af289e9690963aaa135af5b626de5250df"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/process-warning",
+      "name": "process-warning",
+      "version": "5.1.1",
+      "integrity": "sha512-oCkNVj4OKnKEcocVBcDfiIugN1/cE6rgfT3nCtzeqZPA8+rIxMaQ0xXzIkGP8Gj2qUaP1UR7uhJ1VD8lUCpzCg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/process-warning/-/process-warning-5.1.1.tgz",
+        "bytes": 8841,
+        "sha256": "4d28948634e8d9bda20d268057490ce1d2b63807407974166bee8c11d8d7e04b"
+      },
+      "metadataSha256": "ab21625f6212f9da4db54ea0567e4f854ca5333cab6662d72f00d0977f20056d",
+      "gitHeadUnsigned": "b218315ac16b9ec2c094bea73ab6b32b1b39e48f",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDS2423gHENPciDPyVn3LbXF5ZR9NmG8JnccsDZwEe4LwIhAK9PKd65Jh71hQp0WQgnm2g0xFXplmUM/TTUUl6097w4",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIEvlw6RaLHuC0Bf7PrcMjnXcNDTRB+basq0v8FfZTWAgAiB1GRHwTyNfa262IxFpbxiFkhARHc1fkIXQNzNKLmJ/lw==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1123,
+            "sha256": "8d3c1dd501e056405ab56f4ad87b987070d55d1fe814616584ec2360045f9017"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/quick-format-unescaped",
+      "name": "quick-format-unescaped",
+      "version": "4.0.4",
+      "integrity": "sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/quick-format-unescaped/-/quick-format-unescaped-4.0.4.tgz",
+        "bytes": 4066,
+        "sha256": "acba54ec5587ffddfb0811b693aad4844366772f01511291302d3380d431a485"
+      },
+      "metadataSha256": "2f75ef7d2b0421874b1e224f51138144039e6b74455bb18f56a7bbbca9bdf0f3",
+      "gitHeadUnsigned": "20ebf64c2f2e182f97923a423d468757b9a24a63",
+      "registrySignatures": [
+        {
+          "sig": "MEQCICopwT4gnZnKgazbfvq0w43ArJAHlvSlhgzW2dRGYfX6AiAs3bblw1jyCWrc0LVfGjT+CD3F3wnCemj2wPPx/51u+g==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1091,
+            "sha256": "5ac141bfc70bec8f40838502436bfcb85e3f4c24377e41b9ddef07bdd6aa51bc"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/radix3",
+      "name": "radix3",
+      "version": "1.1.2",
+      "integrity": "sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/radix3/-/radix3-1.1.2.tgz",
+        "bytes": 6160,
+        "sha256": "0a52222fae07c436ce682a0236ebb002d0a937af9f9c1600ea7ddd8630899104"
+      },
+      "metadataSha256": "b1a4be317b0535c3caa2a54ab5a365259e43ce4d3b77e429a0570f5d6a9a8637",
+      "gitHeadUnsigned": "293d3ae4d0d8719e4df62d921b2effdc2dc4567a",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQD2rZa4vVKDybAw66QYL2vGm1g1Yg316IQT9W92NXS+wwIgXbkvB0YMM9dcPpoHsLMR+4V1uigRsxf+M60dQgUoDtk=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/readdirp",
+      "name": "readdirp",
+      "version": "5.1.1",
+      "integrity": "sha512-Kko+Y5XQ6fM+Ce3dq3m9YGxnacYZYl9cA1wZjaF3Vbry2L3i1qVg8+CAgNPsXRArPMUMCaOR7oa9Nqntc43JKA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/readdirp/-/readdirp-5.1.1.tgz",
+        "bytes": 9058,
+        "sha256": "935a688197715ea14c184e4a56542d6abe99a75b2c6d805d24a4cdf36514d5a5"
+      },
+      "metadataSha256": "fa1f50c7045b9448c578af12b9f6e24c074b9291d6115f72650a29695ea43890",
+      "gitHeadUnsigned": "5dba3694a1de891ea6edb0301240326f8f8c81f1",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCy7+Hs4SxsxSgduKQDRTRQ8eiVvh9szTm6xjendyxz2QIhAMrxAnrgNLDx+yZJWwv7SN/Nkfhra14tjAr0sA00oMEd",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1114,
+            "sha256": "dffec71d93f273d2af7b54c6c7e7e70b3289c632ec0d7253210ec21ac336d5ac"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/real-require",
+      "name": "real-require",
+      "version": "0.2.0",
+      "integrity": "sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/real-require/-/real-require-0.2.0.tgz",
+        "bytes": 2382,
+        "sha256": "2aa86d462e4bcec95cca91c935002e102644e1bb2fcd36a9b52e4f4555c73f96"
+      },
+      "metadataSha256": "09735a43446403addc5886d3410c367daf8fed7a331a0669edacda293e9e9ee1",
+      "gitHeadUnsigned": "514f9d0ff860dd84a6cff52d89d437d5a5c3203b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCWBlgtRjI+obB6kKJugvSPk3nzwK6Jr2viGOozmPOlzAIgGYKZWV+ReySPmYsOQF5HVcbg11ewUxe6WvTRJTn323c=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.md",
+            "bytes": 1114,
+            "sha256": "cbf263504e800cf09f99962cce8497b76eef79c3526bca434b90c3ef4c17220d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/safe-stable-stringify",
+      "name": "safe-stable-stringify",
+      "version": "2.5.0",
+      "integrity": "sha512-b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/safe-stable-stringify/-/safe-stable-stringify-2.5.0.tgz",
+        "bytes": 7286,
+        "sha256": "acf5b4e0f8e5f0bfd9479eae41a6dd90e175d89eecd98fe1c834eab602073e91"
+      },
+      "metadataSha256": "2d33c27633ddea72add67319bfe06731e007a5e5eeb94a59e48f341cce617cd4",
+      "gitHeadUnsigned": "0c192c2c1e26676ba5af1f7dbe066b98d76f353f",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQDxOrhCsI2uyN4DlAo4+7MDwdGgtwlWslt5XOuTl/d/wAIhANMN1j+i8C1bGBx/KEHQcGmZ8MNomWIBmIBRmJrvghIh",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1079,
+            "sha256": "3a6d6de49d284a36c5d271ef0e62eca1838cc460dd7630e3f2c347c8f5b2232a"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/slow-redact",
+      "name": "slow-redact",
+      "version": "0.3.2",
+      "integrity": "sha512-MseHyi2+E/hBRqdOi5COy6wZ7j7DxXRz9NkseavNYSvvWC06D8a5cidVZX3tcG5eCW3NIyVU4zT63hw0Q486jw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/slow-redact/-/slow-redact-0.3.2.tgz",
+        "bytes": 19752,
+        "sha256": "82d59f7e6920cd0aad4c6a4d9752087d9a42ea62f6aa24af79cdae2638a61e47"
+      },
+      "metadataSha256": "7bba34795167fade1fd7bbd96f13bf1169dea154902e8bcd751bc7aee5a88413",
+      "gitHeadUnsigned": "cb7bc49dcc405c6529cfd6dbf2aa92252033cb3d",
+      "registrySignatures": [
+        {
+          "sig": "MEYCIQCQXGftsQVD2HgS2JpDN4YgqvCK/ZL2VeK/wCISEnE7ZwIhAPlA+P0eCCisoXAq9slDjI0261CewvcvYKO2GOoZi7fq",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1076,
+            "sha256": "58d4023bfbed5fb530c5bb8d44641299eac62c850267415ec939cc42dea87e4f"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/sonic-boom",
+      "name": "sonic-boom",
+      "version": "4.2.1",
+      "integrity": "sha512-w6AxtubXa2wTXAUsZMMWERrsIRAdrK0Sc+FUytWvYAhBJLyuI4llrMIC1DtlNSdI99EI86KZum2MMq3EAZlF9Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/sonic-boom/-/sonic-boom-4.2.1.tgz",
+        "bytes": 15731,
+        "sha256": "bf128eca0c2a2ed9eb9f598a69eb374df08f3886dd9c506c5129935487166b87"
+      },
+      "metadataSha256": "e8a5180ad05eee51ef02630565d74f0a90e34fcb6e10e01df23600edea1d7125",
+      "gitHeadUnsigned": "ada84a68dfccfe9cf1b34f4b3170b6907dd4c468",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCn9BfaaG/P5td5Bctjay+1xLy1+rvqZm1CV0UfJK/vJgIgNWpknu64NdORXJB57RbDOS35X8QzhnovSVGOnDmtSWk=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1071,
+            "sha256": "db5c3795cb080810fed0380bf4d6adef3f81579e8ae3a867d3c2abab2329db9d"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/split2",
+      "name": "split2",
+      "version": "4.2.0",
+      "integrity": "sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/split2/-/split2-4.2.0.tgz",
+        "bytes": 4668,
+        "sha256": "e0061e7f042fc5ff6dcda8afb66619757d92ab1ff514a28a5904f2ebde27bf54"
+      },
+      "metadataSha256": "113447596ab7b00cc2fb5dde52ffb6c1832da1bd069f2f1077c8d2eaa5e5eda6",
+      "gitHeadUnsigned": "919b26b59c9762b817a121f4416ccc44d82043ad",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQDdYBk35OiBzZT7xa1SNsc/v5xle5hd+fK0nrosDwk0uAIgdQqJyAv3sGaTJK4FTH8JGNaM3JjDBihzYNmMQErdpkA=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "ISC",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 764,
+            "sha256": "c372ef2fa1dfcb124ed807609751e75e3a009f108c5724916b489288fcb88a0c"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/thread-stream",
+      "name": "thread-stream",
+      "version": "3.2.0",
+      "integrity": "sha512-zLBvqpwr4Esa0kRjcrzGU6zL25lePWaCLMx0RQFrmteozIfeNdaMLpG5U7PeHzvlFkAWaRKA9/KVW4F60iB+qw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/thread-stream/-/thread-stream-3.2.0.tgz",
+        "bytes": 20048,
+        "sha256": "99ec7b0a30060ca693bebe16c780642ecd2b4b92b1e7ab89ef0cd8014f78ecf1"
+      },
+      "metadataSha256": "9e3c9988dfe29036d112f698a3afb700da11fdf52ce6fb1fe494e1a4b9f64dd7",
+      "gitHeadUnsigned": "663a60186f82eaac433f7737e7fe85b50a2db5b4",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIFXbBtMLvgtGqCcmfEE6v0TsQ3CbkQr1JOY8Ih353u9WAiEAvQBM0pDmzFVfE5EgHWnKFiwSoqpdC8A/jnPmrN7UPVg=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1071,
+            "sha256": "47404ffc18f1267832bc0623857871de5a3a93ebb19693f5e1b963af91fab54b"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/tslib",
+      "name": "tslib",
+      "version": "1.14.1",
+      "integrity": "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz",
+        "bytes": 7605,
+        "sha256": "733b312e29ef6488eb668db728bcd0dee92f087872001a06c8594999c06d91fb"
+      },
+      "metadataSha256": "aeb9d90ce593b3625c09924d91bdad0b035078a1edacf097accdba4af166ac51",
+      "gitHeadUnsigned": "7d33f3607d635dbaaaba006a4648346a81422f3a",
+      "registrySignatures": [
+        {
+          "sig": "MEQCICJ+rIeTgN1CLrZXY920+5lKQULE2UQXujVPhSHnG5PyAiBFabCCIBlAeViOH29jrzGZzYODwmRHtu1LGxe5/T69Tg==",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "0BSD",
+        "archiveFiles": [
+          {
+            "path": "LICENSE.txt",
+            "bytes": 655,
+            "sha256": "210b19e543130388c68654b7497e967119ce17145f66ab7d85688fbd70f08751"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/ufo",
+      "name": "ufo",
+      "version": "1.6.4",
+      "integrity": "sha512-JFNbkD1Svwe0KvGi8GOeLcP4kAWQ609twvCdcHxq1oSL8svv39ZuSvajcD8B+5D0eL4+s1Is2D/O6KN3qcTeRA==",
+      "archive": {
+        "url": "https://registry.npmjs.org/ufo/-/ufo-1.6.4.tgz",
+        "bytes": 21428,
+        "sha256": "b060e20d485ef8f6a8b9d58dc0fb28e8b9607dfeabf2b6007a73e60f012e6ab0"
+      },
+      "metadataSha256": "ec1ac749a48876fe2c84fa6c554eef75710fc5ec749dd81af81ef497170e05ab",
+      "gitHeadUnsigned": "f06c800d0c59f2a4a1b9ba65eb6cb61a84419be6",
+      "registrySignatures": [
+        {
+          "sig": "MEUCICcps1qpMsCmS60pwcCPypiCz5TePNWlFGKUbjFaANVCAiEA2HNK8xAr9z5EIMcH8SfwagRCaMQl6eNhpJ9e1XLE/5U=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/uint8arrays",
+      "name": "uint8arrays",
+      "version": "3.1.1",
+      "integrity": "sha512-+QJa8QRnbdXVpHYjLoTpJIdCTiw9Ir62nocClWuXIq2JIh4Uta0cQsTSpFL678p2CN8B+XSApwcU+pQEqVpKWg==",
+      "archive": {
+        "url": "https://registry.npmjs.org/uint8arrays/-/uint8arrays-3.1.1.tgz",
+        "bytes": 24438,
+        "sha256": "3f0a2d25ff7643146e82edf906bc8e72c9d35b15c122158f6f913084a97f9c1b"
+      },
+      "metadataSha256": "301c0e9cd9d8b1f1185fbd16efce4871c8f57b8b1ab4b7546dff5acfd0ca6022",
+      "gitHeadUnsigned": "66c931a497c598bfaff46d09b6ddd061b6c91a08",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQClB2UC5WR9aBb91Au0qpX2R+NqQQ2GnkqW0UfJlJt9YwIgaFeZhOFgCn45lrmpB5hpIrxBP2VeVS24YTMwaeoSQ28=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [],
+        "upstream": [
+          {
+            "key": "uint8arrays-3.1.1",
+            "file": "package.json",
+            "url": "https://github.com/achingbrain/uint8arrays/blob/66c931a497c598bfaff46d09b6ddd061b6c91a08/package.json",
+            "bytes": 2030,
+            "sha256": "eb302b797853aa6911d647f0be800df9c910af2223f24dd837accce96efa590c",
+            "source": "Exact published unsigned gitHead repository snapshot; separate from archive license files.",
+            "licenseFileAbsentFromArchiveAndExactSourceRoot": true,
+            "declaredLicense": "MIT",
+            "fullLicenseTextPresent": false
+          }
+        ],
+        "missingFullLicenseText": true
+      }
+    },
+    {
+      "path": "node_modules/uncrypto",
+      "name": "uncrypto",
+      "version": "0.1.3",
+      "integrity": "sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==",
+      "archive": {
+        "url": "https://registry.npmjs.org/uncrypto/-/uncrypto-0.1.3.tgz",
+        "bytes": 2913,
+        "sha256": "c4935f57eaa4cbac82ab58ad5b252a134acb49f6f7c521d2510821e990e40c71"
+      },
+      "metadataSha256": "0a9f8699f6abd0ee1942e59eeeaaa913e151e0704beb39297c4915e849f978eb",
+      "gitHeadUnsigned": "a0cd466151b2b728a54b085c931c7173fdecc26b",
+      "registrySignatures": [
+        {
+          "sig": "MEUCIQCsQS5WfR/ael7QsynlwDwrK8tDayNQD0b8I/cda+NfkAIgNqdUcHbDN+Ajz3XZmadHqcGE211UVwyC3akxDqg8jC4=",
+          "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+        }
+      ],
+      "signingKeyExpires": "2025-01-29T00:00:00.000Z",
+      "historicalSignatureOnly": true,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    },
+    {
+      "path": "node_modules/unstorage",
+      "name": "unstorage",
+      "version": "1.17.6",
+      "integrity": "sha512-gjKtcmn/KwZuJZO9o2sc0esAQnhmTw0LviDHwevTXbJMYs0dRTp8ZEEWXHU0vTpzbN3cA0yxlTeyXssMp3zDqw==",
+      "archive": {
+        "url": "https://registry.npmjs.org/unstorage/-/unstorage-1.17.6.tgz",
+        "bytes": 81056,
+        "sha256": "dc91498db49142d023ecc9ed2a30f4ac1ee74164f6355a37187997f99cc9256a"
+      },
+      "metadataSha256": "32edd2b4325dc3c62907ff22013d6f39ccfe3c6766d947aa611da758b737548a",
+      "gitHeadUnsigned": null,
+      "registrySignatures": [
+        {
+          "sig": "MEQCIDhu6qGiTJw0YEfNK7CmzSs5BZOScyjm1zGJqpgyyjGwAiAFc5erTKfsiK6N9CM8MEM7e1Gc6vOixx9rDy+jy6AGRA==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "sig": "MEQCIHb7QY3nJkQHvDL40ZUGS3jB21/4La8n0U3urQd5YrMmAiB+Kk6IfWrVoDZlPEE/Dr/QUjwKAAKe+Hg/VnE6CQDH4A==",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        }
+      ],
+      "signingKeyExpires": null,
+      "historicalSignatureOnly": false,
+      "license": {
+        "declared": "MIT",
+        "archiveFiles": [
+          {
+            "path": "LICENSE",
+            "bytes": 1078,
+            "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+          }
+        ],
+        "upstream": [],
+        "missingFullLicenseText": false
+      }
+    }
+  ],
+  "sourceBindings": [
+    {
+      "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/src/validators.ts",
+      "sourceMapPath": "../src/validators.ts",
+      "bytes": 14989,
+      "sha256": "806f1cdfd84606d9239282235aa9b3996b28ab6ce9c36c3fe6b6e4dfde5700ba",
+      "exactT50CommitSourceMapMatch": true
+    },
+    {
+      "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/src/namespaces.ts",
+      "sourceMapPath": "../src/namespaces.ts",
+      "bytes": 10787,
+      "sha256": "b9d554364ce6ca39a2d8d06e07ac8c0ad571069d4194a3dfdf801cd9e80e265d",
+      "exactT50CommitSourceMapMatch": true
+    },
+    {
+      "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/src/misc.ts",
+      "sourceMapPath": "../src/misc.ts",
+      "bytes": 17433,
+      "sha256": "92d1ebf51aee80daadafe6626f5fbffbb6e8885c4ac2470b9cd817f85a7bf19a",
+      "exactT50CommitSourceMapMatch": true
+    },
+    {
+      "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/src/uri.ts",
+      "sourceMapPath": "../src/uri.ts",
+      "bytes": 3348,
+      "sha256": "b2f5080bbfa0cb9c6fbaef5efc44c1c341e7c31d2ac12bdf2bbe79600089b554",
+      "exactT50CommitSourceMapMatch": true
+    }
+  ],
+  "pinnedFiles": [
+    {
+      "path": "@walletconnect/utils/dist/index.js",
+      "bytes": 43466,
+      "sha256": "8b4eec93c82950de354831907ed898ec678a79d1917387361f6a27ef0c10011b"
+    },
+    {
+      "path": "@walletconnect/utils/dist/index.cjs.map",
+      "bytes": 171918,
+      "sha256": "38f9bde675adc113debd12d1c576ebfbe53c081a3d27a8cf7239ff463bf2f673"
+    }
+  ],
+  "audit": {
+    "utf8": "{\n  \"auditReportVersion\": 2,\n  \"vulnerabilities\": {},\n  \"metadata\": {\n    \"vulnerabilities\": {\n      \"info\": 0,\n      \"low\": 0,\n      \"moderate\": 0,\n      \"high\": 0,\n      \"critical\": 0,\n      \"total\": 0\n    },\n    \"dependencies\": {\n      \"prod\": 70,\n      \"dev\": 0,\n      \"optional\": 0,\n      \"peer\": 0,\n      \"peerOptional\": 0,\n      \"total\": 69\n    }\n  }\n}\n",
+    "sha256": "5850b82600aa181725506e797c9a3c89c02c243692171337ca061ac5b84c985c",
+    "exitCode": 0,
+    "scope": "Entire resolved lock; no package omissions, overrides or scanner exclusions."
+  },
+  "limits": {
+    "cpu": 1,
+    "memoryBytes": 268435456,
+    "pids": 64,
+    "runtimeMs": 30000,
+    "outputBytes": 65536
+  },
+  "qualification": {
+    "publicFixtureOnly": true,
+    "productionProvider": false,
+    "currentSigningTrustRoot": false,
+    "applicationProtocolSelected": false,
+    "walletSessionOrCallbackAuthenticated": false,
+    "g05RoutingQualified": false,
+    "sdkLifecycleQualified": false,
+    "professionalReview": false,
+    "releaseEnabled": false
+  },
+  "notes": [
+    "Registry signatures bind name@version:integrity, not unsigned gitHead/source/license metadata or source-to-bundle equivalence. Exact source byte comparisons are separate.",
+    "Expired legacy assertions are mathematical historical evidence only, never a currently valid key, waiver or application trust policy.",
+    "WalletConnect Community License and missing uint8arrays3.1.1 full text remain explicit licensing/adoption limits; this is finite public function research, not commercial/legal approval."
+  ],
+  "observedConformance": {
+    "disposition": "STRONGER_APPLICATION_URI_EXPECTATION_UNMET",
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "actualParsedProtocol": "",
+    "expectedCompleteRoundtripProtocol": "wc",
+    "allRequiredFormatterArgumentsSupplied": true,
+    "upstreamParserTestGuaranteesProtocolRoundtrip": false,
+    "upstreamDefectClaimed": false,
+    "normalizationOrDefaultAdded": false,
+    "exactContractReadbacks": [
+      {
+        "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/utils/test/uri.spec.ts",
+        "bytes": 2083,
+        "sha256": "60adab27035b81feb1352c4a8945ffa2843dd48cda11f99984b014f98539d586",
+        "path": "/workspace/work/t75-uri-contract-0.txt"
+      },
+      {
+        "url": "https://github.com/WalletConnect/walletconnect-monorepo/blob/63094dcb6fded05dcbc2b08b8895ada75a31dcb5/packages/core/src/controllers/pairing.ts",
+        "bytes": 18372,
+        "sha256": "85be43cdb6cc870e0a510a3b49befbc7524de706e072dd93c6df93fa102bb629",
+        "path": "/workspace/work/t75-uri-contract-1.txt"
+      }
+    ]
+  }
+}
