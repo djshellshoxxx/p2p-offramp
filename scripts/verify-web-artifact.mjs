@@ -1,6 +1,6 @@
 /** Check a finished static directory against an independently retained local build inventory. */
 import { createHash } from 'node:crypto';
-import { readFile, realpath, stat } from 'node:fs/promises';
+import { open, realpath, stat } from 'node:fs/promises';
 import { isAbsolute, join, relative, sep } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { scanBuild } from '../apps/web/scripts/build.mjs';
@@ -12,8 +12,10 @@ const MODES = { default: { syntheticDemo: false, testnet: false }, demo: { synth
 const USAGE = 'Usage: node scripts/verify-web-artifact.mjs [--default|--demo|--testnet] DIRECTORY RETAINED_EVIDENCE_FILE';
 
 /** The scan mode is the operator's choice. A retained reference can only be checked against it, never select it. */
-export async function verifyWebArtifact(directory, referenceFile, { mode = 'default' } = {}) {
-  if (!Object.hasOwn(MODES, mode)) throw new Error('UNSUPPORTED_VERIFY_MODE');
+export async function verifyWebArtifact(directory, referenceFile, options = {}) {
+  if (typeof options !== 'object' || options === null || Array.isArray(options)) throw new Error('UNSUPPORTED_VERIFY_MODE');
+  const { mode = 'default' } = options;
+  if (typeof mode !== 'string' || !Object.hasOwn(MODES, mode)) throw new Error('UNSUPPORTED_VERIFY_MODE');
   const flags = MODES[mode];
   const root = await realpath(directory);
   const referencePath = await realpath(referenceFile);
@@ -23,12 +25,19 @@ export async function verifyWebArtifact(directory, referenceFile, { mode = 'defa
   }
   const copiedInventory = await stat(join(root, inventoryName), { throwIfNoEntry: false });
   if (!copiedInventory?.isFile()) throw new Error('ARTIFACT_INTEGRITY_MISMATCH');
-  const referenceStat = await stat(referencePath);
-  if (!referenceStat.isFile()) throw new Error('INVALID_LOCAL_BUILD_EVIDENCE');
-  if (referenceStat.dev === copiedInventory.dev && referenceStat.ino === copiedInventory.ino) {
-    throw new Error('INDEPENDENT_EVIDENCE_REQUIRED');
+  // One handle for the identity check and the read, so the reference cannot be swapped between them.
+  const handle = await open(referencePath, 'r');
+  let bytes;
+  try {
+    const referenceStat = await handle.stat();
+    if (!referenceStat.isFile()) throw new Error('INVALID_LOCAL_BUILD_EVIDENCE');
+    if (referenceStat.dev === copiedInventory.dev && referenceStat.ino === copiedInventory.ino) {
+      throw new Error('INDEPENDENT_EVIDENCE_REQUIRED');
+    }
+    bytes = await handle.readFile();
+  } finally {
+    await handle.close();
   }
-  const bytes = await readFile(referencePath);
   const expected = JSON.parse(bytes);
   if (expected?.version !== 1 || expected.ReleaseEnabled !== 0 || expected.signedRelease !== false ||
       expected.releaseAcceptance !== false || typeof expected.syntheticDemo !== 'boolean' ||
@@ -51,7 +60,9 @@ export function parseVerifyArgs(argv) {
   const flags = argv.filter(arg => arg.startsWith('-'));
   const positional = argv.filter(arg => !arg.startsWith('-'));
   const modes = flags.filter(flag => ['--default', '--demo', '--testnet'].includes(flag)).map(flag => flag.slice(2));
-  if (flags.length > 1 || modes.length !== flags.length || positional.length !== 2) throw new Error(USAGE);
+  if (flags.length > 1 || modes.length !== flags.length || positional.length !== 2) {
+    throw Object.assign(new Error(USAGE), { code: 'USAGE' });
+  }
   return { directory: positional[0], referenceFile: positional[1], mode: modes[0] ?? 'default' };
 }
 
@@ -61,6 +72,7 @@ if (isMain(import.meta.url)) {
     console.log(JSON.stringify(await verifyWebArtifact(directory, referenceFile, { mode })));
   } catch (error) {
     console.error(error.message);
-    process.exitCode = 1;
+    // 2: malformed invocation; 1: the artifact or its reference failed verification.
+    process.exitCode = error?.code === 'USAGE' ? 2 : 1;
   }
 }

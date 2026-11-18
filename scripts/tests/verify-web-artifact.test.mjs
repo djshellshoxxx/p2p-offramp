@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scanBuild, SYNTHETIC_MARKERS } from '../../apps/web/scripts/build.mjs';
 import { TESTNET_TRUST_FORMAT } from '../../apps/web/scripts/testnet-trust.mjs';
-import { verifyWebArtifact } from '../verify-web-artifact.mjs';
+import { parseVerifyArgs, verifyWebArtifact } from '../verify-web-artifact.mjs';
 
 const cli = fileURLToPath(new URL('../verify-web-artifact.mjs', import.meta.url));
 const MIT = 'Permission is hereby granted, free of charge';
@@ -56,7 +56,7 @@ test('the default mode is strict when none is given', async t => {
   await assert.rejects(verifyWebArtifact(demo.directory, demo.reference), /BUILD_MODE_MISMATCH/);
 });
 
-test('a forged lenient reference cannot relax the scan of a default-mode artifact', async t => {
+test('a reference whose profile disagrees with the requested mode is refused before the scan', async t => {
   for (const claim of ['demo', 'testnet']) {
     const { directory, reference } = await artifact(t, 'default', claim);
     await assert.rejects(verifyWebArtifact(directory, reference), /BUILD_MODE_MISMATCH/);
@@ -64,7 +64,7 @@ test('a forged lenient reference cannot relax the scan of a default-mode artifac
   }
 });
 
-test('demo-only or testnet-only content is refused in default mode even when the reference claims it legal', async t => {
+test('D-L4 regression: demo or testnet content with its matching lenient reference is refused unless the operator asks for that mode', async t => {
   for (const mode of ['demo', 'testnet']) {
     const { directory, reference } = await artifact(t, mode);
     await assert.rejects(verifyWebArtifact(directory, reference), /BUILD_MODE_MISMATCH/);
@@ -75,32 +75,40 @@ test('demo-only or testnet-only content is refused in default mode even when the
   }
 });
 
-test('an unknown programmatic mode is refused', async t => {
+test('an unknown or non-string programmatic mode is refused', async t => {
   const { directory, reference } = await artifact(t, 'default');
-  await assert.rejects(verifyWebArtifact(directory, reference, { mode: 'lenient' }), /UNSUPPORTED_VERIFY_MODE/);
+  for (const options of [{ mode: 'lenient' }, { mode: ['demo'] }, { mode: { toString: () => 'demo' } }, { mode: 1 }, null, 'demo', ['demo']]) {
+    await assert.rejects(verifyWebArtifact(directory, reference, options), /UNSUPPORTED_VERIFY_MODE/);
+  }
 });
 
-test('CLI takes the mode from flags and rejects malformed command lines with exit 1', async t => {
+test('parseVerifyArgs accepts exactly one known mode flag and two paths', () => {
+  const d = 'pages', r = 'retained.json';
+  assert.deepEqual(parseVerifyArgs([d, r]), { directory: d, referenceFile: r, mode: 'default' });
+  for (const mode of ['default', 'demo', 'testnet']) {
+    assert.deepEqual(parseVerifyArgs([`--${mode}`, d, r]), { directory: d, referenceFile: r, mode });
+  }
+  // A flag may follow the paths: every token starting with '-' is a flag, so the position is unambiguous.
+  assert.equal(parseVerifyArgs([d, r, '--testnet']).mode, 'testnet');
+  const bad = [[], [d], [d, r, 'extra'], ['--demo', d], ['--', d, r], ['-', d, r], ['-x', r], ['--demo', '--testnet', d, r],
+    ['--demo', '--demo', d, r], ['--demo', '--default', d, r], ['--bogus', d, r], ['-demo', d, r], ['--demo=1', d, r],
+    ['--Demo', d, r], ['--dem', d, r], ['--demo ', d, r], ['\u2013\u2013demo', d, r]];
+  for (const argv of bad) {
+    assert.throws(() => parseVerifyArgs(argv), error => error.code === 'USAGE' && /^Usage:/.test(error.message), JSON.stringify(argv));
+  }
+});
+
+test('CLI takes the mode from flags; verification failures exit 1 and usage errors exit 2', async t => {
   const demo = await artifact(t, 'demo');
   const run = (...args) => spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8' });
   const ok = run('--demo', demo.directory, demo.reference);
   assert.equal(ok.status, 0, ok.stderr);
   assert.equal(JSON.parse(ok.stdout).mode, 'demo');
-  assert.equal(run(demo.directory, demo.reference).status, 1);
-  assert.match(run(demo.directory, demo.reference).stderr, /BUILD_MODE_MISMATCH/);
-  assert.equal(run('--default', demo.directory, demo.reference).status, 1);
-  const forged = await artifact(t, 'default', 'testnet');
-  assert.match(run(forged.directory, forged.reference).stderr, /BUILD_MODE_MISMATCH/);
-  const usage = [['--demo', '--testnet'], ['--demo', '--demo'], ['--demo', '--default'], ['--bogus'], ['-demo'], ['--demo=1']];
-  for (const flags of usage) {
-    const r = run(...flags, demo.directory, demo.reference);
-    assert.equal(r.status, 1, flags.join(' '));
-    assert.match(r.stderr, /Usage:/);
-  }
-  for (const args of [[], [demo.directory], ['--demo', demo.directory], [demo.directory, demo.reference, 'extra']]) {
-    const r = run(...args);
-    assert.equal(r.status, 1);
-    assert.match(r.stderr, /Usage:/);
-  }
+  const strict = run(demo.directory, demo.reference);
+  assert.equal(strict.status, 1);
+  assert.match(strict.stderr, /BUILD_MODE_MISMATCH/);
+  const usage = run('--demo=1', demo.directory, demo.reference);
+  assert.equal(usage.status, 2);
+  assert.match(usage.stderr, /Usage:/);
   assert.doesNotThrow(() => execFileSync(process.execPath, [cli, '--demo', demo.directory, demo.reference], { stdio: 'pipe' }));
 });
