@@ -3,7 +3,10 @@
 New research: [reusable upstream code for unfinished features](docs/research/reuse-2026-11-03/README.md)
 (2026-11-03; current gaps, exact source/license evidence and intended integration points).
 
-Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
+Latest recorded checkpoint: [November 18 documentation reconciliation](docs/consolidation/2026-11-18-documentation-reconciliation.md)
+and [development status](docs/DEVELOPMENT_STATUS.md), pinned to `main@6c38e641`. Start with the **[User Guide](docs/wiki-source/User-Guide.md)**
+or **[Developer Guide](docs/wiki-source/Developer-Guide.md)**. The [November 16 canonical qualification](docs/consolidation/2026-11-16-canonical-qualification.md)
+and [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
 [whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
 [autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
@@ -20,6 +23,12 @@ encrypted messaging and encrypted local recovery. Basic manual fiat settlement r
 confirmation; the application cannot guarantee that fiat is received or irreversible.
 
 ## Current state
+
+The source checkpoint `main@6c38e641` includes merged D1 acceptance (#150), QR/release-trust primitives (#140),
+Solana consent verification (#151), canonical EVM reader binding (#143) and development-only formal evidence tooling (#137).
+The expanded wallet, native Solana recovery and localnet browser workflows remain in draft PRs [#166](https://github.com/djshellshoxxx/p2p-offramp/pull/166),
+[#167](https://github.com/djshellshoxxx/p2p-offramp/pull/167) and [#168](https://github.com/djshellshoxxx/p2p-offramp/pull/168).
+Their source and test claims do not become main capabilities until integration is qualified. See the [current feature matrix](docs/development/FEATURE_COMPLETION_MATRIX.md).
 
 The catalog contains 173 documents: 171 expanded technical design baselines, a navigation catalog
 and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence

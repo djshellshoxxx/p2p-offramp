@@ -1,5 +1,49 @@
 # Development status and continuation contract
 
+## Recorded main checkpoint — November 18, 2026 (after formal-harness merge)
+
+This checkpoint is pinned to merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`, tree
+`44bc5282c9bd59b49b128ed2028e940588fba053`. [The reconciliation record](consolidation/2026-11-18-documentation-reconciliation.md)
+lists the exact merged PRs, preserved documentation source heads and active product stack.
+
+Main includes #135 locale wiring, #140 release/QR primitives, #150 D1 Option B,
+#141 artifact build-mode verification, #149 synthetic recovery coverage, #151 Solana
+consent verification, #143 canonical EVM reader binding and #137 development-only
+formal tooling. D1 is integrated as a library/exchange capability; browser trading,
+physical-wallet acceptance and live trust/bootstrap remain separate qualifications.
+The formal harness retains `PROOF_UNKNOWN` results and an explicit model gap.
+
+The wallet/localnet work in [#166](https://github.com/djshellshoxxx/p2p-offramp/pull/166),
+native Solana recovery in [#167](https://github.com/djshellshoxxx/p2p-offramp/pull/167),
+and localnet browser composition in [#168](https://github.com/djshellshoxxx/p2p-offramp/pull/168)
+are draft work outside this pinned main. Their later edits, ERC-20 UI work and hosted
+checks require their own evidence. Documentation PRs #136/#139/#164/#165 are combined
+in this candidate with their ancestry retained; audit PR #138 remains independent.
+
+The [feature matrix](development/FEATURE_COMPLETION_MATRIX.md) separates implemented
+source from browser, native, testnet and release qualification. `ReleaseEnabled=0`.
+No release, deployment, real-funds operation or live Wiki publication is established.
+The dated records below preserve the scope and restrictions of their original lanes;
+older “current”, “draft” and test-count statements apply only to their named checkpoint.
+
+## Historical main checkpoint — November 18, 2026 (after locale merge)
+
+Merged `main@af4835b58146fc970af90790b635ea7c75a724af` now includes [PR #135](https://github.com/djshellshoxxx/p2p-offramp/pull/135), following [consolidation PR #134](https://github.com/djshellshoxxx/p2p-offramp/pull/134). The #135 locale changes set document `lang`/`dir` from the selected compiled bundle and conditionally show a language selector. The production bundle still supplies English only; this merge does **not** establish published translations or browser/device compatibility. The source-pinned `eef9a803` checkpoint below remains a **historical** pre-#135 snapshot, not the current main head.
+
+As checked here, the new ChatGPT test-only [draft PR #149](https://github.com/djshellshoxxx/p2p-offramp/pull/149) at `90b9b85715f1e04522b828ecdbc4858e92a1b88e` adds a synthetic, fresh-key local-backup recovery regression to the static-client worker test suite. Its exact-head CI must be independently checked; neither the proposed test nor the merge implies wallet send, settlement, or authenticated recovery. The separate audit [draft PR #138](https://github.com/djshellshoxxx/p2p-offramp/pull/138) and docs [draft PR #139](https://github.com/djshellshoxxx/p2p-offramp/pull/139) each had **seven successful GitHub Actions jobs** at their previous exact heads (`487aabe` and `9373fe0` respectively), **before** later ledger/docs edits; do not borrow their old results for the new heads.
+
+Active owner [draft PR #140](https://github.com/djshellshoxxx/p2p-offramp/pull/140) proposes Tier C signed release and QR changes, outside this continuation's implementation ownership. Other draft consolidation/optional-package PRs likewise remain separate and unmerged. SonarCloud Security Rating A is still **unverified**, along with D1 peer acceptance, D8 independent owner/security approval, D9 historic send provenance, live bootstrap, and release evidence. `ReleaseEnabled=0`: no production deployment, real funds, live Wiki publication or release is authorized.
+
+## Historical consolidation checkpoint — November 18, 2026 (static client only)
+
+At merged `main@eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9`, [consolidation PR #134](https://github.com/djshellshoxxx/p2p-offramp/pull/134) landed the integration trunk; [PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61), [PR #132](https://github.com/djshellshoxxx/p2p-offramp/pull/132) and [Wiki-source PR #68](https://github.com/djshellshoxxx/p2p-offramp/pull/68) now report merged. Earlier ChatGPT handoff/audit PRs #66/#67 are closed and their *final file contents* were carried through #134, rather than every intermediate status-only commit. This is a repository integration event, **not** a public static-site publication, release, owner approval or real-funds readiness.
+
+At the exact pre-merge #134 head `7be1dbef7fe38204db441ffb9c29e6f06acfaecd`, four GitHub Actions workflow families (Vault foundation, EVM escrow, Solana escrow, Specification inventory) returned successful conclusions; the separate Snyk status was successful. The author additionally [reported local checks](https://github.com/djshellshoxxx/p2p-offramp/pull/134#issuecomment-6971473083), which are author-reported evidence, not independently rerun here. The GitHub connector returned **no pull-request-triggered workflow runs** for the new merge commit itself. SonarCloud Security Rating **A is not independently verified** by these results; D1 buyer/seller peer acceptance, D8 release approval, D9 historic record provenance, independently qualified client trust/bootstrap, and all real-funds/release restrictions remain separate gates.
+
+Active [draft PR #135](https://github.com/djshellshoxxx/p2p-offramp/pull/135) (locale selection) and [draft PR #136](https://github.com/djshellshoxxx/p2p-offramp/pull/136) (Lane B handoff) are **not included in this main snapshot**. This ChatGPT lane is restricted by the November 12 owner direction to the static GitHub Pages client; no server, native, CLI, relayer or contract development is authorized here. `ReleaseEnabled=0`; no deployments/publication or real-funds use.
+
+The dated November 16 sections below are historical snapshots of their explicitly named source commits and must not be read as the current PR merge state.
+
 ## Development continuation — November 16, 2026
 
 The cumulative development baseline is `claude/confident-fermi-g6wjp3@7461c87`,
@@ -11,7 +55,12 @@ records fresh local validation, the integrated documentation branch, and remaini
 features. The dated snapshot below describes its named main commit, not this newer
 development tree. D1 peer acceptance and browser trading are still unfinished.
 
-## Current scope snapshot — 2026-11-16 (static GitHub Pages client only)
+At the earlier 2026-11-18 documentation sweep, the default-branch head was `8649b7a`, the merge of PR #140 (D3 release-trust
+unification and D6 QR codec; its commit message records owner-approved Tier C on 2026-11-18). `main@cdde998`
+named in the snapshots below is no longer the head. The `packages/qr` codec and symbol encoder are present on
+that head with package tests. The gate results in PR #140 are its author's report and were not re-run here.
+
+## Historical scope snapshot — 2026-11-16 (static GitHub Pages client only)
 
 At merged `main@cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e`, the static client supports encrypted local profile creation/unlock, explicit encrypted-backup export and fresh-key restore, and read-only inspection workflows. The **Offers** page can import and validate a local EVM trade-terms file for read-only review **only when a trusted registry is available**. The default build has **no approved registry**; the explicitly labelled `npm run build:demo` synthetic build supplies local example terms/registry data. This is **not live marketplace discovery, counterparty acceptance, a wallet send or an escrow payment**. Source: [README current state](../README.md), [Offers UI](../apps/web/src/ui/trade/TradePages.tsx), [static service boundary](../apps/web/src/app-services.ts).
 
