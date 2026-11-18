@@ -111,7 +111,7 @@ test('secret-bearing fields and values are refused before hashing, including wal
   }
   const values = [
     `wc:${hashHex('topic')}@2?relay-protocol=irn&symKey=${hashHex('key')}`, `WC:${hashHex('topic')}@1?bridge=x&key=y`, `see wc:${hashHex('t')}@2`,
-    `nsec1${'q'.repeat(58)}`, `xprv9s21ZrQH143K${'a'.repeat(60)}`, '-----BEGIN EC PRIVATE KEY-----',
+    `nsec1${'q'.repeat(58)}`, `xprv9s21ZrQH143K${'a'.repeat(95)}`, `see xprv9s21ZrQH143K${'a'.repeat(95)}`, '-----BEGIN EC PRIVATE KEY-----',
     `eyJhbGciOiJIUzI1NiJ9.${Buffer.from('{"sub":"1"}').toString('base64url')}.c2ln`, `Bearer ${hashHex('t')}`,
     'access_token=abc', '?token=abc', 'api_key: abc', `0x${hashHex('k')}`, `5${'H'.repeat(50)}`, `${solanaKey('a')}${solanaKey('b')}`,
     'abandon ability able about above absent absorb abstract absurd abuse access accident',
@@ -121,9 +121,11 @@ test('secret-bearing fields and values are refused before hashing, including wal
     assert.equal((await createQrEnvelope({ ...address, payload: { address: value } }, counting)).code, 'SECRET_REFUSED', value);
   }
   assert.equal(hashed, 0, 'no secret reached the hash provider');
-  // Public values never trip the heuristics.
-  for (const value of [evmAddress('a'), solanaKey('a'), hashHex('a'), 'native', INPUTS['trade-invite'].payload.ad, 'p2p-offramp-backup/v1', 'v0.12.4-rc.1', 'offramp.example'])
+  // Public values never trip the heuristics, even a Solana key that happens to contain a secret-key prefix.
+  for (const value of [evmAddress('a'), solanaKey('a'), hashHex('a'), 'native', INPUTS['trade-invite'].payload.ad, 'p2p-offramp-backup/v1', 'v0.12.4-rc.1', 'offramp.example',
+    `xprv${solanaKey('a').slice(4)}`, `nsec1${'q'.repeat(39)}`])
     assert.equal(isSecretLike(value), false, value);
+  for (let index = 0; index < 2000; index++) assert.equal(isSecretLike(solanaKey(`random-${index}`)), false);
   for (const name of ['address', 'recipient', 'asset', 'amount', 'ad', 'termsHash', 'channel', 'releaseId', 'sequence', 'manifestSha256', 'format', 'byteLength', 'sha256',
     'protocol', 'v', 'type', 'requestId', 'createdAt', 'expiresAt', 'chain', 'originHint', 'payload', 'payloadSha256', 'signature', 'profile', 'publicKey', 'value'])
     assert.equal(isSecretKeyName(name), false, name);

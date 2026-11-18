@@ -216,6 +216,9 @@ test('replayed invite is refused by the local ledger; memory is bounded and live
   assert.equal(ledger.seen(first.review.requestId), false, 'entries retire after expiry plus skew');
   assert.equal(ledger.size, 0);
   assert.equal(ledger.admit({ ...first.review }).code, 'INVALID_INPUT', 'only reviews issued by the decoder are admitted');
+  const broken = createReplayLedger({ nowSeconds: () => { throw new Error('clock'); } });
+  assert.equal(broken.seen(first.review.requestId), true, 'an unusable clock fails closed');
+  assert.equal(broken.admit(first.review).code, 'UNAVAILABLE');
   assert.throws(() => createReplayLedger({ nowSeconds: () => now, maxEntries: 0 }));
   assert.throws(() => createReplayLedger({}));
 });

@@ -167,7 +167,11 @@ export function createReplayLedger(options: ReplayLedgerOptions): ReplayLedger {
   };
   const purge = (now: number): void => { for (const [id, retireAt] of entries) if (retireAt <= now) entries.delete(id); };
   return Object.freeze({
-    seen(requestId: string): boolean { purge(clock()); return entries.has(requestId); },
+    /** Fails closed: with an unusable clock every requestId reads as seen. */
+    seen(requestId: string): boolean {
+      try { purge(clock()); } catch { return true; }
+      return entries.has(requestId);
+    },
     admit(review: QrImportReview): ReplayAdmitResult {
       if (!isQrImportReview(review)) return failure('INVALID_INPUT');
       let now: number;

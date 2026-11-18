@@ -218,8 +218,8 @@ def is_account(chain, value):
 def secret_value(value):
     words = value.split()
     return any([
-        re.search(r"(^|[^0-9A-Za-z])wc:", value, re.I), "symkey=" in value.lower(), re.search(r"nsec1", value, re.I),
-        re.search(r"[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{20}", value), "PRIVATE KEY-----" in value,
+        re.search(r"(^|[^0-9A-Za-z])wc:", value, re.I), "symkey=" in value.lower(), re.search(r"nsec1[0-9a-z]{50}", value, re.I),
+        re.search(r"[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{100}", value), "PRIVATE KEY-----" in value,
         re.search(r"eyJ[\w-]+\.[\w-]+\.", value), re.match(r"\s*bearer\s+\S", value, re.I),
         re.search(r"(token|secret|password|apikey|api_key|sessionid)\s*[=:]", value, re.I),
         re.search(r"0x[0-9a-fA-F]{64}(?![0-9a-fA-F])", value),

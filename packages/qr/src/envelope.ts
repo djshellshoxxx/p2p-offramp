@@ -163,8 +163,9 @@ const SECRET_KEY_NAME = /seed|mnemonic|private|secret|nsec|xprv|xpriv|tprv|wif|p
 const SECRET_VALUE = [
   /(?:^|[^A-Za-z0-9])wc:/i,                                       // WalletConnect pairing/session URI
   /[?&;#]symkey=/i,                                               // session symmetric key parameter
-  /nsec1[02-9ac-hj-np-z]{6,}/i,                                   // NIP-19 Nostr private key
-  /[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{20,}/,                         // BIP-32 extended private key
+  // Length floors sit far above any public field (Solana keys are at most 44 characters), so no valid value can match.
+  /nsec1[02-9ac-hj-np-z]{50,}/i,                                  // NIP-19 Nostr private key (63 characters)
+  /[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{100,}/,                        // BIP-32 extended private key (111 characters)
   /-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----/,                        // PEM private key
   /eyJ[A-Za-z0-9_-]{2,}\.[A-Za-z0-9_-]{2,}\./,                    // JWT / JWS compact serialization
   /(?:^|\s)bearer\s+\S{6,}/i,                                     // HTTP bearer credential
