@@ -6,9 +6,15 @@
 # zero jobs, is at that SHA and was created in that window. Nothing is re-run.
 # Safe to rerun: runs that are already gone are counted and skipped.
 # Requires: gh, authenticated as a user who can administer Actions on the repo.
-# Usage: bash scripts/consolidation/phase0-delete-orphaned-runs.sh [--dry-run]
+# Usage: bash scripts/consolidation/phase0-delete-orphaned-runs.sh [--dry-run|--apply]   (dry run by default; --apply performs the deletions)
 set -euo pipefail
-DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
+# Dry run unless --apply is given exactly; any other argument is refused, so a typo never runs the live path.
+case "${1:-}" in
+  ""|--dry-run) DRY=1 ;;
+  --apply) DRY=0 ;;
+  *) echo "usage: $0 [--dry-run|--apply]" >&2; exit 2 ;;
+esac
+[ $# -le 1 ] || { echo "usage: $0 [--dry-run|--apply]" >&2; exit 2; }
 REPO=djshellshoxxx/p2p-offramp
 command -v gh >/dev/null || { echo "gh CLI is required"; exit 1; }
 gh auth status >/dev/null 2>&1 || { echo "gh is not authenticated: run gh auth login"; exit 1; }

@@ -4,9 +4,15 @@
 # archive/<branch> tag at that SHA, then delete the remote branch.
 # A branch whose tip moved is skipped, so someone's new work is never deleted.
 # Safe to rerun. Requires: git and push rights to origin.
-# Usage: bash scripts/consolidation/phase1-archive-and-prune.sh [--dry-run]
+# Usage: bash scripts/consolidation/phase1-archive-and-prune.sh [--dry-run|--apply]   (dry run by default; --apply performs the deletions)
 set -euo pipefail
-DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
+# Dry run unless --apply is given exactly; any other argument is refused, so a typo never runs the live path.
+case "${1:-}" in
+  ""|--dry-run) DRY=1 ;;
+  --apply) DRY=0 ;;
+  *) echo "usage: $0 [--dry-run|--apply]" >&2; exit 2 ;;
+esac
+[ $# -le 1 ] || { echo "usage: $0 [--dry-run|--apply]" >&2; exit 2; }
 REMOTE=origin
 git rev-parse --git-dir >/dev/null
 git fetch --prune --tags -q "$REMOTE"

@@ -10,9 +10,15 @@
 #             Solana payout docs). Every non-blank line it adds since its merge
 #             base with origin/main must be present in main's copy of that file.
 # Safe to rerun. Requires: git, gh (authenticated), and push rights to origin.
-# Usage: bash scripts/consolidation/phase2-3-retire-contained-branches.sh [--dry-run]
+# Usage: bash scripts/consolidation/phase2-3-retire-contained-branches.sh [--dry-run|--apply]   (dry run by default; --apply performs the deletions)
 set -euo pipefail
-DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
+# Dry run unless --apply is given exactly; any other argument is refused, so a typo never runs the live path.
+case "${1:-}" in
+  ""|--dry-run) DRY=1 ;;
+  --apply) DRY=0 ;;
+  *) echo "usage: $0 [--dry-run|--apply]" >&2; exit 2 ;;
+esac
+[ $# -le 1 ] || { echo "usage: $0 [--dry-run|--apply]" >&2; exit 2; }
 REMOTE=origin
 REPO=djshellshoxxx/p2p-offramp
 MAIN="$REMOTE/main"
