@@ -8,23 +8,33 @@ const sources = readdirSync(dir)
   .filter(name => name.endsWith('.ts'))
   .map(name => [name, readFileSync(new URL(name, dir), 'utf8')]);
 const ALLOWED_IMPORTS = new Set(['../../domain/index.ts', '../../schemas/index.ts', '@noble/hashes/sha2.js']);
+/** Peer acceptance verifies Ed25519 and lifts x-only keys; it may use these two curves and nothing that signs. */
+const ACCEPTANCE_SOURCES = new Set(['acceptance.ts', 'offchain.ts', 'replay.ts']);
+const ACCEPTANCE_IMPORTS = new Set(['@noble/curves/ed25519.js', '@noble/curves/secp256k1.js']);
+const SIGNING_APIS = /\.sign\(|getPublicKey|keygen|randomSecretKey|randomBytes|getSharedSecret|secretKey/;
 
 test('src-has-no-io-or-forbidden-apis', () => {
   assert.deepEqual(sources.map(([name]) => name).sort(), [
+    'acceptance.ts',
     'address.ts',
     'bind.ts',
     'codec.ts',
     'instructions.ts',
     'layout.ts',
+    'offchain.ts',
     'reader.ts',
+    'replay.ts',
     'window.ts',
   ]);
   for (const [name, text] of sources) {
     assert.doesNotMatch(
       text,
-      /Buffer|node:|@noble\/curves|fetch|atob|contracts\/|sendTransaction|simulateTransaction/,
+      ACCEPTANCE_SOURCES.has(name)
+        ? /Buffer|node:|fetch|atob|contracts\/|sendTransaction|simulateTransaction/
+        : /Buffer|node:|@noble\/curves|fetch|atob|contracts\/|sendTransaction|simulateTransaction/,
       name,
     );
+    if (ACCEPTANCE_SOURCES.has(name)) assert.doesNotMatch(text, SIGNING_APIS, name);
   }
 });
 
@@ -67,7 +77,9 @@ test('import-scan-sees-every-static-form', () => {
 test('src-imports-only-allowed-modules', () => {
   for (const [name, text] of sources) {
     for (const specifier of importSpecifiers(text)) {
-      assert.ok(ALLOWED_IMPORTS.has(specifier) || /^\.\/[a-z]+\.ts$/.test(specifier), `${name}: ${specifier}`);
+      const allowed = ALLOWED_IMPORTS.has(specifier) ||
+        (ACCEPTANCE_SOURCES.has(name) && ACCEPTANCE_IMPORTS.has(specifier));
+      assert.ok(allowed || /^\.\/[a-z]+\.ts$/.test(specifier), `${name}: ${specifier}`);
     }
     assert.doesNotMatch(text, DYNAMIC_LOAD, name);
   }
