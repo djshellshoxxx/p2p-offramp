@@ -1,0 +1,11 @@
+{
+  "name": "p2p-offramp fake-funds EVM lab (linux amd64)",
+  "build": { "dockerfile": "Dockerfile", "context": "." },
+  "remoteUser": "node",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Static development preview (verify host visibility is private)", "onAutoForward": "silent" }
+  },
+  "otherPortsAttributes": { "onAutoForward": "ignore" },
+  "postCreateCommand": "npm ci --ignore-scripts && node --import ./scripts/test-support/register-tsx.mjs scripts/lab/run.mjs foundation"
+}
