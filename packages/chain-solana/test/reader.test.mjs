@@ -517,31 +517,45 @@ test('INTEGRITY_FAILURE: data-{base58,3-tuple,bad-b64}', async () => {
 // Spec §8: base64 caps are checked before decoding. Every account also has an exact-length check after decoding,
 // so only cost tells the two apart: an uncapped reader would regex-scan, allocate and decode ~48 MB first.
 /**
- * Observes every regular-expression scan (RegExp.prototype.test and replace go through `exec`), so the test can
- * prove that an over-cap string is refused by its length alone: decodeBase64 scans with a regex before it
- * allocates, so no scan of the huge string also means no decode and no allocation. The earlier version asserted a
- * wall-clock bound (< 250 ms per case, setup included), which failed under CPU contention (--test-concurrency=4,
- * reproduced 4/4 with busy loops beside it) although the reader behaved correctly.
+ * Records the length of every string that the work hands to a whole-string reader: a regular-expression scan
+ * (`test`, `match`, `replace`, `split`, `search` all go through `exec`), string iteration (`for...of`, `Array.from`,
+ * spread; decodeBase64's own decode loop), `atob`, `Buffer.from(string)` and `TextEncoder`. The test then proves
+ * that the 64 MiB input never reaches any of them, so it is refused by its length alone, without a wall-clock bound.
+ * The earlier version asserted < 250 ms per case (setup included) and failed under CPU contention
+ * (--test-concurrency=4, reproduced 4/4 with busy loops beside it) although the reader behaved correctly.
+ * Not observed: index loops over `s[i]`/`charCodeAt` and other native readers; the reader has none on this path.
  */
-async function withRegexScans(work) {
-  const scanned = [], exec = RegExp.prototype.exec;
-  RegExp.prototype.exec = function spy(input) {
-    scanned.push(String(input).length);
-    return exec.call(this, input);
+async function withStringReads(work) {
+  const seen = [];
+  const exec = RegExp.prototype.exec, iterate = String.prototype[Symbol.iterator];
+  const atob0 = globalThis.atob, from = Buffer.from, encode = TextEncoder.prototype.encode;
+  RegExp.prototype.exec = function spy(input) { seen.push(String(input).length); return exec.call(this, input); };
+  String.prototype[Symbol.iterator] = function spy() { seen.push(String(this).length); return iterate.call(this); };
+  globalThis.atob = function spy(input) { seen.push(String(input).length); return atob0(input); };
+  Buffer.from = function spy(value, ...rest) {
+    if (typeof value === 'string') seen.push(value.length);
+    return from.call(this, value, ...rest);
   };
+  TextEncoder.prototype.encode = function spy(input = '') { seen.push(String(input).length); return encode.call(this, input); };
   try {
     await work();
   } finally {
     RegExp.prototype.exec = exec;
+    String.prototype[Symbol.iterator] = iterate;
+    globalThis.atob = atob0;
+    Buffer.from = from;
+    TextEncoder.prototype.encode = encode;
   }
-  return scanned;
+  return seen;
 }
 
 test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   const huge = 'A'.repeat(64 * 1024 * 1024);
-  // Control: the spy does see the decoder's scan of an in-cap string of the same shape.
-  const probe = 'A'.repeat(1_398_164);
-  assert.ok((await withRegexScans(async () => decodeBase64(probe, probe.length))).includes(probe.length));
+  // The largest per-account cap (ProgramData) in base64 characters; every observed read must stay within it.
+  const LARGEST_CAP = 1_398_164;
+  // Control: the spies see both the decoder's regex scan and its decode loop for an in-cap string of the same shape.
+  const probe = 'A'.repeat(LARGEST_CAP);
+  assert.ok((await withStringReads(async () => decodeBase64(probe, probe.length))).filter(length => length === probe.length).length >= 2);
   // Every account index the reader visits, per kind; `absent` drops the escrow so index 4 is the bare vault check.
   const cases = [
     ...[0, 1, 2, 3, 4].map(index => ['native', index, false]),
@@ -550,7 +564,7 @@ test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
   ];
   for (const [kind, index, absent] of cases) {
     let world;
-    const scanned = await withRegexScans(() =>
+    const seen = await withStringReads(() =>
       failsWith('INTEGRITY_FAILURE', kind, {
         mutate: captured => {
           world = captured;
@@ -565,8 +579,8 @@ test('INTEGRITY_FAILURE: base64-capped-before-decoding', async () => {
       }),
     );
     const label = `${kind}${absent ? ' (absent escrow)' : ''} account ${index}`;
-    assert.ok(scanned.length > 0, `${label}: the spy observed the read`);
-    assert.ok(scanned.every(length => length < huge.length), `${label} over-cap data must be refused before decoding`);
+    assert.ok(seen.length > 0, `${label}: the spies observed the read`);
+    assert.ok(seen.every(length => length <= LARGEST_CAP), `${label}: over-cap data must be refused before any whole-string read or decode`);
   }
 });
 
