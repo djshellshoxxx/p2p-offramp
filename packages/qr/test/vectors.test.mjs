@@ -13,6 +13,7 @@ const { vectors } = document;
 const decodeWith = (text, ctx) => decodeQrText(text, {
   sha256, nowSeconds: () => ctx.now, chains: ctx.chains,
   ...(ctx.expectedChain ? { expectedChain: ctx.expectedChain } : {}), ...(ctx.verifierProfile ? { inviteVerifier: testVerifier() } : {}),
+  ...(ctx.requireInviteSignature === undefined ? {} : { requireInviteSignature: ctx.requireInviteSignature }),
 });
 
 test('committed vectors are exactly what the generator produces, with a matching content digest and sidecar', async () => {
@@ -33,7 +34,8 @@ test('fixture covers the D6 vector requirements', () => {
   assert.deepEqual(vectors.base45.filter(vector => vector.source.startsWith('RFC 9285')).map(vector => vector.base45), ['BB8', '%69 VD92EX0', 'UJCLQE7W581', 'QED8WEX0']);
   const codes = new Set(vectors.rejections.map(vector => vector.expectedCode));
   for (const required of ['VERSION_UNSUPPORTED', 'TYPE_UNSUPPORTED', 'FIELD_UNSUPPORTED', 'QR_TOO_LARGE', 'INVALID_UNICODE', 'CHAIN_MISMATCH', 'EXPIRED', 'HASH_MISMATCH',
-    'SIGNATURE_UNSUPPORTED', 'SIGNATURE_INVALID', 'SECRET_REFUSED', 'WALLET_SESSION_REFUSED', 'URL_REFUSED', 'INVALID_ENCODING', 'INVALID_JSON', 'NON_CANONICAL'])
+    'SIGNATURE_UNSUPPORTED', 'SIGNATURE_INVALID', 'SIGNATURE_REQUIRED', 'PROFILE_UNSUPPORTED', 'SECRET_REFUSED', 'WALLET_SESSION_REFUSED', 'URL_REFUSED',
+    'INVALID_ENCODING', 'INVALID_JSON', 'NON_CANONICAL'])
     assert.ok(codes.has(required), required);
   assert.ok(vectors.rejections.some(vector => vector.name.includes('wallet-session')) && vectors.rejections.some(vector => vector.name.includes('auth-token')));
   assert.deepEqual(vectors.replays[0].expectedCodes, [null, 'REPLAYED']);

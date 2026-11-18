@@ -19,7 +19,7 @@ import {
 } from '../../index.ts';
 import {
   NOW, CHAINS, EVM_CHAIN, OTHER_EVM_CHAIN, SOLANA_CHAIN, INPUTS, deps, sha256, hashHex, solanaKey, evmAddress,
-  TEST_PROFILE, TEST_PUBLIC_KEY, testSign, testVerifier,
+  TEST_PROFILE, TEST_PUBLIC_KEY, TEST_BOUND_AUTHOR, testSign, testVerifier, encodeDeps, adAddress,
 } from '../helpers.mjs';
 
 export const VECTORS_PATH = fileURLToPath(new URL('./vectors.json', import.meta.url));
@@ -201,9 +201,10 @@ function spliceText(tree, find, replacement) {
 async function build() {
   const baseContext = { now: DECODE_NOW, chains: [...CHAINS] };
   const verifierContext = { ...baseContext, verifierProfile: TEST_PROFILE };
+  const reviewOnlyContext = { ...verifierContext, requireInviteSignature: false };
   const envelopes = [], rejections = [];
   const addEnvelope = async (name, envelope, extra = {}) => {
-    const encoded = await encodeQrText(envelope, { sha256 });
+    const encoded = await encodeQrText(envelope, encodeDeps());
     if (!encoded.ok) throw new Error(`${name}: ${encoded.code}`);
     envelopes.push({
       name, type: envelope.type, text: encoded.text, envelopeBytes: encoded.envelopeBytes, withinGenerationTarget: encoded.withinGenerationTarget,
@@ -219,6 +220,8 @@ async function build() {
   await addEnvelope('trade-invite-signed-no-verifier', signed.envelope, { context: baseContext, authenticated: false, signingDigestHex: signed.digest });
   const largest = await sizedInvite(MAX_ENVELOPE_BYTES);
   await addEnvelope('largest-permitted-envelope-2048', largest, { context: baseContext, authenticated: false });
+  await addEnvelope('public-address-www-origin-hint', await envelopeFor('public-address', 'www', { originHint: 'www.offramp.example' }), { context: baseContext, authenticated: false });
+  await addEnvelope('trade-invite-unsigned-review-only', await envelopeFor('trade-invite', 'review-only'), { context: reviewOnlyContext, authenticated: false });
 
   const reject = (name, value, expectedCode, layer, context = baseContext) => rejections.push({ name, text: value, expectedCode, layer, context });
   const address = plain(await envelopeFor('public-address', 'reject-address'));
@@ -271,7 +274,7 @@ async function build() {
   reject('secret-value-nsec', treeText({ ...address, payload: { address: `nsec1${'q'.repeat(58)}` } }), 'SECRET_REFUSED', 'secret');
   reject('secret-value-0x-private-key', treeText({ ...address, payload: { address: `0x${hashHex('not-a-real-key')}` } }), 'SECRET_REFUSED', 'secret');
   reject('url-payload-address', treeText({ ...address, payload: { address: 'https://offramp.example/a' } }), 'URL_REFUSED', 'url');
-  reject('url-origin-hint', treeText({ ...address, originHint: 'https://offramp.example' }), 'URL_REFUSED', 'url');
+  reject('url-origin-hint-is-not-a-hostname', treeText({ ...address, originHint: 'https://offramp.example' }), 'INVALID_ENVELOPE', 'schema');
   // Chain, hash, clock and signature.
   reject('chain-not-in-registry', treeText({ ...address, chain: 'evm:999' }), 'CHAIN_UNSUPPORTED', 'chain');
   reject('wrong-chain', treeText(address), 'CHAIN_MISMATCH', 'chain', { ...baseContext, expectedChain: OTHER_EVM_CHAIN });
@@ -283,6 +286,19 @@ async function build() {
   reject('signature-copied-to-payment-request', treeText({ ...payment, signature: signedPlain.signature }), 'SIGNATURE_UNSUPPORTED', 'signature');
   reject('signature-copied-to-other-invite', treeText({ ...invite, signature: signedPlain.signature }), 'SIGNATURE_INVALID', 'signature', verifierContext);
   reject('signed-invite-expiry-extended', treeText({ ...signedPlain, expiresAt: signedPlain.expiresAt + 60 }), 'SIGNATURE_INVALID', 'signature', verifierContext);
+  const { signature: _stripped, ...strippedPlain } = signedPlain;
+  reject('stripped-signature-with-verifier', treeText(strippedPlain), 'SIGNATURE_REQUIRED', 'signature', verifierContext);
+  reject('unknown-profile-with-verifier', treeText({ ...signedPlain, signature: { ...signedPlain.signature, profile: 'other-profile' } }), 'PROFILE_UNSUPPORTED', 'signature', verifierContext);
+  reject('signature-wrong-size-for-profile', treeText({ ...signedPlain, signature: { ...signedPlain.signature, value: `${signedPlain.signature.value}00` } }), 'SIGNATURE_INVALID', 'signature', verifierContext);
+  const foreign = await envelopeFor('trade-invite', 'foreign-author', { payload: { ...INPUTS['trade-invite'].payload, ad: adAddress(hashHex('qr-other-seller'), hashHex('qr-order')) } });
+  const foreignDigest = await inviteSigningDigest(foreign, sha256);
+  reject('key-not-bound-to-advert-author', treeText({ ...plain(foreign), signature: { profile: TEST_PROFILE, publicKey: TEST_PUBLIC_KEY, value: testSign(foreignDigest.digest) } }), 'SIGNATURE_INVALID', 'signature', verifierContext);
+  const release = plain(await envelopeFor('release-fingerprint', 'reject-release-secret'));
+  const rawKey = hashHex('not-a-real-release-key'), wifLike = `${solanaKey('wif-a')}${solanaKey('wif-b')}`.slice(0, 51);
+  reject('secret-release-id-hex-key', treeText({ ...release, payload: { ...release.payload, releaseId: `${rawKey.slice(0, 32)}.${rawKey.slice(32)}` } }), 'SECRET_REFUSED', 'secret');
+  reject('secret-release-id-hyphenated-wif', treeText({ ...release, payload: { ...release.payload, releaseId: `${wifLike.slice(0, 25)}-${wifLike.slice(25)}` } }), 'SECRET_REFUSED', 'secret');
+  reject('secret-uppercase-mnemonic', treeText({ ...address, payload: { address: 'ABANDON ABILITY ABLE ABOUT ABOVE ABSENT ABSORB ABSTRACT ABSURD ABUSE ACCESS ACCIDENT' } }), 'SECRET_REFUSED', 'secret');
+  reject('secret-comma-mnemonic', treeText({ ...address, payload: { address: 'abandon,ability,able,about,above,absent,absorb,abstract,absurd,abuse,access,accident' } }), 'SECRET_REFUSED', 'secret');
   // Replay: the second admission of the same code through one local ledger.
   const replayed = [{ name: 'replayed-invite', text: treeText(invite), expectedCodes: [null, 'REPLAYED'], layer: 'ledger', context: baseContext }];
 
@@ -290,6 +306,7 @@ async function build() {
   const decodeWith = (value, ctx) => decodeQrText(value, {
     sha256, nowSeconds: () => ctx.now, chains: ctx.chains, ...(ctx.expectedChain ? { expectedChain: ctx.expectedChain } : {}),
     ...(ctx.verifierProfile ? { inviteVerifier: testVerifier() } : {}),
+    ...(ctx.requireInviteSignature === undefined ? {} : { requireInviteSignature: ctx.requireInviteSignature }),
   });
   for (const vector of envelopes) {
     const result = await decodeWith(vector.text, vector.context);
@@ -329,7 +346,9 @@ async function build() {
         inviteSigningDomain: INVITE_SIGNING_DOMAIN, expirySafetyMarginSeconds: EXPIRY_SAFETY_MARGIN_SECONDS, maxFutureSkewSeconds: MAX_FUTURE_SKEW_SECONDS,
       },
       testOnlyInviteProfile: {
-        profile: TEST_PROFILE, publicKey: TEST_PUBLIC_KEY, hmacKeyDerivation: 'SHA-256("qr-test-only-hmac-key")', signature: 'HMAC-SHA-256(key, signingDigest)',
+        profile: TEST_PROFILE, publicKey: TEST_PUBLIC_KEY, publicKeyBytes: 32, signatureBytes: 32, boundAuthor: TEST_BOUND_AUTHOR,
+        hmacKeyDerivation: 'SHA-256("qr-test-only-hmac-key")', signature: 'HMAC-SHA-256(key, signingDigest)',
+        binding: 'The verifier attests boundTo == advertisement author; the test key is bound to boundAuthor only.',
         note: 'Exercises the injected verifier interface only. Not a proposal for the open invite signing-key profile.',
       },
       contentSha256: hexOf(createHash('sha256').update(canonicalBytes(vectors)).digest()),

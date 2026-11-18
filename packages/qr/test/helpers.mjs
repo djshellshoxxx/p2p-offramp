@@ -52,13 +52,17 @@ export const context = (extra = {}) => ({ sha256, nowSeconds: () => NOW + 5, cha
 export const TEST_PROFILE = 'test-hmac-sha256';
 const TEST_KEY = Buffer.from(hashHex('qr-test-only-hmac-key'), 'hex');
 export const TEST_PUBLIC_KEY = hashHex('qr-test-only-key-id');
+/** The advertisement author the test key is bound to (the author of INPUTS['trade-invite']). */
+export const TEST_BOUND_AUTHOR = hashHex('qr-seller');
 export const testSign = digest => createHmac('sha256', TEST_KEY).update(digest).digest('hex');
-export function testVerifier(calls = []) {
+export function testVerifier(calls = [], { boundAuthor = TEST_BOUND_AUTHOR } = {}) {
   return {
-    profile: TEST_PROFILE,
-    async verify({ digest, signature, invite, chain }) {
-      calls.push({ digest: Buffer.from(digest).toString('hex'), invite, chain });
-      return signature.publicKey === TEST_PUBLIC_KEY && signature.value === testSign(digest);
+    profile: TEST_PROFILE, publicKeyBytes: 32, signatureBytes: 32,
+    async verify({ digest, signature, binding }) {
+      calls.push({ digest: Buffer.from(digest).toString('hex'), binding });
+      const valid = signature.publicKey === TEST_PUBLIC_KEY && signature.value === testSign(digest);
+      return valid && binding.author === boundAuthor ? { ok: true, boundTo: binding.author } : { ok: false };
     },
   };
 }
+export const encodeDeps = (now = NOW) => ({ sha256, nowSeconds: () => now });

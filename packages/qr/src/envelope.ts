@@ -47,6 +47,7 @@ export type QrErrorCode =
   | 'VERSION_UNSUPPORTED' | 'INVALID_ENCODING' | 'INVALID_UNICODE' | 'INVALID_JSON' | 'NON_CANONICAL'
   | 'PROTOCOL_UNSUPPORTED' | 'TYPE_UNSUPPORTED' | 'FIELD_UNSUPPORTED' | 'INVALID_ENVELOPE' | 'INVALID_PAYLOAD'
   | 'CHAIN_UNSUPPORTED' | 'CHAIN_MISMATCH' | 'HASH_MISMATCH' | 'SIGNATURE_UNSUPPORTED' | 'SIGNATURE_INVALID'
+  | 'SIGNATURE_REQUIRED' | 'PROFILE_UNSUPPORTED'
   | 'EXPIRED' | 'NOT_YET_VALID' | 'LIFETIME_EXCEEDED' | 'INVALID_INPUT' | 'UNAVAILABLE'
   | 'REPLAYED' | 'REPLAY_LEDGER_FULL';
 export type QrFailure = { readonly ok: false; readonly code: QrErrorCode };
@@ -113,7 +114,7 @@ const CHAIN = /^(?:evm:[1-9][0-9]{0,19}|solana:[1-9A-HJ-NP-Za-km-z]{32,44})$/;
 /** Mirrors packages/exchange parseAdAddress: `30078:<author>:p2p-offramp:v1:<orderId>`. */
 const AD = /^30078:([0-9a-f]{64}):p2p-offramp:v1:([0-9a-f]{64})$/;
 const AMOUNT = /^[1-9][0-9]{0,77}$/;
-const CHANNEL = /^[a-z0-9][a-z0-9._-]{0,63}$/, RELEASE_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+const CHANNEL = /^[a-z0-9][a-z0-9._-]{0,63}$/, RELEASE_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,39}$/;
 const PROFILE = /^[a-z0-9][a-z0-9.-]{0,63}$/;
 const HOST_LABEL = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 const MAX_PUBLIC_KEY_HEX = 256, MAX_SIGNATURE_HEX = 2048;
@@ -157,8 +158,8 @@ export function parseAdReference(ad: string): { readonly author: string; readonl
 // ---------------------------------------------------------------------------------------------------------------
 // Secret and URL refusal. This runs over every key and string value before any schema check, so a secret-bearing
 // field gets SECRET_REFUSED rather than a generic unknown-field error. It is defense in depth: the exact-key schemas
-// below already admit no free-text field. A raw 32-byte hex secret is indistinguishable from a hash and is excluded
-// only by those schemas (hashes are the sole bare-hex fields).
+// below admit no free-text field. A raw 32-byte hex secret is indistinguishable from a hash in a hash slot and is
+// excluded there only by those schemas; in the few text slots (originHint, channel, releaseId) it is refused here.
 const SECRET_KEY_NAME = /seed|mnemonic|private|secret|nsec|xprv|xpriv|tprv|wif|passw|passphrase|token|auth|session|bearer|apikey|cookie|jwt|credential|keystore|entropy|privkey|walletconnect|symkey/;
 const SECRET_VALUE = [
   /(?:^|[^A-Za-z0-9])wc:/i,                                       // WalletConnect pairing/session URI
@@ -172,31 +173,50 @@ const SECRET_VALUE = [
   /(?:^|[?&#;\s])(?:access|refresh|id|auth|session|api)[_-]?(?:token|key)\s*[=:]/i,
   /(?:^|[?&#;\s])(?:token|secret|password|passwd|sessionid|sid|apikey)\s*[=:]/i,
   /0x[0-9a-fA-F]{64}(?![0-9a-fA-F])/,                             // 32-byte key in 0x-hex form
-  /^\s*[a-z]{3,8}(?:\s+[a-z]{3,8}){11,}\s*$/,                     // BIP-39-like mnemonic (12+ words)
 ];
 /** WIF keys, base58 Solana secret keys and serialized extended keys are all longer base58 runs than any public field. */
 const LONG_BASE58 = /^[1-9A-HJ-NP-Za-km-z]{50,}$/, LOWER_HEX = /^[0-9a-f]+$/;
 const URL_LIKE = [/^[A-Za-z][A-Za-z0-9+.-]*:/, /:\/\//, /^\/\//, /^www\./i];
+/** Slots with their own strict syntax where a scheme-like or `www.` value is legitimate. */
+const URL_EXEMPT_SLOTS = new Set(['chain', 'originHint']);
+/** The only slots that hold short free-form identifiers; secrets split by separators are looked for here. */
+const TEXT_SLOTS = new Set(['originHint', 'payload.channel', 'payload.releaseId']);
+const SEPARATORS = /[\s,;:|/._-]+/g;
 
+/** 12 or more alphabetic words of 3-8 letters in any case, separated by spaces, commas, hyphens, dots and similar. */
+function isMnemonicLike(value: string): boolean {
+  const words = value.split(SEPARATORS).filter(word => word.length > 0);
+  return words.length >= 12 && words.every(word => /^[A-Za-z]{3,8}$/.test(word));
+}
 export function isSecretKeyName(key: string): boolean { return SECRET_KEY_NAME.test(key.toLowerCase().replace(/[^a-z0-9]/g, '')); }
 export function isSecretLike(value: string): boolean {
-  return SECRET_VALUE.some(pattern => pattern.test(value)) || (LONG_BASE58.test(value) && !LOWER_HEX.test(value));
+  return SECRET_VALUE.some(pattern => pattern.test(value)) || (LONG_BASE58.test(value) && !LOWER_HEX.test(value)) || isMnemonicLike(value);
+}
+/**
+ * Text-slot check: removes separators first, so a hyphenated WIF key, bare NIP-19/bech32 key data or a hex key split
+ * into labels is still recognised. 16+ bytes of hex, or 50+ base58/bech32 characters, never belong in these slots.
+ */
+export function isSecretLikeText(value: string): boolean {
+  const compact = value.replace(SEPARATORS, '');
+  return isSecretLike(value) || isSecretLike(compact) || /[0-9a-fA-F]{32,}/.test(compact)
+    || /^[1-9A-HJ-NP-Za-km-z]{50,}$/.test(compact) || /^[02-9ac-hj-np-z]{50,}$/i.test(compact);
 }
 export function isUrlLike(value: string): boolean { return URL_LIKE.some(pattern => pattern.test(value)); }
 
-function scanTree(value: JsonValue, depth: number, chainSlot: boolean): void {
+function scanTree(value: JsonValue, depth: number, path: string): void {
   if (typeof value === 'string') {
-    if (isSecretLike(value)) refuse('SECRET_REFUSED');
-    // The chain slot is exempt: chain ids are scheme-like (`evm:1`) and the slot has its own strict syntax check.
-    if (!chainSlot && isUrlLike(value)) refuse('URL_REFUSED');
+    if (TEXT_SLOTS.has(path) ? isSecretLikeText(value) : isSecretLike(value)) refuse('SECRET_REFUSED');
+    // chain and originHint are exempt: chain ids are scheme-like (`evm:1`), a hostname may start with `www.`, and both
+    // slots have their own strict syntax checks.
+    if (!URL_EXEMPT_SLOTS.has(path) && isUrlLike(value)) refuse('URL_REFUSED');
     return;
   }
   if (value === null || typeof value !== 'object') return;
   if (depth > MAX_ENVELOPE_DEPTH) refuse('INVALID_JSON');
-  if (Array.isArray(value)) { for (const item of value as readonly JsonValue[]) scanTree(item, depth + 1, false); return; }
+  if (Array.isArray(value)) { for (const item of value as readonly JsonValue[]) scanTree(item, depth + 1, `${path}[]`); return; }
   for (const key of Object.keys(value)) {
     if (isSecretKeyName(key) || isSecretLike(key)) refuse('SECRET_REFUSED');
-    scanTree((value as Record<string, JsonValue>)[key] as JsonValue, depth + 1, depth === 0 && key === 'chain');
+    scanTree((value as Record<string, JsonValue>)[key] as JsonValue, depth + 1, path === '' ? key : `${path}.${key}`);
   }
 }
 
@@ -279,7 +299,7 @@ function parseSignature(raw: JsonValue): InviteSignature {
  */
 export function validateEnvelopeTree(tree: JsonValue): QrEnvelope {
   const raw = record(tree, 'INVALID_ENVELOPE');
-  scanTree(raw, 0, false);
+  scanTree(raw, 0, '');
   if (raw.protocol !== QR_PROTOCOL) return refuse('PROTOCOL_UNSUPPORTED');
   if (raw.v !== QR_ENVELOPE_VERSION) return refuse('VERSION_UNSUPPORTED');
   const type = raw.type;
@@ -416,7 +436,7 @@ export async function createQrEnvelope(input: CreateQrEnvelopeInput, deps: Creat
       if (lifetime > MAX_INVITE_LIFETIME_SECONDS) return failure('LIFETIME_EXCEEDED');
     }
     // Scan the caller payload before hashing so a secret never reaches the hash provider.
-    scanTree(fields, 0, false);
+    scanTree(fields, 0, '');
     const payloadSha256 = await payloadDigestHex(deps.sha256, fields.payload);
     const tree = normalizeTree({
       protocol: QR_PROTOCOL, v: QR_ENVELOPE_VERSION, type: fields.type, requestId: hex(random), createdAt: now,

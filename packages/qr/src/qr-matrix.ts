@@ -304,6 +304,32 @@ function segment(text: string): { readonly mode: QrSegmentMode; readonly bits: n
   return { mode: 'byte', bits, count: bytes.length };
 }
 
+type Segment = NonNullable<ReturnType<typeof segment>>;
+const fits = (seg: Segment, version: number, level: QrEcLevel): boolean =>
+  seg.count < 2 ** countBits(seg.mode, version) && 4 + countBits(seg.mode, version) + seg.bits.length <= dataCodewords(version, level) * 8;
+
+/** Mode indicator, character count, data, terminator, bit padding and 0xEC/0x11 pad codewords. */
+function segmentCodewords(seg: Segment, version: number, level: QrEcLevel): Uint8Array {
+  const capacityBits = dataCodewords(version, level) * 8, bits: number[] = [];
+  const push = (value: number, width: number): void => { for (let i = width - 1; i >= 0; i--) bits.push((value >>> i) & 1); };
+  push(seg.mode === 'alphanumeric' ? 0b0010 : 0b0100, 4);
+  push(seg.count, countBits(seg.mode, version));
+  bits.push(...seg.bits);
+  push(0, Math.min(4, capacityBits - bits.length));
+  push(0, (8 - (bits.length % 8)) % 8);
+  for (let pad = 0xec; bits.length < capacityBits; pad ^= 0xec ^ 0x11) push(pad, 8);
+  const data = new Uint8Array(capacityBits / 8);
+  for (let i = 0; i < bits.length; i++) data[i >> 3] = (data[i >> 3] as number) | ((bits[i] as number) << (7 - (i & 7)));
+  return data;
+}
+
+/** The data codewords (before error correction) for `text` in a given version and level, or null if it does not fit. */
+export function qrDataCodewords(text: string, version: number, level: QrEcLevel): Uint8Array | null {
+  if (typeof text !== 'string' || !Number.isSafeInteger(version) || version < MIN_QR_VERSION || version > MAX_QR_VERSION || !QR_EC_LEVELS.includes(level)) return null;
+  const seg = segment(text);
+  return seg !== null && fits(seg, version, level) ? segmentCodewords(seg, version, level) : null;
+}
+
 /**
  * Encodes `text` as one QR symbol: a single alphanumeric segment when every character is in the QR alphanumeric
  * set (as P2POFFRAMP codes are), otherwise one UTF-8 byte segment. Chooses the smallest fitting version.
@@ -317,20 +343,9 @@ export function encodeQrMatrix(text: string, options: QrMatrixOptions = {}): QrM
   const seg = segment(text);
   if (seg === null) return Object.freeze({ ok: false, code: 'INVALID_INPUT' });
   let version = minVersion;
-  for (; version <= maxVersion; version++) {
-    if (seg.count < 2 ** countBits(seg.mode, version) && 4 + countBits(seg.mode, version) + seg.bits.length <= dataCodewords(version, level) * 8) break;
-  }
+  for (; version <= maxVersion; version++) if (fits(seg, version, level)) break;
   if (version > maxVersion) return Object.freeze({ ok: false, code: 'QR_TOO_LARGE' });
-  const capacityBits = dataCodewords(version, level) * 8, bits: number[] = [];
-  const push = (value: number, width: number): void => { for (let i = width - 1; i >= 0; i--) bits.push((value >>> i) & 1); };
-  push(seg.mode === 'alphanumeric' ? 0b0010 : 0b0100, 4);
-  push(seg.count, countBits(seg.mode, version));
-  bits.push(...seg.bits);
-  push(0, Math.min(4, capacityBits - bits.length));
-  push(0, (8 - (bits.length % 8)) % 8);
-  for (let pad = 0xec; bits.length < capacityBits; pad ^= 0xec ^ 0x11) push(pad, 8);
-  const data = new Uint8Array(capacityBits / 8);
-  for (let i = 0; i < bits.length; i++) data[i >> 3] = (data[i >> 3] as number) | ((bits[i] as number) << (7 - (i & 7)));
+  const data = segmentCodewords(seg, version, level);
 
   const grid = new Grid(version * 4 + 17);
   drawFunctionPatterns(grid, version, level);

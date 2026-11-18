@@ -14,7 +14,7 @@ export {
   DEFAULT_INVITE_LIFETIME_SECONDS, MIN_INVITE_LIFETIME_SECONDS, MAX_INVITE_LIFETIME_SECONDS, EXPIRY_SAFETY_MARGIN_SECONDS,
   MAX_FUTURE_SKEW_SECONDS, MAX_TIMESTAMP_SECONDS, INVITE_SIGNING_DOMAIN, RECOVERY_FINGERPRINT_FORMATS,
   createQrEnvelope, parseQrEnvelope, attachInviteSignature, inviteSigningDigest, inviteSigningMessage, envelopeBytes,
-  payloadDigestHex, parseAdReference, isQrChain, chainFamily, isOriginHint, isSecretKeyName, isSecretLike, isUrlLike,
+  payloadDigestHex, parseAdReference, isQrChain, chainFamily, isOriginHint, isSecretKeyName, isSecretLike, isSecretLikeText, isUrlLike,
 } from './src/envelope.ts';
 export type {
   QrType, QrErrorCode, QrFailure, QrEnvelope, QrEnvelopeOf, QrPayloads, PublicAddressPayload, PaymentRequestPayload,
@@ -22,14 +22,14 @@ export type {
   Sha256, ChainFamily, CreateQrEnvelopeInput, CreateQrEnvelopeDeps, QrEnvelopeResult,
 } from './src/envelope.ts';
 export { QR_TEXT_PREFIX, QR_TEXT_PREFIX_FAMILY, MAX_QR_TEXT_LENGTH, decodeQrText, encodeQrText, qrTextToBytes } from './src/text-codec.ts';
-export type { InviteVerifier, QrDecodeContext, QrDecodeResult, QrBytesResult, QrEncodeResult } from './src/text-codec.ts';
+export type { InviteVerifier, InviteBinding, InviteVerdict, QrDecodeContext, QrDecodeResult, QrBytesResult, QrEncodeResult } from './src/text-codec.ts';
 export {
   createReplayLedger, isQrImportReview, groupForDisplay, groupDigits,
-  DEFAULT_REPLAY_LEDGER_ENTRIES, MAX_REPLAY_LEDGER_ENTRIES, DEFAULT_REPLAY_RETENTION_SECONDS,
+  DEFAULT_REPLAY_LEDGER_ENTRIES, MAX_REPLAY_LEDGER_ENTRIES, DEFAULT_REPLAY_RETENTION_SECONDS, MAX_REPLAY_RETENTION_SECONDS,
 } from './src/review.ts';
 export type { QrImportReview, QrImportReviewOf, QrWarning, QrDisplayField, ReplayLedger, ReplayLedgerOptions, ReplayAdmitResult } from './src/review.ts';
 export {
-  encodeQrMatrix, renderQrSvg, qrCapacity, dataCodewords, rawDataModules, alignmentPositions, formatInformation, versionInformation,
+  encodeQrMatrix, renderQrSvg, qrCapacity, qrDataCodewords, dataCodewords, rawDataModules, alignmentPositions, formatInformation, versionInformation,
   reedSolomonGenerator, reedSolomonRemainder, penaltyScore, QR_EC_LEVELS, DEFAULT_QR_EC_LEVEL, MIN_QR_VERSION, MAX_QR_VERSION, MIN_QUIET_ZONE_MODULES,
 } from './src/qr-matrix.ts';
 export type { QrEcLevel, QrSegmentMode, QrMatrix, QrMatrixResult, QrMatrixErrorCode, QrMatrixOptions, QrSvgOptions } from './src/qr-matrix.ts';

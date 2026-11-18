@@ -6,8 +6,8 @@ import {
   QR_TEXT_PREFIX, MAX_QR_TEXT_LENGTH, MAX_ENVELOPE_BYTES, GENERATION_TARGET_BYTES, EXPIRY_SAFETY_MARGIN_SECONDS, MAX_FUTURE_SKEW_SECONDS,
 } from '../index.ts';
 import {
-  INPUTS, NOW, CHAINS, EVM_CHAIN, OTHER_EVM_CHAIN, deps, context, sha256, hashHex, evmAddress,
-  TEST_PROFILE, TEST_PUBLIC_KEY, testSign, testVerifier,
+  INPUTS, NOW, CHAINS, EVM_CHAIN, OTHER_EVM_CHAIN, deps, context, sha256, hashHex, evmAddress, adAddress, encodeDeps,
+  TEST_PROFILE, TEST_PUBLIC_KEY, TEST_BOUND_AUTHOR, testSign, testVerifier,
 } from './helpers.mjs';
 
 const plain = value => JSON.parse(canonicalize(value));
@@ -16,7 +16,7 @@ const treeText = tree => rawText(canonicalBytes(tree));
 async function make(type, label = type, change = {}) {
   const created = await createQrEnvelope({ ...INPUTS[type], ...change }, deps(`codec/${label}`));
   assert.equal(created.ok, true, `${label}: ${created.code}`);
-  const encoded = await encodeQrText(created.envelope, { sha256 });
+  const encoded = await encodeQrText(created.envelope, encodeDeps());
   assert.equal(encoded.ok, true, `${label}: ${encoded.code}`);
   return { envelope: created.envelope, text: encoded.text, encoded };
 }
@@ -24,7 +24,7 @@ async function signed(label = 'signed') {
   const { envelope } = await make('trade-invite', label);
   const digest = await inviteSigningDigest(envelope, sha256);
   const result = attachInviteSignature(envelope, { profile: TEST_PROFILE, publicKey: TEST_PUBLIC_KEY, value: testSign(digest.digest) });
-  const encoded = await encodeQrText(result.envelope, { sha256 });
+  const encoded = await encodeQrText(result.envelope, encodeDeps());
   return { envelope: result.envelope, text: encoded.text, digest: digest.digest };
 }
 const decode = (text, extra) => decodeQrText(text, context(extra));
@@ -90,14 +90,14 @@ test('largest permitted envelope: exactly 2,048 canonical bytes decodes; one mor
   };
   const largest = sized(MAX_ENVELOPE_BYTES);
   assert.equal(canonicalBytes(largest).length, 2048);
-  const encoded = await encodeQrText(largest, { sha256 });
+  const encoded = await encodeQrText(largest, encodeDeps());
   assert.equal(encoded.ok, true); assert.equal(encoded.envelopeBytes, 2048); assert.equal(encoded.withinGenerationTarget, false);
   assert.equal(encoded.text.length, MAX_QR_TEXT_LENGTH);
   const result = await decode(encoded.text);
   assert.equal(result.ok, true); assert.equal(result.review.envelopeBytes, 2048);
   assert.equal(result.review.signature, 'unverified'); assert.ok(result.review.warnings.includes('no-invite-verifier'));
   const over = sized(MAX_ENVELOPE_BYTES + 2);
-  assert.equal((await encodeQrText(over, { sha256 })).code, 'QR_TOO_LARGE');
+  assert.equal((await encodeQrText(over, encodeDeps())).code, 'QR_TOO_LARGE');
   await refused(treeText(over), 'QR_TOO_LARGE');
 });
 
@@ -196,7 +196,7 @@ test('expired invite (with safety margin), future-dated codes, and commit-time e
   assert.equal(ledger.admit(review).code, 'EXPIRED', 'expiry is re-checked when the import is committed');
 });
 
-test('replayed invite is refused by the local ledger; memory is bounded and live entries are never evicted', async () => {
+test('replayed invite is refused by the local ledger; memory is bounded', async () => {
   const { text } = await make('trade-invite', 'replay');
   let now = NOW + 5;
   const ledger = createReplayLedger({ nowSeconds: () => now, maxEntries: 2 });
@@ -209,18 +209,47 @@ test('replayed invite is refused by the local ledger; memory is bounded and live
   const other = (await decode((await make('trade-invite', 'replay-2')).text)).review;
   const third = (await decode((await make('trade-invite', 'replay-3')).text)).review;
   assert.equal(ledger.admit(other).ok, true);
-  assert.equal(ledger.admit(third).code, 'REPLAY_LEDGER_FULL', 'a full ledger refuses rather than forgetting a live code');
+  assert.equal(ledger.admit(third).ok, true, 'unauthenticated entries are evicted oldest-first when full');
   assert.equal(ledger.size, 2);
-  now = first.review.expiresAt + MAX_FUTURE_SKEW_SECONDS;
+  assert.equal(ledger.seen(first.review.requestId), false);
+  now = third.expiresAt + MAX_FUTURE_SKEW_SECONDS;
   assert.equal(ledger.size, 2);
-  assert.equal(ledger.seen(first.review.requestId), false, 'entries retire after expiry plus skew');
+  assert.equal(ledger.seen(third.requestId), false, 'entries retire after expiry plus skew');
   assert.equal(ledger.size, 0);
   assert.equal(ledger.admit({ ...first.review }).code, 'INVALID_INPUT', 'only reviews issued by the decoder are admitted');
   const broken = createReplayLedger({ nowSeconds: () => { throw new Error('clock'); } });
   assert.equal(broken.seen(first.review.requestId), true, 'an unusable clock fails closed');
   assert.equal(broken.admit(first.review).code, 'UNAVAILABLE');
   assert.throws(() => createReplayLedger({ nowSeconds: () => now, maxEntries: 0 }));
+  assert.throws(() => createReplayLedger({ nowSeconds: () => now, retentionSeconds: 86_401 }), RangeError, 'retention is capped at 24 h');
   assert.throws(() => createReplayLedger({}));
+});
+
+test('far-future unsigned codes cannot lock a valid signed invite out of the ledger', async () => {
+  let now = NOW + 5;
+  const ledger = createReplayLedger({ nowSeconds: () => now, maxEntries: 2 });
+  const flood = async label => (await decode((await make('public-address', label, { lifetimeSeconds: 10 * 365 * 86_400 })).text)).review;
+  const a = await flood('flood-a'), b = await flood('flood-b');
+  assert.ok(a.expiresAt - now > 300 * 86_400, 'sender-chosen far-future expiry');
+  assert.equal(ledger.admit(a).ok, true); assert.equal(ledger.admit(b).ok, true);
+  const invite = await signed('protected');
+  const verified = (await decode(invite.text, { inviteVerifier: testVerifier() })).review;
+  assert.equal(verified.authenticated, true);
+  assert.deepEqual(ledger.admit(verified), { ok: true }, 'a full ledger of unsigned codes does not block a verified invite');
+  for (let index = 0; index < 5; index++) assert.equal(ledger.admit(await flood(`flood-more-${index}`)).ok, true);
+  assert.equal(ledger.admit((await decode(invite.text, { inviteVerifier: testVerifier() })).review).code, 'REPLAYED', 'the verified invite was never evicted');
+  // Unsigned far-future entries are forgotten after the retention cap, not at their sender-chosen expiry.
+  const solo = createReplayLedger({ nowSeconds: () => now });
+  assert.equal(solo.admit(a).ok, true);
+  now += 86_400 + MAX_FUTURE_SKEW_SECONDS - 1;
+  assert.equal(solo.seen(a.requestId), true);
+  now += 1;
+  assert.equal(solo.seen(a.requestId), false);
+  // When every entry is a live verified invite, admission refuses instead of evicting one.
+  now = NOW + 5;
+  const tight = createReplayLedger({ nowSeconds: () => now, maxEntries: 1 });
+  assert.equal(tight.admit(verified).ok, true);
+  assert.equal(tight.admit(await flood('flood-tight')).code, 'REPLAY_LEDGER_FULL');
 });
 
 test('codes without expiry are remembered for the retention window', async () => {
@@ -251,18 +280,78 @@ test('only a trade invite is authenticated, and only through an injected verifie
   assert.equal(verified.review.warnings.includes('unauthenticated') || verified.review.warnings.includes('expiry-advisory'), false);
   assert.equal(calls.length, 1);
   assert.equal(calls[0].digest, Buffer.from(invite.digest).toString('hex'));
-  assert.equal(calls[0].chain, EVM_CHAIN);
-  const other = { profile: 'other-profile', verify: async () => true };
-  const unknown = await decode(invite.text, { inviteVerifier: other });
-  assert.equal(unknown.review.authenticated, false);
-  assert.ok(unknown.review.warnings.includes('signature-profile-unknown'));
-  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: { profile: TEST_PROFILE, verify: async () => false } });
-  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: { profile: TEST_PROFILE, verify: async () => 1 } });
-  await refused(invite.text, 'UNAVAILABLE', { inviteVerifier: { profile: TEST_PROFILE, verify: async () => { throw new Error('x'); } } });
-  await refused(invite.text, 'INVALID_INPUT', { inviteVerifier: { verify: async () => true } });
-  const unsigned = await decode((await make('trade-invite', 'unsigned')).text, { inviteVerifier: testVerifier() });
-  assert.equal(unsigned.review.authenticated, false);
-  assert.ok(unsigned.review.warnings.includes('unsigned-invite'));
+  assert.deepEqual({ ...calls[0].binding }, {
+    ad: invite.envelope.payload.ad, author: TEST_BOUND_AUTHOR, orderId: hashHex('qr-order'), termsHash: invite.envelope.payload.termsHash,
+    chain: EVM_CHAIN, requestId: invite.envelope.requestId, createdAt: invite.envelope.createdAt, expiresAt: invite.envelope.expiresAt,
+    originHint: invite.envelope.originHint,
+  });
+  assert.equal(Object.isFrozen(calls[0].binding), true);
+  const sized = verify => ({ profile: TEST_PROFILE, publicKeyBytes: 32, signatureBytes: 32, verify });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: false })) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => 1) });
+  await refused(invite.text, 'UNAVAILABLE', { inviteVerifier: sized(async () => { throw new Error('x'); }) });
+  for (const bad of [{ verify: async () => true }, { profile: TEST_PROFILE, verify: async () => true }, { ...sized(async () => true), signatureBytes: 0 }, { ...sized(async () => true), publicKeyBytes: 129 }])
+    await refused(invite.text, 'INVALID_INPUT', { inviteVerifier: bad });
+  await refused(invite.text, 'INVALID_INPUT', { requireInviteSignature: true });
+  await refused(invite.text, 'INVALID_INPUT', { inviteVerifier: testVerifier(), requireInviteSignature: 'yes' });
+});
+
+test('with a verifier, a stripped or relabelled invite signature is refused, not downgraded', async () => {
+  const invite = await signed('strip');
+  const { signature: _removed, ...stripped } = plain(invite.envelope);
+  await refused(treeText(stripped), 'SIGNATURE_REQUIRED', { inviteVerifier: testVerifier() });
+  await refused((await make('trade-invite', 'unsigned')).text, 'SIGNATURE_REQUIRED', { inviteVerifier: testVerifier() });
+  const relabelled = { ...plain(invite.envelope), signature: { ...plain(invite.envelope.signature), profile: 'other-profile' } };
+  await refused(treeText(relabelled), 'PROFILE_UNSUPPORTED', { inviteVerifier: testVerifier() });
+  // Opting out keeps the review-only behaviour; without a verifier nothing changes.
+  const reviewOnly = await decode(treeText(stripped), { inviteVerifier: testVerifier(), requireInviteSignature: false });
+  assert.equal(reviewOnly.review.authenticated, false); assert.ok(reviewOnly.review.warnings.includes('unsigned-invite'));
+  const unknown = await decode(treeText(relabelled), { inviteVerifier: testVerifier(), requireInviteSignature: false });
+  assert.equal(unknown.review.authenticated, false); assert.ok(unknown.review.warnings.includes('signature-profile-unknown'));
+  assert.equal((await decode(treeText(stripped))).review.authenticated, false);
+  assert.equal((await decode(treeText(relabelled))).review.signature, 'unverified');
+  // Non-invite types are unaffected by the requirement.
+  assert.equal((await decode((await make('public-address', 'not-invite')).text, { inviteVerifier: testVerifier() })).ok, true);
+});
+
+test('the verifier must attest the key-to-author binding, and signature sizes are fixed per profile', async () => {
+  const invite = await signed('binding');
+  const sized = verify => ({ profile: TEST_PROFILE, publicKeyBytes: 32, signatureBytes: 32, verify });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => true) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true })) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: sized(async () => ({ ok: true, boundTo: hashHex('someone-else') })) });
+  await refused(invite.text, 'SIGNATURE_INVALID', { inviteVerifier: testVerifier([], { boundAuthor: hashHex('someone-else') }) });
+  assert.equal((await decode(invite.text, { inviteVerifier: sized(async ({ binding }) => ({ ok: true, boundTo: binding.author })) })).review.authenticated, true);
+  // A valid MAC under the test key over an invite for another author still fails: the key is not bound to that author.
+  const foreign = (await createQrEnvelope({ ...INPUTS['trade-invite'], payload: { ...INPUTS['trade-invite'].payload, ad: adAddress(hashHex('qr-other-seller'), hashHex('qr-order')) } }, deps('codec/foreign'))).envelope;
+  const digest = (await inviteSigningDigest(foreign, sha256)).digest;
+  const signedForeign = attachInviteSignature(foreign, { profile: TEST_PROFILE, publicKey: TEST_PUBLIC_KEY, value: testSign(digest) }).envelope;
+  await refused(treeText(plain(signedForeign)), 'SIGNATURE_INVALID', { inviteVerifier: testVerifier() });
+  // Wrong sizes for the profile are refused before the verifier runs.
+  const calls = [];
+  for (const signature of [{ ...plain(invite.envelope.signature), value: `${invite.envelope.signature.value}00` }, { ...plain(invite.envelope.signature), publicKey: 'ab' }]) {
+    await refused(treeText({ ...plain(invite.envelope), signature }), 'SIGNATURE_INVALID', { inviteVerifier: testVerifier(calls) });
+  }
+  assert.equal(calls.length, 0);
+});
+
+test('encodeQrText refuses an envelope that is already expired, inside the margin, or future-dated', async () => {
+  const { envelope } = await make('trade-invite', 'encode-expiry');
+  assert.equal((await encodeQrText(envelope, encodeDeps(envelope.expiresAt - EXPIRY_SAFETY_MARGIN_SECONDS - 1))).ok, true);
+  assert.equal((await encodeQrText(envelope, encodeDeps(envelope.expiresAt - EXPIRY_SAFETY_MARGIN_SECONDS))).code, 'EXPIRED');
+  assert.equal((await encodeQrText(envelope, encodeDeps(envelope.expiresAt + 1))).code, 'EXPIRED');
+  assert.equal((await encodeQrText(envelope, encodeDeps(envelope.createdAt - MAX_FUTURE_SKEW_SECONDS - 1))).code, 'NOT_YET_VALID');
+  assert.equal((await encodeQrText(envelope, { sha256 })).code, 'INVALID_INPUT', 'a clock is required');
+  assert.equal((await encodeQrText(envelope, { sha256, nowSeconds: () => { throw new Error('clock'); } })).code, 'UNAVAILABLE');
+  const address = (await make('public-address', 'encode-no-expiry')).envelope;
+  assert.equal((await encodeQrText(address, encodeDeps(NOW + 10 * 365 * 86_400))).ok, true, 'codes without expiry stay encodable');
+});
+
+test('an originHint starting with www. is a hostname, not a URL', async () => {
+  const { text } = await make('public-address', 'www', { originHint: 'www.offramp.example' });
+  const result = await decode(text);
+  assert.equal(result.ok, true); assert.equal(result.review.originHint, 'www.offramp.example');
+  assert.ok(result.review.warnings.includes('origin-hint-display-only'));
 });
 
 test('a signature copied to another type, another invite or an altered invite fails', async () => {
@@ -301,7 +390,7 @@ test('URL codes and URL payloads are refused, never opened', async () => {
   for (const value of ['https://offramp.example/invite?id=1', 'HTTP://OFFRAMP.EXAMPLE', 'ethereum:0x0000000000000000000000000000000000000001@1?value=1', 'bitcoin:bc1qxyz', 'javascript:alert(1)'])
     await refused(value, 'URL_REFUSED');
   await refused(treeText({ ...plain(envelope), payload: { address: 'https://offramp.example' } }), 'URL_REFUSED');
-  await refused(treeText({ ...plain(envelope), originHint: 'https://offramp.example' }), 'URL_REFUSED');
+  await refused(treeText({ ...plain(envelope), originHint: 'https://offramp.example' }), 'INVALID_ENVELOPE', 'originHint has strict hostname syntax');
   await refused('HELLO WORLD', 'FORMAT_UNSUPPORTED');
   await refused('', 'FORMAT_UNSUPPORTED');
 });

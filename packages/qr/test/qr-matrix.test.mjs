@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  encodeQrMatrix, renderQrSvg, qrCapacity, dataCodewords, rawDataModules, alignmentPositions, formatInformation, versionInformation,
+  encodeQrMatrix, renderQrSvg, qrCapacity, qrDataCodewords, dataCodewords, rawDataModules, alignmentPositions, formatInformation, versionInformation,
   reedSolomonGenerator, reedSolomonRemainder, penaltyScore, QR_EC_LEVELS, QR_TEXT_PREFIX, MAX_QR_TEXT_LENGTH, encodeBase45,
 } from '../index.ts';
 
@@ -17,10 +17,19 @@ test('Reed-Solomon known answers: ISO/IEC 18004 Annex I (1-M) and "HELLO WORLD" 
   assert.equal(reedSolomonGenerator(10)[0], 1);
 });
 
-test('the "HELLO WORLD" 1-Q data codewords follow from alphanumeric segment encoding', () => {
+test('the "HELLO WORLD" 1-Q data codewords equal the published walkthrough values', () => {
+  const published = [32, 91, 11, 120, 209, 114, 220, 77, 67, 64, 236, 17, 236];
+  assert.deepEqual([...qrDataCodewords('HELLO WORLD', 1, 'Q')], published);
+  assert.equal(dataCodewords(1, 'Q'), 13);
   const { matrix } = encodeQrMatrix('HELLO WORLD', { ecLevel: 'Q' });
   assert.equal(matrix.version, 1); assert.equal(matrix.mode, 'alphanumeric'); assert.equal(matrix.size, 21);
-  assert.equal(dataCodewords(1, 'Q'), 13);
+  // Version 1 has a single block: the bottom-right column pair carries the first data codeword (0x20) upward.
+  const { rows } = encodeQrMatrix('HELLO WORLD', { ecLevel: 'Q', mask: 0 }).matrix;
+  const unmask = (x, y) => Number(rows[y][x]) ^ ((x + y) % 2 === 0 ? 1 : 0);
+  const firstByte = [[20, 20], [19, 20], [20, 19], [19, 19], [20, 18], [19, 18], [20, 17], [19, 17]].reduce((byte, [x, y]) => (byte << 1) | unmask(x, y), 0);
+  assert.equal(firstByte, published[0]);
+  assert.equal(qrDataCodewords('HELLO WORLD', 1, 'H'), null, 'does not fit 1-H');
+  assert.equal(qrDataCodewords('\ud800', 1, 'L'), null);
 });
 
 test('format information matches the 32 published BCH(15,5) words', () => {

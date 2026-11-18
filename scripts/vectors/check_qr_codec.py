@@ -6,6 +6,13 @@ not translated from packages/qr. It re-derives every frozen vector in packages/q
 - the envelope v1 checks in D6 order, the payload hash, the trade-invite signing digest and the test-only verifier;
 - every rejection vector's refusal code, and the local replay refusal.
 
+Independence is not uniform. base45, RFC 8785, the hashes, the signing digest and the QR symbol reader are separate
+implementations written from the standards. The secret/URL heuristics, the signature-requirement rules and the replay
+simulation restate the same policy as packages/qr (the policy is a project decision, not a standard), so agreement there
+shows the two sides apply one consistent rule set; it does not independently prove the rules are sufficient. The replay
+check here is a single seen-set; it does not model the TS ledger's capacity, eviction or retention behaviour, which only
+the TS tests cover.
+
 Usage: python3 -I scripts/vectors/check_qr_codec.py [--vectors PATH]. Exit status 0 only if every check agrees.
 """
 import hashlib
@@ -215,15 +222,24 @@ def is_account(chain, value):
     return raw is not None and len(raw) == 32 and any(raw)
 
 
+SEPARATORS = re.compile(r"[\s,;:|/._-]+")
+URL_EXEMPT_SLOTS = {"chain", "originHint"}
+TEXT_SLOTS = {"originHint", "payload.channel", "payload.releaseId"}
+
+
+def mnemonic_like(value):
+    words = [word for word in SEPARATORS.split(value) if word]
+    return len(words) >= 12 and all(re.fullmatch(r"[A-Za-z]{3,8}", word) for word in words)
+
+
 def secret_value(value):
-    words = value.split()
     return any([
         re.search(r"(^|[^0-9A-Za-z])wc:", value, re.I), "symkey=" in value.lower(), re.search(r"nsec1[0-9a-z]{50}", value, re.I),
         re.search(r"[xyztuv]prv[1-9A-HJ-NP-Za-km-z]{100}", value), "PRIVATE KEY-----" in value,
         re.search(r"eyJ[\w-]+\.[\w-]+\.", value), re.match(r"\s*bearer\s+\S", value, re.I),
         re.search(r"(token|secret|password|apikey|api_key|sessionid)\s*[=:]", value, re.I),
         re.search(r"0x[0-9a-fA-F]{64}(?![0-9a-fA-F])", value),
-        len(words) >= 12 and all(word.isascii() and word.isalpha() and word.islower() for word in words),
+        mnemonic_like(value),
         re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{50,}", value) and not HEX.fullmatch(value),
     ])
 
@@ -232,27 +248,27 @@ def url_value(value):
     return bool(re.match(r"[A-Za-z][A-Za-z0-9+.-]*:", value)) or "://" in value or value.startswith("//") or value.lower().startswith("www.")
 
 
-def scan(value, top):
+def secret_text(value):
+    """Text slots: separators removed, then 16+ hex bytes or 50+ base58/bech32 characters count as key material."""
+    compact = SEPARATORS.sub("", value)
+    return (secret_value(value) or secret_value(compact) or re.search(r"[0-9a-fA-F]{32}", compact) is not None
+            or re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{50,}", compact) is not None or re.fullmatch(r"[02-9ac-hj-np-z]{50,}", compact, re.I) is not None)
+
+
+def scan(value, path):
     if isinstance(value, dict):
         for key, item in value.items():
             if any(word in re.sub(r"[^a-z0-9]", "", key.lower()) for word in SECRET_WORDS) or secret_value(key):
                 raise Refused("SECRET_REFUSED")
-            if isinstance(item, str):
-                if secret_value(item):
-                    raise Refused("SECRET_REFUSED")
-                if not (top and key == "chain") and url_value(item):
-                    raise Refused("URL_REFUSED")
-            else:
-                scan(item, False)
+            scan(item, f"{path}.{key}" if path else key)
     elif isinstance(value, list):
         for item in value:
-            if isinstance(item, str):
-                if secret_value(item):
-                    raise Refused("SECRET_REFUSED")
-                if url_value(item):
-                    raise Refused("URL_REFUSED")
-            else:
-                scan(item, False)
+            scan(item, path + "[]")
+    elif isinstance(value, str):
+        if secret_text(value) if path in TEXT_SLOTS else secret_value(value):
+            raise Refused("SECRET_REFUSED")
+        if path not in URL_EXEMPT_SLOTS and url_value(value):
+            raise Refused("URL_REFUSED")
 
 
 def check_payload(kind, chain, payload):
@@ -275,7 +291,7 @@ def check_payload(kind, chain, payload):
               and isinstance(payload["termsHash"], str) and re.fullmatch(r"[0-9a-f]{64}", payload["termsHash"]) is not None)
     elif kind == "release-fingerprint":
         ok = (isinstance(payload["channel"], str) and re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,63}", payload["channel"]) is not None
-              and isinstance(payload["releaseId"], str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", payload["releaseId"]) is not None
+              and isinstance(payload["releaseId"], str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,39}", payload["releaseId"]) is not None
               and is_int(payload["sequence"]) and payload["sequence"] >= 1
               and isinstance(payload["manifestSha256"], str) and re.fullmatch(r"[0-9a-f]{64}", payload["manifestSha256"]) is not None)
     elif kind == "recovery-fingerprint":
@@ -294,7 +310,7 @@ def is_host(value):
 def check_envelope(env):
     if not isinstance(env, dict):
         raise Refused("INVALID_ENVELOPE")
-    scan(env, True)
+    scan(env, "")
     if env.get("protocol") != PROTOCOL:
         raise Refused("PROTOCOL_UNSUPPORTED")
     if not (is_int(env.get("v")) and env.get("v") == 1):
@@ -382,12 +398,24 @@ def decode(text, context, test_profile):
     if env["expiresAt"] is not None and now + MARGIN >= env["expiresAt"]:
         raise Refused("EXPIRED")
     authenticated = False
-    sig = env.get("signature")
-    if sig is not None and context.get("verifierProfile") == sig["profile"]:
-        expected = hmac.new(test_profile["key"], signing_digest(env), hashlib.sha256).hexdigest()
-        if sig["publicKey"] != test_profile["publicKey"] or not hmac.compare_digest(sig["value"], expected):
-            raise Refused("SIGNATURE_INVALID")
-        authenticated = True
+    sig, verifier = env.get("signature"), context.get("verifierProfile")
+    require = verifier is not None and context.get("requireInviteSignature", True)
+    if env["type"] == "trade-invite":
+        if sig is None:
+            if require:
+                raise Refused("SIGNATURE_REQUIRED")
+        elif verifier is not None and sig["profile"] != verifier:
+            if require:
+                raise Refused("PROFILE_UNSUPPORTED")
+        elif verifier is not None:
+            if len(sig["publicKey"]) != 2 * test_profile["publicKeyBytes"] or len(sig["value"]) != 2 * test_profile["signatureBytes"]:
+                raise Refused("SIGNATURE_INVALID")
+            expected = hmac.new(test_profile["key"], signing_digest(env), hashlib.sha256).hexdigest()
+            author = env["payload"]["ad"].split(":")[1]
+            if (sig["publicKey"] != test_profile["publicKey"] or not hmac.compare_digest(sig["value"], expected)
+                    or author != test_profile["boundAuthor"]):
+                raise Refused("SIGNATURE_INVALID")
+            authenticated = True
     return env, authenticated
 
 
@@ -662,7 +690,11 @@ def main(argv):
     codec = meta["codec"]
     expect((codec["prefix"], codec["protocol"], codec["maxEnvelopeBytes"], codec["maxDepth"], codec["inviteSigningDomain"].encode())
            == (PREFIX, PROTOCOL, MAX_BYTES, MAX_DEPTH, DOMAIN), "codec parameters differ from D6 values used by the oracle")
-    test_profile = {"key": hashlib.sha256(b"qr-test-only-hmac-key").digest(), "publicKey": hashlib.sha256(b"qr-test-only-key-id").hexdigest()}
+    test_profile = {"key": hashlib.sha256(b"qr-test-only-hmac-key").digest(), "publicKey": hashlib.sha256(b"qr-test-only-key-id").hexdigest(),
+                    "boundAuthor": hashlib.sha256(b"qr-seller").hexdigest(), "publicKeyBytes": 32, "signatureBytes": 32}
+    recorded = meta["testOnlyInviteProfile"]
+    expect((recorded["boundAuthor"], recorded["publicKeyBytes"], recorded["signatureBytes"])
+           == (test_profile["boundAuthor"], 32, 32), "test profile binding or sizes differ")
     expect(meta["testOnlyInviteProfile"]["publicKey"] == test_profile["publicKey"], "test profile public key differs")
 
     present = {(v["inputHex"], v["base45"]) for v in vectors["base45"]}

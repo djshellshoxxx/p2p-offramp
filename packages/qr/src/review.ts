@@ -132,42 +132,58 @@ export function buildReview(input: ReviewInput): QrImportReview {
 // ---------------------------------------------------------------------------------------------------------------
 export const DEFAULT_REPLAY_LEDGER_ENTRIES = 512;
 export const MAX_REPLAY_LEDGER_ENTRIES = 65_536;
-/** How long a code without expiry stays remembered. */
+/**
+ * Cap on how long an unauthenticated code is remembered (and the default). Its expiry is sender-chosen and only
+ * invites have a lifetime limit, so a far-future or missing expiry must not pin an entry: such entries are kept for at
+ * most 24 hours from admission.
+ */
 export const DEFAULT_REPLAY_RETENTION_SECONDS = MAX_INVITE_LIFETIME_SECONDS;
+export const MAX_REPLAY_RETENTION_SECONDS = MAX_INVITE_LIFETIME_SECONDS;
 
 export interface ReplayLedgerOptions {
   readonly nowSeconds: () => number;
   readonly maxEntries?: number;
+  /** 1..MAX_REPLAY_RETENTION_SECONDS; bounds how long an unauthenticated code is remembered. */
   readonly retentionSeconds?: number;
 }
 export type ReplayAdmitResult = { readonly ok: true } | QrFailure;
 export interface ReplayLedger {
-  /** Whether this requestId was already admitted and is still remembered. */
+  /** Whether this requestId was already admitted and is still remembered. Fails closed (true) on an unusable clock. */
   seen(requestId: string): boolean;
   /**
-   * Atomically refuses a seen requestId (REPLAYED) or records it. Re-checks expiry at commit time (EXPIRED). When the
-   * ledger is full of entries that are still live it refuses (REPLAY_LEDGER_FULL) instead of evicting one, because
-   * evicting a live entry would let that code be imported again.
+   * Atomically refuses a seen requestId (REPLAYED) or records it, re-checking expiry at commit time (EXPIRED).
+   *
+   * Memory is bounded. A verified (authenticated) invite is protected: it is kept until its signed expiry (at most
+   * 24 h) plus the skew allowance and is never evicted. Unauthenticated codes are kept for at most the retention cap
+   * and, when the ledger is full, the oldest of them is evicted to make room, so attacker-chosen unsigned codes can
+   * never lock out a verified invite. Only when every entry is a protected live invite does admission refuse
+   * (REPLAY_LEDGER_FULL). Deduplication of unauthenticated codes is therefore best-effort under memory pressure, which
+   * matches the spec: this prevents accidental repeat imports and is not anti-replay security.
    */
   admit(review: QrImportReview): ReplayAdmitResult;
   readonly size: number;
 }
+
+interface LedgerEntry { readonly retireAt: number; readonly protected: boolean }
 
 export function createReplayLedger(options: ReplayLedgerOptions): ReplayLedger {
   if (typeof options !== 'object' || options === null || typeof options.nowSeconds !== 'function') throw new TypeError('nowSeconds is required.');
   const maxEntries = options.maxEntries ?? DEFAULT_REPLAY_LEDGER_ENTRIES;
   const retention = options.retentionSeconds ?? DEFAULT_REPLAY_RETENTION_SECONDS;
   if (!Number.isSafeInteger(maxEntries) || maxEntries < 1 || maxEntries > MAX_REPLAY_LEDGER_ENTRIES) throw new RangeError('maxEntries out of range.');
-  if (!Number.isSafeInteger(retention) || retention < 1) throw new RangeError('retentionSeconds out of range.');
-  const entries = new Map<string, number>();
+  if (!Number.isSafeInteger(retention) || retention < 1 || retention > MAX_REPLAY_RETENTION_SECONDS) throw new RangeError('retentionSeconds out of range.');
+  const entries = new Map<string, LedgerEntry>();
   const clock = (): number => {
     const now = options.nowSeconds();
     if (!Number.isSafeInteger(now) || now < 0) throw new RangeError('Invalid clock.');
     return now;
   };
-  const purge = (now: number): void => { for (const [id, retireAt] of entries) if (retireAt <= now) entries.delete(id); };
+  const purge = (now: number): void => { for (const [id, entry] of entries) if (entry.retireAt <= now) entries.delete(id); };
+  const evictOldestUnprotected = (): boolean => {
+    for (const [id, entry] of entries) if (!entry.protected) { entries.delete(id); return true; }
+    return false;
+  };
   return Object.freeze({
-    /** Fails closed: with an unusable clock every requestId reads as seen. */
     seen(requestId: string): boolean {
       try { purge(clock()); } catch { return true; }
       return entries.has(requestId);
@@ -179,9 +195,12 @@ export function createReplayLedger(options: ReplayLedgerOptions): ReplayLedger {
       purge(now);
       if (entries.has(review.requestId)) return failure('REPLAYED');
       if (review.expiresAt !== null && now + EXPIRY_SAFETY_MARGIN_SECONDS >= review.expiresAt) return failure('EXPIRED');
-      if (entries.size >= maxEntries) return failure('REPLAY_LEDGER_FULL' satisfies QrErrorCode);
+      if (entries.size >= maxEntries && !evictOldestUnprotected()) return failure('REPLAY_LEDGER_FULL' satisfies QrErrorCode);
+      // Only a verified signature makes expiresAt trustworthy; it is bounded by the 24 h invite lifetime.
+      const protectedEntry = review.authenticated && review.expiresAt !== null;
+      const until = protectedEntry ? review.expiresAt as number : Math.min(review.expiresAt ?? Number.MAX_SAFE_INTEGER, now + retention);
       // Kept past expiry by the future-skew allowance so a clock stepped back slightly still refuses the replay.
-      entries.set(review.requestId, (review.expiresAt ?? now + retention) + MAX_FUTURE_SKEW_SECONDS);
+      entries.set(review.requestId, Object.freeze({ retireAt: until + MAX_FUTURE_SKEW_SECONDS, protected: protectedEntry }));
       return Object.freeze({ ok: true });
     },
     get size(): number { return entries.size; },

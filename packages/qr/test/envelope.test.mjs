@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import {
   createQrEnvelope, parseQrEnvelope, attachInviteSignature, inviteSigningDigest, inviteSigningMessage, envelopeBytes, canonicalize,
-  payloadDigestHex, parseAdReference, isSecretLike, isSecretKeyName, isUrlLike, QR_TYPES, INVITE_SIGNING_DOMAIN,
+  payloadDigestHex, parseAdReference, isSecretLike, isSecretLikeText, isSecretKeyName, isUrlLike, QR_TYPES, INVITE_SIGNING_DOMAIN,
   DEFAULT_INVITE_LIFETIME_SECONDS, MAX_INVITE_LIFETIME_SECONDS, MIN_INVITE_LIFETIME_SECONDS, MAX_ENVELOPE_BYTES,
 } from '../index.ts';
 import { parseAdAddress } from '../../exchange/index.ts';
@@ -131,12 +131,36 @@ test('secret-bearing fields and values are refused before hashing, including wal
     assert.equal(isSecretKeyName(name), false, name);
 });
 
+test('secrets split by separators in text slots, and mnemonics in any case or separator, are refused', async () => {
+  const release = INPUTS['release-fingerprint'];
+  const base58 = solanaKey('wif-like') + solanaKey('wif-like-2');
+  const bech32 = Array.from(Buffer.from(hashHex('nsec-data') + hashHex('nsec-data-2'), 'hex'), byte => 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'[byte & 31]).join('').slice(0, 58);
+  assert.match(bech32, /[0l]/, 'contains characters outside base58');
+  const hex = hashHex('raw-key');
+  for (const releaseId of [`5${base58.slice(0, 25)}-${base58.slice(25, 50)}`, bech32.slice(0, 29) + '-' + bech32.slice(29), hex, `${hex.slice(0, 32)}.${hex.slice(32)}`, `k-${hex.slice(0, 20)}-${hex.slice(20, 40)}`]) {
+    assert.equal(isSecretLikeText(releaseId), true, releaseId);
+    assert.equal((await create({ ...release, payload: { ...release.payload, releaseId } })).code, 'SECRET_REFUSED', releaseId);
+  }
+  assert.equal((await create({ ...release, payload: { ...release.payload, channel: hex } })).code, 'SECRET_REFUSED');
+  assert.equal((await create({ ...INPUTS['public-address'], originHint: `${hex.slice(0, 32)}.example` })).code, 'SECRET_REFUSED');
+  for (const releaseId of ['v0.12.4-rc.1', 'build-2026.11.18', 'rc1_abcdef1', `v${'x'.repeat(39)}`])
+    assert.equal((await create({ ...release, payload: { ...release.payload, releaseId } })).ok, true, releaseId);
+  assert.equal((await create({ ...release, payload: { ...release.payload, releaseId: `v${'x'.repeat(40)}` } })).code, 'INVALID_PAYLOAD', 'releaseId is at most 40 characters');
+  const words = 'abandon ability able about above absent absorb abstract absurd abuse access accident'.split(' ');
+  for (const phrase of [words.join(' ').toUpperCase(), words.join(','), words.join(', '), words.map(word => word[0].toUpperCase() + word.slice(1)).join('-'), words.join('.')]) {
+    assert.equal(isSecretLike(phrase), true, phrase);
+    assert.equal((await create({ ...INPUTS['public-address'], payload: { address: phrase } })).code, 'SECRET_REFUSED', phrase);
+  }
+  for (const value of ['offramp.example', 'www.offramp.example', 'v0.12.4-rc.1', 'testnet', 'a.b.c.d.example']) assert.equal(isSecretLikeText(value), false, value);
+});
+
 test('URL payloads are refused, not carried', async () => {
   const address = INPUTS['public-address'];
   for (const value of ['https://offramp.example', 'http://x', 'javascript:alert(1)', 'data:text/html,x', 'ethereum:0xabc', '//offramp.example', 'www.offramp.example', 'ipfs://cid'])
     assert.equal(isUrlLike(value), true, value);
   assert.equal((await create({ ...address, payload: { address: 'https://offramp.example/a' } })).code, 'URL_REFUSED');
-  assert.equal((await create({ ...address, originHint: 'https://offramp.example' })).code, 'URL_REFUSED');
+  assert.equal((await create({ ...address, originHint: 'https://offramp.example' })).code, 'INVALID_ENVELOPE', 'originHint has strict hostname syntax');
+  assert.equal((await create({ ...address, originHint: 'www.offramp.example' })).ok, true, 'a www. hostname is not refused as a URL');
   assert.equal((await create({ ...address, chain: 'https://evil' })).code, 'INVALID_ENVELOPE', 'the chain slot has its own strict syntax');
   assert.equal(isUrlLike(EVM_CHAIN), true, 'chain ids are scheme-like, so only the chain slot is exempt from the URL check');
   assert.equal((await create({ ...address, chain: `wc:${hashHex('t')}@2` })).code, 'SECRET_REFUSED', 'the chain slot is still secret-scanned');
