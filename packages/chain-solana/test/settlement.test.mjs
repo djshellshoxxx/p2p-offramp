@@ -436,7 +436,7 @@ test('vault-frozen-{thawable,permanent}-told-apart-by-mint-freeze-authority', as
 test('docs-state-{seller-decision,blocker-exits,margin-ranges}', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8').replace(/\s+/g, ' ');
   const source = readFileSync(new URL('../src/settlement.ts', import.meta.url), 'utf8')
-    .replace(/^\s*\*\s?/gm, '')
+    .replace(/^[ \t]*\* ?/gm, '')
     .replace(/\s+/g, ' ');
   const exitsOf = text => text.slice(text.indexOf('Waiting alone'), text.indexOf('Waiting alone') + 1200);
   for (const [name, text] of [['README', readme], ['settlement.ts', source]]) {
