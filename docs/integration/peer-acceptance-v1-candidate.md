@@ -1,5 +1,12 @@
 # D1 EOA peer-acceptance candidate
 
+Update (November 18): the [Option B composition](D1-peer-acceptance.md) builds on this candidate, as a Tier C patch
+for owner review. It adds the exchange version 2 carrier with injected ports, account classification from pinned
+code (ERC-1271, refusal of EIP-7702 and counterfactual accounts), and durable admission with quotas and
+deadline retirement. The sections below describe the primitive. Where they differ from that document, that document
+is current: the verifier now takes the local registry and refuses a caller domain that differs from it, and the
+browser fixture ran in Chromium.
+
 The candidate includes encrypted, session-scoped replay and cancellation history,
 the cryptographic primitive, and a private bounded v2 EOA carrier. These remain
 private modules, disconnected from the shipped exchange and economic authority.
@@ -40,8 +47,8 @@ No contract signature arguments or on-chain signature verification are added.
 
 ## Verification contract
 
-`verifyEoaPeerAcceptance(domain, terms, context, proof)` snapshots exact own data
-fields. Trusted context supplies the expected signer role, authenticated sender
+`verifyEoaPeerAcceptance(registry, domain, terms, context, proof)` snapshots exact own data
+fields, and returns null when `domain` differs from the local registry entry for the terms. Trusted context supplies the expected signer role, authenticated sender
 and recipient messaging keys, current time and authenticated envelope deadline.
 The untrusted proof supplies only the binding and two signatures. It cannot supply
 a domain, expected peer identity, clock or authority flag.
@@ -156,12 +163,17 @@ classify accounts, enforce lifecycle/current-time checks and admit durable repla
 history before any future approved integration.
 
 `npm run test:peer:browser` adds actual browser fixtures for two-tab CAS, reload,
-stale duplicates, portable tombstone restore and lock. Local Chromium startup was
-blocked by a denied socket before assertions. The fixture is wired into CI;
-browser qualification is pending. It explicitly preserves the old-backup
-limitation instead of claiming exported history is globally fresh.
+stale duplicates, portable tombstone restore and lock, and now also a two-tab D1
+cancel-versus-accept race and deadline retirement. It passed in local Chromium 153
+on November 18. It explicitly preserves the old-backup limitation instead of
+claiming exported history is globally fresh.
 
 ## Remaining D1 integration
+
+Items 2 and 3, the carrier and byte budget in item 4, and the two-wallet failure paths of item 5 (on a loopback
+Anvil node, without a browser journey) are implemented in the [Option B composition](D1-peer-acceptance.md) and
+await owner review. Independent review, wallet prompts, the inbox/AUTH policy and the browser journey remain open.
+The original list:
 
 1. Independently review the exact candidate fields and vectors before adopting a
    version 2 exchange carrier. Existing version 1 `{revision}` remains negotiation
