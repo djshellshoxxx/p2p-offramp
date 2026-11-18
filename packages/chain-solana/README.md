@@ -39,7 +39,7 @@ not approve any network, deployment or registry entry.
 - The escrow at the PDA must be absent, a System pre-init donation, or a 222-byte EscrowV1 that matches every term.
   A foreign `terms_hash` gives CONFLICT. Native custody is rent-aware, and a threshold other than 1.0 or 2.0 gives
   `rent-unknown`. The SPL vault must have no delegate and no close authority, must not be native, and must hold at
-  least the principal. `readValidated` returns CONFLICT for a funded trade whose vault is frozen.
+  least the principal. A frozen vault reads as funded (C-L3): only the payout waits, `custody.payoutBlockedBy`.
 - Responses are read only through own data descriptors, and base64 is capped before decoding. Provider
   rejections give UNAVAILABLE, and no provider detail is kept. At most 4 jobs run at once. The timeout is 1..60,000
   ms (default 10,000). Abort, timeout and dispose free a slot only when the physical request settles.
@@ -60,3 +60,14 @@ implemented. The `@noble/hashes` 2.4.0 inventory review is still pending.
 node --import ./scripts/test-support/register-tsx.mjs --test packages/chain-solana/test/*.test.mjs
 npm run typecheck && npm run check:boundaries && npm test
 ```
+
+## B1a: reader and client policies
+
+- `readValidated` reports a frozen-vault trade like any funded trade; `read(…).custody.vaultFrozen` and
+  `payoutBlockedBy: ['vault-frozen']` carry the flag. `readPayout` reads both parties' payout destinations at the
+  same slot (native 7 keys, SPL 9) and returns plans: `create-ata-idempotent`, `rent-top-up`, `ready` or
+  `blocked(reason)`. It builds no instruction.
+- A mint with a freeze authority is refused unless `freezeAuthorityPermits` names that exact key; `snapshot.mint`
+  surfaces it before funding. The ProgramData deploy slot is pinned per reader once confirmed.
+- `src/policy.ts`: PROPOSED margins (300 s each, landing bound 182 s), never applied silently, and
+  `settlementActions(snapshot, releaseMargin)`. Details: [docs/b1a-reader.md](docs/b1a-reader.md).
