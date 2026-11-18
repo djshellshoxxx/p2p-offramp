@@ -9,13 +9,32 @@ import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { promisify } from 'node:util';
+import { parseArgs, promisify } from 'node:util';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
 import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
 
 /** Sepolia identity (provenance in apps/web/src/testnet/sepolia-network.ts). Checked against the node before any send. */
 export const SEPOLIA = Object.freeze({ chainId: BigInt(SEPOLIA_NETWORK.chainIdentity), genesisHash: SEPOLIA_NETWORK.genesisHash });
 export const EVM_DIR = fileURLToPath(new URL('../../contracts/evm/', import.meta.url));
+/**
+ * Deployment ids the kit accepts: the intersection of the G11 registry id, the G16 terms/trade-binding identifier and
+ * the recovery profile grammar, so a recorded id is usable by every later tool. D3 leaves the naming rule for new ids
+ * (for example `escrow-sepolia-v2`) to the owner; the kit enforces only this grammar and never reuses an id for a new
+ * address (DEPLOYMENT_ID_REBOUND).
+ */
+export const isDeploymentId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/.test(value);
+/** The CLIs' default deployment id (the first Sepolia deployment). Library entry points require an explicit id. */
+export const CLI_DEFAULT_DEPLOYMENT_ID = 'escrow-sepolia-v1';
+
+/**
+ * `parseArgs` (strict, as before) that also reports the first option given more than once as `repeated`, so a CLI can
+ * refuse it (OPTION_REPEATED) instead of silently taking the last value, as parseArgs would.
+ */
+export function parseSingleOptions(config) {
+  const { tokens, ...parsed } = parseArgs({ ...config, tokens: true });
+  const names = tokens.filter(token => token.kind === 'option').map(token => token.name);
+  return { ...parsed, repeated: names.find((name, index) => names.indexOf(name) !== index) };
+}
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 export const sha256Hex = bytes => createHash('sha256').update(bytes).digest('hex');
