@@ -75,7 +75,9 @@ its termsHash, to equal what it recomputes from its own registry.
 
 One verification reads, through an injected EIP-1193 read port: chain id, genesis hash, the latest block (the
 recorded anchor), the escrow code at that block (must match the registry runtime hash), then the signer's code at
-that block:
+that block. The anchor's timestamp must be at most 900 s older than the local clock and at most 300 s ahead of it
+(`stale-block` / `future-block`, UNAVAILABLE). Every code read and `eth_call` names the anchor by EIP-1898
+`{blockHash, requireCanonical: true}`, and a provider that does not support that fails closed:
 
 | Code at the recorded block | Path |
 |---|---|
@@ -100,23 +102,42 @@ a different binding is `CONFLICT`; a tombstoned termsHash is `TOMBSTONED` in eve
 `cancel` and `terms-reject` of a session with reviewed terms write the tombstone durably before the state changes, on
 the sending and the receiving side. If the write fails, the cancel or reject is refused and can be retried.
 
-Lifetime, replacing the candidate's permanent 64-term bound (schema version 2; version 1 records migrate):
+Lifetime and capacity, replacing the candidate's permanent 64-term bound (schema version 2; version 1 records migrate).
+An independent review found that the first version of this patch held quota for a day past each deadline while
+exchange slots recycle in about 17 minutes, so 16 ghosted offers could block an advert for over a day. Now:
 
-- New entries are refused (never evicted) beyond 8 per counterparty key, 16 per advertisement and 64 in total.
-- An entry retires only once `now >= acceptBeforeSeconds + 86,400`. By then no statement for that termsHash can
-  verify, since the deadline is inside the signed terms. A high-water mark `retiredThroughSeconds` refuses
-  (`EXPIRED`) any later admission for terms at or below it, even after a clock rollback. A live tombstone is never
-  removed.
-- Version 1 entries and the unscoped `tombstone(termsHash)` carry no deadline. They never retire and count only
-  against the total.
+- A live entry (a recorded statement) retires at `acceptBeforeSeconds + 300`. A high-water mark
+  `retiredThroughSeconds` then refuses (`EXPIRED`) any admission for terms at or below it. `status` also reports
+  them as withdrawn, so removing an entry (tombstone or not) never resurrects it after a clock jump and rollback.
+  The mark only rises to the deadline of an entry actually retired, never to the clock.
+- A statement that was never accepted (no buyer binding) is compacted into a tombstone once its session ended
+  (advert expiry), because it can no longer progress. It then stops counting against live quotas.
+- `cancel`/`terms-reject` tombstones are compact (no bindings, no scope). They use their own budget of 192 and
+  never count against live quotas.
+- New live entries are refused (never evicted) beyond 64 in total. Non-priority entries (an unselected seller-side
+  session) are also bounded at 8 per counterparty and 16 per advertisement, and cannot use the last 16 live slots.
+  Those stay for priority sessions: selected seller-side sessions and buyer-side sessions.
+- Version 1 entries and the unscoped `tombstone(termsHash)` carry no deadline. They never retire and count against
+  the live total.
 
-Cancellation races. If the tombstone lands first, the acceptance is refused. If the acceptance commits first, the cancel
-returns `OUT_OF_ORDER` (the state machine still has no transition out of `accepted`), but the durable tombstone stays.
-From then on nothing is shown as accepted (`withdrawn`, no label) and funding rechecks refuse.
+A full ledger still refuses the statement being sent or received (`LIMIT_EXCEEDED`), including for a selected
+session. It never displaces another session.
+
+Verifier capacity. The exchange runs at most one verification per session (another one is refused `BUSY`, not
+remembered, so it can be redelivered). Copies of a rumor already being processed are `DUPLICATE`. A tombstone read
+and the binding and deadline checks run before any chain read. The verifier itself allows 16 concurrent
+verifications.
+
+Cancellation races. If the tombstone lands first, the acceptance is refused before any chain read. If a local
+cancel or reject starts while an acceptance is being verified, the cancel wins: the acceptance is refused
+`TOMBSTONED` and nothing is labelled. If the acceptance had already committed, the cancel returns `OUT_OF_ORDER`
+(the state machine still has no transition out of `accepted`), but the durable tombstone stays. From then on nothing
+is shown as accepted (`withdrawn`, no label) and funding rechecks refuse.
 
 ## Rechecks, and no veto after funding
 
-`acceptanceStatus(sessionId, purpose)` re-verifies every stored statement at a fresh block and re-reads the tombstone:
+`acceptanceStatus(sessionId, purpose)` re-verifies every stored statement at a fresh block and reads the tombstone
+before and again after the (slow) re-verification, so a cancel that lands meanwhile is reported as `withdrawn`:
 `'display'` (refusals become `invalid` / `expired` / `withdrawn` without a label), `'accept'` (done automatically
 before a buyer acceptance) and `'fund'` (both statements valid for at least 120 s more). On rechecks the deadline is
 `min(acceptBeforeSeconds, notAfterSeconds)`; on arrival the authenticated envelope expiry also applies. No result
@@ -158,19 +179,21 @@ signature-shaped values in any advert field.
 
 | Area | Tests |
 |---|---|
-| Carrier, downgrade, ports, races, budget, no wallet import | `packages/exchange/test/peer-acceptance.test.mjs` (11) |
+| Carrier, downgrade, ports, races, budget, single-flight and rumor dedupe, status re-read, no wallet import | `packages/exchange/test/peer-acceptance.test.mjs` (13) |
 | Registry-checked EOA primitive (Low) | `packages/wallet/test/evm-peer-acceptance.test.mjs` (8, one new) |
-| Classification, ERC-1271, 7702, counterfactual, deadlines, cancel/timeout | `packages/wallet/test/evm-peer-verifier.test.mjs` (11) |
-| Quotas, retirement, high-water mark, migration, rotation, backups | `packages/wallet/test/evm-peer-replay-lifetime.test.mjs` (7) |
+| Classification, ERC-1271, 7702, counterfactual, deadlines, cancel/timeout, EIP-1898 pinning, block age | `packages/wallet/test/evm-peer-verifier.test.mjs` (12) |
+| Quotas, priority reserve, ghost-session release, retirement, high-water mark after jump and rollback, tombstone budget, migration, rotation, backups | `packages/wallet/test/evm-peer-replay-lifetime.test.mjs` (10) |
 | Existing ledger and EOA envelope tests, kept | `evm-peer-replay.test.mjs` (11), `evm-peer-envelope.test.mjs` (9, one new) |
-| End-to-end composition, lock, reload, restore, adverts, no veto after funding | `packages/wallet/test/evm-peer-session.test.mjs` (9) |
+| End-to-end composition, lock, reload, restore, adverts, 16 ghosted offers then an honest buyer, no veto after funding | `packages/wallet/test/evm-peer-session.test.mjs` (10) |
+| Frozen v2 carrier vectors (generator, versions, SHA-256) recomputed with repository code | `packages/wallet/test/evm-peer-v2-vectors.test.mjs` (3), `packages/wallet/test/fixtures/peer-acceptance-v2-README.md` |
+| Solidity struct hashes, digests and `ecrecover` for the v2 vectors | `contracts/evm/test/PeerAcceptanceV2Vector.t.sol` (3) |
 | Real IndexedDB: two-tab cancel-vs-accept CAS race, reload, retirement persistence | `npm run test:peer:browser` (Chromium) |
 | Real EVM: ERC-1271 contract wallet (`contracts/evm/test/mocks/PeerAcceptanceWallet.sol`), EOA, revoked policy, 7702 designator, counterfactual | `scripts/test-peer-acceptance-evm-local.mjs`, run by `npm run test:exchange:evm` (6 checks) |
 
 ## Not covered
 
-- Independent review of the fields, vectors and flows. The vectors are self-generated with viem and cross-checked
-  with Foundry's `ecrecover` for the original four only.
+- Independent protocol and cryptographic review of the fields and flows. The vectors are self-generated with viem;
+  Solidity `abi.encode` and `ecrecover` recompute the original four and the frozen v2 carrier vectors.
 - Interoperability with any other implementation; real wallets, real devices, testnets or funds.
 - An external-wallet prompt for the `PeerAcceptance` statement: the adapter still signs only TradeTerms, and only for
   EOAs. The UI does not show the statement yet.
