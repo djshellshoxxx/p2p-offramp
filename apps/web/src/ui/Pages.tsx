@@ -9,10 +9,13 @@ import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
 import { localeStore, type BundledLocaleStore } from './locale/runtime.ts';
 
-export const pageTitle: Readonly<Record<Route['page'], string>> = {
-  home: m.homeTitle, offers: m.offersTitle, trade: m.tradeTitle,
-  recovery: m.recoveryTitle, settings: m.settingsTitle, unknown: m.unknownTitle,
+const pageTitleSources: Readonly<Record<Route['page'], () => string>> = {
+  home: () => m.homeTitle, offers: () => m.offersTitle, trade: () => m.tradeTitle,
+  recovery: () => m.recoveryTitle, settings: () => m.settingsTitle, unknown: () => m.unknownTitle,
 };
+/** Live getters: a title read after a language change shows the selected bundle, never the load-time text. */
+export const pageTitle: Readonly<Record<Route['page'], string>> = Object.freeze(Object.defineProperties({},
+  Object.fromEntries(Object.entries(pageTitleSources).map(([page, read]) => [page, { enumerable: true, get: read }]))) as Record<Route['page'], string>);
 
 export function Home({ services, unlocked, restoredProfileId, onSelectionConsumed }: { readonly services: AppServices | null; readonly unlocked: boolean;
   readonly restoredProfileId: string; readonly onSelectionConsumed: () => void }) {
@@ -100,11 +103,11 @@ export function LocaleSelector({ store = localeStore }: { readonly store?: Bundl
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
   const options = store.available();
   return <>
-    {options.length > 1 ? <label className="field">{m.localeChoose}
-      <select value={snapshot.id} onChange={event => { store.select(event.currentTarget.value); }} aria-describedby="locale-choose-help">
+    {options.length > 1 ? <div className="field"><label htmlFor="locale-choose">{m.localeChoose}</label>
+      <select id="locale-choose" value={snapshot.id} onChange={event => { store.select(event.currentTarget.value); }} aria-describedby="locale-choose-help">
         {options.map(option => <option key={option.id} value={option.id} lang={option.locale} dir={option.direction}>{option.locale}{option.display === 'development-fixture' ? ` (${option.id})` : ''}</option>)}
-      </select><span id="locale-choose-help">{m.localeChooseHelp}</span></label> : null}
+      </select><p id="locale-choose-help">{m.localeChooseHelp}</p></div> : null}
     {snapshot.display === 'development-fixture' ? <p role="note">{m.localeFixture}</p> : null}
-    {snapshot.fallback ? <p role="status">{m.localeFallback} <button type="button" onClick={() => { store.select('en'); }}>{m.localeUseSource}</button></p> : null}
+    {snapshot.fallback ? <><p role="status">{m.localeFallback}</p><button type="button" onClick={() => { store.select('en'); }}>{m.localeUseSource}</button></> : null}
   </>;
 }

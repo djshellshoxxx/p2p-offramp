@@ -63,7 +63,7 @@ export function App({ services, starting = false, startupError, trade = null, di
       window.removeEventListener('online', connectivity); window.removeEventListener('offline', connectivity);
     };
   }, []);
-  useEffect(() => { document.title = `${pageTitle[route.page]} · ${m.appName}`; }, [route.page]);
+  useEffect(() => { document.title = `${pageTitle[route.page]} · ${m.appName}`; }, [route.page, locale.id]);
   useEffect(() => {
     if (initialRoute.current) initialRoute.current = false;
     else title.current?.focus();

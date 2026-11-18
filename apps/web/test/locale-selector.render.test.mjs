@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { LocaleSelector } from '../src/ui/Pages.tsx';
+import { LocaleSelector, pageTitle } from '../src/ui/Pages.tsx';
 import { createBundledLocaleStore, localeStore } from '../src/ui/locale/runtime.ts';
 import { sourceCatalog } from '../src/ui/locale/en.ts';
 import { messages as m } from '../src/ui/messages.ts';
@@ -41,4 +41,24 @@ test('an unavailable requested language shows the fallback notice with an explic
   assert.equal(store.getSnapshot().fallback, true);
   assert.match(html, /<p role="status">/);
   assert.ok(html.includes(m.localeUseSource));
+});
+
+test('page titles are live getters, so the heading and document title follow a language change', () => {
+  for (const page of ['home', 'offers', 'trade', 'recovery', 'settings', 'unknown']) {
+    const descriptor = Object.getOwnPropertyDescriptor(pageTitle, page);
+    assert.equal(typeof descriptor.get, 'function', `${page} is read at render time`);
+    assert.equal(descriptor.value, undefined);
+  }
+  assert.equal(pageTitle.settings, m.settingsTitle);
+  assert.ok(Object.isFrozen(pageTitle));
+});
+
+test('the selector label names only the control; help text is a separate description', () => {
+  const store = createBundledLocaleStore({ developmentFixtures: true, fixtures: [fixture('fixture-rtl', 'ar')] }, memory());
+  const html = render(store);
+  assert.match(html, /<label for="locale-choose">[^<]+<\/label>/);
+  assert.match(html, /<select id="locale-choose"/);
+  assert.match(html, /<p id="locale-choose-help">/);
+  store.select('fixture-missing');
+  assert.match(render(store), /<p role="status">[^<]+<\/p><button/);
 });
