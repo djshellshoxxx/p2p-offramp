@@ -8,6 +8,10 @@ const sources = readdirSync(dir)
   .filter(name => name.endsWith('.ts'))
   .map(name => [name, readFileSync(new URL(name, dir), 'utf8')]);
 const ALLOWED_IMPORTS = new Set(['../../domain/index.ts', '../../schemas/index.ts', '@noble/hashes/sha2.js']);
+/** Lifecycle (B1b) modules. Only wallet.ts verifies Ed25519 and only submit.ts may name the one send method. */
+const LIFECYCLE = ['auxiliary.ts', 'compose.ts', 'intent.ts', 'journal.ts', 'message.ts', 'plan.ts', 'submit.ts',
+  'wallet.ts'];
+const LIFECYCLE_EXCEPTIONS = { 'wallet.ts': '@noble/curves', 'submit.ts': 'sendTransaction' };
 
 test('src-has-no-io-or-forbidden-apis', () => {
   assert.deepEqual(sources.map(([name]) => name).sort(), [
@@ -18,14 +22,19 @@ test('src-has-no-io-or-forbidden-apis', () => {
     'layout.ts',
     'reader.ts',
     'window.ts',
-  ]);
+    ...LIFECYCLE,
+  ].sort());
   for (const [name, text] of sources) {
-    assert.doesNotMatch(
-      text,
-      /Buffer|node:|@noble\/curves|fetch|atob|contracts\/|sendTransaction|simulateTransaction/,
-      name,
-    );
+    const allowed = LIFECYCLE_EXCEPTIONS[name];
+    const forbidden = ['Buffer', 'node:', '@noble/curves', 'fetch', 'atob', 'contracts/', 'sendTransaction',
+      'simulateTransaction'].filter(word => word !== allowed);
+    for (const word of forbidden) assert.ok(!text.includes(word), `${name}: ${word}`);
   }
+  // The exceptions are narrow: one import, one RPC method name.
+  const wallet = sources.find(([name]) => name === 'wallet.ts')[1];
+  assert.deepEqual(importSpecifiers(wallet).filter(spec => spec.startsWith('@noble')), ['@noble/curves/ed25519.js']);
+  const submit = sources.find(([name]) => name === 'submit.ts')[1];
+  assert.equal(submit.match(/'sendTransaction'/g).length, 1);
 });
 
 /**
@@ -67,7 +76,9 @@ test('import-scan-sees-every-static-form', () => {
 test('src-imports-only-allowed-modules', () => {
   for (const [name, text] of sources) {
     for (const specifier of importSpecifiers(text)) {
-      assert.ok(ALLOWED_IMPORTS.has(specifier) || /^\.\/[a-z]+\.ts$/.test(specifier), `${name}: ${specifier}`);
+      const curves = name === 'wallet.ts' && specifier === '@noble/curves/ed25519.js';
+      const local = /^\.\/[a-z]+\.ts$/.test(specifier);
+      assert.ok(ALLOWED_IMPORTS.has(specifier) || curves || local, `${name}: ${specifier}`);
     }
     assert.doesNotMatch(text, DYNAMIC_LOAD, name);
   }
