@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /** Local source-bound SMT/native evidence. No result produced here approves a deployment or closes specialist review. */
 import {spawn} from 'node:child_process';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,readdir,realpath} from 'node:fs/promises';
+import {realpathSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {resolve,dirname,sep} from 'node:path';
+import {resolve,dirname,basename,sep} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {keccak_256} from '@noble/hashes/sha3.js';
@@ -137,14 +138,17 @@ async function collectSources(entry){
 }
 async function verifySources(digests){for(const[key,hash]of Object.entries(digests))if(await hashFile(resolve(EVM,key))!==hash)stop('SOURCE_DRIFT');}
 async function hashFile(path){return sha(await readFile(path));}
-export async function processBounded(command,args,{input='',cwd=ROOT,env=process.env,timeoutMs=10000,maxOutput=LIMITS.outputBytes}={}){
- return new Promise(resolveResult=>{let child,stdout=[],stderr=[],bytes=0,ended=false,timedOut=false,limited=false,timer;
-  const finish=(code,error)=>{if(ended)return;ended=true;clearTimeout(timer);kill();resolveResult({code,error:error?'SPAWN_FAILED':null,timedOut,limited,stdout:Buffer.concat(stdout).toString('utf8'),stderr:Buffer.concat(stderr).toString('utf8')});};
+/** Kills the owned process group on every exit path. A descendant that left the group (setsid) and holds a pipe is not killed,
+ * but it cannot stall the result: after exit, timeout or overflow the pipes get graceMs to drain, then the run ends as PIPE_HELD_OPEN. */
+export async function processBounded(command,args,{input='',cwd=ROOT,env=process.env,timeoutMs=10000,maxOutput=LIMITS.outputBytes,graceMs=1000}={}){
+ return new Promise(resolveResult=>{let child,stdout=[],stderr=[],bytes=0,ended=false,timedOut=false,limited=false,timer,grace,exitCode=null;
+  const finish=(code,error)=>{if(ended)return;ended=true;clearTimeout(timer);clearTimeout(grace);kill();child?.stdout?.destroy();child?.stderr?.destroy();resolveResult({code,error,timedOut,limited,stdout:Buffer.concat(stdout).toString('utf8'),stderr:Buffer.concat(stderr).toString('utf8')});};
   const kill=()=>{try{if(child?.pid)process.kill(-child.pid,'SIGKILL');}catch{try{child?.kill('SIGKILL');}catch{}}};
-  try{child=spawn(command,args,{cwd,env,stdio:['pipe','pipe','pipe'],detached:true});}catch(error){finish(null,error);return;}
-  timer=setTimeout(()=>{timedOut=true;kill();},Math.max(1,timeoutMs));
-  const collect=(list,chunk)=>{bytes+=chunk.length;if(bytes>maxOutput){limited=true;kill();return;}list.push(Buffer.from(chunk));};
-  child.stdout.on('data',chunk=>collect(stdout,chunk));child.stderr.on('data',chunk=>collect(stderr,chunk));child.on('error',error=>finish(null,error));child.on('close',code=>finish(code));child.stdin.on('error',()=>{});child.stdin.end(input);
+  const bound=()=>{if(grace===undefined)grace=setTimeout(()=>finish(exitCode,'PIPE_HELD_OPEN'),Math.max(1,graceMs));};
+  try{child=spawn(command,args,{cwd,env,stdio:['pipe','pipe','pipe'],detached:true});}catch{finish(null,'SPAWN_FAILED');return;}
+  timer=setTimeout(()=>{timedOut=true;kill();bound();},Math.max(1,timeoutMs));
+  const collect=(list,chunk)=>{if(ended)return;bytes+=chunk.length;if(bytes>maxOutput){limited=true;kill();bound();return;}list.push(Buffer.from(chunk));};
+  child.stdout.on('data',chunk=>collect(stdout,chunk));child.stderr.on('data',chunk=>collect(stderr,chunk));child.on('error',()=>finish(null,'SPAWN_FAILED'));child.on('exit',code=>{exitCode=code;bound();});child.on('close',code=>finish(code,null));child.stdin.on('error',()=>{});child.stdin.end(input);
  });
 }
 function baseSettings(contractFile,contract){return{optimizer:{enabled:true,runs:200},evmVersion:'cancun',viaIR:false,remappings:['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],modelChecker:{engine:'chc',solvers:['smtlib2'],targets:['assert'],showProvedSafe:true,showUnproved:true,showUnsupported:true,extCalls:'trusted',contracts:{[contractFile]:[contract]}},outputSelection:{'*':{'*':['metadata']}}};}
@@ -244,19 +248,33 @@ export function guardPredicates(ast,source){
  }
  return{predicates:output,bindings,sourceSha256:sha(source),astSha256:sha(canonical(ast))};
 }
+/** Ordinary satisfiability: only a clean UNSAT proves a guard obligation, a clean SAT is a counterexample, anything else is unknown. */
+export function guardOutcome(solved){
+ const answer=solved?.code===0&&!solved.timedOut&&!solved.limited&&!solved.error&&typeof solved.stderr==='string'&&!solved.stderr.trim()?solverAnswer(solved.stdout):'unknown';
+ return{answer,result:answer==='unsat'?'PROVED_GUARD_LOGIC_ONLY':answer==='sat'?'COUNTEREXAMPLE_FOUND':'PROOF_UNKNOWN'};
+}
+/** Non-vacuity: each control obligation is satisfiable by construction. Unless every one returned SAT, no guard result counts. */
+export function applyGuardControls(controls,properties){
+ if(Array.isArray(controls)&&controls.length>0&&controls.every(control=>control?.answer==='sat'))return properties;
+ return properties.map(property=>({...property,result:'PROOF_UNKNOWN',qualification:'A satisfiable control obligation did not return sat, so this guard result is not counted.'}));
+}
 async function proveGuards(sourceClosure,{outputDirectory,deadline,tools}){
  const settings=baseSettings(HARNESS,'CanonicalSMT');delete settings.modelChecker;settings.outputSelection={'*':{'':['ast']}};
- const input=JSON.stringify({language:'Solidity',sources:sourceClosure.sources,settings});const compiled=await processBounded(tools.solc,['--standard-json'],{input,timeoutMs:Math.min(LIMITS.compilerMs,Math.max(1,deadline-performance.now()))});
- await writeFile(resolve(outputDirectory,'guard-compiler-input.json'),input);await writeFile(resolve(outputDirectory,'guard-compiler-output.json'),compiled.stdout);
- if(compiled.code!==0||compiled.timedOut||compiled.limited||compiled.error)stop('GUARD_COMPILER_INCOMPLETE');let parsed;try{parsed=JSON.parse(compiled.stdout);}catch{stop('GUARD_COMPILER_INVALID');}if(parsed.errors?.some(e=>e.severity==='error'))stop('GUARD_COMPILER_INVALID');
+ const input=JSON.stringify({language:'Solidity',sources:sourceClosure.sources,settings});const compiled=await processBounded(tools.solc,['--standard-json'],{input,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.compilerMs,Math.max(1,deadline-performance.now()))});
+ await writeFile(resolve(outputDirectory,'guard-compiler-input.json'),input);await writeFile(resolve(outputDirectory,'guard-compiler-output.json'),compiled.stdout);await writeFile(resolve(outputDirectory,'guard-compiler-stderr.txt'),compiled.stderr);
+ if(compiled.code!==0||compiled.timedOut||compiled.limited||compiled.error||compiled.stderr.trim())stop('GUARD_COMPILER_INCOMPLETE');let parsed;try{parsed=JSON.parse(compiled.stdout);}catch{stop('GUARD_COMPILER_INVALID');}if(parsed.errors?.some(e=>e.severity==='error'))stop('GUARD_COMPILER_INVALID');
  const extracted=guardPredicates(parsed.sources?.['src/BasicEscrow.sol']?.ast,sourceClosure.sources['src/BasicEscrow.sol'].content),{release,refund}=extracted.predicates;
  const prefix=`(set-logic QF_LIA)\n(declare-const state Int)\n(declare-const caller Int)\n(declare-const seller Int)\n(declare-const time Int)\n(declare-const deadline Int)\n(assert (and (<= 0 state) (<= state 3) (<= 0 caller) (< caller ${2n**160n}) (<= 0 seller) (< seller ${2n**160n}) (<= 0 time) (< time ${2n**256n}) (<= 0 deadline) (< deadline ${2n**64n})))\n`;
  const obligations=[['GUARD-RELEASE-REFUND-DISJOINT',`(and ${release} ${refund})`],['GUARD-UNAUTHORIZED-RELEASE-REFUSED',`(and ${release} (distinct caller seller))`],['GUARD-SELLER-DEADLINE-COVERAGE',`(and (= state 1) (= caller seller) (not (or ${release} ${refund})))`],['GUARD-DEADLINE-EQUALITY-REFUND',`(and (= state 1) (= caller seller) (= time deadline) (or ${release} (not ${refund})))`]];
- const results=[];for(const[id,violation]of obligations){const query=prefix+`(assert ${violation})\n(check-sat)\n`;if(performance.now()>=deadline)stop('GUARD_TOTAL_DEADLINE');const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,timeoutMs:Math.min(LIMITS.queryMs,deadline-performance.now()),maxOutput:LIMITS.solverOutputBytes});const answer=solved.code===0&&!solved.timedOut&&!solved.limited&&!solved.error&&!solved.stderr.trim()?solverAnswer(solved.stdout):'unknown';await writeFile(resolve(outputDirectory,id+'.smt2'),query);await writeFile(resolve(outputDirectory,id+'.stdout'),solved.stdout);results.push({id,result:answer==='unsat'?'PROVED_GUARD_LOGIC_ONLY':answer==='sat'?'COUNTEREXAMPLE_FOUND':'PROOF_UNKNOWN',answer,queryIdentity:queryIdentity(query),querySha256:sha(query),responseSha256:sha(solved.stdout),timedOut:solved.timedOut});}
- return{...extracted,compilerInputSha256:sha(input),compilerOutputSha256:sha(compiled.stdout),properties:results,qualification:'Only side-effect-free canonical pre-payout revert predicates; excludes modifiers, storage transitions, gas, transfers, bytecode and whole-contract correctness.'};
+ // Both guard predicates must be admissible over the domain, or the obligations above could hold vacuously.
+ const controlObligations=[['GUARD-CONTROL-RELEASE-ADMISSIBLE',release],['GUARD-CONTROL-REFUND-ADMISSIBLE',refund]];
+ const solve=async(id,assertion)=>{const query=prefix+`(assert ${assertion})\n(check-sat)\n`;if(performance.now()>=deadline)stop('GUARD_TOTAL_DEADLINE');const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.queryMs,deadline-performance.now()),maxOutput:LIMITS.solverOutputBytes});await writeFile(resolve(outputDirectory,id+'.smt2'),query);await writeFile(resolve(outputDirectory,id+'.stdout'),solved.stdout);await writeFile(resolve(outputDirectory,id+'.stderr'),solved.stderr);return{id,...guardOutcome(solved),queryIdentity:queryIdentity(query),querySha256:sha(query),responseSha256:sha(solved.stdout),stderrSha256:sha(solved.stderr),exitCode:solved.code,timedOut:solved.timedOut};};
+ const controls=[];for(const[id,assertion]of controlObligations){const solved=await solve(id,assertion);controls.push({...solved,result:solved.answer==='sat'?'CONTROL_SATISFIABLE':'CONTROL_FAILED'});}
+ const results=[];for(const[id,violation]of obligations)results.push(await solve(id,violation));
+ return{...extracted,compilerInputSha256:sha(input),compilerOutputSha256:sha(compiled.stdout),controls,properties:applyGuardControls(controls,results),qualification:'Only side-effect-free canonical pre-payout revert predicates; excludes modifiers, storage transitions, gas, transfers, bytecode and whole-contract correctness.'};
 }
 export async function runFormal({outputDirectory=resolve(ROOT,'.formal-evidence'),environment=process.env}={}){
- await mkdir(outputDirectory,{recursive:true});const deadline=performance.now()+LIMITS.totalMs;
+ outputDirectory=await claimEvidenceDirectory(outputDirectory,'run-started.json',{scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_REFINEMENT',limits:LIMITS});const deadline=performance.now()+LIMITS.totalMs;
  const tools=resolveTools(environment),env=tools.env;const toolchain=await checkToolchain(env),solver=await verifyTools(tools);
  const sourceClosure=await collectSources(HARNESS),source=sourceClosure.sources[HARNESS].content,specBytes=await readFile(resolve(EVM,'formal/properties.json')),spec=JSON.parse(specBytes),canonicalPath=resolve(EVM,spec.canonicalSource),canonicalBefore=await hashFile(canonicalPath),abiPath=resolve(EVM,'abi/BasicEscrow.json'),interfaceBefore=await hashFile(abiPath);
  if(canonicalBefore!==spec.canonicalSourceSha256)stop('CANONICAL_SOURCE_CHANGED');
@@ -277,8 +295,7 @@ export async function runFormal({outputDirectory=resolve(ROOT,'.formal-evidence'
 }
 /** One finite partition tranche; reuses the original bridge and never invokes the native witness. */
 export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal-partition-evidence'),environment=process.env}={}){
- await mkdir(outputDirectory,{recursive:true});const started=performance.now(),deadline=started+LIMITS.totalMs,budget={queries:0,bytes:0,rounds:0};
- await writeFile(resolve(outputDirectory,'tranche-started.json'),JSON.stringify({scope:'CLOSED_THREE_PARTITION_ATTEMPTS',limits:LIMITS,targets:PARTITION_TARGETS})+'\n',{flag:'wx'});
+ outputDirectory=await claimEvidenceDirectory(outputDirectory,'tranche-started.json',{scope:'CLOSED_THREE_PARTITION_ATTEMPTS',limits:LIMITS,targets:PARTITION_TARGETS});const started=performance.now(),deadline=started+LIMITS.totalMs,budget={queries:0,bytes:0,rounds:0};
  const tools=resolveTools(environment),toolchain=await checkToolchain(tools.env),solver=await verifyTools(tools);
  const original=await readFile(resolve(EVM,HARNESS),'utf8'),specBytes=await readFile(resolve(EVM,'formal/properties.json')),spec=JSON.parse(specBytes),canonicalPath=resolve(EVM,spec.canonicalSource),canonicalBefore=await hashFile(canonicalPath),abiPath=resolve(EVM,'abi/BasicEscrow.json'),interfaceBefore=await hashFile(abiPath);
  if(canonicalBefore!==spec.canonicalSourceSha256)stop('CANONICAL_SOURCE_CHANGED');
@@ -304,9 +321,22 @@ export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal
 }
 // The CLI argument picks where evidence is written. It must resolve inside this checkout, so a stray or
 // injected argument cannot direct writes anywhere else on the machine. Relative paths still resolve from cwd.
+// Symlinks are resolved on the deepest existing ancestor, so a link inside the checkout cannot lead writes out of it.
+// The git directory is refused. Other paths inside the checkout are accepted; the defaults are git-ignored.
+const insideCheckout=path=>{const root=realpathSync(ROOT).replace(/\/$/,''),git=root+sep+'.git';return path.startsWith(root+sep)&&path!==git&&!path.startsWith(git+sep);};
 export function evidenceDirectory(input,fallback){
- const target=input===undefined?resolve(ROOT,fallback):resolve(input),inside=resolve(ROOT)+sep;
- if(!target.startsWith(inside))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
- return target;
+ const target=input===undefined?resolve(ROOT,fallback):resolve(input),missing=[];let existing=target;
+ for(;;){try{existing=realpathSync(existing);break;}catch(error){if(error?.code!=='ENOENT')stop('FORMAL_OUTPUT_INVALID');const parent=dirname(existing);if(parent===existing)stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');missing.unshift(basename(existing));existing=parent;}}
+ const real=resolve(existing,...missing);if(!insideCheckout(real))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
+ return real;
+}
+/** Every run needs a new or empty directory inside the checkout. An exclusive start marker is written before any evidence, so
+ * a rerun cannot leave a stale report.json beside newer partial files. Programmatic callers get the same checks as the CLI. */
+async function claimEvidenceDirectory(directory,marker,payload){
+ const target=evidenceDirectory(directory);await mkdir(target,{recursive:true});
+ const real=await realpath(target);if(!insideCheckout(real))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
+ if((await readdir(real)).length)stop('FORMAL_OUTPUT_IN_USE');
+ try{await writeFile(resolve(real,marker),JSON.stringify(payload)+'\n',{flag:'wx'});}catch(error){if(error?.code==='EEXIST')stop('FORMAL_OUTPUT_IN_USE');throw error;}
+ return real;
 }
 if(isMain(import.meta.url)){const partitions=process.argv[2]==='--partitions';let directory;try{directory=evidenceDirectory(process.argv[partitions?3:2],partitions?'.formal-partition-evidence':'.formal-evidence');const report=await(partitions?runFormalPartitions:runFormal)({outputDirectory:directory});console.log(JSON.stringify({scope:report.scope,result:report.result,properties:report.formal.properties.map(p=>({id:p.id,result:p.result})),queries:report.formal.queries.length,native:report.native?.nativeRefinement??'NOT_RERUN',releaseEnabled:false,report:resolve(directory,'report.json')}));}catch(error){console.error(JSON.stringify({result:'TOOL_INCOMPLETE',code:/^[A-Z_]{1,64}$/.test(error?.message??'')?error.message:'UNAVAILABLE',releaseEnabled:false}));process.exitCode=1;}}

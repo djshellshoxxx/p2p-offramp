@@ -35,6 +35,11 @@ const RECORDED=Object.freeze({
 });
 /** The shape bridge() returns for clean complete work, around the given compiler diagnostics. */
 const cleanWork=(errors,answers=['sat'])=>({incomplete:false,stopReason:null,output:{errors:structuredClone(errors)},queries:answers.map(answer=>({answer,exitCode:0,timedOut:false,limited:false,stderrSha256:EMPTY})),compilerRuns:[0,1].map(()=>({exitCode:0,error:null,timedOut:false,limited:false,stderrSha256:EMPTY}))});
+/** A unique evidence directory inside the checkout under the git-ignored default prefix; removed by the returned cleanup. */
+async function checkoutScratch(){
+ const parent=join(ROOT,'.formal-evidence'),directory=join(parent,`unit-${process.pid}-${Math.random().toString(16).slice(2)}`);
+ return{directory,cleanup:async()=>{await rm(directory,{recursive:true,force:true});try{await rmdir(parent);}catch{}}};
+}
 test('query binding uses Keccak and rejects oversized work; unknown or contaminated solver output stays unknown',()=>{
  assert.equal(queryIdentity(''),'0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470');
  assert.throws(()=>queryIdentity('x'.repeat(LIMITS.queryBytes+1)));
@@ -237,12 +242,47 @@ test('actual canonical and model import literals retain their pinned dependency 
  assert.deepEqual(formal.literalImports(canonical),['@openzeppelin/contracts/token/ERC20/IERC20.sol','@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol','@openzeppelin/contracts/utils/ReentrancyGuard.sol']);
  assert.deepEqual(formal.literalImports(model),['../src/BasicEscrow.sol','../test/mocks/Mocks.sol','forge-std/Test.sol']);
 });
-test('the CLI evidence directory must resolve inside the checkout, so arguments cannot direct writes elsewhere',()=>{
- const root=new URL('../../',import.meta.url).pathname.replace(/\/$/,'');
+test('the CLI evidence directory must resolve inside the checkout, so arguments cannot direct writes elsewhere',async()=>{
+ const root=ROOT;
  assert.equal(formal.evidenceDirectory(undefined,'.formal-evidence'),root+'/.formal-evidence');
  assert.equal(formal.evidenceDirectory(root+'/.formal-evidence/run-1'),root+'/.formal-evidence/run-1');
  for(const outside of['/tmp/formal-evidence',root,root+'-sibling/evidence',root+'/../outside','/'])
   assert.throws(()=>formal.evidenceDirectory(outside),/FORMAL_OUTPUT_OUTSIDE_REPOSITORY/,outside);
+ for(const git of[root+'/.git',root+'/.git/formal-evidence'])assert.throws(()=>formal.evidenceDirectory(git),/FORMAL_OUTPUT_/,git);
+ // A symlink inside the checkout is resolved on the deepest existing ancestor, so it cannot lead writes outside.
+ const scratch=await checkoutScratch(),outside=await mkdtemp(join(tmpdir(),'formal-outside-'));
+ try{
+  await mkdir(scratch.directory,{recursive:true});await symlink(outside,join(scratch.directory,'escape'));
+  for(const path of[join(scratch.directory,'escape'),join(scratch.directory,'escape','evidence','deeper')])assert.throws(()=>formal.evidenceDirectory(path),/FORMAL_OUTPUT_OUTSIDE_REPOSITORY/,path);
+  await assert.rejects(formal.runFormalPartitions({outputDirectory:join(scratch.directory,'escape','evidence'),environment:{}}),{message:'FORMAL_OUTPUT_OUTSIDE_REPOSITORY'});
+  await assert.rejects(access(join(outside,'evidence')),{code:'ENOENT'});
+ }finally{await scratch.cleanup();await rm(outside,{recursive:true,force:true});}
+});
+test('both run modes claim a new or empty in-checkout directory with an exclusive marker before any tool runs',async()=>{
+ const scratch=await checkoutScratch(),outside=join(tmpdir(),`formal-not-created-${process.pid}-${Math.random().toString(16).slice(2)}`);
+ try{
+  for(const[run,marker]of[[formal.runFormal,'run-started.json'],[formal.runFormalPartitions,'tranche-started.json']]){
+   const directory=join(scratch.directory,marker);
+   await assert.rejects(run({outputDirectory:directory,environment:{}}),{message:'TOOL_ROOT_REQUIRED'});
+   assert.ok(JSON.parse(await readFile(join(directory,marker),'utf8')).scope);
+   await assert.rejects(run({outputDirectory:directory,environment:{}}),{message:'FORMAL_OUTPUT_IN_USE'});
+   // A directory left by an earlier run (here: a stale report.json, no marker) is refused and left untouched.
+   const stale=join(scratch.directory,'stale-'+marker);await mkdir(stale,{recursive:true});await writeFile(join(stale,'report.json'),'{"stale":true}\n');
+   await assert.rejects(run({outputDirectory:stale,environment:{}}),{message:'FORMAL_OUTPUT_IN_USE'});assert.equal(await readFile(join(stale,'report.json'),'utf8'),'{"stale":true}\n');
+   await assert.rejects(access(join(stale,marker)),{code:'ENOENT'});
+   await assert.rejects(run({outputDirectory:outside,environment:{}}),{message:'FORMAL_OUTPUT_OUTSIDE_REPOSITORY'});await assert.rejects(access(outside),{code:'ENOENT'});
+  }
+ }finally{await scratch.cleanup();}
+});
+test('a descendant that leaves the process group and holds a pipe cannot stall the bounded runner',{timeout:20000},async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'formal-escape-'));const pids=[];
+ try{for(const mode of['exit','timeout']){
+  const file=join(directory,mode);
+  // detached:true gives the grandchild its own session (setsid); inherited stdio keeps the runner's pipes open for 8 s.
+  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},8000)'],{detached:true,stdio:['ignore','inherit','inherit']});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));process.stdout.write('started');if(process.argv[2]==='timeout')setTimeout(()=>{},8000);`;
+  const started=performance.now(),result=await formal.processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?300:4000,graceMs:200});pids.push(Number(await readFile(file,'utf8')));
+  assert.ok(performance.now()-started<3000,mode+' waited for the escaped descendant');assert.equal(result.error,'PIPE_HELD_OPEN');assert.equal(result.timedOut,mode==='timeout');
+ }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
 });
 const fakeTool=async(directory,name,plan,body)=>{const path=join(directory,name);await writeFile(path,`#!${process.execPath}\nconst plan=${JSON.stringify(plan)};\n${body}\n`);await chmod(path,0o755);return path;};
 // Fake solc: answers round n (n = number of responses supplied) from the plan; it never reads the environment or the network.
@@ -315,4 +355,15 @@ test('Z3 pinning fails closed on a wrong digest, a missing file, a wrong version
   await writeFile(files.solc,'replaced compiler');await assert.rejects(formal.recheckTools(tools,before,{pin,solcSha256}),{message:'TOOL_ARTIFACT_DRIFT'});
   await rm(files.solc);await assert.rejects(formal.recheckTools(tools,before,{pin,solcSha256}),{message:'TOOL_ARTIFACT_MISSING'});
  }finally{await rm(directory,{recursive:true,force:true});}
+});
+test('guard answers map by ordinary satisfiability only when clean, and satisfiable controls gate every guard result',()=>{
+ const clean={code:0,timedOut:false,limited:false,error:null,stdout:'unsat\n',stderr:''};
+ assert.deepEqual(formal.guardOutcome(clean),{answer:'unsat',result:'PROVED_GUARD_LOGIC_ONLY'});
+ assert.deepEqual(formal.guardOutcome({...clean,stdout:'sat\n'}),{answer:'sat',result:'COUNTEREXAMPLE_FOUND'});
+ for(const change of[{stdout:'unknown\n'},{stdout:'timeout\n'},{stdout:''},{timedOut:true},{limited:true},{error:'SPAWN_FAILED'},{code:1},{code:null},{stderr:'WARNING\n'},{stderr:undefined}])
+  assert.deepEqual(formal.guardOutcome({...clean,...change}),{answer:'unknown',result:'PROOF_UNKNOWN'},JSON.stringify(change));
+ const properties=[{id:'A',answer:'unsat',result:'PROVED_GUARD_LOGIC_ONLY'},{id:'B',answer:'sat',result:'COUNTEREXAMPLE_FOUND'}];
+ assert.deepEqual(formal.applyGuardControls([{answer:'sat'},{answer:'sat'}],properties),properties);
+ for(const controls of[[],[{answer:'sat'},{answer:'unsat'}],[{answer:'unknown'}],undefined])
+  assert.deepEqual(formal.applyGuardControls(controls,properties).map(property=>property.result),['PROOF_UNKNOWN','PROOF_UNKNOWN']);
 });
