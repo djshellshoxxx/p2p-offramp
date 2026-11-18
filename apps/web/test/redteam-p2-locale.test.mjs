@@ -18,3 +18,26 @@ test('REDTEAM-P2-LOC1 a translation made only of non-spacing/format characters i
   }
   assert.deepEqual(accepted, [], `invisible translations accepted (first code point): ${accepted.join(', ')}`);
 });
+
+// Area review of the consolidation candidate (2bc0f62, MEDIUM-1): the visible test ran on the raw source, so
+// placeholder syntax ({, |, =) counted as visible. Named branches made only of invisible text, a message made only of
+// a variable, and punctuation-only critical warnings passed. Visibility is now judged on the message's own text.
+test('locale visibility ignores placeholder syntax: invisible branches, variable-only and symbol-only critical text are refused', () => {
+  const make = (source, variables, severity = 'warning') => createMessage({ key: 'recovery.count', source, context: 'Count of unverified records',
+    severity, variables, reviewRequired: true, docsAnchor: 'docs/recovery.md#records' });
+  for (const [source, variables] of [
+    ['{count|one=​|other=​}', { count: 'count' }],
+    ['{count|​|⁠}', { count: 'count' }],
+    ['{count|one=records|other=​}', { count: 'count' }],
+    ['{x}', { x: 'text' }],
+    ['​{x}⁠', { x: 'text' }],
+  ]) assert.throws(() => make(source, variables), /unavailable/, JSON.stringify(source));
+  assert.throws(() => make('.', {}, 'critical'), /unavailable/);
+  assert.throws(() => make('⚠ {x}', { x: 'text' }, 'critical'), /unavailable/);
+  // Still accepted: words with variables, named branches with visible text, punctuation-only non-critical text,
+  // and a critical message whose words are all in its count branches.
+  make('{count} records are unverified', { count: 'count' });
+  make('{count|one=one record|other={count} records}'.replace('{count} records}', 'many records}'), { count: 'count' });
+  make('…', {}, 'information');
+  make('{count|one=1 record unverified|other=records unverified}', { count: 'count' }, 'critical');
+});

@@ -34,6 +34,18 @@ const unsafe = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f\u061c\u200e\u200f\u202a
 // Joiners and variation selectors inside translated words stay accepted; only a message with no visible
 // character is refused (supersedes #127's weaker Default_Ignorable-only check).
 const visible = /(?![\p{Default_Ignorable_Code_Point}\u2800])[\p{L}\p{N}\p{P}\p{S}]/u;
+// Critical warnings must carry words or numbers of their own, not only punctuation or symbols.
+const lettered = /(?![\p{Default_Ignorable_Code_Point}\u2800])[\p{L}\p{N}]/u;
+/**
+ * Visibility is judged on the message's own text, never on placeholder syntax ({, |, =) or variable values: every
+ * count branch must be visible, and every rendering must show `test` either in the literal text or in a count part
+ * whose branches all pass it. So `{x}`, `{n|one=\u200b|other=\u200b}` and invisible literals are refused.
+ */
+function ownText(compiledParts: readonly Part[], test: RegExp): boolean {
+  const literals = compiledParts.filter((part): part is string => typeof part === 'string').join('');
+  return test.test(literals) || compiledParts.some(part => typeof part !== 'string' && part.forms !== undefined &&
+    Object.values(part.forms).every(form => test.test(form as string)));
+}
 type PluralCategory = 'zero' | 'one' | 'two' | 'few' | 'many' | 'other';
 type Part = string | Readonly<{ name: string; forms?: Readonly<Partial<Record<PluralCategory, string>>> }>;
 export interface MessageFormatOptions { readonly locale: LocaleCatalog['locale']; }
@@ -91,7 +103,10 @@ export function createMessage<const V extends MessageVariables>(input: MessageEn
     for (const key of keys as string[]) { if (!purposes.includes(values[key] as VariablePurpose)) return refuse(); variables[key] = values[key] as VariablePurpose; }
     const entry: MessageEntry = Object.freeze({ key: raw.key, source: raw.source, context: raw.context, severity: raw.severity as MessageEntry['severity'],
       variables: Object.freeze(variables), reviewRequired: raw.reviewRequired, docsAnchor: raw.docsAnchor });
-    compiled.set(entry, parts(entry.source, entry.variables)); return entry as MessageEntry<V>;
+    const compiledParts = parts(entry.source, entry.variables);
+    if (compiledParts.some(part => typeof part !== 'string' && part.forms !== undefined && Object.values(part.forms).some(form => !visible.test(form as string))) ||
+        !ownText(compiledParts, visible) || (entry.severity === 'critical' && !ownText(compiledParts, lettered))) return refuse();
+    compiled.set(entry, compiledParts); return entry as MessageEntry<V>;
   } catch { return refuse(); }
 }
 function displayValue(purpose: VariablePurpose, value: unknown): string {

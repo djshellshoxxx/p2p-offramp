@@ -94,9 +94,10 @@ test('blank source messages are refused at every severity without trimming valid
 });
 
 test('address-purpose display retains exact canonical bytes and refuses spoofing controls', () => {
-  const entry=createMessage(definition({source:'{address}',variables:{address:'address'}}));
+  // Variable-only sources are refused (no visible text of their own), so the harness carries a literal label.
+  const entry=createMessage(definition({source:'Address {address}',variables:{address:'address'}}));
   const address='0x'+'Ab'.repeat(20);
-  assert.equal(formatMessage(entry,{address}),address);
+  assert.equal(formatMessage(entry,{address}),`Address ${address}`);
   for(const value of ['0x1234',address+'\u202e','１２３４','<script>','a'.repeat(80)]) refuses(()=>formatMessage(entry,{address:value}),'MESSAGE_VARIABLE_MISMATCH');
 });
 test('direction is derived from a supported locale and imported status grants no selection authority', () => {
