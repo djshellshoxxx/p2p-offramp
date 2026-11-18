@@ -60,3 +60,17 @@ implemented. The `@noble/hashes` 2.4.0 inventory review is still pending.
 node --import ./scripts/test-support/register-tsx.mjs --test packages/chain-solana/test/*.test.mjs
 npm run typecheck && npm run check:boundaries && npm test
 ```
+
+## Lifecycle, submission and recovery (B1b)
+
+Adds signing and submission on top of the read-only modules above (which keep the guarantees stated there):
+`message.ts` (legacy message serializer/parser), `plan.ts` (C-L2 plans: one escrow instruction per message, payout
+only after a finalized `Released`/`Refunded` read), `wallet.ts` (Wallet Standard `standard:connect` +
+`solana:signTransaction`, role-key bound, byte-exact and Ed25519-verified output), `intent.ts`/`journal.ts`
+(encrypted-vault journal port with CAS), `submit.ts` (durable send marker before one `sendTransaction`,
+`skipPreflight: true`, `maxRetries: 0`, no resend; reconciliation by signature status and finalized blockhash
+expiry), `adapter.ts` (mapping to Lane A's `IntentV2`), `recovery.ts` and the entry point
+`createSolanaEscrowClient({ rpc, wallet, journal, registry, clock, margins, walletChain })` in `compose.ts`. Margins
+are required inputs. Status: adapter plus local-validator integration, not wired into apps/web. Details, the state
+machine and the open shared-schema items: [docs/lifecycle.md](docs/lifecycle.md); recovery:
+[contracts/solana/RECOVERY.md](../../contracts/solana/RECOVERY.md).
