@@ -56,7 +56,7 @@ export function parseLocalnetCommand(input: unknown): LocalnetCommand {
         ...(raw.escrowForSeconds === undefined ? {} : { escrowForSeconds: integer(raw.escrowForSeconds, 2100, 604800) }) };
     }
     if (action === 'accept') return { type, action, sessionId: string(fields(input, ['type', 'action', 'sessionId']).sessionId, 300) };
-    if (action === 'fund' || action === 'release' || action === 'refund') {
+    if (action === 'approve' || action === 'fund' || action === 'release' || action === 'refund') {
       const raw = fields(input, ['type', 'action', 'tradeId'], ['fiatReceiptConfirmed']);
       if (raw.fiatReceiptConfirmed !== undefined && typeof raw.fiatReceiptConfirmed !== 'boolean') return fail();
       return { type, action, tradeId: string(raw.tradeId, 64, /^[0-9a-f]{64}$/),

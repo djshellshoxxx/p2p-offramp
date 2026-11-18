@@ -9,7 +9,7 @@ import { decodeBase64url, encodeBase64url, decodeIdentityPayload, encodeIdentity
 import { createCoreError, createOperationId, reviewTermsBytes, TERMS_REVIEW_FORMAT, encodePrivateAgreement, encodeCapabilities,
   checkFundingWindow, sha256Hex, type ReviewedEvmTerms, type PrivateAgreementV1 } from '../../../../packages/domain/index.ts';
 import { createLifecycleJournal, createEvmTxLifecycle, evmFinalityPolicy, type EvmTxLifecycle, type LifecycleJournal, type PreparedEvmIntent } from '../../../../packages/domain/localnet.ts';
-import { EvmChainReader } from '../../../../packages/chain-evm/localnet.ts';
+import { EvmChainReader, type LiveAnchor } from '../../../../packages/chain-evm/localnet.ts';
 import { EvmWalletAdapter, createEvmPeerAcceptancePorts, createEip1193ChainReader, escrowCallFor, evmTermsFromReviewed, evmTermsHash,
   peerAcceptanceTypedData, type Eip1193Provider, type WalletSession, type EvmPeerPorts, type PeerAcceptanceV1 } from '../../../../packages/wallet/localnet.ts';
 import { createLocalNobleNostrProvider, createRelayEventCrypto } from '../../../../packages/nostr-crypto/index.ts';
@@ -21,6 +21,7 @@ import type { LocalnetCommand, LocalnetResult, LocalnetReview, LocalnetSnapshot,
 import { createLocalnetRelayRoute, LOCALNET_RELAY_ENDPOINT } from './relay-route.ts';
 import { reviewedTermsRequest, reviewedTransactionRequest } from './review-requests.ts';
 import { LocalnetFailure, fail, fields, parseLocalnetCommand } from './validation.ts';
+import { erc20FundingReady, nextErc20Approval, readErc20FundingState, type Erc20FundingState } from './erc20-funding.ts';
 
 const TRADE_FORMAT = 'p2p-offramp/localnet-private-trade/v1';
 const REVIEW_MS = 30_000, IDLE_MS = 5 * 60_000, MAX_TRADES = 8;
@@ -44,7 +45,8 @@ const pending = (intent: Intent): boolean => !['finalized', 'failed', 'expired',
 interface Trade {
   readonly recordId: string; readonly bytes: Uint8Array; readonly reviewed: ReviewedEvmTerms; readonly role: 'seller' | 'buyer';
   readonly counterparty: string; readonly restored: boolean; sessionId: string | null; acceptance: string;
-  state: LocalnetTradeView['chainState']; observedAt: number | null; chainTimestamp: string | null; chat: DurableTradeChat;
+  state: LocalnetTradeView['chainState']; observedAt: number | null; chainTimestamp: string | null; tokenState: Erc20FundingState | null;
+  tokenReadError: boolean; chat: DurableTradeChat;
   messages: LocalnetTradeView['chat'];
 }
 interface Review {
@@ -125,13 +127,19 @@ export class LocalnetController {
       const fresh = trade.observedAt !== null && this.#now() >= trade.observedAt && this.#now() - trade.observedAt < 60_000;
       const seller = trade.role === 'seller' && account === r.seller;
       const clear = !intents.some(pending);
+      const fundingWindow = trade.chainTimestamp !== null && BigInt(trade.chainTimestamp) < BigInt(r.acceptBeforeSeconds) &&
+        BigInt(r.escrowExpirySeconds) - BigInt(trade.chainTimestamp) >= 1800n;
+      const admission = seller && fresh && clear && fundingWindow && trade.state === 'absent' && trade.acceptance === 'both-verified' && trade.sessionId !== null;
+      const approval = r.asset.kind === 'erc20' && trade.tokenState ? { token: r.asset.address!, spender: r.deployment.address,
+        ...trade.tokenState, nextAmountBaseUnits: nextErc20Approval(r.amountBaseUnits, trade.tokenState) } : null;
       return { id, sessionId: trade.sessionId, role: trade.role, restored: trade.restored, seller: r.seller, buyer: r.buyer,
         assetId: r.asset.id, amountBaseUnits: r.amountBaseUnits, fiatCurrency: r.agreement.fiatCurrency, fiatMinorUnits: r.agreement.fiatMinorUnits,
         fiatScale: r.agreement.fiatScale, paymentInstructions: r.agreement.paymentInstructions, acceptBeforeSeconds: r.acceptBeforeSeconds,
         escrowExpirySeconds: r.escrowExpirySeconds, peerAcceptance: trade.acceptance, chainState: trade.state, chainObservedAtMs: trade.observedAt,
         intents: intents.map(intent => ({ id: intent.intentId, action: intent.action, state: intent.state, hash: intent.submission.chain === 'evm' ? intent.submission.hash : null })),
         chat: trade.messages,
-        canFund: seller && fresh && clear && trade.state === 'absent' && trade.acceptance === 'both-verified' && trade.sessionId !== null,
+        approval, tokenReadError: trade.tokenReadError, canApprove: admission && approval !== null && approval.nextAmountBaseUnits !== null,
+        canFund: admission && (r.asset.kind === 'native' || trade.tokenState !== null && erc20FundingReady(r.amountBaseUnits, trade.tokenState)),
         canRelease: seller && fresh && clear && trade.state === 'funded' && trade.chainTimestamp !== null && BigInt(trade.chainTimestamp) < BigInt(r.escrowExpirySeconds),
         canRefund: seller && fresh && clear && trade.state === 'funded' && trade.chainTimestamp !== null && BigInt(trade.chainTimestamp) >= BigInt(r.escrowExpirySeconds),
       };
@@ -300,7 +308,7 @@ export class LocalnetController {
       const bytes = decodeBase64url(raw.terms, 1, 64 * 1024);
       try {
         const reviewed = value(await reviewTermsBytes(this.#config.registry, bytes)); this.#guard(epoch);
-        if (reviewed.asset.kind !== 'native' || reviewed.unsupportedCapabilities.length || this.#trades.size >= MAX_TRADES || this.#trades.has(idOf(reviewed))) fail('INTEGRITY_FAILURE');
+        if (!this.#supported(reviewed) || reviewed.unsupportedCapabilities.length || this.#trades.size >= MAX_TRADES || this.#trades.has(idOf(reviewed))) fail('INTEGRITY_FAILURE');
         this.#trades.set(idOf(reviewed), this.#newTrade(record.id, bytes, reviewed, raw.role, raw.counterpartyPublicKey, null, true));
       } finally { bytes.fill(0); }
     }
@@ -308,13 +316,19 @@ export class LocalnetController {
   #newTrade(recordId: string, bytes: Uint8Array, reviewed: ReviewedEvmTerms, role: 'seller' | 'buyer', counterparty: string, sessionId: string | null, restored: boolean): Trade {
     const chat = value(createDurableTradeChat({ vault: this.#vault, session: this.#session!, provider: this.#messaging,
       binding: bindingOf(reviewed), participants: [this.#publicKey!, counterparty], selfPublicKey: this.#publicKey!, now: this.#seconds, nowMs: this.#now }));
-    return { recordId, bytes: Uint8Array.from(bytes), reviewed, role, counterparty, sessionId, restored, acceptance: restored ? 'recheck-required' : 'none', state: null, observedAt: null, chainTimestamp: null, chat, messages: [] };
+    return { recordId, bytes: Uint8Array.from(bytes), reviewed, role, counterparty, sessionId, restored, acceptance: restored ? 'recheck-required' : 'none', state: null, observedAt: null, chainTimestamp: null, tokenState: null, tokenReadError: false, chat, messages: [] };
+  }
+  #supported(reviewed: ReviewedEvmTerms): boolean {
+    const asset = this.#config.network.assets.find(candidate => candidate.id === reviewed.asset.id), deployment = this.#config.network.deployments[0]!;
+    return asset !== undefined && asset.kind === reviewed.asset.kind && asset.address === reviewed.asset.address && asset.transferPolicy === 'exact-transfer' &&
+      reviewed.network.id === this.#config.network.id && reviewed.deployment.id === this.#config.network.deployments[0]!.id &&
+      reviewed.deployment.address === deployment.address && deployment.supportedAssetIds.includes(reviewed.asset.id);
   }
   async #saveSession(sessionId: string): Promise<void> {
     const session = this.#exchange!.session(sessionId); if (!session?.terms) return;
     const { reviewed, bytes } = session.terms, id = idOf(reviewed), epoch = this.#epoch;
     try {
-      if (reviewed.asset.kind !== 'native' || reviewed.unsupportedCapabilities.length) fail('UNSUPPORTED_ASSET');
+      if (!this.#supported(reviewed) || reviewed.unsupportedCapabilities.length) fail('UNSUPPORTED_ASSET');
       const existing = this.#trades.get(id);
       if (existing) { existing.sessionId = sessionId; return; }
       if (this.#trades.size >= MAX_TRADES) fail('LIMIT_EXCEEDED');
@@ -328,7 +342,7 @@ export class LocalnetController {
   }
   async #advertise(command: Extract<LocalnetCommand, { type: 'ad.publish' }>): Promise<void> {
     const asset = this.#config.network.assets.find(entry => entry.id === command.assetId);
-    if (!asset || asset.kind !== 'native' || !this.#config.network.deployments[0]!.supportedAssetIds.includes(asset.id)) fail('UNSUPPORTED_ASSET');
+    if (!asset || !['native', 'erc20'].includes(asset.kind) || asset.transferPolicy !== 'exact-transfer' || !this.#config.network.deployments[0]!.supportedAssetIds.includes(asset.id)) fail('UNSUPPORTED_ASSET');
     if (!this.#wallet) fail('WALLET_REQUIRED');
     const epoch = this.#epoch, now = this.#seconds();
     const event = await createAdEvent(this.#eventCrypto!, { app: 'p2p-offramp', v: 1, orderId: random(32), revision: 1, networkId: this.#config.network.id,
@@ -344,7 +358,8 @@ export class LocalnetController {
   async #draft(session: SessionView, command: Extract<LocalnetCommand, { type: 'review.prepare'; action: 'offer' }>): Promise<Uint8Array> {
     const found = this.#book!.revalidate(adBookKey(session.seller, session.orderId)); if (!found.ok) fail('AD_UNAVAILABLE');
     const ad = found.ad.ad, asset = this.#config.network.assets.find(entry => entry.id === ad.assetId);
-    if (!asset || asset.kind !== 'native' || !this.#wallet || session.role !== 'seller' || !session.selected) fail('UNAUTHORIZED');
+    if (!asset || !['native', 'erc20'].includes(asset.kind) || asset.transferPolicy !== 'exact-transfer' ||
+        !this.#config.network.deployments[0]!.supportedAssetIds.includes(asset.id) || !this.#wallet || session.role !== 'seller' || !session.selected) fail('UNAUTHORIZED');
     const epoch = this.#epoch, now = this.#seconds(), deployment = this.#config.network.deployments[0]!;
     const agreement: PrivateAgreementV1 = { v: 1, orderId: session.orderId, revision: '1', fiatCurrency: ad.currency,
       fiatMinorUnits: command.fiatMinorUnits, fiatScale: command.fiatScale, paymentInstructions: command.paymentInstructions, capabilities: [], agreementSalt: random(32) };
@@ -354,7 +369,7 @@ export class LocalnetController {
       const acceptBeforeSeconds = String(now + (command.acceptForSeconds ?? 900)), escrowExpirySeconds = String(now + (command.escrowForSeconds ?? 3600));
       checkFundingWindow(acceptBeforeSeconds, escrowExpirySeconds, String(now));
       return new TextEncoder().encode(JSON.stringify({ format: TERMS_REVIEW_FORMAT, terms: { orderId: session.orderId, revision: '1', networkId: this.#config.network.id,
-        deploymentId: deployment.id, seller: this.#wallet.account, buyer: session.buyerAddress, assetKind: 'native', asset: ZERO,
+        deploymentId: deployment.id, seller: this.#wallet.account, buyer: session.buyerAddress, assetKind: asset.kind, asset: asset.address ?? ZERO,
         amountBaseUnits: ad.amountMin, privateAgreementHash, capabilitiesHash, sellerNonce: random(32), acceptBeforeSeconds, escrowExpirySeconds }, privateAgreement: agreement }));
     } finally { agreementBytes.fill(0); capabilityBytes.fill(0); }
   }
@@ -370,7 +385,7 @@ export class LocalnetController {
     if (!this.#wallet) fail('WALLET_REQUIRED');
     await this.#cancelReview(); const epoch = this.#epoch, wallet = this.#wallet!; this.#guard(epoch);
     let reviewed: ReviewedEvmTerms, bytes: Uint8Array | null = null, sessionId: string | null = null, prepared: PreparedEvmIntent | null = null, peerBinding: PeerAcceptanceV1 | null = null;
-    let supersedes: string | null = null;
+    let supersedes: string | null = null, approvalAmount: string | null = null;
     try {
       if (command.action === 'offer' || command.action === 'accept') {
         const session = this.#exchange!.session(command.sessionId); if (!session) fail('SESSION_NOT_FOUND'); sessionId = session.id;
@@ -380,18 +395,26 @@ export class LocalnetController {
           value(await this.#exchange!.acceptanceStatus(session.id, 'accept', this.#operation.signal)); this.#guard(epoch); bytes = Uint8Array.from(session.terms.bytes);
         }
         reviewed = value(await reviewTermsBytes(this.#config.registry, bytes)); this.#guard(epoch);
-        if (reviewed.asset.kind !== 'native' || reviewed.unsupportedCapabilities.length || wallet.account !== reviewed[session.role]) fail('UNAUTHORIZED');
+        if (!this.#supported(reviewed) || reviewed.unsupportedCapabilities.length || wallet.account !== reviewed[session.role]) fail('UNAUTHORIZED');
         peerBinding = value(await this.#exchange!.acceptanceStatement(session.id, bytes, reviewed.acceptBeforeSeconds)).binding; this.#guard(epoch);
       } else {
         const trade = this.#trades.get(command.tradeId); if (!trade) fail('TRADE_NOT_FOUND'); reviewed = trade.reviewed;
         if (trade.role !== 'seller' || wallet.account !== reviewed.seller) fail('UNAUTHORIZED');
         if (command.action === 'release' && command.fiatReceiptConfirmed !== true) fail('FIAT_RECEIPT_CONFIRMATION_REQUIRED');
         await this.#observe(trade); this.#guard(epoch);
-        if (command.action === 'fund') {
+        if (command.action === 'fund' || command.action === 'approve') {
           if (!trade.sessionId) fail('PEER_REACCEPTANCE_REQUIRED');
           value(await this.#exchange!.acceptanceStatus(trade.sessionId, 'fund', this.#operation.signal)); this.#guard(epoch);
         }
-        const canonical = escrowCallFor(command.action === 'fund' ? { action: 'fund', domain: domainOf(reviewed), terms: evmTermsFromReviewed(reviewed) }
+        if (command.action === 'approve') {
+          if (reviewed.asset.kind !== 'erc20') fail('UNSUPPORTED_ASSET');
+          if (trade.tokenState === null) fail('TOKEN_READ_UNAVAILABLE');
+          approvalAmount = nextErc20Approval(reviewed.amountBaseUnits, trade.tokenState);
+          if (approvalAmount === null) fail('TOKEN_APPROVAL_UNAVAILABLE');
+        } else if (command.action === 'fund' && reviewed.asset.kind === 'erc20' &&
+            (trade.tokenState === null || !erc20FundingReady(reviewed.amountBaseUnits, trade.tokenState))) fail('TOKEN_ALLOWANCE_REQUIRED');
+        const canonical = escrowCallFor(command.action === 'approve' ? { action: 'approve', token: reviewed.asset.address!, spender: reviewed.deployment.address, amountBaseUnits: approvalAmount! }
+          : command.action === 'fund' ? { action: 'fund', domain: domainOf(reviewed), terms: evmTermsFromReviewed(reviewed) }
           : { action: command.action, escrow: reviewed.deployment.address, tradeId: idOf(reviewed) });
         const replaced = new Set(this.#intents.map(intent => intent.replacementOf).filter(id => id !== null));
         const successors = this.#intents.filter(intent => intent.binding.tradeId === command.tradeId && ['expired', 'replaced'].includes(intent.state) && !replaced.has(intent.intentId));
@@ -411,6 +434,9 @@ export class LocalnetController {
         { label: 'Payment instructions', value: reviewed.agreement.paymentInstructions },
         { label: 'Accept before (unix seconds)', value: reviewed.acceptBeforeSeconds }, { label: 'Refund after (unix seconds)', value: reviewed.escrowExpirySeconds },
       ];
+      if (reviewed.asset.kind === 'erc20') fields.push({ label: 'Token contract', value: reviewed.asset.address! });
+      if (approvalAmount !== null) fields.push({ label: 'Allowance spender', value: reviewed.deployment.address },
+        { label: 'New allowance in base units', value: approvalAmount }, { label: 'Allowance change', value: approvalAmount === '0' ? 'Reset existing allowance to zero.' : 'Approve only this trade\'s exact principal.' });
       if (command.action === 'release') fields.push({ label: 'Bank receipt', value: 'Seller explicitly confirmed receipt in their bank account.' });
       if (supersedes !== null) fields.push({ label: 'Supersedes reconciled intent', value: supersedes }, { label: 'Transaction nonce', value: prepared!.request.nonce });
       const publicReview: LocalnetReview = { id: random(16), action: command.action, expiresAtMs: this.#now() + REVIEW_MS, fields,
@@ -448,16 +474,25 @@ export class LocalnetController {
     try {
       this.#guard(); const epoch = this.#epoch, trade = this.#trades.get(intent.binding.tradeId);
       if (!trade || intent.binding.chain !== 'evm' || intent.binding.networkId !== trade.reviewed.network.id || intent.binding.deploymentId !== trade.reviewed.deployment.id ||
-          intent.account !== trade.reviewed.seller || intent.action === 'approve') fail('INTEGRITY_FAILURE');
+          intent.account !== trade.reviewed.seller) fail('INTEGRITY_FAILURE');
       const r = trade.reviewed;
-      const canonical = escrowCallFor(intent.action === 'fund' ? { action: 'fund', domain: domainOf(r), terms: evmTermsFromReviewed(r) }
-        : { action: intent.action, escrow: r.deployment.address, tradeId: idOf(r) });
       const request = JSON.parse(intent.preparedRequest) as Record<string, unknown>;
+      const approvalAmount = intent.action === 'approve' ? this.#approvalAmount(r, request.data) : null;
+      const canonical = escrowCallFor(intent.action === 'approve' ? { action: 'approve', token: r.asset.address!, spender: r.deployment.address, amountBaseUnits: approvalAmount! }
+        : intent.action === 'fund' ? { action: 'fund', domain: domainOf(r), terms: evmTermsFromReviewed(r) }
+        : { action: intent.action, escrow: r.deployment.address, tradeId: idOf(r) });
       if (request.chainId !== '31337' || request.from !== r.seller || intent.expectedEscrowState !== canonical.expectedEscrowState ||
           request.to !== canonical.call.to || request.data !== canonical.call.data || request.value !== canonical.call.value) fail('INTEGRITY_FAILURE');
       value(await this.#native!.validateLive(r.network.id, r.deployment.id, this.#operation.signal)); this.#guard(epoch);
       return { ok: true, value: undefined };
     } catch (error) { return this.#preflightFailure(error); }
+  }
+  #approvalAmount(reviewed: ReviewedEvmTerms, data: unknown): string {
+    if (reviewed.asset.kind !== 'erc20') fail('INTEGRITY_FAILURE');
+    for (const amountBaseUnits of ['0', reviewed.amountBaseUnits]) {
+      if (escrowCallFor({ action: 'approve', token: reviewed.asset.address!, spender: reviewed.deployment.address, amountBaseUnits }).call.data === data) return amountBaseUnits;
+    }
+    return fail('INTEGRITY_FAILURE');
   }
   #preflightFailure(error: unknown): CoreResult<never> {
     const code = error instanceof LocalnetFailure && ['LOCKED', 'CONFLICT', 'EXPIRED', 'UNAUTHORIZED'].includes(error.code) ? error.code as 'LOCKED' | 'CONFLICT' | 'EXPIRED' | 'UNAUTHORIZED' : 'INTEGRITY_FAILURE';
@@ -475,17 +510,42 @@ export class LocalnetController {
       if (typeof head?.timestamp !== 'string' || !/^0x(?:0|[1-9a-f][0-9a-f]*)$/.test(head.timestamp)) fail('INTEGRITY_FAILURE');
       const time = BigInt(head.timestamp);
       if (time < BigInt(anchor.timestampSeconds)) fail('INTEGRITY_FAILURE');
-      if (intent.action === 'fund') {
+      if (intent.action === 'fund' || intent.action === 'approve') {
         checkFundingWindow(r.acceptBeforeSeconds, r.escrowExpirySeconds, time.toString());
         if (!trade.sessionId) fail('UNAUTHORIZED');
         value(await this.#exchange!.acceptanceStatus(trade.sessionId, 'fund', this.#operation.signal)); this.#guard(epoch);
+        if (r.asset.kind === 'erc20') {
+          const state = await this.#tokenState(r); this.#guard(epoch);
+          if (intent.action === 'fund' ? !erc20FundingReady(r.amountBaseUnits, state) :
+              nextErc20Approval(r.amountBaseUnits, state) !== this.#approvalAmount(r, (JSON.parse(intent.preparedRequest) as Record<string, unknown>).data)) fail('UNAUTHORIZED');
+        } else if (intent.action === 'approve') fail('UNAUTHORIZED');
       } else if (intent.action === 'refund' && time < BigInt(r.escrowExpirySeconds) || intent.action === 'release' && time >= BigInt(r.escrowExpirySeconds)) fail('EXPIRED');
       return { ok: true, value: undefined };
     } catch (error) { return this.#preflightFailure(error); }
   }
+  async #tokenState(reviewed: ReviewedEvmTerms, escrowAnchor?: LiveAnchor): Promise<Erc20FundingState> {
+    if (reviewed.asset.kind !== 'erc20') fail('UNSUPPORTED_ASSET');
+    const epoch = this.#epoch, anchor = escrowAnchor ?? value(await this.#native!.validateLive(reviewed.network.id, reviewed.deployment.id, this.#operation.signal)); this.#guard(epoch);
+    return readErc20FundingState({ anchor, genesisHash: this.#config.network.genesisHash, token: reviewed.asset.address!, seller: reviewed.seller,
+      spender: reviewed.deployment.address, signal: this.#operation.signal, assertCurrent: () => this.#guard(epoch),
+      request: async request => { const send = this.#provider.request; this.#guard(epoch); const output = await send.call(this.#provider, request); this.#guard(epoch); return output; } });
+  }
   async #observe(trade: Trade): Promise<void> {
+    trade.observedAt = null; trade.chainTimestamp = null; trade.tokenState = null; trade.tokenReadError = false;
     const epoch = this.#epoch, read = value(await this.#native!.read(bindingOf(trade.reviewed), { generation: epoch, requestSequence: ++this.#sequence,
       signal: this.#operation.signal }, expectedOf(trade.reviewed))); this.#guard(epoch);
+    // Once funded, allowances are irrelevant to release/refund and must not add a new veto to either exit.
+    if (trade.reviewed.asset.kind === 'erc20' && read.escrow.state === 'absent') {
+      try { trade.tokenState = await this.#tokenState(trade.reviewed, read.anchor); this.#guard(epoch); }
+      catch (error) {
+        // Failure of this unfunded trade's token guidance cannot hide another trade's funded exit on refresh/unlock.
+        // The escrow anchor was validated above, outside this fallback. Final identity checks and vault invalidation
+        // still propagate; malformed/unavailable token guidance keeps only this trade's approval/funding disabled.
+        this.#guard(epoch);
+        if (error instanceof LocalnetFailure && !['INTEGRITY_FAILURE', 'UNAVAILABLE', 'TIMEOUT'].includes(error.code)) throw error;
+        trade.tokenReadError = true;
+      }
+    }
     trade.state = read.escrow.state; trade.observedAt = read.observation.observedAt; trade.chainTimestamp = read.anchor.timestampSeconds;
   }
   async #refresh(): Promise<void> {

@@ -9,7 +9,7 @@ import { runLocalnetUiCommand, type LocalnetUiCommand } from './ui-command.ts';
 import './localnet.css';
 
 type Send = (command: LocalnetUiCommand) => Promise<LocalnetResult | undefined>;
-const labels = { offer: 'Offer these terms', accept: 'Accept these terms', fund: 'Fund escrow', release: 'Release to buyer', refund: 'Refund to seller' };
+const labels = { offer: 'Offer these terms', accept: 'Accept these terms', approve: 'Submit this allowance change', fund: 'Fund escrow', release: 'Release to buyer', refund: 'Refund to seller' };
 const safeCode = (code: string) => /^[A-Z][A-Z0-9_]{0,63}$/.test(code) ? code : 'OPERATION_REFUSED';
 
 function ProfileForms({ snapshot, busy, send }: { snapshot: LocalnetSnapshot; busy: boolean; send: Send }) {
@@ -92,7 +92,8 @@ function BackupPanel({ unlocked, busy, send }: { unlocked: boolean; busy: boolea
 }
 
 function Market({ config, snapshot, busy, send }: { config: LocalnetConfig; snapshot: LocalnetSnapshot; busy: boolean; send: Send }) {
-  const assets = config.network.assets.filter(asset => asset.kind === 'native');
+  const assets = config.network.assets.filter(asset => (asset.kind === 'native' || asset.kind === 'erc20') &&
+    asset.transferPolicy === 'exact-transfer' && config.network.deployments[0]!.supportedAssetIds.includes(asset.id));
   const [assetId, setAssetId] = useState(assets[0]?.id ?? ''), [amount, setAmount] = useState('10000000000000000'), [currency, setCurrency] = useState('USD');
   return <section className="panel" aria-labelledby="market-title">
     <h2 id="market-title">Local offers</h2>
@@ -144,7 +145,7 @@ function Sessions({ snapshot, busy, send }: { snapshot: LocalnetSnapshot; busy: 
 
 function Trade({ trade, busy, send }: { trade: LocalnetTradeView; busy: boolean; send: Send }) {
   const [fiatReceived, setFiatReceived] = useState(false), [text, setText] = useState('');
-  const prepare = (action: 'fund' | 'release' | 'refund') => {
+  const prepare = (action: 'approve' | 'fund' | 'release' | 'refund') => {
     const confirmed = fiatReceived; setFiatReceived(false);
     void send({ type: 'review.prepare', action, tradeId: trade.id, ...(action === 'release' ? { fiatReceiptConfirmed: confirmed } : {}) });
   };
@@ -163,7 +164,15 @@ function Trade({ trade, busy, send }: { trade: LocalnetTradeView; busy: boolean;
     <h4>Private payment instructions</h4><p className="localnet-preserve" data-testid="payment-instructions">{trade.paymentInstructions}</p>
     {trade.role === 'buyer' && <p className="helper">Refresh and verify that escrow is funded before following the agreed payment instructions. A chat message is not evidence of a bank payment.</p>}
     {trade.canRelease && <label className="checkbox-label"><input type="checkbox" checked={fiatReceived} onChange={event => setFiatReceived(event.target.checked)} />I checked my bank account and received the agreed fiat payment.</label>}
+    {trade.tokenReadError && <p className="notice" role="status">Token allowance could not be checked. Refresh before preparing an approval or funding this trade.</p>}
+    {trade.approval && <section aria-label="Token allowance">
+      <p>Token <code>{trade.approval.token}</code> · Escrow spender <code>{trade.approval.spender}</code></p>
+      <p>Finalized allowance: {trade.approval.allowanceBaseUnits} base units. Available balance: {trade.approval.balanceBaseUnits} base units.</p>
+      {!trade.approval.settled && <p className="helper">The latest allowance or token code differs from finalized state. Refresh after finality before continuing.</p>}
+      <p className="helper">Each allowance change has its own wallet review. An existing non-exact allowance is reset to zero first; the next approval grants only this trade's principal. Funding requires a separate review.</p>
+    </section>}
     <div className="actions">
+      {trade.approval && <button disabled={busy || !trade.canApprove} onClick={() => prepare('approve')}>{trade.approval.nextAmountBaseUnits === '0' ? 'Review allowance reset' : 'Review exact token allowance'}</button>}
       <button disabled={busy || !trade.canFund} onClick={() => prepare('fund')}>Review funding</button>
       <button disabled={busy || !trade.canRelease || !fiatReceived} onClick={() => prepare('release')}>Review release</button>
       <button disabled={busy || !trade.canRefund} onClick={() => prepare('refund')}>Review refund</button>

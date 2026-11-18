@@ -32,7 +32,8 @@ function typedData(data) {
   return { ...data, domain: { ...data.domain, chainId: BigInt(data.domain.chainId) }, message };
 }
 
-export async function startLocalnetFixture() {
+export async function startLocalnetFixture({ erc20 = false } = {}) {
+  assert.equal(typeof erc20, 'boolean');
   const foundry = process.env.FOUNDRY_BIN ?? `${homedir()}/.foundry/bin`;
   const env = { ...process.env, PATH: `${foundry}:${process.env.PATH ?? ''}` };
   const anvilPath = existsSync(`${foundry}/anvil`) ? `${foundry}/anvil` : 'anvil';
@@ -62,7 +63,15 @@ export async function startLocalnetFixture() {
       try { if (await rpc('eth_chainId') === '0x7a69') break; } catch { /* Bounded startup retry. */ }
       await pause(25);
     }
-    const deployed = await run('forge', ['create', 'src/BasicEscrow.sol:BasicEscrow', '--rpc-url', url, '--private-key', KEYS[0], '--broadcast', '--json', '--constructor-args', '[]'],
+    let token = null;
+    if (erc20) {
+      const deployedToken = await run('forge', ['create', 'test/mocks/Mocks.sol:MockERC20', '--rpc-url', url, '--private-key', KEYS[0], '--broadcast', '--json', '--constructor-args', 'Local Test Token', 'LTT'],
+        { cwd: contracts, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }), timeout: 30_000, maxBuffer: 1 << 20 });
+      token = JSON.parse(deployedToken.stdout.slice(deployedToken.stdout.indexOf('{'))).deployedTo.toLowerCase();
+      await run('cast', ['send', '--rpc-url', url, '--private-key', KEYS[0], token, 'mint(address,uint256)', accounts[0], '1000000000000000000000000'],
+        { env: forgeEnv(env), timeout: 30_000, maxBuffer: 1 << 20 });
+    }
+    const deployed = await run('forge', ['create', 'src/BasicEscrow.sol:BasicEscrow', '--rpc-url', url, '--private-key', KEYS[0], '--broadcast', '--json', '--constructor-args', token === null ? '[]' : `[${token}]`],
       { cwd: contracts, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }), timeout: 30_000, maxBuffer: 1 << 20 });
     const escrow = JSON.parse(deployed.stdout.slice(deployed.stdout.indexOf('{'))).deployedTo.toLowerCase();
     const mine = async (count = 6) => { await rpc('anvil_mine', [`0x${count.toString(16)}`]); return Number(BigInt((await rpc('eth_getBlockByNumber', ['latest', false])).timestamp)); };
@@ -73,8 +82,9 @@ export async function startLocalnetFixture() {
     assert.equal(keccak256(await rpc('eth_getCode', [escrow, 'latest'])).slice(2), runtime, 'escrow runtime matches the independent compiled artifact');
     network.genesisHash = (await rpc('eth_getBlockByNumber', ['0x0', false])).hash; network.endpoints = [{ id: 'local-node', url: `${url}/` }];
     network.assets = network.assets.filter(asset => asset.kind === 'native');
+    if (token !== null) network.assets.push({ id: 'test-token', kind: 'erc20', address: token, decimals: 18, transferPolicy: 'exact-transfer' });
     network.deployments = [{ ...network.deployments[0], address: escrow, artifactSha256: sha(Buffer.from(artifact.bytecode.object.replace(/^0x/, ''), 'hex')),
-      runtime: { kind: 'evm-code', keccak256: runtime, upgradeable: false }, supportedAssetIds: ['native'] }];
+      runtime: { kind: 'evm-code', keccak256: runtime, upgradeable: false }, supportedAssetIds: token === null ? ['native'] : ['native', 'test-token'] }];
     relay = await startFakeRelay({ onMessage(connection, message, fixture) {
       if (message[0] === 'REQ') {
         connection.subs.set(message[1], message.slice(2));
@@ -108,7 +118,9 @@ export async function startLocalnetFixture() {
             return signingAccounts[index].signTypedData(typedData(JSON.parse(params[1])));
           }
           if (method === 'eth_sendTransaction') {
-            assert.equal(params[0].from.toLowerCase(), accounts[index]); assert.equal(params[0].to.toLowerCase(), escrow);
+            assert.equal(params[0].from.toLowerCase(), accounts[index]);
+            assert.ok(params[0].to.toLowerCase() === escrow || token !== null && params[0].to.toLowerCase() === token &&
+              /^0x095ea7b3[0-9a-f]{128}$/.test(params[0].data) && params[0].value === '0x0', 'fixture sends target only escrow or token allowance');
             await beforeSend?.(params[0]); counts.sends++;
             const hash = await rpc(method, params);
             if (state.loseNextSend) { state.loseNextSend = false; throw new Error('Synthetic lost response after broadcast.'); }
@@ -119,6 +131,6 @@ export async function startLocalnetFixture() {
         },
       };
     };
-    return { config, buildOption, rpc, escrow, accounts, provider, mine, relay, counts, close };
+    return { config, buildOption, rpc, escrow, token, accounts, provider, mine, relay, counts, close };
   } catch (error) { await close(); throw error; }
 }

@@ -1,5 +1,5 @@
 /** Purpose-bound localnet Worker messages. No raw vault read, secret export or generic wallet command exists. */
-export type LocalnetAction = 'offer' | 'accept' | 'fund' | 'release' | 'refund';
+export type LocalnetAction = 'offer' | 'accept' | 'approve' | 'fund' | 'release' | 'refund';
 export type LocalnetCommand =
   | { readonly type: 'status' | 'profile.lock' | 'wallet.connect' | 'refresh' | 'review.cancel' | 'backup.export' }
   | { readonly type: 'profile.create'; readonly passphrase: string }
@@ -11,7 +11,7 @@ export type LocalnetCommand =
   | { readonly type: 'review.prepare'; readonly action: 'offer'; readonly sessionId: string; readonly fiatMinorUnits: string;
       readonly fiatScale: number; readonly paymentInstructions: string; readonly acceptForSeconds?: number; readonly escrowForSeconds?: number }
   | { readonly type: 'review.prepare'; readonly action: 'accept'; readonly sessionId: string }
-  | { readonly type: 'review.prepare'; readonly action: 'fund' | 'release' | 'refund'; readonly tradeId: string;
+  | { readonly type: 'review.prepare'; readonly action: 'approve' | 'fund' | 'release' | 'refund'; readonly tradeId: string;
       /** Required only for release: the seller explicitly checked their bank account. Never inferred from chat. */
       readonly fiatReceiptConfirmed?: boolean }
   | { readonly type: 'review.confirm'; readonly reviewId: string }
@@ -43,7 +43,10 @@ export interface LocalnetTradeView {
   readonly chainState: 'absent' | 'funded' | 'released' | 'refunded' | null; readonly chainObservedAtMs: number | null;
   readonly intents: readonly { readonly id: string; readonly action: string; readonly state: string; readonly hash: string | null }[];
   readonly chat: readonly { readonly id: string; readonly direction: 'inbound' | 'outbound'; readonly text: string; readonly createdAt: number }[];
-  readonly canFund: boolean; readonly canRelease: boolean; readonly canRefund: boolean;
+  readonly approval: { readonly token: string; readonly spender: string; readonly allowanceBaseUnits: string;
+    readonly balanceBaseUnits: string; readonly settled: boolean; readonly nextAmountBaseUnits: string | null } | null;
+  readonly tokenReadError: boolean;
+  readonly canApprove: boolean; readonly canFund: boolean; readonly canRelease: boolean; readonly canRefund: boolean;
 }
 export interface LocalnetSnapshot {
   readonly version: 1; readonly phase: 'locked' | 'ready' | 'working'; readonly profileIds: readonly string[];
