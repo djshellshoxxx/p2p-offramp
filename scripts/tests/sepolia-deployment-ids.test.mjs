@@ -272,6 +272,34 @@ test('key rotation: the new key continues the old key\'s ledger only through an 
   assert.deepEqual(continued.signedDeployments.deployments.map(item => [item.id, item.firstSequence]), [['escrow-sepolia-v1', 1]]);
 });
 
+test('re-review: --previous-key cannot launder a ledger re-signed by another key; the key must have signed the committed release', async t => {
+  const { root, owner, sign } = await signingRoot(t);
+  await stage(root, registryWith(entry('escrow-sepolia-v1', X)));
+  await writeSignedRelease(root, await sign(1));
+  const ledger = JSON.parse(await readFile(resolve(root, SIGNED_DEPLOYMENTS_FILE), 'utf8'));
+  const { signature, keyId, ...body } = ledger;
+  assert.ok(signature && keyId === owner.keyId);
+  // Attacker key A re-signs an emptied ledger with the correct lastManifestSha256; the owner is talked into --previous-key A.
+  const attacker = keygen(), asPrevious = key => [previousPublicKey({ keyId: key.keyId, publicKey: key.publicKey })];
+  await writeFile(resolve(root, SIGNED_DEPLOYMENTS_FILE), JSON.stringify(signLedger(attacker.privateJwk, { ...body, deployments: [] })));
+  await stage(root, registryWith(entry('escrow-sepolia-v1', Y)));
+  await assert.rejects(sign(2, { previousPublicKeys: asPrevious(attacker) }), message('PREVIOUS_KEY_UNTRUSTED'), 'the committed envelope names the owner key, not A');
+  // Without a committed release a previous key is never trusted on the ledger's word.
+  const committed = await readFile(resolve(root, RELEASE_MANIFEST_FILE));
+  await rm(resolve(root, RELEASE_MANIFEST_FILE));
+  await assert.rejects(sign(2, { previousPublicKeys: asPrevious(attacker) }), message('PREVIOUS_KEY_UNTRUSTED'));
+  await writeFile(resolve(root, RELEASE_MANIFEST_FILE), committed);
+  // An envelope that names the ledger's key but does not verify over the committed manifest is refused too.
+  const envelope = JSON.parse(await readFile(resolve(root, RELEASE_ENVELOPE_FILE), 'utf8'));
+  await writeFile(resolve(root, RELEASE_ENVELOPE_FILE), JSON.stringify({ ...envelope, keyId: attacker.keyId }));
+  await assert.rejects(sign(2, { previousPublicKeys: asPrevious(attacker) }), message('PREVIOUS_KEY_UNTRUSTED'));
+  // The genuine ledger and envelope still continue, so legitimate signing is unaffected.
+  await writeFile(resolve(root, RELEASE_ENVELOPE_FILE), JSON.stringify(envelope));
+  await writeFile(resolve(root, SIGNED_DEPLOYMENTS_FILE), JSON.stringify(ledger));
+  await stage(root, registryWith(entry('escrow-sepolia-v1', X)));
+  assert.equal((await sign(2, { previousPublicKeys: asPrevious(attacker) })).summary.previousRelease.ledgerKeyId, owner.keyId);
+});
+
 test('deploy and record also refuse ids from the signed ledger, and the pending marker carries the deployment id', async t => {
   const directory = await mkdtemp(resolve(tmpdir(), 'p2p-ledger-ids-')); t.after(() => rm(directory, { recursive: true, force: true }));
   const owner = keygen();

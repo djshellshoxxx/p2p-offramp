@@ -25,7 +25,8 @@
  * the G11 parser already refuses one address under two ids (REGISTRY_INVALID). The ledger is signed by the release key
  * (domain "p2p-offramp/signed-deployments/v1\n") and verified at signing against the signer's own key or an explicit
  * `--previous-key` (the first signing after a rotation): an edited ledger is SIGNED_DEPLOYMENTS_INVALID, one signed by
- * another key SIGNED_DEPLOYMENTS_UNTRUSTED. Once any release exists (a committed manifest, an accepted release, or a
+ * another key SIGNED_DEPLOYMENTS_UNTRUSTED, and one whose key did not also sign the committed release (envelope keyId and
+ * manifest signature) PREVIOUS_KEY_UNTRUSTED. Once any release exists (a committed manifest, an accepted release, or a
  * sequence above 1) a ledger is required (SIGNED_DEPLOYMENTS_MISSING), it must belong to the committed manifest and must
  * not be older than the accepted release (SIGNED_DEPLOYMENTS_STALE). THIS IS A SIGNER-SIDE CHECK ONLY: manifests keep
  * `predecessorDigest: null`, so no verifier can enforce it, and a stolen key could still rebind an id. A restore of the
@@ -142,15 +143,30 @@ export function signLedger(privateJwk, body) {
   return { ...unsigned, signature };
 }
 /** The ledger's signature must verify under one of `publicKeys` (P-256 JWKs): unknown key UNTRUSTED, bad signature INVALID. */
+const verifyP1363 = (key, payload, signature) => {
+  try {
+    return verify('sha256', payload, { key: createPublicKey({ key: { kty: 'EC', crv: 'P-256', x: key.x, y: key.y }, format: 'jwk' }), dsaEncoding: 'ieee-p1363' },
+      Buffer.from(signature, 'base64url'));
+  } catch { return false; }
+};
+/** Returns the key (one of `publicKeys`) whose signature the ledger carries. */
 function verifyLedger(ledger, publicKeys) {
   const key = publicKeys.find(candidate => keyIdOf(candidate) === ledger.keyId);
   if (!key) throw new Error('SIGNED_DEPLOYMENTS_UNTRUSTED');
-  let valid = false;
-  try {
-    valid = verify('sha256', ledgerPayload(ledger), { key: createPublicKey({ key: { kty: 'EC', crv: 'P-256', x: key.x, y: key.y }, format: 'jwk' }), dsaEncoding: 'ieee-p1363' },
-      Buffer.from(ledger.signature, 'base64url'));
-  } catch { valid = false; }
-  if (!valid) throw new Error('SIGNED_DEPLOYMENTS_INVALID');
+  if (typeof ledger.signature !== 'string' || !verifyP1363(key, ledgerPayload(ledger), ledger.signature)) throw new Error('SIGNED_DEPLOYMENTS_INVALID');
+  return key;
+}
+/**
+ * The key that signed the ledger must also have signed the committed release beside it: the committed envelope names
+ * the same keyId and its G15 signature over the committed manifest verifies under that key. Otherwise a ledger
+ * re-signed by any key the owner is talked into passing as --previous-key would be trusted (PREVIOUS_KEY_UNTRUSTED).
+ */
+function checkCommittedRelease(manifestBytes, envelopeBytes, key, keyId) {
+  let envelope;
+  try { envelope = JSON.parse(envelopeBytes?.toString('utf8') ?? ''); } catch { throw new Error('PREVIOUS_KEY_UNTRUSTED'); }
+  if (!exactKeys(envelope, ['v', 'keyId', 'alg', 'manifestSha256', 'signature']) || envelope.v !== 1 || envelope.alg !== 'ES256-P1363' || envelope.keyId !== keyId ||
+      envelope.manifestSha256 !== sha(manifestBytes) || typeof envelope.signature !== 'string' ||
+      !verifyP1363(key, Buffer.concat([Buffer.from('p2p-offramp/release/v1\n'), manifestBytes]), envelope.signature)) throw new Error('PREVIOUS_KEY_UNTRUSTED');
 }
 
 async function readOptional(path) {
@@ -172,8 +188,9 @@ export async function signedDeploymentIdentities(root) {
 /**
  * The signed deployment ledger under `root`, verified for signing release `sequence`. It is null only before the first
  * release: once a manifest is committed, a release was accepted, or the sequence is above 1, a missing ledger is
- * SIGNED_DEPLOYMENTS_MISSING. Its signature must verify under `trustedKeys` (the signer's key and any explicit previous
- * key). It must belong to the committed manifest and not be older than the accepted release (SIGNED_DEPLOYMENTS_STALE),
+ * SIGNED_DEPLOYMENTS_MISSING. Its signature must verify under `trustedKeys` (the signer's key first, then any explicit
+ * previous key), and that same key must have signed the committed release (PREVIOUS_KEY_UNTRUSTED otherwise). It must
+ * belong to the committed manifest and not be older than the accepted release (SIGNED_DEPLOYMENTS_STALE),
  * so deleting, emptying or rolling back the ledger, or restoring an older release's files, cannot reopen a signed id.
  */
 export async function readSignedDeployments(root, { trustedKeys, sequence }) {
@@ -185,8 +202,11 @@ export async function readSignedDeployments(root, { trustedKeys, sequence }) {
     return null;
   }
   const ledger = parseSignedDeployments(text.toString('utf8'));
-  verifyLedger(ledger, trustedKeys);
+  const ledgerKey = verifyLedger(ledger, trustedKeys);
   if (committed !== null && sha(committed) !== ledger.lastManifestSha256) throw new Error('SIGNED_DEPLOYMENTS_STALE');
+  if (committed !== null) checkCommittedRelease(committed, await readOptional(resolve(root, RELEASE_ENVELOPE_FILE)), ledgerKey, ledger.keyId);
+  // A previous key is trusted only through a committed release it signed, never on the ledger's word alone.
+  else if (ledger.keyId !== keyIdOf(trustedKeys[0])) throw new Error('PREVIOUS_KEY_UNTRUSTED');
   if (accepted !== null && (ledger.lastSequence < accepted.sequence || ledger.lastSequence === accepted.sequence && ledger.lastManifestSha256 !== accepted.manifestSha256)) {
     throw new Error('SIGNED_DEPLOYMENTS_STALE');
   }

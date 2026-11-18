@@ -205,7 +205,10 @@ its own archived packages.
    `--previous-key <old public key file>`. Use the `{ keyId, publicKey }` JSON
    that `keygen` printed for the old key (the key file from a commit you
    reviewed). Without it, signing stops with `SIGNED_DEPLOYMENTS_UNTRUSTED`.
-   Then steps 5 to 7.
+   The tool also requires that this key signed the committed release
+   (`PREVIOUS_KEY_UNTRUSTED` otherwise), but it cannot tell your old key from a
+   key that re-signed both the ledger and the release files: take the old key
+   only from your own records. Then steps 5 to 7.
 
 The ledger continues across keys: ids signed under the old key keep their
 identity, and from then on the ledger is signed by the new key. Packages built before the rotation keep working, because a package
