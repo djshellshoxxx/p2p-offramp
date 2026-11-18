@@ -1,0 +1,75 @@
+{
+  "source": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+  "exactDirectPins": 13,
+  "lockSha256": "8872a625711d1f38268be2b52d1b1645618bd5ee1b473e4770790cc24a9a2cda",
+  "picomatch": {
+    "version": "4.0.7",
+    "registryAndTarballIntegrityVerified": true,
+    "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA=="
+  },
+  "artifacts": [
+    {
+      "profile": "default",
+      "root": "/workspace/scratch/07167523f342/p2p-offramp/apps/web/dist",
+      "assets": 10,
+      "ReleaseEnabled": 0,
+      "evidenceSha256": "db32d51bc074fc712281340aac3b35428f3e9464364e1ddf36196a6856b41bdc",
+      "graphs": [
+        {
+          "file": "core-graph-document.json",
+          "modules": 70,
+          "sha256": "450b790b29de3e862b2f5fdeab52cc402e6ef82bda0563f88bcceb362074a504",
+          "affected": []
+        },
+        {
+          "file": "core-graph-worker.json",
+          "modules": 26,
+          "sha256": "89622f421c37b5ea9e19d26d141b44733ffca5691a2c6cb298467a43a0cd78ab",
+          "affected": []
+        }
+      ]
+    },
+    {
+      "profile": "demo",
+      "root": "/workspace/scratch/07167523f342/p2p-offramp/apps/web/dist-demo",
+      "assets": 11,
+      "ReleaseEnabled": 0,
+      "evidenceSha256": "480a7892fa229e92f6c00e2c36659e71ed648a3f7b82d72d73daacbe65140ba3",
+      "graphs": [
+        {
+          "file": "core-graph-document.json",
+          "modules": 72,
+          "sha256": "1e9367f9096509a0d94d7bdbb56ade250a3c2dd20203a12e83483a16c4569cb7",
+          "affected": []
+        },
+        {
+          "file": "core-graph-worker.json",
+          "modules": 26,
+          "sha256": "89622f421c37b5ea9e19d26d141b44733ffca5691a2c6cb298467a43a0cd78ab",
+          "affected": []
+        }
+      ]
+    },
+    {
+      "profile": "localnet",
+      "root": "/workspace/scratch/07167523f342/final-combined-artifact",
+      "assets": 11,
+      "ReleaseEnabled": 0,
+      "evidenceSha256": "35300ccf560de5083230577ca29ad716c462a550fc74b5bf4c74eab6bca4282a",
+      "graphs": [
+        {
+          "file": "core-graph-document.json",
+          "modules": 45,
+          "sha256": "e3509581b0d51b9f2387419fcdc02e6ea8abb166be0f489332bbc38ab5429b69",
+          "affected": []
+        },
+        {
+          "file": "core-graph-worker.json",
+          "modules": 103,
+          "sha256": "64abf39b4d9fa58f28ac600bde21069c905a59c6b647d075eca718ac73ca386c",
+          "affected": []
+        }
+      ]
+    }
+  ]
+}

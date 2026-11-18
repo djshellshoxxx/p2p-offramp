@@ -1,0 +1,90 @@
+{
+  "source": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+  "source_tree": "1d0b2a3ef9a7661bcc04aabbccf18c1186fde5fb",
+  "published_identical_tree_commit": "b981ebed7e1e0d85f69210df7f444bacc91bf55a",
+  "files": [
+    {
+      "path": "build-demo.log",
+      "bytes": 1526,
+      "sha256": "95cc45363131919e5a8b6968b00f06bb2bb3365f40d08bac825efc12a76c50da"
+    },
+    {
+      "path": "build.log",
+      "bytes": 1372,
+      "sha256": "33b4b3d0707f7f5c71a84d7f4b119af7e3195024396af03e678de3e9acba4a8d"
+    },
+    {
+      "path": "check-boundaries.log",
+      "bytes": 341,
+      "sha256": "e1592be68e41e0c1d9cf7d07ccebb24cc284275d84c44ccf12229b170f013f1a"
+    },
+    {
+      "path": "check-specs.log",
+      "bytes": 298,
+      "sha256": "702f17b0b0d5d137efd0cb99c4b0c9592e628045d20a12638e2d50e8cd7dc66a"
+    },
+    {
+      "path": "dependency-integrity-and-artifact-graphs.json",
+      "bytes": 2465,
+      "sha256": "803c83399ffed3dfd379c695d200363d23e72422a37fd76aa166833836422419"
+    },
+    {
+      "path": "dependency-npm-audit-production.json",
+      "bytes": 362,
+      "sha256": "0b8abff8b84fbc0fded24cdbf77d0ae8177f1327db050d2622b7773a360c97e3"
+    },
+    {
+      "path": "dependency-reproduction.json",
+      "bytes": 3408,
+      "sha256": "3548fbb255c426e48e96090c6c243744e1bc08e79e83be710f15de48f05d2ea8"
+    },
+    {
+      "path": "localnet-build-result.json",
+      "bytes": 339,
+      "sha256": "98a87fca2be0e63af109c9d1f40a493afa7c1639311f025b191da47ede5ce341"
+    },
+    {
+      "path": "localnet-build.log",
+      "bytes": 1282,
+      "sha256": "afba74051d859ae5f5f534bb506ebc7b9cbf163087513888e5b429cbf952c21b"
+    },
+    {
+      "path": "npm-audit.json",
+      "bytes": 2690,
+      "sha256": "d8b33019282b19f473bae77c06d6f13157b90f18f66442e7a30443be04e8d119"
+    },
+    {
+      "path": "results.json",
+      "bytes": 1237,
+      "sha256": "ab80595009577d1aad97847a8b51651efa8920b28f95dfb0f50945b1d62c75e7"
+    },
+    {
+      "path": "test-build-policy.log",
+      "bytes": 6619,
+      "sha256": "2409bd3ba08921aecb29dc0e5a5f41fc2fc54ed11b0332d4ba85cdc744f01924"
+    },
+    {
+      "path": "test-localnet-controller.log",
+      "bytes": 1843,
+      "sha256": "46e2707f87383c786c0c5d4ec3afa208da838351907bfd5c8ad87aab8c73d0d5"
+    },
+    {
+      "path": "test-specs.log",
+      "bytes": 4670,
+      "sha256": "cdad45ff6acc5c3f1e0a7087f08c8711dc92916193e4df0ec072f7a4f19cf6a0"
+    },
+    {
+      "path": "test.log",
+      "bytes": 191503,
+      "sha256": "6e3c06f6b3890cf4ba1c3b8a1d3386d978221b8831f9f5eebcc2d99884e947a3"
+    },
+    {
+      "path": "typecheck.log",
+      "bytes": 289,
+      "sha256": "a550ff26e5b128d5107b02fa16d34523af27e99e388c4cdbe322940fa5de93c3",
+      "source_bytes": 290,
+      "source_sha256": "6a12cffb65325525a02ae9c63237b4a5c732aa42302fa957e127eba5c566bfab",
+      "normalization": "Removed trailing blank line at EOF for repository whitespace policy; all command output retained."
+    }
+  ]
+}

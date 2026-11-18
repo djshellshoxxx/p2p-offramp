@@ -1,0 +1,12 @@
+{
+  "source": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+  "artifact": "/workspace/scratch/07167523f342/final-combined-artifact",
+  "assets": 11,
+  "ReleaseEnabled": 0,
+  "fixtureActions": {
+    "signatures": 0,
+    "sends": 0,
+    "connects": 0
+  },
+  "configDigest": "5d60b2d3e949a723ab40418ff90d724cf9f0793313361c1005b94327aafa397c"
+}

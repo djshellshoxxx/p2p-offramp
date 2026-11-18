@@ -27,13 +27,15 @@ are tracked separately. Optional proof, location, courier and arbitration capabi
 
 Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Offline signed registry/release verification, test-only wallet execution, both native escrow profiles and the canonical encrypted relay-to-escrow local acceptance loop are implemented. Approved live trust/bootstrap, qualified deployments and a funds-enabled app remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
 
+The November 18 consolidation checkpoint is documented in [Consolidation, security repair, and qualification result](docs/execution/CONSOLIDATION-RESULT-2026-11-18.md). Four scoped PRs reached main; the separately reviewed integration stack adds the native Solana encrypted journal/recovery projection and a localnet-only EVM trading UI. Its combined source passed 1,922 tests and real Anvil/relay controller checks, while actual browser execution, the real Solana validator, complete Solana/ERC-20 browser flows and public-testnet qualification remain outstanding. The report records the unpatched build-tool dependency advisory and keeps implementation, main integration and release qualification separate. `ReleaseEnabled=0`.
+
 ## Future features
 
 The proposed privacy enhancement backlog is documented in [Future privacy architecture and enhancements](docs/future-features/PRIVACY-ENHANCEMENTS.md) (PRIV-001 through PRIV-012). These features are not implemented or required for the core MVP, and do not change existing release or real-funds gates.
 
 ## Screenshots
 
-Captured from the synthetic, test-only demo build (`npm run build:demo`); trading and funds are disabled in every build.
+Captured from the synthetic, test-only demo build (`npm run build:demo`), which has no signing or send capability. The separate localnet test profile uses disposable development assets only.
 
 ![Home: locked local workspace with funds disabled and the SYNTHETIC DEMO badge](docs/screenshots/startup.png)
 
