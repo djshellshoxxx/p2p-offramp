@@ -401,3 +401,7 @@ try{
     if(anvil?.pid&&anvil.exitCode===null&&anvil.signalCode===null){const stopped=new Promise(done=>anvil.once('exit',done));anvil.kill('SIGTERM');const timer=setTimeout(()=>anvil.kill('SIGKILL'),1000);timer.unref();await stopped;clearTimeout(timer);}
   }
 }
+
+// D1 peer acceptance on the same pinned toolchain, with its own loopback Anvil: ERC-1271 contract-wallet and EOA
+// statements through the D1 exchange, revoked policy, EIP-7702 designator and counterfactual signer.
+await import('./test-peer-acceptance-evm-local.mjs');
