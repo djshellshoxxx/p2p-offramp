@@ -14,6 +14,10 @@ case "${1:-}" in
 esac
 [ $# -le 1 ] || { echo "usage: $0 [--dry-run|--apply]" >&2; exit 2; }
 REMOTE=origin
+LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
+[ -r "$LIB" ] || { echo "missing $LIB"; exit 1; }
+# shellcheck source=scripts/consolidation/lib.sh
+. "$LIB"   # lines_on_main and tag_at; both fail closed
 git rev-parse --git-dir >/dev/null
 git fetch --prune --tags -q "$REMOTE"
 ok=0; skip=0; gone=0
@@ -24,7 +28,7 @@ while read -r branch sha; do
   if [ "$cur" != "$sha" ]; then echo "SKIP moved: $branch ($cur != $sha)"; skip=$((skip+1)); continue; fi
   if [ $DRY = 1 ]; then echo "would archive+delete $branch @ ${sha:0:9}"; ok=$((ok+1)); continue; fi
   git push -q "$REMOTE" "$sha:refs/tags/archive/$branch"
-  git ls-remote --tags "$REMOTE" "refs/tags/archive/$branch" | grep -q "^$sha" \
+  tag_at "$REMOTE" "refs/tags/archive/$branch" "$sha" \
     || { echo "FAIL tag not verified: $branch"; exit 1; }
   # The lease makes the delete fail if the branch moved after the check above.
   git push -q --force-with-lease="refs/heads/$branch:$sha" "$REMOTE" ":refs/heads/$branch"

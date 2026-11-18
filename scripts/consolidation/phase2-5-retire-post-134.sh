@@ -31,21 +31,10 @@ git rev-parse --git-dir >/dev/null
 [ "$(git rev-parse --is-shallow-repository)" = false ] || git fetch --unshallow -q "$REMOTE"
 git fetch --prune --tags -q "$REMOTE"
 
-# 0 when every non-blank line added on $1 since its merge base with main is on main.
-lines_on_main() {
-  local mb f want have miss rc=0
-  mb=$(git merge-base "$1" "$MAIN")
-  want=$(mktemp); have=$(mktemp)
-  while IFS= read -r f; do
-    if ! git cat-file -e "$MAIN:$f" 2>/dev/null; then rc=1; break; fi
-    git diff "$mb" "$1" -- "$f" | grep -v '^+++ ' | sed -n 's/^+//p' | sed 's/^[[:space:]]*//' | grep -v '^$' > "$want" || true
-    git show "$MAIN:$f" | sed 's/^[[:space:]]*//' > "$have"
-    miss=$(grep -cvxFf "$have" "$want" || true)
-    if [ "$miss" != 0 ]; then rc=1; break; fi
-  done < <(git diff --name-only --diff-filter=AM "$mb" "$1")
-  rm -f "$want" "$have"
-  return $rc
-}
+LIB="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib.sh"
+[ -r "$LIB" ] || { echo "missing $LIB"; exit 1; }
+# shellcheck source=scripts/consolidation/lib.sh
+. "$LIB"   # lines_on_main and tag_at; both fail closed
 
 open_prs() { # number of open PRs using branch $1 as head or base
   local h b
@@ -70,7 +59,7 @@ while read -r branch sha mode; do
   esac
   if [ $DRY = 1 ]; then echo "would archive+delete $branch @ ${sha:0:9} ($mode)"; ok=$((ok+1)); continue; fi
   git push -q "$REMOTE" "$sha:refs/tags/archive/$branch"
-  git ls-remote --tags "$REMOTE" "refs/tags/archive/$branch" | grep -q "^$sha" \
+  tag_at "$REMOTE" "refs/tags/archive/$branch" "$sha" \
     || { echo "FAIL tag not verified: $branch"; exit 1; }
   git push -q --force-with-lease="refs/heads/$branch:$sha" "$REMOTE" ":refs/heads/$branch"
   echo "archived+deleted $branch"; ok=$((ok+1))

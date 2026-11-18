@@ -289,6 +289,23 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
     The last is weaker than `main`'s `openai-agents.yml` (write permissions,
     unpinned actions and CLI, persisted credentials, no verify job), so nothing
     was taken from it.
+- Run 3, independent review of #142 (separate review agent, at `ec3ca3e`): no
+  High finding. One Medium was found and fixed. `lines_on_main` passed
+  vacuously when `git merge-base` failed (unrelated history or an unknown
+  SHA). It also skipped renamed files (`--diff-filter=AM` with rename
+  detection) and binary files, and it dropped added lines that start with
+  `++ `. The tag still preserved the work, but the content check was
+  bypassed. The check now lives in `scripts/consolidation/lib.sh`, shared by
+  the phase 2–3 and 2–5 scripts, and fails closed in every one of those
+  cases.
+  - The tag check in all three retirement scripts now compares the exact SHA
+    (`tag_at`).
+  - `scripts/tests/consolidation-lib.test.mjs` (8 cases, in `npm test`) fails
+    4/8 against the old function and passes 8/8 against the new one.
+  - Re-run dry runs: phase 1 65/65; phase 2–3 45 processed and 2 skipped
+    (moved: `claude/sleepy-fermat-4s6ocx`, and
+    `claude/p2p-offramp-evm-escrow-vc7stk`, now at `main`'s tip); phase 2–5
+    14/14.
 - Run 3, Phase 5: #65's two fixes are on `main` with tests (unquoted
   meta-refresh rule `apps/web/scripts/artifact-policy.mjs:48`, tests at lines
   97–98; malformed saved-review wrappers are skipped in `savedEntries`). #65 and
