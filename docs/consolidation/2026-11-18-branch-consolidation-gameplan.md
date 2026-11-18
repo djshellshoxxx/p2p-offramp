@@ -1,6 +1,6 @@
 # Branch consolidation gameplan — 2026-11-18
 
-Status: PROPOSED. Nothing has been merged, closed or deleted by this document.
+Status: PROPOSED. Executable form: [CONSOLIDATION-PROMPT.md](CONSOLIDATION-PROMPT.md).
 It is a read-only analysis of `origin` taken on 2026-11-18 at `main@6ef9a26`.
 Owner decision D8 (tiered merge policy) still governs every merge below.
 
