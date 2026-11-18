@@ -75,9 +75,11 @@ possible.
 
 Run read-only queries and print a short state table before acting:
 
-1. `git fetch --all --prune --tags`
-2. List open PRs with head and base (GitHub API/MCP). Record whether PR #132
-   is open, merged or closed, and its CI and review state.
+1. `git fetch --all --prune --tags`. If `git rev-parse --is-shallow-repository`
+   prints `true`, run `git fetch --unshallow origin` first: on a shallow clone,
+   ancestry and ahead/behind checks give wrong answers.
+2. List open PRs with head and base (GitHub API/MCP). Record whether PRs #132
+   and #133 are open, merged or closed, and their CI and review state.
 3. For every remote branch, record its commits ahead of and behind
    `origin/main`, and `git cherry origin/main <branch>` unique patches.
 4. Check whether these still exist on `origin`: the 65 branches listed in
@@ -106,8 +108,12 @@ Run read-only queries and print a short state table before acting:
   `chatgpt/zero-codex/g12-recovery-cli-file-identity-20261111` until #102
   closes, then archive and delete it as well.
 
-### Phase 2 — Land the trunk (PR #132)
-- **Done when:** PR #132 is merged into `main`.
+### Phase 2 — Land the trunk (PR #132, completed by PR #133)
+- **Done when:** PR #133 is merged into #132's branch and PR #132 is merged into
+  `main`. #132 alone is incomplete: it lacks the `claude/confident-fermi-g6wjp3`
+  tip (Solana D5 and the red-team fixes). #133 adds it (see gameplan §3a).
+  Before the owner merges #132, confirm `git merge-base --is-ancestor
+  origin/claude/confident-fermi-g6wjp3 origin/nodata/affectionate-ritchie-xq4bon`.
 - **While open:** keep it mergeable. Merge `origin/main` into it on conflict,
   rerun the local gate set, and fix CI failures at the root cause. Ensure an
   independent review exists (another agent or person, not the author of the
@@ -116,9 +122,13 @@ Run read-only queries and print a short state table before acting:
 - **After merge:**
   1. Close as contained in `main` (comment first, citing the merge commit):
      #50, #53, #54, #57, #60, #61, #68, #84, #102, #127 and #128.
-  2. Archive and delete their head branches, which are listed in the gameplan's
-     Appendix B, plus `nodata/affectionate-ritchie-xq4bon`. First verify each
-     one with `git merge-base --is-ancestor <branch> origin/main`.
+  2. Close the D9 stack (Phase 3), then archive and delete the contained
+     branches with
+     `bash scripts/consolidation/phase2-3-retire-contained-branches.sh --dry-run`
+     followed by a real run. The script is SHA-pinned and checks containment,
+     open PRs and archive tags itself. If ref pushes are refused, hand it to the
+     owner. Delete `nodata/affectionate-ritchie-xq4bon` and
+     `nodata/epic-goldberg-sg8n96` with GitHub's Delete branch button.
 
 ### Phase 3 — D9 regression tests
 - **Status:** already satisfied by Phase 2. All 264 added test lines from

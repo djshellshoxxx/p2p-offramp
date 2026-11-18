@@ -213,6 +213,37 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
   D9 stack (`d9-restored-race-20261111`) are already in the trunk, and all 9
   D9 regression tests pass on the merged head. #69–#75 and #91–#93 can close
   when PR #132 merges.
+- 2026-11-18 run 2, Step 0 (on unshallowed history): `main@6ef9a26`, 142
+  remote branches besides `main`, 49 open PRs, 0 `archive/*` tags. #132 is an
+  open draft at `86224cf`: exact-head CI 10/10 green, mergeable, no reviews.
+- 2026-11-18 run 2, Phase 0: all 15 #130 runs still exist. This session's
+  tools cannot delete runs, so the owner runs
+  `scripts/consolidation/phase0-delete-orphaned-runs.sh`.
+- 2026-11-18 run 2, Phase 1: the dry run is clean (65/65 tips unchanged, none
+  is an open PR's head or base). The real run stopped at the first tag push
+  (HTTP 403) and deleted nothing, so the owner runs the script. On full
+  history the list is 49 ancestors of `main`, 3 patch-equivalent (#78–#80), 12
+  superseded `s01`–`s12` and 1 custodial branch (deletion approved).
+- 2026-11-18 run 2, Phase 2 correction: #132 merged
+  `codex/review-consolidate-20261116@5eadddd`, which is not a descendant of
+  the `claude/confident-fermi-g6wjp3` tip `64c7c18`. #132 therefore lacked 41
+  commits (36 unique patches): Solana D5 (`contracts/solana`,
+  `packages/chain-solana`), #57, #56's Sonar fixes, DATA01/N38, the D9 review
+  fixes and red-team passes 1 and 2. The earlier analysis ran on a depth-50
+  shallow clone; "#127 = CF + 1 commit" was wrong. PR #133 (base: #132's
+  branch) merges the CF tip, with one conflict in `catalog.ts` (CF's stricter
+  visible-text check kept, both sides' tests kept). All 11 local gates pass at
+  `f2cb43d` on Node 24.22.3: `npm test` 1,552 tests, 1,549 pass, 0 fail,
+  1 skip and 2 todo. `phase2-3-retire-contained-branches.sh` (47 branches,
+  SHA-pinned) was tested against a simulated remote.
+- 2026-11-18 run 2, open findings that come in with the trunk:
+  REDTEAM-P2-EX3 (Medium) and P2-EX2 (Low–Medium) are anti-sybil design
+  issues, owner-blocked, with their repros kept as `todo`. An independent
+  review of #132 at `86224cf` found 2 Medium (M1, prepared intents held
+  forever; M2, a stale cancel overwrites a send marker). The reviewer reports
+  both fixed by CF commits that only #133 brings in.
+- 2026-11-18 run 2, Phase 3: re-confirmed on full history. All 264 D9 test
+  lines are in the trunk, and the D9 code change is identical there.
 
 ## 4. Expected end state
 
