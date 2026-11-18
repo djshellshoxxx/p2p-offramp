@@ -47,7 +47,9 @@ not approve any network, deployment or registry entry.
 - Responses are read only through own data descriptors, and base64 is capped before decoding. Provider
   rejections give UNAVAILABLE, and no provider detail is kept. At most 4 jobs run at once. The timeout is 1..60,000
   ms (default 10,000). Abort, timeout and dispose free a slot only when the physical request settles. A caller
-  signal that is not a usable `AbortSignal` gives INVALID_INPUT before a slot is reserved, so it cannot leak one.
+  signal that is not a usable `AbortSignal` gives INVALID_INPUT and never leaks a slot. The slot is reserved before
+  the caller's `addEventListener` runs, so caller code that re-enters the reader still counts against the limit.
+  The listener is removed on every settle path.
 - Native amounts above 2^53-1 give LIMIT_EXCEEDED. Network ids must not contain `:`.
 
 ## Settlement planner (`src/settlement.ts`)
@@ -77,8 +79,11 @@ not approve any network, deployment or registry entry.
 - A step describes one snapshot; it never says a send is safe. After any uncertain outcome (timeout, dropped or
   unknown signature), G12 (the journal) must reconcile the transaction and re-observe finalized state before any
   retry. The planner cannot tell "not sent" from "sent, not yet finalized" and must not be used as that check.
-- The destination token account is not read, so a missing or frozen recipient ATA (program error
-  `DestinationFrozen`) shows up only as a failed payout, which leaves the escrow terminal and retryable.
+- Neither the native recipient nor the SPL destination account is read, so recipient-side failures show up only
+  as a failed payout, while the planner still says `payout` / `payout-pending`. A native payout that would leave
+  an empty recipient below the rent-exempt minimum (rent for 0 bytes) fails until the recipient is funded. A
+  missing, frozen (`DestinationFrozen`) or re-owned (`WrongRecipient`, after SetAuthority) recipient ATA fails as
+  well. Each failure leaves the escrow terminal and retryable.
 
 ## What it does NOT prove
 

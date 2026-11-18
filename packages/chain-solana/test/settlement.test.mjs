@@ -180,13 +180,24 @@ test('INVALID_INPUT: {unbranded-snapshot,role,chainTime,margin,stale-chainTime,c
   }
   // A chain time older than the snapshot's own finalized Clock is stale input.
   error(plan(snapshot, 'seller', CHAIN_TIME - 1), 'INVALID_INPUT');
-  for (const context of [null, undefined, 'seller', []]) {
+  // An array or a function is not a context object, even when it carries valid own properties.
+  const props = { role: 'seller', chainTime: String(CHAIN_TIME), releaseMargin: MARGIN };
+  const shaped = [Object.assign([], props), Object.assign(() => {}, props)];
+  for (const context of [null, undefined, 'seller', [], ...shaped]) {
     error(nextSettlementStep(snapshot, context), 'INVALID_INPUT');
   }
   // Inputs are validated in every state, even where the window is not needed.
   const paid = (await snapshotOf('native', { world: { escrow: { state: 1, paid: 1 } } })).snapshot;
   error(plan(paid, 'arbiter', CHAIN_TIME), 'INVALID_INPUT');
   error(plan(paid, 'seller', 'x'), 'INVALID_INPUT');
+  const absent = (await snapshotOf('native', { mutate: absentEscrow })).snapshot;
+  const refunded = (await snapshotOf('native', { world: { escrow: { state: 2 } } })).snapshot;
+  for (const state of [absent, paid, refunded]) {
+    for (const releaseMargin of ['604801', undefined, '', 60]) {
+      const context = { role: 'seller', chainTime: String(CHAIN_TIME), releaseMargin };
+      error(nextSettlementStep(state, context), 'INVALID_INPUT');
+    }
+  }
 });
 
 test('pure-{no-clock,no-io}', async () => {

@@ -244,8 +244,9 @@ export class SolanaChainReader {
     const failure = (code: CoreErrorCode): CoreResult<never> =>
       ({ ok: false, error: createCoreError(code, { operationId, readOnly: true }) });
     if (this.#disposed) return Promise.resolve(failure('CANCELLED'));
-    // The caller's signal is checked, and its listener attached, before a job slot is reserved: a value that is
-    // not an AbortSignal (or one whose methods throw) is INVALID_INPUT and can never leak a slot.
+    // The caller's signal is checked before a job slot is reserved: a value that is not an AbortSignal is
+    // INVALID_INPUT. The slot is taken before addEventListener (caller code that may re-enter the reader) and
+    // given back if it throws, so the limit holds and no slot leaks.
     const invalid = () => Promise.resolve(failure('INVALID_INPUT'));
     let aborted: boolean;
     try {
@@ -256,9 +257,11 @@ export class SolanaChainReader {
     if (this.#jobs.size >= MAX_RPC_READS) return Promise.resolve(failure('LIMIT_EXCEEDED'));
     const controller = new AbortController();
     const onExternal = () => controller.abort();
-    try { external?.addEventListener('abort', onExternal, { once: true }); } catch { return invalid(); }
-    const detach = () => { try { external?.removeEventListener('abort', onExternal); } catch { /* caller-owned */ } };
     this.#jobs.add(controller);
+    try { external?.addEventListener('abort', onExternal, { once: true }); } catch {
+      this.#jobs.delete(controller); return invalid();
+    }
+    const detach = () => { try { external?.removeEventListener('abort', onExternal); } catch { /* caller-owned */ } };
     let abortCode: CoreErrorCode = 'CANCELLED';
     const timer = setTimeout(() => { abortCode = 'TIMEOUT'; controller.abort(); }, this.#timeoutMs);
     const guard = () => { if (this.#disposed || controller.signal.aborted) fail(abortCode); };

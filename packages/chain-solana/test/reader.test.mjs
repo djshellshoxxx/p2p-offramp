@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { getEventListeners } from 'node:events';
 import { createTradeAuthority } from '../../domain/src/authority.ts';
 import { SolanaFailure } from '../src/codec.ts';
 import { MAX_RPC_READS, payoutRegressed, SolanaChainReader } from '../src/reader.ts';
@@ -951,7 +952,12 @@ test('pre-RPC negatives make no calls', async () => {
 
 // A caller signal that is not an AbortSignal is refused before a job slot is reserved, so it cannot leak one.
 test('non-signal-refused-without-leaking-a-slot', async () => {
-  const s = setup('native');
+  const held = [];
+  let holding = false;
+  const s = setup('native', {
+    handle: input =>
+      holding && input.method === 'getGenesisHash' ? new Promise(resolve => held.push(resolve)) : undefined,
+  });
   try {
     const hostile = new Proxy(
       {},
@@ -975,12 +981,105 @@ test('non-signal-refused-without-leaking-a-slot', async () => {
       error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal }, s.terms), 'INVALID_INPUT');
       error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal), 'INVALID_INPUT');
     }
+    // A throwing addEventListener reaches the slot logic, so it runs MAX_RPC_READS times per method.
+    for (let index = 0; index < MAX_RPC_READS; index++) {
+      error(await s.reader.read(s.binding, request(throwingAdd), s.terms), 'INVALID_INPUT');
+      error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, throwingAdd), 'INVALID_INPUT');
+    }
     assert.equal(s.calls.length, 0);
     ok(await s.reader.read(s.binding, request(), s.terms));
     ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
+    // A signal whose removeEventListener throws is still usable: the read resolves to a result, never rejects.
+    const throwingRemove = new AbortController().signal;
+    throwingRemove.removeEventListener = () => {
+      throw Error('SECRET');
+    };
+    ok(await s.reader.read(s.binding, request(throwingRemove), s.terms));
+    ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, throwingRemove));
+    // Every slot is still free: MAX_RPC_READS reads can be held at once, and one more is LIMIT_EXCEEDED.
+    holding = true;
+    const jobs = Array.from({ length: MAX_RPC_READS }, () => s.reader.read(s.binding, request(), s.terms));
+    while (held.length < MAX_RPC_READS) await new Promise(resolve => setImmediate(resolve));
+    error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'LIMIT_EXCEEDED');
+    holding = false;
+    held.forEach(resolve => resolve(COMPILED_GENESIS));
+    for (const job of jobs) ok(await job);
   } finally {
     s.reader.dispose();
   }
+});
+
+// A caller signal's addEventListener is caller code. If it re-enters the reader, the nested calls must still see
+// the slot the outer call took, so no more than MAX_RPC_READS jobs ever run at once.
+test('reentrant-signal-cannot-exceed-the-job-limit', async () => {
+  for (const method of ['read', 'validateLive']) {
+    let inFlight = 0;
+    let peak = 0;
+    const s = setup('native', {
+      handle: () => {
+        peak = Math.max(peak, ++inFlight);
+        return new Promise(() => {});
+      },
+    });
+    const jobs = [];
+    let depth = 0;
+    const call = signal =>
+      method === 'read'
+        ? s.reader.read(s.binding, request(signal), s.terms)
+        : s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal);
+    const reentrant = () => {
+      const signal = new AbortController().signal;
+      signal.addEventListener = function (...args) {
+        if (depth++ < 9) jobs.push(call(reentrant()));
+        return EventTarget.prototype.addEventListener.apply(this, args);
+      };
+      return signal;
+    };
+    try {
+      jobs.push(call(reentrant()));
+      await new Promise(resolve => setTimeout(resolve, 20));
+      assert.ok(peak <= MAX_RPC_READS, `${method}: ${peak} provider calls in flight`);
+      error(await call(undefined), 'LIMIT_EXCEEDED');
+    } finally {
+      s.reader.dispose();
+    }
+    const codes = (await Promise.all(jobs)).map(result => result.error.code);
+    assert.equal(codes.filter(code => code === 'CANCELLED').length, MAX_RPC_READS, method);
+    assert.equal(codes.filter(code => code === 'LIMIT_EXCEEDED').length, jobs.length - MAX_RPC_READS, method);
+  }
+});
+
+// The listener #run attaches to a caller signal is removed on every settle path, so a reused signal keeps none.
+test('caller-signal-listener-removed-{ok,timeout,dispose}', async () => {
+  const listeners = signal => getEventListeners(signal, 'abort').length;
+  const s = setup('native');
+  try {
+    const caller = new AbortController();
+    for (let index = 0; index < 3; index++) {
+      ok(await s.reader.read(s.binding, request(caller.signal), s.terms));
+      ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, caller.signal));
+    }
+    assert.equal(listeners(caller.signal), 0);
+  } finally {
+    s.reader.dispose();
+  }
+  const hang = input => (input.method === 'getBlock' ? new Promise(() => {}) : undefined);
+  const slow = setup('native', { options: { timeoutMs: 10 }, handle: hang });
+  try {
+    const caller = new AbortController();
+    error(await slow.reader.read(slow.binding, request(caller.signal), slow.terms), 'TIMEOUT');
+    error(await slow.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, caller.signal), 'TIMEOUT');
+    assert.equal(listeners(caller.signal), 0);
+  } finally {
+    slow.reader.dispose();
+  }
+  const held = setup('native', { handle: hang });
+  const caller = new AbortController();
+  const job = held.reader.read(held.binding, request(caller.signal), held.terms);
+  await new Promise(resolve => setTimeout(resolve, 5));
+  held.reader.dispose();
+  error(await job, 'CANCELLED');
+  assert.equal(listeners(caller.signal), 0);
 });
 
 // ---- concurrency ----
