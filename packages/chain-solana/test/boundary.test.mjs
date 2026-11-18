@@ -14,7 +14,7 @@ const ACCEPTANCE_IMPORTS = new Set(['@noble/curves/ed25519.js', '@noble/curves/s
 const SIGNING_APIS = /\.sign\(|getPublicKey|keygen|randomSecretKey|randomBytes|getSharedSecret|secretKey/;
 /** Lifecycle (B1b) modules. Only wallet.ts verifies Ed25519 and only submit.ts may name the one send method. */
 const LIFECYCLE = ['adapter.ts', 'auxiliary.ts', 'compose.ts', 'intent.ts', 'journal.ts', 'message.ts', 'plan.ts',
-  'recovery.ts', 'submit.ts', 'wallet.ts'];
+  'recovery.ts', 'submit.ts', 'vaultjournal.ts', 'wallet.ts'];
 const LIFECYCLE_EXCEPTIONS = { 'wallet.ts': '@noble/curves', 'submit.ts': 'sendTransaction' };
 
 test('src-has-no-io-or-forbidden-apis', () => {

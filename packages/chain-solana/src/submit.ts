@@ -76,7 +76,10 @@ async function call(
     .then(() => {
       // Check in the physical continuation: disposal can win after the caller schedules this microtask.
       context.assertActive?.();
-      return context.rpc.request({ method, params, signal: controller.signal });
+      const rpc = context.rpc, request = rpc.request;
+      // An injected accessor can synchronously revoke the session while exposing the callable.
+      context.assertActive?.();
+      return Reflect.apply(request, rpc, [{ method, params, signal: controller.signal }]);
     })
     .then((value): Raced => ({ boxed: { value } }), (): Raced => ({ stop: 'UNAVAILABLE' }));
   try {
@@ -219,7 +222,7 @@ export async function signIntent(
   const { record } = stored;
   if (record.state !== 'prepared' || session.address !== record.feePayer || session.role !== record.role ||
       session.tradeId !== trade.binding.tradeId) return fail('UNAUTHORIZED');
-  const result = await signWithWallet(session, messageOf(record));
+  const result = await signWithWallet(session, messageOf(record), context.assertActive);
   if (!result.ok) return fail(result.error.code);
   // transitionIntent re-parses the record, which verifies the signature over the journaled message again.
   const next = transitionIntent(record, 'signed', clockNow(context), { signature: result.value.signature });

@@ -167,3 +167,11 @@ expiry), `adapter.ts` (mapping to Lane A's `IntentV2`), `recovery.ts` and the en
 are required inputs. Status: adapter plus local-validator integration, not wired into apps/web. Details, the state
 machine and the open shared-schema items: [docs/lifecycle.md](docs/lifecycle.md); recovery:
 [contracts/solana/RECOVERY.md](../../contracts/solana/RECOVERY.md).
+
+`SolanaVaultJournal` in `src/vaultjournal.ts` implements the port with the real encrypted vault's session lease
+and persistent CAS. It keeps full native intents per trade, preserving pre-marker signatures, uncertain markers,
+payouts and outcomes across fresh-key backup restore. The client rechecks the live journal capability immediately
+before physical RPC dispatch. A pure schema parser lets the ordinary offline recovery view show one current,
+unverified hint per native trade journal, preserving the full history in the encrypted backup. It imports no
+Solana RPC or wallet implementation and grants no transaction authority. See the encrypted vault composition
+section in [docs/lifecycle.md](docs/lifecycle.md) for selection rules, bounds and tested recovery behavior.

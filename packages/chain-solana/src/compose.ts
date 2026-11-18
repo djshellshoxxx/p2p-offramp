@@ -97,7 +97,11 @@ export function createSolanaEscrowClient(options: SolanaEscrowClientOptions): So
   const reader = new SolanaChainReader({ rpc: options.rpc, registry: options.registry, timeoutMs,
     now: () => options.clock.now(), freezeAuthorityPermits: options.freezeAuthorityPermits ?? [] });
   let disposed = false, sequence = 0;
-  const assertActive = () => { if (disposed) fail('CANCELLED'); };
+  const assertActive = () => {
+    if (disposed) fail('CANCELLED');
+    // A vault-backed journal revokes this capability synchronously on lock, including after a marker CAS.
+    checkedProfileId(options.journal);
+  };
   const context: SolanaSubmitContext = { rpc: options.rpc, journal: options.journal, clock: options.clock, random,
     timeoutMs, floors: new Map(), assertActive };
   const locks = new Map<string, Promise<unknown>>();

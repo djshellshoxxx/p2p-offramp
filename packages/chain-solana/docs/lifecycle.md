@@ -1,10 +1,15 @@
 # Solana transaction lifecycle, submission and recovery (B1b)
 
-Status: **adapter + local integration**. Implemented in `packages/chain-solana/src/{message,auxiliary,plan,wallet,
-intent,journal,submit,adapter,recovery,compose}.ts`, tested on fakes (no network) and driven against a real pinned
-`solana-test-validator` by `contracts/solana/localnet/client-run.mjs`. It is **not wired** into apps/web, not run
-in a browser, not run on a public cluster, not independently reviewed and not approved for release. The app build
-still excludes this package.
+Status: **native adapter, encrypted vault journal, and offline recovery projection implemented**.
+The native modules live in `packages/chain-solana/src/{message,auxiliary,plan,wallet,intent,journal,vaultjournal,
+submit,adapter,recovery,compose}.ts`. Independent core and vault reviews, with reproduced defects and repairs,
+are recorded in `docs/execution/INDEPENDENT-CORE-REVIEW-2026-11-18.md` and
+`docs/execution/INDEPENDENT-NATIVE-VAULT-REVIEW-2026-11-18.md`. A real-validator driver exists at
+`contracts/solana/localnet/client-run.mjs`; the current consolidated run was blocked before startup by the host's
+io_uring restrictions. Earlier source-PR validator results below are historical, not current combined qualification.
+Native wallet and transaction actions are **not wired** into apps/web and have not been qualified in a browser or
+on a public cluster. The offline browser build includes only the pure recovery-hint parser, not this native package.
+Release approval remains outstanding.
 
 ## 1. Pieces and ports
 
@@ -16,6 +21,7 @@ still excludes this package.
 | `wallet.ts` | Wallet Standard permission port: explicit connect, role-key check, sign-only, output validation |
 | `intent.ts` | `SolanaIntentRecord`, strict restore validation, transition table |
 | `journal.ts` | Injected CAS journal port, load/store helpers, admission rule |
+| `vaultjournal.ts` | Native journal records through the real encrypted vault's session authority and CAS |
 | `submit.ts` | Blockhash anchoring, durable marker, one `sendTransaction`, native reconciliation |
 | `adapter.ts` | Mapping to and from Lane A's shared `IntentV2` (validated with Lane A's own `parseIntent`) |
 | `recovery.ts` | Portable recovery document, exits and unsigned exit messages (see `contracts/solana/RECOVERY.md`) |
@@ -125,6 +131,72 @@ Actions resolve to `{ intentId, signature, state }` with `state` `sent` or `unkn
 Operations on one trade are serialized in the instance; other tabs are fenced by the journal CAS. The default
 margin policy (B1a) is supplied by the caller.
 
+### Encrypted vault composition
+
+`new SolanaVaultJournal(vaultService, vaultSession)` implements the injected journal
+port using the existing `VaultService.read/commit` and `VaultSessionAuthority`
+capabilities. Import it from `src/vaultjournal.ts`, then pass the instance as
+`journal` to `createSolanaEscrowClient`. Call `journal.dispose()` when discarding the
+composition. Vault lock revokes the journal's captured session synchronously. The
+client checks this capability at wallet and physical RPC boundaries, including the
+microtask immediately before dispatch after a durable send marker.
+
+One encrypted `kind: 'journal'`, `schemaVersion: 1` private record per trade holds
+format `p2p-offramp/solana/vault-journal/v1`, the complete binding, a per-trade revision
+and the complete native intent records. Its id is a domain-separated hash of the
+binding; decoding also checks the full binding. Records are bounded to 32 intents
+and the vault's 262,144-byte payload limit. History has no deletion or pruning API.
+Strict decoding rejects duplicate, foreign, future, inconsistent or malformed
+entries without overwriting them. `loadIntents` additionally verifies each intent
+against the bound trade and exact message before lifecycle use.
+
+Writes enforce native state transitions, immutable fields, per-trade revision,
+original-profile cancellation rules and admission/replacement rules. The vault's
+global revision and atomic persistent CAS fence other instances and sessions. An
+empty commit checks persistent freshness even for a read. A conflicting or revoked
+session must be reopened and reconciled; the adapter does not retry. A lock or
+abort after an acknowledged CAS is reported as uncertain, preserving the stored
+marker and preventing broadcast.
+
+The encrypted backup service copies this native payload without converting through
+`IntentV2`. A fresh-key restore changes the current profile id while preserving every
+intent's `originProfileId`, pre-marker signature, marker, payout state and outcome.
+Consequently a restored preparation can be reconciled but cannot be cancelled as
+the fresh profile's own never-sent transaction. No carrier or journal format migration
+is introduced here.
+
+The offline recovery projector uses a separate pure schema parser to show one current
+recovery hint per native trade journal. Its sole nonterminal intent takes precedence
+over every stored terminal label, including a later label; if all intents are terminal,
+the greatest `updatedAt` wins, with greatest `intentId` breaking ties. Multiple open
+intents, duplicate IDs, foreign bindings, future versions or invalid structures make
+the entire record unsupported. The record and its complete history remain unchanged.
+
+The hint keeps the literal native action/state and the public transaction-signature ID,
+including a signature saved before the marker and payout actions. It carries the existing
+`unverified-offline-reference` authority. Stored terminal labels grant no chain or wallet
+authority. The existing 64-record pagination and private export bounds remain unchanged;
+the UI explains that the complete intent history stays in the encrypted backup. The
+ordinary offline build imports no Solana RPC, wallet or cryptographic verification code.
+Its parser checks bounded structural consistency, including message account/blockhash
+metadata, and never substitutes for the native client's signature, terms, PDA, network
+or live-state verification. No generic private-record read or transaction action is
+added to the worker protocol.
+
+`test/vaultjournal.test.mjs` exercises the actual `EncryptedVaultService` and
+`EncryptedBackupService` with an in-memory backing-store implementation. It verifies
+ciphertext-only persistence, release and payout outcomes through fresh-key restore,
+pre-marker signature recovery, uncertain marker/send outcomes, explicit rebuild only
+after expiry, 32-intent bounds, cross-session CAS, stale reads, malformed records,
+and lock races before/after CAS and at physical dispatch. These tests do not claim
+IndexedDB browser execution; the application's storage and browser suites cover
+that backing store separately.
+
+The dated [integration qualification](integration-qualification-20261118.md) records
+the consolidated core's native build/LiteSVM/IDL evidence and the current container's
+blocked real-validator startup. Earlier local-validator summaries below are source
+PR evidence and do not qualify a later combined commit.
+
 ## 5. Tests and local evidence
 
 Unit tests (no network): `message`, `plan`, `wallet`, `intent`, `lifecycle`, `adapter`, `recovery` (`test/*.test.mjs`,
@@ -143,7 +215,12 @@ escrow effect, skipping signature verification on restore, and planning a payout
 
 Real validator (`client-run.mjs`, Agave 4.1.2, synthetic localnet program/mints/keys generated at runtime): see §8.
 
-## 6. Needs Lane A (shared schema and journal; not edited here)
+## 6. Historical shared-schema proposals (not the current recovery store)
+
+The proposals below predate `SolanaVaultJournal`. The current encrypted native journal stores the complete
+native lifecycle without a lossy `IntentV2` conversion, and the offline projection reads that native format.
+These shared-schema proposals are retained for future consolidation; they are not implemented requirements
+for using the current native journal. Browser wallet/exchange composition remains a separate integration task.
 
 1. `packages/schemas/src/intent.ts` (`IntentV1.action`, `IntentV1.expectedEscrowState`, `parseIntent`): add
    `'payout'` and `'released' | 'refunded'` for Solana bindings only, with `payout ⇔ released|refunded`. Older

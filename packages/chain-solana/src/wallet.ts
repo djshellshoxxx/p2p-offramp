@@ -167,13 +167,16 @@ export function checkSignedTransaction(
 
 /** One `signTransaction` call for our unsigned wire transaction; the wallet must not change a byte of the message. */
 export async function signWithWallet(
-  session: SolanaWalletSession, message: Uint8Array,
+  session: SolanaWalletSession, message: Uint8Array, assertActive?: () => void,
 ): Promise<CoreResult<SignedSolanaTransaction>> {
   try {
     const state = SESSIONS.get(session);
     if (!state) return failure('UNAUTHORIZED');
+    assertActive?.();
     const sign = feature(state.wallet, SOLANA_SIGN_TRANSACTION, 'signTransaction');
     const input = { account: state.account, transaction: unsignedTransaction(message), chain: session.chain };
+    // Descriptor traps in an injected feature can revoke the session during lookup; check before invoking it.
+    assertActive?.();
     let output: unknown;
     try { output = await sign(input); } catch (error) { return walletError(error); }
     return { ok: true, value: checkSignedTransaction(output, message, session.address) };
