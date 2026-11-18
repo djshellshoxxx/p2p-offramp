@@ -220,3 +220,25 @@ test('G07 follows literal dynamic imports into the entry graph and still rejects
     await rm(root, { recursive: true, force: true });
   }
 });
+
+// Area review of the consolidation candidate (2bc0f62, MEDIUM-2): a `.js` specifier for a `.ts` source was not followed,
+// so a forbidden module behind `import './helper.js'` passed with "visited 1 module".
+test('G07 follows JavaScript-extension specifiers into their TypeScript sources', async () => {
+  for (const [specifier, file] of [['./helper.js', 'helper.ts'], ['./view.jsx', 'view.tsx'], ['./worker.mjs', 'worker.mts'], ['./legacy.cjs', 'legacy.cts']]) {
+    const root = await mkdtemp(join(tmpdir(), 'p2p-import-jsext-'));
+    try {
+      await put(root, 'tsconfig.json', JSON.stringify({
+        compilerOptions: { target: 'ES2023', module: 'ESNext', moduleResolution: 'Bundler', noEmit: true, allowImportingTsExtensions: true, jsx: 'preserve' },
+        include: ['packages/*/src/**/*', 'apps/web/src/**/*'],
+      }));
+      await put(root, 'packages/proofs/index.ts', 'export const proof = true;\n');
+      await put(root, `apps/web/src/${file}`, "export { proof } from '../../../packages/proofs/index.ts';\n");
+      await put(root, 'apps/web/src/main.ts', `export * from '${specifier}';\n`);
+      const result = await inspectImportBoundaries(root);
+      assert.ok(result.findings.some(finding => finding.code === 'CORE_GRAPH_FORBIDDEN_MODULE' && finding.detail === 'packages/proofs/index.ts'),
+        `forbidden module behind ${specifier} is reported: ${JSON.stringify(result.findings)}`);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  }
+});

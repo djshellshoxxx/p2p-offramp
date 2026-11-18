@@ -120,8 +120,12 @@ function resolveLocalModule(root, importer, specifier, sourceSet) {
   if (!specifier || (!specifier.startsWith('.') && !isAbsolute(specifier))) return { external: true };
   const raw = isAbsolute(specifier) ? resolve(specifier) : resolve(dirname(importer), specifier);
   if (!within(root, raw)) return { escaped: true, path: raw };
-  const candidates = extname(raw)
-    ? [raw]
+  // Bundlers and NodeNext resolve a JavaScript-extension specifier to its TypeScript source, so `./x.js` must be
+  // followed into `x.ts` (and `.jsx`/`.mjs`/`.cjs` into `.tsx`/`.mts`/`.cts`); otherwise the graph walk would stop there.
+  const ext = extname(raw), base = raw.slice(0, raw.length - ext.length);
+  const typescriptSiblings = { '.js': ['.ts', '.tsx'], '.jsx': ['.tsx'], '.mjs': ['.mts'], '.cjs': ['.cts'] }[ext] ?? [];
+  const candidates = ext
+    ? [raw, ...typescriptSiblings.map(extension => base + extension)]
     : [...SOURCE_EXTENSIONS.map(extension => raw + extension), ...SOURCE_EXTENSIONS.map(extension => resolve(raw, `index${extension}`))];
   return { path: candidates.find(candidate => sourceSet.has(candidate)) ?? raw };
 }
