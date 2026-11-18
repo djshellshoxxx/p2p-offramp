@@ -244,6 +244,17 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
   both fixed by CF commits that only #133 brings in.
 - 2026-11-18 run 2, Phase 3: re-confirmed on full history. All 264 D9 test
   lines are in the trunk, and the D9 code change is identical there.
+- 2026-11-18 run 2, review outcome: five independent AI reviewers covered
+  wallet/EVM/D9, storage/vault/relay, CI/supply chain, the Solana program and
+  the red-team delta. Their consolidated result is posted as a COMMENT review
+  on #132. With #133 (`f2cb43d`) there is no new High or Medium finding;
+  `REDTEAM-D9-1`, `-D9-2`, `-P2-D9-3` and the crash-before-release-marker
+  refund test pass there, which closes M1 and M2. Still open: P2-EX3
+  (Medium) and P2-EX2, which need an owner decision. The Low findings are
+  listed in the review; the prune-script delete race is fixed in `68b2fe1`.
+  #133 exact-head CI at `68b2fe1`: 8/8 green, including `forge` and the
+  Solana `program` job. Next step is the owner's: merge #133 into #132's
+  branch, decide on P2-EX3/EX2, then merge #132.
 
 ## 4. Expected end state
 
