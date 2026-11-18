@@ -9,6 +9,7 @@ import { openEnvelope, disposeMaterial } from '../packages/storage/src/vault-cry
 import { decodeIntentPayload } from '../packages/schemas/index.ts';
 import { buildGetTrade, decodeTrade } from '../packages/wallet/localnet.ts';
 import { startLocalnetFixture } from './lib/localnet-fixture.mjs';
+import { assertLocalnetSendMarked } from './lib/localnet-send-evidence.mjs';
 
 const PASS = 'public synthetic independent browser profile passphrase';
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -36,8 +37,7 @@ async function createParty(index, store = memoryStore(), restoredPassphrase = PA
     const profile = controller.snapshot().profileId, opened = await openEnvelope(store.rows.get(profile), restoredPassphrase, crypto);
     try {
       const recorded = opened.snapshot.records.filter(record => record.kind === 'journal').map(record => decodeIntentPayload(record.payload));
-      const matching = recorded.filter(intent => intent.state === 'broadcast-unknown' && JSON.parse(intent.preparedRequest).data === transaction.data);
-      assert.equal(matching.length, 1, 'one durable send marker precedes each wallet call'); assert.equal(matching[0].originProfileId, profile); markers++;
+      assertLocalnetSendMarked(recorded, transaction, profile); markers++;
     } finally { disposeMaterial(opened.material); }
   } });
   const now = () => clock * 1000 + wallClockOffsetMs;

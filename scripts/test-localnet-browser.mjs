@@ -13,6 +13,7 @@ import { decodeIntentPayload } from '../packages/schemas/index.ts';
 import { buildGetTrade, decodeTrade } from '../packages/wallet/localnet.ts';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { startLocalnetFixture } from './lib/localnet-fixture.mjs';
+import { assertLocalnetSendMarked } from './lib/localnet-send-evidence.mjs';
 
 const PASS = 'public synthetic localnet browser profile passphrase';
 const RESTORED_PASS = 'public synthetic restored localnet browser passphrase';
@@ -54,10 +55,8 @@ async function party(index, passphrase = PASS) {
     const opened = await openEnvelope(row, passphrase, crypto);
     try {
       const records = opened.snapshot.records.filter(record => record.kind === 'journal').map(record => decodeIntentPayload(record.payload));
-      const marked = records.filter(intent => intent.state === 'broadcast-unknown' && JSON.parse(intent.preparedRequest).data === request.data);
-      assert.equal(marked.length, 1, 'a durable IndexedDB marker exists before the actual external wallet send');
-      assert.equal(marked[0].originProfileId, id); markers++;
-      for (const secretText of [PAYMENT, MESSAGE, marked[0].preparedRequest]) assert.equal(JSON.stringify(row).includes(secretText), false);
+      const marked = assertLocalnetSendMarked(records, request, id); markers++;
+      for (const secretText of [PAYMENT, MESSAGE, marked.preparedRequest]) assert.equal(JSON.stringify(row).includes(secretText), false);
     } finally { disposeMaterial(opened.material); }
   } });
   await context.exposeBinding('__localnetFixtureRequest', async (_source, request) => {
