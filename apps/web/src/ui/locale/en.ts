@@ -325,6 +325,8 @@ const definitions = {
     "localeHelp": "English source copy only. Browser capability checks are not device certification. Wallet support, physical device tests, translation review, and accessibility acceptance remain pending.",
     "localeFallback": "The requested language is unavailable or incomplete. The complete English source is shown. Funds remain disabled.",
     "localeUseSource": "Use English source",
+    "localeChoose": "Display language",
+    "localeChooseHelp": "Changes display text only. Addresses, amounts and signed data are never translated.",
     "localeFixture": "Development language fixture. This is formatting and layout test data, not a reviewed translation. Funds remain disabled.",
     "unknownTitle": "Page unavailable",
     "unknownHelp": "This route is not supported. Return home or open recovery guidance. Link contents are not used as commands.",

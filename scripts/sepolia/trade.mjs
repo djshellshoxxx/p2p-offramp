@@ -18,13 +18,14 @@
  * never logged or written. RPC: SEPOLIA_RPC_URL (never logged).
  *
  *   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/trade.mjs --run <id> [--amount-wei N] [--wait] [--wait-finalized]
+ *     [--deployment-id <id>]   the signed registry deployment to trade against (CLI default escrow-sepolia-v1; library
+ *                             callers pass `deploymentId` explicitly). Terms, bindings and the state file are bound to it.
  *     [--unsigned-registry]   G25 pre-acceptance exercise: use the recorded, not yet owner-signed registry (recorded as
  *                             registryTrust.verified: false). Every on-chain identity check still applies.
  */
 import { randomBytes } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname, resolve, sep } from 'node:path';
-import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { RegistryService, reviewTermsBytes, encodePrivateAgreement, encodeCapabilities, sha256Hex, checkFundingWindow, TERMS_REVIEW_FORMAT } from '../../packages/domain/index.ts';
 import { createTradeAuthority } from '../../packages/domain/src/authority.ts';
@@ -32,12 +33,12 @@ import { evmTermsHash, verifyEoaAcceptance } from '../../packages/wallet/src/evm
 import {
   buildChainObservation, buildFundNative, buildGetTrade, buildRefund, buildRelease, buildTradeIdOf, decodeEscrowLog, decodeEscrowRevert, decodeTrade, tradeMatchesTerms,
 } from '../../packages/wallet/src/evm-escrow.ts';
-import { chainIdentity, hexToBytes, isMain, keccakHex, ROOT, RpcError, rpcClient, SEPOLIA, sha256Hex as sha } from './lib.mjs';
+import { chainIdentity, CLI_DEFAULT_DEPLOYMENT_ID, hexToBytes, isDeploymentId, isMain, keccakHex, parseSingleOptions, ROOT, rpcClient, RpcError, SEPOLIA, sha256Hex as sha } from './lib.mjs';
 import { REGISTRY_ASSET } from './owner-release.mjs';
 import { loadVerifiedRegistry } from './verify-release.mjs';
 import { sellerKeyEnv, sendAsSeller } from './send.mjs';
 
-export const NETWORK_ID = 'sepolia', DEPLOYMENT_ID = 'escrow-sepolia-v1';
+export const NETWORK_ID = 'sepolia';
 const ZERO = `0x${'0'.repeat(40)}`;
 const MIN_DURATION = 1800; // BasicEscrow.MIN_DURATION and trade-terms MIN_ESCROW_SECONDS
 /** A release sent closer than this to the deadline could be mined after it and revert (DeadlinePassed). */
@@ -138,16 +139,18 @@ export function tradeStatePath(root, run) {
 }
 
 export async function runTrades(options) {
-  const { root = ROOT, run, statePath } = options ?? {};
+  const { root = ROOT, run, statePath, deploymentId } = options ?? {};
   const path = statePath ?? tradeStatePath(root, run);
   if (statePath !== undefined && !/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) throw new TradeError('RUN_ID_INVALID');
+  // Selection is explicit: refused before any lock, state file or RPC.
+  if (!isDeploymentId(deploymentId)) throw new TradeError('DEPLOYMENT_ID_INVALID');
   const lock = await acquireStateLock(path);
   try { return await runLockedTrades({ ...options, statePath: path }); }
   finally { await lock.release(); }
 }
 
 async function runLockedTrades({
-  env = process.env, root = ROOT, run, statePath, amountWei = 10n ** 14n, expectGenesis = SEPOLIA.genesisHash, requireSignedRegistry = true, pinnedKeyId,
+  env = process.env, root = ROOT, run, statePath, deploymentId, amountWei = 10n ** 14n, expectGenesis = SEPOLIA.genesisHash, requireSignedRegistry = true, pinnedKeyId,
   wait = false, waitFinalized = false, maxWaitSeconds = 3600, pollSeconds = 15, advanceTime, nowSeconds, log = () => {},
   /** eth_getLogs range per request: hosted providers cap the span, so wide ranges are paged. */
   logChunk = 2000,
@@ -155,6 +158,7 @@ async function runLockedTrades({
   beforeFund, beforeSettle,
 }) {
   if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(run ?? '')) fail('RUN_ID_INVALID');
+  if (!isDeploymentId(deploymentId)) fail('DEPLOYMENT_ID_INVALID');
   const path = statePath ?? tradeStatePath(root, run);
   const rpc = rpcClient(env.SEPOLIA_RPC_URL);
   const identity = await chainIdentity(rpc);
@@ -162,7 +166,7 @@ async function runLockedTrades({
   if (identity.genesisHash !== expectGenesis) fail('WRONG_GENESIS');
 
   const { lookup, trust } = await loadTrust({ root, requireSignedRegistry, nowSeconds, expectGenesis, pinnedKeyId });
-  const network = lookup.network(NETWORK_ID), deployment = lookup.deployment(NETWORK_ID, DEPLOYMENT_ID);
+  const network = lookup.network(NETWORK_ID), deployment = lookup.deployment(NETWORK_ID, deploymentId);
   if (!network || !deployment || network.chainIdentity !== SEPOLIA.chainId.toString() || network.genesisHash !== identity.genesisHash) fail('REGISTRY_NETWORK_MISMATCH');
   if (!deployment.supportedAssetIds.includes('native')) fail('REGISTRY_ASSET_UNSUPPORTED');
   const escrow = deployment.address;
@@ -182,7 +186,7 @@ async function runLockedTrades({
   async function checkStoredTrade(trade) {
     const { terms, privateAgreement, acceptance } = trade ?? {};
     if (!terms || !privateAgreement || !acceptance || terms.seller !== seller || terms.buyer !== buyer || terms.networkId !== NETWORK_ID ||
-        terms.deploymentId !== DEPLOYMENT_ID || terms.assetKind !== 'native' || terms.asset !== ZERO || terms.amountBaseUnits !== amountWei.toString()) fail('STATE_MISMATCH');
+        terms.deploymentId !== deploymentId || terms.assetKind !== 'native' || terms.asset !== ZERO || terms.amountBaseUnits !== amountWei.toString()) fail('STATE_MISMATCH');
     const reviewed = await reviewTermsBytes(lookup, new TextEncoder().encode(JSON.stringify({ format: TERMS_REVIEW_FORMAT, terms, privateAgreement })));
     let accepted = false;
     try {
@@ -196,7 +200,8 @@ async function runLockedTrades({
   try { state = JSON.parse(await readFile(path, 'utf8')); }
   catch (error) { if (error?.code !== 'ENOENT') throw error; state = null; }
   if (state) {
-    if (state.escrow !== escrow || state.seller !== seller || state.buyer !== buyer || state.genesisHash !== identity.genesisHash ||
+    // States written before deployment ids were parameterized carry no id; their escrow and terms still bind them.
+    if (state.escrow !== escrow || (state.deploymentId !== undefined && state.deploymentId !== deploymentId) || state.seller !== seller || state.buyer !== buyer || state.genesisHash !== identity.genesisHash ||
         state.amountWei !== amountWei.toString() || !Array.isArray(state.trades)) fail('STATE_MISMATCH');
     // Labels are protocol slots, never output path components supplied by an editable saved state.
     // Check even planned trades before negotiation can write a terms-review document.
@@ -204,7 +209,7 @@ async function runLockedTrades({
         new Set(state.trades.map(trade => trade.label)).size !== 2) fail('STATE_MISMATCH');
     for (const trade of state.trades) if (trade?.status !== 'planned') await checkStoredTrade(trade);
   } else {
-    state = { format: 'p2p-offramp/sepolia-trade-run/v1', run, network: NETWORK_ID, chainId: domain.chainId, genesisHash: identity.genesisHash, escrow,
+    state = { format: 'p2p-offramp/sepolia-trade-run/v1', run, network: NETWORK_ID, deploymentId, chainId: domain.chainId, genesisHash: identity.genesisHash, escrow,
       runtimeKeccak: deployment.runtime.keccak256, deploymentRecord: `docs/deployments/sepolia/BasicEscrow-${escrow}.json`, registryTrust: trust, seller, buyer,
       amountWei: amountWei.toString(), releaseEnabled: 0,
       trades: [{ label: 'release', status: 'planned', checks: [], attempts: {} }, { label: 'refund', status: 'planned', checks: [], attempts: {} }] };
@@ -246,7 +251,7 @@ async function runLockedTrades({
     return entries;
   }
   const decodedLogs = entries => entries.map(entry => ({ ...decodeEscrowLog(escrow, entry), tx: entry.transactionHash, block: BigInt(entry.blockNumber).toString(), blockHash: entry.blockHash }));
-  const binding = tradeId => ({ chain: 'evm', networkId: NETWORK_ID, deploymentId: DEPLOYMENT_ID, tradeId });
+  const binding = tradeId => ({ chain: 'evm', networkId: NETWORK_ID, deploymentId, tradeId });
   /** One consistent snapshot: escrow state and logs read at the same block, returned with that block. */
   async function observe(trade) {
     let at;
@@ -329,7 +334,7 @@ async function runLockedTrades({
     const agreement = { v: 1, orderId, revision: '1', fiatCurrency: 'EUR', fiatMinorUnits: '100', fiatScale: 2,
       paymentInstructions: 'SEPOLIA TESTNET PROOF. No fiat payment is made or expected.', capabilities: [], agreementSalt: hex(randomBytes(32)) };
     const expiry = trade.label === 'release' ? now + 7200 : now + MIN_DURATION + 900;
-    const terms = { orderId, revision: '1', networkId: NETWORK_ID, deploymentId: DEPLOYMENT_ID, seller, buyer, assetKind: 'native', asset: ZERO,
+    const terms = { orderId, revision: '1', networkId: NETWORK_ID, deploymentId, seller, buyer, assetKind: 'native', asset: ZERO,
       amountBaseUnits: amountWei.toString(), privateAgreementHash: await sha256Hex(encodePrivateAgreement(agreement)), capabilitiesHash: await sha256Hex(encodeCapabilities([])),
       sellerNonce: hex(randomBytes(32)), acceptBeforeSeconds: String(now + 900), escrowExpirySeconds: String(expiry) };
     // The app's own terms review must accept exactly these terms against the verified registry.
@@ -526,10 +531,11 @@ async function runLockedTrades({
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { run: { type: 'string' }, 'amount-wei': { type: 'string' }, wait: { type: 'boolean' }, 'wait-finalized': { type: 'boolean' },
-    'unsigned-registry': { type: 'boolean' } } });
+  const { values, repeated } = parseSingleOptions({ options: { run: { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID }, 'amount-wei': { type: 'string' },
+    wait: { type: 'boolean' }, 'wait-finalized': { type: 'boolean' }, 'unsigned-registry': { type: 'boolean' } } });
   try {
-    const { state, path } = await runTrades({ run: values.run, requireSignedRegistry: !values['unsigned-registry'], ...(values['amount-wei'] ? { amountWei: BigInt(values['amount-wei']) } : {}),
+    if (repeated) fail('OPTION_REPEATED');
+    const { state, path } = await runTrades({ run: values.run, deploymentId: values['deployment-id'], requireSignedRegistry: !values['unsigned-registry'], ...(values['amount-wei'] ? { amountWei: BigInt(values['amount-wei']) } : {}),
       wait: Boolean(values.wait), waitFinalized: Boolean(values['wait-finalized']), log: message => console.error(message) });
     console.log(JSON.stringify({ ok: true, state: path, trades: state.trades.map(trade => ({ label: trade.label, status: trade.status, tradeId: trade.tradeId, fund: trade.fund?.tx ?? null, settle: trade.settle?.tx ?? null })), finality: state.finality }));
   } catch (error) {
