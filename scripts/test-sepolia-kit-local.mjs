@@ -20,7 +20,7 @@ import { resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { deploy } from './sepolia/deploy.mjs';
 import { PENDING_FILE, recordDeployment, clearRecordedAttempt } from './sepolia/record-deployment.mjs';
-import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
+import { ABI_ASSET, keygen, REGISTRY_ASSET, SIGNED_DEPLOYMENTS_FILE, signManifest, signRelease, writeSignedRelease } from './sepolia/owner-release.mjs';
 import { acceptSepoliaRelease, TRUSTED_KEY_PATH, verifySepoliaRelease } from './sepolia/verify-release.mjs';
 import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, ROOT, rpcClient, SEPOLIA, TOOLCHAIN, keccakHex, hexToBytes } from './sepolia/lib.mjs';
 import { TESTNET_ACCEPTED_FILE } from '../apps/web/scripts/testnet-trust.mjs';
@@ -82,9 +82,10 @@ try {
   const env = (url, key = DEV_KEY) => ({ ...inherited, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: key });
   // A temporary repository root laid out like the checkout: records, registry and trust files live where the tools look.
   const root = resolve(temporary, 'root');
-  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
+  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md', ABI_ASSET]) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
   const recordsDir = resolve(root, 'docs/deployments/sepolia');
-  const out = { outDir: recordsDir, registryPath: resolve(root, REGISTRY_ASSET) };
+  // Deployment ids are explicit library inputs (D3): the first deployment is escrow-sepolia-v1, a later one escrow-sepolia-v2.
+  const out = { outDir: recordsDir, registryPath: resolve(root, REGISTRY_ASSET), deploymentId: 'escrow-sepolia-v1' };
   const broadcastDir = resolve(temporary, 'broadcast');
 
   // Pins: the README and the kit agree, and the installed toolchain is the pinned one.
@@ -160,7 +161,7 @@ try {
   pass('a post-broadcast failure names the transaction and contract, blocks redeploying, and record-deployment completes it from chain state');
 
   // Every recorder refusal, each from real chain state.
-  const recordInto = (txHash, extra = {}) => recordDeployment({ rpcUrl: node.url, txHash, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash,
+  const recordInto = (txHash, extra = {}) => recordDeployment({ rpcUrl: node.url, txHash, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, deploymentId: 'escrow-sepolia-v1',
     outDir: resolve(temporary, 'x'), registryPath: resolve(temporary, 'x/r.json'), env: env(node.url), ...extra });
   const other = await node.rpc('eth_sendTransaction', [{ from: DEPLOYER, data: '0x600a600c600039600a6000f3602a60005260206000f3' }]);
   await assert.rejects(recordInto(other), code('RUNTIME_CODE_MISMATCH'));
@@ -233,23 +234,30 @@ try {
   const refreshed = await recordDeployment({ rpcUrl: node.url, txHash: pendingTx, publicEndpoint: PUBLIC_ENDPOINT, expectedDeployer: DEPLOYER, expectGenesis: genesisHash, ...out, env: env(node.url) });
   assert.equal(refreshed.record.finalizedAtRecording, true, 're-recording after finality marks the record finalized');
   await assert.rejects(sign({ days: 31 }), message('DAYS_INVALID'));
+  // D3 Option A: the signer refuses an ABI asset that is not byte-identical to the committed canonical ABI.
+  const abiFile = resolve(root, ABI_ASSET), abiBytes = await readFile(abiFile);
+  await writeFile(abiFile, Buffer.concat([abiBytes, Buffer.from('\n')]));
+  await assert.rejects(sign(), message('ABI_NOT_CANONICAL'));
+  await rm(abiFile);
+  await assert.rejects(sign(), message('ABI_MISSING'));
+  await writeFile(abiFile, abiBytes);
   const signed = await sign();
+  assert.deepEqual(JSON.parse(new TextDecoder().decode(signed.manifestBytes)).assets.map(asset => asset.path), [ABI_ASSET, REGISTRY_ASSET], 'one manifest covers the ABI and the registry');
+  assert.deepEqual(signed.summary.assets.map(asset => asset.path), [ABI_ASSET, REGISTRY_ASSET], 'the owner sees both signed assets');
   assert.deepEqual(signed.summary.networks.map(network => [network.id, network.chainIdentity, network.genesisHash, network.environment, network.endpoints, network.deployments.map(item => item.address)]),
     [['sepolia', '11155111', genesisHash, 'testnet', [PUBLIC_ENDPOINT], [record.contractAddress]]], 'the owner sees exactly what is signed');
   const recordPath = resolve(recordsDir, `BasicEscrow-${record.contractAddress}.json`), recordText = await readFile(recordPath, 'utf8');
   await writeFile(recordPath, recordText.replace(record.codeDigest.runtime, 'f'.repeat(64)));
   await assert.rejects(sign(), message('DEPLOYMENT_RECORD_MISMATCH'));
   await writeFile(recordPath, recordText);
-  const publish = async release => {
-    await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), release.manifestBytes);
-    await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(release.envelope));
-  };
+  // Manifest, envelope and (for owner-tool releases) the signed deployment ledger, written together as `sign` does.
+  const publish = release => writeSignedRelease(root, release);
   await publish(signed);
-  pass('owner signing refuses a non-Sepolia registry, a deployment not recorded after finality or not matching its record, and more than 30 days');
+  pass('owner signing covers registry and canonical ABI; refuses a non-canonical or missing ABI, a non-Sepolia registry, a deployment not recorded after finality or not matching its record, and more than 30 days');
 
   // Verification by the app's verifier: real-Sepolia identity by default, then the local stand-in.
   assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60, pinnedKeyId: owner.keyId })).error.code, 'NETWORK_NOT_SEPOLIA', 'real-Sepolia identity by default');
-  const check = (nowSeconds = () => now + 60) => verifySepoliaRelease({ root, nowSeconds, expectGenesis: genesisHash, pinnedKeyId: owner.keyId });
+  const check = (nowSeconds = () => now + 60, deploymentId = 'escrow-sepolia-v1') => verifySepoliaRelease({ root, nowSeconds, expectGenesis: genesisHash, pinnedKeyId: owner.keyId, deploymentId });
   assert.equal((await verifySepoliaRelease({ root, nowSeconds: () => now + 60, expectGenesis: genesisHash })).error.code, 'KEY_UNPINNED', 'ordinary verifier cannot accept a self-supplied fixture root');
   const verified = await check();
   assert.equal(verified.ok, true, JSON.stringify(verified));
@@ -269,7 +277,17 @@ try {
   await writeFile(registryFile, registryText.replace(record.contractAddress, '0x' + 'de'.repeat(20)));
   assert.equal((await check()).error.code, 'ASSET_MISMATCH');
   await writeFile(registryFile, registryText);
-  pass('verification binds the registry deployment; refuses the real-Sepolia mismatch, an expired manifest, an untrusted or mismatched key and a tampered registry');
+  await writeFile(abiFile, Buffer.concat([abiBytes, Buffer.from(' ')]));
+  assert.equal((await check()).error.code, 'ASSET_MISMATCH', 'an ABI edited after signing is refused');
+  await writeFile(abiFile, abiBytes);
+  // A registry-only manifest (the pre-D3 shape), validly signed by the pinned key, no longer verifies anywhere.
+  const registryOnly = JSON.parse(new TextDecoder().decode(signed.manifestBytes));
+  registryOnly.assets = registryOnly.assets.filter(asset => asset.path === REGISTRY_ASSET);
+  await publish(signManifest(owner.privateJwk, registryOnly));
+  assert.equal((await check()).error.code, 'ASSET_MISMATCH', 'a registry-only manifest is refused');
+  await publish(signed);
+  assert.equal((await check()).ok, true);
+  pass('verification binds the registry deployment and the ABI; refuses the real-Sepolia mismatch, an expired manifest, an untrusted or mismatched key, a tampered registry or ABI and a registry-only manifest');
 
   // Acceptance (G25 §4.3): once a release is accepted, an older one or another manifest at the same sequence is a rollback.
   await acceptSepoliaRelease(verified, { root });
@@ -282,10 +300,48 @@ try {
   await acceptSepoliaRelease(verifiedSecond, { root });
   await publish(signed);
   assert.equal((await check()).error.code, 'RELEASE_ROLLBACK', 'an older signed release is refused after a newer one was accepted');
-  await publish(await sign({ sequence: 2, days: 29 }));
+  // The signer itself refuses to continue from a release older than the accepted one (signer-side continuity).
+  await assert.rejects(sign({ sequence: 3 }), message('SIGNED_DEPLOYMENTS_STALE'));
+  // A different manifest at the accepted sequence, as a key used outside the tool could sign it.
+  const substitute = JSON.parse(new TextDecoder().decode(second.manifestBytes)); substitute.expiresAt -= 86_400;
+  await publish(signManifest(owner.privateJwk, substitute));
   assert.equal((await check()).error.code, 'RELEASE_ROLLBACK', 'a different manifest at the accepted sequence is refused');
   await publish(second);
   pass('an accepted release is recorded; an older release or a substitute at the accepted sequence is refused as a rollback');
+
+  // D3 (PROPOSED): a second deployment gets a new id; the registry keeps the first, and no signed id is rebound.
+  const sentBeforeV2 = await node.rpc('eth_getTransactionCount', [DEPLOYER, 'latest']);
+  await assert.rejects(deploy({ env: env(node.url), publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out }), code('DEPLOYMENT_ID_REBOUND'));
+  assert.equal(await node.rpc('eth_getTransactionCount', [DEPLOYER, 'latest']), sentBeforeV2, 'a listed id is refused before anything is sent');
+  const v2 = await deploy({ env: env(node.url), publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash, ...out, deploymentId: 'escrow-sepolia-v2' });
+  assert.notEqual(v2.record.contractAddress, record.contractAddress);
+  const listed = () => readFile(resolve(root, REGISTRY_ASSET), 'utf8').then(text => JSON.parse(text).networks[0].deployments.map(item => [item.id, item.address]));
+  assert.deepEqual(await listed(), [['escrow-sepolia-v1', record.contractAddress], ['escrow-sepolia-v2', v2.record.contractAddress]], 'recording v2 keeps v1');
+  const registryWithBoth = await readFile(resolve(root, REGISTRY_ASSET));
+  await assert.rejects(recordDeployment({ rpcUrl: node.url, txHash: v2.record.initializationTx, publicEndpoint: PUBLIC_ENDPOINT, expectedDeployer: DEPLOYER, expectGenesis: genesisHash,
+    ...out, env: env(node.url) }), code('DEPLOYMENT_ID_REBOUND'), 'recording v2 under v1 is refused');
+  assert.deepEqual(await readFile(resolve(root, REGISTRY_ASSET)), registryWithBoth, 'a refused recording writes nothing');
+  await node.rpc('anvil_mine', ['0x46']);
+  await recordDeployment({ rpcUrl: node.url, txHash: v2.record.initializationTx, publicEndpoint: PUBLIC_ENDPOINT, expectedDeployer: DEPLOYER, expectGenesis: genesisHash,
+    ...out, deploymentId: 'escrow-sepolia-v2', env: env(node.url) });
+  assert.deepEqual(await listed(), [['escrow-sepolia-v1', record.contractAddress], ['escrow-sepolia-v2', v2.record.contractAddress]], 're-recording v2 after finality keeps the order');
+  const third = await sign({ sequence: 3 });
+  assert.deepEqual(third.summary.networks[0].deployments.map(item => [item.id, item.previouslySigned]), [['escrow-sepolia-v1', true], ['escrow-sepolia-v2', false]]);
+  await publish(third);
+  assert.deepEqual(JSON.parse(await readFile(resolve(root, SIGNED_DEPLOYMENTS_FILE), 'utf8')).deployments.map(item => [item.id, item.firstSequence]), [['escrow-sepolia-v1', 1], ['escrow-sepolia-v2', 3]]);
+  const bothSigned = await check(undefined, 'escrow-sepolia-v2');
+  assert.equal(bothSigned.ok, true, JSON.stringify(bothSigned)); assert.equal(bothSigned.value.escrow, v2.record.contractAddress);
+  assert.equal((await check()).value.escrow, record.contractAddress, 'v1 keeps its signed address');
+  // The pre-D3 redeploy shape: a registry naming only escrow-sepolia-v1, now at the new address. Signing refuses it.
+  const rebound = JSON.parse(registryWithBoth.toString('utf8'));
+  rebound.networks[0].deployments = [{ ...rebound.networks[0].deployments[1], id: 'escrow-sepolia-v1' }];
+  await writeFile(resolve(root, REGISTRY_ASSET), JSON.stringify(rebound, null, 2) + '\n');
+  await assert.rejects(sign({ sequence: 4 }), error => error?.message === 'DEPLOYMENT_ID_REBOUND' && error.deploymentId === 'escrow-sepolia-v1');
+  rebound.networks[0].deployments = [JSON.parse(registryWithBoth.toString('utf8')).networks[0].deployments[1]];
+  await writeFile(resolve(root, REGISTRY_ASSET), JSON.stringify(rebound, null, 2) + '\n');
+  await assert.rejects(sign({ sequence: 4 }), message('DEPLOYMENT_ID_DROPPED'));
+  await writeFile(resolve(root, REGISTRY_ASSET), registryWithBoth);
+  pass('a second deployment needs a new id: deploy and record refuse a listed id, the registry keeps v1, and signing refuses a rebound or dropped signed id');
 
   // CLI entry guard: a checkout path with spaces, reached through a symlink, still runs the CLI (it used to exit 0 silently).
   const linked = resolve(temporary, 'path with spaces'); await mkdir(linked); await symlink(ROOT, resolve(linked, 'checkout'));
