@@ -100,8 +100,13 @@ node scripts/sepolia/owner-release.mjs sign --key ~/p2p-sepolia-release-key/sepo
 ```
 
 Use a sequence higher than the last signed one (`SEQUENCE_NOT_INCREASING`
-otherwise). Read the printed summary before you commit:
+otherwise); the first release is sequence 1. Read the printed summary before you
+commit:
 
+- `previousRelease` names the release this one continues (`null` only for the
+  first). Its `sequence` and `manifestSha256` must be the last release you
+  signed. If they are older, stop: the repository's release files were rolled
+  back, and signing would continue from the wrong history;
 - `assets` lists both paths above;
 - each deployment shows `previouslySigned`: `true` for every id from earlier
   releases, `false` only for the new ones you meant to add.
@@ -112,17 +117,33 @@ otherwise). Read the printed summary before you commit:
 - a release that changes the address, runtime hash or artifact hash of a signed
   id (`DEPLOYMENT_ID_REBOUND`), or that leaves a signed id out
   (`DEPLOYMENT_ID_DROPPED`);
-- a ledger that does not belong to the committed manifest
-  (`SIGNED_DEPLOYMENTS_MISSING`, `SIGNED_DEPLOYMENTS_STALE`).
+- an ABI other than the one the ledger recorded while signed deployments exist
+  (`ABI_CHANGED`);
+- a missing ledger once any release exists (`SIGNED_DEPLOYMENTS_MISSING`), a
+  ledger that is edited or signed by another key (`SIGNED_DEPLOYMENTS_INVALID`,
+  `SIGNED_DEPLOYMENTS_UNTRUSTED`), and a ledger that does not belong to the
+  committed manifest or is older than the accepted release
+  (`SIGNED_DEPLOYMENTS_STALE`).
 
-These are checks in your signing tool only. The manifest keeps
+The ledger is signed with your release key and checked against it at every
+signing. These are checks in your signing tool only. The manifest keeps
 `predecessorDigest: null`, so no verifier can enforce them, and a stolen key
-could sign a rebinding release. Verifiers still accept only a registry that names
-Sepolia alone.
+could sign a rebinding release. A restore of all four files (manifest, envelope,
+ledger and `sepolia.accepted.json`) to an older release also looks consistent to
+the tool: `previousRelease` is your check for that. Verifiers still accept only a
+registry that names Sepolia alone.
 
-To redo a signing before you commit it, first restore the three files with
-`git checkout -- registry/testnet/sepolia.release.json registry/testnet/sepolia.release.sig.json registry/testnet/sepolia.signed-deployments.json`,
-or sign with the next sequence. Commit the three files together.
+To redo a signing you have not committed yet:
+
+- First release: the three files are new and untracked, so delete them:
+  `rm registry/testnet/sepolia.release.json registry/testnet/sepolia.release.sig.json registry/testnet/sepolia.signed-deployments.json`.
+- Later release: restore the committed versions:
+  `git checkout -- registry/testnet/sepolia.release.json registry/testnet/sepolia.release.sig.json registry/testnet/sepolia.signed-deployments.json`.
+
+Signing again with the next sequence on top of the uncommitted files is only
+safe when the redo changes no deployment that the uncommitted release added: its
+ledger already records those ids as signed, so a corrected address for one of
+them is refused as `DEPLOYMENT_ID_REBOUND`. Commit the three files together.
 
 ## 5. Verify and accept (anyone)
 
@@ -179,10 +200,15 @@ its own archived packages.
 1. Run step 1 with a new `--out` directory.
 2. Commit the new public key file and the new pin together (step 2). A manifest
    signed by the old key then fails with `KEY_UNTRUSTED`.
-3. Sign the next sequence with the new key (step 4), then steps 5 to 7.
+3. Sign the next sequence with the new key (step 4), and pass the old key's
+   public file so the tool can check the ledger the old key signed:
+   `--previous-key <old public key file>`. Use the `{ keyId, publicKey }` JSON
+   that `keygen` printed for the old key (the key file from a commit you
+   reviewed). Without it, signing stops with `SIGNED_DEPLOYMENTS_UNTRUSTED`.
+   Then steps 5 to 7.
 
 The ledger continues across keys: ids signed under the old key keep their
-identity. Packages built before the rotation keep working, because a package
+identity, and from then on the ledger is signed by the new key. Packages built before the rotation keep working, because a package
 never rechecks the key or the expiry when it runs.
 
 ## 10. Revoke a key

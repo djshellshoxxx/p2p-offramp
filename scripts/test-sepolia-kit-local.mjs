@@ -300,7 +300,11 @@ try {
   await acceptSepoliaRelease(verifiedSecond, { root });
   await publish(signed);
   assert.equal((await check()).error.code, 'RELEASE_ROLLBACK', 'an older signed release is refused after a newer one was accepted');
-  await publish(await sign({ sequence: 2, days: 29 }));
+  // The signer itself refuses to continue from a release older than the accepted one (signer-side continuity).
+  await assert.rejects(sign({ sequence: 3 }), message('SIGNED_DEPLOYMENTS_STALE'));
+  // A different manifest at the accepted sequence, as a key used outside the tool could sign it.
+  const substitute = JSON.parse(new TextDecoder().decode(second.manifestBytes)); substitute.expiresAt -= 86_400;
+  await publish(signManifest(owner.privateJwk, substitute));
   assert.equal((await check()).error.code, 'RELEASE_ROLLBACK', 'a different manifest at the accepted sequence is refused');
   await publish(second);
   pass('an accepted release is recorded; an older release or a substitute at the accepted sequence is refused as a rollback');

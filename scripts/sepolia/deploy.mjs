@@ -8,8 +8,9 @@
  *
  *   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs --public-endpoint https://<public rpc>/ [--deployment-id escrow-sepolia-v1]
  *
- * A new deployment is recorded under a new id: an id the registry draft already lists is refused (DEPLOYMENT_ID_REBOUND)
- * before anything is sent, because a new CREATE always has a new address and earlier escrows keep their binding (D3).
+ * A new deployment is recorded under a new id: an id the registry draft or the signed deployment ledger already lists is
+ * refused (DEPLOYMENT_ID_REBOUND) before anything is sent, because a new CREATE always has a new address and earlier
+ * escrows keep their binding (D3). The pending-deployment marker and every failure hint name the deployment id.
  *
  * Once a CREATE has been broadcast, every failure prints its transaction hash and contract address, and a pending
  * marker (docs/deployments/sepolia/pending-deploy.json) blocks another deployment until that one is recorded with
@@ -20,9 +21,10 @@ import { execFile } from 'node:child_process';
 import { mkdir, mkdtemp, open, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { parseArgs, promisify } from 'node:util';
+import { promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { chainIdentity, checkCleanSource, checkToolchain, CLI_DEFAULT_DEPLOYMENT_ID, EVM_DIR, forgeEnv, forgeKey, hexToBytes, isDeploymentId, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, CLI_DEFAULT_DEPLOYMENT_ID, EVM_DIR, forgeEnv, forgeKey, hexToBytes, isDeploymentId, isMain, keccakHex, KitError, leaksPrivateRpc, parseSingleOptions, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { signedDeploymentIdentities } from './owner-release.mjs';
 import { checkPublicEndpoint, DEFAULT_REGISTRY_PATH, PENDING_FILE, recordDeployment, recordedDeploymentIds } from './record-deployment.mjs';
 import { clearForgeCache, recordedTransactions } from './send.mjs';
 
@@ -44,10 +46,11 @@ function deployerAddress(keyHex) {
  * Persisting an attempt BEFORE Forge consumes nonce makes an absent/unreadable record an unknown outcome,
  * never permission to create another contract. Only native transaction reconciliation clears the guard.
  */
-export async function broadcastPreparedDeployment({ env, rpc, from, outDir, broadcastDir, runForge = run }) {
+export async function broadcastPreparedDeployment({ env, rpc, from, outDir, broadcastDir, deploymentId, runForge = run }) {
   const nonce = BigInt(await rpc('eth_getTransactionCount', [from, 'pending'])).toString();
+  const named = deploymentId === undefined ? {} : { deploymentId };
   const attempt = { format: 'p2p-offramp/deployment-attempt/v1', state: 'broadcast-unknown',
-    chainId: SEPOLIA.chainId.toString(), from, nonce, tx: null, address: null, at: new Date().toISOString() };
+    chainId: SEPOLIA.chainId.toString(), from, nonce, tx: null, address: null, ...named, at: new Date().toISOString() };
   await mkdir(outDir, { recursive: true });
   let guard;
   try {
@@ -55,7 +58,7 @@ export async function broadcastPreparedDeployment({ env, rpc, from, outDir, broa
     await guard.writeFile(JSON.stringify(attempt, null, 2) + '\n');
     await guard.sync();
   } catch (error) {
-    if (error?.code === 'EEXIST') fail('UNRECORDED_DEPLOYMENT_PENDING', { from, nonce });
+    if (error?.code === 'EEXIST') fail('UNRECORDED_DEPLOYMENT_PENDING', { from, nonce, ...named });
     throw error;
   } finally { await guard?.close(); }
   const dir = broadcastDir ?? await mkdtemp(resolve(tmpdir(), 'p2p-sepolia-deploy-'));
@@ -68,11 +71,11 @@ export async function broadcastPreparedDeployment({ env, rpc, from, outDir, broa
     finally { await clearForgeCache('DeployBasicEscrow.s.sol'); }
     let sent;
     try { sent = (await recordedTransactions(dir, 'DeployBasicEscrow.s.sol')).filter(tx => tx.transactionType === 'CREATE' && tx.contractName === 'BasicEscrow'); }
-    catch { fail('BROADCAST_UNCERTAIN', { from, nonce }); }
-    if (sent.length !== 1 || !/^0x[0-9a-f]{64}$/.test(sent[0].hash ?? '')) fail('BROADCAST_UNCERTAIN', { from, nonce });
+    catch { fail('BROADCAST_UNCERTAIN', { from, nonce, ...named }); }
+    if (sent.length !== 1 || !/^0x[0-9a-f]{64}$/.test(sent[0].hash ?? '')) fail('BROADCAST_UNCERTAIN', { from, nonce, ...named });
     try {
-      if (sent[0].transaction?.from?.toLowerCase() !== from || BigInt(sent[0].transaction?.nonce) !== BigInt(nonce)) fail('BROADCAST_UNCERTAIN', { from, nonce });
-    } catch { fail('BROADCAST_UNCERTAIN', { from, nonce }); }
+      if (sent[0].transaction?.from?.toLowerCase() !== from || BigInt(sent[0].transaction?.nonce) !== BigInt(nonce)) fail('BROADCAST_UNCERTAIN', { from, nonce, ...named });
+    } catch { fail('BROADCAST_UNCERTAIN', { from, nonce, ...named }); }
     return sent[0];
   } finally { if (!broadcastDir) await rm(dir, { recursive: true, force: true }); }
 }
@@ -84,9 +87,10 @@ export async function deploy({ env = process.env, publicEndpoint, deploymentId, 
   if (!isDeploymentId(deploymentId)) fail('DEPLOYMENT_ID_INVALID');
   const pendingPath = resolve(outDir, PENDING_FILE);
   const pending = await readFile(pendingPath, 'utf8').then(JSON.parse, () => null);
-  if (pending) fail('UNRECORDED_DEPLOYMENT_PENDING', { tx: pending.tx, address: pending.address, from: pending.from, nonce: pending.nonce });
-  // A fresh CREATE can never keep an already listed id's address: refuse before any RPC or broadcast.
-  if ((await recordedDeploymentIds(registryPath ?? DEFAULT_REGISTRY_PATH)).has(deploymentId)) fail('DEPLOYMENT_ID_REBOUND');
+  if (pending) fail('UNRECORDED_DEPLOYMENT_PENDING', { tx: pending.tx, address: pending.address, from: pending.from, nonce: pending.nonce, deploymentId: pending.deploymentId });
+  // A fresh CREATE can never keep an already listed or signed id's address: refuse before any RPC or broadcast.
+  if ((await recordedDeploymentIds(registryPath ?? DEFAULT_REGISTRY_PATH)).has(deploymentId) ||
+      (await signedDeploymentIdentities(root)).some(entry => entry.id === deploymentId)) fail('DEPLOYMENT_ID_REBOUND');
   const rpc = rpcClient(env.SEPOLIA_RPC_URL);
   const identity = await chainIdentity(rpc);
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
@@ -97,12 +101,12 @@ export async function deploy({ env = process.env, publicEndpoint, deploymentId, 
   await checkCleanSource(root);
   await checkToolchain(env);
   try { await run('forge', ['build'], { cwd: EVM_DIR, env: forgeEnv(env, { FOUNDRY_OFFLINE: 'true' }) }); } catch { fail('BUILD_FAILED'); }
-  const created = await broadcastPreparedDeployment({ env, rpc, from, outDir, broadcastDir });
+  const created = await broadcastPreparedDeployment({ env, rpc, from, outDir, broadcastDir, deploymentId });
   const tx = created.hash, address = typeof created.contractAddress === 'string' ? created.contractAddress.toLowerCase() : null;
   // From here a contract may exist on chain: every failure names it, and the marker blocks a second deployment.
   try {
     await mkdir(outDir, { recursive: true });
-    await writeFile(pendingPath, JSON.stringify({ tx, address, at: new Date().toISOString() }, null, 2) + '\n');
+    await writeFile(pendingPath, JSON.stringify({ tx, address, deploymentId, at: new Date().toISOString() }, null, 2) + '\n');
     if (created.transaction?.from?.toLowerCase() !== from) fail('UNEXPECTED_SENDER');
     for (let attempt = 0; ; attempt++) {
       if (await rpc('eth_getTransactionReceipt', [tx])) break;
@@ -113,20 +117,23 @@ export async function deploy({ env = process.env, publicEndpoint, deploymentId, 
       expectGenesis, outDir, ...(registryPath ? { registryPath } : {}), root, env });
   } catch (error) {
     if (error?.code === 'DEPLOY_REVERTED') await rm(pendingPath, { force: true }); // a reverted CREATE left no contract
-    try { Object.assign(error, { tx, address }); } catch { /* the code still reaches the caller */ }
+    try { Object.assign(error, { tx, address, deploymentId }); } catch { /* the code still reaches the caller */ }
     throw error;
   }
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { 'public-endpoint': { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID } } });
+  const { values, repeated } = parseSingleOptions({ options: { 'public-endpoint': { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID } } });
   try {
+    if (repeated) throw new KitError('OPTION_REPEATED');
     const result = await deploy({ publicEndpoint: values['public-endpoint'], deploymentId: values['deployment-id'] });
     console.log(JSON.stringify({ ok: true, address: result.record.contractAddress, tx: result.record.initializationTx, record: result.recordPath, registry: result.registryPath }));
   } catch (error) {
     // The transaction hash and contract address are public chain data; printing them prevents an accidental second deployment.
-    console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED', ...(error?.tx ? { tx: error.tx, address: error.address,
-      next: 'record it: scripts/sepolia/record-deployment.mjs --tx <tx> --public-endpoint <url> --deployment-id <id> --deployer <address>' } : {}), ...(error?.from ? { from: error.from, nonce: error.nonce, next: 'Deployment outcome is unknown. Find the native transaction for this account and nonce with a trusted RPC, then record-deployment.mjs --tx <hash>; do not delete the attempt guard or redeploy blindly.' } : {}) }));
+    const id = typeof error?.deploymentId === 'string' ? error.deploymentId : '<id>';
+    console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED', ...(typeof error?.deploymentId === 'string' ? { deploymentId: error.deploymentId } : {}),
+      ...(error?.tx ? { tx: error.tx, address: error.address,
+      next: `record it: scripts/sepolia/record-deployment.mjs --tx <tx> --public-endpoint <url> --deployment-id ${id} --deployer <address>` } : {}), ...(error?.from ? { from: error.from, nonce: error.nonce, next: `Deployment outcome is unknown. Find the native transaction for this account and nonce with a trusted RPC, then record-deployment.mjs --tx <hash> --deployment-id ${id}; do not delete the attempt guard or redeploy blindly.` } : {}) }));
     process.exitCode = 1;
   }
 }

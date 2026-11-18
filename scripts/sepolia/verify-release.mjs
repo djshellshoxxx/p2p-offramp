@@ -13,9 +13,8 @@
  */
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { parseArgs } from 'node:util';
 import { TESTNET_ACCEPTED_FILE, TESTNET_TRUST_FILES, verifyTestnetTrust } from '../../apps/web/scripts/testnet-trust.mjs';
-import { CLI_DEFAULT_DEPLOYMENT_ID, isDeploymentId, isMain, ROOT } from './lib.mjs';
+import { CLI_DEFAULT_DEPLOYMENT_ID, isDeploymentId, isMain, parseSingleOptions, ROOT } from './lib.mjs';
 
 export const TRUSTED_KEY_PATH = TESTNET_TRUST_FILES.key;
 const CODES = Object.freeze({ MISSING: 'RELEASE_MISSING', JSON: 'RELEASE_UNREADABLE', KEY_ID: 'KEY_UNTRUSTED', NETWORK: 'NETWORK_NOT_SEPOLIA' });
@@ -57,8 +56,8 @@ export async function acceptSepoliaRelease(verified, { root = ROOT } = {}) {
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { accept: { type: 'boolean' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID } } });
-  const result = await verifySepoliaRelease({ deploymentId: values['deployment-id'] });
+  const { values, repeated } = parseSingleOptions({ options: { accept: { type: 'boolean' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID } } });
+  const result = repeated ? { ok: false, error: { code: 'OPTION_REPEATED' } } : await verifySepoliaRelease({ deploymentId: values['deployment-id'] });
   if (result.ok && values.accept) await acceptSepoliaRelease(result);
   console.log(JSON.stringify({ ...result, ...(result.ok && values.accept ? { accepted: TESTNET_ACCEPTED_FILE } : {}) }));
   if (!result.ok) process.exitCode = 1;

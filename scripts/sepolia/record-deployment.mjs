@@ -13,6 +13,8 @@
  * re-recorded after finality, replaces its own entry with the same identity. An id already bound to another address,
  * runtime or artifact is DEPLOYMENT_ID_REBOUND, and an address already listed under another id is DEPLOYMENT_ADDRESS_REUSED;
  * nothing is written then. A new deployment needs a new id (`--deployment-id`, default escrow-sepolia-v1 on the CLI only).
+ * The same refusals apply against the signed deployment ledger, and a pending-deployment marker for this transaction that
+ * names another id is DEPLOYMENT_ID_MISMATCH.
  * Optional SEPOLIA_CROSSCHECK_RPC_URL repeats the identity and code checks against an independent endpoint. The public
  * endpoint must be a keyless https URL carrying no credential of either RPC URL. Run it again once the deployment block
  * is finalized: the refreshed record says finalizedAtRecording: true, which owner signing requires (G25 §4.2).
@@ -21,9 +23,10 @@
 import { execFile } from 'node:child_process';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { parseArgs, promisify } from 'node:util';
+import { promisify } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
-import { chainIdentity, checkCleanSource, checkToolchain, CLI_DEFAULT_DEPLOYMENT_ID, escrowArtifact, EVM_DIR, forgeEnv, hexToBytes, isDeploymentId, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, CLI_DEFAULT_DEPLOYMENT_ID, escrowArtifact, EVM_DIR, forgeEnv, hexToBytes, isDeploymentId, isMain, keccakHex, KitError, leaksPrivateRpc, parseSingleOptions, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { signedDeploymentIdentities } from './owner-release.mjs';
 
 const run = promisify(execFile);
 const ALLOWLIST_SELECTOR = '0x' + keccakHex(new TextEncoder().encode('allowlistedTokens()')).slice(0, 8);
@@ -150,10 +153,15 @@ const sameIdentity = (a, b) => a.address === b.address && a.artifactSha256 === b
 /**
  * The next registry draft: `network` (endpoints, finality and assets from this invocation) with the existing draft's
  * deployments kept in order and `deployment` added, or replacing its own entry when the identity is unchanged (a
- * re-recording after finality). Pure: refusals throw before anything is written. This is tool policy; the signer
- * enforces the same rule against every previously signed id (owner-release.mjs, DEPLOYMENT_ID_REBOUND).
+ * re-recording after finality). `signed` (ledger entries) applies the same rule to every signed id, even one an edited
+ * draft no longer lists. Pure: refusals throw before anything is written. This is tool policy; the signer enforces the
+ * rule again against the verified ledger (owner-release.mjs, DEPLOYMENT_ID_REBOUND).
  */
-export function mergeRegistryDraft(existing, network, deployment) {
+export function mergeRegistryDraft(existing, network, deployment, signed = []) {
+  const signedEntry = signed.find(entry => entry.networkId === network.id && entry.id === deployment.id);
+  if (signedEntry && (signedEntry.address !== deployment.address || signedEntry.runtimeKeccak !== deployment.runtime.keccak256 ||
+      signedEntry.artifactSha256 !== deployment.artifactSha256)) fail('DEPLOYMENT_ID_REBOUND');
+  if (signed.some(entry => entry.networkId === network.id && entry.id !== deployment.id && entry.address === deployment.address)) fail('DEPLOYMENT_ADDRESS_REUSED');
   let deployments = [];
   if (existing !== null) {
     const [current, ...others] = existing.networks;
@@ -172,6 +180,9 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath = DEFAULT_REGISTRY_PATH, root = ROOT, env = process.env }) {
   checkPublicEndpoint(publicEndpoint);
   if (!isDeploymentId(deploymentId)) fail('DEPLOYMENT_ID_INVALID');
+  // deploy wrote the id it broadcast under into the marker: recording that transaction under another id is refused.
+  const pending = await readFile(resolve(outDir, PENDING_FILE), 'utf8').then(JSON.parse, () => null);
+  if (pending?.tx === txHash && pending.deploymentId !== undefined && pending.deploymentId !== deploymentId) fail('DEPLOYMENT_ID_MISMATCH');
   if (leaksPrivateRpc(publicEndpoint, [rpcUrl, crosscheckUrl])) fail('PUBLIC_ENDPOINT_IS_PRIVATE_RPC');
   if (!/^0x[0-9a-f]{64}$/.test(txHash ?? '')) fail('TX_HASH_INVALID');
   if (expectedDeployer !== undefined && !/^0x[0-9a-f]{40}$/.test(expectedDeployer)) fail('DEPLOYER_INVALID');
@@ -217,7 +228,7 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
   const deployment = { id: deploymentId, address: record.contractAddress, protocolVersion: 1, artifactSha256: record.artifactSha256,
     runtime: { kind: 'evm-code', keccak256: record.codeDigest.runtime, upgradeable: false }, supportedAssetIds: ['native'] };
   // Earlier deployments stay listed: dropping one would remove the maintained exit for escrows funded under it.
-  const registry = mergeRegistryDraft(await readRegistryDraft(registryPath), network, deployment);
+  const registry = mergeRegistryDraft(await readRegistryDraft(registryPath), network, deployment, await signedDeploymentIdentities(root));
   const registryBytes = new TextEncoder().encode(JSON.stringify(registry, null, 2) + '\n');
   parseRegistryBytes(registryBytes); // the app's own G11 parser must accept it (https endpoint, lowercase address, etc.)
   await mkdir(outDir, { recursive: true }); await mkdir(resolve(registryPath, '..'), { recursive: true });
@@ -230,9 +241,10 @@ export async function recordDeployment({ rpcUrl, crosscheckUrl, txHash, publicEn
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID },
+  const { values, repeated } = parseSingleOptions({ options: { tx: { type: 'string' }, 'public-endpoint': { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID },
     deployer: { type: 'string' }, 'out-dir': { type: 'string' }, registry: { type: 'string' } } });
   try {
+    if (repeated) throw new KitError('OPTION_REPEATED');
     const result = await recordDeployment({ rpcUrl: process.env.SEPOLIA_RPC_URL, crosscheckUrl: process.env.SEPOLIA_CROSSCHECK_RPC_URL, txHash: values.tx,
       publicEndpoint: values['public-endpoint'], deploymentId: values['deployment-id'], ...(values.deployer ? { expectedDeployer: values.deployer.toLowerCase() } : {}),
       ...(values['out-dir'] ? { outDir: resolve(values['out-dir']) } : {}), ...(values.registry ? { registryPath: resolve(values.registry) } : {}) });

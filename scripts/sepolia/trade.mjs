@@ -26,7 +26,6 @@
 import { randomBytes } from 'node:crypto';
 import { mkdir, open, readFile, rename, rm } from 'node:fs/promises';
 import { dirname, resolve, sep } from 'node:path';
-import { parseArgs } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { RegistryService, reviewTermsBytes, encodePrivateAgreement, encodeCapabilities, sha256Hex, checkFundingWindow, TERMS_REVIEW_FORMAT } from '../../packages/domain/index.ts';
 import { createTradeAuthority } from '../../packages/domain/src/authority.ts';
@@ -34,7 +33,7 @@ import { evmTermsHash, verifyEoaAcceptance } from '../../packages/wallet/src/evm
 import {
   buildChainObservation, buildFundNative, buildGetTrade, buildRefund, buildRelease, buildTradeIdOf, decodeEscrowLog, decodeEscrowRevert, decodeTrade, tradeMatchesTerms,
 } from '../../packages/wallet/src/evm-escrow.ts';
-import { chainIdentity, CLI_DEFAULT_DEPLOYMENT_ID, hexToBytes, isDeploymentId, isMain, keccakHex, ROOT, rpcClient, RpcError, SEPOLIA, sha256Hex as sha } from './lib.mjs';
+import { chainIdentity, CLI_DEFAULT_DEPLOYMENT_ID, hexToBytes, isDeploymentId, isMain, keccakHex, parseSingleOptions, ROOT, rpcClient, RpcError, SEPOLIA, sha256Hex as sha } from './lib.mjs';
 import { REGISTRY_ASSET } from './owner-release.mjs';
 import { loadVerifiedRegistry } from './verify-release.mjs';
 import { sellerKeyEnv, sendAsSeller } from './send.mjs';
@@ -532,9 +531,10 @@ async function runLockedTrades({
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { run: { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID }, 'amount-wei': { type: 'string' },
+  const { values, repeated } = parseSingleOptions({ options: { run: { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID }, 'amount-wei': { type: 'string' },
     wait: { type: 'boolean' }, 'wait-finalized': { type: 'boolean' }, 'unsigned-registry': { type: 'boolean' } } });
   try {
+    if (repeated) fail('OPTION_REPEATED');
     const { state, path } = await runTrades({ run: values.run, deploymentId: values['deployment-id'], requireSignedRegistry: !values['unsigned-registry'], ...(values['amount-wei'] ? { amountWei: BigInt(values['amount-wei']) } : {}),
       wait: Boolean(values.wait), waitFinalized: Boolean(values['wait-finalized']), log: message => console.error(message) });
     console.log(JSON.stringify({ ok: true, state: path, trades: state.trades.map(trade => ({ label: trade.label, status: trade.status, tradeId: trade.tradeId, fund: trade.fund?.tx ?? null, settle: trade.settle?.tx ?? null })), finality: state.finality }));

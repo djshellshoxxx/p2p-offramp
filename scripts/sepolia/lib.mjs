@@ -9,7 +9,7 @@ import { readFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { promisify } from 'node:util';
+import { parseArgs, promisify } from 'node:util';
 import { keccak256 } from '../../packages/wallet/src/evm-terms.ts';
 import { SEPOLIA_NETWORK } from '../../apps/web/src/testnet/sepolia-network.ts';
 
@@ -25,6 +25,16 @@ export const EVM_DIR = fileURLToPath(new URL('../../contracts/evm/', import.meta
 export const isDeploymentId = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/.test(value);
 /** The CLIs' default deployment id (the first Sepolia deployment). Library entry points require an explicit id. */
 export const CLI_DEFAULT_DEPLOYMENT_ID = 'escrow-sepolia-v1';
+
+/**
+ * `parseArgs` (strict, as before) that also reports the first option given more than once as `repeated`, so a CLI can
+ * refuse it (OPTION_REPEATED) instead of silently taking the last value, as parseArgs would.
+ */
+export function parseSingleOptions(config) {
+  const { tokens, ...parsed } = parseArgs({ ...config, tokens: true });
+  const names = tokens.filter(token => token.kind === 'option').map(token => token.name);
+  return { ...parsed, repeated: names.find((name, index) => names.indexOf(name) !== index) };
+}
 export const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 export const sha256Hex = bytes => createHash('sha256').update(bytes).digest('hex');
