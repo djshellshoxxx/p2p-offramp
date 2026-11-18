@@ -20,7 +20,8 @@ while read -r branch sha; do
   git push -q "$REMOTE" "$sha:refs/tags/archive/$branch"
   git ls-remote --tags "$REMOTE" "refs/tags/archive/$branch" | grep -q "^$sha" \
     || { echo "FAIL tag not verified: $branch"; exit 1; }
-  git push -q "$REMOTE" --delete "$branch"
+  # The lease makes the delete fail if the branch moved after the check above.
+  git push -q --force-with-lease="refs/heads/$branch:$sha" "$REMOTE" ":refs/heads/$branch"
   echo "archived+deleted $branch"; ok=$((ok+1))
 done <<'LIST'
 autonomous/completion-20261031 b3519180eb56c9913a8568a3ac878fa94a7eca19

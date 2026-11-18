@@ -59,7 +59,8 @@ while read -r branch sha mode; do
   git push -q "$REMOTE" "$sha:refs/tags/archive/$branch"
   git ls-remote --tags "$REMOTE" "refs/tags/archive/$branch" | grep -q "^$sha" \
     || { echo "FAIL tag not verified: $branch"; exit 1; }
-  git push -q "$REMOTE" --delete "$branch"
+  # The lease makes the delete fail if the branch moved after the check above.
+  git push -q --force-with-lease="refs/heads/$branch:$sha" "$REMOTE" ":refs/heads/$branch"
   echo "archived+deleted $branch"; ok=$((ok+1))
 done <<'LIST'
 claude/loving-einstein-xgzvdy-decisions 89d0a928e9e1127a4c8911f9437359260bd06ab6 ancestor
