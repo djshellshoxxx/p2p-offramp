@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {keccak_256} from '@noble/hashes/sha3.js';
 import {EvmChainReader,MAX_RPC_READS,MAX_RUNTIME_CODE_BYTES} from '../src/reader.ts';
+import {decodeTrade} from '../../wallet/src/evm-escrow.ts';
 const hx = n => '0x'+n.repeat(64);
 const seller='0x'+'11'.repeat(20),buyer='0x'+'22'.repeat(20),contract='0x'+'33'.repeat(20),token='0x'+'44'.repeat(20),zero='0x'+'00'.repeat(20);
 const binding={chain:'evm',networkId:'local',deploymentId:'escrow',tradeId:'55'.repeat(32)};
@@ -190,4 +191,115 @@ test('canonical layout refuses malformed words and never falls back to a legacy 
    assert.equal(s.calls.filter(call=>call.method==='eth_call').length-before,1);
   }
  }finally{s.reader.dispose();}
+});
+
+// ---------- G3 / BT-01 independent review (team-c): canonical getTrade path ----------
+const sel=sig=>Buffer.from(keccak_256(Buffer.from(sig))).toString('hex').slice(0,8);
+const GET_TRADE_SELECTOR=sel('getTrade(bytes32)');
+/** contracts/evm BasicEscrow.getTrade -> Escrow(seller, uint64 deadline, State state, buyer, token, amount). */
+const canonicalWords=(status=1,changes={})=>{const x={...wanted,...changes};return '0x'+[word(x.seller),word(x.expirySeconds),word(status),word(x.buyer),word(x.asset),word(x.amountBaseUnits)].join('');};
+const dirty=(raw,index,nibble='1')=>{const words=raw.slice(2).match(/.{64}/g);words[index]=nibble+words[index].slice(1);return '0x'+words.join('');};
+function canonicalSetup(changes={}){const s=setup({...changes,options:{escrowLayouts:{[codehash]:'canonical-get-trade-v1'},...changes.options}});s.setEscrow('escrow' in changes?changes.escrow:canonicalWords());return s;}
+const methodsOf=calls=>calls.map(x=>x.method);
+
+test('canonical-get-trade-v1 reads getTrade(bytes32) at the anchored finalized tag and decodes (seller,deadline,state,buyer,token,amount)',async()=>{
+ const s=canonicalSetup();try{
+  const result=ok(await s.reader.read(binding,request(),wanted));
+  assert.deepEqual(result.escrow,{...wanted,state:'funded'});
+  assert.deepEqual(result.observation,{binding,generation:2,requestSequence:4,anchor:{height:'10',hash:finalized.hash},state:'funded',finality:'finalized',observedAt:123});
+  assert.deepEqual(s.calls.find(x=>x.method==='eth_call').params,[{to:contract,data:`0x${GET_TRADE_SELECTOR}${binding.tradeId}`},'0xa']);
+  for(const [n,name]of [[2,'released'],[3,'refunded']]){s.setEscrow(canonicalWords(n));assert.equal(ok(await s.reader.readValidated(binding,request(),wanted)).state,name);}
+  s.setEscrow('0x'+'0'.repeat(384));assert.equal(ok(await s.reader.read(binding,request(),wanted)).escrow.state,'absent');
+  const tokenWanted={...wanted,asset:token};s.setEscrow(canonicalWords(1,{asset:token}));assert.equal(ok(await s.reader.read(binding,request(),tokenWanted)).escrow.asset,token);
+  const max={...wanted,amountBaseUnits:((1n<<256n)-1n).toString(),expirySeconds:((1n<<64n)-1n).toString()};s.setEscrow(canonicalWords(1,max));assert.deepEqual(ok(await s.reader.read(binding,request(),max)).escrow,{...max,state:'funded'});
+ }finally{s.reader.dispose();}
+});
+
+test('canonical decode is strict: wrong layout, short/long, dirty address bits, out-of-range state/deadline, non-zero absent, mismatched terms',async()=>{
+ const nonAbsent=f=>canonicalWords(1,f);
+ const invalid=[
+  ['legacy layout to canonical reader',state()],['short by one word',canonicalWords().slice(0,-64)],['short by one nibble',canonicalWords().slice(0,-1)],['long by one byte',canonicalWords()+'00'],['long by one word',canonicalWords()+'0'.repeat(64)],
+  ['empty','0x'],['no prefix',canonicalWords().slice(2)],['uppercase',canonicalWords().toUpperCase().replace('0X','0x')],['all ones','0x'+'f'.repeat(384)],
+  ['dirty seller',dirty(canonicalWords(),0)],['dirty buyer',dirty(canonicalWords(),3)],['dirty token',dirty(canonicalWords(),4)],['dirty token high bit',dirty(canonicalWords(),4,'8')],
+  ['state 4',canonicalWords(4)],['state 255',canonicalWords(255)],['state 2^8',canonicalWords(256)],['state high bit',canonicalWords((1n<<255n).toString())],
+  ['deadline 2^64',nonAbsent({expirySeconds:(1n<<64n).toString()})],['deadline zero',nonAbsent({expirySeconds:'0'})],
+  ['absent with fields',canonicalWords(0)],['absent with only amount','0x'+'0'.repeat(320)+word(1)],['absent with only deadline','0x'+word(0)+word(1)+'0'.repeat(256)],
+  ['funded zero seller',nonAbsent({seller:zero})],['funded zero buyer',nonAbsent({buyer:zero})],['funded zero amount',nonAbsent({amountBaseUnits:'0'})],['seller == buyer',nonAbsent({buyer:seller})],
+  ['swapped seller/buyer',nonAbsent({seller:buyer,buyer:seller})],['amount mismatch',nonAbsent({amountBaseUnits:'1001'})],['token mismatch',nonAbsent({asset:token})],['deadline mismatch',nonAbsent({expirySeconds:'2001'})],
+  ['numeric',1],['null',null],['object',{data:canonicalWords()}],
+ ];
+ const s=canonicalSetup();try{for(const [label,raw]of invalid){s.setEscrow(raw);const result=await s.reader.read(binding,request(),wanted);assert.equal(result.ok,false,label);assert.equal(result.error.code,'INTEGRITY_FAILURE',label);}}finally{s.reader.dispose();}
+ // The reverse mismatch: canonical return data to a legacy-layout reader.
+ const legacy=setup();try{legacy.setEscrow(canonicalWords());error(await legacy.reader.read(binding,request(),wanted),'INTEGRITY_FAILURE');}finally{legacy.reader.dispose();}
+});
+
+test('canonical reads keep chain/genesis/runtime/anchor defenses: wrong code, reorg between header and state, finalized race',async()=>{
+ const wrongCode=canonicalSetup({handle:i=>i.method==='eth_getCode'?'0x60016001':undefined});
+ try{error(await wrongCode.reader.read(binding,request(),wanted),'INTEGRITY_FAILURE');assert.equal(methodsOf(wrongCode.calls).includes('eth_call'),false,'no state read on wrong runtime');}finally{wrongCode.reader.dispose();}
+ const upgradeable=canonicalSetup({deployment:{runtime:{kind:'evm-code',keccak256:codehash,upgradeable:true}}});
+ try{error(await upgradeable.reader.read(binding,request(),wanted),'UNSUPPORTED_PROVIDER');assert.equal(upgradeable.calls.length,0);}finally{upgradeable.reader.dispose();}
+ for(const changes of [{handle:i=>i.method==='eth_chainId'?'0x1':undefined},{network:{genesisHash:hx('c')}}]){const s=canonicalSetup(changes);try{error(await s.reader.read(binding,request(),wanted),'WRONG_CHAIN');assert.equal(methodsOf(s.calls).includes('eth_call'),false);}finally{s.reader.dispose();}}
+ // Reorg between header and state: the block at the anchored height changes after eth_call.
+ for(const changed of [{hash:hx('c')},{timestamp:'0x65'},{number:'0xb'}]){
+  let read=false;const s=canonicalSetup({handle:i=>{if(i.method==='eth_call')read=true;if(i.method==='eth_getBlockByNumber'&&i.params[0]==='0xa'&&read)return{...finalized,...changed};}});
+  try{error(await s.reader.read(binding,request(),wanted),'INTEGRITY_FAILURE');assert.deepEqual(methodsOf(s.calls).slice(-2),['eth_call','eth_getBlockByNumber']);}finally{s.reader.dispose();}
+ }
+ // Finalized race: the tag advances (and the trade settles) after the anchor; every read stays pinned to the first anchor.
+ let finalizedCalls=0;const race=canonicalSetup({handle:i=>{
+  if(i.method==='eth_getBlockByNumber'&&i.params[0]==='finalized'){finalizedCalls++;return finalizedCalls===1?finalized:{number:'0xb',hash:hx('c'),timestamp:'0x65'};}
+  if(i.method==='eth_call')return i.params[1]==='0xa'?canonicalWords(1):canonicalWords(2);
+ }});
+ try{
+  const result=ok(await race.reader.read(binding,request(),wanted));assert.equal(result.escrow.state,'funded');assert.deepEqual(result.observation.anchor,{height:'10',hash:finalized.hash});
+  assert.equal(finalizedCalls,1,'finalized tag is resolved exactly once per read');
+  for(const call of race.calls.filter(x=>x.method==='eth_getCode'||x.method==='eth_call'))assert.equal(call.params[1],'0xa');
+  assert.deepEqual(race.calls.filter(x=>x.method==='eth_getBlockByNumber').map(x=>x.params[0]),['0x0','finalized','0xa']);
+  assert.deepEqual(methodsOf(race.calls),['eth_chainId','eth_getBlockByNumber','eth_getBlockByNumber','eth_getCode','eth_call','eth_getBlockByNumber']);
+ }finally{race.reader.dispose();}
+ for(const header of [null,{...finalized,number:'0x0a'},{...finalized,hash:'0x'+'B'.repeat(64)}]){
+  const s=canonicalSetup({handle:i=>i.method==='eth_getBlockByNumber'&&i.params[0]==='finalized'?header:undefined});
+  try{error(await s.reader.read(binding,request(),wanted),'INTEGRITY_FAILURE');assert.equal(methodsOf(s.calls).includes('eth_call'),false);}finally{s.reader.dispose();}
+ }
+});
+
+test('canonical reads keep cancellation and fixed diagnostics; a late state result publishes nothing',async()=>{
+ let release;const s=canonicalSetup({handle:i=>i.method==='eth_call'?new Promise(resolve=>{release=resolve;}):undefined});
+ try{
+  const controller=new AbortController(),pending=s.reader.read(binding,{generation:1,requestSequence:1,signal:controller.signal},wanted);
+  while(!release)await new Promise(resolve=>setImmediate(resolve));
+  controller.abort();error(await pending,'CANCELLED');
+  const before=s.calls.length;release(canonicalWords());await new Promise(resolve=>setImmediate(resolve));assert.equal(s.calls.length,before,'late state cannot trigger the anchor recheck');
+ }finally{s.reader.dispose();}
+ const leak=canonicalSetup({handle:i=>{if(i.method==='eth_call')throw Error('SECRET https://rpc.invalid');}});try{error(await leak.reader.read(binding,request(),wanted),'UNAVAILABLE');}finally{leak.reader.dispose();}
+});
+
+test('canonical decoder is at least as strict as wallet decodeTrade and agrees on every vector both accept',async()=>{
+ const vectors=[canonicalWords(1),canonicalWords(2),canonicalWords(3),canonicalWords(1,{asset:token}),'0x'+'0'.repeat(384),canonicalWords(0),canonicalWords(4),dirty(canonicalWords(),0),dirty(canonicalWords(),3),dirty(canonicalWords(),4),
+  canonicalWords(1,{expirySeconds:(1n<<64n).toString()}),canonicalWords(1,{amountBaseUnits:'0'}),canonicalWords(1,{seller:zero}),canonicalWords(1,{buyer:zero}),canonicalWords(1,{buyer:seller}),canonicalWords(1,{expirySeconds:'0'}),
+  canonicalWords().slice(0,-2),canonicalWords()+'00',canonicalWords().toUpperCase().replace('0X','0x')];
+ let agreed=0;
+ for(const raw of vectors){
+  let walletTrade=null;try{walletTrade=decodeTrade(raw);}catch{/* rejected by wallet */}
+  const expectation=walletTrade&&walletTrade.state!=='absent'&&walletTrade.seller!==walletTrade.buyer?{seller:walletTrade.seller,buyer:walletTrade.buyer,asset:walletTrade.token,amountBaseUnits:walletTrade.amount,expirySeconds:walletTrade.deadline==='0'?'1':walletTrade.deadline}:wanted;
+  const s=canonicalSetup({escrow:raw});try{
+   const result=await s.reader.read(binding,request(),expectation);
+   if(!walletTrade)assert.equal(result.ok,false,`reader must reject what wallet rejects: ${raw}`);
+   else if(result.ok){agreed++;assert.deepEqual(result.value.escrow,{seller:walletTrade.seller,buyer:walletTrade.buyer,asset:walletTrade.token,amountBaseUnits:walletTrade.amount,expirySeconds:walletTrade.deadline,state:walletTrade.state});}
+   else assert.equal(result.error.code,'INTEGRITY_FAILURE');
+  }finally{s.reader.dispose();}
+ }
+ assert.equal(agreed,5,'funded/released/refunded/token/absent vectors decode identically');
+});
+
+test('layout policy snapshot: hostile keys/shapes refused; legacy default unchanged; deployment hash change is unsupported',async()=>{
+ const rpc={request:async()=>{throw Error('no rpc');}},registry={network:()=>null,deployment:()=>null};
+ const sym=Symbol('x'),many=Object.fromEntries(Array.from({length:129},(_,i)=>[i.toString(16).padStart(64,'0'),'canonical-get-trade-v1']));
+ const proxy=new Proxy({[codehash]:'canonical-get-trade-v1'},{getOwnPropertyDescriptor(){throw Error('SECRET');}});
+ for(const escrowLayouts of [{[codehash.toUpperCase()]:'canonical-get-trade-v1'},{['0x'+codehash]:'canonical-get-trade-v1'},{[sym]:'canonical-get-trade-v1'},many,proxy,new Map([[codehash,'canonical-get-trade-v1']]),
+  JSON.parse(`{"__proto__":"canonical-get-trade-v1"}`),{[codehash]:'canonical-basic-v1'},{[codehash]:new String('canonical-get-trade-v1')},'canonical-get-trade-v1',1])
+  assert.throws(()=>new EvmChainReader({rpc,registry,escrowLayouts}),/Invalid EVM escrow layout policy/);
+ const empty=setup({options:{escrowLayouts:{}}});try{error(await empty.reader.read(binding,request(),wanted),'UNSUPPORTED_PROVIDER');assert.equal(empty.calls.some(x=>x.method==='eth_call'),false);}finally{empty.reader.dispose();}
+ const nullProto=Object.assign(Object.create(null),{[codehash]:'canonical-get-trade-v1'});const s=canonicalSetup({options:{escrowLayouts:nullProto}});try{ok(await s.reader.read(binding,request(),wanted));}finally{s.reader.dispose();}
+ const legacy=setup();try{ok(await legacy.reader.read(binding,request(),wanted));assert.equal(legacy.calls.find(x=>x.method==='eth_call').params[0].data,`0x${sel('escrows(bytes32)')}${binding.tradeId}`);}finally{legacy.reader.dispose();}
+ const mapped=setup({options:{escrowLayouts:{[codehash]:'legacy-escrows-v1'}}});try{ok(await mapped.reader.read(binding,request(),wanted));}finally{mapped.reader.dispose();}
 });

@@ -1,0 +1,169 @@
+{
+  "format": "p2p-offramp/solana-localnet-accounts/v1",
+  "note": "Finalized getAccountInfo bytes from a real local solana-test-validator. Synthetic program id, mints and compiled genesis; not a cluster deployment.",
+  "validator": {
+    "solanaCore": "4.1.2",
+    "featureSet": 3345198602,
+    "genesisHash": "DiVLGwuPtjYhNZj9kAApqaRzjNJ63ddrAcf5JEP6wgm4",
+    "deactivatedFeatures": []
+  },
+  "sbpfVersion": 3,
+  "program": {
+    "address": "7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq",
+    "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+    "executable": true,
+    "dataBase64": "AgAAAAfKm15KGyGlBGOREB3HtIIMG23dKi8AdOj9WkKOjJ6a"
+  },
+  "programData": {
+    "address": "XR3M7K34KSnyYV1HtPmoRkjuLWqhwfF3m1LgC3jaTfF",
+    "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+    "dataLength": 242581,
+    "headerBase64": "AwAAAAAAAAAAAAAAANJuZDWe2V8NHbOTnSLrgR7Y36tkjdHYCFOeYscjFcUm",
+    "sha256OfBytesAfterHeader": "eed3a49072900a761756117514d0596b418ff33e6f9fe7d7b2f962471f6064c0",
+    "sha256OfWholeData": "73763066230f6ec6278d9db5d9a8d1f92e815af4fd13dc4768708f0c7246acc0",
+    "soLength": 242536,
+    "soSha256": "eed3a49072900a761756117514d0596b418ff33e6f9fe7d7b2f962471f6064c0"
+  },
+  "trades": [
+    {
+      "trade": "native-release",
+      "escrowAddress": "8e7FCmS9YGyvnbZMXwPAdVHkDXhtJqjthaWyQwrBqiSA",
+      "clockUnixTimestampAtFunding": 1793782780,
+      "fundSignature": "4zeUWdTePp9G4ayzDLtLv5MRnobqtJuYeJqmqGjcJXau6u6katZrWQD9ZXyy7tJs9XctNCc7mRhtea9r2Z8VbWES"
+    },
+    {
+      "trade": "native-refund",
+      "escrowAddress": "GKGurFizzXDta2WLAb5EeqFGeJwTjhD83DLDUkRA7e3m",
+      "clockUnixTimestampAtFunding": 1793782753,
+      "fundSignature": "YXJdV8Csx3iPWFjuxHAvRxXJzyXR9oASJVysrMxFq3TcKe8hSZmSevyQquz2VQ3sxwJaWJo7YKspKxSw4kj6vCN"
+    },
+    {
+      "trade": "spl-release",
+      "escrowAddress": "26xv4Vy43AgnEACmyncsDRUVPtemxEzcHojY94bGYTZe",
+      "clockUnixTimestampAtFunding": 1793782821,
+      "fundSignature": "2AMwE6mPu32actYMu44kuXsqdMgYhCb63GrMk46XeEWgCTrZ4fAoe7ZR45ex6DqM3WFP6S9oQycFAVwKvEPLExt2"
+    }
+  ],
+  "escrows": [
+    {
+      "label": "native-funded",
+      "trade": "native-release",
+      "escrowAddress": "8e7FCmS9YGyvnbZMXwPAdVHkDXhtJqjthaWyQwrBqiSA",
+      "vaultAddress": null,
+      "fundArgs": {
+        "orderId": "9f5e646f715044b75231c3e81ba4cb480a058ad66e3b6a2602c90b4d33638ce2",
+        "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+        "privateAgreementHash": "d4bb2ce9e341ad2ba48548bf7720c183991627d1a2f7bad6996c69cab873a666",
+        "capabilitiesHash": "902f9f446a57721587980dd3c7195d2b1b394174fdae8bf4e6efe124889309d5",
+        "sellerNonce": "bc2f15c0da223cf10bbc610336cf59d85268ae3c813c056e93ce6db70c3b3b2b",
+        "revision": "1",
+        "amount": "500000000",
+        "acceptBefore": "1793782840",
+        "expiry": "1793786380"
+      },
+      "seller": "2euBwBt3CATSJRk2NWiqHvDUVXJapDpxXswey7nrkR1r",
+      "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+      "mint": null,
+      "clockUnixTimestampAtFunding": 1793782780,
+      "slot": 162,
+      "lamports": 502436000,
+      "dataBase64": "GlrB2rz7i9MB/wAAAAAYkS/FzMy7p5X4inpZoFzW7ORQZ+I2Is/iKR8C050H+cok79sK+KwHmgODfr8DOz+KnQA5el/73bYbx4+tinczAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABlzR0AAAAADALragAAAAAgWtiIxBJuCAHcw3rzcqYPS0ybi9iZXTEO2BrpkVnCrLwvFcDaIjzxC7xhAzbPWdhSaK48gTwFbpPObbcMOzsr"
+    },
+    {
+      "label": "native-released-paid",
+      "trade": "native-release",
+      "escrowAddress": "8e7FCmS9YGyvnbZMXwPAdVHkDXhtJqjthaWyQwrBqiSA",
+      "vaultAddress": null,
+      "fundArgs": {
+        "orderId": "9f5e646f715044b75231c3e81ba4cb480a058ad66e3b6a2602c90b4d33638ce2",
+        "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+        "privateAgreementHash": "d4bb2ce9e341ad2ba48548bf7720c183991627d1a2f7bad6996c69cab873a666",
+        "capabilitiesHash": "902f9f446a57721587980dd3c7195d2b1b394174fdae8bf4e6efe124889309d5",
+        "sellerNonce": "bc2f15c0da223cf10bbc610336cf59d85268ae3c813c056e93ce6db70c3b3b2b",
+        "revision": "1",
+        "amount": "500000000",
+        "acceptBefore": "1793782840",
+        "expiry": "1793786380"
+      },
+      "seller": "2euBwBt3CATSJRk2NWiqHvDUVXJapDpxXswey7nrkR1r",
+      "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+      "mint": null,
+      "clockUnixTimestampAtFunding": 1793782780,
+      "slot": 194,
+      "lamports": 2436000,
+      "dataBase64": "GlrB2rz7i9MB/wABAQAYkS/FzMy7p5X4inpZoFzW7ORQZ+I2Is/iKR8C050H+cok79sK+KwHmgODfr8DOz+KnQA5el/73bYbx4+tinczAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABlzR0AAAAADALragAAAAAgWtiIxBJuCAHcw3rzcqYPS0ybi9iZXTEO2BrpkVnCrLwvFcDaIjzxC7xhAzbPWdhSaK48gTwFbpPObbcMOzsr"
+    },
+    {
+      "label": "native-refunded-paid",
+      "trade": "native-refund",
+      "escrowAddress": "GKGurFizzXDta2WLAb5EeqFGeJwTjhD83DLDUkRA7e3m",
+      "vaultAddress": null,
+      "fundArgs": {
+        "orderId": "9fa0a40303c3c8a0eb9b95194928659419402bf6698af8790acb33e5a555138c",
+        "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+        "privateAgreementHash": "59e219eead203ab067fbdbd72ffe5a4c75c4626ec4cb42008e86b39fde0c5ac8",
+        "capabilitiesHash": "fb3f58086cb6becad1da110c38d96f13522c18ff8c15ecf063757b43f1e96e43",
+        "sellerNonce": "5d915784a7de3dff494c958c9c2b05fb89b4e20a2f0b1d1bf153a4215e67ab89",
+        "revision": "1",
+        "amount": "300000000",
+        "acceptBefore": "1793782813",
+        "expiry": "1793784558"
+      },
+      "seller": "4LuGFASWtcgro4qLCXuynQBsZctCEAAUmKCKLp3eQU7J",
+      "buyer": "Ec62HYw857ST1YV8AdtL1AsBtguTSaQsbhJFv4auKzre",
+      "mint": null,
+      "clockUnixTimestampAtFunding": 1793782753,
+      "slot": 4373,
+      "lamports": 2436000,
+      "dataBase64": "GlrB2rz7i9MB/wACAQAxrDCexTpE0ukbV6LHDTCN9SJTsqaaQtaaAEBEwJsBocok79sK+KwHmgODfr8DOz+KnQA5el/73bYbx4+tinczAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACj4REAAAAA7vrqagAAAAA+68qCfRJ41tne2NkJAhpu4GJg3+T/KFspg94TIoEUZF2RV4Sn3j3/SUyVjJwrBfuJtOIKLwsdG/FTpCFeZ6uJ"
+    },
+    {
+      "label": "spl-funded",
+      "trade": "spl-release",
+      "escrowAddress": "26xv4Vy43AgnEACmyncsDRUVPtemxEzcHojY94bGYTZe",
+      "vaultAddress": "APXnnCi2b59xN81JKGP3gKaTT1wawE9KLky1DiSGAG9S",
+      "fundArgs": {
+        "orderId": "a0ad0b2ca7dde05a86959a3a3078387d31f56d50b68a0551f95376ab65040b7b",
+        "buyer": "8P7NUs1CnzqRkpyUdAGs1H1RcFNfkr7pigigybuRzdAq",
+        "privateAgreementHash": "8014de5b9019d94dcc8bc389e68bd93491d106655ed8dada94fd2d13f26be4ed",
+        "capabilitiesHash": "552e37d7da8dd9a4d838ac23b9c60980ad9dcecdb6de8113db47cc9fa04ac52f",
+        "sellerNonce": "47eb308531e4277e27941cd29bf6b03847faac29e54077b3d55d2efce255e112",
+        "revision": "1",
+        "amount": "25000000",
+        "acceptBefore": "1793782881",
+        "expiry": "1793786421"
+      },
+      "seller": "2euBwBt3CATSJRk2NWiqHvDUVXJapDpxXswey7nrkR1r",
+      "buyer": "8P7NUs1CnzqRkpyUdAGs1H1RcFNfkr7pigigybuRzdAq",
+      "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+      "clockUnixTimestampAtFunding": 1793782821,
+      "slot": 258,
+      "lamports": 2436000,
+      "dataBase64": "GlrB2rz7i9MB//8AAAIYkS/FzMy7p5X4inpZoFzW7ORQZ+I2Is/iKR8C050H+W2ryg0qzh85v8Dicaq8J9MuGJtEy5eDMmmI/TieofGybWludC02ZHAtb3BlbjpwMnAtb2ZmcmFtcDpsb2NhbDEG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqUB4fQEAAAAANQLragAAAADEjxdo3fOPHFGj5PxzAwki+uqTDN0YVZPqiSVOXy9HFEfrMIUx5Cd+J5Qc0pv2sDhH+qwp5UB3s9VdLvziVeES"
+    },
+    {
+      "label": "spl-released-paid",
+      "trade": "spl-release",
+      "escrowAddress": "26xv4Vy43AgnEACmyncsDRUVPtemxEzcHojY94bGYTZe",
+      "vaultAddress": "APXnnCi2b59xN81JKGP3gKaTT1wawE9KLky1DiSGAG9S",
+      "fundArgs": {
+        "orderId": "a0ad0b2ca7dde05a86959a3a3078387d31f56d50b68a0551f95376ab65040b7b",
+        "buyer": "8P7NUs1CnzqRkpyUdAGs1H1RcFNfkr7pigigybuRzdAq",
+        "privateAgreementHash": "8014de5b9019d94dcc8bc389e68bd93491d106655ed8dada94fd2d13f26be4ed",
+        "capabilitiesHash": "552e37d7da8dd9a4d838ac23b9c60980ad9dcecdb6de8113db47cc9fa04ac52f",
+        "sellerNonce": "47eb308531e4277e27941cd29bf6b03847faac29e54077b3d55d2efce255e112",
+        "revision": "1",
+        "amount": "25000000",
+        "acceptBefore": "1793782881",
+        "expiry": "1793786421"
+      },
+      "seller": "2euBwBt3CATSJRk2NWiqHvDUVXJapDpxXswey7nrkR1r",
+      "buyer": "8P7NUs1CnzqRkpyUdAGs1H1RcFNfkr7pigigybuRzdAq",
+      "mint": "8N6gdCRGuwbAEE9G81P3wgXV7g1AMLSupsNWP6orJoqa",
+      "clockUnixTimestampAtFunding": 1793782821,
+      "slot": 291,
+      "lamports": 2436000,
+      "dataBase64": "GlrB2rz7i9MB//8BAQIYkS/FzMy7p5X4inpZoFzW7ORQZ+I2Is/iKR8C050H+W2ryg0qzh85v8Dicaq8J9MuGJtEy5eDMmmI/TieofGybWludC02ZHAtb3BlbjpwMnAtb2ZmcmFtcDpsb2NhbDEG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqUB4fQEAAAAANQLragAAAADEjxdo3fOPHFGj5PxzAwki+uqTDN0YVZPqiSVOXy9HFEfrMIUx5Cd+J5Qc0pv2sDhH+qwp5UB3s9VdLvziVeES"
+    }
+  ]
+}

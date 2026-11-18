@@ -184,7 +184,7 @@ class EvmLifecycle implements EvmTxLifecycle {
     for (const intentId of intentIds) {
       this.#prepared.delete(intentId);
       // Durable cancel before any send-capable call; a conflict means another step already moved it.
-      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null }));
+      await this.#serial(() => this.#journal.observe(intentId, { state: 'failed', hash: null, from: 'prepared' }));
     }
   }
   /** Synchronous invalidation first (no prepare result survives it), then durable cancellation of un-sent intents. */
@@ -235,7 +235,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       const previousRecords = unwrap(await this.#serial(() => this.#journal.list(signal)));
       for (const previous of previousRecords) {
         if (previous.binding.chain !== 'evm' || previous.binding.networkId !== binding.networkId || lower(previous.account) !== context.account ||
-            !['finalized', ...TERMINAL].includes(previous.state) ||
+            !(['finalized', ...TERMINAL].includes(previous.state) || this.#abandonedCandidate(previous)) ||
             !(previous.binding.deploymentId === binding.deploymentId && previous.binding.tradeId === binding.tradeId || previous.submission.chain === 'evm' && previous.submission.nonce === nonce)) continue;
         // Live cancellations and profile-bound never-marked approvals have proof. Imported records must be re-read.
         if (previous.state === 'failed' && previous.submission.chain === 'evm' && previous.submission.hash === null && this.#journal.isTerminalVerified(previous.intentId)) continue;
@@ -303,7 +303,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       }
       if (typeof result !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(result)) return stop('BROADCAST_UNKNOWN');
       const hash = lower(result);
-      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash }));
+      const recorded = await this.#serial(() => this.#journal.observe(intentId, { state: 'pending', hash, from: 'broadcast-unknown' }));
       if (!recorded.ok) return stop('BROADCAST_UNKNOWN');
       return Object.freeze({ intent: recorded.value, hash });
     }, 'UNAVAILABLE').then(result => {
@@ -319,7 +319,8 @@ class EvmLifecycle implements EvmTxLifecycle {
     return this.#guarded(async () => {
       if (typeof intentId !== 'string') return stop('INVALID_INPUT');
       const signal = external ?? new AbortController().signal;
-      const intent = await this.#find(intentId, signal);
+      let intent = await this.#find(intentId, signal);
+      if (this.#abandonedCandidate(intent)) intent = await this.#expirePrepared(intent, signal) ?? intent;
       const done = (outcome: EvmOutcome, value: Intent, escrowState: EscrowState | null, evidence: EvmReconciliation['evidence']): EvmReconciliation =>
         Object.freeze({ outcome, intent: value, escrowState, evidence });
       const settledOutcome = OUTCOME_OF[intent.state];
@@ -419,20 +420,47 @@ class EvmLifecycle implements EvmTxLifecycle {
         if (!latched) return done(outcome, intent, escrowState, evidence);
         next = 'reorged'; outcome = 'reorged';
       }
-      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash })));
+      const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash, from: intent.state })));
       await authorize(written); return done(outcome, written, escrowState, evidence);
     }, 'UNAVAILABLE');
+  }
+  /** Prepared in the journal but not a live prepare result or send of this instance (it may be another tab's). */
+  #abandonedCandidate(record: Intent): boolean {
+    return record.state === 'prepared' && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId);
+  }
+  /**
+   * Block lease for a non-live prepared intent: within dropAfterBlocks of its preparedAtBlock it may still be live in
+   * another tab and is left alone. After that it is cancelled (prepared -> failed CAS). Cancellation is not never-sent
+   * authority: value-moving, legacy and imported records keep their nonce hold and are classified natively.
+   */
+  async #expirePrepared(intent: Intent, signal: AbortSignal): Promise<Intent | null> {
+    const request = parsePreparedRequest(intent.preparedRequest);
+    if (await this.#read(signal, s => this.#reader.chainId(s)) !== request.chainId) return stop('WRONG_CHAIN');
+    const latest = checked(await this.#read(signal, s => this.#reader.head('latest', s)), isBlock) ?? stop('UNAVAILABLE');
+    if (BigInt(latest.number) < BigInt(request.preparedAtBlock) + BigInt(this.#policy.dropAfterBlocks)) return null;
+    const cancelled = await this.#serial(() => this.#journal.observe(intent.intentId, { state: 'failed', hash: null, from: 'prepared' }));
+    if (!cancelled.ok && cancelled.error.code !== 'CONFLICT') return stop(cancelled.error.code);
+    return this.#find(intent.intentId, signal);
   }
   recover(external?: AbortSignal): Promise<CoreResult<readonly Intent[]>> {
     return this.#guarded(async () => {
       const signal = external ?? new AbortController().signal;
       const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
-      // Only locally originated, never-marked approvals may be cancelled using persisted metadata.
-      // Old/imported snapshots and value-moving actions remain visible and retain their nonce holds.
-      const prepared = records.filter(record => record.state === 'prepared' && record.action === 'approve' && this.#journal.hasLocalPreparation(record) && !this.#prepared.has(record.intentId) && !this.#sending.has(record.intentId));
-      for (const record of prepared) unwrap(await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null })));
-      const cancelled = new Set(prepared.map(record => record.intentId));
-      return Object.freeze(records.filter(record => !cancelled.has(record.intentId) && (!['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId))));
+      // A prepared intent not live in THIS instance may still be live in another tab of the same profile, so only
+      // locally originated never-marked approvals (durable never-sent proof once failed) are cancelled at once.
+      // Every other non-live preparation (value-moving, legacy or imported) is returned for reconcile(), which
+      // cancels it only after its block lease (preparedAtBlock + dropAfterBlocks) has passed; see #expirePrepared.
+      // Cancels are a CAS from 'prepared': a send marker written by another tab after this list() wins (CONFLICT).
+      let current: readonly Intent[] = records, stale = false;
+      for (const record of records) {
+        if (!this.#abandonedCandidate(record) || record.action !== 'approve' || !this.#journal.hasLocalPreparation(record)) continue;
+        const cancelled = await this.#serial(() => this.#journal.observe(record.intentId, { state: 'failed', hash: null, from: 'prepared' }));
+        if (!cancelled.ok && cancelled.error.code !== 'CONFLICT') return stop(cancelled.error.code);
+        stale = true;
+      }
+      if (stale) current = unwrap(await this.#serial(() => this.#journal.list(signal)));
+      return Object.freeze(current.filter(record => record.state === 'prepared' ? this.#abandonedCandidate(record) :
+        !['finalized', ...TERMINAL].includes(record.state) || !this.#journal.isTerminalVerified(record.intentId)));
     }, 'UNAVAILABLE');
   }
   dispose(): void {

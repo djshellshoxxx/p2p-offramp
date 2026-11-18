@@ -14,6 +14,14 @@ Recorded against source `b2ebd641785b9ca87633865b77a492d249653cb3`, 2026-10-26. 
 
 Verification evidence: `docs/evidence/ATTRIBUTION_LICENSES_20261026.json`. No install/download/build was performed. Cache integrity proves correspondence to selected locked bytes, not standalone publisher-authenticity or safety; earlier G06 evidence records additional Noble upstream checks.
 
+## Solana program dependencies (contracts/solana, added 2026-11-04)
+
+| Work | Exact version/source | Use and notice |
+|---|---|---|
+| Anchor (`anchor-lang`, `anchor-spl`, CLI); Solana Foundation and contributors | 1.2.2; `solana-foundation/anchor` tag `v1.2.2`, commit `8d9d1488d9b8af41b266d7513eea2e668adf15a2` | Linked into the on-chain program and used to generate its IDL. Apache-2.0; full text retained at `licenses/anchor-1.2.2-Apache-2.0.txt` (byte copy of the tagged `LICENSE`). The workspace layout follows the CLI's `anchor init` LiteSVM template; no program logic was copied. |
+| Agave / Solana SDK crates (`solana-*`, `spl-token-interface`, `spl-associated-token-account-interface`); Anza and contributors | Versions pinned in `contracts/solana/Cargo.lock`; Agave tools v4.1.2 commit `182084b82aae88b1b0731540f63bf7416f27773a` | Program dependencies and build tools. Each crate declares Apache-2.0 in its manifest; the Apache-2.0 text above applies. |
+| LiteSVM; LiteSVM contributors | 0.15.0 (crates.io), test-only | In-process SVM for `cargo test`. Apache-2.0. Its bundled `spl_token-3.5.0.so` (SHA-256 `7b44674b…5a3c`) and p-token ELF are executed only in tests; nothing is redistributed. |
+
 ## Copied and derived test material
 
 - **BIP340:** `packages/identity/test/fixtures/bip340-test-vectors.csv`, upstream bitcoin/bips commit `93f161194fbaed12c44f5e2a0c1d4f2b1b317cb0`. Preserve `BIP340-LICENSE-NOTICE.md`, which names **Pieter Wuille, Jonas Nick and Tim Ruffing**, states BSD-2-Clause document terms and the upstream code-license alternatives. No vector bytes changed.

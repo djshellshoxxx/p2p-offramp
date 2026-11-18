@@ -27,7 +27,7 @@ export type ExchangeCode =
   | 'HASH_MISMATCH' | 'REVISION_MISMATCH' | 'WRONG_SIGNER';
 export type ExchangeResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly code: ExchangeCode; readonly review?: TermsReviewRejection };
 
-export const EXCHANGE_LIMITS = Object.freeze({ maxSessions: 64, maxSeenMessages: 1024, defaultMessageTtlSeconds: 900 });
+export const EXCHANGE_LIMITS = Object.freeze({ maxSessions: 64, maxSessionsPerAd: 16, maxSeenMessages: 1024, maxSeenMessagesPerSession: 16, defaultMessageTtlSeconds: 900 });
 const RUMOR_LIMITS: EventLimits = Object.freeze({ maxContentBytes: MAX_ENVELOPE_BYTES, maxTags: 4, maxTagItems: 2, maxTagItemBytes: 256,
   maxJsonBytes: MAX_RUMOR_JSON_BYTES, allowedKinds: [KIND_PRIVATE_DIRECT_MESSAGE] });
 
@@ -44,7 +44,12 @@ export interface ExchangeOptions {
   readonly now: () => number;
   readonly sha256?: Parameters<typeof reviewTermsBytes>[2];
   readonly maxSessions?: number;
+  /** Live sessions per advert. A full advert (or exchange) evicts its least recently admitted idle `taken` session; offered/accepted sessions are never evicted. */
+  readonly maxSessionsPerAd?: number;
+  /** Replay ids remembered in total. Only operations that open a session (take) are refused when it is full. */
   readonly maxSeenMessages?: number;
+  /** Replay ids remembered per session (ad + buyer key), so one peer cannot exhaust the shared memory. Clamped to maxSeenMessages. */
+  readonly maxSeenMessagesPerSession?: number;
   readonly messageTtlSeconds?: number;
 }
 export interface SessionView {
@@ -77,6 +82,8 @@ export interface TermsExchange {
 interface Session {
   readonly id: string; readonly role: Role; readonly ad: string; readonly orderId: string; readonly seller: string; readonly buyer: string;
   readonly buyerAddress: string; readonly adExpires: number; readonly adMin: bigint; readonly adMax: bigint;
+  /** The signed advert's network, asset and fiat currency; reviewed terms must name exactly these. */
+  readonly adNetwork: string; readonly adAsset: string; readonly adCurrency: string;
   state: SessionState; terms: { hash: string; bytes: Uint8Array; reviewed: ReviewedEvmTerms } | null;
 }
 interface BuiltMessage {
@@ -92,12 +99,21 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   const { provider, selfPublicKey: self, registry } = options;
   if (!isHex64(self) || typeof provider?.publicKey !== 'function' || typeof options.hashTerms !== 'function' || typeof options.now !== 'function') throw new TypeError('INVALID_OPTIONS');
   const maxSessions = options.maxSessions ?? EXCHANGE_LIMITS.maxSessions;
+  const maxPerAd = options.maxSessionsPerAd ?? EXCHANGE_LIMITS.maxSessionsPerAd;
   const maxSeen = options.maxSeenMessages ?? EXCHANGE_LIMITS.maxSeenMessages;
+  const perSessionOption = options.maxSeenMessagesPerSession ?? EXCHANGE_LIMITS.maxSeenMessagesPerSession;
   const ttl = options.messageTtlSeconds ?? EXCHANGE_LIMITS.defaultMessageTtlSeconds;
-  if (![maxSessions, maxSeen, ttl].every(value => Number.isSafeInteger(value) && value >= 1) || ttl > MAX_MESSAGE_LIFETIME_SECONDS) throw new RangeError('INVALID_OPTIONS');
+  if (![maxSessions, maxPerAd, maxSeen, perSessionOption, ttl].every(value => Number.isSafeInteger(value) && value >= 1) || ttl > MAX_MESSAGE_LIFETIME_SECONDS) throw new RangeError('INVALID_OPTIONS');
+  const maxSeenPerSession = Math.min(perSessionOption, maxSeen);
+  // Insertion order is admission order: the first idle `taken` session found is the least recently admitted.
   const sessions = new Map<string, Session>();
-  /** rumor id -> message expiry. Only expired entries are ever evicted, so a live replay is always recognised. */
-  const seen = new Map<string, number>();
+  /**
+   * session id (ad|buyer key) -> rumor id -> message expiry. Only expired entries are ever evicted (also after the
+   * session itself is gone), so a live replay is always recognised. Each session's memory is bounded on its own; the
+   * total bound only refuses opening new sessions, never messages of sessions that are already live.
+   */
+  const seen = new Map<string, Map<string, number>>();
+  let seenEntries = 0;
   // Only the newest in-flight take for a pair may commit, even if a newer
   // session has since become terminal or been pruned. Tokens are bounded.
   const pendingTakes = new Map<string, symbol>();
@@ -107,16 +123,31 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   const view = (s: Session): SessionView => Object.freeze({ id: s.id, role: s.role, ad: s.ad, orderId: s.orderId, seller: s.seller, buyer: s.buyer, buyerAddress: s.buyerAddress,
     state: s.state, adExpiresAtSeconds: s.adExpires,
     terms: s.terms === null ? null : Object.freeze({ hash: s.terms.hash, bytes: new Uint8Array(s.terms.bytes), reviewed: s.terms.reviewed }) });
+  function sweep(now: number): void {
+    for (const [sessionId, ids] of seen) {
+      for (const [rumorId, expiry] of ids) if (expiry <= now) { ids.delete(rumorId); seenEntries--; }
+      if (ids.size === 0) seen.delete(sessionId);
+    }
+  }
+  function remember(sessionId: string, rumorId: string, expiry: number): void {
+    let ids = seen.get(sessionId);
+    if (ids === undefined) { ids = new Map(); seen.set(sessionId, ids); }
+    if (!ids.has(rumorId)) seenEntries++;
+    ids.set(rumorId, expiry);
+  }
   function purge(now: number): void {
-    for (const [id, expiry] of seen) if (expiry <= now) seen.delete(id);
+    sweep(now);
     for (const [id, s] of sessions) if (s.state === 'cancelled' || s.state === 'rejected' || now >= s.adExpires) sessions.delete(id);
   }
-  function replayError(id: string | null, now: number): ExchangeCode | null {
+  /** `opening`: the message would create a session; only then does the shared total apply. */
+  function replayError(sessionId: string, id: string | null, now: number, opening: boolean): ExchangeCode | null {
     // Capacity is checked again immediately before each synchronous state commit.
     // Concurrent crypto/review completions cannot overbook or evict live replay ids.
-    for (const [seenId, expiry] of seen) if (expiry <= now) seen.delete(seenId);
-    if (id !== null && seen.has(id)) return 'DUPLICATE';
-    return seen.size >= maxSeen ? 'LIMIT_EXCEEDED' : null;
+    sweep(now);
+    const ids = seen.get(sessionId);
+    if (id !== null && ids?.has(id) === true) return 'DUPLICATE';
+    if ((ids?.size ?? 0) >= maxSeenPerSession) return 'LIMIT_EXCEEDED';
+    return opening && seenEntries >= maxSeen ? 'LIMIT_EXCEEDED' : null;
   }
   function readyToCommit(s: Session, expectedState: SessionState | null, id: string, expires: number, acceptBefore?: string): ExchangeResult<number> {
     if (closed) return bad('CLOSED');
@@ -129,13 +160,21 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     } else if (current !== s || s.state !== expectedState) return bad('OUT_OF_ORDER');
     if (now >= s.adExpires) return bad('AD_EXPIRED');
     if (now >= expires || (acceptBefore !== undefined && BigInt(acceptBefore) <= BigInt(now))) return bad('EXPIRED');
-    const replay = replayError(id, now); if (replay !== null) return bad(replay);
+    const replay = replayError(s.id, id, now, expectedState === null); if (replay !== null) return bad(replay);
     return { ok: true, value: now };
+  }
+  /** Evict the least recently admitted idle `taken` session matching `filter`. Its replay ids are kept until expiry. */
+  function evictIdle(filter: (s: Session) => boolean): boolean {
+    for (const [id, s] of sessions) if (s.state === 'taken' && filter(s)) { sessions.delete(id); return true; }
+    return false;
   }
   function admit(s: Session, now: number): boolean {
     if (sessions.has(s.id)) return false;
-    if (sessions.size >= maxSessions) purge(now);
-    if (sessions.size >= maxSessions) return false;
+    const sameAd = (other: Session): boolean => other.ad === s.ad;
+    const perAd = (): number => { let count = 0; for (const other of sessions.values()) if (sameAd(other)) count++; return count; };
+    if (sessions.size >= maxSessions || perAd() >= maxPerAd) purge(now);
+    if (perAd() >= maxPerAd && !evictIdle(sameAd)) return false;
+    if (sessions.size >= maxSessions && !evictIdle(() => true)) return false;
     sessions.set(s.id, s); return true;
   }
 
@@ -146,6 +185,10 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     if (!result.ok) return bad('REVIEW_FAILED', result.code);
     const reviewed = result.value;
     if (reviewed.orderId !== s.orderId || reviewed.buyer !== s.buyerAddress) return bad('TERMS_MISMATCH');
+    // The advert's signed network, asset and fiat currency bind the offer; the amount range is only meaningful in that asset.
+    // Adverts name the network by registry id or by its CAIP-2 chain id (eip155:<chainId>).
+    if (reviewed.asset.id !== s.adAsset || reviewed.agreement.fiatCurrency !== s.adCurrency ||
+      (s.adNetwork !== reviewed.network.id && s.adNetwork !== `eip155:${reviewed.network.chainId}`)) return bad('AD_MISMATCH');
     const amount = BigInt(reviewed.amountBaseUnits);
     if (amount < s.adMin || amount > s.adMax) return bad('AD_MISMATCH');
     const now = clock(); if (now === null) return bad('INVALID_INPUT');
@@ -178,7 +221,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     } catch { return bad('INVALID_INPUT'); }
   }
   const sent = (s: Session, type: MessageType, built: { rumorId: string; recipientWrap: NostrEvent; selfWrap: NostrEvent }, expires: string): SentMessage => {
-    seen.set(built.rumorId, Number(expires));
+    remember(s.id, built.rumorId, Number(expires));
     return Object.freeze({ sessionId: s.id, rumorId: built.rumorId, type, state: s.state, recipientWrap: built.recipientWrap, selfWrap: built.selfWrap });
   };
   /** Common precondition for local sends: open exchange, valid clock, known live session in the role the call requires. */
@@ -195,13 +238,12 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   const exchange: TermsExchange = {
     get sessionCount() { return sessions.size; },
     session: id => { const s = sessions.get(id); return s === undefined ? null : view(s); },
-    close() { closed = true; sessions.clear(); seen.clear(); pendingTakes.clear(); },
+    close() { closed = true; sessions.clear(); seen.clear(); seenEntries = 0; pendingTakes.clear(); },
 
     async take(adKey, buyerAddress, secret) {
       const now = clock();
       if (closed) return bad('CLOSED');
       if (now === null || !isEvmAddress(buyerAddress) || typeof adKey !== 'string') return bad('INVALID_INPUT');
-      const replay = replayError(null, now); if (replay !== null) return bad(replay);
       const found = options.ads.revalidate(adKey);
       if (!found.ok) return bad(found.reason === 'expired' ? 'AD_EXPIRED' : 'AD_UNAVAILABLE');
       const { ad, author } = found.ad;
@@ -210,7 +252,8 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       const expiresAt = Number(ad.expiresAtSeconds);
       if (now >= expiresAt) return bad('AD_EXPIRED');
       const s: Session = { id: sessionIdFor(address, self), role: 'buyer', ad: address, orderId: ad.orderId, seller: author, buyer: self, buyerAddress, adExpires: expiresAt,
-        adMin: BigInt(ad.amountMin), adMax: BigInt(ad.amountMax), state: 'taken', terms: null };
+        adMin: BigInt(ad.amountMin), adMax: BigInt(ad.amountMax), adNetwork: ad.networkId, adAsset: ad.assetId, adCurrency: ad.currency, state: 'taken', terms: null };
+      const replay = replayError(s.id, null, now, true); if (replay !== null) return bad(replay);
       const previous = sessions.get(s.id);
       if (previous !== undefined && previous.state !== 'cancelled' && previous.state !== 'rejected' && now < previous.adExpires) return bad('OUT_OF_ORDER');
       if (!pendingTakes.has(s.id) && pendingTakes.size >= maxSessions) return bad('LIMIT_EXCEEDED');
@@ -236,7 +279,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       const s = live.value;
       if (!(termsBytes instanceof Uint8Array)) return bad('INVALID_INPUT');
       if (transition(s.state, 'terms-offer', 'seller') === null) return bad('OUT_OF_ORDER');
-      const replay = replayError(null, now!); if (replay !== null) return bad(replay);
+      const replay = replayError(s.id, null, now!, false); if (replay !== null) return bad(replay);
       if (termsBytes.byteLength === 0 || termsBytes.byteLength > MAX_OFFER_TERMS_BYTES) return bad('LIMIT_EXCEEDED');
       const copy = new Uint8Array(termsBytes);
       const checked = await reviewForSession(s, copy); if (closed) return bad('CLOSED');
@@ -260,7 +303,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       // The acceptance covers exactly the bytes that passed local review; anything else is refused before signing.
       if (!sameBytes(s.terms.bytes, termsBytes)) return bad('TERMS_MISMATCH');
       if (BigInt(s.terms.reviewed.acceptBeforeSeconds) <= BigInt(now!)) return bad('EXPIRED');
-      const replay = replayError(null, now!); if (replay !== null) return bad(replay);
+      const replay = replayError(s.id, null, now!, false); if (replay !== null) return bad(replay);
       const { hash, reviewed } = s.terms;
       const built = await build(s, 'terms-accept', { revision: reviewed.revision }, hash, secret);
       if (closed) return bad('CLOSED');
@@ -275,7 +318,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       const now = clock(); const live = liveSession(sessionId, 'buyer', now); if (!live.ok) return live;
       const s = live.value;
       if (transition(s.state, 'terms-reject', 'buyer') === null || s.terms === null) return bad('OUT_OF_ORDER');
-      const replay = replayError(null, now!); if (replay !== null) return bad(replay);
+      const replay = replayError(s.id, null, now!, false); if (replay !== null) return bad(replay);
       const built = await build(s, 'terms-reject', { reason }, s.terms.hash, secret);
       if (closed) return bad('CLOSED');
       if (!built.ok) return built;
@@ -292,7 +335,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (s === undefined) return bad('UNKNOWN_SESSION');
       if (now >= s.adExpires) return bad('AD_EXPIRED');
       if (transition(s.state, 'cancel', s.role) === null) return bad('OUT_OF_ORDER');
-      const replay = replayError(null, now); if (replay !== null) return bad(replay);
+      const replay = replayError(s.id, null, now, false); if (replay !== null) return bad(replay);
       const expectedState = s.state;
       const built = await build(s, 'cancel', { reason }, s.terms?.hash ?? null, secret);
       if (closed) return bad('CLOSED');
@@ -325,7 +368,6 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (rumor.created_at > now + MAX_FUTURE_SKEW_SECONDS) return bad('MALFORMED');
       if (expires <= now) return bad('EXPIRED');
       if (expires > now + MAX_MESSAGE_LIFETIME_SECONDS) return bad('MALFORMED');
-      const replay = replayError(rumor.id, now); if (replay !== null) return bad(replay);
 
       const address = parseAdAddress(env.ad)!;
       const seller = address.author;
@@ -336,6 +378,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (!iAmSeller && from !== seller) return bad('NOT_SELLER');
       const buyerKey = iAmSeller ? from : self;
       const id = sessionIdFor(env.ad, buyerKey);
+      const replay = replayError(id, rumor.id, now, env.type === 'take-request'); if (replay !== null) return bad(replay);
 
       const session = sessions.get(id);
       if (env.type === 'take-request') {
@@ -348,11 +391,11 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
         const adExpires = Number(ad.expiresAtSeconds);
         if (now >= adExpires) return bad('AD_EXPIRED');
         const fresh: Session = { id, role: 'seller', ad: env.ad, orderId: address.orderId, seller, buyer: from, buyerAddress: env.body.buyerAddress as string, adExpires,
-          adMin: BigInt(ad.amountMin), adMax: BigInt(ad.amountMax), state: 'taken', terms: null };
+          adMin: BigInt(ad.amountMin), adMax: BigInt(ad.amountMax), adNetwork: ad.networkId, adAsset: ad.assetId, adCurrency: ad.currency, state: 'taken', terms: null };
         const ready = readyToCommit(fresh, null, rumor.id, expires); if (!ready.ok) return ready;
         sessions.delete(id);
         if (!admit(fresh, ready.value)) return bad('LIMIT_EXCEEDED');
-        seen.set(rumor.id, expires);
+        remember(id, rumor.id, expires);
         return { ok: true, value: Object.freeze({ sessionId: id, rumorId: rumor.id, type: env.type, from, state: fresh.state, termsHash: null, reviewed: null }) };
       }
 
@@ -390,7 +433,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       }
 
       session.state = transition(session.state, env.type, senderRole)!;
-      seen.set(rumor.id, expires);
+      remember(id, rumor.id, expires);
       return { ok: true, value: Object.freeze({ sessionId: id, rumorId: rumor.id, type: env.type, from, state: session.state, termsHash: env.termsHash, reviewed }) };
     },
   };
