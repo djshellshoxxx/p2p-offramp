@@ -206,3 +206,15 @@ selectively extracted · preserved/historical · excluded.
 | `work/p2p-pr14-finish-handoff-20261030` | `8c8911e2dd` | - | 0/111 | yes | yes |  |  | already integrated (ancestor of main) |
 | `work/p2p-relay-lifetime-20261030` | `e0961edc8c` | - | 0/115 | yes | yes |  |  | already integrated (ancestor of main) |
 | `work/p2p-validation-20261030` | `11ce9e42be` | - | 0/113 | yes | yes |  |  | already integrated (ancestor of main) |
+
+## Merges after Phase 2 (2026-11-18)
+
+| PR | Merge commit | Content | Gates |
+| --- | --- | --- | --- |
+| #135 | `af4835b` | Locale root lang/dir and selector; Phase 2 outcome; Phase 3 quarry plan; Lane B prompt | 10/10 CI + Snyk; locale review clean |
+| #140 | `8649b7a` | D3 Option A release-trust unification; D6 `packages/qr` codec | 10/10 CI + Snyk; local 1,648/1,648; reviews clean; owner Tier C approval |
+| #150 | `97ce6a4` | D1 peer acceptance (Option B) | 10/10 CI + Snyk; local 1,698/1,698, forge 92/92; review clean; owner Tier C approval |
+
+Overlap to resolve (not Lane A's PRs, left untouched): #159 (`claude/p2p-offramp-evm-escrow-vc7stk`, D1 in exchange v2)
+duplicates D1 already on `main` via #150; #157 (`claude/sleepy-fermat-4s6ocx`, chain-solana planner/reader) overlaps
+Lane B track B1 (#151, #152, #158). Lane B PRs #136–#163 are drafts owned by Lane B.
