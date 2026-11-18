@@ -4,7 +4,8 @@ import { realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const MAX_BYTES = 8 * 1024 * 1024;
-const protectedPath = /(?:^|\/)(?:\.github|\.git|\.env[^/]*)(?:\/|$)|\.(?:pem|key)$|(?:^|\/)(?:package-lock\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock)$|^scripts\/agent\//i;
+// Also refuses package manifests and npm/git config, which change what CI installs or how files are interpreted.
+const protectedPath = /(?:^|\/)(?:\.github|\.git|\.husky|\.env[^/]*)(?:\/|$)|\.(?:pem|key)$|(?:^|\/)(?:package\.json|package-lock\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock|\.npmrc|\.yarnrc(?:\.yml)?|\.gitattributes|\.gitmodules|Cargo\.lock)$|^scripts\/agent\//i;
 const credentials = [
   /\bsk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{20,}/,
   /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/,

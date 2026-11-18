@@ -136,7 +136,8 @@ test('REDTEAM-EX2 one peer cannot freeze the exchange by filling the replay memo
 // REDTEAM-EX3: session slots were global (default 64), with no per-peer bound and no eviction of idle 'taken'
 // sessions before ad expiry. Throwaway keys (free) locked out every new buyer of the seller for the ad lifetime.
 // Policy since REDTEAM-P2-EX3 (exchange.ts header): a flood holds the advert only until its own take-requests expire
-// (at most 3600 s; here 600 s), then the honest newcomer displaces the oldest idle intake, well inside the ad lifetime.
+// (seller-side cap ttl + skew, 1,020 s at the defaults; this flood uses 600 s), then the honest newcomer displaces the
+// oldest idle intake, well inside the ad lifetime.
 // While the flood's takes are live the newcomer is refused rather than an admitted buyer being pushed out.
 test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for honest buyers beyond their take lifetime', async () => {
   const w = await worldAd({}, { maxSessions: 4 });

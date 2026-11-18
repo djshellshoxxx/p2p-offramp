@@ -10,7 +10,7 @@ Current implementation work and remaining gates are tracked in the
 ## Requirements
 
 - Node 24+ (the package `engines` contract; CI and current local verification use Node 24).
-- Python 3.11+ for the spec tools (3.12 in CI).
+- Python 3.12+ for the spec tools (the documented supported baseline and CI version).
 - Chromium for browser checks. `scripts/lib/chromium-path.mjs` uses `P2P_CHROMIUM`, then `/usr/bin/chromium`,
   then the newest `/opt/pw-browsers/chromium-*`. Chromium is a test tool, not an app server.
 

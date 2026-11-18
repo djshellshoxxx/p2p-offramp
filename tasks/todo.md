@@ -184,3 +184,24 @@ architecture, test results, handoff). Gap IDs G1–G9 live in `docs/integration/
 - PR #65 remains a draft source record for T36–T40; its remaining audit and task status must be refreshed against the current tree before any of those are treated as active work.
 - PR #49 imports the accepted D1/D4/D5/D6/D7/D8/D9 design decisions; D2 remains proposed. Acceptance records are design decisions, not implementation or release approval.
 - The Pages beta follow-ups and G23 display-only privacy projection are consolidated through PR #114 and recorded in the current handoff.
+
+<!-- Preserved 2026-11-18 from claude/compassionate-gauss-uyhfih@970ac80 (no PR). Status at preservation: T43 (D9) is
+     implemented differently on the trunk (sendMarkedAt CAS lifecycle); T41 exists as the candidate EOA verifier; T42
+     (exchange v2 carrier), T44 refusal surface review, T45/T46 (packages/qr) were never implemented on any ref. -->
+## Invoked decision-implementation continuation — 2026-11-11
+
+Baseline: main `cdde998`, branch `claude/compassionate-gauss-uyhfih`. Baseline suite on Node 24: 1,091 package/UI tests, 1,090 pass, 1 skipped, 0 failures. Owner-accepted packets D1 (Option B), D4 (Option C), D6 (Option B) and D9 (Option A) on `claude/gifted-faraday-73kydc` were unimplemented on every branch (`git grep` for `sendMarkedAt`, `PeerAcceptance`, `base45` across main, the #61 integration head and the zero-codex D9 test branches found nothing). PR #65 T33–T40 numbers are reserved; this tranche starts at T41. Trading stays disabled; nothing here is release approval, an independent professional review, or a live deployment.
+
+| Task | Status | Owner / scope / acceptance |
+| --- | --- | --- |
+| T41 | IN_PROGRESS | d1_wallet; exact EIP-712 `PeerAcceptance` v1 profile, EOA-only verifier, typed-data builders, ethers-independent frozen vectors + OpenSSL cross-check; `packages/wallet/src/evm-peer-acceptance.ts` and its tests/fixtures only |
+| T42 | IN_PROGRESS | d1_exchange; exchange protocol v2 (signed offer/accept, seller-first order, effective deadline, (termsHash, role) bindings, durable tombstones through an injected store port, byte budget), v1 byte-identical; `packages/exchange/**` only |
+| T43 | IN_PROGRESS | d9_lifecycle; intent record v2 with write-once `sendMarkedAt` and journal origin, versioned parser keeping v1 byte-for-byte, approve-only never-sent skip, 4001 path reconciled never skipped, all eight D9 acceptance cases; `packages/schemas/src/intent.ts`, `intent-journal.ts`, `tx-lifecycle.ts` and their tests |
+| T44 | IN_PROGRESS | d4_capabilities; `CORE_CAPABILITIES_SHA256`, review/verifier/Solana-encoder refusal of any non-empty capability set or non-core hash before signing/funding, Python hash cross-check, extensions README and spec checkpoints; `trade-terms.ts`, `terms-review.ts`, `evm-agreement.ts`, `domain/index.ts` |
+| T45 | IN_PROGRESS | d6_codec; new `packages/qr`: RFC 9285 base45, RFC 8785 canonical JSON, exact envelope v1 per type, `P2POFFRAMP:1:` text codec with 2,048-byte decoded cap, secret refusal, invite digest with injected verifier (no default key), independent frozen codec vectors |
+| T46 | IN_PROGRESS | d6_symbol; dependency-free ISO/IEC 18004 encoder (alphanumeric/byte, v1–40, L/M/Q/H, RS GF(256), masks/penalties) and SVG renderer, known-answer tests, independent `qrcode`/`jsqr` frozen cross-check |
+| T47 | READY | root; independent reviews of T41–T46 by different agents, integration (harness v2 run, index facades, ledger/docs), combined checks, publish draft PR |
+
+One writer per file; root owns `tasks/*`, `package.json`, docs and index facades not listed above. Checkboxes become DONE only after an independent review and the combined checks.
+
+Deliberately not started: G22 browser journey composition (PR #26/#42/#43 stack and PR #65 T40 own that surface), Solana D5 program (PR #50 lane; no Anchor/Solana toolchain here), QR camera scanning UI, vault-backed peer-acceptance store (follow-on after T42 freezes the port), ERC-1271/EIP-7702 acceptance schemes (undecided policy).

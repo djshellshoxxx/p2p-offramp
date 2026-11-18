@@ -287,7 +287,19 @@ class EvmLifecycle implements EvmTxLifecycle {
       }
       if (external?.aborted) { await this.#cancelPrepared([intentId]); return stop('CANCELLED'); }
       // Durable send-started marker (prepared -> broadcast-unknown CAS). Its failure means the wallet is never called.
-      unwrap(await this.#serial(() => this.#journal.markSending(intentId)));
+      const marked = await this.#serial(() => this.#journal.markSending(intentId));
+      if (!marked.ok) {
+        // Nothing was sent. Release the in-memory send slot so the record is not wedged in this instance. Any code but
+        // BROADCAST_UNKNOWN means no marker was written: the preparation is still this instance's and may be submitted
+        // again by an explicit user action (nothing is resent automatically); if the wallet generation moved, it is
+        // cancelled instead. After BROADCAST_UNKNOWN a marker may exist, so the record is left to reconcile().
+        this.#sending.delete(intentId);
+        if (marked.error.code !== 'BROADCAST_UNKNOWN') {
+          if (this.#generation === generation && !this.#disposed) this.#prepared.set(intentId, entry);
+          else await this.#cancelPrepared([intentId]);
+        }
+        return stop(marked.error.code);
+      }
       // The marker is conservative: cancellation or a changed wallet during its durable write must
       // stop before the send-capable call and leave reconciliation to classify the recorded marker.
       if (external?.aborted || this.#generation !== generation || this.#disposed) return stop('BROADCAST_UNKNOWN');
@@ -341,6 +353,7 @@ class EvmLifecycle implements EvmTxLifecycle {
       const effects = EFFECTS[intent.action];
       const latched = LATCHED.includes(intent.state);
       let outcome: EvmOutcome, evidence: EvmReconciliation['evidence'];
+      let nonceTakenElsewhere = false;
       const hash = intent.submission.hash;
 
       let receipt: EvmReceiptView | null = null;
@@ -379,7 +392,12 @@ class EvmLifecycle implements EvmTxLifecycle {
         if (latestCount > nonce) {
           evidence = 'nonce';
           if (hash !== null) outcome = 'replaced';
-          else if (effects === null) outcome = 'pending';
+          else if (effects === null) {
+            // An approval without a recorded hash has no escrow effect to observe. It is settled as never included only
+            // when native data shows its nonce was consumed by a different, finalized transaction of this journal.
+            nonceTakenElsewhere = await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
+            outcome = nonceTakenElsewhere && !conflict ? 'replaced' : 'pending';
+          }
           else if (escrowState !== null && effects.includes(escrowState)) {
             // Unknown hash: the nonce was consumed and the escrow shows this intent's effect. Depth is measured on the escrow itself.
             evidence = 'escrow-effect';
@@ -404,6 +422,8 @@ class EvmLifecycle implements EvmTxLifecycle {
 
       let target: Intent['state'] | null = outcome === 'pending' ? (hash !== null ? 'pending' : null) : outcome === 'confirmed' ? 'confirmed' : outcome === 'finalized' ? 'finalized' :
         outcome === 'replaced' ? 'replaced' : outcome === 'dropped' ? 'expired' : outcome === 'reverted' ? 'failed' : outcome === 'reorged' ? 'reorged' : null;
+      // Proven never included and never able to be: a settled, released state rather than a successor-awaiting one.
+      if (nonceTakenElsewhere && !conflict) target = 'failed';
       // The recorded terminal label is not proof after restoration (or a later native contradiction).
       if (TERMINAL.includes(intent.state) && target !== intent.state) { target = 'reorged'; outcome = 'reorged'; }
       const authorize = async (value: Intent): Promise<void> => {
@@ -423,6 +443,33 @@ class EvmLifecycle implements EvmTxLifecycle {
       const written = unwrap(await this.#serial(() => this.#journal.observe(intentId, { state: next, hash, from: intent.state })));
       await authorize(written); return done(outcome, written, escrowState, evidence);
     }, 'UNAVAILABLE');
+  }
+  /**
+   * True when another journal intent of the same account and chain recorded a hash at `nonce` whose transaction is
+   * canonical and at or below the finalized head. One nonce is one transaction, so `intent` can never be included.
+   * Restored records lose never-sent proof (new profile ID); this native check keeps them from vetoing later exits.
+   */
+  async #nonceFinalizedElsewhere(intent: Intent, account: string, nonce: bigint, chainId: string, finalizedNumber: bigint,
+    read: <T>(work: (signal: AbortSignal) => Promise<CoreResult<T>>) => Promise<T>, signal: AbortSignal): Promise<boolean> {
+    if (finalizedNumber < 0n) return false;
+    const records = unwrap(await this.#serial(() => this.#journal.list(signal)));
+    for (const other of records) {
+      if (other.intentId === intent.intentId || other.submission.chain !== 'evm' || other.submission.hash === null ||
+        other.submission.nonce === null || BigInt(other.submission.nonce) !== nonce) continue;
+      let otherRequest: EvmPreparedRequest;
+      try { otherRequest = parsePreparedRequest(other.preparedRequest); } catch { continue; }
+      if (otherRequest.chainId !== chainId || lower(otherRequest.from) !== account) continue;
+      const otherHash = other.submission.hash;
+      const receipt = await read(s => this.#reader.receipt(otherHash, s));
+      if (receipt === null || receipt.transactionHash !== otherHash || !DECIMAL.test(receipt.blockNumber) || !HASH.test(receipt.blockHash) ||
+        BigInt(receipt.blockNumber) > finalizedNumber) continue;
+      const receiptBlock = receipt.blockNumber;
+      if (await read(s => this.#reader.blockHashAt(receiptBlock, s)) !== receipt.blockHash) continue;
+      const tx = await read(s => this.#reader.transaction(otherHash, s));
+      if (tx === null || tx.hash !== otherHash || lower(tx.from) !== account || !DECIMAL.test(tx.nonce) || BigInt(tx.nonce) !== nonce) continue;
+      return true;
+    }
+    return false;
   }
   /** Prepared in the journal but not a live prepare result or send of this instance (it may be another tab's). */
   #abandonedCandidate(record: Intent): boolean {
