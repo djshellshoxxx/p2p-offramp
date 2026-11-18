@@ -1,21 +1,60 @@
 import { readFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
-import { buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
+import { buildLocalnetContentPolicy, buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
 
 const escapeAttribute = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 export function offlinePolicy(delivery) {
   return buildOfflineContentPolicy({ version: 1, releaseId: 'local-development', delivery });
 }
+/** Localnet build profile only: the offline policy with connect-src naming exactly the injected loopback relay origin. */
+export function localnetPolicy(delivery, relayOrigin) {
+  return buildLocalnetContentPolicy({ version: 1, releaseId: 'local-development', delivery, relayOrigin });
+}
 export function policyMarkup(policy) {
   return policy.meta.map(record => 'httpEquiv' in record
     ? `<meta http-equiv="${record.httpEquiv}" content="${escapeAttribute(record.content)}">`
     : `<meta name="${record.name}" content="${record.content}">`).join('\n    ');
 }
-/** Runs for document and native Worker builds; records real bundler module graphs. */
-export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = false) {
-  const policy = offlinePolicy(delivery);
+/**
+ * Module admission (A3). The localnet profile is the ONLY profile with exceptions: the reviewed EVM wallet modules,
+ * chain-evm, relay (its WebSocket( token only in packages/relay/src/pool.ts), exchange, the three localnet facades, the
+ * apps/web/src/localnet subtree and the @noble/{curves,hashes,ciphers} dependencies. Every other profile keeps the prior
+ * rules and additionally refuses each localnet-only module, so a default/demo/testnet build that reached one fails.
+ */
+const LOCALNET_WALLET_MODULES = /^packages\/wallet\/src\/evm-(?:adapter|terms|submit|escrow|payment-preflight|peer-acceptance|peer-envelope|peer-replay)\.ts$/;
+const LOCALNET_ONLY_MODULES = [LOCALNET_WALLET_MODULES, /^packages\/(?:wallet|domain|chain-evm)\/localnet\.ts$/, /^packages\/(?:chain-evm|relay|exchange)\//, /^apps\/web\/src\/localnet\//];
+const LOCALNET_DEPENDENCIES = /^node_modules\/@noble\/(?:curves|hashes|ciphers)\//;
+export const LOCALNET_WEBSOCKET_MODULE = 'packages/relay/src/pool.ts';
+/** Throws NON_CORE_MODULE / UNREVIEWED_DEPENDENCY for a repository-relative module path the profile does not admit. */
+export function assertModuleAdmitted(path, localnet = false) {
+  if (localnet) {
+    if (/^packages\/wallet\/src\/evm-/.test(path) && !LOCALNET_WALLET_MODULES.test(path)) throw new Error('NON_CORE_MODULE');
+    // chain-evm and relay are admitted only at their own top-level package roots, never as nested look-alike paths.
+    const evmOrRelay = /(?:^|\/)packages\/(?:chain-evm|relay)(?:\/|$)/.test(path) && !/^packages\/(?:chain-evm|relay)\//.test(path);
+    if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) || evmOrRelay || /(?:^|\/)packages\/(?:extensions|chain-solana)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path)) throw new Error('NON_CORE_MODULE');
+    if (/^packages\/[^/]+\/localnet\.ts$/.test(path) && !LOCALNET_ONLY_MODULES[1].test(path)) throw new Error('NON_CORE_MODULE');
+    if (path.startsWith('node_modules/') && !/^node_modules\/(?:react|react-dom|scheduler)\//.test(path) && !LOCALNET_DEPENDENCIES.test(path)) throw new Error(`UNREVIEWED_DEPENDENCY: ${path}`);
+    return;
+  }
+  if (LOCALNET_ONLY_MODULES.some(pattern => pattern.test(path))) throw new Error('NON_CORE_MODULE');
+  if (/^packages\/wallet\/src\/evm-(?:execution|adapter|terms)\.ts$/.test(path)) throw new Error('NON_CORE_MODULE');
+  if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) || /(?:^|\/)packages\/(?:extensions|chain-evm|chain-solana|relay)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path)) throw new Error('NON_CORE_MODULE');
+  if (path.startsWith('node_modules/') && !/^node_modules\/(?:react|react-dom|scheduler)\//.test(path)) throw new Error(`UNREVIEWED_DEPENDENCY: ${path}`);
+}
+function localnetProfile(localnet) {
+  if (localnet === null || localnet === undefined) return null;
+  if (typeof localnet !== 'object' || Object.getPrototypeOf(localnet) !== Object.prototype || Object.keys(localnet).join() !== 'relayOrigin') throw new Error('LOCALNET_PROFILE_INVALID');
+  return Object.freeze({ relayOrigin: localnet.relayOrigin });
+}
+/**
+ * Runs for document and native Worker builds; records real bundler module graphs. `localnet` ({ relayOrigin }) is set
+ * only by the library-only localnet build (apps/web/vite.config.ts createViteConfig); every other build omits it.
+ */
+export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = false, localnet = null) {
+  const profile = localnetProfile(localnet);
+  const policy = profile ? localnetPolicy(delivery, profile.relayOrigin) : offlinePolicy(delivery);
   return {
     name: `p2p-offline-static-${worker ? 'worker' : 'document'}`,
     apply: 'build',
@@ -37,12 +76,10 @@ export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = fa
         if (id.startsWith('\0') || id.startsWith('vite/') || id.startsWith('rolldown:')) continue;
         const clean = id.split('?')[0];
         const path = relative(repositoryRoot, clean).replaceAll('\\', '/');
-        if (/^packages\/wallet\/src\/evm-(?:execution|adapter|terms)\.ts$/.test(path)) throw new Error('NON_CORE_MODULE');
-        if (path.startsWith('../') || /(?:^|\/)(?:test|tests|fixtures)(?:\/|$)/.test(path) || /(?:^|\/)packages\/(?:extensions|chain-evm|chain-solana|relay)(?:\/|$)|(?:^|\/)(?:05_ADVANCED|06_)/i.test(path)) throw new Error('NON_CORE_MODULE');
+        assertModuleAdmitted(path, profile !== null);
         if (!/\.(?:[cm]?[jt]sx?|css|html)$/.test(clean)) throw new Error('UNREVIEWED_MODULE_TYPE');
         const source = await readFile(clean, 'utf8');
-        if (!path.startsWith('node_modules/') && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source);
-        if (path.startsWith('node_modules/') && !/^node_modules\/(?:react|react-dom|scheduler)\//.test(path)) throw new Error(`UNREVIEWED_DEPENDENCY: ${path}`);
+        if (!path.startsWith('node_modules/') && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source, { allowWebSocketConstructor: profile !== null && path === LOCALNET_WEBSOCKET_MODULE });
         modules.push({ path, sha256: createHash('sha256').update(source).digest('hex') });
       }
       modules.sort((a, b) => a.path.localeCompare(b.path, 'en'));
@@ -51,7 +88,7 @@ export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = fa
       this.emitFile({ type: 'asset', fileName: worker ? 'core-graph-worker.json' : 'core-graph-document.json', source: JSON.stringify(graph, null, 2) + '\n' });
       if (!worker) {
         this.emitFile({ type: 'asset', fileName: 'content-policy.json', source: JSON.stringify({ ...policy, releaseAcceptance: false, ReleaseEnabled: 0 }, null, 2) + '\n' });
-        const headerPolicy = offlinePolicy('header');
+        const headerPolicy = profile ? localnetPolicy('header', profile.relayOrigin) : offlinePolicy('header');
         this.emitFile({ type: 'asset', fileName: '_headers', source: '/*\n' + Object.entries(headerPolicy.headers).map(([name, value]) => `  ${name}: ${value}`).join('\n') + '\n' });
       }
       // This first scan runs before final HTML emission. The build CLI scans the on-disk final set.
