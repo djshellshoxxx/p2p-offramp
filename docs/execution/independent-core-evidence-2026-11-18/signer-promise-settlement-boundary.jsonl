@@ -1,0 +1,10 @@
+{"method":"terms","depth":4,"ok":false,"error":"LOCKED","events":["dispose","adapter_promise_settled","consumer_callback"]}
+{"method":"terms","depth":5,"ok":false,"error":"LOCKED","events":["dispose","adapter_promise_settled","consumer_callback"]}
+{"method":"terms","depth":6,"ok":true,"events":["adapter_promise_settled","dispose","consumer_callback"]}
+{"method":"terms","depth":7,"ok":true,"events":["adapter_promise_settled","consumer_callback","dispose"]}
+{"method":"terms","depth":8,"ok":true,"events":["adapter_promise_settled","consumer_callback","dispose"]}
+{"method":"peer","depth":4,"ok":false,"error":"LOCKED","events":["dispose","adapter_promise_settled","consumer_callback"]}
+{"method":"peer","depth":5,"ok":false,"error":"LOCKED","events":["dispose","adapter_promise_settled","consumer_callback"]}
+{"method":"peer","depth":6,"ok":true,"events":["adapter_promise_settled","dispose","consumer_callback"]}
+{"method":"peer","depth":7,"ok":true,"events":["adapter_promise_settled","consumer_callback","dispose"]}
+{"method":"peer","depth":8,"ok":true,"events":["adapter_promise_settled","consumer_callback","dispose"]}

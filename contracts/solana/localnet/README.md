@@ -23,6 +23,11 @@ from absolute, non-world-writable `PATH` entries (`tool-path.mjs`). Ports 18899 
 - Refund: funded with deadline = clock + 1805 s; an early refund lands and fails with 6013
   `DeadlineNotReached`; after waiting real time (no clock warp) until the validator Clock reaches the
   deadline, refund+payout_native paid by a third party credits the seller exactly the amount.
+- Frozen vault (review C-L2, C-L3), through the TypeScript reader (`reader-check.mjs`, packages/chain-solana):
+  the vault and the buyer ATA of the freezable test mint are frozen. The reader reports `funded`, `vaultFrozen`,
+  `payoutBlockedBy: vault-frozen`, and `validateLive` matches the region hash. `release` alone lands. The payout
+  fails with SPL Token `AccountFrozen` (17) while the vault is frozen and with 6016 `DestinationFrozen` while the
+  ATA is frozen. After both thaws it pays the buyer, and the reader reports `complete`.
 - All claimed state is read at `finalized` commitment.
 
 ## What it does NOT prove
@@ -33,5 +38,21 @@ from absolute, non-world-writable `PATH` entries (`tool-path.mjs`). Ports 18899 
   `SOLANA_LOCALNET_SO`), Agave 4.1.2 refuses `--final` while SIMD-0500 (`disable_sbpf_v0_v1_v2_deployment`)
   is active; the run proves that refusal, then runs the flows with only that feature deactivated (listed in
   `deviations`).
-- No adversarial coverage (wrong signer, wrong recipient, frozen mint, Token-2022): see the LiteSVM tests.
+- No other adversarial coverage (wrong signer, wrong recipient, Token-2022): see the LiteSVM tests.
+- The synthetic profile compiles a fake genesis constant into the program. So the reader's RPC adapter maps the one
+  validator genesis recorded at startup to that constant, and only that; the reader registry is built locally,
+  not signed.
 - Single local validator: no forks, no real stake-weighted clock, no fee market.
+
+## Client flow (`client-run.mjs`)
+
+    node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs   # ~36 min
+
+Drives the `packages/chain-solana` client against the same pinned validator (ports offset 400 by default): fund,
+release alone, payout; a manually bundled `[release, payout_spl]` to a frozen ATA that rolls the release back,
+next to the client's sequenced flow that keeps it; a crash after the durable send marker (no resend, dropped after
+finalized expiry, explicit rebuild); a vault restore with the marker; and a real refund after the deadline. Every
+escrow transaction is built by the client's serializer and signed through its Wallet Standard port by a runtime
+keypair; one signed transaction is cross-checked with `solana decode-transaction`. Localnet-only shim: its RPC
+adapter answers `getGenesisHash` with the program's compiled synthetic genesis constant, which no real validator
+can have. Writes `client-summary.json` in the work dir; `SOLANA_CLIENT_SKIP_REFUND=1` skips the wait (and fails).

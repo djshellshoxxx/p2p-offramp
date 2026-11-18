@@ -1,0 +1,34 @@
+✔ document-is-self-contained-and-public (28.984149ms)
+✔ document-tampering-refused (33.244046ms)
+✔ reader-checks-chain-against-the-document (19.976261ms)
+✔ exits-follow-finalized-state-and-clock (16.603444ms)
+✖ recovery exits reject a snapshot for different terms at the same escrow PDA (13.881663ms)
+✔ recovery-messages-follow-c-l2 (33.953778ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 607.899095
+
+✖ failing tests:
+
+test at packages/chain-solana/test/recovery.test.mjs:142:1
+✖ recovery exits reject a snapshot for different terms at the same escrow PDA (13.881663ms)
+  AssertionError [ERR_ASSERTION]: {"ok":true,"value":{"state":"funded","paidOut":false,"chainTimeSeconds":"1793782800","deadlineSeconds":"1793786400","exits":[{"exit":"release","roles":["seller"],"open":true,"reason":"open"},{"exit":"refund","roles":["seller"],"open":false,"reason":"before-deadline"},{"exit":"payout","roles":["seller","buyer"],"open":false,"reason":"not-terminal"}]}}
+  
+  true !== false
+  
+      at error (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/support.mjs:43:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/recovery.test.mjs:148:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

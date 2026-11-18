@@ -145,6 +145,42 @@ fn frozen_destination_blocks_only_the_payout_and_a_retry_succeeds_after_thaw() {
     }
 }
 
+/// SPL Token `TokenError::AccountFrozen`, returned by both the original build and p-token.
+const TOKEN_ACCOUNT_FROZEN: u32 = 17;
+
+/// Review C-L3: release and refund only change state, so a frozen vault never blocks them. Only the payout
+/// waits (the token program refuses the transfer) and succeeds once the freeze authority thaws the vault.
+#[test]
+fn frozen_vault_blocks_only_the_payout_for_release_and_refund_until_thaw() {
+    for build in BUILDS {
+        let mut h = Harness::new(build);
+        setup(&mut h);
+        let trade = funded(&mut h, TEST_MINT_FREEZABLE, 6);
+        let destination = buyer_ata(&mut h, &trade);
+        h.set_frozen(trade.vault, true);
+        h.send(&[release_ix(&trade.seller.pubkey(), &trade.escrow)], &[&trade.seller]).expect("release, vault frozen");
+        assert_eq!(h.escrow(&trade.escrow).state, EscrowState::Released, "{build:?}");
+        let payout = payout_spl_ix(&trade.escrow, &trade.vault, &trade.mint, &destination);
+        assert_eq!(code(h.send(std::slice::from_ref(&payout), &[])), TOKEN_ACCOUNT_FROZEN, "{build:?}");
+        assert!(!h.escrow(&trade.escrow).paid_out);
+        assert_eq!(h.token_amount(&trade.vault), AMOUNT);
+        h.set_frozen(trade.vault, false);
+        h.send(&[payout], &[]).expect("payout after thaw");
+        assert_eq!((h.token_amount(&destination), h.token_amount(&trade.vault)), (AMOUNT, 0), "{build:?}");
+
+        let trade = funded(&mut h, TEST_MINT_FREEZABLE, 7);
+        h.set_frozen(trade.vault, true);
+        h.set_time(trade.deadline as i64);
+        h.send(&[refund_ix(&trade.escrow)], &[]).expect("refund, vault frozen");
+        assert_eq!(h.escrow(&trade.escrow).state, EscrowState::Refunded, "{build:?}");
+        let payout = payout_spl_ix(&trade.escrow, &trade.vault, &trade.mint, &trade.seller_token);
+        assert_eq!(code(h.send(std::slice::from_ref(&payout), &[])), TOKEN_ACCOUNT_FROZEN, "{build:?}");
+        h.set_frozen(trade.vault, false);
+        h.send(&[payout], &[]).expect("refund payout after thaw");
+        assert_eq!(h.token_amount(&trade.seller_token), 3 * AMOUNT, "{build:?}");
+    }
+}
+
 #[test]
 fn restricted_sources_and_unlisted_mints_are_refused() {
     for build in BUILDS {

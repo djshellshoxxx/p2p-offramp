@@ -4,11 +4,23 @@ on:
     branches: [main]
     paths:
       - 'contracts/solana/**'
+      - 'packages/chain-solana/**'
+      - 'packages/domain/**'
+      - 'packages/schemas/**'
+      - 'scripts/test-support/register-tsx.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'packages/domain/test/fixtures/g16-vectors.json'
       - '.github/workflows/solana-escrow.yml'
   pull_request:
     paths:
       - 'contracts/solana/**'
+      - 'packages/chain-solana/**'
+      - 'packages/domain/**'
+      - 'packages/schemas/**'
+      - 'scripts/test-support/register-tsx.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'packages/domain/test/fixtures/g16-vectors.json'
       - '.github/workflows/solana-escrow.yml'
 permissions:
@@ -19,7 +31,8 @@ concurrency:
 jobs:
   program:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # The real validator acceptance waits through the contract's 1800-second refund minimum.
+    timeout-minutes: 90
     env:
       AGAVE_VERSION: v4.1.2
       # SHA-256 of solana-release-x86_64-unknown-linux-gnu.tar.bz2 recorded at first download (2026-11-04).
@@ -31,6 +44,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
         with:
           fetch-depth: 1
+          persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
         with:
           node-version: '24'
@@ -40,7 +54,10 @@ jobs:
         run: |
           node contracts/solana/vectors/derive.mjs --check
           node --test contracts/solana/vectors/derive.test.mjs
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0, tag resolved 2026-11-04
+      # Restore on every run; save (last step) only on a push to main, so a pull_request run can never seed the
+      # cache that main restores. restore/ and save/ exist at this v4.3.0 commit (checked 2026-11-18).
+      - id: solana-cache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0, tag resolved 2026-11-04
         with:
           path: |
             ~/.cargo/registry/index
@@ -80,3 +97,17 @@ jobs:
         run: |
           anchor idl build -p basic_escrow -o "$RUNNER_TEMP/basic_escrow.json" -- --features localnet --locked
           diff -u idl/basic_escrow.json "$RUNNER_TEMP/basic_escrow.json"
+      - name: Real validator client acceptance including refund and recovery
+        timeout-minutes: 50
+        env:
+          SOLANA_LOCALNET_DIR: ${{ github.workspace }}/contracts/solana/target/client-localnet
+        run: node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs
+      - name: Save dependency cache (push to main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.solana-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0, tag resolved 2026-11-04
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cache/solana
+          key: ${{ steps.solana-cache.outputs.cache-primary-key }}
