@@ -60,3 +60,21 @@ implemented. The `@noble/hashes` 2.4.0 inventory review is still pending.
 node --import ./scripts/test-support/register-tsx.mjs --test packages/chain-solana/test/*.test.mjs
 npm run typecheck && npm run check:boundaries && npm test
 ```
+
+## B1c off-chain acceptance
+
+Verify-only D1 peer acceptance for Solana (candidate, not wired; details and byte layouts in
+[docs/acceptance.md](docs/acceptance.md)). Each wallet signs two Solana off-chain messages, version 1 (`0xff`
+prefix, never a transaction): the terms consent (both parties sign identical bytes binding `terms-sha256`, genesis,
+program and registry ids) and its own peer acceptance (role, wallet, both Nostr keys, expiry). The program verifies
+neither (D5); the seller can fund without them.
+
+- `solanaTermsConsentRequest(trade)`, `solanaPeerAcceptanceRequest(trade, draft)`: what a wallet is asked to sign.
+- `verifySolanaPeerAcceptance(trade, context, proof)`: strict Ed25519 (RFC 8032 output only, stricter than
+  ZIP-215), local registry and session only; the result is `candidateOnly` with `economicPreparationAllowed: false`.
+- `decodeSolanaPeerAcceptance`, `decodeSolanaTermsConsent`: strict decoders for signed bytes.
+- `SolanaPeerReplayLedger(vault, session, clock)`: encrypted `(termsHash, role)` replay memory and tombstones,
+  64 acceptance entries plus 64 tombstones, evicted only after `acceptBeforeSeconds`, 7-day horizon, watermark.
+
+Vectors come from this package and an independent Python implementation (`contracts/solana/vectors/acceptance.py`).
+No physical or browser wallet was tested: wallet interoperability is UNVERIFIED.
