@@ -1,0 +1,1298 @@
+{
+  "meta": {
+    "description": "D6 QR interchange codec vectors (envelope v1, RFC 8785 canonical JSON, RFC 9285 base45 text). Synthetic values only.",
+    "generator": "packages/qr/test/fixtures/generate-vectors.mjs",
+    "independentCheck": "scripts/vectors/check_qr_codec.py",
+    "generatorRuntime": "node 24.22.3",
+    "codec": {
+      "prefix": "P2POFFRAMP:1:",
+      "protocol": "p2p-offramp-qr",
+      "envelopeVersion": 1,
+      "base45": "RFC 9285",
+      "canonicalJson": "RFC 8785",
+      "maxEnvelopeBytes": 2048,
+      "generationTargetBytes": 1024,
+      "maxDepth": 8,
+      "inviteSigningDomain": "p2p-offramp-qr/v1/trade-invite/signing-digest",
+      "expirySafetyMarginSeconds": 60,
+      "maxFutureSkewSeconds": 120
+    },
+    "testOnlyInviteProfile": {
+      "profile": "test-hmac-sha256",
+      "publicKey": "8887dc70e63517c854936737b46d7edc90fce1fe7f8a56ac57025e36dacc317c",
+      "hmacKeyDerivation": "SHA-256(\"qr-test-only-hmac-key\")",
+      "signature": "HMAC-SHA-256(key, signingDigest)",
+      "note": "Exercises the injected verifier interface only. Not a proposal for the open invite signing-key profile."
+    },
+    "contentSha256": "f52cf571f20642a82e7807c9cd70a0f62db61c3a00233fe6515391adde089bb8"
+  },
+  "vectors": {
+    "base45": [
+      {
+        "name": "rfc9285-AB",
+        "source": "RFC 9285 section 4",
+        "inputHex": "4142",
+        "base45": "BB8"
+      },
+      {
+        "name": "rfc9285-Hello!!",
+        "source": "RFC 9285 section 4",
+        "inputHex": "48656c6c6f2121",
+        "base45": "%69 VD92EX0"
+      },
+      {
+        "name": "rfc9285-base-45",
+        "source": "RFC 9285 section 4",
+        "inputHex": "626173652d3435",
+        "base45": "UJCLQE7W581"
+      },
+      {
+        "name": "rfc9285-ietf!",
+        "source": "RFC 9285 section 4",
+        "inputHex": "6965746621",
+        "base45": "QED8WEX0"
+      },
+      {
+        "name": "edge-0",
+        "source": "generated",
+        "inputHex": "",
+        "base45": ""
+      },
+      {
+        "name": "edge-1",
+        "source": "generated",
+        "inputHex": "00",
+        "base45": "00"
+      },
+      {
+        "name": "edge-2",
+        "source": "generated",
+        "inputHex": "ff",
+        "base45": "U5"
+      },
+      {
+        "name": "edge-3",
+        "source": "generated",
+        "inputHex": "0000",
+        "base45": "000"
+      },
+      {
+        "name": "edge-4",
+        "source": "generated",
+        "inputHex": "ffff",
+        "base45": "FGW"
+      },
+      {
+        "name": "edge-5",
+        "source": "generated",
+        "inputHex": "ffffff",
+        "base45": "FGWU5"
+      },
+      {
+        "name": "edge-6",
+        "source": "generated",
+        "inputHex": "000000",
+        "base45": "00000"
+      },
+      {
+        "name": "sha512-prefix-1",
+        "source": "generated",
+        "inputHex": "73",
+        "base45": "P2"
+      },
+      {
+        "name": "sha512-prefix-9",
+        "source": "generated",
+        "inputHex": "1462d0a5ec3d4acab2",
+        "base45": "/P2/GQ.%TLK9/3"
+      },
+      {
+        "name": "sha512-prefix-17",
+        "source": "generated",
+        "inputHex": "f16c868468f19558916c9c5c9529a114df",
+        "base45": "JNUB0H0CDR*IDHINYJP%IGGK/4"
+      },
+      {
+        "name": "sha512-prefix-25",
+        "source": "generated",
+        "inputHex": "9848ac520f1ef0b16499a923ad582d8081494bfa70303f9e74",
+        "base45": "EBJEZL0-1CJUDWC9HL6-L%X5MFGAR9A8E-18Q2"
+      },
+      {
+        "name": "sha512-prefix-33",
+        "source": "generated",
+        "inputHex": "147dd95ff541c62320ddee49933c45a7572b5de5b595c1470bfdbec27ba49b4de5",
+        "base45": "PQ2RLRA0V82P/64Q5URRIB 8+0B7*B0/MOJO9N195OHSFMSJ45"
+      }
+    ],
+    "base45Invalid": [
+      {
+        "name": "length-mod-3-is-1",
+        "text": "A"
+      },
+      {
+        "name": "length-mod-3-is-1-long",
+        "text": "BB8A"
+      },
+      {
+        "name": "lowercase-not-in-alphabet",
+        "text": "bb8"
+      },
+      {
+        "name": "character-outside-alphabet",
+        "text": "BB#"
+      },
+      {
+        "name": "non-ascii-character",
+        "text": "BBÉ"
+      },
+      {
+        "name": "triple-overflow-65536",
+        "text": "GGW"
+      },
+      {
+        "name": "triple-overflow-max",
+        "text": ":::"
+      },
+      {
+        "name": "pair-overflow-256",
+        "text": "V5"
+      },
+      {
+        "name": "pair-overflow-max",
+        "text": "::"
+      }
+    ],
+    "jcs": [
+      {
+        "name": "rfc8785-utf16-key-order",
+        "inputJson": "{\"\\u20ac\":\"Euro Sign\",\"\\r\":\"Carriage Return\",\"\\ufb33\":\"Hebrew Letter Dalet With Dagesh\",\"1\":\"One\",\"\\ud83d\\ude00\":\"Emoji: Grinning Face\",\"\\u0080\":\"Control\",\"\\u00f6\":\"Latin Small Letter O With Diaeresis\"}",
+        "canonical": "{\"\\r\":\"Carriage Return\",\"1\":\"One\",\"\":\"Control\",\"ö\":\"Latin Small Letter O With Diaeresis\",\"€\":\"Euro Sign\",\"😀\":\"Emoji: Grinning Face\",\"דּ\":\"Hebrew Letter Dalet With Dagesh\"}",
+        "canonicalHex": "7b225c72223a2243617272696167652052657475726e222c2231223a224f6e65222c22c280223a22436f6e74726f6c222c22c3b6223a224c6174696e20536d616c6c204c6574746572204f205769746820446961657265736973222c22e282ac223a224575726f205369676e222c22f09f9880223a22456d6f6a693a204772696e6e696e672046616365222c22efacb3223a22486562726577204c65747465722044616c6574205769746820446167657368227d"
+      },
+      {
+        "name": "rfc8785-string-escapes",
+        "inputJson": "{\"string\":\"\\u20ac$\\u000F\\u000aA'\\u0042\\u0022\\u005c\\\\\\\"\\/\"}",
+        "canonical": "{\"string\":\"€$\\u000f\\nA'B\\\"\\\\\\\\\\\"/\"}",
+        "canonicalHex": "7b22737472696e67223a22e282ac245c75303030665c6e4127425c225c5c5c5c5c222f227d"
+      },
+      {
+        "name": "literals-and-nesting",
+        "inputJson": "{ \"b\": [1, -2, true, false, null, \"x\"], \"a\": { \"z\": 0, \"y\": \"\\u2028\\u2029\" } }",
+        "canonical": "{\"a\":{\"y\":\"  \",\"z\":0},\"b\":[1,-2,true,false,null,\"x\"]}",
+        "canonicalHex": "7b2261223a7b2279223a22e280a8e280a9222c227a223a307d2c2262223a5b312c2d322c747275652c66616c73652c6e756c6c2c2278225d7d"
+      },
+      {
+        "name": "safe-integer-bounds",
+        "inputJson": "[9007199254740991, -9007199254740991, 0, -1]",
+        "canonical": "[9007199254740991,-9007199254740991,0,-1]",
+        "canonicalHex": "5b393030373139393235343734303939312c2d393030373139393235343734303939312c302c2d315d"
+      },
+      {
+        "name": "empty-containers-and-empty-key",
+        "inputJson": "{\"a\": {}, \"\": [], \"b\": [[], {}]}",
+        "canonical": "{\"\":[],\"a\":{},\"b\":[[],{}]}",
+        "canonicalHex": "7b22223a5b5d2c2261223a7b7d2c2262223a5b5b5d2c7b7d5d7d"
+      },
+      {
+        "name": "all-c0-controls-and-del",
+        "inputJson": "[\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000a\\u000b\\u000c\\u000d\\u000e\\u000f\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001a\\u001b\\u001c\\u001d\\u001e\\u001f\\u007f\"]",
+        "canonical": "[\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000b\\f\\r\\u000e\\u000f\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001a\\u001b\\u001c\\u001d\\u001e\\u001f\"]",
+        "canonicalHex": "5b225c75303030305c75303030315c75303030325c75303030335c75303030345c75303030355c75303030365c75303030375c625c745c6e5c75303030625c665c725c75303030655c75303030665c75303031305c75303031315c75303031325c75303031335c75303031345c75303031355c75303031365c75303031375c75303031385c75303031395c75303031615c75303031625c75303031635c75303031645c75303031655c75303031667f225d"
+      },
+      {
+        "name": "astral-and-private-use-keys",
+        "inputJson": "{\"\\uffff\":1,\"\\ue000\":2,\"\\ud800\\udc00\":3,\"\\udbff\\udfff\":4,\"~\":5}",
+        "canonical": "{\"~\":5,\"𐀀\":3,\"􏿿\":4,\"\":2,\"￿\":1}",
+        "canonicalHex": "7b227e223a352c22f0908080223a332c22f48fbfbf223a342c22ee8080223a322c22efbfbf223a317d"
+      },
+      {
+        "name": "proto-is-an-ordinary-key",
+        "inputJson": "{\"__proto__\":{\"polluted\":true},\"constructor\":1}",
+        "canonical": "{\"__proto__\":{\"polluted\":true},\"constructor\":1}",
+        "canonicalHex": "7b225f5f70726f746f5f5f223a7b22706f6c6c75746564223a747275657d2c22636f6e7374727563746f72223a317d"
+      }
+    ],
+    "jcsInvalid": [
+      {
+        "name": "duplicate-key",
+        "inputJson": "{\"a\":1,\"a\":2}",
+        "expectedCode": "DUPLICATE_KEY",
+        "maxDepth": 8
+      },
+      {
+        "name": "duplicate-key-via-escape",
+        "inputJson": "{\"a\":1,\"\\u0061\":2}",
+        "expectedCode": "DUPLICATE_KEY",
+        "maxDepth": 8
+      },
+      {
+        "name": "duplicate-proto-key",
+        "inputJson": "{\"__proto__\":1,\"__proto__\":2}",
+        "expectedCode": "DUPLICATE_KEY",
+        "maxDepth": 8
+      },
+      {
+        "name": "fraction",
+        "inputJson": "{\"a\":1.5}",
+        "expectedCode": "UNSUPPORTED_NUMBER",
+        "maxDepth": 8
+      },
+      {
+        "name": "integral-fraction",
+        "inputJson": "[1.0]",
+        "expectedCode": "UNSUPPORTED_NUMBER",
+        "maxDepth": 8
+      },
+      {
+        "name": "exponent",
+        "inputJson": "[1e3]",
+        "expectedCode": "UNSUPPORTED_NUMBER",
+        "maxDepth": 8
+      },
+      {
+        "name": "unsafe-integer",
+        "inputJson": "[9007199254740992]",
+        "expectedCode": "UNSUPPORTED_NUMBER",
+        "maxDepth": 8
+      },
+      {
+        "name": "negative-zero",
+        "inputJson": "[-0]",
+        "expectedCode": "UNSUPPORTED_NUMBER",
+        "maxDepth": 8
+      },
+      {
+        "name": "lone-high-surrogate",
+        "inputJson": "[\"\\ud800\"]",
+        "expectedCode": "INVALID_UNICODE",
+        "maxDepth": 8
+      },
+      {
+        "name": "lone-low-surrogate",
+        "inputJson": "[\"\\udc00x\"]",
+        "expectedCode": "INVALID_UNICODE",
+        "maxDepth": 8
+      },
+      {
+        "name": "reversed-surrogate-pair",
+        "inputJson": "[\"\\ude00\\ud83d\"]",
+        "expectedCode": "INVALID_UNICODE",
+        "maxDepth": 8
+      },
+      {
+        "name": "lone-surrogate-key",
+        "inputJson": "{\"\\udfff\":1}",
+        "expectedCode": "INVALID_UNICODE",
+        "maxDepth": 8
+      },
+      {
+        "name": "nan-literal",
+        "inputJson": "[NaN]",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "trailing-comma",
+        "inputJson": "[1,]",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "leading-zero",
+        "inputJson": "[01]",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "single-quotes",
+        "inputJson": "['a']",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "raw-control-character",
+        "inputJson": "[\"a\tb\"]",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "trailing-garbage",
+        "inputJson": "{} {}",
+        "expectedCode": "INVALID_JSON",
+        "maxDepth": 8
+      },
+      {
+        "name": "depth-9",
+        "inputJson": "[[[[[[[[[]]]]]]]]]",
+        "expectedCode": "DEPTH_EXCEEDED",
+        "maxDepth": 8
+      }
+    ],
+    "utf8Invalid": [
+      {
+        "name": "overlong-solidus",
+        "inputHex": "22c0af22",
+        "expectedCode": "INVALID_UNICODE"
+      },
+      {
+        "name": "encoded-surrogate",
+        "inputHex": "22eda08022",
+        "expectedCode": "INVALID_UNICODE"
+      },
+      {
+        "name": "truncated-sequence",
+        "inputHex": "22e28222",
+        "expectedCode": "INVALID_UNICODE"
+      },
+      {
+        "name": "above-u10ffff",
+        "inputHex": "22f490808022",
+        "expectedCode": "INVALID_UNICODE"
+      },
+      {
+        "name": "stray-continuation",
+        "inputHex": "228022",
+        "expectedCode": "INVALID_UNICODE"
+      }
+    ],
+    "envelopes": [
+      {
+        "name": "public-address",
+        "type": "public-address",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7$ C4VC507Y57JA7IL6/CCUX6$96COCH-CKB7:966UC-CC7VCIE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "envelopeBytes": 350,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":null,\"originHint\":\"offramp.example\",\"payload\":{\"address\":\"0xe4c2e6a423136046de066bd7b69e0751f23ce432\"},\"payloadSha256\":\"5f6cfe6f01297231b39c161556ec9270b1268fa0f2f8875d126fd3a3ce2ce63d\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"eedc7d8b9439a35a10c0f29b17d8a1df\",\"type\":\"public-address\",\"v\":1}",
+        "payloadCanonical": "{\"address\":\"0xe4c2e6a423136046de066bd7b69e0751f23ce432\"}",
+        "payloadSha256": "5f6cfe6f01297231b39c161556ec9270b1268fa0f2f8875d126fd3a3ce2ce63d",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "payment-request",
+        "type": "payment-request",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646FA7246+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFBEC34EG/DWE4NE4QW6646646646646646646646646IE4QF4ZQE7$CWE4*F4IEC/EDFZC3Q5ZKEOPCM9E1$CUUEWF7X56H-CRG66:6COCI*6.A6UW6$57 47KPCY C646:96UZC%57:DCJB7VW6J*60EC9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7HM6Z47$96SG6846N-CBL6GPC.CCIOC 57% CDM6D56RW6IM6XW6L*60:6YJC7VC2ECFA7.CC0:6L-CN-CE567UC//6HOC:CCIE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4SE4B560DCMB7YJCVW6IOCUZCD%63076VCZJC2:6307TF6YZC$363Q5RWEI9EWE4-F4NECF$DG/DOX54$C%$E QEIE42G4WE4OB6",
+        "envelopeBytes": 394,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000900,\"originHint\":null,\"payload\":{\"amount\":\"1500000000000000000\",\"asset\":\"native\",\"recipient\":\"0xf22a78c06c1b548e87ceeb0017e18faa9a556dab\"},\"payloadSha256\":\"3e86102b02f832caa2c68def3a0d513f576f72bedfad90a272f6f80ed970c5a4\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"60ba59dbe55c6e1617bdebf747b26e50\",\"type\":\"payment-request\",\"v\":1}",
+        "payloadCanonical": "{\"amount\":\"1500000000000000000\",\"asset\":\"native\",\"recipient\":\"0xf22a78c06c1b548e87ceeb0017e18faa9a556dab\"}",
+        "payloadSha256": "3e86102b02f832caa2c68def3a0d513f576f72bedfad90a272f6f80ed970c5a4",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "trade-invite",
+        "type": "trade-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7 57UZCJ.CUX6HL6KA7N.C:R6CL60B6I%6:DCWJC$57YICFA7IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "envelopeBytes": 536,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000600,\"originHint\":\"offramp.example\",\"payload\":{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"},\"payloadSha256\":\"162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"8de1fa5a3895fe4a331e66aabc8eb890\",\"type\":\"trade-invite\",\"v\":1}",
+        "payloadCanonical": "{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"}",
+        "payloadSha256": "162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "release-fingerprint",
+        "type": "release-fingerprint",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DIH70%EHUDSF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFNPCCEC1/D7UDWF77WE QE1/DUUE3Q5B$D5/DN.C QEMOA.CCWW6WE4QE4507C56E%62R6J.CSICAL6F-CNA7COC7UCIOC9L6IPCGL6:/6UX6G-CYX6.A6:TC+CCB46H*6LPC207M.C0R6I-C//61UC9F63Q5ZKETVDHEC9 CTTCWF7G.EZ$5LF6$Q6XKEZ$5IE4:F44$C%$E:.DFZC8G74$F-F4NEC*VD2ECMOA.CCWW6WE4SF4:DCPF6 ZCJB7*96U47YICXICJ%6Z57 57TZCL*6CL6OF64:6K%6$57D56K%6L-CF-CG%6NB7$96407LB76UCWJCGM63S61A73Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7L*6B461A6+Q6+CCHOC$57  C$ CSICTF6CL6Z C$ZC0UC4R6IE40G4%FFFZCWF7ZKETVDHECQZCR.C3/D5$CV9EZEDUUE3Q52.E2G7Z2",
+        "envelopeBytes": 421,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":null,\"createdAt\":1800000000,\"expiresAt\":null,\"originHint\":null,\"payload\":{\"channel\":\"testnet\",\"manifestSha256\":\"47d0c6247fab231f098c0d9c630cc37715af15e1bd1a0056bcf7afd45f370d32\",\"releaseId\":\"v0.12.4-rc.1\",\"sequence\":7},\"payloadSha256\":\"caa22e79a1281b8b7678c8de06f332176688e0d68f6f0649e107c9cd8bc3d4e9\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"6f051940a0c58eedeeb22633ece8d249\",\"type\":\"release-fingerprint\",\"v\":1}",
+        "payloadCanonical": "{\"channel\":\"testnet\",\"manifestSha256\":\"47d0c6247fab231f098c0d9c630cc37715af15e1bd1a0056bcf7afd45f370d32\",\"releaseId\":\"v0.12.4-rc.1\",\"sequence\":7}",
+        "payloadSha256": "caa22e79a1281b8b7678c8de06f332176688e0d68f6f0649e107c9cd8bc3d4e9",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "recovery-fingerprint",
+        "type": "recovery-fingerprint",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DIH70%EHUDSF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPF9KC7WERT93/DAWEWE43R6OF65L6VF404EB$DUUEWF7C8E78EX3E .CBEC78EUJCQPC4%E006N963Q5OQE.CCWW6WE4NE4UIC:R6/96:DCNF6207YX6DL6DOC7VCD%6SG6XW6307L-C6071R6Y57HPCLA7L-CA56//6 47G-C4S6VZCEM6K-C4DCQF6$364$F-F4NEC*VD2ECMOA.CCWW6WE4SF4+Q62071ECQF6:TCVW6L-C2UC ZCK.CVJC.96TF64UC 47207G*6+964VCJA7-CCNB7B46UW6H-C3VCYX6X571DCN-CRW6F473Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7-96TG6.96C%6X C.A6:96W474DCJB7YX6VG6N.CI-CHOC3ECIE40G4%FFFZCWF7ZKEUPCO/EALECX5ZED93D1LE*KEG/DIE42G4WE4OB6",
+        "envelopeBytes": 406,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":null,\"createdAt\":1800000000,\"expiresAt\":null,\"originHint\":null,\"payload\":{\"byteLength\":48213,\"format\":\"p2p-offramp-backup/v1\",\"sha256\":\"1b44a16aa207a5e34c1df612b577bf67e468bcb96f60a7087f14fe23bf5a9230\"},\"payloadSha256\":\"c407aac23d155f6d4e7fbbb1526d6877a6a13dc94a19e0554f2db5e8aa6f8518\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"142c1560ea1b1783a99a5e2efef3c5ae\",\"type\":\"recovery-fingerprint\",\"v\":1}",
+        "payloadCanonical": "{\"byteLength\":48213,\"format\":\"p2p-offramp-backup/v1\",\"sha256\":\"1b44a16aa207a5e34c1df612b577bf67e468bcb96f60a7087f14fe23bf5a9230\"}",
+        "payloadSha256": "c407aac23d155f6d4e7fbbb1526d6877a6a13dc94a19e0554f2db5e8aa6f8518",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "public-address-solana",
+        "type": "public-address",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF7VQEPVD..DNG7P191-9P.E0$C0B8HUA:OC0T9DY9HEE5JC2B6SEFSUCQ19N.DT.D$JCL*87KFVPD3CB3Q5XPCX C7WEFUCUUE2G7T47646646646246UF47AF*ED6$CGC8WE4H/D VD3Q504ESEDZED.69G/DWE4+F4O.CVKEQ$D.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7ZY8QS9QKD+S9+JCZKFQG87DA2S65EE5QEUR6LPCSG8TOC-S9ZVE.IBL+85576AFRY99G43Q5E9EYFFS3EXUC 8DSF6/$6WF7SG6$47M-CWF6J*6%ZCB56%ZC3R6DM6:/6707746RIC1:61UCVW6QW6SG6TW6XW6WJC707:R6SW60EC/A6H*6E562S62UC-CCIE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4TE40S6SW6$96//6K%6 ZCUZCCOC%47.A6607F46WW61R6RW6TTC3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "envelopeBytes": 391,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY\",\"createdAt\":1800000000,\"expiresAt\":null,\"originHint\":\"offramp.example\",\"payload\":{\"address\":\"EeL7jsLEbkzNB2Qj4dq9sU4ScfB4cALFtTZWFe8ExoMF\"},\"payloadSha256\":\"2b88f7296de90be9483a717f01b173d355502b5357bc7f4a52ab1c6b0e4dd4a1\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"74b52107068e7e1c0891b7e09564651d\",\"type\":\"public-address\",\"v\":1}",
+        "payloadCanonical": "{\"address\":\"EeL7jsLEbkzNB2Qj4dq9sU4ScfB4cALFtTZWFe8ExoMF\"}",
+        "payloadSha256": "2b88f7296de90be9483a717f01b173d355502b5357bc7f4a52ab1c6b0e4dd4a1",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "payment-request-erc20",
+        "type": "payment-request",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646FA7246+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFBEC34EG/DWE4NE4.967:6NF6%47QF61:6/961A6UW6QF6XW6F46Y47646Z47 47FA76:6TW6TF6OA7X47I%6WW6+Q6WW6+Q6IL60R63:6X476467:6+96*96LA7IL6IA7CW63Q5HECLQEUUEWF7X56TF6WZC0DCGPC5VCOB7A46$57GL6XW6UG6JB7G*6I*6D%6XIC946746NF6C46IE4/F4Z C$EDQEDG/DWE4ME4.9FPF62DCZ57C46DOCVIC3R6$ZC407$ CQIC7466070A6J.C4DC0DCWW62VCCIC4$F-F4NEC*VD2ECMOA.CCWW6WE4TF4GL6OF6ZX62UC ZCZW6.96UIC*96TF67UCWJCJOCYICZ CFA72R6WF6HPC.A6/Q65UCYZCTICQF6TIC0S60EC4DCK-CVZC$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF76VC5:64R69L6:96DL6H%64ECXJC:A6% CUICOA7XJCGPCU47IE40G4%FFFZCWF7E9EZFF1$C-UEZKEKFE6$CUUE3Q52.E2G7Z2",
+        "envelopeBytes": 489,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000900,\"originHint\":null,\"payload\":{\"amount\":\"115792089237316195423570985008687907853269984665640564039457584007913129639935\",\"asset\":\"0x26e3a5cadd9f048e37572d9a6a6c61b703012006\",\"recipient\":\"0xf22a78c06c1b548e87ceeb0017e18faa9a556dab\"},\"payloadSha256\":\"d37215fd4e75915b41226d9bcc7b8ec904729cb1b43d7e5b323b34baba9f5e20\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"de774930173465afbd1defb499bdca81\",\"type\":\"payment-request\",\"v\":1}",
+        "payloadCanonical": "{\"amount\":\"115792089237316195423570985008687907853269984665640564039457584007913129639935\",\"asset\":\"0x26e3a5cadd9f048e37572d9a6a6c61b703012006\",\"recipient\":\"0xf22a78c06c1b548e87ceeb0017e18faa9a556dab\"}",
+        "payloadSha256": "d37215fd4e75915b41226d9bcc7b8ec904729cb1b43d7e5b323b34baba9f5e20",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "recovery-fingerprint-references",
+        "type": "recovery-fingerprint",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DIH70%EHUDSF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPF9KC7WERT93/DAWEWE4+96$960:63Q5X.C/KEIECWE4-F4.G6LX5O.CVKEQ$D%:5O.CXVD1/DOX5Z C44E5$CGEFZKEN.CZKE:.D6$C006N963Q5OQE.CCWW6WE4UE4KPC% CY471R6-Q6IA7TG60DCHA7.A6TW65VCG%6/CC2VCTICF46AL6F56KA7AL6 ZCEL6$ZC3DC7:6A56L*6WJC+CCSG6FZC4$F-F4NEC*VD2ECMOA.CCWW6WE4QF4JB7X47:DCEOCL*6KOC0DC/CCAL6CL6%47F-C0EC%ZCB464VCU47C%6AL64S6$96$47FL61EC3073ECZX6UF6E56FM6+CCQQ63Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7OA7N.CG-CZZCNF6G*6:R67:6BL6TW6L.CVF6QF6GOCKOC846IE40G4%FFFZCWF7ZKEUPCO/EALECX5ZED93D1LE*KEG/DIE42G4WE4OB6",
+        "envelopeBytes": 428,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":null,\"createdAt\":1800000000,\"expiresAt\":null,\"originHint\":null,\"payload\":{\"byteLength\":131072,\"format\":\"p2p-offramp/offline-recovery-references/v1\",\"sha256\":\"8ceef854641932ca5921b53dd64a3dab309310f9531e735e8a8790a6fbca02be\"},\"payloadSha256\":\"a9a84aac26fc8a5a3313389f0abe905dc8160314f108836ac7bae5f270e3ca04\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"99fef1e6206a4a793253fc2823c4c802\",\"type\":\"recovery-fingerprint\",\"v\":1}",
+        "payloadCanonical": "{\"byteLength\":131072,\"format\":\"p2p-offramp/offline-recovery-references/v1\",\"sha256\":\"8ceef854641932ca5921b53dd64a3dab309310f9531e735e8a8790a6fbca02be\"}",
+        "payloadSha256": "a9a84aac26fc8a5a3313389f0abe905dc8160314f108836ac7bae5f270e3ca04",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      },
+      {
+        "name": "trade-invite-signed-test-profile",
+        "type": "trade-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF70B6DL6 47L%6-CCM.CYZCFM63UC507XIC-CCHM62DC2UCWF6IE4:F4SED..DNWEZKEWE4MPFV9EX3EXEDFZCWF77WE QEEX5B$D9OCOQE.CCWW6IE4-F4Z$EXVD*OCC$CWE4UE4$47507JOCE56F%6RW6407Y474R6FL61:63071R65UC  CLOCF56KPC1B6 ZCN-C0DCG*6HOC//6SF6WZCJ*61ECFOC:96/NC3Q5K/E0WDFZCWF7FOCUJC ZC0B6YW6$57+CC6VCZJCQICQICNB7C%6C56-CCX47C561R6RIC0S6EM6A56707.CCO.CUF6TZC:TCFA7N-C 47LA79G43Q5RWEI9EWE40G4VKE6VCFX5I/D-EDFZC3Q52.E2G7Z2",
+        "envelopeBytes": 733,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000600,\"originHint\":\"offramp.example\",\"payload\":{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"},\"payloadSha256\":\"162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"1e348769a1fde53cd57db7a13ea7d429\",\"signature\":{\"profile\":\"test-hmac-sha256\",\"publicKey\":\"8887dc70e63517c854936737b46d7edc90fce1fe7f8a56ac57025e36dacc317c\",\"value\":\"c3bae71e588ea0debfb0b09e600ca1840c46b14b3b0a7fa2ff27e0d190f88796\"},\"type\":\"trade-invite\",\"v\":1}",
+        "payloadCanonical": "{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"}",
+        "payloadSha256": "162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ],
+          "verifierProfile": "test-hmac-sha256"
+        },
+        "authenticated": true,
+        "signingDigestHex": "04d7c6fc51035515d2549a391505d2b7f0e99bab1d0f355769c3500f0b8d36de"
+      },
+      {
+        "name": "trade-invite-signed-no-verifier",
+        "type": "trade-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF70B6DL6 47L%6-CCM.CYZCFM63UC507XIC-CCHM62DC2UCWF6IE4:F4SED..DNWEZKEWE4MPFV9EX3EXEDFZCWF77WE QEEX5B$D9OCOQE.CCWW6IE4-F4Z$EXVD*OCC$CWE4UE4$47507JOCE56F%6RW6407Y474R6FL61:63071R65UC  CLOCF56KPC1B6 ZCN-C0DCG*6HOC//6SF6WZCJ*61ECFOC:96/NC3Q5K/E0WDFZCWF7FOCUJC ZC0B6YW6$57+CC6VCZJCQICQICNB7C%6C56-CCX47C561R6RIC0S6EM6A56707.CCO.CUF6TZC:TCFA7N-C 47LA79G43Q5RWEI9EWE40G4VKE6VCFX5I/D-EDFZC3Q52.E2G7Z2",
+        "envelopeBytes": 733,
+        "withinGenerationTarget": true,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000600,\"originHint\":\"offramp.example\",\"payload\":{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"},\"payloadSha256\":\"162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"1e348769a1fde53cd57db7a13ea7d429\",\"signature\":{\"profile\":\"test-hmac-sha256\",\"publicKey\":\"8887dc70e63517c854936737b46d7edc90fce1fe7f8a56ac57025e36dacc317c\",\"value\":\"c3bae71e588ea0debfb0b09e600ca1840c46b14b3b0a7fa2ff27e0d190f88796\"},\"type\":\"trade-invite\",\"v\":1}",
+        "payloadCanonical": "{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"}",
+        "payloadSha256": "162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false,
+        "signingDigestHex": "04d7c6fc51035515d2549a391505d2b7f0e99bab1d0f355769c3500f0b8d36de"
+      },
+      {
+        "name": "largest-permitted-envelope-2048",
+        "type": "trade-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7:DC.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECWE4PE46466:6AH72:6F%6TICCOCRW6V47  C+CCZ CZ47IM63UCZZC.962UC/CC.Q64DC 472DCGM6VJCVX63EC+CC7VCNB7TZC2DCTF64DCG46C8E78EX3E .CBECK8EH.E8G74UCZW6WF67:6MB71UCKA7TW62:6IM6UF6Z47%47EM6$966VC-CCIL6JPCU470DC4UC0R6B56HPCF%6VZC0S62:6407H%6N963Q57WE/KE$PEHECI7DWF7.CCX57JA7XW6UX6VX66464VC:96%57J*6WF6LPC-Q6EOCBL6%57%574UCMA7HPCZ CN-COB7L.C 47I%64DCW47SW6L%6SIC9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7/96QF6OF6VJC9L61B6K%6I%6GL6OB7407ZX6CL6BL6.A6K.CWZCJ%6YJC0R61:6B46XX6M.CKOC:961S6F46COCVF63R6QW6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4VF4SICYZCEOC  C/96:/6M-CE46.Q61A6E56WW6.Q6C56JPCQQ63Q5PQEI3DIEC6%EFZCVH7-F40LER.CTVDWE4:F42FDQZCV9ET3EFZC3Q5Y9E-JCOED-N95EFWF7+96BL6.CC4DC:CC0UC-A6/96G-CC56LA7G*6KA7$ZCC%6746VW66075UC:Q65VCL%66VCG*6/TC7VCDM6A46VX6YW69463VCIE42G4AEC%$EWE4RE4CL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6946U47YW6LB7/TC9L6UW6*96MB7HOCCL64R6:R6946K%66:6:CCEM6M.CIL6E%6UX60:6K-CJOCK*6E56TG6:TCM-CSF6IA77VC207846N-CFL6A56UZCWF6E56LOCUG6XICZ C6UC.96V47/TC-Q6IA7607.962DCUZCZ CZX6ZIC+Q6WF6SW6J%6% CIM6$364$F0G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "envelopeBytes": 2048,
+        "withinGenerationTarget": false,
+        "canonical": "{\"chain\":\"evm:11155111\",\"createdAt\":1800000000,\"expiresAt\":1800000600,\"originHint\":\"aa.example\",\"payload\":{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"},\"payloadSha256\":\"162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850\",\"protocol\":\"p2p-offramp-qr\",\"requestId\":\"fb2e5c2ed1671f70842190e56420ccd4\",\"signature\":{\"profile\":\"size-probe\",\"publicKey\":\"1332a2a9a4d21a16f10c966a95e86001557ed744dd69de6ad0df3a045b5803db\",\"value\":\"533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0381589cd03054129dc533494a036878a43bfd39625a72f5c76e0e2cd1f72593df7a02f8360ae1290ec92db7ecd81582d041937e15a7e1ec5fb940295267ef3f0\"},\"type\":\"trade-invite\",\"v\":1}",
+        "payloadCanonical": "{\"ad\":\"30078:f7463b3c05182eda0ec863fd5e615d4a342a987a73dbb5baea0df9ee0a726a90:p2p-offramp:v1:7d65929799dd39553743f2786893b10dea139cd81a5d6450bcb63e24b747c651\",\"termsHash\":\"a28a94575a5b00dc178f6d29cf41c2328f8fd697cbecf89ffc8766a9835269b2\"}",
+        "payloadSha256": "162321bb301f6866379f7c5f33321bfbe367be4573055dfdc8174c09c0284850",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        },
+        "authenticated": false
+      }
+    ],
+    "rejections": [
+      {
+        "name": "url-instead-of-code",
+        "text": "https://offramp.example/pay?to=0x00",
+        "expectedCode": "URL_REFUSED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "erc681-uri",
+        "text": "ethereum:0xf22a78c06c1b548e87ceeb0017e18faa9a556dab@11155111?value=1",
+        "expectedCode": "URL_REFUSED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "wallet-session-uri",
+        "text": "wc:8240ca93c13185db92c4a51e580b52bea649e95f3107140aeb862529f25a843f@2?relay-protocol=irn&symKey=d1f96f749c8b46e522769b6860a98cf8145579907ebfa1daf929210107b11fe3",
+        "expectedCode": "WALLET_SESSION_REFUSED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "bare-mnemonic",
+        "text": "abandon ability able about above absent absorb abstract absurd abuse access accident",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-prefix-version",
+        "text": "P2POFFRAMP:2:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "VERSION_UNSUPPORTED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "lowercase-prefix-is-scheme-like",
+        "text": "p2pofframp:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "URL_REFUSED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "plain-text",
+        "text": "HELLO WORLD",
+        "expectedCode": "FORMAT_UNSUPPORTED",
+        "layer": "text",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "decoded-2049-bytes-refused-before-parse",
+        "text": "P2POFFRAMP:1:FGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWFGWU5",
+        "expectedCode": "QR_TOO_LARGE",
+        "layer": "size",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "envelope-2050-bytes",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7:DC.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECWE4PE46466:6AH72:6F%6TICCOCRW6V47  C+CCZ CZ47IM63UCZZC.962UC/CC.Q64DC 472DCGM6VJCVX63EC+CC7VCNB7TZC2DCTF64DCG46C8E78EX3E .CBECK8EH.E8G74UCZW6WF67:6MB71UCKA7TW62:6IM6UF6Z47%47EM6$966VC-CCIL6JPCU470DC4UC0R6B56HPCF%6VZC0S62:6407H%6N963Q57WE/KE$PEHECI7DWF7.CCX57JA7XW6UX6VX66464VC:96%57J*6WF6LPC-Q6EOCBL6%57%574UCMA7HPCZ CN-COB7L.C 47I%64DCW47SW6L%6SIC9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7/96QF6OF6VJC9L61B6K%6I%6GL6OB7407ZX6CL6BL6.A6K.CWZCJ%6YJC0R61:6B46XX6M.CKOC:961S6F46COCVF63R6QW6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4VE4UW6GM6FL6KA7EOCRF6QW6H-C4UC+96XIC746F-COB7IA7T/63Q5PQEI3DIEC6%EFZCVH7-F40LER.CTVDWE4:F42FDQZCV9ET3EFZC3Q5Y9E-JCOED-N95EFWF7+96BL6.CC4DC:CC0UC-A6/96G-CC56LA7G*6KA7$ZCC%6746VW66075UC:Q65VCL%66VCG*6/TC7VCDM6A46VX6YW69463VCIE42G4AEC%$EWE4UE4QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL60UCPF6VZC+96+96XIC2ECEL63R6QF6Y C:DCT47OF6.96O-CVJCJ.CA56WW60S6B46O-CWJCK*6G*6E564ECLB7%47Z CYZC-Q6$ZCWG6QF6DL6RF6MA7A46J%6ZX6WX64R6H%6FL6946.A6LB7Z47UG61:6V472S6VG6ZW6C46IA7COCH*64:6 57407BL6TTC4$F0G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCode": "QR_TOO_LARGE",
+        "layer": "size",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "truncated-one-character",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB",
+        "expectedCode": "INVALID_ENCODING",
+        "layer": "base45",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "damaged-overflow-triple",
+        "text": "P2POFFRAMP:1:MPF:::7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "INVALID_ENCODING",
+        "layer": "base45",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "damaged-character-outside-alphabet",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OBa",
+        "expectedCode": "INVALID_ENCODING",
+        "layer": "base45",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "truncated-three-characters",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4",
+        "expectedCode": "INVALID_JSON",
+        "layer": "json",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "invalid-utf8-encoded-surrogate",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7$1U99GB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "INVALID_UNICODE",
+        "layer": "utf8",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "invalid-utf8-overlong",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7$KO.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL69G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "INVALID_UNICODE",
+        "layer": "utf8",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "lone-surrogate-escape",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7:UB6UC646.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL69G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "INVALID_UNICODE",
+        "layer": "json",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "duplicate-envelope-key",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH DN963Q5NPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "INVALID_JSON",
+        "layer": "json",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "float-timestamp",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A6646646646646*$53Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "INVALID_JSON",
+        "layer": "json",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "non-canonical-whitespace",
+        "text": "P2POFFRAMP:1:/OF 24NPC7ECO-DUF7UF4W/E2G7%96VW6%96N96OP5 24XPCX C7WEFUCUUEUF70A6646646646646OP5 24B$CM9EZKEUPEUUEUF7H/D VDOP5 2404ESEDZED.69G/DWE4 24X3E .CBEC88EB$CBECP9EFZCOP5 24E9EYFFS3ETTCUF7/OFY24QF45VCZKEZQEWE4 24X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL6TD4$44OP5 24E9EYFFS3EXUC 8DSF6/$6UF7RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTCOP5 24V9E24EU3E*3EWE4 24C8E78EX3E .CBEC78EHFEIE4RC1/F44$C%$E QENC9WE4 24WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE4RC10G4%FFFZCUF7-F4Z$EXVD9OC2ECJVC6$C:OEOP5 242.EUF7:86Z2",
+        "expectedCode": "NON_CANONICAL",
+        "layer": "canonical",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "non-canonical-member-order",
+        "text": "P2POFFRAMP:1:MPFV9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5NPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "NON_CANONICAL",
+        "layer": "canonical",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "non-canonical-escape",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4LF4U ED4684678EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "NON_CANONICAL",
+        "layer": "canonical",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-envelope-version",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4AH6",
+        "expectedCode": "VERSION_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-protocol",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4+F4AWE5$CNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "PROTOCOL_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-type",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7LQE  C8X51ECEQD-7E3Q52.E2G7Z2",
+        "expectedCode": "TYPE_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-envelope-field",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD*F424EFZCWF7+8D VDA2E3Q504ESEDZED.69G/DWE4+F4O.CVKEQ$D.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL69G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "FIELD_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "unknown-payload-field",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646FA7246+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFBEC34EG/DWE4NE4QW6646646646646646646646646IE4QF4ZQE7$CWE4*F4IEC/EDFZC3Q5F$DP$DWE44G4IE4/F4Z C$EDQEDG/DWE4ME4.9FPF62DCZ57C46DOCVIC3R6$ZC407$ CQIC7466070A6J.C4DC0DCWW62VCCIC4$F-F4NEC*VD2ECMOA.CCWW6WE4PE4$ZCD%6846QICWG6W47TG6:DCTG6K%66VCI-C+CC3UC+96K-C4:6M-CSG6  CJ.C7UCA56UF6WG6L*6T47  CMA7C56UX6QQ63Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7LOC846B46IM6GL61R6ZZC/TCV47VW66UCFM6K*6C56HA73R6IE40G4%FFFZCWF7E9EZFF1$C-UEZKEKFE6$CUUE3Q52.E2G7Z2",
+        "expectedCode": "FIELD_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "trade-invite-carrying-terms",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DWE4-F4*KEKPC5X7IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCode": "FIELD_UNSUPPORTED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "invite-without-expiry",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCode": "INVALID_ENVELOPE",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "invite-lifetime-over-24h",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646Z47+Q6X96+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCode": "LIFETIME_EXCEEDED",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "chain-on-fingerprint",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFNPCCEC1/D7UDWF77WE QE1/DUUE3Q5B$D5/DN.C QEMOA.CCWW6WE4QE4507C56E%62R6J.CSICAL6F-CNA7COC7UCIOC9L6IPCGL6:/6UX6G-CYX6.A6:TC+CCB46H*6LPC207M.C0R6I-C//61UC9F63Q5ZKETVDHEC9 CTTCWF7G.EZ$5LF6$Q6XKEZ$5IE4:F44$C%$E:.DFZC8G74$F-F4NEC*VD2ECMOA.CCWW6WE4SF4:DCPF6 ZCJB7*96U47YICXICJ%6Z57 57TZCL*6CL6OF64:6K%6$57D56K%6L-CF-CG%6NB7$96407LB76UCWJCGM63S61A73Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7QICRF6:/62EC$57YICVJC$ZC7UC0R6I-CJ%6FM62:6TF6YJCIE40G4%FFFZCWF7ZKETVDHECQZCR.C3/D5$CV9EZEDUUE3Q52.E2G7Z2",
+        "expectedCode": "INVALID_ENVELOPE",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "mixed-case-address",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME499FER6:F6T%6.Q6AL6FL6A46W%6RX8I%6:G8G:6L%6RX83:6EA6QF6VM8/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "INVALID_PAYLOAD",
+        "layer": "schema",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-field-mnemonic",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F63Q5O$D0$C-3EOEDWE4/F4  C1EC7WETTC4$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-field-private-key",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E/EDIECB CC$CWE4/F4  C1EC7WETTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-field-auth-token",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F63Q5JECAWEFUA/PDO-DWF7ZKE2VCZPC  C9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-value-wallet-session-uri",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE43G4MOCV47+Q6GPCIA7DOCAL6Y473VCHA7GOC0DC0B6YW6B56SW6YJC1DC4R6%ZCZX6AL6D46-96A56Y CZ47SF6WF6H-CUX6X47IM6958.08: CNECMX50LEHWEUPCYUD*EDS-D-QEY DC$CBY71B6LA7M-C4R6KOCUICK*6SW6UF6L%6WICZ47A56NA7LPCU470R6XW6OA7D46Y CJ.C:A64ECHA7HA7$96$96307%96N.C+K64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-value-jwt",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7C$CDI94JCOPCY1ARH9C AHB93-9BH9.%50FFCLFP1B4ED:DDKR6%-DB*5SEDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL69G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-value-bearer-token",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7WH8GEC5$C7340R6:R64UC/A6RG6IPCA46F-C.CCF560ECM-CH-CWJCLA7H-C 571A6GOCDL6B46WG66VCM.CVJCRW6UICL*6YZCDL6N-C1A73Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-value-nsec",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4*F4LQEDOCGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFEGFE9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "secret-value-0x-private-key",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4.9F2DC5073073VCRG6ZZC4S6XJCVF62ECXZCJ-C3:6YZCJOC4:6OF66VCU472VCIM61DC0:6K-CVICUZCL%6LB7H-CRIC 57$364$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "SECRET_REFUSED",
+        "layer": "secret",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "url-payload-address",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4XF4MWEW9E0G7%:5O.CVKEQ$D.%5$9FQ$DTVDO:59G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "URL_REFUSED",
+        "layer": "url",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "url-origin-hint",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7A9DIWENPEJ/5X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "URL_REFUSED",
+        "layer": "url",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "chain-not-in-registry",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH DOA71A73Q5XPCX C7WEFUCUUE2G7T47646646646246UF47AF*ED6$CGC8WE4H/D VD3Q504ESEDZED.69G/DWE4+F4O.CVKEQ$D.%5$9FQ$DTVDIE4-F4NEC*VD2ECWE4MPF2ECJVC6$C:OEWF7X56XZCEOCZZC:CCQF6+96C%61R66VCC46H*65UCWICNB7D46RW6H-CFM6XZCBL69G43Q5E9EYFFS3EXUC 8DSF6/$6WF7ZX6I*6N.CL*6746WF60:6AL6TICLB7/96.96WW6Z CHA7//6RICTF6%57+CCH-CN-C 47XX6*96L*61UC/CCKPCTG6ZZCGM6IE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4UF4EL66:6707$ZCZJC1ECWG6SF6T47UF6WG6IOCO-C1DCO-C1-C3Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "CHAIN_UNSUPPORTED",
+        "layer": "chain",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "wrong-chain",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "CHAIN_MISMATCH",
+        "layer": "chain",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ],
+          "expectedChain": "evm:1"
+        }
+      },
+      {
+        "name": "hash-mismatch",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646FA7246+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFBEC34EG/DWE4NE4QW6646646646646646646646746IE4QF4ZQE7$CWE4*F4IEC/EDFZC3Q5ZKEOPCM9E1$CUUEWF7X56H-CRG66:6COCI*6.A6UW6$57 47KPCY C646:96UZC%57:DCJB7VW6J*60EC9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7HM6Z47$96SG6846N-CBL6GPC.CCIOC 57% CDM6D56RW6IM6XW6L*60:6YJC7VC2ECFA7.CC0:6L-CN-CE567UC//6HOC:CCIE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4SF4FA7NF6TW6I-C2:6K*6J*6E46SF6XX6W47IOCTZCLOCRF6F473Q5RWEI9EWE4-F4NECF$DG/DOX54$C%$E QEIE42G4WE4OB6",
+        "expectedCode": "HASH_MISMATCH",
+        "layer": "hash",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "expired-invite-within-safety-margin",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCode": "EXPIRED",
+        "layer": "clock",
+        "context": {
+          "now": 1800000540,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "created-in-the-future",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE40G4%FFFZCWF7Y9E-JCOED7X55VCZKEZQEIE42G4WE4OB6",
+        "expectedCode": "NOT_YET_VALID",
+        "layer": "clock",
+        "context": {
+          "now": 1799999879,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "signature-copied-to-public-address",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF45VCZKEZQEWE4ME4-9F1S6VG6G*6.Q6AL6FL6A46J*6TZCI%6XJC307L%6TZC3:61B6QF6KPC/Q69F64$F-F4NEC*VD2ECMOA.CCWW6WE4RE4L-CLPCZZCF-C*96MA7QF6.A6IL6DOCD%6VW6K*6LOCUF6B56*96K%6J.CF56WG6$473:6:TCTF6M.CDM6FM6VZCKPCF%6TTC3Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7WZCXW6 47N.CY57J.CEOCH-CYW68460:6L.CL*6JB7L*6OB7IE4:F4SED..DNWEZKEWE4MPFV9EX3EXEDFZCWF77WE QEEX5B$D9OCOQE.CCWW6IE4-F4Z$EXVD*OCC$CWE4UE4$47507JOCE56F%6RW6407Y474R6FL61:63071R65UC  CLOCF56KPC1B6 ZCN-C0DCG*6HOC//6SF6WZCJ*61ECFOC:96/NC3Q5K/E0WDFZCWF7FOCUJC ZC0B6YW6$57+CC6VCZJCQICQICNB7C%6C56-CCX47C561R6RIC0S6EM6A56707.CCO.CUF6TZC:TCFA7N-C 47LA79G43Q5RWEI9EWE4-F4Z$EXVD9OC2ECJVC6$C:OE3Q52.E2G7Z2",
+        "expectedCode": "SIGNATURE_UNSUPPORTED",
+        "layer": "signature",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "signature-copied-to-payment-request",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646FA7246+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPFBEC34EG/DWE4NE4QW6646646646646646646646646IE4QF4ZQE7$CWE4*F4IEC/EDFZC3Q5ZKEOPCM9E1$CUUEWF7X56H-CRG66:6COCI*6.A6UW6$57 47KPCY C646:96UZC%57:DCJB7VW6J*60EC9G43Q5E9EYFFS3EXUC 8DSF6/$6WF7HM6Z47$96SG6846N-CBL6GPC.CCIOC 57% CDM6D56RW6IM6XW6L*60:6YJC7VC2ECFA7.CC0:6L-CN-CE567UC//6HOC:CCIE4-F40LEHWEUPC7UDWF7C8E78EX3E .CBEC78EHFEIE4/F44$C%$E QENC9WE4SF4FA7NF6TW6I-C2:6K*6J*6E46SF6XX6W47IOCTZCLOCRF6F473Q5PQEI3DIEC6%EFZCVH7-F40LER.CTVDWE40G46$C-UE39D1ECPX5 8DSF6/$63Q5Y9E-JCOED-N95EFWF7$47 474VC//6ZZCEL6:96KOCUW6IA7J%6GL6UICJ*66074VCFA7L.CUZCN.C707X57WW61ECXW6846YX6FL62VCIPCAL6407IE42G4AEC%$EWE4SF4EM63EC:/6YZC$47X CD56Y CK.CB56F46ZZC646GPC0A6+Q6GOCH*6-96TICQIC2DCJ.CWG6H-C607D561A6F56$477:6/$64$F0G4%FFFZCWF7E9EZFF1$C-UEZKEKFE6$CUUE3Q52.E2G7Z2",
+        "expectedCode": "SIGNATURE_UNSUPPORTED",
+        "layer": "signature",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      },
+      {
+        "name": "signature-copied-to-other-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE4:F4SED..DNWEZKEWE4MPFV9EX3EXEDFZCWF77WE QEEX5B$D9OCOQE.CCWW6IE4-F4Z$EXVD*OCC$CWE4UE4$47507JOCE56F%6RW6407Y474R6FL61:63071R65UC  CLOCF56KPC1B6 ZCN-C0DCG*6HOC//6SF6WZCJ*61ECFOC:96/NC3Q5K/E0WDFZCWF7FOCUJC ZC0B6YW6$57+CC6VCZJCQICQICNB7C%6C56-CCX47C561R6RIC0S6EM6A56707.CCO.CUF6TZC:TCFA7N-C 47LA79G43Q5RWEI9EWE40G4VKE6VCFX5I/D-EDFZC3Q52.E2G7Z2",
+        "expectedCode": "SIGNATURE_INVALID",
+        "layer": "signature",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ],
+          "verifierProfile": "test-hmac-sha256"
+        }
+      },
+      {
+        "name": "signed-invite-expiry-extended",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646I%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF70B6DL6 47L%6-CCM.CYZCFM63UC507XIC-CCHM62DC2UCWF6IE4:F4SED..DNWEZKEWE4MPFV9EX3EXEDFZCWF77WE QEEX5B$D9OCOQE.CCWW6IE4-F4Z$EXVD*OCC$CWE4UE4$47507JOCE56F%6RW6407Y474R6FL61:63071R65UC  CLOCF56KPC1B6 ZCN-C0DCG*6HOC//6SF6WZCJ*61ECFOC:96/NC3Q5K/E0WDFZCWF7FOCUJC ZC0B6YW6$57+CC6VCZJCQICQICNB7C%6C56-CCX47C561R6RIC0S6EM6A56707.CCO.CUF6TZC:TCFA7N-C 47LA79G43Q5RWEI9EWE40G4VKE6VCFX5I/D-EDFZC3Q52.E2G7Z2",
+        "expectedCode": "SIGNATURE_INVALID",
+        "layer": "signature",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ],
+          "verifierProfile": "test-hmac-sha256"
+        }
+      }
+    ],
+    "replays": [
+      {
+        "name": "replayed-invite",
+        "text": "P2POFFRAMP:1:MPFNPC7ECO-DWF79$CH D%96.96RW6%96IE4SF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUE2G7T47646646C%6246+F4*KED3DH.DZEDUUEWF7X3E .CBEC88EB$CBECP9EFZC3Q5E9EYFFS3ETTCVH7QF4TTCWF79L6D46*47M-C1R6EM6FM6B460A6VG62VCE56KOCF%6M.CYX6D%6XX6:R6DL6RG6NA72071:63VCVICUJCX CD56O-C$ CA560:6G*6FA7KH7.G6LX5O.CVKEQ$DQH72A6507H%6HA7MA7OA75VCIL6VW6GL6/Q6H-C6:6K%6IA7RICD56X C+96LB76UC-A6XX6G%6QW6WJCWICHM6RF6XIC2R6IOCRW6IE40G45$CT$DY69OQEWE4QF4VF64DC0R63:60DCQICD56DOC6:6L-C0UCLB7J-C/A6QF6VF6N-CM.CL%6407YJCLPC%47O.CKOC4:6G*6NA7EL6TF6KB79F64$F-F4NEC*VD2ECMOA.CCWW6WE4NE4E%6BL6.A6TIC746L-CZ47F%67:6M-CHOCI-CCL6OF6ZJCYJCFL6307XZCXW69L6VW67VC4VCU472:6COCLB7846X47Y47$363Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7JPCWICW471ECE564ECQICI*6J-C3VCI*6.967VCZZCF46/A6IE40G4%FFFZCWF7KWE2ECQZCZEDS/E7WEIE42G4WE4OB6",
+        "expectedCodes": [
+          null,
+          "REPLAYED"
+        ],
+        "layer": "ledger",
+        "context": {
+          "now": 1800000005,
+          "chains": [
+            "evm:11155111",
+            "evm:1",
+            "solana:FGwNgv9emA7TqcPLJM8qEbH1gy9dNGxnNnTbhF8z2kYY"
+          ]
+        }
+      }
+    ]
+  }
+}
