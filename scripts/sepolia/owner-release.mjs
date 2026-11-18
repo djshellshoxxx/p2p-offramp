@@ -14,8 +14,18 @@
  *                                      canonical file, and any deployment without a committed DeploymentRecord that
  *                                      matches it, was recorded from clean sources and after finality (G25 §4.2: run
  *                                      record-deployment again once the block is finalized). Writes
- *                                      registry/testnet/sepolia.release.json and sepolia.release.sig.json and prints
- *                                      the assets, networks, endpoints and deployments that were signed: check them first.
+ *                                      registry/testnet/sepolia.release.json, sepolia.release.sig.json and the signed
+ *                                      deployment ledger sepolia.signed-deployments.json, and prints the assets, networks,
+ *                                      endpoints and deployments that were signed: check them first, then commit all three.
+ *
+ * Deployment continuity (D3, PROPOSED): a deployment id, once signed on this channel, names the same address, runtime
+ * keccak and artifactSha256 in every later release. `sign` refuses a registry that rebinds a signed id
+ * (DEPLOYMENT_ID_REBOUND) or drops one (DEPLOYMENT_ID_DROPPED), and a sequence that does not exceed the last signed one
+ * (SEQUENCE_NOT_INCREASING); the G11 parser already refuses one address under two ids (REGISTRY_INVALID). The
+ * ledger it checks against must describe the release currently committed beside it (SIGNED_DEPLOYMENTS_MISSING or
+ * SIGNED_DEPLOYMENTS_STALE otherwise). THIS IS A SIGNER-SIDE CHECK ONLY: manifests keep `predecessorDigest: null`, so no
+ * verifier can enforce it, and a stolen key (or a signer run without the ledger) could still rebind an id. Verifiers
+ * still accept only a Sepolia-only registry, and recovery packages already built keep their original pins.
  *
  * Format (identical to the G15 verifier, packages/security/src/release-manifest.ts): canonical JSON manifest, ES256
  * with IEEE-P1363 signature over "p2p-offramp/release/v1\n" + manifest bytes, keyId = sha256(canonical {crv,kty,x,y}).
@@ -32,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
 import { isSepoliaOnly, SEPOLIA_RELEASE_ASSETS, SEPOLIA_RELEASE_CHANNEL } from '../../apps/web/src/testnet/sepolia-network.ts';
-import { isMain } from './lib.mjs';
+import { isDeploymentId, isMain } from './lib.mjs';
 
 export const CHANNEL = SEPOLIA_RELEASE_CHANNEL;
 export const REGISTRY_ASSET = SEPOLIA_RELEASE_ASSETS.registry;
@@ -41,6 +51,12 @@ export const ABI_ASSET = SEPOLIA_RELEASE_ASSETS.abi;
 const CANONICAL_ABI = new URL('../../contracts/evm/abi/BasicEscrow.json', import.meta.url);
 /** packages/security/src/release-manifest.ts refuses a manifest valid for longer than 30 days. */
 export const MAX_RELEASE_DAYS = 30;
+export const RELEASE_MANIFEST_FILE = 'registry/testnet/sepolia.release.json';
+export const RELEASE_ENVELOPE_FILE = 'registry/testnet/sepolia.release.sig.json';
+/** Signer-side record of every deployment ever signed on this channel; read by `sign`, never by any verifier. */
+export const SIGNED_DEPLOYMENTS_FILE = 'registry/testnet/sepolia.signed-deployments.json';
+export const SIGNED_DEPLOYMENTS_FORMAT = 'p2p-offramp/testnet-signed-deployments/v1';
+const HEX64 = /^[0-9a-f]{64}$/;
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 export const canonical = value => value === null || typeof value !== 'object' ? JSON.stringify(value)
@@ -89,6 +105,72 @@ export function signManifest(privateJwk, manifest) {
   return { manifestBytes: bytes, envelope };
 }
 
+const exactKeys = (value, keys) => typeof value === 'object' && value !== null && !Array.isArray(value) &&
+  Object.keys(value).sort().join() === [...keys].sort().join();
+/** Strict parse of the signed deployment ledger; anything unexpected is SIGNED_DEPLOYMENTS_INVALID. */
+export function parseSignedDeployments(text) {
+  const invalid = () => { throw new Error('SIGNED_DEPLOYMENTS_INVALID'); };
+  let value;
+  try { value = JSON.parse(text); } catch { return invalid(); }
+  if (!exactKeys(value, ['format', 'channel', 'lastSequence', 'lastManifestSha256', 'deployments']) || value.format !== SIGNED_DEPLOYMENTS_FORMAT ||
+      value.channel !== CHANNEL || !Number.isSafeInteger(value.lastSequence) || value.lastSequence < 1 || !HEX64.test(value.lastManifestSha256 ?? '') ||
+      !Array.isArray(value.deployments)) return invalid();
+  const seen = new Set();
+  for (const entry of value.deployments) {
+    if (!exactKeys(entry, ['networkId', 'id', 'address', 'runtimeKeccak', 'artifactSha256', 'firstSequence']) || !isDeploymentId(entry.networkId) ||
+        !isDeploymentId(entry.id) || !/^0x[0-9a-f]{40}$/.test(entry.address ?? '') || !HEX64.test(entry.runtimeKeccak ?? '') || !HEX64.test(entry.artifactSha256 ?? '') ||
+        !Number.isSafeInteger(entry.firstSequence) || entry.firstSequence < 1 || entry.firstSequence > value.lastSequence || seen.has(`${entry.networkId}/${entry.id}`)) return invalid();
+    seen.add(`${entry.networkId}/${entry.id}`);
+  }
+  return value;
+}
+
+async function readOptional(path) {
+  try { return await readFile(path); } catch (error) { if (error?.code === 'ENOENT') return null; throw error; }
+}
+/**
+ * The signed deployment ledger under `root` (null before the first release). It must describe the release currently
+ * committed beside it: a committed manifest without a ledger is SIGNED_DEPLOYMENTS_MISSING, and a ledger written for
+ * another manifest is SIGNED_DEPLOYMENTS_STALE, so deleting or rolling back the ledger alone cannot reopen a signed id.
+ */
+export async function readSignedDeployments(root) {
+  const text = await readOptional(resolve(root, SIGNED_DEPLOYMENTS_FILE));
+  const ledger = text === null ? null : parseSignedDeployments(text.toString('utf8'));
+  const committed = await readOptional(resolve(root, RELEASE_MANIFEST_FILE));
+  if (committed !== null) {
+    if (ledger === null) throw new Error('SIGNED_DEPLOYMENTS_MISSING');
+    if (sha(committed) !== ledger.lastManifestSha256) throw new Error('SIGNED_DEPLOYMENTS_STALE');
+  }
+  return ledger;
+}
+
+const refuse = (code, deploymentId) => Object.assign(new Error(code), { deploymentId });
+/**
+ * D3 continuity rule over a parsed registry: every previously signed id must still be listed with the same address,
+ * runtime keccak and artifactSha256, and the sequence must increase. (A signed address cannot reappear under a new id:
+ * its signed id must stay listed, and G11 refuses one address under two ids.) Signer-side only (predecessorDigest is
+ * null): no verifier enforces this.
+ */
+export function checkSignedDeployments(ledger, registry, sequence) {
+  if (ledger === null) return;
+  if (sequence <= ledger.lastSequence) throw new Error('SEQUENCE_NOT_INCREASING');
+  for (const signed of ledger.deployments) {
+    const deployment = registry.networks.find(network => network.id === signed.networkId)?.deployments.find(item => item.id === signed.id);
+    if (!deployment) throw refuse('DEPLOYMENT_ID_DROPPED', signed.id);
+    if (deployment.address !== signed.address || deployment.runtime.keccak256 !== signed.runtimeKeccak || deployment.artifactSha256 !== signed.artifactSha256) throw refuse('DEPLOYMENT_ID_REBOUND', signed.id);
+  }
+}
+
+/** The ledger after signing `registry` as `sequence`: earlier entries unchanged, new ids appended with their first sequence. */
+export function nextSignedDeployments(ledger, registry, { sequence, manifestSha256 }) {
+  const deployments = [...(ledger?.deployments ?? [])];
+  for (const network of registry.networks) for (const deployment of network.deployments) {
+    if (!deployments.some(entry => entry.networkId === network.id && entry.id === deployment.id)) deployments.push({ networkId: network.id, id: deployment.id,
+      address: deployment.address, runtimeKeccak: deployment.runtime.keccak256, artifactSha256: deployment.artifactSha256, firstSequence: sequence });
+  }
+  return { format: SIGNED_DEPLOYMENTS_FORMAT, channel: CHANNEL, lastSequence: sequence, lastManifestSha256: manifestSha256, deployments };
+}
+
 /**
  * Builds and signs the manifest over the registry and ABI assets of `root` (the repository checkout). The registry must
  * be exactly Sepolia and the ABI byte-identical to the canonical committed ABI (D3: an ABI change needs per-deployment ABI
@@ -114,12 +196,24 @@ export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAY
         record.chainId !== network.chainIdentity || record.genesisIdentity !== network.genesisHash || record.sourceTreeClean !== true) throw new Error('DEPLOYMENT_RECORD_MISMATCH');
     if (record.finalizedAtRecording !== true) throw new Error('DEPLOYMENT_NOT_FINALIZED');
   }
+  // Signer-side continuity (D3): previously signed deployment ids keep their identity and stay listed.
+  const ledger = await readSignedDeployments(root);
+  checkSignedDeployments(ledger, parsed, sequence);
   const manifest = await buildManifest({ registry, abi, sequence, days, now, root, sourceCommit });
   const signed = signManifest(privateJwk, manifest);
-  const summary = { releaseId: parsed.releaseId, assets: manifest.assets, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
+  const previouslySigned = (networkId, id) => Boolean(ledger?.deployments.some(entry => entry.networkId === networkId && entry.id === id));
+  const summary = { releaseId: parsed.releaseId, sequence, assets: manifest.assets, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
     genesisHash: network.genesisHash, environment: network.environment, endpoints: network.endpoints.map(endpoint => endpoint.url),
-    deployments: network.deployments.map(deployment => ({ id: deployment.id, address: deployment.address, runtimeKeccak: deployment.runtime.keccak256 ?? null })) })) };
-  return { ...signed, summary };
+    deployments: network.deployments.map(deployment => ({ id: deployment.id, address: deployment.address, runtimeKeccak: deployment.runtime.keccak256 ?? null,
+      previouslySigned: previouslySigned(network.id, deployment.id) })) })) };
+  return { ...signed, summary, signedDeployments: nextSignedDeployments(ledger, parsed, { sequence, manifestSha256: signed.envelope.manifestSha256 }) };
+}
+
+/** Writes a signed release under `root`: manifest, envelope, then the ledger (when given). Commit all three together. */
+export async function writeSignedRelease(root, { manifestBytes, envelope, signedDeployments }) {
+  await writeFile(resolve(root, RELEASE_MANIFEST_FILE), manifestBytes);
+  await writeFile(resolve(root, RELEASE_ENVELOPE_FILE), JSON.stringify(envelope, null, 2) + '\n');
+  if (signedDeployments !== undefined) await writeFile(resolve(root, SIGNED_DEPLOYMENTS_FILE), JSON.stringify(signedDeployments, null, 2) + '\n');
 }
 
 if (isMain(import.meta.url)) {
@@ -134,8 +228,7 @@ if (isMain(import.meta.url)) {
   } else if (command === 'sign') {
     if (!values.key || !values.sequence) throw new Error('--key and --sequence are required');
     const signed = await signRelease({ privateJwk: JSON.parse(await readFile(values.key, 'utf8')), sequence: Number(values.sequence), days: Number(values.days ?? 30) });
-    await writeFile(resolve(ROOT, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
-    await writeFile(resolve(ROOT, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope, null, 2) + '\n');
+    await writeSignedRelease(ROOT, signed);
     console.log(JSON.stringify({ ok: true, manifestSha256: signed.envelope.manifestSha256, keyId: signed.envelope.keyId, signed: signed.summary }, null, 2));
   } else { console.error('usage: owner-release.mjs keygen --out <dir> | sign --key <private.jwk> --sequence <n> [--days 30]'); process.exitCode = 2; }
 }

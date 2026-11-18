@@ -6,7 +6,10 @@
  * SEPOLIA_DEPLOYER_PRIVATE_KEY; the RPC URL comes from SEPOLIA_RPC_URL through foundry.toml `rpc_endpoints`. Neither
  * appears in a process argument list or in this script's output.
  *
- *   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs --public-endpoint https://<public rpc>/
+ *   node --import ./scripts/test-support/register-tsx.mjs scripts/sepolia/deploy.mjs --public-endpoint https://<public rpc>/ [--deployment-id escrow-sepolia-v1]
+ *
+ * A new deployment is recorded under a new id: an id the registry draft already lists is refused (DEPLOYMENT_ID_REBOUND)
+ * before anything is sent, because a new CREATE always has a new address and earlier escrows keep their binding (D3).
  *
  * Once a CREATE has been broadcast, every failure prints its transaction hash and contract address, and a pending
  * marker (docs/deployments/sepolia/pending-deploy.json) blocks another deployment until that one is recorded with
@@ -19,8 +22,8 @@ import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
 import { secp256k1 } from '@noble/curves/secp256k1.js';
-import { chainIdentity, checkCleanSource, checkToolchain, EVM_DIR, forgeEnv, forgeKey, hexToBytes, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
-import { checkPublicEndpoint, PENDING_FILE, recordDeployment } from './record-deployment.mjs';
+import { chainIdentity, checkCleanSource, checkToolchain, CLI_DEFAULT_DEPLOYMENT_ID, EVM_DIR, forgeEnv, forgeKey, hexToBytes, isDeploymentId, isMain, keccakHex, leaksPrivateRpc, ROOT, rpcClient, SEPOLIA } from './lib.mjs';
+import { checkPublicEndpoint, DEFAULT_REGISTRY_PATH, PENDING_FILE, recordDeployment, recordedDeploymentIds } from './record-deployment.mjs';
 import { clearForgeCache, recordedTransactions } from './send.mjs';
 
 const run = promisify(execFile);
@@ -74,13 +77,16 @@ export async function broadcastPreparedDeployment({ env, rpc, from, outDir, broa
   } finally { if (!broadcastDir) await rm(dir, { recursive: true, force: true }); }
 }
 
-export async function deploy({ env = process.env, publicEndpoint, expectGenesis = SEPOLIA.genesisHash, minBalanceWei = 10n ** 15n,
+export async function deploy({ env = process.env, publicEndpoint, deploymentId, expectGenesis = SEPOLIA.genesisHash, minBalanceWei = 10n ** 15n,
   outDir = resolve(ROOT, 'docs/deployments/sepolia'), registryPath, broadcastDir, root = ROOT }) {
   checkPublicEndpoint(publicEndpoint);
   if (leaksPrivateRpc(publicEndpoint, [env.SEPOLIA_RPC_URL, env.SEPOLIA_CROSSCHECK_RPC_URL])) fail('PUBLIC_ENDPOINT_IS_PRIVATE_RPC');
+  if (!isDeploymentId(deploymentId)) fail('DEPLOYMENT_ID_INVALID');
   const pendingPath = resolve(outDir, PENDING_FILE);
   const pending = await readFile(pendingPath, 'utf8').then(JSON.parse, () => null);
   if (pending) fail('UNRECORDED_DEPLOYMENT_PENDING', { tx: pending.tx, address: pending.address, from: pending.from, nonce: pending.nonce });
+  // A fresh CREATE can never keep an already listed id's address: refuse before any RPC or broadcast.
+  if ((await recordedDeploymentIds(registryPath ?? DEFAULT_REGISTRY_PATH)).has(deploymentId)) fail('DEPLOYMENT_ID_REBOUND');
   const rpc = rpcClient(env.SEPOLIA_RPC_URL);
   const identity = await chainIdentity(rpc);
   if (identity.chainId !== SEPOLIA.chainId) fail('WRONG_CHAIN');
@@ -103,7 +109,7 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
       if (attempt === 59) fail('RECEIPT_TIMEOUT');
       await new Promise(done => setTimeout(done, 5000));
     }
-    return await recordDeployment({ rpcUrl: env.SEPOLIA_RPC_URL, crosscheckUrl: env.SEPOLIA_CROSSCHECK_RPC_URL, txHash: tx, publicEndpoint, expectedDeployer: from,
+    return await recordDeployment({ rpcUrl: env.SEPOLIA_RPC_URL, crosscheckUrl: env.SEPOLIA_CROSSCHECK_RPC_URL, txHash: tx, publicEndpoint, deploymentId, expectedDeployer: from,
       expectGenesis, outDir, ...(registryPath ? { registryPath } : {}), root, env });
   } catch (error) {
     if (error?.code === 'DEPLOY_REVERTED') await rm(pendingPath, { force: true }); // a reverted CREATE left no contract
@@ -113,14 +119,14 @@ export async function deploy({ env = process.env, publicEndpoint, expectGenesis 
 }
 
 if (isMain(import.meta.url)) {
-  const { values } = parseArgs({ options: { 'public-endpoint': { type: 'string' } } });
+  const { values } = parseArgs({ options: { 'public-endpoint': { type: 'string' }, 'deployment-id': { type: 'string', default: CLI_DEFAULT_DEPLOYMENT_ID } } });
   try {
-    const result = await deploy({ publicEndpoint: values['public-endpoint'] });
+    const result = await deploy({ publicEndpoint: values['public-endpoint'], deploymentId: values['deployment-id'] });
     console.log(JSON.stringify({ ok: true, address: result.record.contractAddress, tx: result.record.initializationTx, record: result.recordPath, registry: result.registryPath }));
   } catch (error) {
     // The transaction hash and contract address are public chain data; printing them prevents an accidental second deployment.
     console.error(JSON.stringify({ ok: false, code: error?.code ?? 'FAILED', ...(error?.tx ? { tx: error.tx, address: error.address,
-      next: 'record it: scripts/sepolia/record-deployment.mjs --tx <tx> --public-endpoint <url> --deployer <address>' } : {}), ...(error?.from ? { from: error.from, nonce: error.nonce, next: 'Deployment outcome is unknown. Find the native transaction for this account and nonce with a trusted RPC, then record-deployment.mjs --tx <hash>; do not delete the attempt guard or redeploy blindly.' } : {}) }));
+      next: 'record it: scripts/sepolia/record-deployment.mjs --tx <tx> --public-endpoint <url> --deployment-id <id> --deployer <address>' } : {}), ...(error?.from ? { from: error.from, nonce: error.nonce, next: 'Deployment outcome is unknown. Find the native transaction for this account and nonce with a trusted RPC, then record-deployment.mjs --tx <hash>; do not delete the attempt guard or redeploy blindly.' } : {}) }));
     process.exitCode = 1;
   }
 }
