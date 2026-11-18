@@ -217,6 +217,12 @@ function payoutOf(escrow: EscrowAccountV1 | null): SolanaEscrowSnapshot['payout'
   return escrow.paidOut ? 'complete' : 'pending';
 }
 function counter(value: unknown): number { return safeInt(value, 'INVALID_INPUT'); }
+/** A request counter; a getter that throws is the caller's fault (INVALID_INPUT), not a provider failure. */
+function requestCounter(read: () => unknown): number {
+  let value: unknown;
+  try { value = read(); } catch { return fail('INVALID_INPUT'); }
+  return counter(value);
+}
 
 /** Only snapshots produced by `read()` carry the brand; the settlement planner refuses copies. */
 const SNAPSHOTS = new WeakSet<object>();
@@ -239,29 +245,32 @@ export class SolanaChainReader {
   }
 
   /** Same job discipline as the EVM reader: a slot is freed only when the physical work settles. */
-  #run<T>(external: AbortSignal | undefined, work: (context: Context) => Promise<T>): Promise<CoreResult<T>> {
+  #run<T>(signalOf: () => unknown, work: (context: Context) => Promise<T>): Promise<CoreResult<T>> {
     const operationId = createOperationId();
     const failure = (code: CoreErrorCode): CoreResult<never> =>
       ({ ok: false, error: createCoreError(code, { operationId, readOnly: true }) });
     if (this.#disposed) return Promise.resolve(failure('CANCELLED'));
-    // The caller's signal is checked before a job slot is reserved: a value that is not an AbortSignal is
-    // INVALID_INPUT. The slot is taken before addEventListener (caller code that may re-enter the reader) and
-    // given back if it throws, so the limit holds and no slot leaks.
+    // The caller's signal is read and checked before a job slot is reserved: a value that is not an AbortSignal,
+    // or a request whose `signal` cannot be read, is INVALID_INPUT. The slot is taken before addEventListener
+    // (caller code that may re-enter the reader) and given back if it throws, so the limit holds and no slot leaks.
     const invalid = () => Promise.resolve(failure('INVALID_INPUT'));
-    let aborted: boolean;
+    let external: AbortSignal | undefined, aborted: boolean;
     try {
-      if (external !== undefined && !(external instanceof AbortSignal)) return invalid();
+      const value = signalOf();
+      if (value !== undefined && !(value instanceof AbortSignal)) return invalid();
+      external = value;
       aborted = external?.aborted === true;
     } catch { return invalid(); }
     if (aborted) return Promise.resolve(failure('CANCELLED'));
     if (this.#jobs.size >= MAX_RPC_READS) return Promise.resolve(failure('LIMIT_EXCEEDED'));
     const controller = new AbortController();
     const onExternal = () => controller.abort();
-    this.#jobs.add(controller);
-    try { external?.addEventListener('abort', onExternal, { once: true }); } catch {
-      this.#jobs.delete(controller); return invalid();
-    }
     const detach = () => { try { external?.removeEventListener('abort', onExternal); } catch { /* caller-owned */ } };
+    this.#jobs.add(controller);
+    // A caller addEventListener may register the listener and then throw, so the refusal detaches it too.
+    try { external?.addEventListener('abort', onExternal, { once: true }); } catch {
+      detach(); this.#jobs.delete(controller); return invalid();
+    }
     let abortCode: CoreErrorCode = 'CANCELLED';
     const timer = setTimeout(() => { abortCode = 'TIMEOUT'; controller.abort(); }, this.#timeoutMs);
     const guard = () => { if (this.#disposed || controller.signal.aborted) fail(abortCode); };
@@ -322,7 +331,7 @@ export class SolanaChainReader {
   }
 
   validateLive(networkId: string, deploymentId: string, signal?: AbortSignal): Promise<CoreResult<SolanaLiveAnchor>> {
-    return this.#run(signal, async context => {
+    return this.#run(() => signal, async context => {
       const ref = resolveDeployment(this.#options.registry, networkId, deploymentId);
       return deepFreeze(await this.#confirm(ref, await this.#anchor(ref, [], context), context));
     });
@@ -331,8 +340,9 @@ export class SolanaChainReader {
   read(
     binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput,
   ): Promise<CoreResult<SolanaEscrowSnapshot>> {
-    return this.#run(request.signal, async context => {
-      const generation = counter(request.generation), requestSequence = counter(request.requestSequence);
+    return this.#run(() => request.signal, async context => {
+      const generation = requestCounter(() => request.generation);
+      const requestSequence = requestCounter(() => request.requestSequence);
       const trade = bindTrade(this.#options.registry, binding, terms);
       const native = trade.terms.assetKind === 'native';
       const extra = native ? [trade.escrow.address, RENT_SYSVAR_ID]

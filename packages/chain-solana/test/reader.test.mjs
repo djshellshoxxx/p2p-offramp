@@ -1009,6 +1009,33 @@ test('non-signal-refused-without-leaking-a-slot', async () => {
   }
 });
 
+// The request object itself is caller input: read() always returns a promise of a result, and a request that
+// cannot be read (null, a throwing signal or counter getter) is INVALID_INPUT, never a provider failure.
+test('unreadable-request-{null,undefined,signal-getter,counter-getters}-INVALID_INPUT', async () => {
+  const s = setup('native');
+  const throwing = name =>
+    Object.defineProperty({ ...request() }, name, {
+      get() {
+        throw Error('SECRET');
+      },
+    });
+  try {
+    for (const req of [null, undefined, throwing('signal'), throwing('generation'), throwing('requestSequence')]) {
+      let pending;
+      assert.doesNotThrow(() => {
+        pending = s.reader.read(s.binding, req, s.terms);
+      });
+      assert.ok(pending instanceof Promise);
+      error(await pending, 'INVALID_INPUT');
+      error(await s.reader.readValidated(s.binding, req, s.terms), 'INVALID_INPUT');
+    }
+    assert.equal(s.calls.length, 0);
+    ok(await s.reader.read(s.binding, request(), s.terms));
+  } finally {
+    s.reader.dispose();
+  }
+});
+
 // A caller signal's addEventListener is caller code. If it re-enters the reader, the nested calls must still see
 // the slot the outer call took, so no more than MAX_RPC_READS jobs ever run at once.
 test('reentrant-signal-cannot-exceed-the-job-limit', async () => {
@@ -1080,6 +1107,23 @@ test('caller-signal-listener-removed-{ok,timeout,dispose}', async () => {
   held.reader.dispose();
   error(await job, 'CANCELLED');
   assert.equal(listeners(caller.signal), 0);
+  // An addEventListener that registers the listener and then throws: the refusal still removes it.
+  const late = setup('native');
+  try {
+    const signal = new AbortController().signal;
+    signal.addEventListener = function (...args) {
+      EventTarget.prototype.addEventListener.apply(this, args);
+      throw Error('SECRET');
+    };
+    for (let index = 0; index < 3; index++) {
+      error(await late.reader.read(late.binding, request(signal), late.terms), 'INVALID_INPUT');
+      error(await late.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, signal), 'INVALID_INPUT');
+    }
+    assert.equal(late.calls.length, 0);
+    assert.equal(listeners(signal), 0);
+  } finally {
+    late.reader.dispose();
+  }
 });
 
 // ---- concurrency ----
@@ -1107,6 +1151,33 @@ test('four-held-cancel-limit-no-followups', async () => {
   holding = false;
   ok(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID));
   s.reader.dispose();
+});
+
+// Spec §5 pre-RPC step 1: with every slot held, CANCELLED (disposed or aborted) and a non-signal INVALID_INPUT
+// still win over LIMIT_EXCEEDED.
+test('guard-order-with-four-held-{aborted,non-signal,disposed}', async () => {
+  const held = [];
+  const s = setup('native', {
+    handle: input => (input.method === 'getGenesisHash' ? new Promise(resolve => held.push(resolve)) : undefined),
+  });
+  const jobs = Array.from({ length: MAX_RPC_READS }, () => s.reader.read(s.binding, request(), s.terms));
+  while (held.length < MAX_RPC_READS) await new Promise(resolve => setImmediate(resolve));
+  const aborted = new AbortController();
+  aborted.abort();
+  error(await s.reader.read(s.binding, request(aborted.signal), s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, aborted.signal), 'CANCELLED');
+  error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal: {} }, s.terms), 'INVALID_INPUT');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, {}), 'INVALID_INPUT');
+  error(await s.reader.read(s.binding, request(), s.terms), 'LIMIT_EXCEEDED');
+  s.reader.dispose();
+  // The fake RPC ignores the abort, so all four slots stay taken after dispose.
+  error(await s.reader.read(s.binding, request(), s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID), 'CANCELLED');
+  error(await s.reader.read(s.binding, { generation: 1, requestSequence: 1, signal: {} }, s.terms), 'CANCELLED');
+  error(await s.reader.validateLive(NETWORK_ID, DEPLOYMENT_ID, {}), 'CANCELLED');
+  for (const job of jobs) error(await job, 'CANCELLED');
+  held.forEach(resolve => resolve(COMPILED_GENESIS));
+  assert.equal(s.calls.length, MAX_RPC_READS);
 });
 
 // Spec §5 pre-RPC step 1 and §8: validateLive honours its signal exactly like read().

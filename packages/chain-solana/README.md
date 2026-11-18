@@ -47,9 +47,11 @@ not approve any network, deployment or registry entry.
 - Responses are read only through own data descriptors, and base64 is capped before decoding. Provider
   rejections give UNAVAILABLE, and no provider detail is kept. At most 4 jobs run at once. The timeout is 1..60,000
   ms (default 10,000). Abort, timeout and dispose free a slot only when the physical request settles. A caller
-  signal that is not a usable `AbortSignal` gives INVALID_INPUT and never leaks a slot. The slot is reserved before
-  the caller's `addEventListener` runs, so caller code that re-enters the reader still counts against the limit.
-  The listener is removed on every settle path.
+  signal that is not a usable `AbortSignal` gives INVALID_INPUT and never leaks a slot. So does a request that
+  cannot be read (null, or a throwing `signal`, `generation` or `requestSequence` getter): `read()` still returns a
+  promise of a result. The slot is reserved before the caller's `addEventListener` runs, so caller code that
+  re-enters the reader still counts against the limit. The listener is removed on every settle path, including an
+  `addEventListener` that registers it and then throws.
 - Native amounts above 2^53-1 give LIMIT_EXCEEDED. Network ids must not contain `:`.
 
 ## Settlement planner (`src/settlement.ts`)
@@ -63,7 +65,7 @@ not approve any network, deployment or registry entry.
 | --- | --- |
 | absent (incl. a System pre-init donation) | `none` / `escrow-absent` |
 | payout complete | `none` / `payout-complete` |
-| released or refunded, unpaid, custody blocker | `wait` / `rent-shortfall`, `rent-unknown` or `vault-frozen` |
+| released or refunded, unpaid, custody blocker | `wait` / `rent-shortfall`, `rent-unknown`, `vault-frozen` (below) |
 | released or refunded, unpaid, no blocker | `payout` / `payout-pending`, outcome = the state (any role) |
 | funded, `refundOpen` | `refund` / `refund-open` (any role) |
 | funded, `releaseOpen` | seller: `release` / `release-open`; others: `wait` / `awaiting-seller-release` |
@@ -75,7 +77,14 @@ not approve any network, deployment or registry entry.
   or refund.
 - It consumes only snapshots that `read()` returned (branded, finality `finalized`); copies, observations and
   hand-built objects give INVALID_INPUT, as do an unknown role, a non-canonical `chainTime` or `releaseMargin`,
-  and a `chainTime` older than the snapshot's own `live.timestampSeconds`. Inputs are checked in every state.
+  and a `chainTime` different from the snapshot's own `live.timestampSeconds`. Inputs are checked in every state.
+  Escrow state and time must come from one finalized slot: pairing an old snapshot with a later `validateLive`
+  time could plan a refund for an escrow the seller released in between. A later time needs a fresh `read()`,
+  which costs the same 5 calls as `validateLive`.
+- Waiting alone never clears a payout blocker. `rent-shortfall` clears only after anyone sends the escrow PDA at
+  least `rentExemptMinimum - (lamports - principalHeld)` lamports (`contracts/solana/README.md`, Deployment
+  prerequisites); `vault-frozen` needs the mint freeze authority to thaw the vault. Only a fresh finalized
+  `read()` after that plans the payout.
 - A step describes one snapshot; it never says a send is safe. After any uncertain outcome (timeout, dropped or
   unknown signature), G12 (the journal) must reconcile the transaction and re-observe finalized state before any
   retry. The planner cannot tell "not sent" from "sent, not yet finalized" and must not be used as that check.

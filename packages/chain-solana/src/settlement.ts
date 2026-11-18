@@ -17,7 +17,10 @@ export type SettlementRole = 'seller' | 'buyer' | 'third-party';
 export interface SettlementContext {
   /** Who would sign: release needs the seller; refund and payout are permissionless. */
   readonly role: SettlementRole;
-  /** Finalized chain time (`live.timestampSeconds` of this snapshot or a later `validateLive`), u64 decimal. */
+  /**
+   * This snapshot's own finalized chain time (`snapshot.live.timestampSeconds`), u64 decimal. Escrow state and time
+   * must come from one slot: a later time needs a fresh `read()` (the same 5 calls as `validateLive`).
+   */
   readonly chainTime: string;
   /** Seconds kept clear before the deadline for a release, u64 decimal (see `settlementWindow`). */
   readonly releaseMargin: string;
@@ -46,6 +49,10 @@ const step = (value: SettlementStep): CoreResult<SettlementStep> => ({ ok: true,
  * reports a payout blocker (then wait with it); funded -> refund once refund is open (any role), release while
  * release is open (seller only; others wait), else wait in the margin gap. Payout blockers never hold back a
  * release or refund, which change escrow state only. Every input is checked in every state.
+ *
+ * Waiting alone never clears a payout blocker. `rent-shortfall` clears once anyone sends the escrow PDA at least
+ * `rentExemptMinimum - (lamports - principalHeld)` lamports; `vault-frozen` needs the mint freeze authority to
+ * thaw the vault. Only a fresh finalized `read()` after that plans the payout.
  */
 export function nextSettlementStep(
   snapshot: SolanaEscrowSnapshot, context: SettlementContext,
@@ -56,8 +63,9 @@ export function nextSettlementStep(
     if (typeof context !== 'object' || context === null || Array.isArray(context)) return invalid();
     ({ role, chainTime, releaseMargin } = context);
     if (typeof role !== 'string' || !ROLES.includes(role)) return invalid();
-    // A chain time older than the snapshot's own finalized Clock would reopen a window the chain already closed.
-    if (decimalU64(chainTime) < BigInt(snapshot.live.timestampSeconds)) return invalid();
+    // An older time would reopen a closed window; a later one pairs old state with a newer Clock (a refund planned
+    // for an escrow the seller released in between). Only the snapshot's own finalized Clock describes it.
+    if (decimalU64(chainTime) !== BigInt(snapshot.live.timestampSeconds)) return invalid();
   } catch { return invalid(); }
   const escrow = snapshot.escrow;
   // The deadline is needed only while funded; '0' still validates chainTime and releaseMargin in other states.
