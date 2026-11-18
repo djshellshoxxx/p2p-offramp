@@ -34,8 +34,8 @@ export interface EvmChainReader {
   transactionCount(account: string, tag: 'latest' | 'pending', signal: AbortSignal): Promise<CoreResult<string>>;
   transaction(hash: string, signal: AbortSignal): Promise<CoreResult<EvmTransactionView | null>>;
   receipt(hash: string, signal: AbortSignal): Promise<CoreResult<EvmReceiptView | null>>;
-  /** Escrow trade state for `binding` at a decimal block number. */
-  escrowState(binding: TradeBinding, blockNumber: string, signal: AbortSignal): Promise<CoreResult<EscrowState>>;
+  /** Escrow trade state at a decimal block number. When supplied, bind to the already-observed canonical hash. */
+  escrowState(binding: TradeBinding, blockNumber: string, signal: AbortSignal, expectedBlockHash?: string): Promise<CoreResult<EscrowState>>;
   /** Native-decoded observation for the authority reducer (G08); `request` is the authority's reconcile request. */
   escrowObservation(binding: TradeBinding, request: ReconcileRequest): Promise<CoreResult<ChainObservation>>;
 }
@@ -402,7 +402,7 @@ class EvmLifecycle implements EvmTxLifecycle {
             // Unknown hash: the nonce was consumed and the escrow shows this intent's effect. Depth is measured on the escrow itself.
             evidence = 'escrow-effect';
             const depthBlock = latestNumber - BigInt(this.#policy.confirmations) + 1n;
-            const atFinalized = finalizedHead === null ? null : await read(s => this.#reader.escrowState(intent.binding, finalizedHead.number, s));
+            const atFinalized = finalizedHead === null ? null : await read(s => this.#reader.escrowState(intent.binding, finalizedHead.number, s, finalizedHead.hash));
             const atDepth = depthBlock < 0n ? null : await read(s => this.#reader.escrowState(intent.binding, depthBlock.toString(), s));
             outcome = atFinalized !== null && effects.includes(atFinalized) ? 'finalized' : atDepth !== null && effects.includes(atDepth) ? 'confirmed' : 'pending';
           } else outcome = latched ? 'reorged' : conflict ? 'pending' : 'replaced';
