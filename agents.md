@@ -17,3 +17,12 @@
 - Update README, specifications, TODO lists, and developer documentation as work progresses.
 - If a push fails, report the failure and retain local commits.
 - Continue to the next independent task after a successful checkpoint.
+
+## Branching
+
+- Branch new work from current `main` only. Do not branch from another unmerged feature branch.
+- One pull request per lane or item. Do not open a second branch for work an open pull request already covers.
+- Do not stack pull requests more than 2 deep without owner approval. Retarget or merge the lower pull request first.
+- A branch that is 0 commits ahead of `main`, or whose pull request the owner closed as superseded, is finished. Archive it as an `archive/<branch>` tag at its tip, verify the tag, then delete the branch.
+- Never delete a branch that is the base of an open pull request (GitHub closes that pull request), or whose tip moved since it was checked.
+- Record consolidation progress in `docs/consolidation/2026-11-18-branch-consolidation-gameplan.md` §3a. Do not start a new dated ledger file.
