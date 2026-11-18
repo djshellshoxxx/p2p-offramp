@@ -21,10 +21,13 @@ export interface LocaleSnapshot {
   readonly display: 'source-draft' | 'development-fixture'; readonly fallback: boolean;
   readonly reason: 'LOCALE_INCOMPLETE' | null; readonly fundsLocaleEligible: false;
 }
+export interface LocaleOption { readonly id: string; readonly locale: LocaleCatalog['locale']; readonly direction: 'ltr' | 'rtl'; readonly display: LocaleSnapshot['display'] }
 export interface BundledLocaleStore {
   getSnapshot(): LocaleSnapshot; subscribe(listener: () => void): () => void;
   /** Explicit selection only; no browser-language sniffing, network or imported catalog registration. */
   select(requested: unknown): LocaleSnapshot;
+  /** Compiled bundles only (English source plus explicit development fixtures); never discovered or imported. */
+  available(): readonly LocaleOption[];
   format<V extends MessageVariables>(source: MessageEntry<V>, values: MessageValues<V>): string;
   integer(value: number | bigint): string;
 }
@@ -53,6 +56,8 @@ export function createBundledLocaleStore(configuration: BundledLocaleConfigurati
       bundles.set(fixture.id, Object.freeze({ id: fixture.id, catalog, display: 'development-fixture' }));
     } catch { /* The entire incomplete fixture remains unavailable; source is retained atomically. */ }
   }
+  const options: readonly LocaleOption[] = Object.freeze([...bundles.values()].map(bundle => Object.freeze({ id: bundle.id,
+    locale: bundle.catalog.locale, direction: bundle.catalog.direction, display: bundle.display })));
   let selected = sourceBundle;
   let snapshot: LocaleSnapshot = Object.freeze({ id: 'en', locale: 'en', direction: 'ltr', revision: 0, display: 'source-draft',
     fallback: false, reason: null, fundsLocaleEligible: false });
@@ -74,6 +79,7 @@ export function createBundledLocaleStore(configuration: BundledLocaleConfigurati
     getSnapshot: () => snapshot,
     subscribe(listener: () => void) { if (typeof listener !== 'function') return incomplete(); listeners.add(listener); return () => { listeners.delete(listener); }; },
     select: (requested: unknown) => select(requested, true),
+    available: () => options,
     format<V extends MessageVariables>(source: MessageEntry<V>, values: MessageValues<V>): string {
       if (sourceCatalog[source.key] !== source) return incomplete();
       const entry = selected.catalog.messages[source.key]; if (!entry) return incomplete();
