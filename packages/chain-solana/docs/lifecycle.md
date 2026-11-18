@@ -141,8 +141,7 @@ Mutation checks (each run once by temporarily breaking `src`): sending before th
 an off-by-one expiry, cancelling restored records, skipping wallet byte equality, trusting a status without the
 escrow effect, skipping signature verification on restore, and planning a payout from `Funded` are each caught.
 
-Real validator (`client-run.mjs`, Agave 4.1.2, synthetic localnet program/mints/keys generated at runtime): see the
-results section appended by the run record in this file's last section.
+Real validator (`client-run.mjs`, Agave 4.1.2, synthetic localnet program/mints/keys generated at runtime): see §8.
 
 ## 6. Needs Lane A (shared schema and journal; not edited here)
 
@@ -192,3 +191,25 @@ a malicious wallet holds the key anyway. Fees and the ATA rent of a failed payou
 A same-profile storage rollback (the vault returned to an older state without a new profile id) can show a marked
 intent as `signed` without its marker; `recover()` would then cancel it as never sent (the same residual as Lane A's
 A-N4). The escrow program still lets only one state change and one payout succeed per escrow.
+
+## 8. Local validator run record (2026-11-18)
+
+`node --import ./scripts/test-support/register-tsx.mjs contracts/solana/localnet/client-run.mjs`, solana-core 4.1.2
+(feature set 3345198602), SBPF v3 `basic_escrow.so` built in this worktree (SHA-256 `eed3a490…`, the same as the
+committed fixture's), every feature active. Two complete runs, both exit 0 with 62/62 checks: one before the
+ledger-history check was added (1925 s) and a final one on the committed source (1922 s, source hashes recorded
+before the run and unchanged after). Final run:
+
+| Flow | Result |
+| --- | --- |
+| native | fund, release alone (finalized `Released`, unpaid), payout_native: buyer credited exactly 0.4 SOL; one `sendTransaction` per intent |
+| serializer | validator accepted every client-built message; `solana decode-transaction` of a signed fund: same keys and header, `sigverifyStatus: ["pass"]` |
+| C-L2 (i) | manual `[release, payout_spl]` to a frozen buyer ATA: client refuses it (`INVALID_INPUT`); sent anyway it fails `InstructionError [1, Custom 6016]` and the escrow stays `Funded` |
+| C-L2 (ii) | client release alone finalized; payout to the frozen ATA journaled `failed` (`InstructionError:1:Custom:6016`); escrow stays `Released`, unpaid; after thaw the retried payout finalizes and the buyer ATA holds 25 000 000 |
+| crash | crash after the marker: no send; restart keeps `sendMarked`, refuses a new release; `dropped` once the finalized height passed lastValidBlockHeight 614; implicit rebuild refused, explicit `rebuildOf` rebuild finalized with a new blockhash; 0 sends for the crashed intent |
+| restore | vault backup with a marked payout restored into another profile: not cancelled, reconciled `finalized`, no resend |
+| refund | funded with deadline = clock + 1815 s; client refused an early refund (`EXPIRED`); after 1857 s of real time refund and payout finalized; escrow released exactly 0.3 SOL |
+
+13 `sendTransaction` calls in total, one per sent intent. Localnet-only deviation: the harness answers
+`getGenesisHash` with the compiled synthetic genesis constant. Single local validator: no forks, no fee market,
+no real stake-weighted clock.
