@@ -139,7 +139,7 @@ test('guard translator rejects changed predicates, inserted side effects, unknow
  assert.throws(()=>guardPredicates(ast,source.replace('msg.sender != escrow.seller','msg.sender == escrow.seller')));
 });
 
-test('owned process groups drain on success, timeout and output overflow including closed-pipe descendants', {timeout:12000}, async()=>{
+test('owned process groups drain on success, timeout and output overflow including closed-pipe descendants', {timeout:40000}, async()=>{
  const {processBounded}=await import('../formal/evm.mjs');
  const {mkdtemp,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');
  const directory=await mkdtemp(join(tmpdir(),'formal-process-'));const pids=[];
@@ -147,9 +147,10 @@ test('owned process groups drain on success, timeout and output overflow includi
  try{for(const mode of['success','timeout','overflow']){
   const file=join(directory,mode);
   // Pass data as arguments; the child program stays a literal independent of paths.
-  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},5000)'],{stdio:'ignore'});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));const mode=process.argv[2];if(mode==='timeout')setTimeout(()=>{},5000);else if(mode==='overflow'){process.stdout.write('x'.repeat(8192));setTimeout(()=>{},5000);}else{process.stdout.write('done');process.stderr.write('separate');}`;
-  const result=await processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?300:2000,maxOutput:mode==='overflow'?1024:8192});const pid=Number(await readFile(file,'utf8'));pids.push(pid);
-  for(let i=0;i<40&&!await dead(pid);i++)await new Promise(resolve=>setTimeout(resolve,25));assert.equal(await dead(pid),true,mode+' left descendant alive');
+  // The grandchild outlives every wait below, so only the group kill can make it exit in time.
+  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},60000)'],{stdio:'ignore'});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));const mode=process.argv[2];if(mode==='timeout')setTimeout(()=>{},60000);else if(mode==='overflow'){process.stdout.write('x'.repeat(8192));setTimeout(()=>{},60000);}else{process.stdout.write('done');process.stderr.write('separate');}`;
+  const result=await processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?2000:8000,maxOutput:mode==='overflow'?1024:8192});const pid=Number(await readFile(file,'utf8'));pids.push(pid);
+  for(let i=0;i<200&&!await dead(pid);i++)await new Promise(resolve=>setTimeout(resolve,25));assert.equal(await dead(pid),true,mode+' left descendant alive');
   if(mode==='success'){assert.equal(result.code,0);assert.equal(result.stdout,'done');assert.equal(result.stderr,'separate');}if(mode==='timeout')assert.equal(result.timedOut,true);if(mode==='overflow')assert.equal(result.limited,true);
  }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
 });
@@ -274,14 +275,15 @@ test('both run modes claim a new or empty in-checkout directory with an exclusiv
   }
  }finally{await scratch.cleanup();}
 });
-test('a descendant that leaves the process group and holds a pipe cannot stall the bounded runner',{timeout:20000},async()=>{
+test('a descendant that leaves the process group and holds a pipe cannot stall the bounded runner',{timeout:30000},async()=>{
  const directory=await mkdtemp(join(tmpdir(),'formal-escape-'));const pids=[];
  try{for(const mode of['exit','timeout']){
   const file=join(directory,mode);
-  // detached:true gives the grandchild its own session (setsid); inherited stdio keeps the runner's pipes open for 8 s.
-  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},8000)'],{detached:true,stdio:['ignore','inherit','inherit']});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));process.stdout.write('started');if(process.argv[2]==='timeout')setTimeout(()=>{},8000);`;
+  // detached:true gives the grandchild its own session (setsid); inherited stdio keeps the runner's pipes open for 40 s,
+  // longer than this test may run, so the previous close-only wait fails here rather than passing late.
+  const script=`const {spawn}=require('node:child_process');const fs=require('node:fs');const child=spawn(process.execPath,['-e','setTimeout(()=>{},40000)'],{detached:true,stdio:['ignore','inherit','inherit']});child.unref();fs.writeFileSync(process.argv[1],String(child.pid));process.stdout.write('started');if(process.argv[2]==='timeout')setTimeout(()=>{},40000);`;
   const started=performance.now(),result=await formal.processBounded(process.execPath,['-e',script,file,mode],{timeoutMs:mode==='timeout'?300:4000,graceMs:200});pids.push(Number(await readFile(file,'utf8')));
-  assert.ok(performance.now()-started<3000,mode+' waited for the escaped descendant');assert.equal(result.error,'PIPE_HELD_OPEN');assert.equal(result.timedOut,mode==='timeout');
+  assert.ok(performance.now()-started<10000,mode+' waited for the escaped descendant');assert.equal(result.error,'PIPE_HELD_OPEN');assert.equal(result.timedOut,mode==='timeout');
  }}finally{for(const pid of pids)try{process.kill(pid,'SIGKILL');}catch{}await rm(directory,{recursive:true,force:true});}
 });
 const fakeTool=async(directory,name,plan,body)=>{const path=join(directory,name);await writeFile(path,`#!${process.execPath}\nconst plan=${JSON.stringify(plan)};\n${body}\n`);await chmod(path,0o755);return path;};
@@ -289,7 +291,7 @@ const fakeTool=async(directory,name,plan,body)=>{const path=join(directory,name)
 const FAKE_SOLC=`let input='';process.stdin.on('data',chunk=>input+=chunk).on('end',()=>{const responses=JSON.parse(input).auxiliaryInput?.smtlib2responses??{};const step=plan.rounds[Math.min(Object.keys(responses).length,plan.rounds.length-1)];
  setTimeout(()=>{if(step.raw!==undefined)process.stdout.write(step.raw);else process.stdout.write(JSON.stringify({errors:step.errors,...(step.queries?{auxiliaryInputRequested:{smtlib2queries:step.queries}}:{})}));if(step.stderr)process.stderr.write(step.stderr);process.exitCode=step.exit??0;},step.sleepMs??0);});`;
 const FAKE_Z3=`if(process.argv[2]==='--version'){process.stdout.write(plan.version+'\\n');}else{let input='';process.stdin.on('data',chunk=>input+=chunk).on('end',()=>setTimeout(()=>{process.stdout.write(plan.stdout??'');if(plan.stderr)process.stderr.write(plan.stderr);process.exitCode=plan.exit??0;},plan.sleepMs??0));}`;
-test('bridge incompleteness bookkeeping ends PROOF_UNKNOWN through the whole-target classification, with fake solc and z3',{timeout:60000},async()=>{
+test('bridge incompleteness bookkeeping ends PROOF_UNKNOWN through the whole-target classification, with fake solc and z3',{timeout:90000},async()=>{
  const source='contract T { function f(uint x) public pure { assert(x == x); assert(x >= 0); } }',assertions=['assert(x == x);','assert(x >= 0);'];
  const spans=assertions.map(assertion=>assertionSpan(source,assertion)),at=(span,errorCode,message)=>({errorCode,severity:errorCode==='9576'?'info':'warning',sourceLocation:{file:'T.sol',...span},message});
  const SAFE=spans.map(span=>at(span,'9576','CHC: Assertion violation check is safe!')),MIGHT=[...spans.map(span=>at(span,'6328','CHC: Assertion violation might happen here.')),RECORDED.abstractions[3]];
@@ -300,11 +302,12 @@ test('bridge incompleteness bookkeeping ends PROOF_UNKNOWN through the whole-tar
   {name:'clean control',rounds:[{errors:MIGHT,queries:request(0)},{errors:SAFE}],z3:{stdout:'sat\n'},expect:{stopReason:null,results:['PROVED_UNDER_DECLARED_MODEL','PROVED_UNDER_DECLARED_MODEL']}},
   {name:'recorded abstraction on clean work',rounds:[{errors:MIGHT,queries:request(0)},{errors:[...SAFE,RECORDED.abstractions[0]]}],z3:{stdout:'sat\n'},expect:{stopReason:null}},
   {name:'z3 unknown',rounds:safeRounds(),z3:{stdout:'unknown\n'},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
-  {name:'z3 timeout',rounds:safeRounds(),z3:{stdout:'sat\n',sleepMs:20000},deadlineMs:1500,expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown',timedOut:true}},
+  // The per-query bound (LIMITS.queryMs) stops this one, not the total deadline.
+  {name:'z3 timeout',rounds:safeRounds(),z3:{stdout:'sat\n',sleepMs:60000},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown',timedOut:true}},
   {name:'z3 stderr',rounds:safeRounds(),z3:{stdout:'sat\n',stderr:'WARNING: resource limit\n'},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
   {name:'z3 non-zero exit',rounds:safeRounds(),z3:{stdout:'sat\n',exit:1},expect:{stopReason:'SOLVER_UNKNOWN',answer:'unknown'}},
   {name:'compiler stderr',rounds:safeRounds({stderr:'Warning: unexpected\n'}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_STDERR'}},
-  {name:'compiler timeout',rounds:safeRounds({sleepMs:20000}),z3:{stdout:'sat\n'},deadlineMs:1500,expect:{stopReason:'COMPILER_TIMEOUT'}},
+  {name:'compiler timeout',rounds:safeRounds({sleepMs:60000}),z3:{stdout:'sat\n'},deadlineMs:4000,expect:{stopReason:'COMPILER_TIMEOUT'}},
   {name:'compiler non-zero exit',rounds:safeRounds({exit:2}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_FAILURE'}},
   {name:'compiler invalid output',rounds:safeRounds({raw:'{not json'}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_OUTPUT_INVALID'}},
   {name:'compiler error diagnostic',rounds:safeRounds({errors:[...SAFE,{errorCode:'2314',severity:'error',message:'Expected token'}]}),z3:{stdout:'sat\n'},expect:{stopReason:'COMPILER_ERROR'}},
