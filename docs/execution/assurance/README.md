@@ -22,9 +22,14 @@ fiat release, batch settlement, permits, bridges and advanced privacy each have
 distinct absent or unqualified sub-scopes. Those exclusions do not waive related
 core ordering, amount, signature, routing, metadata or recovery requirements.
 
-`evidence-manifest.json` binds the exact current bytes of the finite public
-reference set (at most64 files), excluding its own self-hash. The existing focused
-assurance test checks paths/SHA256 and validates every AttackCase. Its success
+`evidence-manifest.json` binds the finite public reference set (at most64 files),
+excluding its own self-hash. Files owned by this packet bind their exact working-tree
+bytes. Every other file binds the bytes at the manifest's `sourceCommit` (a commit on
+`origin/main`): `npm run check:governance` verifies that hash against `git show` and
+lists any file whose current bytes later drifted under `stale`. A stale row is never
+evidence that the current file was assessed, and it does not fail the check. The
+focused assurance test checks paths, containment, size and the owned-row hashes
+without git, and validates every AttackCase. Its success
 proves packet integrity for that invocation, not that every referenced suite ran.
 Selected actual local checks and reused receipt identities are recorded separately
 under `drills/`; current native aggregate execution belongs to root.
@@ -56,4 +61,4 @@ node node_modules/typescript/bin/tsc --noEmit
 node scripts/check-import-boundaries.mjs
 ```
 
-The first command checks the packet's exact source hashes as well as hostile-input validators and inert projections. If evidence bytes change, review the changed assertions and regenerate the manifest deliberately; do not relabel old results as the new source. Existing regression commands and recovery steps are in the adjacent checklist. No command in this document sends messages, signs transactions or publishes an advisory.
+The first command checks the packet's exact source hashes as well as hostile-input validators and inert projections. If evidence bytes change, review the changed assertions and regenerate the manifest deliberately (`node scripts/governance/refresh-evidence-manifest.mjs --commit origin/main`); do not relabel old results as the new source. Existing regression commands and recovery steps are in the adjacent checklist. No command in this document sends messages, signs transactions or publishes an advisory.

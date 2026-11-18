@@ -1,6 +1,7 @@
 {
-  "format": "p2p-offramp/assurance-local-evidence/v1",
-  "scope": "Exact local public source/document byte integrity; no attack execution, incident, legal/professional review or release authority inferred. Own manifest self-hash excluded.",
+  "format": "p2p-offramp/assurance-local-evidence/v2",
+  "scope": "Exact local public source/document byte integrity; no attack execution, incident, legal/professional review or release authority inferred. Own manifest self-hash excluded. Rows owned by this packet bind the working tree; every other row binds the bytes at sourceCommit and is reported stale, never current, when the file later changes.",
+  "sourceCommit": "af4835b58146fc970af90790b635ea7c75a724af",
   "files": [
     {
       "path": "00_PLANNING_AND_THREAT_MODELING/feature_0.11_operations/module_0.11.1_privacy_operations/spec-incident-response-and-redacted-diagnostics.md",
@@ -36,7 +37,7 @@
     },
     {
       "path": "docs/execution/assurance/README.md",
-      "sha256": "0906a3751e8555195abf10026624ac6c6030850eb32c89160463225a22178a79"
+      "sha256": "baa7ba5b4a5decdb9c30b903b6c55d8c60fe40b03366961876f38827e38bb2b6"
     },
     {
       "path": "docs/execution/assurance/attack-cases.json",
@@ -112,7 +113,7 @@
     },
     {
       "path": "packages/governance/test/assurance.test.mjs",
-      "sha256": "728a42b74a62e79087f3503826bd2f2e2b2deb5c313539e232c2d1e7fc19141a"
+      "sha256": "5ac0c9383a9ced5f0762b7308435253ae25c18f2b80ac003f3d84de860a638a6"
     },
     {
       "path": "packages/messaging/src/durable-chat.ts",

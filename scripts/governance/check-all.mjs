@@ -3,6 +3,7 @@ import { opendir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 import { checkGovernanceRecord } from './check.mjs';
+import { checkEvidenceBinding } from './evidence.mjs';
 import { isMain } from '../lib/is-main.mjs';
 
 export async function checkMaintainedGovernance(root = fileURLToPath(new URL('../../', import.meta.url))) {
@@ -25,7 +26,9 @@ export async function checkMaintainedGovernance(root = fileURLToPath(new URL('..
     if (result.historical) historical++;
     if (result.pending) pending++;
   }
-  return { checked: names.length, historical, pending, economicPreparationAllowed: false, authority: 'inert-record-only' };
+  // Needs git history (CI job with fetch-depth 0). Drift of non-owned files is reported, never a failure.
+  const evidence = await checkEvidenceBinding({ root });
+  return { checked: names.length, historical, pending, evidence: { sourceCommit: evidence.sourceCommit, rows: evidence.rows, owned: evidence.owned, bound: evidence.bound, stale: evidence.stale }, economicPreparationAllowed: false, authority: 'inert-record-only' };
 }
 if (isMain(import.meta.url)) {
   try { console.log(JSON.stringify(await checkMaintainedGovernance())); }

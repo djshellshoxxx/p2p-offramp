@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile,realpath,stat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {resolve,sep} from 'node:path';
+import {isOwned,MANIFEST_FORMAT,COMMIT_PATTERN}from'../../../scripts/governance/evidence.mjs';
 import {validateRoleFacts,validateJurisdictionAssessment,validateJurisdictionMatrix,validateAttackCase,validateIncidentRecord,diffRoleFacts,buildAssuranceReviewPacket} from '../index.ts';
 const hash='a'.repeat(64),path='docs/execution/assurance/README.md';
 const facts=()=>({version:1,id:'synthetic-publisher',role:'publisher',controlsSpendingKeys:false,canRedirectEscrow:false,canChangeExistingTerms:false,handlesFiat:false,holdsPhysicalCash:false,receivesFees:false,setsCounterpartyTerms:false,selectsCounterparties:false,deploymentIds:[],jurisdictionsClaimed:[],evidencePaths:[path],revision:1});
@@ -51,8 +52,13 @@ test('review claims retain the full matrix identity and required descriptions ca
 });
 test('public source packet has exact current evidence bytes and explicitly unassessed jurisdiction intake',async()=>{
  const root=await realpath(new URL('../../../',import.meta.url)),base=resolve(root,'docs/execution/assurance');
- const manifest=JSON.parse(await readFile(resolve(base,'evidence-manifest.json')));assert.equal(manifest.format,'p2p-offramp/assurance-local-evidence/v1');assert.ok(manifest.files.length>5&&manifest.files.length<=64);
- const seen=new Set();for(const row of manifest.files){assert.match(row.path,/^[A-Za-z0-9_./-]+$/);assert.ok(!row.path.split('/').includes('..'));assert.ok(!seen.has(row.path));seen.add(row.path);const target=await realpath(resolve(root,row.path));assert.ok(target.startsWith(root+sep));assert.equal((await stat(target)).isFile(),true);assert.ok((await stat(target)).size<=2*1024*1024);assert.equal(createHash('sha256').update(await readFile(target)).digest('hex'),row.sha256,row.path);}
+ const manifest=JSON.parse(await readFile(resolve(base,'evidence-manifest.json')));assert.equal(manifest.format,MANIFEST_FORMAT);assert.match(manifest.sourceCommit,COMMIT_PATTERN);assert.ok(manifest.files.length>5&&manifest.files.length<=64);
+ const seen=new Set();for(const row of manifest.files){assert.match(row.path,/^[A-Za-z0-9_./-]+$/);assert.ok(!row.path.split('/').includes('..'));assert.ok(!seen.has(row.path));seen.add(row.path);assert.match(row.sha256,/^[0-9a-f]{64}$/);
+  // Structure, containment and size need no git. Only rows this packet owns are hashed against the working tree; other rows bind
+  // sourceCommit bytes (checked by check:governance with history) and may drift without failing this test.
+  const owned=isOwned(row.path);let target;try{target=await realpath(resolve(root,row.path));}catch(error){if(owned)throw error;continue;}
+  assert.ok(target.startsWith(root+sep));assert.equal((await stat(target)).isFile(),true);assert.ok((await stat(target)).size<=2*1024*1024);
+  if(owned)assert.equal(createHash('sha256').update(await readFile(target)).digest('hex'),row.sha256,row.path);}
  const roles=JSON.parse(await readFile(resolve(base,'role-facts.json'))),assessments=JSON.parse(await readFile(resolve(base,'jurisdiction-matrix.json'))),attacks=JSON.parse(await readFile(resolve(base,'attack-cases.json')));assert.deepEqual(roles,[]);assert.deepEqual(assessments,[]);for(const a of attacks)good(validateAttackCase(a));assert.ok(attacks.every(a=>a.status==='specified'));assert.equal(good(buildAssuranceReviewPacket({roles,assessments,attacks,incidents:[],asOf:'2026-11-02'})).intakeState,'unassessed');
  const contract=await readFile(resolve(root,'contracts/evm/test/BasicEscrow.t.sol'),'utf8');for(const selector of ['test_reentrancy_buyerReentersRefundDuringReleasePush','test_reentrancy_sellerReentersReleaseDuringRefundPush','test_reentrancy_callbackTokenDuringPayoutBlocked','test_fund_rejectsSellerNonceReuseAcrossOrders','test_tradeId_isDeploymentAndChainBound','test_fundToken_rejectsFeeOnTransfer','test_reentrancy_callbackTokenDuringFundingBlocked','test_refund_atDeadlineByStrangerPaysSellerOnly','test_release_rejectsAtDeadline'])assert.ok(contract.includes('function '+selector+'('),selector);
 });
