@@ -170,20 +170,25 @@ test('negative: replayed, duplicated and expired messages are refused; bounds ar
   assert.equal(ok(await w.buyer.ex.receive(take.selfWrap, w.buyer.secret)).own, true);
   fail(await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'take-request', takeBody(w.third), { tags: [['p', w.seller.pub], ['a', w.address]] }), w.seller.secret), 'MALFORMED');
   fail(await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'take-request', { ...takeBody(w.third), extra: 1 }), w.seller.secret), 'MALFORMED');
-  // Bounded sessions: a flood of takers cannot grow state past the cap. The least recently admitted idle `taken`
-  // session is evicted (REDTEAM-EX3) but its replay id is kept; offered sessions are never evicted, so a take is then refused.
+  // Bounded sessions: a flood of takers cannot grow state past the cap. A session whose take is still live is never
+  // displaced (REDTEAM-P2-EX3), so the newcomer is refused; once the oldest take has expired its idle session is
+  // displaced first, and its replay id expired with it. Offered sessions are never evicted, so a take is then refused.
   const small = await world({ maxSessions: 2 });
   const takers = [await party(), await party(), await party(), await party()];
   const wraps = [], results = [];
   for (const [i, t] of takers.slice(0, 3).entries()) {
-    wraps.push(await craft(t, small.seller, small.address, 'take-request', takeBody(t), { nonce: String(i).repeat(64) }));
+    wraps.push(await craft(t, small.seller, small.address, 'take-request', takeBody(t), { nonce: String(i).repeat(64), expires: NOW + (i === 0 ? 600 : 1000) }));
     results.push(await small.seller.ex.receive(wraps[i], small.seller.secret));
   }
-  assert.deepEqual(results.map(r => r.ok), [true, true, true]);
-  assert.equal(small.seller.ex.sessionCount, 2); assert.equal(small.seller.ex.session(results[0].value.sessionId), null);
+  assert.deepEqual(results.map(r => r.ok), [true, true, false]); fail(results[2], 'LIMIT_EXCEEDED');
+  assert.equal(small.seller.ex.sessionCount, 2);
   fail(await small.seller.ex.receive(wraps[0], small.seller.secret), 'DUPLICATE');
+  small.clock.now = NOW + 601;
+  results[2] = await small.seller.ex.receive(wraps[2], small.seller.secret); ok(results[2]);
+  assert.equal(small.seller.ex.session(results[0].value.sessionId), null);
+  fail(await small.seller.ex.receive(wraps[0], small.seller.secret), 'EXPIRED');
   for (const r of results.slice(1)) ok(await small.seller.ex.offer(r.value.sessionId, termsBytes(), small.seller.secret));
-  const refused = await small.seller.ex.receive(await craft(takers[3], small.seller, small.address, 'take-request', takeBody(takers[3]), { nonce: '3'.repeat(64) }), small.seller.secret);
+  const refused = await small.seller.ex.receive(await craft(takers[3], small.seller, small.address, 'take-request', takeBody(takers[3]), { nonce: '3'.repeat(64), expires: NOW + 1500 }), small.seller.secret);
   fail(refused, 'LIMIT_EXCEEDED'); assert.equal(small.seller.ex.sessionCount, 2);
   for (const r of results.slice(1)) assert.equal(small.seller.ex.session(r.value.sessionId).state, 'offered');
 });

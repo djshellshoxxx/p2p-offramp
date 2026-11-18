@@ -112,32 +112,43 @@ test('REDTEAM-EX1 offer for another network/asset/currency than the advert is re
 // sessions that already exist, fails LIMIT_EXCEEDED. Default capacity 1024 = 512 take/cancel pairs from ONE key.
 // Shown with maxSeenMessages 16 for runtime; the code path is identical at the default.
 test('REDTEAM-EX2 one peer cannot freeze the exchange by filling the replay memory', async () => {
+  // Since REDTEAM-P2-EX2 the attacker is capped earlier: seller-side messages must expire within ttl + skew, and a key
+  // cannot re-take over its own unanswered tombstone while that tombstone still holds replay ids.
   const w = await worldAd({}, { maxSeenMessages: 16 });
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
   ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
   const body = { buyerAddress: `0x${'77'.repeat(20)}`, buyerMessagingKey: w.third.pub };
-  let admitted = 0;
+  fail(await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'take-request', body, { nonce: freshNonce(), expires: NOW + 3600 }), w.seller.secret), 'MALFORMED');
+  const codes = [];
   for (let i = 0; i < 8; i++) {
-    const t = await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'take-request', body, { nonce: freshNonce(), expires: NOW + 3600 }), w.seller.secret);
-    if (!t.ok) break; admitted++;
-    const c = await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'cancel', { reason: 'withdrawn' }, { nonce: freshNonce(), expires: NOW + 3600 }), w.seller.secret);
-    if (!c.ok) break; admitted++;
+    const t = await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'take-request', body, { nonce: freshNonce(), expires: NOW + 900 }), w.seller.secret);
+    const c = await w.seller.ex.receive(await craft(w.third, w.seller, w.address, 'cancel', { reason: 'withdrawn' }, { nonce: freshNonce(), expires: NOW + 900 }), w.seller.secret);
+    codes.push(t.ok ? 'ok' : t.code, c.ok ? 'ok' : c.code);
   }
-  assert.ok(admitted >= 15, `attacker admitted ${admitted} messages`);
-  w.clock.now = NOW + 300; // inside the ad lifetime; attacker entries live until NOW + 3600 (and can be topped up)
+  assert.deepEqual(codes.slice(0, 2), ['ok', 'ok']);
+  assert.ok(codes.slice(2).every(code => code === 'OUT_OF_ORDER'), JSON.stringify(codes));
+  assert.equal(w.seller.ex.replayIdCount, 3);
+  w.clock.now = NOW + 300; // inside the ad lifetime and the attacker's window
   const offer = await w.seller.ex.offer(take.sessionId, termsBytes(), w.seller.secret);
   assert.equal(offer.ok, true, `honest offer refused: ${JSON.stringify(offer)}`);
 });
 
-// REDTEAM-EX3: session slots are global (default 64), with no per-peer bound and no eviction of idle 'taken'
-// sessions before ad expiry. Throwaway keys (free) lock out every new buyer of the seller for the ad lifetime.
-test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for honest buyers', async () => {
+// REDTEAM-EX3: session slots were global (default 64), with no per-peer bound and no eviction of idle 'taken'
+// sessions before ad expiry. Throwaway keys (free) locked out every new buyer of the seller for the ad lifetime.
+// Policy since REDTEAM-P2-EX3 (exchange.ts header): a flood holds the advert only until its own take-requests expire
+// (at most 3600 s; here 600 s), then the honest newcomer displaces the oldest idle intake, well inside the ad lifetime.
+// While the flood's takes are live the newcomer is refused rather than an admitted buyer being pushed out.
+test('REDTEAM-EX3 throwaway keys cannot exhaust seller session capacity for honest buyers beyond their take lifetime', async () => {
   const w = await worldAd({}, { maxSessions: 4 });
+  const flood = [];
   for (let i = 0; i < 4; i++) {
     const sybil = await party();
-    ok(await w.seller.ex.receive(await craft(sybil, w.seller, w.address, 'take-request', { buyerAddress: `0x${'66'.repeat(20)}`, buyerMessagingKey: sybil.pub }, { nonce: freshNonce() }), w.seller.secret));
+    flood.push(await w.seller.ex.receive(await craft(sybil, w.seller, w.address, 'take-request', { buyerAddress: `0x${'66'.repeat(20)}`, buyerMessagingKey: sybil.pub }, { nonce: freshNonce() }), w.seller.secret));
   }
+  assert.equal(flood.filter(r => r.ok).length, 3, 'intake is capped below maxSessions'); fail(flood[3], 'LIMIT_EXCEEDED');
   const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret));
+  fail(await w.seller.ex.receive(take.recipientWrap, w.seller.secret), 'LIMIT_EXCEEDED');
+  w.clock.now = NOW + 601; // flood takes expired at NOW + 600; the honest take lives until NOW + 900, the ad until NOW + 1800
   const got = await w.seller.ex.receive(take.recipientWrap, w.seller.secret);
   assert.equal(got.ok, true, `honest take refused: ${JSON.stringify(got)}`);
 });
@@ -170,12 +181,12 @@ test('EX2 replay memory is bounded per session: one key is capped, honest new bu
   const attack = [];
   for (let i = 0; i < 8; i++) {
     for (const [type, msg] of [['take-request', body], ['cancel', { reason: 'withdrawn' }]]) {
-      const wrap = await craft(w.third, w.seller, w.address, type, msg, { nonce: freshNonce(), expires: NOW + 3600 });
+      const wrap = await craft(w.third, w.seller, w.address, type, msg, { nonce: freshNonce(), expires: NOW + 1020 });
       attack.push([wrap, await w.seller.ex.receive(wrap, w.seller.secret)]);
     }
   }
-  assert.equal(attack.filter(([, r]) => r.ok).length, 4, 'attacker capped at its own per-session memory');
-  for (const [, r] of attack.slice(4)) fail(r, 'LIMIT_EXCEEDED');
+  assert.equal(attack.filter(([, r]) => r.ok).length, 2, 'attacker holds one take and one cancel');
+  for (const [, r] of attack.slice(2)) fail(r, 'OUT_OF_ORDER');
   fail(await w.seller.ex.receive(attack[0][0], w.seller.secret), 'DUPLICATE');
   // A different honest buyer can still open a session, and the existing session can still offer.
   const other = await party();
@@ -184,24 +195,30 @@ test('EX2 replay memory is bounded per session: one key is capped, honest new bu
   // Replay memory survives the session: the attacker's cancelled session cannot be revived by replaying its take.
   w.clock.now = NOW + 1000;
   fail(await w.seller.ex.receive(attack[0][0], w.seller.secret), 'DUPLICATE');
+  w.clock.now = NOW + 1020;
+  fail(await w.seller.ex.receive(attack[0][0], w.seller.secret), 'EXPIRED');
   assert.throws(() => createTermsExchange({ provider, selfPublicKey: w.seller.pub, ads: w.seller.book, registry, hashTerms, now: () => NOW, maxSeenMessagesPerSession: 0 }), RangeError);
+  assert.throws(() => createTermsExchange({ provider, selfPublicKey: w.seller.pub, ads: w.seller.book, registry, hashTerms, now: () => NOW, maxIntakeSessionsPerAd: 0 }), RangeError);
 });
 
-test('EX3 per-advert session cap evicts only idle taken sessions of that advert; offered sessions are never evicted', async () => {
+test('EX3 per-advert session cap displaces only expired idle intake of that advert; offered sessions are never evicted', async () => {
   const w = await worldAd({}, { maxSessionsPerAd: 2 });
   const { id } = await toOffered(w);
   const sybils = [];
-  for (let i = 0; i < 3; i++) {
+  const sybilTake = async expires => {
     const sybil = await party();
-    sybils.push(ok(await w.seller.ex.receive(await craft(sybil, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: sybil.pub }, { nonce: freshNonce() }), w.seller.secret)));
-  }
+    return w.seller.ex.receive(await craft(sybil, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: sybil.pub }, { nonce: freshNonce(), expires }), w.seller.secret);
+  };
+  sybils.push(ok(await sybilTake(NOW + 600)));
+  fail(await sybilTake(NOW + 600), 'LIMIT_EXCEEDED'); // the first sybil's take is live: it is not displaced
+  w.clock.now = NOW + 601;
+  sybils.push(ok(await sybilTake(NOW + 1500)));
   assert.equal(w.seller.ex.sessionCount, 2);
   assert.equal(w.seller.ex.session(id).state, 'offered');
-  assert.equal(w.seller.ex.session(sybils[0].sessionId), null); assert.equal(w.seller.ex.session(sybils[1].sessionId), null);
-  assert.equal(w.seller.ex.session(sybils[2].sessionId).state, 'taken');
-  ok(await w.seller.ex.offer(sybils[2].sessionId, termsBytes(), w.seller.secret));
+  assert.equal(w.seller.ex.session(sybils[0].sessionId), null);
+  assert.equal(w.seller.ex.session(sybils[1].sessionId).state, 'taken');
+  ok(await w.seller.ex.offer(sybils[1].sessionId, termsBytes(), w.seller.secret));
   const late = await party();
-  fail(await w.seller.ex.receive(await craft(late, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: late.pub }, { nonce: freshNonce() }), w.seller.secret), 'LIMIT_EXCEEDED');
+  fail(await w.seller.ex.receive(await craft(late, w.seller, w.address, 'take-request', { buyerAddress: set.terms.buyer, buyerMessagingKey: late.pub }, { nonce: freshNonce(), expires: NOW + 1500 }), w.seller.secret), 'LIMIT_EXCEEDED');
   assert.equal(w.seller.ex.session(id).state, 'offered');
 });
-
