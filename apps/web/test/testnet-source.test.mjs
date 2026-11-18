@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { sepoliaRegistrySource, TESTNET_TRUST_FORMAT as RUNTIME_FORMAT } from '../src/testnet/sepolia-source.ts';
-import { loadTestnetTrust, verifyTestnetTrust, TESTNET_TRUST_FORMAT, TESTNET_TRUST_FILES } from '../scripts/testnet-trust.mjs';
+import { LEGACY_TESTNET_TRUST_FORMATS, sepoliaRegistrySource, TESTNET_TRUST_FORMAT as RUNTIME_FORMAT } from '../src/testnet/sepolia-source.ts';
+import { loadTestnetTrust, verifyTestnetTrust, TESTNET_ACCEPTED_FILE, TESTNET_TRUST_FORMAT, TESTNET_TRUST_FILES } from '../scripts/testnet-trust.mjs';
 import { fixtureRegistry, fixtureTermsDocument, FIXTURE_ESCROW, writeTestnetTrust } from '../../../scripts/lib/testnet-fixture.mjs';
 import { reviewTermsBytes } from '../../../packages/domain/index.ts';
 
@@ -71,7 +71,8 @@ async function rawBundle(root) {
   const read = path => readFile(resolve(root, path));
   const trusted = JSON.parse(await read(TESTNET_TRUST_FILES.key));
   return { format: TESTNET_TRUST_FORMAT, keyId: trusted.keyId, publicKey: trusted.publicKey, registry: (await read(TESTNET_TRUST_FILES.registry)).toString('base64url'),
-    manifest: (await read(TESTNET_TRUST_FILES.manifest)).toString('base64url'), envelope: JSON.parse(await read(TESTNET_TRUST_FILES.envelope)) };
+    abi: (await read(TESTNET_TRUST_FILES.abi)).toString('base64url'), manifest: (await read(TESTNET_TRUST_FILES.manifest)).toString('base64url'),
+    envelope: JSON.parse(await read(TESTNET_TRUST_FILES.envelope)) };
 }
 test('a signed registry that is not exactly Sepolia (chain id and genesis) is refused at build time and at runtime', async t => {
   const sepolia = fixtureRegistry().networks[0];
@@ -117,4 +118,75 @@ test('an unset owner pin blocks substituted self-consistent bundles at build, ru
   assert.deepEqual(await verifyTestnetTrust(second.root, { pinnedKeyId: first.keyId }), { ok: false, error: { code: 'KEY_ID' } });
   assert.deepEqual(await sepoliaRegistrySource(await rawBundle(second.root), undefined, first.keyId)(), { kind: 'failed' });
   assert.equal((await verifySepoliaRelease({ root: second.root, pinnedKeyId: second.keyId })).ok, true, 'explicit fixture pin is library composition only');
+});
+
+// D3 Option A (PROPOSED): one G15 manifest covers the registry and the canonical ABI, and the bundle carries both.
+const CANONICAL_ABI = await readFile(new URL('../../../contracts/evm/abi/BasicEscrow.json', import.meta.url));
+const onlyRegistry = manifest => { manifest.assets = manifest.assets.filter(asset => asset.path === TESTNET_TRUST_FILES.registry); };
+
+test('one manifest over the registry and the canonical ABI verifies at build time and at runtime; the v2 bundle carries the ABI', async t => {
+  const { root, keyId } = await trustRoot(t);
+  const manifest = JSON.parse(await readFile(resolve(root, TESTNET_TRUST_FILES.manifest), 'utf8'));
+  assert.deepEqual(manifest.assets.map(asset => asset.path), [TESTNET_TRUST_FILES.abi, TESTNET_TRUST_FILES.registry]);
+  assert.deepEqual(manifest.deployments, []); assert.equal(manifest.predecessorDigest, null);
+  const { bundle, summary } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
+  assert.equal(bundle.format, 'p2p-offramp/testnet-trust/v2');
+  assert.deepEqual(Buffer.from(bundle.abi, 'base64url'), CANONICAL_ABI);
+  assert.equal(summary.abiSha256, manifest.assets[0].sha256);
+  assert.equal((await sepoliaRegistrySource(structuredClone(bundle), undefined, keyId)()).kind, 'ready');
+});
+
+test('registry-only, extra-asset and edited or non-canonical ABI manifests are ASSET_MISMATCH at build time and refused at runtime', async t => {
+  const cases = {
+    'registry-only manifest': { editManifest: onlyRegistry },
+    'manifest naming an asset that is never supplied': { editManifest: (manifest, sha) => {
+      manifest.assets.push({ path: 'docs/unsupplied.json', bytes: 2, sha256: sha(new TextEncoder().encode('{}')) });
+      manifest.assets.sort((a, b) => a.path < b.path ? -1 : 1);
+    } },
+  };
+  for (const [name, options] of Object.entries(cases)) {
+    const { root, keyId } = await trustRoot(t, options);
+    await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: ASSET_MISMATCH/, name);
+    assert.deepEqual(await sepoliaRegistrySource(await rawBundle(root), undefined, keyId)(), { kind: 'failed' }, name);
+  }
+  // A signed ABI that is not the committed canonical file could never be packaged for recovery: the build refuses it.
+  const altered = Buffer.concat([CANONICAL_ABI, Buffer.from('\n')]);
+  const nonCanonical = await trustRoot(t, { abi: altered });
+  await assert.rejects(loadTestnetTrust(nonCanonical.root, { pinnedKeyId: nonCanonical.keyId }), /TESTNET_TRUST_INVALID: ASSET_MISMATCH/);
+  // ABI bytes edited after signing, in the checkout or inside an embedded bundle.
+  const { root, keyId } = await trustRoot(t);
+  const { bundle } = await loadTestnetTrust(root, { pinnedKeyId: keyId });
+  const abi = Buffer.from(bundle.abi, 'base64url'); abi[10] ^= 1;
+  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, abi: abi.toString('base64url') }, undefined, keyId)(), { kind: 'failed' });
+  await writeFile(resolve(root, TESTNET_TRUST_FILES.abi), abi);
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_INVALID: ASSET_MISMATCH/);
+  await rm(resolve(root, TESTNET_TRUST_FILES.abi));
+  await assert.rejects(loadTestnetTrust(root, { pinnedKeyId: keyId }), /TESTNET_TRUST_MISSING/);
+});
+
+test('legacy registry-only v1 bundles and v2 bundles without ABI bytes are refused at runtime', async t => {
+  assert.deepEqual(LEGACY_TESTNET_TRUST_FORMATS, ['p2p-offramp/testnet-trust/v1']);
+  const { root, keyId } = await trustRoot(t, { editManifest: onlyRegistry });
+  const { abi, ...v1Shape } = await rawBundle(root);
+  assert.ok(abi);
+  for (const legacy of [{ ...v1Shape, format: 'p2p-offramp/testnet-trust/v1' }, { ...v1Shape, format: 'p2p-offramp/testnet-trust/v1', abi }, v1Shape]) {
+    assert.deepEqual(await sepoliaRegistrySource(legacy, undefined, keyId)(), { kind: 'failed' });
+  }
+  const current = await trustRoot(t);
+  const { bundle } = await loadTestnetTrust(current.root, { pinnedKeyId: current.keyId });
+  assert.deepEqual(await sepoliaRegistrySource({ ...bundle, format: 'p2p-offramp/testnet-trust/v1' }, undefined, current.keyId)(), { kind: 'failed' });
+  const { abi: dropped, ...withoutAbi } = bundle;
+  assert.ok(dropped);
+  assert.deepEqual(await sepoliaRegistrySource(withoutAbi, undefined, current.keyId)(), { kind: 'failed' });
+});
+
+test('build-time verification of the two-asset release refuses an older sequence and a different manifest at the accepted sequence', async t => {
+  const { root, keyId, manifestSha256 } = await trustRoot(t);
+  const accept = record => writeFile(resolve(root, TESTNET_ACCEPTED_FILE), JSON.stringify(record));
+  await accept({ sequence: 1, manifestSha256 });
+  assert.equal((await verifyTestnetTrust(root, { pinnedKeyId: keyId })).ok, true, 'the accepted release itself still verifies');
+  await accept({ sequence: 2, manifestSha256: 'a'.repeat(64) });
+  assert.deepEqual(await verifyTestnetTrust(root, { pinnedKeyId: keyId }), { ok: false, error: { code: 'RELEASE_ROLLBACK' } });
+  await accept({ sequence: 1, manifestSha256: 'a'.repeat(64) });
+  assert.deepEqual(await verifyTestnetTrust(root, { pinnedKeyId: keyId }), { ok: false, error: { code: 'RELEASE_ROLLBACK' } });
 });

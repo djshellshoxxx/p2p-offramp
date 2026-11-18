@@ -20,9 +20,9 @@ import { homedir, tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { deploy } from './sepolia/deploy.mjs';
 import { recordDeployment } from './sepolia/record-deployment.mjs';
-import { keygen, REGISTRY_ASSET, signRelease } from './sepolia/owner-release.mjs';
+import { keygen, REGISTRY_ASSET, signRelease, writeSignedRelease } from './sepolia/owner-release.mjs';
 import { TRUSTED_KEY_PATH } from './sepolia/verify-release.mjs';
-import { runTrades } from './sepolia/trade.mjs';
+import { runTrades as runTradesFor } from './sepolia/trade.mjs';
 import { chainIdentity, EVM_DIR, ROOT, rpcClient, SEPOLIA } from './sepolia/lib.mjs';
 import { reviewTermsBytes, RegistryService } from '../packages/domain/index.ts';
 import { evmTermsHash } from '../packages/wallet/src/evm-terms.ts';
@@ -38,6 +38,9 @@ const PUBLIC_ENDPOINT = 'https://ethereum-sepolia-rpc.publicnode.com/';
 process.env.SEPOLIA_SELLER_PRIVATE_KEY = '0x' + '22'.repeat(32);
 process.env.SEPOLIA_CROSSCHECK_RPC_URL = 'http://127.0.0.1:9/';
 const inherited = Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('SEPOLIA_')));
+// Deployment selection is an explicit library input (D3); this proof trades against the first deployment.
+const DEPLOYMENT_ID = 'escrow-sepolia-v1';
+const runTrades = options => runTradesFor({ deploymentId: DEPLOYMENT_ID, ...options });
 const passed = [];
 const pass = name => { passed.push(name); console.log(`ok - ${name}`); };
 const code = expected => error => { assert.equal(error?.code, expected, String(error?.stack ?? error)); return true; };
@@ -83,15 +86,15 @@ try {
 
   // Kit: deploy, record and owner-sign the registry inside a temporary repository root.
   const root = resolve(temporary, 'root');
-  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
+  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md', 'contracts/evm/abi/BasicEscrow.json']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
   // The seller key is given without 0x (the form wallets export); the kit normalizes it for Forge.
   const env = { ...inherited, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: SELLER_KEY.slice(2), SEPOLIA_BUYER_PRIVATE_KEY: BUYER_KEY };
-  const deployed = await deploy({ env, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash,
+  const deployed = await deploy({ env, publicEndpoint: PUBLIC_ENDPOINT, deploymentId: DEPLOYMENT_ID, expectGenesis: genesisHash,
     outDir: resolve(root, 'docs/deployments/sepolia'), registryPath: resolve(root, REGISTRY_ASSET) });
   const escrow = deployed.record.contractAddress;
   // G25: the registry is signed only after the deployment block is finalized and re-recorded (anvil finalizes latest - 64).
   await rpc('anvil_mine', ['0x46']);
-  assert.equal((await recordDeployment({ rpcUrl: url, txHash: deployed.record.initializationTx, publicEndpoint: PUBLIC_ENDPOINT, expectedDeployer: SELLER, expectGenesis: genesisHash,
+  assert.equal((await recordDeployment({ rpcUrl: url, txHash: deployed.record.initializationTx, publicEndpoint: PUBLIC_ENDPOINT, deploymentId: DEPLOYMENT_ID, expectedDeployer: SELLER, expectGenesis: genesisHash,
     outDir: resolve(root, 'docs/deployments/sepolia'), registryPath: resolve(root, REGISTRY_ASSET), env })).record.finalizedAtRecording, true);
 
   // Refusals before any trade transaction.
@@ -100,15 +103,16 @@ try {
   await mkdir(resolve(root, TRUSTED_KEY_PATH, '..'), { recursive: true });
   await writeFile(resolve(root, TRUSTED_KEY_PATH), JSON.stringify({ keyId: owner.keyId, publicKey: owner.publicKey }));
   const signed = await signRelease({ privateJwk: owner.privateJwk, sequence: 1, days: 30, now: Math.floor(Date.now() / 1000) - 60, root, sourceCommit: 'b'.repeat(40), expectGenesis: genesisHash });
-  await writeFile(resolve(root, 'registry/testnet/sepolia.release.json'), signed.manifestBytes);
-  await writeFile(resolve(root, 'registry/testnet/sepolia.release.sig.json'), JSON.stringify(signed.envelope));
+  await writeSignedRelease(root, signed);
   await assert.rejects(runTrades({ env, root, run: 'key-unpinned', expectGenesis: genesisHash }), code('REGISTRY_NOT_VERIFIED_KEY_UNPINNED'));
   await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'wrong-genesis' }), code('WRONG_GENESIS'));
   await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: SELLER_KEY }, root, run: 'same-party', expectGenesis: genesisHash }), code('BUYER_EQUALS_SELLER'));
   await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env: { ...env, SEPOLIA_BUYER_PRIVATE_KEY: '' }, root, run: 'no-buyer', expectGenesis: genesisHash }), code('BUYER_KEY_MISSING'));
   await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'Bad Id', expectGenesis: genesisHash }), code('RUN_ID_INVALID'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'no-deployment', expectGenesis: genesisHash, deploymentId: undefined }), code('DEPLOYMENT_ID_INVALID'));
+  await assert.rejects(runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'unknown-deployment', expectGenesis: genesisHash, deploymentId: 'escrow-sepolia-v9' }), code('REGISTRY_NETWORK_MISMATCH'));
   assert.equal(await rpc('eth_getTransactionCount', [SELLER, 'latest']), '0x1', 'only the deployment was sent');
-  pass('refuses an unverified registry, wrong genesis, buyer = seller, missing buyer key and a bad run id before sending anything');
+  pass('refuses an unverified registry, wrong genesis, buyer = seller, missing buyer key, a bad run id and a missing or unknown deployment id before sending anything');
 
   // Run 1: release trade settles; refund trade is funded and waits for its deadline.
   const first = await runTrades({ pinnedKeyId: owner.keyId, env, root, run: 'local-proof', expectGenesis: genesisHash });
@@ -118,7 +122,7 @@ try {
     assert.equal((await stat(resolve(statePath, '..', name))).mode & 0o777, 0o600, name);
   }
   const [release, refund] = first.state.trades;
-  assert.equal(first.state.registryTrust.verified, true); assert.equal(first.state.registryTrust.keyId, owner.keyId);
+  assert.equal(first.state.registryTrust.verified, true); assert.equal(first.state.registryTrust.keyId, owner.keyId); assert.equal(first.state.deploymentId, DEPLOYMENT_ID, 'the run state is bound to its deployment id');
   assert.equal(release.status, 'released'); assert.equal(refund.status, 'awaiting-deadline');
   for (const check of ['terms pass the app terms review against the registry', 'seller and buyer acceptances verify; not across roles, chains or deployments',
     'on-chain tradeIdOf equals the off-chain termsHash', 'amount control (one wei short): reverts IncorrectDeposit', 'escrow record and Funded event match the signed terms',
