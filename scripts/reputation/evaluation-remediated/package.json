@@ -1,0 +1,24 @@
+{
+  "name": "p2p-semaphore-4.14.5-maintained-transitives-20261102",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Experimental Node-only dependency override evaluation; outside original SDK constraints and not a production provider",
+  "engines": {
+    "node": "24.19.0"
+  },
+  "dependencies": {
+    "@semaphore-protocol/group": "4.14.5",
+    "@semaphore-protocol/identity": "4.14.5",
+    "@semaphore-protocol/proof": "4.14.5",
+    "ffjavascript": "0.3.1",
+    "snarkjs": "0.7.6"
+  },
+  "overrides": {
+    "ethers": "6.17.0",
+    "snarkjs": "0.7.6",
+    "bfj": "9.1.4",
+    "ejs": "7.0.2",
+    "circom_tester": "0.0.24"
+  }
+}
