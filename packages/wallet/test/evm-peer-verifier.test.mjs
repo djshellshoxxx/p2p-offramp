@@ -81,7 +81,7 @@ test('empty code at the recorded block: EOA path verifies both strict signatures
     deepFrozen(result);
     assert.doesNotMatch(JSON.stringify(result), new RegExp(hexOf(input.termsSignature).slice(0, 40)));
     const code = f.state.calls.find(call => call.method === 'eth_getCode' && call.params[0] === input.binding.account);
-    assert.equal(code.params[1], '0x10', 'classification is pinned to the recorded block');
+    assert.deepEqual(code.params[1], { blockHash: H1, requireCanonical: true }, 'classification is pinned to the recorded block by hash');
     assert.ok(methods(f).every(method => ['eth_chainId', 'eth_getBlockByNumber', 'eth_getCode'].includes(method)), 'EOA path never eth_calls');
     assert.ok(!methods(f).some(method => /send|sign/i.test(method)));
   }
@@ -100,7 +100,7 @@ test('contract code: ERC-1271 for BOTH statements at the recorded block; either 
   const calls = f.state.calls.filter(call => call.method === 'eth_call');
   assert.equal(calls.length, 2);
   assert.deepEqual(calls.map(call => call.params[0].data.slice(10, 74)), [result.value.termsHash, result.value.bindingHash]);
-  assert.ok(calls.every(call => call.params[1] === '0x10' && call.params[0].to === W && call.params[0].gas === '0x186a0'));
+  assert.ok(calls.every(call => call.params[1].blockHash === H1 && call.params[1].requireCanonical === true && call.params[0].to === W && call.params[0].gas === '0x186a0'));
   for (const approvals of [{ approveTerms: false }, { approveBinding: false }]) {
     const g = await chain(); assert.deepEqual(await g.verifier.verify(contractInput(g, approvals)), { ok: false, code: 'UNAUTHORIZED' });
   }
@@ -185,12 +185,12 @@ test('deadlines: binding, terms, envelope (on arrival only) and chain block time
     const f = await chain(); if (anchorTime !== undefined) f.state.anchor.timestamp = '0x' + anchorTime.toString(16);
     return f.verifier.verify({ ...eoaInput(), ...overrides });
   };
-  assert.equal((await at({ nowSeconds: '1699994999' })).ok, true);
+  assert.equal((await at({ nowSeconds: '1699994999' }, 1_699_994_999)).ok, true);
   assert.deepEqual(await at({ nowSeconds: '1699995000' }), { ok: false, code: 'EXPIRED' }, 'binding notAfter');
   assert.deepEqual(await at({ envelopeExpiresAtSeconds: String(NOW) }), { ok: false, code: 'EXPIRED' }, 'envelope expiry on arrival');
-  const recheck = await at({ envelopeExpiresAtSeconds: null, nowSeconds: String(NOW + 4000) });
+  const recheck = await at({ envelopeExpiresAtSeconds: null, nowSeconds: String(NOW + 4000) }, NOW + 4000);
   assert.equal(recheck.ok, true); assert.equal(recheck.value.effectiveNotAfterSeconds, '1699995000');
-  assert.deepEqual(await at({}, 1_699_995_000), { ok: false, code: 'EXPIRED' }, 'block.timestamp at the deadline');
+  assert.deepEqual(await at({ nowSeconds: '1699994990' }, 1_699_995_000), { ok: false, code: 'EXPIRED' }, 'block.timestamp at the deadline');
 });
 test('inputs are snapshotted before the first await; hostile inputs and oversize signatures never reach the chain', async () => {
   const held = deferred(), f = await chain(), input = eoaInput();
@@ -223,4 +223,26 @@ test('timeout, abort, dispose and the pending bound end verification without lat
   const { registry } = await registryWith(), slow = createPeerAcceptanceVerifier({ registry, request: () => new Promise(() => {}), timeoutMs: 10 });
   const timed = slow.verify(eoaInput()); await new Promise(r => setImmediate(r)); context.mock.timers.tick(10);
   assert.deepEqual(await timed, { ok: false, code: 'TIMEOUT' }); slow.dispose(); context.mock.timers.reset();
+});
+test('review NIT: reads are pinned by EIP-1898 block hash (fail closed if unsupported) and the latest block must be current', async () => {
+  // Every state read names the anchor's hash with requireCanonical; a provider that rejects that form fails closed.
+  const f = await chain(), input = contractInput(f), result = await f.verifier.verify(input);
+  assert.equal(result.ok, true, JSON.stringify(result));
+  const stateReads = f.state.calls.filter(call => call.method === 'eth_getCode' || call.method === 'eth_call');
+  assert.equal(stateReads.length, 5);
+  assert.ok(stateReads.every(call => JSON.stringify(call.params.at(-1)) === JSON.stringify({ blockHash: H1, requireCanonical: true })));
+  const legacy = await chain(), legacyInput = contractInput(legacy);
+  legacy.state.intercept = (method, params) => { if ((method === 'eth_getCode' || method === 'eth_call') && typeof params.at(-1) === 'object') throw Error('PRIVATE invalid block param'); };
+  const refusedLegacy = await legacy.verifier.verify(legacyInput);
+  assert.deepEqual(refusedLegacy, { ok: false, code: 'UNAVAILABLE' }); assert.doesNotMatch(JSON.stringify(refusedLegacy), /PRIVATE/);
+  // A stale or future 'latest' is not a current observation.
+  for (const [timestamp, reason] of [[NOW - PEER_VERIFIER_LIMITS.maxAnchorAgeSeconds - 1, 'stale-block'], [NOW + PEER_VERIFIER_LIMITS.maxAnchorFutureSeconds + 1, 'future-block']]) {
+    const g = await chain(); g.state.anchor.timestamp = '0x' + timestamp.toString(16);
+    assert.deepEqual(await g.verifier.verify(eoaInput()), { ok: false, code: 'UNAVAILABLE', reason });
+    assert.ok(!g.state.calls.some(call => call.method === 'eth_getCode'), 'no state read against a stale block');
+  }
+  const edge = await chain(); edge.state.anchor.timestamp = '0x' + (NOW - PEER_VERIFIER_LIMITS.maxAnchorAgeSeconds).toString(16);
+  assert.equal((await edge.verifier.verify(eoaInput())).ok, true, 'exactly at the age bound');
+  const { registry } = await registryWith();
+  assert.throws(() => createPeerAcceptanceVerifier({ registry, request: async () => null, maxAnchorAgeSeconds: 0 }), /Invalid peer verifier configuration/);
 });

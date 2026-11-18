@@ -43,8 +43,14 @@
  *   version 1 offer or accept is refused (DOWNGRADE) in both directions; take-request, terms-reject and cancel stay v1.
  * - A statement is verified (injected verifier: registry-derived domain, account class from pinned code, both
  *   signatures) only after the gift wrap authenticated the sender and every session check above passed, and then
- *   durably admitted to the injected replay store before the state changes. The admission policy above is unchanged:
- *   D1 work never displaces or refuses another session's messages; only the message being processed can be refused.
+ *   durably admitted to the injected replay store before the state changes. The session admission policy above is
+ *   unchanged and D1 work never displaces another session. The replay store's capacity is shared, though: when it is
+ *   full, the statement being sent or received is refused (LIMIT_EXCEEDED), also for a selected session. To keep that
+ *   rare, cancelled, rejected and never-accepted-but-ended sessions free their quota (compact tombstones with their own
+ *   budget), entries retire shortly after the terms deadline, and selected and buyer-side sessions are exempt from the
+ *   per-peer/per-ad quotas and may use a reserved share of the total (see packages/wallet/src/evm-peer-replay.ts).
+ * - At most one verification runs per session, and a rumor already being processed is a DUPLICATE, so copies of one
+ *   wrap cannot occupy the verifier; cheap local checks (state, deadlines, binding, tombstone) run before chain reads.
  * - cancel and terms-reject of a session with reviewed terms durably tombstone its termsHash before the state changes,
  *   on both the sending and the receiving side; a later statement for that termsHash is refused in any session.
  * - Before a new acceptance and before funding (`acceptanceStatus` with purpose 'accept' / 'fund') every stored
@@ -77,7 +83,7 @@ export type ExchangeCode =
   | 'HASH_MISMATCH' | 'REVISION_MISMATCH' | 'WRONG_SIGNER'
   // D1 mode only (peerAcceptance ports configured).
   | 'DOWNGRADE' | 'ACCEPTANCE_REQUIRED' | 'ACCEPTANCE_DISABLED' | 'ACCEPTANCE_REFUSED' | 'ACCEPTANCE_CONFLICT' | 'ACCEPTANCE_UNAVAILABLE'
-  | 'UNSUPPORTED_ACCOUNT' | 'TOMBSTONED';
+  | 'UNSUPPORTED_ACCOUNT' | 'TOMBSTONED' | 'BUSY';
 export type ExchangeResult<T> = { readonly ok: true; readonly value: T } | { readonly ok: false; readonly code: ExchangeCode; readonly review?: TermsReviewRejection;
   /** D1 only: the port refusal behind the code, and its fixed-vocabulary reason word (for example `eip7702-delegated`). */
   readonly acceptance?: PeerAcceptanceCode; readonly reason?: string };
@@ -189,6 +195,10 @@ interface Session {
   pins: number;
   /** D1 mode only. Verified statements kept in memory for rechecks; never persisted, exported or put in a view. */
   peer: { seller: PeerRecord | null; buyer: PeerRecord | null } | null;
+  /** D1: a verification for this session is in flight (single-flight). */
+  verifying?: boolean;
+  /** D1: local cancel/reject tombstone writes in flight, and whether one was durably written for these terms. */
+  withdrawing?: number; withdrawn?: boolean;
 }
 interface PeerRecord { readonly wire: PeerAcceptanceWire; readonly evidence: PeerVerifiedEvidence }
 interface BuiltMessage {
@@ -241,6 +251,8 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   // Only the newest in-flight take for a pair may commit, even if a newer
   // session has since become terminal or been pruned. Tokens are bounded.
   const pendingTakes = new Map<string, symbol>();
+  // D1 only: rumor ids currently being processed by receive (copies of one wrap are DUPLICATE while in flight).
+  const inflight = new Set<string>();
   let closed = false;
 
   const clock = (): number | null => { try { const value = options.now(); return Number.isSafeInteger(value) && value >= 0 ? value : null; } catch { return null; } };
@@ -405,13 +417,22 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
 
   // ---------- D1 peer acceptance (only reachable when `d1` is set) ----------
   const counterpartyOf = (s: Session): string => s.role === 'seller' ? s.buyer : s.seller;
+  /** Selected seller-side sessions and buyer-side sessions are progress the local user chose (priority capacity). */
   const replayScope = (s: Session, reviewed: ReviewedEvmTerms, now: number): PeerReplayScope =>
-    Object.freeze({ ad: s.ad, peer: counterpartyOf(s), acceptBeforeSeconds: reviewed.acceptBeforeSeconds, nowSeconds: now });
-  const roleView = (evidence: PeerVerifiedEvidence, now: number): PeerAcceptanceRoleView => Object.freeze({
+    Object.freeze({ ad: s.ad, peer: counterpartyOf(s), acceptBeforeSeconds: reviewed.acceptBeforeSeconds, nowSeconds: now,
+      closesAtSeconds: s.adExpires, priority: s.role === 'buyer' || s.selected });
+  const withdrawnLocally = (s: Session): boolean => s.withdrawn === true || (s.withdrawing ?? 0) > 0;
+  const roleView = (s: Session, evidence: PeerVerifiedEvidence, now: number): PeerAcceptanceRoleView => Object.freeze({
     role: evidence.binding.role, account: evidence.binding.account, scheme: evidence.scheme, termsHash: evidence.termsHash,
     notAfterSeconds: evidence.binding.notAfterSeconds, effectiveNotAfterSeconds: evidence.effectiveNotAfterSeconds,
     anchorHeight: evidence.anchor.height, anchorHash: evidence.anchor.hash, finality: 'unfinalized' as const, checkedAtSeconds: now,
-    label: peerRoleLabel(evidence) });
+    label: withdrawnLocally(s) ? null : peerRoleLabel(evidence) });
+  /** Single-flight D1 verification per session. A second request while one runs is refused BUSY (not remembered). */
+  async function exclusive<T>(s: Session, work: () => Promise<ExchangeResult<T>>): Promise<ExchangeResult<T>> {
+    if (s.verifying === true) return bad('BUSY');
+    s.verifying = true;
+    try { return await work(); } finally { s.verifying = false; }
+  }
   /** acceptBefore may be at most MAX_PEER_ACCEPT_HORIZON_SECONDS ahead, so replay entries always retire. */
   const withinHorizon = (reviewed: ReviewedEvmTerms, now: number): boolean =>
     BigInt(reviewed.acceptBeforeSeconds) - BigInt(now) <= BigInt(MAX_PEER_ACCEPT_HORIZON_SECONDS);
@@ -459,19 +480,27 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     const status = outcome.value?.status;
     return status === 'recorded' || status === 'duplicate' ? { ok: true, value: status } : peerBad('INTEGRITY_FAILURE');
   }
-  /** Durable tombstone for a session's reviewed terms; a no-op outside D1 mode or before any terms exist. */
+  /**
+   * Durable tombstone for a session's reviewed terms; a no-op outside D1 mode or before any terms exist. While it is in
+   * flight, and once it succeeded, nothing in this session is labelled accepted (even if a racing acceptance commits).
+   */
   async function tombstoneFor(s: Session, now: number): Promise<ExchangeResult<void>> {
     if (d1 === null || s.terms === null) return { ok: true, value: undefined };
     let result: unknown;
+    s.withdrawing = (s.withdrawing ?? 0) + 1;
     try { result = await d1.replay.tombstone(s.terms.hash, replayScope(s, s.terms.reviewed, now)); } catch { return peerBad('UNAVAILABLE'); }
+    finally { s.withdrawing = (s.withdrawing ?? 1) - 1; }
     if (closed) return bad('CLOSED');
     const outcome = result as { ok?: unknown; code?: unknown; reason?: unknown } | null;
-    return outcome !== null && typeof outcome === 'object' && outcome.ok === true ? { ok: true, value: undefined } : peerBad(outcome?.code, outcome?.reason);
+    if (outcome === null || typeof outcome !== 'object' || outcome.ok !== true) return peerBad(outcome?.code, outcome?.reason);
+    s.withdrawn = true;
+    return { ok: true, value: undefined };
   }
-  async function tombstoned(termsHash: string, now: number): Promise<ExchangeResult<boolean>> {
+  /** Tombstone (or retired past the store's high-water mark) for this session's reviewed terms. */
+  async function tombstoned(s: Session, terms: { hash: string; reviewed: ReviewedEvmTerms }, now: number): Promise<ExchangeResult<boolean>> {
     if (d1 === null) return bad('ACCEPTANCE_DISABLED');
     let result: unknown;
-    try { result = await d1.replay.status(termsHash, now); } catch { return peerBad('UNAVAILABLE'); }
+    try { result = await d1.replay.status(terms.hash, replayScope(s, terms.reviewed, now)); } catch { return peerBad('UNAVAILABLE'); }
     if (closed) return bad('CLOSED');
     const outcome = result as { ok?: unknown; value?: { tombstoned?: unknown }; code?: unknown; reason?: unknown } | null;
     if (outcome === null || typeof outcome !== 'object' || outcome.ok !== true) return peerBad(outcome?.code, outcome?.reason);
@@ -482,6 +511,11 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   async function receiveStatement(s: Session, role: Role, wire: PeerAcceptanceWire, reviewed: ReviewedEvmTerms, termsHash: string,
     envelopeExpires: number, now: number): Promise<ExchangeResult<PeerRecord>> {
     if (!withinHorizon(reviewed, now)) return peerBad('LIMIT_EXCEEDED', 'accept-horizon');
+    if (!bindingMatches(s, role, wire, reviewed, termsHash)) return peerBad('UNAUTHORIZED');
+    // Cheap local refusal before any chain read: cancelled terms never reach the verifier.
+    if (withdrawnLocally(s)) return peerBad('TOMBSTONED');
+    const withdrawn = await tombstoned(s, { hash: termsHash, reviewed }, now); if (!withdrawn.ok) return withdrawn;
+    if (withdrawn.value) return peerBad('TOMBSTONED');
     const verified = await verifyStatement(s, role, wire, reviewed, termsHash, envelopeExpires, now); if (!verified.ok) return verified;
     const admitted = await admitStatement(verified.value, replayScope(s, reviewed, now)); if (!admitted.ok) return admitted;
     return { ok: true, value: Object.freeze({ wire, evidence: verified.value }) };
@@ -668,27 +702,32 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       const copy = new Uint8Array(termsBytes);
       s.pins++;
       try {
-        const checked = await reviewForSession(s, copy); if (closed) return bad('CLOSED');
-        if (!checked.ok) return checked;
-        const { reviewed, hash } = checked.value;
-        if (!withinHorizon(reviewed, now!)) return peerBad('LIMIT_EXCEEDED', 'accept-horizon');
-        if (!bindingMatches(s, 'seller', wire, reviewed, hash)) return peerBad('UNAUTHORIZED');
-        let text: string;
-        try { text = new TextDecoder('utf-8', { fatal: true }).decode(copy); } catch { return bad('INVALID_INPUT'); }
-        const built = await build(s, 'terms-offer', { terms: text }, hash, secret, wire);
-        if (closed) return bad('CLOSED');
-        if (!built.ok) return built;
-        const expires = Number(built.value.envelope.expiresAtSeconds);
-        const ready = readyToCommit(s, 'taken', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
-        if (!ready.ok) return ready;
-        // The seller's own statement passes the same verification the buyer will run (account class at a fresh block,
-        // both signatures, registry domain, deadlines including this envelope) before it is durably recorded.
-        const verified = await verifyStatement(s, 'seller', wire, reviewed, hash, expires, ready.value); if (!verified.ok) return verified;
-        const admitted = await admitStatement(verified.value, replayScope(s, reviewed, ready.value)); if (!admitted.ok) return admitted;
-        const still = readyToCommit(s, 'taken', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
-        if (!still.ok) return still;
-        s.state = 'offered'; s.terms = { hash, bytes: copy, reviewed }; s.peer!.seller = Object.freeze({ wire, evidence: verified.value });
-        return { ok: true, value: sent(s, 'terms-offer', built.value, built.value.envelope.expiresAtSeconds) };
+        return await exclusive(s, async () => {
+          const checked = await reviewForSession(s, copy); if (closed) return bad('CLOSED');
+          if (!checked.ok) return checked;
+          const { reviewed, hash } = checked.value;
+          if (!withinHorizon(reviewed, now!)) return peerBad('LIMIT_EXCEEDED', 'accept-horizon');
+          if (!bindingMatches(s, 'seller', wire, reviewed, hash)) return peerBad('UNAUTHORIZED');
+          // Cheap local refusal before any chain read: cancelled terms are never offered again.
+          const withdrawn = await tombstoned(s, { hash, reviewed }, now!); if (!withdrawn.ok) return withdrawn;
+          if (withdrawn.value) return peerBad('TOMBSTONED');
+          let text: string;
+          try { text = new TextDecoder('utf-8', { fatal: true }).decode(copy); } catch { return bad('INVALID_INPUT'); }
+          const built = await build(s, 'terms-offer', { terms: text }, hash, secret, wire);
+          if (closed) return bad('CLOSED');
+          if (!built.ok) return built;
+          const expires = Number(built.value.envelope.expiresAtSeconds);
+          const ready = readyToCommit(s, 'taken', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
+          if (!ready.ok) return ready;
+          // The seller's own statement passes the same verification the buyer will run (account class at a fresh block,
+          // both signatures, registry domain, deadlines including this envelope) before it is durably recorded.
+          const verified = await verifyStatement(s, 'seller', wire, reviewed, hash, expires, ready.value); if (!verified.ok) return verified;
+          const admitted = await admitStatement(verified.value, replayScope(s, reviewed, ready.value)); if (!admitted.ok) return admitted;
+          const still = readyToCommit(s, 'taken', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
+          if (!still.ok) return still;
+          s.state = 'offered'; s.terms = { hash, bytes: copy, reviewed }; s.peer!.seller = Object.freeze({ wire, evidence: verified.value });
+          return { ok: true, value: sent(s, 'terms-offer', built.value, built.value.envelope.expiresAtSeconds) };
+        });
       } finally { s.pins--; }
     },
 
@@ -702,27 +741,31 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       if (!sameBytes(s.terms.bytes, termsBytes)) return bad('TERMS_MISMATCH');
       if (BigInt(s.terms.reviewed.acceptBeforeSeconds) <= BigInt(now!)) return bad('EXPIRED');
       const replay = replayError(s.id, null, now!, false); if (replay !== null) return bad(replay);
-      const { hash, reviewed } = s.terms;
+      const terms = s.terms, { hash, reviewed } = terms;
       const seller = s.peer!.seller;
       if (seller === null) return bad('OUT_OF_ORDER');
       if (!bindingMatches(s, 'buyer', wire, reviewed, hash)) return peerBad('UNAUTHORIZED');
-      // Before a new acceptance: the seller statement must still verify at a fresh block (account class, ERC-1271
-      // policy, registry, deadlines) and the terms must not be tombstoned.
-      const withdrawn = await tombstoned(hash, now!); if (!withdrawn.ok) return withdrawn;
-      if (withdrawn.value) return peerBad('TOMBSTONED');
-      const recheck = await verifyStatement(s, 'seller', seller.wire, reviewed, hash, null, now!); if (!recheck.ok) return recheck;
-      const built = await build(s, 'terms-accept', { revision: reviewed.revision }, hash, secret, wire);
-      if (closed) return bad('CLOSED');
-      if (!built.ok) return built;
-      const expires = Number(built.value.envelope.expiresAtSeconds);
-      const ready = readyToCommit(s, 'offered', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
-      if (!ready.ok) return ready;
-      const verified = await verifyStatement(s, 'buyer', wire, reviewed, hash, expires, ready.value); if (!verified.ok) return verified;
-      const admitted = await admitStatement(verified.value, replayScope(s, reviewed, ready.value)); if (!admitted.ok) return admitted;
-      const still = readyToCommit(s, 'offered', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
-      if (!still.ok) return still;
-      s.state = 'accepted'; s.peer!.buyer = Object.freeze({ wire, evidence: verified.value });
-      return { ok: true, value: sent(s, 'terms-accept', built.value, built.value.envelope.expiresAtSeconds) };
+      if (withdrawnLocally(s)) return peerBad('TOMBSTONED');
+      return exclusive(s, async () => {
+        // Before a new acceptance: the terms must not be tombstoned and the seller statement must still verify at a fresh
+        // block (account class, ERC-1271 policy, registry, deadlines).
+        const withdrawn = await tombstoned(s, terms, now!); if (!withdrawn.ok) return withdrawn;
+        if (withdrawn.value) return peerBad('TOMBSTONED');
+        const recheck = await verifyStatement(s, 'seller', seller.wire, reviewed, hash, null, now!); if (!recheck.ok) return recheck;
+        const built = await build(s, 'terms-accept', { revision: reviewed.revision }, hash, secret, wire);
+        if (closed) return bad('CLOSED');
+        if (!built.ok) return built;
+        const expires = Number(built.value.envelope.expiresAtSeconds);
+        const ready = readyToCommit(s, 'offered', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
+        if (!ready.ok) return ready;
+        const verified = await verifyStatement(s, 'buyer', wire, reviewed, hash, expires, ready.value); if (!verified.ok) return verified;
+        const admitted = await admitStatement(verified.value, replayScope(s, reviewed, ready.value)); if (!admitted.ok) return admitted;
+        const still = readyToCommit(s, 'offered', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
+        if (!still.ok) return still;
+        if (withdrawnLocally(s)) return peerBad('TOMBSTONED');
+        s.state = 'accepted'; s.peer!.buyer = Object.freeze({ wire, evidence: verified.value });
+        return { ok: true, value: sent(s, 'terms-accept', built.value, built.value.envelope.expiresAtSeconds) };
+      });
     },
 
     async acceptanceStatus(sessionId, purpose, signal) {
@@ -735,34 +778,45 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
         ({ ok: true, value: Object.freeze({ termsHash: s.terms?.hash ?? null, state, seller, buyer, refusal, label, freshness: 'local-history' as const, economicPreparationAllowed: false as const }) });
       const terms = s.terms, records = s.peer!;
       if (terms === null || (records.seller === null && records.buyer === null)) return purpose === 'display' ? status('none', null, null, null, null) : bad('OUT_OF_ORDER');
-      if (s.state === 'cancelled' || s.state === 'rejected') return purpose === 'display' ? status('withdrawn', null, null, 'TOMBSTONED', null) : peerBad('TOMBSTONED');
-      const withdrawn = await tombstoned(terms.hash, now);
-      if (!withdrawn.ok) return purpose === 'display' ? status('invalid', null, null, withdrawn.acceptance ?? 'UNAVAILABLE', null) : withdrawn;
-      if (withdrawn.value) return purpose === 'display' ? status('withdrawn', null, null, 'TOMBSTONED', null) : peerBad('TOMBSTONED');
-      const views: { seller: PeerAcceptanceRoleView | null; buyer: PeerAcceptanceRoleView | null } = { seller: null, buyer: null };
-      let refusal: { ok: false; code: ExchangeCode; acceptance?: PeerAcceptanceCode; reason?: string } | null = null;
-      for (const role of ['seller', 'buyer'] as const) {
-        const record = records[role]; if (record === null) continue;
-        const checked = await verifyStatement(s, role, record.wire, terms.reviewed, terms.hash, null, now, signal);
-        if (checked.ok) views[role] = roleView(checked.value, now);
-        else { refusal ??= checked; if (checked.code === 'CLOSED') return checked; }
-      }
-      if (s.terms !== terms) return bad('OUT_OF_ORDER');
-      if (purpose !== 'display') {
-        if (refusal !== null) return refusal;
-        if (views.seller === null || (purpose === 'fund' && views.buyer === null)) return bad('OUT_OF_ORDER');
-        if (purpose === 'fund') {
-          const deadline = [views.seller, views.buyer!].map(view => BigInt(view.effectiveNotAfterSeconds)).reduce((a, b) => a < b ? a : b);
-          if (deadline - BigInt(now) <= BigInt(FUNDING_SAFETY_MARGIN_SECONDS)) return peerBad('EXPIRED', 'funding-margin');
+      const withdrawnNow = (): boolean => s.state === 'cancelled' || s.state === 'rejected' || withdrawnLocally(s);
+      const withdrawnStatus = (): ExchangeResult<PeerAcceptanceStatus> => purpose === 'display' ? status('withdrawn', null, null, 'TOMBSTONED', null) : peerBad('TOMBSTONED');
+      if (withdrawnNow()) return withdrawnStatus();
+      return exclusive(s, async () => {
+        const withdrawn = await tombstoned(s, terms, now);
+        if (!withdrawn.ok) return purpose === 'display' ? status('invalid', null, null, withdrawn.acceptance ?? 'UNAVAILABLE', null) : withdrawn;
+        if (withdrawn.value) return withdrawnStatus();
+        const state = s.state;
+        const views: { seller: PeerAcceptanceRoleView | null; buyer: PeerAcceptanceRoleView | null } = { seller: null, buyer: null };
+        let refusal: { ok: false; code: ExchangeCode; acceptance?: PeerAcceptanceCode; reason?: string } | null = null;
+        for (const role of ['seller', 'buyer'] as const) {
+          const record = records[role]; if (record === null) continue;
+          const checked = await verifyStatement(s, role, record.wire, terms.reviewed, terms.hash, null, now, signal);
+          if (checked.ok) views[role] = roleView(s, checked.value, now);
+          else { refusal ??= checked; if (checked.code === 'CLOSED') return checked; }
         }
-      }
-      if (refusal !== null) {
-        const code = refusal.acceptance ?? 'UNAVAILABLE';
-        return status(code === 'EXPIRED' ? 'expired' : 'invalid', views.seller, views.buyer, code, null);
-      }
-      if (views.seller !== null && views.buyer !== null) return status('both-verified', views.seller, views.buyer, null, BOTH_VERIFIED_LABEL);
-      if (views.seller !== null) return status('seller-verified', views.seller, null, null, views.seller.label);
-      return status('invalid', null, views.buyer, 'INTEGRITY_FAILURE', null);
+        // The verification awaited chain reads: re-read the session and the tombstone before reporting anything.
+        if (sessions.get(sessionId) !== s || s.terms !== terms) return bad('OUT_OF_ORDER');
+        if (withdrawnNow()) return withdrawnStatus();
+        const again = await tombstoned(s, terms, now);
+        if (!again.ok) return purpose === 'display' ? status('invalid', null, null, again.acceptance ?? 'UNAVAILABLE', null) : again;
+        if (again.value || withdrawnNow()) return withdrawnStatus();
+        if (s.state !== state || sessions.get(sessionId) !== s) return bad('OUT_OF_ORDER');
+        if (purpose !== 'display') {
+          if (refusal !== null) return refusal;
+          if (views.seller === null || (purpose === 'fund' && views.buyer === null)) return bad('OUT_OF_ORDER');
+          if (purpose === 'fund') {
+            const deadline = [views.seller, views.buyer!].map(view => BigInt(view.effectiveNotAfterSeconds)).reduce((a, b) => a < b ? a : b);
+            if (deadline - BigInt(now) <= BigInt(FUNDING_SAFETY_MARGIN_SECONDS)) return peerBad('EXPIRED', 'funding-margin');
+          }
+        }
+        if (refusal !== null) {
+          const code = refusal.acceptance ?? 'UNAVAILABLE';
+          return status(code === 'EXPIRED' ? 'expired' : 'invalid', views.seller, views.buyer, code, null);
+        }
+        if (views.seller !== null && views.buyer !== null) return status('both-verified', views.seller, views.buyer, null, BOTH_VERIFIED_LABEL);
+        if (views.seller !== null) return status('seller-verified', views.seller, null, null, views.seller.label);
+        return status('invalid', null, views.buyer, 'INTEGRITY_FAILURE', null);
+      });
     },
 
     async receive(wrap, secret) {
@@ -829,68 +883,81 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
       }
 
       if (session === undefined) return bad('UNKNOWN_SESSION');
-      if (now >= session.adExpires) return bad('AD_EXPIRED');
-      if (iAmSeller && expires > session.adExpires) return bad('MALFORMED');
-      // accept/reject must come from the counterparty that sent the take-request (the session's buyer).
-      if ((env.type === 'terms-accept' || env.type === 'terms-reject') && from !== session.buyer) return bad('NOT_COUNTERPARTY');
-      const senderRole: Role = from === session.seller ? 'seller' : 'buyer';
-      if (from !== session.seller && from !== session.buyer) return bad('NOT_COUNTERPARTY');
-      if (transition(session.state, env.type, senderRole) === null) return bad('OUT_OF_ORDER');
-      // D1 steps await ports; every commit below re-checks against the state captured here.
-      const expectedState = session.state;
+      const settle = async (session: Session, now: number): Promise<ExchangeResult<ReceivedMessage>> => {
+        if (now >= session.adExpires) return bad('AD_EXPIRED');
+        if (iAmSeller && expires > session.adExpires) return bad('MALFORMED');
+        // accept/reject must come from the counterparty that sent the take-request (the session's buyer).
+        if ((env.type === 'terms-accept' || env.type === 'terms-reject') && from !== session.buyer) return bad('NOT_COUNTERPARTY');
+        const senderRole: Role = from === session.seller ? 'seller' : 'buyer';
+        if (from !== session.seller && from !== session.buyer) return bad('NOT_COUNTERPARTY');
+        if (transition(session.state, env.type, senderRole) === null) return bad('OUT_OF_ORDER');
+        // D1 steps await ports; every commit below re-checks against the state captured here.
+        const expectedState = session.state;
 
-      let reviewed: ReviewedEvmTerms | null = null;
-      let statement: PeerRecord | null = null;
-      if (env.type === 'terms-offer') {
-        const text = body.terms as string;
-        let bytes: Uint8Array;
-        try { bytes = new TextEncoder().encode(text); } catch { return bad('MALFORMED'); }
-        const checked = await reviewForSession(session, bytes);
-        if (closed) return bad('CLOSED');
-        if (!checked.ok) return checked;
-        if (checked.value.hash !== env.termsHash) return bad('HASH_MISMATCH');
-        const ready = readyToCommit(session, 'taken', rumor.id, expires, checked.value.reviewed.acceptBeforeSeconds);
-        if (!ready.ok) return ready;
-        if (env.v === 2) {
-          const received = await receiveStatement(session, 'seller', env.body.acceptance, checked.value.reviewed, checked.value.hash, expires, ready.value);
-          if (!received.ok) return received;
-          const still = readyToCommit(session, 'taken', rumor.id, expires, checked.value.reviewed.acceptBeforeSeconds);
-          if (!still.ok) return still;
-          statement = received.value; session.peer!.seller = statement;
+        let reviewed: ReviewedEvmTerms | null = null;
+        let statement: PeerRecord | null = null;
+        if (env.type === 'terms-offer') {
+          const text = body.terms as string;
+          let bytes: Uint8Array;
+          try { bytes = new TextEncoder().encode(text); } catch { return bad('MALFORMED'); }
+          const checked = await reviewForSession(session, bytes);
+          if (closed) return bad('CLOSED');
+          if (!checked.ok) return checked;
+          if (checked.value.hash !== env.termsHash) return bad('HASH_MISMATCH');
+          const ready = readyToCommit(session, 'taken', rumor.id, expires, checked.value.reviewed.acceptBeforeSeconds);
+          if (!ready.ok) return ready;
+          if (env.v === 2) {
+            const received = await receiveStatement(session, 'seller', env.body.acceptance, checked.value.reviewed, checked.value.hash, expires, ready.value);
+            if (!received.ok) return received;
+            const still = readyToCommit(session, 'taken', rumor.id, expires, checked.value.reviewed.acceptBeforeSeconds);
+            if (!still.ok) return still;
+            // A local cancel/reject started meanwhile: its tombstone wins and nothing is recorded as offered.
+            if (withdrawnLocally(session)) return peerBad('TOMBSTONED');
+            statement = received.value; session.peer!.seller = statement;
+          }
+          session.terms = { hash: checked.value.hash, bytes, reviewed: checked.value.reviewed };
+          reviewed = checked.value.reviewed;
+        } else if (env.type === 'terms-accept' || env.type === 'terms-reject') {
+          if (session.terms === null || env.termsHash !== session.terms.hash) return bad('HASH_MISMATCH');
+          if (env.type === 'terms-accept' && body.revision !== session.terms.reviewed.revision) return bad('REVISION_MISMATCH');
+          const acceptBefore = env.type === 'terms-accept' ? session.terms.reviewed.acceptBeforeSeconds : undefined;
+          const ready = readyToCommit(session, expectedState, rumor.id, expires, acceptBefore);
+          if (!ready.ok) return ready;
+          if (env.v === 2 || (d1 !== null && env.type === 'terms-reject')) {
+            const terms = session.terms;
+            const done = env.v === 2
+              ? await receiveStatement(session, 'buyer', env.body.acceptance, terms.reviewed, terms.hash, expires, ready.value)
+              : await tombstoneFor(session, ready.value);
+            if (!done.ok) return done;
+            const still = readyToCommit(session, expectedState, rumor.id, expires, acceptBefore);
+            if (!still.ok) return still;
+            // A local cancel started while this acceptance was verified: its tombstone wins and nothing is accepted.
+            if (env.v === 2 && withdrawnLocally(session)) return peerBad('TOMBSTONED');
+            if (env.v === 2) { statement = done.value as PeerRecord; session.peer!.buyer = statement; }
+          }
+        } else if (session.terms !== null && env.termsHash !== null && env.termsHash !== session.terms.hash) return bad('HASH_MISMATCH');
+        else if (session.terms === null && env.termsHash !== null) return bad('HASH_MISMATCH');
+        else {
+          const ready = readyToCommit(session, expectedState, rumor.id, expires); if (!ready.ok) return ready;
+          if (d1 !== null && session.terms !== null) {
+            // An authenticated cancel of reviewed terms is durably tombstoned before the session changes.
+            const recorded = await tombstoneFor(session, ready.value); if (!recorded.ok) return recorded;
+            const still = readyToCommit(session, expectedState, rumor.id, expires); if (!still.ok) return still;
+          }
         }
-        session.terms = { hash: checked.value.hash, bytes, reviewed: checked.value.reviewed };
-        reviewed = checked.value.reviewed;
-      } else if (env.type === 'terms-accept' || env.type === 'terms-reject') {
-        if (session.terms === null || env.termsHash !== session.terms.hash) return bad('HASH_MISMATCH');
-        if (env.type === 'terms-accept' && body.revision !== session.terms.reviewed.revision) return bad('REVISION_MISMATCH');
-        const acceptBefore = env.type === 'terms-accept' ? session.terms.reviewed.acceptBeforeSeconds : undefined;
-        const ready = readyToCommit(session, expectedState, rumor.id, expires, acceptBefore);
-        if (!ready.ok) return ready;
-        if (env.v === 2 || (d1 !== null && env.type === 'terms-reject')) {
-          const terms = session.terms;
-          const done = env.v === 2
-            ? await receiveStatement(session, 'buyer', env.body.acceptance, terms.reviewed, terms.hash, expires, ready.value)
-            : await tombstoneFor(session, ready.value);
-          if (!done.ok) return done;
-          const still = readyToCommit(session, expectedState, rumor.id, expires, acceptBefore);
-          if (!still.ok) return still;
-          if (env.v === 2) { statement = done.value as PeerRecord; session.peer!.buyer = statement; }
-        }
-      } else if (session.terms !== null && env.termsHash !== null && env.termsHash !== session.terms.hash) return bad('HASH_MISMATCH');
-      else if (session.terms === null && env.termsHash !== null) return bad('HASH_MISMATCH');
-      else {
-        const ready = readyToCommit(session, expectedState, rumor.id, expires); if (!ready.ok) return ready;
-        if (d1 !== null && session.terms !== null) {
-          // An authenticated cancel of reviewed terms is durably tombstoned before the session changes.
-          const recorded = await tombstoneFor(session, ready.value); if (!recorded.ok) return recorded;
-          const still = readyToCommit(session, expectedState, rumor.id, expires); if (!still.ok) return still;
-        }
-      }
 
-      session.state = transition(session.state, env.type, senderRole)!;
-      remember(id, rumor.id, expires);
-      const result = { sessionId: id, rumorId: rumor.id, type: env.type, from, state: session.state, termsHash: env.termsHash, reviewed };
-      return { ok: true, value: Object.freeze(statement === null ? result : { ...result, acceptance: roleView(statement.evidence, now) }) };
+        session.state = transition(session.state, env.type, senderRole)!;
+        remember(id, rumor.id, expires);
+        const result = { sessionId: id, rumorId: rumor.id, type: env.type, from, state: session.state, termsHash: env.termsHash, reviewed };
+        return { ok: true, value: Object.freeze(statement === null ? result : { ...result, acceptance: roleView(session, statement.evidence, now) }) };
+      };
+      if (d1 === null) return settle(session, now);
+      // D1: copies of one rumor are DUPLICATE while it is in flight, and a session verifies one statement at a time, so
+      // replayed wraps cannot occupy the shared verifier. cancel and reject are never held up by a verification.
+      if (inflight.has(rumor.id)) return bad('DUPLICATE');
+      inflight.add(rumor.id);
+      try { return env.v === 2 ? await exclusive(session, () => settle(session, now)) : await settle(session, now); }
+      finally { inflight.delete(rumor.id); }
     },
   };
   return Object.freeze(exchange);

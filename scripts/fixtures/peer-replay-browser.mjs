@@ -40,7 +40,7 @@ const request = async ({ method, params = [] }) => {
 const verifier = createPeerAcceptanceVerifier({ registry, request });
 const SELLER = '0x' + '88'.repeat(20), D1_TERMS = { ...scenario.sets.native.terms, seller: SELLER };
 const SCOPE = { ad: `30078:${vector.binding.ownMessagingKey}:p2p-offramp:v1:${D1_TERMS.orderId}`, peer: vector.binding.ownMessagingKey,
-  acceptBeforeSeconds: D1_TERMS.acceptBeforeSeconds };
+  acceptBeforeSeconds: D1_TERMS.acceptBeforeSeconds, closesAtSeconds: '1699991800', priority: false };
 let session, ledger, evidence;
 function value(result) { if (!result.ok) throw Error(result.error.code); return result.value; }
 function attach(opened) { session = value(opened); ledger = new CandidatePeerReplayLedger(vault, session); return session.profileId; }
@@ -68,7 +68,7 @@ window.peerFixture = {
   // D1 composed path: verifier-minted evidence and scoped tombstones (cancel vs accept on real IndexedDB).
   admitScoped: async (nowSeconds = '1699990000') => ledger.admitVerified(await mint(), { ...SCOPE, nowSeconds }),
   tombstoneScoped: async (nowSeconds = '1699990000') => ledger.tombstoneScoped((await mint()).termsHash, { ...SCOPE, nowSeconds }),
-  status: async (nowSeconds = '1699990000') => ledger.status((await mint()).termsHash, nowSeconds),
+  status: async (nowSeconds = '1699990000') => ledger.status((await mint()).termsHash, nowSeconds, D1_TERMS.acceptBeforeSeconds),
   ledgerState: async () => {
     const record = value(await vault.read(session.sessionId, PEER_REPLAY_RECORD_ID));
     if (record === null) return null;

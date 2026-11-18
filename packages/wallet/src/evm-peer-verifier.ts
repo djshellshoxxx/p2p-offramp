@@ -12,6 +12,9 @@
  *      eth_call at the same recorded block. No EOA fallback, no low-s rule (deduplication never uses signature bytes).
  * 4. that the block is still canonical, the account code unchanged, the chain and genesis unchanged, the escrow
  *    deployment code equal to the registry's runtime hash, and the block timestamp before the deadline.
+ * The recorded block is the provider's 'latest', which must be within maxAnchorAgeSeconds of the local clock (and not
+ * ahead of it); every code read and eth_call is pinned to it by EIP-1898 `{blockHash, requireCanonical: true}`, and a
+ * provider that does not support that fails closed.
  *
  * Results are point-in-time and unfinalized. Every economic recheck calls verify again at a fresh block; a contract
  * wallet's policy is mutable and a proxy's code hash cannot freeze it. Read-only: no signing, sending or wallet prompt.
@@ -30,15 +33,22 @@ export const PEER_VERIFIER_LIMITS = Object.freeze({
   runtimeBytes: 24_576,
   /** Gas for each isValidSignature eth_call. */
   gas: 100_000,
-  pending: 4,
+  /** Concurrent verifications per verifier. The exchange also runs at most one per session and dedupes rumors. */
+  pending: 16,
   timeoutMs: 10_000,
+  /** The recorded 'latest' block must be at most this old against the trusted local clock... */
+  maxAnchorAgeSeconds: 900,
+  /** ...and at most this far ahead of it. */
+  maxAnchorFutureSeconds: 300,
 });
 export const EIP7702_DESIGNATOR_PREFIX = '0xef0100';
 const ERC1271_MAGIC = '0x1626ba7e' + '0'.repeat(56);
 const ERC6492_SUFFIX = '6492'.repeat(16);
 export type PeerVerifyCode = 'INVALID_INPUT' | 'UNAUTHORIZED' | 'EXPIRED' | 'WRONG_CHAIN' | 'UNSUPPORTED' | 'UNAVAILABLE' | 'TIMEOUT'
   | 'CANCELLED' | 'INTEGRITY_FAILURE' | 'LIMIT_EXCEEDED' | 'CONFLICT';
-export type PeerUnsupportedReason = 'eip7702-delegated' | 'counterfactual-or-undeployed' | 'reserved-code-prefix';
+export type PeerUnsupportedReason = 'eip7702-delegated' | 'counterfactual-or-undeployed' | 'reserved-code-prefix'
+  /** UNAVAILABLE: the provider's 'latest' block is too old or ahead of the local clock. */
+  | 'stale-block' | 'future-block';
 export interface PeerVerifyInput {
   /** Locally reviewed terms (EvmTermsInput shape). */
   readonly terms: EvmTermsInput;
@@ -69,6 +79,8 @@ export interface PeerVerifierOptions {
   readonly request: Eip1193Request;
   readonly timeoutMs?: number;
   readonly monotonicNow?: () => number;
+  /** Bound on the recorded block's age against the local clock (default PEER_VERIFIER_LIMITS.maxAnchorAgeSeconds). */
+  readonly maxAnchorAgeSeconds?: number;
 }
 export interface PeerAcceptanceVerifier {
   verify(input: PeerVerifyInput, signal?: AbortSignal): Promise<PeerVerifyResult>;
@@ -131,8 +143,10 @@ export function createPeerAcceptanceVerifier(options: PeerVerifierOptions): Peer
   const { registry, request } = options;
   const clock = options.monotonicNow ?? (() => performance.now());
   const timeout = options.timeoutMs ?? PEER_VERIFIER_LIMITS.timeoutMs;
+  const maxAge = options.maxAnchorAgeSeconds ?? PEER_VERIFIER_LIMITS.maxAnchorAgeSeconds;
   if (typeof request !== 'function' || typeof registry?.network !== 'function' || typeof registry.deployment !== 'function' ||
-      typeof clock !== 'function' || !Number.isSafeInteger(timeout) || timeout < 1 || timeout > 30_000) throw new TypeError('Invalid peer verifier configuration.');
+      typeof clock !== 'function' || !Number.isSafeInteger(timeout) || timeout < 1 || timeout > 30_000 ||
+      !Number.isSafeInteger(maxAge) || maxAge < 1 || maxAge > 86_400) throw new TypeError('Invalid peer verifier configuration.');
   const jobs = new Set<AbortController>();
   let disposed = false;
 
@@ -202,12 +216,18 @@ export function createPeerAcceptanceVerifier(options: PeerVerifierOptions): Peer
         const genesis = header(await call('eth_getBlockByNumber', ['0x0', false]));
         if (genesis.height !== '0' || genesis.hash !== network.genesisHash) return refused('WRONG_CHAIN');
         const anchor = header(await call('eth_getBlockByNumber', ['latest', false])), tag = '0x' + BigInt(anchor.height).toString(16);
+        // A stale or future 'latest' (stuck provider, wrong chain view, bad clock) is not a current observation.
+        if (BigInt(anchor.timestamp) + BigInt(maxAge) < now) return refused('UNAVAILABLE', 'stale-block');
+        if (BigInt(anchor.timestamp) > now + BigInt(PEER_VERIFIER_LIMITS.maxAnchorFutureSeconds)) return refused('UNAVAILABLE', 'future-block');
+        // Every state read is pinned to the recorded block by hash (EIP-1898) and must be canonical; a provider that
+        // does not support this fails closed (UNAVAILABLE).
+        const pin = Object.freeze({ blockHash: anchor.hash, requireCanonical: true });
         // The registry's escrow deployment must be the code at verifyingContract: the domain is the escrow it names.
         const runtime = deployment.runtime;
-        if (runtime.kind !== 'evm-code' || codeHash(code(await call('eth_getCode', [deployment.address, tag]))) !== runtime.keccak256) return refused('INTEGRITY_FAILURE');
+        if (runtime.kind !== 'evm-code' || codeHash(code(await call('eth_getCode', [deployment.address, pin]))) !== runtime.keccak256) return refused('INTEGRITY_FAILURE');
         // Chain time: the contract compares acceptBeforeSeconds against block.timestamp.
         if (BigInt(anchor.timestamp) >= deadline) return refused('EXPIRED');
-        const walletCode = code(await call('eth_getCode', [binding.account, tag]));
+        const walletCode = code(await call('eth_getCode', [binding.account, pin]));
         let scheme: 'eoa' | 'erc1271';
         if (walletCode === '0x') {
           scheme = 'eoa';
@@ -224,10 +244,10 @@ export function createPeerAcceptanceVerifier(options: PeerVerifierOptions): Peer
         } else {
           scheme = 'erc1271';
           for (const [digest, signature] of [[termsHash, termsSignature], [bindingHash, bindingSignature]] as const) {
-            const returned = await call('eth_call', [{ to: binding.account, data: isValidSignatureCall(digest, signature), gas: '0x' + PEER_VERIFIER_LIMITS.gas.toString(16) }, tag]);
+            const returned = await call('eth_call', [{ to: binding.account, data: isValidSignatureCall(digest, signature), gas: '0x' + PEER_VERIFIER_LIMITS.gas.toString(16) }, pin]);
             if (returned !== ERC1271_MAGIC) return refused('UNAUTHORIZED');
           }
-          if (code(await call('eth_getCode', [binding.account, tag])) !== walletCode) return refused('INTEGRITY_FAILURE');
+          if (code(await call('eth_getCode', [binding.account, pin])) !== walletCode) return refused('INTEGRITY_FAILURE');
         }
         // The recorded block must still be canonical, on the same chain and genesis, with an unchanged registry view.
         const repeated = header(await call('eth_getBlockByNumber', [tag, false]));

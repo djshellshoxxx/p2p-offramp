@@ -55,7 +55,9 @@ function fakeChain() {
   chain.request = async ({ method, params = [] }) => {
     chain.calls.push(method);
     if (method === 'eth_chainId') return '0x7a69';
-    if (method === 'eth_getBlockByNumber') return params[0] === '0x0' ? { number: '0x0', hash: raw.networks[0].genesisHash, timestamp: '0x0' } : { ...chain.anchor };
+    // The latest block follows the shared test clock (the verifier refuses a stale 'latest').
+    if (method === 'eth_getBlockByNumber') return params[0] === '0x0' ? { number: '0x0', hash: raw.networks[0].genesisHash, timestamp: '0x0' }
+      : { ...chain.anchor, timestamp: '0x' + (chain.clock?.now ?? NOW).toString(16) };
     if (method === 'eth_getCode') return params[0] === raw.networks[0].deployments[0].address ? chain.escrowCode : chain.codes.get(params[0]) ?? '0x';
     if (method === 'eth_call') { const data = params[0].data; return chain.approved.has(`${params[0].to}:${data.slice(10, 74)}`) ? MAGIC : '0xffffffff' + '0'.repeat(56); }
     throw Error('unexpected ' + method);
@@ -87,6 +89,7 @@ async function party(chain, clock, { store = new Store(), verifierRegistry = reg
 }
 async function world(t, options = {}) {
   const chain = options.chain ?? fakeChain(), clock = { now: NOW };
+  chain.clock = clock;
   const seller = await party(chain, clock, options.seller), buyer = await party(chain, clock, options.buyer);
   const ad = await createAdEvent(await createRelayEventCrypto(provider, seller.secret), { app: 'p2p-offramp', v: 1, orderId: ORDER, revision: 1, networkId: 'eip155:31337',
     assetId: 'native', amountMin: '1000000000000000000', amountMax: '2000000000000000000', currency: 'USD', railClass: 'bank-transfer', expiresAtSeconds: String(NOW + 1800), maker: seller.pub }, NOW);
@@ -106,6 +109,9 @@ async function accepted(w, options = {}) {
   const accept = ok(await w.buyer.ex.acceptWithAcceptance(r.id, termsBytes(terms), signStatement(statement, 'buyer'), w.buyer.secret));
   return { ...r, accept, done: await w.seller.ex.receive(accept.recipientWrap, w.seller.secret) };
 }
+/** Exchange-shaped replay scope for direct port calls in these tests. */
+const portScope = (w, id, now = w.clock.now) => ({ ad: w.seller.ex.session(id)?.ad ?? `30078:${w.seller.pub}:p2p-offramp:v1:${ORDER}`, peer: w.buyer.pub,
+  acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: now, closesAtSeconds: NOW + 1800, priority: true });
 const ledgerJson = async who => {
   const record = ok(await who.vault.read(who.session.sessionId, PEER_REPLAY_RECORD_ID));
   return record === null ? null : JSON.parse(new TextDecoder().decode(decodeBase64url(record.payload, 1, 131072)));
@@ -188,14 +194,14 @@ test('a tombstoned termsHash is refused in a new session, after reload, and from
   // Reload: a new exchange and ledger over the same encrypted vault still refuses.
   const reopened = ok(await w.buyer.vault.unlock(w.buyer.session.profileId, PASS));
   const ports = createEvmPeerAcceptancePorts({ registry, request: w.chain.request, vault: w.buyer.vault, session: reopened }); t.after(() => ports.dispose());
-  assert.equal(ok(await ports.replay.status(r.statement.termsHash, w.clock.now)).tombstoned, true);
+  assert.equal(ok(await ports.replay.status(r.statement.termsHash, portScope(w, r.id))).tombstoned, true);
   // Fresh-key restore of the latest backup keeps the tombstone (conservative); restore uses a new key and profile.
   const backup = new EncryptedBackupService(w.buyer.store, crypto), bytes = await backup.export(w.buyer.session.profileId);
   const receipt = await backup.restore(bytes, PASS, 'fresh key after device loss');
   const restoredVault = new EncryptedVaultService(w.buyer.store, crypto, { lifecycle: false }); t.after(() => restoredVault.dispose());
   const restored = ok(await restoredVault.unlock(receipt.newProfileId, 'fresh key after device loss'));
   const restoredPorts = createEvmPeerAcceptancePorts({ registry, request: w.chain.request, vault: restoredVault, session: restored }); t.after(() => restoredPorts.dispose());
-  assert.equal(ok(await restoredPorts.replay.status(r.statement.termsHash, w.clock.now)).tombstoned, true);
+  assert.equal(ok(await restoredPorts.replay.status(r.statement.termsHash, portScope(w, r.id))).tombstoned, true);
 });
 test('an older backup cannot see later tombstones: its exchange never claims global freshness', async t => {
   const w = await world(t), r = await offered(w); ok(r.got);
@@ -205,7 +211,7 @@ test('an older backup cannot see later tombstones: its exchange never claims glo
   const vault = new EncryptedVaultService(w.buyer.store, crypto, { lifecycle: false }); t.after(() => vault.dispose());
   const session = ok(await vault.unlock(receipt.newProfileId, 'older backup passphrase'));
   const ports = createEvmPeerAcceptancePorts({ registry, request: w.chain.request, vault, session }); t.after(() => ports.dispose());
-  assert.equal(ok(await ports.replay.status(r.statement.termsHash, NOW)).tombstoned, false, 'documented limitation');
+  assert.equal(ok(await ports.replay.status(r.statement.termsHash, portScope(w, r.id, NOW))).tombstoned, false, 'documented limitation');
   // Even a both-verified status from such a profile carries only local freshness.
   const v = await world(t), q = await accepted(v); ok(q.done);
   assert.equal(ok(await v.seller.ex.acceptanceStatus(q.id, 'display')).freshness, 'local-history');
@@ -216,7 +222,7 @@ test('lock refuses admission and status; concurrent cancel and accept on one rea
   const accept = ok(await w.buyer.ex.acceptWithAcceptance(r.id, termsBytes(), signStatement(statement, 'buyer'), w.buyer.secret));
   const [cancelled, received] = await Promise.all([w.seller.ex.cancel(r.id, 'withdrawn', w.seller.secret), w.seller.ex.receive(accept.recipientWrap, w.seller.secret)]);
   assert.equal([cancelled.ok, received.ok].filter(Boolean).length >= 1, true);
-  const tombstoned = ok(await w.seller.ports.replay.status(r.statement.termsHash, NOW)).tombstoned;
+  const tombstoned = ok(await w.seller.ports.replay.status(r.statement.termsHash, portScope(w, r.id, NOW))).tombstoned;
   const display = ok(await w.seller.ex.acceptanceStatus(r.id, 'display'));
   if (tombstoned) { assert.equal(display.label, null); fail(await w.seller.ex.acceptanceStatus(r.id, 'fund'), 'TOMBSTONED'); }
   else { assert.equal(received.ok, true); assert.equal(display.label, BOTH_VERIFIED_LABEL); }
@@ -225,6 +231,31 @@ test('lock refuses admission and status; concurrent cancel and accept on one rea
   const buyerStatement = ok(await v.buyer.ex.acceptanceStatement(q.id, termsBytes(), String(NOW + 5000)));
   const locked = fail(await v.buyer.ex.acceptWithAcceptance(q.id, termsBytes(), signStatement(buyerStatement, 'buyer'), v.buyer.secret), 'ACCEPTANCE_UNAVAILABLE');
   assert.equal(locked.acceptance, 'LOCKED'); assert.equal(v.buyer.ex.session(q.id).state, 'offered');
+});
+test('review MEDIUM: sixteen ghosted offers on one advert no longer block the next buyer for the deadline plus a day', async t => {
+  // 16 throwaway buyers take; the seller answers each with a D1 offer, they vanish and the seller cancels. Exchange
+  // slots recycle once the cancelled sessions' replay ids expire (~15 min); the ledger must free its quota as fast.
+  const w = await world(t), ghostTerms = i => ({ ...set.terms, sellerNonce: (0x100 + i).toString(16).padStart(64, '0') });
+  for (let i = 0; i < 16; i++) {
+    const k = await provider.generate(), crypto2 = await createRelayEventCrypto(provider, k.secretKey);
+    const book = createOrderBook({ nowSeconds: () => w.clock.now, verifier: crypto2 }); assert.equal(book.ingest(w.ad), 'accepted');
+    const ghost = createTermsExchange({ provider, selfPublicKey: k.publicKey, ads: book, registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256 });
+    const take = ok(await ghost.take(w.key, set.terms.buyer, k.secretKey)); ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+    if (i % 2 === 0) ok(w.seller.ex.select(take.sessionId));
+    const statement = ok(await w.seller.ex.acceptanceStatement(take.sessionId, termsBytes(ghostTerms(i)), String(NOW + 5000)));
+    ok(await w.seller.ex.offerWithAcceptance(take.sessionId, termsBytes(ghostTerms(i)), signStatement(statement, 'seller'), w.seller.secret));
+    ok(await w.seller.ex.cancel(take.sessionId, 'withdrawn', w.seller.secret));
+    ghost.close(); crypto2.dispose();
+  }
+  w.clock.now = NOW + 901; // every cancelled session's replay ids have expired; the exchange can admit a new take
+  const take = ok(await w.buyer.ex.take(w.key, set.terms.buyer, w.buyer.secret)); ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
+  // Not even selected: the non-priority per-advert quota no longer counts the sixteen cancelled offers.
+  const statement = ok(await w.seller.ex.acceptanceStatement(take.sessionId, termsBytes(), String(NOW + 5000)));
+  const offer = ok(await w.seller.ex.offerWithAcceptance(take.sessionId, termsBytes(), signStatement(statement, 'seller'), w.seller.secret));
+  assert.equal(ok(await w.buyer.ex.receive(offer.recipientWrap, w.buyer.secret)).state, 'offered');
+  const stored = await ledgerJson(w.seller);
+  assert.equal(stored.entries.filter(entry => entry.tombstoned).length, 16);
+  assert.equal(stored.entries.filter(entry => !entry.tombstoned).length, 1);
 });
 test('public adverts never carry acceptance signatures: the advert encoder refuses them in any field', async () => {
   const k = await provider.generate(), signer = await createRelayEventCrypto(provider, k.secretKey), signature = '0x' + 'ab'.repeat(65);
@@ -260,8 +291,7 @@ test('after funding: expired acceptance, a later tombstone or a changed peer pol
     assert.equal(ok(await w.seller.ex.acceptanceStatus(r.id, 'fund')).state, 'both-verified', 'acceptance valid before funding');
     // Funding happened (chain observation); now the acceptance stops being current in one of three ways.
     if (change === 'expired') w.clock.now = Number(set.terms.acceptBeforeSeconds) + 1;
-    if (change === 'tombstoned') ok(await w.seller.ports.replay.tombstone(r.statement.termsHash, { ad: w.seller.ex.session(r.id).ad, peer: w.buyer.pub,
-      acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: NOW }));
+    if (change === 'tombstoned') ok(await w.seller.ports.replay.tombstone(r.statement.termsHash, portScope(w, r.id, NOW)));
     if (change === 'policy-changed') w.chain.codes.set(set.terms.buyer, DELEGATED);
     const gate = await w.seller.ex.acceptanceStatus(r.id, 'fund');
     assert.equal(gate.ok, false, `${change}: a new funding preparation is refused`);

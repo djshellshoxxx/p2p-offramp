@@ -93,9 +93,13 @@ export interface PeerAcceptanceVerifierPort {
 export interface PeerReplayScope {
   /** Advertisement address of the session and the counterparty's messaging key, for per-ad and per-peer quotas. */
   readonly ad: string; readonly peer: string;
-  /** Terms deadline that the termsHash commits to; entries retire only after it (plus grace). */
+  /** Terms deadline that the termsHash commits to; entries retire after it (plus a small skew). */
   readonly acceptBeforeSeconds: string;
   readonly nowSeconds: number;
+  /** The session's end (advert expiry): a statement never accepted by then can no longer progress and frees quota. */
+  readonly closesAtSeconds: number;
+  /** Selected seller-side or buyer-side session: exempt from per-peer/per-ad quotas and may use reserved capacity. */
+  readonly priority: boolean;
 }
 /** Durable, encrypted replay and cancellation memory keyed by (termsHash, role). Called only after authenticated receipt
  * (or before a local send) and only for the live session's own statements. */
@@ -105,8 +109,9 @@ export interface PeerReplayStorePort {
   admit(evidence: PeerVerifiedEvidence, scope: PeerReplayScope): Promise<PeerPortResult<{ readonly status: 'recorded' | 'duplicate' }>>;
   /** Irreversibly refuse every later statement for termsHash (cancel/reject). Idempotent. */
   tombstone(termsHash: string, scope: PeerReplayScope): Promise<PeerPortResult<void>>;
-  /** Persisted-fresh read for display and economic rechecks. */
-  status(termsHash: string, nowSeconds: number): Promise<PeerPortResult<{ readonly tombstoned: boolean }>>;
+  /** Persisted-fresh read for display and economic rechecks. `tombstoned` is also true when the terms deadline is at or
+   * below the store's retirement high-water mark, so a retired tombstone is never resurrected. */
+  status(termsHash: string, scope: PeerReplayScope): Promise<PeerPortResult<{ readonly tombstoned: boolean }>>;
 }
 export interface PeerAcceptanceOptions {
   readonly verifier: PeerAcceptanceVerifierPort;
@@ -213,7 +218,8 @@ export interface PeerAcceptanceRoleView {
   readonly anchorHeight: string; readonly anchorHash: string; readonly finality: 'unfinalized';
   /** Trusted local seconds of the verification behind this view. */
   readonly checkedAtSeconds: number;
-  readonly label: string;
+  /** Null when the terms are being or were withdrawn locally (a cancel/reject tombstone), even if the statement verified. */
+  readonly label: string | null;
 }
 export type PeerAcceptanceState = 'none' | 'seller-verified' | 'both-verified' | 'withdrawn' | 'expired' | 'invalid';
 export interface PeerAcceptanceStatus {

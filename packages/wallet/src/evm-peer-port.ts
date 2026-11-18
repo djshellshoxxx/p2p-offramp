@@ -14,7 +14,7 @@ import type { CoreErrorCode, CoreResult, VaultService, VaultSession, VaultSessio
 import { evmTermsHash, type EvmTermsInput } from './evm-terms.ts';
 import { resolvePeerDomain, type PeerRegistryView } from './evm-peer-acceptance.ts';
 import { createPeerAcceptanceVerifier, isPeerAcceptanceEvidence, type PeerAcceptanceEvidence, type PeerVerifyCode } from './evm-peer-verifier.ts';
-import { CandidatePeerReplayLedger } from './evm-peer-replay.ts';
+import { CandidatePeerReplayLedger, type PeerReplayScope as LedgerScope } from './evm-peer-replay.ts';
 import type { Eip1193Request } from './evm-submit.ts';
 
 export interface EvmPeerPortOptions {
@@ -60,9 +60,11 @@ export function createEvmPeerAcceptancePorts(options: EvmPeerPortOptions): EvmPe
     tail = next.then(() => undefined, () => undefined);
     return next;
   };
-  const scope = (input: ExchangeReplayScope): { ad: string; peer: string; acceptBeforeSeconds: string; nowSeconds: string } | null => {
-    if (typeof input !== 'object' || input === null || !Number.isSafeInteger(input.nowSeconds) || input.nowSeconds < 0) return null;
-    return { ad: input.ad, peer: input.peer, acceptBeforeSeconds: input.acceptBeforeSeconds, nowSeconds: String(input.nowSeconds) };
+  const scope = (input: ExchangeReplayScope): LedgerScope | null => {
+    if (typeof input !== 'object' || input === null || !Number.isSafeInteger(input.nowSeconds) || input.nowSeconds < 0 ||
+        !Number.isSafeInteger(input.closesAtSeconds) || input.closesAtSeconds < 0 || typeof input.priority !== 'boolean') return null;
+    return { ad: input.ad, peer: input.peer, acceptBeforeSeconds: input.acceptBeforeSeconds, nowSeconds: String(input.nowSeconds),
+      closesAtSeconds: String(input.closesAtSeconds), priority: input.priority };
   };
   const done = <T>(result: CoreResult<T>): PeerPortResult<T> => result.ok ? Object.freeze({ ok: true as const, value: result.value }) : mapCore(result.error.code);
 
@@ -98,7 +100,7 @@ export function createEvmPeerAcceptancePorts(options: EvmPeerPortOptions): EvmPe
         if (result.error.code !== 'CONFLICT') return mapCore(result.error.code);
         // The ledger reports a tombstone and a conflicting binding alike; a refused admission wrote nothing, so a
         // fresh read tells them apart (a live tombstone is never removed).
-        const status = await ledger.status(evidence.termsHash, stable.nowSeconds);
+        const status = await ledger.status(evidence.termsHash, stable.nowSeconds, stable.acceptBeforeSeconds);
         return Object.freeze({ ok: false as const, code: status.ok && status.value.tombstoned ? 'TOMBSTONED' as const : 'CONFLICT' as const });
       });
     },
@@ -107,10 +109,12 @@ export function createEvmPeerAcceptancePorts(options: EvmPeerPortOptions): EvmPe
       if (stable === null) return Promise.resolve(Object.freeze({ ok: false as const, code: 'INVALID_INPUT' as const }));
       return serial(async () => done(await ledger.tombstoneScoped(termsHash, stable)));
     },
-    status(termsHash: string, nowSeconds: number) {
-      if (!Number.isSafeInteger(nowSeconds) || nowSeconds < 0) return Promise.resolve(Object.freeze({ ok: false as const, code: 'INVALID_INPUT' as const }));
+    status(termsHash: string, input: ExchangeReplayScope) {
+      const stable = scope(input);
+      if (stable === null) return Promise.resolve(Object.freeze({ ok: false as const, code: 'INVALID_INPUT' as const }));
       return serial(async () => {
-        const result = await ledger.status(termsHash, String(nowSeconds));
+        // With the deadline, a termsHash retired past the high-water mark stays withdrawn (never resurrected).
+        const result = await ledger.status(termsHash, stable.nowSeconds, stable.acceptBeforeSeconds);
         return result.ok ? Object.freeze({ ok: true as const, value: Object.freeze({ tombstoned: result.value.tombstoned }) }) : mapCore(result.error.code);
       });
     },

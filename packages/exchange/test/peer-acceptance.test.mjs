@@ -136,14 +136,17 @@ test('D1 flow: both statements are verified with session-derived context, admitt
   const w = await world(), r = await toAccepted(w);
   // The seller's own statement was verified (envelope deadline included) and admitted before the offer was returned.
   const sellerCalls = w.seller.ports.calls;
-  assert.deepEqual(sellerCalls.slice(0, 2).map(c => c.port), ['verify', 'admit']);
-  const own = sellerCalls[0].request;
+  // Cheap local check first (tombstone), then the chain-reading verification, then durable admission.
+  assert.deepEqual(sellerCalls.slice(0, 3).map(c => c.port), ['status', 'verify', 'admit']);
+  const own = sellerCalls[1].request;
   assert.deepEqual([own.role, own.signerMessagingKey, own.counterpartyMessagingKey], ['seller', w.seller.pub, w.buyer.pub]);
   assert.equal(typeof own.envelopeExpiresAtSeconds, 'number');
-  assert.deepEqual({ ...sellerCalls[1].scope }, { ad: w.address, peer: w.buyer.pub, acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: NOW });
+  assert.deepEqual({ ...sellerCalls[2].scope }, { ad: w.address, peer: w.buyer.pub, acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: NOW,
+    closesAtSeconds: NOW + 1800, priority: false }, 'an unselected seller-side session has no priority capacity');
   // Buyer: verify(seller, authenticated sender key) -> admit -> (accept) status, recheck seller, verify(own), admit.
-  assert.deepEqual(w.buyer.ports.calls.map(c => c.port), ['verify', 'admit', 'status', 'verify', 'verify', 'admit']);
-  const arrival = w.buyer.ports.calls[0].request, recheck = w.buyer.ports.calls[3].request;
+  assert.deepEqual(w.buyer.ports.calls.map(c => c.port), ['status', 'verify', 'admit', 'status', 'verify', 'verify', 'admit']);
+  const arrival = w.buyer.ports.calls[1].request, recheck = w.buyer.ports.calls[4].request;
+  assert.equal(w.buyer.ports.calls[2].scope.priority, true, 'buyer-side sessions are priority');
   assert.deepEqual([arrival.role, arrival.signerMessagingKey, arrival.counterpartyMessagingKey], ['seller', w.seller.pub, w.buyer.pub]);
   assert.equal(arrival.envelopeExpiresAtSeconds, NOW + 900, 'authenticated envelope deadline (default TTL) on arrival');
   assert.equal(recheck.envelopeExpiresAtSeconds, null, 'a recheck of a stored statement has no envelope deadline');
@@ -237,7 +240,8 @@ test('cancel and reject durably tombstone the termsHash before the state changes
   const cancel = ok(await w.seller.ex.cancel(r.id, 'withdrawn', w.seller.secret));
   assert.ok(w.seller.ports.tombstones.has(r.statement.termsHash));
   const tomb = w.seller.ports.calls.find(c => c.port === 'tombstone');
-  assert.deepEqual({ ...tomb.scope }, { ad: w.address, peer: w.buyer.pub, acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: NOW });
+  assert.deepEqual({ ...tomb.scope }, { ad: w.address, peer: w.buyer.pub, acceptBeforeSeconds: set.terms.acceptBeforeSeconds, nowSeconds: NOW,
+    closesAtSeconds: NOW + 1800, priority: false });
   assert.equal(ok(await w.buyer.ex.receive(cancel.recipientWrap, w.buyer.secret)).state, 'cancelled');
   assert.ok(w.buyer.ports.tombstones.has(r.statement.termsHash));
   assert.equal(ok(await w.buyer.ex.acceptanceStatus(r.id, 'display')).state, 'withdrawn');
@@ -282,23 +286,83 @@ test('cancellation races: a cancel and an acceptance in flight together never le
     assert.equal(w.seller.ex.session(r.id).state, 'cancelled');
     fail(await w.seller.ex.acceptanceStatus(r.id, 'fund'), 'TOMBSTONED');
   }
-  // Order 3: the buyer's acceptance is admitted first and the cancel's tombstone lands while it commits: the session
-  // may end accepted, but the tombstone means nothing is displayed as valid and funding rechecks refuse.
+  // Order 3 (review NIT): the buyer's acceptance is being verified when the seller's cancel starts, and its tombstone
+  // is still being written when the verification finishes. The cancel wins: the acceptance is refused, never labelled.
   {
     const w = await world(), r = await toOffered(w);
     const statement = ok(await w.buyer.ex.acceptanceStatement(r.id, termsBytes(), String(NOW + 5000)));
     const accept = ok(await w.buyer.ex.acceptWithAcceptance(r.id, termsBytes(), wire(statement), w.buyer.secret));
-    const tombHeld = deferred(); w.seller.ports.tombstoneHold = tombHeld;
+    const verifyHeld = deferred(), tombHeld = deferred(); w.seller.ports.hold = verifyHeld;
+    const receiving = w.seller.ex.receive(accept.recipientWrap, w.seller.secret);
+    while (!w.seller.ports.calls.some(c => c.port === 'verify' && c.request.role === 'buyer')) await new Promise(r2 => setImmediate(r2));
+    w.seller.ports.hold = null; w.seller.ports.tombstoneHold = tombHeld;
     const cancelling = w.seller.ex.cancel(r.id, 'withdrawn', w.seller.secret);
     while (!w.seller.ports.calls.some(c => c.port === 'tombstone')) await new Promise(r2 => setImmediate(r2));
-    const received = await w.seller.ex.receive(accept.recipientWrap, w.seller.secret);
-    tombHeld.resolve(); const cancelled = await cancelling;
-    assert.equal(received.ok, true); assert.equal(received.value.state, 'accepted');
-    fail(cancelled, 'OUT_OF_ORDER');
+    verifyHeld.resolve();
+    const received = await receiving;
+    fail(received, 'TOMBSTONED'); assert.ok(!('value' in received) && !JSON.stringify(received).includes('signed by'));
+    tombHeld.resolve(); assert.equal(ok(await cancelling).state, 'cancelled');
     const display = ok(await w.seller.ex.acceptanceStatus(r.id, 'display'));
     assert.equal(display.state, 'withdrawn'); assert.equal(display.label, null);
     fail(await w.seller.ex.acceptanceStatus(r.id, 'fund'), 'TOMBSTONED');
   }
+});
+test('review LOW: copies of one wrap or a second statement in a session cannot occupy the verifier; other sessions proceed', async () => {
+  const w = await world(), r = await toOffered(w);
+  // A second buyer session on the same advert, with its own offer.
+  const other = await party(), book = createOrderBook({ nowSeconds: () => w.clock.now, verifier: other.crypto }), ports = fakePorts();
+  const otherEx = createTermsExchange({ provider, selfPublicKey: other.pub, ads: book, registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256,
+    peerAcceptance: { verifier: ports.verifier, replay: ports.replay } });
+  const other2Terms = termsBytes({ ...set.terms, sellerNonce: 'cd'.repeat(32) }); // distinct termsHash
+  const adEvent = await createAdEvent(w.seller.crypto, { app: 'p2p-offramp', v: 1, orderId: ORDER, revision: 1, networkId: 'eip155:31337', assetId: 'native',
+    amountMin: '1000000000000000000', amountMax: '2000000000000000000', currency: 'USD', railClass: 'bank-transfer', expiresAtSeconds: String(NOW + 1800), maker: w.seller.pub }, NOW);
+  assert.equal(book.ingest(adEvent), 'accepted');
+  const take2 = ok(await otherEx.take(w.key, set.terms.buyer, other.secret)); ok(await w.seller.ex.receive(take2.recipientWrap, w.seller.secret));
+  const st2 = ok(await w.seller.ex.acceptanceStatement(take2.sessionId, other2Terms, String(NOW + 5000)));
+  ok(await otherEx.receive(ok(await w.seller.ex.offerWithAcceptance(take2.sessionId, other2Terms, wire(st2), w.seller.secret)).recipientWrap, other.secret));
+  const bst2 = ok(await otherEx.acceptanceStatement(take2.sessionId, other2Terms, String(NOW + 5000)));
+  const honest = ok(await otherEx.acceptWithAcceptance(take2.sessionId, other2Terms, wire(bst2), other.secret));
+  // The verifier has four slots, like the real one's old global bound.
+  let running = 0; const verify = w.seller.ports.verifier.verify, held = deferred();
+  w.seller.ports.verifier.verify = async request => {
+    if (running >= 4) return { ok: false, code: 'LIMIT_EXCEEDED' };
+    running++; try { if (request.signerMessagingKey === w.buyer.pub) await held.promise; return await verify(request); } finally { running--; }
+  };
+  const statement = ok(await w.buyer.ex.acceptanceStatement(r.id, termsBytes(), String(NOW + 5000)));
+  const accept = ok(await w.buyer.ex.acceptWithAcceptance(r.id, termsBytes(), wire(statement), w.buyer.secret));
+  const copies = Array.from({ length: 6 }, () => w.seller.ex.receive(accept.recipientWrap, w.seller.secret));
+  while (running === 0) await new Promise(r2 => setImmediate(r2));
+  // A different rumor for the same session while one verification runs is BUSY (not remembered, retryable).
+  const second = v2Envelope(w, w.buyer, w.seller, 'terms-accept', statement.termsHash, { revision: '1', acceptance: wire(statement) }, { nonce: 'ee'.repeat(32) });
+  fail(await w.seller.ex.receive(await craft(w.buyer, w.seller, JSON.stringify(second), envelopeTags(second)), w.seller.secret), 'BUSY');
+  assert.equal(running, 1, 'one verification for the session, whatever the number of copies');
+  assert.equal(ok(await w.seller.ex.receive(honest.recipientWrap, w.seller.secret)).state, 'accepted', 'another session is not starved');
+  held.resolve();
+  const results = await Promise.all(copies);
+  assert.equal(results.filter(result => result.ok).length, 1);
+  assert.ok(results.filter(result => !result.ok).every(result => result.code === 'DUPLICATE'));
+  otherEx.close();
+});
+test('review LOW: acceptanceStatus re-reads the session and tombstone after its slow re-verification', async () => {
+  const w = await world(), r = await toOffered(w), held = deferred();
+  w.buyer.ports.hold = held;
+  const checking = w.buyer.ex.acceptanceStatus(r.id, 'display');
+  while (!w.buyer.ports.calls.some(c => c.port === 'verify' && c.request.envelopeExpiresAtSeconds === null)) await new Promise(r2 => setImmediate(r2));
+  fail(await w.buyer.ex.acceptanceStatus(r.id, 'display'), 'BUSY');
+  // The seller cancels while the buyer's display check is still verifying; the buyer processes it at once.
+  const cancel = ok(await w.seller.ex.cancel(r.id, 'withdrawn', w.seller.secret));
+  w.buyer.ports.hold = null;
+  assert.equal(ok(await w.buyer.ex.receive(cancel.recipientWrap, w.buyer.secret)).state, 'cancelled');
+  held.resolve();
+  const status = ok(await checking);
+  assert.equal(status.state, 'withdrawn'); assert.equal(status.label, null); assert.equal(status.seller, null);
+  // Same for a tombstone written elsewhere (another tab) during the check.
+  const v = await world(), q = await toOffered(v), again = deferred();
+  v.buyer.ports.hold = again;
+  const pending = v.buyer.ex.acceptanceStatus(q.id, 'accept');
+  while (!v.buyer.ports.calls.some(c => c.port === 'verify' && c.request.envelopeExpiresAtSeconds === null)) await new Promise(r2 => setImmediate(r2));
+  v.buyer.ports.tombstones.add(q.statement.termsHash); v.buyer.ports.hold = null; again.resolve();
+  fail(await pending, 'TOMBSTONED');
 });
 test('rechecks: expiry, a changed peer policy and the funding margin refuse new acceptance or funding but never rewrite history', async () => {
   const w = await world(), r = await toOffered(w);
