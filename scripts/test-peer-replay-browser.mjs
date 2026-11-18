@@ -82,8 +82,36 @@ try {
   await first.evaluate(() => window.peerFixture.lock());
   const locked = await first.evaluate(() => window.peerFixture.admit());
   assert.equal(locked.ok, false); assert.equal(locked.error.code, 'LOCKED');
+
+  // D1 composed path on real IndexedDB: a cancel (scoped tombstone) and an acceptance (verifier-minted evidence)
+  // race from two documents of one profile. Exactly one same-revision CAS wins; after a full reload the outcome is
+  // consistent and a tombstone, once written, refuses every later admission.
+  const d1Context = await isolatedContext(), tabA = await openPage(d1Context), tabB = await openPage(d1Context);
+  const d1Profile = await tabA.evaluate(() => window.peerFixture.create());
+  await tabB.evaluate(id => window.peerFixture.open(id), d1Profile);
+  const [accepting, cancelling] = await Promise.all([tabA.evaluate(() => window.peerFixture.admitScoped()), tabB.evaluate(() => window.peerFixture.tombstoneScoped())]);
+  assert.equal([accepting, cancelling].filter(result => result.ok).length, 1, 'exactly one CAS winner between cancel and accept');
+  assert.equal([accepting, cancelling].find(result => !result.ok).error.code, 'CONFLICT');
+  for (const page of [tabA, tabB]) { await page.reload(); await page.waitForFunction(() => !!window.peerFixture); await page.evaluate(id => window.peerFixture.open(id), d1Profile); }
+  const afterRace = await tabA.evaluate(() => window.peerFixture.ledgerState());
+  assert.equal(afterRace.schemaVersion, 2); assert.equal(afterRace.entries, 1);
+  assert.equal(afterRace.tombstoned, cancelling.ok ? 1 : 0);
+  if (!cancelling.ok) assert.equal((await tabB.evaluate(() => window.peerFixture.tombstoneScoped())).ok, true, 'the losing cancel is retried explicitly');
+  const refusedAfterCancel = await tabA.evaluate(() => window.peerFixture.admitScoped());
+  assert.equal(refusedAfterCancel.ok, false); assert.equal(refusedAfterCancel.error.code, 'CONFLICT', 'a written tombstone refuses later admission');
+  const tombstonedStatus = await tabB.evaluate(() => window.peerFixture.status());
+  assert.equal(tombstonedStatus.ok, true); assert.equal(tombstonedStatus.value.tombstoned, true); assert.equal(tombstonedStatus.value.freshness, 'local-history');
+  // Retirement after the terms deadline plus grace persists across reload; a rolled-back clock cannot re-admit.
+  const retiredAt = String(1_700_000_000 + 86_400);
+  assert.equal((await tabB.evaluate(now => window.peerFixture.status(now), retiredAt)).ok, true);
+  await tabA.reload(); await tabA.waitForFunction(() => !!window.peerFixture); await tabA.evaluate(id => window.peerFixture.open(id), d1Profile);
+  const retired = await tabA.evaluate(() => window.peerFixture.ledgerState());
+  assert.equal(retired.entries, 0); assert.equal(retired.retiredThroughSeconds, '1700000000');
+  const rolledBack = await tabA.evaluate(() => window.peerFixture.admitScoped('1699990000'));
+  assert.equal(rolledBack.ok, false); assert.equal(rolledBack.error.code, 'EXPIRED', 'high-water mark survives reload');
+  assert.doesNotMatch(JSON.stringify(await tabA.evaluate(() => window.peerFixture.stored())), /termsHash|ownMessagingKey|Signature/);
   assert.deepEqual(unexpected, []);
-  console.log(`PASS: Chromium ${browser.version()}; CAS race, reload, encrypted storage, duplicate freshness, tombstone restore, lock and old-backup limitation verified.`);
+  console.log(`PASS: Chromium ${browser.version()}; CAS race, reload, encrypted storage, duplicate freshness, tombstone restore, lock, old-backup limitation, D1 cancel-vs-accept race and retirement verified.`);
 } finally {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));

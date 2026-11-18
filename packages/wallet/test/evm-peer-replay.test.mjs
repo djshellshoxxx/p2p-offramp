@@ -7,9 +7,12 @@ import { EncryptedVaultService } from '../../storage/src/vault-service.ts';
 import { EncryptedBackupService } from '../../storage/src/backup-service.ts';
 import { VaultStorageError } from '../../storage/src/idb-vault-store.ts';
 import { encodeBase64url } from '../../schemas/index.ts';
+import { RegistryService } from '../../domain/index.ts';
 import { peerAcceptanceHash } from '../src/evm-peer-acceptance.ts';
 import { CandidatePeerReplayLedger, PEER_REPLAY_RECORD_ID, PEER_REPLAY_FORMAT, MAX_PEER_REPLAY_TERMS } from '../src/evm-peer-replay.ts';
 const scenario=JSON.parse(await readFile(new URL('../../domain/test/fixtures/local-evm-scenario/scenario.json',import.meta.url),'utf8'));
+const registry=new RegistryService();
+assert.equal((await registry.load(new Uint8Array(await readFile(new URL('../../domain/test/fixtures/local-evm-scenario/registry.json',import.meta.url))),scenario.registrySha256)).ok,true);
 const vectors=JSON.parse(await readFile(new URL('./fixtures/peer-acceptance-v1.json',import.meta.url),'utf8'));
 const pass='synthetic peer replay fixture passphrase',clone=value=>structuredClone(value);
 const bytes=value=>new Uint8Array(Buffer.from(value.slice(2),'hex'));
@@ -38,7 +41,7 @@ async function setup(t){
   const ledger=new CandidatePeerReplayLedger(vault,session);t.after(()=>{ledger.dispose();vault.dispose();});
   return {store,vault,session,ledger};
 }
-const admit=(ledger,f)=>ledger.admitEoa(f.domain,f.terms,f.context,f.proof);
+const admit=(ledger,f)=>ledger.admitEoa(registry,f.domain,f.terms,f.context,f.proof);
 async function changedBinding(f,changes){
   const binding={...f.proof.binding,...changes},account=privateKeyToAccount('0x'+scenario.testOnlyKeys[binding.role].privateKeyHex);
   return {...f,context:{...f.context,ownMessagingKey:binding.ownMessagingKey,counterpartyMessagingKey:binding.counterpartyMessagingKey},
