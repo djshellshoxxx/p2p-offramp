@@ -12,13 +12,15 @@
 # Renames are not followed (--no-renames), so a renamed file's whole content counts as added.
 # Deletions are not work to preserve and are ignored.
 lines_on_main() {
-  local sha=$1 main=${2:-${MAIN:-origin/main}} mb names stat f tmp rc=0
+  local sha=$1 main=${2:-${MAIN:-origin/main}} mb names stat f tmp g rc=0
   mb=$(git merge-base "$sha" "$main" 2>/dev/null) || return 1
   [ -n "$mb" ] || return 1
   names=$(git diff --no-renames --name-only --diff-filter=AMT "$mb" "$sha") || return 1
   stat=$(git diff --no-renames --numstat --diff-filter=AMT "$mb" "$sha") || return 1
-  # numstat prints "-<TAB>-<TAB>path" for a binary file.
-  if printf '%s\n' "$stat" | grep -q $'^-\t-\t'; then return 1; fi
+  # numstat prints "-<TAB>-<TAB>path" for a binary file. grep status: 0 found, 1 none, 2 error;
+  # only 1 continues. A here-string avoids a pipe, so SIGPIPE cannot hide a match.
+  g=0; grep -q $'^-\t-\t' <<< "$stat" || g=$?
+  [ "$g" = 1 ] || return 1
   tmp=$(mktemp -d) || return 1
   while IFS= read -r f; do
     [ -n "$f" ] || continue
@@ -30,8 +32,10 @@ lines_on_main() {
       "$tmp/diff" > "$tmp/want" || { rc=1; break; }
     if ! git show "$main:$f" > "$tmp/main"; then rc=1; break; fi
     sed 's/^[[:space:]]*//' "$tmp/main" > "$tmp/have" || { rc=1; break; }
-    # Any wanted line that is not a whole line of main's copy fails the check.
-    if grep -qvxFf "$tmp/have" "$tmp/want"; then rc=1; break; fi
+    # Any wanted line that is not a whole line of main's copy fails the check. grep status:
+    # 0 a line is missing, 1 none missing, 2 error; only 1 passes.
+    g=0; grep -qvxFf "$tmp/have" "$tmp/want" || g=$?
+    [ "$g" = 1 ] || { rc=1; break; }
   done <<< "$names"
   rm -rf "$tmp"
   return $rc

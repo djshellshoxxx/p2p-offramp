@@ -300,6 +300,9 @@ fixes if absent; owner verdict on #63/#64; close #27, #29.
   cases.
   - The tag check in all three retirement scripts now compares the exact SHA
     (`tag_at`).
+  - The same reviewer re-reviewed the fix: no High or Medium open. Its two Low
+    follow-ups are also fixed: a `grep` error (exit 2) and a SIGPIPE in the
+    binary check could have counted as a pass; only exit 1 passes now.
   - `scripts/tests/consolidation-lib.test.mjs` (8 cases, in `npm test`) fails
     4/8 against the old function and passes 8/8 against the new one.
   - Re-run dry runs: phase 1 65/65; phase 2–3 45 processed and 2 skipped
