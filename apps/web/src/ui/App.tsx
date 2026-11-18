@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { messages as m } from './messages.ts';
-import { SOURCE_LOCALE } from './locale/en.ts';
+import { localeStore } from './locale/runtime.ts';
 import { errorMessage, isProfileId, parseRoute } from './routes.ts';
 import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.tsx';
 import type { TradeReviewController } from '../trade/review-controller.ts';
@@ -27,6 +27,9 @@ export function App({ services, starting = false, startupError, trade = null, di
   const testnet = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-testnet';
   const testnetLocalProof = tradeSnapshot.registry.kind === 'ready' && tradeSnapshot.registry.label === 'sepolia-local-proof';
   const [route, setRoute] = useState(() => parseRoute(window.location.hash));
+  // The selected compiled bundle owns the document language and direction, so assistive technology and bidi follow it.
+  const locale = useSyncExternalStore(localeStore.subscribe, localeStore.getSnapshot, localeStore.getSnapshot);
+  useLayoutEffect(() => { document.documentElement.lang = locale.locale; document.documentElement.dir = locale.direction; }, [locale.locale, locale.direction]);
   const [online, setOnline] = useState(() => navigator.onLine);
   const [notice, setNotice] = useState('');
   const [pending, setPending] = useState('');
@@ -81,7 +84,7 @@ export function App({ services, starting = false, startupError, trade = null, di
     }
   }
 
-  return <div className="app-shell" lang={SOURCE_LOCALE.locale} dir={SOURCE_LOCALE.direction}>
+  return <div className="app-shell" lang={locale.locale} dir={locale.direction}>
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); main.current?.focus(); }}>{m.skip}</a>
     <aside className="sidebar">
       <a className="brand" href="#/home"><span className="brand-symbol" aria-hidden="true">↔</span><span>{m.appName}<small>{m.development}</small></span></a>

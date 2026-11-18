@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { AppServices } from '../app-services.ts';
 import { CreateForm, ExportForm, RestoreForm, UnlockForm } from './VaultForms.tsx';
 import { messages as m } from './messages.ts';
@@ -7,6 +7,7 @@ import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { DiagnosticsPanel } from './DiagnosticsPanel.tsx';
 import { RecoveryReferencesPanel } from './RecoveryReferencesPanel.tsx';
 import { PrivacyStatusPanel } from './PrivacyStatusPanel.tsx';
+import { localeStore, type BundledLocaleStore } from './locale/runtime.ts';
 
 export const pageTitle: Readonly<Record<Route['page'], string>> = {
   home: m.homeTitle, offers: m.offersTitle, trade: m.tradeTitle,
@@ -81,7 +82,7 @@ export function Settings({ diagnostics = null, services = null, scope }: { reado
     <PrivacyStatusPanel services={services} {...(scope === undefined ? {} : { scope })} />
     <section className="plain-section" aria-labelledby="trust-title"><h2 id="trust-title">{m.trustTitle}</h2><p>{m.trustHelp}</p></section>
     <section className="warning" aria-labelledby="framing-title"><h2 id="framing-title">{m.framingTitle}</h2><p>{m.framingHelp}</p></section>
-    <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p></section>
+    <section className="plain-section" aria-labelledby="locale-title"><h2 id="locale-title">{m.localeTitle}</h2><p>{m.localeHelp}</p><LocaleSelector /></section>
     <DiagnosticsPanel service={diagnostics} />
   </>;
 }
@@ -92,4 +93,18 @@ export function UnavailablePage({ page }: { readonly page: 'offers' | 'trade' | 
     {page === 'offers' ? <p>{m.offersHelp}</p> : page === 'trade' ? <p>{m.tradeHelp}</p> : null}
     <div className="actions"><a href="#/home">{m.returnHome}</a><a href="#/recovery">{m.openRecovery}</a></div>
   </section>;
+}
+
+/** Explicit display-language choice among compiled bundles. Never sniffs the browser language or loads a catalog. */
+export function LocaleSelector({ store = localeStore }: { readonly store?: BundledLocaleStore }) {
+  const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
+  const options = store.available();
+  return <>
+    {options.length > 1 ? <label className="field">{m.localeChoose}
+      <select value={snapshot.id} onChange={event => { store.select(event.currentTarget.value); }} aria-describedby="locale-choose-help">
+        {options.map(option => <option key={option.id} value={option.id} lang={option.locale} dir={option.direction}>{option.locale}{option.display === 'development-fixture' ? ` (${option.id})` : ''}</option>)}
+      </select><span id="locale-choose-help">{m.localeChooseHelp}</span></label> : null}
+    {snapshot.display === 'development-fixture' ? <p role="note">{m.localeFixture}</p> : null}
+    {snapshot.fallback ? <p role="status">{m.localeFallback} <button type="button" onClick={() => { store.select('en'); }}>{m.localeUseSource}</button></p> : null}
+  </>;
 }
