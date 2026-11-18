@@ -17,6 +17,19 @@ export const SEPOLIA_NETWORK = Object.freeze({
 /** Owner-approved testnet release keyId. Null means no trust root is configured: every ordinary path refuses. */
 export const SEPOLIA_RELEASE_KEY_ID: string | null = null;
 
+/** G15 channel of the Sepolia testnet release. */
+export const SEPOLIA_RELEASE_CHANNEL = 'sepolia-testnet';
+/**
+ * The exact asset set of the Sepolia testnet G15 release (D3 Option A, PROPOSED and pending owner approval): one signed
+ * manifest covers the registry and the canonical escrow ABI, and every verifier (owner signing, sepolia:verify, the trade
+ * tool, the testnet build, the app runtime and the maintained recovery builder) supplies exactly these two assets. A
+ * registry-only manifest therefore fails every verifier with ASSET_MISMATCH. Paths are relative to the checkout root.
+ */
+export const SEPOLIA_RELEASE_ASSETS = Object.freeze({
+  abi: 'contracts/evm/abi/BasicEscrow.json',
+  registry: 'registry/testnet/sepolia.registry.json',
+} as const);
+
 /** True only for a well-formed keyId equal to an independently configured nonnull pin. */
 export function isPinnedReleaseKey(keyId: string, pinned: string | null = SEPOLIA_RELEASE_KEY_ID): boolean {
   return typeof pinned === 'string' && /^[0-9a-f]{64}$/.test(pinned) && keyId === pinned;
