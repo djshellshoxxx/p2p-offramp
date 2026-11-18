@@ -44,7 +44,8 @@
     "test:local-evm": "node scripts/test-local-evm.mjs",
     "test:locale:browser": "node scripts/test-locale-layout-browser.mjs",
     "test:research:receipts": "node --test scripts/tests/research-evidence.test.mjs",
-    "test:peer:browser": "node scripts/test-peer-replay-browser.mjs"
+    "test:peer:browser": "node scripts/test-peer-replay-browser.mjs",
+    "test:meetup:browser": "node packages/meetup/test/origin-ledger-browser.mjs"
   },
   "devDependencies": {
     "@types/react": "19.3.0",
