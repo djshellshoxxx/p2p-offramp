@@ -10,12 +10,13 @@ import { build } from 'vite';
 import { createReleaseRegistry, verifyRelease } from '../../packages/security/src/release-manifest.ts';
 import { parseRegistryBytes, parseStrictJsonBytes } from '../../packages/schemas/index.ts';
 import { TESTNET_ACCEPTED_FILE, TESTNET_TRUST_FILES } from '../../apps/web/scripts/testnet-trust.mjs';
-import { isSepoliaOnly, SEPOLIA_RELEASE_KEY_ID } from '../../apps/web/src/testnet/sepolia-network.ts';
+import { isSepoliaOnly, SEPOLIA_RELEASE_CHANNEL, SEPOLIA_RELEASE_KEY_ID } from '../../apps/web/src/testnet/sepolia-network.ts';
 import { isMain, ROOT } from '../sepolia/lib.mjs';
 import { RECOVERY_FORMAT, loadArchivedRecoveryProfile, refuseRecovery, recoveryErrorCode } from './evm-recovery.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const CANONICAL_ABI_PATH = 'contracts/evm/abi/BasicEscrow.json';
+/** The release's ABI asset path; the same two-asset set (registry and ABI) as every other testnet verifier (D3 Option A). */
+const CANONICAL_ABI_PATH = TESTNET_TRUST_FILES.abi;
 const byteLength = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype),'byteLength').get;
 function snapshot(input) {
   try {
@@ -111,7 +112,7 @@ export async function buildConfiguredEvmRecovery({outDir,root=ROOT}) {
     if (key.keyId !== SEPOLIA_RELEASE_KEY_ID) return refuseRecovery('KEY_UNTRUSTED');
     const accepted = await readAcceptedEvmRecoveryRelease(root);
     const proof = await verifyRelease(new Uint8Array(manifest),detached,[key.publicKey],accepted === null ? 0 : accepted.sequence,
-      {channel:'sepolia-testnet',assets:[{path:names.registry,bytes:new Uint8Array(registry)},{path:CANONICAL_ABI_PATH,bytes:new Uint8Array(abi)}],
+      {channel:SEPOLIA_RELEASE_CHANNEL,assets:[{path:names.registry,bytes:new Uint8Array(registry)},{path:CANONICAL_ABI_PATH,bytes:new Uint8Array(abi)}],
         ...(accepted === null ? {} : {installedManifestSha256:accepted.manifestSha256})});
     if (!proof.ok) return refuseRecovery(proof.error.code);
     if (proof.value.keyId !== SEPOLIA_RELEASE_KEY_ID || !isSepoliaOnly(parseRegistryBytes(new Uint8Array(registry)))) return refuseRecovery('WRONG_CHAIN');

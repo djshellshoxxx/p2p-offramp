@@ -83,7 +83,7 @@ try {
 
   // Kit: deploy, record and owner-sign the registry inside a temporary repository root.
   const root = resolve(temporary, 'root');
-  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
+  for (const file of ['contracts/evm/foundry.toml', 'package-lock.json', 'THIRD_PARTY_NOTICES.md', 'contracts/evm/abi/BasicEscrow.json']) { await mkdir(resolve(root, file, '..'), { recursive: true }); await copyFile(resolve(ROOT, file), resolve(root, file)); }
   // The seller key is given without 0x (the form wallets export); the kit normalizes it for Forge.
   const env = { ...inherited, PATH, SEPOLIA_RPC_URL: url, SEPOLIA_DEPLOYER_PRIVATE_KEY: SELLER_KEY.slice(2), SEPOLIA_BUYER_PRIVATE_KEY: BUYER_KEY };
   const deployed = await deploy({ env, publicEndpoint: PUBLIC_ENDPOINT, expectGenesis: genesisHash,

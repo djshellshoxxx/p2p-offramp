@@ -7,18 +7,22 @@
  *                                      (mode 0600, refuses to overwrite) and prints ONLY the public JWK + keyId, which
  *                                      is what you hand over (commit it as security/testnet-trust/sepolia-release-key.pub.json).
  *   sign --key <private.jwk> --sequence <n> [--days 30]
- *                                      Sign a manifest over registry/testnet/sepolia.registry.json (1-30 days, the
- *                                      verifier's maximum). Refuses any registry that is not exactly Sepolia (chain id
- *                                      and genesis), and any deployment without a committed DeploymentRecord that
+ *                                      Sign one manifest over BOTH release assets, registry/testnet/sepolia.registry.json
+ *                                      and the canonical escrow ABI contracts/evm/abi/BasicEscrow.json (D3 Option A,
+ *                                      PROPOSED), valid 1-30 days (the verifier's maximum). Refuses any registry that is
+ *                                      not exactly Sepolia (chain id and genesis), an ABI that differs from the committed
+ *                                      canonical file, and any deployment without a committed DeploymentRecord that
  *                                      matches it, was recorded from clean sources and after finality (G25 §4.2: run
  *                                      record-deployment again once the block is finalized). Writes
  *                                      registry/testnet/sepolia.release.json and sepolia.release.sig.json and prints
- *                                      the networks, endpoints and deployments that were signed: check them first.
+ *                                      the assets, networks, endpoints and deployments that were signed: check them first.
  *
  * Format (identical to the G15 verifier, packages/security/src/release-manifest.ts): canonical JSON manifest, ES256
  * with IEEE-P1363 signature over "p2p-offramp/release/v1\n" + manifest bytes, keyId = sha256(canonical {crv,kty,x,y}).
- * The manifest names no deployments of its own (G15 keeps `deployments: []`); the escrow deployment is inside the
- * signed registry asset. Testnet only: this key is not a mainnet trust root.
+ * The manifest names no deployments of its own (G15 keeps `deployments: []`); the escrow deployments are inside the
+ * signed registry asset. Its asset list is exactly SEPOLIA_RELEASE_ASSETS, sorted by path, so the testnet build, the app
+ * runtime, sepolia:verify, the trade tool and the maintained recovery builder all accept the same signed manifest.
+ * Testnet only: this key is not a mainnet trust root.
  */
 import { createHash, createPrivateKey, generateKeyPairSync, sign } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -27,11 +31,14 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { parseRegistryBytes } from '../../packages/schemas/index.ts';
-import { isSepoliaOnly } from '../../apps/web/src/testnet/sepolia-network.ts';
+import { isSepoliaOnly, SEPOLIA_RELEASE_ASSETS, SEPOLIA_RELEASE_CHANNEL } from '../../apps/web/src/testnet/sepolia-network.ts';
 import { isMain } from './lib.mjs';
 
-export const CHANNEL = 'sepolia-testnet';
-export const REGISTRY_ASSET = 'registry/testnet/sepolia.registry.json';
+export const CHANNEL = SEPOLIA_RELEASE_CHANNEL;
+export const REGISTRY_ASSET = SEPOLIA_RELEASE_ASSETS.registry;
+export const ABI_ASSET = SEPOLIA_RELEASE_ASSETS.abi;
+/** The canonical ABI committed in this checkout; the maintained recovery builder compares the signed ABI to it byte for byte. */
+const CANONICAL_ABI = new URL('../../contracts/evm/abi/BasicEscrow.json', import.meta.url);
 /** packages/security/src/release-manifest.ts refuses a manifest valid for longer than 30 days. */
 export const MAX_RELEASE_DAYS = 30;
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
@@ -48,8 +55,16 @@ export function keygen() {
   return { privateJwk: privateKey.export({ format: 'jwk' }), publicKey: pub, keyId: keyIdOf(pub) };
 }
 
-/** The G15 manifest over `registry` (bytes of the registry asset). No checks: signRelease is the owner-facing entry. */
-export async function buildManifest({ registry, sequence, days, now, root, sourceCommit }) {
+/** Both release assets, sorted by path as the G15 verifier requires. A registry-only manifest is never produced. */
+export function releaseAssets({ registry, abi }) {
+  if (!(registry instanceof Uint8Array) || !(abi instanceof Uint8Array)) throw new Error('RELEASE_ASSETS_REQUIRED');
+  return [{ path: REGISTRY_ASSET, bytes: registry }, { path: ABI_ASSET, bytes: abi }]
+    .sort((a, b) => a.path < b.path ? -1 : 1).map(({ path, bytes }) => ({ path, bytes: bytes.length, sha256: sha(bytes) }));
+}
+
+/** The G15 manifest over the registry and ABI asset bytes. No checks: signRelease is the owner-facing entry. */
+export async function buildManifest({ registry, abi, sequence, days, now, root, sourceCommit }) {
+  const assets = releaseAssets({ registry, abi });
   const registryId = JSON.parse(new TextDecoder().decode(registry)).releaseId;
   return {
     format: 'p2p-offramp-release', version: 1, channel: CHANNEL, sequence, releaseId: registryId,
@@ -60,7 +75,7 @@ export async function buildManifest({ registry, sequence, days, now, root, sourc
     lockfileDigest: sha(await readFile(resolve(root, 'package-lock.json'))),
     sbomDigest: sha(await readFile(resolve(root, 'THIRD_PARTY_NOTICES.md'))),
     createdAt: now, expiresAt: now + days * 86_400, minStorageSchema: 1, maxStorageSchema: 1,
-    assets: [{ path: REGISTRY_ASSET, bytes: registry.length, sha256: sha(registry) }], deployments: [], predecessorDigest: null,
+    assets, deployments: [], predecessorDigest: null,
   };
 }
 
@@ -75,14 +90,18 @@ export function signManifest(privateJwk, manifest) {
 }
 
 /**
- * Builds and signs the manifest over the registry asset of `root` (the repository checkout). The registry must be
- * exactly Sepolia; `expectGenesis` exists only for local proofs on a node started with Sepolia's chain id.
- * Returns the signed bytes plus a summary of what was signed, for the owner to check.
+ * Builds and signs the manifest over the registry and ABI assets of `root` (the repository checkout). The registry must
+ * be exactly Sepolia and the ABI byte-identical to the canonical committed ABI (D3: an ABI change needs per-deployment ABI
+ * digests first, or packages for older escrows could no longer be built). `expectGenesis` exists only for local proofs
+ * on a node started with Sepolia's chain id. Returns the signed bytes plus a summary of what was signed, for the owner to check.
  */
 export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAYS, now = Math.floor(Date.now() / 1000), root = ROOT, sourceCommit, expectGenesis }) {
   if (!Number.isSafeInteger(sequence) || sequence < 1) throw new Error('SEQUENCE_INVALID');
   if (!Number.isSafeInteger(days) || days < 1 || days > MAX_RELEASE_DAYS) throw new Error('DAYS_INVALID');
   const registry = await readFile(resolve(root, REGISTRY_ASSET));
+  let abi;
+  try { abi = await readFile(resolve(root, ABI_ASSET)); } catch { throw new Error('ABI_MISSING'); }
+  if (!abi.equals(await readFile(CANONICAL_ABI))) throw new Error('ABI_NOT_CANONICAL');
   let parsed;
   try { parsed = parseRegistryBytes(new Uint8Array(registry)); } catch { throw new Error('REGISTRY_INVALID'); }
   if (!isSepoliaOnly(parsed, expectGenesis)) throw new Error('REGISTRY_NOT_SEPOLIA');
@@ -95,8 +114,9 @@ export async function signRelease({ privateJwk, sequence, days = MAX_RELEASE_DAY
         record.chainId !== network.chainIdentity || record.genesisIdentity !== network.genesisHash || record.sourceTreeClean !== true) throw new Error('DEPLOYMENT_RECORD_MISMATCH');
     if (record.finalizedAtRecording !== true) throw new Error('DEPLOYMENT_NOT_FINALIZED');
   }
-  const signed = signManifest(privateJwk, await buildManifest({ registry, sequence, days, now, root, sourceCommit }));
-  const summary = { releaseId: parsed.releaseId, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
+  const manifest = await buildManifest({ registry, abi, sequence, days, now, root, sourceCommit });
+  const signed = signManifest(privateJwk, manifest);
+  const summary = { releaseId: parsed.releaseId, assets: manifest.assets, networks: parsed.networks.map(network => ({ id: network.id, chainIdentity: network.chainIdentity,
     genesisHash: network.genesisHash, environment: network.environment, endpoints: network.endpoints.map(endpoint => endpoint.url),
     deployments: network.deployments.map(deployment => ({ id: deployment.id, address: deployment.address, runtimeKeccak: deployment.runtime.keccak256 ?? null })) })) };
   return { ...signed, summary };
