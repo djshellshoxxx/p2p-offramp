@@ -9,7 +9,7 @@ const sources = readdirSync(dir)
   .map(name => [name, readFileSync(new URL(name, dir), 'utf8')]);
 const ALLOWED_IMPORTS = new Set(['../../domain/index.ts', '../../schemas/index.ts', '@noble/hashes/sha2.js']);
 /** Peer acceptance verifies Ed25519 and lifts x-only keys; it may use these two curves and nothing that signs. */
-const ACCEPTANCE_SOURCES = new Set(['acceptance.ts', 'offchain.ts']);
+const ACCEPTANCE_SOURCES = new Set(['acceptance.ts', 'offchain.ts', 'replay.ts']);
 const ACCEPTANCE_IMPORTS = new Set(['@noble/curves/ed25519.js', '@noble/curves/secp256k1.js']);
 const SIGNING_APIS = /\.sign\(|getPublicKey|keygen|randomSecretKey|randomBytes|getSharedSecret|secretKey/;
 
@@ -23,6 +23,7 @@ test('src-has-no-io-or-forbidden-apis', () => {
     'layout.ts',
     'offchain.ts',
     'reader.ts',
+    'replay.ts',
     'window.ts',
   ]);
   for (const [name, text] of sources) {
