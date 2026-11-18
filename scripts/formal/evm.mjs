@@ -1,0 +1,342 @@
+#!/usr/bin/env node
+/** Local source-bound SMT/native evidence. No result produced here approves a deployment or closes specialist review. */
+import {spawn} from 'node:child_process';
+import {readFile,writeFile,mkdir,readdir,realpath} from 'node:fs/promises';
+import {realpathSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve,dirname,basename,sep} from 'node:path';
+import {homedir} from 'node:os';
+import {fileURLToPath} from 'node:url';
+import {keccak_256} from '@noble/hashes/sha3.js';
+import {forgeEnv,checkToolchain,TOOLCHAIN} from '../sepolia/lib.mjs';
+import {isMain} from '../lib/is-main.mjs';
+export const LIMITS=Object.freeze({queryBytes:4*1024*1024,totalQueryBytes:32*1024*1024,queries:64,rounds:8,queryMs:5000,totalMs:120000,compilerMs:25000,outputBytes:32*1024*1024,solverOutputBytes:131072});
+// The version is taken from the pinned wheel name, so the two can never drift apart.
+const Z3_WHEEL='z3_solver-4.12.2.0-py2.py3-none-manylinux2014_x86_64.whl';
+export const Z3_PIN=Object.freeze({package:'z3-solver',version:Z3_WHEEL.split('-')[1],filename:Z3_WHEEL,artifactSha256:'03921d3021cb6e5dbeaeb94634132a5fbf5403748aa21774efac4047e633af1e',binarySha256:'112132c9f82751e663f5a5573957c678f9af821aaf376d0c5863e4f076370444',librarySha256:'5ba701bbb32fc0923ee98b4adb1b246f7ef60c30fa62065514d8099955678101',metadataSha256:'eb8d327ac5b681c48a7a74ae3f920487c203d188755e950265f680ee0938e8f5',reportedVersion:'Z3 version 4.12.2 - 64 bit',license:'MIT License',officialMetadata:'https://pypi.org/pypi/z3-solver/4.12.2.0/json',libraryPath:'z3/lib/libz3.so.4.12',metadataPath:'z3_solver-4.12.2.0.dist-info/METADATA'});
+const ROOT=fileURLToPath(new URL('../../',import.meta.url)),EVM=resolve(ROOT,'contracts/evm'),HARNESS='formal/CanonicalRefinement.t.sol';
+// solc and z3 read nothing from the environment; a fixed minimal one keeps LD_PRELOAD and similar ambient settings out.
+const TOOL_ENV=Object.freeze({LC_ALL:'C'});
+export const PROBE_SOURCE='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30; contract ToolProbes { function safe(uint x) public pure { assert(x == x); } function unsafe(uint x) public pure { assert(x != 7); } }';
+const ORIGINAL_MODEL_SHA256='7b593c08c3745f20ae49419d471f9281511112afeabc263bd8eacee965321537';
+export const PARTITION_TARGETS=Object.freeze([
+ {id:'EVM-NATIVE-ASSET-NOT-TOKEN',source:'formal/partitions/NativeConstructor.sol',contract:'NativeConstructor',method:'checkNativeAssetExcludedFromTokenAllowlist'},
+ {id:'EVM-UNAUTHORIZED-RELEASE-ATOMIC',source:'formal/partitions/UnauthorizedRelease.sol',contract:'UnauthorizedRelease',method:'checkUnauthorizedReleaseIsAtomic'},
+ {id:'EVM-EARLY-REFUND-ATOMIC',source:'formal/partitions/EarlyRefund.sol',contract:'EarlyRefund',method:'checkRefundBeforeDeadlineIsAtomic'},
+].map(Object.freeze));
+export function resolveTools(env=process.env){
+ if(typeof env.FORMAL_Z3_ROOT!=='string'||!env.FORMAL_Z3_ROOT.trim()||typeof env.FORMAL_Z3_ARTIFACT!=='string'||!env.FORMAL_Z3_ARTIFACT.trim())stop('TOOL_ROOT_REQUIRED');
+ const z3Root=resolve(env.FORMAL_Z3_ROOT),foundryRoot=env.FORMAL_FOUNDRY_ROOT?resolve(env.FORMAL_FOUNDRY_ROOT):null;
+ const solc=resolve(env.FOUNDRY_SOLC||resolve(env.HOME||homedir(),'.svm',TOOLCHAIN.solcVersion,`solc-${TOOLCHAIN.solcVersion}`));
+ return{solc,forge:foundryRoot?resolve(foundryRoot,'forge'):'forge',z3Root,z3:resolve(z3Root,'bin/z3'),artifact:resolve(env.FORMAL_Z3_ARTIFACT),env:forgeEnv({...env,...(foundryRoot?{PATH:foundryRoot+':'+(env.PATH??'')} :{}),FOUNDRY_SOLC:solc})};
+}
+const utf8=new TextEncoder(),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),hex=bytes=>Buffer.from(bytes).toString('hex');
+export const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?'['+value.map(canonical).join(',')+']':'{'+Object.keys(value).sort((left, right) => left < right ? -1 : left > right ? 1 : 0).map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';
+const stop=code=>{throw Error(code);};
+export function queryIdentity(query){if(typeof query!=='string'||Buffer.byteLength(query)>LIMITS.queryBytes)stop('QUERY_LIMIT');return '0x'+hex(keccak_256(utf8.encode(query)));}
+export function solverAnswer(stdout){if(typeof stdout!=='string'||Buffer.byteLength(stdout)>LIMITS.solverOutputBytes)stop('SOLVER_OUTPUT_LIMIT');const text=stdout.trim();return text==='sat'||text==='unsat'?text:'unknown';}
+export function assertionSpan(source,assertion){if(typeof source!=='string'||typeof assertion!=='string'||!assertion.startsWith('assert('))stop('PROPERTY_INVALID');const at=source.indexOf(assertion);if(at<0||source.indexOf(assertion,at+1)>=0)stop('PROPERTY_BINDING_MISMATCH');return{start:Buffer.byteLength(source.slice(0,at)),end:Buffer.byteLength(source.slice(0,at+assertion.length-(assertion.endsWith(';')?1:0)))};}
+// The only diagnostics this harness interprets: solc 0.8.30's CHC assertion-target codes in their exact wording.
+// 6328 covers both an answered violation ("happens here") and an unanswered target ("might happen"); other wording is unrecognized.
+const TARGET_READINGS=Object.freeze({
+ '6328':[[/^CHC: Assertion violation happens here\./,'ASSERTION_VIOLATION'],[/^CHC: Assertion violation might happen here\./,'UNANSWERED']],
+ '9576':[[/^CHC: Assertion violation check is safe!/,'SAFE_UNDER_COMPILER_MODEL']],
+});
+/** Codes shown harmless next to a proof claim. Deliberately empty: no solc diagnostic has been shown benign, so every other one blocks. */
+export const BENIGN_DIAGNOSTIC_CODES=Object.freeze([]);
+/** Second net over message text, for diagnostics the code check lets through (sibling targets, any future allowlisted code). */
+export const ABSTRACTION_TEXT=/does not yet (?:support|implement)|not (?:yet )?(?:fully )?(?:supported|implemented)|unsupported|abstraction|spurious|false positive|not possible|no horn solver|might happen|could not be proved|error trying to invoke|timeout|time limit|resource limit/i;
+const diagnosticText=error=>String(error?.message??'');
+const targetReading=error=>error?.severity==='error'?null:TARGET_READINGS[String(error?.errorCode)]?.find(([pattern])=>pattern.test(diagnosticText(error)))?.[1]??null;
+const locatedAt=(error,file,span)=>error?.sourceLocation?.file===file&&error.sourceLocation.start===span.start&&error.sourceLocation.end===span.end;
+/** Fails closed: the one target diagnostic at the span decides, and every other diagnostic blocks unless it is the recognized
+ * result of a declared sibling assertion in the same file or an allowlisted code. Matching wording blocks in every case. */
+export function classifyProperty(output,file,span,incomplete=false,siblings=[]){
+ const errors=Array.isArray(output?.errors)?output.errors:[],matches=errors.filter(error=>locatedAt(error,file,span)),own=matches.length===1?matches[0]:null;
+ const expected=error=>BENIGN_DIAGNOSTIC_CODES.includes(String(error?.errorCode))&&error?.severity!=='error'||targetReading(error)!==null&&siblings.some(sibling=>locatedAt(error,file,sibling));
+ const unsupported=errors.filter(error=>error!==own&&!expected(error)||ABSTRACTION_TEXT.test(diagnosticText(error)));
+ const reported=matches.length>1?'CONTRADICTORY':own?targetReading(own)??'UNRECOGNIZED':'UNPROVED';
+ if(incomplete||unsupported.length)return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
+ if(reported==='ASSERTION_VIOLATION')return{result:'COUNTEREXAMPLE_FOUND',toolReported:reported,unsupported,qualification:'Compiler-model counterexample requires native replay before calling it an implementation defect.'};
+ if(reported==='SAFE_UNDER_COMPILER_MODEL')return{result:'PROVED_UNDER_DECLARED_MODEL',toolReported:reported,unsupported};
+ return{result:'PROOF_UNKNOWN',toolReported:reported,unsupported};
+}
+/** Exact extraction from the frozen original model, not a replacement or stronger precondition. */
+export function partitionBinding(id,source,original,spec){
+ const target=PARTITION_TARGETS.find(target=>target.id===id);
+ if(!target||sha(original)!==ORIGINAL_MODEL_SHA256||spec?.partitionInvestigation?.originalModelSourceSha256!==ORIGINAL_MODEL_SHA256||canonical(spec.partitionInvestigation.targets)!==canonical(PARTITION_TARGETS))stop('PARTITION_BINDING_MISMATCH');
+ const property=spec.properties.find(property=>property.id===id);if(!property)stop('PARTITION_BINDING_MISMATCH');
+ const fragment=method=>{const prefix=`    function ${method}(`,start=original.indexOf(prefix),end=original.indexOf('\n    }',start);if(start<0||end<start||original.indexOf(prefix,start+1)>=0)stop('PARTITION_BINDING_MISMATCH');return original.slice(start,end+6);};
+ const check=fragment(target.method),parts=[];let actor='',helper='';
+ if(target.contract!=='NativeConstructor'){
+  const start=original.indexOf('contract FormalOutsider {'),end=original.indexOf('\n}',start);if(start<0||end<start)stop('PARTITION_BINDING_MISMATCH');
+  actor=original.slice(start,end+2);helper=fragment('_terms');parts.push(actor,helper);
+ }
+ parts.push(check);
+ const expected='// SPDX-License-Identifier: UNLICENSED\npragma solidity 0.8.30;\n\nimport {BasicEscrow} from "../../src/BasicEscrow.sol";\n\n'+(actor?actor+'\n\n':'')+`contract ${target.contract} {\n`+(helper?helper+'\n':'')+check+'\n}\n';
+ if(source!==expected)stop('PARTITION_BINDING_MISMATCH');
+ const span=(text,part)=>{const start=text.indexOf(part);if(start<0||text.indexOf(part,start+1)>=0)stop('PARTITION_BINDING_MISMATCH');return{start:Buffer.byteLength(text.slice(0,start)),end:Buffer.byteLength(text.slice(0,start+part.length))};};
+ return{target,property,originalModelSourceSha256:sha(original),modelSourceSha256:sha(source),assertion:{original:assertionSpan(original,property.assertion),partition:assertionSpan(source,property.assertion),sha256:sha(property.assertion)},assumptions:spec.assumptions,assumptionsSha256:sha(canonical(spec.assumptions)),fragments:parts.map(part=>({sha256:sha(part),original:span(original,part),partition:span(source,part)}))};
+}
+/** Bridge results (probe, whole target and partitions) need actual, clean, complete query work before source diagnostics may classify them. */
+export function classifyBridge(formal,file,span,siblings=[]){
+ const classified=classifyProperty(formal?.output,file,span,formal?.incomplete,siblings),empty=sha('');
+ const clean=Array.isArray(formal?.queries)&&formal.queries.length>0&&formal.queries.every(query=>['sat','unsat'].includes(query.answer)&&query.exitCode===0&&!query.timedOut&&!query.limited&&query.stderrSha256===empty)&&Array.isArray(formal.compilerRuns)&&formal.compilerRuns.length>0&&formal.compilerRuns.every(run=>run.exitCode===0&&!run.error&&!run.timedOut&&!run.limited&&run.stderrSha256===empty);
+ if(formal?.incomplete||formal?.stopReason||!clean||classified.unsupported.length)return{...classified,result:'PROOF_UNKNOWN',qualification:'Missing/zero queries, stderr, unsupported abstractions, unrecognized diagnostics and incomplete work remain unknown; raw solver polarity is not a proof.'};
+ return classified;
+}
+export const classifyPartition=classifyBridge;
+/** runFormal's classification: every declared assertion of the one target file, each with the others as its siblings. */
+export function classifyWholeTarget(formal,file,source,assertions){
+ const spans=assertions.map(assertion=>assertionSpan(source,assertion));
+ return spans.map((span,index)=>classifyBridge(formal,file,span,spans.filter((_,other)=>other!==index)));
+}
+/** Literal extraction only; the compiler still validates the untouched source. */
+export function literalImports(source){
+ if(typeof source!=='string'||Buffer.byteLength(source)>1048576)stop('SOURCE_LIMIT');
+ const afterSpace=new Uint32Array(source.length+1),quoted=new Map(),matches=[];
+ afterSpace[source.length]=source.length;
+ const space=at=>/\s/.test(source[at]??'');
+ let nextQuote=-1,from=null;
+ // Index suffix delimiters once, rather than rescan them for each import/from.
+ for(let at=source.length-1;at>=0;at--){
+  const char=source[at];
+  afterSpace[at]=space(at)?afterSpace[at+1]:at;
+  if(char===';')from=null;
+  if(char==='"'||char==="'"){
+   if(nextQuote>at+1){
+    const semicolon=afterSpace[nextQuote+1];
+    if(source[semicolon]===';')quoted.set(at,{quote:at,close:nextQuote,end:semicolon+1});
+   }
+   nextQuote=at;
+  }
+  if(source.startsWith('from',at)&&space(at-1)&&space(at+4)){
+   const quote=afterSpace[at+4];
+   if(quoted.has(quote))from={at,quote,next:from};
+  }
+  if(!source.startsWith('import',at)||!space(at+6))continue;
+  const direct=afterSpace[at+6],prefix=from?.at===direct?from.next:from;
+  // Preserve the optional from-clause priority and greedy initial whitespace.
+  const quote=prefix?.quote??(quoted.has(direct)?direct:undefined)??(from?.at===direct&&direct>at+7?from.quote:undefined);
+  if(quote!==undefined)matches.push({at,...quoted.get(quote)});
+ }
+ const imports=[];let end=0;
+ for(let i=matches.length-1;i>=0;i--){
+  const match=matches[i];
+  if(match.at<end)continue;
+  // Copy paths only after nonoverlapping matches have been selected.
+  imports.push(source.slice(match.quote+1,match.close));end=match.end;
+ }
+ return imports;
+}
+async function collectSources(entry){
+ const sources={},digests={};let total=0;
+ async function visit(key){if(Object.hasOwn(sources,key))return;if(Object.keys(sources).length>=256)stop('SOURCE_LIMIT');const path=resolve(EVM,key);if(!path.startsWith(EVM+'/'))stop('SOURCE_PATH_INVALID');const bytes=await readFile(path);total+=bytes.length;if(bytes.length>1048576||total>8*1048576)stop('SOURCE_LIMIT');const content=bytes.toString('utf8');sources[key]={content};digests[key]=sha(bytes);
+  for(const name of literalImports(content)){const imported=name.startsWith('forge-std/')?'lib/forge-std/src/'+name.slice(10):name.startsWith('@openzeppelin/contracts/')?'lib/openzeppelin-contracts/contracts/'+name.slice(24):resolve(dirname(path),name).slice(EVM.length+1);await visit(imported);}
+ }
+ await visit(entry);return{sources,digests};
+}
+async function verifySources(digests){for(const[key,hash]of Object.entries(digests))if(await hashFile(resolve(EVM,key))!==hash)stop('SOURCE_DRIFT');}
+async function hashFile(path){return sha(await readFile(path));}
+/** Kills the owned process group on every exit path. A descendant that left the group (setsid) and holds a pipe is not killed,
+ * but it cannot stall the result: after exit, timeout or overflow the pipes get graceMs to drain, then the run ends as PIPE_HELD_OPEN. */
+export async function processBounded(command,args,{input='',cwd=ROOT,env=process.env,timeoutMs=10000,maxOutput=LIMITS.outputBytes,graceMs=1000}={}){
+ return new Promise(resolveResult=>{let child,stdout=[],stderr=[],bytes=0,ended=false,timedOut=false,limited=false,timer,grace,exitCode=null;
+  const finish=(code,error)=>{if(ended)return;ended=true;clearTimeout(timer);clearTimeout(grace);kill();child?.stdout?.destroy();child?.stderr?.destroy();resolveResult({code,error,timedOut,limited,stdout:Buffer.concat(stdout).toString('utf8'),stderr:Buffer.concat(stderr).toString('utf8')});};
+  const kill=()=>{try{if(child?.pid)process.kill(-child.pid,'SIGKILL');}catch{try{child?.kill('SIGKILL');}catch{}}};
+  const bound=()=>{if(grace===undefined)grace=setTimeout(()=>finish(exitCode,'PIPE_HELD_OPEN'),Math.max(1,graceMs));};
+  try{child=spawn(command,args,{cwd,env,stdio:['pipe','pipe','pipe'],detached:true});}catch{finish(null,'SPAWN_FAILED');return;}
+  timer=setTimeout(()=>{timedOut=true;kill();bound();},Math.max(1,timeoutMs));
+  const collect=(list,chunk)=>{if(ended)return;bytes+=chunk.length;if(bytes>maxOutput){limited=true;kill();bound();return;}list.push(Buffer.from(chunk));};
+  child.stdout.on('data',chunk=>collect(stdout,chunk));child.stderr.on('data',chunk=>collect(stderr,chunk));child.on('error',()=>finish(null,'SPAWN_FAILED'));child.on('exit',code=>{exitCode=code;bound();});child.on('close',code=>finish(code,null));child.stdin.on('error',()=>{});child.stdin.end(input);
+ });
+}
+function baseSettings(contractFile,contract){return{optimizer:{enabled:true,runs:200},evmVersion:'cancun',viaIR:false,remappings:['forge-std/=lib/forge-std/src/','@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/'],modelChecker:{engine:'chc',solvers:['smtlib2'],targets:['assert'],showProvedSafe:true,showUnproved:true,showUnsupported:true,extCalls:'trusted',contracts:{[contractFile]:[contract]}},outputSelection:{'*':{'*':['metadata']}}};}
+/** The compiler/solver loop. Only a round that requests no further query returns stopReason null; every other exit names its reason
+ * and is incomplete. A shared budget caps rounds, queries and query bytes across several bridges. */
+export async function bridge(input,{outputDirectory,deadline,sourceLabel,tools,budget={queries:0,bytes:0,rounds:0}}){
+ const responses={},queries=[],known=new Set(),compilerRuns=[];let totalBytes=0,stopReason=null,output;
+ const result=reason=>({output:output??{},queries,incomplete:reason!==null,stopReason:reason,compilerRuns,sourceInputSha256:sha(canonical(input))});
+ for(let round=0;round<LIMITS.rounds;round++){
+  if(performance.now()>=deadline)return result('TOTAL_DEADLINE');
+  if(budget.rounds>=LIMITS.rounds)return result('ROUND_LIMIT');budget.rounds++;
+  const supplied={...input,...(Object.keys(responses).length?{auxiliaryInput:{smtlib2responses:responses}}:{})},inputText=JSON.stringify(supplied);if(Buffer.byteLength(inputText)>LIMITS.outputBytes)return result('INPUT_LIMIT');
+  const raw=await processBounded(tools.solc,['--base-path',EVM,'--standard-json'],{input:inputText,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.compilerMs,deadline-performance.now())});
+  compilerRuns.push({round,inputSha256:sha(inputText),stdoutSha256:sha(raw.stdout),stderrSha256:sha(raw.stderr),exitCode:raw.code,timedOut:raw.timedOut,limited:raw.limited,error:raw.error});await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-input.json`),inputText);await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-stdout.json`),raw.stdout);await writeFile(resolve(outputDirectory,`${sourceLabel}-round${round}-stderr.txt`),raw.stderr);
+  if(raw.timedOut||raw.limited||raw.error||raw.code!==0||raw.stderr.trim()!=='')return result(raw.timedOut?'COMPILER_TIMEOUT':raw.limited?'COMPILER_OUTPUT_LIMIT':raw.stderr.trim()!==''?'COMPILER_STDERR':'COMPILER_FAILURE');
+  let parsed;try{parsed=JSON.parse(raw.stdout);}catch{return result('COMPILER_OUTPUT_INVALID');}output=parsed;
+  if(!Array.isArray(output?.errors??[])||(output.errors??[]).some(error=>error?.severity==='error'))return result('COMPILER_ERROR');
+  const requested=output.auxiliaryInputRequested?.smtlib2queries??{};if(typeof requested!=='object'||Array.isArray(requested))return result('QUERY_REQUEST_INVALID');
+  const entries=Object.entries(requested);if(entries.length===0)return result(null);
+  for(const[key,query]of entries){
+   if(known.has(key))return result('QUERY_REPEATED');
+   if(queries.length>=LIMITS.queries||budget.queries>=LIMITS.queries)return result('QUERY_LIMIT');
+   if(typeof query!=='string'||Buffer.byteLength(query)>LIMITS.queryBytes)return result('QUERY_INVALID');
+   if(queryIdentity(query)!==key)return result('QUERY_KEY_MISMATCH');
+   totalBytes+=Buffer.byteLength(query);budget.bytes+=Buffer.byteLength(query);if(totalBytes>LIMITS.totalQueryBytes||budget.bytes>LIMITS.totalQueryBytes)return result('QUERY_BYTES_LIMIT');
+   if(performance.now()>=deadline)return result('TOTAL_DEADLINE');
+   known.add(key);budget.queries++;const remaining=Math.min(LIMITS.queryMs,deadline-performance.now());
+   const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,env:TOOL_ENV,timeoutMs:remaining,maxOutput:LIMITS.solverOutputBytes});
+   const answer=solved.error||solved.code!==0||solved.timedOut||solved.limited||solved.stderr.trim()!==''?'unknown':solverAnswer(solved.stdout);
+   const name=`${sourceLabel}-${key.slice(2)}`;await writeFile(resolve(outputDirectory,name+'.smt2'),query);await writeFile(resolve(outputDirectory,name+'.stdout'),solved.stdout);await writeFile(resolve(outputDirectory,name+'.stderr'),solved.stderr);
+   queries.push({key,querySha256:sha(query),queryBytes:Buffer.byteLength(query),responseSha256:sha(solved.stdout),answer,exitCode:solved.code,timedOut:solved.timedOut,limited:solved.limited,stderrSha256:sha(solved.stderr)});
+   responses[key]=answer+'\n';
+   // The remaining queries of this round are still solved and retained, but no further compiler round runs.
+   if(answer==='unknown')stopReason='SOLVER_UNKNOWN';
+  }
+  if(stopReason)return result(stopReason);
+ }
+ return result('ROUND_EXHAUSTED');
+}
+/** Hashes the pinned wheel, binary, runtime library and METADATA and checks the reported version and license. Any miss stops. */
+export async function verifyTools(tools,pin=Z3_PIN){
+ const paths={artifact:tools.artifact,binary:tools.z3,library:resolve(tools.z3Root,pin.libraryPath),metadata:resolve(tools.z3Root,pin.metadataPath)};
+ const expected={artifact:pin.artifactSha256,binary:pin.binarySha256,library:pin.librarySha256,metadata:pin.metadataSha256},hashes={},contents={};
+ for(const[name,path]of Object.entries(paths)){try{contents[name]=await readFile(path);}catch{stop('TOOL_ARTIFACT_MISSING');}hashes[name]=sha(contents[name]);if(hashes[name]!==expected[name])stop('TOOL_ARTIFACT_DRIFT');}
+ const version=await processBounded(tools.z3,['--version'],{env:TOOL_ENV,timeoutMs:5000,maxOutput:8192});if(version.error||version.timedOut||version.limited||version.code!==0||version.stdout.trim()!==pin.reportedVersion)stop('TOOL_VERSION_MISMATCH');
+ if(!contents.metadata.toString('utf8').includes('License: '+pin.license))stop('TOOL_LICENSE_MISMATCH');
+ return{...pin,paths,hashes,reportedVersion:version.stdout.trim(),licenseEvidence:'Pinned package METADATA; license classification is not legal release approval.'};
+}
+/** After analysis: the Z3 pins must still hold, every hash must equal the one taken before, and solc must still match its pin. */
+export async function recheckTools(tools,before,{pin=Z3_PIN,solcSha256=TOOLCHAIN.solcSha256}={}){
+ const after=await verifyTools(tools,pin);if(canonical(after.hashes)!==canonical(before?.hashes))stop('TOOL_ARTIFACT_DRIFT');
+ let compiler;try{compiler=await readFile(tools.solc);}catch{stop('TOOL_ARTIFACT_MISSING');}if(sha(compiler)!==solcSha256)stop('TOOL_ARTIFACT_DRIFT');
+ return{...after,solcSha256:sha(compiler)};
+}
+export function validateProbe(probe,source){
+ if(probe.incomplete||probe.stopReason||probe.queries.length!==2||probe.queries.some(query=>!['sat','unsat'].includes(query.answer)))stop('TOOL_PROBE_INCOMPLETE');
+ const safeSpan=assertionSpan(source,'assert(x == x);'),unsafeSpan=assertionSpan(source,'assert(x != 7);');
+ const safe=classifyBridge(probe,'ToolProbes.sol',safeSpan,[unsafeSpan]),unsafe=classifyBridge(probe,'ToolProbes.sol',unsafeSpan,[safeSpan]);
+ if(safe.result!=='PROVED_UNDER_DECLARED_MODEL'||unsafe.result!=='COUNTEREXAMPLE_FOUND')stop('TOOL_PROBE_BINDING_FAILED');
+ return{safe,unsafe,qualification:'CHC/HORN consistency semantics: SAT can mean safety and UNSAT reachability; compiler source-bound diagnostics, never raw SAT/UNSAT polarity, determine outcomes.'};
+}
+export function nativeWitness(output,exitCode,spec){
+ const suites=Object.entries(output??{});if(exitCode!==1||suites.length!==1||suites[0][0]!==`${HARNESS}:${spec.nativeContract}`)stop('NATIVE_WITNESS_INCOMPLETE');
+ const results=suites[0][1]?.test_results;if(!results||Object.keys(results).length!==2)stop('NATIVE_WITNESS_INCOMPLETE');
+ const good=results[spec.nativeRefinement.test+'()'],bad=results[spec.strictModelCounterexample.test+'()'];
+ if(good?.status!=='Success'||bad?.status!=='Failure'||typeof bad.reason!=='string'||!bad.reason.startsWith(spec.strictModelCounterexample.expectedReason+':'))stop('NATIVE_WITNESS_MISMATCH');
+ const decode=test=>{const trace={};if(!Array.isArray(test.decoded_logs)||test.decoded_logs.length!==13)stop('NATIVE_TRACE_INVALID');for(const line of test.decoded_logs){if(typeof line!=='string')stop('NATIVE_TRACE_INVALID');const match=/^([A-Za-z]+): (0x[0-9a-fA-F]+|[0-9]+)$/.exec(line);if(!match||Object.hasOwn(trace,match[1]))stop('NATIVE_TRACE_INVALID');trace[match[1]]=match[2].toLowerCase();}return trace;};
+ const trace=decode(good);if(canonical(trace)!==canonical(decode(bad)))stop('NATIVE_TRACE_MISMATCH');
+ for(const name of['principal','surplus','activeAfterTerminal','paidAfterTerminal','pendingAfterTerminal','custodyAfterTerminal','paidAfterWithdrawal','pendingAfterWithdrawal','custodyAfterWithdrawal'])if(!/^(0|[1-9][0-9]{0,77})$/.test(trace[name]??''))stop('NATIVE_TRACE_INVALID');
+ const p=BigInt(trace.principal),s=BigInt(trace.surplus);if(bad.reason!==spec.strictModelCounterexample.expectedReason+': 0 != '+p)stop('NATIVE_WITNESS_MISMATCH');if(p<=0n||BigInt(trace.activeAfterTerminal)!==0n||BigInt(trace.paidAfterTerminal)!==0n||BigInt(trace.pendingAfterTerminal)!==p||BigInt(trace.custodyAfterTerminal)!==p+s||BigInt(trace.paidAfterWithdrawal)!==p||BigInt(trace.pendingAfterWithdrawal)!==0n||BigInt(trace.custodyAfterWithdrawal)!==s)stop('NATIVE_REFINEMENT_FAILED');
+ for(const name of['seller','buyer','withdrawCaller'])if(!/^0x[0-9a-f]{40}$/.test(trace[name]??''))stop('NATIVE_TRACE_INVALID');if(new Set([trace.seller,trace.buyer,trace.withdrawCaller]).size!==3||!/^0x[0-9a-f]{64}$/.test(trace.tradeId??''))stop('NATIVE_TRACE_INVALID');
+ return{result:'MODEL_IMPLEMENTATION_GAP',nativeRefinement:'TEST_EVIDENCE_PASSED',strictFailure:bad.reason,trace,counterexampleDigest:sha(canonical(trace)),qualification:'Intended push-to-credit behavior is not theft. This is an actual canonical native witness, not an unbounded proof or a release approval.'};
+}
+/** Predicate-only extraction: no modifier, payout, storage transition or execution theorem. */
+export function guardPredicates(ast,source){
+ const contract=ast?.nodes?.find(n=>n.nodeType==='ContractDefinition'&&n.name==='BasicEscrow');if(!contract)stop('GUARD_AST_INVALID');
+ const enumeration=contract.nodes.find(n=>n.nodeType==='EnumDefinition'&&n.name==='State');
+ const funded=enumeration?.members?.findIndex(n=>n.name==='Funded');if(funded!==1)stop('GUARD_ENUM_CHANGED');
+ const expected={release:['escrow.state != State.Funded','msg.sender != escrow.seller','block.timestamp >= escrow.deadline'],refund:['escrow.state != State.Funded','block.timestamp < escrow.deadline']};
+ const atoms={'escrow.state':'state','State.Funded':String(funded),'msg.sender':'caller','escrow.seller':'seller','block.timestamp':'time','escrow.deadline':'deadline'};
+ const reverts={'escrow.state != State.Funded':'InvalidState(tradeId, escrow.state)','msg.sender != escrow.seller':'Unauthorized(msg.sender)','block.timestamp >= escrow.deadline':'DeadlinePassed(escrow.deadline)','block.timestamp < escrow.deadline':'DeadlineNotReached(escrow.deadline)'};
+ const bindings=[];const text=node=>{if(typeof node?.src!=='string')stop('GUARD_AST_INVALID');const [a,b]=node.src.split(':').map(Number);if(!Number.isSafeInteger(a)||!Number.isSafeInteger(b)||a<0||b<1||a+b>Buffer.byteLength(source))stop('GUARD_AST_INVALID');return Buffer.from(source).subarray(a,a+b).toString('utf8');};
+ const atom=node=>{if(node?.nodeType!=='MemberAccess'||node.expression?.nodeType!=='Identifier')stop('GUARD_AST_UNSUPPORTED');const name=node.expression.name+'.'+node.memberName;if(!Object.hasOwn(atoms,name)||text(node)!==name)stop('GUARD_AST_UNSUPPORTED');return atoms[name];};
+ const output={};for(const[name,conditions]of Object.entries(expected)){
+  const matches=contract.nodes.filter(n=>n.nodeType==='FunctionDefinition'&&n.name===name);if(matches.length!==1)stop('GUARD_FUNCTION_CHANGED');const fn=matches[0],body=fn.body?.statements;
+  if(!Array.isArray(body)||body.length!==conditions.length+5||body[0].nodeType!=='VariableDeclarationStatement'||text(body[0])!=='Escrow storage escrow = _escrows[tradeId]')stop('GUARD_PREFIX_CHANGED');
+  const predicates=[];for(let i=0;i<conditions.length;i++){
+   const node=body[i+1],condition=node?.condition;
+   if(node?.nodeType!=='IfStatement'||node.falseBody!==null&&node.falseBody!==undefined||node.trueBody?.nodeType!=='RevertStatement'||condition?.nodeType!=='BinaryOperation'||text(condition)!==conditions[i]||text(node)!==`if (${conditions[i]}) revert ${reverts[conditions[i]]}`)stop('GUARD_PREFIX_CHANGED');
+   const operator={'!=':'distinct','>=':'>=','<':'<'}[condition.operator];if(!operator)stop('GUARD_AST_UNSUPPORTED');
+   predicates.push(`(not (${operator} ${atom(condition.leftExpression)} ${atom(condition.rightExpression)}))`);
+   bindings.push({function:name,sourceSpan:condition.src,sourceText:text(condition),astSha256:sha(canonical(condition))});
+  }
+  // The very next statement must be the canonical state assignment; no skipped side effects.
+  const next=body[conditions.length+1];if(next?.nodeType!=='ExpressionStatement'||next.expression?.nodeType!=='Assignment'||text(next)!==`escrow.state = State.${name==='release'?'Released':'Refunded'}`)stop('GUARD_PREFIX_CHANGED');
+  output[name]='(and '+predicates.join(' ')+')';
+ }
+ return{predicates:output,bindings,sourceSha256:sha(source),astSha256:sha(canonical(ast))};
+}
+/** Ordinary satisfiability: only a clean UNSAT proves a guard obligation, a clean SAT is a counterexample, anything else is unknown. */
+export function guardOutcome(solved){
+ const answer=solved?.code===0&&!solved.timedOut&&!solved.limited&&!solved.error&&typeof solved.stderr==='string'&&!solved.stderr.trim()?solverAnswer(solved.stdout):'unknown';
+ return{answer,result:answer==='unsat'?'PROVED_GUARD_LOGIC_ONLY':answer==='sat'?'COUNTEREXAMPLE_FOUND':'PROOF_UNKNOWN'};
+}
+/** Non-vacuity: each control obligation is satisfiable by construction. Unless every one returned SAT, no guard result counts. */
+export function applyGuardControls(controls,properties){
+ if(Array.isArray(controls)&&controls.length>0&&controls.every(control=>control?.answer==='sat'))return properties;
+ return properties.map(property=>({...property,result:'PROOF_UNKNOWN',qualification:'A satisfiable control obligation did not return sat, so this guard result is not counted.'}));
+}
+async function proveGuards(sourceClosure,{outputDirectory,deadline,tools}){
+ const settings=baseSettings(HARNESS,'CanonicalSMT');delete settings.modelChecker;settings.outputSelection={'*':{'':['ast']}};
+ const input=JSON.stringify({language:'Solidity',sources:sourceClosure.sources,settings});const compiled=await processBounded(tools.solc,['--standard-json'],{input,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.compilerMs,Math.max(1,deadline-performance.now()))});
+ await writeFile(resolve(outputDirectory,'guard-compiler-input.json'),input);await writeFile(resolve(outputDirectory,'guard-compiler-output.json'),compiled.stdout);await writeFile(resolve(outputDirectory,'guard-compiler-stderr.txt'),compiled.stderr);
+ if(compiled.code!==0||compiled.timedOut||compiled.limited||compiled.error||compiled.stderr.trim())stop('GUARD_COMPILER_INCOMPLETE');let parsed;try{parsed=JSON.parse(compiled.stdout);}catch{stop('GUARD_COMPILER_INVALID');}if(parsed.errors?.some(e=>e.severity==='error'))stop('GUARD_COMPILER_INVALID');
+ const extracted=guardPredicates(parsed.sources?.['src/BasicEscrow.sol']?.ast,sourceClosure.sources['src/BasicEscrow.sol'].content),{release,refund}=extracted.predicates;
+ const prefix=`(set-logic QF_LIA)\n(declare-const state Int)\n(declare-const caller Int)\n(declare-const seller Int)\n(declare-const time Int)\n(declare-const deadline Int)\n(assert (and (<= 0 state) (<= state 3) (<= 0 caller) (< caller ${2n**160n}) (<= 0 seller) (< seller ${2n**160n}) (<= 0 time) (< time ${2n**256n}) (<= 0 deadline) (< deadline ${2n**64n})))\n`;
+ const obligations=[['GUARD-RELEASE-REFUND-DISJOINT',`(and ${release} ${refund})`],['GUARD-UNAUTHORIZED-RELEASE-REFUSED',`(and ${release} (distinct caller seller))`],['GUARD-SELLER-DEADLINE-COVERAGE',`(and (= state 1) (= caller seller) (not (or ${release} ${refund})))`],['GUARD-DEADLINE-EQUALITY-REFUND',`(and (= state 1) (= caller seller) (= time deadline) (or ${release} (not ${refund})))`]];
+ // Both guard predicates must be admissible over the domain, or the obligations above could hold vacuously.
+ const controlObligations=[['GUARD-CONTROL-RELEASE-ADMISSIBLE',release],['GUARD-CONTROL-REFUND-ADMISSIBLE',refund]];
+ const solve=async(id,assertion)=>{const query=prefix+`(assert ${assertion})\n(check-sat)\n`;if(performance.now()>=deadline)stop('GUARD_TOTAL_DEADLINE');const solved=await processBounded(tools.z3,['-in','-smt2','-T:5','memory_max_size=512'],{input:query,env:TOOL_ENV,timeoutMs:Math.min(LIMITS.queryMs,deadline-performance.now()),maxOutput:LIMITS.solverOutputBytes});await writeFile(resolve(outputDirectory,id+'.smt2'),query);await writeFile(resolve(outputDirectory,id+'.stdout'),solved.stdout);await writeFile(resolve(outputDirectory,id+'.stderr'),solved.stderr);return{id,...guardOutcome(solved),queryIdentity:queryIdentity(query),querySha256:sha(query),responseSha256:sha(solved.stdout),stderrSha256:sha(solved.stderr),exitCode:solved.code,timedOut:solved.timedOut};};
+ const controls=[];for(const[id,assertion]of controlObligations){const solved=await solve(id,assertion);controls.push({...solved,result:solved.answer==='sat'?'CONTROL_SATISFIABLE':'CONTROL_FAILED'});}
+ const results=[];for(const[id,violation]of obligations)results.push(await solve(id,violation));
+ return{...extracted,compilerInputSha256:sha(input),compilerOutputSha256:sha(compiled.stdout),controls,properties:applyGuardControls(controls,results),qualification:'Only side-effect-free canonical pre-payout revert predicates; excludes modifiers, storage transitions, gas, transfers, bytecode and whole-contract correctness.'};
+}
+export async function runFormal({outputDirectory=resolve(ROOT,'.formal-evidence'),environment=process.env}={}){
+ outputDirectory=await claimEvidenceDirectory(outputDirectory,'run-started.json',{scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_REFINEMENT',limits:LIMITS});const deadline=performance.now()+LIMITS.totalMs;
+ const tools=resolveTools(environment),env=tools.env;const toolchain=await checkToolchain(env),solver=await verifyTools(tools);
+ const sourceClosure=await collectSources(HARNESS),source=sourceClosure.sources[HARNESS].content,specBytes=await readFile(resolve(EVM,'formal/properties.json')),spec=JSON.parse(specBytes),canonicalPath=resolve(EVM,spec.canonicalSource),canonicalBefore=await hashFile(canonicalPath),abiPath=resolve(EVM,'abi/BasicEscrow.json'),interfaceBefore=await hashFile(abiPath);
+ if(canonicalBefore!==spec.canonicalSourceSha256)stop('CANONICAL_SOURCE_CHANGED');
+ const probeSource=PROBE_SOURCE,probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
+ const probe=await bridge(probeInput,{outputDirectory,deadline,sourceLabel:'probes',tools}),probeResults=validateProbe(probe,probeSource);
+ const actualInput={language:'Solidity',sources:sourceClosure.sources,settings:baseSettings(HARNESS,spec.formalContract)};
+ const guards=await proveGuards(sourceClosure,{outputDirectory,deadline,tools});
+ const formal=await bridge(actualInput,{outputDirectory,deadline,sourceLabel:'canonical',tools});
+ const classified=classifyWholeTarget(formal,HARNESS,source,spec.properties.map(property=>property.assertion));
+ const properties=spec.properties.map((property,index)=>({...property,modelCommit:null,modelSourceSha256:sha(source),assumptions:spec.assumptions,toolVersion:Z3_PIN.reportedVersion,...classified[index],counterexampleDigest:null}));
+ await verifySources(sourceClosure.digests);const native=await processBounded(tools.forge,['test','--match-contract',spec.nativeContract,'--json','-vvvv'],{cwd:EVM,env:forgeEnv(env,{FOUNDRY_TEST:'formal',FOUNDRY_OFFLINE:'true',FOUNDRY_SOLC:tools.solc,RAYON_NUM_THREADS:'1',TOKIO_WORKER_THREADS:'1'}),timeoutMs:Math.min(60000,Math.max(1,deadline-performance.now()))});
+ await writeFile(resolve(outputDirectory,'native-stdout.json'),native.stdout);await writeFile(resolve(outputDirectory,'native-stderr.txt'),native.stderr);if(native.error||native.timedOut||native.limited)stop('NATIVE_TOOL_INCOMPLETE');let parsedNative;try{parsedNative=JSON.parse(native.stdout);}catch{stop('NATIVE_TOOL_OUTPUT_INVALID');}const witness=nativeWitness(parsedNative,native.code,spec);
+ const artifact=JSON.parse(await readFile(resolve(EVM,'out/BasicEscrow.sol/BasicEscrow.json'),'utf8')),committedABI=JSON.parse(await readFile(abiPath,'utf8'));if(canonical(artifact.abi)!==canonical(committedABI))stop('INTERFACE_DRIFT');
+ await verifySources(sourceClosure.digests);if(await hashFile(canonicalPath)!==canonicalBefore||await hashFile(abiPath)!==interfaceBefore)stop('ARTIFACT_DRIFT');await recheckTools(tools,solver);
+ const commit=await processBounded('git',['rev-parse','HEAD'],{maxOutput:1024,timeoutMs:5000});if(commit.code!==0||!/^[0-9a-f]{40}\n?$/.test(commit.stdout))stop('SOURCE_COMMIT_UNAVAILABLE');
+ const report={version:1,scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_REFINEMENT',releaseEnabled:false,productionApproval:false,result:witness.result,reviewUnit:{chain:'evm',sourceCommit:commit.stdout.trim(),canonicalSourceSha256:canonicalBefore,modelCommit:null,modelSourceSha256:sha(source),compilerVersion:toolchain.solcVersion,compilerFlags:{optimizer:true,runs:200,evmVersion:'cancun',viaIR:false},dependencyLockDigest:sha(canonical({npmLock:await hashFile(resolve(ROOT,'package-lock.json')),soliditySources:sourceClosure.digests})),dependencySourceSha256:sourceClosure.digests,artifactDigest:sha(Buffer.from(artifact.deployedBytecode.object.replace(/^0x/,''),'hex')),interfaceDigest:interfaceBefore,threatModelDigest:await hashFile(resolve(EVM,'SECURITY-NOTES.md')),propertySetDigest:sha(specBytes),deploymentParameters:{allowlist:[],context:'local test VM only'},reviewReports:[],findings:[{id:spec.strictModelCounterexample.id,result:'MODEL_IMPLEMENTATION_GAP',counterexampleDigest:witness.counterexampleDigest}]},toolchain,solver,guards,probe:{sourceSha256:sha(probeSource),sourceInputSha256:probe.sourceInputSha256,queries:probe.queries,results:probeResults},formal:{sourceInputSha256:formal.sourceInputSha256,queries:formal.queries,compilerRuns:formal.compilerRuns,stopReason:formal.stopReason,incomplete:formal.incomplete,diagnostics:formal.output.errors??[],properties},native:witness,qualifications:['SMT compiler-model checks and native trace evidence are separate from fuzzing and external review.','Unsupported compiler abstractions, timeouts and missing results stay PROOF_UNKNOWN.','The strict terminal-paid model gap blocks promotion until explicitly reviewed; deferred credit is intended, not theft.','No ERC20/Solana/native deployment, wallet/browser, fiat or network-liveness approval.','The candidate model is uncommitted until integration; modelCommit is null and exact model/source hashes bind local evidence.']};
+ await writeFile(resolve(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');return report;
+}
+/** One finite partition tranche; reuses the original bridge and never invokes the native witness. */
+export async function runFormalPartitions({outputDirectory=resolve(ROOT,'.formal-partition-evidence'),environment=process.env}={}){
+ outputDirectory=await claimEvidenceDirectory(outputDirectory,'tranche-started.json',{scope:'CLOSED_THREE_PARTITION_ATTEMPTS',limits:LIMITS,targets:PARTITION_TARGETS});const started=performance.now(),deadline=started+LIMITS.totalMs,budget={queries:0,bytes:0,rounds:0};
+ const tools=resolveTools(environment),toolchain=await checkToolchain(tools.env),solver=await verifyTools(tools);
+ const original=await readFile(resolve(EVM,HARNESS),'utf8'),specBytes=await readFile(resolve(EVM,'formal/properties.json')),spec=JSON.parse(specBytes),canonicalPath=resolve(EVM,spec.canonicalSource),canonicalBefore=await hashFile(canonicalPath),abiPath=resolve(EVM,'abi/BasicEscrow.json'),interfaceBefore=await hashFile(abiPath);
+ if(canonicalBefore!==spec.canonicalSourceSha256)stop('CANONICAL_SOURCE_CHANGED');
+ const targets=[];for(const target of PARTITION_TARGETS){
+  const closure=await collectSources(target.source),source=closure.sources[target.source].content,binding=partitionBinding(target.id,source,original,spec);
+  targets.push({target,closure,binding});
+ }
+ const probeSource=PROBE_SOURCE,probeInput={language:'Solidity',sources:{'ToolProbes.sol':{content:probeSource}},settings:baseSettings('ToolProbes.sol','ToolProbes')};
+ const probe=await bridge(probeInput,{outputDirectory,deadline,sourceLabel:'probes',tools,budget}),probeResults=validateProbe(probe,probeSource);
+ const results=[];for(const{target,closure,binding}of targets){
+  const input={language:'Solidity',sources:closure.sources,settings:baseSettings(target.source,target.contract)};
+  const formal=await bridge(input,{outputDirectory,deadline,sourceLabel:target.contract,tools,budget});
+  const classification=classifyPartition(formal,target.source,binding.assertion.partition);
+  results.push({...target,attempted:formal.compilerRuns.length>0,binding,dependencySourceSha256:closure.digests,sourceInputSha256:formal.sourceInputSha256,queries:formal.queries,compilerRuns:formal.compilerRuns,stopReason:formal.stopReason,incomplete:formal.incomplete,diagnostics:formal.output.errors??[],...classification});
+  await verifySources(closure.digests);
+ }
+ for(const{closure}of targets)await verifySources(closure.digests);
+ if(await hashFile(resolve(EVM,HARNESS))!==ORIGINAL_MODEL_SHA256||await hashFile(canonicalPath)!==canonicalBefore||await hashFile(abiPath)!==interfaceBefore||await hashFile(resolve(EVM,'formal/properties.json'))!==sha(specBytes))stop('ARTIFACT_DRIFT');
+ await recheckTools(tools,solver);
+ const commit=await processBounded('git',['rev-parse','HEAD'],{maxOutput:1024,timeoutMs:5000});if(commit.code!==0||!/^[0-9a-f]{40}\n?$/.test(commit.stdout))stop('SOURCE_COMMIT_UNAVAILABLE');
+ const report={version:1,scope:'LOCAL_SOURCE_BOUND_EVM_FORMAL_PARTITIONS',releaseEnabled:false,productionApproval:false,result:'BOUNDED_PARTITION_INVESTIGATION',reviewUnit:{sourceCommit:commit.stdout.trim(),canonicalSourceSha256:canonicalBefore,originalModelSourceSha256:ORIGINAL_MODEL_SHA256,interfaceDigest:interfaceBefore,propertySetDigest:sha(specBytes),compilerFlags:{optimizer:true,runs:200,evmVersion:'cancun',viaIR:false,extCalls:'trusted'},modelCommit:null,compiledBytecodeChecked:false},toolchain,solver,limits:LIMITS,budget:{...budget,targetAttempts:results.filter(result=>result.attempted).length,maximumTargetAttempts:3,elapsedMs:performance.now()-started},probe:{sourceSha256:sha(probeSource),sourceInputSha256:probe.sourceInputSha256,queries:probe.queries,compilerRuns:probe.compilerRuns,results:probeResults},formal:{targets:results,properties:results.map(result=>({id:result.id,result:result.result})),queries:results.flatMap(result=>result.queries)},retainedEvidence:{originalWholeTarget:'UNCHANGED_NOT_RERUN',guardProofs:'UNCHANGED_NOT_RERUN',nativeCreditCounterexample:'UNCHANGED_NOT_RERUN'},qualifications:['These exact extractions do not replace the original whole-target UNKNOWN results, four guard-only proofs or STRICT_TERMINAL_ALREADY_PAID native counterexample.','All query/byte/round allowances are shared across the operational probe and at most three ordered target attempts; no target is rerun.','Zero or missing queries, stderr, unsupported abstraction, timeout or incomplete diagnostics remain PROOF_UNKNOWN. Compiler source-bound diagnostics, never raw SAT/UNSAT polarity, classify complete work.','No native witness, deployment, external request or economic action was run by this mode. No ERC20, interleaving, bytecode, whole-contract, production or specialist-review qualification follows.']};
+ await writeFile(resolve(outputDirectory,'report.json'),JSON.stringify(report,null,2)+'\n');return report;
+}
+// The CLI argument picks where evidence is written. It must resolve inside this checkout, so a stray or
+// injected argument cannot direct writes anywhere else on the machine. Relative paths still resolve from cwd.
+// Symlinks are resolved on the deepest existing ancestor, so a link inside the checkout cannot lead writes out of it.
+// The git directory is refused. Other paths inside the checkout are accepted; the defaults are git-ignored.
+const insideCheckout=path=>{const root=realpathSync(ROOT).replace(/\/$/,''),git=root+sep+'.git';return path.startsWith(root+sep)&&path!==git&&!path.startsWith(git+sep);};
+export function evidenceDirectory(input,fallback){
+ const target=input===undefined?resolve(ROOT,fallback):resolve(input),missing=[];let existing=target;
+ for(;;){try{existing=realpathSync(existing);break;}catch(error){if(error?.code!=='ENOENT')stop('FORMAL_OUTPUT_INVALID');const parent=dirname(existing);if(parent===existing)stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');missing.unshift(basename(existing));existing=parent;}}
+ const real=resolve(existing,...missing);if(!insideCheckout(real))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
+ return real;
+}
+/** Every run needs a new or empty directory inside the checkout. An exclusive start marker is written before any evidence, so
+ * a rerun cannot leave a stale report.json beside newer partial files. Programmatic callers get the same checks as the CLI. */
+async function claimEvidenceDirectory(directory,marker,payload){
+ const target=evidenceDirectory(directory);await mkdir(target,{recursive:true});
+ const real=await realpath(target);if(!insideCheckout(real))stop('FORMAL_OUTPUT_OUTSIDE_REPOSITORY');
+ if((await readdir(real)).length)stop('FORMAL_OUTPUT_IN_USE');
+ try{await writeFile(resolve(real,marker),JSON.stringify(payload)+'\n',{flag:'wx'});}catch(error){if(error?.code==='EEXIST')stop('FORMAL_OUTPUT_IN_USE');throw error;}
+ return real;
+}
+if(isMain(import.meta.url)){const partitions=process.argv[2]==='--partitions';let directory;try{directory=evidenceDirectory(process.argv[partitions?3:2],partitions?'.formal-partition-evidence':'.formal-evidence');const report=await(partitions?runFormalPartitions:runFormal)({outputDirectory:directory});console.log(JSON.stringify({scope:report.scope,result:report.result,properties:report.formal.properties.map(p=>({id:p.id,result:p.result})),queries:report.formal.queries.length,native:report.native?.nativeRefinement??'NOT_RERUN',releaseEnabled:false,report:resolve(directory,'report.json')}));}catch(error){console.error(JSON.stringify({result:'TOOL_INCOMPLETE',code:/^[A-Z_]{1,64}$/.test(error?.message??'')?error.message:'UNAVAILABLE',releaseEnabled:false}));process.exitCode=1;}}
