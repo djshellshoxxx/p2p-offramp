@@ -5,7 +5,8 @@
 import { createCoreError, createOperationId, type SolanaTermsInput } from '../../domain/index.ts';
 import type { ChainObservation, CoreErrorCode, CoreResult, TradeBinding } from '../../schemas/index.ts';
 import {
-  CLOCK_SYSVAR_ID, LOADER_V3_ID, RENT_SYSVAR_ID, SYSTEM_PROGRAM_ID, SYSVAR_OWNER_ID, SPL_PROGRAM_ID,
+  associatedTokenAddress, CLOCK_SYSVAR_ID, LOADER_V3_ID, RENT_SYSVAR_ID, SYSTEM_PROGRAM_ID, SYSVAR_OWNER_ID,
+  SPL_PROGRAM_ID,
 } from './address.ts';
 import {
   bindTrade, deepFreeze, resolveDeployment, type BoundSolanaTrade, type SolanaDeploymentRef, type SolanaRegistryView,
@@ -13,14 +14,23 @@ import {
 import { canonicalKey, decodeBase64, fail, failureCode } from './codec.ts';
 import {
   decodeClock, decodeEscrow, decodeMint, decodeProgramAccount, decodeProgramData, decodeTokenAccount, escrowRentMinimum,
-  ESCROW_BYTES, type EscrowAccountV1,
+  ESCROW_BYTES, rentExemptMinimum, TOKEN_ACCOUNT_BYTES, type EscrowAccountV1,
 } from './layout.ts';
+import {
+  classifyTokenAccount, payoutPlanners, type NativePayoutPlan, type RecipientWalletView, type ShallowAccount,
+  type SplPayoutPlan,
+} from './payout.ts';
+import {
+  freezeAuthorityPermitted, parseFreezeAuthorityPermits, type FreezeAuthorityPermits, type SolanaFreezeAuthorityPermit,
+} from './policy.ts';
 
 export const MAX_RPC_READS = 4;
 /** base64 character caps, checked before decoding (ceil(bytes / 3) * 4). */
 const CAP = Object.freeze({
   program: 48, programData: 1_398_164, clock: 56, rent: 24, escrow: 296, token: 220, mint: 112,
 });
+/** MAX_PERMITTED_DATA_LENGTH. A recipient wallet's size comes only via its `space` field; it is never decoded. */
+const MAX_ACCOUNT_BYTES = 10 * 1024 * 1024;
 
 export interface SolanaReadRpc {
   request(input: {
@@ -30,6 +40,8 @@ export interface SolanaReadRpc {
 export interface SolanaReaderOptions {
   readonly rpc: SolanaReadRpc; readonly registry: SolanaRegistryView; readonly now?: () => number;
   readonly timeoutMs?: number;
+  /** Admission choices before funding: exact mint/authority pairs. Existing escrow exits remain available. */
+  readonly freezeAuthorityPermits?: readonly SolanaFreezeAuthorityPermit[];
 }
 export interface SolanaReadRequest {
   readonly generation: number; readonly requestSequence: number; readonly signal: AbortSignal;
@@ -43,15 +55,34 @@ export type NativeCustody = {
   readonly rentExemptMinimum: string | null;
   readonly surplus: string | null; readonly payoutBlockedBy: readonly ('rent-shortfall' | 'rent-unknown')[];
 };
+/**
+ * A frozen vault does not stop the state-only `release` or `refund`; it blocks only the payout, until the mint's
+ * freeze authority thaws it. `payoutBlockedBy` lists it while a payout is still to happen.
+ */
 export type SplCustody = {
   readonly kind: 'spl'; readonly vault: string; readonly vaultAmount: string; readonly principalHeld: string;
   readonly surplus: string; readonly vaultFrozen: boolean; readonly mintDecimals: number;
-  readonly mintFreezeAuthority: string | null;
+  readonly mintFreezeAuthority: string | null; readonly payoutBlockedBy: readonly 'vault-frozen'[];
 };
+/** The SPL mint at slot S, also when no escrow exists yet, so the UI can warn about a freeze authority. */
+export interface SolanaMintView {
+  readonly address: string; readonly decimals: number; readonly freezeAuthority: string | null;
+}
 export interface SolanaEscrowSnapshot {
   readonly observation: ChainObservation; readonly live: SolanaLiveAnchor; readonly escrowAddress: string;
   readonly occupant: 'none' | 'system-prefunded' | 'escrow'; readonly escrow: EscrowAccountV1 | null;
   readonly payout: 'not-applicable' | 'pending' | 'complete'; readonly custody: NativeCustody | SplCustody | null;
+  readonly mint: SolanaMintView | null;
+}
+export type SolanaPayoutPlan = SplPayoutPlan | NativePayoutPlan;
+/**
+ * Payout plans from the same read as `snapshot` (one slot S). `buyer` is the payout after a release and `seller`
+ * the payout after a refund; both are null once paid out. `pending` is the stored recipient's plan while the
+ * escrow is Released or Refunded and unpaid, else null.
+ */
+export interface SolanaPayoutReadiness {
+  readonly snapshot: SolanaEscrowSnapshot; readonly buyer: SolanaPayoutPlan | null;
+  readonly seller: SolanaPayoutPlan | null; readonly pending: SolanaPayoutPlan | null;
 }
 
 /** A provider result boxed by the reader, so no promise is ever resolved with (and no `then` read on) it. */
@@ -129,8 +160,10 @@ const isSystemEmpty = (account: Account) =>
 
 /** Program, ProgramData and Clock identity at slot S (accounts 0..2). */
 type Identity = Pick<SolanaLiveAnchor, 'timestampSeconds' | 'programDataSha256'>;
-interface Anchored { readonly slot: number; readonly accounts: readonly unknown[]; readonly identity: Identity }
-function checkIdentity(ref: SolanaDeploymentRef, accounts: readonly unknown[], slot: number): Identity {
+interface Checked { readonly identity: Identity; readonly deploySlot: bigint }
+interface Anchored extends Checked { readonly slot: number; readonly accounts: readonly unknown[] }
+/** Re-run on every read: nothing about identity is cached that could let a later read skip a check. */
+function checkIdentity(ref: SolanaDeploymentRef, accounts: readonly unknown[], slot: number): Checked {
   const program = present(accounts[0], CAP.program, LOADER_V3_ID, true);
   if (decodeProgramAccount(program.data) !== ref.programDataAddress) return fail();
   const programData = decodeProgramData(present(accounts[1], CAP.programData, LOADER_V3_ID).data);
@@ -139,7 +172,10 @@ function checkIdentity(ref: SolanaDeploymentRef, accounts: readonly unknown[], s
   if (programData.sha256 !== runtime.programDataSha256) return fail();
   const clock = decodeClock(present(accounts[2], CAP.clock, SYSVAR_OWNER_ID).data);
   if (clock.slot !== BigInt(slot) || clock.unixTimestamp < 0n) return fail();
-  return { timestampSeconds: clock.unixTimestamp.toString(), programDataSha256: programData.sha256 };
+  return {
+    identity: { timestampSeconds: clock.unixTimestamp.toString(), programDataSha256: programData.sha256 },
+    deploySlot: programData.deploySlot,
+  };
 }
 
 interface Block { readonly hash: string; readonly height: number; readonly parent: number }
@@ -187,12 +223,26 @@ function nativeCustody(escrow: EscrowAccountV1, entry: object, minimum: bigint |
   };
 }
 
-/** SPL principal sits in the vault PDA token account; the mint is checked even when no escrow exists. */
-function splCustody(
-  trade: BoundSolanaTrade, classified: Classified, vaultEntry: unknown, mintEntry: unknown,
-): SplCustody | null {
-  const mint = decodeMint(present(mintEntry, CAP.mint, SPL_PROGRAM_ID).data);
+/**
+ * The mint is checked even when no escrow exists (the state in which the app decides to fund): SPL Token owner,
+ * registry decimals, then the pre-funding freeze-authority policy. Existing validated escrows retain their exits.
+ * A changed admission permit never vetoes release/refund or an otherwise executable payout after funding.
+ */
+function splMint(
+  trade: BoundSolanaTrade, mintEntry: unknown, permits: FreezeAuthorityPermits, existing: EscrowAccountV1 | null,
+): SolanaMintView {
+  const mint = decodeMint(present(mintEntry, CAP.mint, SPL_PROGRAM_ID).data), address = trade.terms.mint!;
   if (mint.decimals !== trade.asset.decimals) return fail();
+  if (existing === null && !freezeAuthorityPermitted(permits, address, mint.freezeAuthority)) {
+    return fail('UNSUPPORTED_PROVIDER');
+  }
+  return { address, decimals: mint.decimals, freezeAuthority: mint.freezeAuthority };
+}
+
+/** SPL principal sits in the vault PDA token account. */
+function splCustody(
+  trade: BoundSolanaTrade, classified: Classified, vaultEntry: unknown, mint: SolanaMintView,
+): SplCustody | null {
   const escrow = classified.escrow, vaultAddress = trade.vault!.address;
   if (escrow === null) {
     const vault = readAccount(vaultEntry, CAP.token);
@@ -202,11 +252,77 @@ function splCustody(
   const vault = decodeTokenAccount(present(vaultEntry, CAP.token, SPL_PROGRAM_ID).data);
   const principal = escrow.paidOut ? 0n : BigInt(escrow.amountBaseUnits);
   if (vault.mint !== escrow.mint || vault.owner !== trade.escrow.address || vault.amount < principal) return fail();
+  // Like a rent shortfall, a frozen vault is a blocker only while a payout is still to happen.
+  const blockedBy: 'vault-frozen'[] = vault.frozen && !escrow.paidOut ? ['vault-frozen'] : [];
   return {
     kind: 'spl', vault: vaultAddress, vaultAmount: vault.amount.toString(), principalHeld: principal.toString(),
     surplus: (vault.amount - principal).toString(), vaultFrozen: vault.frozen, mintDecimals: mint.decimals,
-    mintFreezeAuthority: mint.freezeAuthority,
+    mintFreezeAuthority: mint.freezeAuthority, payoutBlockedBy: blockedBy,
   };
+}
+
+/**
+ * A payout recipient may be any account (a native buyer can be a data account of any size), so only its
+ * metadata is read: `space` is required, the base64 length (with its padding) must encode exactly that many
+ * bytes, and only a 165-byte SPL Token account is decoded.
+ */
+function shallowAccount(entry: unknown): ShallowAccount | null {
+  if (entry === null) return null;
+  if (typeof entry !== 'object') return fail();
+  const owner = canonicalKey(own(entry, 'owner')), executable = own(entry, 'executable');
+  const lamports = own(entry, 'lamports'), space = safeInt(own(entry, 'space'));
+  if (typeof executable !== 'boolean' || typeof lamports !== 'number' || !Number.isInteger(lamports) || lamports < 0) {
+    return fail();
+  }
+  const tuple = ownArray(own(entry, 'data'), 2), encoded = tuple[0];
+  if (tuple.length !== 2 || tuple[1] !== 'base64' || typeof encoded !== 'string') return fail();
+  const padding = encoded.endsWith('==') ? 2 : encoded.endsWith('=') ? 1 : 0;
+  if (space > MAX_ACCOUNT_BYTES || encoded.length % 4 !== 0 || encoded.length / 4 * 3 - padding !== space) {
+    return fail();
+  }
+  const token = owner === SPL_PROGRAM_ID && !executable && space === TOKEN_ACCOUNT_BYTES;
+  return {
+    owner, executable, lamports: Math.min(lamports, Number.MAX_SAFE_INTEGER), dataLength: space,
+    data: token ? decodeBase64(encoded, CAP.token) : null,
+  };
+}
+function walletView(entry: unknown, rent: Uint8Array): RecipientWalletView {
+  const account = shallowAccount(entry), dataLength = account?.dataLength ?? 0;
+  const minimum = rentExemptMinimum(rent, dataLength);
+  return {
+    lamports: String(account?.lamports ?? 0), dataLength, executable: account?.executable ?? false,
+    rentExemptMinimum: minimum === null ? null : minimum.toString(),
+  };
+}
+
+/** Extra keys for `readPayout`, after the snapshot keys: both parties' payout destinations at the same slot. */
+function payoutKeys(trade: BoundSolanaTrade): readonly string[] {
+  const { buyer, seller, mint } = trade.terms;
+  if (mint === null) return [buyer, seller];
+  return [RENT_SYSVAR_ID, associatedTokenAddress(buyer, mint).address, associatedTokenAddress(seller, mint).address];
+}
+function payoutPlans(
+  trade: BoundSolanaTrade, snapshot: SolanaEscrowSnapshot, accounts: readonly unknown[],
+): Omit<SolanaPayoutReadiness, 'snapshot'> {
+  const escrow = snapshot.escrow, blockedBy = snapshot.custody?.payoutBlockedBy ?? [];
+  if (escrow?.paidOut) return { buyer: null, seller: null, pending: null };
+  const { buyer: buyerKey, seller: sellerKey, mint } = trade.terms;
+  let buyer: SolanaPayoutPlan, seller: SolanaPayoutPlan;
+  if (mint === null) {
+    const rent = present(accounts[4], CAP.rent, SYSVAR_OWNER_ID).data;
+    const principal = BigInt(escrow?.amountBaseUnits ?? trade.terms.amountBaseUnits);
+    buyer = payoutPlanners.native(buyerKey, principal, walletView(accounts[5], rent), blockedBy);
+    seller = payoutPlanners.native(sellerKey, principal, walletView(accounts[6], rent), blockedBy);
+  } else {
+    const ataRent = rentExemptMinimum(present(accounts[6], CAP.rent, SYSVAR_OWNER_ID).data, TOKEN_ACCOUNT_BYTES);
+    const rentLamports = ataRent === null ? null : ataRent.toString();
+    const plan = (recipient: string, index: number) => payoutPlanners.spl(recipient, mint,
+      associatedTokenAddress(recipient, mint).address, classifyTokenAccount(shallowAccount(accounts[index])),
+      blockedBy, rentLamports);
+    buyer = plan(buyerKey, 7); seller = plan(sellerKey, 8);
+  }
+  const pending = escrow?.state === 'released' ? buyer : escrow?.state === 'refunded' ? seller : null;
+  return { buyer, seller, pending };
 }
 
 function payoutOf(escrow: EscrowAccountV1 | null): SolanaEscrowSnapshot['payout'] {
@@ -214,6 +330,17 @@ function payoutOf(escrow: EscrowAccountV1 | null): SolanaEscrowSnapshot['payout'
   return escrow.paidOut ? 'complete' : 'pending';
 }
 function counter(value: unknown): number { return safeInt(value, 'INVALID_INPUT'); }
+/** A request counter; a getter that throws is the caller's fault (INVALID_INPUT), not a provider failure. */
+function requestCounter(read: () => unknown): number {
+  let value: unknown;
+  try { value = read(); } catch { return fail('INVALID_INPUT'); }
+  return counter(value);
+}
+
+/** Only snapshots produced by `read()` carry the brand; the settlement planner refuses copies. */
+const SNAPSHOTS = new WeakSet<object>();
+export const isSolanaEscrowSnapshot = (value: unknown): value is SolanaEscrowSnapshot =>
+  typeof value === 'object' && value !== null && SNAPSHOTS.has(value);
 
 export class SolanaChainReader {
   readonly #options: SolanaReaderOptions;
@@ -222,24 +349,50 @@ export class SolanaChainReader {
   readonly #jobs = new Set<AbortController>();
   /** Highest finalized slot accepted per network; later reads must not observe an older context. */
   readonly #floors = new Map<string, number>();
+  /**
+   * ProgramData deploy slot first confirmed per network and program. With no upgrade authority the ProgramData
+   * can never be rewritten, so a later read showing another deploy slot is inconsistent and fails. This only
+   * adds a refusal; every read still re-checks the whole identity.
+   */
+  readonly #deploySlots = new Map<string, bigint>();
+  readonly #permits: FreezeAuthorityPermits;
   constructor(options: SolanaReaderOptions) {
     this.#options = options;
     this.#timeoutMs = options.timeoutMs ?? 10_000;
     if (!Number.isSafeInteger(this.#timeoutMs) || this.#timeoutMs < 1 || this.#timeoutMs > 60_000) {
       throw new Error('Invalid Solana reader timeout.');
     }
+    this.#permits = parseFreezeAuthorityPermits(options.freezeAuthorityPermits);
   }
 
   /** Same job discipline as the EVM reader: a slot is freed only when the physical work settles. */
-  #run<T>(external: AbortSignal | undefined, work: (context: Context) => Promise<T>): Promise<CoreResult<T>> {
+  #run<T>(signalOf: () => unknown, work: (context: Context) => Promise<T>): Promise<CoreResult<T>> {
     const operationId = createOperationId();
     const failure = (code: CoreErrorCode): CoreResult<never> =>
       ({ ok: false, error: createCoreError(code, { operationId, readOnly: true }) });
-    if (this.#disposed || external?.aborted) return Promise.resolve(failure('CANCELLED'));
+    if (this.#disposed) return Promise.resolve(failure('CANCELLED'));
+    // The caller's signal is read and checked before a job slot is reserved: a value that is not an AbortSignal,
+    // or a request whose `signal` cannot be read, is INVALID_INPUT. The slot is taken before addEventListener
+    // (caller code that may re-enter the reader) and given back if it throws, so the limit holds and no slot leaks.
+    const invalid = () => Promise.resolve(failure('INVALID_INPUT'));
+    let external: AbortSignal | undefined, aborted: boolean;
+    try {
+      const value = signalOf();
+      if (value !== undefined && !(value instanceof AbortSignal)) return invalid();
+      external = value;
+      aborted = external?.aborted === true;
+    } catch { return invalid(); }
+    if (aborted) return Promise.resolve(failure('CANCELLED'));
     if (this.#jobs.size >= MAX_RPC_READS) return Promise.resolve(failure('LIMIT_EXCEEDED'));
-    const controller = new AbortController(); this.#jobs.add(controller);
+    const controller = new AbortController();
+    const onExternal = () => controller.abort();
+    const detach = () => { try { external?.removeEventListener('abort', onExternal); } catch { /* caller-owned */ } };
+    this.#jobs.add(controller);
+    // A caller addEventListener may register the listener and then throw, so the refusal detaches it too.
+    try { external?.addEventListener('abort', onExternal, { once: true }); } catch {
+      detach(); this.#jobs.delete(controller); return invalid();
+    }
     let abortCode: CoreErrorCode = 'CANCELLED';
-    const onExternal = () => controller.abort(); external?.addEventListener('abort', onExternal, { once: true });
     const timer = setTimeout(() => { abortCode = 'TIMEOUT'; controller.abort(); }, this.#timeoutMs);
     const guard = () => { if (this.#disposed || controller.signal.aborted) fail(abortCode); };
     const context: Context = {
@@ -256,17 +409,17 @@ export class SolanaChainReader {
       },
     };
     let onAbort!: () => void;
-    const aborted = new Promise<CoreResult<T>>(resolve => {
+    const cancelled = new Promise<CoreResult<T>>(resolve => {
       onAbort = () => resolve(failure(abortCode)); controller.signal.addEventListener('abort', onAbort, { once: true });
     });
     const physical = Promise.resolve().then(() => { guard(); return work(context); })
       .then(value => { guard(); return { ok: true as const, value }; })
       .catch((error: unknown) => failure(failureCode(error, 'UNAVAILABLE')))
       .finally(() => {
-        this.#jobs.delete(controller); clearTimeout(timer); external?.removeEventListener('abort', onExternal);
+        this.#jobs.delete(controller); clearTimeout(timer); detach();
       });
-    return Promise.race([physical, aborted]).finally(() => {
-      controller.signal.removeEventListener('abort', onAbort); external?.removeEventListener('abort', onExternal);
+    return Promise.race([physical, cancelled]).finally(() => {
+      controller.signal.removeEventListener('abort', onAbort); detach();
     });
   }
 
@@ -283,7 +436,7 @@ export class SolanaChainReader {
     if (floor !== undefined && slot < floor) return fail();
     const accounts = ownArray(own(response, 'value'), keys.length);
     if (accounts.length !== keys.length) return fail();
-    return { slot, accounts, identity: checkIdentity(ref, accounts, slot) };
+    return { slot, accounts, ...checkIdentity(ref, accounts, slot) };
   }
 
   /** Steps 3-5: the block at S twice, then the genesis again; only then is the floor raised. */
@@ -294,57 +447,89 @@ export class SolanaChainReader {
     if (first.hash !== second.hash || first.height !== second.height || first.parent !== second.parent) return fail();
     if ((await context.call('getGenesisHash', [])).value !== ref.network.genesisHash) return fail();
     context.guard();
+    const program = `${ref.network.id}:${ref.deployment.address}`, pinned = this.#deploySlots.get(program);
+    if (pinned !== undefined && pinned !== anchored.deploySlot) return fail();
+    this.#deploySlots.set(program, anchored.deploySlot);
     this.#floors.set(ref.network.id, Math.max(this.#floors.get(ref.network.id) ?? 0, anchored.slot));
     return { height: String(anchored.slot), hash: first.hash, blockHeight: String(first.height), ...anchored.identity };
   }
 
   validateLive(networkId: string, deploymentId: string, signal?: AbortSignal): Promise<CoreResult<SolanaLiveAnchor>> {
-    return this.#run(signal, async context => {
+    return this.#run(() => signal, async context => {
       const ref = resolveDeployment(this.#options.registry, networkId, deploymentId);
       return deepFreeze(await this.#confirm(ref, await this.#anchor(ref, [], context), context));
     });
   }
 
+  /** One anchored read; `payout` appends both parties' payout destinations to the same getMultipleAccounts. */
+  async #observe(
+    binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput, context: Context, payout: boolean,
+  ): Promise<{ readonly trade: BoundSolanaTrade; readonly snapshot: SolanaEscrowSnapshot;
+    readonly accounts: readonly unknown[]; }> {
+    const generation = requestCounter(() => request.generation);
+    const requestSequence = requestCounter(() => request.requestSequence);
+    const trade = bindTrade(this.#options.registry, binding, terms);
+    const native = trade.terms.assetKind === 'native';
+    const extra = native ? [trade.escrow.address, RENT_SYSVAR_ID]
+      : [trade.escrow.address, trade.vault!.address, trade.terms.mint!];
+    const anchored = await this.#anchor(trade, payout ? [...extra, ...payoutKeys(trade)] : extra, context);
+    const classified = classifyEscrow(trade, anchored.accounts[3]);
+    let custody: NativeCustody | SplCustody | null, mint: SolanaMintView | null = null;
+    if (native) {
+      const minimum = escrowRentMinimum(present(anchored.accounts[4], CAP.rent, SYSVAR_OWNER_ID).data);
+      custody = classified.escrow === null ? null : nativeCustody(classified.escrow, classified.entry!, minimum);
+    } else {
+      mint = splMint(trade, anchored.accounts[5], this.#permits, classified.escrow);
+      custody = splCustody(trade, classified, anchored.accounts[4], mint);
+    }
+    const live = await this.#confirm(trade, anchored, context);
+    const observedAt = counter((this.#options.now ?? Date.now)());
+    const observation: ChainObservation = {
+      binding: trade.binding, generation, requestSequence, anchor: { height: live.height, hash: live.hash },
+      state: classified.escrow?.state ?? 'absent', finality: 'finalized', observedAt,
+    };
+    const snapshot: SolanaEscrowSnapshot = {
+      observation, live, escrowAddress: trade.escrow.address, occupant: classified.occupant,
+      escrow: classified.escrow, payout: payoutOf(classified.escrow), custody, mint,
+    };
+    return { trade, snapshot, accounts: anchored.accounts };
+  }
+
   read(
     binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput,
   ): Promise<CoreResult<SolanaEscrowSnapshot>> {
-    return this.#run(request.signal, async context => {
-      const generation = counter(request.generation), requestSequence = counter(request.requestSequence);
-      const trade = bindTrade(this.#options.registry, binding, terms);
-      const native = trade.terms.assetKind === 'native';
-      const extra = native ? [trade.escrow.address, RENT_SYSVAR_ID]
-        : [trade.escrow.address, trade.vault!.address, trade.terms.mint!];
-      const anchored = await this.#anchor(trade, extra, context);
-      const classified = classifyEscrow(trade, anchored.accounts[3]);
-      let custody: NativeCustody | SplCustody | null;
-      if (native) {
-        const minimum = escrowRentMinimum(present(anchored.accounts[4], CAP.rent, SYSVAR_OWNER_ID).data);
-        custody = classified.escrow === null ? null : nativeCustody(classified.escrow, classified.entry!, minimum);
-      } else custody = splCustody(trade, classified, anchored.accounts[4], anchored.accounts[5]);
-      const live = await this.#confirm(trade, anchored, context);
-      const observedAt = counter((this.#options.now ?? Date.now)());
-      const observation: ChainObservation = {
-        binding: trade.binding, generation, requestSequence, anchor: { height: live.height, hash: live.hash },
-        state: classified.escrow?.state ?? 'absent', finality: 'finalized', observedAt,
-      };
-      return deepFreeze({
-        observation, live, escrowAddress: trade.escrow.address, occupant: classified.occupant,
-        escrow: classified.escrow, payout: payoutOf(classified.escrow), custody,
-      });
+    return this.#run(() => request.signal, async context => {
+      const snapshot = deepFreeze((await this.#observe(binding, request, terms, context, false)).snapshot);
+      SNAPSHOTS.add(snapshot);
+      return snapshot;
     });
   }
 
-  /** G08 port. A funded trade whose vault is frozen cannot settle normally: CONFLICT, not a reorg. */
+  /**
+   * The snapshot plus payout plans, all at slot S: 2 more keys for native (buyer, seller wallets), 3 for SPL
+   * (Rent sysvar, buyer and seller canonical ATAs). The plans are advisory; the program enforces the rules.
+   */
+  readPayout(
+    binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput,
+  ): Promise<CoreResult<SolanaPayoutReadiness>> {
+    return this.#run(() => request.signal, async context => {
+      const { trade, snapshot, accounts } = await this.#observe(binding, request, terms, context, true);
+      const result = deepFreeze({ snapshot, ...payoutPlans(trade, snapshot, accounts) });
+      SNAPSHOTS.add(snapshot);
+      return result;
+    });
+  }
+
+  /**
+   * G08 port: the ChainObservation alone. A frozen SPL vault is reported like any other funded trade (review
+   * C-L3): `release` and `refund` are state-only and still succeed, and only the payout waits for a thaw. The
+   * flag is `read(…).custody.vaultFrozen` and `payoutBlockedBy` (`'vault-frozen'`); readPayout plans with it.
+   */
   async readValidated(
     binding: TradeBinding, request: SolanaReadRequest, terms: SolanaTermsInput,
   ): Promise<CoreResult<ChainObservation>> {
     const result = await this.read(binding, request, terms);
-    if (!result.ok) return result;
-    const { custody, observation } = result.value;
-    if (custody?.kind === 'spl' && custody.vaultFrozen && observation.state === 'funded') {
-      return { ok: false, error: createCoreError('CONFLICT', { operationId: createOperationId(), readOnly: true }) };
-    }
-    return { ok: true, value: observation };
+    return result.ok ? { ok: true, value: result.value.observation } : result;
   }
 
   dispose(): void {

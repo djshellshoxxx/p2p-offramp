@@ -624,7 +624,7 @@ const definitions = {
   },
   "recovery": {
     "title": "Offline transaction recovery references",
-    "help": "Inspect the open profile’s stored journal references without connecting a wallet, relay or node. This view makes no writes and cannot retry or clear a transaction.",
+    "help": "Inspect the open profile’s stored journal references without connecting a wallet, relay or node. This view makes no writes and cannot retry or clear a transaction. Native Solana journals show the current recovery hint for each trade; the complete intent history remains in your encrypted backup.",
     "unverified": "Every entry is an unverified offline reference. A stored label such as finalized does not prove current chain state, receipt, payment or safe resubmission. Reconcile against the original network and escrow using compatible recovery software.",
     "private": "This view and its export contain wallet, trade and transaction identifiers. Keep the file private; these fields can link your activity. No spending key, prepared calldata or signing authorization is exported.",
     "locked": "Unlock the local profile to inspect its recovery references. Locking or changing profile clears this view.",

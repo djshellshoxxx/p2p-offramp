@@ -1,0 +1,50 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:build-policy
+> node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs apps/web/scripts/source-locale.test.mjs scripts/tests/import-boundaries.test.mjs scripts/tests/verify-web-artifact.test.mjs
+
+✔ build inventory binds exact raw bytes for binary (27.220582ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (9.350585ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (15.090571ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (8.495775ms)
+▶ build inventory includes prototype-looking root filenames
+  ✔ __proto__ (16.674098ms)
+  ✔ constructor (7.910917ms)
+  ✔ toString (12.014314ms)
+✔ build inventory includes prototype-looking root filenames (38.199762ms)
+✔ prototype-looking root filename cannot hide a private-key marker (6.45313ms)
+✔ prototype-looking root filename participates in case-collision refusal (6.443286ms)
+✔ application token policy denies HTML execution while allowing text and React events (3.356633ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.209008ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (0.649608ms)
+✔ default and demo module graphs reject test-only wallet execution and signing (4.6835ms)
+✔ scanBuild: the default artifact refuses synthetic markers or demo modules; the demo artifact requires them (97.877716ms)
+✔ scanBuild: only the testnet artifact may carry the testnet trust bundle or testnet modules, and it must (134.483285ms)
+✔ scanBuild records portable paths and refuses unsupported filesystem entries (57.47219ms)
+✔ a copied Pages directory must match the independently retained build evidence (3405.243938ms)
+✔ static loading, no-script and safety copy comes from the same English catalog (19.776255ms)
+✔ missing or duplicated catalog placeholders fail instead of emitting mixed static copy (4.37442ms)
+✔ G07 import boundaries use the TypeScript AST and report fixture violations without false positives (280.523038ms)
+✔ G07 permits only the explicit read-only release side entry and follows its dependencies (331.052755ms)
+✔ G07 permits only the existing release side entry and excludes parked optional dependencies (875.050915ms)
+✔ G07 reports missing application graph entry instead of claiming it was checked (156.795335ms)
+✔ G07 refuses missing or unreadable expected roots instead of passing a partial inventory (15.685125ms)
+✔ G07 refuses source-directory symlinks instead of silently omitting their subtree (16.107242ms)
+✔ G07 accepts an explicitly empty packages root with a complete application inventory (126.941209ms)
+✔ G07 follows literal dynamic imports into the entry graph and still rejects non-literal ones (144.063244ms)
+✔ G07 follows JavaScript-extension specifiers into their TypeScript sources (527.958055ms)
+✔ each mode verifies an artifact whose content and retained reference both match it (205.057234ms)
+✔ the default mode is strict when none is given (53.093714ms)
+✔ a reference whose profile disagrees with the requested mode is refused before the scan (59.168629ms)
+✔ D-L4 regression: demo or testnet content with its matching lenient reference is refused unless the operator asks for that mode (37.072579ms)
+✔ an unknown or non-string programmatic mode is refused (28.833103ms)
+✔ parseVerifyArgs accepts exactly one known mode flag and two paths (0.707626ms)
+✔ CLI takes the mode from flags; verification failures exit 1 and usage errors exit 2 (1595.444351ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4161.562889

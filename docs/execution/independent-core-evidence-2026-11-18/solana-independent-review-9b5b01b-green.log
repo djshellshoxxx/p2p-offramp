@@ -1,0 +1,18 @@
+✔ independent review: disposal before physical RPC dispatch prevents broadcast (33.256195ms)
+✔ independent review: before-observation switch cannot mark an unknown transaction dropped (16.887867ms)
+✔ independent review: during-observation switch cannot mark an unknown transaction dropped (19.310575ms)
+✔ independent review: rejected network switch cannot poison the finalized height floor (14.763378ms)
+✔ independent review: wrong-network failed status cannot settle a marked intent (11.298235ms)
+✔ document-is-self-contained-and-public (33.411849ms)
+✔ document-tampering-refused (29.273734ms)
+✔ reader-checks-chain-against-the-document (26.498909ms)
+✔ exits-follow-finalized-state-and-clock (16.94934ms)
+✔ recovery-messages-follow-c-l2 (34.988876ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 551.737405

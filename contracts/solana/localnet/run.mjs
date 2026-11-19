@@ -3,6 +3,8 @@
 // Deploys (genesis-loaded upgradeable program), makes it immutable, inspects it, runs native and SPL
 // release+payout and one real refund after the >= 1800 s minimum. Prints a JSON summary on stdout,
 // progress on stderr; exits 1 on any failed expectation.
+// It also runs the TypeScript reader (reader-check.mjs) against the validator: a frozen-vault SPL trade must read as
+// funded with vaultFrozen, release alone must land, and the payout must fail until thaw, then succeed.
 // SBPF v0-v2 ELFs: Agave 4.1.2 refuses `--final` while SIMD-0500 (disable_sbpf_v0_v1_v2_deployment) is active,
 // so the run first proves that refusal on an all-features validator, then runs the flows on a validator with
 // only that feature deactivated (reported in `deviations`). SBPF v3+ ELFs run with every feature active.
@@ -430,7 +432,7 @@ async function fundTrade(name, { seller, buyer, amount, expiryOffset, spl = null
     if (res.err) throw new Error(`${name}: fund tx ${res.signature} failed: ${JSON.stringify(res.err)}`);
     const fund = await finalize(`${name} fund`, res);
     const trade = { name, seller, args, escrow: escrow.address, escrowBump: escrow.bump, vault, spl: Boolean(spl),
-      clock, attempt, fund };
+      mint: spl?.mint ?? null, clock, attempt, fund };
     fixture.trades.push({ trade: name, escrowAddress: escrow.address, clockUnixTimestampAtFunding: clock.unixTimestamp,
       fundSignature: fund.signature });
     return trade;
@@ -452,7 +454,7 @@ async function readEscrow(trade, snapshotLabel = null) {
     fixture.escrows.push({
       label: snapshotLabel, trade: trade.name, escrowAddress: trade.escrow, vaultAddress: trade.vault?.address ?? null,
       fundArgs: fundArgsJson(trade.args), seller: trade.seller.address, buyer: trade.args.buyer,
-      mint: trade.spl ? d.OPEN_MINT : null, clockUnixTimestampAtFunding: trade.clock.unixTimestamp,
+      mint: trade.mint, clockUnixTimestampAtFunding: trade.clock.unixTimestamp,
       slot: acc.slot, lamports: acc.lamports, dataBase64: Buffer.from(acc.data).toString('base64'),
     });
   }
@@ -462,7 +464,7 @@ async function readEscrow(trade, snapshotLabel = null) {
 async function checkFunded(trade, snapshotLabel) {
   const e = await readEscrow(trade, snapshotLabel);
   const { spl } = trade;
-  const want = d.termsHash({ seller: trade.seller.address, mint: spl ? d.OPEN_MINT : null,
+  const want = d.termsHash({ seller: trade.seller.address, mint: trade.mint,
     tokenProgram: spl ? d.SPL_PROGRAM_ID : null, assetKind: spl ? 2 : 0, args: trade.args });
   eq(`${trade.name}: state Funded`, e.state, 'Funded');
   eq(`${trade.name}: amount`, e.amount, String(trade.args.amount));
@@ -470,7 +472,7 @@ async function checkFunded(trade, snapshotLabel) {
   eq(`${trade.name}: buyer`, e.buyer, trade.args.buyer);
   eq(`${trade.name}: seller`, e.seller, trade.seller.address);
   eq(`${trade.name}: asset kind`, e.assetKind, spl ? 2 : 0);
-  eq(`${trade.name}: mint`, e.mint, spl ? d.OPEN_MINT : ZERO_KEY);
+  eq(`${trade.name}: mint`, e.mint, trade.mint ?? ZERO_KEY);
   eq(`${trade.name}: escrow bump canonical`, e.escrowBump, trade.escrowBump);
   eq(`${trade.name}: on-chain terms hash == off-chain rebuild`, e.termsHash, want);
   if (spl) eq(`${trade.name}: vault bump canonical`, e.vaultBump, trade.vault.bump);
@@ -549,6 +551,107 @@ async function splReleaseFlow() {
     deadline: trade.args.expiry, clockAtFunding: trade.clock.unixTimestamp, fundAttempts: trade.attempt,
     buyerAta, sellerAta, signatures: { setup, fund: trade.fund, releasePayout: settle },
     buyerAtaAmount: buyerTok.amount, vaultAmountAfter: vaultTok.amount, sellerAtaAmount: sellerTok.amount };
+}
+
+// ---- frozen vault and frozen destination, observed through the TypeScript reader (review C-L2, C-L3) ----
+async function readerFor(program) {
+  const { createReaderCheck } = await import('./reader-check.mjs');
+  return createReaderCheck({
+    rpc, validatorGenesis: summary.validator.genesisHash, compiledGenesis: d.base58Encode(d.utf8(d.GENESIS_HASH_ASCII)),
+    rpcUrl: RPC_URL, programId: d.PROGRAM_ID, programDataSha256: program.hashes.afterHeaderSha256,
+    soSha256: program.hashes.soSha256, mints: [{ id: 'usd6', address: d.OPEN_MINT }, { id: 'usd6f', address:
+      d.FREEZABLE_MINT }],
+    // Owner choice for the synthetic freezable test mint only (D5 open question 2).
+    freezeAuthorityPermits: [{ mint: d.FREEZABLE_MINT, freezeAuthority: keys.mintAuthority.address }],
+    sleep: d.sleep,
+  });
+}
+
+/// Sends a payout that must fail; returns the finalized custom error code.
+async function payoutMustFail(label, trade, destination, want) {
+  const ix = d.payoutSplIx({ escrow: trade.escrow, vault: trade.vault.address, mint: trade.mint, destination });
+  const res = await d.sendTx(rpc, { feePayer: keys.payer, instructions: [ix], signers: [keys.payer],
+    skipPreflight: true });
+  const st = await d.waitForSignature(rpc, res.signature, 'finalized', FINALIZE_TIMEOUT_MS);
+  const code = st.err?.InstructionError?.[1]?.Custom ?? null;
+  eq(`${label}: payout fails on chain with custom error ${want}`, code, want);
+  return { signature: res.signature, slot: st.slot, err: st.err };
+}
+
+async function frozenFlow(program) {
+  const reader = await readerFor(program);
+  try {
+    const live = await reader.validateLive();
+    eq('reader: validateLive programDataSha256 == finalized region hash', live.programDataSha256,
+      program.hashes.afterHeaderSha256);
+    await frozenFlowSteps(reader);
+  } finally {
+    reader.dispose();
+  }
+}
+
+async function frozenFlowSteps(reader) {
+  const mint = d.FREEZABLE_MINT, seller = keys.seller.address, buyer = keys.buyerSpl.address;
+  const freezer = keys.mintAuthority;
+  const sellerAta = d.createAtaIdempotentIx(seller, seller, mint);
+  const buyerAta = d.createAtaIdempotentIx(seller, buyer, mint);
+  await sendOk('frozen: freezable-mint ATAs + mint_to', { feePayer: keys.seller, signers: [keys.seller, freezer],
+    instructions: [sellerAta.ix, buyerAta.ix, d.mintToIx(mint, sellerAta.ata, freezer.address, AMOUNTS.spl)] });
+  const trade = await fundTrade('spl-frozen', { seller: keys.seller, buyer, amount: AMOUNTS.spl,
+    expiryOffset: RELEASE_EXPIRY_S, spl: { mint, sellerToken: sellerAta.ata } });
+  await checkFunded(trade, null);
+  const terms = (await import('./reader-check.mjs')).termsOf({ compiledGenesis: d.base58Encode(d.utf8(
+    d.GENESIS_HASH_ASCII)), programId: d.PROGRAM_ID, seller, args: trade.args, mint, tokenProgram: d.SPL_PROGRAM_ID });
+  const tradeId = (await readEscrow(trade)).termsHash;
+  const observe = () => reader.observe(terms, tradeId);
+  const toggle = (label, ixBuilder, accounts) => sendOk(label, { feePayer: keys.payer, signers: [keys.payer, freezer],
+    instructions: accounts.map((account) => ixBuilder(account, mint, freezer.address)) });
+  const signatures = {};
+
+  signatures.freeze = await toggle('frozen: freeze vault + buyer ATA', d.freezeAccountIx,
+    [trade.vault.address, buyerAta.ata]);
+  let seen = await observe();
+  eq('frozen: readValidated reports funded (not CONFLICT)', seen.observation.state, 'funded');
+  eq('frozen: observation finality', seen.observation.finality, 'finalized');
+  eq('frozen: custody.vaultFrozen', seen.snapshot.custody.vaultFrozen, true);
+  eq('frozen: custody.payoutBlockedBy', seen.snapshot.custody.payoutBlockedBy.join(','), 'vault-frozen');
+  eq('frozen: mint freeze authority surfaced', seen.snapshot.mint.freezeAuthority, freezer.address);
+  eq('frozen: buyer plan blocked by the vault', seen.payout.buyer.reason, 'vault-frozen');
+
+  // C-L2: release alone; a frozen vault and a frozen destination do not stop it.
+  signatures.release = await sendOk('frozen: release alone', { feePayer: keys.seller,
+    instructions: [d.releaseIx(seller, trade.escrow)], signers: [keys.seller] });
+  seen = await observe();
+  eq('frozen: reader state after release', seen.observation.state, 'released');
+  eq('frozen: payout pending', seen.snapshot.payout, 'pending');
+  eq('frozen: pending plan blocked by the vault', seen.payout.pending.reason, 'vault-frozen');
+
+  signatures.thawBuyer = await toggle('frozen: thaw buyer ATA', d.thawAccountIx, [buyerAta.ata]);
+  signatures.vaultFrozenPayout = await payoutMustFail('frozen vault', trade, buyerAta.ata, 17);
+  seen = await observe();
+  eq('frozen: still Released and unpaid after the failed payout', `${seen.observation.state}/${seen.snapshot.payout}`,
+    'released/pending');
+
+  signatures.swap = await sendOk('frozen: thaw vault, freeze buyer ATA', { feePayer: keys.payer,
+    signers: [keys.payer, freezer], instructions: [d.thawAccountIx(trade.vault.address, mint, freezer.address),
+      d.freezeAccountIx(buyerAta.ata, mint, freezer.address)] });
+  seen = await observe();
+  eq('frozen: vault thawed', seen.snapshot.custody.vaultFrozen, false);
+  eq('frozen: pending plan blocked by the destination', seen.payout.pending.reason, 'destination-frozen');
+  signatures.destinationFrozenPayout = await payoutMustFail('frozen destination', trade, buyerAta.ata, 6016);
+
+  signatures.thawDestination = await toggle('frozen: thaw buyer ATA again', d.thawAccountIx, [buyerAta.ata]);
+  seen = await observe();
+  eq('frozen: pending plan ready after both thaws', seen.payout.pending.kind, 'ready');
+  signatures.payout = await sendOk('frozen: payout after thaw', { feePayer: keys.payer, signers: [keys.payer],
+    instructions: [d.payoutSplIx({ escrow: trade.escrow, vault: trade.vault.address, mint,
+      destination: buyerAta.ata })] });
+  seen = await observe();
+  eq('frozen: reader payout complete', seen.snapshot.payout, 'complete');
+  eq('frozen: buyer ATA == amount (finalized)', (await tokenAmount(buyerAta.ata)).amount, String(AMOUNTS.spl));
+  eq('frozen: vault empty', (await tokenAmount(trade.vault.address)).amount, '0');
+  summary.flows.frozen = { escrow: trade.escrow, vault: trade.vault.address, mint, buyerAta: buyerAta.ata,
+    amount: AMOUNTS.spl, signatures: { fund: trade.fund, ...signatures } };
 }
 
 async function startRefundTrade() {
@@ -689,6 +792,7 @@ async function main() {
   const early = await earlyRefundMustFail(refundTrade);
   await nativeReleaseFlow();
   await splReleaseFlow();
+  await frozenFlow(finalProg);
   await upgradeAttempt(finalProg.pdAddress, finalProg.hashes.programDataSha256);
   if (SKIP_REFUND) check('refund flow executed (skipped by SOLANA_LOCALNET_SKIP_REFUND_WAIT)', false);
   else await refundFlow(refundTrade, early);

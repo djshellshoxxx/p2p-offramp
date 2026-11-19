@@ -1,0 +1,15 @@
+✔ each mode verifies an artifact whose content and retained reference both match it (148.868232ms)
+✔ the default mode is strict when none is given (29.687117ms)
+✔ a reference whose profile disagrees with the requested mode is refused before the scan (26.950262ms)
+✔ D-L4 regression: demo or testnet content with its matching lenient reference is refused unless the operator asks for that mode (157.039956ms)
+✔ an unknown or non-string programmatic mode is refused (39.572042ms)
+✔ parseVerifyArgs accepts exactly one known mode flag and two paths (0.944444ms)
+✔ CLI takes the mode from flags; verification failures exit 1 and usage errors exit 2 (2493.110595ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3530.93524

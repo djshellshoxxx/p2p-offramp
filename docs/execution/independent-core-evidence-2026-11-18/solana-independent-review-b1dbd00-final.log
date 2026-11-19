@@ -1,0 +1,22 @@
+✔ src-has-no-io-or-forbidden-apis (2.016643ms)
+✔ import-scan-sees-every-static-form (0.250918ms)
+✔ src-imports-only-allowed-modules (0.6492ms)
+✔ package-lines-at-most-120 (4.958783ms)
+✔ readme-records-token-program-id-rename (0.494356ms)
+✔ independent review: registry-valid mixed-case dotted network ID survives recovery (8.60875ms)
+✔ independent review: registry-valid mixed-case dotted deployment ID survives recovery (5.632443ms)
+✔ independent review: registry-valid mixed-case dotted asset ID survives recovery (3.905543ms)
+✔ recovery IDs retain the registry length, separator and traversal constraints (5.406438ms)
+✔ independent review: disposal before physical RPC dispatch prevents broadcast (27.280244ms)
+✔ independent review: before-observation switch cannot mark an unknown transaction dropped (15.649532ms)
+✔ independent review: during-observation switch cannot mark an unknown transaction dropped (11.466202ms)
+✔ independent review: rejected network switch cannot poison the finalized height floor (13.868406ms)
+✔ independent review: wrong-network failed status cannot settle a marked intent (10.819005ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 418.605397

@@ -1,0 +1,40 @@
+✔ peer acceptance: both roles round-trip with signTerms through verifyEoaPeerAcceptance (41.001736ms)
+✔ peer acceptance: typed-data JSON shown to the wallet has the exact shape (9.835474ms)
+✔ peer acceptance: signatures that are not a strict low-s EOA signature by the account are refused (8.320133ms)
+✔ peer acceptance: provider errors map like signTerms and never downgrade (3.072135ms)
+✔ peer acceptance: account switch before or during the prompt is refused (4.045913ms)
+✔ peer acceptance: chain switch before or during the prompt is refused (3.947054ms)
+✔ peer acceptance: preflight refusals never reach the wallet (7.81063ms)
+✔ peer acceptance: terms on another registry EVM network are refused before any wallet request (2.909438ms)
+✔ peer acceptance: domain is rebuilt from the registry and inputs are snapshotted before the first await (4.036429ms)
+✔ peer acceptance: cancellation and late results are discarded (4.195961ms)
+✔ peer acceptance: silent account or chain changes during signing discard the result (4.780339ms)
+✔ wallet signing: one physical authorization slot covers both signature methods (9.326561ms)
+✔ independent review: terms discards dispose after the final identity query (2.823026ms)
+✔ independent review: terms discards abort after the final identity query (2.300844ms)
+✔ independent review: peer discards dispose after the final identity query (2.460876ms)
+✔ independent review: peer discards abort after the final identity query (2.478253ms)
+✔ independent review: cancelled signing retains its physical slot across reconnect until the provider settles (7.46831ms)
+✔ G10 nothing is requested before an explicit connect; connect binds registry network, chain and canonical account (10.218937ms)
+✔ G10 a pre-aborted explicit connect makes no provider request (2.540418ms)
+✔ G10 cancellation while the account request is pending prevents the next provider request (0.925615ms)
+✔ G10 signs G16 terms once with typed data and returns only an offline-verified signature (9.637223ms)
+✔ G10 preflight refuses terms not bound to the registry, session account or role (2.206961ms)
+✔ G10 snapshots validated G16 inputs before provider awaits and signs exactly that snapshot (3.860202ms)
+✔ G10 cancellation while account recheck is pending prevents the chain recheck and signing prompt (0.923622ms)
+✔ G10 account/chain changes invalidate the session; late results after cancel or change are discarded (2.743286ms)
+✔ G10 reconnecting never stacks duplicate provider listeners (1.043765ms)
+✔ G10 first connection observes account changes during its held chain read (0.513901ms)
+✔ G10 listener registration cannot publish a session after synchronous invalidation or disposal (0.677909ms)
+✔ G10 providers without removable lifecycle events are refused before prompting (0.405446ms)
+✔ G10 account reply accessors cannot invalidate a session and then reach the signing prompt (0.786014ms)
+✔ G10 an old held connect cannot detach a newer connection or issue follow-on requests (0.542774ms)
+✔ G10 a request getter cannot dispose the adapter and then start the connect prompt (0.508142ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 833.35558
