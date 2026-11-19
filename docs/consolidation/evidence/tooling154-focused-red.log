@@ -1,0 +1,150 @@
+✔ imported reviewed fields never confer tested authority; maintained scope is rechecked (4.340389ms)
+✔ unknown keys duplicate IDs and hostile getters fail without invoking accessors (2.877636ms)
+✔ exact canonical content participates in maintained verification; date and UTF-8 are strict (0.962274ms)
+✔ lookup detaches registry and never evaluates array accessors or trusts duplicates (0.575208ms)
+✔ byte parser enforces depth, UTF-8 and intrinsic byte length; projection retains only canonical fields (2.557406ms)
+✔ actual copy reader refuses unknown keys, wrong entry IDs and accessors without evaluation (1.19994ms)
+✔ a claim whose evidence is stale is never current even with matching trust and scope (0.683672ms)
+✖ actual draft has exact immutable evidence and links but no review, approval or publication (450.620412ms)
+✔ unknown keys, duplicate claims/copy keys and unrecognized references fail closed (511.3348ms)
+✔ self-attested reviewer, future approval and tested status do not pass local check (331.30819ms)
+✖ wrong source bytes, hash, baseline and missing evidence fail (1168.216909ms)
+✔ document hashes, capabilities, duplicate pages/topics and link report digest are checked (1545.618597ms)
+✖ changed linked target, symlink and oversized manifest are rejected (1468.071266ms)
+✔ authored link grammar rejects broken anchors, traversal, nonchecked HTML and executable examples (991.778098ms)
+✖ real UI copy key, canonical mapping, value hash and immutable catalog bytes are bound (2161.990825ms)
+✔ inline link extraction preserves nested labels, delimiters and authored order (3.737044ms)
+✔ link extraction enforces completed target, link count and UTF-8 document boundaries (1.453074ms)
+✖ actual inspection keeps 240-character targets and the global 256-link limit across pages (365.279097ms)
+✖ actual document reads retain the 64 KiB UTF-8 byte limit (341.825776ms)
+✖ a later edit to a bound non-owned file is stale and not current, but tampered recorded bytes at sourceCommit fail (414.191165ms)
+✔ lab never inherits wallet/RPC/publication credentials or ambient compiler recipe (7.073958ms)
+✔ lab permits only private frontend forwarding and no inferred native RPC forwarding (32.87285ms)
+✔ lab runs never overwrite earlier evidence (84.16868ms)
+✔ a failed lab run keeps its evidence when a later run follows (31.366468ms)
+✔ recipe digests bind actual bytes and reject traversal and symlink parents (29.715624ms)
+✔ lab subprocess bounds logs, timeout and cancellation without a shell (273.337606ms)
+✔ successful and terminated parents cannot leave their owned process group running (428.331018ms)
+✔ a file swapped for a symlink after metadata inspection is never hashed (18.937983ms)
+✔ tools resolve only from absolute, non-world-writable PATH entries (83.932174ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 22
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19533.168735
+
+✖ failing tests:
+
+test at scripts/docs/validate.test.mjs:38:1
+✖ actual draft has exact immutable evidence and links but no review, approval or publication (450.620412ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-cNorzs/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:39:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-cNorzs/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:53:1
+✖ wrong source bytes, hash, baseline and missing evidence fail (1168.216909ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-m87U6v/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:55:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-m87U6v/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:61:1
+✖ changed linked target, symlink and oversized manifest are rejected (1468.071266ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-uyE2R2/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:63:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-uyE2R2/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:81:1
+✖ real UI copy key, canonical mapping, value hash and immutable catalog bytes are bound (2161.990825ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-iNF6mU/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:89:15)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-iNF6mU/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:137:1
+✖ actual inspection keeps 240-character targets and the global 256-link limit across pages (365.279097ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-8RslQG/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:138:18)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-8RslQG/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:151:1
+✖ actual document reads retain the 64 KiB UTF-8 byte limit (341.825776ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-igkxwJ/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async fixture (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:25:12)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:152:18)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-igkxwJ/docs/consolidation'
+  }
+
+test at scripts/docs/validate.test.mjs:178:1
+✖ a later edit to a bound non-owned file is stale and not current, but tampered recorded bytes at sourceCommit fail (414.191165ms)
+  Error: ENOENT: no such file or directory, lstat '/tmp/p2p-docs-git-Ai2xIQ/docs/consolidation'
+      at async lstat (node:internal/fs/promises:1741:18)
+      at async file (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:48:16)
+      at async inspectDocs (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.mjs:143:24)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/scripts/docs/validate.test.mjs:181:17)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'lstat',
+    path: '/tmp/p2p-docs-git-Ai2xIQ/docs/consolidation'
+  }

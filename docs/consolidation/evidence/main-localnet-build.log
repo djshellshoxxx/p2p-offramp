@@ -1,0 +1,1 @@
+LOCALNET_CONFIG_REQUIRED: the localnet build profile is library-only. Call buildWeb({ delivery: 'localnet', outDir, localnet: { registryBytes, registrySha256, escrowLayouts, relayUrl } }) from a test harness; no command-line argument or environment variable enables it.

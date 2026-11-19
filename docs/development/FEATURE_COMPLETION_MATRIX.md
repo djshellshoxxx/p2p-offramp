@@ -1,5 +1,18 @@
 # Feature completion matrix
 
+## Current source-based matrix
+
+The [complete consolidation feature matrix](../consolidation/FEATURE-COMPLETION.md)
+is current for main `91ee6991d4527bba0e76b048a76e65ed7693c5a1`. It records native/ERC-20
+browser and native Solana integration, acceptance evidence, active recovery/resumption
+work, dependencies, security concerns and precise remaining criteria. Source presence
+is distinct from release qualification; `ReleaseEnabled=0`.
+
+The table below is preserved as the historical `6c38e641` checkpoint. Its old draft
+and pending labels do not describe the current PR states.
+
+## Historical matrix before the qualified product merges
+
 Updated: November 18, 2026; source `main@6c38e641e24abcfdcf645f864bd64c9645836d75`.
 
 [The reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)

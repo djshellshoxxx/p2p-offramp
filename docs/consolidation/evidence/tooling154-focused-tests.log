@@ -1,0 +1,38 @@
+✔ imported reviewed fields never confer tested authority; maintained scope is rechecked (11.231588ms)
+✔ unknown keys duplicate IDs and hostile getters fail without invoking accessors (8.954689ms)
+✔ exact canonical content participates in maintained verification; date and UTF-8 are strict (6.086873ms)
+✔ lookup detaches registry and never evaluates array accessors or trusts duplicates (6.9709ms)
+✔ byte parser enforces depth, UTF-8 and intrinsic byte length; projection retains only canonical fields (5.729663ms)
+✔ actual copy reader refuses unknown keys, wrong entry IDs and accessors without evaluation (5.532503ms)
+✔ a claim whose evidence is stale is never current even with matching trust and scope (4.24044ms)
+✔ claim arrays use a bounded own-data length without evaluating dynamic proxy getters (17.176927ms)
+✔ actual draft has exact immutable evidence and links but no review, approval or publication (1301.406184ms)
+✔ unknown keys, duplicate claims/copy keys and unrecognized references fail closed (864.538436ms)
+✔ self-attested reviewer, future approval and tested status do not pass local check (692.656537ms)
+✔ wrong source bytes, hash, baseline and missing evidence fail (1431.816548ms)
+✔ document hashes, capabilities, duplicate pages/topics and link report digest are checked (5438.024239ms)
+✔ changed linked target, symlink and oversized manifest are rejected (2649.344813ms)
+✔ authored link grammar rejects broken anchors, traversal, nonchecked HTML and executable examples (2396.437126ms)
+✔ real UI copy key, canonical mapping, value hash and immutable catalog bytes are bound (4580.912918ms)
+✔ inline link extraction preserves nested labels, delimiters and authored order (1.138876ms)
+✔ link extraction enforces completed target, link count and UTF-8 document boundaries (3.116985ms)
+✔ actual inspection keeps 240-character targets and the global 256-link limit across pages (7287.485549ms)
+✔ actual document reads retain the 64 KiB UTF-8 byte limit (2446.075568ms)
+✔ a later edit to a bound non-owned file is stale and not current, but tampered recorded bytes at sourceCommit fail (2744.849868ms)
+✔ lab never inherits wallet/RPC/publication credentials or ambient compiler recipe (8.213069ms)
+✔ lab permits only private frontend forwarding and no inferred native RPC forwarding (41.692224ms)
+✔ lab runs never overwrite earlier evidence (68.258334ms)
+✔ a failed lab run keeps its evidence when a later run follows (102.040695ms)
+✔ recipe digests bind actual bytes and reject traversal and symlink parents (52.450545ms)
+✔ lab subprocess bounds logs, timeout and cancellation without a shell (314.356547ms)
+✔ successful and terminated parents cannot leave their owned process group running (495.037267ms)
+✔ a file swapped for a symlink after metadata inspection is never hashed (20.441908ms)
+✔ tools resolve only from absolute, non-world-writable PATH entries (85.284058ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44971.24356

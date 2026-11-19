@@ -1,0 +1,21 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:localnet:controller
+> node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-controller.mjs
+
+ok - independent encrypted profiles own distinct messaging identities and explicitly connect different external wallets
+ok - real encrypted take/offer/accept uses current D1 with four exact reviewed wallet signatures and no funding
+ok - durable encrypted chat reaches the independent peer without creating chain or fiat authority
+ok - cancelled preparation sends nothing; funding writes a durable marker and release requires explicit bank-receipt confirmation
+ok - seller release reaches canonical native escrow state after a new exact transaction review
+file:///workspace/scratch/29ec534d969d/p2p-offramp/scripts/test-localnet-controller.mjs:21
+  while (!await check()) { if (Date.now() - start > timeout) throw new Error(`Timed out: ${label}`); await delay(20); }
+                                                                   ^
+
+Error: Timed out: trade d2b00e9c873ae990d052a47afcc24bbccf5697c84fcf4456571d63c0fc937669 update for e353e56b379ba589e338cc997ffe9e35c905a2a834129311f4a7fe499f5d9c95
+    at until (file:///workspace/scratch/29ec534d969d/p2p-offramp/scripts/test-localnet-controller.mjs:21:68)
+    at async waitTrade (file:///workspace/scratch/29ec534d969d/p2p-offramp/scripts/test-localnet-controller.mjs:65:50)
+    at async acceptTrade (file:///workspace/scratch/29ec534d969d/p2p-offramp/scripts/test-localnet-controller.mjs:89:3)
+    at async file:///workspace/scratch/29ec534d969d/p2p-offramp/scripts/test-localnet-controller.mjs:132:18
+
+Node.js v24.22.3

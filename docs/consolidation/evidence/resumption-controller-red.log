@@ -1,0 +1,82 @@
+✖ resumption command selects one saved trade and accepts no peer proof or wallet request from the document (6.446474ms)
+✖ complete bilateral terms require explicit resume and a new funding review after lock/unlock (3525.255035ms)
+✖ complete bilateral terms require explicit resume and a new funding review after fresh profile restore (4302.941172ms)
+✖ interrupted seller-only negotiation is not converted into bilateral authorization on restore (2603.970557ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16828.271696
+
+✖ failing tests:
+
+test at apps/web/test/localnet-resumption.test.mjs:6:1
+✖ resumption command selects one saved trade and accepts no peer proof or wallet request from the document (6.446474ms)
+  LocalnetFailure: UNSUPPORTED_COMMAND
+      at fail (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/src/localnet/validation.ts:8:61)
+      at parseLocalnetCommand (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/src/localnet/validation.ts:66:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/localnet-resumption.test.mjs:8:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'UNSUPPORTED_COMMAND'
+  }
+
+test at apps/web/test/localnet-resumption.test.mjs:13:39
+✖ complete bilateral terms require explicit resume and a new funding review after lock/unlock (3525.255035ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"code":"UNSUPPORTED_COMMAND","snapshot":{"version":1,"phase":"ready","profileIds":["b231e43503f166bf07585b5880c98542"],"profileId":"b231e43503f166bf07585b5880c98542","publicKey":"55b4c9b2ca86716ab2aa44c2970d499087c230f6e1356e40d957650555b4813c","wallet":{"account":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","chainId":"31337"},"relay":"open","ads":[{"key":"55b4c9b2ca86716ab2aa44c2970d499087c230f6e1356e40d957650555b4813c:p2p-offramp:v1:86bbcbc97b676c47c11f55ad7ca3198794f2ab840df7664a8e0e3897cc55b6bf","maker":"55b4c9b2ca86716ab2aa44c2970d499087c230f6e1356e40d957650555b4813c","assetId":"native","amountBaseUnits":"1000","currency":"USD","expiresAtSeconds":"1800003600","own":true}],"sessions":[{"id":"30078:55b4c9b2ca86716ab2aa44c2970d499087c230f6e1356e40d957650555b4813c:p2p-offramp:v1:86bbcbc97b676c47c11f55ad7ca3198794f2ab840df7664a8e0e3897cc55b6bf|2729158a27e77ca475e6aef39cab17f732ecfabdf604f08b2500c37361326c40","role":"seller","state":"taken","selected":false,"buyerAddress":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","tradeId":null}],"trades":[{"id":"df097ea09e494fce3448d92d404d7d72cd80c40de6c0a9a7f882add9712b0337","sessionId":null,"role":"seller","restored":true,"seller":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","buyer":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","assetId":"native","amountBaseUnits":"1000","fiatCurrency":"USD","fiatMinorUnits":"1000","fiatScale":2,"paymentInstructions":"Synthetic confidential payment instructions","acceptBeforeSeconds":"1800000900","escrowExpirySeconds":"1800003600","peerAcceptance":"recheck-required","chainState":"absent","chainObservedAtMs":1800000000000,"intents":[],"chat":[],"approval":null,"tokenReadError":false,"canApprove":false,"canFund":false,"canRelease":false,"canRefund":false}],"review":null,"error":null}}
+
+  false !== true
+
+      at Object.command (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/support/localnet-resumption-fixture.mjs:108:112)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/localnet-resumption.test.mjs:33:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-resumption.test.mjs:13:39
+✖ complete bilateral terms require explicit resume and a new funding review after fresh profile restore (4302.941172ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"code":"UNSUPPORTED_COMMAND","snapshot":{"version":1,"phase":"ready","profileIds":["a386391440601b1f43f3d9a16c7cc0f2"],"profileId":"a386391440601b1f43f3d9a16c7cc0f2","publicKey":"3db6d2898026fd20f6c784953d12329ab8faf171709a5b074ceb18b45a9325f0","wallet":{"account":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","chainId":"31337"},"relay":"open","ads":[{"key":"3db6d2898026fd20f6c784953d12329ab8faf171709a5b074ceb18b45a9325f0:p2p-offramp:v1:3de6fbfc318075ead51a846fb795e1281d9e0ba86899bb7c7a177654443431a2","maker":"3db6d2898026fd20f6c784953d12329ab8faf171709a5b074ceb18b45a9325f0","assetId":"native","amountBaseUnits":"1000","currency":"USD","expiresAtSeconds":"1800003600","own":true}],"sessions":[{"id":"30078:3db6d2898026fd20f6c784953d12329ab8faf171709a5b074ceb18b45a9325f0:p2p-offramp:v1:3de6fbfc318075ead51a846fb795e1281d9e0ba86899bb7c7a177654443431a2|2cf3900d86890e57946ff3a3e4b8f457a06d4ee5bf81870786100b1f5fa0c1e7","role":"seller","state":"taken","selected":false,"buyerAddress":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","tradeId":null}],"trades":[{"id":"2b732f82e7ae9f165b670994146af4a8dde51e89458e37505ad678587f8869d3","sessionId":null,"role":"seller","restored":true,"seller":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","buyer":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","assetId":"native","amountBaseUnits":"1000","fiatCurrency":"USD","fiatMinorUnits":"1000","fiatScale":2,"paymentInstructions":"Synthetic confidential payment instructions","acceptBeforeSeconds":"1800000900","escrowExpirySeconds":"1800003600","peerAcceptance":"recheck-required","chainState":"absent","chainObservedAtMs":1800000000000,"intents":[],"chat":[],"approval":null,"tokenReadError":false,"canApprove":false,"canFund":false,"canRelease":false,"canRefund":false}],"review":null,"error":null}}
+
+  false !== true
+
+      at Object.command (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/support/localnet-resumption-fixture.mjs:108:112)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/localnet-resumption.test.mjs:33:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/localnet-resumption.test.mjs:45:1
+✖ interrupted seller-only negotiation is not converted into bilateral authorization on restore (2603.970557ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'UNSUPPORTED_COMMAND'
+  - 'RESUMPTION_HISTORY_UNAVAILABLE'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-resumption/apps/web/test/localnet-resumption.test.mjs:51:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'UNSUPPORTED_COMMAND',
+    expected: 'RESUMPTION_HISTORY_UNAVAILABLE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,1513 @@
+{
+  "schema": 1,
+  "initial_main": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+  "direct_merges": [
+    {
+      "pr": 169,
+      "sha": "9620890feba318d01493e713e1a79abfd733e0c7",
+      "merged": true,
+      "message": "Pull Request successfully merged",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/commit/9620890feba318d01493e713e1a79abfd733e0c7",
+      "source_branch": "integration/docs-reconciliation-20261118",
+      "source_sha": "db3198379a0c9e12b3f1415ce09256cce18a01d7",
+      "destination": "main",
+      "destination_before": "6c38e641e24abcfdcf645f864bd64c9645836d75",
+      "parents": [
+        "6c38e641e24abcfdcf645f864bd64c9645836d75",
+        "db3198379a0c9e12b3f1415ce09256cce18a01d7"
+      ],
+      "result_tree": "089f391bf4dcb235d834cd3ac493f52a025ca307",
+      "changed_paths": [
+        {
+          "status": "M",
+          "paths": [
+            "00_PLANNING_AND_THREAT_MODELING/feature_0.3_reusable_code/module_0.3.1_vendor_adapters/README.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "README.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/DEVELOPMENT_STATUS.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/consolidation/2026-11-18-documentation-reconciliation.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/consolidation/LANE-A-HANDOFF.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/consolidation/LANE-B-PROGRESS.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/consolidation/LEDGER.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/development/FEATURE_COMPLETION_MATRIX.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/handoffs/CHATGPT_DOCS_MAINTENANCE_LATEST.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/handoffs/CHATGPT_ZERO_CODEX_LATEST.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/wiki-source/Developer-Guide.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/wiki-source/Home.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/wiki-source/Security-and-Release.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/wiki-source/User-Guide.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "docs/wiki-source/_Sidebar.md"
+          ]
+        }
+      ],
+      "file_count": 15,
+      "tests": "TEST-RESULTS.md",
+      "conflicts": "CONFLICT-RESOLUTIONS.md"
+    },
+    {
+      "pr": 166,
+      "sha": "22711c16847133be0d6de39fdf31dd7372be4e7a",
+      "merged": true,
+      "message": "Pull Request successfully merged",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/commit/22711c16847133be0d6de39fdf31dd7372be4e7a",
+      "source_branch": "integration/core-hardening-20261118",
+      "source_sha": "9bc9aa83d740891a01522b7398f5fd3e4049b3e8",
+      "destination": "main",
+      "destination_before": "9620890feba318d01493e713e1a79abfd733e0c7",
+      "parents": [
+        "9620890feba318d01493e713e1a79abfd733e0c7",
+        "9bc9aa83d740891a01522b7398f5fd3e4049b3e8"
+      ],
+      "result_tree": "d79839bf256a419b1d905ed15352ded877d18ea9",
+      "changed_paths": [
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/artifact-policy.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/artifact-policy.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/build.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/scan-build.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/static-build-plugin.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/src/build-flags.d.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/LocalnetRoot.tsx"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/config.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/src/main.tsx"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/tsconfig.ui.json"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/vite.config.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/CORE-CONSOLIDATION-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/EVM-ANCHOR-REMEDIATION-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "package.json"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-evm/README.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-evm/localnet.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/domain/localnet.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/domain/src/tx-lifecycle.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/domain/test/tx-lifecycle.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/security/src/content-policy.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/security/test/content-policy.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/wallet/localnet.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/src/evm-adapter.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/src/evm-contract-acceptance.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/src/evm-payment-preflight.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/src/evm-peer-acceptance.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/src/evm-submit.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/wallet/test/evm-adapter-peer-acceptance.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/test/evm-adapter.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/test/evm-contract-acceptance.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/test/evm-payment-preflight.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/test/evm-submit.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/wallet/test/recovery-erc20-withdraw-boundary.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "scripts/check-import-boundaries.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "scripts/recovery/evm-recovery.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "scripts/test-evm-viem-oracle-local.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "scripts/tests/evm-recovery.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "scripts/tests/import-boundaries.test.mjs"
+          ]
+        }
+      ],
+      "file_count": 38,
+      "tests": "TEST-RESULTS.md",
+      "conflicts": "CONFLICT-RESOLUTIONS.md"
+    },
+    {
+      "pr": 167,
+      "sha": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "merged": true,
+      "message": "Pull Request successfully merged",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/commit/e17b4d34097ca97c21e621547a38766c0271fbde",
+      "source_branch": "integration/solana-core-qualification-20261118",
+      "source_sha": "c277a9383f1712d70e94807a376dc8fc3f5c43e1",
+      "destination": "main",
+      "destination_before": "22711c16847133be0d6de39fdf31dd7372be4e7a",
+      "parents": [
+        "22711c16847133be0d6de39fdf31dd7372be4e7a",
+        "c277a9383f1712d70e94807a376dc8fc3f5c43e1"
+      ],
+      "result_tree": "ba0b017d74c6a5cc3c8d850ffd1b179a6ce097f4",
+      "changed_paths": [
+        {
+          "status": "M",
+          "paths": [
+            ".github/workflows/solana-escrow.yml"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/src/ui/locale/en.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/solana-recovery-references-worker.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "contracts/solana/RECOVERY.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "contracts/solana/localnet/README.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "contracts/solana/localnet/client-run.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "contracts/solana/localnet/driver.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "contracts/solana/localnet/reader-check.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "contracts/solana/localnet/run.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "contracts/solana/programs/basic-escrow/tests/spl.rs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INDEPENDENT-BROWSER-SELECTION-REVIEW-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INDEPENDENT-CORE-REVIEW-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INDEPENDENT-NATIVE-VAULT-REVIEW-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/artifact-verifier-before-after.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/artifact-verifier-tests.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/build-policy-tests.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/signer-independent-review-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/signer-independent-review-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/signer-independent-review-typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/signer-promise-settlement-boundary.jsonl"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-independent-review-93b4bf2-full.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-independent-review-9b5b01b-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-independent-review-b1dbd00-final.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-independent-review-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-recovery-binding-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-recovery-binding-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-recovery-binding-typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-core-evidence-2026-11-18/solana-recovery-id-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-followup-independent-boundaries.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-followup-independent-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-followup-independent-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-followup-independent-typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-vault-independent-boundaries-7a56d6c2.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-native-vault-evidence-2026-11-18/native-vault-independent-tests-7a56d6c2.log"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/README.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/docs/b1a-reader.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/docs/integration-qualification-20261118.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/docs/lifecycle.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/adapter.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/auxiliary.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/compose.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/intent.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/journal.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/src/layout.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/message.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/payout.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/plan.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/policy.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/src/reader.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/recovery.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/settlement.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/submit.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/vaultjournal.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/src/wallet.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/adapter.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/test/bind.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/test/boundary.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/identity.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/independent-recovery-compatibility.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/independent-review-regressions.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/independent-vault-dispatch.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/test/instructions.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/intent.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/test/layout.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/lifecycle-support.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/lifecycle.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/message.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/payout.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/plan.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/policy.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-solana/test/reader.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/recovery.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/settlement.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/vaultjournal.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/chain-solana/test/wallet.test.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/schemas/src/recovery-reference.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/schemas/src/solana-recovery-reference.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/schemas/test/independent-solana-recovery-structure.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "packages/schemas/test/solana-recovery-reference.test.mjs"
+          ]
+        }
+      ],
+      "file_count": 79,
+      "tests": "TEST-RESULTS.md",
+      "conflicts": "CONFLICT-RESOLUTIONS.md"
+    },
+    {
+      "pr": 170,
+      "sha": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "merged": true,
+      "message": "Pull Request successfully merged",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/commit/91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "source_branch": "feature/erc20-browser-continuation-20261118",
+      "source_sha": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
+      "destination": "main",
+      "destination_before": "e17b4d34097ca97c21e621547a38766c0271fbde",
+      "parents": [
+        "e17b4d34097ca97c21e621547a38766c0271fbde",
+        "189f7b1ddfc1b53be7da84cc2a24c9a745d43585"
+      ],
+      "result_tree": "c494301afcf9577175d68f64dda924d6b8fe3c39",
+      "changed_paths": [
+        {
+          "status": "M",
+          "paths": [
+            ".github/workflows/evm-escrow.yml"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "README.md"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/build.mjs"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/scripts/scan-build.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/OfflineRoot.tsx"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/src/localnet/LocalnetRoot.tsx"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/client.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/controller.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/erc20-funding.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/localnet.css"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/localnet.worker.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/protocol.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/relay-route.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/review-requests.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/ui-command.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/validation.ts"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/src/localnet/wallet-bridge.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "apps/web/src/main.tsx"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/independent-erc20-funding.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/independent-localnet-client.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/localnet-boundary.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/localnet-erc20-funding.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/localnet-send-evidence.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "apps/web/test/localnet-ui-restore.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/CONSOLIDATION-INVENTORY-2026-11-18.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/CONSOLIDATION-INVENTORY-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/CONSOLIDATION-RESULT-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/CONTINUATION-RESULT-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/ERC20-LOCALNET-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/FINAL-REMOTE-REFS-2026-11-18.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INDEPENDENT-BROWSER-REVIEW-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INDEPENDENT-ERC20-REVIEW-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/INITIAL-BRANCH-COVERAGE-2026-11-18.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/LOCALNET-BROWSER-COMPOSITION-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/LOCALNET-BROWSER-CONTINUATION-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/PICOMATCH-ADVISORY-ASSESSMENT-2026-11-18.md"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/erc20-localnet-20261118/focused-tests.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/erc20-localnet-20261118/native-controller.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/erc20-localnet-20261118/typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-boundaries.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-build-demo.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-build-policy.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-build.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-full-tests.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-independent.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-localnet-build.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-native-compatibility.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-native.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-spec-links.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-specs.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/erc20-final-typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/continuation-20261118/qualification.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/erc20-independent-review-20261118/erc20-independent-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/erc20-independent-review-20261118/erc20-independent-observer.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/erc20-independent-review-20261118/erc20-independent-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/localnet-browser-continuation-20261118/baseline-localdeps.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/localnet-browser-continuation-20261118/controller-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/localnet-browser-continuation-20261118/marker-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/evidence/localnet-browser-continuation-20261118/marker-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/build-demo.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/build.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/check-boundaries.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/check-specs.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/dependency-integrity-and-artifact-graphs.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/dependency-npm-audit-production.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/dependency-reproduction.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/evidence-index.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/localnet-build-result.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/localnet-build.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/npm-audit.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/results.json"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/test-build-policy.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/test-localnet-controller.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/test-specs.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/test.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/final-gate-evidence-2026-11-18/typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/browser-client-independent-green.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/browser-client-independent-red.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/browser-client-independent-typecheck.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/browser-independent-native-b74cf599.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/browser-independent-units-b74cf599.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/owner-localnet-controller-red-admission.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/owner-localnet-controller-red-clock.log"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "docs/execution/independent-browser-evidence-2026-11-18/owner-localnet-controller-red-release-expiry.log"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "package.json"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-evm/src/reader.ts"
+          ]
+        },
+        {
+          "status": "M",
+          "paths": [
+            "packages/chain-evm/test/reader.test.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/lib/localnet-browser-fixture.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/lib/localnet-fixture.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/lib/localnet-send-evidence.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/test-localnet-browser.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/test-localnet-controller.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/test-localnet-erc20-browser.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/test-localnet-erc20-independent.mjs"
+          ]
+        },
+        {
+          "status": "A",
+          "paths": [
+            "scripts/test-localnet-erc20.mjs"
+          ]
+        }
+      ],
+      "file_count": 95,
+      "tests": "TEST-RESULTS.md",
+      "conflicts": "CONFLICT-RESOLUTIONS.md"
+    },
+    {
+      "pr": 138,
+      "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "merged": true,
+      "message": "Pull Request successfully merged",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/commit/80375193f16082c582a1faf2c6ba598f9eca532a",
+      "source_branch": "chatgpt/zero-codex/audit-compatibility-20261118",
+      "source_sha": "6fbb0872ad1bad16e4a0e269e75843ec9031aa73",
+      "destination": "main",
+      "destination_before": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+      "parents": [
+        "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+        "6fbb0872ad1bad16e4a0e269e75843ec9031aa73"
+      ],
+      "result_tree": "6be72aa4282328654a9243e91f4d9259624e0196",
+      "changed_paths": [
+        {
+          "status": "M",
+          "paths": [
+            "docs/audits/CHATGPT_RANDOM_AUDIT_LEDGER.md"
+          ]
+        }
+      ],
+      "file_count": 1,
+      "tests": "TEST-RESULTS.md",
+      "conflicts": "CONFLICT-RESOLUTIONS.md"
+    }
+  ],
+  "browser_repair": {
+    "local": "9c3ac97fb71135212f16ebf0ac0c8e02ed82ef79",
+    "remote": "823f5d3b8a26e5be8d8a5a65fc5b74766cc04c10",
+    "tree": "3f90594849cca2ba1a34d76f66d77cf45c7bc124"
+  },
+  "erc20_extension": {
+    "pr": 173,
+    "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
+    "tree": "071e8b75807b85ac414a9fb803ebefe859a443a3"
+  },
+  "tooling_repair": {
+    "pr": 174,
+    "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+    "tree": "5284fb94e13b3f0fdd4c146d45ac445f35c00783"
+  },
+  "resumption": {
+    "pr": 175,
+    "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+    "tree": "bc0b0700495b8001d409cc7ec0ef8152e2744a77",
+    "history": [
+      {
+        "local": "81815a245e3da11d885f12498898aa68ca5a628b",
+        "remote": "1d2f25a988d97fbc26ad6cb80ba5819c5f055f4b"
+      },
+      {
+        "local": "435d101b9ea6b43067374917e28c675e867a1829",
+        "remote": "624dffa94dbd8badd978865dc7cae862ae9dcd14"
+      },
+      {
+        "local": "81de2371502980b98e607559c5a5b2b2933adbba",
+        "remote": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
+      }
+    ]
+  }
+}

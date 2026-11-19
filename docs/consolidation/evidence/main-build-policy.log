@@ -1,0 +1,81 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:build-policy
+> node --test apps/web/scripts/artifact-policy.test.mjs apps/web/scripts/scan-build.test.mjs apps/web/scripts/source-locale.test.mjs scripts/tests/import-boundaries.test.mjs scripts/tests/verify-web-artifact.test.mjs
+
+✔ build inventory binds exact raw bytes for binary (156.018953ms)
+✔ build inventory binds exact raw bytes for malformed UTF-8 (52.521735ms)
+✔ build inventory binds exact raw bytes for ordinary multibyte UTF-8 (48.085733ms)
+✔ raw-byte inventory preserves private-key refusal in a binary asset (34.288342ms)
+▶ build inventory includes prototype-looking root filenames
+  ✔ __proto__ (158.155923ms)
+  ✔ constructor (63.841669ms)
+  ✔ toString (72.020302ms)
+✔ build inventory includes prototype-looking root filenames (295.816358ms)
+✔ prototype-looking root filename cannot hide a private-key marker (54.803055ms)
+✔ prototype-looking root filename participates in case-collision refusal (14.042652ms)
+✔ application token policy denies HTML execution while allowing text and React events (11.294177ms)
+✔ bounded artifact paths reject origin, traversal, query, encoded separators and collisions (0.242425ms)
+✔ emitted asset scan denies active remote resources, inlining, secrets and source maps (5.519463ms)
+✔ default and demo module graphs reject test-only wallet execution and signing (18.638164ms)
+✔ default, header, demo and testnet plugins still reject every localnet-only module (document and worker) (11.288517ms)
+✔ the localnet plugin admits exactly the reviewed localnet modules and records them in the graph (807.02687ms)
+✔ the localnet plugin still rejects execution, tests, fixtures, Solana, extensions and unreviewed dependencies (29.33664ms)
+✔ the WebSocket( token is allowed only in packages/relay/src/pool.ts and only by the localnet plugin (50.255444ms)
+✔ the localnet plugin emits the relay-only CSP; the default plugin keeps connect-src none (3.242272ms)
+✔ scanBuild: the default artifact refuses synthetic markers or demo modules; the demo artifact requires them (277.874841ms)
+✔ scanBuild: only the testnet artifact may carry the testnet trust bundle or testnet modules, and it must (269.817827ms)
+✔ scanBuild records portable paths and refuses unsupported filesystem entries (67.664251ms)
+✔ a copied Pages directory must match the independently retained build evidence (18659.491751ms)
+✔ localnet config: a strict 31337/local registry, trusted escrow layout and loopback ws relay are accepted and frozen (31.266961ms)
+✔ localnet config refuses other chains, environments, digests, layouts, relay hosts and unknown keys (fail closed) (102.996655ms)
+✔ scanBuild: localnet markers, modules, relay origins and policy never pass in default, demo or testnet artifacts (1531.80271ms)
+✔ scanBuild: the localnet artifact requires its markers, exact relay-only CSP, ReleaseEnabled 0 and @noble license credits (959.948746ms)
+✔ buildWeb: localnet is a library-only profile with an explicit config, a distinct output directory and no CLI path (790.93414ms)
+vite v8.3.5 building client environment for localnet...
+transforming...
+✓ 47 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-localnet-build-Sv1sAO/_headers                              0.35 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/content-policy.json                   1.16 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/index.html                            1.29 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/third-party-licenses.json             3.62 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/core-graph-document.json              6.94 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/core-graph-worker.json               15.77 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/assets/localnet.worker-BG3sI1eK.js  332.46 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/assets/LocalnetRoot-CD-uua8F.css      1.58 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/assets/index-lbyUyLrG.css             6.77 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/assets/LocalnetRoot-ByJ46Q4V.js      38.53 kB
+../../../../tmp/p2p-localnet-build-Sv1sAO/assets/index-C0FIjmgd.js            220.93 kB
+
+✓ built in 3.31s
+✔ buildWeb(localnet) emits a relay-only CSP, the test-funds marker, ReleaseEnabled 0 and only allowed modules (3433.375776ms)
+✔ static loading, no-script and safety copy comes from the same English catalog (278.21526ms)
+✔ missing or duplicated catalog placeholders fail instead of emitting mixed static copy (51.765797ms)
+✔ G07 import boundaries use the TypeScript AST and report fixture violations without false positives (2412.163152ms)
+✔ G07 permits only the explicit read-only release side entry and follows its dependencies (1339.88864ms)
+✔ G07 permits only the existing release side entry and excludes parked optional dependencies (5199.81849ms)
+✔ G07 reports missing application graph entry instead of claiming it was checked (558.792419ms)
+✔ G07 refuses missing or unreadable expected roots instead of passing a partial inventory (56.499154ms)
+✔ G07 refuses source-directory symlinks instead of silently omitting their subtree (88.608715ms)
+✔ G07 accepts an explicitly empty packages root with a complete application inventory (499.029023ms)
+✔ G07 follows literal dynamic imports into the entry graph and still rejects non-literal ones (973.722302ms)
+✔ G07 follows JavaScript-extension specifiers into their TypeScript sources (3094.2157ms)
+✔ G07 localnet facades are side entries reachable only from the localnet app subtree (918.314966ms)
+✔ G07 a localnet facade is classified under its own package, so the domain facade keeps core-package rules (424.172049ms)
+✔ G07 the repository passes with the localnet facades registered (4465.016699ms)
+✔ each mode verifies an artifact whose content and retained reference both match it (593.557376ms)
+✔ the default mode is strict when none is given (206.878193ms)
+✔ a reference whose profile disagrees with the requested mode is refused before the scan (171.766004ms)
+✔ D-L4 regression: demo or testnet content with its matching lenient reference is refused unless the operator asks for that mode (708.943853ms)
+✔ an unknown or non-string programmatic mode is refused (140.51495ms)
+✔ parseVerifyArgs accepts exactly one known mode flag and two paths (2.512814ms)
+✔ CLI takes the mode from flags; verification failures exit 1 and usage errors exit 2 (8608.921603ms)
+ℹ tests 50
+ℹ suites 0
+ℹ pass 50
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29219.140797

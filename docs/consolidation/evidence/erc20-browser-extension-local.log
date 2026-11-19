@@ -1,0 +1,67 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:localnet:erc20:browser
+> node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-browser.mjs
+
+vite v8.3.5 building client environment for localnet...
+transforming...
+✓ 47 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/_headers                              0.35 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/content-policy.json                   1.17 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/index.html                            1.29 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/third-party-licenses.json             3.62 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/core-graph-document.json              6.94 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/core-graph-worker.json               15.77 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/assets/localnet.worker-BfuAu_ab.js  332.66 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/assets/LocalnetRoot-CD-uua8F.css      1.58 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/assets/index-lbyUyLrG.css             6.77 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/assets/LocalnetRoot-CigMK1aB.js      38.74 kB
+../../../../tmp/p2p-localnet-browser-zMVdLt/app/assets/index-BmThiS-r.js            220.93 kB
+
+✓ built in 2.47s
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-8uXYwg --remote-debugging-pipe --no-startup-window
+<launched> pid=307
+[pid=307][err] /usr/bin/chromium: 9: [: 5225709568: unexpected operator
+[pid=307][err] [307:307:1118/224103.806735:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[pid=307][err] [1118/224103.810774:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+Call log:
+[2m  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-8uXYwg --remote-debugging-pipe --no-startup-window[22m
+[2m  - <launched> pid=307[22m
+[2m  - [pid=307][err] /usr/bin/chromium: 9: [: 5225709568: unexpected operator[22m
+[2m  - [pid=307][err] [307:307:1118/224103.806735:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)[22m
+[2m  - [pid=307][err] [1118/224103.810774:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)[22m
+[2m  - [pid=307] <gracefully close start>[22m
+[2m  - [pid=307] <kill>[22m
+[2m  - [pid=307] <will force kill>[22m
+[2m  - [pid=307] <process did exit: exitCode=null, signal=SIGABRT>[22m
+[2m  - [pid=307] starting temporary directories cleanup[22m
+[2m  - [pid=307] finished temporary directories cleanup[22m
+[2m  - [pid=307] <gracefully close end>[22m
+
+    at startLocalnetBrowserFixture (/workspace/scratch/29ec534d969d/review-erc20/scripts/lib/localnet-browser-fixture.mjs:63:30)
+    at async file:///workspace/scratch/29ec534d969d/review-erc20/scripts/test-localnet-erc20-browser.mjs:109:13 {
+  log: [
+    '  - <launching> /usr/bin/chromium --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-8uXYwg --remote-debugging-pipe --no-startup-window',
+    '  - <launched> pid=307',
+    '  - [pid=307][err] /usr/bin/chromium: 9: [: 5225709568: unexpected operator',
+    '  - [pid=307][err] [307:307:1118/224103.806735:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)',
+    '  - [pid=307][err] [1118/224103.810774:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)',
+    '  - [pid=307] <gracefully close start>',
+    '  - [pid=307] <kill>',
+    '  - [pid=307] <will force kill>',
+    '  - [pid=307] <process did exit: exitCode=null, signal=SIGABRT>',
+    '  - [pid=307] starting temporary directories cleanup',
+    '  - [pid=307] finished temporary directories cleanup',
+    '  - [pid=307] <gracefully close end>'
+  ]
+}
+
+Node.js v24.22.3
