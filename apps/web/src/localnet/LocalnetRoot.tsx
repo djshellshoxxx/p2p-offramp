@@ -250,7 +250,7 @@ export function LocalnetRoot() {
           <div className="actions"><button disabled={busy} onClick={() => { void send({ type: 'wallet.connect' }); }}>Connect wallet</button><button disabled={busy || !snapshot.wallet} onClick={() => { void send({ type: 'refresh' }); }}>Refresh chain and messages</button><button onClick={() => { void send({ type: 'profile.lock' }); }}>Lock profile</button></div></>}
       </section>
       {!unlocked && <ProfileForms snapshot={snapshot} busy={busy} send={send} />}
-      {unlocked && <div key={snapshot.profileId} data-private="localnet-profile">
+      {unlocked && <div key={`private:${snapshot.profileId}`} data-private="localnet-profile">
         {review && <section className="panel localnet-review" role="region" aria-label="Wallet action review">
           <h2>Review: {labels[review.action]}</h2>
           <dl className="localnet-facts">{review.fields.map((field, index) => <div key={index}><dt>{field.label}</dt><dd className="localnet-preserve">{field.value}</dd></div>)}</dl>
@@ -262,7 +262,7 @@ export function LocalnetRoot() {
         <Sessions snapshot={snapshot} busy={busy || Boolean(review)} send={send} />
         <section aria-labelledby="trades-title"><h2 id="trades-title">Your trades</h2>{snapshot.trades.length === 0 && <p className="helper">Agreed terms and recovery records will appear here.</p>}{snapshot.trades.map(trade => <Trade key={trade.id} trade={trade} busy={busy || Boolean(review)} send={send} />)}</section>
       </div>}
-      <BackupPanel key={snapshot.profileId ?? 'locked'} unlocked={unlocked} busy={busy} send={send} />
+      <BackupPanel key={`backup:${snapshot.profileId ?? 'locked'}`} unlocked={unlocked} busy={busy} send={send} />
     </>}
   </main>;
 }
