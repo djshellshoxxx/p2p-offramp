@@ -4,7 +4,9 @@
 
 **Status: development/test-only.** The app is experimental and does not accept or authorize real-funds trading. `ReleaseEnabled=0`. Treat anything in an open draft PR as unmerged work; do not interpret demos as live exchange services.
 
-Current source checkpoint: merged `main@80375193f16082c582a1faf2c6ba598f9eca532a` (November 19, 2026). Wallet/client integration #166, Solana client/recovery #167 and browser trading/ERC-20 recovery #170 are **merged test-oriented implementation work**, not a released real-funds service. The earlier #168 branch is **closed, unmerged**; #173 and #175 remain **draft** with incomplete acceptance. Consult [the development status](../DEVELOPMENT_STATUS.md) and [the consolidation report candidate](https://github.com/djshellshoxxx/p2p-offramp/pull/176) for source-pinned limitations; report #176 itself is unmerged. The earlier `main@6c38e641` documentation checkpoint is historical.
+Current source checkpoint: merged `main@bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e` (November 18, 2026 Pacific; November 19 UTC). Wallet/client integration #166, Solana client/recovery #167, browser trading/ERC-20 recovery #170, and same-terms unfunded resumption [#175](https://github.com/djshellshoxxx/p2p-offramp/pull/175) are merged development functionality. #168 was closed after complete incorporation through #170. The local EVM browser fixture exercises isolated buyer/seller contexts and encrypted restoration. Resuming a saved agreement requires an explicit action and a fresh wallet review; a backup cannot reveal a peer withdrawal that occurred after that backup.
+
+Further ERC-20 recovery/browser work #173 and funded native-Solana recovery/browser work #179 remain unmerged and are being qualified separately. Real-funds trading is disabled. Consult [the development status](../DEVELOPMENT_STATUS.md) and [the consolidation report candidate](https://github.com/djshellshoxxx/p2p-offramp/pull/176) for source-pinned limits; report #176 itself is unmerged at this checkpoint. The earlier `main@6c38e641` documentation checkpoint is historical.
 
 ## Overview and capabilities
 
