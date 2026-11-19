@@ -4,7 +4,11 @@
 
 **Status: active development.** Documentation here describes **main**, not an automatic combination of unmerged draft branches. Node `>=24`; Python 3.12 is used in CI for the spec inventory; a local Chromium installation is needed for browser checks. Foundry is needed for native EVM contract verification.
 
-## Recorded development checkpoint — November 18, 2026
+## Current development checkpoint — November 19, 2026
+
+Merged `main@80375193f16082c582a1faf2c6ba598f9eca532a` incorporates documentation #169, EVM core #166, Solana client/recovery #167, browser trading/ERC-20 recovery #170 and audit ledger #138. PR #168 was closed **without merging**. ERC-20 recovery/browser PR #173, same-terms resumption PR #175 and consolidation documentation PR #176 are still **draft**, each independently subject to exact-head checks and review. Historical integration PR #61 is **merged**; proposed continuation spec PR #63 is **closed without merging**, though its source may be read as historical guidance. None of these status changes turns a development/test client into a live release or satisfies SonarCloud A, D9 historical-send provenance, independent security approval or full buyer/seller acceptance. The live Wiki is not verified as published.
+
+## Historical recorded development checkpoint — November 18, 2026
 
 This guide is scoped to merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. The
 [documentation reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md)
@@ -61,7 +65,7 @@ For this test class, confirm the original pending transaction keeps its hash and
 
 ## Contribution and collaboration
 
-Before changes, inspect [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md), open PRs and their exact head checks. Work on isolated branches and draft PRs; add failing tests for regressions, preserve a reproducible source SHA and verify changed-file ownership. Never rebase/overwrite another agent's branch or silently alter D1/D8/D9/financial policy. Use [continuation spec in PR #63](https://github.com/djshellshoxxx/p2p-offramp/pull/63) for the **proposed** ChatGPT-only lane until merged. See [Architecture and Development](Architecture-and-Development.md).
+Before changes, inspect [README](https://github.com/djshellshoxxx/p2p-offramp/blob/main/README.md), [development roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md), [task ledger](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md), open PRs and their exact head checks. Work on isolated branches and draft PRs; add failing tests for regressions, preserve a reproducible source SHA and verify changed-file ownership. Never rebase/overwrite another agent's branch or silently alter D1/D8/D9/financial policy. The [continuation spec in closed, unmerged PR #63](https://github.com/djshellshoxxx/p2p-offramp/pull/63) is historical advisory source; follow the owner's current, separately authorized zero-Codex instructions rather than treating that PR as awaiting merge. See [Architecture and Development](Architecture-and-Development.md).
 
 ## CI, debugging and security
 
@@ -69,4 +73,4 @@ GitHub Actions workflows are [specifications](https://github.com/djshellshoxxx/p
 
 ## Releases, ADRs, specs and remaining engineering work
 
-`ReleaseEnabled=0` and the empty default approved-registry set must remain unchanged. **Do not enable real funds, merge, deploy or release** without explicit owner authorization, audited escrow/test proofs, trust pins, independent security review, D8 Tier C approval and buyer/seller acceptance. Review [security/release](Security-and-Release.md), [operator build policy](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md), [product completion specs](https://github.com/djshellshoxxx/p2p-offramp/tree/main/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion), [roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md) and [remaining tasks](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md). Draft integration PR #61, D9 send-marker/provenance, D1 peer acceptance and chain/contract-wallet tests remain qualified separately. No release is claimed.
+`ReleaseEnabled=0` and the empty default approved-registry set must remain unchanged. **Do not enable real funds, merge, deploy or release** without explicit owner authorization, audited escrow/test proofs, trust pins, independent security review, D8 Tier C approval and buyer/seller acceptance. Review [security/release](Security-and-Release.md), [operator build policy](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md), [product completion specs](https://github.com/djshellshoxxx/p2p-offramp/tree/main/00_PLANNING_AND_THREAT_MODELING/feature_0.12_product_completion), [roadmap](https://github.com/djshellshoxxx/p2p-offramp/blob/main/DEVELOPMENT_ROADMAP.md) and [remaining tasks](https://github.com/djshellshoxxx/p2p-offramp/blob/main/tasks/todo.md). Historical integration PR #61 is **merged**. D9 historical-send provenance, D1 buyer/seller acceptance and chain/contract-wallet qualifications remain separate outstanding gates. No release is claimed.
