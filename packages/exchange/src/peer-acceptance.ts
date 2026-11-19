@@ -111,7 +111,9 @@ export interface PeerReplayStorePort {
   tombstone(termsHash: string, scope: PeerReplayScope): Promise<PeerPortResult<void>>;
   /** Persisted-fresh read for display and economic rechecks. `tombstoned` is also true when the terms deadline is at or
    * below the store's retirement high-water mark, so a retired tombstone is never resurrected. */
-  status(termsHash: string, scope: PeerReplayScope): Promise<PeerPortResult<{ readonly tombstoned: boolean }>>;
+  status(termsHash: string, scope: PeerReplayScope): Promise<PeerPortResult<{ readonly tombstoned: boolean;
+    /** Complete admitted history is required for checkpoint restoration. Older ports without these flags cannot restore. */
+    readonly sellerRecorded?: boolean; readonly buyerRecorded?: boolean }>>;
 }
 export interface PeerAcceptanceOptions {
   readonly verifier: PeerAcceptanceVerifierPort;

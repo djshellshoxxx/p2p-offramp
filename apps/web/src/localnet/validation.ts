@@ -41,6 +41,7 @@ export function parseLocalnetCommand(input: unknown): LocalnetCommand {
   }
   if (type === 'ad.take') return { type, adKey: string(fields(input, ['type', 'adKey']).adKey, 180) };
   if (type === 'session.select') return { type, sessionId: string(fields(input, ['type', 'sessionId']).sessionId, 300) };
+  if (type === 'trade.resume') return { type, tradeId: string(fields(input, ['type', 'tradeId']).tradeId, 64, /^[0-9a-f]{64}$/) };
   if (type === 'review.confirm') return { type, reviewId: string(fields(input, ['type', 'reviewId']).reviewId, 32, /^[0-9a-f]{32}$/) };
   if (type === 'chat.send') {
     const raw = fields(input, ['type', 'tradeId', 'text']);

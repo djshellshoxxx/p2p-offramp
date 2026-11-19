@@ -115,7 +115,8 @@ export function createEvmPeerAcceptancePorts(options: EvmPeerPortOptions): EvmPe
       return serial(async () => {
         // With the deadline, a termsHash retired past the high-water mark stays withdrawn (never resurrected).
         const result = await ledger.status(termsHash, stable.nowSeconds, stable.acceptBeforeSeconds);
-        return result.ok ? Object.freeze({ ok: true as const, value: Object.freeze({ tombstoned: result.value.tombstoned }) }) : mapCore(result.error.code);
+        return result.ok ? Object.freeze({ ok: true as const, value: Object.freeze({ tombstoned: result.value.tombstoned,
+          sellerRecorded: result.value.seller, buyerRecorded: result.value.buyer }) }) : mapCore(result.error.code);
       });
     },
   });
