@@ -171,7 +171,7 @@ try {
   assert.equal(await panel(locked).locator('.qr-review').count(), 0);
   assert.equal(await panel(locked).getByLabel('Exact public QR text', { exact: true }).inputValue(), '');
   assert.equal(await privateRows(locked), encryptedBefore);
-  const lockStats = await noQrAuthority(locked, { expectedPrivateOperations: ['unlock', 'lock'] });
+  const lockStats = await noQrAuthority(locked, { expectedPrivateOperations: ['unlock', 'lock'], allowTrustedActivity: true });
   reports.push('reference-fingerprint-and-real-vault-lock-clears-memory');
   await locked.context().close();
 

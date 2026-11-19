@@ -40,6 +40,10 @@ export function readPublicEnvelope(text) {
 function instrument() {
   const observed = { wallet: 0, fetch: 0, sockets: 0, beacon: 0, cameraRequests: 0, privateOperations: [], workers: [], policy: [] };
   const fixture = { observed, mode: 'deny', canvas: null, pending: null, streams: [], producers: [] };
+  let inputEvent;
+  // Observe before AppRuntime installs its document capture handlers. Event phase returns to zero
+  // after dispatch, so unrelated asynchronous messages cannot reuse an earlier trusted input.
+  for (const type of ['keydown', 'pointerdown']) document.addEventListener(type, event => { inputEvent = event; }, { capture: true });
   window.__qrFixture = fixture;
   const prompt = async () => { observed.wallet++; throw Error('FIXTURE_WALLET_DENIED'); };
   Object.defineProperty(window, 'ethereum', { configurable: true, value: { request: prompt, enable: prompt } });
@@ -60,7 +64,10 @@ function instrument() {
     }
     postMessage(message, transfer) {
       this.observation.sent.push({ keys: Object.keys(message).sort(), kind: message.kind, operation: message.operation,
-        width: message.width, height: message.height, pixelBytes: message.pixels?.byteLength });
+        width: message.width, height: message.height, pixelBytes: message.pixels?.byteLength,
+        version: message.version, requestId: message.requestId, generation: message.generation,
+        activityInput: message.operation === 'activity' ? { trusted: inputEvent?.isTrusted === true,
+          dispatching: (inputEvent?.eventPhase ?? 0) > 0, type: inputEvent?.type } : undefined });
       if (message.operation) observed.privateOperations.push(message.operation);
       if (transfer === undefined) super.postMessage(message); else super.postMessage(message, transfer);
     }
@@ -161,7 +168,7 @@ export async function startQrBrowserFixture() {
   } catch (error) { await close(); throw error; }
 }
 
-export async function noQrAuthority(page, { expectedPrivateOperations } = {}) {
+export async function noQrAuthority(page, { expectedPrivateOperations, allowTrustedActivity = false } = {}) {
   const snapshot = await page.evaluate(async () => ({ observed: window.__qrFixture.observed,
     localStorage: localStorage.length, sessionStorage: sessionStorage.length,
     caches: typeof caches === 'undefined' ? [] : await caches.keys(),
@@ -173,9 +180,24 @@ export async function noQrAuthority(page, { expectedPrivateOperations } = {}) {
   assert.deepEqual(snapshot.observed.policy, [], 'unchanged actual CSP must permit only the intended local flow');
   // The existing Recovery/Unlock forms read the opaque profile inventory on mount. No QR operation may mutate it.
   const privateOps = snapshot.observed.privateOperations.filter(value => !['init', 'status', 'listProfiles'].includes(value));
-  assert.deepEqual(privateOps, expectedPrivateOperations ?? [], 'QR cannot dispatch private domain operations');
+  if (allowTrustedActivity) {
+    assert.deepEqual(expectedPrivateOperations, ['unlock', 'lock']);
+    assert.equal(privateOps[0], 'unlock'); assert.equal(privateOps.at(-1), 'lock');
+  }
+  assert.deepEqual(allowTrustedActivity ? privateOps.filter(value => value !== 'activity') : privateOps,
+    expectedPrivateOperations ?? [], 'QR cannot dispatch private domain operations');
+  let activityMessages = 0;
   for (const worker of snapshot.observed.workers) {
     assert.equal(worker.type, 'module'); assert.equal(new URL(worker.url, snapshot.href).origin, new URL(snapshot.href).origin);
+    for (const message of worker.sent) if (message.operation === 'activity') {
+      assert.equal(allowTrustedActivity, true); activityMessages++;
+      assert.deepEqual(message.keys, ['generation', 'operation', 'requestId', 'version']);
+      assert.equal(message.version, 1);
+      assert.ok(Number.isSafeInteger(message.requestId) && message.requestId > 0);
+      assert.ok(Number.isSafeInteger(message.generation) && message.generation >= 0);
+      assert.equal(message.activityInput?.trusted, true); assert.equal(message.activityInput?.dispatching, true);
+      assert.ok(['keydown', 'pointerdown'].includes(message.activityInput?.type));
+    }
     if (/decode\.worker-/.test(worker.url)) {
       assert.equal(worker.terminated, 1, 'each physical decode Worker must terminate');
       for (const message of worker.sent) {
@@ -184,6 +206,7 @@ export async function noQrAuthority(page, { expectedPrivateOperations } = {}) {
       }
     } else assert.match(worker.url, /vault\.worker-[A-Za-z0-9_-]+\.js$/);
   }
+  assert.equal(activityMessages, privateOps.filter(value => value === 'activity').length);
   assert.ok(snapshot.tracks.every(state => state === 'ended'), 'all requested camera tracks must stop');
   return snapshot;
 }
