@@ -1,6 +1,30 @@
 # Development status and continuation contract
 
-## Recorded main checkpoint — November 18, 2026 (after formal-harness merge)
+## Current consolidation checkpoint — November 18, 2026 (America/Los_Angeles)
+
+Latest main `80375193f16082c582a1faf2c6ba598f9eca532a` adds the reviewed #138 audit ledger to product checkpoint `91ee6991d4527bba0e76b048a76e65ed7693c5a1`, which integrates documentation #169, core
+hardening #166, native Solana recovery #167, and native/ERC-20 browser stack #170.
+The repaired #168 was closed only after exact tree equivalence proved full
+incorporation. Eight documentation/Solana source PRs are recognized as merged.
+
+[The complete report](consolidation/FINAL-REPORT.md), [every branch](consolidation/BRANCH-INVENTORY.md),
+[current feature matrix](consolidation/FEATURE-COMPLETION.md), and [verification evidence](consolidation/TEST-RESULTS.md)
+record exact source/merge trees and separate implementation from release qualification.
+The merged main passed 1,942 package tests (one optional oracle skipped), all four
+TypeScript projects, 32 spec tests, 50 artifact-policy tests, 92 Foundry tests, and
+default/demo builds with retained-inventory verification. Actual hosted browser
+and native Solana validator checks qualified their respective source merges.
+
+#173 extends token-browser recovery and wallet-change coverage; #174 repairs
+historical tooling. Same-terms unfunded resumption is implemented in #175 and awaits hosted browser qualification.
+Solana browser composition, real relay/physical-wallet/device acceptance, QR UI,
+accessibility/localization and independent release security remain incomplete.
+QR fixes #171/#172 await the required automated review. The root npm audit is now
+clear after the Picomatch advisory's upstream withdrawal; earlier evidence remains
+historical. `ReleaseEnabled=0`; no public deployment, production trust change or
+release occurred. All dated checkpoints below retain their original source scope.
+
+## Historical main checkpoint — November 18, 2026 (after formal-harness merge)
 
 This checkpoint is pinned to merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`, tree
 `44bc5282c9bd59b49b128ed2028e940588fba053`. [The reconciliation record](consolidation/2026-11-18-documentation-reconciliation.md)

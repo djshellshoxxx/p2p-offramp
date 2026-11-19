@@ -1,0 +1,211 @@
+No files changed, compilation skipped
+
+Ran 61 tests for test/BasicEscrow.t.sol:BasicEscrowTest
+[PASS] test_blacklistedBuyer_tokenReleaseDeferred() (gas: 302560)
+[PASS] test_constructor_emptyAllowlistIsNativeOnly() (gas: 1343078)
+[PASS] test_constructor_recordsFixedAllowlist() (gas: 37049)
+[PASS] test_constructor_rejectsCodelessToken() (gas: 65219)
+[PASS] test_constructor_rejectsDuplicateToken() (gas: 133533)
+[PASS] test_constructor_rejectsOversizedAllowlist() (gas: 69161)
+[PASS] test_constructor_rejectsZeroToken() (gas: 60936)
+[PASS] test_directNativeTransferRejected() (gas: 16860)
+[PASS] test_falseReturningTransfer_releaseDeferred() (gas: 296953)
+[PASS] test_forcedEth_createsUnownedSurplusOnly() (gas: 197597)
+[PASS] test_fundNative_bindsTermsAndEmits() (gas: 161292)
+[PASS] test_fundNative_rejectsNonzeroAssetWithNativeKind() (gas: 52905)
+[PASS] test_fundNative_rejectsTokenTerms() (gas: 52721)
+[PASS] test_fundNative_rejectsWrongValue() (gas: 51245)
+[PASS] test_fundToken_bindsTermsAndEmits() (gas: 242316)
+[PASS] test_fundToken_isNotPayable() (gas: 47130)
+[PASS] test_fundToken_noReturnTokenAccepted() (gas: 216861)
+[PASS] test_fundToken_rejectsFalseReturningTransferFrom() (gas: 269336)
+[PASS] test_fundToken_rejectsFeeOnTransfer() (gas: 253110)
+[PASS] test_fundToken_rejectsMissingAllowance() (gas: 221115)
+[PASS] test_fundToken_rejectsNativeKind() (gas: 43958)
+[PASS] test_fundToken_rejectsNonAllowlistedToken() (gas: 125469)
+[PASS] test_fundToken_rejectsZeroAddressToken() (gas: 44412)
+[PASS] test_fund_acceptsOneSecondBeforeAcceptBefore() (gas: 147503)
+[PASS] test_fund_deadlineBounds() (gas: 303141)
+[PASS] test_fund_rejectsAtAcceptBefore() (gas: 52239)
+[PASS] test_fund_rejectsCallerOtherThanTermsSeller() (gas: 54018)
+[PASS] test_fund_rejectsInvalidBuyers() (gas: 89416)
+[PASS] test_fund_rejectsSellerNonceReuseAcrossOrders() (gas: 168458)
+[PASS] test_fund_rejectsTradeIdReuseForever() (gas: 224399)
+[PASS] test_fund_rejectsZeroAmount() (gas: 44789)
+[PASS] test_fund_rejectsZeroRevision() (gas: 51537)
+[PASS] test_gasBurningBuyer_isBoundedAndDeferred() (gas: 281839)
+[PASS] test_getTrade_unknownIsZero() (gas: 15622)
+[PASS] test_insufficientGas_cannotForceDeferral() (gas: 162300)
+[PASS] test_race_atDeadline_refundFirstThenReleaseRejected() (gas: 170697)
+[PASS] test_race_atDeadline_releaseFirstRejectedThenRefundSucceeds() (gas: 168251)
+[PASS] test_race_beforeDeadline_releaseWinsRefundCannotRun() (gas: 193260)
+[PASS] test_race_releaseIncludedBeforeDeadlineThenRefundRejected() (gas: 193378)
+[PASS] test_reentrancy_buyerReentersRefundDuringReleasePush() (gas: 1024769)
+[PASS] test_reentrancy_callbackTokenDuringFundingBlocked() (gas: 1418203)
+[PASS] test_reentrancy_callbackTokenDuringPayoutBlocked() (gas: 1149707)
+[PASS] test_reentrancy_sellerReentersReleaseDuringRefundPush() (gas: 1011152)
+[PASS] test_reentrancy_withdrawReentryBlocked() (gas: 1042311)
+[PASS] test_refund_afterDeadlineByBuyerPaysSellerToken() (gas: 243685)
+[PASS] test_refund_atDeadlineByStrangerPaysSellerOnly() (gas: 171797)
+[PASS] test_refund_rejectsOneSecondBeforeDeadline() (gas: 153536)
+[PASS] test_refund_rejectsUnknownTrade() (gas: 16476)
+[PASS] test_release_oneSecondBeforeDeadline() (gas: 188054)
+[PASS] test_release_paysBuyerNative() (gas: 193367)
+[PASS] test_release_paysBuyerToken() (gas: 243118)
+[PASS] test_release_rejectsAtDeadline() (gas: 154070)
+[PASS] test_release_rejectsNonSeller() (gas: 161410)
+[PASS] test_release_rejectsUnknownTrade() (gas: 19036)
+[PASS] test_revertingBuyer_cannotBlockRefundToSeller() (gas: 410655)
+[PASS] test_revertingBuyer_releaseDefersThenWithdrawAfterFix() (gas: 466667)
+[PASS] test_revertingSeller_refundDeferred() (gas: 451530)
+[PASS] test_terminal_refundedRejectsEverything() (gas: 170384)
+[PASS] test_terminal_releasedRejectsEverything() (gas: 198604)
+[PASS] test_tradeId_isDeploymentAndChainBound() (gas: 1396209)
+[PASS] test_withdraw_nothingToWithdraw() (gas: 18227)
+Suite result: ok. 61 passed; 0 failed; 0 skipped; finished in 25.07ms (29.05ms CPU time)
+
+Ran 6 tests for test/TermsVector.t.sol:TermsVectorTest
+[PASS] test_fixtureErc20TradeFundsUnderRecordedIdAndRefunds() (gas: 975066)
+[PASS] test_fixtureFundingWindowMatchesDomainRule() (gas: 810525)
+[PASS] test_fixtureNativeTradeFundsUnderRecordedIdAndReleases() (gas: 925609)
+[PASS] test_tradeIdChangesWithAnyField() (gas: 1166219)
+[PASS] test_tradeIdEqualsG16EvmTermsHash_erc20() (gas: 749604)
+[PASS] test_tradeIdEqualsG16EvmTermsHash_native() (gas: 749634)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 33.64ms (45.00ms CPU time)
+
+Ran 3 tests for test/PeerAcceptanceV2Vector.t.sol:PeerAcceptanceV2VectorTest
+[PASS] test_bindingIsBoundToDomainRoleAndKeys() (gas: 1405676)
+[PASS] test_bothStatementsStructHashDigestAndSignatures() (gas: 1924535)
+[PASS] test_domainSeparatorAndTradeTermsDigest() (gas: 2358685)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 57.63ms (43.56ms CPU time)
+
+Ran 4 tests for test/PeerAcceptanceVector.t.sol:PeerAcceptanceVectorTest
+[PASS] test_peerAcceptanceBuyerErc20() (gas: 1489142)
+[PASS] test_peerAcceptanceBuyerNative() (gas: 1489113)
+[PASS] test_peerAcceptanceSellerErc20() (gas: 1488740)
+[PASS] test_peerAcceptanceSellerNative() (gas: 1488857)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 71.48ms (88.35ms CPU time)
+
+Ran 10 tests for test/BasicEscrowFuzz.t.sol:BasicEscrowFuzzTest
+[PASS] testFuzz_anyRefundCallerPaysOnlySeller(address) (runs: 1024, μ: 247414, ~: 247414)
+[PASS] testFuzz_deadlineWindow(uint64) (runs: 1024, μ: 76797, ~: 53985)
+[PASS] testFuzz_feeOnTransferAlwaysRejected(uint256) (runs: 1024, μ: 235958, ~: 236790)
+[PASS] testFuzz_fundingRequiresTermsSeller(address) (runs: 1024, μ: 52245, ~: 52245)
+[PASS] testFuzz_nativeReleasePaysExactPrincipal(uint256) (runs: 1024, μ: 191514, ~: 191198)
+[PASS] testFuzz_onlySellerReleases(address) (runs: 1024, μ: 153890, ~: 153890)
+[PASS] testFuzz_settlementTimeGuards(uint256,bool) (runs: 1024, μ: 161831, ~: 158034)
+[PASS] testFuzz_tokenMaxAmount(uint256) (runs: 1024, μ: 246174, ~: 245978)
+[PASS] testFuzz_tokenRefundPaysExactPrincipal(uint256) (runs: 1024, μ: 244612, ~: 244388)
+[PASS] testFuzz_tradeIdBindsEveryEconomicField(bytes32,address,uint256) (runs: 1024, μ: 57603, ~: 57634)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 7.21s (14.19s CPU time)
+
+Ran 3 tests for test/redteam/RedTeamGas.t.sol:RedTeamGasTest
+[PASS] testFuzz_thirdPartyGasCannotForceNativeDeferral(uint256) (runs: 1024, μ: 441098, ~: 447082)
+[PASS] testFuzz_thirdPartyGasCannotForceTokenDeferral(uint256) (runs: 1024, μ: 253592, ~: 253796)
+[PASS] test_sameTermsFundOnTwoDeploymentsWithDistinctIds() (gas: 1598427)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 7.79s (15.06s CPU time)
+
+Ran 5 tests for test/BasicEscrowInvariant.t.sol:BasicEscrowInvariantTest
+[PASS] invariant_conservationNative() (runs: 128, calls: 8192, reverts: 0)
+
+╭---------------+-------------+-------+---------+----------╮
+| Contract      | Selector    | Calls | Reverts | Discards |
++==========================================================+
+| EscrowHandler | fundNative  | 1141  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | fundToken   | 1174  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | refund      | 1133  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | release     | 1182  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | toggleFlaky | 1274  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | warp        | 1124  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | withdraw    | 1164  | 0       | 0        |
+╰---------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_conservationToken() (runs: 128, calls: 8192, reverts: 0)
+
+╭---------------+-------------+-------+---------+----------╮
+| Contract      | Selector    | Calls | Reverts | Discards |
++==========================================================+
+| EscrowHandler | fundNative  | 1178  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | fundToken   | 1182  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | refund      | 1226  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | release     | 1157  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | toggleFlaky | 1197  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | warp        | 1112  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | withdraw    | 1140  | 0       | 0        |
+╰---------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_noDoublePayoutNative() (runs: 128, calls: 8192, reverts: 0)
+
+╭---------------+-------------+-------+---------+----------╮
+| Contract      | Selector    | Calls | Reverts | Discards |
++==========================================================+
+| EscrowHandler | fundNative  | 1142  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | fundToken   | 1186  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | refund      | 1170  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | release     | 1166  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | toggleFlaky | 1165  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | warp        | 1190  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | withdraw    | 1173  | 0       | 0        |
+╰---------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_noDoublePayoutToken() (runs: 128, calls: 8192, reverts: 0)
+
+╭---------------+-------------+-------+---------+----------╮
+| Contract      | Selector    | Calls | Reverts | Discards |
++==========================================================+
+| EscrowHandler | fundNative  | 1213  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | fundToken   | 1123  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | refund      | 1173  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | release     | 1181  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | toggleFlaky | 1157  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | warp        | 1172  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | withdraw    | 1173  | 0       | 0        |
+╰---------------+-------------+-------+---------+----------╯
+
+[PASS] invariant_terminalStatesAreFinal() (runs: 128, calls: 8192, reverts: 0)
+
+╭---------------+-------------+-------+---------+----------╮
+| Contract      | Selector    | Calls | Reverts | Discards |
++==========================================================+
+| EscrowHandler | fundNative  | 1236  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | fundToken   | 1196  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | refund      | 1122  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | release     | 1174  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | toggleFlaky | 1121  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | warp        | 1124  | 0       | 0        |
+|---------------+-------------+-------+---------+----------|
+| EscrowHandler | withdraw    | 1219  | 0       | 0        |
+╰---------------+-------------+-------+---------+----------╯
+
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 9.15s (32.22s CPU time)
+
+Ran 7 test suites in 9.17s (24.33s CPU time): 92 tests passed, 0 failed, 0 skipped (92 total tests)

@@ -1,0 +1,43 @@
+✔ without ports: v2 is MALFORMED, v1 is byte-identical, and {revision} never yields "accepted by peer" (1266.269164ms)
+✔ D1 flow: both statements are verified with session-derived context, admitted, and rechecked before accept and funding (343.232282ms)
+✔ no downgrade in D1 mode: v1 offers/accepts are refused both ways and v2 without its binding or a signature is MALFORMED (847.36725ms)
+✔ admission only after authentication: forged, misaddressed, wrong-role or unknown-session messages never reach the ports (395.849305ms)
+✔ verifier and replay refusals keep the session unchanged and map to fixed codes (3647.093874ms)
+✔ cancel and reject durably tombstone the termsHash before the state changes, on both sides (1261.06235ms)
+✔ cancellation races: a cancel and an acceptance in flight together never leave a valid-looking acceptance (1164.953377ms)
+✔ review LOW: copies of one wrap or a second statement in a session cannot occupy the verifier; other sessions proceed (797.444918ms)
+✔ review LOW: acceptanceStatus re-reads the session and tombstone after its slow re-verification (369.150452ms)
+✔ rechecks: expiry, a changed peer policy and the funding margin refuse new acceptance or funding but never rewrite history (432.232926ms)
+✔ acceptance horizon, statement checks and the explicit carrier byte budget (716.512089ms)
+✔ strict v2 parsing: exact keys, canonical lowercase hex, signature budget, role/key direction and deep freezing (115.069555ms)
+✔ the exchange package never imports a wallet module (10.639065ms)
+✔ checkpoint: only complete accepted history is exported, with encrypted own and incoming wrappers (318.259594ms)
+✔ checkpoint: both roles restore unchanged accepted history after envelope and advert expiry, seller first (571.395607ms)
+✔ checkpoint: unordered history restores deterministically; repeated or missing messages are refused (354.652746ms)
+✔ checkpoint: restoration requires both durable bindings and never reconstructs acceptance from wire alone (322.072531ms)
+✔ checkpoint: malformed context, chronology, wrappers, wrong identity and accessors fail without hydration (357.039254ms)
+✔ checkpoint: binding expiry and current verifier policy apply; the existing funding margin still refuses funding (412.192714ms)
+✔ checkpoint: conflicting existing sessions are preserved and restored history reserves bounded session capacity (484.780505ms)
+✔ checkpoint: one restoration per session; close, abort and a racing tombstone cannot install an acceptance (964.082085ms)
+✔ checkpoint: a re-signed changed binding or revision cannot renew previously admitted terms (417.009142ms)
+✔ checkpoint: legacy replay ports without complete-history flags cannot restore (314.520626ms)
+✔ checkpoint: an ordinary peer session admitted during restoration is not replaced (492.709168ms)
+✔ checkpoint: compatible take redelivery restores complete proof without selecting the placeholder (313.859071ms)
+✔ EOA seller and buyer: both wallet statements verified with pinned classification, durably admitted, signatures nowhere shown or stored (1191.264014ms)
+✔ contract-wallet seller: ERC-1271 for both statements, shown as an unfinalized point-in-time read; revocation blocks new acceptance (560.653553ms)
+✔ EIP-7702 delegated accounts are refused, before sending and on a later funding recheck (1704.233358ms)
+✔ wrong signer, terms-only signature reuse, network and deployment mismatches are refused without state change (2060.511473ms)
+✔ a tombstoned termsHash is refused in a new session, after reload, and from a fresh-key restore of the latest backup (2172.820573ms)
+✔ an older backup cannot see later tombstones: its exchange never claims global freshness (2030.04897ms)
+✔ lock refuses admission and status; concurrent cancel and accept on one real ledger leave no valid acceptance behind a tombstone (1486.287373ms)
+✔ review MEDIUM: sixteen ghosted offers on one advert no longer block the next buyer for the deadline plus a day (5331.361265ms)
+✔ public adverts never carry acceptance signatures: the advert encoder refuses them in any field (12.041695ms)
+✔ after funding: expired acceptance, a later tombstone or a changed peer policy never veto release or refund preparation (4201.164955ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39795.087118

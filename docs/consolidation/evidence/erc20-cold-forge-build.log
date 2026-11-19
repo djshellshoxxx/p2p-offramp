@@ -1,0 +1,196 @@
+Compiling 44 files with Solc 0.8.30
+Solc 0.8.30 finished in 53.16s
+Compiler run successful!
+note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
+   --> src/BasicEscrow.sol:267:16
+    |
+267 |         return keccak256(abi.encodePacked(hex"1901", domainSeparator(), _structHash(terms)));
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
+
+note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
+   --> src/BasicEscrow.sol:272:16
+    |
+272 |         return keccak256(abi.encode(DOMAIN_TYPEHASH, NAME_HASH, VERSION_HASH, block.chainid, address(this)));
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
+
+note[asm-keccak256]: use of inefficient hashing mechanism; consider using inline assembly
+   --> src/BasicEscrow.sol:341:16
+    |
+341 |         return keccak256(bytes.concat(head, tail));
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#asm-keccak256
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+   --> test/mocks/Mocks.sol:165:34
+    |
+165 |     BasicEscrow public immutable escrow;
+    |                                  ^^^^^^ help: consider using: `ESCROW`
+    |
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> test/mocks/PeerAcceptanceWallet.sol:10:30
+   |
+10 |     address public immutable owner;
+   |                              ^^^^^ help: consider using: `OWNER`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/TermsVector.t.sol:18:19
+   |
+18 |         json = vm.readFile(FIXTURE);
+   |                   ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/PeerAcceptanceVector.t.sol:28:22
+   |
+28 |         vectors = vm.readFile("../../packages/wallet/test/fixtures/peer-acceptance-v1.json");
+   |                      ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/PeerAcceptanceVector.t.sol:29:23
+   |
+29 |         scenario = vm.readFile("../../packages/domain/test/fixtures/local-evm-scenario/scenario.json");
+   |                       ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[unsafe-cheatcode]: usage of unsafe cheatcodes that can perform dangerous operations
+  --> test/PeerAcceptanceV2Vector.t.sol:22:19
+   |
+22 |         json = vm.readFile("../../packages/wallet/test/fixtures/peer-acceptance-v2-carrier.json");
+   |                   ^^^^^^^^
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-cheatcode
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> test/BasicEscrowInvariant.t.sol:11:34
+   |
+11 |     BasicEscrow public immutable escrow;
+   |                                  ^^^^^^ help: consider using: `ESCROW`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> test/BasicEscrowInvariant.t.sol:12:32
+   |
+12 |     MockERC20 public immutable token;
+   |                                ^^^^^ help: consider using: `TOKEN`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+note[screaming-snake-case-immutable]: immutables should use SCREAMING_SNAKE_CASE
+  --> test/BasicEscrowInvariant.t.sol:13:40
+   |
+13 |     RevertingReceiver public immutable flaky;
+   |                                        ^^^^^ help: consider using: `FLAKY`
+   |
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#screaming-snake-case-immutable
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+  --> test/BasicEscrowInvariant.t.sol:65:34
+   |
+65 |             escrowExpirySeconds: uint64(block.timestamp + duration)
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: consider disabling this lint if you're certain the cast is safe
+
+           // casting to 'uint64' is safe because [explain why]
+           // forge-lint: disable-next-line(unsafe-typecast)
+
+
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+  --> test/BasicEscrowFuzz.t.sol:48:83
+   |
+48 |         BasicEscrow.TradeTerms memory terms = _nativeTerms(seller, buyer, AMOUNT, uint64(deadline));
+   |                                                                                   ^^^^^^^^^^^^^^^^
+   |
+   = note: consider disabling this lint if you're certain the cast is safe
+
+           // casting to 'uint64' is safe because [explain why]
+           // forge-lint: disable-next-line(unsafe-typecast)
+
+
+   = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+   --> test/BasicEscrow.t.sol:253:33
+    |
+253 |         uint64[2] memory bad = [uint64(earliest - 1), uint64(latest + 1)];
+    |                                 ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: consider disabling this lint if you're certain the cast is safe
+
+            // casting to 'uint64' is safe because [explain why]
+            // forge-lint: disable-next-line(unsafe-typecast)
+
+
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+   --> test/BasicEscrow.t.sol:253:55
+    |
+253 |         uint64[2] memory bad = [uint64(earliest - 1), uint64(latest + 1)];
+    |                                                       ^^^^^^^^^^^^^^^^^^
+    |
+    = note: consider disabling this lint if you're certain the cast is safe
+
+            // casting to 'uint64' is safe because [explain why]
+            // forge-lint: disable-next-line(unsafe-typecast)
+
+
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+   --> test/BasicEscrow.t.sol:262:34
+    |
+262 |         uint64[2] memory good = [uint64(earliest), uint64(latest)];
+    |                                  ^^^^^^^^^^^^^^^^
+    |
+    = note: consider disabling this lint if you're certain the cast is safe
+
+            // casting to 'uint64' is safe because [explain why]
+            // forge-lint: disable-next-line(unsafe-typecast)
+
+
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+   --> test/BasicEscrow.t.sol:262:52
+    |
+262 |         uint64[2] memory good = [uint64(earliest), uint64(latest)];
+    |                                                    ^^^^^^^^^^^^^^
+    |
+    = note: consider disabling this lint if you're certain the cast is safe
+
+            // casting to 'uint64' is safe because [explain why]
+            // forge-lint: disable-next-line(unsafe-typecast)
+
+
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast
+
+warning[unsafe-typecast]: typecasts that can truncate values should be checked
+   --> test/BasicEscrow.t.sol:574:18
+    |
+574 |         assertEq(bytes4(ret), BasicEscrow.InsufficientGas.selector);
+    |                  ^^^^^^^^^^^
+    |
+    = note: consider disabling this lint if you're certain the cast is safe
+
+            // casting to 'bytes4' is safe because [explain why]
+            // forge-lint: disable-next-line(unsafe-typecast)
+
+
+    = help: https://book.getfoundry.sh/reference/forge/forge-lint#unsafe-typecast

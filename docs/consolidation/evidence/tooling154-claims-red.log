@@ -1,0 +1,31 @@
+✔ imported reviewed fields never confer tested authority; maintained scope is rechecked (30.177797ms)
+✔ unknown keys duplicate IDs and hostile getters fail without invoking accessors (28.411124ms)
+✔ exact canonical content participates in maintained verification; date and UTF-8 are strict (10.725151ms)
+✔ lookup detaches registry and never evaluates array accessors or trusts duplicates (1.033127ms)
+✔ byte parser enforces depth, UTF-8 and intrinsic byte length; projection retains only canonical fields (26.627409ms)
+✔ actual copy reader refuses unknown keys, wrong entry IDs and accessors without evaluation (6.033344ms)
+✔ a claim whose evidence is stale is never current even with matching trust and scope (1.602866ms)
+✖ claim arrays use a bounded own-data length without evaluating dynamic proxy getters (22.233931ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4705.658811
+
+✖ failing tests:
+
+test at packages/claims/test/claims.test.mjs:97:1
+✖ claim arrays use a bounded own-data length without evaluating dynamic proxy getters (22.233931ms)
+  Error: CLAIM_UNSUPPORTED
+      at invalid (file:///workspace/scratch/29ec534d969d/review-tooling154/packages/claims/src/claims.ts:25:32)
+      at parsePrivacyClaim (file:///workspace/scratch/29ec534d969d/review-tooling154/packages/claims/src/claims.ts:65:12)
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-tooling154/packages/claims/test/claims.test.mjs:103:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

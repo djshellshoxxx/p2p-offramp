@@ -1,0 +1,22 @@
+{"stage":"after connect native reconciliation","canRelease":false,"chainState":"funded","intents":[{"id":"yxiIBrMahcuAbYiBs8pTNkFI3X2G8ny4IhRXy7DzrmU","action":"release","state":"reorged","hash":null},{"id":"gpLFTQ_PrJLon2cXSk3vLNYtsaHRkWWI3FZHhJulmKc","action":"release","state":"reorged","hash":null},{"id":"Em09hdQftJ34TYO6TvdWp_YR3rFjYfR5LfKSOCluVXg","action":"fund","state":"finalized","hash":"0x8474056b7eba346503928fbd84d36004e819116d466c2915aba1c2ba9d498982"},{"id":"tcUFcrQ7RN9mIXW2e6c8Yl6EG6Lc30_l6tmHX0YeZAQ","action":"approve","state":"finalized","hash":"0xe887566cfc233f8623a9e06c8a8402fef53795e7e5fd093670f95624d481b4f8"},{"id":"_Nl61dqPftv5Kcmdq4rh2VhoaSxSlsyOccIT7e1ZZ74","action":"release","state":"reorged","hash":null}],"counts":{"signatures":8,"sends":4,"connects":3}}
+{"stage":"after one explicit refresh","canRelease":true,"chainState":"funded","intents":[{"id":"yxiIBrMahcuAbYiBs8pTNkFI3X2G8ny4IhRXy7DzrmU","action":"release","state":"replaced","hash":null},{"id":"gpLFTQ_PrJLon2cXSk3vLNYtsaHRkWWI3FZHhJulmKc","action":"release","state":"replaced","hash":null},{"id":"Em09hdQftJ34TYO6TvdWp_YR3rFjYfR5LfKSOCluVXg","action":"fund","state":"finalized","hash":"0x8474056b7eba346503928fbd84d36004e819116d466c2915aba1c2ba9d498982"},{"id":"tcUFcrQ7RN9mIXW2e6c8Yl6EG6Lc30_l6tmHX0YeZAQ","action":"approve","state":"finalized","hash":"0xe887566cfc233f8623a9e06c8a8402fef53795e7e5fd093670f95624d481b4f8"},{"id":"_Nl61dqPftv5Kcmdq4rh2VhoaSxSlsyOccIT7e1ZZ74","action":"release","state":"replaced","hash":null}],"counts":{"signatures":8,"sends":4,"connects":3}}
+{"stage":"explicit release review","ok":false,"code":"CONFLICT","counts":{"signatures":8,"sends":4,"connects":3}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: funded release must remain reachable after finalized same-nonce journal evidence
+
+false !== true
+
+    at file:///workspace/scratch/29ec534d969d/erc20-cancel-restore-repro.mjs:145:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.3

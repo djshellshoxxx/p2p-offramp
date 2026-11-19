@@ -1,6 +1,18 @@
 # Picomatch dependency advisory assessment — 2026-11-18
 
-## Result and decision
+## Current update — advisory withdrawn
+
+Rechecked November 18, 2026 (America/Los_Angeles) at main
+`91ee6991d4527bba0e76b048a76e65ed7693c5a1`: both full `npm audit --json` and
+`npm audit --omit=dev --json` report **zero findings** against the unchanged
+lockfile. The configured registry is `https://registry.npmjs.org/`, and installed
+and latest Picomatch remain `4.0.7`. The [GitHub advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf)
+records withdrawal on November 18. The change is upstream advisory status, not a
+local patch, audit exclusion or dependency downgrade. The previous reproduction
+and scope assessment below remain historical evidence; do not read its five-high
+scanner count as current. [Current findings and limits](../consolidation/SECURITY-FINDINGS.md).
+
+## Historical result and decision
 
 **The complete dependency audit remains open: five high-severity package findings trace to one Picomatch advisory. There is no compatible released Picomatch fix to pin as of 2026-11-18.** A bounded local reproduction confirms excessive matching time in the locked package and through Vite's exported `createFilter` API. The affected packages are development tools, and none appears in the inspected default, demo, or localnet browser document/Worker module graphs.
 

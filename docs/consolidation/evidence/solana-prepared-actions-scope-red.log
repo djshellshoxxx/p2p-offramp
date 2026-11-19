@@ -1,0 +1,48 @@
+✖ a connected session stays scoped to the original profile and full deployment binding (38.518111ms)
+✖ a profile change during wallet connect cannot grant a session in the replacement profile (7.309858ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1061.640764
+
+✖ failing tests:
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:109:1
+✖ a connected session stays scoped to the original profile and full deployment binding (38.518111ms)
+  AssertionError [ERR_ASSERTION]: {"ok":true,"value":{"intentId":"9O_apcbe55lO5Mfnc43oLmhMzJmxThwaPGAKwT2-7zk","action":"release","role":"seller","feePayer":"Hp7aHNw5bkRsj3xMWMm2snrXBzi7gyaJWYLCXo3hFHkC","binding":{"chain":"solana","networkId":"solana-other","deploymentId":"escrow-v1","tradeId":"690f87fc69f959367d554aca493f2dbe1f5320b6705b723212046539f853830b"},"programId":"7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq","escrow":"B55zDjE8AFjNDPcVzJNWAGjMWtD9gpVSgMpEKtXz4o9d","expectedEscrowState":"funded","message":"AQABA/nMuM7XhsAdVMq2pj9J9dXHN7icO0icZcrdd8SN4md5laDUr2FbMz3olQSFRnBEZj2lR/J1o3XS2hOCnPUphPRlc2Nyb3ctcHJvZ3JhbTpwMnAtb2ZmcmFtcDpsb2NhbN8wsOAyuGAMbC/k2LZfRymCDac7//5a01UDKC4ufgfIAQICAAEI/fkPzhx/wfE=","blockhash":"G2EyngnvDkimhiE8eTCTVcqp2hgLjV7FFuY68gqmwecw","lastValidBlockHeight":"350","shape":{"action":"release"}}}
+
+  true !== false
+
+      at error (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/support.mjs:43:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:121:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:129:1
+✖ a profile change during wallet connect cannot grant a session in the replacement profile (7.309858ms)
+  AssertionError [ERR_ASSERTION]: {"ok":true,"value":{"role":"seller","address":"Hp7aHNw5bkRsj3xMWMm2snrXBzi7gyaJWYLCXo3hFHkC","chain":"solana:localnet","tradeId":"690f87fc69f959367d554aca493f2dbe1f5320b6705b723212046539f853830b"}}
+
+  true !== false
+
+      at error (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/support.mjs:43:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:137:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

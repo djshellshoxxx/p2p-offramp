@@ -1,0 +1,17 @@
+vite v8.3.5 building client environment for meta...
+transforming...
+✓ 72 modules transformed.
+rendering chunks...
+apps/web/dist/_headers                           0.34 kB
+apps/web/dist/content-policy.json                1.00 kB
+apps/web/dist/index.html                         1.28 kB
+apps/web/dist/third-party-licenses.json          3.62 kB
+apps/web/dist/core-graph-worker.json             4.13 kB
+apps/web/dist/core-graph-document.json          10.64 kB
+apps/web/dist/assets/vault.worker-DeA1P_KX.js   69.45 kB
+apps/web/dist/assets/index-lbyUyLrG.css          6.77 kB
+apps/web/dist/assets/OfflineRoot-l7aHt8tw.js   179.71 kB
+apps/web/dist/assets/index-DownYrCb.js         220.80 kB
+
+✓ built in 4.09s
+{"localStaticBuild":true,"syntheticDemo":false,"files":10,"bytes":497789,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}

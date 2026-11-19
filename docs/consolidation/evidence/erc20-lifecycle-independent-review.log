@@ -1,0 +1,11 @@
+✔ D9 legacy and fresh-key-restored prepared approvals keep their nonce hold and cannot acquire never-sent authority (1961.865728ms)
+✔ D9 review: a crash before a release marker on a funded escrow keeps the timeout refund reachable without resending (437.431091ms)
+✔ D9 restored cancelled releases require finalized exact-nonce evidence before a fresh funded exit (3692.528034ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6839.621898

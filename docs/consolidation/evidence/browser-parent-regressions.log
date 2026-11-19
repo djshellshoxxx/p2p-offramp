@@ -1,0 +1,38 @@
+✔ independent review: locking redacts the document projection before worker acknowledgement (25.964542ms)
+✔ independent review: a pre-lock worker snapshot cannot republish private data while locking (0.50132ms)
+✔ independent review: a review cannot grant a signing method outside the bridge protocol (0.343304ms)
+✔ independent review: invalidation from a provider request getter prevents the physical prompt (20.985343ms)
+✔ independent review: only the current explicit opening result can restore a private projection (1.379729ms)
+✔ independent review: lock supersedes a queued opening result (8.522266ms)
+✔ independent review: a full document command queue cannot prevent a lock command (4.243149ms)
+✔ localnet bridge refuses signatures, sends and account prompts without the corresponding explicit grant (24.887859ms)
+✔ localnet review snapshots exact payloads, consumes a finite queue, and cannot authorize a changed transaction (21.873838ms)
+✔ physical wallet prompt remains exclusive after revocation until the provider settles (24.304577ms)
+✔ review expiry and cancellation cannot be refreshed by read-only calls (4.198966ms)
+✔ localnet command schema refuses raw vault/wallet operations, accessor payloads and unbounded input (11.973449ms)
+✔ single localnet relay route binds the exact logical URL and only the validated build destination (2.062348ms)
+✔ worker-private canonical profile stores only encrypted rows, reopens the same messaging identity, and clears every projection on lock (2609.057656ms)
+✔ fresh-key restore authenticates and rebinds one messaging identity while retaining the original encrypted profile (5972.213352ms)
+✔ Worker idle expiry invalidates profile, secret projections and review without relying on a document timer (807.687246ms)
+✔ lock during pending vault creation prevents a late private session or encrypted profile from being installed (907.75539ms)
+✔ durable-send evidence accepts the complete native and token approval requests without changing them (21.96782ms)
+✔ durable-send evidence rejects a substituted from even when every other field matches (6.757343ms)
+✔ durable-send evidence rejects a substituted to even when every other field matches (0.647936ms)
+✔ durable-send evidence rejects a substituted data even when every other field matches (0.544461ms)
+✔ durable-send evidence rejects a substituted value even when every other field matches (0.415389ms)
+✔ durable-send evidence rejects a substituted nonce even when every other field matches (0.40515ms)
+✔ durable-send evidence rejects a substituted chainId even when every other field matches (0.708688ms)
+✔ durable-send evidence rejects an omitted field or an extra wallet field (34.7276ms)
+✔ durable-send evidence refuses ambiguous markers and markers belonging to an older profile (6.81399ms)
+✔ durable-send evidence requires persisted pre-send provenance and matching account and nonce metadata (1.769338ms)
+✔ pending backup file read cannot restore after lock (1892.715257ms)
+✔ pending backup file read cannot restore after worker idle lock (707.931002ms)
+✔ current backup file read restores through the real encrypted controller into a fresh profile (3189.549934ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41260.448921

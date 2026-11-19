@@ -1,0 +1,48 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:localnet:erc20
+> node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-independent.mjs
+
+ok - ERC20 terms use bilateral D1; neither unfunded allowance nor buyer authority can authorize a send
+ok - the review contains exactly the bound token, escrow spender and principal; cancelling cannot submit it
+ok - an allowance change after review is rechecked before the durable send marker and physical wallet dispatch
+ok - non-exact allowance requires a separate zero reset followed by a separate exact-principal approval
+ok - independent funding and seller bank-receipt release transfer the exact ERC20 principal to the bound buyer
+ok - fresh-key restoration preserves ERC20 history and refund exits without renewed D1 or an allowance-query veto
+ok - an approval with a lost response stays held across fresh-key restore; observed allowance never authorizes retry or funding
+{
+  "ok": true,
+  "checks": 7,
+  "signatures": 12,
+  "sends": 8,
+  "durableExactMarkers": 8,
+  "ReleaseEnabled": 0
+}
+{
+  "observation": "funded exit after unrelated allowance read failure",
+  "connectionOk": true,
+  "walletConnected": true,
+  "first": {
+    "state": "absent",
+    "canFund": false
+  },
+  "second": {
+    "state": "funded",
+    "canRelease": true,
+    "canRefund": false
+  },
+  "sends": 2
+}
+ok - an unavailable unfunded token observation preserves the later independently verified funded exit
+ok - the visible funded exit actually transfers its exact principal despite the unrelated allowance-read outage
+ok - a chain identity change during token observation remains fatal rather than being downgraded to unavailable guidance
+ok - profile lock during the token query revokes the whole operation and emits no private trade projection
+{
+  "ok": true,
+  "kind": "INDEPENDENT_ERC20_RECOVERY_PROOF",
+  "checks": 4,
+  "signatures": 8,
+  "sends": 3,
+  "durableExactMarkers": 3,
+  "ReleaseEnabled": 0
+}

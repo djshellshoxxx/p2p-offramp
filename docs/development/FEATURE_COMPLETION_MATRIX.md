@@ -1,5 +1,18 @@
 # Feature completion matrix
 
+## Current source-based matrix
+
+The [complete consolidation feature matrix](../consolidation/FEATURE-COMPLETION.md)
+is current for main `91ee6991d4527bba0e76b048a76e65ed7693c5a1`. It records native/ERC-20
+browser and native Solana integration, acceptance evidence, active recovery/resumption
+work, dependencies, security concerns and precise remaining criteria. Source presence
+is distinct from release qualification; `ReleaseEnabled=0`.
+
+The table below is preserved as the historical `6c38e641` checkpoint. Its old draft
+and pending labels do not describe the current PR states.
+
+## Historical matrix before the qualified product merges
+
 Updated: November 18, 2026; source `main@6c38e641e24abcfdcf645f864bd64c9645836d75`.
 
 [The reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)
@@ -31,7 +44,7 @@ evidence, security review, documentation and required release checks all pass.
 | F14 | Payment-proof integrations | zkTLS/TLSNotary/Reclaim research and proof specifications | Research only; no production proof adapter | Select reviewed protocol, define trust and limits, implement an adapter and qualify real fixtures | Planned |
 | F15 | Solana escrow and payout | D5/Solana specifications; `packages/chain-solana/README.md` | Native/SPL program source, finalized read-only adapter and unsigned instruction builders are on main; verify-only off-chain consent/replay candidate merged in #151 | Native settlement/lifecycle/encrypted recovery in draft #167 needs combined real-validator qualification; external-wallet/browser action wiring remains unfinished | Partial; native client integration pending |
 | F16 | Release trust, deployment and real-funds enablement | D2/D8 decisions; deployment and acceptance gates | Offline signed registry/release primitives, QR codec and explicit artifact build-mode checks are merged (#140/#141); `ReleaseEnabled=0` | Approved trust roots/pins, independent security/dependency review, physical-wallet/public-testnet acceptance, exact-source hosted checks and signed owner release authorization | Blocked by remaining qualification and owner release gate |
-| F17 | Optional roadmap modules | D7 decision and feature specifications | D7 parks optional packages pending core qualification | Keep separately modular; begin only after core release gates and per-feature intake | Deferred |
+| F17 | Optional roadmap modules | November 18 accepted-decision supersession of D7 and feature specifications | Isolated optional source intake is accepted, one package per PR | Qualify source and import boundaries under applicable D8 review; default-build wiring requires its own gate | Accepted isolated intake; qualification pending |
 
 ## Evidence limits
 

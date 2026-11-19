@@ -1,0 +1,26 @@
+vite v8.3.5 building client environment for demo...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+apps/web/dist-demo/_headers                              0.34 kB
+apps/web/dist-demo/content-policy.json                   1.00 kB
+apps/web/dist-demo/index.html                            1.28 kB
+apps/web/dist-demo/third-party-licenses.json             3.62 kB
+apps/web/dist-demo/core-graph-worker.json                4.13 kB
+apps/web/dist-demo/core-graph-document.json             10.94 kB
+apps/web/dist-demo/assets/vault.worker-DeA1P_KX.js      69.45 kB
+apps/web/dist-demo/assets/index-lbyUyLrG.css             6.77 kB
+apps/web/dist-demo/assets/synthetic-local-TA6gqNuj.js    5.74 kB
+apps/web/dist-demo/assets/OfflineRoot-YPhIWYqn.js      185.72 kB
+apps/web/dist-demo/assets/index-BjdeRgTt.js            220.82 kB
+
+✓ built in 3.16s
+[33m[PLUGIN_TIMINGS] [0mJavaScript callbacks ran for 2.2s of this 3.1s build (72%).
+The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - plugin vite:worker-import-meta-url transform (43%, 1.3s, 2 calls)
+Additional callback time came from the callbacks below and from callbacks under 1s.
+1 callback is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
+  - plugin vite:css transform (2 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+
+{"localStaticBuild":true,"syntheticDemo":true,"files":11,"bytes":509853,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}

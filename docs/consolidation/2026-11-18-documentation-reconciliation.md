@@ -86,8 +86,10 @@ changes and review their exact disposition before any closure.
    reviewed trust/bootstrap and independent release/security work against their
    actual current implementation. The [Lane A handoff](LANE-A-HANDOFF.md) retains
    the original quarry recipes; [Lane B progress](LANE-B-PROGRESS.md) maps its PRs.
-4. Reconcile optional packages separately. Their draft presence does not change
-   the core scope or D7 deferral.
+4. Reconcile optional packages separately. The November 18 accepted decision
+   supersedes D7 parking and permits one package per PR with import-boundary and
+   applicable D8 review. Default-build wiring needs its own gate; optional intake
+   does not change the mandatory MVP dependency set.
 
 The stack's [Picomatch assessment](https://github.com/djshellshoxxx/p2p-offramp/blob/2a623d7248dcfd35d215b50738c01846143c704a/docs/execution/PICOMATCH-ADVISORY-ASSESSMENT-2026-11-18.md)
 is a dated dependency finding, not a fresh audit or a claim of remediation here.

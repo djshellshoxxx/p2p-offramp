@@ -1,0 +1,17 @@
+✔ confirm consumes once and signs the reviewed blockhash and bytes after a newer finalized read (121.99322ms)
+✔ cancellation during a physical prompt retains the serial slot until that prompt settles (43.662154ms)
+▶ a late wallet approval is rechecked for expiry, finalized state, and profile before marking
+  ✔ blockhash expiry (38.20735ms)
+  ✔ release deadline (50.321203ms)
+  ✔ finalized state (37.356434ms)
+  ✔ profile (21.863756ms)
+✔ a late wallet approval is rechecked for expiry, finalized state, and profile before marking (149.397366ms)
+✔ real encrypted vault lock during prepared signing keeps the physical slot and grants no authority (549.270856ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2585.467799
