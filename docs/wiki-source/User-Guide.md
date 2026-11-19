@@ -4,10 +4,7 @@
 
 **Status: development/test-only.** The app is experimental and does not accept or authorize real-funds trading. `ReleaseEnabled=0`. Treat anything in an open draft PR as unmerged work; do not interpret demos as live exchange services.
 
-Source checkpoint: merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. The
-[development status](../DEVELOPMENT_STATUS.md) distinguishes this default client from
-unmerged localnet browser work in #166–#168. [The reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)
-lists source capabilities separately from user/browser and release qualification.
+Current source checkpoint: merged `main@80375193f16082c582a1faf2c6ba598f9eca532a` (November 19, 2026). Wallet/client integration #166, Solana client/recovery #167 and browser trading/ERC-20 recovery #170 are **merged test-oriented implementation work**, not a released real-funds service. The earlier #168 branch is **closed, unmerged**; #173 and #175 remain **draft** with incomplete acceptance. Consult [the development status](../DEVELOPMENT_STATUS.md) and [the consolidation report candidate](https://github.com/djshellshoxxx/p2p-offramp/pull/176) for source-pinned limitations; report #176 itself is unmerged. The earlier `main@6c38e641` documentation checkpoint is historical.
 
 ## Overview and capabilities
 
