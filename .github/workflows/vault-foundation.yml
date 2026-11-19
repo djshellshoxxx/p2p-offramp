@@ -48,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, official ref checked 2026-10-24
+        with:
+          fetch-depth: 0 # Unsigned distribution binds documentation to immutable source commits.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, official ref checked 2026-10-24
         with:
           node-version: '24'
@@ -59,6 +61,12 @@ jobs:
         with:
           chrome-version: stable
       - run: npm run test:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:portal:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - run: npm run test:distribution:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:web:browser
@@ -102,6 +110,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run test:tooling
       - run: npm run check:docs
+      - run: npm run check:governance
   specs:
     runs-on: ubuntu-latest
     steps:

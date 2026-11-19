@@ -121,7 +121,17 @@ try {
   await camera.waitForFunction(() => window.__qrFixture.streams.length === 1 && window.__qrFixture.streams[0].getTracks().every(track => track.readyState === 'ended'));
   assert.equal(await panel(camera).locator('.qr-review').count(), 0);
   await camera.evaluate(() => { window.__qrFixture.mode = 'allow'; }); await button(camera, 'Start camera').click();
-  await camera.waitForFunction(() => document.querySelector('.qr-camera')?.readyState >= 2);
+  try { await camera.waitForFunction(() => document.querySelector('.qr-camera')?.readyState >= 2); }
+  catch (error) {
+    const state = await camera.evaluate(() => {
+      const video = document.querySelector('.qr-camera');
+      return { readyState: video?.readyState, paused: video?.paused, width: video?.videoWidth, height: video?.videoHeight,
+        hidden: video?.hidden, active: video?.srcObject?.active, producers: window.__qrFixture.producers,
+        tracks: window.__qrFixture.streams.map(stream => stream.getTracks().map(track => ({ readyState: track.readyState, muted: track.muted }))),
+        policy: window.__qrFixture.observed.policy, alerts: [...document.querySelectorAll('.qr-panel [role="alert"]')].map(node => node.textContent) };
+    });
+    throw new Error(`Camera preview did not receive the fixture stream: ${JSON.stringify(state)}`, { cause: error });
+  }
   await button(camera, 'Scan one camera frame').click(); await confirm(camera);
   await noQrAuthority(camera);
   // Actual app event handler, with a deterministic synthetic hidden-page signal (no physical device claim).
@@ -133,6 +143,7 @@ try {
   });
   assert.equal(await panel(camera).getByLabel('Exact public QR text', { exact: true }).inputValue(), '');
   assert.equal(await panel(camera).locator('.qr-review').count(), 0); await noQrAuthority(camera);
+  await camera.waitForFunction(() => window.__qrFixture.producers.every(producer => !producer.active));
   reports.push('synthetic-permission-real-stream-late-cancel-remount-capture-hidden-cleanup');
   await camera.context().close();
 
@@ -160,7 +171,7 @@ try {
   assert.equal(await panel(locked).locator('.qr-review').count(), 0);
   assert.equal(await panel(locked).getByLabel('Exact public QR text', { exact: true }).inputValue(), '');
   assert.equal(await privateRows(locked), encryptedBefore);
-  const lockStats = await noQrAuthority(locked, { expectedPrivateOperations: ['unlock', 'lock'] });
+  const lockStats = await noQrAuthority(locked, { expectedPrivateOperations: ['unlock', 'lock'], allowTrustedActivity: true });
   reports.push('reference-fingerprint-and-real-vault-lock-clears-memory');
   await locked.context().close();
 

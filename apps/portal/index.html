@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="__PORTAL_POLICY__">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>P2P Off-ramp security and recovery references</title>
+  <link rel="stylesheet" href="./portal.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to recovery information</a>
+  <header><p class="status">Trading disabled · No approved deployment</p><h1>Security and recovery references</h1>
+    <p>This read-only page works without JavaScript. It provides local source references and printable instructions, not a wallet or an authenticated release.</p></header>
+  <main id="content" tabindex="-1">
+    <section aria-labelledby="trust"><h2 id="trust">Establish trust independently</h2>
+      <p><strong>No approved release key or public-key fingerprint is configured.</strong> No deployed contract address, signed recovery executable or approved Solana IDL is supplied here.</p>
+      <p>Source commit: <code>__PORTAL_COMMIT__</code>. Worktree at build: <strong>__PORTAL_WORKTREE__</strong>. The build report records the exact downloaded bytes. A commit label does not prove that a modified worktree matches that commit.</p>
+      <p>Authenticate a release and its public-key fingerprint through independently trusted distribution before using it. Compare its signature, original chain and genesis identities, deployed address, runtime code hash and asset digests from independent locations. A checker and hashes from the same hostile server cannot authenticate themselves.</p>
+      <p>These downloads are unsigned local source references. Their hashes do not establish deployed bytecode, an audit, reviewer approval or safe real-funds use. Never provide a seed phrase or private key to a support contact or this page.</p>
+    </section>
+    <section aria-labelledby="recovery"><h2 id="recovery">Printable recovery checklist</h2>
+      <ol>
+        <li>Preserve your encrypted backup and its passphrase separately. Keep private recovery references away from public hosting. A downloaded backup is not a tested restore; browser storage can be evicted.</li>
+        <li>Identify the original escrow from independently authenticated records. Check its exact chain, genesis, address, protocol and runtime hash. Do not substitute a newly advertised deployment.</li>
+        <li>Use an independently authenticated recovery package for that original deployment. The maintained package builder currently refuses an unset trust root. The instructions below describe its protocol; this portal does not supply an approved executable.</li>
+        <li>Read fresh on-chain seller, buyer, asset, exact base-unit amount, state and deadline. Local labels, imported JSON and saved journal states are unverified references, not native chain evidence or proof of fiat receipt.</li>
+        <li>The bound seller can release strictly before expiry. At or after expiry, anyone can trigger a refund to the bound seller. A fiat transfer does not force a seller release, and a proof does not guarantee irreversible payment.</li>
+        <li>A deferred payout can require a withdrawal to its immutable beneficiary. There is no alternate recipient or automatic sweep. A rejecting recipient can still prevent delivery.</li>
+        <li>If you use an external wallet, independently check network, sender, destination, calldata, zero value and fixed beneficiary; obtain current nonce, fees and adequate gas and perform a fresh simulation. Unsigned preparation does not authorize or guarantee inclusion.</li>
+        <li>After a manual submission, retain its hash and verify the receipt, canonical inclusion, finalized policy and original escrow state. An uncertain broadcast is not proof of failure. Do not replay or automatically resubmit a stored request.</li>
+      </ol>
+      <p>Public chain reads reveal metadata to the selected endpoint, including connection information. Private routing and encrypted local storage do not make public transactions anonymous. RPC responses are not independent consensus verification.</p>
+    </section>
+    <section aria-labelledby="downloads"><h2 id="downloads">Exact local reference downloads</h2>
+      <p>Files are copied byte for byte from this checkout. SHA-256 values identify those bytes only; they are not a trust bootstrap. Preserve the complete authenticated recovery package when one is independently available.</p>
+      __PORTAL_DOWNLOADS__
+      <p><a href="./portal-build.json" download>Download local build identities</a> · <a href="./content-policy.json" download>Download delivery policy description</a></p>
+    </section>
+    <section aria-labelledby="limits"><h2 id="limits">Read-only limits and hosting policy</h2>
+      <p>This page cannot sign or send transactions, contact live RPC, decrypt a vault, scan a camera, generate a WASM proof or recover a lost passphrase. It has no forms, trackers, external embeds or executable scripts.</p>
+      <p>The meta policy forbids scripts, connections and embedded frames. A verified host must additionally serve the supplied restrictive headers to prevent other pages framing this page. Meta CSP cannot enforce <code>frame-ancestors</code>. The emitted <code>_headers</code> file is a hosting recipe, not proof a deployed host applied it; GitHub Pages generally cannot apply arbitrary response headers.</p>
+      <p>Print this page using your browser's Print command. Professional accessibility, physical-device recovery, independent cryptographic review and release acceptance remain separate requirements.</p>
+    </section>
+  </main><footer>Local development reference · No funds, release or deployment approval</footer>
+</body>
+</html>

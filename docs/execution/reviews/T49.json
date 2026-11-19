@@ -1,0 +1,169 @@
+{
+  "task": "T49",
+  "reviewer": "/root/branch_inventory/completion_requirements",
+  "reviewedAt": "2026-11-02T09:59:57.453277+00:00",
+  "verdict": "APPROVE_LOCAL_TWO_ORIGIN_FIXTURE_ONLY",
+  "ownedFiles": [
+    {
+      "path": "scripts/fixtures/journey-origin-screen.mjs",
+      "sha256": "c9b9b5d75e84e231cd4e60e58fd760d37653544e6532ec2f2e0c1625e1f29ba3"
+    },
+    {
+      "path": "scripts/fixtures/journey-origin-worker.mjs",
+      "sha256": "5acf2189606914961401f871087fea0f3955e98a58b4f5916c29614f92a0195d"
+    },
+    {
+      "path": "scripts/test-journey-origin-browser.mjs",
+      "sha256": "18dc2fc94fe83adff04f6d37b1deacb35691dffd8043470400be3fc281e0014d"
+    }
+  ],
+  "declaredDependencies": [
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "sha256": "427ec5e3da97cd0dfd07ba363422716c99570e4c94824e201dc8630a127fca61"
+    },
+    {
+      "path": "apps/web/src/journey/vault-composition.ts",
+      "sha256": "eec7e85e4cf7cc515717e138ce85ec87caba9e4deed725855e1087b682138036"
+    },
+    {
+      "path": "apps/web/src/journey/private-trade.ts",
+      "sha256": "904725eb898c43159677b45a9cdd9580f48e5bae8e7903919522d59fe24c8400"
+    },
+    {
+      "path": "apps/web/src/journey/native-contracts.ts",
+      "sha256": "76a75a6235b9917d9cd9c002a78628ab05b46fb2e734a9d34f1c085079bb87cc"
+    },
+    {
+      "path": "apps/web/src/journey/presentation.ts",
+      "sha256": "c7c9b12bbca596b25d9842015fdd6a1c89daa470f490aebc2449843b8693fe3d"
+    },
+    {
+      "path": "apps/web/src/journey/screen.ts",
+      "sha256": "44abab14397ea4f55bfcdc34e4f57f429efef6c09022b0bfbe88577ffbf91d5e"
+    },
+    {
+      "path": "apps/web/src/journey/README.md",
+      "sha256": "37af55d5b11d19238326e67d605cba69e334b166f66d9023d3ada119b327dc82"
+    },
+    {
+      "path": "apps/web/test/journey-vault-composition.test.mjs",
+      "sha256": "a523d7570aa45eddc02f364fe77f84eec6ef1a1715eb7230c1454f7ad455406f"
+    },
+    {
+      "path": "apps/web/test/journey-private-trade.test.mjs",
+      "sha256": "6a38d3c876133a8b4fa7182130a4ff4fc88bd178b2cc510edb987155ae566e87"
+    },
+    {
+      "path": "scripts/fixtures/journey-screen.mjs",
+      "sha256": "ceaa8b8473699f05a97f386d913485d3d90dd73fc7e51bb4515cc9ecf6eed12e"
+    },
+    {
+      "path": "scripts/fixtures/journey-worker.mjs",
+      "sha256": "6f05047766d8c7ed122b67a498ef34e9d08d58ada29831ea505a6134b5d682d0"
+    },
+    {
+      "path": "scripts/test-journey-browser.mjs",
+      "sha256": "933005d6998b48cfb8addd989b8aea5f41371f4575a5de0fb853006312a08603"
+    }
+  ],
+  "additionalObservedTransitiveDependencies": [
+    {
+      "path": "apps/web/src/ui/locale/catalog.ts",
+      "sha256": "78c36cb66c884929bf1fe0731e5530893e7300c651bb1600b1c84e1e19d14e61",
+      "reviewContext": "Previously independently reviewed T52; transitively reached through T43 presentation/display imports."
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "sha256": "e4e1f2ea75e8f3d688fe8bb75d10550602056fa91c380d90bba18d198b8cdffa",
+      "reviewContext": "Previously independently reviewed T52; transitively reached through T43 presentation/display imports."
+    },
+    {
+      "path": "apps/web/src/ui/locale/bundled.ts",
+      "sha256": "50cd19e37c7190e914e21fd5431dd32636b4cabe06d18e6bb0002fb477f452d0",
+      "reviewContext": "Previously independently reviewed T52; transitively reached through T43 presentation/display imports."
+    },
+    {
+      "path": "apps/web/src/ui/locale/runtime.ts",
+      "sha256": "5418018a6baf144d5b9525e0c572c9641697470501f51c25a7289129dbdd3ccf",
+      "reviewContext": "Previously independently reviewed T52; transitively reached through T43 presentation/display imports."
+    },
+    {
+      "path": "apps/web/src/ui/trade/trade-terms-display.ts",
+      "sha256": "09c9c88a1f7ac99fed2351bfdf9b7f6172831698043633ddfe65abc864ac112f",
+      "reviewContext": "Previously independently reviewed T52; transitively reached through T43 presentation/display imports."
+    }
+  ],
+  "observedHead": "637327f2d6023a4696ed0d4506da4dec5dc57382",
+  "unresolvedRequiredFindings": [],
+  "method": "Independent five-axis read of all3 frozen fixture/harness files and relevant actual G15/G03/T34 implementation; one actual plain-Node managed-loopback Chromium run. No source edits, agents, wallet operations or duplicate native chain suite.",
+  "specs": [
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.3_release_distribution/spec-ipfs-origin-and-update-policy.md",
+    "00_PLANNING_AND_THREAT_MODELING/feature_0.3_system_integration/module_0.3.1_static_deployment/spec-content-addressed-release-manifest.md"
+  ],
+  "verification": {
+    "frozenHashesBeforeAndAfter": 3,
+    "declaredDependencyHashesBeforeAndAfter": 12,
+    "command": "P2P_CHROMIUM=/usr/bin/chromium node scripts/test-journey-origin-browser.mjs",
+    "exitCode": 0,
+    "browser": "154.0.8037.57",
+    "actualResult": {
+      "fixture": "actual-signed-two-origin-profile-migration",
+      "browser": "154.0.8037.57",
+      "origins": 2,
+      "manifestSha256": "5096ae7238664b832d3a4676cae7956b60c3d8b16ae2f5854ab492f95b7ad7ef",
+      "signedAssets": 4,
+      "compiledSyntheticPublicKey": true,
+      "independentAssetVerification": true,
+      "tamperedAssetRefused": true,
+      "wrongSignatureRefused": true,
+      "untrustedKeyRefused": true,
+      "sourceCurrentBackupVerified": true,
+      "wrongPassphraseRefused": true,
+      "freshDestinationProfileAndKey": true,
+      "sourceCiphertextPreserved": true,
+      "sourceBackupNotDestinationProof": true,
+      "destinationCurrentBackupReverified": true,
+      "opaqueRecordsIncluded": true,
+      "walletCalls": 0,
+      "externalRequests": 0,
+      "productionOriginPolicy": false,
+      "releaseEnabled": false
+    },
+    "sourceCheckpoint": "Native actual source profile revision1 includes opaque consumer record before complete-current-profile backup verification; backup byte digest matches downloaded file. This is distinct from release reviewed-source provenance.",
+    "destinationCheckpoint": "Actual G03 fresh-key restore starts revision0 with original opaque record count1. Original source file fails current destination verification; destination current re-export passes native T34 re-verification.",
+    "diffCheck": "PASS for owned paths"
+  },
+  "axes": {
+    "correctness": "Actual distinct scheme/host/port origins with the same native IDB database name begin isolated. Each Worker independently verifies the canonical signed four-asset inventory and release-bound registry before constructing vault/store services. Actual native complete-profile source verification, wrong-pass refusal, fresh destination profile/key/salt/ciphertext/revision, original source preservation and new destination backup proof pass.",
+    "readability": "Small isolated screen adapter, verification-first Worker and one bounded end-to-end harness. Labels explicitly state synthetic compiled public trust and local scope; production origin policy and trading remain false.",
+    "architecture": "Uses actual G15 verifyRelease/createReleaseRegistry and in-memory proof identity, actual G03 encrypted recovery and same existing T34 private bridge/product backup controls. Default App/source/flags/facades unchanged. No wallet/trading modules enter the compiled graph. Only the ephemeral public verify-only JWK is compiled; Node signing private key is not exported.",
+    "security": "Fixed asset paths and complete exact byte/hash set, redirect refusal and bounded streaming precede vault access. Adjacent envelopes cannot replace the compiled key. Changed registry bytes, modified signature and another key are refused before profiles; wrong source passphrase creates no destination. Encrypted files are explicitly selected, not plaintext cross-origin URL/postMessage transport. Public scalar verification receipts are emitted only after actual native backup authority is rechecked.",
+    "performance": "One shared bootstrap promise and monotonic command retirement preserve bounded logical/physical bootstrap admission. Four fixed assets each have4MiB bounds, manifest64KiB/envelope8KiB and each fetch10s timeout. Temporary files/browser/servers are closed in finally; no default startup network scope added."
+  },
+  "evidencePrecision": [
+    "Signed manifest sourceCommit/buildRecipeDigest/lockfileDigest/SBOM fields inherit synthetic fixture placeholders; no authentic reviewed-source release attestation is established by this fixture.",
+    "T52 display code now transitively reads the public locale preference. Browser assertions establish zero local/session entries written, zero caches/service workers, and no private business storage there; they do not establish zero Web Storage API reads.",
+    "The native source checkpoint is actual T34 current encrypted-row/complete-profile authority, not a synthetic release provenance claim."
+  ],
+  "limits": [
+    "Harness-controlled compiled ephemeral public key/initial executable is assumed trusted. This does not authenticate a hostile first-page/bootstrap or select a maintained production signing root.",
+    "No production origin/update transition policy, retained cross-origin anti-rollback transfer, nonempty deployment/rotation/archive wire format, CID/gateway availability, HTTP/TLS/private-route qualification or production G15/G22 completion is established.",
+    "No wallet/trading authority, cryptography certification, memory-erasure, power-loss durability, physical-device or accessibility qualification.",
+    "T53 policy427ec5 is recorded for this native origin run. T43 original c77-dependent approval is not retroactively upgraded; root owns combined new-dependency T43 validation."
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/work/t49-independent-native.log",
+      "sha256": "df5b1f66dca25f218963881244f198af8740f1ac389e36ca776b11f232ccecf2"
+    },
+    {
+      "path": "/workspace/work/t49-frozen-sha256.txt",
+      "sha256": "9602cf2d09001e33526a1742915e77167c89fe62fd5c5d1580d7555629f1ead4"
+    },
+    {
+      "path": "/workspace/work/t49-dependency-sha256.txt",
+      "sha256": "d57327f3d9fd130864da6d6120a4c30f4f620a586f103d6ebcadca0eac336b10"
+    }
+  ]
+}
