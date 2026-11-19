@@ -131,3 +131,21 @@ export function verifyEoaPeerAcceptance(registry: PeerRegistryView, domain: EvmD
   } catch { return fail(); }
   finally { for (const bytes of owned) bytes.fill(0); }
 }
+/** EIP-712 struct members of PEER_ACCEPTANCE_TYPE, in encoding order (derived from that one string). */
+export const PEER_ACCEPTANCE_FIELDS: readonly Readonly<{ name: string; type: string }>[] = Object.freeze(
+  PEER_ACCEPTANCE_TYPE.slice('PeerAcceptance('.length, -1).split(',')
+    .map(member => { const [type, name] = member.split(' '); return Object.freeze({ name: name!, type: type! }); }));
+/** Exact eth_signTypedData_v4 JSON whose EIP-712 digest is peerAcceptanceHash(domain, input).
+ * Both inputs are re-validated/snapshotted; the domain is always P2POfframp/version 1. */
+export function peerAcceptanceTypedData(domain: EvmDomainInput, input: PeerAcceptanceV1): string {
+  const stableDomain = snapshotEvmDomain(domain), binding = snapshotPeerAcceptance(input);
+  return JSON.stringify({
+    types: { EIP712Domain: [['name', 'string'], ['version', 'string'], ['chainId', 'uint256'], ['verifyingContract', 'address']].map(([name, type]) => ({ name, type })),
+      PeerAcceptance: PEER_ACCEPTANCE_FIELDS.map(({ name, type }) => ({ name, type })) },
+    primaryType: 'PeerAcceptance',
+    domain: { name: 'P2POfframp', version: '1', chainId: stableDomain.chainId, verifyingContract: stableDomain.verifyingContract },
+    message: { v: 1, termsHash: `0x${binding.termsHash}`, role: binding.role === 'seller' ? 0 : 1, account: binding.account,
+      ownMessagingKey: `0x${binding.ownMessagingKey}`, counterpartyMessagingKey: `0x${binding.counterpartyMessagingKey}`,
+      notAfterSeconds: binding.notAfterSeconds },
+  });
+}

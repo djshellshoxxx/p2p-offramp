@@ -113,3 +113,73 @@ test('default and demo module graphs reject test-only wallet execution and signi
     await assert.rejects(plugin.generateBundle.call({getModuleIds:()=>[path],getModuleInfo:()=>({isExternal:false}),emitFile(){throw Error('should not emit');}}, {}, {}), /NON_CORE_MODULE/);
   }
 });
+
+// ---- A3 localnet build profile: module and token exceptions exist ONLY for the localnet plugin ----
+const repositoryRoot = resolve(import.meta.dirname, '../../..');
+const LOCALNET_ONLY_MODULES = [
+  ...['adapter', 'terms', 'submit', 'escrow', 'payment-preflight', 'peer-acceptance', 'peer-envelope', 'peer-replay'].map(name => `packages/wallet/src/evm-${name}.ts`),
+  'packages/chain-evm/src/reader.ts', 'packages/relay/src/pool.ts', 'packages/relay/src/nip01.ts', 'packages/relay/index.ts', 'packages/exchange/index.ts', 'packages/exchange/src/exchange.ts',
+  'packages/wallet/localnet.ts', 'packages/domain/localnet.ts', 'packages/chain-evm/localnet.ts', 'apps/web/src/localnet/LocalnetRoot.tsx', 'apps/web/src/localnet/config.ts',
+  'node_modules/@noble/curves/secp256k1.js', 'node_modules/@noble/hashes/sha3.js', 'node_modules/@noble/ciphers/chacha.js',
+];
+const localnetProfile = { relayOrigin: 'ws://127.0.0.1:7447' };
+function graphContext(root, paths, emitted = []) {
+  return { getModuleIds: () => paths.map(path => resolve(root, path)), getModuleInfo: () => ({ isExternal: false }), emitFile: file => { emitted.push(file); } };
+}
+test('default, header, demo and testnet plugins still reject every localnet-only module (document and worker)', async () => {
+  for (const worker of [false, true]) for (const delivery of ['meta', 'header']) for (const path of LOCALNET_ONLY_MODULES) {
+    const plugin = staticBuildPlugin(repositoryRoot, delivery, worker);
+    await assert.rejects(plugin.generateBundle.call(graphContext(repositoryRoot, [path]), {}, {}), /NON_CORE_MODULE|UNREVIEWED_DEPENDENCY/, path);
+  }
+});
+test('the localnet plugin admits exactly the reviewed localnet modules and records them in the graph', async () => {
+  for (const worker of [false, true]) {
+    const emitted = [];
+    await staticBuildPlugin(repositoryRoot, 'meta', worker, localnetProfile).generateBundle.call(graphContext(repositoryRoot, LOCALNET_ONLY_MODULES, emitted), {}, {});
+    const graph = JSON.parse(emitted.find(file => /core-graph-/.test(file.fileName)).source);
+    assert.deepEqual(graph.modules.map(module => module.path).sort(), [...LOCALNET_ONLY_MODULES].sort());
+  }
+});
+test('the localnet plugin still rejects execution, tests, fixtures, Solana, extensions and unreviewed dependencies', async () => {
+  for (const path of ['packages/wallet/src/evm-execution.ts', 'packages/wallet/src/evm-other.ts', 'packages/wallet/test/evm-adapter.test.mjs', 'packages/domain/test/fixtures/local-evm-scenario/registry.json',
+    'packages/chain-evm/test/reader.test.mjs', 'packages/chain-solana/src/reader.ts', 'packages/extensions/index.ts', 'packages/messaging/localnet.ts', 'packages/relay/src/fixtures/x.ts',
+    'node_modules/@noble/post-quantum/index.js', 'node_modules/viem/index.js', 'node_modules/x/packages/relay/a.js', 'node_modules/x/packages/chain-evm/a.js', '../outside.ts']) {
+    for (const worker of [false, true]) {
+      const plugin = staticBuildPlugin(repositoryRoot, 'meta', worker, localnetProfile);
+      await assert.rejects(plugin.generateBundle.call(graphContext(repositoryRoot, [path]), {}, {}), /NON_CORE_MODULE|UNREVIEWED_DEPENDENCY/, path);
+    }
+  }
+  assert.throws(() => staticBuildPlugin(repositoryRoot, 'meta', false, { relayOrigin: 'wss://relay.example' }), /INVALID_INPUT|Content boundary/);
+  assert.throws(() => staticBuildPlugin(repositoryRoot, 'meta', false, { relayOrigin: 'ws://127.0.0.1:7447', extra: 1 }), /LOCALNET_PROFILE_INVALID/);
+});
+test('the WebSocket( token is allowed only in packages/relay/src/pool.ts and only by the localnet plugin', async t => {
+  assert.throws(() => inspectApplicationSource('packages/relay/src/pool.ts', 'export const c = url => new WebSocket(url);'), /SOURCE_POLICY/);
+  assert.doesNotThrow(() => inspectApplicationSource('packages/relay/src/pool.ts', 'export const c = url => new WebSocket(url);', { allowWebSocketConstructor: true }));
+  for (const source of ['fetch(url)', 'new EventSource(url)', 'new XMLHttpRequest()', 'eval(text)', 'node.innerHTML = text'])
+    assert.throws(() => inspectApplicationSource('packages/relay/src/pool.ts', source, { allowWebSocketConstructor: true }), /SOURCE_POLICY/, source);
+  const root = await mkdtemp(join(tmpdir(), 'p2p-localnet-token-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const path of ['packages/relay/src/pool.ts', 'packages/relay/src/other.ts', 'packages/exchange/src/exchange.ts', 'apps/web/src/localnet/LocalnetRoot.tsx']) {
+    await mkdir(join(root, path, '..'), { recursive: true });
+    await writeFile(join(root, path), 'export const connect = (url: string) => new WebSocket(url);\n');
+  }
+  await staticBuildPlugin(root, 'meta', false, localnetProfile).generateBundle.call(graphContext(root, ['packages/relay/src/pool.ts']), {}, {});
+  for (const path of ['packages/relay/src/other.ts', 'packages/exchange/src/exchange.ts', 'apps/web/src/localnet/LocalnetRoot.tsx'])
+    await assert.rejects(staticBuildPlugin(root, 'meta', false, localnetProfile).generateBundle.call(graphContext(root, [path]), {}, {}), /SOURCE_POLICY/, path);
+  await assert.rejects(staticBuildPlugin(root, 'meta', false).generateBundle.call(graphContext(root, ['packages/relay/src/pool.ts']), {}, {}), /NON_CORE_MODULE/);
+});
+test('the localnet plugin emits the relay-only CSP; the default plugin keeps connect-src none', async () => {
+  const shell = '<!doctype html><head><!-- OFFLINE_CONTENT_POLICY --><script type="module" src="./a.js"></script></head>';
+  const localnetHtml = staticBuildPlugin(repositoryRoot, 'meta', false, localnetProfile).transformIndexHtml.handler(shell);
+  assert.match(localnetHtml, /connect-src ws:\/\/127\.0\.0\.1:7447;/);
+  assert.doesNotMatch(localnetHtml, /connect-src 'none'/);
+  const defaultHtml = staticBuildPlugin(repositoryRoot, 'meta', false).transformIndexHtml.handler(shell);
+  assert.match(defaultHtml, /connect-src &#39;none&#39;|connect-src 'none'/);
+  assert.doesNotMatch(defaultHtml, /ws:/);
+  const emitted = [];
+  await staticBuildPlugin(repositoryRoot, 'meta', false, localnetProfile).generateBundle.call(graphContext(repositoryRoot, [], emitted), {}, {});
+  const policy = JSON.parse(emitted.find(file => file.fileName === 'content-policy.json').source);
+  assert.deepEqual(policy.manifest.connectOrigins, ['ws://127.0.0.1:7447']);
+  assert.equal(policy.ReleaseEnabled, 0);
+  assert.match(emitted.find(file => file.fileName === '_headers').source, /connect-src ws:\/\/127\.0\.0\.1:7447;/);
+});

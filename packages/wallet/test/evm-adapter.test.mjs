@@ -85,7 +85,7 @@ test('G10 signs G16 terms once with typed data and returns only an offline-verif
   const session = ok(await adapter.connect('local-evm')); wallet.calls = [];
   const signature = ok(await adapter.signTerms(session, domain, terms, 'seller'));
   assert.equal(signature.byteLength, 65);
-  assert.deepEqual(wallet.calls, ['eth_accounts', 'eth_chainId', 'eth_signTypedData_v4'], 'recheck then exactly one typed-data prompt');
+  assert.deepEqual(wallet.calls, ['eth_accounts', 'eth_chainId', 'eth_signTypedData_v4', 'eth_accounts', 'eth_chainId'], 'recheck before and after exactly one typed-data prompt');
   assert.equal(wallet.calls.some(m => m === 'personal_sign' || m === 'eth_sign'), false);
   wallet.behavior = 'wrong-key'; code(await adapter.signTerms(session, domain, terms, 'seller'), 'INTEGRITY_FAILURE');
   wallet.behavior = 'reject'; code(await adapter.signTerms(session, domain, terms, 'seller'), 'USER_REJECTED');
@@ -122,7 +122,7 @@ test('G10 snapshots validated G16 inputs before provider awaits and signs exactl
   assert.equal(signature.byteLength, 65);
   assert.deepEqual(wallet.typedData.at(-1).domain, { name: 'P2POfframp', version: '1', chainId: '31337', verifyingContract: originalDomain.verifyingContract });
   assert.equal(wallet.typedData.at(-1).message.amountBaseUnits, originalTerms.amountBaseUnits);
-  assert.deepEqual(wallet.calls, ['eth_accounts', 'eth_chainId', 'eth_signTypedData_v4']);
+  assert.deepEqual(wallet.calls, ['eth_accounts', 'eth_chainId', 'eth_signTypedData_v4', 'eth_accounts', 'eth_chainId']);
 });
 test('G10 cancellation while account recheck is pending prevents the chain recheck and signing prompt', async () => {
   const wallet = new FakeWallet(), adapter = new EvmWalletAdapter(wallet, 'fake', await registry());

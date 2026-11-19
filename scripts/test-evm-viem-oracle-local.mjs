@@ -264,7 +264,7 @@ async function main() {
   const refund = escrowCallFor({ action: 'refund', escrow, tradeId: tokenId }).call;
   const refundHash = await sendTx(toTx(refund, third));
   // A mined refund must not replace finalized funded evidence prematurely.
-  const refundReceipt = await client.getTransactionReceipt({ hash: refundHash });
+  const refundReceipt = await client.waitForTransactionReceipt({ hash: refundHash, timeout: 10_000, pollingInterval: 50 });
   const refundHead = await client.getBlock({ blockTag: 'latest' });
   const refundFinalized = await client.getBlock({ blockTag: 'finalized' });
   check('token refund is successful at latest but remains above finalized height', refundReceipt.status === 'success' &&

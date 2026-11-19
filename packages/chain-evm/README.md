@@ -55,8 +55,10 @@ What it does not establish:
   Below `N` the header is still matched by height only, so a backend on a short fork can answer the receipt, the
   transaction and the header at that height consistently with each other but not with `H`'s chain. Binding older
   receipts to `H` needs a parent-hash walk or a state proof, and is not implemented.
-- Other readers. The wallet's payment preflight, submit and contract-acceptance reads and the recovery tool still pin
-  state by block number (tracked as a Lane A follow-up). This section covers `packages/chain-evm` only.
+- Other readers. The wallet's payment preflight, submit and contract-acceptance readers and the historical recovery
+  tool also pin state by canonical block hash. The transaction lifecycle passes its observed finalized hash to its
+  escrow-state reader, so that lookup cannot silently choose another block at the same height. Separate observations
+  still require honest RPC responses; no reader verifies state proofs or ancestry between independently read heights.
 
 Evidence for the node behaviour: the success path with the object form runs against real Anvil in CI through
 `npm run test:evm:viem` (Anvil 1.5.1) and `npm run test:evm:local` (Anvil 1.7.1). The refusal codes (-32001 for an

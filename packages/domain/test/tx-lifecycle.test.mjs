@@ -125,6 +125,30 @@ const outcome = async (env, intentId) => val(await env.life.reconcile(intentId))
 const close = env => { env.life.dispose(); env.journal.dispose(); env.vault.dispose(); };
 const never = () => new Promise(() => {});
 
+test('unknown-broadcast reconciliation keeps the finalized hash when asking for its escrow effect', async () => {
+  const env=await setup();
+  try {
+    env.chain.mine(2);env.chain.finalized=1;
+    const prepared=val(await env.life.prepare(fund()));
+    env.wallet.onSend=tx=>{env.chain.broadcast(tx);throw Error('lost broadcast result');};
+    err(await env.life.submit(prepared),'BROADCAST_UNKNOWN');env.chain.mine(2);
+    env.life.dispose();
+    const reader=env.chain.reader(),readState=reader.escrowState;
+    reader.escrowState=async(target,number,signal,expectedHash)=>{
+      // A height-only lookup can select the funded fork. The finalized header actually precedes
+      // funding; an anchor-aware read must retain that hash and observe the original absent state.
+      if(number==='1'&&expectedHash===undefined)return ok('funded');
+      if(number==='1')assert.equal(expectedHash,env.chain.blocks[1].hash);
+      return readState(target,number,signal,expectedHash);
+    };
+    env.life=createEvmTxLifecycle({journal:env.journal,reader,wallet:env.wallet.request,policy,retry});
+    await env.life.walletChanged({account:ACCOUNT,chainId:'31337',generation:1});
+    const result=await outcome(env,prepared.intentId);
+    assert.equal(result.outcome,'confirmed','fork-only funding must not receive finalized authority');
+    assert.equal(result.intent.state,'confirmed');assert.equal(env.wallet.sends,1);
+  }finally{close(env);}
+});
+
 test('happy path: reserve, send-started before the wallet, one send, hash recorded, confirmations then finalized', async () => {
   const env = await setup(), prepared = val(await env.life.prepare(fund()));
   assert.equal((await stored(env, prepared.intentId)).state, 'prepared');
