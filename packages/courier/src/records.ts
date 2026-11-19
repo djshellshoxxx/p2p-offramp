@@ -374,8 +374,9 @@ function parse(
       basis: names(["cooperative", "timeoutRefund"]),
     },
   };
+  if (typeof kind !== "string" || !Object.hasOwn(schemas, kind))
+    return stop("UNSUPPORTED_PROFILE");
   const schema = schemas[kind];
-  if (!schema) return stop("UNSUPPORTED_PROFILE");
   const raw = data(input, Object.keys(schema)),
     out: Record<string, unknown> = Object.create(null);
   for (const [field, read] of Object.entries(schema))

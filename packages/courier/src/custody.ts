@@ -495,13 +495,15 @@ export function authorizeRouteFields(options: {
   readonly nowSeconds: number;
 }) {
   return result(() => {
-    const p = evidenceOf(options.grant, options.verifier, "disclosure"),
+    const grant = options.grant,
+      p = evidenceOf(grant, options.verifier, "disclosure"),
       r = p.body,
       recipient = text(
         options.verifier.profile.parseKey(options.recipient),
         512,
       );
     if (
+      grant.classification !== "attributed-mutual-claim" ||
       r.recipient !== recipient ||
       r.legId !== hex(options.legId) ||
       r.purpose !== options.purpose ||
