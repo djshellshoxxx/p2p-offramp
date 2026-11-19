@@ -4,6 +4,20 @@
 
 **Status: active development.** Documentation here describes **main**, not an automatic combination of unmerged draft branches. Node `>=24`; Python 3.12 is used in CI for the spec inventory; a local Chromium installation is needed for browser checks. Foundry is needed for native EVM contract verification.
 
+## Recorded development checkpoint — November 18, 2026
+
+This guide is scoped to merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. The
+[documentation reconciliation](../consolidation/2026-11-18-documentation-reconciliation.md)
+separates merged D1, QR/release-trust, Solana consent, canonical EVM reader and formal
+tooling from draft wallet/localnet/native-recovery/browser stack #166–#168. Read those
+exact heads before duplicating their work. Older PR-specific examples below retain
+their historical source scope and do not describe the current open/merged inventory.
+
+The merged development-only formal classifier suite is `npm run test:formal:unit`.
+Its [runner documentation](../../scripts/formal/README.md) explains tool pins, bounded
+native/solver evidence, `PROOF_UNKNOWN` and the retained model gap. Passing its tests
+is not a formal proof or a release approval.
+
 ## Architecture / module map
 
 The application is a static React/TypeScript/Vite **client-first** shell under [`apps/web`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/apps/web). Local encrypted vault/session/storage and schema boundaries live in [`packages`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages): `schemas` (strict validation), `storage` (encrypted persistence), `identity`, `nostr-crypto`, `relay`, `messaging`, `domain` (review/state/intent journal), `exchange`, `chain-evm`, `security` and other isolated modules. EVM escrow proof/tests live in [`contracts/evm`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/contracts/evm) and [`packages/escrow-evm`](https://github.com/djshellshoxxx/p2p-offramp/tree/main/packages/escrow-evm). **Presence of a module is not evidence that it is wired into a trusted production build.**

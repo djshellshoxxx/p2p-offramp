@@ -1,0 +1,77 @@
+✖ independent review: registry-valid mixed-case dotted network ID survives recovery (4.039696ms)
+✖ independent review: registry-valid mixed-case dotted deployment ID survives recovery (1.984239ms)
+✖ independent review: registry-valid mixed-case dotted asset ID survives recovery (1.627573ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 283.285244
+
+✖ failing tests:
+
+test at packages/chain-solana/test/independent-recovery-compatibility.test.mjs:8:3
+✖ independent review: registry-valid mixed-case dotted network ID survives recovery (4.039696ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"error":{"code":"INVALID_INPUT","retryable":false,"action":"edit-input","correlationId":"fc9f9112572ef7eae0ba5bb5cff02f8b","messageKey":"core.error.invalid_input"}}
+  
+  false !== true
+  
+      at ok (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/support.mjs:39:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/independent-recovery-compatibility.test.mjs:26:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/chain-solana/test/independent-recovery-compatibility.test.mjs:8:3
+✖ independent review: registry-valid mixed-case dotted deployment ID survives recovery (1.984239ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"error":{"code":"INVALID_INPUT","retryable":false,"action":"edit-input","correlationId":"835804e3f3f3f21f080b4ca968693b87","messageKey":"core.error.invalid_input"}}
+  
+  false !== true
+  
+      at ok (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/support.mjs:39:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/independent-recovery-compatibility.test.mjs:26:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/chain-solana/test/independent-recovery-compatibility.test.mjs:8:3
+✖ independent review: registry-valid mixed-case dotted asset ID survives recovery (1.627573ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"error":{"code":"INVALID_INPUT","retryable":false,"action":"edit-input","correlationId":"15f2a776ae2b4d3160f0ae3c1aea0b3d","messageKey":"core.error.invalid_input"}}
+  
+  false !== true
+  
+      at ok (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/support.mjs:39:10)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/solana-independent-review/packages/chain-solana/test/independent-recovery-compatibility.test.mjs:26:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

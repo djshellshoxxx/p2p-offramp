@@ -1,0 +1,19 @@
+✔ independent ERC20 observer binds both token state tuples to exact canonical block hashes (4.221206ms)
+✔ independent ERC20 observer stops after cancellation at every RPC completion boundary (2.73978ms)
+✔ independent ERC20 observer refuses dispatch if a provider getter revokes ownership (0.98413ms)
+✔ independent ERC20 observer stops after revocation inside a hostile header descriptor trap (0.329145ms)
+✔ independent ERC20 observer bounds a hanging read and never resumes RPC after timeout (0.6315ms)
+✔ ERC20 funding reads exact owner/spender at canonical hashes and resets existing non-exact allowance (3.136215ms)
+✔ latest allowance can veto but never substitute for finalized allowance; both balances constrain funding (1.08398ms)
+✔ malformed token ABI, missing or oversized code and reorged headers fail without fallback (1.472043ms)
+✔ chain/genesis changes and revoked owner stop token state publication (0.83181ms)
+✔ token response accessors are not executed and code changes between anchors disable approval (0.595666ms)
+✔ approval commands cannot choose a token, spender, amount or raw transaction (0.363527ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 361.601855

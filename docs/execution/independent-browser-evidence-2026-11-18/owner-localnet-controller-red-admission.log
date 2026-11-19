@@ -1,0 +1,26 @@
+ok - independent encrypted profiles own distinct messaging identities and explicitly connect different external wallets
+ok - real encrypted take/offer/accept uses current D1 with four exact reviewed wallet signatures and no funding
+ok - durable encrypted chat reaches the independent peer without creating chain or fiat authority
+ok - cancelled preparation sends nothing; funding writes a durable marker and release requires explicit bank-receipt confirmation
+ok - seller release reaches canonical native escrow state after a new exact transaction review
+ok - unknown broadcast retains its null hash and marker; fresh-key restore reconciles native effect without resending or requiring fresh D1 acceptance for exits
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: wallet.connect: {"ok":false,"code":"UNAUTHORIZED","snapshot":{"version":1,"phase":"ready","profileIds":["1d4e01b6e1b10ee7646a3a2bedbade6f"],"profileId":"1d4e01b6e1b10ee7646a3a2bedbade6f","publicKey":"9e2686ffe1c7aa6090e4c1f0a54df7d61774784be13ee50a059cf884acb19d6d","wallet":{"account":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","chainId":"31337"},"relay":"open","ads":[{"key":"1eeff03821911c6994e27bfa8cb6dd2edd8051a92b6cac5ffe6cd4f4390be408:p2p-offramp:v1:c7f10662bbeb09aa61734659aef7a47fa277de56ae070310d49df6a64dd3e5a9","maker":"1eeff03821911c6994e27bfa8cb6dd2edd8051a92b6cac5ffe6cd4f4390be408","assetId":"native","amountBaseUnits":"1000000000000000","currency":"USD","expiresAtSeconds":"1795006029","own":false},{"key":"9e2686ffe1c7aa6090e4c1f0a54df7d61774784be13ee50a059cf884acb19d6d:p2p-offramp:v1:ff041d5e413a9682015069c5b5a7f18b54b96e277732329b1c34adfa96f68d85","maker":"9e2686ffe1c7aa6090e4c1f0a54df7d61774784be13ee50a059cf884acb19d6d","assetId":"native","amountBaseUnits":"1000000000000000","currency":"USD","expiresAtSeconds":"1795006030","own":true},{"key":"c75c1e9e31de93cb3b268c35aa00e9d78f0a1743f2656b98c7444c0c64fcf2d7:p2p-offramp:v1:6b9284abb9742536479bea2f67cc083c333a7b3f5e4a1120f06ba7aacf9a2ecd","maker":"c75c1e9e31de93cb3b268c35aa00e9d78f0a1743f2656b98c7444c0c64fcf2d7","assetId":"native","amountBaseUnits":"1000000000000000","currency":"USD","expiresAtSeconds":"1795006027","own":false}],"sessions":[],"trades":[{"id":"80c76a8719a71677693ec15aa969749fae9820f06af5993dbc6702b00a0000e5","sessionId":null,"role":"seller","restored":true,"seller":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","buyer":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","assetId":"native","amountBaseUnits":"1000000000000000","fiatCurrency":"USD","fiatMinorUnits":"2500","fiatScale":2,"paymentInstructions":"SYNTHETIC private bank instructions only for local test funds.","acceptBeforeSeconds":"1795003330","escrowExpirySeconds":"1795006030","peerAcceptance":"recheck-required","chainState":null,"chainObservedAtMs":null,"intents":[{"id":"Sh37LKnTQs8QrxeEh36i2w0g2jw0q7Z2B8o7OlxW-Ys","action":"fund","state":"prepared","hash":null}],"chat":[],"canFund":false,"canRelease":false,"canRefund":false}],"review":null,"error":"UNAUTHORIZED"}}
+
+false !== true
+
+    at Object.command (file:///workspace/scratch/07167523f342/browser-work/scripts/test-localnet-controller.mjs:101:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///workspace/scratch/07167523f342/browser-work/scripts/test-localnet-controller.mjs:225:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

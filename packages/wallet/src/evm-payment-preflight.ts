@@ -86,6 +86,8 @@ function hash(input: unknown): string {
   return typeof input === 'string' && input.length === 66 ? text(input.toLowerCase(), HASH) : stop('INTEGRITY_FAILURE');
 }
 interface Block { readonly number: string; readonly hash: string; readonly timestamp: string }
+interface StateBlock { readonly blockHash: string; readonly requireCanonical: true }
+const stateAt = (anchor: Block): Readonly<StateBlock> => Object.freeze({ blockHash: anchor.hash, requireCanonical: true });
 function block(raw: unknown): Readonly<Block> {
   if (raw === null) return stop('UNAVAILABLE');
   const timestamp = quantity(field(raw, 'timestamp'));
@@ -161,24 +163,26 @@ export function createEvmPaymentPreflight(options: EvmPaymentPreflightOptions): 
             if (quantity(await call('eth_chainId', [])) !== chainId) return stop('WRONG_CHAIN');
             const initialGenesis = block(await call('eth_getBlockByNumber', ['0x0', false]));
             if (initialGenesis.number !== '0' || initialGenesis.hash !== genesis) return stop('WRONG_CHAIN');
-            const finalized = block(await call('eth_getBlockByNumber', ['finalized', false])), tag = hex(finalized.number);
+            const finalized = block(await call('eth_getBlockByNumber', ['finalized', false])), tag = hex(finalized.number), finalizedAt = stateAt(finalized);
             if (!sameBlock(finalized, block(await call('eth_getBlockByNumber', [tag, false])))) return stop('INTEGRITY_FAILURE');
-            if (runtimeHash(await call('eth_getCode', [escrow, tag])) !== codeDigest) return stop('INTEGRITY_FAILURE');
-            if (hash(await call('eth_call', [{ to: idCall.to, data: idCall.data }, tag])) !== `0x${termsHash}`) return stop('INTEGRITY_FAILURE');
-            const readTradeAt = async (blockTag: string) => {
-              const rawTrade = await call('eth_call', [{ to: tradeCall.to, data: tradeCall.data }, blockTag]);
+            if (runtimeHash(await call('eth_getCode', [escrow, finalizedAt])) !== codeDigest) return stop('INTEGRITY_FAILURE');
+            if (hash(await call('eth_call', [{ to: idCall.to, data: idCall.data }, finalizedAt])) !== `0x${termsHash}`) return stop('INTEGRITY_FAILURE');
+            const readTradeAt = async (anchored: Readonly<StateBlock>) => {
+              const rawTrade = await call('eth_call', [{ to: tradeCall.to, data: tradeCall.data }, anchored]);
               if (typeof rawTrade !== 'string' || rawTrade.length !== 386) return stop('INTEGRITY_FAILURE');
               try { return decodeTrade(rawTrade); } catch { return stop('INTEGRITY_FAILURE'); }
             };
-            const trade = await readTradeAt(tag);
-            // Finalized funding remains the state proof. A lagging finalized clock
+            const trade = await readTradeAt(finalizedAt);
+            // Finalized funding remains the native evidence. A lagging finalized clock
             // must never enlarge the payment window relative to the current chain.
             const latest = block(await call('eth_getBlockByNumber', ['latest', false]));
             if (BigInt(latest.number) < BigInt(finalized.number) || BigInt(latest.timestamp) < BigInt(finalized.timestamp) ||
                 latest.number === finalized.number && !sameBlock(latest, finalized)) return stop('INTEGRITY_FAILURE');
             // A settlement can be visible before finality. Latest state may hide
             // guidance, but cannot substitute for the finalized funding proof.
-            const latestTrade = await readTradeAt(hex(latest.number));
+            // Hash binding prevents a load-balanced backend from answering the same height on another fork.
+            // Unsupported EIP-1898 parameters fail closed; there is no number-based fallback.
+            const latestTrade = await readTradeAt(stateAt(latest));
             if (!sameBlock(finalized, block(await call('eth_getBlockByNumber', [tag, false])))) return stop('INTEGRITY_FAILURE');
             if (quantity(await call('eth_chainId', [])) !== chainId) return stop('WRONG_CHAIN');
             const finalGenesis = block(await call('eth_getBlockByNumber', ['0x0', false]));

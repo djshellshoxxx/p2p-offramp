@@ -1,0 +1,25 @@
+✔ independent review: locking redacts the document projection before worker acknowledgement (4.31151ms)
+✔ independent review: a pre-lock worker snapshot cannot republish private data while locking (0.290097ms)
+✔ independent review: a review cannot grant a signing method outside the bridge protocol (0.180131ms)
+✔ independent review: invalidation from a provider request getter prevents the physical prompt (0.320733ms)
+✔ independent review: only the current explicit opening result can restore a private projection (4.706244ms)
+✔ independent review: lock supersedes a queued opening result (0.349787ms)
+✔ independent review: a full document command queue cannot prevent a lock command (0.526663ms)
+✔ localnet bridge refuses signatures, sends and account prompts without the corresponding explicit grant (0.915819ms)
+✔ localnet review snapshots exact payloads, consumes a finite queue, and cannot authorize a changed transaction (0.294023ms)
+✔ physical wallet prompt remains exclusive after revocation until the provider settles (0.217948ms)
+✔ review expiry and cancellation cannot be refreshed by read-only calls (0.547394ms)
+✔ localnet command schema refuses raw vault/wallet operations, accessor payloads and unbounded input (0.523408ms)
+✔ single localnet relay route binds the exact logical URL and only the validated build destination (0.424889ms)
+✔ worker-private canonical profile stores only encrypted rows, reopens the same messaging identity, and clears every projection on lock (179.626316ms)
+✔ fresh-key restore authenticates and rebinds one messaging identity while retaining the original encrypted profile (420.672578ms)
+✔ Worker idle expiry invalidates profile, secret projections and review without relying on a document timer (81.339048ms)
+✔ lock during pending vault creation prevents a late private session or encrypted profile from being installed (83.036292ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1229.730014

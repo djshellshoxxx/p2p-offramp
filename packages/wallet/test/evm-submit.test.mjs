@@ -99,3 +99,31 @@ test('every reader operation normalizes hostile thrown prototypes without escapi
     assert.doesNotMatch(JSON.stringify(result),/PRIVATE|https|private\.invalid/);
   }
 });
+
+test('lifecycle state reads cannot pair a majority header with a forked backend escrow effect', async () => {
+  const forkHash=`0x${'fa'.repeat(32)}`, terms=sets.native.terms;
+  const released='0x'+[terms.seller,terms.escrowExpirySeconds,2,terms.buyer,terms.asset,terms.amountBaseUnits].map(word).join('');
+  for(const operation of ['observation','state']){
+    let stateReads=0;
+    const p=provider({eth_call:params=>{
+      stateReads++;
+      // Only the fork has released; H still has a funded trade. Number lookup on the fork is valid,
+      // but the majority hash is unknown there and must be refused instead of relabeling its state.
+      const at=params[1];
+      if(typeof at==='object'&&at.blockHash!==forkHash)throw Object.assign(new Error('PRIVATE unknown canonical block'),{code:-32001});
+      return released;
+    }});
+    const reader=createEip1193ChainReader({request:p.request,escrow:ESCROW});
+    const result=operation==='observation'?await reader.escrowObservation(binding,{signal,generation:1,requestSequence:1}):await reader.escrowState(binding,'16',signal);
+    assert.equal(result.ok,false,`${operation} must not accept state from the other fork`);
+    assert.equal(result.error.code,'UNAVAILABLE');assert.doesNotMatch(JSON.stringify(result),/PRIVATE/);
+    assert.equal(stateReads,1,'no number fallback or retry');
+  }
+});
+
+test('an expected finalized block hash cannot be replaced by another header at the same height', async () => {
+  const p=provider(),reader=createEip1193ChainReader({request:p.request,escrow:ESCROW});
+  const result=await reader.escrowState(binding,'16',signal,`0x${'fa'.repeat(32)}`);
+  assert.equal(result.ok,false);assert.equal(result.error.code,'INTEGRITY_FAILURE');
+  assert.equal(p.calls.includes('eth_call'),false,'mismatched finality anchor is rejected before state access');
+});

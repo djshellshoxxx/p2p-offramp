@@ -174,6 +174,24 @@ test('WRONG_CHAIN: terms-{genesis,program}', () => {
   assert.equal(ok(bind(sol())).deployment.address, PROGRAM);
 });
 
+// Spec §5 pre-RPC order: with two faults, the earlier step's code wins (terms, registry, chain identity, asset,
+// buyer, native amount). Every other negative case has one fault, so only these pin the order.
+test('two-fault-cases-follow-the-pre-RPC-order', () => {
+  const missing = terms => ({ ...bindingOf(terms), deploymentId: 'missing' });
+  error(bind({ ...sol(), extra: '1' }, missing(sol())), 'INVALID_INPUT');
+  error(bind(sol(), { ...missing(sol()), tradeId: 'ab'.repeat(32) }), 'INVALID_INPUT');
+  const otherChain = sol({ genesisHash: key('other-genesis') });
+  error(bind(otherChain, missing(otherChain)), 'UNSUPPORTED_PROVIDER');
+  error(bind(spl({ genesisHash: key('other-genesis'), mint: key('unlisted') })), 'WRONG_CHAIN');
+  const base = sol(),
+    escrow = escrowPda(base.seller, base.sellerNonce).address;
+  const tokenOnly = makeRegistry({ deployment: { supportedAssetIds: ['usd6'] } });
+  error(bind(sol({ buyer: escrow }), undefined, tokenOnly), 'UNSUPPORTED_PROVIDER');
+  const big = String(2 ** 53);
+  error(bind(sol({ amountBaseUnits: big, buyer: escrow })), 'INVALID_INPUT');
+  error(bind(sol({ amountBaseUnits: big }), undefined, tokenOnly), 'UNSUPPORTED_PROVIDER');
+});
+
 test('LIMIT_EXCEEDED: native-2^53', () => {
   error(bind(sol({ amountBaseUnits: String(2 ** 53) })), 'LIMIT_EXCEEDED');
   assert.equal(ok(bind(sol({ amountBaseUnits: String(2 ** 53 - 1) }))).terms.amountBaseUnits, String(2 ** 53 - 1));

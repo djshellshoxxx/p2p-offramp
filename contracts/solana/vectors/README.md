@@ -20,3 +20,28 @@ Written without reference to the Rust program, so a Rust test can cross-check it
 - ATA and Token program IDs are known constants, not verified on disk
   (`idsSource: known-constant-unverified-on-disk`).
 - Deterministic: no randomness, no network. Only `generator.node` varies with Node version.
+
+## Peer-acceptance vectors (B1c)
+
+Independent Python implementation of the Solana peer-acceptance formats in
+[`packages/chain-solana/docs/acceptance.md`](../../../packages/chain-solana/docs/acceptance.md), written from that
+document and not from the TypeScript source. It signs with OpenSSL Ed25519 through `cryptography` and checks every
+expected outcome with its own strict decoder, verifier and replay-ledger model before it writes the fixture.
+
+- `acceptance.py` - generator and independent implementation (`--write`, `--check [FIXTURE]`, `--agave-cli PATH`)
+- `peer-acceptance-v1.json` - frozen fixture (`p2p-offramp/solana/peer-acceptance-vectors/v1`): 4 positive,
+  4 variant, 47 negative, 33 decoding vectors and 10 ledger scenarios
+- Generator: CPython 3.12 with `cryptography` 50.0.0 (hash-pinned in `scripts/tests/requirements-crypto.txt`)
+- Fixture SHA-256: `4ecfe5131e5d0999178177a01143324ebd853b9f08acd54b092f0c8cf66eaf5c`
+
+Every wallet and messaging key is derived from a public label: **TEST-ONLY synthetic data, never for funds.**
+Genesis, program and mint are the synthetic `localnet` values; `otherv1`/`other` variants are synthetic too.
+
+    /opt/tools/venv-oracle/bin/python -I contracts/solana/vectors/acceptance.py --check   # exit 1 if stale
+    /opt/tools/venv-oracle/bin/python -I contracts/solana/vectors/acceptance.py --write   # regenerate, then update the hash
+    /opt/tools/venv-oracle/bin/python -I contracts/solana/vectors/acceptance.py --agave-cli /opt/tools/solana-release/bin/solana
+
+`packages/chain-solana/test/acceptance-vectors.test.mjs` (in `npm test`) reproduces the fixture byte for byte in
+TypeScript; `scripts/tests/test_solana_peer_acceptance_vectors.py` (in `npm run test:specs`) reruns the check. The
+optional `--agave-cli` step confirms that Agave 4.1.2's `solana sign-offchain-message` produces exactly the
+`offchain-v0-agave-cli` negative signature (checked locally on 2026-11-18; not run in CI).

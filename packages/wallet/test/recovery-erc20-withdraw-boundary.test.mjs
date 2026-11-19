@@ -97,7 +97,10 @@ test('G12 historical ERC-20 deferred withdrawal is bound to on-chain recipient a
       const reads = calls.slice(start).filter(call => call.method === 'eth_call');
       assert.ok(reads.some(call => call.params[0].data === buildPendingWithdrawals(escrow, recipient, TOKEN).data));
       assert.equal(reads.some(call => call.params[0].data === buildPendingWithdrawals(escrow, recipient, ZERO).data), false);
-      assert.ok(reads.every(call => call.params[1] === '0x11'), 'trade and credit reads must share one pinned block');
+      for (const read of reads) {
+        assert.deepEqual(read.params[1], { blockHash: '0x' + '13'.repeat(32), requireCanonical: true },
+          'trade and credit reads must share the exact canonical block hash');
+      }
     }
 
     // Changing the asset, removing the credit, or observing nonterminal state

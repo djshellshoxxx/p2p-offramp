@@ -1,0 +1,27 @@
+ok - independent encrypted profiles own distinct messaging identities and explicitly connect different external wallets
+ok - real encrypted take/offer/accept uses current D1 with four exact reviewed wallet signatures and no funding
+ok - durable encrypted chat reaches the independent peer without creating chain or fiat authority
+ok - cancelled preparation sends nothing; funding writes a durable marker and release requires explicit bank-receipt confirmation
+ok - seller release reaches canonical native escrow state after a new exact transaction review
+ok - unknown broadcast retains its null hash and marker; fresh-key restore reconciles native effect without resending or requiring fresh D1 acceptance for exits
+ok - abandoned funding review reconciles after lock/reopen without demanding the lost ephemeral D1 session or authorizing resubmission
+ok - abandoned release review expires through native reconciliation after lock/reopen and does not prevent a fresh funded exit
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: native expiry enables refund even while the browser clock is two minutes behind
+
+false !== true
+
+    at file:///workspace/scratch/07167523f342/browser-work/scripts/test-localnet-controller.mjs:168:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

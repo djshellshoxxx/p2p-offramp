@@ -45,7 +45,7 @@ async function fixture(overrides = {}) {
       }
       case 'eth_getCode': return state.code;
       case 'eth_call': return args.params[0].data.startsWith(state.tradeIdSelector ?? '0x00') ? `0x${binding.tradeId}` :
-        args.params[1] === uint(state.latestHeight) && state.latestHeight !== 16 ?
+        (args.params[1] === uint(state.latestHeight) || args.params[1]?.blockHash === state.latestHash) && state.latestHeight !== 16 ?
           encodedTrade(state.latestPhase ?? state.phase, state.latestStored ?? state.stored) : encodedTrade(state.phase, state.stored);
       default: assert.fail(`Unexpected read method ${args.method}`);
     }
@@ -65,8 +65,8 @@ test('canonical finalized funded state yields read-only guidance; every call is 
   assert.ok(Object.isFrozen(value)); assert.ok(Object.isFrozen(value.binding));
   const allowed = new Set(['eth_chainId', 'eth_getBlockByNumber', 'eth_getCode', 'eth_call']);
   assert.ok(f.calls.every(call => allowed.has(call.method)));
-  assert.ok(f.calls.filter(call => call.method === 'eth_getCode' || call.method === 'eth_call' && call.params[0].data.startsWith(f.state.tradeIdSelector)).every(call => call.params[1] === '0x10'));
-  assert.deepEqual(f.calls.filter(call => call.method === 'eth_call' && !call.params[0].data.startsWith(f.state.tradeIdSelector)).map(call => call.params[1]), ['0x10', '0x11']);
+  assert.ok(f.calls.filter(call => call.method === 'eth_getCode' || call.method === 'eth_call' && call.params[0].data.startsWith(f.state.tradeIdSelector)).every(call => call.params[1].blockHash === ANCHOR && call.params[1].requireCanonical === true));
+  assert.deepEqual(f.calls.filter(call => call.method === 'eth_call' && !call.params[0].data.startsWith(f.state.tradeIdSelector)).map(call => call.params[1]), [{blockHash:ANCHOR,requireCanonical:true}, {blockHash:OTHER,requireCanonical:true}]);
   assert.ok(f.calls.length <= 13); assert.deepEqual(good(f.reader.view()), value);
 });
 
@@ -92,11 +92,11 @@ test('latest funding cannot replace finalized funding and latest immutable misma
 
 test('malformed latest trade or a reorg during its read cannot produce guidance', async () => {
   for (const returned of ['0x', `0x${word(7).repeat(6)}`]) {
-    const f = await fixture({ intercept: args => args.method === 'eth_call' && args.params[1] === '0x11' ? returned : undefined });
+    const f = await fixture({ intercept: args => args.method === 'eth_call' && args.params[1]?.blockHash === OTHER ? returned : undefined });
     refused(await f.reader.read(), 'INTEGRITY_FAILURE'); refused(f.reader.view(), 'UNAVAILABLE');
   }
   const shifted = await fixture({ intercept: (args, state) => {
-    if (args.method === 'eth_call' && args.params[1] === '0x11') state.latestHash = ANCHOR;
+    if (args.method === 'eth_call' && args.params[1]?.blockHash === OTHER) state.latestHash = ANCHOR;
   } });
   refused(await shifted.reader.read(), 'INTEGRITY_FAILURE'); refused(shifted.reader.view(), 'UNAVAILABLE');
 });
@@ -260,4 +260,29 @@ test('timed-out reads hold the physical slot until drain, then permit a new expl
   refused(await reader.read(), 'TIMEOUT'); refused(await reader.read(), 'CONFLICT');
   release('0x7a69'); await new Promise(resolve => setImmediate(resolve)); f.state.intercept = undefined;
   assert.equal(good(await reader.read()).decision, 'allow-guidance');
+});
+
+test('forked RPC state cannot authorize fiat guidance under another finalized or latest anchor', async () => {
+  for (const target of ['finalized', 'latest']) {
+    const f = await fixture(target === 'finalized' ? { phase: 'absent', latestPhase: 'funded' } : { phase: 'funded', latestPhase: 'absent' });
+    const targetNumber = target === 'finalized' ? '0x10' : '0x11';
+    const targetHash = target === 'finalized' ? ANCHOR : OTHER;
+    const forkHash = `0x${'fa'.repeat(32)}`;
+    let forkReads = 0;
+    // Headers come from the majority chain. A state-read backend has a different canonical block
+    // at the same height: funded there, but absent at the header's actual hash.
+    f.state.intercept = args => {
+      if (args.method !== 'eth_call' || args.params[0].data.startsWith(f.state.tradeIdSelector)) return undefined;
+      const at = args.params[1];
+      if (at !== targetNumber && at?.blockHash !== targetHash) return undefined;
+      forkReads++;
+      if (typeof at === 'object' && at.blockHash !== forkHash) throw Object.assign(new Error('PRIVATE unknown canonical block'), { code: -32001 });
+      return '0x' + [f.terms.seller, f.terms.escrowExpirySeconds, 1, f.terms.buyer, f.terms.asset, f.terms.amountBaseUnits].map(word).join('');
+    };
+    try {
+      refused(await f.reader.read(), 'UNAVAILABLE');
+      refused(f.reader.view(), 'UNAVAILABLE');
+      assert.equal(forkReads, 1, 'no retry or block-number fallback may publish guidance');
+    } finally { f.reader.dispose(); }
+  }
 });
