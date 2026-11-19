@@ -66,7 +66,7 @@
     "apps/web/vite.config.ts": "c06238ffe63f31b89b3ae3ad2a09a4d52d735cce56c200b5d3b82279b05b0da4",
     "contracts/solana/README.md": "481abf01dbb8dc2f187b3ae0b0909f60b446418262c8780b9c360c9eb900426d",
     "contracts/solana/programs/basic-escrow/Cargo.toml": "598efb4e9e135d27e3ae651c5881e3ea7ec0e5bc9ce450a8488650ff0564d21d",
-    "contracts/solana/programs/basic-escrow/build.rs": "4d57c49052cd7f27bdda068c1d66d8cc5bea3e9b44b1647c0e04721cf5b7e8d8",
+    "contracts/solana/programs/basic-escrow/build.rs": "b387927cfae8dcb82e58b862eeee2ca693db24ce31f10a29ed3231eeb376d7c8",
     "contracts/solana/programs/basic-escrow/src/lib.rs": "25c06ba880e830aee0d373afb5a219b9cb7b78c71f928f56c6660b97f0d45268",
     "contracts/solana/programs/basic-escrow/src/network.rs": "bc0c8c2ff8a76277ac0d8893d6309fe3413a0f15576aad3091c38bf02837a9a3",
     "docs/consolidation/SOLANA_BROWSER_RECOVERY.md": "0a715e2518c84c8d9f871d2cf9b31c3041467fc15343afe890d13e059c911f2a",
@@ -97,7 +97,25 @@
     "restore-byte-bound-red.log": "eae47faae90262575ca237246817f28e012dd6186b9541e4eb55a62e94d89a88",
     "typecheck-four-projects.log": "a550ff26e5b128d5107b02fa16d34523af27e99e388c4cdbe322940fa5de93c3",
     "typecheck-ui-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "wallet-byte-bound-red.log": "481caff96521c8e1ab13a1f7cb12eb71a9bd777541671706c925c070997af454"
+    "wallet-byte-bound-red.log": "481caff96521c8e1ab13a1f7cb12eb71a9bd777541671706c925c070997af454",
+    "hosted-native-format-red.log": "cfaef9b112945c4a744150fd8fc927f971f0d3df03c16a96e9ad7548997b9a04"
   },
-  "logNormalization": "Trailing blank lines removed; other diagnostic content retained."
+  "logNormalization": "Trailing blank lines removed; other diagnostic content retained.",
+  "hostedFormatRepair": {
+    "failedHead": "99c7d497f73a183464ae8d379e6fa6bbbabf2599",
+    "checkoutMerge": "60084264e00dd11482d9bcb228b29a3978ccfd91",
+    "runId": 44481304515,
+    "jobId": 135413915190,
+    "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44481304515/job/135413915190",
+    "failure": "cargo fmt --check: two build.rs layout hunks",
+    "repair": "Applied exactly the Rust 1.98.1 formatter output. No workflow or gate changed. Non-whitespace tokens match after normalizing the optional trailing array comma.",
+    "localRustfmt": "UNAVAILABLE",
+    "hostedRetest": "PENDING",
+    "nativeStagesAfterFormat": "NOT_REACHED",
+    "passedBeforeFailure": [
+      "fresh npm ci --ignore-scripts; zero reported vulnerabilities",
+      "7 independent JavaScript vectors",
+      "pinned Agave and Anchor archive hashes"
+    ]
+  }
 }

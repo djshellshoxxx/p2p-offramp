@@ -3,11 +3,7 @@
 use std::{env, fs, path::PathBuf};
 
 fn main() {
-    for name in [
-        "P2P_SOLANA_BROWSER_FIXTURE",
-        "P2P_SOLANA_BROWSER_GENESIS_HEX",
-        "P2P_SOLANA_BROWSER_PROGRAM_ID",
-    ] {
+    for name in ["P2P_SOLANA_BROWSER_FIXTURE", "P2P_SOLANA_BROWSER_GENESIS_HEX", "P2P_SOLANA_BROWSER_PROGRAM_ID"] {
         println!("cargo:rerun-if-env-changed={name}");
     }
     if env::var_os("CARGO_FEATURE_BROWSER_LOCALNET").is_none() {
@@ -17,9 +13,8 @@ fn main() {
     assert_eq!(env::var("P2P_SOLANA_BROWSER_FIXTURE").as_deref(), Ok("local-validator-only"));
     let genesis = env::var("P2P_SOLANA_BROWSER_GENESIS_HEX").expect("actual local genesis is required");
     assert!(genesis.len() == 64 && genesis.bytes().all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)));
-    let bytes: Vec<u8> = (0..32)
-        .map(|i| u8::from_str_radix(&genesis[i * 2..i * 2 + 2], 16).expect("canonical genesis hex"))
-        .collect();
+    let bytes: Vec<u8> =
+        (0..32).map(|i| u8::from_str_radix(&genesis[i * 2..i * 2 + 2], 16).expect("canonical genesis hex")).collect();
     assert!(bytes.iter().any(|b| *b != 0));
     assert_ne!(bytes.as_slice(), b"genesis-hash:p2p-offramp:localv1");
     let program = env::var("P2P_SOLANA_BROWSER_PROGRAM_ID").expect("local program key is required");
