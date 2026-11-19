@@ -60,7 +60,7 @@ export async function world(t) {
   network.deployments[0].runtime.keccak256 = runtime;
   const registryJson = JSON.stringify(raw), config = await parseLocalnetConfig(localnetConfigDocument({ registryJson,
     registrySha256: createHash('sha256').update(registryJson).digest('hex'), escrowLayouts: { [runtime]: 'canonical-get-trade-v1' }, relayUrl: 'ws://127.0.0.1:18501/' }));
-  const chain = { now: 1_800_000_000, chainId: '0x7a69', code, counts: { signatures: 0, sends: 0, connects: 0 }, hold: null };
+  const chain = { now: 1_800_000_000, chainId: '0x7a69', code, codes: new Map(), escrows: new Map(), counts: { signatures: 0, sends: 0, connects: 0 }, hold: null };
   const accounts = KEYS.map(privateKeyToAccount), addresses = accounts.map(account => account.address.toLowerCase()), hub = relay(), parties = [];
   async function party(index, store = memoryStore()) {
     const listeners = new Map(), state = { account: addresses[index] }, calls = [];
@@ -77,8 +77,8 @@ export async function world(t) {
         if (method === 'eth_getBlockByNumber') return params[0] === '0x0'
           ? { number: '0x0', hash: network.genesisHash, timestamp: '0x1' }
           : { number: '0x10', hash: `0x${'12'.repeat(32)}`, timestamp: `0x${chain.now.toString(16)}`, transactions: [] };
-        if (method === 'eth_getCode') return params[0] === network.deployments[0].address ? chain.code : '0x';
-        if (method === 'eth_call') return `0x${'0'.repeat(384)}`;
+        if (method === 'eth_getCode') return params[0] === network.deployments[0].address ? chain.code : chain.codes.get(params[0]) ?? '0x';
+        if (method === 'eth_call') return chain.escrows.get(params[0].data.slice(10)) ?? `0x${'0'.repeat(384)}`;
         if (method === 'eth_blockNumber') return '0x10';
         if (method === 'eth_getTransactionCount') return '0x0';
         if (method === 'eth_getTransactionReceipt' || method === 'eth_getTransactionByHash') return null;

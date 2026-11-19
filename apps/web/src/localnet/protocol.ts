@@ -8,6 +8,7 @@ export type LocalnetCommand =
   | { readonly type: 'ad.publish'; readonly assetId: string; readonly amountBaseUnits: string; readonly currency: string }
   | { readonly type: 'ad.take'; readonly adKey: string }
   | { readonly type: 'session.select'; readonly sessionId: string }
+  | { readonly type: 'trade.resume'; readonly tradeId: string }
   | { readonly type: 'review.prepare'; readonly action: 'offer'; readonly sessionId: string; readonly fiatMinorUnits: string;
       readonly fiatScale: number; readonly paymentInstructions: string; readonly acceptForSeconds?: number; readonly escrowForSeconds?: number }
   | { readonly type: 'review.prepare'; readonly action: 'accept'; readonly sessionId: string }
@@ -40,6 +41,8 @@ export interface LocalnetTradeView {
   readonly fiatCurrency: string; readonly fiatMinorUnits: string; readonly fiatScale: number; readonly paymentInstructions: string;
   readonly acceptBeforeSeconds: string; readonly escrowExpirySeconds: string;
   readonly peerAcceptance: string;
+  readonly resumption: 'not-required' | 'required' | 'ready' | 'unavailable' | 'blocked';
+  readonly canResume: boolean;
   readonly chainState: 'absent' | 'funded' | 'released' | 'refunded' | null; readonly chainObservedAtMs: number | null;
   readonly intents: readonly { readonly id: string; readonly action: string; readonly state: string; readonly hash: string | null }[];
   readonly chat: readonly { readonly id: string; readonly direction: 'inbound' | 'outbound'; readonly text: string; readonly createdAt: number }[];

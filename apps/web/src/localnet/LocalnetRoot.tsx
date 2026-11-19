@@ -162,6 +162,15 @@ function Trade({ trade, busy, send }: { trade: LocalnetTradeView; busy: boolean;
       <dt>Peer acceptance</dt><dd>{trade.peerAcceptance}</dd>
     </dl>
     <h4>Private payment instructions</h4><p className="localnet-preserve" data-testid="payment-instructions">{trade.paymentInstructions}</p>
+    {trade.restored && trade.chainState === 'absent' && <section aria-label="Resume saved trade">
+      <p>Recheck this saved agreement before preparing a transaction. Resuming verifies the original wallet acceptances; it does not ask your peer to sign again or send a transaction.</p>
+      {trade.resumption === 'ready' ? <p role="status">The original agreement has been rechecked. Each allowance or funding transaction still needs its own review and wallet confirmation.</p> : <>
+        {trade.resumption === 'unavailable' && <p role="status">This backup has no complete bilateral acceptance proof. Start a new negotiation from Local offers; saved terms alone cannot authorize funding.</p>}
+        {trade.resumption === 'blocked' && <p role="status">The saved agreement could not be resumed. Check the wallet and network, refresh transaction recovery, or start a new negotiation if the original agreement expired or was withdrawn.</p>}
+        {!trade.canResume && <p className="helper">Connect the wallet listed for your role and refresh chain state. Resolve any pending transaction first. If the original acceptance or funding window has passed, start a new negotiation from Local offers.</p>}
+        <button disabled={busy || !trade.canResume} onClick={() => { void send({ type: 'trade.resume', tradeId: trade.id }); }}>Recheck and resume saved trade</button>
+      </>}
+    </section>}
     {trade.role === 'buyer' && <p className="helper">Refresh and verify that escrow is funded before following the agreed payment instructions. A chat message is not evidence of a bank payment.</p>}
     {trade.canRelease && <label className="checkbox-label"><input type="checkbox" checked={fiatReceived} onChange={event => setFiatReceived(event.target.checked)} />I checked my bank account and received the agreed fiat payment.</label>}
     {trade.tokenReadError && <p className="notice" role="status">Token allowance could not be checked. Refresh before preparing an approval or funding this trade.</p>}
