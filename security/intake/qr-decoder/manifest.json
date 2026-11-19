@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "observedDate": "2026-11-19",
+  "package": "jsqr",
+  "packageVersion": "1.4.0",
+  "license": "Apache-2.0",
+  "runtimeDependencies": [],
+  "registryUrl": "https://registry.npmjs.org/jsqr/1.4.0",
+  "tarball": {
+    "url": "https://registry.npmjs.org/jsqr/-/jsqr-1.4.0.tgz",
+    "bytes": 64745,
+    "sha256": "b5299b37917a1fe7a8cab9dd5cc6b8accf82663add80abe5bf7761a921cc6602",
+    "integrity": "sha512-dxLob7q65Xg2DvstYkRpkYtmKm2sPJ9oFhrhmudT1dZvNFFTlroai3AWSpLey/w5vMcLBXRgOJsbXpdN9HzU/A==",
+    "files": "tarball-files.json"
+  },
+  "source": {
+    "repository": "https://github.com/cozmo/jsQR",
+    "releaseGitHead": "49a9633931fb8030ac2fc9cecc121d6e5a19f9a3",
+    "path": "dist/jsQR.js",
+    "bytes": 256885,
+    "sha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859",
+    "npmAndUpstreamRuntimeBytesEqual": true,
+    "signedSourceProvenance": false
+  },
+  "applicationBoundary": {
+    "authority": "none",
+    "runtime": "dedicated-disposable-module-worker",
+    "network": false,
+    "privateVaultAccess": false,
+    "imageBytesMax": 2097152,
+    "imagePixelsMax": 2000000,
+    "imageEdgeMax": 4096,
+    "decodePixelsMax": 1000000,
+    "decodeEdgeMax": 1024,
+    "decodeDeadlineMilliseconds": 1000,
+    "decodedCandidateCharactersMax": 4096,
+    "acceptedEnvelopeBytesMax": 2048,
+    "fileBytesMax": 65536,
+    "ReleaseEnabled": 0
+  },
+  "audit": {
+    "command": "npm audit --omit=dev --package-lock-only --json",
+    "file": "runtime-audit-2026-11-19.json",
+    "sha256": "42d1a24ead6ccb74baeee473b945314b7f67b180beaab7ff956b5b7722c1c85b",
+    "knownRuntimeVulnerabilities": 0
+  },
+  "localDependencies": {
+    "freshNpmCi": "BLOCKED: exit137; cause unestablished",
+    "method": "physical-copy-of-existing-pinned-dependencies-plus-verified-cached-jsqr-archive",
+    "baseLockfileSha256": "8872a625711d1f38268be2b52d1b1645618bd5ee1b473e4770790cc24a9a2cda",
+    "sourceCheckoutModified": false,
+    "hostedFreshInstallRequired": true
+  },
+  "qualification": {
+    "independentScannerTest": "apps/web/test/qr-decoder-oracle.test.mjs",
+    "emittedBrowserGate": "npm run test:qr:browser",
+    "executionReport": "docs/execution/qr-public-flow-2026-11-19.md",
+    "physicalCamera": false,
+    "physicalDeviceQualification": false,
+    "releaseAcceptance": false
+  }
+}

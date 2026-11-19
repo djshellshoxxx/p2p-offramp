@@ -27,6 +27,13 @@ test('active cancellation stops every track, detaches preview and requires a new
   capture.dispose();
 });
 
+test('a second mounted owner cannot open another camera while the original stream is live', async () => {
+  const a = createCameraCapture({ request: async () => stream(), attach() {}, detach() {} });
+  const b = createCameraCapture({ request: async () => stream(), attach() {}, detach() {} });
+  try { assert.equal((await a.start()).ok, true); assert.equal((await b.start()).code, 'BUSY'); }
+  finally { a.dispose(); b.dispose(); }
+});
+
 test('provider failures and attach failures are fixed errors and cannot leak a live stream', async () => {
   const denied = createCameraCapture({ request: async () => { throw Error('private device details'); }, attach() {}, detach() {} });
   assert.deepEqual(await denied.start(), { ok: false, code: 'CAMERA_UNAVAILABLE' }); denied.dispose();
@@ -34,4 +41,11 @@ test('provider failures and attach failures are fixed errors and cannot leak a l
   const broken = createCameraCapture({ request: async () => active, attach() { throw Error('private detail'); }, detach() { throw Error('cleanup'); } });
   assert.equal((await broken.start()).code, 'CAMERA_UNAVAILABLE');
   assert.deepEqual(active.tracks.map(track => track.stops), [1, 1]); broken.dispose();
+});
+
+test('synchronous revocation by a requesting-state observer prevents the native permission side effect', async () => {
+  let requests = 0;
+  const capture = createCameraCapture({ request: async () => { requests++; return stream(); }, attach() {}, detach() {} });
+  capture.subscribe(() => { if (capture.getSnapshot().state === 'requesting') capture.cancel(); });
+  assert.equal((await capture.start()).code, 'CANCELLED'); assert.equal(requests, 0); capture.dispose();
 });

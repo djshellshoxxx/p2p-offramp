@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "date": "2026-11-19",
+  "base": "bf71ca1e5e8dbdd8c1f83d5fde3c9f4f8ad8ba1e",
+  "initialRedCommit": "6b12b0ac72f4d22084ff2f8b1e53a397719aad2b",
+  "scope": "Bounded local public QR display/capture/review/fingerprint comparison; no domain or economic authority",
+  "sourceHashAlgorithm": "SHA-256 of exact working-tree bytes; final Git commit/tree supplied by publication manifest",
+  "sourceFiles": [
+    {
+      "path": "apps/web/scripts/artifact-policy.test.mjs",
+      "bytes": 14021,
+      "sha256": "7286cd17c59666a6733650e1e857a35e12a6f7f9d32f2e95e78dd3fdf32e2780"
+    },
+    {
+      "path": "apps/web/scripts/build.mjs",
+      "bytes": 18010,
+      "sha256": "607f3c4728fd5653a65f6040337c467231ceca922fbed83ccbf2d5ef52d8a936"
+    },
+    {
+      "path": "apps/web/scripts/qr-build-policy.mjs",
+      "bytes": 5342,
+      "sha256": "09205d7bc3d67e65b97c5107037a8d8495c6da33f36cb5e0d6f487e85ba33077"
+    },
+    {
+      "path": "apps/web/scripts/qr-build-policy.test.mjs",
+      "bytes": 3818,
+      "sha256": "1209fe0734c32ce700102d5e8667488ea949b4912057b1ebc3f4ccb04f6be341"
+    },
+    {
+      "path": "apps/web/scripts/static-build-plugin.mjs",
+      "bytes": 8396,
+      "sha256": "1b78c44bf58f1630f091498c11c92e07a87921ad4a917ce035a01f3e0c55fba4"
+    },
+    {
+      "path": "apps/web/src/content-policy/local-policy.ts",
+      "bytes": 9998,
+      "sha256": "a05acc7dadd2ba64b629372d2766de33e1016afc4613be0bbf27cf75f40e34d2"
+    },
+    {
+      "path": "apps/web/src/qr/browser-image.ts",
+      "bytes": 2957,
+      "sha256": "1fba411008fd34acff7a3d60fcce25b0d12b318d7fdd935706d42dd741af083e"
+    },
+    {
+      "path": "apps/web/src/qr/capture-controller.ts",
+      "bytes": 3107,
+      "sha256": "850d2f9ab42f6b05b38dc5e0ba74c9102a084b1d5637fa356824adda8e986a80"
+    },
+    {
+      "path": "apps/web/src/qr/decode-client.ts",
+      "bytes": 5714,
+      "sha256": "d043dd3f4feed79bd90e9e0a0e590e56fb4c63b9dcf431613b8f3006c3e5ba10"
+    },
+    {
+      "path": "apps/web/src/qr/decode.worker.ts",
+      "bytes": 1574,
+      "sha256": "f6c61d744ecbe367a7e0c35b0e0c08733bd24f006302df8c3b2aba77ee21a2d2"
+    },
+    {
+      "path": "apps/web/src/qr/decoder.ts",
+      "bytes": 2156,
+      "sha256": "f7bc1e055be4d043781d802f038e036cdb969f44e7d3c94c30dcef11263a67b2"
+    },
+    {
+      "path": "apps/web/src/qr/display.tsx",
+      "bytes": 949,
+      "sha256": "699aa40bdb74866af6cad67671012aef71704146864722258ed55fc647c2db75"
+    },
+    {
+      "path": "apps/web/src/qr/file-input.ts",
+      "bytes": 1614,
+      "sha256": "d68825f7e6b4254ba8347081f1d562e09f9a8a9e22af2390543f2dfae1fd0b87"
+    },
+    {
+      "path": "apps/web/src/qr/image-header.ts",
+      "bytes": 4283,
+      "sha256": "d1550bcdb572139790366d8dd8807e3ab6a705be12b5ab15a9170e2ddc7983b6"
+    },
+    {
+      "path": "apps/web/src/qr/protocol.ts",
+      "bytes": 4451,
+      "sha256": "a2589f11f8190b094f83f1593426acc5c219c0b4ae4a355038fdf551be5475e9"
+    },
+    {
+      "path": "apps/web/src/qr/public-export.ts",
+      "bytes": 1403,
+      "sha256": "67ca903550a68605da704bbacde9b68024a60af80a21e2608a8800064a668e0f"
+    },
+    {
+      "path": "apps/web/src/qr/review-controller.ts",
+      "bytes": 12664,
+      "sha256": "4425a0be4a8b12aaeddab8952a6ec38d5c235325ecccaf900fe15892faa180ce"
+    },
+    {
+      "path": "apps/web/src/qr/trusted-context.ts",
+      "bytes": 1242,
+      "sha256": "fa639008c40425eef156eac385797213ede10a2cf47bc1bcb1fe6cf39492813a"
+    },
+    {
+      "path": "apps/web/src/ui/App.tsx",
+      "bytes": 8309,
+      "sha256": "0c0a920dbe8d9bbfa2c53d8c9a5e3d250ea10e71e3ec481bda35284160d03bd4"
+    },
+    {
+      "path": "apps/web/src/ui/QrPanel.tsx",
+      "bytes": 13163,
+      "sha256": "6f402228b9a6e449f6af96f326cfd2bf9d723bf3bb36f9466393d80664383d40"
+    },
+    {
+      "path": "apps/web/src/ui/app.css",
+      "bytes": 8743,
+      "sha256": "f8fa08632ae43b489ab9f7341834f8e81bda4a60d6fa8d8d33ec78235b569a30"
+    },
+    {
+      "path": "apps/web/src/ui/locale/en.ts",
+      "bytes": 65001,
+      "sha256": "eea477dc76f5ee33965635674ba97740353ac7b478ee8c139103de0519eedfc0"
+    },
+    {
+      "path": "apps/web/src/ui/qr-messages.ts",
+      "bytes": 995,
+      "sha256": "6a7b23b37bcec539b821e26645d9b87b0eb8ba36ca40d5d224dc888eab12fffd"
+    },
+    {
+      "path": "apps/web/test/qr-browser-oracle.test.mjs",
+      "bytes": 1006,
+      "sha256": "4bea3e3552ed02ff89693f567ab2464ae3ede8b6a3691619c4ba884da364e168"
+    },
+    {
+      "path": "apps/web/test/qr-camera.test.mjs",
+      "bytes": 3515,
+      "sha256": "b414a7cc6dd20be56a66ecc01b7e73375f6e442e70662709327c144f7cb50160"
+    },
+    {
+      "path": "apps/web/test/qr-decoder-oracle.test.mjs",
+      "bytes": 3859,
+      "sha256": "66e273c9d3ef90896ad887206e30e839611c1401becd39e9e1a59c9112dbbf75"
+    },
+    {
+      "path": "apps/web/test/qr-image.test.mjs",
+      "bytes": 6101,
+      "sha256": "be16ab99e378f6350090c34e53f8a9109088e38596a5eed422035e3aed5083dc"
+    },
+    {
+      "path": "apps/web/test/qr-review.test.mjs",
+      "bytes": 9077,
+      "sha256": "a0d6059e98c4458ebe19e69482662c9d3091a318b25e67dfd55ba9b783c78a43"
+    },
+    {
+      "path": "apps/web/test/qr-ui.test.mjs",
+      "bytes": 3179,
+      "sha256": "5a9b00a9474ed789c5cc12af13092e6578f55d7f0fbb83f3d652c2e68a5496e2"
+    },
+    {
+      "path": "apps/web/tsconfig.ui.json",
+      "bytes": 380,
+      "sha256": "56b753b405cd6630b5b3ffe680df66b0ec821c863765569f5c3ff3eecb4ca56b"
+    },
+    {
+      "path": "apps/web/tsconfig.worker.json",
+      "bytes": 169,
+      "sha256": "6731a046675c93755e017599e69c1b816c9f807668731b8e76593c1eab873502"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 57692,
+      "sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+    },
+    {
+      "path": "package.json",
+      "bytes": 6272,
+      "sha256": "17150d4d373d85edbe74f9dc33af56fd60015a09bf0835144ce84b38cf4da025"
+    },
+    {
+      "path": "packages/qr/README.md",
+      "bytes": 16735,
+      "sha256": "2e244d3e2fb020265e26b56735112434e34a35d218a546a6551f209645c79551"
+    },
+    {
+      "path": "packages/qr/src/qr-matrix.ts",
+      "bytes": 22751,
+      "sha256": "31c5a01cf34199b62463aa65a17bc94aec993adb81a35255875eb7ec8be68aa5"
+    },
+    {
+      "path": "packages/schemas/index.ts",
+      "bytes": 959,
+      "sha256": "d3246790ee5c8e4213611771c2e30c0b74d36a39094f28ab0ad18f03986cfa15"
+    },
+    {
+      "path": "scripts/lib/qr-browser-fixture.mjs",
+      "bytes": 12025,
+      "sha256": "16a314771306e326b7e35fc5c5a82795d11cff4c3dce7da8b7e18e118e11b79e"
+    },
+    {
+      "path": "scripts/test-qr-browser.mjs",
+      "bytes": 14045,
+      "sha256": "cfe6b958a3fb2675b76d99f4044afd23b9dfc4d2505de38d2acb56fac35a4961"
+    }
+  ],
+  "logs": [
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-red-initial.log",
+      "status": "RED",
+      "scope": "Initial review/camera/image tests before implementation",
+      "pass": 0,
+      "fail": 3,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-red-initial.log",
+      "originalBytes": 3751,
+      "originalSha256": "7f039841237bae8d788aef43df68d756b747c18ba5db253f7ab733872eaf6df4",
+      "viewerSha256": "7f039841237bae8d788aef43df68d756b747c18ba5db253f7ab733872eaf6df4"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-focused-first.log",
+      "status": "RED",
+      "scope": "Compare-before-confirm initially discarded the prior review",
+      "pass": 11,
+      "fail": 1,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-focused-first.log",
+      "originalBytes": 2144,
+      "originalSha256": "aa4d4ab5870e82d147ca3704f1650b6e167e0005d7fbe0e6706d41e1ca68dfc6",
+      "viewerSha256": "82b27e40c49d5dbeeab85862fc92d7bd66360d0d178d6864bcde293c0d67a360"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-red-camera-owner.log",
+      "status": "RED",
+      "scope": "A second owner could start during an existing live camera stream",
+      "pass": 3,
+      "fail": 1,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-red-camera-owner.log",
+      "originalBytes": 1276,
+      "originalSha256": "02cd4a4586008bfc2aca41a12185e89369ff7c6705e2f077a8b3cc69e64a6073",
+      "viewerSha256": "0437d5f58aeaf19620762b02b72a4e42faa3ee909ab2fd6df702e94cf6ac1050"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-red-review-findings.log",
+      "status": "RED",
+      "scope": "Reentrant Worker/input/scheduler revocation and BOM parity findings",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-red-review-findings.log",
+      "originalBytes": 5127,
+      "originalSha256": "6af6e242d1193877385d8b6001f7a677025d726bbe836519303b8c5e26c8c5e2",
+      "viewerSha256": "d05bd19f9093c38252b65493b32103d97fe4e82085e9de187546b0f8935f3178"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-review-findings-green.log",
+      "status": "PASS",
+      "scope": "Focused lifecycle/parity fixes",
+      "pass": 16,
+      "fail": 0,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-review-findings-green.log",
+      "originalBytes": 1843,
+      "originalSha256": "3368275e5d6bd360cd66433a5557cea11b67f0b77fd6b5d094e10f37cd5a7c98",
+      "viewerSha256": "3368275e5d6bd360cd66433a5557cea11b67f0b77fd6b5d094e10f37cd5a7c98"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-red-build-policy.log",
+      "status": "RED",
+      "scope": "Dedicated graph policy absent before implementation",
+      "pass": 0,
+      "fail": 1,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-red-build-policy.log",
+      "originalBytes": 1523,
+      "originalSha256": "ebe8abd2147110e0a4dadab77cff1cc40b2998b0296d31107e1319abd0f07bd9",
+      "viewerSha256": "ebe8abd2147110e0a4dadab77cff1cc40b2998b0296d31107e1319abd0f07bd9"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-final-refinements-red.log",
+      "status": "RED",
+      "scope": "Early pixel cleanup and graph authority claims failed; field labels already passed",
+      "pass": 1,
+      "fail": 2,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-final-refinements-red.log",
+      "originalBytes": 1802,
+      "originalSha256": "5cc304b2b1daf42feb4077ad7dd3f52cbeeed276c5131acc06ff7b22f316fa4c",
+      "viewerSha256": "5cc304b2b1daf42feb4077ad7dd3f52cbeeed276c5131acc06ff7b22f316fa4c"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-focused-oracle-first.log",
+      "status": "RED",
+      "scope": "Test rasterizer dropped odd final hex nibbles; UI assertion misread escaped attribute text",
+      "pass": 25,
+      "fail": 3,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-focused-oracle-first.log",
+      "originalBytes": 10586,
+      "originalSha256": "35ae77ad7ef628a7f9af9a17fa671ade787a620293137f8dc68c6f60de259b59",
+      "viewerSha256": "8a0ea8f0c886fd1caf6408df202f8ef595517a2821ac85c5223fcdf8b9dab01f"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-focused-oracle-second.log",
+      "status": "PASS",
+      "scope": "Fixed independent rasterizer and attribute assertion; all 25 frozen symbols decoded",
+      "pass": 28,
+      "fail": 0,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-focused-oracle-second.log",
+      "originalBytes": 3118,
+      "originalSha256": "cc126f968bc7014602cc966bda10ba6300270bd246da5d02b3a6c6558cfaeb7e",
+      "viewerSha256": "cc126f968bc7014602cc966bda10ba6300270bd246da5d02b3a6c6558cfaeb7e"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-affected-regressions.log",
+      "status": "PASS",
+      "scope": "Existing codec plus application, fixture oracle, locale and content-policy regressions",
+      "pass": 142,
+      "fail": 0,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-affected-regressions.log",
+      "originalBytes": 14801,
+      "originalSha256": "a54f3d526ee90f8a9a2b5e05823a9a8986bcfbc0f2d9394d8931c3b0b92efd2e",
+      "viewerSha256": "a54f3d526ee90f8a9a2b5e05823a9a8986bcfbc0f2d9394d8931c3b0b92efd2e"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-build-policy.log",
+      "status": "RED",
+      "scope": "Legacy synthetic test graphs lacked the real version/modules object shape",
+      "pass": 46,
+      "fail": 7,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-build-policy.log",
+      "originalBytes": 11377,
+      "originalSha256": "528db59a137da1d96843d0ed1ff86f34722defcbdb6ebf23b1beb6c65af7749c",
+      "viewerSha256": "528db59a137da1d96843d0ed1ff86f34722defcbdb6ebf23b1beb6c65af7749c"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-build-policy-second.log",
+      "status": "PASS",
+      "scope": "Graph fixture correction and explicit malformed-module-array refusal",
+      "pass": 53,
+      "fail": 0,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-build-policy-second.log",
+      "originalBytes": 6579,
+      "originalSha256": "0b93a8ccb778f8f161bd565ec1c0ae20095659e119f04c68aab92c3680ee72bf",
+      "viewerSha256": "0b93a8ccb778f8f161bd565ec1c0ae20095659e119f04c68aab92c3680ee72bf"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-default-build-first.log",
+      "status": "RED",
+      "scope": "Locale catalog refused hyphenated keys",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-default-build-first.log",
+      "originalBytes": 1704,
+      "originalSha256": "4405f0b853b49330d6117ee8b614c55b315f398f7d54324fe4939a55020b404c",
+      "viewerSha256": "4405f0b853b49330d6117ee8b614c55b315f398f7d54324fe4939a55020b404c"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-typecheck-first.log",
+      "status": "RED",
+      "scope": "Worker library separation and CommonJS declaration interop before fixes",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-typecheck-first.log",
+      "originalBytes": 519,
+      "originalSha256": "63bbd40c7ea1328429d8e09a550e1ec2922a792d6a603e29b3926917bcaa43c9",
+      "viewerSha256": "63bbd40c7ea1328429d8e09a550e1ec2922a792d6a603e29b3926917bcaa43c9"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-typecheck-locale-mapping-red.log",
+      "status": "RED",
+      "scope": "Duplicated mapped return type before named type alias",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-typecheck-locale-mapping-red.log",
+      "originalBytes": 597,
+      "originalSha256": "cc6509306aadcf6ed74ef486585aefa4ef7ae9375b659ca75cd41c03dea7f889",
+      "viewerSha256": "cc6509306aadcf6ed74ef486585aefa4ef7ae9375b659ca75cd41c03dea7f889"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-typecheck-final.log",
+      "status": "PASS",
+      "scope": "All four TypeScript projects",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-typecheck-final.log",
+      "originalBytes": 290,
+      "originalSha256": "6a12cffb65325525a02ae9c63237b4a5c732aa42302fa957e127eba5c566bfab",
+      "viewerSha256": "a550ff26e5b128d5107b02fa16d34523af27e99e388c4cdbe322940fa5de93c3"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-build-default-demo-final.log",
+      "status": "PASS",
+      "scope": "Final ordinary default and synthetic-demo emitted builds",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-build-default-demo-final.log",
+      "originalBytes": 2658,
+      "originalSha256": "c012a7ab5717617f92befdbc680eb079775e126b53c7ab8b53e0d3e202f3e3e1",
+      "viewerSha256": "f242f03cffc8caae0c6e3921ac5df5e78cbd78002ec9f48885bf30fdfb996506"
+    },
+    {
+      "path": "docs/execution/qr-public-evidence-2026-11-19/qr-emitted-browser-first.log",
+      "status": "BLOCKED",
+      "scope": "Default build passed; Chromium socket permission failed before first page",
+      "pass": null,
+      "fail": null,
+      "originalLocalPath": "/workspace/scratch/29ec534d969d/qr-emitted-browser-first.log",
+      "originalBytes": 9030,
+      "originalSha256": "32044f801c8226cedbde6eafb63815b6feb83ab4932873d7495f709ec04b0fcd",
+      "viewerSha256": "c9fbde104cd1202cfddb37931ddb25f513431ac9eb61f8085517cc61104081a2"
+    }
+  ],
+  "viewerNormalization": "Terminal CSI escapes, trailing line whitespace and trailing blank lines removed; no diagnostic lines or failures omitted",
+  "dependencies": {
+    "intake": "security/intake/qr-decoder/manifest.json",
+    "localFreshInstall": "BLOCKED exit137, cause unestablished; tool result retained in session; no standalone install log",
+    "localVerification": "Physical copy of pinned existing dependencies plus verified cached jsqr archive; source checkout unchanged",
+    "hostedFreshInstall": "PENDING"
+  },
+  "qualification": {
+    "affectedTests": {
+      "pass": 142,
+      "fail": 0,
+      "skip": 0
+    },
+    "buildPolicyTests": {
+      "pass": 53,
+      "fail": 0,
+      "skip": 0
+    },
+    "typecheckProjects": 4,
+    "defaultBuild": "PASS",
+    "demoBuild": "PASS",
+    "localnetBuild": "PASS within build-policy suite",
+    "independentScanner": {
+      "package": "jsqr",
+      "version": "1.4.0",
+      "frozenMatrices": 25,
+      "largestEnvelopeBytes": 2048,
+      "status": "PASS"
+    },
+    "actualBrowser": "BLOCKED before first page by Chromium socket() Operation not permitted",
+    "hostedBrowser": "PENDING; additive npm run test:qr:browser gate",
+    "physicalDevices": "NOT_RUN; docs/execution/qr-physical-device-matrix.json",
+    "independentSourceReview": "Current-byte review found no remaining High/Medium in reviewed runtime/UI; final checkpoint binding pending",
+    "ReleaseEnabled": 0,
+    "releaseAcceptance": false
+  },
+  "separateGates": [
+    "D6 invite signing-key profile and authenticated economic handoff",
+    "PR171 and PR172 Tier B bot reviews",
+    "Physical-device/camera/print/low-light qualification"
+  ]
+}

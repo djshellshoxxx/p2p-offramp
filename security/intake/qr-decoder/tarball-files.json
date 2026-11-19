@@ -1,0 +1,87 @@
+[
+  {
+    "path": "LICENSE",
+    "bytes": 11358,
+    "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08"
+  },
+  {
+    "path": "README.md",
+    "bytes": 5340,
+    "sha256": "00362bb63937bdc33e5f73c6e02c2543faf91479f9f8c775cdbc5c622c50f968"
+  },
+  {
+    "path": "dist/BitMatrix.d.ts",
+    "bytes": 395,
+    "sha256": "5d5c757869b22d5e7b7d8fa48be37d5f3cc746211b1169b48adf0c704a7bc7ef"
+  },
+  {
+    "path": "dist/binarizer/index.d.ts",
+    "bytes": 271,
+    "sha256": "6d9dab995aaf63c3ccb1f9e36da83831a28a59a85664cfd31fd2358faade5478"
+  },
+  {
+    "path": "dist/decoder/decodeData/BitStream.d.ts",
+    "bytes": 208,
+    "sha256": "17082bdb9f1bbfbbed24d9bf0a7d5e9e4f75d54fef9a86d001833eb4627f1302"
+  },
+  {
+    "path": "dist/decoder/decodeData/index.d.ts",
+    "bytes": 634,
+    "sha256": "2c6cd04aca6c96dffb8d4955a75bff4d209b18229ae3a0f281f9ff7ceb74867b"
+  },
+  {
+    "path": "dist/decoder/decodeData/shiftJISTable.d.ts",
+    "bytes": 68,
+    "sha256": "d235dad41e532f9b55c867465593737754a0e354e0e08ee896795841cc346794"
+  },
+  {
+    "path": "dist/decoder/decoder.d.ts",
+    "bytes": 146,
+    "sha256": "8165f08b3e16cc73dc65c9148579da48ba8c81ebffd2e4a898a83b03b013d85a"
+  },
+  {
+    "path": "dist/decoder/reedsolomon/GenericGF.d.ts",
+    "bytes": 582,
+    "sha256": "70fb54b68a7057c7d70ced5357703a853607767a68475f6203a4cdddfef26076"
+  },
+  {
+    "path": "dist/decoder/reedsolomon/GenericGFPoly.d.ts",
+    "bytes": 545,
+    "sha256": "c50268552de0f6eb8f9764a036327dcc89218bf4b0865d8ac50875ed31beab78"
+  },
+  {
+    "path": "dist/decoder/reedsolomon/index.d.ts",
+    "bytes": 82,
+    "sha256": "58eec81e801f769cc83535b314ac29b66e193baf98584f66daaa2ba636cfd2b0"
+  },
+  {
+    "path": "dist/decoder/version.d.ts",
+    "bytes": 351,
+    "sha256": "c9d8f4ed897a1de89e1fc91e9eb14afc8d1320389b54141d2c7c2eb134fc595e"
+  },
+  {
+    "path": "dist/extractor/index.d.ts",
+    "bytes": 278,
+    "sha256": "95863cac3dd7298e471e7e51d5726e81dcc616fa471a605149e7df278f30e9ef"
+  },
+  {
+    "path": "dist/index.d.ts",
+    "bytes": 762,
+    "sha256": "812910e685c1d4c9492dbedc840e03b0787504f371ef6580a8ad35728ee8a36f"
+  },
+  {
+    "path": "dist/jsQR.js",
+    "bytes": 256885,
+    "sha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859"
+  },
+  {
+    "path": "dist/locator/index.d.ts",
+    "bytes": 312,
+    "sha256": "d8784287f0209c097ed26305d2a91c76c6c1dad94dd6d58328fc8f375ca60a27"
+  },
+  {
+    "path": "package.json",
+    "bytes": 1524,
+    "sha256": "23850629144f70982bdefa89db822397fc14bc849d6ed18bf9ceeb72c0f2678f"
+  }
+]

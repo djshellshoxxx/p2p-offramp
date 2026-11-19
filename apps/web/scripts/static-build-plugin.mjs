@@ -3,6 +3,7 @@ import { relative, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { buildLocalnetContentPolicy, buildOfflineContentPolicy } from '../../../packages/security/src/content-policy.ts';
 import { inspectApplicationSource, inspectArtifactFiles, safeArtifactPath } from './artifact-policy.mjs';
+import { QR_DECODER_ENTRY, QR_DECODER_GRAPH, assertQrDecoderModule, assertNotQrDecoderModule, qrDecoderGraph } from './qr-build-policy.mjs';
 
 const escapeAttribute = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 export function offlinePolicy(delivery) {
@@ -29,6 +30,7 @@ const LOCALNET_DEPENDENCIES = /^node_modules\/@noble\/(?:curves|hashes|ciphers)\
 export const LOCALNET_WEBSOCKET_MODULE = 'packages/relay/src/pool.ts';
 /** Throws NON_CORE_MODULE / UNREVIEWED_DEPENDENCY for a repository-relative module path the profile does not admit. */
 export function assertModuleAdmitted(path, localnet = false) {
+  assertNotQrDecoderModule(path);
   if (localnet) {
     if (/^packages\/wallet\/src\/evm-/.test(path) && !LOCALNET_WALLET_MODULES.test(path)) throw new Error('NON_CORE_MODULE');
     // chain-evm and relay are admitted only at their own top-level package roots, never as nested look-alike paths.
@@ -70,22 +72,25 @@ export function staticBuildPlugin(repositoryRoot, delivery = 'meta', worker = fa
     },
     async generateBundle(_options, bundle) {
       const modules = [];
+      const repositoryPath = id => typeof id === 'string' ? relative(repositoryRoot, id.split('?')[0]).replaceAll('\\', '/') : '';
+      const qrDecoder = worker && [...this.getModuleIds()].some(id => repositoryPath(id) === QR_DECODER_ENTRY);
+      if (qrDecoder && profile !== null) throw new Error('QR_DECODER_SCOPE');
       for (const id of this.getModuleIds()) {
         const info = this.getModuleInfo(id);
         if (!info || info.isExternal) throw new Error('EXTERNAL_MODULE');
         if (id.startsWith('\0') || id.startsWith('vite/') || id.startsWith('rolldown:')) continue;
         const clean = id.split('?')[0];
         const path = relative(repositoryRoot, clean).replaceAll('\\', '/');
-        assertModuleAdmitted(path, profile !== null);
+        if (qrDecoder) assertQrDecoderModule(path); else assertModuleAdmitted(path, profile !== null);
         if (!/\.(?:[cm]?[jt]sx?|css|html)$/.test(clean)) throw new Error('UNREVIEWED_MODULE_TYPE');
         const source = await readFile(clean, 'utf8');
-        if (!path.startsWith('node_modules/') && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source, { allowWebSocketConstructor: profile !== null && path === LOCALNET_WEBSOCKET_MODULE });
+        if ((!path.startsWith('node_modules/') || qrDecoder) && /\.[jt]sx?$/.test(clean)) inspectApplicationSource(path, source, { allowWebSocketConstructor: profile !== null && path === LOCALNET_WEBSOCKET_MODULE });
         modules.push({ path, sha256: createHash('sha256').update(source).digest('hex') });
       }
       modules.sort((a, b) => a.path.localeCompare(b.path, 'en'));
-      const graph = { version: 1, scope: worker ? 'native-worker' : 'document', modules,
+      const graph = qrDecoder ? qrDecoderGraph(modules, bundle, repositoryPath) : { version: 1, scope: worker ? 'native-worker' : 'document', modules,
         frameworkDomInternals: 'React DOM contains internal HTML sink code. Application token checks and browser hostile-text probes are separate evidence.', completeXssProof: false };
-      this.emitFile({ type: 'asset', fileName: worker ? 'core-graph-worker.json' : 'core-graph-document.json', source: JSON.stringify(graph, null, 2) + '\n' });
+      this.emitFile({ type: 'asset', fileName: qrDecoder ? QR_DECODER_GRAPH : worker ? 'core-graph-worker.json' : 'core-graph-document.json', source: JSON.stringify(graph, null, 2) + '\n' });
       if (!worker) {
         this.emitFile({ type: 'asset', fileName: 'content-policy.json', source: JSON.stringify({ ...policy, releaseAcceptance: false, ReleaseEnabled: 0 }, null, 2) + '\n' });
         const headerPolicy = profile ? localnetPolicy('header', profile.relayOrigin) : offlinePolicy('header');

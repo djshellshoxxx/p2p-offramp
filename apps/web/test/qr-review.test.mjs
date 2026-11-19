@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { createQrReviewController } from '../src/qr/review-controller.ts';
 import { CandidateAttemptAdmission } from '../src/content-policy/local-policy.ts';
-import { createQrEnvelope, encodeQrText, MAX_QR_TEXT_LENGTH } from '../../../packages/qr/index.ts';
+import { createQrEnvelope, createReplayLedger, encodeQrText, MAX_QR_TEXT_LENGTH } from '../../../packages/qr/index.ts';
 import { INPUTS, NOW, CHAINS, deps, sha256, seededRandom } from '../../../packages/qr/test/helpers.mjs';
 
 const backupFixture = JSON.parse(await readFile(new URL('../../../packages/storage/test/fixtures/vault-python-v1.json', import.meta.url), 'utf8'));
@@ -22,7 +22,8 @@ async function textFor(type, label = type) {
 function fixture(options = {}) {
   let scope = 'profile-0', chains = [...CHAINS], now = NOW + 5;
   const controller = createQrReviewController({ context: () => ({ scope, chains }), sha256,
-    nowSeconds: () => now, randomBytes: seededRandom('app-qr'), admission: new CandidateAttemptAdmission(() => 0), ...options });
+    nowSeconds: () => now, randomBytes: seededRandom('app-qr'), admission: new CandidateAttemptAdmission(() => 0),
+    ledger: createReplayLedger({ nowSeconds: () => now }), ...options });
   return { controller, scope: value => { scope = value; }, chains: value => { chains = value; }, now: value => { now = value; } };
 }
 
@@ -61,6 +62,8 @@ test('file admission precedes reads, exact text is never trimmed and all bytes a
   const bytes = new TextEncoder().encode(text + '\n');
   assert.equal((await controller.readEnvelopeFile({ size: bytes.length, async arrayBuffer() { reads++; return bytes.buffer; } })).code, 'INVALID_ENCODING');
   assert.ok(bytes.every(byte => byte === 0)); assert.equal(reads, 1);
+  const bom = new TextEncoder().encode('\ufeff' + text);
+  assert.equal((await controller.readEnvelopeFile(file(bom))).code, 'FORMAT_UNSUPPORTED', 'file ingress must preserve a BOM so the exact-text codec refuses it');
   assert.equal((await controller.readEnvelopeFile(file(new TextEncoder().encode(text)))).ok, true);
   controller.dispose();
 });
@@ -120,4 +123,25 @@ test('backup fingerprint is exact opaque bytes, compares only after review, neve
   assert.equal((await controller.createFingerprint(file(new TextEncoder().encode('{"privateKey":"secret"}')), 'p2p-offramp-backup/v1')).code, 'FILE_FORMAT');
   assert.equal(controller.getSnapshot().review, null);
   controller.dispose();
+});
+
+test('owned camera pixels are wiped even when admission refuses before decoder work starts', async () => {
+  const frame = () => ({ width: 1, height: 1, pixels: new Uint8ClampedArray([91, 92, 93, 255]) });
+  const disposed = fixture().controller; disposed.dispose();
+  const missing = fixture().controller;
+  const noContext = fixture({ context() { throw Error('Unavailable context'); } }).controller;
+  for (const [controller, code] of [[disposed, 'CANCELLED'], [missing, 'UNAVAILABLE'], [noContext, 'UNAVAILABLE']]) {
+    const pixels = frame();
+    assert.equal((await controller.reviewPixels(pixels)).code, code);
+    assert.ok(pixels.pixels.every(byte => byte === 0), code);
+    controller.dispose();
+  }
+  const hashing = deferred();
+  const busy = fixture({ sha256: () => hashing.promise }).controller;
+  const pending = busy.reviewText(await textFor('recovery-fingerprint', 'pixels-busy'));
+  const pixels = frame();
+  try {
+    assert.equal((await busy.reviewPixels(pixels)).code, 'BUSY');
+    assert.ok(pixels.pixels.every(byte => byte === 0), 'busy admission');
+  } finally { busy.dispose(); hashing.resolve(new Uint8Array(32)); await pending; }
 });

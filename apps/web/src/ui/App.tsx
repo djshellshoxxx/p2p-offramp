@@ -7,6 +7,7 @@ import { Home, Recovery, Settings, UnavailablePage, pageTitle } from './Pages.ts
 import type { TradeReviewController } from '../trade/review-controller.ts';
 import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
+import { QrPanel } from './QrPanel.tsx';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
@@ -108,10 +109,10 @@ export function App({ services, starting = false, startupError, trade = null, di
         {pending ? <p role="status">{pending}</p> : null}
         {notice ? <p className="notice error" role="alert">{notice}</p> : null}
         {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
-          route.page === 'recovery' ? <Recovery services={services} onOpenRestored={id => {
+          route.page === 'recovery' ? <><Recovery services={services} onOpenRestored={id => {
             if (!isProfileId(id)) return;
             setRestoredProfileId(id); window.location.hash = '#/home';
-          }} /> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
+          }} /><QrPanel services={services} trade={trade} scope={scope} /></> : route.page === 'settings' ? <Settings diagnostics={diagnostics} services={services} scope={scope} /> :
           route.page === 'offers' ? <OffersPage trade={trade} store={store} /> : route.page === 'trade' ? <TradePage trade={trade} localId={route.localId} store={store} /> :
           <UnavailablePage page={route.page} />}
       </main>

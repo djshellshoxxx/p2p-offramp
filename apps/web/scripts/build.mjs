@@ -9,6 +9,7 @@ import { loadTestnetTrust, TESTNET_TRUST_FORMAT_PREFIX } from './testnet-trust.m
 import { isMain } from '../../../scripts/lib/is-main.mjs';
 import { buildLocalnetContentPolicy } from '../../../packages/security/src/content-policy.ts';
 import { LOCALNET_BANNER, LOCALNET_CONFIG_FORMAT, localnetConfigDocument, parseLocalnetConfig } from '../src/localnet/config.ts';
+import { completeQrWorkerLicense, inspectQrArtifact } from './qr-build-policy.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 /** Vite's document license report excludes dependencies bundled only in a native Worker. */
@@ -34,6 +35,7 @@ async function completeWorkerLicenses(directory) {
       if (existing.identifier !== 'MIT' || !existing.text?.includes('Permission is hereby granted')) throw new Error('LICENSE_ATTRIBUTION_MISSING');
     } else inventory.push({ name, version: manifest.version, identifier: manifest.license, text: license });
   }
+  await completeQrWorkerLicense(directory, inventory, resolve(root, '../../node_modules'));
   inventory.sort((a, b) => a.name.localeCompare(b.name, 'en') || a.version.localeCompare(b.version, 'en'));
   await writeFile(inventoryPath, JSON.stringify(inventory, null, 2) + '\n');
 }
@@ -99,6 +101,7 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
   const licenses = JSON.parse(files['third-party-licenses.json'] ?? 'null');
   if (!Array.isArray(licenses) || ['react', 'react-dom', 'scheduler'].some(name => !licenses.some(item => item.name === name && item.identifier === 'MIT' && typeof item.text === 'string' && item.text.includes('Permission is hereby granted')))) throw new Error('LICENSE_ATTRIBUTION_MISSING');
   for (const graph of ['core-graph-document.json', 'core-graph-worker.json']) if (!files[graph]) throw new Error('CORE_GRAPH_MISSING');
+  const qr = inspectQrArtifact(files, JSON.parse(files['core-graph-document.json']).modules, JSON.parse(files['core-graph-worker.json']).modules);
   if (localnet && (syntheticDemo || testnet)) throw new Error('LOCALNET_PROFILE_EXCLUSIVE');
   const graphPaths = ['core-graph-document.json', 'core-graph-worker.json'].flatMap(graph => {
     const modules = JSON.parse(files[graph]).modules;
@@ -121,7 +124,7 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
   const containsTestnet = testnetModules || Object.values(files).some(text => text.includes(TESTNET_TRUST_FORMAT_PREFIX));
   if (containsTestnet !== testnet) throw new Error(testnet ? 'TESTNET_TRUST_DATA_MISSING' : 'TESTNET_DATA_IN_NON_TESTNET_BUILD');
   return { version: 1, ReleaseEnabled: 0, syntheticDemo, testnet, signedRelease: false, releaseAcceptance: false, framingAttestation: false, inspection, assets,
-    ...(localnetEvidence ? { localnet: localnetEvidence } : {}) };
+    ...(localnetEvidence ? { localnet: localnetEvidence } : {}), ...(qr ? { qr } : {}) };
 }
 /**
  * `demo` is a meta-delivery build that additionally includes the synthetic local registry and samples. `testnet` is a

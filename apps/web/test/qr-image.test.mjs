@@ -56,3 +56,32 @@ test('decoder refuses inconsistent pixel dimensions before posting and validates
   listener({ data: { id: 999, ok: true, text: 'wrong request' } });
   assert.equal((await pending).code, 'DECODER_PROTOCOL'); client.dispose();
 });
+
+test('revocation inside Worker creation terminates the late returned physical Worker without posting', async () => {
+  for (const action of ['cancel', 'dispose']) {
+    let posts = 0, stops = 0, nested;
+    const worker = { addEventListener() {}, removeEventListener() {}, postMessage() { posts++; }, terminate() { stops++; } };
+    const other = createQrDecodeClient({ makeWorker: () => worker });
+    let client;
+    client = createQrDecodeClient({ makeWorker() {
+      client[action](); nested = other.decode({ width: 1, height: 1, pixels: new Uint8ClampedArray(4) });
+      return worker;
+    } });
+    assert.equal((await client.decode({ width: 1, height: 1, pixels: new Uint8ClampedArray(4) })).code, 'CANCELLED');
+    assert.equal((await nested).code, 'BUSY', 'physical admission remains held until the factory returns and its Worker stops');
+    assert.equal(posts, 0); assert.equal(stops, 1); client.dispose(); other.dispose();
+  }
+});
+
+test('revocation in input access and scheduling cannot start a stale decode', async () => {
+  let constructed = 0, client;
+  client = createQrDecodeClient({ makeWorker() { constructed++; throw Error('must not construct'); } });
+  const input = { get width() { client.dispose(); return 1; }, height: 1, pixels: new Uint8ClampedArray(4) };
+  assert.equal((await client.decode(input)).code, 'CANCELLED'); assert.equal(constructed, 0);
+  let posts = 0, stopped = 0, cleared = [];
+  const worker = { addEventListener() {}, removeEventListener() {}, postMessage() { posts++; }, terminate() { stopped++; } };
+  let second;
+  second = createQrDecodeClient({ makeWorker: () => worker, schedule() { second.cancel(); return 73; }, clear: id => cleared.push(id) });
+  assert.equal((await second.decode({ width: 1, height: 1, pixels: new Uint8ClampedArray(4) })).code, 'CANCELLED');
+  assert.equal(posts, 0); assert.equal(stopped, 1); assert.ok(cleared.includes(73)); second.dispose();
+});
