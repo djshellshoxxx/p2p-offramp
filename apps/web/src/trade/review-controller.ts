@@ -171,6 +171,14 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     try { bytes = await read(); } catch { bytes = 'FILE_UNREADABLE'; }
     if (!current()) { if(bytes instanceof Uint8Array)bytes.fill(0); return { kind: 'stale' }; }
     if (typeof bytes === 'string') { const job = { kind: 'rejected', code: bytes } as const; setJob(job); return job; }
+    // A FileLike can advertise a smaller size than its returned buffer; samples have no size
+    // metadata. Bound the actual byte count before making additional plaintext copies.
+    if (bytes.byteLength > MAX_TERMS_REVIEW_BYTES) {
+      bytes.fill(0);
+      const job = { kind: 'rejected', code: 'TOO_LARGE' } as const;
+      setJob(job);
+      return job;
+    }
     bytes=bytes.slice(); const original=bytes.slice(); transient.add(bytes); transient.add(original);
     setJob({ kind: 'busy', step: 'checking' });
     let result: TermsReviewResult;
@@ -208,7 +216,8 @@ export function createTradeReviewController(options: TradeReviewOptions): TradeR
     importFile(file: FileLike) {
       return run('file', async () => {
         // Size is checked before any bytes are read.
-        if (typeof file.size !== 'number' || file.size > MAX_TERMS_REVIEW_BYTES) return 'TOO_LARGE';
+        if (!Number.isSafeInteger(file.size) || file.size < 0) return 'FILE_UNREADABLE';
+        if (file.size > MAX_TERMS_REVIEW_BYTES) return 'TOO_LARGE';
         return new Uint8Array(await file.arrayBuffer());
       });
     },
