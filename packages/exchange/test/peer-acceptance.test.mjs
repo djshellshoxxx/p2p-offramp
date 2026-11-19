@@ -61,7 +61,8 @@ function fakePorts() {
         if (ports.tombstoneRefuse) return ports.tombstoneRefuse;
         tombstones.add(termsHash); return { ok: true, value: undefined };
       },
-      async status(termsHash) { calls.push({ port: 'status', termsHash }); return { ok: true, value: { tombstoned: tombstones.has(termsHash) } }; },
+      async status(termsHash) { calls.push({ port: 'status', termsHash }); return { ok: true, value: { tombstoned: tombstones.has(termsHash),
+        sellerRecorded: bindings.has(`${termsHash}:seller`), buyerRecorded: bindings.has(`${termsHash}:buyer`) } }; },
     },
   };
   return ports;
@@ -87,15 +88,16 @@ async function toTaken(w) {
   ok(await w.seller.ex.receive(take.recipientWrap, w.seller.secret));
   return take.sessionId;
 }
-async function toOffered(w) {
+async function toOffered(w, { selected = false } = {}) {
   const id = await toTaken(w), bytes = termsBytes();
+  if (selected) ok(w.seller.ex.select(id));
   const statement = ok(await w.seller.ex.acceptanceStatement(id, bytes, String(NOW + 5000)));
   const offer = ok(await w.seller.ex.offerWithAcceptance(id, bytes, wire(statement), w.seller.secret));
   const got = ok(await w.buyer.ex.receive(offer.recipientWrap, w.buyer.secret));
   return { id, offer, got, statement };
 }
-async function toAccepted(w) {
-  const offered = await toOffered(w), bytes = termsBytes();
+async function toAccepted(w, options) {
+  const offered = await toOffered(w, options), bytes = termsBytes();
   const statement = ok(await w.buyer.ex.acceptanceStatement(offered.id, bytes, String(NOW + 5000)));
   const accept = ok(await w.buyer.ex.acceptWithAcceptance(offered.id, bytes, wire(statement), w.buyer.secret));
   const done = ok(await w.seller.ex.receive(accept.recipientWrap, w.seller.secret));
@@ -440,4 +442,169 @@ test('the exchange package never imports a wallet module', async () => {
     const text = await readFile(new URL(file, root), 'utf8');
     for (const [, specifier] of text.matchAll(/(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g)) assert.doesNotMatch(specifier, /wallet|chain-evm|escrow/, `${file} imports ${specifier}`);
   }
+});
+
+// A checkpoint is encrypted, previously admitted history, not a new acceptance or a renewed deadline.
+function reopening(w, who, overrides = {}) {
+  return createTermsExchange({ provider, selfPublicKey: who.pub, ads: { revalidate() { throw Error('history must not reopen an advert'); } },
+    registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256,
+    peerAcceptance: { verifier: who.ports.verifier, replay: who.ports.replay }, ...overrides });
+}
+test('checkpoint: only complete accepted history is exported, with encrypted own and incoming wrappers', async () => {
+  const w = await world(), id = await toTaken(w);
+  fail(w.seller.ex.checkpoint(id), 'OUT_OF_ORDER');
+  const bytes = termsBytes(), statement = ok(await w.seller.ex.acceptanceStatement(id, bytes, String(NOW + 5000)));
+  const offer = ok(await w.seller.ex.offerWithAcceptance(id, bytes, wire(statement), w.seller.secret));
+  ok(await w.buyer.ex.receive(offer.recipientWrap, w.buyer.secret));
+  fail(w.seller.ex.checkpoint(id), 'OUT_OF_ORDER');
+  const buyer = ok(await w.buyer.ex.acceptanceStatement(id, bytes, String(NOW + 5000)));
+  const accept = ok(await w.buyer.ex.acceptWithAcceptance(id, bytes, wire(buyer), w.buyer.secret));
+  ok(await w.seller.ex.receive(accept.recipientWrap, w.seller.secret));
+  const seller = ok(w.seller.ex.checkpoint(id)), buyerCopy = ok(w.buyer.ex.checkpoint(id));
+  assert.equal(seller.format, 'p2p-offramp/exchange-checkpoint/v1');
+  assert.deepEqual(seller.history.map(item => item.type), ['terms-offer', 'terms-accept']);
+  assert.deepEqual(seller.history.map(item => item.wrap.id), [offer.selfWrap.id, accept.recipientWrap.id]);
+  assert.deepEqual(buyerCopy.history.map(item => item.wrap.id), [offer.recipientWrap.id, accept.selfWrap.id]);
+  assert.equal(seller.session.id, id); assert.equal(seller.session.role, 'seller');
+  assert.doesNotMatch(JSON.stringify(seller), /termsSignature|bindingSignature|abababab|paymentInstructions/);
+  assert.ok(Object.isFrozen(seller) && Object.isFrozen(seller.session) && Object.isFrozen(seller.history));
+  assert.ok(seller.history.every(item => Object.isFrozen(item) && Object.isFrozen(item.wrap)));
+  fail(w.seller.ex.checkpoint('missing'), 'UNKNOWN_SESSION');
+  const v1 = await world({ d1: false }); fail(v1.seller.ex.checkpoint('missing'), 'ACCEPTANCE_DISABLED');
+});
+test('checkpoint: both roles restore unchanged accepted history after envelope and advert expiry, seller first', async () => {
+  const w = await world(), r = await toAccepted(w);
+  for (const who of [w.seller, w.buyer]) {
+    const checkpoint = ok(who.ex.checkpoint(r.id)); who.ex.close();
+    w.clock.now = NOW + 1900;
+    const ex = reopening(w, who), before = who.ports.calls.length;
+    const restored = ok(await ex.restoreCheckpoint(checkpoint, who.secret));
+    assert.equal(restored.id, r.id); assert.equal(restored.state, 'accepted');
+    assert.equal(restored.terms.hash, r.statement.termsHash); assert.deepEqual(restored.terms.bytes, termsBytes());
+    const checks = who.ports.calls.slice(before).filter(call => call.port === 'verify').map(call => call.request);
+    assert.deepEqual(checks.map(request => request.role), ['seller', 'buyer']);
+    assert.ok(checks.every(request => request.envelopeExpiresAtSeconds === null && request.nowSeconds === w.clock.now));
+    assert.equal(ok(await ex.acceptanceStatus(r.id, 'fund')).state, 'both-verified');
+    assert.equal(ok(await ex.restoreCheckpoint(checkpoint, who.secret)).id, r.id, 'repeat restoration is idempotent');
+    assert.equal(ex.sessionCount, 1);
+    assert.equal((await ex.receive(r.accept.selfWrap, who.secret)).ok, who === w.buyer, 'own history is decrypted explicitly by restoration');
+    ex.close();
+  }
+});
+test('checkpoint: unordered history restores deterministically; repeated or missing messages are refused', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const reordered = structuredClone(checkpoint); reordered.history.reverse();
+  const ex = reopening(w, w.seller);
+  assert.equal(ok(await ex.restoreCheckpoint(reordered, w.seller.secret)).state, 'accepted');
+  for (const history of [[checkpoint.history[0]], [checkpoint.history[0], checkpoint.history[0]], [...checkpoint.history, checkpoint.history[0]]]) {
+    const fresh = reopening(w, w.seller); fail(await fresh.restoreCheckpoint({ ...checkpoint, history }, w.seller.secret), 'INVALID_INPUT');
+    assert.equal(fresh.sessionCount, 0); fresh.close();
+  }
+  ex.close();
+});
+test('checkpoint: restoration requires both durable bindings and never reconstructs acceptance from wire alone', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  w.seller.ports.bindings.delete(`${r.statement.termsHash}:buyer`);
+  const ex = reopening(w, w.seller), before = w.seller.ports.calls.filter(call => call.port === 'verify').length;
+  fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'ACCEPTANCE_REQUIRED');
+  assert.equal(w.seller.ports.calls.filter(call => call.port === 'verify').length, before);
+  assert.equal(ex.sessionCount, 0); assert.equal(w.seller.ports.bindings.has(`${r.statement.termsHash}:buyer`), false);
+  ex.close();
+});
+test('checkpoint: malformed context, chronology, wrappers, wrong identity and accessors fail without hydration', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const mutations = [
+    copy => { copy.session.id += 'x'; }, copy => { copy.session.buyerAddress = set.terms.seller; },
+    copy => { copy.history[0].admittedAtSeconds = NOW + 901; }, copy => { copy.history[0].admittedAtSeconds = NOW + 1; },
+    copy => { copy.history[0].wrap.content = 'corrupt'; }, copy => { copy.history[1].wrap = r.accept.selfWrap; },
+  ];
+  for (const mutate of mutations) {
+    const copy = structuredClone(checkpoint); mutate(copy); const ex = reopening(w, w.seller);
+    assert.equal((await ex.restoreCheckpoint(copy, w.seller.secret)).ok, false, mutate.toString()); assert.equal(ex.sessionCount, 0); ex.close();
+  }
+  const ex = reopening(w, w.seller); fail(await ex.restoreCheckpoint(checkpoint, w.buyer.secret), 'WRONG_SIGNER');
+  let touched = 0; const hostile = { ...checkpoint };
+  Object.defineProperty(hostile, 'session', { enumerable: true, get() { touched++; return checkpoint.session; } });
+  fail(await ex.restoreCheckpoint(hostile, w.seller.secret), 'INVALID_INPUT'); assert.equal(touched, 0); ex.close();
+});
+test('checkpoint: binding expiry and current verifier policy apply; the existing funding margin still refuses funding', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  w.clock.now = NOW + 5000 - 120;
+  let ex = reopening(w, w.seller); ok(await ex.restoreCheckpoint(checkpoint, w.seller.secret));
+  fail(await ex.acceptanceStatus(r.id, 'fund'), 'EXPIRED'); ex.close();
+  w.clock.now = NOW + 5000; ex = reopening(w, w.seller);
+  fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'EXPIRED'); assert.equal(ex.sessionCount, 0); ex.close();
+  w.clock.now = NOW; w.seller.ports.refuse = { ok: false, code: 'WRONG_CHAIN' }; ex = reopening(w, w.seller);
+  fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'ACCEPTANCE_REFUSED'); assert.equal(ex.sessionCount, 0); ex.close();
+});
+test('checkpoint: conflicting existing sessions are preserved and restored history reserves bounded session capacity', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const ex = createTermsExchange({ provider, selfPublicKey: w.seller.pub, ads: w.seller.book, registry, hashTerms,
+    now: () => w.clock.now, sha256: nodeSha256, peerAcceptance: { verifier: w.seller.ports.verifier, replay: w.seller.ports.replay } });
+  const buyer = createTermsExchange({ provider, selfPublicKey: w.buyer.pub, ads: w.buyer.book, registry, hashTerms,
+    now: () => w.clock.now, sha256: nodeSha256, peerAcceptance: { verifier: w.buyer.ports.verifier, replay: w.buyer.ports.replay } });
+  const take = ok(await buyer.take(w.key, set.terms.seller, w.buyer.secret)); ok(await ex.receive(take.recipientWrap, w.seller.secret));
+  fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'OUT_OF_ORDER'); assert.equal(ex.session(r.id).state, 'taken');
+  ex.close(); buyer.close();
+  const full = reopening(w, w.seller, { ads: w.seller.book, maxSessions: 1, maxSessionsPerAd: 1 });
+  const other = createTermsExchange({ provider, selfPublicKey: w.third.pub, ads: w.buyer.book, registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256 });
+  const otherTake = ok(await other.take(w.key, set.terms.buyer, w.third.secret)); ok(await full.receive(otherTake.recipientWrap, w.seller.secret));
+  fail(await full.restoreCheckpoint(checkpoint, w.seller.secret), 'LIMIT_EXCEEDED');
+  assert.equal(full.sessionCount, 1); assert.equal(full.session(otherTake.sessionId).state, 'taken'); full.close(); other.close();
+});
+test('checkpoint: one restoration per session; close, abort and a racing tombstone cannot install an acceptance', async () => {
+  for (const action of ['abort', 'close', 'tombstone']) {
+    const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+    const ex = reopening(w, w.seller), gate = deferred(), controller = new AbortController(); w.seller.ports.hold = gate;
+    const before = w.seller.ports.calls.length, restoring = ex.restoreCheckpoint(checkpoint, w.seller.secret, controller.signal);
+    while (!w.seller.ports.calls.slice(before).some(call => call.port === 'verify')) await new Promise(resolve => setTimeout(resolve, 0));
+    fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'BUSY');
+    if (action === 'abort') controller.abort();
+    if (action === 'close') ex.close();
+    if (action === 'tombstone') w.seller.ports.tombstones.add(r.statement.termsHash);
+    gate.resolve(); assert.equal((await restoring).ok, false, action); assert.equal(ex.sessionCount, 0); ex.close();
+  }
+});
+test('checkpoint: a re-signed changed binding or revision cannot renew previously admitted terms', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const changed = structuredClone(checkpoint), acceptance = wire(r.statement);
+  acceptance.binding.notAfterSeconds = String(NOW + 5001);
+  const envelope = v2Envelope(w, w.seller, w.buyer, 'terms-offer', r.statement.termsHash, { terms: new TextDecoder().decode(termsBytes()), acceptance });
+  changed.history[0].wrap = await craft(w.seller, w.seller, encodeEnvelopeV2(envelope), envelopeTags(envelope));
+  let ex = reopening(w, w.seller); fail(await ex.restoreCheckpoint(changed, w.seller.secret), 'ACCEPTANCE_CONFLICT');
+  assert.equal(ex.sessionCount, 0); ex.close();
+  const badRevision = structuredClone(checkpoint), accept = v2Envelope(w, w.buyer, w.seller, 'terms-accept', r.statement.termsHash,
+    { revision: '2', acceptance: wire(r.buyerStatement) });
+  badRevision.history[1].wrap = await craft(w.buyer, w.seller, encodeEnvelopeV2(accept), envelopeTags(accept));
+  ex = reopening(w, w.seller); fail(await ex.restoreCheckpoint(badRevision, w.seller.secret), 'REVISION_MISMATCH');
+  assert.equal(ex.sessionCount, 0); ex.close();
+});
+test('checkpoint: legacy replay ports without complete-history flags cannot restore', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const ex = reopening(w, w.seller, { peerAcceptance: { verifier: w.seller.ports.verifier,
+    replay: { ...w.seller.ports.replay, async status() { return { ok: true, value: { tombstoned: false } }; } } } });
+  fail(await ex.restoreCheckpoint(checkpoint, w.seller.secret), 'ACCEPTANCE_REQUIRED');
+  assert.equal(ex.sessionCount, 0); ex.close();
+});
+test('checkpoint: an ordinary peer session admitted during restoration is not replaced', async () => {
+  const w = await world(), r = await toAccepted(w), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const ex = reopening(w, w.seller, { ads: w.seller.book }), gate = deferred(); w.seller.ports.hold = gate;
+  const before = w.seller.ports.calls.length, restoring = ex.restoreCheckpoint(checkpoint, w.seller.secret);
+  while (!w.seller.ports.calls.slice(before).some(call => call.port === 'verify')) await new Promise(resolve => setTimeout(resolve, 0));
+  const buyer = createTermsExchange({ provider, selfPublicKey: w.buyer.pub, ads: w.buyer.book, registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256 });
+  const take = ok(await buyer.take(w.key, set.terms.buyer, w.buyer.secret)); ok(await ex.receive(take.recipientWrap, w.seller.secret));
+  gate.resolve(); fail(await restoring, 'OUT_OF_ORDER'); assert.equal(ex.session(r.id).state, 'taken');
+  ex.close(); buyer.close();
+});
+test('checkpoint: compatible take redelivery restores complete proof without selecting the placeholder', async () => {
+  const w = await world(), r = await toAccepted(w, { selected: true }), checkpoint = ok(w.seller.ex.checkpoint(r.id));
+  const ex = reopening(w, w.seller, { ads: w.seller.book });
+  const buyer = createTermsExchange({ provider, selfPublicKey: w.buyer.pub, ads: w.buyer.book, registry, hashTerms, now: () => w.clock.now, sha256: nodeSha256 });
+  const take = ok(await buyer.take(w.key, set.terms.buyer, w.buyer.secret)); ok(await ex.receive(take.recipientWrap, w.seller.secret));
+  assert.equal(ex.session(r.id).state, 'taken'); assert.equal(ex.session(r.id).selected, false);
+  assert.equal(checkpoint.session.selected, true);
+  const restored = ok(await ex.restoreCheckpoint(checkpoint, w.seller.secret));
+  assert.equal(restored.state, 'accepted'); assert.equal(restored.selected, true); assert.equal(ex.sessionCount, 1);
+  assert.equal(ok(await ex.acceptanceStatus(r.id, 'fund')).state, 'both-verified');
+  ex.close(); buyer.close();
 });

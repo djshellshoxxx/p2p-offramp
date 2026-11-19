@@ -6,7 +6,8 @@
  *
  * Authority: relay messages and chat are discovery and communication only. A session reaching `accepted` is NOT funding;
  * it only means the buyer sent an acceptance of exactly the bytes local review approved. Funding, release and refund are
- * decided by chain observation (packages/domain authority). Sessions are bounded, in-memory and never persisted.
+ * decided by chain observation (packages/domain authority). Sessions are bounded and in-memory; complete D1 encrypted
+ * history can be checkpointed privately and restored only against the durable ledger and fresh signature verification.
  *
  * Admission and replay policy (REDTEAM-P2-EX2/EX3). Direction set by the owner's 2026-11-18 consolidation brief: protect
  * selected, admitted and progressing conversations; reserve capacity for them; accept that anonymous finite-memory
@@ -76,6 +77,8 @@ import type {
   ExchangeEnvelopeV2, PeerAcceptanceBinding, PeerAcceptanceCode, PeerAcceptanceOptions, PeerAcceptanceRoleView, PeerAcceptanceState,
   PeerAcceptanceStatus, PeerAcceptanceWire, PeerReplayScope, PeerVerifiedEvidence,
 } from './peer-acceptance.ts';
+import { EXCHANGE_CHECKPOINT_FORMAT, parseExchangeCheckpoint } from './checkpoint.ts';
+import type { ExchangeCheckpoint, ExchangeCheckpointMessage, ExchangeCheckpointSession } from './checkpoint.ts';
 
 export type ExchangeCode =
   | 'INVALID_INPUT' | 'LIMIT_EXCEEDED' | 'CLOSED' | 'WRAP_INVALID' | 'MALFORMED' | 'NOT_ADDRESSED' | 'EXPIRED' | 'AD_UNAVAILABLE' | 'AD_EXPIRED'
@@ -180,6 +183,10 @@ export interface TermsExchange {
    * here is consulted by release, refund or payout.
    */
   acceptanceStatus(sessionId: string, purpose: PeerAcceptancePurpose, signal?: AbortSignal): Promise<ExchangeResult<PeerAcceptanceStatus>>;
+  /** Private encrypted recovery history, only after both D1 statements completed admission. Never a fresh acceptance claim. */
+  checkpoint(sessionId: string): ExchangeResult<ExchangeCheckpoint>;
+  /** Recheck complete previously admitted history without sending, signing, renewing deadlines or reopening negotiation. */
+  restoreCheckpoint(input: unknown, secret: Uint8Array, signal?: AbortSignal): Promise<ExchangeResult<SessionView>>;
   session(sessionId: string): SessionView | null;
   /** Sessions held, tombstones included. */
   readonly sessionCount: number;
@@ -200,6 +207,8 @@ interface Session {
   pins: number;
   /** D1 mode only. Verified statements kept in memory for rechecks; never persisted, exported or put in a view. */
   peer: { seller: PeerRecord | null; buyer: PeerRecord | null } | null;
+  /** Only encrypted wrappers and local admission times survive through the private checkpoint API. */
+  history?: { offer: ExchangeCheckpointMessage | null; accept: ExchangeCheckpointMessage | null };
   /** D1: a verification for this session is in flight (single-flight). */
   verifying?: boolean;
   /** D1: local cancel/reject tombstone writes in flight, and whether one was durably written for these terms. */
@@ -256,6 +265,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
   // Only the newest in-flight take for a pair may commit, even if a newer
   // session has since become terminal or been pruned. Tokens are bounded.
   const pendingTakes = new Map<string, symbol>();
+  const pendingRestores = new Map<string, { readonly token: symbol; readonly ad: string; readonly opening: boolean }>();
   // D1 only: rumor ids currently being processed by receive (copies of one wrap are DUPLICATE while in flight).
   const inflight = new Set<string>();
   let closed = false;
@@ -526,11 +536,158 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     return { ok: true, value: Object.freeze({ wire, evidence: verified.value }) };
   }
 
+  const checkpointContext = (s: Session): ExchangeCheckpointSession => Object.freeze({ id: s.id, role: s.role, ad: s.ad,
+    orderId: s.orderId, seller: s.seller, buyer: s.buyer, buyerAddress: s.buyerAddress, adExpiresAtSeconds: s.adExpires,
+    adMin: s.adMin.toString(), adMax: s.adMax.toString(), adNetwork: s.adNetwork, adAsset: s.adAsset, adCurrency: s.adCurrency, selected: s.selected });
+  function checkpointFor(s: Session): ExchangeResult<ExchangeCheckpoint> {
+    if (s.state !== 'accepted' || s.terms === null || !s.peer?.seller || !s.peer.buyer || !s.history?.offer || !s.history.accept) return bad('OUT_OF_ORDER');
+    if (withdrawnLocally(s)) return peerBad('TOMBSTONED');
+    const captured = parseExchangeCheckpoint({ format: EXCHANGE_CHECKPOINT_FORMAT, session: checkpointContext(s), history: [s.history.offer, s.history.accept] });
+    return captured === null ? bad('INVALID_INPUT') : { ok: true, value: captured };
+  }
+  /** Existing history may deny recovery; it can never supply the missing signature or create an acceptance. */
+  async function completeHistory(s: Session, terms: { hash: string; reviewed: ReviewedEvmTerms }, now: number): Promise<ExchangeResult<void>> {
+    if (d1 === null) return bad('ACCEPTANCE_DISABLED');
+    let result: unknown;
+    try { result = await d1.replay.status(terms.hash, replayScope(s, terms.reviewed, now)); } catch { return peerBad('UNAVAILABLE'); }
+    if (closed) return bad('CLOSED');
+    const outcome = result as { ok?: unknown; value?: { tombstoned?: unknown; sellerRecorded?: unknown; buyerRecorded?: unknown }; code?: unknown; reason?: unknown } | null;
+    if (outcome === null || typeof outcome !== 'object' || outcome.ok !== true) return peerBad(outcome?.code, outcome?.reason);
+    if (outcome.value?.tombstoned === true) return peerBad('TOMBSTONED');
+    if (outcome.value?.tombstoned !== false) return peerBad('INTEGRITY_FAILURE');
+    return outcome.value.sellerRecorded === true && outcome.value.buyerRecorded === true ? { ok: true, value: undefined } : bad('ACCEPTANCE_REQUIRED');
+  }
+
+  async function restoreCheckpoint(input: unknown, secret: Uint8Array, signal?: AbortSignal): Promise<ExchangeResult<SessionView>> {
+    if (d1 === null) return bad('ACCEPTANCE_DISABLED');
+    if (closed) return bad('CLOSED');
+    if (!(secret instanceof Uint8Array) || secret.byteLength !== 32 || (signal !== undefined && !(signal instanceof AbortSignal))) return bad('INVALID_INPUT');
+    if (signal?.aborted) return peerBad('CANCELLED');
+    const captured = parseExchangeCheckpoint(input);
+    if (captured === null) return bad('INVALID_INPUT');
+    const saved = captured.session, localKey = saved.role === 'seller' ? saved.seller : saved.buyer;
+    if (localKey !== self) return bad('WRONG_SIGNER');
+    if (pendingRestores.has(saved.id)) return bad('BUSY');
+    const previous = sessions.get(saved.id);
+    // Relay reconnect can redeliver the original take before the user resumes. It carries no competing terms;
+    // the full durable history still has to pass every check below before replacing this compatible placeholder.
+    const replacePlaceholder = previous !== undefined && previous.state === 'taken' && previous.terms === null && previous.peer !== null &&
+      previous.peer.seller === null && previous.peer.buyer === null && !previous.history?.offer && !previous.history?.accept &&
+      JSON.stringify({ ...checkpointContext(previous), selected: saved.selected }) === JSON.stringify(saved);
+    if (previous !== undefined) {
+      if (previous.verifying || previous.pins > 0) return bad('BUSY');
+      if (!replacePlaceholder) {
+        const existing = checkpointFor(previous);
+        if (!existing.ok || JSON.stringify(existing.value) !== JSON.stringify(captured)) return bad('OUT_OF_ORDER');
+      }
+    }
+    const previousState = previous?.state, previousTerms = previous?.terms;
+    const room = (): boolean => previous !== undefined || (sessions.size < maxSessions &&
+      [...sessions.values()].filter(session => session.ad === saved.ad).length < maxPerAd);
+    const reservations = [...pendingRestores.values()].filter(item => item.opening);
+    if (previous === undefined && (!room() || sessions.size + reservations.length >= maxSessions ||
+        [...sessions.values()].filter(session => session.ad === saved.ad).length + reservations.filter(item => item.ad === saved.ad).length >= maxPerAd)) return bad('LIMIT_EXCEEDED');
+    const token = Symbol();
+    pendingRestores.set(saved.id, { token, ad: saved.ad, opening: previous === undefined });
+    if (previous) previous.verifying = true;
+    const key = new Uint8Array(secret);
+    const gate = (): ExchangeResult<number> => {
+      if (closed) return bad('CLOSED');
+      if (signal?.aborted) return peerBad('CANCELLED');
+      if (pendingRestores.get(saved.id)?.token !== token || sessions.get(saved.id) !== previous ||
+          previous?.state !== previousState || previous?.terms !== previousTerms) return bad('OUT_OF_ORDER');
+      if (previous && withdrawnLocally(previous)) return peerBad('TOMBSTONED');
+      const now = clock(); return now === null ? bad('INVALID_INPUT') : { ok: true, value: now };
+    };
+    try {
+      if (await provider.publicKey(key) !== self) return bad('WRONG_SIGNER');
+      let ready = gate(); if (!ready.ok) return ready;
+      const s: Session = { id: saved.id, role: saved.role, ad: saved.ad, orderId: saved.orderId, seller: saved.seller, buyer: saved.buyer,
+        buyerAddress: saved.buyerAddress, adExpires: saved.adExpiresAtSeconds, adMin: BigInt(saved.adMin), adMax: BigInt(saved.adMax),
+        adNetwork: saved.adNetwork, adAsset: saved.adAsset, adCurrency: saved.adCurrency, state: 'accepted', terms: null,
+        selected: saved.selected, pins: 0, peer: { seller: null, buyer: null }, history: { offer: captured.history[0]!, accept: captured.history[1]! } };
+      const history: { envelope: ExchangeEnvelopeV2; rumorId: string; expires: number; admittedAt: number }[] = [];
+      for (const item of captured.history) {
+        // Own self-wraps are authenticated here as history; receive() deliberately ignores them as new messages.
+        const opened = await unwrapGiftWrap(item.wrap, key, provider, { now: ready.value, rumorLimits: RUMOR_LIMITS });
+        ready = gate(); if (!ready.ok) return ready;
+        const rumor = opened.rumor, env = parseEnvelopeV2(rumor.content);
+        if (env === null || rumor.kind !== KIND_PRIVATE_DIRECT_MESSAGE || env.type !== item.type || env.sender !== rumor.pubkey ||
+            env.ad !== s.ad || env.orderId !== s.orderId ||
+            env.sender !== (item.type === 'terms-offer' ? s.seller : s.buyer) || env.recipient !== (item.type === 'terms-offer' ? s.buyer : s.seller)) return bad('MALFORMED');
+        const tags = envelopeTags(env);
+        if (rumor.tags.length !== tags.length || rumor.tags.some((tag, index) => tag.length !== 2 || tag[0] !== tags[index]![0] || tag[1] !== tags[index]![1])) return bad('MALFORMED');
+        const expires = Number(env.expiresAtSeconds), admittedAt = item.admittedAtSeconds;
+        // An expired transport envelope is usable only as previously admitted history, never as a new arrival.
+        if (admittedAt > ready.value + MAX_FUTURE_SKEW_SECONDS || admittedAt >= s.adExpires || admittedAt >= expires ||
+            expires > s.adExpires || expires > admittedAt + MAX_MESSAGE_LIFETIME_SECONDS || rumor.created_at > admittedAt + MAX_FUTURE_SKEW_SECONDS) return bad('MALFORMED');
+        history.push({ envelope: env, rumorId: rumor.id, expires, admittedAt });
+      }
+      const offer = history[0]!, accept = history[1]!;
+      if (offer.envelope.termsHash !== accept.envelope.termsHash || offer.rumorId === accept.rumorId) return bad('HASH_MISMATCH');
+      const bytes = new TextEncoder().encode((offer.envelope.body as { readonly terms: string }).terms);
+      const checked = await reviewForSession(s, bytes);
+      ready = gate(); if (!ready.ok) return ready;
+      if (!checked.ok) return checked;
+      const terms = checked.value;
+      if (terms.hash !== offer.envelope.termsHash) return bad('HASH_MISMATCH');
+      if ((accept.envelope.body as { readonly revision: string }).revision !== terms.reviewed.revision) return bad('REVISION_MISMATCH');
+      if (!withinHorizon(terms.reviewed, ready.value)) return peerBad('LIMIT_EXCEEDED', 'accept-horizon');
+      for (const item of history) {
+        const role = item.envelope.type === 'terms-offer' ? 'seller' : 'buyer', wire = item.envelope.body.acceptance;
+        if (!bindingMatches(s, role, wire, terms.reviewed, terms.hash)) return peerBad('UNAUTHORIZED');
+        if (BigInt(item.admittedAt) >= BigInt(terms.reviewed.acceptBeforeSeconds) || BigInt(item.admittedAt) >= BigInt(wire.binding.notAfterSeconds) ||
+            BigInt(terms.reviewed.acceptBeforeSeconds) - BigInt(item.admittedAt) > BigInt(MAX_PEER_ACCEPT_HORIZON_SECONDS)) return bad('MALFORMED');
+      }
+      const prior = await completeHistory(s, terms, ready.value);
+      ready = gate(); if (!ready.ok) return ready;
+      if (!prior.ok) return prior;
+      s.terms = { hash: terms.hash, bytes, reviewed: terms.reviewed };
+      // Seller first, as on the original exchange. Only duplicate admission is allowed; no missing role is synthesized.
+      for (const item of history) {
+        const role = item.envelope.type === 'terms-offer' ? 'seller' : 'buyer', wire = item.envelope.body.acceptance;
+        const verified = await verifyStatement(s, role, wire, terms.reviewed, terms.hash, null, ready.value, signal);
+        ready = gate(); if (!ready.ok) return ready;
+        if (!verified.ok) return verified;
+        const admitted = await admitStatement(verified.value, replayScope(s, terms.reviewed, ready.value));
+        ready = gate(); if (!ready.ok) return ready;
+        if (!admitted.ok) return admitted;
+        if (admitted.value !== 'duplicate') return peerBad('INTEGRITY_FAILURE');
+        s.peer![role] = Object.freeze({ wire, evidence: verified.value });
+      }
+      const fresh = await completeHistory(s, terms, ready.value);
+      ready = gate(); if (!ready.ok) return ready;
+      if (!fresh.ok) return fresh;
+      if ([s.peer!.seller!, s.peer!.buyer!].some(record => BigInt(record.evidence.effectiveNotAfterSeconds) <= BigInt(ready.value))) return peerBad('EXPIRED');
+      if (previous !== undefined && !replacePlaceholder) return { ok: true, value: view(previous) };
+      if (!room()) return bad('LIMIT_EXCEEDED');
+      const restoredAt = ready.value;
+      sweep(restoredAt);
+      const ids = seen.get(s.id), live = history.filter(item => item.expires > restoredAt && !ids?.has(item.rumorId));
+      if ((ids?.size ?? 0) + live.length > maxSeenPerSession || seenEntries + live.length > maxSeen) return bad('LIMIT_EXCEEDED');
+      sessions.set(s.id, s);
+      for (const item of live) remember(s.id, item.rumorId, item.expires);
+      return { ok: true, value: view(s) };
+    } catch {
+      const ready = gate(); return ready.ok ? bad('WRAP_INVALID') : ready;
+    } finally {
+      key.fill(0);
+      if (pendingRestores.get(saved.id)?.token === token) pendingRestores.delete(saved.id);
+      if (previous) previous.verifying = false;
+    }
+  }
+
   const exchange: TermsExchange = {
     get sessionCount() { return sessions.size; },
     get replayIdCount() { const now = clock(); if (now !== null) sweep(now); return seenEntries; },
     session: id => { const s = sessions.get(id); return s === undefined ? null : view(s); },
-    close() { closed = true; sessions.clear(); seen.clear(); seenEntries = 0; pendingTakes.clear(); },
+    checkpoint(id) {
+      if (d1 === null) return bad('ACCEPTANCE_DISABLED');
+      if (closed) return bad('CLOSED');
+      const s = sessions.get(id); return s === undefined ? bad('UNKNOWN_SESSION') : checkpointFor(s);
+    },
+    restoreCheckpoint,
+    close() { closed = true; sessions.clear(); seen.clear(); seenEntries = 0; pendingTakes.clear(); pendingRestores.clear(); },
 
     select(sessionId) {
       const live = liveSession(sessionId, 'seller', clock()); if (!live.ok) return live;
@@ -731,6 +888,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
           const still = readyToCommit(s, 'taken', built.value.rumorId, expires, reviewed.acceptBeforeSeconds);
           if (!still.ok) return still;
           s.state = 'offered'; s.terms = { hash, bytes: copy, reviewed }; s.peer!.seller = Object.freeze({ wire, evidence: verified.value });
+          s.history = { offer: Object.freeze({ type: 'terms-offer', admittedAtSeconds: still.value, wrap: built.value.selfWrap }), accept: null };
           return { ok: true, value: sent(s, 'terms-offer', built.value, built.value.envelope.expiresAtSeconds) };
         });
       } finally { s.pins--; }
@@ -769,6 +927,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
         if (!still.ok) return still;
         if (withdrawnLocally(s)) return peerBad('TOMBSTONED');
         s.state = 'accepted'; s.peer!.buyer = Object.freeze({ wire, evidence: verified.value });
+        if (s.history) s.history.accept = Object.freeze({ type: 'terms-accept', admittedAtSeconds: still.value, wrap: built.value.selfWrap });
         return { ok: true, value: sent(s, 'terms-accept', built.value, built.value.envelope.expiresAtSeconds) };
       });
     },
@@ -827,10 +986,11 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
     async receive(wrap, secret) {
       if (closed) return bad('CLOSED');
       let now = clock(); if (now === null) return bad('INVALID_INPUT');
-      let rumor;
+      let rumor, receivedWrap: NostrEvent;
       try {
         if (await provider.publicKey(secret) !== self) return bad('WRONG_SIGNER');
-        rumor = (await unwrapGiftWrap(wrap, secret, provider, { now, rumorLimits: RUMOR_LIMITS })).rumor;
+        const opened = await unwrapGiftWrap(wrap, secret, provider, { now, rumorLimits: RUMOR_LIMITS });
+        rumor = opened.rumor; receivedWrap = opened.wrap;
       } catch { return bad('WRAP_INVALID'); }
       if (closed) return bad('CLOSED');
       now = clock(); if (now === null) return bad('INVALID_INPUT');
@@ -919,6 +1079,7 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
             // A local cancel/reject started meanwhile: its tombstone wins and nothing is recorded as offered.
             if (withdrawnLocally(session)) return peerBad('TOMBSTONED');
             statement = received.value; session.peer!.seller = statement;
+            session.history = { offer: Object.freeze({ type: 'terms-offer', admittedAtSeconds: still.value, wrap: receivedWrap }), accept: null };
           }
           session.terms = { hash: checked.value.hash, bytes, reviewed: checked.value.reviewed };
           reviewed = checked.value.reviewed;
@@ -938,7 +1099,10 @@ export function createTermsExchange(options: ExchangeOptions): TermsExchange {
             if (!still.ok) return still;
             // A local cancel started while this acceptance was verified: its tombstone wins and nothing is accepted.
             if (env.v === 2 && withdrawnLocally(session)) return peerBad('TOMBSTONED');
-            if (env.v === 2) { statement = done.value as PeerRecord; session.peer!.buyer = statement; }
+            if (env.v === 2) {
+              statement = done.value as PeerRecord; session.peer!.buyer = statement;
+              if (session.history) session.history.accept = Object.freeze({ type: 'terms-accept', admittedAtSeconds: still.value, wrap: receivedWrap });
+            }
           }
         } else if (session.terms !== null && env.termsHash !== null && env.termsHash !== session.terms.hash) return bad('HASH_MISMATCH');
         else if (session.terms === null && env.termsHash !== null) return bad('HASH_MISMATCH');
