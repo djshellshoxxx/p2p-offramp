@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /** Actual built ERC-20 application/Worker/IndexedDB gate. Requires Chromium; source/build checks cannot substitute. */
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { buildErc20Approve, buildErc20BalanceOf, buildGetTrade, decodeTrade } from '../packages/wallet/localnet.ts';
 import { idleLocalnetBrowser as idle, startLocalnetBrowserFixture, waitLocalnetBrowser as until } from './lib/localnet-browser-fixture.mjs';
 
 const PASS = 'public synthetic ERC20 browser profile passphrase';
+const RESTORED_PASS = 'public synthetic restored ERC20 browser passphrase';
+// LocalnetController configures evmFinalityPolicy(network, 1, 12). Assert both sides of that block lease below.
+const PREPARATION_LEASE_BLOCKS = 12;
 const PAYMENT = 'SYNTHETIC ERC20 local fixture bank instructions';
 const checks = [], pass = label => { checks.push(label); console.log(`ok - ${label}`); };
 const trade = (owner, id) => owner.page.locator(`[data-trade-id="${id}"]`);
@@ -36,7 +40,9 @@ async function negotiate(seller, buyer, amount, allowanceButton) {
   await seller.page.getByLabel('Asset', { exact: true }).selectOption('test-token');
   await seller.page.getByLabel('Amount in base units', { exact: true }).fill(amount);
   await seller.page.getByRole('button', { name: 'Publish sell offer', exact: true }).click(); await idle(seller);
-  await buyer.page.locator('[data-ad-key]').filter({ hasText: `${amount} base units` }).getByRole('button', { name: 'Request private terms', exact: true }).click();
+  await buyer.page.locator('[data-ad-key]').filter({ has: buyer.page.getByRole('heading', {
+    name: `${amount} base units · test-token / USD`, exact: true,
+  }) }).getByRole('button', { name: 'Request private terms', exact: true }).click();
   await until(async () => (await seller.page.locator('[data-session-key]').evaluateAll(items => items.map(item => item.getAttribute('data-session-key')))).some(id => !known.has(id)), 'seller receives token negotiation');
   const session = (await seller.page.locator('[data-session-key]').evaluateAll(items => items.map(item => item.getAttribute('data-session-key')))).find(id => !known.has(id));
   await seller.page.locator(`[data-session-key="${session}"]`).click(); await idle(seller);
@@ -63,6 +69,44 @@ async function balance(account) {
 async function settled(owner, id, expected) {
   await fixture.chain.mine(); await refresh(owner);
   await until(async () => await trade(owner, id).getByTestId('chain-state').textContent() === expected, `canonical ${expected} state`);
+}
+async function revokedReview(owner, id, event, value) {
+  const before = { ...fixture.chain.counts };
+  await trade(owner, id).getByRole('checkbox').check();
+  await prepare(owner, id, 'Review release');
+  const preparedAtBlock = BigInt(await fixture.chain.rpc('eth_blockNumber'));
+  if (event === 'accountsChanged') owner.provider.state.account = value[0];
+  if (event === 'chainChanged') owner.provider.state.chainId = value;
+  await owner.emit(event, value);
+  await region(owner).waitFor({ state: 'hidden' });
+  await until(async () => await owner.page.getByTestId('wallet-account').textContent() === 'not connected', `${event} revokes wallet authority`);
+  for (const action of ['Review funding', 'Review release', 'Review refund']) {
+    assert.equal(await trade(owner, id).getByRole('button', { name: action, exact: true }).isEnabled(), false);
+  }
+  assert.deepEqual(fixture.chain.counts, before, 'wallet events cannot send, sign or reconnect automatically');
+  return preparedAtBlock;
+}
+async function restore(owner) {
+  const oldId = await owner.profileId(), before = { ...fixture.chain.counts };
+  await owner.page.evaluate(() => localStorage.setItem('erc20-source-profile', 'source'));
+  const [download] = await Promise.all([owner.page.waitForEvent('download'),
+    owner.page.getByRole('button', { name: 'Download encrypted backup', exact: true }).click()]);
+  const backup = await readFile(await download.path());
+  assert.equal(backup.toString().includes(PAYMENT), false, 'payment instructions remain encrypted in exported backup');
+  await owner.close(); await fixture.chain.mine();
+  const restored = await fixture.party(0, RESTORED_PASS);
+  assert.equal(await restored.page.evaluate(() => localStorage.getItem('erc20-source-profile')), null, 'restore uses an independent browser profile');
+  await restored.page.getByText('Restore an encrypted backup', { exact: true }).click();
+  await restored.page.getByLabel('Encrypted backup file', { exact: true }).setInputFiles({ name: 'erc20.backup.json', mimeType: 'application/json', buffer: backup });
+  await restored.page.getByLabel('Backup source passphrase', { exact: true }).fill(owner.passphrase);
+  await restored.page.getByLabel('Restored profile passphrase', { exact: true }).fill(RESTORED_PASS);
+  await restored.page.getByRole('button', { name: 'Restore to a fresh profile', exact: true }).click();
+  await restored.page.locator('[data-private="localnet-profile"]').waitFor(); await idle(restored);
+  assert.notEqual(await restored.profileId(), oldId);
+  assert.deepEqual(fixture.chain.counts, before, 'restoration cannot send, sign or connect a wallet');
+  await connect(restored);
+  assert.equal(fixture.chain.counts.sends, before.sends); assert.equal(fixture.chain.counts.signatures, before.signatures);
+  return restored;
 }
 
 try {
@@ -92,20 +136,86 @@ try {
   assert.equal(await balance(chain.accounts[1]), buyerBefore + 2500n); assert.equal(await balance(chain.escrow), 0n);
   pass('a separate funding review and explicit bank-receipt release pay the exact token principal to the bound buyer');
 
-  const second = await negotiate(seller, buyer, '1100', 'Review exact token allowance'), beforeRefund = await balance(chain.accounts[0]);
+  const second = await negotiate(seller, buyer, '1100', 'Review exact token allowance');
   await prepare(seller, second, 'Review exact token allowance'); await confirm(seller); await chain.mine(); await refresh(seller);
   await prepare(seller, second, 'Review funding'); await confirm(seller); await settled(seller, second, 'funded');
-  const deadline = await trade(seller, second).locator('dt').filter({ hasText: /^Refund deadline$/ }).evaluate(element => element.nextElementSibling.textContent.split(' ')[0]);
-  await chain.rpc('evm_setNextBlockTimestamp', [Number(deadline) + 1]); await chain.mine(); await refresh(seller);
-  await prepare(seller, second, 'Review refund'); await confirm(seller); await settled(seller, second, 'refunded');
-  assert.equal(await balance(chain.accounts[0]), beforeRefund);
-  assert.equal(decodeTrade(await chain.rpc('eth_call', [{ to: chain.escrow, data: buildGetTrade(chain.escrow, second).data }, 'latest'])).state, 'refunded');
-  assert.equal(chain.counts.sends, 7); assert.equal(fixture.markers, 7);
+
+  await revokedReview(seller, second, 'accountsChanged', [chain.accounts[1]]);
+  await connect(seller);
+  assert.equal(await trade(seller, second).getByRole('button', { name: 'Review release', exact: true }).isEnabled(), false, 'a different account cannot release the seller escrow');
+  seller.provider.state.account = chain.accounts[0]; await seller.emit('accountsChanged', [chain.accounts[0]]); await connect(seller);
+  const chainChangePreparationBlock = await revokedReview(seller, second, 'chainChanged', '0x1');
+  await seller.page.getByRole('button', { name: 'Connect wallet', exact: true }).click();
+  await seller.page.getByRole('alert').filter({ hasText: 'WRONG_CHAIN' }).waitFor(); await idle(seller);
+  assert.equal(await seller.page.getByTestId('wallet-account').textContent(), 'not connected');
+  seller.provider.state.chainId = '0x7a69'; await seller.emit('chainChanged', '0x7a69'); await connect(seller);
+  // A cancellation cannot persist while native chain identity is wrong. Reconnection must preserve
+  // that durable preparation until its canonical block lease ends; it cannot simply clear the journal.
+  const beforeLease = { ...chain.counts };
+  const heldRelease = trade(seller, second);
+  assert.match(await heldRelease.textContent(), /release · prepared/);
+  assert.equal(await heldRelease.getByRole('button', { name: 'Review release', exact: true }).isEnabled(), false);
+  assert.equal(BigInt(await chain.rpc('eth_blockNumber')), chainChangePreparationBlock);
+  await chain.mine(PREPARATION_LEASE_BLOCKS - 1); await refresh(seller);
+  assert.match(await heldRelease.textContent(), /release · prepared/);
+  assert.equal(await heldRelease.getByRole('checkbox').count(), 0, 'the prepared intent remains held before its lease boundary');
+  await chain.mine(1); await refresh(seller);
+  assert.doesNotMatch(await heldRelease.textContent(), /release · prepared/);
+  await heldRelease.getByRole('checkbox').waitFor();
+  assert.deepEqual(chain.counts, beforeLease, 'lease reconciliation cannot sign, send or reconnect automatically');
+  pass('wrong-chain cancellation stays held through block 11 and restores the funded exit at the configured 12-block lease without wallet actions');
+  await revokedReview(seller, second, 'disconnect', { code: 4900, message: 'Synthetic wallet disconnect' });
+  await connect(seller);
+  assert.equal(chain.counts.sends, 6, 'three invalidated release reviews cannot submit a transaction');
+  pass('account changes, wrong-chain changes and disconnect revoke open token release reviews; correct-wallet reconnection and canonical lease reconciliation preserve the funded exit');
+
+  const third = await negotiate(seller, buyer, '700', 'Review exact token allowance');
+  await prepare(seller, third, 'Review exact token allowance'); await confirm(seller); await chain.mine(); await refresh(seller);
+  await prepare(seller, third, 'Review funding'); await confirm(seller); await settled(seller, third, 'funded');
+  const fourth = await negotiate(seller, buyer, '500', 'Review exact token allowance');
+  await prepare(seller, fourth, 'Review exact token allowance'); seller.provider.state.loseNextSend = true; await confirm(seller);
+  await seller.page.getByRole('alert').filter({ hasText: 'BROADCAST_UNKNOWN' }).waitFor();
+  assert.match(await trade(seller, fourth).textContent(), /approve · broadcast-unknown/);
+  assert.equal(chain.counts.sends, 9);
   const approvals = seller.provider.calls.filter(request => request.method === 'eth_sendTransaction' && request.params[0].to === chain.token);
-  assert.deepEqual(approvals.map(request => request.params[0].data), ['0', '2500', '1100'].map(amount => buildErc20Approve(chain.token, chain.escrow, amount).data));
-  await seller.page.getByRole('button', { name: 'Lock profile', exact: true }).click(); await seller.page.locator('[data-private]').waitFor({ state: 'hidden' });
-  assert.equal((await seller.page.locator('body').textContent()).includes(PAYMENT), false); assert.deepEqual(fixture.unexpected, []);
-  pass('chain-time refund returns only the bound seller principal; all seven sends have full IndexedDB markers and lock removes private views');
+  assert.deepEqual(approvals.map(request => request.params[0].data), ['0', '2500', '1100', '700', '500'].map(amount => buildErc20Approve(chain.token, chain.escrow, amount).data));
+  const restored = await restore(seller);
+  // The later recorded approval consumed the three cancelled releases' shared nonce. Only its
+  // finalized native receipt/body can settle those restored records; their null markers cannot.
+  const restoredCounts = { ...chain.counts }, cancelledReleases = trade(restored, second).locator('details li').filter({ hasText: /^release ·/ });
+  assert.deepEqual(await cancelledReleases.allTextContents(), ['release · failed', 'release · failed', 'release · failed']);
+  assert.equal(await cancelledReleases.locator('code').count(), 0, 'cancelled releases retain their unknown hashes');
+  await refresh(restored);
+  assert.deepEqual(await cancelledReleases.allTextContents(), ['release · failed', 'release · failed', 'release · failed']);
+  assert.deepEqual(chain.counts, restoredCounts, 'explicit native reconciliation cannot sign, send or reconnect');
+  for (const id of [second, third]) {
+    assert.equal(await trade(restored, id).getByTestId('chain-state').textContent(), 'funded');
+    assert.match(await trade(restored, id).textContent(), /Restored profile/);
+    assert.equal(await trade(restored, id).getByRole('button', { name: 'Review funding', exact: true }).isEnabled(), false);
+  }
+  const held = trade(restored, fourth);
+  assert.match(await held.textContent(), /approve · (broadcast-unknown|pending)/);
+  assert.equal(await held.locator('details code').count(), 0, 'lost approval response has no invented transaction hash');
+  assert.match(await held.getByRole('region', { name: 'Token allowance' }).textContent(), /Finalized allowance: 500 base units/);
+  assert.equal(await held.getByRole('button', { name: 'Review exact token allowance', exact: true }).isEnabled(), false);
+  assert.equal(await held.getByRole('button', { name: 'Review funding', exact: true }).isEnabled(), false);
+  assert.equal(chain.counts.sends, 9);
+  pass('fresh-key browser restore retains funded token trades and holds a lost approval response despite the exact allowance being visible on chain');
+
+  const restoredBuyerBefore = await balance(chain.accounts[1]);
+  await trade(restored, second).getByRole('checkbox').check(); await prepare(restored, second, 'Review release'); await confirm(restored); await settled(restored, second, 'released');
+  assert.equal(await balance(chain.accounts[1]), restoredBuyerBefore + 1100n);
+  const sellerBeforeRefund = await balance(chain.accounts[0]);
+  const deadline = await trade(restored, third).locator('dt').filter({ hasText: /^Refund deadline$/ }).evaluate(element => element.nextElementSibling.textContent.split(' ')[0]);
+  await chain.rpc('evm_setNextBlockTimestamp', [Number(deadline) + 1]); await chain.mine(); await refresh(restored);
+  await prepare(restored, third, 'Review refund'); await confirm(restored); await settled(restored, third, 'refunded');
+  assert.equal(await balance(chain.accounts[0]), sellerBeforeRefund + 700n); assert.equal(await balance(chain.escrow), 0n);
+  assert.equal(decodeTrade(await chain.rpc('eth_call', [{ to: chain.escrow, data: buildGetTrade(chain.escrow, third).data }, 'latest'])).state, 'refunded');
+  assert.equal(chain.counts.sends, 11); assert.equal(fixture.markers, 11);
+  assert.equal(await held.getByRole('button', { name: 'Review funding', exact: true }).isEnabled(), false);
+  await restored.page.getByRole('button', { name: 'Lock profile', exact: true }).click(); await restored.page.locator('[data-private]').waitFor({ state: 'hidden' });
+  assert.equal((await restored.page.locator('body').textContent()).includes(PAYMENT), false); assert.deepEqual(fixture.unexpected, []);
+  pass('restored token release and chain-time refund pay their bound recipients despite an unrelated unknown approval; all eleven sends have IndexedDB markers and lock removes private views');
   console.log(JSON.stringify({ ok: true, kind: 'ERC20_LOCAL_BROWSER_PROOF', engine: fixture.browser.version(), checks: checks.length,
     ...chain.counts, durableMarkers: fixture.markers, ReleaseEnabled: 0, physicalWalletQualification: false, publicTestnetQualification: false }, null, 2));
 } finally { await fixture?.close(); }
