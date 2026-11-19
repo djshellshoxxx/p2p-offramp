@@ -62,7 +62,7 @@ export async function startLocalnetBrowserFixture(options = {}) {
     const origin = `http://127.0.0.1:${server.address().port}`;
     browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
     const party = async (index, passphrase) => {
-      const context = await browser.newContext({ serviceWorkers: 'block' });
+      const context = await browser.newContext({ serviceWorkers: 'block', acceptDownloads: true });
       await context.route('**/*', route => {
         if (new URL(route.request().url()).origin === origin) return route.continue();
         unexpected.push(route.request().url()); return route.abort();
@@ -83,6 +83,10 @@ export async function startLocalnetBrowserFixture(options = {}) {
       });
       await context.addInitScript(() => {
         const listeners = new Map();
+        // Test-only event delivery uses the same listeners an external EIP-1193 wallet would notify.
+        Object.defineProperty(window, '__localnetFixtureEmit', { value(event, value) {
+          for (const listener of listeners.get(event) ?? []) listener(value);
+        } });
         Object.defineProperty(window, 'ethereum', { value: Object.freeze({
           async request(request) {
             const reply = await window.__localnetFixtureRequest(request);
@@ -95,7 +99,9 @@ export async function startLocalnetBrowserFixture(options = {}) {
       });
       page = await context.newPage(); page.setDefaultTimeout(30_000); await page.goto(origin);
       await page.getByRole('heading', { name: 'Your encrypted profile' }).waitFor();
-      return { page, provider, passphrase, profileId: () => profileId(page), close: async () => { await context.close(); } };
+      return { page, provider, passphrase, profileId: () => profileId(page),
+        emit: (event, value) => page.evaluate(([name, payload]) => window.__localnetFixtureEmit(name, payload), [event, value]),
+        close: async () => { await context.close(); } };
     };
     return { chain, evidence, browser, party, unexpected, get markers() { return markers; }, close };
   } catch (error) { await close(); throw error; }
