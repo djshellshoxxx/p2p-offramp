@@ -1,0 +1,36 @@
+name: Nostr relay interoperability
+on:
+  push:
+    branches: [main]
+  pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  native-nostr-relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Install exact upstream relay binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          nak_bin="$RUNNER_TEMP/nak-v0.22.3-linux-amd64"
+          curl --fail --silent --show-error --location --retry 2 --max-time 120 \
+            --output "$nak_bin" \
+            https://github.com/fiatjaf/nak/releases/download/v0.22.3/nak-v0.22.3-linux-amd64
+          echo "2eb9a16f86c865275983459b2c705d22d5dfbcf527026a279449cbf204d164fe  $nak_bin" | sha256sum --check --status
+          chmod u+x "$nak_bin"
+          echo "P2P_NAK=$nak_bin" >> "$GITHUB_ENV"
+      - name: Qualify native relay transport and AUTH refusal
+        run: npm run test:relay:native
