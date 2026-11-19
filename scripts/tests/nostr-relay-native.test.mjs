@@ -65,7 +65,7 @@ async function rawClient(relay) {
   };
 }
 
-test('native relay accepts exact signed bytes; duplicate/reordered delivery and reconnect do not republish', { timeout: 35_000 }, async t => {
+test('native relay accepts exact signed bytes; duplicate/reordered delivery and reconnect do not republish', { timeout: 120_000 }, async t => {
   const relay = await startNak({ eagerAuth: true });
   t.after(() => relay.close());
   const product = productPool(relay); t.after(() => product.close());
@@ -126,7 +126,7 @@ test('native relay accepts exact signed bytes; duplicate/reordered delivery and 
   t.diagnostic(JSON.stringify({ relay: NAK_PIN.version, source: NAK_PIN.commit, nativeWrites: net.count('EVENT'), implicitAuth: net.count('AUTH'), recoveredUnknown: true, exactSignedFields: true, tlsQualified: false }));
 });
 
-test('native relay carries project NIP-17 gift wraps without treating transport acceptance as agreement authority', { timeout: 25_000 }, async t => {
+test('native relay carries project NIP-17 gift wraps without treating transport acceptance as agreement authority', { timeout: 120_000 }, async t => {
   const relay = await startNak(); t.after(() => relay.close());
   const product = productPool(relay); t.after(() => product.close());
   const seller = await provider.generate(), buyer = await provider.generate();
@@ -157,7 +157,7 @@ test('native relay carries project NIP-17 gift wraps without treating transport 
   t.diagnostic('Actual native stored/live NIP-59 transport and project NIP-17 authentication passed; no wallet, acceptance state or delivery receipt is created.');
 });
 
-test('native AUTH-required relay refuses product reads/writes; explicit fixture AUTH is connection/challenge scoped', { timeout: 30_000 }, async t => {
+test('native AUTH-required relay refuses product reads/writes; explicit fixture AUTH is connection/challenge scoped', { timeout: 120_000 }, async t => {
   const relay = await startNak({ auth: true, eagerAuth: true }); t.after(() => relay.close());
   const product = productPool(relay); t.after(() => product.close());
   const publisher = await provider.generate(), authIdentity = await provider.generate();

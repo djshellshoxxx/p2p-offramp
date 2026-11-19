@@ -17,6 +17,13 @@ transport evidence; earlier `nostr-tools` differential tests remain separate
 crypto/filter oracles and the existing localnet/browser runners retain their
 repository-owned fake relay.
 
+An additional local rerun was much slower and cancelled the private-message case
+at its original 25-second overall test allowance; the other two cases passed.
+The fixture now allows 120 seconds per scenario while retaining the original
+bounded startup, socket, acknowledgement and condition waits. No protocol check
+or product timeout was relaxed. This intermediate cancellation is not recorded
+as a passing run.
+
 The new `native-nostr-relay` hosted job is additive. A local pass does not claim
 that the exact PR's hosted job or independent review has passed. This test does
 not qualify another Nostr client implementation, TLS, a public deployment,
