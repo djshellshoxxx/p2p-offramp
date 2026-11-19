@@ -1,0 +1,470 @@
+{
+  "schema": 1,
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "classification_scope": "Implementation as present on pinned main. Tests below name verified source paths, not new test execution. Release qualification is separate.",
+  "features": [
+    {
+      "id": "F01",
+      "feature": "Encrypted profiles, backup, fresh-key restore",
+      "status": "Implemented",
+      "implemented_scope": "Encrypted vault, IndexedDB CAS persistence, profiles, migration, backup verification and restore are present in main.",
+      "source": [
+        "packages/storage/src/vault-service.ts",
+        "packages/storage/src/backup-service.ts"
+      ],
+      "test_source": [
+        "packages/storage/test/vault-service.test.mjs",
+        "packages/storage/test/backup-service.test.mjs",
+        "packages/storage/test/backup-verification.test.mjs"
+      ],
+      "remaining": "Continue supported-browser/device acceptance; library completeness does not establish independent cryptographic certification.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F02",
+      "feature": "Private messaging identity and lock lifecycle",
+      "status": "Implemented",
+      "implemented_scope": "Messaging secret is owned by identity/vault services; session disposal and retention are implemented.",
+      "source": [
+        "packages/identity/src/identity-service.ts"
+      ],
+      "test_source": [
+        "packages/identity/test/identity.test.mjs",
+        "packages/identity/test/history-retention.test.mjs"
+      ],
+      "remaining": "Verify physical-device sleep/reload behavior and complete long-term key-rotation decisions separately.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F03",
+      "feature": "Canonical EVM terms and offline review",
+      "status": "Implemented",
+      "implemented_scope": "Immutable trade terms, registry bindings, role/account checks and signing-domain validation are implemented.",
+      "source": [
+        "packages/wallet/src/evm-terms.ts",
+        "packages/wallet/src/evm-agreement.ts"
+      ],
+      "test_source": [
+        "packages/wallet/test/evm-terms.test.mjs",
+        "packages/wallet/test/evm-agreement.test.mjs",
+        "packages/wallet/test/g16-bilateral-replay.test.mjs"
+      ],
+      "remaining": "Integrate #187 to bound actual file reads before retained input; retain explicit review and validation.",
+      "candidate_prs": "#187",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F04",
+      "feature": "Basic EVM escrow and financial invariants",
+      "status": "Implemented",
+      "implemented_scope": "Native/ERC-20 fund, seller-authorized release to fixed buyer, timeout refund to fixed seller, terminal-state replay refusal and reentrancy guard exist.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol"
+      ],
+      "test_source": [
+        "contracts/evm/test/BasicEscrow.t.sol",
+        "contracts/evm/test/BasicEscrowFuzz.t.sol",
+        "contracts/evm/test/BasicEscrowInvariant.t.sol"
+      ],
+      "remaining": "Independent contract review and authorized deployed-runtime/public-testnet qualification remain separate. BasicEscrow has no dispute/arbitration function.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F05",
+      "feature": "Failed payout and deferred withdrawal recovery",
+      "status": "Implemented",
+      "implemented_scope": "Failed push payouts retain a recipient/asset-bound pending withdrawal; retries pay the original recipient.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol",
+        "scripts/recovery/evm-recovery.mjs"
+      ],
+      "test_source": [
+        "packages/wallet/test/recovery-erc20-withdraw-boundary.test.mjs",
+        "packages/wallet/test/recovery-withdrawal-boundary.test.mjs"
+      ],
+      "remaining": "Retain canonical state validation and exact recipient/asset binding during future UI expansion.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F06",
+      "feature": "Offer creation, discovery, expiration and stale-event defense",
+      "status": "Implemented",
+      "implemented_scope": "Signed Nostr advertisements and bounded orderbook ingest are composed into localnet trading; expiry/deletion filters and immutable ad identities exist.",
+      "source": [
+        "packages/relay/src/ad.ts",
+        "packages/relay/src/advertisement.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "packages/relay/test/ad.test.mjs",
+        "packages/relay/test/advertisement.test.mjs",
+        "packages/exchange/test/async-boundaries.test.mjs"
+      ],
+      "remaining": "Production relay/bootstrap configuration and physical-browser acceptance are separate; it is a bilateral trade workflow, not an automatic centralized matching engine.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F07",
+      "feature": "Bilateral negotiation, cancellation and replay resistance",
+      "status": "Implemented",
+      "implemented_scope": "v2 offer/accept requires TradeTerms plus PeerAcceptance signatures; terms-bound cancellation/rejection tombstones and durable replay ledger exist.",
+      "source": [
+        "packages/exchange/src/exchange.ts",
+        "packages/exchange/src/peer-acceptance.ts"
+      ],
+      "test_source": [
+        "packages/exchange/test/peer-acceptance.test.mjs",
+        "packages/exchange/test/redteam-exchange.test.mjs",
+        "packages/exchange/test/redteam-pass2-exchange.test.mjs"
+      ],
+      "remaining": "Do not import the older alternate exchange from #159 over current v2. Wallet and public-network acceptance remain separate.",
+      "candidate_prs": "#159 retains selected test/vector evidence only",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F08",
+      "feature": "Nostr event verification, relay transport and interop",
+      "status": "Implemented",
+      "implemented_scope": "Signature-checked events, malformed-event refusal, bounded subscriptions, duplicate handling, reconnect/failover and independent native relay harness are on main.",
+      "source": [
+        "packages/nostr-crypto/src/relay-event-crypto.ts",
+        "packages/relay/src/pool.ts",
+        "scripts/lib/nostr-relay-fixture.mjs"
+      ],
+      "test_source": [
+        "packages/relay/test/pool.test.mjs",
+        "packages/relay/test/pool-lifetime.test.mjs",
+        "scripts/tests/nostr-relay-native.test.mjs"
+      ],
+      "remaining": "Readiness publication during reconnect needs #181; independently tested relay fixture does not establish every public relay/provider.",
+      "candidate_prs": "#181",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F09",
+      "feature": "Encrypted trade messaging and durable history",
+      "status": "Implemented",
+      "implemented_scope": "NIP-17 envelopes and authenticated encrypted history are composed into localnet bilateral trades.",
+      "source": [
+        "packages/messaging/src/envelope.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "packages/messaging/test/envelope.test.mjs",
+        "packages/messaging/test/durable-chat.test.mjs"
+      ],
+      "remaining": "Public metadata and network/device privacy remain external qualification concerns; ciphertext does not hide public chain settlement.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F10",
+      "feature": "Wallet connection, network identity and prompt/session safety",
+      "status": "Partial",
+      "implemented_scope": "EVM provider/peer signer and Solana wallet boundaries exist, with explicit account/network checks and prompt invalidation.",
+      "source": [
+        "packages/wallet/src/evm-adapter.ts",
+        "packages/wallet/src/evm-peer-acceptance.ts",
+        "packages/chain-solana/src/wallet.ts"
+      ],
+      "test_source": [
+        "packages/wallet/test/evm-adapter.test.mjs",
+        "packages/wallet/test/evm-peer-session.test.mjs",
+        "packages/chain-solana/test/wallet.test.mjs"
+      ],
+      "remaining": "Physical injected wallets, hardware devices, mobile handoff and full account/chain switch matrix remain; local fixtures cannot qualify those devices.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F11",
+      "feature": "Durable send marker, concurrency and unknown-broadcast recovery",
+      "status": "Implemented",
+      "implemented_scope": "Version-2 sendMarkedAt/origin provenance, CAS journal writes, conservative unknown outcomes, nonce reservations and canonical reconciliation are on main.",
+      "source": [
+        "packages/domain/src/intent-journal.ts",
+        "packages/domain/src/tx-lifecycle.ts",
+        "packages/wallet/src/evm-execution.ts"
+      ],
+      "test_source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/domain/test/tx-lifecycle.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "remaining": "Retain no-automatic-resend rule and source-bound device/browser verification. Do not reimport the duplicate D9 branch stack.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F12",
+      "feature": "Native EVM browser trade flow",
+      "status": "Implemented",
+      "implemented_scope": "Isolated localnet app supports two-party offer/accept, explicit review, funding, release/refund, messaging and encrypted recovery. It is merged into main.",
+      "source": [
+        "apps/web/src/localnet/LocalnetRoot.tsx",
+        "apps/web/src/localnet/controller.ts",
+        "apps/web/src/localnet/wallet-bridge.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-boundary.test.mjs",
+        "apps/web/test/localnet-ui-restore.test.mjs",
+        "scripts/test-localnet-browser.mjs"
+      ],
+      "remaining": "Localnet profile is restricted to synthetic endpoints/fixtures and ReleaseEnabled=0. Default static app is not a live production trading deployment.",
+      "candidate_prs": "#181 readiness correction",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F13",
+      "feature": "ERC-20 browser approval, settlement and recovery",
+      "status": "Implemented",
+      "implemented_scope": "Merged #170/#173 add exact-token allowance review, funding, release/refund and fresh-profile/cancelled-intent recovery.",
+      "source": [
+        "apps/web/src/localnet/erc20-funding.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-erc20-funding.test.mjs",
+        "scripts/test-localnet-erc20-independent.mjs",
+        "scripts/test-localnet-erc20-browser.mjs"
+      ],
+      "remaining": "Qualify each authorized production token/profile separately; local MockERC20 evidence is not arbitrary token compatibility.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F14",
+      "feature": "Interrupted unfunded trade resumption",
+      "status": "Implemented",
+      "implemented_scope": "Merged #175 revalidates original bilateral proof and same immutable terms from encrypted checkpoints before funding admission.",
+      "source": [
+        "packages/exchange/src/checkpoint.ts",
+        "apps/web/src/localnet/controller.ts"
+      ],
+      "test_source": [
+        "apps/web/test/localnet-resumption.test.mjs",
+        "apps/web/test/localnet-resumption-ui.test.mjs"
+      ],
+      "remaining": "Missing/expired/withdrawn original evidence still requires a new negotiation. Resumption does not refresh peer authorization or send a transaction.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F15",
+      "feature": "Solana native/SPL escrow client and durable recovery",
+      "status": "Implemented",
+      "implemented_scope": "Merged #167 provides finalized native/SPL reads, settlement planning, wallet submission fences, durable native journal and encrypted recovery.",
+      "source": [
+        "packages/chain-solana/src/compose.ts",
+        "packages/chain-solana/src/vaultjournal.ts",
+        "contracts/solana/programs/basic-escrow/src/lib.rs"
+      ],
+      "test_source": [
+        "packages/chain-solana/test/settlement.test.mjs",
+        "packages/chain-solana/test/lifecycle.test.mjs",
+        "packages/chain-solana/test/vaultjournal.test.mjs"
+      ],
+      "remaining": "Public network/genesis/program and allowed-mint policies are not invented or activated; Token-2022/wrapped SOL are refused.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F16",
+      "feature": "Solana funded-exit browser composition",
+      "status": "Partial",
+      "implemented_scope": "Core native client exists. Open #179 adds explicit prepared/confirm review and browser recovery of already funded trades, rather than full offer/fund parity.",
+      "source": [
+        "packages/chain-solana/src/compose.ts"
+      ],
+      "test_source": [
+        "packages/chain-solana/test/recovery.test.mjs",
+        "packages/chain-solana/test/independent-vault-dispatch.test.mjs"
+      ],
+      "remaining": "Repair #179 qualification and validate actual browser plus native validator; full Solana discovery/negotiation/funding UI remains beyond that funded-exit slice.",
+      "candidate_prs": "#179",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F17",
+      "feature": "Public QR codec and renderer",
+      "status": "Implemented",
+      "implemented_scope": "Main contains versioned bounded QR envelope, canonical JSON, base45, text codec, symbol encoder and SVG rendering primitives.",
+      "source": [
+        "packages/qr/src/text-codec.ts",
+        "packages/qr/src/jcs.ts",
+        "packages/qr/src/qr-matrix.ts"
+      ],
+      "test_source": [
+        "packages/qr/test/codec.test.mjs",
+        "packages/qr/test/jcs.test.mjs",
+        "packages/qr/test/qr-matrix.test.mjs"
+      ],
+      "remaining": "Integrate #171 positive-safe-integer grouping guard and #172 typed failure for hostile array descriptors. Trade invite signing/verifier policy remains unresolved.",
+      "candidate_prs": "#171 #172",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F18",
+      "feature": "Public QR image/camera capture and review UI",
+      "status": "Missing",
+      "implemented_scope": "Absent from pinned main; #183 contains new bounded image/header admission, decoder Worker, camera capture and explicit public review UI.",
+      "source": [
+        "packages/qr/index.ts"
+      ],
+      "test_source": [
+        "packages/qr/test/envelope.test.mjs"
+      ],
+      "remaining": "Repair browser qualification, integrate candidate with explicit trust-context refusal, then complete real device matrix; no authenticated invite claim from unsigned data.",
+      "candidate_prs": "#183",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F19",
+      "feature": "Localization and accessibility",
+      "status": "Partial",
+      "implemented_scope": "Locale catalogs, language/direction selector, keyboard focus handling and basic responsive UI tests exist.",
+      "source": [
+        "apps/web/src/ui/locale/runtime.ts",
+        "apps/web/src/ui/locale/catalog.ts"
+      ],
+      "test_source": [
+        "apps/web/test/locale-runtime.test.mjs",
+        "apps/web/test/locale-catalog.test.mjs",
+        "scripts/test-locale-layout-browser.mjs"
+      ],
+      "remaining": "Complete supported translations, native browser zoom/RTL/screen-reader/mobile device acceptance. Locale source presence alone is not translation qualification.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F20",
+      "feature": "Privacy controls, origin policy and private-data isolation",
+      "status": "Partial",
+      "implemented_scope": "Encrypted storage, session lock, explicit transport grants, content policy, import boundaries and static artifact checks exist.",
+      "source": [
+        "packages/transport/src/http-driver.ts",
+        "packages/security/src/content-policy.ts",
+        "scripts/check-import-boundaries.mjs"
+      ],
+      "test_source": [
+        "packages/transport/test/http-driver.test.mjs",
+        "apps/web/test/content-policy.test.mjs",
+        "scripts/tests/import-boundaries.test.mjs"
+      ],
+      "remaining": "Deployment origin, RPC/relay metadata, physical device and extension assumptions require separate review; no comprehensive anonymity guarantee.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F21",
+      "feature": "Dispute/jury arbitration",
+      "status": "Experimental",
+      "implemented_scope": "Basic escrow has no adjudication path. Optional #147 preserves diagnostic arbitration calculations; this is not enabled dispute settlement.",
+      "source": [
+        "contracts/evm/src/BasicEscrow.sol"
+      ],
+      "test_source": [],
+      "remaining": "Review optional module independently and define authority/model before any user-facing financial integration.",
+      "candidate_prs": "#147; historical #46",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F22",
+      "feature": "Meetup/geofencing, courier and advanced privacy modules",
+      "status": "Experimental",
+      "implemented_scope": "Nine accepted independent optional-package branches preserve reference implementations outside main/default application.",
+      "source": [
+        "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md"
+      ],
+      "test_source": [],
+      "remaining": "Qualify one package at a time and keep default-build import isolation. Do not count unwired reference modules as completed core features.",
+      "candidate_prs": "#144\u2013148 #160\u2013163",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F23",
+      "feature": "zkTLS/payment proof adapters and private reputation",
+      "status": "Missing",
+      "implemented_scope": "Main has research/specification material; optional proof-inputs/proof-jobs and intake evaluation branches are not production proof verification or a reputation service.",
+      "source": [
+        "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md"
+      ],
+      "test_source": [],
+      "remaining": "Select explicit trust model, implement adapter and real fixtures, independently review. Preserve #155 evaluations as inert evidence.",
+      "candidate_prs": "#144 #155 #162",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F24",
+      "feature": "Signed asset-update controller and browser update UI",
+      "status": "Missing",
+      "implemented_scope": "Main has signed release/registry primitives. Historical #40/#56/#81 still contain a distinct asset-update HTTP/store/controller feature not yet present on main.",
+      "source": [
+        "packages/security/src/release-manifest.ts",
+        "packages/security/src/release-locator.ts"
+      ],
+      "test_source": [
+        "packages/security/test/release-manifest.test.mjs",
+        "packages/security/test/release-locator.test.mjs"
+      ],
+      "remaining": "Selective extraction needs later malformed-envelope fixes, failed-IDB-open retry repair, current transport types, tests and release-verification review. Do not restore older trust semantics.",
+      "candidate_prs": "#40 #56 #81",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F25",
+      "feature": "Lab/docs tooling, claims and historical evidence",
+      "status": "Partial",
+      "implemented_scope": "Core spec/build checks exist. Repaired #174 preserves original #154 tooling, bounded claims and evidence-manifest fixes; #176 contains prior inventory/evidence.",
+      "source": [
+        "scripts/spec_audit.py",
+        "docs/execution/CONSOLIDATION-RESULT-2026-11-18.md"
+      ],
+      "test_source": [
+        "scripts/tests/test_spec_audit.py"
+      ],
+      "remaining": "Qualify repaired tooling against current docs; preserve historical test dates/source hashes and update stale present-tense claims.",
+      "candidate_prs": "#174 #176; dependent #155 #156",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F26",
+      "feature": "Duplicate historical regression stack",
+      "status": "Duplicate",
+      "implemented_scope": "D9 #69\u201375/#91\u201393 tests, isolated #78\u201380 tests, and #168 effective browser delta are already represented on current main.",
+      "source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "test_source": [
+        "packages/domain/test/intent-journal.test.mjs",
+        "packages/wallet/test/evm-execution.test.mjs"
+      ],
+      "remaining": "No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    },
+    {
+      "id": "F27",
+      "feature": "Production release and live-funds qualification",
+      "status": "Blocked",
+      "implemented_scope": "Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task.",
+      "source": [
+        "apps/web/scripts/build.mjs",
+        "docs/recovery/OWNER-TESTNET-RELEASE-RUNBOOK.md"
+      ],
+      "test_source": [
+        "apps/web/scripts/artifact-policy.test.mjs",
+        "scripts/tests/verify-web-artifact.test.mjs"
+      ],
+      "remaining": "Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.",
+      "candidate_prs": "",
+      "test_execution": "Inventory worker checked source presence and behavior; did not rerun product suites. Coordinator records current execution separately."
+    }
+  ]
+}

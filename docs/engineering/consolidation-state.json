@@ -1,0 +1,235 @@
+{
+  "schema": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "generation": 1,
+  "updated_at_utc": "2026-11-19T23:33:44.506009+00:00",
+  "phase": "combined-source-locally-verified-hosted-qualification-pending",
+  "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "integration_branch": "codex/max-consolidation-20261119",
+  "integration_source_sha": "84814328f5534d6fceb2bbe74509fe37c5b48689",
+  "integration_source_tree": "0d6d70bb4465c2ce6e9395b602dc3e59a91869b2",
+  "scope": {
+    "deployment_authorized": false,
+    "release_enabled": 0,
+    "custody": "noncustodial",
+    "source_integration_authorized": true
+  },
+  "inventory": {
+    "file": "branch-inventory.json",
+    "baseline_main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+    "branches_examined": 192,
+    "pull_requests_examined": 184,
+    "classification_counts": {
+      "A": 108,
+      "B": 20,
+      "C": 41,
+      "D": 5,
+      "E": 2,
+      "F": 11,
+      "G": 5,
+      "H": 0
+    }
+  },
+  "completed": [
+    {
+      "id": "CONSOLIDATE-PR-171",
+      "source_sha": "5984dc823c25399a001b5f059c79db89f51a1324",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/171"
+    },
+    {
+      "id": "CONSOLIDATE-PR-172",
+      "source_sha": "56b904e5c4fba36a4688ab8411123926c90d1e28",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/172"
+    },
+    {
+      "id": "CONSOLIDATE-PR-174",
+      "source_sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/174"
+    },
+    {
+      "id": "CONSOLIDATE-PR-179",
+      "source_sha": "4ff4559d668e9e9f7deb311e39a6a655808983a6",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/179"
+    },
+    {
+      "id": "CONSOLIDATE-PR-181",
+      "source_sha": "13e0882ab7f7efd9e23a45c8ad5cd6d814a43546",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/181"
+    },
+    {
+      "id": "CONSOLIDATE-PR-183",
+      "source_sha": "ae83f6382a27b1e96bef60e39d48625d86f08e33",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/183"
+    },
+    {
+      "id": "CONSOLIDATE-PR-187",
+      "source_sha": "6537693eb526969c46d94cfa7f24a5fe02e82116",
+      "state": "integrated-on-staging",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/187"
+    }
+  ],
+  "repairs": [
+    {
+      "id": "FIX-QR-STABLE-LABELS",
+      "state": "implemented",
+      "source": "apps/web/src/ui/QrPanel.tsx"
+    },
+    {
+      "id": "FIX-SOLANA-STABLE-LABELS",
+      "state": "implemented",
+      "source": "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx"
+    },
+    {
+      "id": "INTEGRATE-QR-SOLANA-POLICY",
+      "state": "implemented-tested",
+      "source": "apps/web/scripts/qr-build-policy.test.mjs"
+    }
+  ],
+  "verification": {
+    "baseline_unit": {
+      "tests": 1965,
+      "passed": 1964,
+      "failed": 0,
+      "skipped": 1
+    },
+    "integration_unit": {
+      "tests": 2073,
+      "passed": 2072,
+      "failed": 0,
+      "skipped": 1
+    },
+    "integration_build_policy": {
+      "tests": 54,
+      "passed": 54,
+      "failed": 0
+    },
+    "integration_solana_focus": {
+      "tests": 63,
+      "passed": 63,
+      "failed": 0
+    },
+    "integration_qr_bounds": {
+      "tests": 129,
+      "passed": 129,
+      "failed": 0
+    },
+    "specification_unit": {
+      "tests": 32,
+      "passed": 32,
+      "failed": 0
+    },
+    "agreement_fuzz": {
+      "tests": 26,
+      "passed": 26,
+      "failed": 0
+    },
+    "actual_browser": "not-run-locally-unix-socket-policy-blocks-chromium",
+    "hosted_exact_head": "pending",
+    "foundry_ci_profile": {
+      "version": "1.5.1",
+      "solc": "0.8.30",
+      "tests": 92,
+      "passed": 92,
+      "failed": 0,
+      "skipped": 0,
+      "fuzz_runs": 4096,
+      "invariant_runs": 256,
+      "invariant_depth": 100
+    },
+    "formal_harness_unit": {
+      "tests": 22,
+      "passed": 22,
+      "failed": 0
+    },
+    "default_and_demo_builds": "passed-with-four-TypeScript-projects"
+  },
+  "workers": [
+    {
+      "generation": 1,
+      "worker": "branch_inventory",
+      "state": "complete",
+      "scope": "all-branch inventory and feature matrix"
+    },
+    {
+      "generation": 1,
+      "worker": "bounded_security",
+      "state": "complete",
+      "scope": "PR187/181 independent red-green review"
+    },
+    {
+      "generation": 1,
+      "worker": "ci_recon",
+      "state": "complete",
+      "scope": "QR labels, CI diagnosis, Solana label review"
+    },
+    {
+      "generation": 1,
+      "worker": "tooling_qualification",
+      "state": "complete",
+      "scope": "PR174 source and tooling verification"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_integration_audit",
+      "state": "running",
+      "scope": "independent combined build/runtime security audit"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_historical_tooling",
+      "state": "running",
+      "scope": "portal/distribution and inert intake/governance extraction"
+    },
+    {
+      "generation": 2,
+      "worker": "successor_asset_update",
+      "state": "running",
+      "scope": "signed asset-update selective extraction"
+    }
+  ],
+  "remaining": [
+    {
+      "id": "GATE-COMBINED-HOSTED",
+      "priority": 1,
+      "state": "pending",
+      "next_action": "Open current integration PR and execute existing hosted checks without weakening them."
+    },
+    {
+      "id": "AUDIT-COMBINED-BOUNDARIES",
+      "priority": 1,
+      "state": "ready",
+      "next_action": "Fresh independent worker reviews resolved build policy, runtime isolation, and current source delta."
+    },
+    {
+      "id": "EXTRACT-HISTORICAL-TOOLING",
+      "priority": 2,
+      "state": "ready",
+      "next_action": "Inspect portal/distribution and inert governance/intake source; extract only qualified unique work."
+    },
+    {
+      "id": "EXTRACT-ASSET-UPDATE",
+      "priority": 2,
+      "state": "needs-design-and-source-review",
+      "next_action": "Assess retained signed-update code and later fixes against current trust and transport types before extraction."
+    },
+    {
+      "id": "OPTIONAL-REFERENCE-PACKAGES",
+      "priority": 3,
+      "state": "preserved-separately",
+      "next_action": "Qualify independently; do not wire experimental packages into production core."
+    },
+    {
+      "id": "REAL-DEVICE-QUALIFICATION",
+      "priority": 3,
+      "state": "external",
+      "next_action": "Physical wallets, camera/print/device matrices and owner-controlled live trust/release inputs remain explicit."
+    }
+  ],
+  "successor_generation": 2
+}
