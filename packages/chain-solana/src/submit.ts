@@ -209,7 +209,40 @@ export async function prepareIntent(
   });
   verifyIntentForTrade(record, trade);
   admitIntent(loaded.records, record);
+  context.assertActive?.();
+  if (checkedProfileId(context.journal) !== profile) return fail('LOCKED');
   return { record, revision: await storeIntent(context.journal, trade, loaded.revision, record, signal) };
+}
+
+/**
+ * Validity of the ORIGINAL reviewed blockhash; this never requests a replacement blockhash or edits a message.
+ * Bracket the fresh finalized height and processed validity with genesis checks, and reject stale contexts.
+ */
+export async function recheckPreparedBlockhash(
+  context: SolanaSubmitContext, trade: BoundSolanaTrade, record: SolanaIntentRecord, plan: SolanaMessagePlan,
+): Promise<void> {
+  if ((record.state !== 'prepared' && record.state !== 'signed') || record.sendMarkedAt !== null) {
+    return fail('CONFLICT');
+  }
+  const genesis = async () => {
+    if ((await call(context, 'getGenesisHash', [])).value !== trade.network.genesisHash) return fail('WRONG_CHAIN');
+  };
+  await genesis();
+  const height = safeInt((await call(context, 'getBlockHeight', [{ commitment: 'finalized' }])).value);
+  const originalHeight = Number(record.lastValidBlockHeight) - MAX_PROCESSING_AGE;
+  if (height < originalHeight || height < Number(plan.snapshotBlockHeight) ||
+      height < (context.floors.get(trade.binding.networkId) ?? 0)) return fail('INTEGRITY_FAILURE');
+  if (height > Number(record.lastValidBlockHeight)) return fail('EXPIRED');
+  const minimumSlot = Math.max(Number(record.blockhashSlot), Number(plan.snapshotSlot));
+  const validity = (await call(context, 'isBlockhashValid', [record.blockhash,
+    { commitment: 'processed', minContextSlot: minimumSlot }])).value;
+  if (safeInt(own(own(validity, 'context'), 'slot')) < minimumSlot) return fail('INTEGRITY_FAILURE');
+  const valid = own(validity, 'value');
+  if (typeof valid !== 'boolean') return fail('INTEGRITY_FAILURE');
+  await genesis();
+  if (!valid) return fail('EXPIRED');
+  context.assertActive?.();
+  raiseFloor(context, trade.binding, height);
 }
 
 const MESSAGE_BASE64_CAP = Math.ceil(MAX_TRANSACTION_BYTES / 3) * 4;
@@ -224,6 +257,8 @@ export async function signIntent(
       session.tradeId !== trade.binding.tradeId) return fail('UNAUTHORIZED');
   const result = await signWithWallet(session, messageOf(record), context.assertActive);
   if (!result.ok) return fail(result.error.code);
+  // Cancellation/lock can win while the physical prompt is open. Do not persist a late signature as authority.
+  context.assertActive?.();
   // transitionIntent re-parses the record, which verifies the signature over the journaled message again.
   const next = transitionIntent(record, 'signed', clockNow(context), { signature: result.value.signature });
   const revision = await storeIntent(context.journal, trade, stored.revision, next);

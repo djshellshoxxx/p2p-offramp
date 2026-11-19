@@ -5,7 +5,7 @@ import { SolanaVaultJournal } from '../src/vaultjournal.ts';
 import { EncryptedVaultService } from '../../storage/src/vault-service.ts';
 import { VaultStorageError } from '../../storage/src/idb-vault-store.ts';
 import { connected, makeWallet, SELLER, setupClient, splitWire } from './lifecycle-support.mjs';
-import { error, key, ok } from './support.mjs';
+import { error, key, makeRegistry, ok } from './support.mjs';
 
 const recordOf = env => env.journalFake.records(env.binding)[0];
 const sends = env => env.cluster.calls.filter(call => call.method === 'sendTransaction').length;
@@ -104,6 +104,37 @@ test('a changed profile cannot inherit or cancel a prepared capability', async (
   assert.equal(sends(env), 0);
   env.journalFake.setProfile('a'.repeat(32));
   error(await env.client.confirm(handle, session), 'CONFLICT');
+});
+
+test('a connected session stays scoped to the original profile and full deployment binding', async () => {
+  const base = makeRegistry();
+  const env = setupClient('native', { registry: {
+    network: id => ['solana-localnet', 'solana-other'].includes(id)
+      ? { ...base.network('solana-localnet'), id } : null,
+    deployment: (network, id) => ['solana-localnet', 'solana-other'].includes(network) &&
+      ['escrow-v1', 'escrow-alias'].includes(id)
+      ? { ...base.deployment('solana-localnet', 'escrow-v1'), id } : null,
+  } });
+  const session = await connected(env, 'seller');
+  for (const changed of [{ networkId: 'solana-other' }, { deploymentId: 'escrow-alias' }]) {
+    const alias = ok(env.client.bind({ ...env.binding, ...changed }, env.terms));
+    error(await env.client.prepare(alias, session, 'release'), 'UNAUTHORIZED');
+  }
+  env.journalFake.setProfile('b'.repeat(32));
+  error(await env.client.prepare(env.trade, session, 'release'), 'LOCKED');
+  assert.equal(env.journalFake.records(env.binding).length, 0);
+  assert.equal(env.walletFake.calls.sign.length, 0);
+});
+
+test('a profile change during wallet connect cannot grant a session in the replacement profile', async () => {
+  const env = setupClient();
+  const feature = env.walletFake.wallet.features['standard:connect'], original = feature.connect;
+  feature.connect = async (...args) => {
+    const result = await original(...args);
+    env.journalFake.setProfile('b'.repeat(32));
+    return result;
+  };
+  error(await env.client.connect(env.trade, 'seller'), 'LOCKED');
 });
 
 test('wallet account, network, or disconnect revocation disposes the client and all its reviews', async t => {
