@@ -18,7 +18,11 @@ export interface EvmReaderOptions {
 export interface LiveAnchor { readonly height: string; readonly hash: string; readonly timestampSeconds: string; readonly codeKeccak256: string; }
 export interface EscrowExpectation { readonly seller: string; readonly buyer: string; readonly asset: string; readonly amountBaseUnits: string; readonly expirySeconds: string; }
 export interface DecodedEscrow extends EscrowExpectation { readonly state: ChainObservation['state']; }
-export interface EvmEscrowSnapshot { readonly observation: ChainObservation; readonly escrow: DecodedEscrow; }
+export interface EvmEscrowSnapshot {
+  readonly observation: ChainObservation; readonly escrow: DecodedEscrow;
+  /** The same rechecked canonical header used for every state read; its timestamp drives native deadline guidance. */
+  readonly anchor: LiveAnchor;
+}
 export interface EvmReadRequest { readonly generation: number; readonly requestSequence: number; readonly signal: AbortSignal; }
 export interface ExpectedEscrowTransaction { readonly hash: string; readonly from: string; readonly to: string; readonly data: string; readonly value: string; readonly nonce?: string; }
 export interface ReceiptObservation {
@@ -188,7 +192,7 @@ export class EvmChainReader {
       if (escrow.state !== 'absent' && (escrow.seller !== wanted.seller || escrow.buyer !== wanted.buyer || escrow.asset !== wanted.asset || escrow.amountBaseUnits !== wanted.amountBaseUnits || escrow.expirySeconds !== wanted.expirySeconds)) return fail();
       await this.#recheck(live,context);
       const observedAt = counter((this.#options.now ?? Date.now)());
-      return Object.freeze({escrow,observation:Object.freeze({binding,generation,requestSequence,anchor:Object.freeze({height:live.anchor.height,hash:live.anchor.hash}),state:escrow.state,finality:'finalized' as const,observedAt})});
+      return Object.freeze({escrow,anchor:live.anchor,observation:Object.freeze({binding,generation,requestSequence,anchor:Object.freeze({height:live.anchor.height,hash:live.anchor.hash}),state:escrow.state,finality:'finalized' as const,observedAt})});
     });
   }
   async readValidated(binding: TradeBinding, request: EvmReadRequest, expected: EscrowExpectation): Promise<CoreResult<ChainObservation>> {

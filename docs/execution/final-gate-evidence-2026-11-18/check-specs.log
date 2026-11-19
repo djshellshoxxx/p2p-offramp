@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 check:specs
+> python scripts/spec_audit.py --check
+
+{"broken_links": 0, "categories": {"catalog": 1, "design-review-pending": 171, "planning": 1}, "total": 173, "unindexed": []}

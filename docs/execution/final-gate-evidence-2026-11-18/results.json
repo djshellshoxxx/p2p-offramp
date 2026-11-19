@@ -1,0 +1,56 @@
+[
+  {
+    "command": "npm run typecheck",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 1.9
+  },
+  {
+    "command": "npm test",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 52.8
+  },
+  {
+    "command": "npm run test:specs",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 2.82
+  },
+  {
+    "command": "npm run check:specs",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 0.2
+  },
+  {
+    "command": "npm run check:boundaries",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 0.73
+  },
+  {
+    "command": "npm run test:build-policy",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 2.95
+  },
+  {
+    "command": "npm run build",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 2.04
+  },
+  {
+    "command": "npm run build:demo",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 2.23
+  },
+  {
+    "command": "npm run test:localnet:controller",
+    "sha": "9f3ba5de1c202ef8b94d875c14cfcbc7af7ef7a0",
+    "exit": 0,
+    "seconds": 9.17
+  }
+]

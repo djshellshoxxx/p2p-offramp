@@ -11,6 +11,32 @@ import { buildLocalnetContentPolicy } from '../../../packages/security/src/conte
 import { LOCALNET_BANNER, LOCALNET_CONFIG_FORMAT, localnetConfigDocument, parseLocalnetConfig } from '../src/localnet/config.ts';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+/** Vite's document license report excludes dependencies bundled only in a native Worker. */
+async function completeWorkerLicenses(directory) {
+  const graph = JSON.parse(await readFile(resolve(directory, 'core-graph-worker.json'), 'utf8'));
+  const inventoryPath = resolve(directory, 'third-party-licenses.json');
+  const inventory = JSON.parse(await readFile(inventoryPath, 'utf8'));
+  if (!Array.isArray(graph.modules) || !Array.isArray(inventory)) throw new Error('LICENSE_ATTRIBUTION_MISSING');
+  const names = new Set();
+  for (const module of graph.modules) {
+    if (typeof module.path !== 'string' || !module.path.startsWith('node_modules/')) continue;
+    const match = /^node_modules\/(@noble\/(?:curves|hashes|ciphers)|react|react-dom|scheduler)\//.exec(module.path);
+    if (!match) throw new Error('UNREVIEWED_DEPENDENCY');
+    names.add(match[1]);
+  }
+  for (const name of [...names].sort()) {
+    const packageRoot = resolve(root, '../../node_modules', name);
+    const manifest = JSON.parse(await readFile(resolve(packageRoot, 'package.json'), 'utf8'));
+    const license = await readFile(resolve(packageRoot, 'LICENSE'), 'utf8');
+    if (manifest.name !== name || typeof manifest.version !== 'string' || manifest.license !== 'MIT' || !license.includes('Permission is hereby granted')) throw new Error('LICENSE_ATTRIBUTION_MISSING');
+    const existing = inventory.find(item => item.name === name && item.version === manifest.version);
+    if (existing) {
+      if (existing.identifier !== 'MIT' || !existing.text?.includes('Permission is hereby granted')) throw new Error('LICENSE_ATTRIBUTION_MISSING');
+    } else inventory.push({ name, version: manifest.version, identifier: manifest.license, text: license });
+  }
+  inventory.sort((a, b) => a.name.localeCompare(b.name, 'en') || a.version.localeCompare(b.version, 'en'));
+  await writeFile(inventoryPath, JSON.stringify(inventory, null, 2) + '\n');
+}
 /** Strings that only the synthetic demo module contains (registry release ID and pinned registry digest). */
 export const SYNTHETIC_MARKERS = Object.freeze(['test-local-only', '14e7ecfb5aff74253affe0d2e8560728763f01db405bcc7efdca964ef103ca6a']);
 /** Strings only the localnet artifact carries (embedded config format and the visible test-funds banner). */
@@ -68,7 +94,8 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
   await walk(directory);
   const assets = Object.keys(files).sort().map(path => identities[path]);
   const inspection = { ...inspectArtifactFiles(files), bytes: assets.reduce((total, asset) => total + asset.bytes, 0) };
-  if (!assets.some(item => /^assets\/vault\.worker-[A-Za-z0-9_-]+\.js$/.test(item.path))) throw new Error('NATIVE_WORKER_ASSET_MISSING');
+  const workers = assets.filter(item => /^assets\/(?:vault|localnet)\.worker-[A-Za-z0-9_-]+\.js$/.test(item.path));
+  if (workers.length !== 1) throw new Error('NATIVE_WORKER_ASSET_MISSING');
   const licenses = JSON.parse(files['third-party-licenses.json'] ?? 'null');
   if (!Array.isArray(licenses) || ['react', 'react-dom', 'scheduler'].some(name => !licenses.some(item => item.name === name && item.identifier === 'MIT' && typeof item.text === 'string' && item.text.includes('Permission is hereby granted')))) throw new Error('LICENSE_ATTRIBUTION_MISSING');
   for (const graph of ['core-graph-document.json', 'core-graph-worker.json']) if (!files[graph]) throw new Error('CORE_GRAPH_MISSING');
@@ -81,6 +108,7 @@ export async function scanBuild(directory, { syntheticDemo = false, testnet = fa
   const containsLocalnet = localnetPolicyDocument || graphPaths.some(path => LOCALNET_GRAPH_MODULE.test(path)) ||
     Object.values(files).some(text => text.includes('ws://') || LOCALNET_MARKERS.some(marker => text.includes(marker)));
   if (containsLocalnet !== Boolean(localnet)) throw new Error(localnet ? 'LOCALNET_DATA_MISSING' : 'LOCALNET_DATA_IN_NON_LOCALNET_BUILD');
+  if (!workers[0].path.startsWith(localnet ? 'assets/localnet.worker-' : 'assets/vault.worker-')) throw new Error('WORKER_PROFILE_MISMATCH');
   const localnetEvidence = localnet ? checkLocalnetArtifact(files, graphPaths, localnet.relayOrigin) : null;
   const demoModules = ['core-graph-document.json', 'core-graph-worker.json']
     .some(graph => JSON.parse(files[graph]).modules?.some(module => typeof module.path === 'string' && module.path.startsWith('apps/web/src/demo/')));
@@ -118,6 +146,7 @@ export async function buildWeb({ delivery = 'meta', outDir, trustRoot, nowSecond
   await build({ configFile: resolve(root, 'vite.config.ts'), mode: delivery, build: { outDir },
     ...(trust ? { define: { __P2P_TESTNET_TRUST__: JSON.stringify(trust.bundle),
       __P2P_TESTNET_LOCAL_PROOF_KEY_ID__: JSON.stringify(testOnlyLocalProof?.pinnedKeyId ?? null) } } : {}) });
+  await completeWorkerLicenses(outDir);
   const evidence = { ...await scanBuild(outDir, { syntheticDemo, testnet }), ...(trust ? { testnetTrust: { ...trust.summary, localProof: testOnlyLocalProof !== undefined, ownerApproved: testOnlyLocalProof === undefined } } : {}) };
   await writeFile(resolve(outDir, 'local-build-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
   return evidence;
@@ -144,6 +173,7 @@ async function buildLocalnet(outDir, localnet) {
   const { createViteConfig } = await import('../vite.config.ts');
   const viteConfig = createViteConfig('localnet', { document, relayOrigin: config.relayOrigin });
   await build({ ...viteConfig, configFile: false, mode: 'localnet', build: { ...viteConfig.build, outDir } });
+  await completeWorkerLicenses(outDir);
   const scanned = await scanBuild(outDir, { localnet: { relayOrigin: config.relayOrigin } });
   const evidence = { ...scanned, localnet: { ...scanned.localnet, registrySha256: config.registrySha256, escrowLayouts: { ...config.escrowLayouts }, chainId: config.network.chainIdentity } };
   await writeFile(resolve(outDir, 'local-build-evidence.json'), JSON.stringify(evidence, null, 2) + '\n');
