@@ -62,12 +62,14 @@ export function createContractAcceptanceVerifier(options:ContractAcceptanceOptio
      if(quantity(await call('eth_chainId')).toString()!==domain.chainId)return failure('WRONG_CHAIN');
      const genesis=header(await call('eth_getBlockByNumber',['0x0',false]));if(genesis.height!=='0'||genesis.hash!==network.genesisHash)return failure('WRONG_CHAIN');
      const anchor=header(await call('eth_getBlockByNumber',['latest',false])),tag='0x'+BigInt(anchor.height).toString(16);
-     if(codeHash(code(await call('eth_getCode',[deployment.address,tag])))!==deployment.runtime.keccak256)return failure('INTEGRITY_FAILURE');
-     const walletCode=code(await call('eth_getCode',[scope.account,tag]));
+     // Mutable wallet policy and runtime must be read from the same canonical block, even behind a load balancer.
+     const stateAt=Object.freeze({blockHash:anchor.hash,requireCanonical:true});
+     if(codeHash(code(await call('eth_getCode',[deployment.address,stateAt])))!==deployment.runtime.keccak256)return failure('INTEGRITY_FAILURE');
+     const walletCode=code(await call('eth_getCode',[scope.account,stateAt]));
      const data='0x1626ba7e'+digest+'40'.padStart(64,'0')+signature.length.toString(16).padStart(64,'0')+hex(signature).padEnd(Math.ceil(signature.length/32)*64,'0');
-     const returned=await call('eth_call',[{to:scope.account,data,gas:'0x186a0'},tag]);
+     const returned=await call('eth_call',[{to:scope.account,data,gas:'0x186a0'},stateAt]);
      if(typeof returned!=='string'||returned.length!==66||returned!=='0x1626ba7e'+'0'.repeat(56))return failure('UNAUTHORIZED');
-     if(code(await call('eth_getCode',[scope.account,tag]))!==walletCode)return failure('INTEGRITY_FAILURE');
+     if(code(await call('eth_getCode',[scope.account,stateAt]))!==walletCode)return failure('INTEGRITY_FAILURE');
      const repeated=header(await call('eth_getBlockByNumber',[tag,false]));if(JSON.stringify(repeated)!==JSON.stringify(anchor))return failure('INTEGRITY_FAILURE');
      if(quantity(await call('eth_chainId')).toString()!==domain.chainId)return failure('WRONG_CHAIN');
      const finalGenesis=header(await call('eth_getBlockByNumber',['0x0',false]));if(JSON.stringify(genesis)!==JSON.stringify(finalGenesis))return failure('WRONG_CHAIN');

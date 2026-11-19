@@ -4,6 +4,11 @@
 
 **Status: development/test-only.** The app is experimental and does not accept or authorize real-funds trading. `ReleaseEnabled=0`. Treat anything in an open draft PR as unmerged work; do not interpret demos as live exchange services.
 
+Source checkpoint: merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. The
+[development status](../DEVELOPMENT_STATUS.md) distinguishes this default client from
+unmerged localnet browser work in #166–#168. [The reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)
+lists source capabilities separately from user/browser and release qualification.
+
 ## Overview and capabilities
 
 On **main**, the static client provides a local encrypted profile/vault with lock, unlock, encrypted export and recovery into a fresh-key profile. A synthetic demo build contains offline sample offers and read-only EVM trade-terms review. An unlocked profile can save a bounded set of original review documents locally and revalidate them on load. Existing tests cover aspects of backup recovery, browser storage and review; those tests are **not production or security certification**.

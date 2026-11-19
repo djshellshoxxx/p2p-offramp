@@ -1,0 +1,42 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p2p-offramp@0.1.0 test:specs
+> python -m unittest discover -s scripts/tests -v
+
+test_actual_signature_digest_and_public_key_negative_controls (test_g16_vectors.G16OpenSSLFixture.test_actual_signature_digest_and_public_key_negative_controls) ... ok
+test_committed_signed_fixture_checks_all_four_signatures (test_g16_vectors.G16OpenSSLFixture.test_committed_signed_fixture_checks_all_four_signatures) ... ok
+test_empty_signature_work_cannot_pass (test_g16_vectors.G16OpenSSLFixture.test_empty_signature_work_cannot_pass) ... ok
+test_committed_fixture_matches_independent_generator (test_g16_vectors.G16VectorFixture.test_committed_fixture_matches_independent_generator) ... ok
+test_committed_vectors_agree_with_independent_oracle (test_qr_codec_oracle.QrCodecOracle.test_committed_vectors_agree_with_independent_oracle) ... ok
+test_oracle_detects_a_changed_base45_vector (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_changed_base45_vector) ... ok
+test_oracle_detects_a_changed_payload_hash (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_changed_payload_hash) ... ok
+test_oracle_detects_a_damaged_symbol_module (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_damaged_symbol_module) ... ok
+test_oracle_detects_a_stale_content_digest (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_stale_content_digest) ... ok
+test_oracle_detects_a_wrong_capacity (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_wrong_capacity) ... ok
+test_oracle_detects_a_wrong_refusal_code (test_qr_codec_oracle.QrCodecOracle.test_oracle_detects_a_wrong_refusal_code) ... ok
+test_untampered_copy_passes (test_qr_codec_oracle.QrCodecOracle.test_untampered_copy_passes) ... ok
+test_a_tampered_fixture_is_refused (test_solana_peer_acceptance_vectors.SolanaPeerAcceptanceVectors.test_a_tampered_fixture_is_refused) ... ok
+test_committed_fixture_matches_independent_generator (test_solana_peer_acceptance_vectors.SolanaPeerAcceptanceVectors.test_committed_fixture_matches_independent_generator) ... ok
+test_fixture_covers_the_required_cases (test_solana_peer_acceptance_vectors.SolanaPeerAcceptanceVectors.test_fixture_covers_the_required_cases) ... ok
+test_readme_records_fixture_sha256 (test_solana_peer_acceptance_vectors.SolanaPeerAcceptanceVectors.test_readme_records_fixture_sha256) ... ok
+test_all_recorded_sources_must_be_installed (test_source_correspondence.SourceCorrespondenceTests.test_all_recorded_sources_must_be_installed) ... ok
+test_catalog_accepts_nested_and_multiline_link_labels (test_spec_audit.AuditTests.test_catalog_accepts_nested_and_multiline_link_labels) ... ok
+test_catalog_coverage_detects_missing_specs (test_spec_audit.AuditTests.test_catalog_coverage_detects_missing_specs) ... ok
+test_cli_readiness_fails_even_when_links_pass (test_spec_audit.AuditTests.test_cli_readiness_fails_even_when_links_pass) ... ok
+test_design_baseline_still_requires_review (test_spec_audit.AuditTests.test_design_baseline_still_requires_review) ... ok
+test_fence_with_trailing_text_does_not_expose_example_links (test_spec_audit.AuditTests.test_fence_with_trailing_text_does_not_expose_example_links) ... ok
+test_link_lookalikes_do_not_index_specs_or_report_missing_files (test_spec_audit.AuditTests.test_link_lookalikes_do_not_index_specs_or_report_missing_files) ... ok
+test_links_cannot_escape_repository (test_spec_audit.AuditTests.test_links_cannot_escape_repository) ... ok
+test_links_ignore_remote_and_fragment_but_check_files (test_spec_audit.AuditTests.test_links_ignore_remote_and_fragment_but_check_files) ... ok
+test_missing_status_and_code_examples_do_not_claim_readiness (test_spec_audit.AuditTests.test_missing_status_and_code_examples_do_not_claim_readiness) ... ok
+test_placeholder_with_all_headings_is_not_complete (test_spec_audit.AuditTests.test_placeholder_with_all_headings_is_not_complete) ... ok
+test_plain_status_and_missing_sections (test_spec_audit.AuditTests.test_plain_status_and_missing_sections) ... ok
+test_report_is_deterministic_and_links_from_docs (test_spec_audit.AuditTests.test_report_is_deterministic_and_links_from_docs) ... ok
+test_shorter_fence_does_not_end_example (test_spec_audit.AuditTests.test_shorter_fence_does_not_end_example) ... ok
+test_table_metadata_is_read_as_pending_design (test_spec_audit.AuditTests.test_table_metadata_is_read_as_pending_design) ... ok
+test_titled_catalog_link_counts_toward_coverage (test_spec_audit.AuditTests.test_titled_catalog_link_counts_toward_coverage) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 2.667s
+
+OK

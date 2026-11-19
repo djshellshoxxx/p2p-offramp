@@ -44,6 +44,32 @@ function rpc(profile, patch = {}) {
   };
   return { request, calls, state };
 }
+
+test('recovery never combines majority headers with fork-only settlement state or withdrawal credit', async () => {
+  const f=await fixture(), {keccak256}=await import('../../packages/wallet/src/evm-terms.ts');
+  const {buildPendingWithdrawals}=await import('../../packages/wallet/src/evm-escrow.ts');
+  const profile=structuredClone(f.profile),raw=JSON.parse(Buffer.from(profile.registry.bytes,'base64url'));
+  raw.networks[0].deployments[0].runtime.keccak256=Buffer.from(keccak256(Buffer.from('6000','hex'))).toString('hex');
+  const bytes=Buffer.from(JSON.stringify(raw));profile.registry.bytes=bytes.toString('base64url');profile.registry.sha256=sha(bytes);
+  const options={profile,binding:{chain:'evm',networkId:'local-evm',deploymentId:'escrow-fixture',tradeId:'ab'.repeat(32)},endpointId:'loopback-fixture'};
+  const selector=buildPendingWithdrawals(raw.networks[0].deployments[0].address,BUYER,ZERO).data.slice(2,10);
+  for(const target of ['trade','credit']){
+    const p=rpc(profile,{phase:target==='credit'?2:1,pendingSelector:selector});let forkReads=0;
+    p.state.intercept=(method,params)=>{
+      if(method!=='eth_call')return undefined;
+      const pending=params[0].data.startsWith('0x'+selector);
+      if((target==='credit')!==pending)return undefined;
+      forkReads++;
+      // The other node has a different canonical block at 0x11. Its terminal state/credit cannot
+      // establish a recovery snapshot under L, even when the final header check returns L again.
+      const at=params[1];
+      if(typeof at==='object'&&at.blockHash!=='0x'+'fa'.repeat(32))throw Object.assign(new Error('PRIVATE unknown canonical block'),{code:-32001});
+      return target==='credit'?'0x'+word(1000):'0x'+[SELLER,2000,2,BUYER,ZERO,1000].map(word).join('');
+    };
+    await assert.rejects(api.inspectEvmRecovery({...options,request:p.request}),error=>error.code==='UNAVAILABLE',target);
+    assert.equal(forkReads,1,'recovery must not retry by block number');
+  }
+});
 test('builder requires original live proof and exact authenticated canonical ABI before emitting a package', async () => {
   const f = await fixture();
   assert.ok(f.files.some(file => file.path === 'recover.mjs'));

@@ -3,7 +3,10 @@
 New research: [reusable upstream code for unfinished features](docs/research/reuse-2026-11-03/README.md)
 (2026-11-03; current gaps, exact source/license evidence and intended integration points).
 
-Current source: [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
+Latest recorded checkpoint: [November 18 documentation reconciliation](docs/consolidation/2026-11-18-documentation-reconciliation.md)
+and [development status](docs/DEVELOPMENT_STATUS.md), pinned to `main@6c38e641`. Start with the **[User Guide](docs/wiki-source/User-Guide.md)**
+or **[Developer Guide](docs/wiki-source/Developer-Guide.md)**. The [November 16 canonical qualification](docs/consolidation/2026-11-16-canonical-qualification.md)
+and [continuation evidence](docs/execution/CONTINUATION-RESULT-2026-10-31.md),
 [whole-source audit](docs/execution/CONTINUATION-AUDIT-2026-10-31.md),
 [remaining-work inventory](docs/execution/INCOMPLETE-WORK-2026-10-31.md),
 [autonomous execution prompt](docs/execution/AUTONOMOUS-NEXT-PROMPT-2026-10-31.md)
@@ -21,11 +24,19 @@ confirmation; the application cannot guarantee that fiat is received or irrevers
 
 ## Current state
 
+The source checkpoint `main@6c38e641` includes merged D1 acceptance (#150), QR/release-trust primitives (#140),
+Solana consent verification (#151), canonical EVM reader binding (#143) and development-only formal evidence tooling (#137).
+The expanded wallet, native Solana recovery and localnet browser workflows remain in draft PRs [#166](https://github.com/djshellshoxxx/p2p-offramp/pull/166),
+[#167](https://github.com/djshellshoxxx/p2p-offramp/pull/167) and [#168](https://github.com/djshellshoxxx/p2p-offramp/pull/168).
+Their source and test claims do not become main capabilities until integration is qualified. See the [current feature matrix](docs/development/FEATURE_COMPLETION_MATRIX.md).
+
 The catalog contains 173 documents: 171 expanded technical design baselines, a navigation catalog
 and supplemental plan. Provider/artifact pins, implementations and security/interoperability evidence
 are tracked separately. Optional proof, location, courier and arbitration capabilities remain gated.
 
 Implemented foundations include bounded encrypted IndexedDB/CAS persistence, fresh-key backup recovery, local messaging-identity lifecycle, authority/error/retry policies, a conservative encrypted intent journal and discovery-only wallet boundary. A static React/Vite shell now exposes locked startup, known-profile unlock/lock/status and explicit unchecked ciphertext export through a native Worker. No mandatory app-owned backend exists; the [client-side requirement](docs/adr/ADR-CLIENT-SIDE-2026-10-24.md) is normative. Create/restore/inventory UI is implemented. The Offers page can check a local G16 EVM trade-terms file offline against a loaded registry and open a read-only review (exact amounts, full addresses, deadlines, settlement risk); the default build has no approved registry, so this works only in the explicitly labelled synthetic `demo` build. Offline signed registry/release verification, test-only wallet execution, both native escrow profiles and the canonical encrypted relay-to-escrow local acceptance loop are implemented. Approved live trust/bootstrap, qualified deployments and a funds-enabled app remain incomplete. ReleaseEnabled stays zero. No real-funds readiness is claimed.
+
+The November 18 consolidation checkpoint is documented in [Consolidation, security repair, and qualification result](docs/execution/CONSOLIDATION-RESULT-2026-11-18.md). Four scoped PRs reached main; the separately reviewed integration stack adds the native Solana encrypted journal/recovery projection and a localnet-only EVM trading UI. Its combined source passed 1,922 tests and real Anvil/relay controller checks, while actual browser execution, the real Solana validator, complete Solana/ERC-20 browser flows and public-testnet qualification remain outstanding. The report records the unpatched build-tool dependency advisory and keeps implementation, main integration and release qualification separate. `ReleaseEnabled=0`.
 
 ## Future features
 
@@ -33,7 +44,7 @@ The proposed privacy enhancement backlog is documented in [Future privacy archit
 
 ## Screenshots
 
-Captured from the synthetic, test-only demo build (`npm run build:demo`); trading and funds are disabled in every build.
+Captured from the synthetic, test-only demo build (`npm run build:demo`), which has no signing or send capability. The separate localnet test profile uses disposable development assets only.
 
 ![Home: locked local workspace with funds disabled and the SYNTHETIC DEMO badge](docs/screenshots/startup.png)
 

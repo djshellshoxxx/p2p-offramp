@@ -2,7 +2,11 @@
 import { createScanner, SyntaxKind } from 'typescript/unstable/ast';
 
 const forbiddenMembers = new Set(['innerHTML', 'outerHTML', 'insertAdjacentHTML', 'dangerouslySetInnerHTML', 'serviceWorker', 'sendBeacon']);
-export function inspectApplicationSource(path, source) {
+/**
+ * `allowWebSocketConstructor` is set only by the localnet build plugin, and only for packages/relay/src/pool.ts; every
+ * other token check still applies there, and every other module and profile keeps the full policy.
+ */
+export function inspectApplicationSource(path, source, { allowWebSocketConstructor = false } = {}) {
   // TypeScript 7's scanner handles escapes/comments/literals. This is a conservative token
   // policy, not data-flow analysis; browser fixtures independently exercise hostile content.
   const scanner = createScanner(true, undefined, source);
@@ -24,7 +28,8 @@ export function inspectApplicationSource(path, source) {
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i], previous = tokens[i - 1]?.text, next = tokens[i + 1]?.text;
     if ((token.kind === SyntaxKind.Identifier || token.kind === SyntaxKind.StringLiteral && previous === '[') && forbiddenMembers.has(token.value)) fail();
-    if (token.kind === SyntaxKind.Identifier && ['eval', 'Function', 'fetch', 'WebSocket', 'XMLHttpRequest', 'EventSource'].includes(token.value) && next === '(') fail();
+    if (token.kind === SyntaxKind.Identifier && ['eval', 'Function', 'fetch', 'WebSocket', 'XMLHttpRequest', 'EventSource'].includes(token.value) && next === '(' &&
+        !(allowWebSocketConstructor === true && token.value === 'WebSocket' && previous === 'new')) fail();
     if (['write', 'writeln'].includes(token.value) && previous === '.' && tokens[i - 2]?.text === 'document') fail();
     if (token.value === 'style' && next === '=') fail();
     if (token.value === 'setAttribute' && next === '(' && tokens[i + 2]?.kind === SyntaxKind.StringLiteral && /^(?:on|style$)/i.test(tokens[i + 2].value)) fail();

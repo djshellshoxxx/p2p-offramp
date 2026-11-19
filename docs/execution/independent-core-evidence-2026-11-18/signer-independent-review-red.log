@@ -1,0 +1,113 @@
+✔ peer acceptance: both roles round-trip with signTerms through verifyEoaPeerAcceptance (31.522518ms)
+✔ peer acceptance: typed-data JSON shown to the wallet has the exact shape (8.1431ms)
+✔ peer acceptance: signatures that are not a strict low-s EOA signature by the account are refused (7.476694ms)
+✔ peer acceptance: provider errors map like signTerms and never downgrade (2.658528ms)
+✔ peer acceptance: account switch before or during the prompt is refused (2.778481ms)
+✔ peer acceptance: chain switch before or during the prompt is refused (3.013739ms)
+✔ peer acceptance: preflight refusals never reach the wallet (6.814457ms)
+✔ peer acceptance: terms on another registry EVM network are refused before any wallet request (2.597595ms)
+✔ peer acceptance: domain is rebuilt from the registry and inputs are snapshotted before the first await (3.254805ms)
+✔ peer acceptance: cancellation and late results are discarded (4.250482ms)
+✔ peer acceptance: silent account or chain changes during signing discard the result (4.786339ms)
+✔ wallet signing: one physical authorization slot covers both signature methods (9.047016ms)
+✖ independent review: terms discards dispose after the final identity query (3.036454ms)
+✖ independent review: terms discards abort after the final identity query (2.571045ms)
+✖ independent review: peer discards dispose after the final identity query (2.630024ms)
+✖ independent review: peer discards abort after the final identity query (2.729506ms)
+✔ G10 nothing is requested before an explicit connect; connect binds registry network, chain and canonical account (10.037423ms)
+✔ G10 a pre-aborted explicit connect makes no provider request (0.621236ms)
+✔ G10 cancellation while the account request is pending prevents the next provider request (0.713897ms)
+✔ G10 signs G16 terms once with typed data and returns only an offline-verified signature (9.835507ms)
+✔ G10 preflight refuses terms not bound to the registry, session account or role (2.562873ms)
+✔ G10 snapshots validated G16 inputs before provider awaits and signs exactly that snapshot (3.037315ms)
+✔ G10 cancellation while account recheck is pending prevents the chain recheck and signing prompt (0.794369ms)
+✔ G10 account/chain changes invalidate the session; late results after cancel or change are discarded (2.472736ms)
+✔ G10 reconnecting never stacks duplicate provider listeners (0.968916ms)
+✔ G10 first connection observes account changes during its held chain read (0.534914ms)
+✔ G10 listener registration cannot publish a session after synchronous invalidation or disposal (0.62378ms)
+✔ G10 providers without removable lifecycle events are refused before prompting (0.354169ms)
+✔ G10 account reply accessors cannot invalidate a session and then reach the signing prompt (0.699325ms)
+✔ G10 an old held connect cannot detach a newer connection or issue follow-on requests (0.445148ms)
+✔ G10 a request getter cannot dispose the adapter and then start the connect prompt (0.758194ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 27
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 622.528749
+
+✖ failing tests:
+
+test at packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:311:5
+✖ independent review: terms discards dispose after the final identity query (3.036454ms)
+  AssertionError [ERR_ASSERTION]: expected failure
+  
+  true !== false
+  
+      at code (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:91:42)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:329:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:311:5
+✖ independent review: terms discards abort after the final identity query (2.571045ms)
+  AssertionError [ERR_ASSERTION]: expected failure
+  
+  true !== false
+  
+      at code (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:91:42)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:329:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:311:5
+✖ independent review: peer discards dispose after the final identity query (2.630024ms)
+  AssertionError [ERR_ASSERTION]: expected failure
+  
+  true !== false
+  
+      at code (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:91:42)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:329:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:311:5
+✖ independent review: peer discards abort after the final identity query (2.729506ms)
+  AssertionError [ERR_ASSERTION]: expected failure
+  
+  true !== false
+  
+      at code (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:91:42)
+      at TestContext.<anonymous> (file:///workspace/scratch/07167523f342/signer-independent-review/packages/wallet/test/evm-adapter-peer-acceptance.test.mjs:329:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

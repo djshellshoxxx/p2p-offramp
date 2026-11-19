@@ -1,0 +1,18 @@
+vite v8.3.5 building client environment for localnet...
+transforming...
+✓ 47 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/_headers                              0.35 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/content-policy.json                   1.17 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/index.html                            1.29 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/third-party-licenses.json             3.62 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/core-graph-document.json              6.94 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/core-graph-worker.json               15.77 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/assets/localnet.worker-B3jBiEnD.js  332.59 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/assets/LocalnetRoot-CD-uua8F.css      1.58 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/assets/index-lbyUyLrG.css             6.77 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/assets/LocalnetRoot-Cw7K63ha.js      38.71 kB
+../../../../tmp/p2p-final-token-artifact-ANjUOe/app/assets/index-BUFP2haO.js            220.93 kB
+
+✓ built in 454ms
+{"ok":true,"kind":"ERC20_LOCALNET_ARTIFACT","assets":11,"ReleaseEnabled":0,"fixtureWalletCallsDuringBuild":{"signatures":0,"sends":0,"connects":0},"browserExecuted":false}

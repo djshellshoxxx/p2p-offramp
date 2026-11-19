@@ -69,3 +69,31 @@ test('content object boundaries reject accessors, symbols, inherited fields and 
  invalid(()=>parse(Object.assign(Object.create({inherited:true}),{href:'https://example.org/',label:'Link'})));
  const revoked=Proxy.revocable({},{});revoked.revoke();invalid(()=>build(revoked.proxy));
 });
+
+// A3 localnet build profile: the default offline policy is pinned byte-for-byte; the localnet variant changes connect-src only.
+const DEFAULT_META_CSP="base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'";
+const DEFAULT_HEADER_CSP="base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-ancestors 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'";
+test('default offline CSP is unchanged by the localnet variant',()=>{
+ const build=fn('buildOfflineContentPolicy');
+ assert.equal(build({version:1,releaseId:'local-development',delivery:'meta'}).csp,DEFAULT_META_CSP);
+ assert.equal(build({version:1,releaseId:'local-development',delivery:'header'}).csp,DEFAULT_HEADER_CSP);
+ assert.deepEqual(build({version:1,releaseId:'local-development',delivery:'meta'}).manifest,{version:1,releaseId:'local-development',connectOrigins:[],delivery:'meta',framingProtected:false});
+});
+test('localnet CSP permits exactly the one injected loopback relay origin and nothing else',()=>{
+ const build=fn('buildLocalnetContentPolicy');
+ for(const delivery of ['meta','header'])for(const relayOrigin of ['ws://127.0.0.1:7447','ws://[::1]:1','ws://127.0.0.1:65535']){
+  const policy=build({version:1,releaseId:'local-development',delivery,relayOrigin});
+  const base=delivery==='meta'?DEFAULT_META_CSP:DEFAULT_HEADER_CSP;
+  assert.equal(policy.csp,base.replace("connect-src 'none'",`connect-src ${relayOrigin}`));
+  assert.deepEqual(policy.manifest,{version:1,releaseId:'local-development',connectOrigins:[relayOrigin],delivery,framingProtected:false,profile:'localnet',testFundsOnly:true});
+  assert.ok(Object.isFrozen(policy)&&Object.isFrozen(policy.manifest)&&Object.isFrozen(policy.manifest.connectOrigins));
+  assert.ok(policy.notices.includes('content.policy.localnet-test-funds-only'));
+  if(delivery==='meta')assert.equal(policy.meta[0].content,policy.csp);else assert.equal(policy.headers['Content-Security-Policy'],policy.csp);
+ }
+ for(const relayOrigin of ['wss://127.0.0.1:7447','ws://localhost:7447','ws://127.0.0.2:7447','ws://127.0.0.1','ws://127.0.0.1:0','ws://127.0.0.1:65536','ws://127.0.0.1:07447',
+  'ws://127.0.0.1:7447/','ws://127.0.0.1:7447/path','ws://user@127.0.0.1:7447','ws://127.0.0.1:7447?x','ws://127.0.0.1:7447#x',"ws://127.0.0.1:7447 'self'",'ws://127.0.0.1:7447;','*','WS://127.0.0.1:7447','http://127.0.0.1:7447','',7447,null])
+  invalid(()=>build({version:1,releaseId:'local-development',delivery:'meta',relayOrigin}));
+ invalid(()=>build({version:1,releaseId:'local-development',delivery:'meta'}));
+ invalid(()=>build({version:1,releaseId:'local-development',delivery:'meta',relayOrigin:'ws://127.0.0.1:7447',extra:1}));
+ invalid(()=>fn('buildOfflineContentPolicy')({version:1,releaseId:'local-development',delivery:'meta',relayOrigin:'ws://127.0.0.1:7447'}));
+});

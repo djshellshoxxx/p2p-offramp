@@ -18,6 +18,8 @@ import type { EvmDomainInput, EvmTermsInput } from './evm-terms.ts';
 
 export type Eip1193Request = (args: { readonly method: string; readonly params?: readonly unknown[] }) => Promise<unknown>;
 export interface ReaderRequest { readonly signal: AbortSignal; readonly generation: number; readonly requestSequence: number }
+interface AnchoredBlock { readonly blockHash: string; readonly requireCanonical: true }
+const stateAt = (blockHash: string): Readonly<AnchoredBlock> => Object.freeze({ blockHash, requireCanonical: true });
 
 const HASH = /^0x[0-9a-f]{64}$/, ADDRESS = /^0x[0-9a-f]{40}$/, QUANTITY = /^0x(?:0|[1-9a-f][0-9a-f]{0,63})$/, DATA = /^0x(?:[0-9a-f]{2})*$/;
 class ReaderFailure extends Error { readonly code: CoreErrorCode; constructor(code: CoreErrorCode) { super('EVM read unavailable.'); this.code = code; } }
@@ -60,12 +62,12 @@ export function createEip1193ChainReader(options: Eip1193ChainReaderOptions) {
     if (raw === null) return null;
     return Object.freeze({ number: quantity(field(raw, 'number')), hash: hash(field(raw, 'hash')) });
   };
-  const escrowStateAt = async (binding: TradeBinding, blockTag: string): Promise<EscrowState> => {
+  const escrowStateAt = async (binding: TradeBinding, anchored: Readonly<AnchoredBlock>): Promise<EscrowState> => {
     if (binding.chain !== 'evm') throw new ReaderFailure('INVALID_INPUT');
     const getTrade = buildGetTrade(escrow, binding.tradeId);
-    const returned = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, blockTag]));
+    const returned = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, anchored]));
     // Before the deployment block the escrow has no code, so no trade can exist there; any other empty return is corrupt.
-    if (returned === '0x') return data(await call('eth_getCode', [escrow, blockTag])) === '0x' ? 'absent' : corrupt();
+    if (returned === '0x') return data(await call('eth_getCode', [escrow, anchored])) === '0x' ? 'absent' : corrupt();
     return decodeTrade(returned).state;
   };
   return Object.freeze({
@@ -89,13 +91,22 @@ export function createEip1193ChainReader(options: Eip1193ChainReaderOptions) {
       return Object.freeze({ transactionHash: hash(field(raw, 'transactionHash')), blockNumber: quantity(field(raw, 'blockNumber')), blockHash: hash(field(raw, 'blockHash')),
         status: status === '0x1' ? 'success' as const : 'reverted' as const });
     }),
-    escrowState: (binding: TradeBinding, blockNumber: string, signal: AbortSignal) => read(signal, () => escrowStateAt(binding, hex(blockNumber))),
+    escrowState: (binding: TradeBinding, blockNumber: string, signal: AbortSignal, expectedBlockHash?: string) => read(signal, async () => {
+      const expected = expectedBlockHash === undefined ? undefined : hash(expectedBlockHash);
+      const tag = hex(blockNumber), anchor = await block(tag);
+      if (anchor === null) throw new ReaderFailure('UNAVAILABLE');
+      if (anchor.number !== blockNumber || expected !== undefined && anchor.hash !== expected) return corrupt();
+      const result = await escrowStateAt(binding, stateAt(anchor.hash));
+      const repeated = await block(tag);
+      if (repeated === null || repeated.number !== anchor.number || repeated.hash !== anchor.hash) return corrupt();
+      return result;
+    }),
     /** Escrow state at the latest block, anchored to that block; finality is reported as 'pending' (the lifecycle applies policy). */
     escrowObservation: (binding: TradeBinding, reconcile: ReaderRequest) => read<ChainObservation>(reconcile.signal, async () => {
       const head = await block('latest');
       if (head === null) return corrupt();
       const getTrade = buildGetTrade(escrow, binding.tradeId);
-      const getTradeReturn = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, hex(head.number)]));
+      const getTradeReturn = data(await call('eth_call', [{ to: getTrade.to, data: getTrade.data }, stateAt(head.hash)]));
       const checkedHead = await block(hex(head.number));
       if (checkedHead === null || checkedHead.number !== head.number || checkedHead.hash !== head.hash) return corrupt();
       return buildChainObservation(escrow, { binding, generation: reconcile.generation, requestSequence: reconcile.requestSequence, getTradeReturn,

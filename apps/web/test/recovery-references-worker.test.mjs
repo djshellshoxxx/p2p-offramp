@@ -52,3 +52,35 @@ test('lock suppresses a held recovery read, and fresh-key backup restore remains
   await s.send('listRecoveryReferences',{profileId:restored.newProfileId,offset:0,expectedRevision:null},1);const value=good(s.last().result);
   assert.equal(value.authority,'unverified-offline-reference');assert.equal(value.revision,0);assert.equal(value.items[0].storedState,'finalized');assert.equal(value.unsupported,1);
 });
+
+test('fresh-key recovery preserves unknown-broadcast references without cross-profile disclosure or writes',async()=>{
+  const s=await setup(2),originalProfile=s.session.profileId;
+  const newPassphrase='distinct local recovery destination passphrase';
+  const exported=await s.backup.exportWithStatus(originalProfile);
+  const receipt=await s.backup.restore(exported.bytes,pass,newPassphrase);
+  assert.notEqual(receipt.newProfileId,originalProfile);
+  const writesBeforeReads=s.writes();
+
+  await s.send('unlock',{profileId:originalProfile,passphrase:pass});
+  await s.send('listRecoveryReferences',{profileId:originalProfile,offset:0,expectedRevision:null});
+  const original=good(s.last().result);
+  assert.equal(original.items.length,2);
+  assert.equal(original.items[1].storedState,'broadcast-unknown');
+  assert.equal(original.items[1].chainReference,null);
+  assert.equal(original.items[1].nonce,'2');
+
+  // A profile change revokes the prior selection. The old profile must not
+  // supply a private recovery page even when its encrypted records still exist.
+  await s.send('lock',{},1);
+  await s.send('unlock',{profileId:receipt.newProfileId,passphrase:newPassphrase},1);
+  await s.send('listRecoveryReferences',{profileId:originalProfile,offset:0,expectedRevision:null},1);
+  assert.equal(s.last().result.error.code,'LOCKED');
+  await s.send('listRecoveryReferences',{profileId:receipt.newProfileId,offset:0,expectedRevision:null},1);
+  const recovered=good(s.last().result);
+  assert.equal(recovered.authority,'unverified-offline-reference');
+  assert.deepEqual(recovered.items,original.items);
+  assert.equal(recovered.items[1].storedState,'broadcast-unknown');
+  assert.equal(recovered.items[1].nonce,'2');
+  assert.doesNotMatch(JSON.stringify(recovered),/PRIVATE_CALLDATA_BANK_SECRET|preparedRequest|walletGeneration|replacementOf/);
+  assert.equal(s.writes(),writesBeforeReads,'projection and profile isolation must be read-only');
+});

@@ -1,0 +1,34 @@
+✔ independent review: locking redacts the document projection before worker acknowledgement (1.636559ms)
+✔ independent review: a pre-lock worker snapshot cannot republish private data while locking (0.262334ms)
+✔ independent review: a review cannot grant a signing method outside the bridge protocol (0.176335ms)
+✔ independent review: invalidation from a provider request getter prevents the physical prompt (0.762465ms)
+✔ independent review: only the current explicit opening result can restore a private projection (1.585883ms)
+✔ independent review: lock supersedes a queued opening result (0.208694ms)
+✔ independent review: a full document command queue cannot prevent a lock command (0.355374ms)
+✔ localnet bridge refuses signatures, sends and account prompts without the corresponding explicit grant (0.876087ms)
+✔ localnet review snapshots exact payloads, consumes a finite queue, and cannot authorize a changed transaction (0.235493ms)
+✔ physical wallet prompt remains exclusive after revocation until the provider settles (0.231057ms)
+✔ review expiry and cancellation cannot be refreshed by read-only calls (0.514784ms)
+✔ localnet command schema refuses raw vault/wallet operations, accessor payloads and unbounded input (0.473041ms)
+✔ single localnet relay route binds the exact logical URL and only the validated build destination (0.409044ms)
+✔ worker-private canonical profile stores only encrypted rows, reopens the same messaging identity, and clears every projection on lock (178.629004ms)
+✔ fresh-key restore authenticates and rebinds one messaging identity while retaining the original encrypted profile (467.801737ms)
+✔ Worker idle expiry invalidates profile, secret projections and review without relying on a document timer (81.26566ms)
+✔ lock during pending vault creation prevents a late private session or encrypted profile from being installed (72.391515ms)
+✔ ERC20 funding reads exact owner/spender at canonical hashes and resets existing non-exact allowance (5.685124ms)
+✔ latest allowance can veto but never substitute for finalized allowance; both balances constrain funding (1.274675ms)
+✔ malformed token ABI, missing or oversized code and reorged headers fail without fallback (1.671562ms)
+✔ chain/genesis changes and revoked owner stop token state publication (0.854534ms)
+✔ token response accessors are not executed and code changes between anchors disable approval (0.527172ms)
+✔ approval commands cannot choose a token, spender, amount or raw transaction (0.39887ms)
+✔ pending backup file read cannot restore after lock (109.132536ms)
+✔ pending backup file read cannot restore after worker idle lock (78.955599ms)
+✔ current backup file read restores through the real encrypted controller into a fresh profile (431.158836ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1350.256834

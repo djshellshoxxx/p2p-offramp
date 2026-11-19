@@ -48,7 +48,7 @@ export function parseAdAddress(value: unknown): { readonly author: string; reado
 export function adBookKey(author: string, orderId: string): string { return `${author}:${AD_D_PREFIX}${orderId}`; }
 
 /** Exact rumor tags for an envelope, in order. The receiver requires exactly these. */
-export function envelopeTags(envelope: ExchangeEnvelopeV1): string[][] {
+export function envelopeTags(envelope: Pick<ExchangeEnvelopeV1, 'recipient' | 'ad' | 'termsHash'>): string[][] {
   const tags = [['p', envelope.recipient], ['a', envelope.ad], ['t', EXCHANGE_TOPIC]];
   if (envelope.termsHash !== null) tags.push(['trade', envelope.termsHash]);
   return tags;

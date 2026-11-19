@@ -330,6 +330,14 @@ export function mintToIx(mint, destination, authority, amount) {
   return { programId: SPL_PROGRAM_ID, keys, data: concat([7], u64le(amount)) };
 }
 
+/// SPL Token FreezeAccount (10) / ThawAccount (11): account, mint, freeze authority (signer).
+const freezeKeys = (account, mint, authority) =>
+  [meta(account, false, true), meta(mint, false, false), meta(authority, true, false)];
+export const freezeAccountIx = (account, mint, authority) =>
+  ({ programId: SPL_PROGRAM_ID, keys: freezeKeys(account, mint, authority), data: Uint8Array.of(10) });
+export const thawAccountIx = (account, mint, authority) =>
+  ({ programId: SPL_PROGRAM_ID, keys: freezeKeys(account, mint, authority), data: Uint8Array.of(11) });
+
 /// Loader-v3 Upgrade (enum index 3): programdata, program, buffer, spill, rent, clock, authority.
 export function loaderUpgradeIx({ programId, programData, buffer, spill, authority }) {
   const keys = [meta(programData, false, true), meta(programId, false, true), meta(buffer, false, true),

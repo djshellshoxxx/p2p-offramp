@@ -34,9 +34,14 @@ Each successful build writes `local-build-evidence.json` with the asset lengths,
 Keep a copy from the trusted build outside the directory you intend to host. To check a copied Pages demo before upload, run
 
 ```sh
-node scripts/verify-web-artifact.mjs ./pages-candidate ./retained/demo/local-build-evidence.json
+node scripts/verify-web-artifact.mjs --demo ./pages-candidate ./retained/demo/local-build-evidence.json
 ```
 
+The scan mode comes from the command line, never from the reference file: `--default` (also used when no flag is
+given), `--demo` or `--testnet`. A reference whose build profile disagrees with the requested mode is refused with
+`BUILD_MODE_MISMATCH` before any scan, so a demo or testnet artifact cannot pass as a default one, even with a matching
+reference. Usage errors exit 2 and failed verification exits 1. `--testnet` checks the testnet build profile only: it does
+not establish owner approval, a pinned release key or local-proof status.
 The command checks the copied inventory and every payload file, including the native Worker, against that reference.
 A missing, changed or unexpected file fails verification. This comparison establishes local build integrity. Release
 signing and authorization require their own evidence.
@@ -71,12 +76,13 @@ Even a passing consistency report grants no promotion or runtime authority.
   digest) appears in any emitted file, and fails the demo build if the markers are missing.
 - The demo build shows a "SYNTHETIC DEMO" badge on every page. Its samples still pass through the same validator
   as user files. Never deploy the demo build as a product, and never use its addresses, keys or amounts on a real network.
-- **Testnet build: what it needs.** Before building, `apps/web/scripts/testnet-trust.mjs` reads four files and verifies them with the app's own G15 verifier:
+- **Testnet build: what it needs.** Before building, `apps/web/scripts/testnet-trust.mjs` reads five files and verifies them with the app's own G15 verifier:
   - `security/testnet-trust/sepolia-release-key.pub.json`;
   - `registry/testnet/sepolia.registry.json`;
+  - `contracts/evm/abi/BasicEscrow.json` (proposed, D3 Option A: the one signed manifest covers the registry and this ABI; a registry-only manifest is `TESTNET_TRUST_INVALID: ASSET_MISMATCH`);
   - `registry/testnet/sepolia.release.json`;
   - `registry/testnet/sepolia.release.sig.json`.
-- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest or the wrong key ID stops it with `TESTNET_TRUST_INVALID`. So does any registry that is not exactly Sepolia (`TESTNET_TRUST_INVALID: NETWORK`): it must name one network, chain id 11155111 with Sepolia's genesis hash, whatever its `environment` labels say. The app repeats every check at runtime and fails closed. Once a release has been accepted (`npm run sepolia:verify -- --accept` writes `registry/testnet/sepolia.accepted.json`), an older signed release or a different manifest at the accepted sequence stops the build with `TESTNET_TRUST_INVALID: RELEASE_ROLLBACK`.
+- **Testnet build: when it stops.** A missing file stops the build with `TESTNET_TRUST_MISSING`. An expired or altered manifest or the wrong key ID stops it with `TESTNET_TRUST_INVALID`. So does any registry that is not exactly Sepolia (`TESTNET_TRUST_INVALID: NETWORK`): it must name one network, chain id 11155111 with Sepolia's genesis hash, whatever its `environment` labels say. The app repeats the signature, pinned key, exact asset set, expiry and Sepolia-only checks at runtime and fails closed. It does not repeat two build-time checks: it has no rollback floor (the accepted release is enforced at build time only), and it does not compare the embedded ABI with the committed file (the build refuses to embed any other). Once a release has been accepted (`npm run sepolia:verify -- --accept` writes `registry/testnet/sepolia.accepted.json`), an older signed release or a different manifest at the accepted sequence stops the build with `TESTNET_TRUST_INVALID: RELEASE_ROLLBACK`.
 - **Testnet build: in the app.**
   - The verified bundle is embedded through `__P2P_TESTNET_TRUST__`. The app cannot fetch anything, because CSP sets `connect-src 'none'`.
   - The app verifies the bundle again with the device clock, so after the manifest expires the registry fails closed.
