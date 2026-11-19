@@ -1,0 +1,39 @@
+✔ REDTEAM-D9-1 a never-marked value-moving intent can be resolved after restart (no permanent lock) (464.593673ms)
+✔ REDTEAM-D9-2 cross-tab recover() never relabels a marked (sent) intent as failed (190.890987ms)
+✔ REDTEAM-P2-D9-3 another tab's recover() does not cancel a live preparation (410.528474ms)
+✔ restored profile: an approval whose nonce a different finalized transaction consumed cannot veto release or refund (1756.726323ms)
+✔ a restored hash-null approval stays held until the transaction that consumed its nonce is finalized (1365.485623ms)
+✔ a refused send marker returns the preparation for an explicit retry and sends nothing by itself (207.974769ms)
+✔ unknown-broadcast reconciliation keeps the finalized hash when asking for its escrow effect (412.120331ms)
+✔ happy path: reserve, send-started before the wallet, one send, hash recorded, confirmations then finalized (395.010637ms)
+✔ duplicate submit: concurrent, sequential and after restart make exactly one wallet send (177.896121ms)
+✔ crash before approval send marker: same-profile restart cancels the provably unsent approval (295.490607ms)
+✔ external cancellation after the durable send marker prevents the wallet call and preserves unknown recovery (185.693792ms)
+✔ crash after send-started, before the wallet broadcast: pending until expiry, then dropped; re-prepare needs an explicit same-nonce successor (702.653066ms)
+✔ crash during the wallet call after broadcast (hash never returned): reconcile resolves confirmed from nonce and escrow effect (282.109375ms)
+✔ crash after the hash returned but before it was persisted: BROADCAST_UNKNOWN, then confirmed by reconciliation (229.258425ms)
+✔ crash after the hash was recorded: restart reconciles the receipt to confirmed (187.839474ms)
+✔ replaced: the recorded nonce was used by a different transaction; a successor must name it (592.571344ms)
+✔ dropped with a known hash, reverted, and still-pending classifications (1148.975532ms)
+✔ reorg: a confirmed receipt that disappears unlatches to reorged, then re-confirms on the new chain (308.520083ms)
+✔ account or chain change cancels un-sent intents and invalidates prepare results (407.080023ms)
+✔ 4001 after the send marker cannot authorize a fresh attempt, including after restart (552.226185ms)
+✔ 4001 during wallet preflight still cancels the unsent intent and permits fresh explicit preparation (259.749755ms)
+✔ reads retry through read-retry; sends never retry; integrity failures remain pending (1029.432355ms)
+✔ lifecycle journal transitions are validated: no backwards, no hash rewrite, terminal is final (322.708226ms)
+✔ restart never lets a restored finalized label authorize a new intent after native rollback (350.487498ms)
+✔ restored stable finalized intent is re-read before a new explicit action, without resending it (265.265516ms)
+✔ D9 writes a permanent v2 marker in the same durable transition before wallet entry (303.729946ms)
+✔ D9 cancelled local approvals remain skippable after later funding and a restart beyond the scan window (917.691073ms)
+✔ D9 restart does not skip prepared value-moving actions on marker metadata alone (274.146412ms)
+✔ D9 legacy and fresh-key-restored prepared approvals keep their nonce hold and cannot acquire never-sent authority (1742.923446ms)
+✔ D9 review: a crash before a release marker on a funded escrow keeps the timeout refund reachable without resending (459.834039ms)
+✔ D9 restored cancelled releases require finalized exact-nonce evidence before a fresh funded exit (5338.095942ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18866.871382

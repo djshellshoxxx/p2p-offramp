@@ -1,0 +1,35 @@
+✔ maps-onto-lane-a-intent-v2 (208.011324ms)
+✔ signed-before-marker-is-lossy-and-payout-unrepresentable (80.157518ms)
+✔ import-never-trusts-terminal-labels (60.099689ms)
+✔ independent review: disposal before physical RPC dispatch prevents broadcast (86.195623ms)
+✔ independent review: before-observation switch cannot mark an unknown transaction dropped (41.272239ms)
+✔ independent review: during-observation switch cannot mark an unknown transaction dropped (33.717978ms)
+✔ independent review: rejected network switch cannot poison the finalized height floor (55.064223ms)
+✔ independent review: wrong-network failed status cannot settle a marked intent (33.007886ms)
+✔ valid-record-roundtrip (159.790253ms)
+✔ restored-record-strictly-validated (39.043103ms)
+✔ record-bound-to-network-program-genesis-pin (55.77185ms)
+✔ durable-nonce-message-refused-on-restore (62.794231ms)
+✔ transition-table-and-immutability (68.056679ms)
+✔ admission-rule (59.059012ms)
+✔ vault journal preserves full release/payout records through real encrypted fresh-key restore (1676.529446ms)
+✔ pre-marker signature and original profile survive backup and reconcile after fresh-key restore (1541.166215ms)
+✔ uncertain send remains blocked across restore until finalized expiry and an explicit rebuild (1295.019159ms)
+✔ vault lock before the marker CAS prevents both the write and physical broadcast (597.467831ms)
+✔ uncertain marker commit retains durable recovery state and never broadcasts (686.528175ms)
+✔ lock after a successful marker CAS is uncertain and preserves the marker without sending (644.744212ms)
+✔ lock in the final physical-dispatch microtask prevents broadcast after a durable marker (589.968807ms)
+✔ failed payout error and signature survive encrypted restore with the release still finalized (2140.49621ms)
+✔ 32 terminal native intents fill the bound without discarding earlier recovery records (383.517835ms)
+✔ per-trade CAS snapshots inputs and refuses stale writes or changes to immutable intent fields (390.623329ms)
+✔ concurrent vault sessions cannot both reserve one trade and stale reads fail freshness checks (879.548292ms)
+✔ foreign, future, duplicate and oversized records fail closed without overwriting stored data (385.526559ms)
+✔ invalid signals, accessor inputs, cancellation and disposed sessions have fixed errors (399.940866ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18446.05492

@@ -12,7 +12,7 @@ it does not transfer source ownership or count draft code as integrated. See the
 | Track | PRs and observed disposition | Remaining boundary |
 | --- | --- | --- |
 | B1 Solana client | #151 merged; #152/#153/#157/#158 remain drafts and are consolidated in draft #167 | Qualify the combined native-validator path and compose native browser actions before claiming parity |
-| B2 optional packages | #144 proof-inputs, #145 liquidity, #146 courier, #147 arbitration, #148 privacy-policy, #160 privacy-controls, #161 stealth, #162 proof-jobs and #163 meetup remain drafts | Separate modular review; no core completion or D7 deferral change |
+| B2 optional packages | #144 proof-inputs, #145 liquidity, #146 courier, #147 arbitration, #148 privacy-policy, #160 privacy-controls, #161 stealth, #162 proof-jobs and #163 meetup remain drafts | November 18 acceptance supersedes D7 parking: one package per PR, import-boundary and applicable D8 review; default-build wiring separately gated |
 | B3 formal harness | #137 merged at `6c38e641`; development-only tooling | Retain unknown proofs/model gap; no release certification |
 | B4 tooling/intake/governance | #154/#155/#156 remain drafts | Review each exact source and its claims before integration |
 | B5 canonical EVM reads | #143 merged at `f9bc66e7`; downstream wallet/payment/recovery work is in #166 | Current-head qualification for #166 and the dependent stack |

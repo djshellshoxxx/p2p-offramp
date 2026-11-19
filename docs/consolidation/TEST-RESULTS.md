@@ -43,7 +43,7 @@ Source `91ee6991d4527bba0e76b048a76e65ed7693c5a1`, tree
 | #170 real native/ERC-20 browser | [run 44468884732, job 135373246270](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44468884732/job/135373246270) | PASS in Chromium 158.0.8127.36. Native: 5 checks, 4 sends, 4 durable markers. Token: 3 original checks, 7 sends, 7 markers |
 | #170 remaining workflows | [Vault 44468884764](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44468884764), [inventory 44468884720](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44468884720), [Solana 44468884759](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44468884759/job/135373344902) | PASS at exact source head; Solana program job finished before merge |
 | #171 `5984dc82…` / #172 `56b904e5…` | Small complete diffs independently reviewed; recorded RED/GREEN, seven required checks and CodeQL/Snyk | Technical PASS; mandatory Tier B automated review BLOCKED |
-| #174 tree `5284fb94…` | 30 focused docs/lab/tool-path/claims tests; full typecheck, strict current docs and boundaries | Local PASS; current-head CI and required automated review pending |
+| #174 tree `5284fb94…` | 30 focused docs/lab/tool-path/claims tests; full typecheck, strict current docs and boundaries; seven required hosted jobs plus docs-tooling | Local and required hosted PASS; mandatory Tier B automated review remains absent |
 
 The independent worker observed the fresh 277-test run in execution session 6319 (exit 0, 125.4 s); no separate portable log of that particular run was retained, and earlier committed Solana logs are not relabelled as that execution.
 
@@ -61,6 +61,22 @@ storage composition. Neither proves the missing Solana browser/wallet journey.
   The separate 9 app/UI tests are already included in the 93. Four typechecks,
   default and explicit localnet artifact gates pass; independent review found no
   confirmed High/Medium blocker. Real hosted browser is pending.
+- #173 `c7f462c…`, tree `fcd0c50b…`, exactly matches reviewed local `3eb8dada…`.
+  The new restored-cancellation regression failed before repair and passes after;
+  31 affected lifecycle tests pass. A separate reviewer ran three targeted
+  regressions including eight proof-refusal variants. The real-Anvil diagnostic
+  preserves the held unknown approval and completes original 1,100-unit release
+  and 700-unit refund, with 7 sends/7 durable markers and zero escrow balance.
+  This is narrower than the full browser's expected 11 sends. Fresh hosted
+  [run 44479571240](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571240)
+  remains queued; no browser pass is inferred from native tests.
+- Native Solana prepared-action API `aa551463…`, tree `166556f0…`: 65 focused,
+  boundary, legacy-lifecycle and encrypted-dispatch tests plus 27 adapter/intent/
+  vault tests pass (92 distinct affected tests). Root typecheck and independent
+  source review pass; a separate reviewer ran eight selected tests/subtests.
+  Original bytes, before/after-sign eligibility, one-shot confirmation,
+  cancellation, profile/binding identity and physical prompt retention are
+  covered. Host event wiring and actual native/browser integration remain separate.
 
 ## Failures, blocked execution and retries
 
@@ -70,7 +86,8 @@ storage composition. Neither proves the missing Solana browser/wallet journey.
 | First repaired-parent typecheck under parallel load | FAIL: exit 137 | Serialized same-source retry PASS; no compiler options changed |
 | First repaired-parent native controller | FAIL | Timeout waiting for second negotiation after five checks; unchanged retry PASS with 12 checks, 12 signatures, 4 sends/markers; cause remains unconfirmed |
 | New #173 original head `7a85ccbe…` | FAIL | [Hosted local-trade job 135388826982](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44473637320/job/135388826982) timed out before disconnect case because wrong-chain cancellation left a durable prepared lease; no automatic send observed |
-| #173 correction `2edda4e5…` | FAIL at later restored-release stage | [Actual local-trade job 135394487370](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487370) passed the explicit block 11/12 lease, wallet-event revocation and fresh-profile/unknown-approval assertions, then timed out before the restored release checkbox. Staged native reconciliation versus production recovery defect is being investigated; no GREEN claimed |
+| #173 correction `2edda4e5…` | FAIL at later restored-release stage | [Actual local-trade job 135394487370](https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487370) passed the lease, wallet-event and fresh-profile/unknown-approval assertions, then timed out before restored release review. A separate native reproduction confirmed the production defect; repaired in `c7f462c…`, fresh browser GREEN pending |
+| #173 expanded native diagnostic attempts 1/2 | FAIL | Early pre-restore UNAVAILABLE/BROADCAST_UNKNOWN harness outcomes retained. A subsequent instrumented diagnostic completed release/refund with 7 sends/markers; earlier failures are not relabelled and do not establish a root cause |
 | Local #173 real Chromium | BLOCKED | Chromium 156 aborts with Unix socket `Operation not permitted` before opening a browser context. No sandbox bypass attempted; hosted real Chromium used |
 | First local extension fixture cold compile | BLOCKED attempt | 120-second fixture timeout; standalone exact compiler cold build completed 44 files; no fixture timeout weakened |
 | Shared dependency symlink during isolated build | Expected rejection | Artifact graph correctly refused `NON_CORE_MODULE`; isolated pinned dependency install fixed worktree resolution, then 47-module localnet build passed |

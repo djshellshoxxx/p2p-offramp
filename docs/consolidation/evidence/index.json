@@ -408,13 +408,200 @@
       "raw_bytes": 1607,
       "raw_archive_member": "resumption-build-localnet-input-failure.log",
       "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-hosted-7a85-failure.log",
+      "sha256": "bd6301b3f5b8e30b44b37806794b82fcd176494812e31e1777646514d1223184",
+      "bytes": 74014,
+      "source": "7a85ccbe720b540b059c5b1b030b3de8ade224c5; hosted run44473637320/job135388826982",
+      "status": "FAIL",
+      "raw_sha256": "02156ae2bfc0891d59f07a906e0291a7fc34dded73a4c33f8fb05064fb6d0025",
+      "raw_bytes": 74058,
+      "raw_archive_member": "erc20-hosted-7a85-failure.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-hosted-2edda-failure.log",
+      "sha256": "29b4a59a82fe9579b49c273da4c62cb0c1633d8f3e2c85658b4f6ad13248a13e",
+      "bytes": 74425,
+      "source": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492; hosted run44475364446/job135394487370",
+      "status": "FAIL",
+      "raw_sha256": "63ab7905280fdcc9fbee681ca2f89bc3b7d72d8462d02d3f641285610d8d6a55",
+      "raw_bytes": 74469,
+      "raw_archive_member": "erc20-hosted-2edda-failure.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-domain-red.log",
+      "sha256": "d71748d872944d5587c2655d380378b8eb06d25b16dbf957c3a65d757b780f3a",
+      "bytes": 1034,
+      "source": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492 production with new regression before fix",
+      "status": "EXPECTED_RED",
+      "raw_sha256": "59f60436ff889eb364913700aee5dd29b45f1d5515e4fdc163923426774d01e5",
+      "raw_bytes": 1038,
+      "raw_archive_member": "erc20-cancelled-exit-domain-red.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-domain-green.log",
+      "sha256": "b3e48b54e5152fdee0e8e464eb2dc33c73238c5b7911991e1defbf01a4b35ce3",
+      "bytes": 233,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c",
+      "status": "PASS",
+      "raw_sha256": "b3e48b54e5152fdee0e8e464eb2dc33c73238c5b7911991e1defbf01a4b35ce3",
+      "raw_bytes": 233,
+      "raw_archive_member": "erc20-cancelled-exit-domain-green.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-domain-suite.log",
+      "sha256": "bb6380feec7e6b627874dbb36cea1b8fa56e0a017f08d2d993570176951b4f6c",
+      "bytes": 3707,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c",
+      "status": "PASS",
+      "raw_sha256": "bb6380feec7e6b627874dbb36cea1b8fa56e0a017f08d2d993570176951b4f6c",
+      "raw_bytes": 3707,
+      "raw_archive_member": "erc20-cancelled-exit-domain-suite.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-lifecycle-independent-review.log",
+      "sha256": "3e3f85bb2e3154bf4c6cc65ea6c552ffef4adc4a8aa4733802cd6e16f29d714f",
+      "bytes": 501,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c",
+      "status": "PASS",
+      "raw_sha256": "3e3f85bb2e3154bf4c6cc65ea6c552ffef4adc4a8aa4733802cd6e16f29d714f",
+      "raw_bytes": 501,
+      "raw_archive_member": "erc20-lifecycle-independent-review.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancel-restore-repro.log",
+      "sha256": "748fd98bbdaf0f7a812da2ca578458cbe935cbf640ca737b8cafe9154c6cd0ea",
+      "bytes": 2207,
+      "source": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492; standalone native restored-review diagnostic",
+      "status": "EXPECTED_RED",
+      "raw_sha256": "748fd98bbdaf0f7a812da2ca578458cbe935cbf640ca737b8cafe9154c6cd0ea",
+      "raw_bytes": 2207,
+      "raw_archive_member": "erc20-cancel-restore-repro.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancel-restore-green.log",
+      "sha256": "2b70fedd7a34cd4e8a20ed20c4349a1bca182b7014798f742b3d4d14a697997a",
+      "bytes": 1656,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c; standalone native restored-review diagnostic",
+      "status": "PASS",
+      "raw_sha256": "2b70fedd7a34cd4e8a20ed20c4349a1bca182b7014798f742b3d4d14a697997a",
+      "raw_bytes": 1656,
+      "raw_archive_member": "erc20-cancel-restore-green.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-native-attempt1.log",
+      "sha256": "32419832a95cef8d765c4617c1dfec683bab365ba21220ef2b99eed4b822292b",
+      "bytes": 2763,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c; exploratory expanded native harness attempt1",
+      "status": "FAIL",
+      "raw_sha256": "32419832a95cef8d765c4617c1dfec683bab365ba21220ef2b99eed4b822292b",
+      "raw_bytes": 2763,
+      "raw_archive_member": "erc20-cancelled-exit-native-attempt1.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-native-attempt2.log",
+      "sha256": "3df380ba551a8d63bda8846c4c7e759793e9b24c55cbfbd7830a9b0efe76ee29",
+      "bytes": 5333,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c; exploratory expanded native harness attempt2",
+      "status": "FAIL",
+      "raw_sha256": "3df380ba551a8d63bda8846c4c7e759793e9b24c55cbfbd7830a9b0efe76ee29",
+      "raw_bytes": 5333,
+      "raw_archive_member": "erc20-cancelled-exit-native-attempt2.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "erc20-cancelled-exit-native-green.log",
+      "sha256": "c50ebb0f6b1c2272d4cf363f1773cdc52e8963fa988a768e6a08b697ba1fed02",
+      "bytes": 1975,
+      "source": "local 3eb8dada6c6b3dd060665e2c65c83f021f45d2f0; remote c7f462c6688c78c35514808177ff7cfed32b9961; identical tree fcd0c50bc8e0f14202ed873edd9f764b0380ef0c; expanded native diagnostic with request-error instrumentation",
+      "status": "PASS",
+      "raw_sha256": "c50ebb0f6b1c2272d4cf363f1773cdc52e8963fa988a768e6a08b697ba1fed02",
+      "raw_bytes": 1975,
+      "raw_archive_member": "erc20-cancelled-exit-native-green.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-actions-red.log",
+      "sha256": "950e0bf24f80c37d08982a8b6fba5995c114a6af9c0175c3c58e765ba125de1b",
+      "bytes": 26662,
+      "source": "new prepare API regression before production implementation",
+      "status": "EXPECTED_RED",
+      "raw_sha256": "950e0bf24f80c37d08982a8b6fba5995c114a6af9c0175c3c58e765ba125de1b",
+      "raw_bytes": 26662,
+      "raw_archive_member": "solana-prepared-actions-red.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-actions-scope-red.log",
+      "sha256": "527b7faaa3d464d18b81d9061a2211e7fd46fca3de305c374ed488c878ef8920",
+      "bytes": 2946,
+      "source": "prepared API before connect-time profile/full-binding repair",
+      "status": "EXPECTED_RED",
+      "raw_sha256": "ec622194c3f3f5a4f1a44de990eaf685305b7a5cdb389c7ae176d804c2676c19",
+      "raw_bytes": 2954,
+      "raw_archive_member": "solana-prepared-actions-scope-red.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-actions-affected.log",
+      "sha256": "68fe9f18c0d7fe575683961e47e461a85d0a9c1155dc91812815b5148fe9551b",
+      "bytes": 5074,
+      "source": "aa551463ea5db51253476be03b1f9f016eeee83a; tree 166556f036f2654863c1de5dd409cb80417ba6d4; package API only, browser/native-validator integration pending",
+      "status": "PASS",
+      "raw_sha256": "68fe9f18c0d7fe575683961e47e461a85d0a9c1155dc91812815b5148fe9551b",
+      "raw_bytes": 5074,
+      "raw_archive_member": "solana-prepared-actions-affected.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-actions-vault-regression.log",
+      "sha256": "36f8e29c572c7fceef117ba3c984d83db50c7ba8b3d355eac679d7dbdf60a179",
+      "bytes": 2512,
+      "source": "aa551463ea5db51253476be03b1f9f016eeee83a; tree 166556f036f2654863c1de5dd409cb80417ba6d4; package API only, browser/native-validator integration pending",
+      "status": "PASS",
+      "raw_sha256": "36f8e29c572c7fceef117ba3c984d83db50c7ba8b3d355eac679d7dbdf60a179",
+      "raw_bytes": 2512,
+      "raw_archive_member": "solana-prepared-actions-vault-regression.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-actions-typecheck.log",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "bytes": 1,
+      "source": "aa551463ea5db51253476be03b1f9f016eeee83a; tree 166556f036f2654863c1de5dd409cb80417ba6d4; package API only, browser/native-validator integration pending",
+      "status": "PASS",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "raw_archive_member": "solana-prepared-actions-typecheck.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
+    },
+    {
+      "file": "solana-prepared-independent-review.log",
+      "sha256": "6a30eaa5d18c5850ace13596a9255aa5c024ebbe4dc3074bb4f722219887ed8e",
+      "bytes": 795,
+      "source": "aa551463ea5db51253476be03b1f9f016eeee83a; tree 166556f036f2654863c1de5dd409cb80417ba6d4; package API only, browser/native-validator integration pending",
+      "status": "PASS",
+      "raw_sha256": "6a30eaa5d18c5850ace13596a9255aa5c024ebbe4dc3074bb4f722219887ed8e",
+      "raw_bytes": 795,
+      "raw_archive_member": "solana-prepared-independent-review.log",
+      "presentation": "Trailing line whitespace and extra terminal blank lines normalized; original bytes retained in raw archive."
     }
   ],
   "archive": {
     "file": "raw-logs.zip",
-    "sha256": "aa46435f11e1ecaa1ca5b22134a2565dcb68e48f4ac73885a0b683078a587597",
-    "bytes": 115414,
-    "members": 37,
+    "sha256": "a77d193eb3465e6984833390ed70ba94d97708ef2e4691cff8f118fdfc12cfa7",
+    "bytes": 175904,
+    "members": 54,
     "timestamp_note": "ZIP entry dates are fixed for reproducibility, not execution timestamps."
   }
 }

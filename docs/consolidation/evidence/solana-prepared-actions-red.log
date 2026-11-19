@@ -1,0 +1,336 @@
+✖ prepare journals an immutable exact-message review without signing or sending (17.948963ms)
+✖ confirm consumes once and signs the reviewed blockhash and bytes after a newer finalized read (8.865707ms)
+✖ handles are local capabilities: copies and a second client cannot confirm or cancel them (4.987825ms)
+✖ prepare and confirm require the original client, trade, account, and wallet chain (6.698432ms)
+✖ a changed profile cannot inherit or cancel a prepared capability (5.615912ms)
+▶ wallet account, network, or disconnect revocation disposes the client and all its reviews
+  ✖ account (5.289851ms)
+  ✖ network (6.333779ms)
+  ✖ disconnect (7.185857ms)
+✖ wallet account, network, or disconnect revocation disposes the client and all its reviews (20.059601ms)
+▶ confirmation refuses changed finalized state, genesis, and release deadline before prompting
+  ✖ escrow state (7.542859ms)
+  ✖ genesis (7.143076ms)
+  ✖ deadline (7.616965ms)
+✖ confirmation refuses changed finalized state, genesis, and release deadline before prompting (23.458908ms)
+▶ original blockhash is valid at the last height and refused beyond it
+  ✖ 150 (7.364812ms)
+  ✖ 151 (5.175105ms)
+✖ original blockhash is valid at the last height and refused beyond it (13.193152ms)
+▶ blockhash validity must be true and from a context no older than the finalized review
+  ✖ invalid (4.690967ms)
+  ✖ stale context (4.469452ms)
+  ✖ non-boolean (7.097173ms)
+✖ blockhash validity must be true and from a context no older than the finalized review (17.150937ms)
+✖ payout review fixes the exact rent top-up and never changes it under the same maximum (7.053829ms)
+▶ refund and native/SPL payout use the same explicit prepare and confirm path
+  ✖ native refund (4.092025ms)
+  ✖ native payout (4.825999ms)
+  ✖ spl payout (17.675897ms)
+✖ refund and native/SPL payout use the same explicit prepare and confirm path (27.510258ms)
+✖ cancel consumes only this local never-marked preparation and permits a new review (4.811088ms)
+✖ cancellation during a physical prompt retains the serial slot until that prompt settles (5.210371ms)
+▶ a late wallet approval is rechecked for expiry, finalized state, and profile before marking
+  ✖ blockhash expiry (5.41171ms)
+  ✖ release deadline (11.711294ms)
+  ✖ finalized state (4.678133ms)
+  ✖ profile (3.287375ms)
+✖ a late wallet approval is rechecked for expiry, finalized state, and profile before marking (26.097414ms)
+✖ a cross-tab CAS winner invalidates the reviewed intent before any broadcast (4.563258ms)
+✖ a changed journal record cannot substitute for the privately retained preparation (5.907739ms)
+✖ an uncertain marker write cannot be cancelled or retried through the review handle (5.713075ms)
+✖ cancellation racing with marker persistence preserves the marker and prevents dispatch (6.27059ms)
+✖ real encrypted vault lock during prepared signing keeps the physical slot and grants no authority (153.482223ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 0
+ℹ fail 37
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1714.51823
+
+✖ failing tests:
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:19:1
+✖ prepare journals an immutable exact-message review without signing or sending (17.948963ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:21:22)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:40:1
+✖ confirm consumes once and signs the reviewed blockhash and bytes after a newer finalized read (8.865707ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:42:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:60:1
+✖ handles are local capabilities: copies and a second client cannot confirm or cancel them (4.987825ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:62:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:77:1
+✖ prepare and confirm require the original client, trade, account, and wallet chain (6.698432ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:80:26)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:96:1
+✖ a changed profile cannot inherit or cancel a prepared capability (5.615912ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:98:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:110:69
+✖ account (5.289851ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:112:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:110:61)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:110:69
+✖ network (6.333779ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:112:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:110:61)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:110:69
+✖ disconnect (7.185857ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:112:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:110:61)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:127:14
+✖ escrow state (7.542859ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:128:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:127:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:127:14
+✖ genesis (7.143076ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:128:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:127:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:127:14
+✖ deadline (7.616965ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:128:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:127:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:138:72
+✖ 150 (7.364812ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:139:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:138:64)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:138:72
+✖ 151 (5.175105ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:139:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:138:64)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:154:14
+✖ invalid (4.690967ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:155:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:154:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:154:14
+✖ stale context (4.469452ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:155:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:154:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:154:14
+✖ non-boolean (7.097173ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:155:54)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:154:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:164:1
+✖ payout review fixes the exact rent top-up and never changes it under the same maximum (7.053829ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:168:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:180:13
+✖ native refund (4.092025ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:183:35)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:180:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:180:13
+✖ native payout (4.825999ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:183:35)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:180:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:180:13
+✖ spl payout (17.675897ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:183:35)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:180:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:192:1
+✖ cancel consumes only this local never-marked preparation and permits a new review (4.811088ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:193:52)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:205:1
+✖ cancellation during a physical prompt retains the serial slot until that prompt settles (5.210371ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:210:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:235:14
+✖ blockhash expiry (5.41171ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:240:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:235:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:235:14
+✖ release deadline (11.711294ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:240:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:235:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:235:14
+✖ finalized state (4.678133ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:240:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:235:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:235:14
+✖ profile (3.287375ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:240:33)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:235:6)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:250:1
+✖ a cross-tab CAS winner invalidates the reviewed intent before any broadcast (4.563258ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:255:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:268:1
+✖ a changed journal record cannot substitute for the privately retained preparation (5.907739ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:269:52)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:276:1
+✖ an uncertain marker write cannot be cancelled or retried through the review handle (5.713075ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:280:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:289:1
+✖ cancellation racing with marker persistence preserves the marker and prevents dispatch (6.27059ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:294:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at packages/chain-solana/test/prepared-actions.test.mjs:316:1
+✖ real encrypted vault lock during prepared signing keeps the physical slot and grants no authority (153.482223ms)
+  TypeError [Error]: env.client.prepare is not a function
+      at prepared (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:16:49)
+      at async TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-solana-actions/packages/chain-solana/test/prepared-actions.test.mjs:327:31)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

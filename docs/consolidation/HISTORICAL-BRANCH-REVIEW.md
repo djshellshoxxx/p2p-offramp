@@ -10,13 +10,20 @@ The closed regression/history branches #66–80 and #91–93 are accounted for b
 
 ## Classification rules
 
+Policy correction after independent review: the November 18 owner acceptance in
+the gameplan's section 5 explicitly supersedes D7's earlier parking option, as
+recorded in the accepted-decision index. Nine isolated optional successor PRs are
+B pending their own source, integration, import-boundary and applicable D8 review;
+optionality alone does not make them E. Default-build wiring remains separately
+gated. The pinned source comparisons below retain their original snapshot.
+
 | Class | Meaning |
 | --- | --- |
 | A | Direct merge candidate after current exact-head gates and independent review |
 | B | Useful isolated candidate requiring integration repair/requalification |
 | C | Selective extraction, or unresolved inherited branch envelope |
 | D | Exact ancestor or demonstrated complete material content |
-| E | Optional reference, research, or historical evidence payload |
+| E | Experimental research or historical process/evidence payload |
 | F | Incompatible custodial architecture |
 
 For cumulative branches, a stage's own feature can be present while its inherited backlog remains C. Closing a PR, finding a replacement branch, matching test names, or finding each line somewhere is not complete-content proof.
@@ -51,7 +58,7 @@ These are history-disposition findings, not a new end-to-end or live-chain quali
 | [#43](https://github.com/djshellshoxxx/p2p-offramp/pull/43) | `bc549f477f86` | C | 0/3/21 | 21/24 own-delta paths absent: journey state machine, native contracts, presentation, composition, native retention and browser fixtures. New #168/#170 controllers are not demonstrated complete equivalents. |
 | [#44](https://github.com/djshellshoxxx/p2p-offramp/pull/44) | `f8a9aa143012` | C | 0/11/30 | 30/41 own-delta paths absent: portal/distribution and tooling/claims/lab/devcontainer. #154 covers tooling subset but remains unmerged. Preserve portal separately, without release/trust authority. |
 | [#45](https://github.com/djshellshoxxx/p2p-offramp/pull/45) | `5a9997485b9d` | C | 0/1/27 | 27/28 own-delta paths absent. #155 is newer extraction for inert dependency/Semaphore evaluation; this historical stage is not incorporated. |
-| [#46](https://github.com/djshellshoxxx/p2p-offramp/pull/46) | `0baa3c1ae5a7` | C | 0/2/134 | 134/136 own-delta paths absent. E for its optional package payload, C for cumulative branch envelope; use separate D7-isolated successor PRs, never core-enable all packages. |
+| [#46](https://github.com/djshellshoxxx/p2p-offramp/pull/46) | `0baa3c1ae5a7` | C | 0/2/134 | 134/136 own-delta paths absent. C for the cumulative branch envelope; isolated optional successor intake is accepted under the November 18 D7 supersession. Qualify each separately; default-build wiring requires its own gate. |
 | [#47](https://github.com/djshellshoxxx/p2p-offramp/pull/47) | `14d7c5e26796` | C | 0/2/34 | 34/36 own-delta paths absent. Prefer #156 historical/inactive governance records and immutable evidence binding over old decision JSON; predecessor stack still unmerged. |
 | [#48](https://github.com/djshellshoxxx/p2p-offramp/pull/48) | `494703e83789` | C | 0/5/185 | 185/190 own-delta paths absent, primarily historical execution/review evidence. E for evidence payload, C for cumulative branch envelope. Link the old SHA rather than bulk-import historical proof. |
 | [#56](https://github.com/djshellshoxxx/p2p-offramp/pull/56) | `a45e932a3715` | C | 92/50/60 | Same head as #81; 60 own-delta paths absent. Sonar/formal/retention/locale work partially incorporated, but runtime/journey and update work remain. Preserve source and select current-compatible deltas. |
@@ -64,7 +71,7 @@ These are history-disposition findings, not a new end-to-end or live-chain quali
 3. **Journey and native retention:** #43's 21 absent paths plus #35's nine absent repair paths include private-trade composition, presentation, native-retention, recovery/flow tests and browser harnesses. Review F01/F03/F06 against the modern #168/#170 controllers before extracting behavior. The quarry documents five old recovery fixtures that encode pre-D9 semantics; they must not weaken current provenance requirements.
 4. **Portal/distribution:** still absent under `apps/portal`, `scripts/portal`, `scripts/distribution`; #154 intentionally excludes them. Keep this a separate source qualification task with explicit unapproved artifacts and existing ABI/source/recovery bindings.
 5. **Tooling/intake/governance:** prefer #154 → #155 → #156 over raw #44/#45/#47. The successors already adapt manifest binding and mark governance records historical. Their old passing CI does not erase current integration requirements.
-6. **Optional packages:** #46 payload is E. Successor PRs #144–148/#160–163 retain separate package proposals (proof-inputs, liquidity, courier, arbitration, privacy-policy, privacy-controls, stealth, proof-jobs, meetup). D7 isolation and explicit ownership remain; no optional package is enabled by this audit.
+6. **Optional packages:** #46 remains C for its cumulative envelope. Successor PRs #144–148/#160–163 retain separate package proposals (proof-inputs, liquidity, courier, arbitration, privacy-policy, privacy-controls, stealth, proof-jobs, meetup). The November 18 acceptance supersedes D7 parking: isolated source intake is accepted, with each successor B pending its own integration, import-boundary and applicable D8 review. Default-build wiring requires a separate gate; none is enabled by this audit.
 7. **Historical execution evidence:** #48 payload is E. Link immutable source `494703e837897d04bce1cb04134fa8be6b747377` for the 185 absent historical files instead of copying them into a modern proof packet. #26/#28/#56/#81 include mixtures of these groups and cannot be declared fully superseded.
 
 ## Tooling candidates and #142

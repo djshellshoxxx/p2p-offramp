@@ -61,8 +61,10 @@ Tier B automated review and fresh hosted checks are required before integration.
   each changed head needs fresh checks and reinspection.
 - #142 contains retirement helpers but its line-membership check cannot establish
   complete content incorporation. No retirement operation was executed.
-- #144–148 and #160–163 are optional D7 work. Their presence and historical green
-  CI do not make them required MVP dependencies.
+- #144–148 and #160–163 are optional packages accepted for isolated source intake
+  by the November 18 decision that supersedes D7's original parking option. Each
+  needs its own source, import-boundary and applicable D8 review; default-build
+  wiring is separately gated. They are not required MVP dependencies.
 
 See [every branch and exact head](BRANCH-INVENTORY.json), [merge decisions](MERGE-DECISIONS.md)
 and [remaining acceptance criteria](REMAINING-WORK.md).

@@ -2120,7 +2120,7 @@
         }
       },
       "classification": "C",
-      "reason": "134/136 own-delta paths absent. E for its optional package payload, C for cumulative branch envelope; use separate D7-isolated successor PRs, never core-enable all packages.",
+      "reason": "134/136 own-delta paths absent. C for the cumulative branch envelope; isolated optional successor intake is accepted under the November 18 D7 supersession. Qualify each separately; default-build wiring requires its own gate.",
       "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/46"
     },
     {
@@ -7557,7 +7557,7 @@
       "ancestor_stack170": false,
       "audit_scope": "historical",
       "classification": "C",
-      "reason": "134/136 own-delta paths absent. E for its optional package payload, C for cumulative branch envelope; use separate D7-isolated successor PRs, never core-enable all packages."
+      "reason": "134/136 own-delta paths absent. C for the cumulative branch envelope; isolated optional successor intake is accepted under the November 18 D7 supersession. Qualify each separately; default-build wiring requires its own gate."
     },
     {
       "branch": "claude/loving-einstein-xgzvdy-m0-s11-governance-ci",
@@ -8400,8 +8400,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-courier",
@@ -8412,8 +8412,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
@@ -8424,8 +8424,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-meetup",
@@ -8436,8 +8436,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
@@ -8448,8 +8448,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
@@ -8460,8 +8460,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
@@ -8472,8 +8472,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
@@ -8484,8 +8484,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b2-stealth",
@@ -8496,8 +8496,8 @@
       "ancestor_main": false,
       "ancestor_stack170": false,
       "audit_scope": "historical",
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended."
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency."
     },
     {
       "branch": "nodata/youthful-maxwell-uwy8hx-b3-formal",
@@ -8917,7 +8917,7 @@
     "B": "Useful isolated candidate requiring current integration repair/requalification",
     "C": "Selective extraction or unresolved branch envelope",
     "D": "Exact ancestor or demonstrated complete material content",
-    "E": "Optional reference/research/historical evidence only",
+    "E": "Experimental research or historical process/evidence only",
     "F": "Incompatible custody architecture"
   },
   "ci_review": {
@@ -9312,5 +9312,21 @@
     "Missing paths identify absent source artifacts; renamed implementations may cover part of their behavior, so they are not proof that every associated end-user behavior is absent.",
     "Old head CI does not qualify a newly merged tree.",
     "PR-own-delta metrics use merge-base(PR recorded base, head); cumulative branch backlog is classified separately."
-  ]
+  ],
+  "policy_correction": {
+    "decision": "November 18 accepted optional source intake explicitly supersedes D7 parking",
+    "source": "docs/adr/ACCEPTED-DECISIONS-2026-11-04.md and docs/consolidation/2026-11-18-branch-consolidation-gameplan.md section 5",
+    "branches_reclassified_E_to_B": [
+      "nodata/youthful-maxwell-uwy8hx-b2-arbitration",
+      "nodata/youthful-maxwell-uwy8hx-b2-courier",
+      "nodata/youthful-maxwell-uwy8hx-b2-liquidity",
+      "nodata/youthful-maxwell-uwy8hx-b2-meetup",
+      "nodata/youthful-maxwell-uwy8hx-b2-privacy-controls",
+      "nodata/youthful-maxwell-uwy8hx-b2-privacy-policy",
+      "nodata/youthful-maxwell-uwy8hx-b2-proof-inputs",
+      "nodata/youthful-maxwell-uwy8hx-b2-proof-jobs",
+      "nodata/youthful-maxwell-uwy8hx-b2-stealth"
+    ],
+    "limits": "No source comparison or hosted CI assertion changed; default-build wiring separately gated."
+  }
 }

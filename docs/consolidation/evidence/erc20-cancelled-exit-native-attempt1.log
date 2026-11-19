@@ -1,0 +1,21 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: review.confirm: {"ok":false,"code":"UNAVAILABLE","snapshot":{"version":1,"phase":"ready","profileIds":["73f5d192215a17fecb5b0e09fa6d1fdc"],"profileId":"73f5d192215a17fecb5b0e09fa6d1fdc","publicKey":"880246014bea2cc3c1612524e49d1e4dd5d3d115e1fcf70e6e98eeea4b47d78c","wallet":{"account":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","chainId":"31337"},"relay":"open","ads":[{"key":"880246014bea2cc3c1612524e49d1e4dd5d3d115e1fcf70e6e98eeea4b47d78c:p2p-offramp:v1:80ec727e1cee4c33a8c2961664f717dfc4d96b76bb04f6064cd556d52c82fb31","maker":"880246014bea2cc3c1612524e49d1e4dd5d3d115e1fcf70e6e98eeea4b47d78c","assetId":"test-token","amountBaseUnits":"1100","currency":"USD","expiresAtSeconds":"1795076442","own":true}],"sessions":[{"id":"30078:880246014bea2cc3c1612524e49d1e4dd5d3d115e1fcf70e6e98eeea4b47d78c:p2p-offramp:v1:80ec727e1cee4c33a8c2961664f717dfc4d96b76bb04f6064cd556d52c82fb31|9260a4a2e7c8428ceef1525f9092581b1f35336c5e35cd7b7efb24ce356ac2a1","role":"seller","state":"offered","selected":true,"buyerAddress":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","tradeId":"f7f3c651198213638d2b7ccc4f3fb57dce145e700e810413dc515193badbae18"}],"trades":[{"id":"f7f3c651198213638d2b7ccc4f3fb57dce145e700e810413dc515193badbae18","sessionId":"30078:880246014bea2cc3c1612524e49d1e4dd5d3d115e1fcf70e6e98eeea4b47d78c:p2p-offramp:v1:80ec727e1cee4c33a8c2961664f717dfc4d96b76bb04f6064cd556d52c82fb31|9260a4a2e7c8428ceef1525f9092581b1f35336c5e35cd7b7efb24ce356ac2a1","role":"seller","restored":false,"seller":"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266","buyer":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8","assetId":"test-token","amountBaseUnits":"1100","fiatCurrency":"USD","fiatMinorUnits":"2500","fiatScale":2,"paymentInstructions":"SYNTHETIC private bank instructions only for local test funds.","acceptBeforeSeconds":"1795073742","escrowExpirySeconds":"1795076442","peerAcceptance":"none","chainState":null,"chainObservedAtMs":null,"intents":[],"chat":[],"approval":null,"tokenReadError":false,"canApprove":false,"canFund":false,"canRelease":false,"canRefund":false}],"review":null,"error":"UNAVAILABLE"}}
+
+false !== true
+
+    at Object.command (file:///workspace/scratch/29ec534d969d/erc20-cancelled-exit-native-green.mjs:59:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async acceptTrade (file:///workspace/scratch/29ec534d969d/erc20-cancelled-exit-native-green.mjs:88:3)
+    at async file:///workspace/scratch/29ec534d969d/erc20-cancelled-exit-native-green.mjs:124:17 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.3

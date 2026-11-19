@@ -9,19 +9,19 @@ local/hosted development qualification. The full MVP and release gates remain
 incomplete. `ReleaseEnabled=0`; no public-network deployment or production release
 occurred.
 
-The initial remote inventory covered **177 branches** and every PR page. The updated inventory contains **180 branches**, including the three new development branches, and 172 PR records. The documentation branch containing this snapshot is created afterward; the machine-readable inventory is the authoritative timestamped count.
+The initial remote inventory covered **177 branches** and every PR page. The updated inventory contains **181 branches**, including three new development branches and the report branch, and 173 PR records. The machine-readable inventory is the authoritative timestamped count; its own next report commit necessarily appears only in a later refresh.
 
 ## Recorded counts at this checkpoint
 
 | Measure | Result |
 | --- | --- |
 | Initial branches discovered | 177, including main |
-| Current pre-publication inventory | 180 branches: 120 D, 38 C, 8 B, 13 E, 1 F, 0 A |
+| Current inventory | 181 branches: 120 D, 38 C, 18 B, 4 E, 1 F, 0 A; 173 PR records, 34 open |
 | Direct PR merges executed | **5**: #169, #166, #167, #170, #138 |
 | Additional source PRs GitHub recognized as merged | **8**: #136, #139, #164, #165, #152, #153, #157, #158 |
 | Explicit superseded closure | **1**: repaired #168, proved incorporated through #170 |
 | New development PRs so far | **3**: #173 expanded token-browser recovery; #174 repaired historical tooling; #175 explicit unfunded resumption |
-| Original branch repair lanes | #168 browser parent and #154 tooling; #173 test extension also repaired after hosted RED |
+| Original branch repair lanes | #168 browser parent and #154 tooling; expanded #173 acceptance also exposed and repaired a restored-exit lifecycle defect |
 | Selective historical extractions | Two narrow units: #28 per-run lab evidence and #156 independent tool-path test, both in #174 |
 | Textual merge conflicts resolved | One `package.json` conflict; all required scripts retained |
 | Historical branches deleted / force pushes / direct main pushes | Zero |
@@ -58,13 +58,19 @@ the actual runs, source trees and scope limits.
 The new #173 tests initially failed in actual Chromium because correct reconnect
 did not immediately retire a prepared intent after wrong-chain cancellation.
 The correction explicitly tests the configured block lease; no canonical check or
-journal invariant was weakened. The corrected hosted run passed the lease, wallet-revocation and fresh-profile/unknown-approval assertions, then exposed a later restored-release failure that remains under investigation. A complete browser GREEN is still required. Local
+journal invariant was weakened. The corrected hosted run passed those assertions,
+then exposed a confirmed restored-exit defect: multiple cancelled attempts still
+blocked a fresh review after another finalized transaction consumed their nonce.
+The narrow recovery repair is now published as `c7f462c…`, independently reviewed,
+and passes 31 affected lifecycle tests plus a real native restore/release/refund
+diagnostic. A fresh complete browser GREEN is still required. Local
 Chromium is blocked before context creation by sandbox Unix sockets, so local
 build success is never presented as browser acceptance.
 
 Confirmed repairs include duplicate React keys, clone-safe wallet requests,
-stale strict documentation records, lab evidence overwrite and a developer claims
-array-bound bypass. QR bounds/typed-error repairs are technically qualified but
+stale strict documentation records, lab evidence overwrite, a developer claims
+array-bound bypass and finalized-nonce recovery for restored cancelled exits.
+QR bounds/typed-error repairs are technically qualified but
 remain unmerged because the required automated review has not appeared.
 
 Fresh root full and production npm audits now return zero findings. The earlier
@@ -78,7 +84,10 @@ The unfinished required product work is same-terms unfunded resumption, Solana
 browser composition, broader real-relay/physical-wallet/device acceptance, QR
 camera/application handoff, and complete accessibility/localization coverage.
 Current PR gates include exact-head #173/#175 browser checks and D8 automated review for
-QR/tooling. Optional D7 packages remain deferred; the custodial ledger branch is
+QR/tooling. Optional packages are accepted for isolated source intake under the
+November 18 decision superseding D7's original parking option; their per-PR
+qualification and separately gated default-build integration remain outstanding.
+They are outside mandatory MVP dependencies. The custodial ledger branch is
 architecturally rejected and retained.
 
 Release qualification still needs independent professional security review,

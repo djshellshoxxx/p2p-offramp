@@ -1,32 +1,32 @@
 {
   "schema": 1,
   "repository": "https://github.com/djshellshoxxx/p2p-offramp",
-  "generated_at_utc": "2026-11-19T07:10:51+00:00",
+  "generated_at_utc": "2026-11-19T07:27:54+00:00",
   "user_date": "2026-11-18 (America/Los_Angeles)",
   "main": "80375193f16082c582a1faf2c6ba598f9eca532a",
   "main_tree": "6be72aa4282328654a9243e91f4d9259624e0196",
   "initial_branch_count": 177,
-  "branch_count": 180,
-  "pull_request_count": 172,
-  "open_pull_requests": 33,
+  "branch_count": 181,
+  "pull_request_count": 173,
+  "open_pull_requests": 34,
   "pagination": {
     "branches": [
       100,
-      80,
+      81,
       0
     ],
     "pull_requests": [
       100,
-      72,
+      73,
       0
     ],
     "check_runs": "One exact-head page per unique branch tip, per_page=100; every returned total_count <=100."
   },
   "classification_counts": {
-    "B": 8,
+    "B": 18,
     "C": 38,
     "D": 120,
-    "E": 13,
+    "E": 4,
     "F": 1
   },
   "branches": [
@@ -16055,7 +16055,7 @@
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
       "classification": "C",
-      "reason": "134/136 own-delta paths absent. E for its optional package payload, C for cumulative branch envelope; use separate D7-isolated successor PRs, never core-enable all packages.",
+      "reason": "134/136 own-delta paths absent. C for the cumulative branch envelope; isolated optional successor intake is accepted under the November 18 D7 supersession. Qualify each separately; default-build wiring requires its own gate.",
       "incorporation_proof": "historical",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
@@ -28273,14 +28273,14 @@
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
       "classification": "B",
-      "reason": "Repaired original #154 ancestry on current main. Independent complete diff review, 30 focused tests, TypeScript and strict documentation checks pass; fresh hosted CI and mandatory Tier B automated review remain.",
-      "incorporation_proof": "independent full diff + local GREEN; hosted/review pending",
+      "reason": "Repaired original #154 ancestry on current main. Independent complete diff review, 30 focused tests, TypeScript, strict docs and all seven required hosted jobs pass; mandatory Tier B CodeRabbit/Qodo review remains absent.",
+      "incorporation_proof": "independent full diff + local and required hosted GREEN; external review pending",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
       "required_check_summary": {
-        "success": 3,
-        "pending": 4,
+        "success": 7,
+        "pending": 0,
         "failed_or_cancelled": 0,
         "required_total": 7
       },
@@ -28298,26 +28298,26 @@
           "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
         },
         "local-evm": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394836184",
           "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
         },
         "schemas-and-crypto": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394836009",
           "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
         },
         "browser": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394835898",
           "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
         },
         "specs": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394835976",
           "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
         },
@@ -28335,98 +28335,311 @@
           {
             "name": "CodeQL",
             "status": "completed",
-            "conclusion": "neutral",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/135400560356",
-            "app": "github-advanced-security"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "local-evm",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394836184",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "schemas-and-crypto",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394836009",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "specs",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394835976",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "browser",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394835898",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "forge",
             "status": "completed",
             "conclusion": "success",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470021/job/135394835815",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "docs-tooling",
             "status": "completed",
             "conclusion": "success",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470014/job/135394835654",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "program",
-            "status": "queued",
+            "status": "in_progress",
             "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470097/job/135394835619",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "local-trade",
             "status": "completed",
             "conclusion": "success",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470021/job/135394835593",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "inventory",
             "status": "completed",
             "conclusion": "success",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475470138/job/135394835584",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
           },
           {
             "name": "Analyze (javascript-typescript)",
             "status": "completed",
             "conclusion": "success",
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475467366/job/135394831441",
-            "app": "github-actions"
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
+          },
+          {
+            "name": "Analyze (python)",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475467366/job/135394831172",
+            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b"
+          }
+        ]
+      }
+    },
+    {
+      "branch": "docs/consolidation-20261119",
+      "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/df9141098770c88d1a4d35d8b997e0b70e3927d5",
+      "protected": false,
+      "tip_date": "2026-11-18T23:14:17-08:00",
+      "last_meaningful_nonmerge_commit": {
+        "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5",
+        "date": "2026-11-19T07:14:17+00:00",
+        "subject": "Record complete consolidation inventory, merge evidence and unfinished MVP acceptance"
+      },
+      "merge_base_with_main": "80375193f16082c582a1faf2c6ba598f9eca532a",
+      "behind_main": 0,
+      "ahead_main": 1,
+      "changed_files_from_merge_base": [
+        "01_P2P_SHIELDED_OFFRAMP_ENGINE/feature_1.7_transaction_recovery/module_1.7.1_transaction_journal/spec-transaction-lifecycle-journal.md",
+        "README.md",
+        "docs/DEVELOPMENT_STATUS.md",
+        "docs/consolidation/BRANCH-INVENTORY.json",
+        "docs/consolidation/BRANCH-INVENTORY.md",
+        "docs/consolidation/CONFLICT-RESOLUTIONS.md",
+        "docs/consolidation/DEPENDENCY-GRAPH.md",
+        "docs/consolidation/FEATURE-COMPLETION.md",
+        "docs/consolidation/FINAL-REPORT.md",
+        "docs/consolidation/HISTORICAL-BRANCH-REVIEW.json",
+        "docs/consolidation/HISTORICAL-BRANCH-REVIEW.md",
+        "docs/consolidation/MERGE-DECISIONS.md",
+        "docs/consolidation/MERGE-LEDGER.json",
+        "docs/consolidation/MERGE-LEDGER.md",
+        "docs/consolidation/REMAINING-WORK.md",
+        "docs/consolidation/SECURITY-FINDINGS.md",
+        "docs/consolidation/TEST-RESULTS.md",
+        "docs/consolidation/evidence/README.md",
+        "docs/consolidation/evidence/browser-parent-controller-retry.log",
+        "docs/consolidation/evidence/browser-parent-controller.log",
+        "docs/consolidation/evidence/browser-parent-regressions.log",
+        "docs/consolidation/evidence/browser-parent-typecheck.log",
+        "docs/consolidation/evidence/core-focused-review.log",
+        "docs/consolidation/evidence/erc20-browser-extension-local.log",
+        "docs/consolidation/evidence/erc20-cold-forge-build.log",
+        "docs/consolidation/evidence/index.json",
+        "docs/consolidation/evidence/main-after138-spec-check.log",
+        "docs/consolidation/evidence/main-boundaries.log",
+        "docs/consolidation/evidence/main-build-policy.log",
+        "docs/consolidation/evidence/main-default-build.log",
+        "docs/consolidation/evidence/main-default-retained-inventory.json",
+        "docs/consolidation/evidence/main-default-verify.log",
+        "docs/consolidation/evidence/main-demo-build.log",
+        "docs/consolidation/evidence/main-demo-retained-inventory.json",
+        "docs/consolidation/evidence/main-demo-verify.log",
+        "docs/consolidation/evidence/main-erc20-native.log",
+        "docs/consolidation/evidence/main-foundry.log",
+        "docs/consolidation/evidence/main-localnet-build.log",
+        "docs/consolidation/evidence/main-npm-audit-production.json",
+        "docs/consolidation/evidence/main-npm-audit.json",
+        "docs/consolidation/evidence/main-package-tests.log",
+        "docs/consolidation/evidence/main-spec-inventory.log",
+        "docs/consolidation/evidence/main-spec-tests.log",
+        "docs/consolidation/evidence/main-typecheck.log",
+        "docs/consolidation/evidence/raw-logs.zip",
+        "docs/consolidation/evidence/resumption-affected-regression.log",
+        "docs/consolidation/evidence/resumption-build-default.log",
+        "docs/consolidation/evidence/resumption-build-localnet-input-failure.log",
+        "docs/consolidation/evidence/resumption-build-localnet.log",
+        "docs/consolidation/evidence/resumption-controller-red.log",
+        "docs/consolidation/evidence/resumption-exchange-wallet.log",
+        "docs/consolidation/evidence/resumption-typecheck.log",
+        "docs/consolidation/evidence/tooling154-claims-red.log",
+        "docs/consolidation/evidence/tooling154-current-docs.log",
+        "docs/consolidation/evidence/tooling154-focused-red.log",
+        "docs/consolidation/evidence/tooling154-focused-tests.log",
+        "docs/consolidation/evidence/tooling154-typecheck.log",
+        "docs/development/FEATURE_COMPLETION_MATRIX.md",
+        "docs/execution/PICOMATCH-ADVISORY-ASSESSMENT-2026-11-18.md"
+      ],
+      "changed_modules": [
+        "01_P2P_SHIELDED_OFFRAMP_ENGINE",
+        "README.md",
+        "docs",
+        "docs/consolidation",
+        "docs/development",
+        "docs/execution"
+      ],
+      "changed_test_and_fixture_paths": [],
+      "test_coverage_limit": "Presence is not a passing test claim. Exact-source results are separately recorded.",
+      "prs": [
+        {
+          "number": 176,
+          "state": "open",
+          "draft": true,
+          "merged_at": null,
+          "head_sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5",
+          "base": "main",
+          "title": "Record comprehensive consolidation, verification and remaining MVP work",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/176"
+        }
+      ],
+      "referenced_tracker_issues": [],
+      "depends_on_prs": [],
+      "classification": "B",
+      "reason": "Consolidation record draft with all ten requested reports, full branch inventory and retained evidence. Current policy/source corrections and fresh exact-head qualification required before documentation merge.",
+      "incorporation_proof": "independent documentation review + continuing source/evidence refresh",
+      "exact_ancestor_of_main": false,
+      "safe_to_merge_now": false,
+      "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
+      "required_check_summary": {
+        "success": 0,
+        "pending": 7,
+        "failed_or_cancelled": 0,
+        "required_total": 7
+      },
+      "required_checks": {
+        "forge": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073488/job/135403341982",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "local-trade": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073488/job/135403341544",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "local-evm": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342645",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "schemas-and-crypto": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342100",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "browser": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342423",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "specs": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342353",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        },
+        "inventory": {
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073660/job/135403342339",
+          "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+        }
+      },
+      "ci": {
+        "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5",
+        "total": 9,
+        "checks": [
+          {
+            "name": "local-evm",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342645",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "browser",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342423",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "specs",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342353",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "inventory",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073660/job/135403342339",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "schemas-and-crypto",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073573/job/135403342100",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "forge",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073488/job/135403341982",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "local-trade",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478073488/job/135403341544",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
           },
           {
             "name": "Analyze (python)",
             "status": "queued",
             "conclusion": null,
-            "sha": "030ba10169531dc9a6324d862bb4fad71fbb117b",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475467366/job/135394831172",
-            "app": "github-actions"
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478069198/job/135403332530",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
+          },
+          {
+            "name": "Analyze (javascript-typescript)",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44478069198/job/135403332178",
+            "sha": "df9141098770c88d1a4d35d8b997e0b70e3927d5"
           }
         ]
       }
@@ -29150,8 +29363,8 @@
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
       "required_check_summary": {
-        "success": 0,
-        "pending": 7,
+        "success": 2,
+        "pending": 5,
         "failed_or_cancelled": 0,
         "required_total": 7
       },
@@ -29175,7 +29388,7 @@
           "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
         },
         "schemas-and-crypto": {
-          "status": "queued",
+          "status": "in_progress",
           "conclusion": null,
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024444",
           "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
@@ -29187,93 +29400,91 @@
           "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
         },
         "specs": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024094",
           "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
         },
         "inventory": {
-          "status": "queued",
-          "conclusion": null,
+          "status": "completed",
+          "conclusion": "success",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745470/job/135399023883",
           "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
         }
       },
       "ci": {
         "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
-        "total": 9,
+        "total": 10,
         "checks": [
+          {
+            "name": "CodeQL",
+            "status": "completed",
+            "conclusion": "neutral",
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/135407123001",
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
+          },
           {
             "name": "forge",
             "status": "queued",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745517/job/135399024557",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "schemas-and-crypto",
-            "status": "queued",
+            "status": "in_progress",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024444",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "browser",
             "status": "queued",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024441",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "local-evm",
             "status": "queued",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024423",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "local-trade",
             "status": "queued",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745517/job/135399024129",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "specs",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745515/job/135399024094",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "inventory",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476745470/job/135399023883",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "Analyze (python)",
             "status": "queued",
             "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476741882/job/135399017394",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           },
           {
             "name": "Analyze (javascript-typescript)",
-            "status": "queued",
-            "conclusion": null,
-            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722",
+            "status": "completed",
+            "conclusion": "success",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44476741882/job/135399017087",
-            "app": "github-actions"
+            "sha": "ba90ad4cdd7e98eaee0d9595096e2812938b1722"
           }
         ]
       }
@@ -31587,73 +31798,64 @@
             "name": "schemas-and-crypto",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046475/job/135400107165",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "specs",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046475/job/135400107158",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "local-evm",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046475/job/135400107130",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "browser",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046475/job/135400106707",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "Analyze (javascript-typescript)",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046259/job/135400008581",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "Analyze (python)",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046259/job/135400008249",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "forge",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046469/job/135400003458",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "local-trade",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046469/job/135400003161",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           },
           {
             "name": "inventory",
             "status": "queued",
             "conclusion": null,
-            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a",
             "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44477046453/job/135400002811",
-            "app": "github-actions"
+            "sha": "80375193f16082c582a1faf2c6ba598f9eca532a"
           }
         ]
       }
@@ -33345,9 +33547,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -33555,9 +33757,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -33752,9 +33954,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -33987,9 +34189,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -34187,9 +34389,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -34377,9 +34579,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -34570,9 +34772,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -34779,9 +34981,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -34993,9 +35195,9 @@
       ],
       "referenced_tracker_issues": [],
       "depends_on_prs": [],
-      "classification": "E",
-      "reason": "Optional D7 reference package, separate from core feature consolidation; no enabling recommended.",
-      "incorporation_proof": "historical",
+      "classification": "B",
+      "reason": "Isolated optional source intake accepted November 18, superseding D7 parking. One package per PR, import-boundary and applicable D8 review required; current-main qualification pending. Default-build wiring needs a separate gate; not a mandatory MVP dependency.",
+      "incorporation_proof": "accepted decision supersession; isolated source retained for current-head qualification",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
@@ -40015,27 +40217,31 @@
     },
     {
       "branch": "test/erc20-browser-recovery-20261119",
-      "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
+      "sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/c7f462c6688c78c35514808177ff7cfed32b9961",
       "protected": false,
-      "tip_date": "2026-11-18T22:52:27-08:00",
+      "tip_date": "2026-11-18T23:25:53-08:00",
       "last_meaningful_nonmerge_commit": {
-        "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-        "date": "2026-11-19T06:52:27+00:00",
-        "subject": "test(localnet): qualify wrong-chain recovery at the block lease"
+        "sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
+        "date": "2026-11-19T07:25:53+00:00",
+        "subject": "fix(recovery): settle cancelled exits from finalized nonce evidence"
       },
       "merge_base_with_main": "189f7b1ddfc1b53be7da84cc2a24c9a745d43585",
       "behind_main": 43,
-      "ahead_main": 2,
+      "ahead_main": 3,
       "changed_files_from_merge_base": [
+        "packages/domain/src/tx-lifecycle.ts",
+        "packages/domain/test/tx-lifecycle.test.mjs",
         "scripts/lib/localnet-browser-fixture.mjs",
         "scripts/test-localnet-erc20-browser.mjs"
       ],
       "changed_modules": [
+        "packages/domain",
         "scripts",
         "scripts/lib"
       ],
       "changed_test_and_fixture_paths": [
+        "packages/domain/test/tx-lifecycle.test.mjs",
         "scripts/test-localnet-erc20-browser.mjs"
       ],
       "test_coverage_limit": "Presence is not a passing test claim. Exact-source results are separately recorded.",
@@ -40045,9 +40251,9 @@
           "state": "open",
           "draft": true,
           "merged_at": null,
-          "head_sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
+          "head_sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
           "base": "main",
-          "title": "test(localnet): qualify ERC-20 browser recovery and wallet revocation",
+          "title": "fix(recovery): qualify ERC-20 restore and finalized nonce recovery",
           "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/173"
         }
       ],
@@ -40056,144 +40262,134 @@
         170
       ],
       "classification": "B",
-      "reason": "New real-browser wallet revocation and encrypted restore coverage. Hosted test exposed a conservative prepared-lease hold after wrong-chain cancellation; repair/qualification in progress. Local Chromium is sandbox-blocked.",
-      "incorporation_proof": "new test source + hosted failure",
+      "reason": "Expanded browser acceptance found restored cancelled exits blocked despite finalized same-nonce evidence. Narrow Tier C lifecycle repair independently reviewed; 31 affected tests and native restore/release/refund diagnostic pass. Both earlier hosted failures retained; fresh exact-head browser GREEN pending.",
+      "incorporation_proof": "regression RED/GREEN + independent full repair review + native evidence; hosted pending",
       "exact_ancestor_of_main": false,
       "safe_to_merge_now": false,
       "unique_functionality_assessment": "Retain exact source and selective scope described in the disposition; no wholesale equivalence assumed.",
       "required_check_summary": {
-        "success": 4,
-        "pending": 3,
+        "success": 0,
+        "pending": 7,
         "failed_or_cancelled": 0,
         "required_total": 7
       },
       "required_checks": {
         "forge": {
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487631",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571240/job/135408230929",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "local-trade": {
-          "status": "in_progress",
+          "status": "queued",
           "conclusion": null,
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487370",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571240/job/135408231205",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "local-evm": {
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488163",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231119",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "schemas-and-crypto": {
           "status": "queued",
           "conclusion": null,
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488197",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231735",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "browser": {
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488027",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231577",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "specs": {
           "status": "queued",
           "conclusion": null,
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488159",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231572",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         },
         "inventory": {
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364452/job/135394487851",
-          "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492"
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571403/job/135408230901",
+          "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
         }
       },
       "ci": {
-        "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
+        "sha": "c7f462c6688c78c35514808177ff7cfed32b9961",
         "total": 10,
         "checks": [
-          {
-            "name": "CodeQL",
-            "status": "completed",
-            "conclusion": "neutral",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/135400452850",
-            "app": "github-advanced-security"
-          },
           {
             "name": "schemas-and-crypto",
             "status": "queued",
             "conclusion": null,
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488197",
-            "app": "github-actions"
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231735",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           },
           {
-            "name": "local-evm",
-            "status": "completed",
-            "conclusion": "success",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488163",
-            "app": "github-actions"
+            "name": "browser",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231577",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           },
           {
             "name": "specs",
             "status": "queued",
             "conclusion": null,
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488159",
-            "app": "github-actions"
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231572",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           },
           {
-            "name": "browser",
-            "status": "completed",
-            "conclusion": "success",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364504/job/135394488027",
-            "app": "github-actions"
-          },
-          {
-            "name": "inventory",
-            "status": "completed",
-            "conclusion": "success",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364452/job/135394487851",
-            "app": "github-actions"
-          },
-          {
-            "name": "forge",
-            "status": "completed",
-            "conclusion": "success",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487631",
-            "app": "github-actions"
+            "name": "program",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571433/job/135408231244",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           },
           {
             "name": "local-trade",
-            "status": "in_progress",
+            "status": "queued",
             "conclusion": null,
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475364446/job/135394487370",
-            "app": "github-actions"
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571240/job/135408231205",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
+          },
+          {
+            "name": "local-evm",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571487/job/135408231119",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
+          },
+          {
+            "name": "forge",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571240/job/135408230929",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
+          },
+          {
+            "name": "inventory",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479571403/job/135408230901",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
+          },
+          {
+            "name": "Analyze (javascript-typescript)",
+            "status": "queued",
+            "conclusion": null,
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479565931/job/135408220707",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           },
           {
             "name": "Analyze (python)",
             "status": "queued",
             "conclusion": null,
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475358528/job/135394471869",
-            "app": "github-actions"
-          },
-          {
-            "name": "Analyze (javascript-typescript)",
-            "status": "completed",
-            "conclusion": "success",
-            "sha": "2edda4e57ba0dcadc1a148a870ef0a8b8271b492",
-            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44475358528/job/135394471452",
-            "app": "github-actions"
+            "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44479565931/job/135408220280",
+            "sha": "c7f462c6688c78c35514808177ff7cfed32b9961"
           }
         ]
       }

@@ -25,6 +25,7 @@ Local repair commit `aba8ca0843dcf24e2a80adfa2c8d38e0574a4a2c` preserves both
 | Sequential lab runs overwrite evidence | Historical #28 regression demonstrates flat output collisions | Fresh private directory per invocation; exclusive `wx` file writes; retained failed-run records | Ported exact narrow historical fix; both regression cases pass |
 | Claims arrays bypass a 32-item bound | Changing Proxy `length` admitted 40 preconditions | Capture own data length once, validate safe integer and own-key count, iterate bounded snapshot | New regression failed before fix; focused suite passes |
 | New #173 wrong-chain test expected immediate release availability | Hosted browser timed out after correct reconnect while durable prepared intent remained | Assert the hold, mine 11 configured lease blocks and require continued hold, then the 12th and require recovered exit without any wallet action | New real-browser GREEN pending; no product/journal rule weakened |
+| Restored cancelled releases veto a fresh funded exit | Second hosted #173 run failed at restored release; native reproduction showed three successor-required records despite a finalized same-nonce consumer | Extend the existing canonical finalized account/chain/nonce proof to hashless value-moving records. Retain original profile, null hash and markers; a fresh explicit review remains mandatory | New regression RED→GREEN; 31 affected tests, independent review and real native release/refund diagnostic pass; fresh full browser gate pending |
 
 ## Combined-tree verification
 

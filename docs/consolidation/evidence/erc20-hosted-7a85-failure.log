@@ -1,0 +1,784 @@
+﻿2026-11-19T06:41:42.7770431Z Current runner version: '2.338.2'
+2026-11-19T06:41:42.7796575Z ##[group]Runner Image Provisioner
+2026-11-19T06:41:42.7797581Z Hosted Compute Agent
+2026-11-19T06:41:42.7798219Z Version: 20261111.635
+2026-11-19T06:41:42.7798875Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-19T06:41:42.7799680Z Build Date: 2026-11-11T01:49:01Z
+2026-11-19T06:41:42.7800379Z Worker ID: {4ca6eed8-6306-4c38-a0cd-9f3db1aef900}
+2026-11-19T06:41:42.7801127Z Region: westcentralus
+2026-11-19T06:41:42.7801807Z Cloud: Azure
+2026-11-19T06:41:42.7802353Z ##[endgroup]
+2026-11-19T06:41:42.7804476Z ##[group]Operating System
+2026-11-19T06:41:42.7805193Z Ubuntu
+2026-11-19T06:41:42.7805725Z 26.04.1
+2026-11-19T06:41:42.7806320Z LTS
+2026-11-19T06:41:42.7806837Z ##[endgroup]
+2026-11-19T06:41:42.7807434Z ##[group]Runner Image
+2026-11-19T06:41:42.7808065Z Image: ubuntu-26.04
+2026-11-19T06:41:42.7809762Z Version: 20261116.202.1
+2026-11-19T06:41:42.7811914Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261116.202/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-19T06:41:42.7814939Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261116.202
+2026-11-19T06:41:42.7816799Z ##[endgroup]
+2026-11-19T06:41:42.7818918Z ##[group]GITHUB_TOKEN Permissions
+2026-11-19T06:41:42.7821837Z Contents: read
+2026-11-19T06:41:42.7822914Z Metadata: read
+2026-11-19T06:41:42.7824268Z ##[endgroup]
+2026-11-19T06:41:42.7827388Z Secret source: Actions
+2026-11-19T06:41:42.7829095Z Cache mode: write
+2026-11-19T06:41:42.7830824Z Prepare workflow directory
+2026-11-19T06:41:42.8227356Z Prepare all required actions
+2026-11-19T06:41:42.8276917Z Getting action download info
+2026-11-19T06:41:43.1403379Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-19T06:41:43.2280057Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-19T06:41:43.3100178Z Download action repository 'foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf' (SHA:dba66c27052e63476d886f22216e119ba7e615bf)
+2026-11-19T06:41:43.8687319Z Download action repository 'browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce' (SHA:c785b87e244131f27c9f19c1a33e2ead956ab7ce)
+2026-11-19T06:41:44.3705724Z Complete job name: local-trade
+2026-11-19T06:41:44.4771017Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-11-19T06:41:44.4772110Z with:
+2026-11-19T06:41:44.4772554Z   submodules: true
+2026-11-19T06:41:44.4773060Z   repository: djshellshoxxx/p2p-offramp
+2026-11-19T06:41:44.4777395Z   token: ***
+2026-11-19T06:41:44.4777861Z   ssh-strict: true
+2026-11-19T06:41:44.4778331Z   ssh-user: git
+2026-11-19T06:41:44.4778798Z   persist-credentials: true
+2026-11-19T06:41:44.4779309Z   clean: true
+2026-11-19T06:41:44.4779765Z   sparse-checkout-cone-mode: true
+2026-11-19T06:41:44.4780312Z   fetch-depth: 1
+2026-11-19T06:41:44.4780751Z   fetch-tags: false
+2026-11-19T06:41:44.4781253Z   show-progress: true
+2026-11-19T06:41:44.4781723Z   lfs: false
+2026-11-19T06:41:44.4782163Z   set-safe-directory: true
+2026-11-19T06:41:44.4782684Z   allow-unsafe-pr-checkout: false
+2026-11-19T06:41:44.4783797Z ##[endgroup]
+2026-11-19T06:41:44.7309688Z Syncing repository: djshellshoxxx/p2p-offramp
+2026-11-19T06:41:44.7313610Z ##[group]Getting Git version info
+2026-11-19T06:41:44.7315302Z Working directory is '/home/runner/work/p2p-offramp/p2p-offramp'
+2026-11-19T06:41:44.7317666Z [command]/usr/bin/git version
+2026-11-19T06:41:44.7318847Z git version 2.56.1
+2026-11-19T06:41:44.7332183Z ##[endgroup]
+2026-11-19T06:41:44.7353561Z Temporarily overriding HOME='/home/runner/work/_temp/2780604d-8851-43ff-baec-d5d1c57ea288' before making global git config changes
+2026-11-19T06:41:44.7357524Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-19T06:41:44.7361086Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T06:41:44.7421607Z Deleting the contents of '/home/runner/work/p2p-offramp/p2p-offramp'
+2026-11-19T06:41:44.7425867Z ##[group]Initializing the repository
+2026-11-19T06:41:44.7432380Z [command]/usr/bin/git init /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T06:41:44.7579223Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-19T06:41:44.7581219Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-19T06:41:44.7583610Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-19T06:41:44.7585324Z hint: call:
+2026-11-19T06:41:44.7585827Z hint:
+2026-11-19T06:41:44.7586757Z hint: 	git config --global init.defaultBranch <name>
+2026-11-19T06:41:44.7587812Z hint:
+2026-11-19T06:41:44.7589214Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-19T06:41:44.7591937Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-19T06:41:44.7593860Z hint:
+2026-11-19T06:41:44.7594409Z hint: 	git branch -m <name>
+2026-11-19T06:41:44.7595312Z hint:
+2026-11-19T06:41:44.7596671Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-19T06:41:44.7598783Z Initialized empty Git repository in /home/runner/work/p2p-offramp/p2p-offramp/.git/
+2026-11-19T06:41:44.7617469Z [command]/usr/bin/git remote add origin https://github.com/djshellshoxxx/p2p-offramp
+2026-11-19T06:41:44.7664081Z ##[endgroup]
+2026-11-19T06:41:44.7665591Z ##[group]Disabling automatic garbage collection
+2026-11-19T06:41:44.7668765Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-19T06:41:44.7705668Z ##[endgroup]
+2026-11-19T06:41:44.7706806Z ##[group]Setting up auth
+2026-11-19T06:41:44.7714519Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T06:41:44.7756621Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T06:41:44.8210405Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T06:41:44.8249649Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T06:41:44.8546247Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T06:41:44.8587734Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T06:41:44.8891433Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-19T06:41:44.8932657Z ##[endgroup]
+2026-11-19T06:41:44.8934127Z ##[group]Fetching the repository
+2026-11-19T06:41:44.8944114Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5ba58ac642718dfd660b9d7e23deda1208e45dc3:refs/remotes/pull/173/merge
+2026-11-19T06:41:46.0589746Z From https://github.com/djshellshoxxx/p2p-offramp
+2026-11-19T06:41:46.0594039Z  * [new ref]         5ba58ac642718dfd660b9d7e23deda1208e45dc3 -> pull/173/merge
+2026-11-19T06:41:46.0600894Z ##[endgroup]
+2026-11-19T06:41:46.0603814Z ##[group]Determining the checkout info
+2026-11-19T06:41:46.0606864Z ##[endgroup]
+2026-11-19T06:41:46.0609016Z [command]/usr/bin/git sparse-checkout disable
+2026-11-19T06:41:46.0671711Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-19T06:41:46.0705819Z ##[group]Checking out the ref
+2026-11-19T06:41:46.0708708Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/173/merge
+2026-11-19T06:41:46.2303519Z Note: switching to 'refs/remotes/pull/173/merge'.
+2026-11-19T06:41:46.2304637Z
+2026-11-19T06:41:46.2305525Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-19T06:41:46.2307302Z changes and commit them, and you can discard any commits you make in this
+2026-11-19T06:41:46.2309576Z state without impacting any branches by switching back to a branch.
+2026-11-19T06:41:46.2310559Z
+2026-11-19T06:41:46.2311428Z If you want to create a new branch to retain commits you create, you may
+2026-11-19T06:41:46.2313674Z do so (now or later) by using -c with the switch command. Example:
+2026-11-19T06:41:46.2314872Z
+2026-11-19T06:41:46.2315717Z   git switch -c <new-branch-name>
+2026-11-19T06:41:46.2316758Z
+2026-11-19T06:41:46.2317524Z Or undo this operation with:
+2026-11-19T06:41:46.2318271Z
+2026-11-19T06:41:46.2319093Z   git switch -
+2026-11-19T06:41:46.2320019Z
+2026-11-19T06:41:46.2321268Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-19T06:41:46.2322572Z
+2026-11-19T06:41:46.2323911Z HEAD is now at 5ba58ac Merge 7a85ccbe720b540b059c5b1b030b3de8ade224c5 into 189f7b1ddfc1b53be7da84cc2a24c9a745d43585
+2026-11-19T06:41:46.2328914Z ##[endgroup]
+2026-11-19T06:41:46.2331266Z ##[group]Setting up auth for fetching submodules
+2026-11-19T06:41:46.2333637Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-19T06:41:46.2370717Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-11-19T06:41:46.2404079Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-11-19T06:41:46.2436579Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-127660907@github.com:
+2026-11-19T06:41:46.2466026Z ##[endgroup]
+2026-11-19T06:41:46.2467958Z ##[group]Fetching submodules
+2026-11-19T06:41:46.2469579Z [command]/usr/bin/git submodule sync
+2026-11-19T06:41:46.2762993Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1
+2026-11-19T06:41:46.3038122Z Submodule 'contracts/evm/lib/forge-std' (https://github.com/foundry-rs/forge-std) registered for path 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:46.3041677Z Submodule 'contracts/evm/lib/openzeppelin-contracts' (https://github.com/OpenZeppelin/openzeppelin-contracts) registered for path 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:46.3072116Z Cloning into '/home/runner/work/p2p-offramp/p2p-offramp/contracts/evm/lib/forge-std'...
+2026-11-19T06:41:46.8454057Z Cloning into '/home/runner/work/p2p-offramp/p2p-offramp/contracts/evm/lib/openzeppelin-contracts'...
+2026-11-19T06:41:48.5731983Z From https://github.com/foundry-rs/forge-std
+2026-11-19T06:41:48.5732884Z  * branch            8e40513d678f392f398620b3ef2b418648b33e89 -> FETCH_HEAD
+2026-11-19T06:41:48.5868041Z Submodule path 'contracts/evm/lib/forge-std': checked out '8e40513d678f392f398620b3ef2b418648b33e89'
+2026-11-19T06:41:49.6870425Z From https://github.com/OpenZeppelin/openzeppelin-contracts
+2026-11-19T06:41:49.6870953Z  * branch            c64a1edb67b6e3f4a15cca8909c9482ad33a02b0 -> FETCH_HEAD
+2026-11-19T06:41:49.7806325Z Submodule path 'contracts/evm/lib/openzeppelin-contracts': checked out 'c64a1edb67b6e3f4a15cca8909c9482ad33a02b0'
+2026-11-19T06:41:49.7821389Z [command]/usr/bin/git submodule foreach git config --local gc.auto 0
+2026-11-19T06:41:49.8101191Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:49.8125732Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:49.8165546Z ##[endgroup]
+2026-11-19T06:41:49.8166270Z ##[group]Persisting credentials for submodules
+2026-11-19T06:41:49.8171661Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-11-19T06:41:49.8447385Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:49.8496480Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:49.8559090Z [command]/usr/bin/git submodule foreach sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-19T06:41:49.8825961Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:49.8868313Z file:/home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/forge-std/config	remote.origin.url
+2026-11-19T06:41:49.8873078Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:49.8915016Z file:/home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/openzeppelin-contracts/config	remote.origin.url
+2026-11-19T06:41:49.8947498Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-11-19T06:41:49.9210791Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:49.9238596Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:49.9278049Z [command]/usr/bin/git submodule foreach git config --local --add 'url.https://github.com/.insteadOf' 'org-127660907@github.com:'
+2026-11-19T06:41:49.9541754Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:41:49.9568042Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:41:49.9603875Z ##[endgroup]
+2026-11-19T06:41:49.9652253Z [command]/usr/bin/git log -1 --format=%H
+2026-11-19T06:41:49.9677954Z 5ba58ac642718dfd660b9d7e23deda1208e45dc3
+2026-11-19T06:41:50.0021319Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-19T06:41:50.0021739Z with:
+2026-11-19T06:41:50.0021950Z   node-version: 24
+2026-11-19T06:41:50.0022189Z   cache: npm
+2026-11-19T06:41:50.0022421Z   always-auth: false
+2026-11-19T06:41:50.0022685Z   check-latest: false
+2026-11-19T06:41:50.0025606Z   token: ***
+2026-11-19T06:41:50.0025824Z ##[endgroup]
+2026-11-19T06:41:50.1578533Z (node:2784) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-19T06:41:50.1579809Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-19T06:41:50.1589012Z Found in cache @ /opt/hostedtoolcache/node/24.22.3/x64
+2026-11-19T06:41:50.1589948Z ##[group]Environment details
+2026-11-19T06:41:50.5227585Z node: v24.22.3
+2026-11-19T06:41:50.5228218Z npm: 11.19.1
+2026-11-19T06:41:50.5228639Z yarn: 1.22.22
+2026-11-19T06:41:50.5230034Z ##[endgroup]
+2026-11-19T06:41:50.5254294Z [command]/opt/hostedtoolcache/node/24.22.3/x64/bin/npm config get cache
+2026-11-19T06:41:50.6888524Z /home/runner/.npm
+2026-11-19T06:41:50.9164368Z Cache hit for: node-cache-Linux-x64-npm-c2ba19d286a52847671f9b0ed80922210760d1f5cae48ccbe0415aad2fcfbf80
+2026-11-19T06:41:50.9277762Z (node:2784) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-19T06:41:52.0673031Z Received 50539208 of 50539208 (100.0%), 51.3 MBs/sec
+2026-11-19T06:41:52.0674686Z Cache Size: ~48 MB (50539208 B)
+2026-11-19T06:41:52.0798313Z [command]/usr/bin/tar -xf /home/runner/work/_temp/95bcee28-2341-441a-8554-d085a11efaf4/cache.tzst -P -C /home/runner/work/p2p-offramp/p2p-offramp --use-compress-program unzstd
+2026-11-19T06:41:52.1713624Z Cache restored successfully
+2026-11-19T06:41:52.1745259Z Cache restored from key: node-cache-Linux-x64-npm-c2ba19d286a52847671f9b0ed80922210760d1f5cae48ccbe0415aad2fcfbf80
+2026-11-19T06:41:52.1963079Z ##[group]Run foundry-rs/foundry-toolchain@dba66c27052e63476d886f22216e119ba7e615bf
+2026-11-19T06:41:52.1963799Z with:
+2026-11-19T06:41:52.1964002Z   version: v1.5.1
+2026-11-19T06:41:52.1964234Z   network: ethereum
+2026-11-19T06:41:52.1964442Z   cache: true
+2026-11-19T06:41:52.1964740Z   cache-key: local-trade-5ba58ac642718dfd660b9d7e23deda1208e45dc3
+2026-11-19T06:41:52.1965128Z   cache-restore-keys: local-trade-
+2026-11-19T06:41:52.1965390Z ##[endgroup]
+2026-11-19T06:41:52.3282781Z Installing Foundry (version: v1.5.1)
+2026-11-19T06:41:52.3283878Z Downloading foundryup installer from foundry-rs/foundryup@a27902ef04dcb43061fabf343365cb5afc95fc48...
+2026-11-19T06:41:52.4061288Z Running foundryup installer...
+2026-11-19T06:41:53.3091187Z Running: foundryup --install 1.5.1
+2026-11-19T06:41:55.4573690Z Added /home/runner/.foundry/bin to PATH
+2026-11-19T06:41:55.4575200Z Primary key: linux-foundry-chain-fork-local-trade-5ba58ac642718dfd660b9d7e23deda1208e45dc3
+2026-11-19T06:41:55.4581673Z Restore keys: linux-foundry-chain-fork-local-trade-
+2026-11-19T06:41:55.6245490Z Cache hit for restore-key: linux-foundry-chain-fork-local-trade-9620890feba318d01493e713e1a79abfd733e0c7
+2026-11-19T06:41:56.0953027Z Received 21586 of 21586 (100.0%), 0.1 MBs/sec
+2026-11-19T06:41:56.0954164Z Cache Size: ~0 MB (21586 B)
+2026-11-19T06:41:56.0983886Z [command]/usr/bin/tar -xf /home/runner/work/_temp/6658e352-c524-4dd1-a925-33f4885d605b/cache.tzst -P -C /home/runner/work/p2p-offramp/p2p-offramp --use-compress-program unzstd
+2026-11-19T06:41:56.1050474Z Cache restored successfully
+2026-11-19T06:41:56.1054468Z Cache restored from key: linux-foundry-chain-fork-local-trade-9620890feba318d01493e713e1a79abfd733e0c7
+2026-11-19T06:41:56.1055095Z Running: forge --version
+2026-11-19T06:41:56.1113073Z forge Version: 1.5.1-v1.5.1
+2026-11-19T06:41:56.1113754Z Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2
+2026-11-19T06:41:56.1114271Z Build Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)
+2026-11-19T06:41:56.1114731Z Build Profile: maxperf
+2026-11-19T06:41:56.1120507Z Running: cast --version
+2026-11-19T06:41:56.1179422Z cast Version: 1.5.1-v1.5.1
+2026-11-19T06:41:56.1180110Z Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2
+2026-11-19T06:41:56.1180944Z Build Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)
+2026-11-19T06:41:56.1181570Z Build Profile: maxperf
+2026-11-19T06:41:56.1186419Z Running: anvil --version
+2026-11-19T06:41:56.1221777Z anvil Version: 1.5.1-v1.5.1
+2026-11-19T06:41:56.1222438Z Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2
+2026-11-19T06:41:56.1222980Z Build Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)
+2026-11-19T06:41:56.1223579Z Build Profile: maxperf
+2026-11-19T06:41:56.1225972Z Running: chisel --version
+2026-11-19T06:41:56.1260857Z chisel Version: 1.5.1-v1.5.1
+2026-11-19T06:41:56.1261512Z Commit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2
+2026-11-19T06:41:56.1262066Z Build Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)
+2026-11-19T06:41:56.1262592Z Build Profile: maxperf
+2026-11-19T06:41:56.1400274Z ##[group]Run npm ci --ignore-scripts
+2026-11-19T06:41:56.1400676Z [36;1mnpm ci --ignore-scripts[0m
+2026-11-19T06:41:56.1442320Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:41:56.1442597Z ##[endgroup]
+2026-11-19T06:42:02.3087818Z
+2026-11-19T06:42:02.3088497Z added 59 packages, and audited 60 packages in 6s
+2026-11-19T06:42:02.3088951Z
+2026-11-19T06:42:02.3089217Z 28 packages are looking for funding
+2026-11-19T06:42:02.3089873Z   run `npm fund` for details
+2026-11-19T06:42:02.3101714Z
+2026-11-19T06:42:02.3102075Z found 0 vulnerabilities
+2026-11-19T06:42:02.3826734Z ##[group]Run npm run test:evm:local
+2026-11-19T06:42:02.3827101Z [36;1mnpm run test:evm:local[0m
+2026-11-19T06:42:02.3859876Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:02.3860162Z ##[endgroup]
+2026-11-19T06:42:02.4910129Z
+2026-11-19T06:42:02.4910796Z > p2p-offramp@0.1.0 test:evm:local
+2026-11-19T06:42:02.4911999Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-local-trade.mjs
+2026-11-19T06:42:02.4912733Z
+2026-11-19T06:42:04.4431723Z ok - deployed BasicEscrow and mock ERC-20 on private anvil (chain 31337, loopback)
+2026-11-19T06:42:04.4884637Z ok - native trade: signed terms -> fund -> release; buyer +1 ETH, escrow empty, authority observes absent/funded/released
+2026-11-19T06:42:04.4918405Z ok - negative: double release, refund-after-release and re-funding a settled trade all revert
+2026-11-19T06:42:04.5231964Z ok - ERC-20 trade: exact approve -> fund -> release; buyer +2.5 TUSD, escrow empty
+2026-11-19T06:42:04.5777054Z ok - refund trades: fund -> clock past deadline -> third party refunds to seller only (native and ERC-20); release after deadline reverts
+2026-11-19T06:42:04.6029174Z ok - negative: substituted buyer changes tradeId; release cannot apply to it and the bound buyer is paid
+2026-11-19T06:42:04.6233385Z ok - negative: buyer and third party cannot release
+2026-11-19T06:42:04.7229961Z ok - reverting buyer: release settles and credits the buyer; third-party withdraw reverts while rejecting, then pays after the receiver accepts
+2026-11-19T06:42:04.8212662Z ok - same-block race: release and refund in one block, both fee orders; chain time decides (deadline-1 release, deadline refund); one payout
+2026-11-19T06:42:04.8213843Z
+2026-11-19T06:42:04.8214371Z 9 local trade checks passed
+2026-11-19T06:42:04.8513725Z ##[group]Run npm run test:exchange:evm
+2026-11-19T06:42:04.8514328Z [36;1mnpm run test:exchange:evm[0m
+2026-11-19T06:42:04.8562281Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:04.8562732Z ##[endgroup]
+2026-11-19T06:42:04.9655224Z
+2026-11-19T06:42:04.9656151Z > p2p-offramp@0.1.0 test:exchange:evm
+2026-11-19T06:42:04.9657222Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-exchange-evm-local.mjs
+2026-11-19T06:42:04.9657799Z
+2026-11-19T06:42:05.7048826Z ok - canonical escrow and both real-crypto exchange parties use loopback-only chain/relay fixtures
+2026-11-19T06:42:06.6547641Z ok - canonical release journey persists authenticated bidirectional text before explicit relay publication and deduplicates after reopen
+2026-11-19T06:42:07.2058935Z ok - fresh-key restore reauthenticates original chat proofs and dedup alongside unknown G12 recovery without changing the source or resending
+2026-11-19T06:42:07.4069494Z ok - native release journey joins actual encrypted G12, finalized G08 and fresh exact-match G18 without wallet actions
+2026-11-19T06:42:07.5791450Z ok - encrypted canonical exchange -> exact reviewed acceptance -> G12 fund -> native release with lost-response/fresh-key native recovery
+2026-11-19T06:42:08.3692359Z ok - canonical refund journey persists authenticated bidirectional text before explicit relay publication and deduplicates after reopen
+2026-11-19T06:42:08.7155809Z ok - native refund journey joins actual encrypted G12, finalized G08 and fresh exact-match G18 without wallet actions
+2026-11-19T06:42:09.0812291Z ok - encrypted canonical exchange -> exact reviewed acceptance -> G12 fund -> native refund
+2026-11-19T06:42:09.4661741Z ok - accepted reviewed terms refuse expired chain-time funding without a wallet send
+2026-11-19T06:42:09.8586800Z ok - accepted reviewed terms refuse too-short chain-time funding without a wallet send
+2026-11-19T06:42:10.2528256Z ok - accepted reviewed terms refuse too-long chain-time funding without a wallet send
+2026-11-19T06:42:10.2533827Z ok - altered bytes, replay, pre-accept preparation, changed call value and repeat funding are refused; every send had a durable marker
+2026-11-19T06:42:10.2547201Z {"fixture":"canonical-exchange-native-escrow-loopback","checks":12,"negotiatedOrders":5,"settledOrders":2,"submissions":4,"durableMarkers":4,"chatMessages":4,"chatReopens":2,"chatRecoveries":1,"journeyReads":128,"journeySendOrSignCalls":0,"realNostrCrypto":true,"canonicalRelay":true,"canonicalLifecycle":true,"canonicalEscrow":true,"exactReviewedBytes":true,"durableAuthenticatedChat":true,"unknownFreshKeyRecovery":true,"freshFundingWindow":true,"externalNetwork":false,"tradingEnabled":false,"releaseAcceptance":false}
+2026-11-19T06:42:10.7456525Z ok - pinned Anvil, deployed escrow and a test-only ERC-1271 wallet; registry is the only domain source
+2026-11-19T06:42:11.0088434Z ok - ERC-1271 seller and EOA buyer: both statements verified by real eth_call ABI encoding and strict recovery
+2026-11-19T06:42:11.1111286Z ok - the contract wallet refuses a statement its owner did not sign
+2026-11-19T06:42:11.1474477Z ok - a revoked contract-wallet policy is observed by the next recheck; nothing is displayed as accepted
+2026-11-19T06:42:11.1842691Z ok - an EIP-7702 delegated account is refused UNSUPPORTED, never verified as EOA or contract
+2026-11-19T06:42:11.2890090Z ok - an undeployed contract wallet is refused as counterfactual
+2026-11-19T06:42:11.2893984Z {"fixture":"d1-peer-acceptance-loopback","checks":6,"verifierReadMethods":["eth_call","eth_chainId","eth_getBlockByNumber","eth_getCode"],"walletPrompts":0,"funding":false,"externalNetwork":false,"tradingEnabled":false,"releaseAcceptance":false}
+2026-11-19T06:42:11.3280622Z ##[group]Run npm run test:evm:viem
+2026-11-19T06:42:11.3280967Z [36;1mnpm run test:evm:viem[0m
+2026-11-19T06:42:11.3315060Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:11.3315336Z ##[endgroup]
+2026-11-19T06:42:11.4439654Z
+2026-11-19T06:42:11.4440319Z > p2p-offramp@0.1.0 test:evm:viem
+2026-11-19T06:42:11.4442374Z > node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/viem-read-rpc.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-viem-oracle-local.mjs
+2026-11-19T06:42:11.4444053Z
+2026-11-19T06:42:12.2770322Z ✔ allowlist is exactly the seven read methods (1.512102ms)
+2026-11-19T06:42:12.2773106Z ✔ forwards method and params unchanged (2.223185ms)
+2026-11-19T06:42:12.2775183Z ✔ non-allowlisted methods are rejected before reaching the provider (0.853016ms)
+2026-11-19T06:42:12.2776535Z ✔ abort before the call never reaches the provider (0.418307ms)
+2026-11-19T06:42:12.2896744Z ✔ abort mid-call rejects promptly; late result is discarded (6.422434ms)
+2026-11-19T06:42:12.2898954Z ✔ provider errors surface as plain rejections without leaking details (1.292134ms)
+2026-11-19T06:42:12.2901945Z ✔ well-formed state flows through EvmChainReader over the viem adapter (5.448813ms)
+2026-11-19T06:42:12.2905210Z ✔ malformed results pass through and the reader fails closed (2.936251ms)
+2026-11-19T06:42:12.2918275Z ✔ provider error under the reader maps to UNAVAILABLE with no leak (0.801621ms)
+2026-11-19T06:42:12.3166030Z ℹ tests 9
+2026-11-19T06:42:12.3166582Z ℹ suites 0
+2026-11-19T06:42:12.3166887Z ℹ pass 9
+2026-11-19T06:42:12.3167179Z ℹ fail 0
+2026-11-19T06:42:12.3167452Z ℹ cancelled 0
+2026-11-19T06:42:12.3167740Z ℹ skipped 0
+2026-11-19T06:42:12.3168004Z ℹ todo 0
+2026-11-19T06:42:12.3168322Z ℹ duration_ms 835.997389
+2026-11-19T06:42:13.4098303Z ok - c) chain id: viem getChainId == registry chainIdentity and validateLive ok
+2026-11-19T06:42:13.4260947Z ok - c) finalized anchor: reader validateLive anchor == viem finalized block (height/hash/timestamp)
+2026-11-19T06:42:13.4310468Z ok - c) runtime code keccak: reader anchor == viem keccak256(getCode)
+2026-11-19T06:42:13.4404590Z ok - B1) legacy-only reader on canonical BasicEscrow fails closed without probing another layout
+2026-11-19T06:42:13.4520067Z ok - canonical funded: direct getTrade read matches viem at the finalized anchor
+2026-11-19T06:42:13.4594157Z ok - a) funded: reader.read (shim) decoded escrow == viem readContract getTrade @finalized
+2026-11-19T06:42:13.4595214Z ok - a) funded fields match the submitted terms
+2026-11-19T06:42:13.4702976Z ok - b) fund receipt finalized: status/nonce/anchor match viem
+2026-11-19T06:42:13.4875179Z ok - b) d) reverted duplicate fund: viem status "reverted" and reader succeeded === false
+2026-11-19T06:42:13.4875998Z ok - d) viem reports status reverted
+2026-11-19T06:42:13.4942997Z ok - e) missing hash: reader kind unknown and viem throws TransactionReceiptNotFoundError
+2026-11-19T06:42:13.4953088Z ok - f) wrong chain identity in registry -> WRONG_CHAIN
+2026-11-19T06:42:13.4995530Z ok - g) wrong runtime keccak in registry -> INTEGRITY_FAILURE
+2026-11-19T06:42:13.5115024Z ok - b) h) release mined after finalized anchor reports pending (viem sees success)
+2026-11-19T06:42:13.5241712Z ok - canonical pending release remains funded at finalized anchor
+2026-11-19T06:42:13.5242425Z ok - h) finalized snapshot still funded while release is pending
+2026-11-19T06:42:13.5347774Z ok - canonical released: direct getTrade read matches viem at finalized anchor
+2026-11-19T06:42:13.5403607Z ok - a) released: reader.read (shim) decoded escrow == viem getTrade @finalized, state released
+2026-11-19T06:42:13.5498883Z ok - b) release receipt finalized: status/nonce/anchor match viem
+2026-11-19T06:42:13.5506634Z ok - release paid buyer exactly the escrowed amount (viem getBalance delta)
+2026-11-19T06:42:13.5584825Z ok - canonical absent: unused token trade matches viem and all-zero storage
+2026-11-19T06:42:13.5815637Z ok - canonical token funded: every immutable field matches viem
+2026-11-19T06:42:13.5870712Z ok - canonical token refuses mismatched seller
+2026-11-19T06:42:13.5917205Z ok - canonical token refuses mismatched buyer
+2026-11-19T06:42:13.5959663Z ok - canonical token refuses mismatched asset
+2026-11-19T06:42:13.6001191Z ok - canonical token refuses mismatched amountBaseUnits
+2026-11-19T06:42:13.6056699Z ok - canonical token refuses mismatched expirySeconds
+2026-11-19T06:42:13.6100707Z ok - canonical unlisted runtime refuses before eth_call on a real deployment
+2026-11-19T06:42:13.6154139Z ok - token refund is successful at latest but remains above finalized height
+2026-11-19T06:42:13.6221001Z ok - canonical pending token refund remains funded at finalized anchor
+2026-11-19T06:42:13.6335596Z ok - canonical token refunded: terminal state and fields match viem
+2026-11-19T06:42:13.6371200Z ok - canonical token refund returns principal only to seller
+2026-11-19T06:42:13.6409529Z {"script":"test-evm-viem-oracle-local","viem":"2.57.10","checks":32,"passed":32,"mismatches":[],"findings":[],"ok":true}
+2026-11-19T06:42:13.6667996Z ##[group]Run npm run test:payment:preflight
+2026-11-19T06:42:13.6668385Z [36;1mnpm run test:payment:preflight[0m
+2026-11-19T06:42:13.6702001Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:13.6702269Z ##[endgroup]
+2026-11-19T06:42:13.7719141Z
+2026-11-19T06:42:13.7719766Z > p2p-offramp@0.1.0 test:payment:preflight
+2026-11-19T06:42:13.7721138Z > node --test scripts/tests/fixture-receipt.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-payment-preflight-local.mjs
+2026-11-19T06:42:13.7722030Z
+2026-11-19T06:42:13.8689421Z ✔ null-first receipts poll only the exact same transaction hash and never send again (2.094123ms)
+2026-11-19T06:42:13.8692773Z ✔ malformed, reverted and foreign receipts fail immediately without waiting or further RPC (4.909029ms)
+2026-11-19T06:42:13.8696226Z ✔ read failure and malformed hash produce fixed errors with no retries or private diagnostics (0.428378ms)
+2026-11-19T06:42:13.8699492Z ✔ null receipt attempt exhaustion is bounded independently of a stalled test clock (1.966556ms)
+2026-11-19T06:42:13.8702419Z ✔ monotonic deadline bounds reads and waits; late success or clock reversal cannot pass (1.377408ms)
+2026-11-19T06:42:13.8704340Z ✔ a never-settling RPC is bounded by the receipt deadline without sleeping (0.792777ms)
+2026-11-19T06:42:13.8802413Z ℹ tests 6
+2026-11-19T06:42:13.8803013Z ℹ suites 0
+2026-11-19T06:42:13.8804356Z ℹ pass 6
+2026-11-19T06:42:13.8804754Z ℹ fail 0
+2026-11-19T06:42:13.8805003Z ℹ cancelled 0
+2026-11-19T06:42:13.8805483Z ℹ skipped 0
+2026-11-19T06:42:13.8805992Z ℹ todo 0
+2026-11-19T06:42:13.8806501Z ℹ duration_ms 73.258971
+2026-11-19T06:42:14.5287125Z ok - native finalized funding matches canonical terms, registry runtime, chain and genesis
+2026-11-19T06:42:14.5454305Z ok - native latest release vetoes guidance while finalized escrow still reports funded and time remains
+2026-11-19T06:42:14.5845300Z ok - latest native time permits 901 seconds and refuses 900 despite a finalized clock lag over 900 seconds
+2026-11-19T06:42:14.6080470Z ok - monotonic expiry/resume hide guidance, and native release remains independently available
+2026-11-19T06:42:14.6160035Z ok - native runtime/genesis identity mismatches block guidance
+2026-11-19T06:42:14.6281738Z ok - deep native snapshot rollback followed by explicit re-read cannot retain funded guidance
+2026-11-19T06:42:14.6782901Z ok - native timeout refund remains available with guidance blocked and leaves no escrow principal
+2026-11-19T06:42:14.6785605Z {"fixture":"canonical-native-payment-preflight","checks":7,"adapterReads":163,"adapterSendOrSignCalls":0,"finalizedPolicy":true,"latestClockWhileFinalizedLags":true,"latestSettlementVetoWhileFinalizedFunded":true,"nativeBoundary901And900":true,"externalNetwork":false,"tradingEnabled":false,"releaseAcceptance":false}
+2026-11-19T06:42:14.7108257Z ##[group]Run npm run test:evm:reconcile
+2026-11-19T06:42:14.7108619Z [36;1mnpm run test:evm:reconcile[0m
+2026-11-19T06:42:14.7141020Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:14.7141293Z ##[endgroup]
+2026-11-19T06:42:14.8218607Z
+2026-11-19T06:42:14.8219215Z > p2p-offramp@0.1.0 test:evm:reconcile
+2026-11-19T06:42:14.8220549Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-reconcile-local.mjs
+2026-11-19T06:42:14.8221175Z
+2026-11-19T06:42:15.6254445Z ok - deployed BasicEscrow on private anvil (chain 31337, loopback); automine off; file-backed encrypted journal
+2026-11-19T06:42:16.4226402Z ok - unknown outcome: client SIGKILLed after send-started and broadcast; fresh process reconciles confirmed -> finalized without resending
+2026-11-19T06:42:16.6799342Z ok - replaced: higher-gas same-nonce dev-account tx replaces the pending fund; intent -> replaced; explicit successor -> confirmed
+2026-11-19T06:42:16.9998512Z ok - dropped: pending fund removed from the pool -> dropped after expiry; same-nonce successor -> confirmed
+2026-11-19T06:42:17.3654398Z ok - receipt path: fund -> finalized (anvil finalized tag), then release via the lifecycle -> confirmed; buyer paid
+2026-11-19T06:42:17.3655129Z
+2026-11-19T06:42:17.3655296Z 5 reconcile checks passed
+2026-11-19T06:42:17.4010600Z ##[group]Run npm run test:recovery:evm
+2026-11-19T06:42:17.4010962Z [36;1mnpm run test:recovery:evm[0m
+2026-11-19T06:42:17.4043927Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:17.4044202Z ##[endgroup]
+2026-11-19T06:42:17.5152029Z
+2026-11-19T06:42:17.5152733Z > p2p-offramp@0.1.0 test:recovery:evm
+2026-11-19T06:42:17.5156540Z > node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/evm-recovery.test.mjs scripts/tests/evm-recovery-endpoint-options.test.mjs scripts/tests/sepolia-release-assets.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-recovery-local.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-evm-recovery-releases-local.mjs
+2026-11-19T06:42:17.5159191Z
+2026-11-19T06:42:19.6675760Z ✔ recovery commands reject repeated singleton options before choosing a provider or reading a reference (933.07368ms)
+2026-11-19T06:42:19.7222613Z ✔ recovery never combines majority headers with fork-only settlement state or withdrawal credit (166.388318ms)
+2026-11-19T06:42:19.7224875Z ✔ builder requires original live proof and exact authenticated canonical ABI before emitting a package (2.952563ms)
+2026-11-19T06:42:19.7226426Z ✔ only a missing accepted-release file permits an empty rollback floor (17.428725ms)
+2026-11-19T06:42:19.7227964Z ✔ accepted sequence and digest preserve the signature verifier rollback floor and exact resume (10.266755ms)
+2026-11-19T06:42:19.7229608Z ✔ accepted-release rollback state rejects symlinks instead of inheriting another file floor (1.643383ms)
+2026-11-19T06:42:19.7231290Z ✔ accepted-release FIFO is refused promptly without waiting for a writer or configured trust pin (617.775732ms)
+2026-11-19T06:42:19.7232855Z ✔ oversized accepted-release file is refused before any whole-file allocation (3.462186ms)
+2026-11-19T06:42:19.7234470Z ✔ accepted-release inspection rejects file replacement between lstat and open (3.19524ms)
+2026-11-19T06:42:19.7235675Z ✔ accepted-release reader closes its file and wipes its bounded owned read buffer (3.333726ms)
+2026-11-19T06:42:19.7236516Z ✔ recovery uses stored latest immutable fields and creates only bound unsigned exits (11.940335ms)
+2026-11-19T06:42:19.7237483Z ✔ asynchronous caller mutation cannot replace the deployment, binding or release sender after native inspection (3.383459ms)
+2026-11-19T06:42:19.7238441Z ✔ cancellation during the latest native read rejects promptly and never continues late reads (3.367109ms)
+2026-11-19T06:42:19.7239217Z ✔ portable CLI refuses a FIFO reference without waiting for a writer (93.463945ms)
+2026-11-19T06:42:19.7239948Z ✔ recovery CLI rejects symlinked reference files without opening their targets (16.033551ms)
+2026-11-19T06:42:19.7241086Z ✔ recovery CLI refuses reference inode replacement between lstat and open (9.882409ms)
+2026-11-19T06:42:20.1249478Z ✔ D3 check 1: with the committed null pin every ordinary path refuses KEY_UNPINNED, the builder before reading any file (57.459241ms)
+2026-11-19T06:42:20.1251761Z ✔ D3 checks 2-3: one two-asset manifest passes every verifier under a test-only pin; every adversarial input is refused by all of them (1368.959253ms)
+2026-11-19T06:42:20.1485623Z ℹ tests 18
+2026-11-19T06:42:20.1486362Z ℹ suites 0
+2026-11-19T06:42:20.1486898Z ℹ pass 18
+2026-11-19T06:42:20.1487428Z ℹ fail 0
+2026-11-19T06:42:20.1487955Z ℹ cancelled 0
+2026-11-19T06:42:20.1488520Z ℹ skipped 0
+2026-11-19T06:42:20.1489071Z ℹ todo 0
+2026-11-19T06:42:20.1489718Z ℹ duration_ms 2597.949516
+2026-11-19T06:42:21.1848007Z ok - copied bundle runs with Node alone and reads original escrow after its release manifest expires
+2026-11-19T06:42:21.9322412Z ok - unverified journal hints do not override native parties; only bound-seller pre-expiry release is prepared and paid
+2026-11-19T06:42:22.3044330Z ok - latest chain deadline disables release and permits anyone to refund only the bound seller
+2026-11-19T06:42:23.1656047Z ok - deferred principal is withdrawn only to its immutable native beneficiary by a separate fixture wallet
+2026-11-19T06:42:23.8044011Z ok - wrong chain, genesis, runtime, changing state anchor and unregistered endpoint refuse recovery output
+2026-11-19T06:42:23.9831014Z ok - edited archived profile, registry or ABI is rejected against the executable pins before networking
+2026-11-19T06:42:23.9834886Z {"fixture":"portable-canonical-evm-recovery","checks":6,"recoveryReads":141,"runtimeSendOrSignCalls":0,"separateFixtureWallet":true,"copiedOutsideCheckout":true,"expiredManifestStillExitsOriginalEscrow":true,"fixedWithdrawalBeneficiary":true,"externalNetwork":false,"tradingEnabled":false,"releaseAcceptance":false}
+2026-11-19T06:42:24.9699269Z ok - release N signs registry and ABI in one manifest; its v1 package is built from the shared verifier's live proof before expiresAt
+2026-11-19T06:42:25.0332896Z ok - release N+1 (adds v2, keeps v1) is accepted; release N is now refused as a rollback and as expired
+2026-11-19T06:42:25.0885118Z ok - key rotation: the rotated-out key's release is KEY_UNTRUSTED, release N+2 by the new key is accepted and packaged
+2026-11-19T06:42:25.6478175Z ok - package N, copied outside the checkout, inspects and prepares the refund for the escrow funded under N after N+1, N's expiry and key rotation; the refund pays the seller
+2026-11-19T06:42:26.0755266Z ok - each deployment id keeps its own package: v2 is recovered by its package; a reference naming v2 given to package N is WRONG_CHAIN before any RPC
+2026-11-19T06:42:26.3082824Z ok - an edited profile, registry, ABI or README in package N is refused against the executable pins before networking
+2026-11-19T06:42:26.3084675Z {"fixture":"evm-recovery-across-releases","checks":6,"recoveryReads":55,"releases":3,"keyRotated":true,"expiredReleaseStillExits":true,"copiedOutsideCheckout":true,"externalNetwork":false,"sourcePinUnset":true,"tradingEnabled":false,"releaseAcceptance":false}
+2026-11-19T06:42:26.3506829Z ##[group]Run npm run test:sepolia:kit
+2026-11-19T06:42:26.3507445Z [36;1mnpm run test:sepolia:kit[0m
+2026-11-19T06:42:26.3547280Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:26.3547570Z ##[endgroup]
+2026-11-19T06:42:26.4562914Z
+2026-11-19T06:42:26.4563719Z > p2p-offramp@0.1.0 test:sepolia:kit
+2026-11-19T06:42:26.4565630Z > node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-hygiene.test.mjs scripts/tests/deployment-record.test.mjs scripts/tests/sepolia-deployment-ids.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-kit-local.mjs
+2026-11-19T06:42:26.4566999Z
+2026-11-19T06:42:27.2224743Z ✔ deployment proof binds receipt/CREATE/address/canonical inclusion and pins code/allowlist reads (7.554889ms)
+2026-11-19T06:42:27.2251800Z ✔ wrong receipt, transaction, derived address, orphan and changed anchors never record finality (8.038163ms)
+2026-11-19T06:42:27.2497936Z ✔ both pending branches require fresh proof; uncertainty and substituted owner preserve guard (31.926514ms)
+2026-11-19T06:42:27.2512694Z ✔ canonical early known attempts may clear; hashless attempts wait for native finality (5.538065ms)
+2026-11-19T06:42:27.2515041Z ✔ reverted status is actionable only after native CREATE inclusion and empty-code proof (1.667376ms)
+2026-11-19T06:42:27.2641069Z ✔ geth-style reverted CREATE address must equal the authenticated sender/nonce derivation (7.719207ms)
+2026-11-19T06:42:27.2656808Z ✔ G25 public registry RPC endpoint rejects credential-bearing or ambiguous URLs offline (6.935988ms)
+2026-11-19T06:42:27.4095420Z ✔ signing refuses to rebind or drop a signed deployment id and accepts the same identity or a new id (D3 check 4) (53.99445ms)
+2026-11-19T06:42:27.4325700Z ✔ the ledger must describe the committed release: missing, stale and malformed ledgers stop signing (22.211752ms)
+2026-11-19T06:42:27.4535730Z ✔ DEPLOYMENT_ID_REBOUND is signer-side only: a verifier accepts a rebinding manifest the pinned key signed outside the tool (20.686135ms)
+2026-11-19T06:42:27.4553074Z ✔ record-deployment keeps earlier deployments and refuses a rebound id or a reused address before writing (2.750623ms)
+2026-11-19T06:42:27.4650646Z ✔ deploy, trade, verify and the recovery builder select deployments by explicit id and refuse before any RPC (9.496697ms)
+2026-11-19T06:42:27.4829537Z ✔ sepolia:verify lists every signed deployment and refuses an unknown selected id (17.620049ms)
+2026-11-19T06:42:27.4973881Z ✔ review 1a: once a release exists, a deleted ledger is SIGNED_DEPLOYMENTS_MISSING, not a fresh start (14.286752ms)
+2026-11-19T06:42:27.5184772Z ✔ review 1b: an emptied, edited or foreign-signed ledger is refused; the ABI digest is recorded and enforced (20.911978ms)
+2026-11-19T06:42:27.5490515Z ✔ review 1c: restoring release N's files after N+1 was accepted cannot reopen ids signed in N+1 (30.56768ms)
+2026-11-19T06:42:27.5593533Z ✔ key rotation: the new key continues the old key's ledger only through an explicit --previous-key (10.200169ms)
+2026-11-19T06:42:27.5762632Z ✔ re-review: --previous-key cannot launder a ledger re-signed by another key; the key must have signed the committed release (16.72985ms)
+2026-11-19T06:42:27.5853140Z ✔ deploy and record also refuse ids from the signed ledger, and the pending marker carries the deployment id (8.766738ms)
+2026-11-19T06:42:29.5036999Z ✔ the Sepolia CLIs refuse a repeated option instead of taking its last value (1918.672151ms)
+2026-11-19T06:42:29.5277698Z ✔ forgeEnv pins the canonical config/profile, drops ambient build settings and private keys (2.855448ms)
+2026-11-19T06:42:29.5279218Z ✔ rpcClient refuses plain HTTP except to loopback (2.788474ms)
+2026-11-19T06:42:29.5280673Z ✔ public endpoints cannot copy individual private query credentials or their URL encodings (1.840929ms)
+2026-11-19T06:42:29.5282609Z ✔ every nonempty repeated or short private query value is considered without treating empty values as credentials (0.874108ms)
+2026-11-19T06:42:29.5285229Z ✔ a public endpoint with a malformed percent escape is refused as uninspectable (0.239496ms)
+2026-11-19T06:42:29.5286723Z ✔ percent-escape case and repeated encoding cannot hide a private query value (0.706796ms)
+2026-11-19T06:42:29.5288131Z ✔ form-encoded plus/space query credentials are matched in every spelling (0.43997ms)
+2026-11-19T06:42:29.5289527Z ✔ host-label credentials are matched regardless of case or URL canonicalization (5.532273ms)
+2026-11-19T06:42:29.5291114Z ✔ a literal percent sign reached by decoding a valid %25 does not make an endpoint uninspectable (0.549794ms)
+2026-11-19T06:42:29.5291958Z ✔ short private RPC userinfo is sensitive even when it is not a key-like token (0.524547ms)
+2026-11-19T06:42:29.5292903Z ✔ public endpoint checks retain userinfo and long path or host protection with bounded private URL inspection (0.584159ms)
+2026-11-19T06:42:29.5294389Z ✔ RPC transport bounds chunked bodies and refuses mismatched/ambiguous protocol replies (38.833738ms)
+2026-11-19T06:42:29.5295606Z ✔ RPC requests capture independent ids and prohibit redirects/credentials without exposing diagnostics (2.162679ms)
+2026-11-19T06:42:29.5296571Z ✔ control probes expose only explicitly requested bounded hexadecimal eth_call revert bytes (3.830895ms)
+2026-11-19T06:42:29.5297565Z ✔ deployment attempt persists before a failed/unreadable broadcast and prevents an automatic second send (176.34376ms)
+2026-11-19T06:42:29.5298914Z ✔ unknown deployment guard clears only after finalized matching native account/nonce and canonical inclusion (24.6049ms)
+2026-11-19T06:42:29.5299803Z ✔ effective compiler recipe rejects global or profile configuration drift (1.649863ms)
+2026-11-19T06:42:29.5300504Z ✔ committed compiler recipe disables inferred vendor remappings (4.435549ms)
+2026-11-19T06:42:29.5300937Z ℹ tests 38
+2026-11-19T06:42:29.5301149Z ℹ suites 0
+2026-11-19T06:42:29.5301353Z ℹ pass 38
+2026-11-19T06:42:29.5301563Z ℹ fail 0
+2026-11-19T06:42:29.5301785Z ℹ cancelled 0
+2026-11-19T06:42:29.5302011Z ℹ skipped 0
+2026-11-19T06:42:29.5302226Z ℹ todo 0
+2026-11-19T06:42:29.5302483Z ℹ duration_ms 3039.273982
+2026-11-19T06:42:30.1648934Z ok - pins agree with the README; a different forge or solc and dirty or untracked contract sources are refused
+2026-11-19T06:42:31.2165324Z ok - refuses a bad or keyed public endpoint, wrong chain id, non-Sepolia genesis, unfunded or missing key and a CLI genesis override before sending anything
+2026-11-19T06:42:36.1265242Z ok - a post-broadcast failure names the transaction and contract, blocks redeploying, and record-deployment completes it from chain state
+2026-11-19T06:42:37.6290798Z ok - a mined reverted CREATE classifies for deploy cleanup with native null or geth-style exact derived receipt address
+2026-11-19T06:42:39.4539623Z ok - wrong-hash, orphan, missing-status and substituted reverted native receipts cannot create records or clear known attempt guards
+2026-11-19T06:42:39.7130676Z ok - recorder refuses foreign runtime code, wrong genesis, a non-https endpoint, an unexpected deployer, a non-deployment, a reverted deployment, a non-empty allowlist and a disagreeing cross-check
+2026-11-19T06:42:39.9832135Z ok - owner signing covers registry and canonical ABI; refuses a non-canonical or missing ABI, a non-Sepolia registry, a deployment not recorded after finality or not matching its record, and more than 30 days
+2026-11-19T06:42:40.0079455Z ok - verification binds the registry deployment and the ABI; refuses the real-Sepolia mismatch, an expired manifest, an untrusted or mismatched key, a tampered registry or ABI and a registry-only manifest
+2026-11-19T06:42:40.0231395Z ok - an accepted release is recorded; an older release or a substitute at the accepted sequence is refused as a rollback
+2026-11-19T06:42:41.1445116Z ok - a second deployment needs a new id: deploy and record refuse a listed id, the registry keeps v1, and signing refuses a rebound or dropped signed id
+2026-11-19T06:42:41.5410339Z ok - the Sepolia CLIs run from a checkout path with spaces reached through a symlink
+2026-11-19T06:42:41.5418229Z ok - no key or RPC URL in any Forge cache or broadcast file; the checkout broadcast records are untouched
+2026-11-19T06:42:41.5424289Z
+2026-11-19T06:42:41.5434090Z 12 sepolia kit checks passed
+2026-11-19T06:42:41.5823885Z ##[group]Run npm run test:sepolia:trade
+2026-11-19T06:42:41.5824286Z [36;1mnpm run test:sepolia:trade[0m
+2026-11-19T06:42:41.5857396Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:41.5857687Z ##[endgroup]
+2026-11-19T06:42:41.6903722Z
+2026-11-19T06:42:41.6904403Z > p2p-offramp@0.1.0 test:sepolia:trade
+2026-11-19T06:42:41.6906614Z > node --import ./scripts/test-support/register-tsx.mjs --test scripts/tests/sepolia-trade-state.test.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-sepolia-trade-local.mjs
+2026-11-19T06:42:41.6908111Z
+2026-11-19T06:42:42.2488201Z ✔ edited trade labels, duplicate labels and missing trade slots fail before generating documents or sending (100.618553ms)
+2026-11-19T06:42:42.3154579Z ✔ valid saved labels still negotiate beside an explicitly selected operator state path (66.786333ms)
+2026-11-19T06:42:42.3698090Z ▶ an observation whose numbered block changes or disappears is refused before funding
+2026-11-19T06:42:42.3699127Z   ✔ hash (54.152143ms)
+2026-11-19T06:42:42.4231612Z   ✔ height (53.338768ms)
+2026-11-19T06:42:42.4769954Z   ✔ time (53.457594ms)
+2026-11-19T06:42:42.5341261Z   ✔ missing (56.727908ms)
+2026-11-19T06:42:42.5344082Z ✔ an observation whose numbered block changes or disappears is refused before funding (219.026077ms)
+2026-11-19T06:42:42.5862553Z ✔ a stable anchored absence still reaches the explicit pre-funding hook without a send (51.552141ms)
+2026-11-19T06:42:43.1451084Z ✔ saved funding or settlement attempts and hashes cannot permit another funding decision from current absence (558.673864ms)
+2026-11-19T06:42:43.2457432Z ✔ each funding attempt is durable before the send boundary and resume never invokes that boundary a second time (100.529594ms)
+2026-11-19T06:42:43.3995029Z ✔ proven funding allows the first distinct exit, preserves each kind, and never repeats a prior release or refund (153.789387ms)
+2026-11-19T06:42:43.4655608Z ✔ native terminal observations remain read-only even with unresolved or unknown legacy attempt evidence (65.826678ms)
+2026-11-19T06:42:43.5466216Z ▶ a transient RPC read failure before any send never locks a new or planned trade behind broadcast reconciliation
+2026-11-19T06:42:43.5467822Z   ✔ fresh state file (80.999322ms)
+2026-11-19T06:42:43.6271433Z   ✔ saved planned state (80.300316ms)
+2026-11-19T06:42:43.6273432Z ✔ a transient RPC read failure before any send never locks a new or planned trade behind broadcast reconciliation (161.95706ms)
+2026-11-19T06:42:43.7011619Z ✔ a send failure is attributed to its action in the recorded error (73.311536ms)
+2026-11-19T06:42:43.8159838Z ▶ a legacy uncertain error not tied to an accounted-for action blocks a different exit; a matching hash-bearing failed send does not
+2026-11-19T06:42:43.8161788Z   ✔ settle record beside an unattributed uncertain error (114.660659ms)
+2026-11-19T06:42:43.9332764Z   ✔ failed send whose outcome differs from the uncertain error (117.432645ms)
+2026-11-19T06:42:44.0367259Z   ✔ hashless failed send (103.210876ms)
+2026-11-19T06:42:44.1419148Z   ✔ unfinished fund record beside an unattributed RPC error (105.030704ms)
+2026-11-19T06:42:44.2538687Z   ✔ error matching a hash-bearing failed send (111.623249ms)
+2026-11-19T06:42:44.2540327Z ✔ a legacy uncertain error not tied to an accounted-for action blocks a different exit; a matching hash-bearing failed send does not (553.18183ms)
+2026-11-19T06:42:44.3199903Z ✔ a second trade process cannot take a held state lock, a leftover lock is never stolen, and the lock is released in finally (65.810085ms)
+2026-11-19T06:42:44.4061613Z ✔ finality covers every recorded transaction, including hash-bearing failed sends (85.919588ms)
+2026-11-19T06:42:44.4063713Z ✔ the CLI state path is derived only from a valid run id and stays inside the trades directory (0.626276ms)
+2026-11-19T06:42:44.4372034Z ℹ tests 25
+2026-11-19T06:42:44.4372555Z ℹ suites 0
+2026-11-19T06:42:44.4373010Z ℹ pass 25
+2026-11-19T06:42:44.4373672Z ℹ fail 0
+2026-11-19T06:42:44.4374081Z ℹ cancelled 0
+2026-11-19T06:42:44.4375527Z ℹ skipped 0
+2026-11-19T06:42:44.4376033Z ℹ todo 0
+2026-11-19T06:42:44.4376536Z ℹ duration_ms 2709.240874
+2026-11-19T06:42:45.9337467Z ok - refuses an unverified registry, wrong genesis, buyer = seller, missing buyer key, a bad run id and a missing or unknown deployment id before sending anything
+2026-11-19T06:42:46.3172837Z ok - run 1: release trade signed, funded, released and verified; refund trade funded and waiting for its deadline
+2026-11-19T06:42:46.3759912Z ok - a crash between broadcast and save, resumed after the acceptance window, recovers the funding and runs the replay controls at the funding block
+2026-11-19T06:42:46.5150218Z ok - run 2: after the deadline, release reverts and the refund returns the exact principal to the seller
+2026-11-19T06:42:46.5486641Z ok - settled trades are re-observed on every run and a re-included transaction is detected by its block hash
+2026-11-19T06:42:47.2416066Z ok - a release trade resumed after its deadline is refunded and labelled refunded-after-release-deadline; the other trade is unaffected
+2026-11-19T06:42:48.0762312Z ok - a release mined after its deadline is recorded as TX_REVERTED with its hash, and the next run refunds the trade
+2026-11-19T06:42:48.2353120Z ok - an acceptance window that lapses before funding ends as expired-unfunded without any transaction
+2026-11-19T06:42:48.2712194Z ok - a terminal status that the chain contradicts is re-observed and processed again
+2026-11-19T06:42:48.3787995Z ok - a resumed run re-validates every negotiated trade (parties, amount, terms review, termsHash, both signatures) before any transaction
+2026-11-19T06:42:48.4590015Z ok - a Forge failure other than a revert stops the run as FORGE_FAILED
+2026-11-19T06:42:48.4657040Z ok - refuses to resume a state file bound to a different escrow
+2026-11-19T06:42:48.4683462Z ok - evidence contains no key or RPC URL; the written terms-review file passes the app review and names the deployed escrow
+2026-11-19T06:42:48.4684020Z
+2026-11-19T06:42:48.4684194Z 13 sepolia trade checks passed
+2026-11-19T06:42:48.5183164Z ##[group]Run npm run test:localnet:controller
+2026-11-19T06:42:48.5183990Z [36;1mnpm run test:localnet:controller[0m
+2026-11-19T06:42:48.5218389Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:48.5218665Z ##[endgroup]
+2026-11-19T06:42:48.6289174Z
+2026-11-19T06:42:48.6290162Z > p2p-offramp@0.1.0 test:localnet:controller
+2026-11-19T06:42:48.6291488Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-controller.mjs
+2026-11-19T06:42:48.6292259Z
+2026-11-19T06:42:50.2482287Z ok - independent encrypted profiles own distinct messaging identities and explicitly connect different external wallets
+2026-11-19T06:42:50.7827923Z ok - real encrypted take/offer/accept uses current D1 with four exact reviewed wallet signatures and no funding
+2026-11-19T06:42:50.9513844Z ok - durable encrypted chat reaches the independent peer without creating chain or fiat authority
+2026-11-19T06:42:51.5937128Z ok - cancelled preparation sends nothing; funding writes a durable marker and release requires explicit bank-receipt confirmation
+2026-11-19T06:42:52.0759027Z ok - seller release reaches canonical native escrow state after a new exact transaction review
+2026-11-19T06:42:52.7565507Z ok - buyer display selection and a second seller negotiation remain independent of canonical seller intake pinning
+2026-11-19T06:42:54.1367583Z ok - unknown broadcast retains its null hash and marker; fresh-key restore reconciles native effect without resending or requiring fresh D1 acceptance for exits
+2026-11-19T06:42:55.1352365Z ok - abandoned funding review reconciles after lock/reopen without demanding the lost ephemeral D1 session or authorizing resubmission
+2026-11-19T06:42:55.8019344Z ok - abandoned release review expires through native reconciliation after lock/reopen and does not prevent a fresh funded exit
+2026-11-19T06:42:56.2983761Z ok - refund eligibility uses the rechecked canonical block time despite a deliberately skewed browser clock
+2026-11-19T06:42:57.2342837Z ok - restored original seller refunds after native expiry through one new reviewed transaction and canonical journal
+2026-11-19T06:42:57.2348039Z ok - relay contains only public ads/ciphertext and lock removes all decrypted trade/chat projections
+2026-11-19T06:42:57.2348905Z {
+2026-11-19T06:42:57.2360751Z   "ok": true,
+2026-11-19T06:42:57.2361227Z   "kind": "LOCAL_CONTROLLER_PROOF",
+2026-11-19T06:42:57.2361716Z   "checks": 12,
+2026-11-19T06:42:57.2362090Z   "walletPrompts": 12,
+2026-11-19T06:42:57.2362493Z   "sends": 4,
+2026-11-19T06:42:57.2362865Z   "durableMarkers": 4,
+2026-11-19T06:42:57.2363437Z   "ReleaseEnabled": 0,
+2026-11-19T06:42:57.2363893Z   "browserQualification": false
+2026-11-19T06:42:57.2364317Z }
+2026-11-19T06:42:58.7946625Z ##[group]Run npm run test:localnet:erc20
+2026-11-19T06:42:58.7947478Z [36;1mnpm run test:localnet:erc20[0m
+2026-11-19T06:42:58.7995685Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:42:58.7996154Z ##[endgroup]
+2026-11-19T06:42:58.9123159Z
+2026-11-19T06:42:58.9124154Z > p2p-offramp@0.1.0 test:localnet:erc20
+2026-11-19T06:42:58.9126299Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20.mjs && node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-independent.mjs
+2026-11-19T06:42:58.9127721Z
+2026-11-19T06:43:01.2931989Z ok - ERC20 terms use bilateral D1; neither unfunded allowance nor buyer authority can authorize a send
+2026-11-19T06:43:01.4154728Z ok - the review contains exactly the bound token, escrow spender and principal; cancelling cannot submit it
+2026-11-19T06:43:01.5526147Z ok - an allowance change after review is rechecked before the durable send marker and physical wallet dispatch
+2026-11-19T06:43:02.5118355Z ok - non-exact allowance requires a separate zero reset followed by a separate exact-principal approval
+2026-11-19T06:43:03.6107631Z ok - independent funding and seller bank-receipt release transfer the exact ERC20 principal to the bound buyer
+2026-11-19T06:43:07.7737776Z ok - fresh-key restoration preserves ERC20 history and refund exits without renewed D1 or an allowance-query veto
+2026-11-19T06:43:09.9633945Z ok - an approval with a lost response stays held across fresh-key restore; observed allowance never authorizes retry or funding
+2026-11-19T06:43:09.9634834Z {
+2026-11-19T06:43:09.9635122Z   "ok": true,
+2026-11-19T06:43:09.9635419Z   "checks": 7,
+2026-11-19T06:43:09.9635724Z   "signatures": 12,
+2026-11-19T06:43:09.9636029Z   "sends": 8,
+2026-11-19T06:43:09.9636346Z   "durableExactMarkers": 8,
+2026-11-19T06:43:09.9636842Z   "ReleaseEnabled": 0
+2026-11-19T06:43:09.9637336Z }
+2026-11-19T06:43:15.8800307Z {
+2026-11-19T06:43:15.8801165Z   "observation": "funded exit after unrelated allowance read failure",
+2026-11-19T06:43:15.8801930Z   "connectionOk": true,
+2026-11-19T06:43:15.8802266Z   "walletConnected": true,
+2026-11-19T06:43:15.8802578Z   "first": {
+2026-11-19T06:43:15.8802829Z     "state": "absent",
+2026-11-19T06:43:15.8803112Z     "canFund": false
+2026-11-19T06:43:15.8803809Z   },
+2026-11-19T06:43:15.8804216Z   "second": {
+2026-11-19T06:43:15.8804609Z     "state": "funded",
+2026-11-19T06:43:15.8805001Z     "canRelease": true,
+2026-11-19T06:43:15.8805398Z     "canRefund": false
+2026-11-19T06:43:15.8805759Z   },
+2026-11-19T06:43:15.8806077Z   "sends": 2
+2026-11-19T06:43:15.8806402Z }
+2026-11-19T06:43:15.8807343Z ok - an unavailable unfunded token observation preserves the later independently verified funded exit
+2026-11-19T06:43:16.3800520Z ok - the visible funded exit actually transfers its exact principal despite the unrelated allowance-read outage
+2026-11-19T06:43:16.4569994Z ok - a chain identity change during token observation remains fatal rather than being downgraded to unavailable guidance
+2026-11-19T06:43:16.5300061Z ok - profile lock during the token query revokes the whole operation and emits no private trade projection
+2026-11-19T06:43:16.5301084Z {
+2026-11-19T06:43:16.5301455Z   "ok": true,
+2026-11-19T06:43:16.5301979Z   "kind": "INDEPENDENT_ERC20_RECOVERY_PROOF",
+2026-11-19T06:43:16.5302522Z   "checks": 4,
+2026-11-19T06:43:16.5302924Z   "signatures": 8,
+2026-11-19T06:43:16.5303542Z   "sends": 3,
+2026-11-19T06:43:16.5303936Z   "durableExactMarkers": 3,
+2026-11-19T06:43:16.5304413Z   "ReleaseEnabled": 0
+2026-11-19T06:43:16.5304820Z }
+2026-11-19T06:43:18.0824558Z ##[group]Run browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce
+2026-11-19T06:43:18.0825359Z with:
+2026-11-19T06:43:18.0825732Z   chrome-version: stable
+2026-11-19T06:43:18.0826191Z   install-dependencies: false
+2026-11-19T06:43:18.0826670Z   install-chromedriver: false
+2026-11-19T06:43:18.0827129Z   no-sudo: false
+2026-11-19T06:43:18.0827481Z ##[endgroup]
+2026-11-19T06:43:18.1597106Z Setup chrome stable
+2026-11-19T06:43:18.1608919Z Attempting to download chrome stable...
+2026-11-19T06:43:18.1610572Z Acquiring chrome stable from https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+2026-11-19T06:43:18.8817705Z Installing chrome...
+2026-11-19T06:43:18.8866716Z [command]/usr/bin/ar x /home/runner/work/_temp/bca28d73-b1dd-4d6a-a276-f5e479a5fb38
+2026-11-19T06:43:19.0658583Z [command]/usr/bin/tar -xf /tmp/deb-dyR60X/data.tar.xz --directory /tmp/chrome-gaaqPB --strip-components 4 ./opt/google
+2026-11-19T06:43:25.4970156Z Successfully Installed chromium to /opt/hostedtoolcache/setup-chrome/chromium/stable/x64
+2026-11-19T06:43:25.4980444Z [command]/opt/hostedtoolcache/setup-chrome/chromium/stable/x64/chrome --version
+2026-11-19T06:43:25.5945901Z [1119/064325.592166:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/hostedtoolcache/setup-chrome/chromium/stable/x64/CHROME_VERSION_EXTRA
+2026-11-19T06:43:25.5947270Z Google Chrome 158.0.8127.36
+2026-11-19T06:43:25.5975896Z Successfully setup chromium 158.0.8127.36
+2026-11-19T06:43:25.6207708Z ##[group]Run npm run test:localnet:browser
+2026-11-19T06:43:25.6208099Z [36;1mnpm run test:localnet:browser[0m
+2026-11-19T06:43:25.6240651Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:43:25.6240914Z env:
+2026-11-19T06:43:25.6241251Z   P2P_CHROMIUM: /opt/hostedtoolcache/setup-chrome/chromium/stable/x64/chrome
+2026-11-19T06:43:25.6241676Z ##[endgroup]
+2026-11-19T06:43:25.7309494Z
+2026-11-19T06:43:25.7310213Z > p2p-offramp@0.1.0 test:localnet:browser
+2026-11-19T06:43:25.7311190Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-browser.mjs
+2026-11-19T06:43:25.7311749Z
+2026-11-19T06:43:27.4719043Z [36mvite v8.3.5 [32mbuilding client environment for localnet...[36m[39m
+2026-11-19T06:43:27.4876585Z transforming...
+2026-11-19T06:43:27.8429573Z ✓ 47 modules transformed.
+2026-11-19T06:43:27.8630653Z rendering chunks...
+2026-11-19T06:43:27.9391606Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/_headers                              0.35 kB
+2026-11-19T06:43:27.9393564Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/content-policy.json                   1.17 kB
+2026-11-19T06:43:27.9395021Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/index.html                            1.29 kB
+2026-11-19T06:43:27.9395837Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/third-party-licenses.json             3.62 kB
+2026-11-19T06:43:27.9396591Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/core-graph-document.json              6.94 kB
+2026-11-19T06:43:27.9397315Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/core-graph-worker.json               15.77 kB
+2026-11-19T06:43:27.9398086Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/assets/localnet.worker-DvvFNgzP.js  332.46 kB
+2026-11-19T06:43:27.9398876Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/assets/LocalnetRoot-CD-uua8F.css      1.58 kB
+2026-11-19T06:43:27.9399614Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/assets/index-lbyUyLrG.css             6.77 kB
+2026-11-19T06:43:27.9400370Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/assets/LocalnetRoot-DNRiEMMK.js      38.54 kB
+2026-11-19T06:43:27.9401118Z ../../../../../tmp/p2p-localnet-browser-1wx6YV/app/assets/index-BRXhxd8z.js            220.93 kB
+2026-11-19T06:43:27.9401484Z
+2026-11-19T06:43:27.9402146Z [32m✓ built in 466ms[39m
+2026-11-19T06:43:31.0266072Z ok - built application creates isolated encrypted profiles, performs no automatic wallet action, and refuses a wrong-chain wallet
+2026-11-19T06:43:32.1105672Z ok - buyer and seller negotiate exact private terms through real encrypted relay traffic and four separately reviewed wallet signatures
+2026-11-19T06:43:35.5356743Z ok - explicit funding and bank-receipt release reach the real escrow; cancelled review and chat alone send nothing
+2026-11-19T06:43:40.0261406Z ok - unknown broadcast survives encrypted backup into an independent fresh-key profile and reconciles without a resend; prior encrypted chat survives
+2026-11-19T06:43:42.0597325Z ok - refund follows native chain expiry after restore; every send has an IndexedDB marker and lock removes private views without network leakage
+2026-11-19T06:43:42.0599640Z {
+2026-11-19T06:43:42.0600482Z   "ok": true,
+2026-11-19T06:43:42.0601193Z   "kind": "LOCAL_BROWSER_PROOF",
+2026-11-19T06:43:42.0601929Z   "engine": "158.0.8127.36",
+2026-11-19T06:43:42.0602605Z   "checks": 5,
+2026-11-19T06:43:42.0603471Z   "signatures": 8,
+2026-11-19T06:43:42.0604173Z   "sends": 4,
+2026-11-19T06:43:42.0604867Z   "connects": 4,
+2026-11-19T06:43:42.0605516Z   "durableMarkers": 4,
+2026-11-19T06:43:42.0606141Z   "ReleaseEnabled": 0,
+2026-11-19T06:43:42.0607214Z   "externalWallet": "Node-hosted public Anvil fixture; physical wallet compatibility not tested",
+2026-11-19T06:43:42.0609126Z   "publicTestnetQualification": false
+2026-11-19T06:43:42.0609641Z }
+2026-11-19T06:43:43.7271786Z ##[group]Run npm run test:localnet:erc20:browser
+2026-11-19T06:43:43.7272481Z [36;1mnpm run test:localnet:erc20:browser[0m
+2026-11-19T06:43:43.7312021Z shell: /usr/bin/bash -e {0}
+2026-11-19T06:43:43.7312294Z env:
+2026-11-19T06:43:43.7312648Z   P2P_CHROMIUM: /opt/hostedtoolcache/setup-chrome/chromium/stable/x64/chrome
+2026-11-19T06:43:43.7313073Z ##[endgroup]
+2026-11-19T06:43:43.8378253Z
+2026-11-19T06:43:43.8378972Z > p2p-offramp@0.1.0 test:localnet:erc20:browser
+2026-11-19T06:43:43.8379892Z > node --import ./scripts/test-support/register-tsx.mjs scripts/test-localnet-erc20-browser.mjs
+2026-11-19T06:43:43.8380433Z
+2026-11-19T06:43:45.7475930Z [36mvite v8.3.5 [32mbuilding client environment for localnet...[36m[39m
+2026-11-19T06:43:45.7625939Z transforming...
+2026-11-19T06:43:46.0956898Z ✓ 47 modules transformed.
+2026-11-19T06:43:46.1173186Z rendering chunks...
+2026-11-19T06:43:46.1997990Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/_headers                              0.35 kB
+2026-11-19T06:43:46.1999688Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/content-policy.json                   1.17 kB
+2026-11-19T06:43:46.2001619Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/index.html                            1.29 kB
+2026-11-19T06:43:46.2003546Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/third-party-licenses.json             3.62 kB
+2026-11-19T06:43:46.2005117Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/core-graph-document.json              6.94 kB
+2026-11-19T06:43:46.2006707Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/core-graph-worker.json               15.77 kB
+2026-11-19T06:43:46.2007685Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/assets/localnet.worker-Dr_fPeEF.js  332.66 kB
+2026-11-19T06:43:46.2008467Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/assets/LocalnetRoot-CD-uua8F.css      1.58 kB
+2026-11-19T06:43:46.2009212Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/assets/index-lbyUyLrG.css             6.77 kB
+2026-11-19T06:43:46.2009933Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/assets/LocalnetRoot-Bc-4pmDD.js      38.74 kB
+2026-11-19T06:43:46.2010660Z ../../../../../tmp/p2p-localnet-browser-JRw71h/app/assets/index-hORj8Fv7.js            220.93 kB
+2026-11-19T06:43:46.2011044Z
+2026-11-19T06:43:46.2011449Z [32m✓ built in 451ms[39m
+2026-11-19T06:43:53.5137480Z ok - asset selection and bilateral terms reach separate zero-reset/exact-principal wallet reviews; cancellation sends nothing
+2026-11-19T06:43:56.4553742Z ok - a separate funding review and explicit bank-receipt release pay the exact token principal to the bound buyer
+2026-11-19T06:44:35.0521094Z node:internal/modules/run_main:107
+2026-11-19T06:44:35.0521502Z     triggerUncaughtException(
+2026-11-19T06:44:35.0521776Z     ^
+2026-11-19T06:44:35.0521897Z
+2026-11-19T06:44:35.0522071Z locator.check: Timeout 30000ms exceeded.
+2026-11-19T06:44:35.0522358Z Call log:
+2026-11-19T06:44:35.0523018Z   - waiting for locator('[data-trade-id="407cc72f4f2ec46907a8a6f798d3954bc5a1e80aa79abe88ea70834f52616316"]').getByRole('checkbox')
+2026-11-19T06:44:35.0524031Z
+2026-11-19T06:44:35.0524477Z     at revokedReview (/home/runner/work/p2p-offramp/p2p-offramp/scripts/test-localnet-erc20-browser.mjs:73:48)
+2026-11-19T06:44:35.0525586Z     at /home/runner/work/p2p-offramp/p2p-offramp/scripts/test-localnet-erc20-browser.mjs:148:9 {
+2026-11-19T06:44:35.0526240Z   log: [
+2026-11-19T06:44:35.0526937Z     `  - waiting for locator('[data-trade-id="407cc72f4f2ec46907a8a6f798d3954bc5a1e80aa79abe88ea70834f52616316"]').getByRole('checkbox')`
+2026-11-19T06:44:35.0527542Z   ],
+2026-11-19T06:44:35.0527747Z   name: 'TimeoutError'
+2026-11-19T06:44:35.0527974Z }
+2026-11-19T06:44:35.0528080Z
+2026-11-19T06:44:35.0528167Z Node.js v24.22.3
+2026-11-19T06:44:35.1080722Z ##[error]Process completed with exit code 1.
+2026-11-19T06:44:35.1226191Z Post job cleanup.
+2026-11-19T06:44:35.2222275Z [command]/usr/bin/git version
+2026-11-19T06:44:35.2284913Z git version 2.56.1
+2026-11-19T06:44:35.2313602Z Temporarily overriding HOME='/home/runner/work/_temp/831dee2e-cd76-4a24-b830-f983c0ea3664' before making global git config changes
+2026-11-19T06:44:35.2315284Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-19T06:44:35.2320923Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T06:44:35.2370467Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T06:44:35.2418503Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T06:44:35.2726622Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:44:35.2778351Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:44:35.2861995Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T06:44:35.2916784Z http.https://github.com/.extraheader
+2026-11-19T06:44:35.2924260Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-19T06:44:35.2983779Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T06:44:35.3314671Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:44:35.3338244Z http.https://github.com/.extraheader
+2026-11-19T06:44:35.3376268Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:44:35.3403019Z http.https://github.com/.extraheader
+2026-11-19T06:44:35.3462332Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T06:44:35.3502782Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T06:44:35.3810208Z Entering 'contracts/evm/lib/forge-std'
+2026-11-19T06:44:35.3830499Z file:/home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/forge-std/config	remote.origin.url
+2026-11-19T06:44:35.3852418Z Entering 'contracts/evm/lib/openzeppelin-contracts'
+2026-11-19T06:44:35.3876163Z file:/home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/openzeppelin-contracts/config	remote.origin.url
+2026-11-19T06:44:35.3918193Z [command]/usr/bin/git config --file /home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/forge-std/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T06:44:35.3954960Z [command]/usr/bin/git config --file /home/runner/work/p2p-offramp/p2p-offramp/.git/modules/contracts/evm/lib/openzeppelin-contracts/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T06:44:35.4150131Z Cleaning up orphan processes
+2026-11-19T06:44:35.4553588Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
