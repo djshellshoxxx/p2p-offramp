@@ -391,13 +391,14 @@ class EvmLifecycle implements EvmTxLifecycle {
         const latestCount = BigInt(checked(await read(s => this.#reader.transactionCount(account, 'latest', s)), value => DECIMAL.test(value)));
         if (latestCount > nonce) {
           evidence = 'nonce';
+          // A different finalized journal transaction at this exact account/chain/nonce rules out every
+          // hashless action, including restored cancelled releases/refunds. Keeping those as separate
+          // successor-required replacements can otherwise make a funded exit permanently conflict.
+          nonceTakenElsewhere = hash === null && await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
           if (hash !== null) outcome = 'replaced';
-          else if (effects === null) {
-            // An approval without a recorded hash has no escrow effect to observe. It is settled as never included only
-            // when native data shows its nonce was consumed by a different, finalized transaction of this journal.
-            nonceTakenElsewhere = await this.#nonceFinalizedElsewhere(intent, account, nonce, request.chainId, finalizedNumber, read, signal);
-            outcome = nonceTakenElsewhere && !conflict ? 'replaced' : 'pending';
-          }
+          else if (nonceTakenElsewhere) outcome = conflict ? 'pending' : 'replaced';
+          // An approval without that proof or a recorded hash has no escrow effect to observe.
+          else if (effects === null) outcome = 'pending';
           else if (escrowState !== null && effects.includes(escrowState)) {
             // Unknown hash: the nonce was consumed and the escrow shows this intent's effect. Depth is measured on the escrow itself.
             evidence = 'escrow-effect';

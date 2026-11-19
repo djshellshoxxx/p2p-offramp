@@ -649,3 +649,87 @@ test('D9 review: a crash before a release marker on a funded escrow keeps the ti
     assert.equal(env.wallet.sends, 2, 'recovery never sent the cancelled release');
   } finally { close(env); }
 });
+
+test('D9 restored cancelled releases require finalized exact-nonce evidence before a fresh funded exit', async () => {
+  const { EncryptedBackupService } = await import('../../storage/src/backup-service.ts');
+  const env = await setup(); let backup;
+  const release = () => fund({ action: 'release', expectedEscrowState: 'funded', call: { to: ESCROW, data: NOOP, value: '0' } });
+  try {
+    const funding = val(await env.life.prepare(fund())); val(await env.life.submit(funding));
+    env.chain.mine(2); env.chain.finalized = env.chain.latest().number;
+    assert.equal((await outcome(env, funding.intentId)).outcome, 'finalized');
+    const fundingFinality = env.chain.finalized, originalProfile = env.session.profileId, cancelled = [];
+    for (let index = 0; index < 3; index++) {
+      cancelled.push(val(await env.life.prepare(release())));
+      await env.life.walletChanged(null);
+      await env.life.walletChanged({ account: ACCOUNT, chainId: '31337', generation: index + 2 });
+    }
+    const consumer = val(await env.life.prepare(fund({ binding: { ...binding, tradeId: 'cd'.repeat(32) }, action: 'approve',
+      expectedEscrowState: 'funded', call: { to: ESCROW, data: '0x01', value: '0' } })));
+    assert.ok(cancelled.every(item => item.request.nonce === consumer.request.nonce));
+    const sent = val(await env.life.submit(consumer)); env.chain.mine(2); env.chain.finalized = env.chain.latest().number;
+    assert.equal((await outcome(env, consumer.intentId)).outcome, 'finalized');
+    backup = new EncryptedBackupService(env.store, crypto);
+    const bytes = await backup.export(env.session.profileId), restored = await backup.restore(bytes, pass, pass); bytes.fill(0);
+    env.life.dispose(); env.journal.dispose(); env.vault.dispose();
+    env.vault = new EncryptedVaultService(env.store, crypto, { lifecycle: false });
+    env.session = val(await env.vault.unlock(restored.newProfileId, pass));
+    assert.notEqual(env.session.profileId, originalProfile);
+    const reader = env.chain.reader.bind(env.chain); let proof = 'valid';
+    env.chain.reader = () => {
+      const native = reader();
+      return { ...native,
+        chainId: async () => proof === 'wrong-chain' ? ok('1') : native.chainId(),
+        receipt: async hash => {
+          const result = await native.receipt(hash);
+          if (hash !== sent.hash || !result.ok || result.value === null) return result;
+          if (proof === 'missing-receipt') return ok(null);
+          return proof === 'noncanonical-receipt' ? ok({ ...result.value, blockHash: h('different-fork') }) : result;
+        },
+        transaction: async hash => {
+          const result = await native.transaction(hash);
+          if (hash !== sent.hash || !result.ok || result.value === null) return result;
+          if (proof === 'missing-body') return ok(null);
+          if (proof === 'wrong-account') return ok({ ...result.value, from: OTHER });
+          return proof === 'wrong-nonce' ? ok({ ...result.value, nonce: '999' }) : result;
+        },
+      };
+    };
+    const sends = env.wallet.sends;
+    for (proof of ['unfinalized', 'wrong-chain', 'wrong-account', 'wrong-nonce', 'missing-hash', 'missing-receipt', 'missing-body', 'noncanonical-receipt']) {
+      env.chain.finalized = proof === 'unfinalized' ? fundingFinality : env.chain.latest().number;
+      await start(env);
+      if (proof === 'missing-hash') {
+        // A nonce count alone cannot recover a consumer whose wallet response was never recorded.
+        const journal = env.journal;
+        env.life.dispose();
+        env.life = createEvmTxLifecycle({ journal: { ...journal, list: async signal => {
+          const result = await journal.list(signal);
+          return result.ok ? ok(result.value.map(item => item.intentId === consumer.intentId
+            ? { ...item, submission: { ...item.submission, hash: null } } : item)) : result;
+        } }, reader: env.chain.reader(), wallet: env.wallet.request, policy, retry });
+        await env.life.walletChanged({ account: ACCOUNT, chainId: '31337', generation: 1 });
+      }
+      for (const item of cancelled) {
+        if (proof === 'wrong-chain') err(await env.life.reconcile(item.intentId), 'WRONG_CHAIN');
+        else {
+          await outcome(env, item.intentId); await outcome(env, item.intentId);
+          assert.notEqual((await stored(env, item.intentId)).state, 'failed', `${proof} cannot release a restored reservation`);
+        }
+      }
+      err(await env.life.prepare(release()), proof === 'wrong-chain' ? 'WRONG_CHAIN' : 'CONFLICT');
+      assert.equal(env.wallet.sends, sends, 'recovery cannot send');
+    }
+    proof = 'valid'; env.chain.finalized = env.chain.latest().number; await start(env);
+    for (const item of cancelled) {
+      await outcome(env, item.intentId); await outcome(env, item.intentId);
+      const record = await stored(env, item.intentId);
+      assert.equal(record.state, 'failed', 'a finalized different transaction proves this nonce cannot be submitted again');
+      assert.equal(record.submission.hash, null); assert.equal(record.sendMarkedAt, null);
+      assert.equal(record.originProfileId, originalProfile); assert.equal(env.journal.isTerminalVerified(item.intentId), true);
+    }
+    const prepared = val(await env.life.prepare(release()));
+    assert.equal(prepared.request.nonce, String(BigInt(consumer.request.nonce) + 1n));
+    assert.equal(env.wallet.sends, sends, 'a fresh explicit review still does not send');
+  } finally { backup?.dispose(); close(env); }
+});

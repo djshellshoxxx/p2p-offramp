@@ -180,6 +180,14 @@ try {
   const approvals = seller.provider.calls.filter(request => request.method === 'eth_sendTransaction' && request.params[0].to === chain.token);
   assert.deepEqual(approvals.map(request => request.params[0].data), ['0', '2500', '1100', '700', '500'].map(amount => buildErc20Approve(chain.token, chain.escrow, amount).data));
   const restored = await restore(seller);
+  // The later recorded approval consumed the three cancelled releases' shared nonce. Only its
+  // finalized native receipt/body can settle those restored records; their null markers cannot.
+  const restoredCounts = { ...chain.counts }, cancelledReleases = trade(restored, second).locator('details li').filter({ hasText: /^release ·/ });
+  assert.deepEqual(await cancelledReleases.allTextContents(), ['release · failed', 'release · failed', 'release · failed']);
+  assert.equal(await cancelledReleases.locator('code').count(), 0, 'cancelled releases retain their unknown hashes');
+  await refresh(restored);
+  assert.deepEqual(await cancelledReleases.allTextContents(), ['release · failed', 'release · failed', 'release · failed']);
+  assert.deepEqual(chain.counts, restoredCounts, 'explicit native reconciliation cannot sign, send or reconnect');
   for (const id of [second, third]) {
     assert.equal(await trade(restored, id).getByTestId('chain-state').textContent(), 'funded');
     assert.match(await trade(restored, id).textContent(), /Restored profile/);
