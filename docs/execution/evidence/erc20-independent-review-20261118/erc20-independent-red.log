@@ -1,0 +1,35 @@
+{
+  "observation": "funded exit after unrelated allowance read failure",
+  "connectionOk": false,
+  "connectionCode": "UNAVAILABLE",
+  "walletConnected": true,
+  "first": {
+    "state": null,
+    "canFund": false
+  },
+  "second": {
+    "state": null,
+    "canRelease": false,
+    "canRefund": false
+  },
+  "sends": 2
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: an earlier unfunded trade token read must not hide an independently funded trade exit after unlock
+
+false !== true
+
+    at file:///workspace/scratch/ab9553887ecb/erc20-independent-review/scripts/test-localnet-erc20-independent.mjs:154:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

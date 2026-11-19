@@ -118,21 +118,61 @@ export interface OfflineContentPolicy {
 /** Offline-only build data. Registry-derived external origins require a separate authenticated issuer. */
 export function buildOfflineContentPolicy(input: unknown): OfflineContentPolicy {
   const raw = exact(input, ['version', 'releaseId', 'delivery']);
+  const delivery = policyInput(raw);
+  const csp = offlineCsp(delivery, "'none'");
+  const manifest: ContentPolicyManifest = Object.freeze({ version: 1, releaseId: raw.releaseId as string, connectOrigins: Object.freeze([]) as readonly [], delivery, framingProtected: false });
+  return assemble(manifest, csp, delivery, []);
+}
+function policyInput(raw: Record<string, unknown>): 'header' | 'meta' {
   if (raw.version !== 1 || typeof raw.releaseId !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/.test(raw.releaseId) ||
       (raw.delivery !== 'header' && raw.delivery !== 'meta')) return fail();
+  return raw.delivery;
+}
+function offlineCsp(delivery: 'header' | 'meta', connectSource: string): string {
   const directives: Record<string, string> = {
     'default-src': "'none'", 'script-src': "'self'", 'style-src': "'self'", 'img-src': "'self'", 'font-src': "'self'",
-    'connect-src': "'none'", 'worker-src': "'self'", 'manifest-src': "'self'", 'base-uri': "'none'", 'object-src': "'none'",
+    'connect-src': connectSource, 'worker-src': "'self'", 'manifest-src': "'self'", 'base-uri': "'none'", 'object-src': "'none'",
     'form-action': "'none'", 'frame-src': "'none'",
   };
-  if (raw.delivery === 'header') directives['frame-ancestors'] = "'none'";
-  const csp = Object.keys(directives).sort().map(name => `${name} ${directives[name]!}`).join('; ');
-  const manifest: ContentPolicyManifest = Object.freeze({ version: 1, releaseId: raw.releaseId, connectOrigins: Object.freeze([]) as readonly [], delivery: raw.delivery, framingProtected: false });
-  const headers = raw.delivery === 'header' ? Object.freeze({ 'Content-Security-Policy': csp, 'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff' }) : Object.freeze({});
-  const meta: readonly ContentMetaRecord[] = raw.delivery === 'header' ? Object.freeze([]) : Object.freeze([
+  if (delivery === 'header') directives['frame-ancestors'] = "'none'";
+  return Object.keys(directives).sort().map(name => `${name} ${directives[name]!}`).join('; ');
+}
+function assemble<M>(manifest: M, csp: string, delivery: 'header' | 'meta', extraNotices: readonly string[]): { readonly manifest: M; readonly csp: string; readonly headers: Readonly<Record<string, string>>; readonly meta: readonly ContentMetaRecord[]; readonly notices: readonly string[] } {
+  const headers = delivery === 'header' ? Object.freeze({ 'Content-Security-Policy': csp, 'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff' }) : Object.freeze({});
+  const meta: readonly ContentMetaRecord[] = delivery === 'header' ? Object.freeze([]) : Object.freeze([
     Object.freeze({ httpEquiv: 'Content-Security-Policy' as const, content: csp }), Object.freeze({ name: 'referrer' as const, content: 'no-referrer' as const }),
   ]);
   const notices = ['content.policy.deployment-unverified', 'content.policy.framing-unverified'];
-  if (raw.delivery === 'meta') notices.push('content.policy.meta-before-resources-required');
+  if (delivery === 'meta') notices.push('content.policy.meta-before-resources-required');
+  notices.push(...extraNotices);
   return Object.freeze({ manifest, csp, headers, meta, notices: Object.freeze(notices) });
+}
+
+/**
+ * Localnet build profile only (apps/web/scripts/build.mjs `delivery: 'localnet'`, a library-only test seam). Identical to
+ * the offline policy except that connect-src names exactly one plain-WebSocket loopback relay origin
+ * (`ws://127.0.0.1:PORT` or `ws://[::1]:PORT`, explicit canonical port, no path/credentials/query/fragment). No other
+ * origin, scheme, wildcard or 'self' is ever added. A browser whose CSP parser refuses an IPv6 literal drops the source,
+ * which leaves connect-src empty: the relay is then blocked (fail closed), never widened.
+ */
+export const LOCALNET_RELAY_ORIGIN_PATTERN = /^ws:\/\/(?:127\.0\.0\.1|\[::1\]):([1-9][0-9]{0,4})$/;
+export interface LocalnetContentPolicyManifest {
+  readonly version: 1; readonly releaseId: string; readonly connectOrigins: readonly [string];
+  readonly delivery: 'header' | 'meta'; readonly framingProtected: false; readonly profile: 'localnet'; readonly testFundsOnly: true;
+}
+export interface LocalnetContentPolicy extends Omit<OfflineContentPolicy, 'manifest'> { readonly manifest: LocalnetContentPolicyManifest }
+export function isLocalnetRelayOrigin(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const match = LOCALNET_RELAY_ORIGIN_PATTERN.exec(value);
+  return match !== null && Number(match[1]) <= 65535;
+}
+export function buildLocalnetContentPolicy(input: unknown): LocalnetContentPolicy {
+  const raw = exact(input, ['version', 'releaseId', 'delivery', 'relayOrigin']);
+  const delivery = policyInput(raw);
+  if (!isLocalnetRelayOrigin(raw.relayOrigin)) return fail();
+  const relayOrigin = raw.relayOrigin;
+  const csp = offlineCsp(delivery, relayOrigin);
+  const manifest: LocalnetContentPolicyManifest = Object.freeze({ version: 1, releaseId: raw.releaseId as string,
+    connectOrigins: Object.freeze([relayOrigin]) as readonly [string], delivery, framingProtected: false, profile: 'localnet', testFundsOnly: true });
+  return assemble(manifest, csp, delivery, ['content.policy.localnet-test-funds-only']);
 }

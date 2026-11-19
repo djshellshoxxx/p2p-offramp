@@ -81,10 +81,16 @@ const THRESHOLD_ONE = '000000000000f03f', THRESHOLD_TWO = '0000000000000040';
  * exact f64 thresholds 1.0 and 2.0 are understood (no floats); any other value is unknown (null).
  */
 export function escrowRentMinimum(bytes: Uint8Array): bigint | null {
+  return rentExemptMinimum(bytes, ESCROW_BYTES);
+}
+/** The same rule for any account size: (128 + dataLength) * lamportsPerByteYear * threshold, or null. */
+export function rentExemptMinimum(bytes: Uint8Array, dataLength: number): bigint | null {
   exactLength(bytes, RENT_BYTES);
+  if (!Number.isSafeInteger(dataLength) || dataLength < 0) return fail();
   const lamportsPerByteYear = readU64(bytes, 0), threshold = hex(bytes.subarray(8, 16));
-  if (threshold === THRESHOLD_ONE) return 350n * lamportsPerByteYear;
-  if (threshold === THRESHOLD_TWO) return 700n * lamportsPerByteYear;
+  const base = (128n + BigInt(dataLength)) * lamportsPerByteYear;
+  if (threshold === THRESHOLD_ONE) return base;
+  if (threshold === THRESHOLD_TWO) return 2n * base;
   return null;
 }
 /** SPL Token account; refuses delegate, close authority, native wrapping and uninitialized state. */

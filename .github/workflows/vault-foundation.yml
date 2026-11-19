@@ -36,6 +36,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck
       - run: npm test
+      - run: npm run test:formal:unit
       - run: npm run test:acceptance:cli
       - run: node --test scripts/agent/*.test.mjs
       - run: npm run check:boundaries

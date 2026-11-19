@@ -1,0 +1,23 @@
+.localnet-journey { max-width: 76rem; }
+.localnet-journey h3 { margin: 1rem 0 .5rem; font-size: 1.05rem; }
+.localnet-journey h4 { margin: 1.5rem 0 .5rem; }
+.localnet-journey select, .localnet-journey textarea { width: 100%; min-height: 44px; padding: .6rem .75rem; color: var(--text); background: var(--surface); border: 1px solid #869995; border-radius: 4px; font: inherit; }
+.localnet-journey textarea { resize: vertical; }
+.localnet-journey code { font-size: .82em; overflow-wrap: anywhere; }
+.localnet-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1.5rem; }
+.localnet-status { padding: 1.25rem; background: #edf1ef; border: 1px solid var(--line); border-radius: 4px; }
+.localnet-status p:last-of-type { margin-bottom: 0; }
+.localnet-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: 1rem; margin-top: 2rem; }
+.localnet-item { padding: 1rem; border: 1px solid var(--line); border-radius: 4px; }
+.localnet-session-list { display: flex; flex-wrap: wrap; gap: .75rem; list-style: none; padding: 0; }
+.localnet-session-list [aria-pressed="true"] { background: #dce7e3; border-color: var(--accent); }
+.localnet-facts { margin: 1rem 0; }
+.localnet-facts dt { margin-top: .8rem; color: var(--muted); font-size: .85rem; }
+.localnet-facts dd { margin: .15rem 0 0; }
+.localnet-preserve { white-space: pre-wrap; overflow-wrap: anywhere; }
+.localnet-journey details { margin-top: 1.5rem; }
+.localnet-journey summary { min-height: 44px; cursor: pointer; font-weight: 650; }
+.localnet-review { border: 2px solid var(--accent); background: #f7fcf9; }
+.localnet-messages { padding-left: 1.3rem; }
+.localnet-messages li { padding: .5rem 0; }
+.localnet-journey button:disabled { cursor: default; }

@@ -33,6 +33,7 @@ jobs:
           git diff --exit-code -- abi/BasicEscrow.json
   local-trade:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -53,3 +54,18 @@ jobs:
       - run: npm run test:recovery:evm
       - run: npm run test:sepolia:kit
       - run: npm run test:sepolia:trade
+      - run: npm run test:localnet:controller
+      - run: npm run test:localnet:erc20
+      - name: Install Chromium for the built localnet journey
+        id: localnet-chrome
+        uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce
+        with:
+          chrome-version: stable
+      - name: Qualify separate buyer and seller browser profiles
+        run: npm run test:localnet:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.localnet-chrome.outputs.chrome-path }}
+      - name: Qualify reviewed token allowances and ERC-20 browser exits
+        run: npm run test:localnet:erc20:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.localnet-chrome.outputs.chrome-path }}

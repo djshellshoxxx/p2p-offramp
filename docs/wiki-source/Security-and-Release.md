@@ -2,7 +2,37 @@
 
 [Home](Home.md) · **[User Guide](User-Guide.md)** · **[Developer Guide](Developer-Guide.md)**
 
-**Status: experimental/test-only. No real-funds trading, production deployment, or release is authorized.** The merged default branch at `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` (one added `agents.md` since the prior source-pinned baseline `300287dcde818a9d10ae301265d00bc7c0877bbb`) keeps `ReleaseEnabled=0` and an empty default network allowlist. A successful demo, local EVM test, or draft PR does not enable trading. See the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md) and [development status](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md).
+**Status: experimental/test-only. No real-funds trading, production deployment, or release is authorized.** The historical merged-main snapshot at `cdde998cf1d0e54c6cfb6fe9cdde0fc22a80e10e` (one added `agents.md` since the prior source-pinned baseline `300287dcde818a9d10ae301265d00bc7c0877bbb`) keeps `ReleaseEnabled=0` and an empty default network allowlist. A successful demo, local EVM test, or draft PR does not enable trading. See the [operator guide](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/OPERATOR.md) and [development status](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md).
+
+## Recorded main checkpoint — November 18, 2026
+
+The current documentation checkpoint is `main@6c38e641e24abcfdcf645f864bd64c9645836d75`. See the
+[reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md) for
+exact merge identities. In addition to #135/#140/#150/#149 below, #141 artifact-mode
+verification, #151 verify-only Solana consent, #143 canonical EVM reader binding and
+#137 formal evidence tooling are merged. The formal tool retains unknown proof results
+and an explicit model gap; its successful regression suite does not certify the contract.
+D1 library integration is distinct from complete buyer/seller browser acceptance.
+
+Draft #166/#167/#168 supplies further EVM wallet, native Solana recovery and localnet
+browser work. Its new source combinations and actual browser/validator execution need
+independent qualification. The dated Picomatch finding, Sonar A, historical send
+provenance, physical wallets, live trust/bootstrap and independent release review are
+not cleared by this docs work. `ReleaseEnabled=0`; no live Wiki publication occurred.
+
+The earlier PR statuses, test counts and lane restrictions below are **historical**
+to their named commits. They must not be used as a fresh inventory of open PRs or as
+qualification of current main. Use the checkpoint record for current dispositions.
+
+## Historical merged client snapshot at `f3fb7392` — November 18, 2026
+
+Verified `main@f3fb73921c75ec6aa1075ab2ca516e6c5fe3a3dc` now includes [locale PR #135](https://github.com/djshellshoxxx/p2p-offramp/pull/135), [release/QR PR #140](https://github.com/djshellshoxxx/p2p-offramp/pull/140), [D1 Option B library PR #150](https://github.com/djshellshoxxx/p2p-offramp/pull/150), and [test-only recovery PR #149](https://github.com/djshellshoxxx/p2p-offramp/pull/149). The static-client localization wiring is not evidence of published translations; the merged D1 carrier is not proof of finished two-party browser acceptance. No actual funds, release, or live trust bootstrap is authorized. Successful Actions workflows on PR #149's exact source head are limited CI evidence, not SonarCloud Rating A or release approval.
+
+The merged [PR #149](https://github.com/djshellshoxxx/p2p-offramp/pull/149) adds an encrypted fresh-key `broadcast-unknown` recovery-reference regression to the static client. Its three observed exact-head GitHub Actions workflow families completed successfully, but the test does **not** establish a confirmed chain broadcast, signing/send authority or complete D9 historical provenance. [Merged #140](https://github.com/djshellshoxxx/p2p-offramp/pull/140) introduces separately gated release/QR changes; [merged #150](https://github.com/djshellshoxxx/p2p-offramp/pull/150) provides the D1 library carrier but does not authorize any production exchange. Independent security review, D8 approvals, complete two-party test-only acceptance and the signed owner release gate remain outstanding. The live Wiki is not claimed published.
+
+## Historical pre-#135 main qualification — November 18, 2026
+
+At the historical pre-#135 merged-main checkpoint `eef9a80312e7ac1cb84ff79307e0cdc60d6e1cc9`, reached through [PR #134](https://github.com/djshellshoxxx/p2p-offramp/pull/134). [PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61) is now merged; it must **not** be described as still-open integration. At the exact #134 pre-merge head `7be1dbef7fe38204db441ffb9c29e6f06acfaecd`, the Vault foundation, EVM escrow, Solana escrow, and Specification inventory GitHub Actions workflow families completed successfully; Snyk's separate commit status was successful. These are not exact-head CI evidence for the *merge commit*, and they do **not** establish SonarCloud Security Rating A, an independent release security audit, accepted live trust keys, D1/D8 approval, or real-funds readiness. The [November 18 development checkpoint](https://github.com/djshellshoxxx/p2p-offramp/blob/main/docs/DEVELOPMENT_STATUS.md) gives current ownership and scope. The **dated PR reports below are historical snapshots**, not current open/merged status.
 
 ## User-facing limitations and safe operation
 
@@ -13,7 +43,7 @@
 
 ## Source qualification is not release approval
 
-On **unmerged** [integration PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61), commit `c87c21b915c9e175113292bb1307754ed2424166` has **10 successful GitHub Actions checks** and a separate successful Snyk status ([exact-head checks](https://github.com/djshellshoxxx/p2p-offramp/commit/c87c21b915c9e175113292bb1307754ed2424166/checks)). This only qualifies the observed hosted checks at that exact commit.
+Historically, before consolidation, on [integration PR #61](https://github.com/djshellshoxxx/p2p-offramp/pull/61), commit `c87c21b915c9e175113292bb1307754ed2424166` has **10 successful GitHub Actions checks** and a separate successful Snyk status ([exact-head checks](https://github.com/djshellshoxxx/p2p-offramp/commit/c87c21b915c9e175113292bb1307754ed2424166/checks)). This only qualifies the observed hosted checks at that exact commit.
 
 **Unresolved security gate:** the distinct [PR #56](https://github.com/djshellshoxxx/p2p-offramp/pull/56) SonarCloud result reports **Security Rating C versus required A**. The precise issue records were not available to the ChatGPT direct GitHub lane. PR #61 has no visible exact-head Sonar result. Do not infer that this gate passed from other successful checks, invent individual findings, suppress Sonar rules, or claim approval of draft integration changes.
 

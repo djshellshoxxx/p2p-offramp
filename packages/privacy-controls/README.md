@@ -12,7 +12,7 @@ timelock or a coercion-resistance claim.
 - Adapter: none. No wallet, relay, network, deletion or transaction adapter exists.
 - Wired feature: none. Not imported by `apps/web`, core packages or scripts; outside the default build. `test/optional-boundary.test.mjs` fails if anything outside this directory imports it.
 - Qualified behaviour: a finite two-document Chromium run (`npm run test:privacy-controls:browser`). No physical-device, Worker-isolation, release or independent-review qualification.
-- Authority: none over funded trades. It cannot alter terms, funding, release or refund; `executionSupported:false` and `walletAuthority:false` are fixed in its outputs. Part of the D7 parked set until the core journey leaves `LOCALPROOF`.
+- Authority: none over funded trades. It cannot alter terms, funding, release or refund; `executionSupported:false` and `walletAuthority:false` are fixed in its outputs. D7 permits isolated source intake (accepted 2026-11-18). Default application wiring and advancement beyond `LOCALPROOF` retain their separate gates.
 
 The public entry point is `index.ts`. All operations return the existing G13
 `CoreResult`; errors contain fixed codes and correlation metadata. Inputs reject

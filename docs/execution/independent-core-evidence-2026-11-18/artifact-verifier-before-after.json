@@ -1,0 +1,16 @@
+{
+  "baseline": "97ce6a41805ab4d8fc6fccbcfb9dd79463deebd7",
+  "integration": "7116de5a853ae4b1fef1ba6968ba3f7320d226f6",
+  "results": [
+    {
+      "mode": "demo",
+      "baselineAcceptedWithoutExplicitMode": true,
+      "fixedRejection": "BUILD_MODE_MISMATCH"
+    },
+    {
+      "mode": "testnet",
+      "baselineAcceptedWithoutExplicitMode": true,
+      "fixedRejection": "BUILD_MODE_MISMATCH"
+    }
+  ]
+}
