@@ -7,6 +7,8 @@ import { idleLocalnetBrowser as idle, startLocalnetBrowserFixture, waitLocalnetB
 
 const PASS = 'public synthetic ERC20 browser profile passphrase';
 const RESTORED_PASS = 'public synthetic restored ERC20 browser passphrase';
+// LocalnetController configures evmFinalityPolicy(network, 1, 12). Assert both sides of that block lease below.
+const PREPARATION_LEASE_BLOCKS = 12;
 const PAYMENT = 'SYNTHETIC ERC20 local fixture bank instructions';
 const checks = [], pass = label => { checks.push(label); console.log(`ok - ${label}`); };
 const trade = (owner, id) => owner.page.locator(`[data-trade-id="${id}"]`);
@@ -72,6 +74,7 @@ async function revokedReview(owner, id, event, value) {
   const before = { ...fixture.chain.counts };
   await trade(owner, id).getByRole('checkbox').check();
   await prepare(owner, id, 'Review release');
+  const preparedAtBlock = BigInt(await fixture.chain.rpc('eth_blockNumber'));
   if (event === 'accountsChanged') owner.provider.state.account = value[0];
   if (event === 'chainChanged') owner.provider.state.chainId = value;
   await owner.emit(event, value);
@@ -81,6 +84,7 @@ async function revokedReview(owner, id, event, value) {
     assert.equal(await trade(owner, id).getByRole('button', { name: action, exact: true }).isEnabled(), false);
   }
   assert.deepEqual(fixture.chain.counts, before, 'wallet events cannot send, sign or reconnect automatically');
+  return preparedAtBlock;
 }
 async function restore(owner) {
   const oldId = await owner.profileId(), before = { ...fixture.chain.counts };
@@ -140,15 +144,30 @@ try {
   await connect(seller);
   assert.equal(await trade(seller, second).getByRole('button', { name: 'Review release', exact: true }).isEnabled(), false, 'a different account cannot release the seller escrow');
   seller.provider.state.account = chain.accounts[0]; await seller.emit('accountsChanged', [chain.accounts[0]]); await connect(seller);
-  await revokedReview(seller, second, 'chainChanged', '0x1');
+  const chainChangePreparationBlock = await revokedReview(seller, second, 'chainChanged', '0x1');
   await seller.page.getByRole('button', { name: 'Connect wallet', exact: true }).click();
   await seller.page.getByRole('alert').filter({ hasText: 'WRONG_CHAIN' }).waitFor(); await idle(seller);
   assert.equal(await seller.page.getByTestId('wallet-account').textContent(), 'not connected');
   seller.provider.state.chainId = '0x7a69'; await seller.emit('chainChanged', '0x7a69'); await connect(seller);
+  // A cancellation cannot persist while native chain identity is wrong. Reconnection must preserve
+  // that durable preparation until its canonical block lease ends; it cannot simply clear the journal.
+  const beforeLease = { ...chain.counts };
+  const heldRelease = trade(seller, second);
+  assert.match(await heldRelease.textContent(), /release · prepared/);
+  assert.equal(await heldRelease.getByRole('button', { name: 'Review release', exact: true }).isEnabled(), false);
+  assert.equal(BigInt(await chain.rpc('eth_blockNumber')), chainChangePreparationBlock);
+  await chain.mine(PREPARATION_LEASE_BLOCKS - 1); await refresh(seller);
+  assert.match(await heldRelease.textContent(), /release · prepared/);
+  assert.equal(await heldRelease.getByRole('checkbox').count(), 0, 'the prepared intent remains held before its lease boundary');
+  await chain.mine(1); await refresh(seller);
+  assert.doesNotMatch(await heldRelease.textContent(), /release · prepared/);
+  await heldRelease.getByRole('checkbox').waitFor();
+  assert.deepEqual(chain.counts, beforeLease, 'lease reconciliation cannot sign, send or reconnect automatically');
+  pass('wrong-chain cancellation stays held through block 11 and restores the funded exit at the configured 12-block lease without wallet actions');
   await revokedReview(seller, second, 'disconnect', { code: 4900, message: 'Synthetic wallet disconnect' });
   await connect(seller);
   assert.equal(chain.counts.sends, 6, 'three invalidated release reviews cannot submit a transaction');
-  pass('account changes, wrong-chain changes and disconnect revoke open token release reviews; explicit correct-wallet reconnection preserves the funded exit');
+  pass('account changes, wrong-chain changes and disconnect revoke open token release reviews; correct-wallet reconnection and canonical lease reconciliation preserve the funded exit');
 
   const third = await negotiate(seller, buyer, '700', 'Review exact token allowance');
   await prepare(seller, third, 'Review exact token allowance'); await confirm(seller); await chain.mine(); await refresh(seller);
