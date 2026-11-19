@@ -24,6 +24,9 @@ pub use state::*;
 #[cfg(feature = "localnet")]
 declare_id!("7q2EChqznfQea58ZfUvBzRd97Bc28kwHaey1tYy7ADjq");
 
+#[cfg(feature = "browser-localnet")]
+include!(concat!(env!("OUT_DIR"), "/browser_program_id.rs"));
+
 #[program]
 pub mod basic_escrow {
     use super::*;

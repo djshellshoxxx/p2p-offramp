@@ -1,0 +1,79 @@
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/capture-controller.ts' imported from /workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-camera.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:30)
+    at MessagePort.handleMessage (node:internal/modules/esm/worker:251:24)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:869:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/capture-controller.ts'
+}
+
+Node.js v24.22.3
+✖ apps/web/test/qr-camera.test.mjs (3980.931171ms)
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/image-header.ts' imported from /workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-image.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:30)
+    at MessagePort.handleMessage (node:internal/modules/esm/worker:251:24)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:869:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/image-header.ts'
+}
+
+Node.js v24.22.3
+✖ apps/web/test/qr-image.test.mjs (16531.227855ms)
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/review-controller.ts' imported from /workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-review.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:30)
+    at MessagePort.handleMessage (node:internal/modules/esm/worker:251:24)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:869:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/src/qr/review-controller.ts'
+}
+
+Node.js v24.22.3
+✖ apps/web/test/qr-review.test.mjs (3759.926725ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24342.868177
+
+✖ failing tests:
+
+test at apps/web/test/qr-camera.test.mjs:1:1
+✖ apps/web/test/qr-camera.test.mjs (3980.931171ms)
+  'test failed'
+
+test at apps/web/test/qr-image.test.mjs:1:1
+✖ apps/web/test/qr-image.test.mjs (16531.227855ms)
+  'test failed'
+
+test at apps/web/test/qr-review.test.mjs:1:1
+✖ apps/web/test/qr-review.test.mjs (3759.926725ms)
+  'test failed'

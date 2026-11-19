@@ -1,0 +1,106 @@
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (4.649314ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (0.501782ms)
+✔ a second mounted owner cannot open another camera while the original stream is live (0.381295ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (0.636996ms)
+✖ synchronous revocation by a requesting-state observer prevents the native permission side effect (1.346356ms)
+✔ image preflight bounds dimensions and complete container before native decompression (3.880793ms)
+✔ decoder physical job is terminated on timeout/cancel and late replies cannot cross generations (1.196376ms)
+✔ decoder refuses inconsistent pixel dimensions before posting and validates reply identifiers (1.317382ms)
+✖ revocation inside Worker creation terminates the late returned physical Worker without posting (1002.240754ms)
+✖ revocation in input access and scheduling cannot start a stale decode (3.082265ms)
+✔ all five public QR types get complete unauthenticated review and explicit no-authority confirmation (160.75194ms)
+✔ default context rejects chain-bound codes; unsupported inputs never produce a review (4.222825ms)
+✖ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (20.933283ms)
+✔ cancel retains the physical file slot across remounts and suppresses every late result (20.806917ms)
+✔ late hash, context change, expiry and local replay cannot revive a reviewed selection (59.6081ms)
+✔ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (16.691944ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 12
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3760.638109
+
+✖ failing tests:
+
+test at apps/web/test/qr-camera.test.mjs:46:1
+✖ synchronous revocation by a requesting-state observer prevents the native permission side effect (1.346356ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 0
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-camera.test.mjs:50:67)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-image.test.mjs:60:1
+✖ revocation inside Worker creation terminates the late returned physical Worker without posting (1002.240754ms)
+  AssertionError [ERR_ASSERTION]: physical admission remains held until the factory returns and its Worker stops
+  + actual - expected
+
+  + 'DECODE_TIMEOUT'
+  - 'BUSY'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-image.test.mjs:71:12)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at listOnTimeout (node:internal/timers:644:9)
+      at process.processTimers (node:internal/timers:618:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'DECODE_TIMEOUT',
+    expected: 'BUSY',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-image.test.mjs:76:1
+✖ revocation in input access and scheduling cannot start a stale decode (3.082265ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'UNAVAILABLE'
+  - 'CANCELLED'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-image.test.mjs:80:10)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at listOnTimeout (node:internal/timers:644:9)
+      at process.processTimers (node:internal/timers:618:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'UNAVAILABLE',
+    expected: 'CANCELLED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-review.test.mjs:57:1
+✖ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (20.933283ms)
+  AssertionError [ERR_ASSERTION]: file ingress must preserve a BOM so the exact-text codec refuses it
+  + actual - expected
+
+  + undefined
+  - 'FORMAT_UNSUPPORTED'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-review.test.mjs:66:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'FORMAT_UNSUPPORTED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

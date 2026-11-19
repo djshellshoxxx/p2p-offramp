@@ -1,0 +1,338 @@
+2026-11-19T07:55:33.6133994Z Current runner version: '2.338.2'
+2026-11-19T07:55:33.6153502Z ##[group]Runner Image Provisioner
+2026-11-19T07:55:33.6154144Z Hosted Compute Agent
+2026-11-19T07:55:33.6154593Z Version: 20261103.629
+2026-11-19T07:55:33.6155113Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-19T07:55:33.6155639Z Build Date: 2026-11-03T17:26:59Z
+2026-11-19T07:55:33.6156150Z Worker ID: {7d5cfdcb-e887-411f-9352-7628900f2e05}
+2026-11-19T07:55:33.6156672Z Region: us-west-2
+2026-11-19T07:55:33.6157053Z Cloud: AWS
+2026-11-19T07:55:33.6157455Z ##[endgroup]
+2026-11-19T07:55:33.6158357Z ##[group]Operating System
+2026-11-19T07:55:33.6158846Z Ubuntu
+2026-11-19T07:55:33.6159214Z 26.04.1
+2026-11-19T07:55:33.6159561Z LTS
+2026-11-19T07:55:33.6159958Z ##[endgroup]
+2026-11-19T07:55:33.6160343Z ##[group]Runner Image
+2026-11-19T07:55:33.6161114Z Image: ubuntu-26.04
+2026-11-19T07:55:33.6161547Z Version: 20261111.82.6
+2026-11-19T07:55:33.6162462Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.82/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-19T07:55:33.6163537Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.82
+2026-11-19T07:55:33.6164219Z ##[endgroup]
+2026-11-19T07:55:33.6165041Z ##[group]GITHUB_TOKEN Permissions
+2026-11-19T07:55:33.6166834Z Contents: read
+2026-11-19T07:55:33.6167255Z Metadata: read
+2026-11-19T07:55:33.6167649Z ##[endgroup]
+2026-11-19T07:55:33.6169211Z Secret source: Actions
+2026-11-19T07:55:33.6169834Z Cache mode: write
+2026-11-19T07:55:33.6170341Z Prepare workflow directory
+2026-11-19T07:55:33.6442610Z Prepare all required actions
+2026-11-19T07:55:33.6479339Z Getting action download info
+2026-11-19T07:55:34.0538635Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-19T07:55:35.8705110Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-11-19T07:55:36.0519929Z Download action repository 'actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-11-19T07:55:36.1354759Z Download action repository 'browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce' (SHA:c785b87e244131f27c9f19c1a33e2ead956ab7ce)
+2026-11-19T07:55:36.5146693Z Complete job name: program
+2026-11-19T07:55:36.5967273Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-11-19T07:55:36.5968674Z with:
+2026-11-19T07:55:36.5969388Z   fetch-depth: 1
+2026-11-19T07:55:36.5970228Z   persist-credentials: false
+2026-11-19T07:55:36.5971422Z   repository: djshellshoxxx/p2p-offramp
+2026-11-19T07:55:36.5977834Z   token: ***
+2026-11-19T07:55:36.5978685Z   ssh-strict: true
+2026-11-19T07:55:36.5979436Z   ssh-user: git
+2026-11-19T07:55:36.5980186Z   clean: true
+2026-11-19T07:55:36.5981138Z   sparse-checkout-cone-mode: true
+2026-11-19T07:55:36.5982043Z   fetch-tags: false
+2026-11-19T07:55:36.5982817Z   show-progress: true
+2026-11-19T07:55:36.5983602Z   lfs: false
+2026-11-19T07:55:36.5984332Z   submodules: false
+2026-11-19T07:55:36.5985112Z   set-safe-directory: true
+2026-11-19T07:55:36.5986168Z   allow-unsafe-pr-checkout: false
+2026-11-19T07:55:36.5987276Z env:
+2026-11-19T07:55:36.5987973Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:55:36.5989210Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:55:36.5990668Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:55:36.5992124Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:55:36.5993431Z   CARGO_TERM_COLOR: never
+2026-11-19T07:55:36.5994212Z ##[endgroup]
+2026-11-19T07:55:40.0987846Z Syncing repository: djshellshoxxx/p2p-offramp
+2026-11-19T07:55:40.0990023Z ##[group]Getting Git version info
+2026-11-19T07:55:40.0990964Z Working directory is '/home/runner/work/p2p-offramp/p2p-offramp'
+2026-11-19T07:55:40.0991904Z [command]/usr/bin/git version
+2026-11-19T07:55:40.0992382Z git version 2.56.1
+2026-11-19T07:55:40.1013319Z ##[endgroup]
+2026-11-19T07:55:40.1017913Z Temporarily overriding HOME='/home/runner/work/_temp/0da4a13c-1d85-49c5-ad1e-d22179815b14' before making global git config changes
+2026-11-19T07:55:40.1019254Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-19T07:55:40.1020039Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T07:55:40.1109474Z Deleting the contents of '/home/runner/work/p2p-offramp/p2p-offramp'
+2026-11-19T07:55:40.1112375Z ##[group]Initializing the repository
+2026-11-19T07:55:40.1115706Z [command]/usr/bin/git init /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T07:55:40.1939526Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-19T07:55:40.1940263Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-19T07:55:40.1941235Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-19T07:55:40.1941698Z hint: call:
+2026-11-19T07:55:40.1942003Z hint:
+2026-11-19T07:55:40.1942624Z hint: 	git config --global init.defaultBranch <name>
+2026-11-19T07:55:40.1942957Z hint:
+2026-11-19T07:55:40.1943326Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-19T07:55:40.1943805Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-19T07:55:40.1944176Z hint:
+2026-11-19T07:55:40.1944470Z hint: 	git branch -m <name>
+2026-11-19T07:55:40.1944748Z hint:
+2026-11-19T07:55:40.1945140Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-19T07:55:40.1965634Z Initialized empty Git repository in /home/runner/work/p2p-offramp/p2p-offramp/.git/
+2026-11-19T07:55:40.1973357Z [command]/usr/bin/git remote add origin https://github.com/djshellshoxxx/p2p-offramp
+2026-11-19T07:55:40.2037516Z ##[endgroup]
+2026-11-19T07:55:40.2037989Z ##[group]Disabling automatic garbage collection
+2026-11-19T07:55:40.2040910Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-19T07:55:40.2062662Z ##[endgroup]
+2026-11-19T07:55:40.2063295Z ##[group]Setting up auth
+2026-11-19T07:55:40.2067432Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T07:55:40.2091147Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T07:55:40.5913375Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T07:55:40.5936548Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T07:55:40.6117341Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T07:55:40.6140147Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T07:55:40.6314706Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-19T07:55:40.6338188Z ##[endgroup]
+2026-11-19T07:55:40.6339061Z ##[group]Fetching the repository
+2026-11-19T07:55:40.6345240Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +60084264e00dd11482d9bcb228b29a3978ccfd91:refs/remotes/pull/179/merge
+2026-11-19T07:55:41.9222220Z From https://github.com/djshellshoxxx/p2p-offramp
+2026-11-19T07:55:41.9222764Z  * [new ref]         60084264e00dd11482d9bcb228b29a3978ccfd91 -> pull/179/merge
+2026-11-19T07:55:41.9226468Z ##[endgroup]
+2026-11-19T07:55:41.9227248Z ##[group]Determining the checkout info
+2026-11-19T07:55:41.9228104Z ##[endgroup]
+2026-11-19T07:55:41.9233241Z [command]/usr/bin/git sparse-checkout disable
+2026-11-19T07:55:41.9293581Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-19T07:55:41.9314023Z ##[group]Checking out the ref
+2026-11-19T07:55:41.9317393Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/179/merge
+2026-11-19T07:55:42.0321523Z Note: switching to 'refs/remotes/pull/179/merge'.
+2026-11-19T07:55:42.0321844Z
+2026-11-19T07:55:42.0322193Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-19T07:55:42.0322750Z changes and commit them, and you can discard any commits you make in this
+2026-11-19T07:55:42.0323153Z state without impacting any branches by switching back to a branch.
+2026-11-19T07:55:42.0323364Z
+2026-11-19T07:55:42.0323568Z If you want to create a new branch to retain commits you create, you may
+2026-11-19T07:55:42.0323976Z do so (now or later) by using -c with the switch command. Example:
+2026-11-19T07:55:42.0324233Z
+2026-11-19T07:55:42.0324366Z   git switch -c <new-branch-name>
+2026-11-19T07:55:42.0324608Z
+2026-11-19T07:55:42.0324782Z Or undo this operation with:
+2026-11-19T07:55:42.0324985Z
+2026-11-19T07:55:42.0325150Z   git switch -
+2026-11-19T07:55:42.0325332Z
+2026-11-19T07:55:42.0325653Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-19T07:55:42.0325958Z
+2026-11-19T07:55:42.0326324Z HEAD is now at 6008426 Merge 99c7d497f73a183464ae8d379e6fa6bbbabf2599 into 80375193f16082c582a1faf2c6ba598f9eca532a
+2026-11-19T07:55:42.0333792Z ##[endgroup]
+2026-11-19T07:55:42.0385135Z [command]/usr/bin/git log -1 --format=%H
+2026-11-19T07:55:42.0404064Z 60084264e00dd11482d9bcb228b29a3978ccfd91
+2026-11-19T07:55:42.0409893Z ##[group]Removing auth
+2026-11-19T07:55:42.0414156Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T07:55:42.0434883Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T07:55:42.0628688Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T07:55:42.0644414Z http.https://github.com/.extraheader
+2026-11-19T07:55:42.0648113Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-19T07:55:42.0669140Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T07:55:42.0845330Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T07:55:42.0865964Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T07:55:42.1035491Z ##[endgroup]
+2026-11-19T07:55:42.1278452Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-11-19T07:55:42.1278803Z with:
+2026-11-19T07:55:42.1279046Z   node-version: 24
+2026-11-19T07:55:42.1279274Z   cache: npm
+2026-11-19T07:55:42.1279492Z   always-auth: false
+2026-11-19T07:55:42.1279760Z   check-latest: false
+2026-11-19T07:55:42.1281727Z   token: ***
+2026-11-19T07:55:42.1282054Z env:
+2026-11-19T07:55:42.1282300Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:55:42.1282623Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:55:42.1282992Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:55:42.1283311Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:55:42.1283649Z   CARGO_TERM_COLOR: never
+2026-11-19T07:55:42.1283899Z ##[endgroup]
+2026-11-19T07:55:42.3072303Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-19T07:55:42.3076743Z (node:2446) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-19T07:55:42.3077337Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-19T07:55:42.3077986Z ##[group]Environment details
+2026-11-19T07:55:46.6045598Z node: v24.22.2
+2026-11-19T07:55:46.6045987Z npm: 11.19.1
+2026-11-19T07:55:46.6046501Z yarn: 1.22.22
+2026-11-19T07:55:46.6047651Z ##[endgroup]
+2026-11-19T07:55:46.6057928Z [command]/opt/hostedtoolcache/node/24.22.2/x64/bin/npm config get cache
+2026-11-19T07:55:47.1500873Z /home/runner/.npm
+2026-11-19T07:55:47.5214394Z Cache hit for: node-cache-Linux-x64-npm-c2ba19d286a52847671f9b0ed80922210760d1f5cae48ccbe0415aad2fcfbf80
+2026-11-19T07:55:47.5297261Z (node:2446) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-19T07:55:48.8688255Z Received 0 of 50539208 (0.0%), 0.0 MBs/sec
+2026-11-19T07:55:49.8499661Z Received 50539208 of 50539208 (100.0%), 24.3 MBs/sec
+2026-11-19T07:55:49.8500849Z Cache Size: ~48 MB (50539208 B)
+2026-11-19T07:55:49.8614752Z [command]/usr/bin/tar -xf /home/runner/work/_temp/490acbf8-26ca-4737-8140-b25285578ed3/cache.tzst -P -C /home/runner/work/p2p-offramp/p2p-offramp --use-compress-program unzstd
+2026-11-19T07:55:49.9022751Z Cache restored successfully
+2026-11-19T07:55:49.9039936Z Cache restored from key: node-cache-Linux-x64-npm-c2ba19d286a52847671f9b0ed80922210760d1f5cae48ccbe0415aad2fcfbf80
+2026-11-19T07:55:49.9170368Z ##[group]Run npm ci --ignore-scripts
+2026-11-19T07:55:49.9171090Z [36;1mnpm ci --ignore-scripts[0m
+2026-11-19T07:55:49.9577281Z shell: /usr/bin/bash -e {0}
+2026-11-19T07:55:49.9577589Z env:
+2026-11-19T07:55:49.9577828Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:55:49.9578337Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:55:49.9578734Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:55:49.9579202Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:55:49.9579574Z   CARGO_TERM_COLOR: never
+2026-11-19T07:55:49.9579837Z ##[endgroup]
+2026-11-19T07:55:53.5077659Z
+2026-11-19T07:55:53.5085209Z added 59 packages, and audited 60 packages in 4s
+2026-11-19T07:55:53.5085546Z
+2026-11-19T07:55:53.5085793Z 28 packages are looking for funding
+2026-11-19T07:55:53.5086245Z   run `npm fund` for details
+2026-11-19T07:55:53.5086512Z
+2026-11-19T07:55:53.5086731Z found 0 vulnerabilities
+2026-11-19T07:55:53.5390606Z ##[group]Run node contracts/solana/vectors/derive.mjs --check
+2026-11-19T07:55:53.5391097Z [36;1mnode contracts/solana/vectors/derive.mjs --check[0m
+2026-11-19T07:55:53.5391495Z [36;1mnode --test contracts/solana/vectors/derive.test.mjs[0m
+2026-11-19T07:55:53.5409510Z shell: /usr/bin/bash -e {0}
+2026-11-19T07:55:53.5409831Z env:
+2026-11-19T07:55:53.5410101Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:55:53.5410610Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:55:53.5411031Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:55:53.5411362Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:55:53.5411781Z   CARGO_TERM_COLOR: never
+2026-11-19T07:55:53.5412016Z ##[endgroup]
+2026-11-19T07:55:53.6978582Z ✔ fixture regenerates byte-identical (8.802045ms)
+2026-11-19T07:55:53.6982604Z ✔ PROGRAM_ID (0.60768ms)
+2026-11-19T07:55:53.7042183Z ✔ negatives throw (0.675946ms)
+2026-11-19T07:55:53.7042879Z ✔ base58 round trip incl. leading zeros (0.12911ms)
+2026-11-19T07:55:53.7043426Z ✔ canonical bump: no higher bump is off-curve; address is off-curve (2.252919ms)
+2026-11-19T07:55:53.7043911Z ✔ fixture has a bump < 255 and zero/ff nonces (0.303894ms)
+2026-11-19T07:55:53.7044425Z ✔ sanity: empty seeds is stable (self-consistency only) (1.035752ms)
+2026-11-19T07:55:53.7044917Z ℹ tests 7
+2026-11-19T07:55:53.7045424Z ℹ suites 0
+2026-11-19T07:55:53.7046411Z ℹ pass 7
+2026-11-19T07:55:53.7047000Z ℹ fail 0
+2026-11-19T07:55:53.7047326Z ℹ cancelled 0
+2026-11-19T07:55:53.7047650Z ℹ skipped 0
+2026-11-19T07:55:53.7048033Z ℹ todo 0
+2026-11-19T07:55:53.7048388Z ℹ duration_ms 77.983552
+2026-11-19T07:55:53.7608537Z ##[group]Run actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+2026-11-19T07:55:53.7608916Z with:
+2026-11-19T07:55:53.7609215Z   path: ~/.cargo/registry/index
+~/.cargo/registry/cache
+~/.cache/solana
+
+2026-11-19T07:55:53.7609880Z   key: solana-deps-Linux-agave-v4.1.2-78f6640d08dee9ce2c49bae8192ee6b7edd68533a169e0f6857fd7cc729358c5
+2026-11-19T07:55:53.7610333Z   enableCrossOsArchive: false
+2026-11-19T07:55:53.7610830Z   fail-on-cache-miss: false
+2026-11-19T07:55:53.7611080Z   lookup-only: false
+2026-11-19T07:55:53.7611312Z env:
+2026-11-19T07:55:53.7611536Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:55:53.7611895Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:55:53.7612237Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:55:53.7612561Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:55:53.7612919Z   CARGO_TERM_COLOR: never
+2026-11-19T07:55:53.7613179Z ##[endgroup]
+2026-11-19T07:55:53.8371734Z (node:2551) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-19T07:55:53.8372379Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-19T07:55:54.1143735Z Cache hit for: solana-deps-Linux-agave-v4.1.2-78f6640d08dee9ce2c49bae8192ee6b7edd68533a169e0f6857fd7cc729358c5
+2026-11-19T07:55:54.1216275Z (node:2551) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-19T07:55:55.4534032Z Received 0 of 579648193 (0.0%), 0.0 MBs/sec
+2026-11-19T07:55:56.4543391Z Received 79691776 of 579648193 (13.7%), 38.0 MBs/sec
+2026-11-19T07:55:57.4528239Z Received 163577856 of 579648193 (28.2%), 52.0 MBs/sec
+2026-11-19T07:55:58.4533214Z Received 268435456 of 579648193 (46.3%), 64.0 MBs/sec
+2026-11-19T07:55:59.4541301Z Received 381681664 of 579648193 (65.8%), 72.8 MBs/sec
+2026-11-19T07:56:00.4538278Z Received 465567744 of 579648193 (80.3%), 74.0 MBs/sec
+2026-11-19T07:56:01.4538153Z Received 562870977 of 579648193 (97.1%), 76.7 MBs/sec
+2026-11-19T07:56:01.5287978Z Received 579648193 of 579648193 (100.0%), 78.1 MBs/sec
+2026-11-19T07:56:01.5289213Z Cache Size: ~553 MB (579648193 B)
+2026-11-19T07:56:01.5389769Z [command]/usr/bin/tar -xf /home/runner/work/_temp/12953319-7360-47fc-8731-395e1be17742/cache.tzst -P -C /home/runner/work/p2p-offramp/p2p-offramp --use-compress-program unzstd
+2026-11-19T07:56:03.3292958Z Cache restored successfully
+2026-11-19T07:56:03.6749200Z Cache restored from key: solana-deps-Linux-agave-v4.1.2-78f6640d08dee9ce2c49bae8192ee6b7edd68533a169e0f6857fd7cc729358c5
+2026-11-19T07:56:03.6861781Z ##[group]Run curl --proto '=https' --tlsv1.2 -sSfL -o "$RUNNER_TEMP/agave.tar.bz2" \
+2026-11-19T07:56:03.6862340Z [36;1mcurl --proto '=https' --tlsv1.2 -sSfL -o "$RUNNER_TEMP/agave.tar.bz2" \[0m
+2026-11-19T07:56:03.6862947Z [36;1m  "https://github.com/anza-xyz/agave/releases/download/$AGAVE_VERSION/solana-release-x86_64-unknown-linux-gnu.tar.bz2"[0m
+2026-11-19T07:56:03.6863485Z [36;1mecho "$AGAVE_SHA256  $RUNNER_TEMP/agave.tar.bz2" | sha256sum -c[0m
+2026-11-19T07:56:03.6863887Z [36;1mtar -xjf "$RUNNER_TEMP/agave.tar.bz2" -C "$RUNNER_TEMP"[0m
+2026-11-19T07:56:03.6864305Z [36;1mcurl --proto '=https' --tlsv1.2 -sSfL -o "$RUNNER_TEMP/anchor" \[0m
+2026-11-19T07:56:03.6864876Z [36;1m  "https://github.com/solana-foundation/anchor/releases/download/v$ANCHOR_VERSION/anchor-$ANCHOR_VERSION-x86_64-unknown-linux-gnu"[0m
+2026-11-19T07:56:03.6865450Z [36;1mecho "$ANCHOR_SHA256  $RUNNER_TEMP/anchor" | sha256sum -c[0m
+2026-11-19T07:56:03.6865857Z [36;1mchmod 755 "$RUNNER_TEMP/anchor"[0m
+2026-11-19T07:56:03.6866185Z [36;1mecho "$RUNNER_TEMP/solana-release/bin" >> "$GITHUB_PATH"[0m
+2026-11-19T07:56:03.6866556Z [36;1mecho "$RUNNER_TEMP" >> "$GITHUB_PATH"[0m
+2026-11-19T07:56:03.6885012Z shell: /usr/bin/bash -e {0}
+2026-11-19T07:56:03.6885382Z env:
+2026-11-19T07:56:03.6885611Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:56:03.6885989Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:56:03.6886354Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:56:03.6886830Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:56:03.6887233Z   CARGO_TERM_COLOR: never
+2026-11-19T07:56:03.6887476Z ##[endgroup]
+2026-11-19T07:56:12.3925740Z /home/runner/work/_temp/agave.tar.bz2: OK
+2026-11-19T07:56:28.5668964Z /home/runner/work/_temp/anchor: OK
+2026-11-19T07:56:28.5727586Z ##[group]Run rustup show active-toolchain || rustup toolchain install
+2026-11-19T07:56:28.5728074Z [36;1mrustup show active-toolchain || rustup toolchain install[0m
+2026-11-19T07:56:28.5747011Z shell: /usr/bin/bash -e {0}
+2026-11-19T07:56:28.5747345Z env:
+2026-11-19T07:56:28.5747590Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:56:28.5747934Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:56:28.5748331Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:56:28.5748678Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:56:28.5749072Z   CARGO_TERM_COLOR: never
+2026-11-19T07:56:28.5749352Z ##[endgroup]
+2026-11-19T07:56:29.2588484Z info: syncing channel updates for 1.98.1-x86_64-unknown-linux-gnu
+2026-11-19T07:56:29.5701605Z info: latest update on 2026-09-03 for version 1.98.1 (48a229cea 2026-09-01)
+2026-11-19T07:56:29.5707690Z info: downloading 5 components
+2026-11-19T07:56:36.8133153Z warn: the missing active toolchain `1.98.1-x86_64-unknown-linux-gnu` has been auto-installed
+2026-11-19T07:56:36.8133861Z warn: auto-installation is deprecated for most `rustup` commands
+2026-11-19T07:56:36.8134396Z warn: scripts relying on this behavior in `rustup` may stop working in the future
+2026-11-19T07:56:36.8134859Z warn: to install the active toolchain, use `rustup install` instead
+2026-11-19T07:56:36.8135390Z warn: see <https://github.com/rust-lang/rustup/issues/4836> for more info
+2026-11-19T07:56:36.8136119Z 1.98.1-x86_64-unknown-linux-gnu (overridden by '/home/runner/work/p2p-offramp/p2p-offramp/contracts/solana/rust-toolchain.toml')
+2026-11-19T07:56:36.8243887Z ##[group]Run cargo fmt --check
+2026-11-19T07:56:36.8244258Z [36;1mcargo fmt --check[0m
+2026-11-19T07:56:36.8263536Z shell: /usr/bin/bash -e {0}
+2026-11-19T07:56:36.8263819Z env:
+2026-11-19T07:56:36.8264107Z   AGAVE_VERSION: v4.1.2
+2026-11-19T07:56:36.8264454Z   AGAVE_SHA256: 5991d027a686eb419a709a479178b33eb83501e8a2bfbf599a81a286bfcbf770
+2026-11-19T07:56:36.8264813Z   ANCHOR_VERSION: 1.2.2
+2026-11-19T07:56:36.8265183Z   ANCHOR_SHA256: e2c35a973bcfe476f3a89b120e99820f917229faf33d3e71f6625bd94199e741
+2026-11-19T07:56:36.8265530Z   CARGO_TERM_COLOR: never
+2026-11-19T07:56:36.8265828Z ##[endgroup]
+2026-11-19T07:56:36.8715692Z Diff in /home/runner/work/p2p-offramp/p2p-offramp/contracts/solana/programs/basic-escrow/build.rs:3:
+2026-11-19T07:56:36.8716495Z  use std::{env, fs, path::PathBuf};
+2026-11-19T07:56:36.8716868Z
+2026-11-19T07:56:36.8717219Z  fn main() {
+2026-11-19T07:56:36.8717557Z -    for name in [
+2026-11-19T07:56:36.8718023Z -        "P2P_SOLANA_BROWSER_FIXTURE",
+2026-11-19T07:56:36.8718620Z -        "P2P_SOLANA_BROWSER_GENESIS_HEX",
+2026-11-19T07:56:36.8719108Z -        "P2P_SOLANA_BROWSER_PROGRAM_ID",
+2026-11-19T07:56:36.8719484Z -    ] {
+2026-11-19T07:56:36.8720182Z +    for name in ["P2P_SOLANA_BROWSER_FIXTURE", "P2P_SOLANA_BROWSER_GENESIS_HEX", "P2P_SOLANA_BROWSER_PROGRAM_ID"] {
+2026-11-19T07:56:36.8721103Z          println!("cargo:rerun-if-env-changed={name}");
+2026-11-19T07:56:36.8721626Z      }
+2026-11-19T07:56:36.8722052Z      if env::var_os("CARGO_FEATURE_BROWSER_LOCALNET").is_none() {
+2026-11-19T07:56:36.8722884Z Diff in /home/runner/work/p2p-offramp/p2p-offramp/contracts/solana/programs/basic-escrow/build.rs:17:
+2026-11-19T07:56:36.8723748Z      assert_eq!(env::var("P2P_SOLANA_BROWSER_FIXTURE").as_deref(), Ok("local-validator-only"));
+2026-11-19T07:56:36.8724908Z      let genesis = env::var("P2P_SOLANA_BROWSER_GENESIS_HEX").expect("actual local genesis is required");
+2026-11-19T07:56:36.8725838Z      assert!(genesis.len() == 64 && genesis.bytes().all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)));
+2026-11-19T07:56:36.8726692Z -    let bytes: Vec<u8> = (0..32)
+2026-11-19T07:56:36.8727423Z -        .map(|i| u8::from_str_radix(&genesis[i * 2..i * 2 + 2], 16).expect("canonical genesis hex"))
+2026-11-19T07:56:36.8727951Z -        .collect();
+2026-11-19T07:56:36.8728302Z +    let bytes: Vec<u8> =
+2026-11-19T07:56:36.8729028Z +        (0..32).map(|i| u8::from_str_radix(&genesis[i * 2..i * 2 + 2], 16).expect("canonical genesis hex")).collect();
+2026-11-19T07:56:36.8729612Z      assert!(bytes.iter().any(|b| *b != 0));
+2026-11-19T07:56:36.8730206Z      assert_ne!(bytes.as_slice(), b"genesis-hash:p2p-offramp:localv1");
+2026-11-19T07:56:36.8731098Z      let program = env::var("P2P_SOLANA_BROWSER_PROGRAM_ID").expect("local program key is required");
+2026-11-19T07:56:36.8936641Z ##[error]Process completed with exit code 1.
+2026-11-19T07:56:36.9065653Z Post job cleanup.
+2026-11-19T07:56:36.9684944Z [command]/usr/bin/git version
+2026-11-19T07:56:36.9711997Z git version 2.56.1
+2026-11-19T07:56:36.9737077Z Temporarily overriding HOME='/home/runner/work/_temp/367c55aa-08c2-423d-8c06-e7d65201b666' before making global git config changes
+2026-11-19T07:56:36.9738354Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-19T07:56:36.9741258Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/p2p-offramp/p2p-offramp
+2026-11-19T07:56:36.9767871Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-19T07:56:36.9791004Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-19T07:56:37.0010702Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-19T07:56:37.0032485Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-19T07:56:37.0234912Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-19T07:56:37.0270661Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-19T07:56:37.0624503Z Cleaning up orphan processes
+2026-11-19T07:56:37.0871336Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830, actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

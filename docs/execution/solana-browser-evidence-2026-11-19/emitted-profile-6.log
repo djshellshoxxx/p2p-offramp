@@ -1,0 +1,31 @@
+✔ Solana profile pins one local native network and exact registry bytes; policies are explicit (19.557993ms)
+✔ Solana profile refuses nonlocal, SPL, multiple deployment and mutable program configurations (15.700199ms)
+✔ RPC configuration is a literal IPv4 loopback origin, canonical root URL and explicit port (1.075988ms)
+✔ Solana content policy adds exactly its local RPC; ordinary policies remain offline (2.137057ms)
+✔ native modules and RPC transport require their own explicit build profile (6.043111ms)
+vite v8.3.5 building client environment for solana-localnet...
+transforming...
+✓ 47 modules transformed.
+rendering chunks...
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/_headers                                     0.35 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/content-policy.json                          1.18 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/index.html                                   1.29 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/third-party-licenses.json                    3.62 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/core-graph-document.json                     6.99 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/core-graph-worker.json                      11.26 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/assets/solana-localnet.worker-urScG-cs.js  172.84 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/assets/SolanaLocalnetRoot-C5L4xmIZ.css       0.97 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/assets/index-lbyUyLrG.css                    6.77 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/assets/SolanaLocalnetRoot-CWVzqSxv.js       30.39 kB
+../../../../tmp/p2p-solana-profile-test-hzsfRL/app/assets/index-Cejorv2o.js                   220.96 kB
+
+✓ built in 1.55s
+✔ emitted native Worker artifact requires its own library profile, exact CSP and unchanged release refusal (1672.735265ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3452.740632

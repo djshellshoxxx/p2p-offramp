@@ -176,3 +176,23 @@ export function buildLocalnetContentPolicy(input: unknown): LocalnetContentPolic
     connectOrigins: Object.freeze([relayOrigin]) as readonly [string], delivery, framingProtected: false, profile: 'localnet', testFundsOnly: true });
   return assemble(manifest, csp, delivery, ['content.policy.localnet-test-funds-only']);
 }
+
+/** Separate library-only Solana recovery fixture. One exact loopback HTTP origin; ordinary profiles stay offline. */
+export interface SolanaLocalnetContentPolicyManifest extends Omit<LocalnetContentPolicyManifest, 'profile'> {
+  readonly profile: 'solana-localnet';
+}
+export interface SolanaLocalnetContentPolicy extends Omit<OfflineContentPolicy, 'manifest'> {
+  readonly manifest: SolanaLocalnetContentPolicyManifest;
+}
+export function buildSolanaLocalnetContentPolicy(input: unknown): SolanaLocalnetContentPolicy {
+  const raw = exact(input, ['version', 'releaseId', 'delivery', 'rpcOrigin']);
+  const delivery = policyInput(raw), origin = raw.rpcOrigin;
+  if (typeof origin !== 'string' || !/^http:\/\/127\.0\.0\.1:[1-9][0-9]{0,4}$/.test(origin)) return fail();
+  let parsed: URL;
+  try { parsed = new URL(origin); } catch { return fail(); }
+  if (parsed.origin !== origin || !parsed.port || Number(parsed.port) > 65535) return fail();
+  const manifest: SolanaLocalnetContentPolicyManifest = Object.freeze({ version: 1, releaseId: raw.releaseId as string,
+    connectOrigins: Object.freeze([origin]) as readonly [string], delivery, framingProtected: false,
+    profile: 'solana-localnet', testFundsOnly: true });
+  return assemble(manifest, offlineCsp(delivery, origin), delivery, ['content.policy.localnet-test-funds-only']);
+}

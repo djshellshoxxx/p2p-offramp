@@ -17,8 +17,8 @@ async function syntheticBuild(t, payload, payloadPath = 'assets/payload.bin') {
     'index.html': '<!doctype html><script type="module" src="./assets/main.js"></script>',
     'assets/main.js': 'export const fixture = true;\n',
     'assets/vault.worker-fixture.js': 'export {};\n',
-    'core-graph-document.json': '[]\n',
-    'core-graph-worker.json': '[]\n',
+    'core-graph-document.json': '{"version":1,"modules":[]}\n',
+    'core-graph-worker.json': '{"version":1,"modules":[]}\n',
     // Synthetic scanner prerequisites only; these are not distributed license notices.
     'third-party-licenses.json': JSON.stringify(['react', 'react-dom', 'scheduler'].map(name => ({ name, identifier: 'MIT', text: 'Permission is hereby granted (synthetic test fixture)' }))),
     [payloadPath]: payload,

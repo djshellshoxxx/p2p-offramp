@@ -37,9 +37,13 @@ recommended sub-rules on 2026-11-04. Nothing here is deployed to a public cluste
 
 ## Network profiles
 
-Exactly one profile feature must be selected. Only `localnet` exists. Its genesis constant, program ID and
-two test mints are synthetic ASCII-derived 32-byte values, never a real cluster's. Devnet or mainnet needs
-verified genesis/program/mint evidence and a deployment decision; building without a profile fails.
+Exactly one local test profile feature must be selected; building without a profile or selecting both fails.
+`localnet` uses synthetic ASCII-derived genesis, program and two test-mint values, never a real cluster's.
+The separate `browser-localnet` fixture starts a disposable validator first, compiles that validator's actual
+genesis and its fresh program ID, deploys locally, then removes the local upgrade authority. It allows native SOL
+only and never rewrites RPC genesis responses. See [the browser recovery scope and gate](../../docs/consolidation/SOLANA_BROWSER_RECOVERY.md).
+Neither profile defines a public-network deployment. Devnet or mainnet still needs verified genesis/program/mint
+evidence and a deployment decision; no production/default profile can enable this fixture.
 
 ## Toolchain (pinned)
 

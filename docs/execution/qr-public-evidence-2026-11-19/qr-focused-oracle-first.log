@@ -1,0 +1,101 @@
+✔ decoder module scope is exact and unavailable to the document or private native Worker (2.73643ms)
+✔ emitted decoder asset is bound to exactly its dedicated graph and pinned dependency bytes (4.089118ms)
+✔ a decoder graph cannot claim private runtime or network authority (1.10961ms)
+✔ permission is an explicit action; cancellation holds physical admission across new owners and stops late tracks (3.97856ms)
+✔ active cancellation stops every track, detaches preview and requires a new gesture (0.685655ms)
+✔ a second mounted owner cannot open another camera while the original stream is live (0.477455ms)
+✔ provider failures and attach failures are fixed errors and cannot leak a live stream (0.713428ms)
+✔ synchronous revocation by a requesting-state observer prevents the native permission side effect (0.408496ms)
+✖ independent pinned upstream decoder reads all 25 frozen symbols, including the 2048-byte envelope (76.989869ms)
+✖ rotation, inversion and a bounded damaged module recover exact public text; unreadable partial input does not select a code (51.260469ms)
+✔ two clear symbols never silently select the first candidate (19.430382ms)
+✔ installed decoder bytes are the reviewed upstream artifact and expose no external capabilities (10.850155ms)
+✔ image preflight bounds dimensions and complete container before native decompression (4.208142ms)
+✔ decoder physical job is terminated on timeout/cancel and late replies cannot cross generations (1.71185ms)
+✔ decoder refuses inconsistent pixel dimensions before posting and validates reply identifiers (0.983033ms)
+✔ revocation inside Worker creation terminates the late returned physical Worker without posting (0.737223ms)
+✔ revocation in input access and scheduling cannot start a stale decode (0.681438ms)
+✔ all five public QR types get complete unauthenticated review and explicit no-authority confirmation (464.939171ms)
+✔ default context rejects chain-bound codes; unsupported inputs never produce a review (3.571689ms)
+✔ file admission precedes reads, exact text is never trimmed and all bytes are wiped after use (16.921587ms)
+✔ cancel retains the physical file slot across remounts and suppresses every late result (14.440453ms)
+✔ late hash, context change, expiry and local replay cannot revive a reviewed selection (38.995559ms)
+✔ backup fingerprint is exact opaque bytes, compares only after review, never decrypts or restores (22.53194ms)
+✔ owned camera pixels are wiped even when admission refuses before decoder work starts (2.452039ms)
+✖ display uses static SVG geometry with a full four-module quiet zone and escaped accessible text (17.080815ms)
+✔ full exact payment identities and unauthenticated state remain visible without links or action controls (18.184996ms)
+✔ all five public reviews label every full display field, including release sequence (22.562422ms)
+✔ every public QR failure and critical authority statement is catalog-backed (1.895464ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 25
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5364.218183
+
+✖ failing tests:
+
+test at apps/web/test/qr-decoder-oracle.test.mjs:21:1
+✖ independent pinned upstream decoder reads all 25 frozen symbols, including the 2048-byte envelope (76.989869ms)
+  AssertionError [ERR_ASSERTION]: hello-world-H
+  + actual - expected
+
+  + null
+  - 'HELLO WORLD'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-decoder-oracle.test.mjs:23:39)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'HELLO WORLD',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-decoder-oracle.test.mjs:26:1
+✖ rotation, inversion and a bounded damaged module recover exact public text; unreadable partial input does not select a code (51.260469ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + null
+  - 'P2POFFRAMP:1:MPFNPC7ECO-DIH70%EHUDSF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPF9KC7WERT93/DAWEWE43R6OF65L6VF404EB$DUUEWF7C8E78EX3E .CBEC78EUJCQPC4%E006N963Q5OQE.CCWW6WE4NE4UIC:R6/96:DCNF6207YX6DL6DOC7VCD%6SG6XW6307L-C6071R6Y57HPCLA7L-CA56//6 47G-C4S6VZCEM6K-C4DCQF6$364$F-F4NEC*VD2ECMOA.CCWW6WE4SF4+Q62071ECQF6:TCVW6L-C2UC ZCK.CVJC.96TF64UC 47207G*6+964VCJA7-CCNB7B46UW6H-C3VCYX6X571DCN-CRW6F473Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7-96TG6.96C%6X C.A6:96W474DCJB7YX6VG6N.CI-CHOC3ECIE40G4%FFFZCWF7ZKEUPCO/EALECX5ZED93D1LE*KEG/DIE42G4WE4OB6'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-decoder-oracle.test.mjs:28:106)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'P2POFFRAMP:1:MPFNPC7ECO-DIH70%EHUDSF4ZKEIEC  CGC8WE40A66466466466463Q5B$CM9EZKEUPEUUEIH70%EHUD+F4*KED3DH.DZEDUUEIH70%EHUD-F4NEC*VD2ECWE4MPF9KC7WERT93/DAWEWE43R6OF65L6VF404EB$DUUEWF7C8E78EX3E .CBEC78EUJCQPC4%E006N963Q5OQE.CCWW6WE4NE4UIC:R6/96:DCNF6207YX6DL6DOC7VCD%6SG6XW6307L-C6071R6Y57HPCLA7L-CA56//6 47G-C4S6VZCEM6K-C4DCQF6$364$F-F4NEC*VD2ECMOA.CCWW6WE4SF4+Q62071ECQF6:TCVW6L-C2UC ZCK.CVJC.96TF64UC 47207G*6+964VCJA7-CCNB7B46UW6H-C3VCYX6X571DCN-CRW6F473Q5V9E24EU3E*3EWE4-F4.G6LX5O.CVKEQ$DNX5DJE3Q5ZKEKFE6$COVETTCWF7-96TG6.96C%6X C.A6:96W474DCJB7YX6VG6N.CI-CHOC3ECIE40G4%FFFZCWF7ZKEUPCO/EALECX5ZED93D1LE*KEG/DIE42G4WE4OB6',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web/test/qr-ui.test.mjs:13:1
+✖ display uses static SVG geometry with a full four-module quiet zone and escaped accessible text (17.080815ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /<img|<script|\sonerror=|style=/. Input:
+
+  '<svg class="qr-symbol" role="img" aria-label="&lt;img src=x onerror=alert(1)&gt;" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="29" height="29" fill="#ffffff"></rect><path d="M4 4h7v1h-7zM14 4h3v1h-3zM18 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM13 5h2v1h-2zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h2v1h-2zM18 6h1v1h-1zM20 6h3v1h-3zM24 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM12 7h1v1h-1zM15 7h1v1h-1zM18 7h1v1h-1zM20 7h3v1h-3zM24 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h5v1h-5zM18 8h1v1h-1zM20 8h3v1h-3zM24 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM16 9h1v1h-1zM18 9h1v1h-1zM24 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h7v1h-7zM12 11h1v1h-1zM15 11h2v1h-2zM4 12h1v1h-1zM6 12h5v1h-5zM13 12h1v1h-1zM16 12h1v1h-1zM18 12h5v1h-5zM4 13h1v1h-1zM6 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h2v1h-2zM20 13h1v1h-1zM23 13h2v1h-2zM8 14h3v1h-3zM13 14h3v1h-3zM17 14h2v1h-2zM20 14h1v1h-1zM22 14h2v1h-2zM5 15h3v1h-3zM9 15h1v1h-1zM18 15h1v1h-1zM20 15h2v1h-2zM24 15h1v1h-1zM5 16h1v1h-1zM8 16h3v1h-3zM15 16h1v1h-1zM17 16h2v1h-2zM21 16h1v1h-1zM23 16h1v1h-1zM12 17h3v1h-3zM16 17h3v1h-3zM20 17h1v1h-1zM4 18h7v1h-7zM13 18h1v1h-1zM16 18h3v1h-3zM20 18h1v1h-1zM23 18h2v1h-2zM4 19h1v1h-1zM10 19h1v1h-1zM12 19h3v1h-3zM17 19h1v1h-1zM20 19h1v1h-1zM4 20h1v1h-1zM6 20h3v1h-3zM10 20h1v1h-1zM12 20h1v1h-1zM18 20h3v1h-3zM24 20h1v1h-1zM4 21h1v1h-1zM6 21h3v1h-3zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h2v1h-2zM17 21h1v1h-1zM19 21h1v1h-1zM21 21h1v1h-1zM4 22h1v1h-1zM6 22h3v1h-3zM10 22h1v1h-1zM12 22h3v1h-3zM16 22h2v1h-2zM22 22h1v1h-1zM4 23h1v1h-1zM10 23h1v1h-1zM14 23h4v1h-4zM19 23h2v1h-2zM24 23h1v1h-1zM4 24h7v1h-7zM12 24h1v1h-1z" fill="#000000"></path></svg>'
+
+      at TestContext.<anonymous> (file:///workspace/scratch/29ec534d969d/review-qr-mobile/apps/web/test/qr-ui.test.mjs:17:47)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<svg class="qr-symbol" role="img" aria-label="&lt;img src=x onerror=alert(1)&gt;" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="29" height="29" fill="#ffffff"></rect><path d="M4 4h7v1h-7zM14 4h3v1h-3zM18 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM13 5h2v1h-2zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h2v1h-2zM18 6h1v1h-1zM20 6h3v1h-3zM24 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM12 7h1v1h-1zM15 7h1v1h-1zM18 7h1v1h-1zM20 7h3v1h-3zM24 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h5v1h-5zM18 8h1v1h-1zM20 8h3v1h-3zM24 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM16 9h1v1h-1zM18 9h1v1h-1zM24 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h7v1h-7zM12 11h1v1h-1zM15 11h2v1h-2zM4 12h1v1h-1zM6 12h5v1h-5zM13 12h1v1h-1zM16 12h1v1h-1zM18 12h5v1h-5zM4 13h1v1h-1zM6 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h2v1h-2zM20 13h1v1h-1zM23 13h2v1h-2zM8 14h3v1h-3zM13 14h3v1h-3zM17 14h2v1h-2zM20 14h1v1h-1zM22 14h2v1h-2zM5 15h3v1h-3zM9 15h1v1h-1zM18 15h1v1h-1zM20 15h2v1h-2zM24 15h1v1h-1zM5 16h1v1h-1zM8 16h3v1h-3zM15 16h1v1h-1zM17 16h2v1h-2zM21 16h1v1h-1zM23 16h1v1h-1zM12 17h3v1h-3zM16 17h3v1h-3zM20 17h1v1h-1zM4 18h7v1h-7zM13 18h1v1h-1zM16 18h3v1h-3zM20 18h1v1h-1zM23 18h2v1h-2zM4 19h1v1h-1zM10 19h1v1h-1zM12 19h3v1h-3zM17 19h1v1h-1zM20 19h1v1h-1zM4 20h1v1h-1zM6 20h3v1h-3zM10 20h1v1h-1zM12 20h1v1h-1zM18 20h3v1h-3zM24 20h1v1h-1zM4 21h1v1h-1zM6 21h3v1h-3zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h2v1h-2zM17 21h1v1h-1zM19 21h1v1h-1zM21 21h1v1h-1zM4 22h1v1h-1zM6 22h3v1h-3zM10 22h1v1h-1zM12 22h3v1h-3zM16 22h2v1h-2zM22 22h1v1h-1zM4 23h1v1h-1zM10 23h1v1h-1zM14 23h4v1h-4zM19 23h2v1h-2zM24 23h1v1h-1zM4 24h7v1h-7zM12 24h1v1h-1z" fill="#000000"></path></svg>',
+    expected: /<img|<script|\sonerror=|style=/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
