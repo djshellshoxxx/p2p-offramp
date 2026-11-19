@@ -39,7 +39,7 @@ export function readPublicEnvelope(text) {
 
 function instrument() {
   const observed = { wallet: 0, fetch: 0, sockets: 0, beacon: 0, cameraRequests: 0, privateOperations: [], workers: [], policy: [] };
-  const fixture = { observed, mode: 'deny', canvas: null, pending: null, streams: [] };
+  const fixture = { observed, mode: 'deny', canvas: null, pending: null, streams: [], producers: [] };
   window.__qrFixture = fixture;
   const prompt = async () => { observed.wallet++; throw Error('FIXTURE_WALLET_DENIED'); };
   Object.defineProperty(window, 'ethereum', { configurable: true, value: { request: prompt, enable: prompt } });
@@ -76,9 +76,22 @@ function instrument() {
   };
   const stream = () => {
     if (!fixture.canvas) throw Error('FIXTURE_FRAME_REQUIRED');
-    const value = fixture.canvas.captureStream(5); fixture.streams.push(value);
+    const source = fixture.canvas, canvas = document.createElement('canvas');
+    canvas.width = source.width; canvas.height = source.height;
+    const context = canvas.getContext('2d'), value = canvas.captureStream(0), track = value.getVideoTracks()[0];
+    if (!context || typeof track?.requestFrame !== 'function') throw Error('FIXTURE_FRAME_PRODUCER_UNAVAILABLE');
+    fixture.streams.push(value);
+    const producer = { frames: 0, active: true }; fixture.producers.push(producer);
+    // A static canvas painted before capture does not keep producing camera frames. Repaint after the
+    // stream is attached as well, and stop the fixture producer when the app stops the actual track.
+    const paint = () => {
+      if (track.readyState === 'ended') { producer.active = false; clearInterval(timer); return; }
+      context.clearRect(0, 0, canvas.width, canvas.height); context.drawImage(source, 0, 0);
+      track.requestFrame(); producer.frames++;
+    };
+    const timer = setInterval(paint, 200); paint();
     // Real CanvasCaptureMediaStreamTrack, real video.srcObject and real video-to-canvas capture.
-    value.getVideoTracks()[0]?.requestFrame?.(); return value;
+    return value;
   };
   fixture.releaseCamera = () => {
     if (!fixture.pending) throw Error('FIXTURE_NO_PENDING_CAMERA');
