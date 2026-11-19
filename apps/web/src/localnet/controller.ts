@@ -664,9 +664,10 @@ export class LocalnetController {
     finally { bytes.fill(0); }
   }
   async #drain(): Promise<void> {
-    if (this.#busy || this.#draining || !this.#current()) return;
+    if (this.#busy || this.#draining || !this.#inbox.length || !this.#current()) return;
     this.#draining = true; const epoch = this.#epoch;
     try {
+      this.#emit();
       while (this.#inbox.length && this.#current(epoch)) {
         const event = this.#inbox.shift()!;
         const result = await this.#exchange!.receive(event, this.#secret!); this.#guard(epoch);
