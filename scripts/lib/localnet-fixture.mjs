@@ -109,6 +109,8 @@ export async function startLocalnetFixture({ erc20 = false } = {}) {
         removeListener(event, listener) { listeners.get(event)?.delete(listener); },
         emit(event, value) { for (const listener of listeners.get(event) ?? []) listener(value); },
         async request(input) {
+          // Node silently clones AbortSignal to {}, while a browser Worker rejects it. Keep the wallet wire shape exact.
+          assert.ok(Reflect.ownKeys(input).every(key => key === 'method' || key === 'params'), 'wallet requests contain only EIP-1193 method/params');
           const { method, params = [] } = structuredClone(input); calls.push({ method, params });
           if (method === 'eth_requestAccounts') { counts.connects++; return [state.account]; }
           if (method === 'eth_accounts') return [state.account];

@@ -252,7 +252,10 @@ export class LocalnetController {
       } catch (error) { pair.secretKey.fill(0); throw error; }
     }
     const request = async (args: { readonly method: string; readonly params?: readonly unknown[] }): Promise<unknown> => {
-      this.#guard(epoch); const output = await this.#provider.request(args); this.#guard(epoch); return output;
+      // RPC cancellation stays in the reader; AbortSignal cannot cross the Worker wallet bridge.
+      this.#guard(epoch);
+      const output = await this.#provider.request(args.params === undefined ? { method: args.method } : { method: args.method, params: args.params });
+      this.#guard(epoch); return output;
     };
     this.#native = new EvmChainReader({ rpc: { request }, registry: this.#config.registry, escrowLayouts: this.#config.escrowLayouts, now: this.#now });
     this.#ports = createEvmPeerAcceptancePorts({ registry: this.#config.registry, request, vault: this.#vault, session });
