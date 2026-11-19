@@ -57,6 +57,7 @@ export function isQrImportReview(value: unknown): value is QrImportReview {
 
 /** Splits a lookalike-prone string into groups of four (after a `0x` prefix) for display. */
 export function groupForDisplay(value: string, size = 4): string {
+  if (!Number.isSafeInteger(size) || size <= 0) throw new RangeError('Grouping size must be a positive safe integer.');
   const prefix = value.startsWith('0x') ? '0x' : '';
   const body = value.slice(prefix.length), groups: string[] = [];
   for (let index = 0; index < body.length; index += size) groups.push(body.slice(index, index + size));
