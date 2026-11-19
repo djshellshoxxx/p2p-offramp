@@ -182,8 +182,9 @@ npm run test:proof:browser     # Chromium via P2P_CHROMIUM or scripts/lib/chromi
 
 The native browser harness compiles the actual App, custody Worker and separate
 public resource Worker under the existing content-policy builder. It creates an
-actual encrypted profile, exports and authenticates its revision-0 backup during
-finite CPU work, then locks the vault and observes native Worker closure. A
+actual encrypted profile, exports its revision-0 backup during finite CPU work,
+and checks that the downloaded export is non-empty. It then locks the vault and
+observes native Worker closure. Backup re-verification is not exercised. A
 competing attempt is refused throughout the measured native shutdown interval;
 a fresh explicit attempt becomes admissible only after confirmed physical exit. Other
 bounded cases exercise malformed output/identity/message flood, crash,
