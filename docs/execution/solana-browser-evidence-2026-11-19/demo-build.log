@@ -1,0 +1,18 @@
+vite v8.3.5 building client environment for demo...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+apps/web/dist-demo/_headers                              0.34 kB
+apps/web/dist-demo/content-policy.json                   1.00 kB
+apps/web/dist-demo/index.html                            1.28 kB
+apps/web/dist-demo/third-party-licenses.json             3.62 kB
+apps/web/dist-demo/core-graph-worker.json                4.13 kB
+apps/web/dist-demo/core-graph-document.json             10.94 kB
+apps/web/dist-demo/assets/vault.worker-DeA1P_KX.js      69.45 kB
+apps/web/dist-demo/assets/index-lbyUyLrG.css             6.77 kB
+apps/web/dist-demo/assets/synthetic-local-TA6gqNuj.js    5.74 kB
+apps/web/dist-demo/assets/OfflineRoot-YPhIWYqn.js      185.72 kB
+apps/web/dist-demo/assets/index-BjdeRgTt.js            220.82 kB
+
+✓ built in 1.73s
+{"localStaticBuild":true,"syntheticDemo":true,"files":11,"bytes":509853,"bundledSinkTokensRequiringFrameworkReview":18,"completeXssProof":false,"signedRelease":false,"releaseAcceptance":false}

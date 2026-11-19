@@ -1,0 +1,25 @@
+✔ locked recovery Worker refuses every economic command and never touches RPC or wallet (14.159557ms)
+✔ profile lock revokes the controller immediately; unsupported commands cannot mint authority (142.742744ms)
+✔ only an original finalized funded native escrow with the embedded deployment pin can be imported (418.917988ms)
+✔ the complete canonical recovery document is encrypted and survives lock/reopen with its original provenance (469.816676ms)
+✔ manual receipt, exact review, cancellation and IndexedDB-compatible encrypted CAS precede signing and sending (967.295664ms)
+✔ wallet scope revocation while the physical signer is pending cannot send or restore review authority (443.976904ms)
+✔ fresh-key restore preserves uncertain provenance and requires a definitive drop plus explicit rebuild (1781.451093ms)
+✔ a persistent CAS conflict locks the profile before any wallet signature or send (175.548464ms)
+✔ RPC transport preserves actual genesis and fences allowed methods, replies and disposal (95.20912ms)
+✔ Worker command parser refuses funding, generic signing, hidden fields and malformed recovery input (3.054861ms)
+✔ restore input is bounded before copying and cannot invoke a caller-owned iterator (0.819457ms)
+✔ wallet connect and sign-only prompts require explicit one-shot document capabilities (9.389788ms)
+✔ exact transaction, chain and account substitutions never prompt a wallet (4.099882ms)
+✔ cancel and account changes retain the physical prompt slot until settlement and discard the result (1.713585ms)
+✔ changed account identity without an event is detected before prompt dispatch (1.183971ms)
+✔ expired reviews and wallets without change events fail closed (0.725872ms)
+✔ wallet byte views are bounded before copy and custom iterators never execute (1.102779ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5569.323772

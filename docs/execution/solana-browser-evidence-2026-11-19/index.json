@@ -1,0 +1,103 @@
+{
+  "format": "p2p-offramp/solana-browser-source-evidence/v1",
+  "generatedAt": "2026-11-19T07:37:48.931615+00:00",
+  "baseMain": "91ee6991d4527bba0e76b048a76e65ed7693c5a1",
+  "nativeApiUpstreamHead": "aa551463ea5db51253476be03b1f9f016eeee83a",
+  "localNativeApiParent": "cc217003a44a8b509fae0f04991cc0f70f282ac5",
+  "ReleaseEnabled": 0,
+  "qualification": {
+    "sourceUnitAndBuild": "PASS",
+    "actualNativeBrowser": "BLOCKED_PENDING_HOSTED_EXACT_HEAD",
+    "publicNetwork": false,
+    "freshSolanaNegotiation": false,
+    "reason": "Local invocation exits 1 with TOOL_NOT_FOUND: solana. No validator/browser execution result is claimed."
+  },
+  "checks": {
+    "focusedTests": {
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0
+    },
+    "emittedProfileTestsFinalUi": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    "independentRuntimeTests": {
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "buildPolicyTests": {
+      "passed": 50,
+      "failed": 0,
+      "skipped": 0
+    },
+    "typecheckProjects": 4,
+    "uiTypecheckAfterPrivacyClearing": "PASS",
+    "defaultBuild": "PASS",
+    "demoBuild": "PASS",
+    "importBoundaries": "PASS"
+  },
+  "changedSourceSha256": {
+    ".github/workflows/solana-escrow.yml": "9822f77c899c2b60b3c3335360a337b9d88ab653808afc42e8621a91190ee2e3",
+    "apps/web/scripts/artifact-policy.mjs": "7817ed04f64a800da0f62e7f189d3f6057f60c9b0ca13b7f8ada2d8afc0db398",
+    "apps/web/scripts/build.mjs": "81f0d2cd9529d06fb39ca459573cd3675b66f4aea372e120174996b5b89c95de",
+    "apps/web/scripts/static-build-plugin.mjs": "51b33d43e9d9d21505df1f1a7115364891275b4872945df4554d5af3994b226b",
+    "apps/web/src/build-flags.d.ts": "60b55157a3321980250c14c1cc94bbd33a0e266ca5d3516b86c8075005c1c6a9",
+    "apps/web/src/main.tsx": "38d5da490887e6f4a5e6b9589cebe344e4eb4488521420fbd1aa3281144fd2e6",
+    "apps/web/src/solana-localnet/SolanaLocalnetRoot.tsx": "058c195dee24c72ff078f6cf149faaef99c69f0f4f89b4bb9249d5dee0a3ff9e",
+    "apps/web/src/solana-localnet/client.ts": "b0ca3ff52fb484eca7fbdb779c89b6cd8c6737631aa1ad3f8bf0c167d22a3c61",
+    "apps/web/src/solana-localnet/config.ts": "ab3045d87ce47a4591e42416de1da1ce597c4aa37e9a4795dae7ba53759a0f3c",
+    "apps/web/src/solana-localnet/controller.ts": "066bba80c021f7915f7049a2fbe3bc6ba616d89efeb394b000d0ac734fc5b528",
+    "apps/web/src/solana-localnet/discovery.ts": "d3188d6f52a0c40886f06e563c2952991d5a9f3b65fd65acbacc07f19b588af2",
+    "apps/web/src/solana-localnet/protocol.ts": "37d34341c1b8582d15466de96dafab02dc8dd679aff1c898ad26e8e2da117c6c",
+    "apps/web/src/solana-localnet/rpc.ts": "5e2071c52e59e9829ac826171e4882b9d97a89c8a865b024f8671bcf5fc3dc4f",
+    "apps/web/src/solana-localnet/solana-localnet.css": "42158f24e683b838f2bade1b97869633747848463ea623d03ca336a5b0637f00",
+    "apps/web/src/solana-localnet/solana-localnet.worker.ts": "2045ca5d18f3c303e393a108757765c1387a9cae642a9a3c3232803ed763be90",
+    "apps/web/src/solana-localnet/validation.ts": "d69616d8919f156cbad81edf2c879c2fbc0ff2240b85a48ff663110d461ee42a",
+    "apps/web/src/solana-localnet/wallet-bridge.ts": "6da8b6fb182dd43e6a0de1ab19182efcf86c3e865078c2f0d90f1cf5f35acefa",
+    "apps/web/test/solana-localnet-controller.test.mjs": "ca05ab86f11fa1c96f3ad94d107aea8e0a6a40bc0d5b5848dfb36c22ef419e75",
+    "apps/web/test/solana-localnet-policy.test.mjs": "77f17b2fe918b9cddfc1e8a52382286bd8a936bbf80073dd45faa8532084b623",
+    "apps/web/test/solana-localnet-rpc.test.mjs": "77857ed73fb820af13bd7b75a77f2923340bfec1f77101c6491eb32f53b942d9",
+    "apps/web/test/solana-localnet-send-evidence.test.mjs": "4db3137767f5d2f425e7388ed397964d71b8df8746c1fb1f4867b7cf35417c6c",
+    "apps/web/test/solana-localnet-support.mjs": "ece12232c9a837b89eafb919d8df361ecba7c17625eff437be45e9f347d70fe4",
+    "apps/web/test/solana-localnet-wallet.test.mjs": "37c1b43f72008ac3395c6d14d0567e13974417c87114f8afadfa01e1c097b17e",
+    "apps/web/vite.config.ts": "c06238ffe63f31b89b3ae3ad2a09a4d52d735cce56c200b5d3b82279b05b0da4",
+    "contracts/solana/README.md": "481abf01dbb8dc2f187b3ae0b0909f60b446418262c8780b9c360c9eb900426d",
+    "contracts/solana/programs/basic-escrow/Cargo.toml": "598efb4e9e135d27e3ae651c5881e3ea7ec0e5bc9ce450a8488650ff0564d21d",
+    "contracts/solana/programs/basic-escrow/build.rs": "4d57c49052cd7f27bdda068c1d66d8cc5bea3e9b44b1647c0e04721cf5b7e8d8",
+    "contracts/solana/programs/basic-escrow/src/lib.rs": "25c06ba880e830aee0d373afb5a219b9cb7b78c71f928f56c6660b97f0d45268",
+    "contracts/solana/programs/basic-escrow/src/network.rs": "bc0c8c2ff8a76277ac0d8893d6309fe3413a0f15576aad3091c38bf02837a9a3",
+    "docs/consolidation/SOLANA_BROWSER_RECOVERY.md": "0a715e2518c84c8d9f871d2cf9b31c3041467fc15343afe890d13e059c911f2a",
+    "package.json": "e458a8454b432837228650d73f73e3569bfc76a8c0f437a2752f9d93fbee5b03",
+    "packages/chain-solana/localnet.ts": "42f27c63375aef1980d4862eb16fab6a6e0bbd8300d374697575b53b35955506",
+    "packages/chain-solana/src/compose.ts": "9c79e8ba401f575deef468df425b15beda16a6cfcb2390dc32cd51332006f4ef",
+    "packages/chain-solana/src/submit.ts": "41082d3e14500ba1c8395dc44e3af39f2c87773319fd81688cd337a851512a43",
+    "packages/chain-solana/test/prepared-actions.test.mjs": "8e79ae82b3152cee0c19198987e033e2511030c862c5e301f50ff5e005ff85ad",
+    "packages/security/src/content-policy.ts": "4685e0018840b551557fab53834971bba1751cb92f436e0409ad2510dde72381",
+    "scripts/check-import-boundaries.mjs": "5a89d594adc8f494eee48d1af6347e209e19c5b0df77472804512ccd44f6cdf2",
+    "scripts/lib/solana-localnet-browser-fixture.mjs": "f374902fc8a595dfe5572a45edb51079375595754e4ff08eae52a4c922128120",
+    "scripts/lib/solana-localnet-fixture.mjs": "72390955cdc2415b662af0e47ce7d8553cd7eb0d89efe0fbc10053e79dc09413",
+    "scripts/lib/solana-localnet-send-evidence.mjs": "9bd3702821400addee7e4c579076f92ad5e5e8271ef3e315f01283c7f0d688e5",
+    "scripts/test-solana-localnet-browser.mjs": "0b0cf50e122ddc992d7faf384cf238821c674114eff41170f407a9859c671d97"
+  },
+  "logSha256": {
+    "build-policy-50.log": "96c96d2d5607b1801886bb2290fb4d2b9d469b647128b76051609725b5763b4f",
+    "controller-missing-module-red.log": "0f8cebab86f40f4111a6611e8e4422536d44816c94d4eccaba566371d140e0ff",
+    "default-build.log": "6a5fb059b54f2c8ca9beb61447d3e28dfd7a044879432b8c08b352ea324595d4",
+    "demo-build.log": "dcc393bdcc73a35a1064edb4cbcc9b2d07c3fd01bdbc35a53c6494f3f9ba3360",
+    "emitted-profile-6.log": "0ac9132e9e01c142ec25023da6fcc246d3c0cf7d4d5a96bb01a00f88faa3f80d",
+    "focused-24.log": "2e5f7883561a411e9bd54c311b716bd8221b144f317a48d7e6508c2b7f8326cc",
+    "import-boundaries.log": "934145d2d8cbd1c2c31344ed19e98564cbba11556ec935ede702084ae46ab9b6",
+    "independent-runtime-17.log": "197d385beb0a4919ba67524ddd0833c07ea592b9bf068a78959bd0adc4637b5c",
+    "native-browser-environment-blocked.log": "e5cd08f86cee7533e2ca601457e67a874d0170d0d45f30143f5ae7ad6bb66d25",
+    "physical-marker-missing-module-red.log": "936443c7375baa7d7fdc1722d8ecbf16ce2daef9672c34fdc4f25013afb87548",
+    "profile-missing-module-red.log": "113ad25ce15230e7096618ceb8b06d4b7a1b503e563c8aa336848c79c13844e4",
+    "restore-byte-bound-red.log": "eae47faae90262575ca237246817f28e012dd6186b9541e4eb55a62e94d89a88",
+    "typecheck-four-projects.log": "a550ff26e5b128d5107b02fa16d34523af27e99e388c4cdbe322940fa5de93c3",
+    "typecheck-ui-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wallet-byte-bound-red.log": "481caff96521c8e1ab13a1f7cb12eb71a9bd777541671706c925c070997af454"
+  },
+  "logNormalization": "Trailing blank lines removed; other diagnostic content retained."
+}
