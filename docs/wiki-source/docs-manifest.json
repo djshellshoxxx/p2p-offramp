@@ -18,7 +18,7 @@
       "locale": "en",
       "topic": "Getting-Started",
       "sourcePath": "docs/wiki-source/Getting-Started.md",
-      "sha256": "8bbd5014c4c32ac580fcef25cf5cb2ae538465221e35640897890142af93060e",
+      "sha256": "00747c9e0dac076b157d93ea150e6609369f6cc6208d6642ff511fde7c9df566",
       "implementedCapabilities": [
         "vault"
       ],
@@ -73,5 +73,5 @@
       "lastVerifiedRelease": null
     }
   ],
-  "linkReportDigest": "c1398affb7cc196a82710c43d57f91bee0c92be5d848957b23943214c767cfb4"
+  "linkReportDigest": "da68f5830aa8bc959686466500035316641ac64c34669d43d134448cb1ac8dcd"
 }

@@ -13,7 +13,7 @@ The generated synthetic demo files are under `apps/web/dist-demo`. They are for 
 
 ## First local session
 
-1. Create a local profile after reading the no-reset consent, then unlock that profile.
+1. Create a local profile after reading the no-reset consent; creation opens it unlocked. For an existing profile, choose **Unlock existing profile**.
 2. In the synthetic demo, open an offer or local terms file and inspect the full addresses, asset, amount and deadlines. Saving a review keeps encrypted local review data; it does not submit a trade.
 3. On **Recovery**, explicitly export the encrypted profile file and keep its passphrase separately. Export reports that authentication has not been checked.
 4. With the original profile unlocked, select the complete exported file, enter its backup passphrase and choose **Verify this backup file**. The receipt displays exact file and envelope digests for that profile and revision.
