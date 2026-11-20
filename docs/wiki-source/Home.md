@@ -11,7 +11,33 @@
 
 [Getting Started](Getting-Started.md) · [Wallet and QR Safety](Wallet-and-QR-Safety.md) · [Privacy and Recovery](Privacy-and-Recovery.md) · [Architecture and Development](Architecture-and-Development.md) · [Codespaces Test Lab](Codespaces-Test-Lab.md) · [Security and Release](Security-and-Release.md)
 
-## Recorded source checkpoint — November 18, 2026
+## Source snapshot — November 20, 2026
+
+The refreshed guides describe merged source at
+[`388526a474aea0e08f9c04178c2b7f9e1d4bee3f`](https://github.com/djshellshoxxx/p2p-offramp/commit/388526a474aea0e08f9c04178c2b7f9e1d4bee3f).
+[Source consolidation #221](https://github.com/djshellshoxxx/p2p-offramp/pull/221)
+and [documentation consolidation #222](https://github.com/djshellshoxxx/p2p-offramp/pull/222)
+are merged. Their qualification records remain bound to their exact source.
+
+The default app includes local encrypted profiles, explicit backup-file
+authentication and revision recheck, and public QR inspection. Synthetic review,
+saved-review favorites and reusable draft templates use their documented review
+flows. Wallet execution and funded recovery remain confined to the separately
+configured test profiles. The Solana public recovery export belongs to its
+isolated localnet client. See the [User Guide](User-Guide.md) for these boundaries
+and the [Developer Guide](Developer-Guide.md) for source links and commands.
+
+Source integration leaves `ReleaseEnabled=0`, the default registry unapproved,
+and production locale selection English-only and draft. Signed-update runtime
+composition, physical-device acceptance, semantic approval and release
+qualification remain separate work. These are repository documents; live GitHub
+Wiki publication is unverified.
+
+## Historical source checkpoint — November 18, 2026
+
+The following paragraph records the earlier source and its then-pending branches.
+It is preserved as history; the November 20 snapshot and refreshed guides above
+describe the later integrated source.
 
 This wiki source describes merged `main@6c38e641e24abcfdcf645f864bd64c9645836d75` unless a feature is
 marked draft, future-only or blocked. The [reconciliation record](../consolidation/2026-11-18-documentation-reconciliation.md)

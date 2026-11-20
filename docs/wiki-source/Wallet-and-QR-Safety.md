@@ -10,11 +10,36 @@
 - For a synthetic/test-only request, compare the complete fields to an independently obtained, trusted specification or signed release manifest. A local mock or read-only chain result cannot independently authenticate a merchant or guarantee fiat settlement.
 - Treat a wallet's rejection, timeout, chain change, lost session, unknown hash or failure after a durable send marker as **ambiguous until independently reconciled**. Do not assume a failed UI response means a transaction was never broadcast. Never retry a possibly sent operation automatically.
 
-## QR and same-device workflows
+## Implemented local public-QR workflow
 
-A QR code transports bytes; **it is not a signature, authentic receipt, proof of payment, or proof of a trusted destination**. QR-based transaction and funding features are not claimed as a released workflow on `main`. Any future QR/deep-link implementation must show the decoded payload and its actual destination to the user for explicit approval **before** opening a wallet or navigating. It must validate length, schema, chain, addresses and origin, and reject unexpected fields and unsupported schemes rather than executing scanned content.
+The merged [QR panel](https://github.com/djshellshoxxx/p2p-offramp/blob/388526a474aea0e08f9c04178c2b7f9e1d4bee3f/apps/web/src/ui/QrPanel.tsx)
+appears under **Recovery**, in **Public QR tools**. Choose exact public text,
+a public text file, or a PNG/JPEG containing one public code. Camera permission
+is requested only after **Start camera**; **Scan one camera frame** stops the
+preview after capturing a frame. Physical phone, camera and printed-code
+acceptance remains unqualified, and exact text and file input remain available.
 
-For future same-device interoperability, prefer **explicit copy, encrypted-file transfer, or clearly reviewed wallet deep links** over silently acting on scanned content. These are design/safety requirements, **not a statement that all alternatives are implemented**. Never encode a mnemonic, private key, decrypted recovery material, private counterparty evidence or unrestricted link into a QR image. Save and verify a complete encrypted digital backup separately; a QR screenshot or abbreviated reference does not replace the original file.
+The panel displays the complete decoded fields, public-data authentication
+status, signature state and any origin hint for review. Chain-bound input
+requires the network context from current registry-reviewed terms. An unresolved
+invite signing-key profile cannot establish an authenticated trade session.
+**Confirm this local review** enables the separate symbol display, exact public
+text copy and download controls. Confirmation itself does not connect a wallet,
+negotiate a trade, prepare a payment, navigate to an origin or restore a backup.
+
+The implemented fingerprint workflow takes a selected encrypted-backup or
+offline-reference file and publishes only its format, byte length and SHA-256.
+The public code excludes the file contents and filename. After reviewing that
+code, **Compare exact file bytes** compares a selected file locally. A matching
+length and digest establishes byte correspondence; authentication and successful
+recovery require their separate checks in the [recovery guide](Privacy-and-Recovery.md).
+
+For the same device, **Copy reviewed public text** and **Download reviewed public
+text** preserve the complete reviewed envelope. A camera image or fingerprint
+alone cannot replace the original encrypted backup. Keep private keys,
+passphrases, decrypted recovery data and private counterparty evidence out of
+public codes. The app's local QR review grants no payment, escrow, fiat-finality
+or trusted-destination authority.
 
 ## Safe testing and limitations
 

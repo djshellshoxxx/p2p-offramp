@@ -10,7 +10,7 @@
       "locale": "en",
       "topic": "Home",
       "sourcePath": "docs/wiki-source/Home.md",
-      "sha256": "41bffb07e4c32bd02db12aea830be3620d400c8dadaf6fa0fc7c3e3b8621fc9a",
+      "sha256": "6202aab97db8516d2bbcb3d7ff69690be36f246cfeed734a72943917b8646e60",
       "implementedCapabilities": [],
       "lastVerifiedRelease": null
     },
@@ -18,7 +18,7 @@
       "locale": "en",
       "topic": "Getting-Started",
       "sourcePath": "docs/wiki-source/Getting-Started.md",
-      "sha256": "c797e59909415adcc331be9726f3c262ffc7e9128400a930d2517ffd1831c6cb",
+      "sha256": "8bbd5014c4c32ac580fcef25cf5cb2ae538465221e35640897890142af93060e",
       "implementedCapabilities": [
         "vault"
       ],
@@ -40,7 +40,7 @@
       "locale": "en",
       "topic": "Wallet-and-QR-Safety",
       "sourcePath": "docs/wiki-source/Wallet-and-QR-Safety.md",
-      "sha256": "c8fa2b14362467ee53b97896b53a44843150cd00965199ff7df02d6064fefd94",
+      "sha256": "e42cf36fc1f6532e0100185e8125340173553070a100b8585f1f77af3894234c",
       "implementedCapabilities": [],
       "lastVerifiedRelease": null
     },
@@ -73,5 +73,5 @@
       "lastVerifiedRelease": null
     }
   ],
-  "linkReportDigest": "4b22f3d4bb2a50a83c82c5bf988a9a92cdf67d2472684f61b24d7e9477b9e7d6"
+  "linkReportDigest": "c1398affb7cc196a82710c43d57f91bee0c92be5d848957b23943214c767cfb4"
 }
