@@ -1,0 +1,763 @@
+{
+  "schema": 1,
+  "generated_at_utc": "2026-11-20T04:23:43.406762+00:00",
+  "state": "locally-qualified-independently-reviewed-core-preparation-hosted-gates-pending",
+  "repository": "djshellshoxxx/p2p-offramp",
+  "author_worker": "/root/generation10_core_and_optional",
+  "root_worker_ordinal": 39,
+  "input_handoff": {
+    "published_head": "b01aa60a7eb893d0359449f335f1862864eec179",
+    "tree": "86c7f44cd323601ffa9817defdbcabb2ed241054"
+  },
+  "base_pr": 210,
+  "expected_base_remote_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+  "base_tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+  "corrected207_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+  "source_head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+  "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+  "branch": "codex/generation10-combined-core-20261120",
+  "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core",
+  "source_composition": {
+    "generated_at_utc": "2026-11-20T04:13:21.143565+00:00",
+    "input_handoff_head": "b01aa60a7eb893d0359449f335f1862864eec179",
+    "input_handoff_tree": "86c7f44cd323601ffa9817defdbcabb2ed241054",
+    "base": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "core_base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "source_head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core",
+    "branch": "codex/generation10-combined-core-20261120",
+    "live_ref_observation": {
+      "refs/heads/main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "refs/pull/206/head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+      "refs/pull/208/head": "0e148564743b1ee353abdbdf8931fec464f09870",
+      "refs/pull/209/head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+      "refs/pull/210/head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+      "refs/pull/211/head": "e7397f45f68f18fae8857ea31b58a04e248df404"
+    },
+    "merges": [
+      {
+        "pr": 206,
+        "input_head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "previous_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+        "exit_code": 0,
+        "output": "Merge made by the 'ort' strategy.\n ...ENT_RELAY_INPUT_REVIEW_GENERATION10_20261120.md |  75 +++++++++++++\n ...RELAY_CORE_COMPOSITION_GENERATION11_20261120.md |  49 ++++++++\n .../RELAY_FRESHNESS_CAPACITY_20261120.md           |  26 +++++\n .../relay-composition-generation11.json            | 125 +++++++++++++++++++++\n packages/relay/src/ad.ts                           |   6 +\n .../test/ad-input-boundaries-independent.test.mjs  |  70 ++++++++++++\n packages/relay/test/ad.test.mjs                    |  20 +++-\n 7 files changed, 370 insertions(+), 1 deletion(-)\n create mode 100644 docs/engineering/INDEPENDENT_RELAY_INPUT_REVIEW_GENERATION10_20261120.md\n create mode 100644 docs/engineering/RELAY_CORE_COMPOSITION_GENERATION11_20261120.md\n create mode 100644 docs/engineering/RELAY_FRESHNESS_CAPACITY_20261120.md\n create mode 100644 docs/engineering/relay-composition-generation11.json\n create mode 100644 packages/relay/test/ad-input-boundaries-independent.test.mjs\n",
+        "head": "fe5c3639f821b6697bdbfd1594b45e4600a0e255",
+        "tree": "bb65f09e98bdcbba15d43b4dd95ed08f526ed6b0",
+        "parents": [
+          "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "825a85a55a1e0a43d6f416696fabee94913a2f18"
+        ]
+      },
+      {
+        "pr": 208,
+        "input_head": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "previous_head": "fe5c3639f821b6697bdbfd1594b45e4600a0e255",
+        "exit_code": 0,
+        "output": "Merge made by the 'ort' strategy.\n apps/web/src/app-services.ts                       |  11 ++\n apps/web/src/runtime/app-runtime.ts                |  29 +++-\n apps/web/src/runtime/pending-metadata.ts           |   4 +-\n apps/web/src/runtime/worker-endpoint.ts            |  34 ++++-\n .../test/backup-verification-independent.test.mjs  | 136 ++++++++++++++++++\n .../test/backup-verification-publication.test.mjs  | 141 +++++++++++++++++++\n apps/web/test/backup-verification-runtime.test.mjs | 150 ++++++++++++++++++++\n ...ERIFICATION_COMPOSITION_GENERATION9_20261120.md |  22 +++\n ...RIFICATION_PREREQUISITE_GENERATION9_20261120.md | 153 +++++++++++++++++++++\n ...CKUP_PUBLICATION_REVIEW_GENERATION9_20261120.md |  88 ++++++++++++\n .../SECURITY_REVIEW_BACKUP_GENERATION9_20261119.md | 143 +++++++++++++++++++\n ..._UPDATER_COMPOSITION_GENERATION10_20261120.json |  33 +++++\n ...EW_UPDATER_COMPOSITION_GENERATION10_20261120.md | 128 +++++++++++++++++\n .../backup-qualification-generation9.json          |  77 +++++++++++\n packages/schemas/src/runtime.ts                    |  29 +++-\n packages/schemas/test/backup-verification.test.mjs |  16 +++\n packages/security/README-UPDATES.md                |  19 +++\n 17 files changed, 1198 insertions(+), 15 deletions(-)\n create mode 100644 apps/web/test/backup-verification-independent.test.mjs\n create mode 100644 apps/web/test/backup-verification-publication.test.mjs\n create mode 100644 apps/web/test/backup-verification-runtime.test.mjs\n create mode 100644 docs/engineering/BACKUP_VERIFICATION_COMPOSITION_GENERATION9_20261120.md\n create mode 100644 docs/engineering/BACKUP_VERIFICATION_PREREQUISITE_GENERATION9_20261120.md\n create mode 100644 docs/engineering/INDEPENDENT_BACKUP_PUBLICATION_REVIEW_GENERATION9_20261120.md\n create mode 100644 docs/engineering/SECURITY_REVIEW_BACKUP_GENERATION9_20261119.md\n create mode 100644 docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.json\n create mode 100644 docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.md\n create mode 100644 docs/engineering/backup-qualification-generation9.json\n create mode 100644 packages/schemas/test/backup-verification.test.mjs\n",
+        "head": "b239034c35ecc797ed81e150aa90e76ee0fe22ad",
+        "tree": "b799bfc46c092aabb2943ac88ec4bf31e9ebab3a",
+        "parents": [
+          "fe5c3639f821b6697bdbfd1594b45e4600a0e255",
+          "0e148564743b1ee353abdbdf8931fec464f09870"
+        ]
+      },
+      {
+        "pr": 209,
+        "input_head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "previous_head": "b239034c35ecc797ed81e150aa90e76ee0fe22ad",
+        "exit_code": 0,
+        "output": "Merge made by the 'ort' strategy.\n contracts/solana/Cargo.lock                        |   4 +-\n ..._DEPENDENCY_REMEDIATION_GENERATION7_20261119.md | 209 ++++++++++++\n ...ARGO_REMEDIATION_REVIEW_GENERATION7_20261119.md |  37 +++\n .../cargo-dependency-remediation-generation7.json  | 349 +++++++++++++++++++++\n 4 files changed, 597 insertions(+), 2 deletions(-)\n create mode 100644 docs/engineering/CARGO_DEPENDENCY_REMEDIATION_GENERATION7_20261119.md\n create mode 100644 docs/engineering/INDEPENDENT_CARGO_REMEDIATION_REVIEW_GENERATION7_20261119.md\n create mode 100644 docs/engineering/cargo-dependency-remediation-generation7.json\n",
+        "head": "bbc12f0412df319168bcdb7c02a358e09793db0f",
+        "tree": "eed78aed6830c64589714bd526f94899c58da138",
+        "parents": [
+          "b239034c35ecc797ed81e150aa90e76ee0fe22ad",
+          "c8695278c3b85ac75fc2ad3318830aa8a08f4d50"
+        ]
+      },
+      {
+        "pr": 211,
+        "input_head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "previous_head": "bbc12f0412df319168bcdb7c02a358e09793db0f",
+        "exit_code": 0,
+        "output": "Merge made by the 'ort' strategy.\n .../QR_ASYNC_EXPIRY_RECHECK_20261120.md            | 37 +++++++++\n packages/qr/src/text-codec.ts                      | 20 ++++-\n packages/qr/test/async-expiry.test.mjs             | 90 ++++++++++++++++++++++\n 3 files changed, 143 insertions(+), 4 deletions(-)\n create mode 100644 docs/engineering/QR_ASYNC_EXPIRY_RECHECK_20261120.md\n create mode 100644 packages/qr/test/async-expiry.test.mjs\n",
+        "head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+        "tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+        "parents": [
+          "bbc12f0412df319168bcdb7c02a358e09793db0f",
+          "e7397f45f68f18fae8857ea31b58a04e248df404"
+        ]
+      }
+    ],
+    "component_deltas": [
+      {
+        "pr": 210,
+        "head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+        "tree": "47f982cf20cd123df45805597b266f1f5ab98259",
+        "paths": [
+          "apps/web/test/solana-withheld-transport-independent.test.mjs",
+          "apps/web/test/solana-withheld-transport-qualification.test.mjs",
+          "docs/engineering/INDEPENDENT_TRANSPORT_FIXTURE_REVIEW_GENERATION8_20261120.md",
+          "docs/engineering/TRANSPORT_WARM_CONNECTION_QUALIFICATION_GENERATION8_20261120.md",
+          "scripts/lib/solana-withheld-transport-qualification.mjs",
+          "scripts/test-solana-withheld-send-browser.mjs"
+        ],
+        "non_report_paths": [
+          "apps/web/test/solana-withheld-transport-independent.test.mjs",
+          "apps/web/test/solana-withheld-transport-qualification.test.mjs",
+          "scripts/lib/solana-withheld-transport-qualification.mjs",
+          "scripts/test-solana-withheld-send-browser.mjs"
+        ]
+      },
+      {
+        "pr": 206,
+        "head": "825a85a55a1e0a43d6f416696fabee94913a2f18",
+        "tree": "243d178ac6a3822f71ddf3ad3073cc1d8020b864",
+        "paths": [
+          "docs/engineering/INDEPENDENT_RELAY_INPUT_REVIEW_GENERATION10_20261120.md",
+          "docs/engineering/RELAY_CORE_COMPOSITION_GENERATION11_20261120.md",
+          "docs/engineering/RELAY_FRESHNESS_CAPACITY_20261120.md",
+          "docs/engineering/relay-composition-generation11.json",
+          "packages/relay/src/ad.ts",
+          "packages/relay/test/ad-input-boundaries-independent.test.mjs",
+          "packages/relay/test/ad.test.mjs"
+        ],
+        "non_report_paths": [
+          "packages/relay/src/ad.ts",
+          "packages/relay/test/ad-input-boundaries-independent.test.mjs",
+          "packages/relay/test/ad.test.mjs"
+        ]
+      },
+      {
+        "pr": 208,
+        "head": "0e148564743b1ee353abdbdf8931fec464f09870",
+        "tree": "6a4417741c0b399dde894773f29854f7a2d36228",
+        "paths": [
+          "apps/web/src/app-services.ts",
+          "apps/web/src/runtime/app-runtime.ts",
+          "apps/web/src/runtime/pending-metadata.ts",
+          "apps/web/src/runtime/worker-endpoint.ts",
+          "apps/web/test/backup-verification-independent.test.mjs",
+          "apps/web/test/backup-verification-publication.test.mjs",
+          "apps/web/test/backup-verification-runtime.test.mjs",
+          "docs/engineering/BACKUP_VERIFICATION_COMPOSITION_GENERATION9_20261120.md",
+          "docs/engineering/BACKUP_VERIFICATION_PREREQUISITE_GENERATION9_20261120.md",
+          "docs/engineering/INDEPENDENT_BACKUP_PUBLICATION_REVIEW_GENERATION9_20261120.md",
+          "docs/engineering/SECURITY_REVIEW_BACKUP_GENERATION9_20261119.md",
+          "docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.json",
+          "docs/engineering/SECURITY_REVIEW_UPDATER_COMPOSITION_GENERATION10_20261120.md",
+          "docs/engineering/backup-qualification-generation9.json",
+          "packages/schemas/src/runtime.ts",
+          "packages/schemas/test/backup-verification.test.mjs",
+          "packages/security/README-UPDATES.md"
+        ],
+        "non_report_paths": [
+          "apps/web/src/app-services.ts",
+          "apps/web/src/runtime/app-runtime.ts",
+          "apps/web/src/runtime/pending-metadata.ts",
+          "apps/web/src/runtime/worker-endpoint.ts",
+          "apps/web/test/backup-verification-independent.test.mjs",
+          "apps/web/test/backup-verification-publication.test.mjs",
+          "apps/web/test/backup-verification-runtime.test.mjs",
+          "packages/schemas/src/runtime.ts",
+          "packages/schemas/test/backup-verification.test.mjs",
+          "packages/security/README-UPDATES.md"
+        ]
+      },
+      {
+        "pr": 209,
+        "head": "c8695278c3b85ac75fc2ad3318830aa8a08f4d50",
+        "tree": "e7aba3833fa52c6eda7a23cd6d1301cadc610355",
+        "paths": [
+          "contracts/solana/Cargo.lock",
+          "docs/engineering/CARGO_DEPENDENCY_REMEDIATION_GENERATION7_20261119.md",
+          "docs/engineering/INDEPENDENT_CARGO_REMEDIATION_REVIEW_GENERATION7_20261119.md",
+          "docs/engineering/cargo-dependency-remediation-generation7.json"
+        ],
+        "non_report_paths": [
+          "contracts/solana/Cargo.lock"
+        ]
+      },
+      {
+        "pr": 211,
+        "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+        "tree": "224341968be39c6de7874b34a1f7fd6eefa19857",
+        "paths": [
+          "docs/engineering/QR_ASYNC_EXPIRY_RECHECK_20261120.md",
+          "packages/qr/src/text-codec.ts",
+          "packages/qr/test/async-expiry.test.mjs"
+        ],
+        "non_report_paths": [
+          "packages/qr/src/text-codec.ts",
+          "packages/qr/test/async-expiry.test.mjs"
+        ]
+      }
+    ],
+    "pairwise_component_path_overlap": [],
+    "exact_component_union": true,
+    "unchanged_protected_base_entries": 2449,
+    "all_existing_workflows_and_manifest_preserved": true,
+    "source_entries": 2486,
+    "new_product_causes": 0,
+    "remote_mutations": 0,
+    "free_bytes": 1071968256
+  },
+  "component_test_files_in_full_selection": [
+    "apps/web/test/solana-withheld-transport-independent.test.mjs",
+    "apps/web/test/solana-withheld-transport-qualification.test.mjs",
+    "packages/relay/test/ad-input-boundaries-independent.test.mjs",
+    "packages/relay/test/ad.test.mjs",
+    "apps/web/test/backup-verification-independent.test.mjs",
+    "apps/web/test/backup-verification-publication.test.mjs",
+    "apps/web/test/backup-verification-runtime.test.mjs",
+    "packages/schemas/test/backup-verification.test.mjs",
+    "packages/qr/test/async-expiry.test.mjs"
+  ],
+  "preservation_and_artifacts": {
+    "observed_at_utc": "2026-11-20T04:20:34.583984+00:00",
+    "source_head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "all_base_scripts_preserved": 158,
+    "all_base_workflows_preserved": 6,
+    "all_contract_entries_except_exact209_lock_preserved": 64,
+    "npm_manifest_and_lock_exact": true,
+    "npm_commands_preserved": 56,
+    "cargo_packages": 412,
+    "other_cargo_records_preserved": 411,
+    "old_ctutils": {
+      "name": "ctutils",
+      "version": "0.4.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7d5515a3834141de9eafb9717ad39eea8247b5674e6066c404e8c4b365d2a29e",
+      "dependencies": [
+        "cmov"
+      ]
+    },
+    "new_ctutils": {
+      "name": "ctutils",
+      "version": "0.4.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "12218662ccac37d9714f2191252553d67585b97df8c839cbe49e0bde278dc865",
+      "dependencies": [
+        "cmov"
+      ]
+    },
+    "cargo_lock_exact209": true,
+    "variants": {
+      "dist": {
+        "file_count": 13,
+        "files_sha256": {
+          "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+          "assets/OfflineRoot-CiDlmcyX.js": "582c708e43d298d39ac6061815a402c1e51e628cd84a034fa8189be4d9dd48d8",
+          "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+          "assets/index-D52zOAdh.js": "bfcc10705d8a8fcc2fa1f78184fbd8cbe659b9f163106bdee97413fb78fa91f6",
+          "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+          "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+          "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+          "core-graph-document.json": "131121aa23e31955bc9d4658fb943f5a833cbabb4f819b0b5e380e1f51f24809",
+          "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+          "index.html": "59e42cbf39a51b9f103a6d09a5eebe2c0909415b1f7d7dd622a76beafb68a668",
+          "local-build-evidence.json": "ac7281eb9018b6b96594ddc4f1e5e7ca99e9650f7fe03c3bd01e2b7f20f7347a",
+          "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+          "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+        },
+        "graphs": {
+          "core-graph-document.json": {
+            "modules": 93,
+            "optional_hits": []
+          },
+          "core-graph-worker.json": {
+            "modules": 30,
+            "optional_hits": []
+          },
+          "qr-graph-worker.json": {
+            "modules": 4,
+            "optional_hits": []
+          }
+        },
+        "ReleaseEnabled": 0,
+        "releaseAcceptance": false,
+        "connectOrigins": [],
+        "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+      },
+      "dist-demo": {
+        "file_count": 14,
+        "files_sha256": {
+          "_headers": "9e80afba810ea8db85ab27c8eb231aa294884197614c0236d1319085d7b56ee1",
+          "assets/OfflineRoot-CtvUViRk.js": "d0f0aef8f084c0fdb0d14c40682f872f24f812a4a1c96bd68e03906e4a300f09",
+          "assets/decode.worker-DGcSBxfL.js": "ad0ef65d9c94c186d2734390499811d003a77818e3b2ebc049528d425e56f5ef",
+          "assets/index-e-EtuZnC.js": "20db5c79c87a225e7bb7ef419c250b14fd2c79161be282363155236c78ab0be7",
+          "assets/index-rPDFZ4F5.css": "21ee28132e951fa1fbbc48c450587ebd6e2c86ab5305e3ef98a317466cdad932",
+          "assets/synthetic-local-v50TqsuT.js": "e631e04e99c27db24aa9b25e9b0ebd4e2fdc3d1a1f30cc95f05d52eed39f8389",
+          "assets/vault.worker-BFynfgnx.js": "a872b4c6d91e8a8b2178561bdf8a9e1b03035199cca98ad3374f6fe4fc87d044",
+          "content-policy.json": "0794c4ac577faa97424f0d7a56ab234d910491810ceba30e6eb34b54736a8f9b",
+          "core-graph-document.json": "75d0a95a86c25a9c24470b85628ffb73d086e2686ac610a2f4b52fdb1bab9a66",
+          "core-graph-worker.json": "d57812e5fd8080fd2df700f03998b30a9adad4228629b80e49089c783c800834",
+          "index.html": "5be2b50432e1d70dc694b5d33f6a4823546f9350e97498487f962eea07bff192",
+          "local-build-evidence.json": "5db41a227a6bcce8c4245ec7217e367b678da4231b3f7ef1e4d3780ac7bb9f17",
+          "qr-graph-worker.json": "2ac8e09215fa502063726b0e10c0091585dd710c9b507d9bbadaa142036e53ce",
+          "third-party-licenses.json": "acf888ada680137d8da6331000eae95a49224f77f8acf718a0099cde8f5e66ca"
+        },
+        "graphs": {
+          "core-graph-document.json": {
+            "modules": 95,
+            "optional_hits": []
+          },
+          "core-graph-worker.json": {
+            "modules": 30,
+            "optional_hits": []
+          },
+          "qr-graph-worker.json": {
+            "modules": 4,
+            "optional_hits": []
+          }
+        },
+        "ReleaseEnabled": 0,
+        "releaseAcceptance": false,
+        "connectOrigins": [],
+        "csp": "base-uri 'none'; connect-src 'none'; default-src 'none'; font-src 'self'; form-action 'none'; frame-src 'none'; img-src 'self'; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'self'"
+      }
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-11-20T04:16:21.890642+00:00",
+    "tools": {
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "python": "Python 3.12.14",
+      "forge": {
+        "version": "forge Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf",
+        "path": "/workspace/scratch/6bd6e00af1c0/toolchain/forge",
+        "sha256": "a39fc1913b53dde6a35b603756f65d799e13817ef694107ec0d3704c20435cce"
+      },
+      "cast": {
+        "version": "cast Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf",
+        "path": "/workspace/scratch/6bd6e00af1c0/toolchain/cast",
+        "sha256": "7b25a9c61dac49a0718ba3c2d37ba638014f3baf35739777b2d809780914e91d"
+      },
+      "anvil": {
+        "version": "anvil Version: 1.5.1-v1.5.1\nCommit SHA: b0a9dd9ceda36f63e2326ce530c10e6916f4b8a2\nBuild Timestamp: 2025-12-19T14:07:55.455914129Z (1766153275)\nBuild Profile: maxperf",
+        "path": "/workspace/scratch/6bd6e00af1c0/toolchain/anvil",
+        "sha256": "b47362d2159aa0f2f575320e5e529bb5a91093cb62dc6bd30c0022018aa9f738"
+      },
+      "solc-0.8.30": {
+        "version": "solc, the solidity compiler commandline interface\nVersion: 0.8.30+commit.73712a01.Linux.g++",
+        "path": "/workspace/scratch/6bd6e00af1c0/toolchain/solc-0.8.30",
+        "sha256": "f3e987dc6ecebd4bd350c48edcbc320b46cf9e3109bd3fc3d88f1acaf4c428f7"
+      },
+      "python_oracles": {
+        "cryptography": "50.0.0",
+        "cffi": "2.1.1",
+        "pycparser": "3.00"
+      }
+    },
+    "package_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72"
+  },
+  "dependency_preparation": {
+    "observed_at_utc": "2026-11-20T04:16:21.359591+00:00",
+    "source": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation9-optional-corrected/node_modules",
+    "destination": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core/node_modules",
+    "physical_root": true,
+    "package_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+    "matching_source_lock": true,
+    "free_bytes_before": 900501504,
+    "free_bytes_after": 687357952
+  },
+  "execution": {
+    "source_head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "base_head": "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+    "worktree": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-core",
+    "started_at_utc": "2026-11-20T04:17:16.957539+00:00",
+    "state": "complete",
+    "commands": [
+      {
+        "name": "full",
+        "argv": [
+          "npm",
+          "test"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-full.log",
+        "started_at_utc": "2026-11-20T04:17:16.974560+00:00",
+        "state": "complete",
+        "disk_free_at_start": 665362432,
+        "completed_at_utc": "2026-11-20T04:18:51.536555+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 94.561794,
+        "bytes": 232618,
+        "sha256": "d72d4686bb1568a437ec6a12667730b84b8b86772cdb561a115392812bf5d00c",
+        "summary": {
+          "tests": 2309,
+          "suites": 0,
+          "pass": 2309,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 94149.503811
+        },
+        "disk_free_at_end": 655179776
+      },
+      {
+        "name": "tooling",
+        "argv": [
+          "npm",
+          "run",
+          "test:tooling"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-tooling.log",
+        "started_at_utc": "2026-11-20T04:18:51.598260+00:00",
+        "state": "complete",
+        "disk_free_at_start": 655179776,
+        "completed_at_utc": "2026-11-20T04:19:17.736859+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 26.138159,
+        "bytes": 5737,
+        "sha256": "90e7f51970c1f2a5169dabff9d75cdba7b79e6ce1a0b149c7e259cd58af593e3",
+        "summary": {
+          "tests": 44,
+          "suites": 0,
+          "pass": 44,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 25794.133906
+        },
+        "disk_free_at_end": 771751936
+      },
+      {
+        "name": "typecheck",
+        "argv": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-typecheck.log",
+        "started_at_utc": "2026-11-20T04:19:18.046690+00:00",
+        "state": "complete",
+        "disk_free_at_start": 771751936,
+        "completed_at_utc": "2026-11-20T04:19:20.762968+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 2.714748,
+        "bytes": 341,
+        "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+        "summary": {},
+        "disk_free_at_end": 771747840
+      },
+      {
+        "name": "policy",
+        "argv": [
+          "npm",
+          "run",
+          "test:build-policy"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-policy.log",
+        "started_at_utc": "2026-11-20T04:19:20.798492+00:00",
+        "state": "complete",
+        "disk_free_at_start": 771747840,
+        "completed_at_utc": "2026-11-20T04:19:25.824562+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 5.025748,
+        "bytes": 7518,
+        "sha256": "74b536ca0261b2ea4495806f24bd315d090f9feaaf6e5d6d502da9b77ee92a7a",
+        "summary": {
+          "tests": 57,
+          "suites": 0,
+          "pass": 57,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "duration_ms": 4827.121918
+        },
+        "disk_free_at_end": 771735552
+      },
+      {
+        "name": "boundaries",
+        "argv": [
+          "npm",
+          "run",
+          "check:boundaries"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-boundaries.log",
+        "started_at_utc": "2026-11-20T04:19:25.852078+00:00",
+        "state": "complete",
+        "disk_free_at_start": 771735552,
+        "completed_at_utc": "2026-11-20T04:19:26.682950+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 0.830543,
+        "bytes": 392,
+        "sha256": "a2afff1ba06119367082cb0aec36223a649eae2fcc0580855c50a042cf9f7684",
+        "summary": {},
+        "disk_free_at_end": 771731456
+      },
+      {
+        "name": "build",
+        "argv": [
+          "node",
+          "apps/web/scripts/build.mjs"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-build.log",
+        "started_at_utc": "2026-11-20T04:19:26.711136+00:00",
+        "state": "complete",
+        "disk_free_at_start": 771727360,
+        "completed_at_utc": "2026-11-20T04:19:27.853876+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 1.142144,
+        "bytes": 1026,
+        "sha256": "3afc8ae008321b743e6ca474df66cae86252277aec91a4f6b07567c0c9721775",
+        "summary": {},
+        "disk_free_at_end": 770904064
+      },
+      {
+        "name": "build-demo",
+        "argv": [
+          "node",
+          "apps/web/scripts/build.mjs",
+          "demo"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-build-demo.log",
+        "started_at_utc": "2026-11-20T04:19:27.887049+00:00",
+        "state": "complete",
+        "disk_free_at_start": 770904064,
+        "completed_at_utc": "2026-11-20T04:19:28.741506+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 0.854064,
+        "bytes": 1174,
+        "sha256": "e2dc1489b78d2a471fd94103cdd041b8b4f77cd57b9815eabffd8a3f34fcf083",
+        "summary": {},
+        "disk_free_at_end": 770064384
+      },
+      {
+        "name": "docs",
+        "argv": [
+          "npm",
+          "run",
+          "check:docs"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-docs.log",
+        "started_at_utc": "2026-11-20T04:19:28.772297+00:00",
+        "state": "complete",
+        "disk_free_at_start": 770064384,
+        "completed_at_utc": "2026-11-20T04:19:29.389238+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 0.616404,
+        "bytes": 33780,
+        "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+        "summary": {},
+        "disk_free_at_end": 770023424
+      },
+      {
+        "name": "governance",
+        "argv": [
+          "npm",
+          "run",
+          "check:governance"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-governance.log",
+        "started_at_utc": "2026-11-20T04:19:29.419600+00:00",
+        "state": "complete",
+        "disk_free_at_start": 770023424,
+        "completed_at_utc": "2026-11-20T04:19:31.175028+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 1.754996,
+        "bytes": 1118,
+        "sha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+        "summary": {},
+        "disk_free_at_end": 769966080
+      },
+      {
+        "name": "specs",
+        "argv": [
+          "npm",
+          "run",
+          "check:specs"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-specs.log",
+        "started_at_utc": "2026-11-20T04:19:31.207611+00:00",
+        "state": "complete",
+        "disk_free_at_start": 769966080,
+        "completed_at_utc": "2026-11-20T04:19:31.575181+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 0.367029,
+        "bytes": 349,
+        "sha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+        "summary": {},
+        "disk_free_at_end": 769957888
+      },
+      {
+        "name": "spec-tests",
+        "argv": [
+          "npm",
+          "run",
+          "test:specs"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-spec-tests.log",
+        "started_at_utc": "2026-11-20T04:19:31.614131+00:00",
+        "state": "complete",
+        "disk_free_at_start": 769957888,
+        "completed_at_utc": "2026-11-20T04:19:36.674385+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 5.059714,
+        "bytes": 4721,
+        "sha256": "4113a2adaabe80dc0bf492950de2e11bc156045557f7c19391a9d2eaafd4b11d",
+        "summary": {
+          "python_tests": 32,
+          "python_duration_seconds": 4.782,
+          "python_ok": true
+        },
+        "disk_free_at_end": 769794048
+      },
+      {
+        "name": "source-whitespace",
+        "argv": [
+          "git",
+          "diff",
+          "--check",
+          "cff9eb05d77c82c82a5d22a5395b0ce63b02b265",
+          "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f"
+        ],
+        "log": "/workspace/scratch/6bd6e00af1c0/verification/generation10-core-source-whitespace.log",
+        "started_at_utc": "2026-11-20T04:19:36.704640+00:00",
+        "state": "complete",
+        "disk_free_at_start": 769794048,
+        "completed_at_utc": "2026-11-20T04:19:36.726067+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 0.021019,
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "summary": {},
+        "disk_free_at_end": 769789952
+      }
+    ],
+    "environment": {
+      "FOUNDRY_BIN": "/workspace/scratch/6bd6e00af1c0/toolchain",
+      "FOUNDRY_SOLC": "/workspace/scratch/6bd6e00af1c0/toolchain/solc-0.8.30"
+    },
+    "physical_dependencies": true,
+    "serialized": true,
+    "full_suite_invocations": 1,
+    "new_browser_executions": 0,
+    "extended_native_financial_suites": 0,
+    "completed_at_utc": "2026-11-20T04:19:36.741558+00:00",
+    "all_commands_passed": true
+  },
+  "verification": {
+    "full": {
+      "tests": 2309,
+      "suites": 0,
+      "pass": 2309,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 94149.503811
+    },
+    "tooling": {
+      "tests": 44,
+      "suites": 0,
+      "pass": 44,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 25794.133906
+    },
+    "build_policy": {
+      "tests": 57,
+      "suites": 0,
+      "pass": 57,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 4827.121918
+    },
+    "typescript_configurations": 4,
+    "specification_tests": {
+      "python_tests": 32,
+      "python_duration_seconds": 4.782,
+      "python_ok": true
+    },
+    "boundaries": {
+      "production_files": 238,
+      "core_modules": 142
+    },
+    "spec_documents": 173,
+    "spec_broken_links": 0,
+    "spec_unindexed": 0,
+    "docs": {
+      "engineeringConsistency": true,
+      "semanticApproval": false,
+      "published": false,
+      "approvedRelease": null,
+      "claims": 6,
+      "sourceCommit": "84814328f5534d6fceb2bbe74509fe37c5b48689",
+      "dirtyDraft": true,
+      "staleClaims": [
+        "location-scope",
+        "logical-removal",
+        "message-content",
+        "selected-route",
+        "stealth-local",
+        "vault-at-rest"
+      ]
+    },
+    "governance": {
+      "historical": 12,
+      "pending": 0,
+      "rows": 57,
+      "stale_references": 13,
+      "economic_preparation_allowed": false
+    },
+    "default_files": 13,
+    "demo_files": 14,
+    "optional_graph_imports": 0
+  },
+  "independent_review": {
+    "state": "complete-no-open-high-or-medium-integration-finding",
+    "worker": "/root/generation10_independent",
+    "report_commit": "ce4be00e2ca4c0825f3226ed5b035cd2237ea11d",
+    "report_tree": "e7accc8a91b97499d7092cd37a2900ba5093361b",
+    "report_path": "docs/engineering/INDEPENDENT_GENERATION10_CORE_REVIEW_20261120.md",
+    "source_head": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "own_focused_passed": 54,
+    "own_focused_failed": 0,
+    "author_logs_rehashed": 12,
+    "artifact_files_hashed": 27,
+    "graph_module_hashes_checked": 256,
+    "report_sha256": "16f6ce67b5cc77a4d6b4c82566f78477e1d24e9de9317c1dbaef3f109c60c57d",
+    "focused_log_sha256": "d71139aa9b401ba6f2087cbfd9054fb6443f34a0f9834b6e5a8025efc72993c6"
+  },
+  "report_only_paths": [
+    "docs/engineering/GENERATION10_COMBINED_CORE_20261120.md",
+    "docs/engineering/generation10-core-plan.json"
+  ],
+  "report_binding": "Final author handoff supplies author report commit and subsequent combined report/base head and tree; tested source remains separate.",
+  "source_changes_after_freeze": 0,
+  "new_product_causes": 0,
+  "original_source_refs_changed": false,
+  "remote_mutations": 0,
+  "main_merges": 0,
+  "qualification_limits": {
+    "hosted_ci_new_source": false,
+    "actual_browser_executed": false,
+    "extended_native_financial_executed": false,
+    "native_cargo_library_rerun": false,
+    "native_sbpf_executed": false,
+    "remaining_cargo_advisory": "crypto-bigint 0.5.5 / RUSTSEC-2026-0387 remains; exact209 lock only fixes ctutils. No compatible patched0.5 release or waiver established.",
+    "source_component_results_not_transferred_or_summed": true,
+    "release_enabled": false,
+    "default_optional_activation": false,
+    "screened_historical_updater_browser_excluded": true
+  },
+  "continuation": [
+    "Root alone publishes; preserve expected210 head and exact reviewed tree.",
+    "Original207/206/208/209/211 owner refs remain unchanged.",
+    "Final core report checkpoint includes independent core review before optional layering; root will add no further210 report files after that checkpoint.",
+    "Require applicable exact-source hosted/native/browser checks before merge.",
+    "Nine optional packages remain separate, with standalone named-review condition and no default imports."
+  ]
+}

@@ -2,8 +2,9 @@
 
 These source modules implement local encrypted preferences using the maintained
 vault/session APIs. They are recovered under accepted D7 Option 2. The current
-application and Worker do not import them; this extraction does not enable a
-favorites or template editor, change the vault schema, or add wallet authority.
+application composes saved-review favorites and trade templates through the narrow
+`favorites.ts` and `templates.ts` entries in its native vault Worker. Neither consumer
+changes the vault schema or adds wallet authority.
 
 ## Saved-review favorites
 
@@ -19,6 +20,11 @@ cannot be starred; their IDs can be unstarred. The read-only legacy saved-review
 wrapper recognized by the existing Worker is also accepted without rewriting it.
 Opening a favorite must run the existing current-registry saved-review load and
 resolve its ID only in that fresh result; this preference never grants validity.
+The document receives only bounded IDs and the observed revision. Its explicit
+star/unstar commands bind that revision to the active profile and generation.
+Opening requires a completed fresh load; an interrupted or malformed load cannot
+reuse a previously accepted session route. Lock and profile changes clear the
+projection. Deleting a saved review does not automatically prune the preference.
 
 G03 full-profile backup already preserves this encrypted row and restores it
 under fresh keys. Retention deliberately continues treating preferences as
@@ -47,11 +53,39 @@ Current retention keeps preferences outside its known deletion purposes. Do not
 import the historical retention implementation over the current union of intent
 versions; it contains no distinct runtime improvement.
 
-## Remaining application integration
+## Remaining application qualification
 
-Future UI/Worker composition must expose narrow purpose-specific commands, bind
-requests to the active profile/epoch, clear private projections on retirement,
-and use freshly revalidated saved reviews when opening a favorite. Applying a
-template is only pre-filling reusable inputs: it must require a new bilateral
-agreement and an explicit current transaction review. No source recovery here
-qualifies that user-facing flow or physical-browser behavior.
+The favorites application integration and its exact qualification status are
+recorded in `docs/engineering/PERSONALIZATION_FAVORITES_UI_20261119.md`. Its hosted
+browser gate exercises the emitted UI, actual Worker and encrypted IndexedDB;
+the existence of that harness is not evidence that it has run.
+
+The template application integration is recorded in
+`docs/engineering/PERSONALIZATION_TEMPLATES_UI_20261119.md`. Four purpose-specific
+commands load, preview, commit and cancel the native template store. The same
+native instance owns preview and commit within the selected profile/epoch. The
+Worker accepts only the exact two facades and their two implementations; document
+and QR graphs, the broad barrel and the nine optional packages remain excluded.
+
+The document requires an explicit observed revision, a preview of old/new values,
+a separate acknowledgement of logical deletion/backup limits, and an explicit
+commit. A confirmed change retires that observed library: the next operation
+requires an explicit reload, with no automatic write retry. Cancellation or
+retirement cannot roll back an already durable native write. Locking clears
+private projections; a cancelled in-flight commit retains only a generic outcome
+uncertainty notice until the profile is reopened and explicitly reloaded.
+
+Applying a template or the selected repeat default is always an explicit action.
+It resolves the current registry, copies only the seven defaults, and clears
+party addresses, payment instructions, deadlines, prior local draft review and
+checkbox acknowledgements. Fresh canonical inputs and explicit review create new
+random order/nonce/agreement salt through the maintained domain builder, then run
+the existing current-registry terms review. This creates a local preview only:
+there is no authenticated bilateral acceptance, negotiation, signing, funding or
+submission capability. Draft reviews remain session-only, preserving the existing
+file/sample saved-review payload contract. A new bilateral agreement and the normal
+explicit transaction review are still required before any future economic flow.
+
+`npm run test:templates:browser` qualifies the emitted App, real Worker and encrypted
+IndexedDB on the hosted browser gate. A checked-in harness and local unit/build
+success do not establish actual browser execution or release qualification.
