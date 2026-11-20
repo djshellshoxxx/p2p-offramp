@@ -8,6 +8,7 @@ import { evmTermsHash } from '../src/evm-terms.ts';
 import { createHash } from 'node:crypto';
 import { RegistryService } from '../../domain/index.ts';
 import { PEER_ACCEPTANCE_TYPE, peerAcceptanceHash, resolvePeerDomain, snapshotPeerAcceptance, verifyEoaPeerAcceptance } from '../src/evm-peer-acceptance.ts';
+import { generatePeerAcceptanceV1 } from './fixtures/peer-acceptance-v1-generate.mjs';
 
 // Public synthetic scenario keys only; these vectors confer no production approval.
 const scenario=JSON.parse(await readFile(new URL('../../domain/test/fixtures/local-evm-scenario/scenario.json',import.meta.url),'utf8'));
@@ -18,7 +19,8 @@ async function loadRegistry(patch=()=>{}){
   const service=new RegistryService();assert.equal((await service.load(bytes,createHash('sha256').update(bytes).digest('hex'))).ok,true);return service;
 }
 const registry=await loadRegistry();
-const vectors=JSON.parse(await readFile(new URL('./fixtures/peer-acceptance-v1.json',import.meta.url),'utf8'));
+const vectorText=await readFile(new URL('./fixtures/peer-acceptance-v1.json',import.meta.url),'utf8');
+const vectors=JSON.parse(vectorText);
 const ownKey=Buffer.from(schnorr.getPublicKey(new Uint8Array(32).fill(1))).toString('hex');
 const peerKey=Buffer.from(schnorr.getPublicKey(new Uint8Array(32).fill(2))).toString('hex');
 const otherKey=Buffer.from(schnorr.getPublicKey(new Uint8Array(32).fill(3))).toString('hex');
@@ -41,6 +43,10 @@ async function fixture(role='seller',kind='native'){
   const expected={role,ownMessagingKey:ownKey,counterpartyMessagingKey:peerKey,nowSeconds:'1699990000',envelopeExpiresAtSeconds:'1699996000'};
   return {domain,terms,binding,expected,proof:{binding,termsSignature,bindingSignature},account};
 }
+test('frozen peer-acceptance v1 bytes regenerate independently from the pinned viem encoder and scenario',async()=>{
+  assert.equal(createHash('sha256').update(vectorText).digest('hex'),'295b6c0c2ab11414cdebe96596e4dfc0d9c95b32f3966b20b2cb83aec2a531e8');
+  assert.equal(await generatePeerAcceptanceV1(),vectorText);
+});
 test('candidate EIP-712 binding agrees with viem for both roles and asset kinds',async()=>{
   assert.equal(PEER_ACCEPTANCE_TYPE,'PeerAcceptance(uint8 v,bytes32 termsHash,uint8 role,address account,bytes32 ownMessagingKey,bytes32 counterpartyMessagingKey,uint64 notAfterSeconds)');
   for(const role of ['seller','buyer'])for(const kind of ['native','erc20']){
