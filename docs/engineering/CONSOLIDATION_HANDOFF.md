@@ -66,6 +66,33 @@ The external successor separately published its documentation checkpoint at
 does not supersede the later per-job failures above. Preserve both source owners;
 PR200 remains this coordinator's documentation-only branch.
 
+### Final completed ancestor receipts, observed 03:30:50 UTC
+
+The completed native logs for PR203 and205 were subsequently retrieved and their
+structured validator/browser receipts parsed. These supersede the earlier running
+statuses without changing the source holds. The
+[receipt and status record](native-final-receipts-generation8.json) preserves
+exact checkouts, log hashes, artifact identities and the complete check snapshot.
+
+| Exact source | Completed validator proof | Completed actual browser proof |
+| --- | --- | --- |
+| PR203, checkout `8e2cd7b6ed1c907127b2e35e8b8826f59c039d90` | 62 successful checks,13 sends,1,852 seconds of real refund waiting | Five checks over2,051 seconds; actual Worker/encrypted IndexedDB,8 prompts,7 distinct recorded signatures,zero fixture errors |
+| PR205, checkout `3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4` | 62 successful checks,13 sends,1,850 seconds of real refund waiting | Five checks over2,059 seconds; actual Worker/encrypted IndexedDB,8 prompts,7 distinct recorded signatures,zero fixture errors |
+
+Both browser receipts retain actual genesis and real chain time, no clock warp or
+browser genesis rewriting, and explicit principal/fee/unknown-marker/replacement
+checks. Their validator-client receipts separately retain the localnet-only
+synthetic-genesis shim. No public-network or fresh-negotiation qualification is
+claimed. PR203 has ten successful check records; PR205 has thirteen including the
+aggregate CodeQL record. **PR205 remains held because its source lacks the four
+corrections in207, despite the now-completed ancestor proof.**
+
+At that same final snapshot,207 had eleven successful check records, its failed
+browser diagnostic and one running native job.208 had one success,one running
+and eight queued;209 had one success and nine queued;210 had ten queued. The next
+meaningful execution evidence is210's exact-source browser diagnostic and the
+corrected core's own complete native result. Do not transfer these older passes.
+
 ## Historical generation 5 source and authority
 
 Read this file and `consolidation-state.json` before changing code. The user authorizes autonomous engineering, qualified source integration and successive native-worker generations. Deployment, release, real funds, credentials and settings changes remain outside this task. Keep `ReleaseEnabled=0`.

@@ -2,7 +2,7 @@
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
   "generation": 8,
-  "updated_at_utc": "2026-11-20T03:27:46.924896+00:00",
+  "updated_at_utc": "2026-11-20T03:33:55.040360+00:00",
   "phase": "reviewed-transport210-and-dependency209-published-core207-hosted-hold",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/generation8-core-20261120",
@@ -1180,11 +1180,11 @@
       "browser_job": 136022950072,
       "program_job": 136022950914,
       "browser": "passed",
-      "program_state": "in_progress",
+      "program_state": "completed",
       "observed_at_utc": "2026-11-20T03:06:05Z",
       "foundation": "all5jobs-passed",
       "program_observed_step": 16,
-      "checks": "9-successful1-in-progress",
+      "checks": "10-successful",
       "browser_groups": 14,
       "full_evidence": "hosted-snapshot-generation7.json",
       "prior_observation": {
@@ -1200,7 +1200,18 @@
         "checks": "9-successful1-in-progress",
         "browser_groups": 14,
         "full_evidence": "hosted-snapshot-generation7.json"
-      }
+      },
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "success": 10
+      },
+      "program_conclusion": "success",
+      "validator_checks": 62,
+      "validator_refund_wait_seconds": 1852,
+      "browser_recovery_refund_checks": 5,
+      "browser_duration_seconds": 2051,
+      "browser_fixture_errors": 0,
+      "completed_evidence": "native-final-receipts-generation8.json"
     },
     {
       "pr": 204,
@@ -1238,7 +1249,7 @@
       "head": "cd7d54ba075118a7ec043788c17718be842ee405",
       "merge_checkout": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
       "contexts": 12,
-      "state": "foundation-passed-native-in-progress-source-hold",
+      "state": "all-old-source-checks-passed-source-still-held-missing-four-corrections",
       "foundation_run": 44657477341,
       "browser_job": 136027175362,
       "program_run": 44657477232,
@@ -1246,9 +1257,9 @@
       "observed_at_utc": "2026-11-20T03:06:05Z",
       "browser": "16-groups-passed",
       "foundation": "all5jobs-passed",
-      "program_state": "in_progress",
+      "program_state": "completed",
       "program_observed_step": 16,
-      "checks": "12-successful1-in-progress-including-aggregate-CodeQL",
+      "checks": "13-successful",
       "browser_groups": 16,
       "full_evidence": "hosted-snapshot-generation7.json",
       "prior_observation": {
@@ -1269,13 +1280,24 @@
         "checks": "12-successful1-in-progress-including-aggregate-CodeQL",
         "browser_groups": 16,
         "full_evidence": "hosted-snapshot-generation7.json"
-      }
+      },
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "success": 13
+      },
+      "program_conclusion": "success",
+      "validator_checks": 62,
+      "validator_refund_wait_seconds": 1850,
+      "browser_recovery_refund_checks": 5,
+      "browser_duration_seconds": 2059,
+      "browser_fixture_errors": 0,
+      "completed_evidence": "native-final-receipts-generation8.json"
     },
     {
       "pr": 207,
       "head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
       "tree": "4b694124197ae8ce271f14307d12abc43c719406",
-      "checks": "3-successful1-failed8-queued1-neutral-including-aggregate-CodeQL",
+      "checks": "11-successful1-failed1-in-progress-including-aggregate-CodeQL",
       "program_job": 136044687282,
       "browser_job": 136044687707,
       "state": "actual-browser-warmed-socket-precondition-failed-source-held",
@@ -1293,9 +1315,15 @@
       "browser_conclusion": "failure",
       "browser_run": 44662758173,
       "merge_checkout": "0aba9abd40c39920b8c1cfe9a94fd5870d01f1f9",
-      "program_state": "queued",
+      "program_state": "in_progress",
       "browser_failure": "Diagnostic warm-socket assertion failed after exact one-call/fetch/POST and503 assertions. Later completion/error assertions not reached; no successful receipt.",
-      "full_evidence": "hosted-failure-triage-generation8.json"
+      "full_evidence": "hosted-failure-triage-generation8.json",
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "success": 11,
+        "failure": 1,
+        "in_progress": 1
+      }
     },
     {
       "pr": 209,
@@ -1317,6 +1345,11 @@
         "merge_checkout": "16a98b0213ea7105a6ad27c210a17ccdbc020434",
         "state": "exact-new-lock-native-qualification-required",
         "observed_at_utc": "2026-11-20T02:55:00Z"
+      },
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "queued": 9,
+        "success": 1
       }
     },
     {
@@ -1327,7 +1360,13 @@
       "program_job": 136048284590,
       "program_state": "queued",
       "observed_at_utc": "2026-11-20T03:06:05Z",
-      "state": "external-backup-prerequisite-own-hosted-gates-required"
+      "state": "external-backup-prerequisite-own-hosted-gates-required",
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "queued": 8,
+        "in_progress": 1,
+        "success": 1
+      }
     },
     {
       "pr": 210,
@@ -1402,7 +1441,11 @@
       "browser_job": 136060707469,
       "program_job": 136060703683,
       "state": "new-fixture-needs-exact-hosted-warmed-socket-and-all-applicable-gates",
-      "observed_at_utc": "2026-11-20T03:27:46.924896+00:00"
+      "observed_at_utc": "2026-11-20T03:27:46.924896+00:00",
+      "latest_observed_at_utc": "2026-11-20T03:30:50Z",
+      "latest_check_counts": {
+        "queued": 10
+      }
     }
   ],
   "policy": {
@@ -3191,5 +3234,6 @@
     "combined_log_sha256": "f77cc5e85573c90082a82af4048a214e67a6de4f5011d53d547868fd648608d3",
     "open_high_medium_in_reviewed_scope": 0,
     "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b"
-  }
+  },
+  "latest_completed_native_evidence": "native-final-receipts-generation8.json"
 }
