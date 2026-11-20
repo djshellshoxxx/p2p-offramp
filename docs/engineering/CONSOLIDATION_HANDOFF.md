@@ -1,3 +1,55 @@
+# Current consolidation checkpoint — generation 32 (2026-11-20 UTC)
+
+**The native Solana client now supports explicit funding preparation and
+confirmation.** The distinct `prepareFunding()` entry persists exact unsigned
+bytes and returns immutable seller/absent-escrow review data. Existing private
+confirmation/cancellation authority, physical wallet serialization, durable
+markers, original-message rechecks and uncertain-result recovery remain intact.
+The native driver now configures its SOL and original-SPL admissions through
+that review path; crash and refund keep their direct-funding coverage.
+
+Frozen combined source `5f9fd0a0f2f6d5bf16bcc21fb38a5e2ae0559031`, tree
+`d3b738a378218927d86241a1db987a57af87eec8`, passed **2,654/2,654 tests**
+with zero other outcomes and all six additional qualification commands.
+Independent client, driver and combined-provenance reviews found no actionable
+findings. The four-path source delta preserves 1,026 parent entries and yields
+1,030 exact reviewed non-documentation entries. Both default/demo artifacts
+and all their module graphs match G31; the new native code stays outside them.
+
+Generation 31 is now published as
+[PR239](https://github.com/djshellshoxxx/p2p-offramp/pull/239), head
+`708a3a2bc167cbbc15eaa3d3c168e058499c7f8e`, tree
+`6916074089257c759f2e9695b30e5bf955eb5258`, targeting PR238's branch.
+G32 is a separate unpublished follow-up above that exact parent at this
+checkpoint. **Keep PR236 frozen as the main-target aggregate for PR233–235.**
+Qualify and guard its merge, then read main/tree/ordered parents and prove
+containment before reconciling contained PRs. Preserve original branches.
+PR237 retention, PR238 sharing and PR239 startup remain separate children;
+retarget/reconcile after each parent merge and refresh actual source/target
+acceptance.
+
+G32 is D8 Tier C. Actual applicable hosted checks, execution of the new native
+prepare-and-confirm admissions and qualifying owner authorization recorded in
+the PR remain required. Local review is not merge approval. Preserve each
+standalone G29/G30/G31 Tier B **CodeRabbit or Qodo pass with findings answered**.
+Controlled driver probes return actual sent records without claiming finality.
+Native driver compilation and updater preparation were build-only; no new
+native validator/browser acceptance is established. `ReleaseEnabled=0` remains.
+
+Read the [G32 handoff](CONTINUATION_GENERATION32_20261120.md),
+[qualification](qualification-generation32.json),
+[retained logs](retained-logs-generation32.json) and
+[independent composition report](INDEPENDENT_SOLANA_PREPARED_FUNDING_COMPOSITION_REVIEW_GENERATION32_20261120.md).
+They preserve the baseline, package line-boundary failure, exact five-wrap fix,
+optional-tooling failures and packaging recovery with their actual provenance.
+Author 367/367, independent client 98/98 and separate driver 2/2 are overlapping
+selections and are not summed. G33's inactive funding-display prerequisite has
+separate active author/reviewer ownership and no completion claim. Browser
+funding, optional PR224–232 and audits184–186 retain their separate scope and
+owners. All earlier bytes below remain unchanged historical evidence.
+
+---
+
 # Current consolidation checkpoint — generation 31 (2026-11-20 UTC)
 
 **Offline startup now uses the maintained API presence probe, initialization
