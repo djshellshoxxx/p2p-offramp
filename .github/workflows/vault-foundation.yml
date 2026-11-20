@@ -102,6 +102,10 @@ jobs:
         run: npm run test:backup:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
+      - name: Verify native backup-selection lease and controlled updater composition
+        run: npm run test:update:runtime:browser
+        env:
+          P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
       - run: npm run test:recovery:browser
         env:
           P2P_CHROMIUM: ${{ steps.chrome.outputs.chrome-path }}
