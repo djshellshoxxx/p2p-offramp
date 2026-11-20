@@ -1,10 +1,22 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 5 source and authority
+## Current generations 6–9 checkpoint
+
+The corrected core is independently reviewed and locally qualified at `7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390`, tree `b330e1ca3a8a22598197bdd5de9532a0c56a917b`: **2,259/2,259 tests**, four TS projects, 57 policy,44 tooling,32 specs, boundaries238/142, docs/governance/default/demo passed. Only documentation follows that source. Publish and resolve `codex/generation8-core-20261120` plus live PR200 for exact remote identity and hosted state. PR205 is draft: it lacks four reviewed repairs and must not merge as the final candidate.
+
+Read `SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md`, `core-qualification-generation8.json` and the generation 6–9 scoped reports first. Four new causes (portal cleanup, route ownership, IDB opening cancellation, Solana expiry context) bring the recorded total to 29. Original failed 2244/2245 and all old failed financial jobs remain failures. Hosted PR205 foundation/16 browser groups passed; native Solana remained unfinished at the generation 9 snapshot. These ancestor successes do not transfer to the corrected source. Preserve both real 1800-second refund waits and all strict financial assertions.
+
+A separate evidence branch `codex/optional-composition-evidence-g8-20261120` at db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2 exactly preserves the nine-package composition:2617/2617, seven TS,57policy,13 identical default files. It predates these repairs and is not a bulk merge candidate. Keep one optional package per PR and default unwired.
+
+Fresh generation 9 feature/bug/security workers completed a separate reviewed current-runtime backup-verification prerequisite at 74d4143, with author 111/111, security 40/40 and bug 39/39. Integrate their independent cases and qualify/publish separately; the update browser UI/trust composition remains incomplete. No default trust or network activation is introduced.
+
+The inventory overlay observed 210 branches and 200 normalized PR records (59open,105merged,36closed-unmerged); all original 192 refs remained unchanged. Prior dated counts are retained as observations. No main merge/deployment/release occurred. ReleaseEnabled=0. The existing hourly task must resolve durable refs, preserve active writers, use fresh bounded workers and update its prompt after publication. Credit balance is not observable.
+
+## Historical generation 5 checkpoint (superseded below)
 
 Read this file and `consolidation-state.json` before changing code. The user authorizes autonomous engineering, qualified source integration and successive native-worker generations. Deployment, release, real funds, credentials and settings changes remain outside this task. Keep `ReleaseEnabled=0`.
 
-**The current core candidate is locally qualified and independently reviewed. Its exact published composition still requires hosted execution. No main merge has occurred.** The coordinator is publishing `codex/generation5-core-20261119` toward `main`. Resolve its live ref/PR and coordination PR200 before acting; this is a pre-publication checkpoint and cannot embed its own future Git identity.
+**The current core candidate is locally qualified and independently reviewed. Its exact published composition still requires hosted execution. No main merge has occurred.** The coordinator is publishing `codex/generation 5-core-20261119` toward `main`. Resolve its live ref/PR and coordination PR200 before acting; this is a pre-publication checkpoint and cannot embed its own future Git identity.
 
 | Reference | Exact identity |
 | --- | --- |
@@ -58,7 +70,7 @@ Stable completed IDs and exact source SHAs remain in state. **Twenty-five reprod
 
 Generation5 adds current-runtime favorites and templates UI/Worker composition, completed-503 acknowledgment withholding, restore acknowledgment/byte ownership and immutable copy-text validation. Templates persist only seven defaults in eight bounded slots; explicit preview/consent/native expiry/CAS remain. Applying defaults clears parties/instructions/deadlines and prior consent, creates fresh identity, and requires current registry review. No wallet or funding authority is added. Restore preserves immediate private redaction while awaiting actual acknowledgment and clones intact Worker bytes before zeroing the document buffer.
 
-Fresh generation5 rediscovery at **01:50:42 UTC November20 / November19 Pacific** observed **209 branches and201 PRs:58 open,105 merged,38 closed-unmerged**. All original192 heads are unchanged/present; new refs since generation4 are owned PR203/204. CLI tags and API releases remain empty. Preserve the dated overlays; core publication will add another owned branch/PR.
+Fresh generation 5 rediscovery at **01:50:42 UTC November20 / November19 Pacific** observed **209 branches and201 PRs:58 open,105 merged,38 closed-unmerged**. All original 192 heads are unchanged/present; new refs since generation4 are owned PR203/204. CLI tags and API releases remain empty. Preserve the dated overlays; core publication will add another owned branch/PR.
 
 ## Executed verification
 
@@ -101,7 +113,7 @@ Environment: Node 24.22.3, npm 11.19.1, Python 3.12.14. Foundry 1.5.1 and solc 0
 | **Independent core composition** | **506/506 affected**, **38/38 policy**, **3/3 new cross-feature probes**, boundaries and builds |
 | Core specs/builds | 238 production/142 core modules; default/demo;173 spec documents;Python specs32/32 |
 
-The new independent probes verify reciprocal stale-revision refusal between favorites and templates, and actual encrypted backup restoration of both records plus the saved-review reference at revision zero into a fresh profile without changing original ciphertext. All13 default and14 demo files, including evidence, match independently built final templates artifacts. Exactly four personalization modules occur only in the private Worker; document/QR and all nine optional graphs remain clear. Release flags remain false/0 and external connection origins empty.
+The new independent probes verify reciprocal stale-revision refusal between favorites and templates, and actual encrypted backup restoration of both records plus the saved-review reference at revision zero into a fresh profile without changing original ciphertext. All 13 default and14 demo files, including evidence, match independently built final templates artifacts. Exactly four personalization modules occur only in the private Worker; document/QR and all nine optional graphs remain clear. Release flags remain false/0 and external connection origins empty.
 
 Core's actual eleven-asset Solana artifact digest is `ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4`. It differs from standalone restore because shared schema/style source changed. Do not transfer artifact identity or browser results. Full commands, RED evidence, log digests and portable independent probes appear in `GENERATION5_CORE_COMPOSITION_20261119.md`, `INDEPENDENT_GENERATION5_CORE_REVIEW_20261119.md`, component reports and `INDEPENDENT_GENERATION4_COMPOSITION_REVIEW_20261119.md`. Counts are actual combined executions, not summed old results.
 
@@ -121,10 +133,10 @@ Local Chromium cannot launch under the managed Unix-socket restriction. Do not b
 | PR197 | Duplicate01:11:38 then disabled restore timeout01:12:23; other checks passed. |
 | PR192/193/194/195/198 | All nine triggered old-source checks passed; unchanged Solana path filters did not trigger on those package-only paths. |
 | PR201 | Docs/tooling32/36 with four failures; distribution browser failed SOURCE_PATH; Favorites step skipped. Repairs are in PR204/core. |
-| PR202 | **All13 foundation browser groups passed**, job136009252921. Early receipt proves one application call/fetch/physical POST on a warmed connection, complete503, zero forwarding/unexpected requests. Native job136009253374 remained in progress at01:52 UTC; last observed validator step14. |
+| PR202 | **All 13 foundation browser groups passed**, job136009252921. Early receipt proves one application call/fetch/physical POST on a warmed connection, complete503, zero forwarding/unexpected requests. Native job136009253374 remained in progress at01:52 UTC; last observed validator step14. |
 | PR203 | Reviewed restore source published; all10 contexts queued at01:52 UTC. Browser136022950072/native136022950914. |
 | PR204 | Reviewed templates/tooling source published; all10 contexts queued at01:52 UTC. Browser136023879924/native136023880105. |
-| Core generation5 | Publication then exact-source hosted qualification pending. All16 browser groups and complete native flows must execute. |
+| Core generation 5 | Publication then exact-source hosted qualification pending. All16 browser groups and complete native flows must execute. |
 
 PR202's merge checkout32f7353551660a6c1e3e9302eecf3647b482c0c3 equals its head tree25d637fa and has verified PR190/202 parents. Its short diagnostic is scoped to the controlled failed acknowledgment. Earlier duplicate transport replay is an inference supported by current Chromium source, not a pinned-build trace or a general arbitrary-reset guarantee.
 
@@ -136,7 +148,7 @@ Current locale drift and all six draft claims remain stale with semantic approva
 
 ## Policy and historical evidence
 
-Use the canonical accepted-decision index with the current user directive. The combined integrations, including generation5, contain Tier C recovery/release-verification paths. Current source-integration authorization is already provided; do not ask for it again. Required exact-head checks, applicable native/browser qualification and independent review with no open High/Medium finding remain mandatory. The accepted Tier C text does not separately establish the older Tier B named-bot condition as an additional gate for these combined PRs; assess any standalone Tier B change and actual server-enforced rules on their own terms.
+Use the canonical accepted-decision index with the current user directive. The combined integrations, including generation 5, contain Tier C recovery/release-verification paths. Current source-integration authorization is already provided; do not ask for it again. Required exact-head checks, applicable native/browser qualification and independent review with no open High/Medium finding remain mandatory. The accepted Tier C text does not separately establish the older Tier B named-bot condition as an additional gate for these combined PRs; assess any standalone Tier B change and actual server-enforced rules on their own terms.
 
 **D7 parking was superseded on November 18.** The nine optional packages are accepted for independent, one-package-per-PR source extraction with import-boundary checks. They are not rejected merely because their default app composition remains incomplete. No source acceptance activates financial, network, device or release authority.
 
@@ -164,7 +176,7 @@ Privacy-policy's Medium planning defect is fixed and independently closed: atomi
 
 ## Active workers and remaining functionality
 
-**Twenty-five distinct native workers have actually launched.** Resuming a worker does not increase the count. Authors/reviewers of all components and generation5 core are complete. The coordinator owns core publication, PR200 durable records and CI/integration sequencing. `generation5_rediscovery` owns isolated `codex/generation5-rediscovery-20261119`, refreshing refs/issues/checks and optional-package sequencing; it does not modify source or remote refs.
+**Twenty-five distinct native workers have actually launched.** Resuming a worker does not increase the count. Authors/reviewers of all components and generation 5 core are complete. The coordinator owns core publication, PR200 durable records and CI/integration sequencing. `generation 5_rediscovery` owns isolated `codex/generation 5-rediscovery-20261119`, refreshing refs/issues/checks and optional-package sequencing; it does not modify source or remote refs.
 
 The detailed accepted D8 packet has a named CodeRabbit/Qodo condition for standalone Tier B PRs. Fresh rediscovery found no named review on the nine optional PRs and is documenting applicability separately from server rules. Do not impose that condition on the combined Tier C core, silently remove an applicable standalone rule, or infer inaccessible protection settings. Optional source integration remains one package per PR with absent default imports.
 

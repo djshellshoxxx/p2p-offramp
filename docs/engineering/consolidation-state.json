@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 5,
-  "updated_at_utc": "2026-11-20T01:54:40.406315+00:00",
-  "phase": "core-source-reviewed-local-qualified-publication-and-hosted-pending",
+  "generation": 8,
+  "updated_at_utc": "2026-11-20T02:39:46.678294+00:00",
+  "phase": "corrected-core-reviewed-local-qualified-publication-pending",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
-  "integration_branch": "codex/generation5-core-20261119",
-  "integration_source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
-  "integration_source_tree": "ff1028ddc6c90119e38be7ca8fe3e007fb525b06",
+  "integration_branch": "codex/generation8-core-20261120",
+  "integration_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+  "integration_source_tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
   "scope": {
     "deployment_authorized": false,
     "release_enabled": 0,
@@ -83,6 +83,13 @@
       "releases": 0,
       "owner": "generation5_rediscovery",
       "scope": "Dated pre-publication observation; subsequent source publication requires another overlay."
+    },
+    "generation8_delta": {
+      "file": "inventory-delta-generation8.json",
+      "branches_observed": 210,
+      "prs_observed": 200,
+      "scope": "Connector-observed200 records;59open105merged36closed-unmerged; previous dated counts retained",
+      "original192_unchanged": true
     }
   },
   "completed": [
@@ -375,6 +382,42 @@
       "source": ".github/workflows/vault-foundation.yml",
       "repair_sha": "88c39c92d93722d65bcfb5c3b0eb2b0e62e24823",
       "scope": "Restore original favorites Chromium environment and attach a separate environment to the added template gate; no original step removed."
+    },
+    {
+      "id": "PORTAL-CLEANUP-OWNERSHIP",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "4966938d1f5803048c55f7d698b3ad76f9be4ec0",
+      "review_report": "CODE_AUDIT_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "REVIEW-NAVIGATION-OWNERSHIP",
+      "severity": "Low",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "7517fe457ac8110e5e21b2944074f3c84317d554",
+      "review_report": "INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "INDEXEDDB-OPEN-CANCELLATION",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "8a7e5e539cd33e398daa987ddc7c5256bac8be8f",
+      "review_report": "CODE_AUDIT_GENERATION8_20261120.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
+    },
+    {
+      "id": "SOLANA-EXPIRY-CONTEXT",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "dde7345e1ee2e722344d6f27dd8bd952c285d520",
+      "review_report": "INDEPENDENT_SOLANA_EXPIRY_REVIEW_GENERATION8_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "kind": "reproduced-defect"
     }
   ],
   "verification": {
@@ -564,6 +607,30 @@
       "policy_passed": 38,
       "supplemental_passed": 3,
       "report": "INDEPENDENT_GENERATION5_CORE_REVIEW_20261119.md"
+    },
+    "generation8_core": {
+      "generation": 8,
+      "source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+      "tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+      "state": "independently-reviewed-local-qualified-publication-pending",
+      "parent_pr": 205,
+      "full_suite": {
+        "tests": 2259,
+        "passed": 2259,
+        "failed": 0,
+        "skipped": 0,
+        "cancelled": 0
+      },
+      "build_policy_passed": 57,
+      "tooling_passed": 44,
+      "typescript_projects": 4,
+      "production_files": 238,
+      "core_modules": 142,
+      "high_medium_open": 0,
+      "commands_preserved": 56,
+      "optional_packages_included": false,
+      "report": "SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+      "verification": "core-qualification-generation8.json"
     }
   },
   "workers": [
@@ -731,14 +798,79 @@
       "state": "running",
       "scope": "Fresh refs/issues/CI and standalone optional integration sequencing; no source or remote mutations",
       "branch": "codex/generation5-rediscovery-20261119"
+    },
+    {
+      "id": "code_audit_g6",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g6",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_audit_g6",
+      "state": "automatic-screening-blocked-unverified-lead-only",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "code_audit_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_review_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g7",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_review_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "code_audit_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g8",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "hosted_review_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "feature_completion_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "security_completion_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
+    },
+    {
+      "id": "bug_hunt_g9",
+      "state": "completed",
+      "scope": "Actual native successor worker; see scoped report and live PR200 overlay. Generation9 feature source is separate from this frozen core."
     }
   ],
   "remaining": [
     {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
-      "state": "generation5-core-local-and-independent-qualified-publication-pending",
-      "next_action": "Publish exact core tree; inspect all16 hosted browser groups and complete native financial flows on actual checkout. Preserve both real1800-second waits; integrate only after applicable gates pass."
+      "state": "generation8-local-qualified-publication-pending",
+      "next_action": "Publish exact corrected tree and qualify hosted/native source. PR205 draft hold remains; preserve both actual1800-second waits."
     },
     {
       "id": "GATE-PR189-SOLANA",
@@ -755,14 +887,14 @@
     {
       "id": "COMPOSE-PERSONALIZATION-UI",
       "priority": 2,
-      "state": "favorites-and-templates-reviewed-published-hosted-pending",
+      "state": "ancestor-PR204-205-browser-passed-corrected-descendant-pending",
       "next_action": "PR204 and core contain tooling repair and both UI gates. Inspect actual hosted favorites/templates journeys; do not infer execution from local tests."
     },
     {
       "id": "COMPOSE-ASSET-UPDATE-UI",
       "priority": 2,
-      "state": "internal-source-ready-trust-composition-remaining",
-      "next_action": "Review current trust/transport/lifecycle interface design; do not invent trust roots or activate network updates."
+      "state": "generation9-backup-verification-prerequisite-reviewed-separate-qualification-pending",
+      "next_action": "Integrate independent backup verification tests, qualify and publish separately; native updater browser composition and current trust remain separate. No default activation."
     },
     {
       "id": "EXPERIMENTAL-INTAKE",
@@ -790,12 +922,12 @@
       "next_action": "Preserve original32/36 failure, independentRED0/2\u2192GREEN4/4 and42/42. Current distribution remains intentionally refused for stale immutable evidence."
     }
   ],
-  "successor_generation": 5,
-  "integration_local_source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
-  "parent_integration_pr": 190,
-  "parent_integration_branch": "codex/historical-recovery-20261119",
-  "parent_integration_head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
-  "pull_request_resolution": "PR190 remains the historical source baseline. The reviewed generation5 core descendant combines published PR204 templates/favorites/tooling and PR203 Solana acknowledgment/restore, and is being published toward main. Nine optional PR191-199 remain separate; PR200 remains the live coordination overlay. No main merge has occurred.",
+  "successor_generation": 9,
+  "integration_local_source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+  "parent_integration_pr": 205,
+  "parent_integration_branch": "codex/generation5-core-20261119",
+  "parent_integration_head": "cd7d54ba075118a7ec043788c17718be842ee405",
+  "pull_request_resolution": "Resolve codex/generation8-core-20261120 and live PR200. PR205 is held as draft because it lacks four reviewed repairs. Corrected descendant requires exact-source hosted qualification. No main merge.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -814,9 +946,16 @@
       "pr": 190,
       "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
       "head_tree": "a3701267756596e833247f50614c5ddc32f2cce0"
+    },
+    {
+      "generation": 5,
+      "pr": 205,
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "state": "draft-held-for-four-successor-repairs"
     }
   ],
-  "repair_counting": "25 reproduced repair cases: prior20 plus immutable copy hash, exact personalization distribution admission, restore acknowledgment admission, restore byte ownership and template accepted-review retirement. Restore late-read variants are grouped as one ownership cause. Two additional rows are integration/qualification checks: QR/Solana policy and corrected template/favorites environment attachment. New test-fixture mistakes and adjusted aggregate stale assertions are not counted as product defects.",
+  "repair_counting": "29 reproduced causes: prior25 plus portal cleanup ownership, late review navigation (four entry points, one cause), IndexedDB opening cancellation, Solana expiry context. Formatting/resource failures are not product defects.",
   "hosted": [
     {
       "pr": 188,
@@ -1386,6 +1525,38 @@
       "repair_sha": "6207d14bf83213847620b0dd1541f2c7d2e3b893",
       "repair_pr": 203,
       "review_commit": "3f08da66c9acaecfbc7a23a14edd4786e7cb1be9"
+    },
+    {
+      "id": "PORTAL-CLEANUP-OWNERSHIP",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "4966938d1f5803048c55f7d698b3ad76f9be4ec0",
+      "review_report": "CODE_AUDIT_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "REVIEW-NAVIGATION-OWNERSHIP",
+      "severity": "Low",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "7517fe457ac8110e5e21b2944074f3c84317d554",
+      "review_report": "INDEPENDENT_NAVIGATION_REVIEW_GENERATION7_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "INDEXEDDB-OPEN-CANCELLATION",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "8a7e5e539cd33e398daa987ddc7c5256bac8be8f",
+      "review_report": "CODE_AUDIT_GENERATION8_20261120.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
+    },
+    {
+      "id": "SOLANA-EXPIRY-CONTEXT",
+      "severity": "Medium",
+      "state": "independently-closed-local-qualified-hosted-pending",
+      "repair_sha": "dde7345e1ee2e722344d6f27dd8bd952c285d520",
+      "review_report": "INDEPENDENT_SOLANA_EXPIRY_REVIEW_GENERATION8_20261119.md",
+      "included_in_source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390"
     }
   ],
   "optional_composition": {
@@ -1432,7 +1603,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 25,
+  "native_workers_actually_launched": 38,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -2177,7 +2348,7 @@
     "independent_report": "38536886cb08066ee8679325a2bceae65d4cd366",
     "author_report": "4e5ea0ffe27f031e77297c8119d2c1a36177e012"
   },
-  "reproduced_repairs_count": 25,
+  "reproduced_repairs_count": 29,
   "non_defect_integration_checks_count": 2,
   "solana_restore_repair": {
     "pr": 203,
@@ -2225,6 +2396,30 @@
     "current_distribution_qualified": false
   },
   "core_composition": {
+    "generation": 8,
+    "source": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+    "tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+    "state": "independently-reviewed-local-qualified-publication-pending",
+    "parent_pr": 205,
+    "full_suite": {
+      "tests": 2259,
+      "passed": 2259,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    "build_policy_passed": 57,
+    "tooling_passed": 44,
+    "typescript_projects": 4,
+    "production_files": 238,
+    "core_modules": 142,
+    "high_medium_open": 0,
+    "commands_preserved": 56,
+    "optional_packages_included": false,
+    "report": "SUCCESSOR_CONSOLIDATION_GENERATIONS6_8_20261120.md",
+    "verification": "core-qualification-generation8.json"
+  },
+  "generation5_core_composition": {
     "generation": 5,
     "branch": "codex/generation5-core-20261119",
     "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
@@ -2277,5 +2472,24 @@
     "artifact_reference": "final templates",
     "solana_artifact_digest": "ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4",
     "hosted_qualification": "pending-publication"
+  },
+  "hosted_generation9": {
+    "file": "HOSTED_REVIEW_GENERATION9_20261119.json",
+    "observed_at_utc": "2026-11-20T02:30:30Z",
+    "pr205_foundation": "success-16-browser-groups",
+    "pr205_solana": "in-progress",
+    "corrected_descendant_qualified": false
+  },
+  "optional_generation8": {
+    "source": "813f9192a64f95028a755f167bb6ab888cfa392d",
+    "published_head": "db9eb94356b4a2efd2b82bc2a0b67ab2e56795b2",
+    "tree": "65d567546d93640358be842a71b31fcb445a3851",
+    "branch": "codex/optional-composition-evidence-g8-20261120",
+    "full_passed": 2617,
+    "types_projects": 7,
+    "default_files_identical": 13,
+    "report": "OPTIONAL_COMPOSITION_GENERATION8_20261120.md",
+    "predates_current_repairs": true,
+    "merge_candidate": false
   }
 }
