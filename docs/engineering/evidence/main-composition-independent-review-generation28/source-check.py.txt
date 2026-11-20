@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Read-only composition verification for the assigned immutable source."""
+import datetime
+import hashlib
+import json
+import pathlib
+import re
+import subprocess
+
+SOURCE = "2a0b26f3392d86c1cd3e056771c59438ece92927"
+TREE = "92beca7b34957889156260d1167df81ebcf4aa84"
+BASE = "bca96b796db18d69563ae5f0395452494a0dacd5"
+MAIN = "8e836baa877b676a863c877003e277b638fc5061"
+G26 = "a2a854a285563d4560610577a0df099b041643bf"
+G27 = "0df0e19"
+FORM = "apps/web/src/ui/VaultForms.tsx"
+CHECKS = []
+
+def git(*args):
+    return subprocess.check_output(["git", *args])
+
+def text(*args):
+    return git(*args).decode().strip()
+
+def check(name, actual, expected=True):
+    passed = actual == expected
+    CHECKS.append({"check": name, "passed": passed, "actual": actual, "expected": expected})
+    return passed
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def entries(ref):
+    result = {}
+    for row in git("ls-tree", "-rz", ref).split(b"\0"):
+        if row:
+            value, name = row.split(b"\t", 1)
+            result[name.decode()] = value.decode()
+    return result
+
+def blob(ref, path):
+    return git("show", ref + ":" + path)
+
+def json_at(path):
+    return json.loads(blob(SOURCE, path))
+
+def function(source, name):
+    match = re.search(rb"^(?:export )?function " + name.encode() + rb"\(", source, re.M)
+    assert match is not None, name
+    end = source.index(b"\n}\n", match.start()) + 3
+    return source[match.start():end]
+
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+check("review checkout", text("rev-parse", "HEAD"), SOURCE)
+check("review tree", text("rev-parse", SOURCE + "^{tree}"), TREE)
+check("tracked worktree clean", text("status", "--porcelain=v1", "--untracked-files=no"), "")
+base, source = entries(BASE), entries(SOURCE)
+changed = sorted(path for path in base if path in source and base[path] != source[path])
+added = sorted(set(source) - set(base))
+deleted = sorted(set(base) - set(source))
+unchanged = {path: entry for path, entry in base.items() if source.get(path) == entry}
+non_docs_changed = [path for path in changed if not path.startswith("docs/")]
+non_docs_added = [path for path in added if not path.startswith("docs/")]
+check("production change allowlist", non_docs_changed, [FORM])
+check("test addition allowlist", non_docs_added, ["apps/web/test/unlock-form-admission.test.mjs", "apps/web/test/vault-form-admission.test.mjs"])
+check("no deletion", deleted, [])
+
+ancestry = []
+for name, sha, tree in [
+    ("main", MAIN, "9693f90d2ef73a06b3557d57ddc2239ae65065f5"),
+    ("PR233", "92663e46508b06645111d9c713beb82d3a6d1a0f", "8a75938288a394e8e7b836eba48bf56bcd98a41d"),
+    ("PR234", "477777dc152cd3148ba7f25a75ce8f00dc1b03b5", "7a474d82db7668b0ebbff26ae7a9d75d5030db7a"),
+    ("PR235", BASE, "bfcdf96410df7bbb59996537c8388abaafefbb7c"),
+]:
+    actual_tree = text("rev-parse", sha + "^{tree}")
+    is_ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", sha, SOURCE]).returncode == 0
+    check(name + " exact tree", actual_tree, tree)
+    check(name + " preserved ancestor", is_ancestor)
+    ancestry.append({"name": name, "commit": sha, "tree": actual_tree, "ancestor": is_ancestor})
+
+publication_maps = []
+for name in ["generation21-publication.json", "generations22-23-publication.json", "generations24-25-publication.json"]:
+    manifest = json_at("docs/engineering/" + name)
+    rows = []
+    for row in manifest["commitMap"]:
+        local, published = row["localSha"], row["publishedSha"]
+        local_tree = text("rev-parse", local + "^{tree}")
+        published_tree = text("rev-parse", published + "^{tree}")
+        local_parents = text("show", "-s", "--format=%P", local).split()
+        published_parents = text("show", "-s", "--format=%P", published).split()
+        ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", published, SOURCE]).returncode == 0
+        passed = local_tree == published_tree == row["tree"] and local_parents == row["localParents"] and published_parents == row["publishedParents"] and ancestor
+        check("published mapping " + published, passed)
+        rows.append({"local": local, "published": published, "tree": published_tree, "localParents": local_parents, "publishedParents": published_parents, "preservedAncestor": ancestor, "passed": passed})
+    publication_maps.append({"manifest": name, "entries": rows})
+
+base_form, source_form = blob(BASE, FORM), blob(SOURCE, FORM)
+guard = b"if (busy || request.current !== null) return;"
+comment = b"    // Preserve the active controller even before the busy state rerenders.\n"
+check("four synchronous guards", source_form.count(guard), 4)
+check("one explanatory comment", source_form.count(comment), 1)
+normalized = source_form.replace(comment, b"").replace(guard, b"if (busy) return;")
+check("reversing four guards and one comment yields exact PR235 form", normalized, base_form)
+# Binary source is represented by hashes in the durable result.
+CHECKS[-1]["actual"] = digest(normalized)
+CHECKS[-1]["expected"] = digest(base_form)
+
+subsections = []
+for name in ["NoticeText", "useInventory", "ProfileChoices", "saveCiphertext", "takeSecrets"]:
+    before, after = function(base_form, name), function(source_form, name)
+    check("unchanged form helper " + name, before == after)
+    subsections.append({"name": name, "bytes": len(after), "sha256": digest(after), "equalsPR235": before == after})
+unlock = function(source_form, "UnlockForm")
+check("accepted G26 UnlockForm preserved", unlock, function(blob(G26, FORM), "UnlockForm"))
+CHECKS[-1]["actual"] = digest(unlock)
+CHECKS[-1]["expected"] = digest(function(blob(G26, FORM), "UnlockForm"))
+check("G27 full form matches accepted author", source[FORM], text("ls-tree", G27, "--", FORM).split("\t")[0])
+
+test_bindings = []
+for path, refs in [
+    ("apps/web/test/unlock-form-admission.test.mjs", ["6df5a34a7c00f8a6fa489a53ca8f783616e285f5", G26, "2e599d43d3072e431a3744f733dc6d655a778008", "f36a0a07dff55aa83b9d01a69501d049461d9b33"]),
+    ("apps/web/test/vault-form-admission.test.mjs", ["515a7c9", G27, "dffaea3f28a67acb81bcc53dce36367beda2e221"]),
+]:
+    sha = text("rev-parse", SOURCE + ":" + path)
+    same = all(text("rev-parse", ref + ":" + path) == sha for ref in refs)
+    check("RED GREEN composed test identity " + path, same)
+    test_bindings.append({"path": path, "blob": sha, "sha256": digest(blob(SOURCE, path)), "comparedCommits": [text("rev-parse", ref) for ref in refs], "identical": same})
+
+g21 = []
+for item in json_at("docs/engineering/qualification-generation21.json")["implementationAndTestBlobs"]:
+    path = item["path"]
+    if path == FORM:
+        continue
+    actual = text("rev-parse", SOURCE + ":" + path)
+    check("G21 blob retained " + path, actual, item["gitBlob"])
+    g21.append({"path": path, "blob": actual, "unchanged": actual == item["gitBlob"]})
+
+prefixes = ["apps/web/src/runtime/", "apps/web/src/workers/", "apps/web/src/privacy/", "apps/web/src/ui/locale/", "apps/web/src/solana-localnet/", "apps/web/src/localnet/", "packages/security/", "packages/domain/", "packages/schemas/", "packages/storage/", "packages/chain-solana/", "contracts/", ".github/workflows/"]
+boundaries = []
+for prefix in prefixes:
+    selected = {path: entry for path, entry in base.items() if path.startswith(prefix)}
+    mismatches = [path for path, entry in selected.items() if source.get(path) != entry]
+    new_paths = [path for path in source if path.startswith(prefix) and path not in base]
+    check("preserved boundary " + prefix, mismatches + new_paths, [])
+    boundaries.append({"prefix": prefix, "entries": len(selected), "mismatches": mismatches, "added": new_paths, "entryMapSha256": digest(json.dumps(selected, sort_keys=True, separators=(",", ":")).encode())})
+fixed_paths = ["package.json", "package-lock.json", "contracts/solana/Cargo.lock", "apps/web/src/app-services.ts", "apps/web/src/ui/PrivacyStatusPanel.tsx", "scripts/fixtures/update-attempts.ts", "scripts/fixtures/update-runtime-browser.ts", "scripts/test-update-runtime-browser.mjs", "scripts/tests/update-attempts.test.mjs"]
+fixed = []
+for path in fixed_paths:
+    check("preserved critical path " + path, source[path], base[path])
+    fixed.append({"path": path, "entry": source[path], "sha256": digest(blob(SOURCE, path))})
+
+optional = ["proof-inputs", "liquidity", "courier", "arbitration", "meetup", "privacy-policy", "privacy-controls", "stealth", "proof-jobs"]
+optional_entries = [path for path in source if any(path.startswith("packages/" + name + "/") for name in optional)]
+check("no optional package takeover", optional_entries, [])
+workflow = blob(SOURCE, ".github/workflows/solana-escrow.yml").decode()
+check("native Solana duration limits retained", all(value in workflow for value in ["timeout-minutes: 150", "timeout-minutes: 50", "timeout-minutes: 60", "1800-second refund minimum"]))
+check("aggregate UI changes trigger existing Solana path filter", workflow.count("- 'apps/web/**'"), 2)
+check("all historical native browser workflows unchanged", {path: entry for path, entry in source.items() if path.startswith(".github/workflows/")}, {path: entry for path, entry in base.items() if path.startswith(".github/workflows/")})
+workflows = [{"path": path, "entry": entry, "sha256": digest(blob(SOURCE, path))} for path, entry in source.items() if path.startswith(".github/workflows/")]
+diff_check = subprocess.run(["git", "diff", "--check", MAIN + "..." + SOURCE], capture_output=True)
+check("complete main-target source whitespace", diff_check.returncode, 0)
+check("complete main-target whitespace output empty", (diff_check.stdout + diff_check.stderr).decode(), "")
+
+result = {
+    "schema": "p2p-offramp.main-composition-source-review.v1", "startedAt": started,
+    "completedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    "source": SOURCE, "tree": TREE, "baseline": BASE, "mainTarget": MAIN,
+    "baseEntries": len(base), "sourceEntries": len(source), "preservedBaseEntries": len(unchanged),
+    "preservedNonDocumentationEntries": sum(not path.startswith("docs/") for path in unchanged),
+    "unchangedEntryMapSha256": digest(json.dumps(unchanged, sort_keys=True, separators=(",", ":")).encode()),
+    "changed": [{"path": path, "before": base[path], "after": source[path]} for path in changed],
+    "added": [{"path": path, "entry": source[path]} for path in added], "deleted": deleted,
+    "ancestry": ancestry, "publicationMaps": publication_maps,
+    "commitSequenceAfterPR235": text("log", "--reverse", "--format=%H %P %s", BASE + ".." + SOURCE).splitlines(),
+    "formNormalization": {"reversedGuards": 4, "removedComments": 1, "normalizedSha256": digest(normalized), "baselineSha256": digest(base_form)},
+    "preservedUnlockForm": {"bytes": len(unlock), "sha256": digest(unlock), "acceptedSource": G26},
+    "unchangedFormHelpers": subsections, "newTestBindings": test_bindings, "retainedG21Blobs": g21,
+    "preservedBoundaries": boundaries, "criticalBlobs": fixed, "optionalPackages": optional,
+    "workflows": workflows, "checks": CHECKS,
+    "passed": all(row["passed"] for row in CHECKS),
+    "limits": ["Local immutable Git-object verification; no live remote reread.", "No application, native, browser or financial test ran in this reviewer.", "Preserved workflow definitions and path filters do not establish completed hosted execution."]
+}
+print(json.dumps(result, indent=2) + "\n", end="")
+raise SystemExit(0 if result["passed"] else 1)

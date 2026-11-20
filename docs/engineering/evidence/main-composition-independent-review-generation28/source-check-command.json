@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.py.txt"
+  ],
+  "cwd": "/workspace/scratch/dcf03ef9bee8/p2p-main-composition-review-g28",
+  "startedAt": "2026-11-20T18:08:19.072787+00:00",
+  "completedAt": "2026-11-20T18:08:20.056927+00:00",
+  "exitCode": 0,
+  "log": "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.json",
+  "bytes": 65177,
+  "sha256": "9f71aba75ec4ac66130e7bec8c4b8c4a87187c3a3bc0936a1c931c2afe7985a0",
+  "retention": "Exact combined stdout/stderr retained with deterministic gzip.",
+  "storedPath": "docs/engineering/evidence/main-composition-independent-review-generation28/source-check.json.gz",
+  "storedBytes": 12830,
+  "storedSha256": "da160c8806f72390cbb1e340eccc481a0a2c732d36c49a82c93ab74b7b68fabd"
+}
