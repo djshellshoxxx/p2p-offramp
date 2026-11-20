@@ -468,23 +468,48 @@
     }
   ],
   "staging_overlay": {
-    "source_sha": "de5bb8aadadd9b76099110262b2f7beb123f9421",
-    "scope": "Generation5 core locally qualified2217 full tests and independently reviewed; publication and hosted execution pending. Original27-capability main assessment remains immutable. Nine optional sources remain separate PR191-199.",
+    "source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+    "published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "integration_pr": 210,
+    "scope": "Generation11 combined source includes prior reviewed components and212 transport cleanup. New2311 full and44 independent maintained tests passed. Current-source hosted qualification remains separate;27 pinned-main rows unchanged.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
     "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented prerequisite on combined staging",
+        "change": "Currentd301 preserves208 selected-profile complete-backup verification and Worker/VaultService generation/revision ownership. Combined2311 and independent44 qualification passed; signed-update UI remains partial."
+      },
       {
         "feature_id": "F03",
         "status": "Implemented on staging",
-        "change": "Actual-byte bounds from #187 applied before retaining review input."
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed correction composed on combined staging",
+        "change": "Relay clock/capacity guards from206 are preserved in701f. Component browser/native relay receipts remain source-bound; current combined-hosted qualification is pending."
       },
       {
         "feature_id": "F08",
         "status": "Implemented on staging",
-        "change": "#181 readiness correction retained; native relay and EVM browser paths passed at PR189."
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed correction preserved on combined staging",
+        "change": "Finalized expiry and covering Solana status context handling from207 is preserved. Unknown outcomes retain markers; no automatic resend added."
       },
       {
         "feature_id": "F16",
         "status": "Partial",
-        "change": "Funded-exit source plus acknowledgment fixture and restore lifecycle repairs are composed and independently reviewed. Older native flows failed; current full hosted qualification remains pending. No discovery/funding parity added."
+        "change": "Funded-exit and restore source is preserved in701f. Historical real-refund receipts remain bound to original sources. Full discovery/negotiation/funding parity is incomplete and current combined-native/browser gates are pending."
       },
       {
         "feature_id": "F17",
@@ -493,33 +518,109 @@
       },
       {
         "feature_id": "F18",
-        "status": "Implemented within public review scope",
-        "change": "PR189 exact source completed six actual Chromium journeys with synthetic camera; no physical-device or authenticated-invite claim."
+        "status": "Implemented public-review source on combined staging",
+        "change": "Currentd301 preserves independently corrected211 post-await expiry/invalid-clock behavior and authority:none. Combined2311full/44independent and optional2711 qualification are source-bound. Current browser/device/authenticated-invite conditions remain."
       },
       {
         "feature_id": "F24",
         "status": "Partial",
-        "change": "Internal unexported updater and four storage lifecycle repairs recovered; no update UI or trust-root activation."
+        "change": "Internal updater and208 backup prerequisite composed; trust/transport/update-UI composition remains incomplete. No trust roots or network activation invented; screened historical adaptation remains excluded."
       },
       {
         "feature_id": "F25",
         "status": "Implemented within source-tooling scope",
-        "change": "Recovered tooling now verifies immutable copy text even with current locale drift. Current unsigned distribution stays refused; historical-client positive staging is explicitly separate."
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
       },
       {
         "feature_id": "F22",
-        "status": "Nine reviewed source PRs; hosted qualification active",
-        "change": "PR191\u2013199 preserve one-package scope, native/custom gates and absent default imports. Combined source a2f90cbd passed2553 tests and all13 default files byte-match; current-head hosted qualification remains active."
+        "status": "Nine preserved optional layers qualified on currentd301core",
+        "change": "Generation11 full2711 and independent16 passed;2492 protectedcoreentries,172 originalnonsharedblobs,56-to62commands,13default/14demo files equal fresh finalcore. Zerooptionalimports; original191-199refs unchanged; standalone namedreview and source-bound hosted gates remain."
+      },
+      {
+        "feature_id": "F20",
+        "status": "Partial; transport-library hygiene corrected",
+        "change": "Current212 cleanup erases owned temporary POST copies on cancellation/capacity refusal; oneLow cause,44 independent and2311 full tests. No demonstrated network leak or financial effect. Changed driver is absent from default/demo graphs; no default activation implied."
       }
     ],
-    "published_head": null
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    },
+    "generation10_optional_evidence": {
+      "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
+      "published_final": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "final_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+      "tested_source": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+      "tested_tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+      "full_passed": 2709,
+      "independent_boundary_passed": 16
+    },
+    "current_hosted_snapshot": "hosted-snapshot-generation11.json",
+    "generation11_new_candidate": {
+      "pr": 212,
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+      "base": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "state": "independently-qualified-and-published-in210",
+      "independent_original": {
+        "passed": 0,
+        "failed": 2
+      },
+      "independent_fixed": {
+        "passed": 2,
+        "failed": 0
+      },
+      "independent_maintained_passed": 44,
+      "independent_maintained_includes_two_regressions": true,
+      "cause_count_increment": 1,
+      "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification.",
+      "published_combined_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "full_passed": 2311,
+      "github_recorded_state": "closed-merged-into-stacked-target",
+      "original_source_ref_unchanged": true
+    },
+    "generation11_core_evidence": {
+      "report": "GENERATION11_TRANSPORT_CORE_QUALIFICATION_20261120.md",
+      "independent_report": "INDEPENDENT_TRANSPORT_PREFLIGHT_REVIEW_GENERATION11_20261120.md",
+      "plan": "generation11-core-plan.json",
+      "published_mapping": "generation11-published-checkpoints.json",
+      "full_passed": 2311,
+      "independent_affected_passed": 44,
+      "new_implementation_cause": 1
+    },
+    "generation11_optional_evidence": {
+      "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+      "published_final": "db531cb03ad303821a3625f6858941de1ac07606",
+      "final_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+      "tested_source": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "tested_tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+      "full_passed": 2711,
+      "independent_boundary_passed": 16
+    },
+    "status": "locally-qualified-independently-reviewed-current-hosted-gates-pending"
   },
   "additional_staging_capabilities": [
     {
       "id": "F28",
       "capability": "Encrypted favorites and reusable trade templates",
       "main_status": "Missing package consumers",
-      "staging_status": "Partial",
+      "staging_status": "Implemented in current reviewed combined source; exact-source hosted pending",
       "source": [
         "packages/personalization/src/favorites.ts",
         "packages/personalization/src/trade-draft-store.ts"
@@ -528,11 +629,13 @@
         "packages/personalization/test/favorites.test.mjs",
         "packages/personalization/test/trade-draft-store.test.mjs"
       ],
-      "remaining": "Favorites PR201 Medium independently closed; PR204 adds maintained templates UI/Worker and tooling repair. Core2217 full and independent506 affected/38 policy/3 shared-revision/backup probes passed. Actual current-source hosted favorites/templates gates remain pending.",
-      "status": "Implemented in reviewed source; hosted qualification pending",
+      "remaining": "Favorites/templates and route-ownership corrections preserved in d301. Current2311/44 local qualification is distinct from older205/component browser receipts. Current hosted/device gates remain.",
+      "status": "Implemented in current reviewed combined source; exact-source hosted pending",
       "source_prs": [
         201,
-        204
+        204,
+        207,
+        210
       ]
     },
     {
@@ -548,7 +651,7 @@
         "scripts/portal/build.test.mjs",
         "scripts/test-scriptless-portal-browser.mjs"
       ],
-      "remaining": "No deployed-host, physical-print/device or release claim; preserve current source-bound qualification."
+      "remaining": "Currentd301 preserves replacement-directory cleanup and scriptless portal. Historical190/component browser receipts remain source-bound; current hosted/deployed-host/physical-print qualification remains separate."
     },
     {
       "id": "F30",
@@ -580,5 +683,271 @@
       ],
       "remaining": "Historical stale references remain explicit; this module grants no legal, release or economic authority."
     }
-  ]
+  ],
+  "staging_overlay_history_generation9": {
+    "source_sha": "7e8f93a02d6ffb98164ed3b09ba3db5b44bd9390",
+    "source_tree": "b330e1ca3a8a22598197bdd5de9532a0c56a917b",
+    "published_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
+    "published_tree": "4b694124197ae8ce271f14307d12abc43c719406",
+    "integration_pr": 207,
+    "scope": "Corrected core207 has2259 full source tests and independent97 affected tests. Its actual hosted browser diagnostic failed the warmed-connection precondition on2026-11-20; full current-source qualification remains incomplete. Original27-capability main baseline is unchanged. Relay206, backup208 and dependency209 are separately reviewed descendants, not one qualified combined tree.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
+    "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented library; separate runtime prerequisite reviewed",
+        "change": "PR208 exposes selected-profile complete-backup verification through current Worker/VaultService ownership and fresh generation/revision checks. External author2277 full tests; this coordinator did not execute those tests. No signed-update UI activation."
+      },
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed source correction in separate PR206",
+        "change": "Clock/capacity guards composed on207; external2265 full tests and root original-source140 affected tests are separate counts. Native/current-source hosted qualification remains required."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed reconciliation correction in207",
+        "change": "Unknown Solana outcomes retain their marker until finalized expiry and covering status contexts agree. No automatic resend; RPC context consistency is not cryptographic history completeness."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit, acknowledged-send and restore lifecycle source is composed.202 completed62 validator and5 actual Worker/browser checks with real refund waits.207 has a distinct failed transport-fixture precondition and pending native qualification. No discovery/funding parity added."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented public-review source; separate211 timing correction independently reviewed",
+        "change": "211 rechecks expiry and clock validity after awaited hash/verifier work. Original1pass/3fail became4pass; affected112pass includes those4. One Low cause; authority none. Actual new-source browser/physical-device and authenticated invite qualification remain separate."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal updater recovered with storage retry/cancellation corrections.208 adds the backup prerequisite. Real trust/transport/update-UI composition remains incomplete; the externally screened historical browser adaptation is excluded."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine separately reviewed packages recomposed on corrected210; local2681-pass evidence published",
+        "change": "Generation9 preserves2463 core entries at every layer, exact original package subtrees,56-to62 command union and13 default/14 demo files; zero optional graph imports. Evidence8af4dbc2 preserves nine original-head-parent layers; original PR191-199 remain unchanged. Standalone named review and source-bound hosted/native/browser gates remain."
+      }
+    ],
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    }
+  },
+  "staging_overlay_history_generation10": {
+    "source_sha": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+    "source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+    "published_head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "published_tree": "976a729bc359d331214924abab617969aa066950",
+    "integration_pr": 210,
+    "scope": "Generation10 combines reviewed206/208/209/210/211 on corrected207. Exact new source passed2309 full tests and independent54 focused tests; current-head hosted checks remain queued. The27-row pinned-main baseline is unchanged. New212 is owned by42/43 and has no transferred qualification.",
+    "historical_core": {
+      "pr": 205,
+      "source": "de5bb8aadadd9b76099110262b2f7beb123f9421",
+      "full_passed": 2217,
+      "state": "held because four later core corrections are absent"
+    },
+    "updates": [
+      {
+        "feature_id": "F01",
+        "status": "Implemented prerequisite on combined staging",
+        "change": "Selected-profile complete-backup verification from208 is composed with current Worker/VaultService generation/revision ownership. Combined2309 and independent54 passed; signed-update UI remains partial."
+      },
+      {
+        "feature_id": "F03",
+        "status": "Implemented on staging",
+        "change": "Actual-byte bounds from187 applied before retaining review input."
+      },
+      {
+        "feature_id": "F06",
+        "status": "Reviewed correction composed on combined staging",
+        "change": "Relay clock/capacity guards from206 are preserved in701f. Component browser/native relay receipts remain source-bound; current combined-hosted qualification is pending."
+      },
+      {
+        "feature_id": "F08",
+        "status": "Implemented on staging",
+        "change": "Readiness correction retained; historical source-bound native relay and EVM browser evidence remains separate from current-source qualification."
+      },
+      {
+        "feature_id": "F11",
+        "status": "Reviewed correction preserved on combined staging",
+        "change": "Finalized expiry and covering Solana status context handling from207 is preserved. Unknown outcomes retain markers; no automatic resend added."
+      },
+      {
+        "feature_id": "F16",
+        "status": "Partial",
+        "change": "Funded-exit and restore source is preserved in701f. Historical real-refund receipts remain bound to original sources. Full discovery/negotiation/funding parity is incomplete and current combined-native/browser gates are pending."
+      },
+      {
+        "feature_id": "F17",
+        "status": "Implemented on staging",
+        "change": "Grouping guard and typed JCS descriptor errors integrated."
+      },
+      {
+        "feature_id": "F18",
+        "status": "Implemented public-review source on combined staging",
+        "change": "Independently reproduced211 post-await expiry/invalid-clock correction is composed in2309-test701f. One previously countedLow cause; authority:none. New-source browser, authenticated invite policy and physical devices remain separate."
+      },
+      {
+        "feature_id": "F24",
+        "status": "Partial",
+        "change": "Internal updater and208 backup prerequisite composed; trust/transport/update-UI composition remains incomplete. No trust roots or network activation invented; screened historical adaptation remains excluded."
+      },
+      {
+        "feature_id": "F25",
+        "status": "Implemented within source-tooling scope",
+        "change": "Immutable copy-text tooling and replacement-output cleanup corrections are reviewed. Current unsigned distribution still refuses stale locale evidence; historical positive fixtures do not approve new source."
+      },
+      {
+        "feature_id": "F22",
+        "status": "Nine preserved optional layers qualified on combined core",
+        "change": "Generation10 full2709 and independent16 passed. All2487 protected core entries,172 nonshared original blobs and56-to62 commands preserved. All13default/14demo files match fresh core, zerooptionalimports. Evidencecf827ee5 preserves original191-199refs; named review and applicable source-bound hosted gates remain."
+      }
+    ],
+    "hosted_failure_report": "HOSTED_FAILURE_TRIAGE_GENERATION8_20261120.md",
+    "generation9_optional_evidence": {
+      "head": "8af4dbc2b60b106ec80a2417ddf78d487c3f3586",
+      "tree": "6a9eb6f25ea0568daa80b928408c958356a3db59",
+      "tested_source_tree": "19e8952f7786cae85c661457c0e1545da4f8b758",
+      "full_passed": 2681,
+      "separate_candidates_excluded": [
+        206,
+        208,
+        209,
+        211
+      ]
+    },
+    "qr211_independent": {
+      "head": "e7397f45f68f18fae8857ea31b58a04e248df404",
+      "affected_passed": 112,
+      "report_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
+      "status": "locally-qualified-separate-source-hosted-pending"
+    },
+    "generation10_optional_evidence": {
+      "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
+      "published_final": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
+      "final_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
+      "tested_source": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
+      "tested_tree": "e0826f1f8824f8f1f044e161311432ace6e06254",
+      "full_passed": 2709,
+      "independent_boundary_passed": 16
+    },
+    "current_hosted_snapshot": "generation10-final-current-gates.json",
+    "generation11_new_candidate": {
+      "pr": 212,
+      "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+      "base": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+      "state": "independent-scoped-review-cleared-full-qualification-active",
+      "independent_original": {
+        "passed": 0,
+        "failed": 2
+      },
+      "independent_fixed": {
+        "passed": 2,
+        "failed": 0
+      },
+      "independent_maintained_passed": 44,
+      "independent_maintained_includes_two_regressions": true,
+      "cause_count_increment": 0,
+      "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification."
+    }
+  },
+  "staging_overlay_history_generation13": {
+    "handoff": "CONTINUATION_GENERATIONS12_13_20261120.md",
+    "main_unchanged": true,
+    "main_target_pr": 213,
+    "core_source": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "core_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "backup_verification": {
+      "pr": 215,
+      "source": "e77a2d3e758ee3b416d8d96ecd979526c7ae78ce",
+      "final_ui_tests": 17,
+      "cross_browser_pr": 217,
+      "hosted_browser_execution_pending": true
+    },
+    "signed_update_view": {
+      "local_source": "723b8d105a185f3c84130d1ccd5c9a907ff13153",
+      "default_controller": null,
+      "independent_ui_tests": 23,
+      "executable_updater_in_default_graph": false,
+      "configured_runtime_qualified": false,
+      "remaining": [
+        "exact-own-lock backup lease adapter",
+        "trusted controller configuration",
+        "native origin transition",
+        "physical wallet/device qualification"
+      ]
+    },
+    "solana_funded_exits": {
+      "public_recovery_export": "implementation active",
+      "full_discovery_negotiation_funding": "outside implemented accepted carrier/review scope"
+    },
+    "dependency_remediation": {
+      "pr": 216,
+      "audit_vulnerabilities_before": 1,
+      "audit_vulnerabilities_after": 0,
+      "host_library_defined_tests": 0,
+      "native_gates_pending": true
+    },
+    "required_oracle_pr": 214,
+    "release_enabled": 0
+  },
+  "current_overlay_key": "staging_overlay_generation15",
+  "staging_overlay_generation15": {
+    "pr": 219,
+    "head": "8537d07bf0e67715b881065fa3d6a634a34a70d7",
+    "tree": "768be48cf8b349b3d124f580c59a73c3a0db93e3",
+    "main_unchanged": true,
+    "full_suite_passed": 2361,
+    "independent_actionable_findings": 0,
+    "handoff": "CONTINUATION_GENERATION15_20261120.md",
+    "backup_ui": "implemented; current-source browser pending",
+    "signed_update_ui": "optional view implemented; configured operation incomplete",
+    "solana_recovery_export": "implemented; current-source actual download pending",
+    "native_hosted_gates": "pending",
+    "optional_packages": "preserved separately; final-core qualification not claimed",
+    "release_enabled": 0
+  }
 }

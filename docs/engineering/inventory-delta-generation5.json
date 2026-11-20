@@ -1,0 +1,524 @@
+{
+  "observed_at_utc": "2026-11-20T01:50:42Z",
+  "branches_observed": 209,
+  "prs_observed": 201,
+  "open_prs": 58,
+  "merged_prs": 105,
+  "closed_unmerged_prs": 38,
+  "main": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+  "original_heads_moved": [],
+  "original_heads_removed": [],
+  "added_branches": [
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "head": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36",
+      "pr": 200,
+      "tree": "a3c94e992597a84a5603a16527156c0c934a762e",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/historical-recovery-20261119",
+      "head": "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+      "pr": 190,
+      "tree": "a3701267756596e833247f50614c5ddc32f2cce0",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 33,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/max-consolidation-20261119",
+      "head": "a728ce290eb2fcbe9b4a9e857cc84ced401da70f",
+      "pr": 188,
+      "tree": "b6d2d90b8ee5f148e7f6e7d8be962ef6e565e3ec",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 22,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-arbitration-20261119",
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "pr": 193,
+      "tree": "66d18800ca406996513eaa1eec97567d95d226b3",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-courier-20261119",
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "pr": 195,
+      "tree": "cff27fd7b907474a3d25d9144755eee733c812d9",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-liquidity-20261119",
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "pr": 192,
+      "tree": "3ab9817bec3b4e62cab92b9ce0d9ef2f53435a02",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-meetup-20261119",
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "pr": 196,
+      "tree": "9feb9bdbe77edbd6f11e486bf1785ab76c43a5ca",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-privacy-controls-20261119",
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "pr": 197,
+      "tree": "22d7b4e2ab6756a33eed3598115dab7ca1a9c24f",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-privacy-policy-20261119",
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "pr": 194,
+      "tree": "946ad1109e5a586439f43983de10e9fa8cd1e43d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-proof-inputs-20261119",
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "pr": 191,
+      "tree": "be88b287938122c319b62ee7462bf3a5003dfd9a",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-proof-jobs-20261119",
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "pr": 199,
+      "tree": "498f47b8d4ee8d79baab7a100c0ef2dec85377c9",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/optional-stealth-20261119",
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "pr": 198,
+      "tree": "8feb969703a3fc6eecfc976f5eba550feccf240d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 32,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/personalization-favorites-ui-20261119",
+      "head": "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+      "pr": 201,
+      "tree": "2e88aa8eec7a6e609ca113d35a36177c40bf156d",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 34,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "pr": 204,
+      "tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/qr-camera-fixture-20261119",
+      "head": "9611d6a5cb404fed5d41eeb176dafb31c01de640",
+      "pr": 189,
+      "tree": "938b76f923df166717ef522666575e37a0623825",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 24,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/solana-browser-send-repair-20261119",
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "pr": 202,
+      "tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 34,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "pr": 203,
+      "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    }
+  ],
+  "missing_pr_numbers": [
+    55,
+    82,
+    130
+  ],
+  "main_protected": false,
+  "rulesets": [],
+  "protection_read": "403 Resource not accessible by integration",
+  "tags": [],
+  "releases": [],
+  "schema": "p2p-consolidation-inventory-delta/v1",
+  "baseline_file": "branch-inventory.json",
+  "previous_overlay": "inventory-delta-generation4.json",
+  "coordination_head": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36",
+  "new_since_generation4": [
+    {
+      "branch": "codex/personalization-templates-ui-20261119",
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "pr": 204,
+      "tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    },
+    {
+      "branch": "codex/solana-restore-ack-20261119",
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "pr": 203,
+      "tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "merge_base": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+      "ahead": 35,
+      "behind": 0,
+      "owner": "coordinator and declared native workers",
+      "externally_active": false,
+      "classification": "C",
+      "scope": "Owned cumulative source or evidence; integrate only qualified scoped differences."
+    }
+  ],
+  "changed_owned_heads_since_generation4": [
+    {
+      "branch": "codex/consolidation-handoff-20261119",
+      "previous": "de7c385937dbed27620ab07baf1dc7210f39b700",
+      "current": "f0773c2c91ec271b86c84baf3745c9cd56d1cf36"
+    }
+  ],
+  "optional_checks": [
+    {
+      "pr": 191,
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "total": 10,
+      "passed": 9,
+      "remaining": [
+        {
+          "name": "program",
+          "status": "completed",
+          "conclusion": "failure",
+          "id": 135983838195,
+          "completed": "2026-11-20T01:30:15Z",
+          "details": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44644591747/job/135983838195"
+        }
+      ]
+    },
+    {
+      "pr": 192,
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "total": 9,
+      "passed": 9,
+      "remaining": []
+    },
+    {
+      "pr": 193,
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "total": 9,
+      "passed": 9,
+      "remaining": []
+    },
+    {
+      "pr": 194,
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "total": 9,
+      "passed": 9,
+      "remaining": []
+    },
+    {
+      "pr": 195,
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "total": 9,
+      "passed": 9,
+      "remaining": []
+    },
+    {
+      "pr": 196,
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "total": 10,
+      "passed": 9,
+      "remaining": [
+        {
+          "name": "program",
+          "status": "completed",
+          "conclusion": "failure",
+          "id": 135987783703,
+          "completed": "2026-11-20T01:51:51Z",
+          "details": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44645760050/job/135987783703"
+        }
+      ]
+    },
+    {
+      "pr": 197,
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "total": 10,
+      "passed": 9,
+      "remaining": [
+        {
+          "name": "program",
+          "status": "completed",
+          "conclusion": "failure",
+          "id": 135987836079,
+          "completed": "2026-11-20T01:12:26Z",
+          "details": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44645775824/job/135987836079"
+        }
+      ]
+    },
+    {
+      "pr": 198,
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "total": 9,
+      "passed": 9,
+      "remaining": []
+    },
+    {
+      "pr": 199,
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "total": 11,
+      "passed": 10,
+      "remaining": [
+        {
+          "name": "program",
+          "status": "completed",
+          "conclusion": "failure",
+          "id": 135990906563,
+          "completed": "2026-11-20T01:44:11Z",
+          "details": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44646673349/job/135990906563"
+        }
+      ]
+    }
+  ],
+  "optional_reviews": [
+    {
+      "pr": 191,
+      "head": "61f0c6c05d245c4cc7524852224d00693929df3c",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 192,
+      "head": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 193,
+      "head": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 194,
+      "head": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 195,
+      "head": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 196,
+      "head": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 197,
+      "head": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 198,
+      "head": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+      "submitted_reviews": []
+    },
+    {
+      "pr": 199,
+      "head": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+      "submitted_reviews": []
+    }
+  ],
+  "native_failure_evidence": [
+    {
+      "job": 135983838195,
+      "chars": 178124,
+      "evidence": [
+        "2026-11-20T00:58:22.9534924Z AssertionError [ERR_ASSERTION]: one physical attempt per signed transaction; no retries or resends",
+        "2026-11-20T00:59:57.0524766Z ok - fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+        "2026-11-20T00:59:57.0526684Z Waiting for the real finalized Clock to reach refund deadline 1795138163; no warp or skip is available.",
+        "2026-11-20T01:30:13.1583239Z AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:",
+        "2026-11-20T01:30:13.1584495Z +   'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:30:13.1586246Z     at file:///home/runner/work/p2p-offramp/p2p-offramp/scripts/test-solana-localnet-browser.mjs:173:90",
+        "2026-11-20T01:30:13.1588727Z     'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:30:13.2081105Z ##[error]Process completed with exit code 1."
+      ]
+    },
+    {
+      "job": 135987783703,
+      "chars": 179161,
+      "evidence": [
+        "2026-11-20T01:19:55.3555946Z AssertionError [ERR_ASSERTION]: one physical attempt per signed transaction; no retries or resends",
+        "2026-11-20T01:21:31.1213013Z ok - fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+        "2026-11-20T01:21:31.1215246Z Waiting for the real finalized Clock to reach refund deadline 1795139452; no warp or skip is available.",
+        "2026-11-20T01:51:48.8421501Z AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:",
+        "2026-11-20T01:51:48.8423787Z +   'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:51:48.8427134Z     at file:///home/runner/work/p2p-offramp/p2p-offramp/scripts/test-solana-localnet-browser.mjs:173:90",
+        "2026-11-20T01:51:48.8431914Z     'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:51:48.8810782Z ##[error]Process completed with exit code 1."
+      ]
+    },
+    {
+      "job": 135987836079,
+      "chars": 177893,
+      "evidence": [
+        "2026-11-20T01:11:38.3990201Z AssertionError [ERR_ASSERTION]: one physical attempt per signed transaction; no retries or resends",
+        "2026-11-20T01:12:23.9932268Z   - waiting for getByRole('button', { name: 'Restore with a fresh key', exact: true })",
+        "2026-11-20T01:12:23.9934120Z       - element is not enabled",
+        "2026-11-20T01:12:23.9935245Z       - element is not enabled",
+        "2026-11-20T01:12:23.9936351Z        - element is not enabled",
+        "2026-11-20T01:12:23.9937466Z     at /home/runner/work/p2p-offramp/p2p-offramp/scripts/test-solana-localnet-browser.mjs:126:85 {",
+        "2026-11-20T01:12:23.9938260Z     \"  - waiting for getByRole('button', { name: 'Restore with a fresh key', exact: true })\",",
+        "2026-11-20T01:12:23.9939920Z     '      - element is not enabled',",
+        "2026-11-20T01:12:23.9941217Z     '      - element is not enabled',",
+        "2026-11-20T01:12:23.9942514Z     '       - element is not enabled',",
+        "2026-11-20T01:12:23.9943459Z   name: 'TimeoutError'",
+        "2026-11-20T01:12:24.0453793Z ##[error]Process completed with exit code 1."
+      ]
+    },
+    {
+      "job": 135990906563,
+      "chars": 178345,
+      "evidence": [
+        "2026-11-20T01:12:18.2312301Z AssertionError [ERR_ASSERTION]: one physical attempt per signed transaction; no retries or resends",
+        "2026-11-20T01:13:51.6020355Z ok - fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+        "2026-11-20T01:13:51.6021777Z Waiting for the real finalized Clock to reach refund deadline 1795138996; no warp or skip is available.",
+        "2026-11-20T01:44:08.6073116Z AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:",
+        "2026-11-20T01:44:08.6073928Z +   'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:44:08.6075342Z     at file:///home/runner/work/p2p-offramp/p2p-offramp/scripts/test-solana-localnet-browser.mjs:173:90",
+        "2026-11-20T01:44:08.6076816Z     'one physical attempt per signed transaction; no retries or resends\\n' +",
+        "2026-11-20T01:44:08.6392529Z ##[error]Process completed with exit code 1."
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "number": 55,
+      "state": "open",
+      "title": "Research tooling and end-to-end qualification program for P2P Offramp",
+      "updated_at": "2026-11-10T00:49:15Z"
+    },
+    {
+      "number": 82,
+      "state": "open",
+      "title": "Consolidation gate: integrate qualified test/docs lanes into staging without release promotion",
+      "updated_at": "2026-11-19T07:06:09Z"
+    },
+    {
+      "number": 130,
+      "state": "open",
+      "title": "CI: investigate nine indefinitely queued draft-PR workflow runs with zero jobs",
+      "updated_at": "2026-11-19T07:25:08Z"
+    }
+  ],
+  "limits": [
+    "Dated snapshot precedes publication of the coordinator's generation5 core candidate; resolve live refs before any write.",
+    "Original192 classifications and pinned-main feature matrix remain historical; this overlay does not reclassify them.",
+    "No source edits, remote ref/PR mutations, deployment, release or test-suite rerun in this rediscovery task.",
+    "Detailed branch-protection endpoint returned403. Branch-list metadata reported main protected:false; rulesets list was empty.",
+    "Current check results are bound to their existing published heads and are not qualification for future optional/core composition."
+  ],
+  "optional_checks_observation_interval_utc": [
+    "2026-11-20T01:50:42Z",
+    "2026-11-20T01:54:40Z"
+  ]
+}

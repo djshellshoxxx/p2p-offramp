@@ -1,0 +1,1459 @@
+{
+  "schema": 1,
+  "repository": "djshellshoxxx/p2p-offramp",
+  "owner": "/root/generation7_rediscovery/hosted_snapshot",
+  "observed_start_utc": "2026-11-20T02:39:16Z",
+  "observed_end_utc": "2026-11-20T02:42:41+00:00",
+  "checks_snapshot_utc": "2026-11-20T02:40:57Z",
+  "method": "Read-only GitHub API job/check metadata and completed job-log retrieval; no workflow, source, setting, PR or ref mutation.",
+  "limitations": [
+    "Each job result is bound to its recorded head and actual checkout; no result transfers to unpublished corrected core descendants.",
+    "Original in-progress202 status at02:39:16 was superseded by completed success observed02:40:57; finalized log confirms completion02:39:42.",
+    "No live in-progress native log archive was requested;203\u2013205 native completion remains unobserved in this snapshot.",
+    "PR206 is a separate draft relay clock/capacity change and is not the four-repair core successor.",
+    "PR205 remains on its recorded successor qualification hold for the reproduced Solana reconciliation-context finding; completed ancestor checks do not resolve that defect."
+  ],
+  "captured_log_sha256": {
+    "pr202-native.log": {
+      "bytes": 191336,
+      "sha256": "50782a16cac9dd9a79c17151364e23714f9fa867b24bc0718aca84a0f41abdf7"
+    },
+    "pr203-browser.log": {
+      "bytes": 101923,
+      "sha256": "5760939f48b9bfb865242646bff77990c841c78b05b8a7d6a4c8d52b43ff856b"
+    },
+    "pr204-browser.log": {
+      "bytes": 105048,
+      "sha256": "6e83b47dfd68055f31fa8a4b805ff9ddbcd9488a104c856978b6bfc8bb8cca3d"
+    },
+    "pr205-browser.log": {
+      "bytes": 109169,
+      "sha256": "e9bcc216683f864ba33c9b7ff714f8f75943f080e5b8209ffeffddc9d5215fe9"
+    }
+  },
+  "raw_evidence_sha256": "b62671b1f1a0ee214c4a440554c412dd76457cbba0d17e8a3627801cd8c95f47",
+  "pull_requests": {
+    "202": {
+      "head": "d753c0af23ff43743e34679e6b778b9ac0370da2",
+      "actual_merge_checkout": "32f7353551660a6c1e3e9302eecf3647b482c0c3",
+      "checkout_tree": "25d637fa5d6596e44cdae060ccc407f0c23186ee",
+      "checkout_parents": [
+        "2b23ee614ff2dd05bd3a6e79f1278658c30a3909",
+        "d753c0af23ff43743e34679e6b778b9ac0370da2"
+      ],
+      "checks": [
+        {
+          "id": 136009253395,
+          "name": "native-nostr-relay",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103806/job/136009253395"
+        },
+        {
+          "id": 136009253384,
+          "name": "inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103846/job/136009253384"
+        },
+        {
+          "id": 136009253374,
+          "name": "program",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103777/job/136009253374"
+        },
+        {
+          "id": 136009253045,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772/job/136009253045"
+        },
+        {
+          "id": 136009252921,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772/job/136009252921"
+        },
+        {
+          "id": 136009252917,
+          "name": "forge",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103985/job/136009252917"
+        },
+        {
+          "id": 136009252900,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772/job/136009252900"
+        },
+        {
+          "id": 136009252810,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772/job/136009252810"
+        },
+        {
+          "id": 136009252693,
+          "name": "local-trade",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103985/job/136009252693"
+        },
+        {
+          "id": 136009252556,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44652103772/job/136009252556"
+        }
+      ],
+      "foundation_run_id": 44652103772,
+      "native": {
+        "run_id": 44652103777,
+        "jobs": [
+          {
+            "id": 136009253374,
+            "name": "program",
+            "status": "completed",
+            "conclusion": "success",
+            "active_steps": []
+          }
+        ],
+        "actual_receipts": {
+          "validator": {
+            "ok": true,
+            "checks": [
+              {
+                "name": "program .so exists (cargo build-sbf)",
+                "ok": true
+              },
+              {
+                "name": "solana-test-validator is pinned Agave 4.1.2",
+                "ok": true
+              },
+              {
+                "name": "validator reports solana-core 4.1.2",
+                "ok": true
+              },
+              {
+                "name": "wallet funding: finalized without error",
+                "ok": true
+              },
+              {
+                "name": "refund fund: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "refund trade funded",
+                "ok": true
+              },
+              {
+                "name": "refund: client refuses before the finalized Clock reaches the deadline",
+                "ok": true
+              },
+              {
+                "name": "native fund: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "native fund finalized",
+                "ok": true
+              },
+              {
+                "name": "native: escrow Funded at finalized",
+                "ok": true
+              },
+              {
+                "name": "native release: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "native release finalized",
+                "ok": true
+              },
+              {
+                "name": "native: Released, unpaid, after a release-only message",
+                "ok": true
+              },
+              {
+                "name": "native payout: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "native payout finalized",
+                "ok": true
+              },
+              {
+                "name": "native: buyer credited exactly the amount",
+                "ok": true
+              },
+              {
+                "name": "native: paid out at finalized",
+                "ok": true
+              },
+              {
+                "name": "native: one sendTransaction per intent",
+                "ok": true
+              },
+              {
+                "name": "native: one sendTransaction per intent",
+                "ok": true
+              },
+              {
+                "name": "native: one sendTransaction per intent",
+                "ok": true
+              },
+              {
+                "name": "CLI decode: sigverify pass",
+                "ok": true
+              },
+              {
+                "name": "CLI decode: account keys equal ours",
+                "ok": true
+              },
+              {
+                "name": "CLI decode: header equal ours",
+                "ok": true
+              },
+              {
+                "name": "spl setup: ATAs, mint_to, freeze buyer ATA: finalized without error",
+                "ok": true
+              },
+              {
+                "name": "spl: buyer ATA frozen",
+                "ok": true
+              },
+              {
+                "name": "spl fund: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "spl fund finalized",
+                "ok": true
+              },
+              {
+                "name": "client refuses the bundled [release, payout_spl] message (C-L2)",
+                "ok": true
+              },
+              {
+                "name": "hazard: bundled tx fails on the payout leg (DestinationFrozen 6016)",
+                "ok": true
+              },
+              {
+                "name": "hazard: release rolled back, escrow still Funded",
+                "ok": true
+              },
+              {
+                "name": "spl release: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "spl release finalized",
+                "ok": true
+              },
+              {
+                "name": "spl payout (frozen): send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "spl payout to frozen ATA recorded failed",
+                "ok": true
+              },
+              {
+                "name": "spl payout failure label",
+                "ok": true
+              },
+              {
+                "name": "spl: escrow stays Released and unpaid after the failed payout",
+                "ok": true
+              },
+              {
+                "name": "thaw buyer ATA: finalized without error",
+                "ok": true
+              },
+              {
+                "name": "spl payout retry: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "spl payout retry finalized",
+                "ok": true
+              },
+              {
+                "name": "spl: buyer ATA holds the amount",
+                "ok": true
+              },
+              {
+                "name": "spl: paid out at finalized",
+                "ok": true
+              },
+              {
+                "name": "crash fund: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "crash: release reports UNAVAILABLE after a crash at the marker",
+                "ok": true
+              },
+              {
+                "name": "crash: nothing was sent",
+                "ok": true
+              },
+              {
+                "name": "crash: marked intent not cancelled on recover",
+                "ok": true
+              },
+              {
+                "name": "crash: a new release is refused while the marked one is open",
+                "ok": true
+              },
+              {
+                "name": "crash: marked intent dropped after finalized expiry",
+                "ok": true
+              },
+              {
+                "name": "crash: never sent at any point",
+                "ok": true
+              },
+              {
+                "name": "crash: rebuild must name the dropped intent",
+                "ok": true
+              },
+              {
+                "name": "crash rebuild release: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "crash: explicit rebuild finalized",
+                "ok": true
+              },
+              {
+                "name": "crash: rebuild uses a new blockhash",
+                "ok": true
+              },
+              {
+                "name": "restore: marked payout kept, not cancelled",
+                "ok": true
+              },
+              {
+                "name": "restore: payout reconciled finalized from chain state",
+                "ok": true
+              },
+              {
+                "name": "restore: no resend",
+                "ok": true
+              },
+              {
+                "name": "restore: paid out",
+                "ok": true
+              },
+              {
+                "name": "refund: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "refund finalized",
+                "ok": true
+              },
+              {
+                "name": "refund: escrow Refunded",
+                "ok": true
+              },
+              {
+                "name": "refund payout: send answered with the journaled signature",
+                "ok": true
+              },
+              {
+                "name": "refund payout finalized",
+                "ok": true
+              },
+              {
+                "name": "refund: escrow released exactly the amount",
+                "ok": true
+              }
+            ],
+            "duration_seconds": 1908,
+            "started_at": "2026-11-20T01:33:40.903Z",
+            "finished_at": "2026-11-20T02:05:28.505Z",
+            "send_counts": {
+              "sendTransaction": 13
+            },
+            "refund_waited_seconds": 1851,
+            "deviations": [
+              "getGenesisHash answered with the compiled synthetic genesis constant (localnet-only shim; see header)"
+            ],
+            "error": null
+          },
+          "browser": {
+            "ok": true,
+            "kind": "SOLANA_LOCAL_BROWSER_PROOF",
+            "checks": [
+              "actual module Worker refuses absent or wrong-pinned escrows and encrypts three complete original funded receipts",
+              "explicit cancellation and a wallet change during an actual sign-only prompt both send zero transactions",
+              "reviewed release finalizes alone, then a separate reviewed payout transfers exact principal to the original buyer",
+              "fresh-key restore preserves the unknown marker without resending; only finalized expiry and a new explicit review permit replacement",
+              "real chain time opens refund; separate reviewed refund and payout return original seller principal minus actual fees"
+            ],
+            "duration_seconds": 2045,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "genesisRpcRewritten": false,
+            "clockWarped": false,
+            "realClock": true,
+            "wallet_connects": 5,
+            "wallet_prompts": 8,
+            "setup_funding_count": 3,
+            "recorded_app_sends": [
+              {
+                "action": "release",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795140443648,
+                "withheld": false,
+                "replacement": false
+              },
+              {
+                "action": "payout",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795140458385,
+                "withheld": false,
+                "replacement": false
+              },
+              {
+                "action": "release",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795140473565,
+                "withheld": true,
+                "replacement": false
+              },
+              {
+                "action": "release",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795140537250,
+                "withheld": false,
+                "replacement": true
+              },
+              {
+                "action": "payout",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795140552099,
+                "withheld": false,
+                "replacement": false
+              },
+              {
+                "action": "refund",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795142353663,
+                "withheld": false,
+                "replacement": false
+              },
+              {
+                "action": "payout",
+                "durableState": "sendMarked",
+                "sendMarkedAt": 1795142368157,
+                "withheld": false,
+                "replacement": false
+              }
+            ],
+            "unique_recorded_intents": 7,
+            "fixtureErrors": [],
+            "artifactSha256": "456aa79a119cbfb685f265c682f3c2b12ba34ec942aebc91e9ced5f824aac086",
+            "validatorVersion": {
+              "feature-set": 3345198602,
+              "solana-core": "4.1.2"
+            },
+            "publicNetworkQualification": false,
+            "freshNegotiationQualification": false,
+            "ReleaseEnabled": 0
+          },
+          "raw_log_path": "/workspace/scratch/6bd6e00af1c0/verification/generation7-hosted-snapshot/pr202-native.log"
+        }
+      }
+    },
+    "203": {
+      "head": "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a",
+      "actual_merge_checkout": "8e2cd7b6ed1c907127b2e35e8b8826f59c039d90",
+      "checkout_tree": "412efa7b9534cc182d05d2b97830d5f6ff09944e",
+      "checkout_parents": [
+        "d753c0af23ff43743e34679e6b778b9ac0370da2",
+        "2245b3bfb462eca468b4cf759fdc12fa49c5cd3a"
+      ],
+      "checks": [
+        {
+          "id": 136022950914,
+          "name": "program",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212245/job/136022950914"
+        },
+        {
+          "id": 136022950249,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950249"
+        },
+        {
+          "id": 136022950072,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950072"
+        },
+        {
+          "id": 136022950050,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950050"
+        },
+        {
+          "id": 136022950037,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022950037"
+        },
+        {
+          "id": 136022949990,
+          "name": "local-trade",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212104/job/136022949990"
+        },
+        {
+          "id": 136022949793,
+          "name": "native-nostr-relay",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212072/job/136022949793"
+        },
+        {
+          "id": 136022949762,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212078/job/136022949762"
+        },
+        {
+          "id": 136022949569,
+          "name": "forge",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212104/job/136022949569"
+        },
+        {
+          "id": 136022949408,
+          "name": "inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656212063/job/136022949408"
+        }
+      ],
+      "foundation_run_id": 44656212078,
+      "foundation_jobs": [
+        {
+          "id": 136022949762,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136022950037,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136022950050,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136022950072,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136022950249,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "native": {
+        "run_id": 44656212245,
+        "jobs": [
+          {
+            "id": 136022950914,
+            "name": "program",
+            "status": "in_progress",
+            "conclusion": null,
+            "active_steps": [
+              {
+                "name": "Real validator client acceptance including refund and recovery",
+                "status": "in_progress",
+                "conclusion": null,
+                "number": 14
+              }
+            ]
+          }
+        ]
+      },
+      "browser": {
+        "job_id": 136022950072,
+        "groups": [
+          {
+            "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:portal:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:distribution:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:web:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:private:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locator:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:chat:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:diagnostics:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:recovery:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:peer:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locale:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify isolated-peer live and stored signed-offer discovery",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "structured_receipt_count": 21,
+        "raw_log_path": "/workspace/scratch/6bd6e00af1c0/verification/generation7-hosted-snapshot/pr203-browser.log",
+        "new_composition_receipts": [
+          {
+            "ok": true,
+            "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualRuntimeRpc": true,
+            "warmedConnection": true,
+            "applicationCalls": 1,
+            "fetchCalls": 1,
+            "fetchFailures": 0,
+            "statuses": [
+              503
+            ],
+            "refusal": "RPC_UNAVAILABLE",
+            "physicalSendPosts": 1,
+            "validatorForwards": 0,
+            "unexpectedRequests": 0,
+            "fixtureErrors": 0,
+            "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+            "rawResetQualified": false,
+            "generalBrowserRetransmissionGuarantee": false,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0
+          },
+          {
+            "ok": true,
+            "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualEmittedApp": true,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "heldActualLockResponses": 2,
+            "freshProfileAndKey": true,
+            "staleFileBufferDiscarded": true,
+            "submittedDocumentBufferDiscarded": true,
+            "walletPrompts": 0,
+            "rpcRequests": 0,
+            "financialTransactions": 0,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0,
+            "artifactSha256": "54937986dbf48ed92cb1ebf72ad1a003ba95f7283514f1ecd8f21de58201a946"
+          }
+        ]
+      }
+    },
+    "204": {
+      "head": "98d33db64622eab3f5f4ece6141d445d255245e7",
+      "actual_merge_checkout": "c579e9a646855b5d821caf97249df9872b3e98e1",
+      "checkout_tree": "f5c5bb060732a892ba4eb91532e82ed79f64f2c4",
+      "checkout_parents": [
+        "f5241c09f268a7a6841a5760ed0faa90b5b7f005",
+        "98d33db64622eab3f5f4ece6141d445d255245e7"
+      ],
+      "checks": [
+        {
+          "id": 136023880592,
+          "name": "forge",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491879/job/136023880592"
+        },
+        {
+          "id": 136023880187,
+          "name": "native-nostr-relay",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491835/job/136023880187"
+        },
+        {
+          "id": 136023880105,
+          "name": "program",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491793/job/136023880105"
+        },
+        {
+          "id": 136023880074,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717/job/136023880074"
+        },
+        {
+          "id": 136023880058,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717/job/136023880058"
+        },
+        {
+          "id": 136023880022,
+          "name": "local-trade",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491879/job/136023880022"
+        },
+        {
+          "id": 136023879924,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717/job/136023879924"
+        },
+        {
+          "id": 136023879902,
+          "name": "inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491804/job/136023879902"
+        },
+        {
+          "id": 136023879901,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717/job/136023879901"
+        },
+        {
+          "id": 136023879609,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44656491717/job/136023879609"
+        }
+      ],
+      "foundation_run_id": 44656491717,
+      "foundation_jobs": [
+        {
+          "id": 136023879609,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136023879901,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136023879924,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136023880058,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136023880074,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "native": {
+        "run_id": 44656491793,
+        "jobs": [
+          {
+            "id": 136023880105,
+            "name": "program",
+            "status": "in_progress",
+            "conclusion": null,
+            "active_steps": [
+              {
+                "name": "Real validator client acceptance including refund and recovery",
+                "status": "in_progress",
+                "conclusion": null,
+                "number": 14
+              }
+            ]
+          }
+        ]
+      },
+      "browser": {
+        "job_id": 136023879924,
+        "groups": [
+          {
+            "name": "Run npm run test:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:portal:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:distribution:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:web:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:favorites:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:templates:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:private:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locator:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:chat:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:diagnostics:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:recovery:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:peer:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locale:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify isolated-peer live and stored signed-offer discovery",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "structured_receipt_count": 21,
+        "raw_log_path": "/workspace/scratch/6bd6e00af1c0/verification/generation7-hosted-snapshot/pr204-browser.log",
+        "new_composition_receipts": [
+          {
+            "fixture": "synthetic-emitted-favorites-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision",
+              "star",
+              "encrypted-at-rest",
+              "reload",
+              "current-registry-open",
+              "lock-revokes-route",
+              "profile-isolation",
+              "unstar-persists",
+              "delete-retains-dangling-reference",
+              "explicit-dangling-removal",
+              "invalid-terms-favorite-refused"
+            ],
+            "workerOnlyFavorites": true,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          },
+          {
+            "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision-zero",
+              "preview-consent",
+              "cancel-no-write",
+              "seven-defaults-only",
+              "same-slot-update",
+              "encrypted-at-rest",
+              "apply-clears-transient-fields",
+              "missing-fresh-inputs-refused",
+              "fresh-order-nonce-and-agreement",
+              "reload",
+              "profile-isolation",
+              "explicit-repeat-default",
+              "clear-repeat-default",
+              "delete-clears-default",
+              "lock-revokes-preview",
+              "native-two-worker-cas",
+              "native-eight-slot-bound",
+              "native-extra-field-refusal",
+              "current-registry-refusal",
+              "explicit-blank-draft"
+            ],
+            "nativeProbe": {
+              "initialRevision": 0,
+              "winnerRevision": 1,
+              "staleCode": "CONFLICT",
+              "cancelledCode": "NOT_FOUND",
+              "ninthCode": "PROTOCOL_ERROR",
+              "extraFieldCode": "PROTOCOL_ERROR",
+              "finalRevision": 8,
+              "slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "workerOnlyTemplates": true,
+            "unexpectedRequests": 0,
+            "walletPrompts": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        ]
+      }
+    },
+    "205": {
+      "head": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "actual_merge_checkout": "3dbe6ac3994c56bf2e6424676c6dc034ecc9a9b4",
+      "checkout_tree": "ce3c69ddc36245f756005c540e521a26a3ce59b8",
+      "checkout_parents": [
+        "5c5a84ef6300330700c8b0ca54d074ac113f08be",
+        "cd7d54ba075118a7ec043788c17718be842ee405"
+      ],
+      "checks": [
+        {
+          "id": 136033752731,
+          "name": "CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/runs/136033752731"
+        },
+        {
+          "id": 136027175725,
+          "name": "inventory",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477515/job/136027175725"
+        },
+        {
+          "id": 136027175464,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175464"
+        },
+        {
+          "id": 136027175362,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175362"
+        },
+        {
+          "id": 136027175323,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175323"
+        },
+        {
+          "id": 136027175317,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175317"
+        },
+        {
+          "id": 136027175206,
+          "name": "native-nostr-relay",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477383/job/136027175206"
+        },
+        {
+          "id": 136027175006,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477341/job/136027175006"
+        },
+        {
+          "id": 136027174955,
+          "name": "local-trade",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477306/job/136027174955"
+        },
+        {
+          "id": 136027174640,
+          "name": "forge",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477306/job/136027174640"
+        },
+        {
+          "id": 136027174510,
+          "name": "program",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657477232/job/136027174510"
+        },
+        {
+          "id": 136027163474,
+          "name": "Analyze (javascript-typescript)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657472437/job/136027163474"
+        },
+        {
+          "id": 136027163336,
+          "name": "Analyze (python)",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44657472437/job/136027163336"
+        }
+      ],
+      "foundation_run_id": 44657477341,
+      "foundation_jobs": [
+        {
+          "id": 136027175006,
+          "name": "specs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136027175317,
+          "name": "schemas-and-crypto",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136027175323,
+          "name": "local-evm",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136027175362,
+          "name": "browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 136027175464,
+          "name": "docs-tooling",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "native": {
+        "run_id": 44657477232,
+        "jobs": [
+          {
+            "id": 136027174510,
+            "name": "program",
+            "status": "in_progress",
+            "conclusion": null,
+            "active_steps": [
+              {
+                "name": "Real validator client acceptance including refund and recovery",
+                "status": "in_progress",
+                "conclusion": null,
+                "number": 14
+              }
+            ]
+          }
+        ]
+      },
+      "browser": {
+        "job_id": 136027175362,
+        "groups": [
+          {
+            "name": "Verify one actual browser POST for a withheld Solana acknowledgment",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify acknowledged Solana restore with the actual encrypted Worker",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:portal:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:distribution:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:web:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:favorites:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:templates:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:private:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locator:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:chat:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:diagnostics:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:recovery:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:peer:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run npm run test:locale:browser",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify isolated-peer live and stored signed-offer discovery",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "structured_receipt_count": 23,
+        "raw_log_path": "/workspace/scratch/6bd6e00af1c0/verification/generation7-hosted-snapshot/pr205-browser.log",
+        "new_composition_receipts": [
+          {
+            "ok": true,
+            "kind": "SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualRuntimeRpc": true,
+            "warmedConnection": true,
+            "applicationCalls": 1,
+            "fetchCalls": 1,
+            "fetchFailures": 0,
+            "statuses": [
+              503
+            ],
+            "refusal": "RPC_UNAVAILABLE",
+            "physicalSendPosts": 1,
+            "validatorForwards": 0,
+            "unexpectedRequests": 0,
+            "fixtureErrors": 0,
+            "artifactSha256": "8e1d06fb99e221589dfdd888a8b120ac45195dc63535a39de1f000f7b835cb0a",
+            "rawResetQualified": false,
+            "generalBrowserRetransmissionGuarantee": false,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0
+          },
+          {
+            "ok": true,
+            "kind": "SOLANA_RESTORE_ACK_BROWSER_DIAGNOSTIC",
+            "browser": "158.0.8127.36",
+            "actualEmittedApp": true,
+            "actualModuleWorker": true,
+            "encryptedIndexedDB": true,
+            "heldActualLockResponses": 2,
+            "freshProfileAndKey": true,
+            "staleFileBufferDiscarded": true,
+            "submittedDocumentBufferDiscarded": true,
+            "walletPrompts": 0,
+            "rpcRequests": 0,
+            "financialTransactions": 0,
+            "nativeChainQualified": false,
+            "ReleaseEnabled": 0,
+            "artifactSha256": "ba257e8b5178c52014e4eb4c00a3047cb71cb63d33ed395add6dc7754497a7a4"
+          },
+          {
+            "fixture": "synthetic-emitted-favorites-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision",
+              "star",
+              "encrypted-at-rest",
+              "reload",
+              "current-registry-open",
+              "lock-revokes-route",
+              "profile-isolation",
+              "unstar-persists",
+              "delete-retains-dangling-reference",
+              "explicit-dangling-removal",
+              "invalid-terms-favorite-refused"
+            ],
+            "workerOnlyFavorites": true,
+            "unexpectedRequests": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          },
+          {
+            "fixture": "synthetic-emitted-trade-templates-native-worker-idb",
+            "browser": "158.0.8127.36",
+            "journey": [
+              "locked",
+              "explicit-load-revision-zero",
+              "preview-consent",
+              "cancel-no-write",
+              "seven-defaults-only",
+              "same-slot-update",
+              "encrypted-at-rest",
+              "apply-clears-transient-fields",
+              "missing-fresh-inputs-refused",
+              "fresh-order-nonce-and-agreement",
+              "reload",
+              "profile-isolation",
+              "explicit-repeat-default",
+              "clear-repeat-default",
+              "delete-clears-default",
+              "lock-revokes-preview",
+              "native-two-worker-cas",
+              "native-eight-slot-bound",
+              "native-extra-field-refusal",
+              "current-registry-refusal",
+              "explicit-blank-draft"
+            ],
+            "nativeProbe": {
+              "initialRevision": 0,
+              "winnerRevision": 1,
+              "staleCode": "CONFLICT",
+              "cancelledCode": "NOT_FOUND",
+              "ninthCode": "PROTOCOL_ERROR",
+              "extraFieldCode": "PROTOCOL_ERROR",
+              "finalRevision": 8,
+              "slots": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "workerOnlyTemplates": true,
+            "unexpectedRequests": 0,
+            "walletPrompts": 0,
+            "tradingEnabled": false,
+            "releaseAcceptance": false
+          }
+        ]
+      }
+    },
+    "206": {
+      "title": "fix(relay): reject invalid ad clocks and unbounded order-book capacity",
+      "draft": true,
+      "branch": "codex/relay-freshness-capacity-20261120-auto2",
+      "head": "e848ae19574e8b7f4cb040082df5255ee5a63f1e",
+      "base": "cd7d54ba075118a7ec043788c17718be842ee405",
+      "head_tree": "8420b5614b717e4d705cd676b4cf999b049dc51a",
+      "head_parents": [
+        "3a7d1b2e3cee26f5c9300b89d5502048b37280e4"
+      ],
+      "merge_checkout_candidate": "d022fd4901828fc41dd72238f3977a1b61e6df31",
+      "merge_tree": "8420b5614b717e4d705cd676b4cf999b049dc51a",
+      "merge_parents": [
+        "cd7d54ba075118a7ec043788c17718be842ee405",
+        "e848ae19574e8b7f4cb040082df5255ee5a63f1e"
+      ],
+      "scope": "Separate relay invalid-ad-clock and order-book-capacity repair; NOT the unpublished four-repair core successor.",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/206",
+      "checks": [
+        {
+          "id": 136042554858,
+          "name": "local-trade",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109973/job/136042554858"
+        },
+        {
+          "id": 136042554413,
+          "name": "forge",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109973/job/136042554413"
+        },
+        {
+          "id": 136042554066,
+          "name": "native-nostr-relay",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109949/job/136042554066"
+        },
+        {
+          "id": 136042553991,
+          "name": "browser",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109796/job/136042553991"
+        },
+        {
+          "id": 136042553927,
+          "name": "schemas-and-crypto",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109796/job/136042553927"
+        },
+        {
+          "id": 136042553904,
+          "name": "local-evm",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109796/job/136042553904"
+        },
+        {
+          "id": 136042553884,
+          "name": "docs-tooling",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109796/job/136042553884"
+        },
+        {
+          "id": 136042553546,
+          "name": "inventory",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109860/job/136042553546"
+        },
+        {
+          "id": 136042553540,
+          "name": "specs",
+          "status": "queued",
+          "conclusion": null,
+          "url": "https://github.com/djshellshoxxx/p2p-offramp/actions/runs/44662109796/job/136042553540"
+        }
+      ],
+      "runtime_test_qualification_observed": false
+    }
+  }
+}
