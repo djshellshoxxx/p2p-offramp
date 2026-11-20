@@ -1,6 +1,180 @@
 # P2P-Offramp consolidation handoff
 
-## Current generation 10 checkpoint and generation 11 ownership
+## Current generation 11 checkpoint — verified and restartable
+
+**The combined core and nine preserved optional layers are locally qualified,
+independently reviewed and published on the exact current core.** All three fresh
+generation 11 workers have completed their scopes. A fresh complete repository
+delta found no further unowned, safely actionable source task. The source queue
+is now quiescent and restartable while current-source hosted and external
+qualification conditions remain open. This is not a claim that the entire
+product or a production release is complete.
+
+Main remains **5c5a84ef6300330700c8b0ca54d074ac113f08be**. This coordinator performed
+**zero main merges and zero explicit merge-API calls**. GitHub separately records
+PR212 merged into its stacked target after its exact source was included in210.
+There are **44 distinct native workers actually launched** in this root tree;
+workers 42, 43, 44 were the three fresh generation 11 workers and are now complete.
+External-stream workers are separately attributed. No generation 12 workers have
+been launched; a new generation requires concrete new work.
+
+### Current source checkpoints
+
+| Scope | Exact commit | Exact tree |
+| --- | --- | --- |
+| Tested core212 | 540e1fe2660e0a6084600726d5f6f75fd5c1ee05 | e54743e3dd8cd7f1c8115d8692974ebe34d67405 |
+| Published current core210 | d30152336bb687b31ae547ab3fcecb8835a02ef4 | fa0d662c991cb03729ca0a4ea53ef60960b81842 |
+| Tested optional source | 97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07 | b43344279e6a6c7acd14e52eafab0aca1ff4bc3d |
+| Published equivalent optional source | b40731f82f17ec9119653fc6a21fd26e49e40dff | b43344279e6a6c7acd14e52eafab0aca1ff4bc3d |
+| Published optional report checkpoint | db531cb03ad303821a3625f6858941de1ac07606 | e67004acf32a567dfd515e798c46992aca12163d |
+
+[PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210) remains open/draft on
+corrected207. It preserves reviewed206 relay guards,208 backup verification,209
+ctutils,210 strict transport qualification,211 QR expiry, all four earlier207
+repairs and the new212 temporary-copy cleanup. The current source and reports
+have46 changed paths versus207. Tested 212 follows its original test-first56e1ae0
+and old 701f core; published d301 adds only three evidence documents. Local final
+core4b42a58f5ae37207a7188e518295065f8d00c7e0 has the same fa0d tree.
+
+The [current optional evidence branch](https://github.com/djshellshoxxx/p2p-offramp/tree/codex/optional-current-core-evidence-g11-20261120)
+contains nine separate source layers, then only three report files. Local final
+report5ec0798620e426f0f3758f5c81df5233bff58ae7 has the same e670 tree as published
+db531. Every original-head first parent, preceding-layer second parent and full
+tree was individually verified. Original PR191–199 refs remain unchanged;
+there is no bulk optional PR and no default activation. The exact local-to-remote
+mapping is [generation11-published-checkpoints.json](generation11-published-checkpoints.json).
+Commit metadata can differ while the entire verified tree remains identical.
+
+### Actual execution and independent evidence
+
+| Executed scope | Current core | Current optional source |
+| --- | ---: | ---: |
+| New full suite, one invocation per frozen source | **2,311/2,311** | **2,711/2,711** |
+| Tooling / policy tests | 44/44 and57/57 | 44/44 and57/57 |
+| TypeScript configurations | 4 | 7 |
+| Python specification tests | 32 | 32 |
+| Production files / core entry modules | 238/142 | 304/142 |
+| Independent maintained tests | **44/44** | **16/16** |
+
+Both full suites had zero failures, skips, cancellations and todos. Independent
+44 includes the two new regressions; it is not added to the full suite or to its
+own two-test run. Earlier2309/2709/2681/2617 counts remain source-bound history.
+Core author 43 ran12 serialized commands. Optional qualification ran18 commands
+plus two fresh final-core reference builds. Root rehashed12 core logs, three
+independent regression/affected logs,20 optional/reference logs, the independent
+optional log and both pairs of report checks. Independent reviewer 42 checked all author
+logs,27 core files,54 optional/reference files and complete graph-source records.
+No open High/Medium or other actionable integration finding remains in scope.
+
+The new correction is **one Low implementation cause with two refusal variants**.
+The identical original tests produced 0 passes and 2 failures; the fixed tests
+passed 2/2. The HTTP driver
+now erases its owned POST-body copy on cancellation/capacity refusal, preserving
+caller bytes, admitted requests, error results and slot accounting. No network
+leak, financial effect, authority bypass or whole-process memory sanitization was
+established. The corrected library is absent from all six default/demo graphs;
+all 27 new core artifacts therefore remain byte-identical to generation10.
+
+Optional preparation preserves all 172 original nonshared blobs, all 2,492 protected
+core entries at every layer, all 56 core commands in the 62-command union and all 139
+foundation lines plus seven reviewed additions. All 13 default and 14 demo outputs
+match fresh builds of the exact final core. Zero optional imports occur in any
+of the graphs. Release remains disabled, release acceptance false, external
+origins empty and CSP connect-src 'none'. Node/WASM memory reaches its256MiB cap
+and refuses further growth; browser/device/provider qualification stays separate.
+All strict financial/send assertions and both real1800-second refund minima are
+preserved. No local Chromium or extended native financial execution was added.
+
+Read the [core author report](GENERATION11_TRANSPORT_CORE_QUALIFICATION_20261120.md),
+[core independent review](INDEPENDENT_TRANSPORT_PREFLIGHT_REVIEW_GENERATION11_20261120.md),
+[core plan](generation11-core-plan.json),
+[optional author report](GENERATION11_OPTIONAL_COMPLETE_STACK_20261120.md),
+[optional independent review](INDEPENDENT_GENERATION11_OPTIONAL_REVIEW_20261120.md)
+and [optional plan](generation11-optional-stack-plan.json).
+
+### Fresh census, PR accounting and current hosted gates
+
+The complete **04:56:14–04:56:50 UTC** census found **221 branches /209 PRs**:
+**65 open,106 merged,38 closed unmerged**, zero tags/releases. Complete API and
+Git head maps agree. All original192 branch heads and184 PR records remain exact;
+original classification is A108/B20/C41/D5/E2/F11/G5/H0. Only two known branches
+and PR212 were new since generation10; only200/210 had the already recorded head
+advances. No original branches disappeared or moved. The later generation 11
+optional evidence branch above is one separately verified addition; it does not
+change the dated complete census into a claimed222-branch enumeration.
+
+GitHub records212 closed/merged at04:52:43 UTC with source/merge commit540e1fe
+unchanged, targeting the stacked transport branch. The closed PR retains old 701f
+base metadata; current target d301 directly parents212. This explains106 merged
+records. The exact server closure mechanism is not inferred. It is separate from
+zero main merges and from explicit merge operations. Original212 ref is preserved.
+
+At **04:57:18 UTC**, all **ten checks** on exactd301 were queued. Current browser
+job136092099829, native Nostr136092098664 and native program136092098296 had no
+completed logs or actual executed checkout. The single04:59:49 program-step
+inspection returned an empty list. No old 701f or component pass was transferred.
+See the [final rediscovery report](GENERATION11_FINAL_REDISCOVERY_AND_GATES_20261120.md),
+[complete inventory](inventory-delta-generation11.json) and
+[current-head gate snapshot](hosted-snapshot-generation11.json).
+
+Historical203/205 real-refund receipts and206/208/209 component browser results
+remain intact at their original sources. They do not qualify d301. Historical205
+still lacks four later corrected207 repairs. Current-source distribution remains
+refused where immutable locale evidence is stale; documentation consistency does
+not grant semantic or release approval.
+
+### Corrections, remaining work and exact restart procedure
+
+The ledger contains **33 reproduced corrections:32 implementation defects and
+one historical acknowledgment-fixture defect**. Its35 rows also include one
+integration-boundary check and one workflow-gate correction. Compatible ctutils
+remediation and the later strict transport qualification correction are tracked
+separately. Among implementation rows, five are rated Medium and five Low ; 22 have
+no severity rating. These are source-scoped implementation findings, not 33 proven
+financial exploits. Optional recomposition adds zero causes.
+
+Remaining work has explicit status and next actions in the machine state:
+
+1. **Current-source hosted/native/browser/SBPF gates:** read completed logs and
+   actual checkout/tree/ordered-parent receipts. Keep financial sends, markers,
+   signatures, principal/fees, measured warmth, zero fixture errors and real waits.
+   Coordinate qualification of the combined source with the207 owner before any
+   main integration; green ancestor status is insufficient.
+2. **Nine optional PRs:** preserve separate package scopes. Obtain applicable
+   standalone CodeRabbit-or-Qodo review and exact proposed-source hosted/native
+   checks before advancing each original ref. Re-resolve ownership and leases;
+   future default composition remains a separate gate.
+3. **Dependencies:** exact ctutils0.4.4 correction is present. Retain
+   crypto-bigint0.5.5/RUSTSEC-2026-0387 and five maintenance warnings; a compatible
+   upstream path and applicable native/SBPF evidence remain. No incompatible
+   major, suppression or waiver was introduced.
+4. **Broader feature/external qualification:** full Solana discovery/negotiation/
+   funding UI, signed-update UI and owner trust/transport choices remain partial.
+   Physical wallets, cameras, print, mobile/accessibility and real-device matrices
+   remain separate. Experimental155 and proof/provider/model decisions stay
+   preserved outside default activation. The screened historical updater-browser
+   adaptation remains excluded.
+
+The existing hourly automation is enabled with schedule, timezone, environments
+and triggers unchanged. Its last observed04:30 run completed04:40:11.519165 UTC
+and produced212; this generation reviewed and qualified that source. The task's
+05:06:54 UTC prefix records completed44-worker accounting and this restartable
+state. Root appends the exact final PR200 pointer after publication; continuation
+must always resolve livePR200 and current source refs before editing.
+
+Do not launch another audit merely to keep a loop alive. Resume a fresh generation
+when a concrete new source, completed relevant gate, compatible dependency update,
+required owner/device input or accepted feature specification provides actionable
+work. Read this handoff and machine state first, assign isolated ownership and
+preserve every prior source-bound result. No generation 12 worker is currently
+running. Source, raw logs, artifacts, toolchains and external-owner data remain
+preserved; dependency-transfer receipts locate the reused physical cache.
+
+## Historical generation 10 checkpoint and generation 11 ownership
+
+This section is a dated checkpoint. Current source, evidence, counts and worker
+completion are stated above; older present-tense text below is preserved history.
+
 
 **The combined reviewed core and all nine preserved optional layers are locally
 qualified, independently reviewed and published.** Main remains

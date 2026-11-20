@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "repository": "djshellshoxxx/p2p-offramp",
-  "generation": 10,
-  "updated_at_utc": "2026-11-20T04:46:47.095160+00:00",
-  "phase": "generation10-published-generation11-new-source-qualification-active",
+  "generation": 11,
+  "updated_at_utc": "2026-11-20T05:09:05.194802+00:00",
+  "phase": "verified-quiescent-current-core-and-optional-qualified-hosted-external-gates-pending",
   "main_sha": "5c5a84ef6300330700c8b0ca54d074ac113f08be",
   "integration_branch": "codex/transport-qualification-20261120",
-  "integration_source_sha": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
-  "integration_source_tree": "81845317f8c1cfe7c76846aa54403fb49cc141b0",
+  "integration_source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+  "integration_source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
   "scope": {
     "deployment_authorized": false,
     "release_enabled": 0,
@@ -164,6 +164,37 @@
         "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
         "scope": "Candidate from completed04:30scheduled run, assigned to fresh42/43; not a later full inventory."
       }
+    ],
+    "generation11_refresh": {
+      "file": "inventory-delta-generation11.json",
+      "report": "GENERATION11_FINAL_REDISCOVERY_AND_GATES_20261120.md",
+      "observed_from_utc": "2026-11-20T04:56:14.088Z",
+      "observed_to_utc": "2026-11-20T04:56:50.511Z",
+      "branches": 221,
+      "pull_requests": 209,
+      "open": 65,
+      "merged": 106,
+      "closed_unmerged": 38,
+      "tags": 0,
+      "releases": 0,
+      "original_branch_heads_unchanged": 192,
+      "original_pr_records_unchanged": 184,
+      "api_cli_all_heads_identical": true,
+      "new_known_branches_since_generation10": 2,
+      "new_prs_since_generation10": [
+        212
+      ],
+      "deleted_branches": 0,
+      "additional_unowned_safely_actionable_source_work": false
+    },
+    "after_generation11_census_individual_publications": [
+      {
+        "branch": "codex/optional-current-core-evidence-g11-20261120",
+        "head": "db531cb03ad303821a3625f6858941de1ac07606",
+        "tree": "e67004acf32a567dfd515e798c46992aca12163d",
+        "observed_at_utc": "2026-11-20T05:05:23.512Z",
+        "scope": "New branch created and exact ref/tree verified after complete221/209 census. This is an individually observed addition, not a later complete census."
+      }
     ]
   },
   "completed": [
@@ -270,6 +301,26 @@
       "source_sha": "7dc8f486791f8f4a2fa0b9182181354e6b72f188",
       "published_head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
       "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/codex/optional-complete-evidence-g10-20261120"
+    },
+    {
+      "id": "QUALIFY-GENERATION11-TRANSPORT-CORE",
+      "state": "qualified-independently-reviewed-published-stacked-source",
+      "source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/pull/210"
+    },
+    {
+      "id": "PREPARE-GENERATION11-OPTIONAL-LAYERS",
+      "state": "qualified-independently-reviewed-evidence-published",
+      "source_sha": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "published_head": "db531cb03ad303821a3625f6858941de1ac07606",
+      "url": "https://github.com/djshellshoxxx/p2p-offramp/tree/codex/optional-current-core-evidence-g11-20261120"
+    },
+    {
+      "id": "REDISCOVER-GENERATION11-DELTA",
+      "state": "complete-no-additional-unowned-safely-actionable-source",
+      "source_sha": "166d23a830649a16ff8cf552a896aeb3401263db",
+      "report": "GENERATION11_FINAL_REDISCOVERY_AND_GATES_20261120.md"
     }
   ],
   "repairs": [
@@ -563,6 +614,27 @@
       },
       "affected_passed": 112,
       "affected_includes_fixed_regressions": true
+    },
+    {
+      "id": "FIX-TRANSPORT-PREFLIGHT-COPY-ZEROIZATION",
+      "kind": "reproduced-defect",
+      "severity": "Low",
+      "cause_count": 1,
+      "refusal_variants": 2,
+      "source": "packages/transport/src/http-driver.ts",
+      "original_passed": 0,
+      "original_failed": 2,
+      "fixed_passed": 2,
+      "independent_review": "92ba098fe87bb648e49b5e72f9b31ee7dee68804",
+      "independent_report_sha256": "2ae118a3203b6628b370a034882af47277e4859ce94dc313326c02ecfd1f2035",
+      "scope": "Clears the driver's detached POST-body copy on cancellation/capacity refusal; caller bytes and admitted requests unchanged. No demonstrated network leakage/financial effect or whole-process memory sanitization claim.",
+      "state": "independently-reproduced-corrected-composed-in-current210-local-full-qualified-hosted-pending",
+      "repair_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "pr": 212,
+      "composed_pr": 210,
+      "affected_passed": 44,
+      "full_passed": 2311
     }
   ],
   "verification": {
@@ -1092,6 +1164,32 @@
         "new_root_product_executions": 0,
         "root_parser_note": "The author uses the Node spec reporter (\u2139); the reviewer uses TAP (#). Both raw summary formats were parsed after correcting the root-only initial TAP assumption."
       }
+    },
+    "generation11_core_full": {
+      "source": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "pass": 2311,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "invocations": 1,
+      "independent_affected_passed": 44,
+      "affected_includes_two_regressions": true
+    },
+    "generation11_optional_full": {
+      "source": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+      "pass": 2711,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "invocations": 1,
+      "independent_boundary_passed": 16,
+      "actual_source_reference_files_hashed": 54,
+      "fresh_core_outputs_identical": true,
+      "default_optional_graph_hits": 0
     }
   },
   "workers": [
@@ -1395,23 +1493,35 @@
       "generation": 11,
       "worker": "generation11_transport_review",
       "ordinal": 42,
-      "state": "active",
-      "scope": "Independent212 review and accepted-source/optional evidence. Original0/2,fixed2/2,maintained44/44; oneLow cause pending accepted full qualification."
+      "state": "complete",
+      "scope": "Independent original0/2,fixed2/2,affected44/44; optional16/16; complete source/log/artifact review, no open scoped findings. No duplicate full tests.",
+      "core_report": "92ba098fe87bb648e49b5e72f9b31ee7dee68804",
+      "optional_report": "25f76214d79a73ca640833c7181ae2cf3c645257"
     },
     {
       "generation": 11,
       "worker": "generation11_source_qualification",
       "ordinal": 43,
-      "state": "active",
-      "scope": "New212-based core and preserved optional qualification; root alone publishes."
+      "state": "complete",
+      "scope": "One2311full core and one2711full optional qualification, exact-source preservation and fresh core reference builds; no remote mutations.",
+      "core_report": "4493e8b1c543b1d880f6f4cab17a513badebf7de",
+      "optional_report": "ab2480099f8004db91fbe0a973a5216581f7242d"
+    },
+    {
+      "generation": 11,
+      "worker": "generation11_final_delta",
+      "ordinal": 44,
+      "state": "complete",
+      "scope": "Fresh221/209 full inventory, original192/184 preservation, currentd301 tenqueued gates; no new unowned source, no product tests/remote mutations.",
+      "report_commit": "166d23a830649a16ff8cf552a896aeb3401263db"
     }
   ],
   "remaining": [
     {
       "id": "GATE-COMBINED-HOSTED",
       "priority": 1,
-      "state": "generation10-current701f-ten-queued",
-      "next_action": "Read completed exact-current-source logs and actual checkout/tree receipts; future212composition needs own checks. Preserve both1800secondwaits and all financial assertions."
+      "state": "generation11-current-d301-hosted-ten-queued-at0457",
+      "next_action": "Read final actuald301 checkout/tree/log receipts for applicable current-source gates; strict assertions and both1800secondwaits remain. Old701f observations are historical."
     },
     {
       "id": "GATE-PR189-SOLANA",
@@ -1422,14 +1532,14 @@
     {
       "id": "OPTIONAL-SOURCE-EXTRACTIONS",
       "priority": 2,
-      "state": "generation10-evidence-published-generation11-recomposition-owned",
-      "next_action": "Preserve2709-test evidence and original191-199refs.43 owns only accepted212-based recomposition,42 review. Standalone named review and source gates remain."
+      "state": "generation11-current-core-evidence-published-original-pr-refs-unchanged",
+      "next_action": "Use exact published layer mapping after applicable standalone named review and current per-package hosted/native/browser gates. Re-resolve ownership/heads before each eventual separate PR update; default wiring stays gated."
     },
     {
       "id": "COMPOSE-PERSONALIZATION-UI",
       "priority": 2,
-      "state": "actual205-hosted-favorites-and-templates-passed",
-      "next_action": "Preserve exact205browser proof; new navigation fixes still require corrected descendant hosted execution."
+      "state": "implemented-and-reviewed-in-current-source-hosted-pending",
+      "next_action": "Favorites/templates and navigation fixes are preserved in currentd301. Require exact-current-source completed browser receipts; retain historical205/component evidence separately."
     },
     {
       "id": "COMPOSE-ASSET-UPDATE-UI",
@@ -1466,7 +1576,7 @@
       "id": "CARGO-ADVISORY-REMEDIATION",
       "priority": 1,
       "state": "ctutils-composed-generation10-bigint-compatible-upstream-blocked",
-      "next_action": "Exact209 lock correction is preserved. Await applicable native/SBPF proof; retain bigint and five maintenance warnings without incompatible major or waiver."
+      "next_action": "Currentd301 preserves exact reviewed209lock. Await applicable current native/SBPF proof; retained bigint incompatibility and five maintenance warnings have no waiver."
     },
     {
       "id": "RELAY-PR206-REVIEW",
@@ -1477,23 +1587,23 @@
     {
       "id": "COMPOSE-REVIEWED-CORE-FOLLOWUPS",
       "priority": 1,
-      "state": "completed-generation10-2309-and-independent54",
-      "next_action": "Preserve701f and exact37-path union. Generation11 owns only new212followup."
+      "state": "completed-through-generation11-2311full-44independent",
+      "next_action": "Preserve currentd301 and source-bound history; reopen only for a concrete new candidate or failed current gate."
     },
     {
       "id": "QUALIFY-PR212-TRANSPORT-PREFLIGHT-CLEANUP",
       "priority": 1,
-      "state": "generation11-active",
+      "state": "completed-local-qualification-and-integration-on210",
       "owner": "generation11_transport_review / generation11_source_qualification",
-      "next_action": "Finish accepted540e1fe source execution/review and preserved optional preparation; root alone advances own210withlease. Keep external212 intact and count no unqualified cause."
+      "next_action": "Preserve exact2311full/44independent evidence and source ancestry. Currentd301 hosted/native/browser gates remain; original212head unchanged and GitHub records stackedPRmerged."
     }
   ],
-  "successor_generation": 11,
-  "integration_local_source_sha": "49bcb0f2c63b20ac7878ba4aebd6bc433d44925f",
+  "successor_generation": 12,
+  "integration_local_source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
   "parent_integration_pr": 207,
   "parent_integration_branch": "codex/generation8-core-20261120",
   "parent_integration_head": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
-  "pull_request_resolution": "Reviewed206/208/209/210/211 are composed and locally qualified in root-owned210 on corrected207; component refs unchanged. Nine optional layers are qualified on that exact core and published as evidence; original191-199refs unchanged. Later external212 on210 is assigned to fresh workers42/43. Main-targeting207 and historical205 remain held; no main merges.",
+  "pull_request_resolution": "Current root-owned210d301 includes all reviewed core followups and212, with2311full/44independent local qualification; all9optional layers have2711full/16independent evidence on exact finalcore. GitHub records212merged into stacked210, with original212head unchanged; zero main merges and no explicitmergeAPIcall byroot. Original207/component/optional refs preserved. Fresh221/209delta found no additional unowned safelyactionable source. Remain quiescent/restartable while exact-source gates and named/external prerequisites are pending.",
   "main_merges_performed": 0,
   "published_generations": [
     {
@@ -1537,9 +1647,20 @@
       "optional_head": "cf827ee5a86b28b11d6f2bba7c21f60f3d2153e3",
       "optional_tree": "08c42c12a1cdb1dc81fc0c8422ec58a923e05733",
       "mapping": "generation10-published-checkpoints.json"
+    },
+    {
+      "generation": 11,
+      "source_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "source_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "pr": 210,
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+      "optional_head": "db531cb03ad303821a3625f6858941de1ac07606",
+      "optional_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+      "mapping": "generation11-published-checkpoints.json"
     }
   ],
-  "repair_counting": "32 reproduced corrected causes:31 implementation defects and one previously reproduced acknowledgment-fixture defect. New QR211 contributes one Low implementation cause, not three causes for its three original failing tests. Two other ledger rows are an integration-boundary check and a workflow gate correction. Compatible dependency209 remediation and the later transport210 qualification correction remain separate.",
+  "repair_counting": "33 reproduced corrections =32 implementation defects and one historical acknowledgment-fixture defect. The two212 refusal cases are one Low cause. Two other ledger rows, compatible dependency remediation and later transport qualification correction remain separate.",
   "hosted": [
     {
       "pr": 188,
@@ -1948,6 +2069,21 @@
       "current_head_pass_claimed": false,
       "actual_executed_checkout": null,
       "source": "generation10-final-current-gates.json"
+    },
+    {
+      "pr": 210,
+      "head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+      "observed_at_utc": "2026-11-20T04:57:18.698Z",
+      "counts": {
+        "queued": 10
+      },
+      "browser_job": 136092099829,
+      "native_nostr_job": 136092098664,
+      "native_program_job": 136092098296,
+      "current_head_pass_claimed": false,
+      "actual_executed_checkout": null,
+      "source": "hosted-snapshot-generation11.json"
     }
   ],
   "policy": {
@@ -2023,6 +2159,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 191,
+        "local_head": "379eed00a427cf21fa547b07e9aee22b81410f72",
+        "published_head": "0ea5084d8acaaae20583d180fbe8bc4e681609df",
+        "tree": "1996b0a49c6bc1bba6e32b07f198e37501d174e0",
+        "original_first_parent": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "local_second_parent": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+        "published_second_parent": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "delta_paths": 12,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2091,6 +2240,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 192,
+        "local_head": "13f345f359259efdc18b461a93c57e8eae80af1c",
+        "published_head": "32f861e34bea9fc5af004e1d6f328e861fe73d3b",
+        "tree": "9c2e21ebde323d7384db82cdccc8dc7664404b3b",
+        "original_first_parent": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "local_second_parent": "379eed00a427cf21fa547b07e9aee22b81410f72",
+        "published_second_parent": "0ea5084d8acaaae20583d180fbe8bc4e681609df",
+        "delta_paths": 14,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2149,6 +2311,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 193,
+        "local_head": "298cd03f13f8914c3dbfc23492af2e04d94e1b3c",
+        "published_head": "47eec5d8e036e3621c973f57ee5e771d3265bcf6",
+        "tree": "aae5aa61a1400ee29d16e33919b3f9a4099ca5b9",
+        "original_first_parent": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "local_second_parent": "13f345f359259efdc18b461a93c57e8eae80af1c",
+        "published_second_parent": "32f861e34bea9fc5af004e1d6f328e861fe73d3b",
+        "delta_paths": 20,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2207,6 +2382,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 194,
+        "local_head": "c3862036bde81f8ac1444cfa60acf129ba15f810",
+        "published_head": "b1a28a160b93e6a675236510026dc303eee7cbc8",
+        "tree": "6ea85b1904fb51346b31c1c38f4084f8b59fa253",
+        "original_first_parent": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "local_second_parent": "298cd03f13f8914c3dbfc23492af2e04d94e1b3c",
+        "published_second_parent": "47eec5d8e036e3621c973f57ee5e771d3265bcf6",
+        "delta_paths": 11,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2265,6 +2453,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 195,
+        "local_head": "7b4dbc24abb09efb82fd6b737c76b2f29b212d54",
+        "published_head": "fc4f8a4e2ba5cc72dd098a63ef49b12e75bb9a54",
+        "tree": "8d8236406f6b23692bc1d0fb802de9af01df8c9a",
+        "original_first_parent": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "local_second_parent": "c3862036bde81f8ac1444cfa60acf129ba15f810",
+        "published_second_parent": "b1a28a160b93e6a675236510026dc303eee7cbc8",
+        "delta_paths": 24,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2325,6 +2526,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 196,
+        "local_head": "2731ab1a764772eb58bf6e8b096fd98764abb02e",
+        "published_head": "6bfde1352b09b303e6ffead2c52cf8e4051b811c",
+        "tree": "a97d0b54a88e2a1a1c1862e9a02df4a20452346f",
+        "original_first_parent": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "local_second_parent": "7b4dbc24abb09efb82fd6b737c76b2f29b212d54",
+        "published_second_parent": "fc4f8a4e2ba5cc72dd098a63ef49b12e75bb9a54",
+        "delta_paths": 39,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2383,6 +2597,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 197,
+        "local_head": "023bf15ebae5e6e614e2c252e63a64af7d55071d",
+        "published_head": "0e78cdbae4eb201ec16ff4883e4b1f4793a6ace0",
+        "tree": "e11f0781b1a182e17b16d581208cb387c0b94082",
+        "original_first_parent": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "local_second_parent": "2731ab1a764772eb58bf6e8b096fd98764abb02e",
+        "published_second_parent": "6bfde1352b09b303e6ffead2c52cf8e4051b811c",
+        "delta_paths": 16,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2441,6 +2668,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 198,
+        "local_head": "757df7814d8b6829e92ff1d7e3b1873176bcfc33",
+        "published_head": "9f7af05c57d7ac1a09732c3e65d844b7eb27a46c",
+        "tree": "8e60cad3b1eac35cffc94467aa13cd4212b46695",
+        "original_first_parent": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "local_second_parent": "023bf15ebae5e6e614e2c252e63a64af7d55071d",
+        "published_second_parent": "0e78cdbae4eb201ec16ff4883e4b1f4793a6ace0",
+        "delta_paths": 21,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     },
     {
@@ -2502,6 +2742,19 @@
         "existing_pr_head_unchanged": true,
         "evidence_branch": "codex/optional-complete-evidence-g10-20261120",
         "required_gates": "Applicable exact-source hosted/native/browser and standalone named review; default wiring absent."
+      },
+      "generation11_preparation": {
+        "pr": 199,
+        "local_head": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+        "published_head": "b40731f82f17ec9119653fc6a21fd26e49e40dff",
+        "tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+        "original_first_parent": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "local_second_parent": "757df7814d8b6829e92ff1d7e3b1873176bcfc33",
+        "published_second_parent": "9f7af05c57d7ac1a09732c3e65d844b7eb27a46c",
+        "delta_paths": 22,
+        "existing_pr_head_unchanged": true,
+        "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+        "state": "exact-current-core-prepared-locally-qualified-applicable-source-gates-pending"
       }
     }
   ],
@@ -2510,13 +2763,14 @@
     "enabled": true,
     "cadence": "hourly existing schedule",
     "semantics": "durable scheduled continuation; not a claim that completed native workers run continuously",
-    "prompt_updated_at_utc": "2026-11-20T04:44:51.257231+00:00",
+    "prompt_updated_at_utc": "2026-11-20T05:06:54.734916+00:00",
     "last_observed_run": "2026-11-20T04:30:00Z",
     "last_observed_run_state": "completed2026-11-20T04:40:11.519165Z",
-    "last_result_scope": "Published212 after census; fresh42/43 review/qualification launched.",
-    "prompt_refresh_required": true,
-    "checkpoint_pointer_update_after_publication": "Append actual newly publishedPR200 pointer, keep schedule/environment/triggers unchanged.",
-    "last_observed_run_id": "6afe6e7f-3f8c-832a-b744-a5ca133ffc2e"
+    "last_result_scope": "Last observed04:30run published212; root independently qualified/integrated it on210 and completed current optional evidence. Final task prefix records verified restartable state.",
+    "prompt_refresh_required": false,
+    "checkpoint_pointer_update_after_publication": "Root will append the exact final PR200 publication pointer after normal leased readback. Current task already records completed source state; always resolve livePR200 before edits.",
+    "last_observed_run_id": "6afe6e7f-3f8c-832a-b744-a5ca133ffc2e",
+    "native_workers_permanently_live": false
   },
   "verification_log_sha256": {
     "generation2-full.tap": "3affa64cd3bdc9562dd5d08eb803a4c8764814332e23b574184c97c6c876d392",
@@ -2553,11 +2807,15 @@
     "generation10_core_full": "d72d4686bb1568a437ec6a12667730b84b8b86772cdb561a115392812bf5d00c",
     "generation10_core_independent": "d71139aa9b401ba6f2087cbfd9054fb6443f34a0f9834b6e5a8025efc72993c6",
     "generation10_optional_full": "04fc4d28cb0b13774e85f5666cc5d0748228e7054df62b6acb169cde8fef5e54",
-    "generation10_optional_independent": "834e99b25580c87ec46caf76feddaebf3d33c6b663d58825b8645b4c5b8dba2f"
+    "generation10_optional_independent": "834e99b25580c87ec46caf76feddaebf3d33c6b663d58825b8645b4c5b8dba2f",
+    "generation11_core_full": "3487749188993e24278195714ac5e9c5279cb4a918f94647db852701ecb2bcb5",
+    "generation11_independent_affected": "dd099fa5aa1f3b7ed52bdb15c2adf50cdc7ce8562018ce79e1b20a2c4654966e",
+    "generation11_optional_full": "07831fb7cbd89692037327c2d221cd49afe61a436bd5927dc990e2965714e052",
+    "generation11_optional_independent": "fb2cc67c4ab1ac6c156dc6b7a81d10008030f63ca6eabdfb5362fea93537cd51"
   },
   "integration_pr": 210,
-  "integration_published_head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
-  "integration_published_tree": "976a729bc359d331214924abab617969aa066950",
+  "integration_published_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+  "integration_published_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
   "known_findings": [
     {
       "id": "PRIVACY-ATOMIC-GROUP-PRUNING",
@@ -2640,6 +2898,15 @@
       "pr": 211,
       "review_commit": "49761aac1b2868a39ff0e80317f9d8c070660de9",
       "scope": "Expiry and clock availability revalidated after asynchronous operations at public-review boundary; authority none."
+    },
+    {
+      "id": "FIX-TRANSPORT-PREFLIGHT-COPY-ZEROIZATION",
+      "severity": "Low",
+      "state": "independently-reproduced-corrected-composed-in-current210-local-full-qualified-hosted-pending",
+      "pr": 212,
+      "composed_pr": 210,
+      "repair_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "scope": "Clears the driver's detached POST-body copy on cancellation/capacity refusal; caller bytes and admitted requests unchanged. No demonstrated network leakage/financial effect or whole-process memory sanitization claim."
     }
   ],
   "optional_composition": {
@@ -2686,7 +2953,7 @@
     "author_report": "OPTIONAL_COMPOSITION_20261119.md",
     "author_report_commit": "27fba7450600836b5edc131ae1f4f1744ae96248"
   },
-  "native_workers_actually_launched": 43,
+  "native_workers_actually_launched": 44,
   "optional_hosted_snapshot": {
     "observed_at_utc": "2026-11-20T01:16:13.483Z",
     "checks": {
@@ -3437,7 +3704,7 @@
     "independent_report": "38536886cb08066ee8679325a2bceae65d4cd366",
     "author_report": "4e5ea0ffe27f031e77297c8119d2c1a36177e012"
   },
-  "reproduced_repairs_count": 32,
+  "reproduced_repairs_count": 33,
   "non_defect_integration_checks_count": 2,
   "solana_restore_repair": {
     "pr": 203,
@@ -3892,7 +4159,9 @@
       "root_reexecuted_full_suite": false,
       "root_original_scope_count_separate": 140,
       "state": "published-current-source-hosted-native-required"
-    }
+    },
+    "composed_in_generation11_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "current_composed_verification": "generation11_core_composition; earlier isolated test counts retain their original source scope"
   },
   "backup_verification_successor": {
     "pr": 208,
@@ -3902,7 +4171,9 @@
     "base": "df10fe26a308407237f9ccbc636c8bb61f55b84f",
     "reported_full_passed": 2277,
     "state": "published-draft-external-reviews-reported-hosted-required",
-    "scope": "Current-runtime backup authentication prerequisite; no update activation/trust roots. Historical browser fixture excluded after successor reported automatic screening and unresolved own-lock/stale-result contracts."
+    "scope": "Current-runtime backup authentication prerequisite; no update activation/trust roots. Historical browser fixture excluded after successor reported automatic screening and unresolved own-lock/stale-result contracts.",
+    "composed_in_generation11_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "current_composed_verification": "generation11_core_composition; earlier isolated test counts retain their original source scope"
   },
   "local_resource_recovery": {
     "ignored_dependency_caches_removed_from_completed_checkouts": 11,
@@ -3941,7 +4212,9 @@
     "combined_affected_passed": 28,
     "combined_log_sha256": "f77cc5e85573c90082a82af4048a214e67a6de4f5011d53d547868fd648608d3",
     "open_high_medium_in_reviewed_scope": 0,
-    "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b"
+    "merge_object": "604cbc5fac9228ab22c6d447059d09220452334b",
+    "composed_in_generation11_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "current_composed_verification": "generation11_core_composition; earlier isolated test counts retain their original source scope"
   },
   "latest_completed_native_evidence": "native-final-receipts-generation8.json",
   "generation9_optional_stack": {
@@ -4036,7 +4309,9 @@
     "root_hash_verified_logs": 5,
     "author_ref_changed": false,
     "full_suite_executed": false,
-    "browser_executed": false
+    "browser_executed": false,
+    "composed_in_generation11_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "current_composed_verification": "generation11_core_composition; earlier isolated test counts retain their original source scope"
   },
   "local_resource_recovery_generation9": {
     "observed_at": "2026-11-20T03:48:44.704909+00:00",
@@ -4056,13 +4331,13 @@
     "active_worktree_check": true
   },
   "repair_count_breakdown": {
-    "reproduced_implementation_defects": 31,
+    "reproduced_implementation_defects": 32,
     "reproduced_historical_fixture_defects": 1,
-    "reproduced_total": 32,
+    "reproduced_total": 33,
     "other_ledger_rows": 2,
     "separate_dependency_remediations": 1,
     "separate_generation8_transport_qualification_corrections": 1,
-    "note": "Refines prior loose product-cause wording without changing any earlier repair identity or evidence."
+    "note": "Generation11 adds one independently reproduced/qualified Low temporary-copy cleanup cause with two refusal variants; separate integration/qualification rows and dependency remediation unchanged."
   },
   "hosted_generation9_snapshot": "hosted-snapshot-generation9.json",
   "generation10_core_composition": {
@@ -4086,7 +4361,7 @@
     "full_passed": 2309,
     "independent_focused_passed": 54,
     "full_suite_invocations": 1,
-    "state": "locally-qualified-independently-reviewed-published-exact-source-hosted-gates-pending",
+    "state": "historical-qualified2309-source-on701f-preserved",
     "plan": "generation10-core-plan.json",
     "author_report": "GENERATION10_COMBINED_CORE_20261120.md",
     "independent_report": "INDEPENDENT_GENERATION10_CORE_REVIEW_20261120.md",
@@ -4287,7 +4562,7 @@
         "delta_paths": 22
       }
     ],
-    "state": "locally-qualified-independently-reviewed-published-exact-source-hosted-gates-pending",
+    "state": "historical-qualified2709-source-on701f-preserved",
     "plan": "generation10-optional-stack-plan.json",
     "author_report": "GENERATION10_OPTIONAL_COMPLETE_STACK_20261120.md",
     "independent_report": "INDEPENDENT_GENERATION10_OPTIONAL_REVIEW_20261120.md",
@@ -4438,15 +4713,15 @@
     "optional_graph_imports": 0,
     "named_standalone_review_condition_satisfied": false
   },
-  "current_core_composition_key": "generation10_core_composition",
-  "current_optional_composition_key": "generation10_optional_stack",
+  "current_core_composition_key": "generation11_core_composition",
+  "current_optional_composition_key": "generation11_optional_stack",
   "generation11_candidate": {
     "pr": 212,
     "head": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
     "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
     "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
     "base": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
-    "state": "independent-scoped-review-cleared-full-qualification-active",
+    "state": "independently-qualified-and-published-in210",
     "independent_original": {
       "passed": 0,
       "failed": 2
@@ -4457,8 +4732,12 @@
     },
     "independent_maintained_passed": 44,
     "independent_maintained_includes_two_regressions": true,
-    "cause_count_increment": 0,
-    "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification."
+    "cause_count_increment": 1,
+    "scope": "One Low temporary POST-copy cleanup cause with two refusal variants; no demonstrated network leak/financial impact. Count after accepted-source qualification.",
+    "published_combined_head": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "full_passed": 2311,
+    "github_recorded_state": "closed-merged-into-stacked-target",
+    "original_source_ref_unchanged": true
   },
   "hosted_generation10_snapshot": "hosted-snapshot-generation10.json",
   "hosted_current_generation10_observation": "generation10-final-current-gates.json",
@@ -4511,12 +4790,628 @@
     "external_owner_data_removed": false
   },
   "continuation_control": {
-    "generation10_assigned_work_complete": true,
-    "fresh_census_found_no_other_unowned_work_at_0413": true,
-    "later_new_candidate212_requires_generation11": true,
-    "generation11_workers_actually_started": 2,
+    "generation11_assigned_work_complete": true,
+    "fresh_final_delta_no_additional_unowned_safely_actionable_source": true,
+    "native_workers_actually_launched": 44,
+    "generation11_fresh_workers_actually_launched": 3,
+    "all_generation11_workers_complete": true,
     "native_workers_permanently_live": false,
-    "quiescent": false,
-    "next_quiescence_condition": "Finish concrete212 review/qualification and exact-source optional preservation; if no newer source or gate evidence identifies safely actionable work, retain a verified restartable checkpoint without repeated closed audits."
-  }
+    "quiescent": true,
+    "next_generation_number_if_triggered": 12,
+    "next_generation_workers_launched": 0,
+    "restart_triggers": [
+      "completed relevant current-source hosted/native/browser gate",
+      "concrete new source/PR delta",
+      "compatible dependency remediation",
+      "required owner trust/device/provider input or accepted feature specification"
+    ],
+    "next_action": "Read livePR200/handoff/state and actualrefs; avoid closed-audit repeats, assign isolated fresh workers only to concrete unowned work, preserve all source-bound evidence and gates."
+  },
+  "generation11_core_composition": {
+    "pr": 210,
+    "branch": "codex/transport-qualification-20261120",
+    "previous_head": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "previous_tree": "976a729bc359d331214924abab617969aa066950",
+    "tested_source": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "tested_tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+    "test_first_parent": "56e1ae0fd50c40109aea3f40ce8505e85fc1a5c2",
+    "local_final": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+    "published_final": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "final_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "published_sole_parent": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "only_three_reports_after_source": true,
+    "full_passed": 2311,
+    "independent_affected_passed": 44,
+    "affected_includes_two_regressions": true,
+    "full_suite_invocations": 1,
+    "root_author_logs_rehashed": 12,
+    "root_review_logs_rehashed": 3,
+    "root_post_report_logs_rehashed": 2,
+    "immutable_tree_parent_ref_and_pr_verified": true,
+    "original212_ref_changed": false,
+    "author_report": "GENERATION11_TRANSPORT_CORE_QUALIFICATION_20261120.md",
+    "independent_report": "INDEPENDENT_TRANSPORT_PREFLIGHT_REVIEW_GENERATION11_20261120.md",
+    "plan": "generation11-core-plan.json",
+    "published_mapping": "generation11-published-checkpoints.json",
+    "author_worker": 43,
+    "independent_worker": 42,
+    "independent_report_commit": "92ba098fe87bb648e49b5e72f9b31ee7dee68804",
+    "root_evidence": {
+      "verified_at_utc": "2026-11-20T04:51:44.112633+00:00",
+      "source": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+      "tree": "e54743e3dd8cd7f1c8115d8692974ebe34d67405",
+      "full_suite_counts": {
+        "tests": 2311,
+        "pass": 2311,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "author_logs_rehashed": 12,
+      "author_full_suite_invocations": 1,
+      "independent_review_report_sha256": "2ae118a3203b6628b370a034882af47277e4859ce94dc313326c02ecfd1f2035",
+      "independent_review_commit": "92ba098fe87bb648e49b5e72f9b31ee7dee68804",
+      "new_root_full_executions": 0,
+      "logs": [
+        {
+          "name": "full",
+          "sha256": "3487749188993e24278195714ac5e9c5279cb4a918f94647db852701ecb2bcb5",
+          "bytes": 232920
+        },
+        {
+          "name": "tooling",
+          "sha256": "933f784932834412adc0a77c465a3a925659d9955f7c1412d273d09b0ce7423a",
+          "bytes": 5739
+        },
+        {
+          "name": "typecheck",
+          "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+          "bytes": 341
+        },
+        {
+          "name": "policy",
+          "sha256": "fdb9c627c5361d9ff80b0874dfbe4bce71e19f37a79f8f8defa93a2b191a20ce",
+          "bytes": 7495
+        },
+        {
+          "name": "boundaries",
+          "sha256": "a2afff1ba06119367082cb0aec36223a649eae2fcc0580855c50a042cf9f7684",
+          "bytes": 392
+        },
+        {
+          "name": "build",
+          "sha256": "7ca541327da9491fad262a0850575e4e48b6ad858ff954957e2660deb4822f9b",
+          "bytes": 1026
+        },
+        {
+          "name": "build-demo",
+          "sha256": "60457443897be590f2d7cc48cf64339ccf26f72009e2ac7ee20d92ce741cb4a3",
+          "bytes": 1174
+        },
+        {
+          "name": "docs",
+          "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+          "bytes": 33780
+        },
+        {
+          "name": "governance",
+          "sha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194",
+          "bytes": 1118
+        },
+        {
+          "name": "specs",
+          "sha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9",
+          "bytes": 349
+        },
+        {
+          "name": "spec-tests",
+          "sha256": "e22e5f50be28983fdadc402611d43d4b43f54023fed7a558c236bda2943adadb",
+          "bytes": 4721
+        },
+        {
+          "name": "source-whitespace",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      ]
+    },
+    "open_high_or_medium": 0,
+    "core_original_commands_preserved": 56,
+    "default_artifact_files_identical_to_generation10": 27,
+    "changed_transport_module_in_default_graphs": false,
+    "hosted_current_source_qualification_complete": false
+  },
+  "last_published_optional_composition_key": "generation11_optional_stack",
+  "local_resource_recovery_generation11": {
+    "cache_transfer": {
+      "at_utc": "2026-11-20T04:44:43.266190+00:00",
+      "authorization": "Root message authorized atomic move of completed author39 physical cache after exact-lock and clean/no-process checks.",
+      "from": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation10-optional/node_modules",
+      "to": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-core/node_modules",
+      "source_owner_completed": true,
+      "physical_directory_moved": true,
+      "symlink_used": false,
+      "both_tracked_sources_clean": true,
+      "both_ignored_and_untracked": true,
+      "active_source_cwd_processes": [],
+      "package_lock_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+      "free_bytes_before": 734494720,
+      "free_bytes_after": 734494720,
+      "old_evidence_dependency_resolution": "Older generation10 graph dependency records now resolve to the matching physical cache at the to path; source and artifacts retained unchanged."
+    },
+    "all_source_reports_logs_artifacts_preserved": true
+  },
+  "observed_stacked_pr_closure_generation11": {
+    "pr": 212,
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-11-20T04:52:43Z",
+    "merge_commit_sha": "540e1fe2660e0a6084600726d5f6f75fd5c1ee05",
+    "original_head_unchanged": true,
+    "base_branch": "codex/transport-qualification-20261120",
+    "base_sha_recorded_by_pr_api": "701f3866e60978c945c5a0148dcda5b65f58fdbc",
+    "actual_current_base_ref": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "main_merges_by_root": 0,
+    "explicit_merge_api_calls_by_root": 0,
+    "interpretation": "GitHub records the stacked PR merged after its source was included in the normal210descendant advance; do not infer a main merge or an unobserved server mechanism."
+  },
+  "generation11_optional_stack": {
+    "base_local": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+    "base_published": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+    "base_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+    "tested_source": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+    "tested_tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+    "published_source": "b40731f82f17ec9119653fc6a21fd26e49e40dff",
+    "local_final": "5ec0798620e426f0f3758f5c81df5233bff58ae7",
+    "published_final": "db531cb03ad303821a3625f6858941de1ac07606",
+    "final_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+    "evidence_branch": "codex/optional-current-core-evidence-g11-20261120",
+    "only_three_reports_after_source": true,
+    "all_layer_trees_and_ordered_parents_verified": true,
+    "original_optional_refs_changed": false,
+    "bulk_optional_pr_created": false,
+    "default_activation": false,
+    "full_passed": 2711,
+    "full_suite_invocations": 1,
+    "independent_boundary_passed": 16,
+    "protected_core_entries_each_layer": 2492,
+    "original_nonshared_blobs": 172,
+    "core_commands_preserved": 56,
+    "total_commands": 62,
+    "source_reference_files_hashed": 54,
+    "default_files": 13,
+    "demo_files": 14,
+    "optional_graph_imports": 0,
+    "root_author_reference_logs_rehashed": 20,
+    "root_post_report_logs_rehashed": 2,
+    "root_evidence_receipt_sha256": "ae23acac90fcfa564790357c9b51e2998abff88b6d41d9178a70dde078fd591b",
+    "report_binding": {
+      "tested_optional_head": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "tested_optional_tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+      "core_base_head": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+      "core_base_tree": "fa0d662c991cb03729ca0a4ea53ef60960b81842",
+      "published_core_base": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+      "author_report_head": "ab2480099f8004db91fbe0a973a5216581f7242d",
+      "author_report_tree": "bc32362317bb5d39977cc4be09345cba69cf06f3",
+      "author_report_parent": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "independent_report_head": "25f76214d79a73ca640833c7181ae2cf3c645257",
+      "independent_report_tree": "0b463d303292ac9d4f975c6e06a663dc5f3df3c2",
+      "independent_report_parent": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "independent_report_blob": "b9433aa64833a8e5bcba039f1b2e30553e9826d9",
+      "independent_report_sha256": "b40df577202461fec35f1aa3faed95b1910d8ad9c3fcc36facb14fca207d84ad",
+      "final_optional_report_head": "5ec0798620e426f0f3758f5c81df5233bff58ae7",
+      "final_optional_report_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+      "final_optional_report_parent": "ab2480099f8004db91fbe0a973a5216581f7242d",
+      "report_only_paths": [
+        "docs/engineering/GENERATION11_OPTIONAL_COMPLETE_STACK_20261120.md",
+        "docs/engineering/INDEPENDENT_GENERATION11_OPTIONAL_REVIEW_20261120.md",
+        "docs/engineering/generation11-optional-stack-plan.json"
+      ],
+      "tested_source_entries_preserved": 2666,
+      "final_entries": 2669,
+      "report_validation_pending": false,
+      "optional_full_suite_invocations": 1,
+      "author_remote_mutations": 0,
+      "tracked_status": "clean",
+      "report_validation": [
+        {
+          "name": "docs",
+          "argv": [
+            "npm",
+            "run",
+            "check:docs"
+          ],
+          "source_head": "5ec0798620e426f0f3758f5c81df5233bff58ae7",
+          "log": "/workspace/scratch/6bd6e00af1c0/verification/generation11-optional-post-report-docs.log",
+          "exit_code": 0,
+          "bytes": 33780,
+          "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4",
+          "started_at_utc": "2026-11-20T05:02:46.144553+00:00",
+          "completed_at_utc": "2026-11-20T05:02:46.876919+00:00",
+          "elapsed_seconds": 0.732505
+        },
+        {
+          "name": "whitespace",
+          "argv": [
+            "git",
+            "diff",
+            "--check",
+            "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+            "5ec0798620e426f0f3758f5c81df5233bff58ae7"
+          ],
+          "source_head": "5ec0798620e426f0f3758f5c81df5233bff58ae7",
+          "log": "/workspace/scratch/6bd6e00af1c0/verification/generation11-optional-post-report-whitespace.log",
+          "exit_code": 0,
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "started_at_utc": "2026-11-20T05:02:46.877105+00:00",
+          "completed_at_utc": "2026-11-20T05:02:46.883320+00:00",
+          "elapsed_seconds": 0.006267
+        }
+      ],
+      "validated_at_utc": "2026-11-20T05:02:46.899706+00:00",
+      "physical_dependency_cache": "/workspace/scratch/6bd6e00af1c0/p2p-offramp-generation11-optional/node_modules",
+      "heavy_resource_slot": "released"
+    },
+    "layers": [
+      {
+        "pr": 191,
+        "local_head": "379eed00a427cf21fa547b07e9aee22b81410f72",
+        "published_head": "0ea5084d8acaaae20583d180fbe8bc4e681609df",
+        "tree": "1996b0a49c6bc1bba6e32b07f198e37501d174e0",
+        "original_first_parent": "61f0c6c05d245c4cc7524852224d00693929df3c",
+        "local_second_parent": "4b42a58f5ae37207a7188e518295065f8d00c7e0",
+        "published_second_parent": "d30152336bb687b31ae547ab3fcecb8835a02ef4",
+        "delta_paths": 12
+      },
+      {
+        "pr": 192,
+        "local_head": "13f345f359259efdc18b461a93c57e8eae80af1c",
+        "published_head": "32f861e34bea9fc5af004e1d6f328e861fe73d3b",
+        "tree": "9c2e21ebde323d7384db82cdccc8dc7664404b3b",
+        "original_first_parent": "0fb8452cb38c835e9dccb660f63f6af3156c9f91",
+        "local_second_parent": "379eed00a427cf21fa547b07e9aee22b81410f72",
+        "published_second_parent": "0ea5084d8acaaae20583d180fbe8bc4e681609df",
+        "delta_paths": 14
+      },
+      {
+        "pr": 193,
+        "local_head": "298cd03f13f8914c3dbfc23492af2e04d94e1b3c",
+        "published_head": "47eec5d8e036e3621c973f57ee5e771d3265bcf6",
+        "tree": "aae5aa61a1400ee29d16e33919b3f9a4099ca5b9",
+        "original_first_parent": "f7bd867bc1ee15854b36ba268cedc275c2429c28",
+        "local_second_parent": "13f345f359259efdc18b461a93c57e8eae80af1c",
+        "published_second_parent": "32f861e34bea9fc5af004e1d6f328e861fe73d3b",
+        "delta_paths": 20
+      },
+      {
+        "pr": 194,
+        "local_head": "c3862036bde81f8ac1444cfa60acf129ba15f810",
+        "published_head": "b1a28a160b93e6a675236510026dc303eee7cbc8",
+        "tree": "6ea85b1904fb51346b31c1c38f4084f8b59fa253",
+        "original_first_parent": "a419b420dcee58ce99391a0f73289aa28dc6413b",
+        "local_second_parent": "298cd03f13f8914c3dbfc23492af2e04d94e1b3c",
+        "published_second_parent": "47eec5d8e036e3621c973f57ee5e771d3265bcf6",
+        "delta_paths": 11
+      },
+      {
+        "pr": 195,
+        "local_head": "7b4dbc24abb09efb82fd6b737c76b2f29b212d54",
+        "published_head": "fc4f8a4e2ba5cc72dd098a63ef49b12e75bb9a54",
+        "tree": "8d8236406f6b23692bc1d0fb802de9af01df8c9a",
+        "original_first_parent": "8ff5f5c23dcdda88f79d8f54056515635f0b65a1",
+        "local_second_parent": "c3862036bde81f8ac1444cfa60acf129ba15f810",
+        "published_second_parent": "b1a28a160b93e6a675236510026dc303eee7cbc8",
+        "delta_paths": 24
+      },
+      {
+        "pr": 196,
+        "local_head": "2731ab1a764772eb58bf6e8b096fd98764abb02e",
+        "published_head": "6bfde1352b09b303e6ffead2c52cf8e4051b811c",
+        "tree": "a97d0b54a88e2a1a1c1862e9a02df4a20452346f",
+        "original_first_parent": "4bc4c7e2833b6b8540b8586624fb1697817e02e2",
+        "local_second_parent": "7b4dbc24abb09efb82fd6b737c76b2f29b212d54",
+        "published_second_parent": "fc4f8a4e2ba5cc72dd098a63ef49b12e75bb9a54",
+        "delta_paths": 39
+      },
+      {
+        "pr": 197,
+        "local_head": "023bf15ebae5e6e614e2c252e63a64af7d55071d",
+        "published_head": "0e78cdbae4eb201ec16ff4883e4b1f4793a6ace0",
+        "tree": "e11f0781b1a182e17b16d581208cb387c0b94082",
+        "original_first_parent": "86952b1ccc8eb9c25a3be05d6a32d3c556df8c84",
+        "local_second_parent": "2731ab1a764772eb58bf6e8b096fd98764abb02e",
+        "published_second_parent": "6bfde1352b09b303e6ffead2c52cf8e4051b811c",
+        "delta_paths": 16
+      },
+      {
+        "pr": 198,
+        "local_head": "757df7814d8b6829e92ff1d7e3b1873176bcfc33",
+        "published_head": "9f7af05c57d7ac1a09732c3e65d844b7eb27a46c",
+        "tree": "8e60cad3b1eac35cffc94467aa13cd4212b46695",
+        "original_first_parent": "8e46f3ccf6348a953cef177a4ffd6abfb971c31b",
+        "local_second_parent": "023bf15ebae5e6e614e2c252e63a64af7d55071d",
+        "published_second_parent": "0e78cdbae4eb201ec16ff4883e4b1f4793a6ace0",
+        "delta_paths": 21
+      },
+      {
+        "pr": 199,
+        "local_head": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+        "published_head": "b40731f82f17ec9119653fc6a21fd26e49e40dff",
+        "tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+        "original_first_parent": "e7e1aa90072f4b0376820f0e9b28e609707de74f",
+        "local_second_parent": "757df7814d8b6829e92ff1d7e3b1873176bcfc33",
+        "published_second_parent": "9f7af05c57d7ac1a09732c3e65d844b7eb27a46c",
+        "delta_paths": 22
+      }
+    ],
+    "state": "locally-qualified-independently-reviewed-evidence-published-current-core-base",
+    "author_report": "GENERATION11_OPTIONAL_COMPLETE_STACK_20261120.md",
+    "independent_report": "INDEPENDENT_GENERATION11_OPTIONAL_REVIEW_20261120.md",
+    "plan": "generation11-optional-stack-plan.json",
+    "published_mapping": "generation11-published-checkpoints.json",
+    "author_worker": 43,
+    "independent_worker": 42,
+    "author_report_commit": "ab2480099f8004db91fbe0a973a5216581f7242d",
+    "independent_report_commit": "25f76214d79a73ca640833c7181ae2cf3c645257",
+    "verification": {
+      "full": {
+        "tests": 2711,
+        "suites": 0,
+        "pass": 2711,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 113434.176935
+      },
+      "tooling": {
+        "tests": 44,
+        "suites": 0,
+        "pass": 44,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 28804.540055
+      },
+      "policy": {
+        "tests": 57,
+        "suites": 0,
+        "pass": 57,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 4657.497805
+      },
+      "typescript_configurations": 7,
+      "python_specification_tests": {
+        "python_tests": 32,
+        "python_duration_seconds": 4.42,
+        "python_ok": true
+      },
+      "boundaries": {
+        "production_files": 304,
+        "core_modules": 142
+      },
+      "docs": {
+        "engineeringConsistency": true,
+        "semanticApproval": false,
+        "published": false,
+        "approvedRelease": null,
+        "claims": 6
+      },
+      "governance": {
+        "checked": 12,
+        "historical": 12,
+        "pending": 0,
+        "evidence": {
+          "sourceCommit": "8649b7a1994ec21fe5557179d44e861b746bcda8",
+          "rows": 57,
+          "owned": 12,
+          "bound": 45,
+          "stale": [
+            "apps/web/scripts/artifact-policy.test.mjs",
+            "docs/OPERATOR.md",
+            "packages/chain-evm/src/reader.ts",
+            "packages/chain-evm/test/reader.test.mjs",
+            "packages/security/src/release-manifest.ts",
+            "packages/wallet/src/evm-adapter.ts",
+            "packages/wallet/src/evm-payment-preflight.ts",
+            "packages/wallet/test/evm-adapter.test.mjs",
+            "packages/wallet/test/evm-payment-preflight.test.mjs",
+            "packages/wallet/test/evm-submit.test.mjs",
+            "scripts/recovery/evm-recovery.mjs",
+            "scripts/tests/evm-recovery.test.mjs",
+            "scripts/tests/import-boundaries.test.mjs"
+          ]
+        },
+        "economicPreparationAllowed": false,
+        "authority": "inert-record-only"
+      },
+      "specifications": {
+        "broken_links": 0,
+        "categories": {
+          "catalog": 1,
+          "design-review-pending": 171,
+          "planning": 1
+        },
+        "total": 173,
+        "unindexed": []
+      },
+      "native_node_wasm_memory": {
+        "kind": "public-node-wasm-memory",
+        "moduleSha256": "c834f277a5fac1646aad76810a65d523046ffa04f0c985bf987695fbbd6bcbed",
+        "initialBytes": 65536,
+        "priorPages": 1,
+        "maximumBytes": 268435456,
+        "beyondRefused": true,
+        "bytesAfterRefusal": 268435456,
+        "imports": 0,
+        "browserQualified": false,
+        "providerApproved": false,
+        "proofVerified": false,
+        "nativeWorker": true,
+        "node": "v24.22.3",
+        "linearMemoryOnly": true,
+        "devicePeakMemoryQualified": false
+      },
+      "qualification_commands_passed": 18,
+      "reference_build_commands_passed": 2,
+      "full_suite_invocations": 1,
+      "optional_browser_harness_syntax_checks": 3,
+      "new_browser_executions": 0,
+      "extended_native_financial_executions": 0,
+      "new_sbpf_executions": 0,
+      "default_files": 13,
+      "demo_files": 14,
+      "source_and_reference_actual_files": 54,
+      "optional_graph_imports": 0,
+      "fresh_reference_equals_retained_stage_a_maps": true
+    },
+    "root_evidence": {
+      "verified_at_utc": "2026-11-20T04:58:58.626043+00:00",
+      "source": "97ec6f5a8b8bb811df479bc6f0615d7cdb97ab07",
+      "tree": "b43344279e6a6c7acd14e52eafab0aca1ff4bc3d",
+      "full_suite_counts": {
+        "tests": 2711,
+        "pass": 2711,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "full_suite_invocations": 1,
+      "author_reference_logs_rehashed": 20,
+      "new_root_full_executions": 0,
+      "logs": [
+        {
+          "name": "full",
+          "bytes": 275339,
+          "sha256": "07831fb7cbd89692037327c2d221cd49afe61a436bd5927dc990e2965714e052"
+        },
+        {
+          "name": "tooling",
+          "bytes": 5742,
+          "sha256": "422300aaa756ea5bb0645ba4c68c75c35b2efc32beac0cf25508400189864f8f"
+        },
+        {
+          "name": "typecheck",
+          "bytes": 341,
+          "sha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53"
+        },
+        {
+          "name": "proof-inputs-typecheck",
+          "bytes": 249,
+          "sha256": "1e305eb1bfb14f1b5f68a29cd70d3d9dd040f5dd119fbbc45d75ca92a7e97e00"
+        },
+        {
+          "name": "proof-jobs-typecheck",
+          "bytes": 313,
+          "sha256": "01003589ca24dff5de5e5b62865f20ccb201f4b2a147d91fe1299cd36dfacfb0"
+        },
+        {
+          "name": "policy",
+          "bytes": 7498,
+          "sha256": "da206f512a32158b26f6f6bd36e3a79d216020f993a02d39d8de5fbe3424e4aa"
+        },
+        {
+          "name": "boundaries",
+          "bytes": 392,
+          "sha256": "62ff0a9ff83e69b28299389c00aed569fc8ea560697e46cfee47bdbd60734adc"
+        },
+        {
+          "name": "build",
+          "bytes": 1026,
+          "sha256": "5ce0ba19a3ce3b44b8c82d9086d14366669668131b371c31abbff715e0f90485"
+        },
+        {
+          "name": "build-demo",
+          "bytes": 1174,
+          "sha256": "d525b66cddaa0cb87d99c4710a454ed3eafef2cb6067b2a98d33d5ae4c9f2208"
+        },
+        {
+          "name": "proof-memory",
+          "bytes": 652,
+          "sha256": "c23b861046b8c4db97b176c6021d6defd6cc8163dd0f3a89be90a2536e8cf805"
+        },
+        {
+          "name": "docs",
+          "bytes": 33780,
+          "sha256": "daf413a4cebdd09e5376e2b1c01e17243116981faa90927bdb4a9935032f02c4"
+        },
+        {
+          "name": "governance",
+          "bytes": 1118,
+          "sha256": "42f9556636da25ed29969162b2b491dc3b013911d5d1488a709864b931dd7194"
+        },
+        {
+          "name": "specs",
+          "bytes": 349,
+          "sha256": "25a3cbad6db1d8c778d8964481e666c962f5802d482d42d41ea0945dcd4290b9"
+        },
+        {
+          "name": "spec-tests",
+          "bytes": 4721,
+          "sha256": "9f69fd418760750d2b379e006e430982dcbd72d694b8872d89b9289e3bf8b9eb"
+        },
+        {
+          "name": "meetup-browser-syntax",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "privacy-controls-browser-syntax",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "proof-jobs-browser-syntax",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "source-whitespace",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "reference-build",
+          "bytes": 1026,
+          "sha256": "dcccc436ec075148db5f6c8bbaed92811ab8ae1dee2df26ac61ad86b51f4ced9"
+        },
+        {
+          "name": "reference-build-demo",
+          "bytes": 1174,
+          "sha256": "ddf450104cf9134799b945cfffe0716e24a0f436a78ef28e80edacabe62eccc2"
+        }
+      ],
+      "report_checks_pending": false,
+      "independent_review_commit": "25f76214d79a73ca640833c7181ae2cf3c645257",
+      "independent_report_sha256": "b40df577202461fec35f1aa3faed95b1910d8ad9c3fcc36facb14fca207d84ad",
+      "independent_focused_counts": {
+        "tests": 16,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "independent_focused_log_sha256": "fb2cc67c4ab1ac6c156dc6b7a81d10008030f63ca6eabdfb5362fea93537cd51",
+      "post_report_logs_rehashed": 2,
+      "final_local_report_head": "5ec0798620e426f0f3758f5c81df5233bff58ae7",
+      "final_report_tree": "e67004acf32a567dfd515e798c46992aca12163d",
+      "only_three_report_paths_added": true,
+      "source_entries_preserved": 2666,
+      "clean_checkout": true
+    },
+    "open_high_or_medium": 0,
+    "named_standalone_review_condition_satisfied": false,
+    "hosted_native_browser_qualification_complete": false,
+    "composition_new_cause_count": 0
+  },
+  "hosted_generation11_snapshot": "hosted-snapshot-generation11.json",
+  "current_hosted_snapshot_key": "hosted_generation11_snapshot"
 }

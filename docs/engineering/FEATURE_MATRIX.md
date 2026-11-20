@@ -34,7 +34,32 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
-## Generation 10 current staging overlay
+## Generation 11 current staging overlay
+
+The 27 pinned-main rows above remain unchanged. Current combined core is
+[PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210) at
+d30152336bb687b31ae547ab3fcecb8835a02ef4, treefa0d662c991cb03729ca0a4ea53ef60960b81842. It preserves the prior reviewed
+components and adds one Low transport temporary-copy cleanup cause. Exact source
+passed **2,311/2,311**, with independent **44/44** maintained tests including the
+two regressions. GitHub records212 merged into its stacked target; main is unchanged.
+
+Current optional evidence isdb531cb03ad303821a3625f6858941de1ac07606, treee67004acf32a567dfd515e798c46992aca12163d,
+on exact final core. The new full suite passed **2,711/2,711** and independent
+boundaries **16/16**. All 2,492 protected core entries and 172 original nonshared blobs
+remain exact. All 13 default / 14 demo outputs equal fresh final core builds and
+optional graph imports are zero. Original191–199refs remain unchanged.
+
+Current-source hosted/native/browser and standalone named review gates remain.
+Full Solana discovery/funding parity, signed-update UI, trust/provider decisions,
+physical devices and release qualification remain partial or externally gated.
+The latest full census is 221 branches / 209 PRs at04:56UTC; the later evidence branch
+is separately recorded. All three generation 11 workers completed and the fresh
+delta found no additional unowned safely actionable source work. See the
+[current handoff](CONSOLIDATION_HANDOFF.md),
+[source mapping](generation11-published-checkpoints.json) and
+[gate snapshot](hosted-snapshot-generation11.json).
+
+## Historical generation 10 staging overlay
 
 The 27 pinned-main rows above remain unchanged. Current combined staging is
 [PR210](https://github.com/djshellshoxxx/p2p-offramp/pull/210), published at
