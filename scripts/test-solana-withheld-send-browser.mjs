@@ -8,8 +8,10 @@ import { build } from 'vite';
 import { chromium } from 'playwright-core';
 import { resolveChromiumPath } from './lib/chromium-path.mjs';
 import { rejectWithheldSolanaSend } from './lib/solana-localnet-withheld-send.mjs';
+import { MAX_TRANSPORT_TRIALS, WARM_READS, qualifyWarmedSolanaTransport }
+  from './lib/solana-withheld-transport-qualification.mjs';
 
-const WARM_READS = 8, GENESIS = 'public transport diagnostic; not a chain identity';
+const GENESIS = 'public transport diagnostic; not a chain identity';
 const PARAMS = ['public-transport-fixture-not-a-transaction', { encoding: 'base64', skipPreflight: true, maxRetries: 0 }];
 
 export async function buildSolanaRpcDiagnostic() {
@@ -27,10 +29,10 @@ export async function buildSolanaRpcDiagnostic() {
   return { code: entry.code, sha256: createHash('sha256').update(entry.code).digest('hex') };
 }
 
-export async function runSolanaWithheldSendBrowser() {
-  const artifact = await buildSolanaRpcDiagnostic();
+async function runSolanaWithheldSendTrial(artifact, browser) {
   const sockets = new WeakMap(), warm = [], sends = [], errors = [], unexpected = [], pageErrors = [], completed = [];
-  let nextSocket = 0, browser;
+  const pending = new Set();
+  let nextSocket = 0, context, observed;
   const server = createServer((request, response) => {
     response.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; connect-src 'self'; worker-src 'none'; object-src 'none'; base-uri 'none'");
     response.setHeader('Cache-Control', 'no-store');
@@ -57,14 +59,18 @@ export async function runSolanaWithheldSendBrowser() {
       rejectWithheldSolanaSend(response, {});
       // This diagnostic has no upstream forwarding capability.
     };
-    run().catch(error => { errors.push(error.message); response.writeHead(500).end('Fixture refused.'); });
+    const handling = run().catch(error => {
+      errors.push(error.message);
+      if (!response.headersSent && !response.destroyed) response.writeHead(500).end('Fixture refused.');
+      else response.destroy();
+    });
+    pending.add(handling); void handling.then(() => pending.delete(handling));
   });
   server.on('connection', socket => sockets.set(socket, ++nextSocket));
   try {
     await new Promise((yes, no) => { server.once('error', no); server.listen(0, '127.0.0.1', yes); });
     const origin = `http://127.0.0.1:${server.address().port}`;
-    browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
-    const context = await browser.newContext({ serviceWorkers: 'block' });
+    context = await browser.newContext({ serviceWorkers: 'block' });
     await context.route('**/*', route => {
       if ([origin + '/', origin + '/rpc.js'].includes(route.request().url())) return route.continue();
       unexpected.push(route.request().url()); return route.abort();
@@ -72,7 +78,7 @@ export async function runSolanaWithheldSendBrowser() {
     await context.routeWebSocket(() => true, socket => { unexpected.push(socket.url()); socket.close(); });
     const page = await context.newPage(); page.on('pageerror', error => pageErrors.push(error.message));
     await page.goto(origin);
-    const observed = await page.evaluate(async ({ url, warmReads, expectedGenesis, params }) => {
+    observed = await page.evaluate(async ({ url, warmReads, expectedGenesis, params }) => {
       const { createSolanaLocalRpc } = await import('/rpc.js');
       const rpc = createSolanaLocalRpc(url), nativeFetch = globalThis.fetch;
       let applicationCalls = 0, fetchCalls = 0, fetchFailures = 0, refusal = null;
@@ -96,18 +102,37 @@ export async function runSolanaWithheldSendBrowser() {
         return { applicationCalls, fetchCalls, fetchFailures, statuses, refusal };
       } finally { rpc.dispose(); globalThis.fetch = nativeFetch; }
     }, { url: origin + '/', warmReads: WARM_READS, expectedGenesis: GENESIS, params: PARAMS });
-    assert.deepEqual(observed, { applicationCalls: 1, fetchCalls: 1, fetchFailures: 0, statuses: [503], refusal: 'RPC_UNAVAILABLE' });
-    assert.equal(warm.length, WARM_READS + 1); assert.equal(sends.length, 1);
-    assert.ok(warm.slice(0, WARM_READS).some(read => read.socket === sends[0].socket), 'send uses a connection warmed by an actual RPC read');
-    assert.deepEqual(completed, [503]); assert.deepEqual(errors, []); assert.deepEqual(pageErrors, []); assert.deepEqual(unexpected, []);
-    console.log(JSON.stringify({ ok: true, kind: 'SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC', browser: await browser.version(),
-      actualRuntimeRpc: true, warmedConnection: true, ...observed, physicalSendPosts: sends.length, validatorForwards: 0,
-      unexpectedRequests: 0, fixtureErrors: 0, artifactSha256: artifact.sha256,
-      rawResetQualified: false, generalBrowserRetransmissionGuarantee: false, nativeChainQualified: false, ReleaseEnabled: 0 }));
   } finally {
-    await browser?.close();
-    server.closeAllConnections(); await new Promise(resolve => server.close(resolve));
+    // Each trial owns its context/server until teardown finishes. No late request can be
+    // attributed to a later trial, and no execution or teardown error permits resampling.
+    try { await context?.close(); }
+    finally {
+      server.closeAllConnections();
+      await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+      await Promise.all(pending);
+    }
   }
+  return { observed, warm, sends, completed, errors, pageErrors, unexpected };
+}
+
+export async function runSolanaWithheldSendBrowser() {
+  const artifact = await buildSolanaRpcDiagnostic();
+  const browser = await chromium.launch({ executablePath: resolveChromiumPath(), args: ['--no-sandbox'] });
+  let qualification, browserVersion;
+  try {
+    // Chromium chooses its connection. Keep every invariant-clean cold trial and require
+    // an actually observed warmed socket; this is never a retry of a failed send assertion.
+    qualification = await qualifyWarmedSolanaTransport(() => runSolanaWithheldSendTrial(artifact, browser));
+    browserVersion = await browser.version();
+  } finally {
+    await browser.close();
+  }
+  console.log(JSON.stringify({ ok: true, kind: 'SOLANA_WITHHELD_ACK_TRANSPORT_DIAGNOSTIC', receiptVersion: 2,
+    browser: browserVersion, actualRuntimeRpc: true, warmedConnection: true,
+    ...qualification.totals, refusal: 'RPC_UNAVAILABLE', validatorForwards: 0,
+    trialCount: qualification.trials.length, qualifiedTrial: qualification.qualifiedTrial,
+    maxTrials: MAX_TRANSPORT_TRIALS, trials: qualification.trials, artifactSha256: artifact.sha256,
+    rawResetQualified: false, generalBrowserRetransmissionGuarantee: false, nativeChainQualified: false, ReleaseEnabled: 0 }));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await runSolanaWithheldSendBrowser();
