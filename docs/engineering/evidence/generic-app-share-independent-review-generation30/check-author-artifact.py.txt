@@ -1,0 +1,75 @@
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path.cwd()
+AUTHOR = ROOT.parent / "p2p-g30-evidence"
+BUILD = ROOT.parent / "p2p-g30-build"
+SOURCE = "a2d69851430971ce51588c22c571e48b30b4ca01"
+BASE = "fa7c1a11ff990be4646053731f1030d09eb8f9b6"
+FOUR = {"apps/web/src/main.tsx", "apps/web/src/OfflineRoot.tsx", "apps/web/src/ui/App.tsx", "apps/web/src/ui/Pages.tsx"}
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+receipts = []
+for path in sorted(AUTHOR.glob("[0-9][0-9]-*.json")):
+    record = json.loads(path.read_text())
+    raw = (AUTHOR / record["log"]).read_bytes()
+    patch = (AUTHOR / record["patch"]).read_bytes()
+    assert len(raw) == record["logBytes"] and sha(raw) == record["logSha256"], path
+    assert sha(patch) == record["patchSha256"], path
+    expected = 1 if record["label"] in {"01-baseline-composition", "03-baseline-final-fixtures"} else 0
+    assert record["exitCode"] == expected, path
+    if record["head"] == SOURCE:
+        assert patch == b"", path
+        for name, digest in record["files"].items():
+            assert sha((ROOT / name).read_bytes()) == digest, (path, name)
+    counts = dict(re.findall(r"(?m)^ℹ (tests|pass|fail|cancelled|skipped|todo) (\d+)$", raw.decode()))
+    receipts.append({"name": record["label"], "exit_code": record["exitCode"], "head": record["head"],
+                     "raw_bytes": len(raw), "raw_sha256": sha(raw), "patch_sha256": sha(patch),
+                     "counts": {key: int(value) for key, value in counts.items()}})
+assert len(receipts) == 10
+final_red = json.loads((AUTHOR / "03-baseline-final-fixtures.json").read_text())
+for name, digest in final_red["files"].items():
+    content = subprocess.check_output(["git", "show", BASE + ":" + name]) if name in FOUR else (ROOT / name).read_bytes()
+    assert sha(content) == digest, name
+
+build = json.loads((BUILD / "local-build-evidence.json").read_text())
+assert build["ReleaseEnabled"] == 0 and build["signedRelease"] is False and build["releaseAcceptance"] is False
+assert build["syntheticDemo"] is False and build["testnet"] is False
+assets = []
+for asset in build["assets"]:
+    raw = (BUILD / asset["path"]).read_bytes()
+    assert len(raw) == asset["bytes"] and sha(raw) == asset["sha256"], asset
+    assets.append(asset)
+assert len(assets) == build["inspection"]["files"] == 12
+assert sum(asset["bytes"] for asset in assets) == build["inspection"]["bytes"] == 812179
+policy = json.loads((BUILD / "content-policy.json").read_text())
+assert policy["manifest"]["connectOrigins"] == [] and "connect-src 'none'" in policy["csp"]
+graphs = []
+for name in ["core-graph-document.json", "core-graph-worker.json", "qr-graph-worker.json"]:
+    raw = (BUILD / name).read_bytes()
+    graph = json.loads(raw)
+    for module in graph["modules"]:
+        assert sha((ROOT / module["path"]).read_bytes()) == module["sha256"], module["path"]
+    graphs.append({"path": name, "sha256": sha(raw), "modules": len(graph["modules"])})
+html = (BUILD / "index.html").read_text()
+entry = re.findall(r'<script[^>]+src="\./(assets/index-[A-Za-z0-9_-]+\.js)"', html)
+assert len(entry) == 1, entry
+main = (BUILD / entry[0]).read_text()
+captures = list(re.finditer(r'(?:,|var )([\w$]+)=import\.meta\.url,', main))
+assert len(captures) == 1, len(captures)
+binding = captures[0].group(1)
+assert '{entryModuleUrl:' + binding + '}' in main
+assert 'import(`./OfflineRoot-' in main
+excerpt = main[captures[0].start():]
+assert len(excerpt) < 1000
+print(json.dumps({"source": SOURCE, "author_receipts_rehashed": receipts,
+ "final_baseline_matches_original_four_production_files_and_frozen_test_bytes": True,
+ "build_assets_rehashed": assets, "build_graphs_rehashed": graphs,
+ "source_module_hash_entries_verified": sum(graph["modules"] for graph in graphs),
+ "build_metadata_sha256": sha((BUILD / "local-build-evidence.json").read_bytes()),
+ "entry": entry[0], "captured_entry_binding": binding, "entry_capture_and_lazy_wrapper_excerpt": excerpt,
+ "ReleaseEnabled": 0, "connectOrigins": [], "native_browser_executed": False,
+ "scope": "Independent readback of an author-produced ordinary build, not an independently repeated build or browser execution."
+}, indent=2))

@@ -1,0 +1,452 @@
+{
+  "version": 1,
+  "recorded_utc": "2026-11-20T18:55:44.377796+00:00",
+  "source": {
+    "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+    "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+    "baseline": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+    "baseline_tree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5"
+  },
+  "finding_summary": {
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "findings": [],
+    "scope": "Independent bounded source/composition review; hosted/native-browser qualification remains pending."
+  },
+  "source_identity": {
+    "baseline": "fa7c1a11ff990be4646053731f1030d09eb8f9b6",
+    "baseline_tree": "dc34c0065a6bc4d66b4195b16d573ef1ec7463a5",
+    "source": "a2d69851430971ce51588c22c571e48b30b4ca01",
+    "source_tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+    "baseline_entries": 2846,
+    "source_entries": 2848,
+    "preserved_baseline_entries": 2842,
+    "changed_existing_entries": {
+      "apps/web/src/OfflineRoot.tsx": {
+        "before": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "b8bddc40cf0121c4ac8f8dc1061406c8f3a451f7"
+        },
+        "after": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "2291cec0be13c00bf1d4a9dd25e4470949b67fde"
+        },
+        "working_file_sha256": "1c3071c4e4c8c212eba69a8d40a86016e29c5f511475a018ad428ae62c91c344"
+      },
+      "apps/web/src/main.tsx": {
+        "before": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "b918669df2badab6fc9819d0b7b72aac2e58d795"
+        },
+        "after": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "438fa5c037cae8f51f90cd0d3f80587eea63d119"
+        },
+        "working_file_sha256": "56d6f772c3fd335e2d07d7480d6ff497fa87a4e3c489e8c0c7ecdf88f5c0bf31"
+      },
+      "apps/web/src/ui/App.tsx": {
+        "before": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "dbe9409c37ee813e77262cfbaa948d00c6dfa886"
+        },
+        "after": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "68a9f6fdf599d2cd08141d4df51cfefba92c7be7"
+        },
+        "working_file_sha256": "6169f92593de33110f0cab0d9e54bd28640c476f2239a2486f8c2b964642ebd1"
+      },
+      "apps/web/src/ui/Pages.tsx": {
+        "before": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "195ffb44bb4efef41200ee30230b016dff208df6"
+        },
+        "after": {
+          "mode": "100644",
+          "type": "blob",
+          "oid": "e4cddb844e883d8a28be31220b423bc640b4fee9"
+        },
+        "working_file_sha256": "5db3601177d38a826428ea475e60b18f3a13f00219a6da62f3721a89d5adc520"
+      }
+    },
+    "added_entries": {
+      "apps/web/test/generic-app-share-composition.test.mjs": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "ee6d782733aaab3dec967958fd8c103d5a6a5788"
+      },
+      "apps/web/test/generic-app-share-lifecycle.test.mjs": {
+        "mode": "100644",
+        "type": "blob",
+        "oid": "728e19e6a55e8f3a64f3a11288b84c5e8503c9e9"
+      }
+    },
+    "deleted_entries": [],
+    "preservation_statement": "Every baseline entry outside the four composition files retains its exact mode, type and object ID."
+  },
+  "checks": [
+    {
+      "name": "source-identity",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-source.py a2d69851430971ce51588c22c571e48b30b4ca01",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-source.py",
+        "a2d69851430971ce51588c22c571e48b30b4ca01"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:51:14.726304+00:00",
+      "ended_utc": "2026-11-20T18:51:14.840184+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/source-identity.log.gz",
+      "raw_log_bytes": 2515,
+      "raw_log_sha256": "b2037e5a41fb8f7813c33f23d435f24951791d706e993f387bfde05494f8a64f",
+      "gzip_bytes": 930,
+      "gzip_sha256": "71ddb1a136171e5417169d5454cd36bfe79c0048c961b8eb0cbed854b5fc9dbd",
+      "failed_cases": []
+    },
+    {
+      "name": "focused-independent",
+      "command": "node --import ./scripts/test-support/register-tsx.mjs --test apps/web/test/generic-app-share.test.mjs apps/web/test/generic-app-share-composition.test.mjs apps/web/test/generic-app-share-lifecycle.test.mjs /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/independent-sharing-probes.mjs",
+      "argv": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "apps/web/test/generic-app-share.test.mjs",
+        "apps/web/test/generic-app-share-composition.test.mjs",
+        "apps/web/test/generic-app-share-lifecycle.test.mjs",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/independent-sharing-probes.mjs"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:51:14.727734+00:00",
+      "ended_utc": "2026-11-20T18:51:17.112099+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/focused-independent.log.gz",
+      "raw_log_bytes": 5503,
+      "raw_log_sha256": "5dc54b30d921ac11637a0398eafb7e68b10afa8b7e0ae63f66a4f9f7336d6ce8",
+      "gzip_bytes": 1943,
+      "gzip_sha256": "326a126c21d941a68a9d77dbb81f7c2d12cf4f8cab115659df12d2faf21f89e8",
+      "tests": 48,
+      "suites": 0,
+      "pass": 48,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "failed_cases": []
+    },
+    {
+      "name": "ui-typecheck",
+      "command": "node node_modules/typescript/bin/tsc -p apps/web/tsconfig.ui.json --noEmit",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "apps/web/tsconfig.ui.json",
+        "--noEmit"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:51:14.726363+00:00",
+      "ended_utc": "2026-11-20T18:51:16.690693+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/ui-typecheck.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "failed_cases": []
+    },
+    {
+      "name": "author-artifact-readback",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-author-artifact.py",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-author-artifact.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:52:43.948769+00:00",
+      "ended_utc": "2026-11-20T18:52:44.038840+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/author-artifact-readback.log.gz",
+      "raw_log_bytes": 7888,
+      "raw_log_sha256": "47f1164608caabc36f37e47999ab085b86d73670b9e25dd3eb6a277142ab9e7d",
+      "gzip_bytes": 2391,
+      "gzip_sha256": "e0d8d4f236351aa7b71baf5352739f516f3b2c68c17f86f1beade9b9b538a742",
+      "failed_cases": []
+    },
+    {
+      "name": "author-package-readback",
+      "command": "python /workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-author-package.py",
+      "argv": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-generic-share-review-evidence-g30/check-author-package.py"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:55:11.390806+00:00",
+      "ended_utc": "2026-11-20T18:55:11.486552+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/author-package-readback.log.gz",
+      "raw_log_bytes": 13944,
+      "raw_log_sha256": "dc1cb49698a37b80e1e7ee842e38cc4700a3ef2ba2f1d8c8792dbda40bcb181c",
+      "gzip_bytes": 3001,
+      "gzip_sha256": "9334cb9631d71eb60ad1a1f2c8bb882e4ee780132714424ee520c62794a8ce0c",
+      "failed_cases": []
+    },
+    {
+      "name": "source-whitespace",
+      "command": "git diff --check 8e836baa877b676a863c877003e277b638fc5061..a2d69851430971ce51588c22c571e48b30b4ca01",
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "8e836baa877b676a863c877003e277b638fc5061..a2d69851430971ce51588c22c571e48b30b4ca01"
+      ],
+      "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+      "started_utc": "2026-11-20T18:52:54.354384+00:00",
+      "ended_utc": "2026-11-20T18:52:54.397795+00:00",
+      "source_before": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "source_after": {
+        "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+        "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+        "status": ""
+      },
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_matches_expectation": true,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/source-whitespace.log.gz",
+      "raw_log_bytes": 0,
+      "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip_bytes": 20,
+      "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "failed_cases": []
+    }
+  ],
+  "independent_fixture_files": [
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/capture-check.py.txt",
+      "bytes": 2439,
+      "sha256": "76ac147903e1be586e128411465178eb04617863b8ece8d5c659a1239d82f38c"
+    },
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/check-source.py.txt",
+      "bytes": 2131,
+      "sha256": "1060bf3d17e61c1c20ea0dc3721e6525481faaf413fa8d938397cc65c9d4b9d0"
+    },
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-artifact.py.txt",
+      "bytes": 4202,
+      "sha256": "ddda02398f017e36fee973b9d431d14f2b0750a29317d4e6ea4664d47e5fae7f"
+    },
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-package.py.txt",
+      "bytes": 2778,
+      "sha256": "afa64cd08ef15db8c36b89ac44344369f266bbe7262d0defc661d356f9c835a8"
+    },
+    {
+      "path": "docs/engineering/evidence/generic-app-share-independent-review-generation30/independent-sharing-probes.mjs.txt",
+      "bytes": 17073,
+      "sha256": "f79c5c309c3027f1d2ec0e1084f9cc258b075b0c5add4d8ddcb04dd5b183adff"
+    }
+  ],
+  "dependency_directory_provenance": {
+    "method": "cp -al creates separate physical directories with immutable hardlinked package files; no dependency mutations or cross-checkout import symlinks",
+    "source": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g29/node_modules",
+    "review": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30/node_modules",
+    "source_directory_inode": 4128166,
+    "review_directory_inode": 3494196,
+    "package_json_sha256": "fa0c8282beaacf1bf59aa9e62489699cd2e7ecc9df201d6222a8581e7045f0dd",
+    "lockfile_sha256": "9099553922da18ffb1847f2af0780add27c422ecdcbb00b1050503ffb2e4dd72",
+    "sample": {
+      "react/package.json": {
+        "device": 27,
+        "inode": 4131868,
+        "links": 3,
+        "sha256": "9cc9c3de5441a2eea7f41f52f3f2a15a4fc51f90c0b72741f0d7638643a85e67"
+      },
+      "vite/package.json": {
+        "device": 27,
+        "inode": 4143838,
+        "links": 3,
+        "sha256": "c9586ac07b42763a8a7f6aac6b4a805d70f057bd8c67c43da81c0cc4e5da8293"
+      },
+      "typescript/package.json": {
+        "device": 27,
+        "inode": 4131963,
+        "links": 3,
+        "sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e"
+      }
+    }
+  },
+  "author_evidence_readback": {
+    "commit": "3338964189a00f7181ba8e52166c594b61a48fe7",
+    "tree": "9c3618532ed4712b8933e5a571c0a249be872515",
+    "docs_only_paths": 43,
+    "manifest_artifacts_verified": 39,
+    "receipt_count": 10,
+    "final_baseline_tests": 33,
+    "final_baseline_pass": 26,
+    "final_baseline_fail": 7,
+    "final_frozen_focused_tests": 33,
+    "ordinary_assets": 12,
+    "ordinary_bytes": 812179,
+    "document_modules": 98,
+    "native_worker_modules": 30,
+    "qr_worker_modules": 4,
+    "source_module_hash_entries": 132,
+    "actual_emitted_entry": "assets/index-Bn32YCpH.js",
+    "entry_capture_binding": "b",
+    "artifact_generated_by_author": true,
+    "independent_readback_only": true
+  },
+  "local_validation": {
+    "tests": 48,
+    "maintained_tests": 33,
+    "independent_probes": 15,
+    "passed": 48,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "ui_typecheck": true,
+    "full_source_whitespace": true
+  },
+  "authority": {
+    "ReleaseEnabled": 0,
+    "connectOrigins": [],
+    "native_browser_executed": false,
+    "physical_clipboard_executed": false,
+    "referral_system_implemented": false,
+    "docs_growth_complete": false
+  },
+  "pending": {
+    "combined_root_source_identity_and_qualification": "Not yet supplied at this independent source-review checkpoint. Record a separate supplement when available.",
+    "hosted_current_source_current_target_checks": "Required before merge; not run or inspected by this worker.",
+    "standalone_d8_tier_b_named_automated_review": "A passing CodeRabbit or Qodo review with findings answered remains required, separately from this independent review."
+  },
+  "limitations": [
+    "Maintained main composition uses controlled React/module scheduling, injected module URLs and unrelated screen/port replacements; no startup effects or native browser event delivery.",
+    "Clipboard probes share one maintained leaf evaluation across mounts but use controlled hooks and promise ports; no operating-system clipboard, browser permission or user activation.",
+    "The author-produced ordinary artifact was independently rehashed and inspected, not rebuilt or browser-executed.",
+    "Baseline logs identify their original HEAD, source hashes and binary patch; no separately committed immutable RED checkpoint.",
+    "Independent source review does not satisfy the separately named CodeRabbit-or-Qodo Tier B gate."
+  ],
+  "staged_packet_whitespace": {
+    "name": "staged-full-whitespace",
+    "command": "git diff --cached --check 8e836baa877b676a863c877003e277b638fc5061",
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "working_directory": "/workspace/scratch/dcf03ef9bee8/p2p-generic-app-share-review-g30",
+    "started_utc": "2026-11-20T18:55:44.428765+00:00",
+    "ended_utc": "2026-11-20T18:55:44.507227+00:00",
+    "source_before": {
+      "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "status": "A  docs/engineering/INDEPENDENT_GENERIC_APP_SHARE_REVIEW_GENERATION30_20261120.md\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/author-artifact-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/author-package-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/capture-check.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-artifact.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-package.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-source.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/focused-independent.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/independent-sharing-probes.mjs.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/source-identity.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/source-whitespace.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/ui-typecheck.log.gz\nA  docs/engineering/generic-app-share-independent-review-generation30.json"
+    },
+    "source_after": {
+      "commit": "a2d69851430971ce51588c22c571e48b30b4ca01",
+      "tree": "c484a9c5da4617667d9486d8c3bd4131db1ca8d6",
+      "status": "A  docs/engineering/INDEPENDENT_GENERIC_APP_SHARE_REVIEW_GENERATION30_20261120.md\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/author-artifact-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/author-package-readback.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/capture-check.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-artifact.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-author-package.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/check-source.py.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/focused-independent.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/independent-sharing-probes.mjs.txt\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/source-identity.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/source-whitespace.log.gz\nA  docs/engineering/evidence/generic-app-share-independent-review-generation30/ui-typecheck.log.gz\nA  docs/engineering/generic-app-share-independent-review-generation30.json"
+    },
+    "expected_exit_code": 0,
+    "exit_code": 0,
+    "exit_matches_expectation": true,
+    "timeout_seconds": 120,
+    "timed_out": false,
+    "log": "docs/engineering/evidence/generic-app-share-independent-review-generation30/staged-full-whitespace.log.gz",
+    "raw_log_bytes": 0,
+    "raw_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gzip_bytes": 20,
+    "gzip_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+    "failed_cases": [],
+    "limitation": "This check preceded adding its own log/receipt field; the complete staged result and final commit are checked again without exclusions."
+  }
+}

@@ -1,0 +1,268 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { runInNewContext } from 'node:vm';
+import { setImmediate as turn } from 'node:timers/promises';
+
+// Run from the frozen review checkout. Dependencies resolve inside that physical
+// checkout. This file is an independent evidence fixture, not production code.
+const root = process.cwd();
+const require = createRequire(resolve(root, 'package.json'));
+const { build } = await import(pathToFileURL(require.resolve('vite')).href);
+const path = relative => resolve(root, relative);
+const sourceUrl = relative => pathToFileURL(path(relative)).href;
+const { deriveGenericAppLink } = await import(sourceUrl('apps/web/src/sharing/generic-app-link.ts'));
+const { createElement } = await import(pathToFileURL(require.resolve('react')).href);
+const { renderToStaticMarkup } = await import(pathToFileURL(require.resolve('react-dom/server')).href);
+const { Settings } = await import(sourceUrl('apps/web/src/ui/Pages.tsx'));
+const { App } = await import(sourceUrl('apps/web/src/ui/App.tsx'));
+
+const entry = path('apps/web/test/generic-share-independent-review-fixture.ts');
+const bundle = await build({ configFile: false, logLevel: 'silent', plugins: [{
+  name: 'independent-generic-share-review', enforce: 'pre',
+  resolveId(id) {
+    if (id === entry) return '\0independent-generic-share-review';
+    if (id === 'react' || id === 'react/jsx-runtime') return '\0independent-share-' + id;
+  },
+  load(id) {
+    if (id === '\0independent-generic-share-review') return `
+      export { GenericAppShare } from ${JSON.stringify(path('apps/web/src/ui/GenericAppShare.tsx'))};
+      export { localeStore, messageGroup } from ${JSON.stringify(path('apps/web/src/ui/locale/runtime.ts'))};`;
+    if (id === '\0independent-share-react') return ['useEffect', 'useMemo', 'useRef', 'useState', 'useSyncExternalStore']
+      .map(name => `export const ${name} = (...args) => globalThis.hooks.${name}(...args);`).join('\n');
+    if (id === '\0independent-share-react/jsx-runtime') return `
+      export const Fragment = 'fragment';
+      export const jsx = (type, props) => ({ type, props });
+      export const jsxs = jsx;`;
+    if (id === path('apps/web/src/ui/locale/bundled.ts')) return `
+      import { sourceCatalog } from ${JSON.stringify(path('apps/web/src/ui/locale/en.ts'))};
+      export const bundledLocaleConfiguration = { developmentFixtures: true, fixtures: [{
+        id: 'fixture-rtl', locale: 'ar', messages: Object.fromEntries(Object.entries(sourceCatalog)
+          .map(([key, message]) => [key, '[REVIEW ' + message.source + ']'])) }] };`;
+  },
+}], build: { write: false, minify: false, lib: { entry, formats: ['iife'], name: 'independentShareReview' } } });
+const output = Array.isArray(bundle) ? bundle[0].output : bundle.output;
+assert.equal(output.length, 1);
+const compiled = output[0].code;
+const A = 'https://app.example/nested/%E2%9C%93/space%20name/';
+const B = 'https://app.example/another/project/';
+const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
+const nodes = (node, predicate) => Array.isArray(node) ? node.flatMap(child => nodes(child, predicate)) :
+  !node || typeof node !== 'object' ? [] : [...(predicate(node) ? [node] : []), ...nodes(node.props?.children, predicate)];
+const words = node => Array.isArray(node) ? node.map(words).join('') : typeof node === 'string' || typeof node === 'number' ?
+  String(node) : node?.props ? words(node.props.children) : '';
+const same = (a, b) => a && b && a.length === b.length && b.every((value, index) => Object.is(a[index], value));
+
+// All mounts in one world share one evaluation of the maintained leaf, including
+// its module-level physical-write admission. Effects and memo dependencies are
+// scheduled independently per mount. This is not a browser or DOM fixture.
+function world(t, mode = 'held') {
+  let current = null, clipboardReads = 0, permissionsReads = 0, shareReads = 0, networkCalls = 0;
+  const attempts = [], mounts = new Set();
+  const clipboard = {
+    writeText(text) {
+      assert.equal(this, clipboard);
+      const gate = deferred(); attempts.push({ text, ...gate });
+      if (mode === 'reject') return Promise.reject(new Error('PRIVATE browser detail'));
+      if (mode === 'throw') throw new Error('PRIVATE browser detail');
+      return gate.promise;
+    },
+  };
+  const environment = { TextEncoder, TextDecoder,
+    navigator: {
+      get clipboard() {
+        clipboardReads++;
+        if (mode === 'getter-throws') throw new Error('PRIVATE getter detail');
+        if (mode === 'missing') return undefined;
+        if (mode === 'noncallable') return { writeText: {} };
+        return clipboard;
+      },
+      get permissions() { permissionsReads++; throw new Error('permission probing is outside this operation'); },
+      get share() { shareReads++; throw new Error('native sharing is outside this operation'); },
+    },
+    fetch() { networkCalls++; throw new Error('network is outside this operation'); },
+    hooks: {
+      useState(initial) { return current.state(initial); },
+      useRef(initial) { return current.ref(initial); },
+      useMemo(factory, dependencies) { return current.memo(factory, dependencies); },
+      useEffect(callback, dependencies) { return current.effect(callback, dependencies); },
+      useSyncExternalStore(subscribe, snapshot) {
+        const owner = current;
+        owner.effect(() => subscribe(() => { owner.dirty = true; }), [subscribe]);
+        return snapshot();
+      },
+    },
+  };
+  runInNewContext(compiled, environment);
+  const api = environment.independentShareReview, m = api.messageGroup('shell');
+  function mount(initial = A) {
+    let appLink = initial, stateAt = 0, refAt = 0, memoAt = 0, effectAt = 0, active = true, tree;
+    const states = [], refs = [], memos = [], effects = [];
+    const ui = {
+      dirty: true, writesAfterUnmount: 0,
+      state(initial) {
+        const at = stateAt++;
+        if (!(at in states)) states[at] = typeof initial === 'function' ? initial() : initial;
+        return [states[at], value => {
+          if (!active) { ui.writesAfterUnmount++; return; }
+          const next = typeof value === 'function' ? value(states[at]) : value;
+          if (!Object.is(next, states[at])) { states[at] = next; ui.dirty = true; }
+        }];
+      },
+      ref(initial) { return refs[refAt++] ??= { current: initial }; },
+      memo(factory, dependencies) {
+        const at = memoAt++;
+        if (!memos[at] || !same(memos[at].dependencies, dependencies)) memos[at] = { dependencies, value: factory() };
+        return memos[at].value;
+      },
+      effect(callback, dependencies) {
+        const at = effectAt++, prior = effects[at];
+        if (!prior || !same(prior.dependencies, dependencies)) effects[at] = { callback, dependencies, stop: prior?.stop, pending: true };
+      },
+      view() {
+        assert.equal(active, true, 'cannot render an unmounted fixture');
+        for (let step = 0; step < 12; step++) {
+          if (ui.dirty) {
+            ui.dirty = false; stateAt = refAt = memoAt = effectAt = 0; current = ui;
+            try { tree = api.GenericAppShare({ appLink }); } finally { current = null; }
+          }
+          for (const item of effects) if (item.pending) { item.pending = false; item.stop?.(); item.stop = item.callback(); }
+          if (!ui.dirty) return tree;
+        }
+        assert.fail('independent leaf fixture failed to settle');
+      },
+      button() { return nodes(ui.view(), node => node.type === 'button')[0]; },
+      input() { return nodes(ui.view(), node => node.type === 'input')[0]; },
+      statuses() { return nodes(ui.view(), node => node.props.role === 'status').map(words); },
+      click() { const button = ui.button(); assert.ok(button); assert.notEqual(button.props.disabled, true); button.props.onClick(); },
+      replace(next) { appLink = next; ui.dirty = true; return ui.view(); },
+      replayEffects() {
+        for (const item of effects) item.stop?.();
+        for (const item of effects) item.stop = item.callback();
+      },
+      unmount() { if (active) { for (const item of effects) item.stop?.(); active = false; mounts.delete(ui); } },
+    };
+    mounts.add(ui); t.after(ui.unmount); ui.view(); return ui;
+  }
+  return { mount, attempts, m, api,
+    get clipboardReads() { return clipboardReads; },
+    select(id) { api.localeStore.select(id); for (const ui of mounts) ui.dirty = true; },
+    assertNoOtherSideEffects() { assert.equal(permissionsReads, 0); assert.equal(shareReads, 0); assert.equal(networkCalls, 0); },
+  };
+}
+
+test('independent: real Settings exposes the supplied bytes and null fallback without startup clipboard access', () => {
+  const before = Object.getOwnPropertyDescriptor(globalThis, 'navigator'); let reads = 0;
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, get() { reads++; throw new Error('startup clipboard access'); } });
+  try {
+    const html = renderToStaticMarkup(createElement(Settings, { appLink: A }));
+    assert.match(html, /Share this app/); assert.ok(html.includes('value="' + A + '"'));
+    assert.match(html, /readOnly=""/); assert.match(html, /Copy app address/);
+    for (const props of [{}, { appLink: null }]) {
+      const fallback = renderToStaticMarkup(createElement(Settings, props));
+      assert.match(fallback, /A generic app address is unavailable/);
+      assert.equal(fallback.includes('id="generic-app-url"'), false);
+      assert.equal(fallback.includes('Copy app address'), false);
+    }
+    assert.equal(reads, 0);
+  } finally { if (before) Object.defineProperty(globalThis, 'navigator', before); else delete globalThis.navigator; }
+});
+
+test('independent: actual App forwards only the supplied address into Settings despite private document location', () => {
+  const descriptors = Object.fromEntries(['window', 'navigator'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]));
+  let clipboardReads = 0;
+  Object.defineProperty(globalThis, 'window', { configurable: true, value: { location: {
+    hash: '#/settings', get href() { throw new Error('PRIVATE current URL must not be read'); },
+    get search() { throw new Error('PRIVATE query must not be read'); },
+    get pathname() { throw new Error('PRIVATE document path must not be read'); },
+  } } });
+  Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { onLine: true,
+    get clipboard() { clipboardReads++; throw new Error('no startup clipboard read'); } } });
+  try {
+    const html = renderToStaticMarkup(createElement(App, { services: null, appLink: A }));
+    assert.ok(html.includes('value="' + A + '"')); assert.equal(html.includes('PRIVATE'), false);
+    const fallback = renderToStaticMarkup(createElement(App, { services: null }));
+    assert.match(fallback, /A generic app address is unavailable/); assert.equal(clipboardReads, 0);
+  } finally { for (const [key, before] of Object.entries(descriptors)) {
+    if (before) Object.defineProperty(globalThis, key, before); else delete globalThis[key];
+  } }
+});
+
+test('independent: exact nested address bytes require one explicit click and manual focus selects the input', async t => {
+  const w = world(t), ui = w.mount(); w.select('fixture-rtl'); ui.view(); w.select('en'); ui.view();
+  assert.equal(w.clipboardReads, 0); assert.equal(w.attempts.length, 0);
+  assert.equal(ui.input().props.readOnly, true); assert.equal(ui.input().props.value, A);
+  let selections = 0; ui.input().props.onFocus({ currentTarget: { select() { selections++; } } });
+  assert.equal(selections, 1); assert.equal(w.attempts.length, 0);
+  const onClick = ui.button().props.onClick; onClick(); onClick();
+  assert.equal(w.attempts.length, 1); assert.equal(w.attempts[0].text, A); assert.equal(ui.button().props.disabled, true);
+  w.attempts[0].resolve(); await turn(); assert.deepEqual(ui.statuses(), [w.m.shareAppCopied]);
+  assert.equal(ui.button().props.disabled, false); w.assertNoOtherSideEffects();
+});
+
+test('independent: held physical write blocks simultaneous and replacement mounts until settlement', async t => {
+  const w = world(t), first = w.mount(), second = w.mount(B);
+  const otherClick = second.button().props.onClick; first.click(); otherClick();
+  assert.equal(w.attempts.length, 1); assert.equal(second.button().props.disabled, true);
+  first.unmount(); const replacement = w.mount(B); replacement.button().props.onClick();
+  assert.equal(w.attempts.length, 1); assert.equal(replacement.button().props.disabled, true);
+  w.attempts[0].resolve(); await turn(); assert.equal(first.writesAfterUnmount, 0);
+  assert.deepEqual(second.statuses(), ['']); assert.deepEqual(replacement.statuses(), ['']);
+  assert.equal(replacement.button().props.disabled, false); replacement.click();
+  assert.equal(w.attempts.length, 2); assert.equal(w.attempts[1].text, B);
+  w.attempts[1].resolve(); await turn(); assert.deepEqual(replacement.statuses(), [w.m.shareAppCopied]);
+  assert.deepEqual(second.statuses(), ['']); w.assertNoOtherSideEffects();
+});
+
+for (const restored of [false, true]) test(`independent: address-owner change${restored ? ' and restoration' : ''} retires old completion`, async t => {
+  const w = world(t), ui = w.mount(); ui.click(); ui.replace(B); if (restored) ui.replace(A);
+  assert.equal(ui.button().props.disabled, true); ui.button().props.onClick(); assert.equal(w.attempts.length, 1);
+  w.attempts[0].resolve(); await turn(); assert.deepEqual(ui.statuses(), ['']);
+  ui.click(); assert.equal(w.attempts.length, 2); assert.equal(w.attempts[1].text, restored ? A : B);
+  w.attempts[1].resolve(); await turn(); assert.deepEqual(ui.statuses(), [w.m.shareAppCopied]);
+});
+
+test('independent: null owner removes actions while old physical work stays held and cannot publish success', async t => {
+  const w = world(t), ui = w.mount(); ui.click(); ui.replace(null);
+  assert.equal(ui.button(), undefined); assert.equal(ui.input(), undefined);
+  assert.deepEqual(ui.statuses(), [w.m.shareAppUnavailable]);
+  const other = w.mount(B); assert.equal(other.button().props.disabled, true);
+  w.attempts[0].resolve(); await turn(); assert.deepEqual(ui.statuses(), [w.m.shareAppUnavailable]);
+  ui.replace(A); assert.deepEqual(ui.statuses(), ['']); assert.equal(w.attempts.length, 1);
+});
+
+test('independent: cleanup and effect replay invalidates sequence despite the same mounted address owner', async t => {
+  const w = world(t), ui = w.mount(); ui.click(); ui.replayEffects();
+  assert.equal(ui.button().props.disabled, true); w.attempts[0].resolve(); await turn();
+  assert.deepEqual(ui.statuses(), ['']); assert.equal(ui.button().props.disabled, false);
+  ui.click(); w.attempts[1].resolve(); await turn(); assert.deepEqual(ui.statuses(), [w.m.shareAppCopied]);
+});
+
+test('independent: pending and completed notices follow live locale without another physical write', async t => {
+  const w = world(t), ui = w.mount(); ui.click(); w.select('fixture-rtl');
+  assert.equal(ui.button().props.disabled, true); assert.ok(words(ui.view()).includes('[REVIEW '));
+  assert.equal(w.attempts.length, 1); assert.equal(w.attempts[0].text, A);
+  w.attempts[0].resolve(); await turn(); assert.deepEqual(ui.statuses(), [w.m.shareAppCopied]);
+  const draftNotice = ui.statuses()[0]; w.select('en'); assert.deepEqual(ui.statuses(), [w.m.shareAppCopied]);
+  assert.notEqual(ui.statuses()[0], draftNotice); w.select('fixture-rtl'); assert.deepEqual(ui.statuses(), [draftNotice]);
+  assert.equal(w.api.localeStore.getSnapshot().fundsLocaleEligible, false);
+  assert.equal(w.attempts.length, 1); w.assertNoOtherSideEffects();
+});
+
+for (const mode of ['missing', 'noncallable', 'getter-throws', 'throw', 'reject']) test(`independent: ${mode} clipboard maps to fixed manual fallback without leaking details or probing`, async t => {
+  const w = world(t, mode), ui = w.mount(); ui.click(); await turn();
+  assert.deepEqual(ui.statuses(), [w.m.shareAppCopyUnavailable]); assert.equal(ui.button().props.disabled, false);
+  assert.equal(words(ui.view()).includes('PRIVATE'), false); assert.equal(ui.input().props.value, A);
+  w.select('fixture-rtl'); assert.deepEqual(ui.statuses(), [w.m.shareAppCopyUnavailable]);
+  assert.equal(words(ui.view()).includes('PRIVATE'), false); w.assertNoOtherSideEffects();
+});
+
+test('independent: the unchanged helper distinguishes the emitted main from lazy chunks and route state', () => {
+  const expected = 'https://gateway.example/ipfs/bafy-review/nested/project/';
+  assert.equal(deriveGenericAppLink(expected + 'assets/index-aB1_C2-.js'), expected);
+  for (const entry of [expected + 'assets/OfflineRoot-aB1_C2-.js', expected + 'src/OfflineRoot.tsx',
+    expected + '?profile=PRIVATE#/settings', expected + 'assets/index-aB1_C2-.js#PRIVATE',
+    expected + 'assets/index-aB1_C2-.js?trade=PRIVATE']) assert.equal(deriveGenericAppLink(entry), null);
+});
