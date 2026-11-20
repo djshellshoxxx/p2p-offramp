@@ -14,6 +14,25 @@ The historical native-browser composition remains in its original branch. No
 update UI, trust key, endpoint, gateway or navigation capability is registered by
 this extraction, and no public facade export is added.
 
+The generation 9 prerequisite adds current-profile backup verification to the
+existing private application runtime. `AppServices.verifyBackup(bytes, passphrase)`
+asks the Worker to authenticate the complete file through the maintained
+`EncryptedVaultService.verifyBackup`; it returns only the existing scalar receipt.
+`AppServices.checkBackupVerification()` freshly checks the persisted vault revision
+and returns the Worker-owned fact or `null`. Neither command accepts an imported
+receipt or a readiness flag. The fact is tied to the exact selected handle,
+generation, profile and revision, and is cleared by a new verification attempt,
+saved-review/favorite/template mutation attempt, lock, replacement selection,
+timeout or disposal. Export and restore do not create a verification fact.
+
+The document clears its owned verification request copy after `postMessage` has
+synchronously cloned it; the Worker clears its separately parsed copy when
+dispatch ends, including early refusal. Caller bytes are unchanged. This is
+owned-copy cleanup, not a claim to erase all browser or JavaScript string copies.
+This prerequisite adds no update UI, trust configuration, transport grant,
+navigation adapter or wallet owner. The historical browser harness still needs
+selective recovery and qualification against the current runtime.
+
 This internal G15 controller implements local update discovery and explicit origin
 transition for the existing asset-only manifest/locator profile. It is absent from
 the security facade, default App, public runtime protocol and enabled trading
