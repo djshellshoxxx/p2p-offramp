@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-11-20T02:49:48.125983+00:00",
+  "reviewed_source": "637bedf9218176f933dac29039631ca56bcb42fd",
+  "reviewed_tree": "91ef7b11d8a1cf9378022f9c283136c8a1666f4f",
+  "historical_source": "a45e932a37153590bc329c1e9012cf18e37fe12c",
+  "recovered_source": "01f40b3e009d77b520ba0b6d7881fa24fc6301f9",
+  "recovered_tree": "c5895d592dc90af26691d815bdb663bfc821fb7e",
+  "actual_services_probe": {
+    "exit": 0,
+    "selected": 1,
+    "first": 2,
+    "second": 2,
+    "generations": [
+      1,
+      2
+    ],
+    "exactLockedGenerationExposed": false,
+    "actual_modules": [
+      "apps/web/src/app-services.ts",
+      "apps/web/src/runtime/app-runtime.ts"
+    ],
+    "port": "controlled response port",
+    "native_browser": false,
+    "native_indexeddb": false,
+    "financial_operations": 0
+  },
+  "status": "incomplete-composition-no-implementation-signoff",
+  "blocked_author_implementation": "automated cybersecurity screening; coordinator directed report-only closure without takeover",
+  "new_production_changes": 0,
+  "new_product_defect_count": 0,
+  "release_enabled": 0
+}
