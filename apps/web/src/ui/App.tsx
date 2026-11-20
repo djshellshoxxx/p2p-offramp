@@ -10,6 +10,8 @@ import { OffersPage, TradePage, useTradeReview } from './trade/TradePages.tsx';
 import type { Diagnostics } from '../../../../packages/diagnostics/index.ts';
 import { QrPanel } from './QrPanel.tsx';
 import type { AssetUpdateController } from '../../../../packages/security/update-view.ts';
+import type { StartupCapabilitySnapshot } from '../compatibility/probe.ts';
+import { StartupCompatibilityNotice } from './StartupCompatibilityNotice.tsx';
 
 const locked = Object.freeze({ state: 'locked' as const });
 const noSubscription = () => () => {};
@@ -27,9 +29,11 @@ export interface AppProps {
   readonly updates?: AssetUpdateController | null;
   /** Display-only hosting address derived from the actual main entry, never the current route. */
   readonly appLink?: string | null;
+  /** Local API presence only; actual runtime initialization remains authoritative. */
+  readonly startupCapabilities?: StartupCapabilitySnapshot | null;
 }
 
-export function App({ services, starting = false, startupError, trade = null, diagnostics = null, updates = null, appLink = null }: AppProps) {
+export function App({ services, starting = false, startupError, trade = null, diagnostics = null, updates = null, appLink = null, startupCapabilities = null }: AppProps) {
   const tradeSnapshot = useTradeReview(trade);
   const [drafts, setDrafts] = useState<TradeDraftController | null>(null);
   useEffect(() => {
@@ -120,6 +124,7 @@ export function App({ services, starting = false, startupError, trade = null, di
         <p className="eyebrow">{m.development}</p><h1 ref={title} tabIndex={-1}>{pageTitle[route.page]}</h1>
         <p className="network-note">{m.networkHelp}</p>
         {starting ? <p className="notice" role="status">{m.starting}</p> : !services ? <p className="notice error" role="alert">{startupError ? errorMessage(startupError) : m.unavailable}</p> : null}
+        {startupCapabilities && !starting ? <StartupCompatibilityNotice snapshot={startupCapabilities} runtimeUnavailable={!services} /> : null}
         {pending ? <p role="status">{pending === 'lock' ? m.locking : m.refreshing}</p> : null}
         {notice ? <p className="notice error" role="alert">{errorMessage(notice)}</p> : null}
         {route.page === 'home' ? <Home services={services} unlocked={current.state === 'unlocked'} restoredProfileId={restoredProfileId} onSelectionConsumed={() => setRestoredProfileId('')} /> :
