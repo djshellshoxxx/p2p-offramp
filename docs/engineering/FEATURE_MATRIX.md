@@ -34,6 +34,31 @@ Baseline: `5c5a84ef6300330700c8b0ca54d074ac113f08be`. Classifications describe a
 | F26 | Duplicate historical regression stack | Duplicate | D9 #69–75/#91–93 tests, isolated #78–80 tests, and #168 effective browser delta are already represented on current main. | No reimplementation. Exact normalized whole-file preservation and merge-tree proof are in branch-inventory.json.  |
 | F27 | Production release and live-funds qualification | Blocked | Release-disabled architecture, explicit build modes and signed trust primitives exist; no deployment/release is authorized in this task. | Owner-controlled trust roots/pins, physical wallets/public testnet, required independent reviews and explicit release authorization remain separate. Preserve ReleaseEnabled=0.  |
 
+## Current staging overlay through generation 5
+
+The table above remains the immutable 27-capability assessment of starting main. Generation 2 source `ef9d74258de63e98917c7a34a9392076ff86c35c` is published in PR #190 at `2b23ee614ff2dd05bd3a6e79f1278658c30a3909`; it has not merged to main. The generation 5 core source de5bb8a extends that baseline with independently reviewed favorites, templates, immutable tooling and Solana acknowledgment/restore repairs. Its actual full2217-test suite passed; current hosted qualification remains pending. Nine optional packages remain separate source PRs. `consolidation-state.json` preserves exact source and test evidence.
+
+| Capability | Change on staging | Remaining qualification or composition |
+|---|---|---|
+| F03 / F08 | Pre-copy byte bounds and restored-profile/relay readiness fixes are integrated. | Preserve current source-bound and live-provider checks. |
+| F16 | Funded Solana exit/recovery composition and stable labels are integrated. | Older native workflows failed. Reviewed acknowledgment and restore corrections are composed into generation 5; current native qualification remains pending. Full discovery/funding UI remains absent. |
+| F17 / F18 | Core guards and public image/camera QR review are integrated. PR189 completed six actual Chromium journeys. | Synthetic camera is not physical-device acceptance; unsigned review conveys no authority. |
+| F24 | Internal updater source and four storage lifecycle repairs are recovered. | Unexported/unwired; update UI and current trust composition remain separate. |
+| F25 | Docs/lab tooling and source-bound historical evidence checks are recovered. | Historical receipts remain dated; stale references stay explicit. |
+| F22 | All nine packages are published as #191–#199 with completed independent source reviews. Local all-nine composition preserves their exact source and prior gates. | Combined local qualification passed 2,553 tests and all 13 output files match the base; current-head hosted qualification remains active. No default runtime wiring is authorized by extraction alone. |
+| F28 — favorites/templates | Favorites and templates now have reviewed current-runtime UI/Worker composition in PR201/204 and core source de5bb8a. Native stores, explicit CAS/consent and current registry review remain. | Favorites Medium and template lifecycle defects are closed. Full2217 core and independent506 affected/38 policy/3 cross-feature probes passed; actual new-source hosted UI qualification remains pending. |
+| F29 — scriptless portal | Strict source-reference page, exact downloads and actual PR190 hosted browser qualification passed, including PDF and enforced headers. | No deployed-host or physical print/device claim. |
+| F30 — unsigned staging | Historical PR190 two-pass/nested-path qualification remains valid for its exact source. Immutable copy-text binding and exact favorites/templates admission are repaired and reviewed. | Current locale drift keeps current-source staging refused. The historical-client/current-tooling positive fixture explicitly does not qualify the new client; signing and publication remain false. |
+| F31 — inert governance | Historical record validators and assurance tooling pass;12 historical records,0 pending. |13 current non-owned historical references remain explicitly stale; records confer no authority. |
+
+The JSON companion preserves the baseline and records this overlay separately. Optional reference source acceptance supersedes the earlier parking wording; application and release acceptance remain their own decisions.
+
+## Current generations 6–9 overlay
+
+The immutable main assessment and previous dated overlays remain above. The reviewed corrected core at 7e8f93a passed 2259/2259, four TS,57policy,44tooling and both builds. Four new causes are closed: portal cleanup ownership, review navigation ownership, IDB open cancellation and Solana expiry context. PR205 is draft; qualify the published corrected descendant rather than transfer its ancestor browser success.
+
+F24 now also has a separately reviewed current-runtime backup-verification prerequisite at 74d4143; final composed qualification/publication remains pending. Update UI/current trust/native browser composition remains incomplete. F22's newer nine-package composition passed 2617/2617 and seven TS with 13 identical default artifacts, but predates the four repairs; intake stays one package per PR. Current-source unsigned distribution remains refused for stale immutable evidence. See current handoff/state and generation 6–9 reports for exact source limits.
+
 ## Source and regression evidence
 
 ### F01 — Encrypted profiles, backup, fresh-key restore
@@ -198,7 +223,7 @@ Source: `apps/web/scripts/build.mjs`, `docs/recovery/OWNER-TESTNET-RELEASE-RUNBO
 
 Regression source: `apps/web/scripts/artifact-policy.test.mjs`, `scripts/tests/verify-web-artifact.test.mjs`.
 
-## Highest-value integration order
+## Original inventory integration order (historical)
 
 1. Bound retained review reads (#187) and repair readiness publication (#181).
 2. Integrate isolated QR core guards (#171/#172), then repair/qualify public QR capture (#183).
@@ -206,4 +231,4 @@ Regression source: `apps/web/scripts/artifact-policy.test.mjs`, `scripts/tests/v
 4. Integrate repaired lab/docs tooling (#174), preserve old evidence (#176), and reconcile current status text.
 5. Revisit remaining historical asset-update/personalization/journey deltas selectively; keep independent optional packages out of default runtime.
 
-No branch, release setting or deployment was changed by the inventory worker.
+The integration order above is the inventory worker's original recommendation. Completed work and the current queue are in the staging overlay and consolidation handoff. No branch, release setting or deployment was changed by the inventory worker.

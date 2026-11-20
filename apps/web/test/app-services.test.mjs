@@ -105,3 +105,42 @@ test('facade review commands bind active profile and reject stale or mismatched 
  const stale=services.listTermsReviews();port.reply(port.pendingReview.base,{items:[{recordId:id,source:'file',bytes}],skipped:0});await services.lock();assert.equal((await stale).error.code,'LOCKED');assert.equal(services.profileId,null);
  await services.dispose();
 });
+
+test('favorites facade binds profile and epoch, checks the exact receipt, and clears pending projections on cancellation', async () => {
+ class FavoritePort extends Port {
+  commands = []; pending;
+  postMessage(command) {
+   if (['listFavoriteReviews', 'setReviewFavorite'].includes(command.operation)) {
+    this.commands.push(structuredClone(command));
+    const { profileId, recordId, favorite, expectedRevision, ...base } = command;
+    this.pending = { base, recordId, favorite, expectedRevision }; return;
+   }
+   super.postMessage(command);
+  }
+ }
+ const port = new FavoritePort(), services = await begin(port), recordId = '1'.repeat(32), profileId = 'a'.repeat(32);
+ try {
+  assert.equal((await services.listFavoriteReviews()).error.code, 'LOCKED');
+  assert.equal(port.commands.length, 0);
+  value(await services.unlock(profileId, 'favorite facade fixture passphrase'));
+  const listing = services.listFavoriteReviews(); port.reply(port.pending.base, { revision: 3, recordIds: [recordId] });
+  assert.deepEqual(value(await listing), { revision: 3, recordIds: [recordId] });
+  const setting = services.setReviewFavorite(recordId, false, 3); port.reply(port.pending.base, { recordId, favorite: false, revision: 4 });
+  assert.deepEqual(value(await setting), { recordId, favorite: false, revision: 4 });
+  for (const mismatch of [{ recordId: '2'.repeat(32) }, { favorite: false }, { revision: 8 }]) {
+   const changed = services.setReviewFavorite(recordId, true, 4);
+   port.reply(port.pending.base, { recordId, favorite: true, revision: 5, ...mismatch });
+   assert.equal((await changed).error.code, 'PROTOCOL_ERROR');
+  }
+  for (const command of port.commands) assert.equal(command.profileId, profileId);
+  const abort = new AbortController(), pending = services.listFavoriteReviews(abort.signal), held = port.pending;
+  abort.abort(); assert.equal(services.current.state, 'locked'); assert.equal((await pending).error.code, 'CANCELLED');
+  port.reply(held.base, { revision: 99, recordIds: [recordId] }); await flush();
+  assert.equal(services.current.state, 'locked');
+  value(await services.unlock('b'.repeat(32), 'favorite facade fixture passphrase'));
+  const next = services.listFavoriteReviews(); port.reply(port.pending.base, { revision: 0, recordIds: [] }); assert.deepEqual(value(await next).recordIds, []);
+  assert.equal(port.commands.at(-1).profileId, 'b'.repeat(32));
+  const settled = services.listFavoriteReviews(); port.reply(port.pending.base, { revision: 1, recordIds: [recordId] });
+  await services.lock(); assert.equal((await settled).error.code, 'LOCKED', 'lock after reply settlement still revokes publication');
+ } finally { await services.dispose(); }
+});
