@@ -1,0 +1,43 @@
+{
+  "sourceDirectory": "/workspace/scratch/dcf03ef9bee8/p2p-continuation-g32/node_modules",
+  "reviewDirectory": "/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-review-g34/node_modules",
+  "sourceDirectoryInode": 3716885,
+  "reviewDirectoryInode": 3209992,
+  "physicalDirectory": true,
+  "installationPerformed": false,
+  "dependencyMutationPerformed": false,
+  "samples": [
+    {
+      "path": "typescript/package.json",
+      "bytes": 3087,
+      "sha256": "3722b30210616a13a3213ded11575ba6b2dbab10c32a5ef67afca8513e27017e",
+      "sourceInode": 4131963,
+      "reviewInode": 4131963,
+      "hardlinked": true
+    },
+    {
+      "path": "typescript/bin/tsc",
+      "bytes": 44,
+      "sha256": "2219f428a7e55aaf1f7ad85b9b0f0cf5078aeb76ccc9a7c6036c92d48f492ffd",
+      "sourceInode": 4131967,
+      "reviewInode": 4131967,
+      "hardlinked": true
+    },
+    {
+      "path": "@noble/hashes/package.json",
+      "bytes": 2583,
+      "sha256": "3e361734f5269de162fa362483d7f45dee7efb533ec217157945338f7591baaf",
+      "sourceInode": 4128446,
+      "reviewInode": 4128446,
+      "hardlinked": true
+    },
+    {
+      "path": "@noble/hashes/sha2.js",
+      "bytes": 18997,
+      "sha256": "471746bba6ec4c6238ca41358d1d3b40b6ff31cf3363f0b4d550c649c1a8e83b",
+      "sourceInode": 4128441,
+      "reviewInode": 4128441,
+      "hardlinked": true
+    }
+  ]
+}

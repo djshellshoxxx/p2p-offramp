@@ -1,0 +1,584 @@
+{
+  "version": 1,
+  "generation": 34,
+  "recordedAt": "2026-11-20T19:59:54.766074+00:00",
+  "reviewer": "independent solana_core_capability_guard_review_g34",
+  "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+  "sourceTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+  "sourceParent": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+  "authorEvidence": "853c0b45607eb30f5e438483450c7ab763e6bcfb",
+  "authorEvidenceTree": "1eaffbb7ad676f66b2734639f7235497cd2898c5",
+  "fullWhitespaceBaseline": "8e836baa877b676a863c877003e277b638fc5061",
+  "verdict": "No blocking issue found within the defensive new-funding scope.",
+  "sourceComposition": {
+    "base": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+    "main": "8e836baa877b676a863c877003e277b638fc5061",
+    "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "changed": [
+      "packages/chain-solana/README.md",
+      "packages/chain-solana/src/plan.ts",
+      "packages/chain-solana/test/core-capability-funding.test.mjs"
+    ],
+    "baselineEntryCount": 3101,
+    "sourceEntryCount": 3102,
+    "unchangedBaselineEntries": 3099,
+    "nonDocumentationEntries": 1033,
+    "entries": {
+      "packages/chain-solana/README.md": {
+        "identity": "100644 blob 32d491840808c45dfe6910e4e6b8f8c070803c27",
+        "sha256": "d133f8b5b00ee7c6f1f65f73d7a709e18cbda6ecdbdf3f9d83893073df15069b"
+      },
+      "packages/chain-solana/src/plan.ts": {
+        "identity": "100644 blob fa1cb3d41d54bbad8fcadea342b305e18eaaeb99",
+        "sha256": "ef5e14a71bf9a15886d071b9455c03a55b22538da1161891d968bc3fdd1be4c0"
+      },
+      "packages/chain-solana/test/core-capability-funding.test.mjs": {
+        "identity": "100644 blob c460a54add8d02c1901dee398b4dd8e48cfc3415",
+        "sha256": "163bd637580337f3909e4f9f5f619047479aa4132fd50c07330361b5ba1a6e6b"
+      }
+    },
+    "allOtherEntriesPreserved": true,
+    "fullWhitespaceBaselines": [
+      "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "independentPythonCountZeroSha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+    "frozenVectorGenerator": "scripts/vectors/g16_vectors.py",
+    "frozenVectorUnchanged": true
+  },
+  "commands": [
+    {
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "command": [
+        "node",
+        "--import",
+        "./scripts/test-support/register-tsx.mjs",
+        "--test",
+        "--test-concurrency=1",
+        "packages/chain-solana/test/core-capability-funding.test.mjs",
+        "packages/chain-solana/test/plan.test.mjs",
+        "packages/chain-solana/test/prepared-funding.test.mjs",
+        "packages/chain-solana/test/boundary.test.mjs",
+        "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/independent-core-capability-probes.mjs"
+      ],
+      "startedAt": "2026-11-20T19:56:07.661378+00:00",
+      "completedAt": "2026-11-20T19:56:11.910458+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/targeted-tests.log",
+      "bytes": 7796,
+      "sha256": "9e26cb2b58163048c2abc651f91d6bca52474f6e308d3f3a7ba9d623791cb39d",
+      "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "cleanTrackedWorktree": true,
+      "summary": [
+        "\u2139 tests 100",
+        "\u2139 suites 0",
+        "\u2139 pass 100",
+        "\u2139 fail 0",
+        "\u2139 cancelled 0",
+        "\u2139 skipped 0",
+        "\u2139 todo 0",
+        "\u2139 duration_ms 4130.486979"
+      ]
+    },
+    {
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "startedAt": "2026-11-20T19:56:07.659763+00:00",
+      "completedAt": "2026-11-20T19:56:08.586420+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/package-typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "cleanTrackedWorktree": true,
+      "summary": []
+    },
+    {
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/check-source.py",
+        "2c21958684e8943a3058b0195fd310bfeba68866"
+      ],
+      "startedAt": "2026-11-20T19:56:07.660416+00:00",
+      "completedAt": "2026-11-20T19:56:07.813693+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/source-and-whitespace.log",
+      "bytes": 1547,
+      "sha256": "d57cbfd4a091f4dcb6f80809816ae28260efbe92f4f91d332d33217538ada631",
+      "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "cleanTrackedWorktree": true,
+      "summary": []
+    },
+    {
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/check-call-graph.py",
+        "2c21958684e8943a3058b0195fd310bfeba68866"
+      ],
+      "startedAt": "2026-11-20T19:57:29.794884+00:00",
+      "completedAt": "2026-11-20T19:57:30.430293+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/static-call-graph.log",
+      "bytes": 3540,
+      "sha256": "7133c522ce0f2524c486825e5c42be0ddd26ba607c0132fcf6e78856f794668b",
+      "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "cleanTrackedWorktree": true,
+      "summary": []
+    },
+    {
+      "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+      "command": [
+        "python",
+        "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/check-author-evidence.py"
+      ],
+      "startedAt": "2026-11-20T19:58:08.517776+00:00",
+      "completedAt": "2026-11-20T19:58:09.103790+00:00",
+      "exitCode": 0,
+      "log": "/workspace/scratch/dcf03ef9bee8/p2p-g34-core-capability-review-evidence/author-evidence-verification.log",
+      "bytes": 8177,
+      "sha256": "97bc7f970ead0d90aa0895b6ef2f28916a4b3064a9074914af3e8fd3e48eff32",
+      "finalSource": "2c21958684e8943a3058b0195fd310bfeba68866",
+      "cleanTrackedWorktree": true,
+      "summary": []
+    }
+  ],
+  "authorEvidenceVerification": {
+    "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "sourceTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "authorEvidence": "853c0b45607eb30f5e438483450c7ab763e6bcfb",
+    "authorEvidenceTree": "1eaffbb7ad676f66b2734639f7235497cd2898c5",
+    "verifiedArtifacts": 30,
+    "verifiedExecutionSnapshots": [
+      {
+        "label": "01-baseline",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "reconstructedTree": "a163409c16ad32aa1953ecd4b81fc71404516ace",
+        "counts": {
+          "tests": 33,
+          "pass": 11,
+          "fail": 22,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 1,
+        "logSha256": "b04e47c34609905e2fa56fd46d2e6cad7db46725053182f564b17637c3255c8c",
+        "patchSha256": "02aa6ddad3fd868497edb7888da1fd116b29fd444797a3961585b1ed83133592",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "02-corrected-baseline",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "reconstructedTree": "7152c034942354c7b97680b55e1c24f63d0f7693",
+        "counts": {
+          "tests": 33,
+          "pass": 15,
+          "fail": 18,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 1,
+        "logSha256": "0f93a7290374139377c1e2707a86b359fbe5ecf7386d69ce9aadb400a2854111",
+        "patchSha256": "82c22b9fef9061aec9758a48c68f889dcaa5a1598b3a2616d70e4af66275be92",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "03-guard-focused",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "reconstructedTree": "01d94ab04b10f9742a64b52bccf2a81cd30eaef4",
+        "counts": {
+          "tests": 38,
+          "pass": 36,
+          "fail": 2,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 1,
+        "logSha256": "b0458add8a436b728170c8102c6870c45b6dd833a7d5757e26cb369617c0f0aa",
+        "patchSha256": "44b8a54775c73c0bf55b408c35050360cbc5202f83242e3837a8a6f936f439be",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "04-final-fixture-baseline",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "reconstructedTree": "a62196a0ba87014594df14b585a9e57839afed17",
+        "counts": {
+          "tests": 33,
+          "pass": 15,
+          "fail": 18,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 1,
+        "logSha256": "7d59f24d5923436204f39f75f7559415c51e01a225cd1c3b0d738fc6f6872ddb",
+        "patchSha256": "1c9cde09d809f1ee114e312c2cca7e034967b99083158edd76fdd332badf1244",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "05-final-focused",
+        "source": "448cdcc2a9d13109421f21eaa1107936da0ac5c8",
+        "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+        "counts": {
+          "tests": 38,
+          "pass": 38,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "logSha256": "41fcd661800d16397b3b60f1336cd8c726236638f052f40f4bb361aaf4f71c62",
+        "patchSha256": "9fb4a4f991d502e098860ad4e7b655f51f2a074f21e73fb25e0ab2cf960e7854",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "06-frozen-solana-package",
+        "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+        "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+        "counts": {
+          "tests": 448,
+          "pass": 448,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "logSha256": "ef63b99d1ba69c74f068d36a00fae47d1b588f96d3716f87faa0acd7fecf1730",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "07-frozen-package-typecheck",
+        "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+        "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+        "counts": {},
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "verifiedSourceFiles": 3
+      },
+      {
+        "label": "08-frozen-boundaries",
+        "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+        "reconstructedTree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+        "counts": {},
+        "exitCode": 0,
+        "logSha256": "b460f1c640842daae2ad9cc06e4760d7947d23a24226953417652dd33b5032b8",
+        "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "verifiedSourceFiles": 3
+      }
+    ],
+    "sourceFilesPreservedOutsideDocs": 1033,
+    "gitlinksPreserved": 2,
+    "changedDocumentationPaths": [
+      "docs/engineering/SOLANA_CORE_CAPABILITY_GUARD_GENERATION34_20261120.md",
+      "docs/execution/solana-core-capability-generation34-20261120/01-baseline.json",
+      "docs/execution/solana-core-capability-generation34-20261120/01-baseline.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/01-baseline.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.json",
+      "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/02-corrected-baseline.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.json",
+      "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/03-guard-focused.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.json",
+      "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/04-final-fixture-baseline.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.json",
+      "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/05-final-focused.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.json",
+      "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/06-frozen-solana-package.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.json",
+      "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/07-frozen-package-typecheck.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.json",
+      "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/08-frozen-boundaries.patch.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/09-source-and-evidence-whitespace.json",
+      "docs/execution/solana-core-capability-generation34-20261120/09-source-and-evidence-whitespace.log.gz",
+      "docs/execution/solana-core-capability-generation34-20261120/capture-command.py.txt",
+      "docs/execution/solana-core-capability-generation34-20261120/execution-snapshot-verification.json",
+      "docs/execution/solana-core-capability-generation34-20261120/finalize-evidence.py.txt",
+      "docs/execution/solana-core-capability-generation34-20261120/package-evidence.py.txt",
+      "docs/execution/solana-core-capability-generation34-20261120/receipt.json"
+    ],
+    "allGzipMtimesZero": true,
+    "guardedFixtureCorrectionChangesOnlyTest": [
+      "packages/chain-solana/test/core-capability-funding.test.mjs"
+    ],
+    "actualFailedExecutionCount": 4,
+    "authorPackageResult": "448/448",
+    "fullWhitespaceBaselines": [
+      "2c21958684e8943a3058b0195fd310bfeba68866",
+      "8e836baa877b676a863c877003e277b638fc5061"
+    ],
+    "verificationScope": "Checks committed bytes and original recorded results, without rerunning author commands or any failed baseline."
+  },
+  "callGraphVerification": {
+    "source": "2c21958684e8943a3058b0195fd310bfeba68866",
+    "tree": "e37f179bf8af392d884840fb083bc10a5ebff9f9",
+    "method": "Static tracked production TypeScript reference inventory plus manual call-graph review; not dynamic reachability proof.",
+    "productionFilesScanned": 245,
+    "referenceMatches": {
+      "planFund": [
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 27,
+          "text": "compilePlan, parseMargins, planFund, planPayout, planRefund, planRelease, readTrustedSnapshot, type FundOptions,"
+        },
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 297,
+          "text": "const plan: Planner = snapshot => action === 'fund' ? planFund(trade, snapshot, session.role, margins, extra)"
+        },
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 429,
+          "text": "snapshot => planFund(trade, snapshot, session.role, margins, extra))),"
+        },
+        {
+          "path": "packages/chain-solana/src/plan.ts",
+          "line": 156,
+          "text": "export function planFund("
+        }
+      ],
+      "signIntent": [
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 33,
+          "text": "applyObservation, cancelIntent, markAndSend, observeIntent, prepareIntent, recheckPreparedBlockhash, signIntent,"
+        },
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 248,
+          "text": "const result = await signIntent(active, trade, stored, session);"
+        },
+        {
+          "path": "packages/chain-solana/src/submit.ts",
+          "line": 253,
+          "text": "export async function signIntent("
+        }
+      ],
+      "markAndSend": [
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 33,
+          "text": "applyObservation, cancelIntent, markAndSend, observeIntent, prepareIntent, recheckPreparedBlockhash, signIntent,"
+        },
+        {
+          "path": "packages/chain-solana/src/compose.ts",
+          "line": 258,
+          "text": "stored = await markAndSend(active, trade, stored, signed);"
+        },
+        {
+          "path": "packages/chain-solana/src/submit.ts",
+          "line": 274,
+          "text": "export async function markAndSend("
+        }
+      ],
+      "signWithWallet": [
+        {
+          "path": "packages/chain-solana/src/submit.ts",
+          "line": 41,
+          "text": "import { signWithWallet, type SignedSolanaTransaction, type SolanaWalletSession } from './wallet.ts';"
+        },
+        {
+          "path": "packages/chain-solana/src/submit.ts",
+          "line": 259,
+          "text": "const result = await signWithWallet(session, messageOf(record), context.assertActive);"
+        },
+        {
+          "path": "packages/chain-solana/src/wallet.ts",
+          "line": 169,
+          "text": "export async function signWithWallet("
+        }
+      ],
+      "solanaTermsConsentRequest": [
+        {
+          "path": "packages/chain-solana/src/acceptance.ts",
+          "line": 171,
+          "text": "export function solanaTermsConsentRequest("
+        }
+      ],
+      "solanaPeerAcceptanceRequest": [
+        {
+          "path": "packages/chain-solana/src/acceptance.ts",
+          "line": 184,
+          "text": "export function solanaPeerAcceptanceRequest("
+        }
+      ]
+    },
+    "localnetFacadeSha256": "42f27c63375aef1980d4862eb16fab6a6e0bbd8300d374697575b53b35955506",
+    "internalSigningAndSendingNotExportedByLocalnetFacade": true,
+    "offchainRequestConstructorsHaveNoProductionCaller": true,
+    "preparedConfirmRevalidationSites": 2,
+    "historicalVerificationAndCodecsPreserved": true
+  },
+  "artifacts": [
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/targeted-tests.json",
+      "bytes": 1227,
+      "sha256": "5d073cb0aaee042df975afbe6cf8f27394967b9ec39678482fe2a2f0e7f4b06a",
+      "rawBytes": 1227,
+      "rawSha256": "5d073cb0aaee042df975afbe6cf8f27394967b9ec39678482fe2a2f0e7f4b06a",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/targeted-tests.log.gz",
+      "bytes": 2516,
+      "sha256": "fce447b44f7c34164a3b1dfe155dc4aea7f5d180e9233e8501db4ee7486e653e",
+      "rawBytes": 7796,
+      "rawSha256": "9e26cb2b58163048c2abc651f91d6bca52474f6e308d3f3a7ba9d623791cb39d",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/package-typecheck.json",
+      "bytes": 630,
+      "sha256": "35dbfe62d015c4aba8890db386fe8aea16e0669d13933f725d0a8343c691b51f",
+      "rawBytes": 630,
+      "rawSha256": "35dbfe62d015c4aba8890db386fe8aea16e0669d13933f725d0a8343c691b51f",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/package-typecheck.log.gz",
+      "bytes": 20,
+      "sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+      "rawBytes": 0,
+      "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/source-and-whitespace.json",
+      "bytes": 727,
+      "sha256": "e964fcd19657b0b79887ebd96071874531343a587999e6fecfda5d787e704813",
+      "rawBytes": 727,
+      "rawSha256": "e964fcd19657b0b79887ebd96071874531343a587999e6fecfda5d787e704813",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/source-and-whitespace.log.gz",
+      "bytes": 741,
+      "sha256": "b85dfbd8db7aa947f5b11a08dc72e90a8e9518f9b0f61134d6cde8b976588c75",
+      "rawBytes": 1547,
+      "rawSha256": "d57cbfd4a091f4dcb6f80809816ae28260efbe92f4f91d332d33217538ada631",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/static-call-graph.json",
+      "bytes": 727,
+      "sha256": "da005b7a4f91e2cedac514c4397fe538ec5d9a555ec6dab39856323a3558882d",
+      "rawBytes": 727,
+      "rawSha256": "da005b7a4f91e2cedac514c4397fe538ec5d9a555ec6dab39856323a3558882d",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/static-call-graph.log.gz",
+      "bytes": 1008,
+      "sha256": "818940beb31502cb8b20c52f04e78e9ab2da0cbd4785a8ee4355ea7210510c65",
+      "rawBytes": 3540,
+      "rawSha256": "7133c522ce0f2524c486825e5c42be0ddd26ba607c0132fcf6e78856f794668b",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/author-evidence-verification.json",
+      "bytes": 695,
+      "sha256": "79e7ab8e27a6860c90c6229d49847fe4d146093baaa2f80a401750ff323e67e6",
+      "rawBytes": 695,
+      "rawSha256": "79e7ab8e27a6860c90c6229d49847fe4d146093baaa2f80a401750ff323e67e6",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/author-evidence-verification.log.gz",
+      "bytes": 1834,
+      "sha256": "53d83599e82d91a15512de2e6dde43be187ac16fd81935a4525fd03de3c82a66",
+      "rawBytes": 8177,
+      "rawSha256": "97bc7f970ead0d90aa0895b6ef2f28916a4b3064a9074914af3e8fd3e48eff32",
+      "gzipMtime": 0
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/capture-check.py.txt",
+      "bytes": 1857,
+      "sha256": "ee816f4d07601e7d8437d1df780bb6f251326c3ab8c20bb6d115bf8aa295b8af",
+      "rawBytes": 1857,
+      "rawSha256": "ee816f4d07601e7d8437d1df780bb6f251326c3ab8c20bb6d115bf8aa295b8af",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/check-source.py.txt",
+      "bytes": 2807,
+      "sha256": "5f3c6c0cf7e83c42e41a854221cd8b19f3dca524d72ab8ebdfae1ac5144457db",
+      "rawBytes": 2807,
+      "rawSha256": "5f3c6c0cf7e83c42e41a854221cd8b19f3dca524d72ab8ebdfae1ac5144457db",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/check-call-graph.py.txt",
+      "bytes": 3330,
+      "sha256": "d56fdbe13c46ee8dd289fd936c10867dbacb0c4241089e7245f927b4d9a78b6a",
+      "rawBytes": 3330,
+      "rawSha256": "d56fdbe13c46ee8dd289fd936c10867dbacb0c4241089e7245f927b4d9a78b6a",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/check-author-evidence.py.txt",
+      "bytes": 7302,
+      "sha256": "51b9c991be56aab15bf7948a62b344a443a35a4ff8d1af99988f8966932a0fb7",
+      "rawBytes": 7302,
+      "rawSha256": "51b9c991be56aab15bf7948a62b344a443a35a4ff8d1af99988f8966932a0fb7",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/independent-core-capability-probes.mjs.txt",
+      "bytes": 6213,
+      "sha256": "94e1ee85a2a74ea48214afeb3ad39d202f3ecf1eccb47d81b840f02c4f3c178f",
+      "rawBytes": 6213,
+      "rawSha256": "94e1ee85a2a74ea48214afeb3ad39d202f3ecf1eccb47d81b840f02c4f3c178f",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/package-review.py.txt",
+      "bytes": 5044,
+      "sha256": "4dd1609134c821a7975cec589d4eb2abb1d9df625fae3007fb5f95adb88c963f",
+      "rawBytes": 5044,
+      "rawSha256": "4dd1609134c821a7975cec589d4eb2abb1d9df625fae3007fb5f95adb88c963f",
+      "gzipMtime": null
+    },
+    {
+      "path": "docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34/dependency-provenance.json",
+      "bytes": 1369,
+      "sha256": "670fe09811e5b52301d9db3d3512f9eb98cf79bb938323b90c4b81fc7a77b04e",
+      "rawBytes": 1369,
+      "rawSha256": "670fe09811e5b52301d9db3d3512f9eb98cf79bb938323b90c4b81fc7a77b04e",
+      "gzipMtime": null
+    }
+  ],
+  "limits": [
+    "Independent targeted selection is 100/100 including four original probes; not additive to author or coordinator totals.",
+    "All independent qualification commands used the clean frozen source; no test, typecheck or evidence-check failure occurred.",
+    "Original author failures are retained and verified, including four failed executions and all fixture corrections.",
+    "Historical unsigned record fixtures are data only; no prior private capability was restored or synthesized.",
+    "No second admitted production signing surface was found; static reference inventory is not a dynamic reachability proof.",
+    "G33 historical data consistency remains separate from current funding eligibility and confirmation authority.",
+    "Existing dependencies were reused as immutable physical hardlinks; no install, dependency edit or remote mutation occurred.",
+    "No full repository suite, artifact build, browser, native validator, external target or real financial transaction was run.",
+    "Combined-source qualification, hosted gates and matching Tier C owner approval remain coordinator-owned. ReleaseEnabled remains 0."
+  ]
+}

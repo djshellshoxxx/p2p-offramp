@@ -1,0 +1,95 @@
+import datetime
+import gzip
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/workspace/scratch/dcf03ef9bee8')
+REPO = ROOT / 'p2p-solana-core-capability-guard-review-g34'
+OUT = Path(__file__).resolve().parent
+SOURCE = '2c21958684e8943a3058b0195fd310bfeba68866'
+AUTHOR = '853c0b45607eb30f5e438483450c7ab763e6bcfb'
+BASE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+REL = Path('docs/engineering/evidence/solana-core-capability-guard-independent-review-generation34')
+TARGET = REPO / REL
+CHECKS = ['targeted-tests', 'package-typecheck', 'source-and-whitespace', 'static-call-graph',
+          'author-evidence-verification']
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+assert not TARGET.exists()
+TARGET.mkdir(parents=True)
+artifacts = []
+
+
+def copy(name, destination=None, compress=False):
+    original = (OUT / name).read_bytes()
+    value = gzip.compress(original, mtime=0) if compress else original
+    filename = destination or name
+    (TARGET / filename).write_bytes(value)
+    artifacts.append({'path': (REL / filename).as_posix(), 'bytes': len(value), 'sha256': sha(value),
+                      'rawBytes': len(original), 'rawSha256': sha(original),
+                      'gzipMtime': 0 if compress else None})
+
+
+checks = []
+for name in CHECKS:
+    record = json.loads((OUT / (name + '.json')).read_bytes())
+    raw = (OUT / (name + '.log')).read_bytes()
+    assert record['source'] == record['finalSource'] == SOURCE
+    assert record['tree'] == 'e37f179bf8af392d884840fb083bc10a5ebff9f9'
+    assert record['cleanTrackedWorktree'] and record['exitCode'] == 0
+    assert len(raw) == record['bytes'] and sha(raw) == record['sha256']
+    checks.append(record)
+    copy(name + '.json')
+    copy(name + '.log', name + '.log.gz', compress=True)
+for name in ['capture-check.py', 'check-source.py', 'check-call-graph.py', 'check-author-evidence.py',
+             'independent-core-capability-probes.mjs', 'package-review.py']:
+    copy(name, name + '.txt')
+copy('dependency-provenance.json')
+source = json.loads((OUT / 'source-and-whitespace.log').read_bytes())
+author = json.loads((OUT / 'author-evidence-verification.log').read_bytes())
+call_graph = json.loads((OUT / 'static-call-graph.log').read_bytes())
+receipt = {
+    'version': 1, 'generation': 34, 'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'reviewer': 'independent solana_core_capability_guard_review_g34',
+    'source': SOURCE, 'sourceTree': source['tree'], 'sourceParent': BASE,
+    'authorEvidence': AUTHOR, 'authorEvidenceTree': author['authorEvidenceTree'],
+    'fullWhitespaceBaseline': MAIN,
+    'verdict': 'No blocking issue found within the defensive new-funding scope.',
+    'sourceComposition': source, 'commands': checks, 'authorEvidenceVerification': author,
+    'callGraphVerification': call_graph, 'artifacts': artifacts,
+    'limits': [
+        'Independent targeted selection is 100/100 including four original probes; not additive to author or coordinator totals.',
+        'All independent qualification commands used the clean frozen source; no test, typecheck or evidence-check failure occurred.',
+        'Original author failures are retained and verified, including four failed executions and all fixture corrections.',
+        'Historical unsigned record fixtures are data only; no prior private capability was restored or synthesized.',
+        'No second admitted production signing surface was found; static reference inventory is not a dynamic reachability proof.',
+        'G33 historical data consistency remains separate from current funding eligibility and confirmation authority.',
+        'Existing dependencies were reused as immutable physical hardlinks; no install, dependency edit or remote mutation occurred.',
+        'No full repository suite, artifact build, browser, native validator, external target or real financial transaction was run.',
+        'Combined-source qualification, hosted gates and matching Tier C owner approval remain coordinator-owned. ReleaseEnabled remains 0.',
+    ],
+}
+receipt_path = REPO / 'docs/engineering/solana-core-capability-guard-independent-review-generation34.json'
+assert not receipt_path.exists()
+receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+report_path = REPO / 'docs/engineering/INDEPENDENT_SOLANA_CORE_CAPABILITY_GUARD_REVIEW_GENERATION34_20261120.md'
+assert not report_path.exists()
+report_path.write_bytes((OUT / 'report.md').read_bytes())
+for item in artifacts:
+    raw = (REPO / item['path']).read_bytes()
+    assert sha(raw) == item['sha256'] and len(raw) == item['bytes']
+print(json.dumps({'source': SOURCE, 'authorEvidence': AUTHOR, 'retainedArtifacts': len(artifacts),
+                  'report': str(report_path), 'receipt': str(receipt_path)}, indent=2))

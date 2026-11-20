@@ -1,0 +1,137 @@
+import gzip
+import hashlib
+import json
+import os
+import re
+import subprocess
+import tempfile
+from pathlib import Path
+
+REPO = Path('/workspace/scratch/dcf03ef9bee8/p2p-solana-core-capability-guard-review-g34')
+OUT = Path(__file__).resolve().parent
+SOURCE = '2c21958684e8943a3058b0195fd310bfeba68866'
+AUTHOR = '853c0b45607eb30f5e438483450c7ab763e6bcfb'
+BASE = '448cdcc2a9d13109421f21eaa1107936da0ac5c8'
+MAIN = '8e836baa877b676a863c877003e277b638fc5061'
+PREFIX = 'docs/execution/solana-core-capability-generation34-20261120/'
+
+
+def git(*args, data=None, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, input=data, env=env)
+
+
+def get(path):
+    return git('show', AUTHOR + ':' + path)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def entries(ref):
+    rows = {}
+    for row in git('ls-tree', '-r', '-z', ref).split(b'\0'):
+        if row:
+            identity, path = row.split(b'\t', 1)
+            rows[path.decode()] = identity.decode()
+    return rows
+
+
+assert git('rev-parse', 'HEAD').decode().strip() == SOURCE
+assert not git('status', '--porcelain').strip()
+assert git('show', '-s', '--format=%P', AUTHOR).decode().strip() == SOURCE
+source_entries, evidence_entries = entries(SOURCE), entries(AUTHOR)
+source_non_docs = {p: i for p, i in source_entries.items() if not p.startswith('docs/')}
+assert source_non_docs == {p: i for p, i in evidence_entries.items() if not p.startswith('docs/')}
+assert len(source_non_docs) == 1033
+assert sum(i.startswith('160000 commit ') for i in source_non_docs.values()) == 2
+changed = sorted(p for p in source_entries.keys() | evidence_entries.keys()
+                 if source_entries.get(p) != evidence_entries.get(p))
+assert changed and all(p.startswith('docs/') for p in changed)
+assert not source_entries.keys() - evidence_entries.keys()
+receipt = json.loads(get(PREFIX + 'receipt.json'))
+assert receipt['source'] == SOURCE and receipt['base'] == BASE
+assert receipt['sourceTree'] == git('rev-parse', SOURCE + '^{tree}').decode().strip()
+assert len(receipt['artifacts']) == 30 and len(receipt['commands']) == 8
+artifacts = {}
+for item in receipt['artifacts']:
+    raw = get(item['path'])
+    assert len(raw) == item['bytes'] and sha(raw) == item['sha256'], item['path']
+    content = gzip.decompress(raw) if item['path'].endswith('.gz') else raw
+    assert len(content) == item['rawBytes'] and sha(content) == item['rawSha256'], item['path']
+    if item['path'].endswith('.gz'):
+        assert int.from_bytes(raw[4:8], 'little') == item['gzipMtime'] == 0
+    artifacts[item['path']] = content
+for item in receipt['sourceFiles']:
+    raw = git('show', SOURCE + ':' + item['path'])
+    assert len(raw) == item['bytes'] and sha(raw) == item['sha256']
+    assert source_entries[item['path']] == item['gitEntry']
+
+recorded = {row['label']: row for row in json.loads(get(PREFIX + 'execution-snapshot-verification.json'))}
+expected_counts = [
+    {'tests': 33, 'pass': 11, 'fail': 22, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {'tests': 33, 'pass': 15, 'fail': 18, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {'tests': 38, 'pass': 36, 'fail': 2, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {'tests': 33, 'pass': 15, 'fail': 18, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {'tests': 38, 'pass': 38, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {'tests': 448, 'pass': 448, 'fail': 0, 'cancelled': 0, 'skipped': 0, 'todo': 0},
+    {}, {},
+]
+snapshots = []
+for ordinal, entry in enumerate(receipt['commands']):
+    label = entry['label']
+    record = json.loads(get(PREFIX + label + '.json'))
+    for key in ('label', 'source', 'tree', 'command', 'startedAt', 'completedAt', 'exitCode', 'counts'):
+        assert record[key] == entry[key], (label, key)
+    assert record['tree'] == git('rev-parse', record['source'] + '^{tree}').decode().strip()
+    patch = artifacts[PREFIX + label + '.patch.gz']
+    log = artifacts[PREFIX + label + '.log.gz']
+    for name, raw in [('patch', patch), ('log', log)]:
+        assert len(raw) == record[name]['bytes'] and sha(raw) == record[name]['sha256']
+    counts = {key: int(number) for key, number in re.findall(
+        r'^[#ℹ]\s+(tests|pass|fail|cancelled|skipped|todo)\s+(\d+)\s*$', log.decode(), re.MULTILINE)}
+    assert counts == record['counts'] == expected_counts[ordinal], label
+    assert record['exitCode'] == (1 if ordinal in (0, 1, 2, 3) else 0), label
+    with tempfile.TemporaryDirectory(dir=OUT, prefix='private-index-') as temporary:
+        env = dict(os.environ, GIT_INDEX_FILE=str(Path(temporary) / 'index'))
+        git('read-tree', record['source'], env=env)
+        if patch:
+            git('apply', '--cached', '--check', '-', data=patch, env=env)
+            git('apply', '--cached', '-', data=patch, env=env)
+        tree = git('write-tree', env=env).decode().strip()
+    assert tree == recorded[label]['reconstructedTree']
+    for path, identity in record['sourceFiles'].items():
+        raw = git('show', tree + ':' + path)
+        assert len(raw) == identity['bytes'] and sha(raw) == identity['sha256'], (label, path)
+    if ordinal >= 4:
+        assert tree == receipt['sourceTree']
+    if ordinal >= 5:
+        assert record['source'] == SOURCE and patch == b''
+        assert record['statusBefore'] == record['statusAfter'] == ''
+    snapshots.append({'label': label, 'source': record['source'], 'reconstructedTree': tree,
+                      'counts': counts, 'exitCode': record['exitCode'], 'logSha256': sha(log),
+                      'patchSha256': sha(patch), 'verifiedSourceFiles': len(record['sourceFiles'])})
+
+baseline_plan = git('show', BASE + ':packages/chain-solana/src/plan.ts')
+guard_plan = git('show', SOURCE + ':packages/chain-solana/src/plan.ts')
+for ordinal in (0, 1, 3):
+    assert git('show', snapshots[ordinal]['reconstructedTree'] + ':packages/chain-solana/src/plan.ts') == baseline_plan
+for ordinal in (2, 4, 5, 6, 7):
+    assert git('show', snapshots[ordinal]['reconstructedTree'] + ':packages/chain-solana/src/plan.ts') == guard_plan
+fixture_change = git('diff', '--name-only', snapshots[2]['reconstructedTree'], snapshots[4]['reconstructedTree']).decode().splitlines()
+assert fixture_change == ['packages/chain-solana/test/core-capability-funding.test.mjs']
+whitespace = json.loads(get(PREFIX + '09-source-and-evidence-whitespace.json'))
+assert whitespace['exitCode'] == 0 and whitespace['nonDocsEntriesExactToSource'] == 1033
+for baseline in (SOURCE, MAIN):
+    subprocess.run(['git', 'diff', '--check', baseline + '..' + AUTHOR], cwd=REPO, check=True)
+print(json.dumps({
+    'source': SOURCE, 'sourceTree': receipt['sourceTree'], 'authorEvidence': AUTHOR,
+    'authorEvidenceTree': git('rev-parse', AUTHOR + '^{tree}').decode().strip(),
+    'verifiedArtifacts': len(artifacts), 'verifiedExecutionSnapshots': snapshots,
+    'sourceFilesPreservedOutsideDocs': len(source_non_docs), 'gitlinksPreserved': 2,
+    'changedDocumentationPaths': changed, 'allGzipMtimesZero': True,
+    'guardedFixtureCorrectionChangesOnlyTest': fixture_change,
+    'actualFailedExecutionCount': 4, 'authorPackageResult': '448/448',
+    'fullWhitespaceBaselines': [SOURCE, MAIN],
+    'verificationScope': 'Checks committed bytes and original recorded results, without rerunning author commands or any failed baseline.',
+}, indent=2))
