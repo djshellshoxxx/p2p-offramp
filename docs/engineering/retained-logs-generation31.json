@@ -1,0 +1,81 @@
+{
+  "schema": "p2p-offramp.generation31-retained-logs.v1",
+  "testedSource": "8d566f0e46ee76ee35a957cab0a4358a3da4aeb3",
+  "testedTree": "99047cf4675fbc299d700eec51d9b388da6707fe",
+  "logs": [
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/full-node.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/full-node.log.gz",
+      "decodedBytes": 264227,
+      "compressedBytes": 87932,
+      "decodedSha256": "a069a1b3de4b56b14628764005a10ddef45eb1b9641464bc6041cf46c952f039",
+      "compressedSha256": "713169eeafe7a997374f603220c4050c6ac77aedeadf356bf42b6fb61154e198"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/typecheck.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/typecheck.log.gz",
+      "decodedBytes": 341,
+      "compressedBytes": 211,
+      "decodedSha256": "fcb72ed0da406b29ba721f43edde185dcadfc6559accb55fca89cc9647205d53",
+      "compressedSha256": "3658decb137a17708e36d46adc43e9a0682a24010b504e9ea4e4d8ff8748535e"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/build-policy.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/build-policy.log.gz",
+      "decodedBytes": 7631,
+      "compressedBytes": 3144,
+      "decodedSha256": "9176f6e11285b5ae0d44ba5269a6587deef2e4901fbfddfdc9fc8cce0d991ecd",
+      "compressedSha256": "1e32d1a6ea085b8d9f8294ab9e2973d30844bdcaa39d26faaee93fe5f50f9754"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/boundaries.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/boundaries.log.gz",
+      "decodedBytes": 392,
+      "compressedBytes": 287,
+      "decodedSha256": "171459349881532fab298d83fadbd8a8f2a269b3197f7642193a31fe471deb39",
+      "compressedSha256": "4d73e145c5258e7e67d2b9185efeb6eda0122424a642fd702b009bc488c0bb31"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/default-build.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/default-build.log.gz",
+      "decodedBytes": 1027,
+      "compressedBytes": 498,
+      "decodedSha256": "24e8b2402c4e4fe675e27cb99a7dbc65e4ad2c1af16fe889e1b6b3ac9bf2071b",
+      "compressedSha256": "9885503f979589c8ac65e6c498e6fe10d832ec97aa4bfd88ad6a6643a55d06e2"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/demo-build.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/demo-build.log.gz",
+      "decodedBytes": 1175,
+      "compressedBytes": 521,
+      "decodedSha256": "77607aaadaa418994069135075d2b732ec1f4260db2d8eba5655df40fafcc3d5",
+      "compressedSha256": "b28414bbeff56dc1c880bd982cacf946bf24af5b0492b4ec918acfddf61d583d"
+    },
+    {
+      "originalPath": "/workspace/scratch/dcf03ef9bee8/p2p-g31-qualification/native-fixture-preparation.log",
+      "storedPath": "docs/execution/continuation-generation31-20261120/native-fixture-preparation.log.gz",
+      "decodedBytes": 2196,
+      "compressedBytes": 863,
+      "decodedSha256": "4a6309ea3ce2390c768deccaed284a2bacd6590bfac8746f042f18e1d78172c5",
+      "compressedSha256": "379e47176a29935a4b710fb0a768e254374b63affb16d542228ad7e1d762b67c"
+    }
+  ],
+  "authorAndIndependentIndexes": [
+    "docs/execution/startup-compatibility-generation31-20261120/receipt.json",
+    "docs/execution/startup-compatibility-generation31-20261120/12-source-and-evidence-whitespace.json",
+    "docs/engineering/startup-compatibility-independent-review-generation31.json",
+    "docs/engineering/startup-compatibility-composition-review-generation31.json"
+  ],
+  "limits": [
+    "Two production-file composition changes connect the maintained startup presence probe, required-API initialization guard and compatibility notice. The helper, model, guard and notice implementations remain unchanged.",
+    "A stable lazy-state snapshot is forwarded through OfflineRoot and App. Missing or unavailable required APIs prevent initialization; optional APIs remain optional and actual runtime failure remains authoritative.",
+    "Presence observations are local, untested and uncertified. They do not prove native browser, storage, wallet, device or economic-action readiness.",
+    "The existing sharing fixture uses a labeled inert probe only in its sharing scope; all sharing assertions remain. The new startup fixture executes the real probe/guard/notice and distinguishes property reads from API operations.",
+    "The final original-source baseline has 4 passing lifecycle controls and 19 missing-integration failures. Wired fixture scope/VM corrections and reviewer setup/checker failures remain retained with their actual causes, not product-defect claims.",
+    "Independent maintained cases passed within an initial mixed command that also had a reviewer module-load failure. Four independent probes passed after recorded setup corrections; no single successful 57-case command is claimed.",
+    "Author, adjacent, independent and full-suite selections overlap and must not be summed.",
+    "Native updater fixture compilation is build-only. The maintained command removed its temporary compiled fixture; no native scenarios executed locally. Worker byte identity does not transfer hosted checks to a different source or target.",
+    "Native EVM/Solana entry branches, generic sharing helper/leaf, runtime service ownership and disposal, locale catalog, packages, workflows, dependencies, trust settings and optional/audit ownership remain unchanged.",
+    "This bounded integration does not complete the wider mobile/wallet compatibility specification. No deployment, trust provisioning, physical-device acceptance or release activation follows. ReleaseEnabled remains zero."
+  ]
+}
